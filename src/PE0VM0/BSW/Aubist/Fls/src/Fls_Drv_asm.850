@@ -1,0 +1,105 @@
+------------------------------------------------------------------------------
+-- Protected                                                                --
+-- Copyright AUBASS CO., LTD.                                               --
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+-- Include Files                                                            --
+------------------------------------------------------------------------------
+#include "../cfg/Fls_Drv_Cfg.h"
+
+------------------------------------------------------------------------------
+-- Macros                                                                   --
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+-- Types                                                                    --
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+-- Function Prototypes                                                      --
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+-- Data                                                                     --
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+-- Constants                                                                --
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+-- External Functions                                                       --
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+-- Internal Functions                                                       --
+------------------------------------------------------------------------------
+
+------------------------------------------------------------------------------
+-- Function      : Register Preparation Acquisition Function(assembler)
+-- Description   : This function monitores specified two bits during a 
+--                  specified time until either stand.
+-- param[in]     : r6 (Register address)
+-- param[in]     : r7 (Specified bit)
+-- param[in]     : r8 (Specified bit)
+-- param[in]     : r9 (Timeout count)
+-- return        : r10(match BIT1 /match BIT2 / Timeout)
+-- Note          : -
+------------------------------------------------------------------------------
+.align 16
+.section"bsw_fls_text",.text
+.globl _Fls_Drv_GetRegReady_Asm
+
+_Fls_Drv_GetRegReady_Asm:
+
+_FLS_DRV_GETREGREADY_ASM_LOOP:
+    ld.w 0[r6], r12
+    mov r12, r13
+    and r7, r12
+    bnz _FLS_DRV_GETREGREADY_ASM_BIT1_LOOP_END
+    and r8, r13
+    bnz _FLS_DRV_GETREGREADY_ASM_BIT2_LOOP_END
+
+    add -1, r9
+    bnz _FLS_DRV_GETREGREADY_ASM_LOOP
+
+    mov 0x02, r10
+    br _FLS_DRV_GETREGREADY_ASM_END
+
+_FLS_DRV_GETREGREADY_ASM_BIT1_LOOP_END:
+    mov 0x00, r10
+    br _FLS_DRV_GETREGREADY_ASM_END
+
+_FLS_DRV_GETREGREADY_ASM_BIT2_LOOP_END:
+    mov 0x01, r10
+
+_FLS_DRV_GETREGREADY_ASM_END:
+
+    jmp     lp
+
+
+------------------------------------------------------------------------------
+-- Function      : Synchronization Process Function(assembler)
+-- Description   : This function executes SYNCP instruction and performs a
+--                  synchronization of the pipeline
+-- param[in/out] : -
+-- return        : -
+-- Note          : -
+------------------------------------------------------------------------------
+.section"bsw_fls_text",.text
+.globl _Fls_Drv_Syncp_Asm
+
+_Fls_Drv_Syncp_Asm:
+    syncp
+
+    jmp     lp
+
+
+------------------------------------------------------------------------------
+-- History                                                                  --
+-- Version :Date                                                            --
+-- [number] :[data]                                                         --
+------------------------------------------------------------------------------
+
+----- End of File ------------------------------------------------------------

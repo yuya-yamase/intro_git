@@ -1,0 +1,59 @@
+/*
+    Copyright (C) 2022 eSOL Co.,Ltd. All rights reserved.
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+
+/****************************************************************************
+[ehvm_Hvcm_ghs.850] - EHVM assembly implements for v850
+****************************************************************************/
+    .file "ehvm_Hvcm_ghs.850"
+
+#define HVCM_SETDENYLIST_FUNC 9
+#define HVCM_GETDENYLIST_FUNC 10
+
+
+    .global _ehvm_hvc_set_access_deny_list_hvc
+    .type   _ehvm_hvc_set_access_deny_list_hvc, @function
+_ehvm_hvc_set_access_deny_list_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r14
+    pushsp r1 - r1
+    mov HVCM_SETDENYLIST_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set contextId */
+    mov r7, r14  /* set denylist */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r14
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_hvc_get_access_deny_list_hvc
+    .type   _ehvm_hvc_get_access_deny_list_hvc, @function
+_ehvm_hvc_get_access_deny_list_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r14
+    pushsp r1 - r1
+    mov HVCM_GETDENYLIST_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set contextId */
+    mov r7, r14  /* set denylist */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r14
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+

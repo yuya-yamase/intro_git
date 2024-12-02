@@ -1,0 +1,183 @@
+/*****************************************************************************
+ *	Copyright DENSO Corporation. All rights reserved.
+ ****************************************************************************/
+/*****************************************************************************
+ * [File Name]		Ecu_Int_Vector_asm.850
+ * [Module]			Interrupt
+ * [Function]		Interrupt Vector
+ * [Notes]			None
+ ****************************************************************************/
+
+/*----------------------------------------------------------------------------
+ *		Headers
+ *--------------------------------------------------------------------------*/
+#include <SS_Internal.h>
+#include <Ecu_Memmap.h>
+#include <Ecu_Internal.h>
+
+
+/*----------------------------------------------------------------------------
+ *		Symbols
+ *--------------------------------------------------------------------------*/
+#define ECU_INT_u4VECTOR_ADDRESS (ECU_INT_u4VECTOR_ADDRESS_0)
+
+
+/*----------------------------------------------------------------------------
+ *		Imports
+ *--------------------------------------------------------------------------*/
+	.import _SS_Boot_ResetBoot
+	.import _Ecu_Int_performReset
+
+
+/*----------------------------------------------------------------------------
+ *		Globals
+ *--------------------------------------------------------------------------*/
+	.globl	_Ecu_Int_handleUnknown
+
+/*----------------------------------------------------------------------------
+ *		Codes(Vector Table)
+ *--------------------------------------------------------------------------*/
+
+/**---------------------------------------------------------------------------
+ * Vector for FE-level-interrupt before OS initialize for Core 0 
+ *--------------------------------------------------------------------------*/
+
+	.section	".vectortable_fe0", "ax"
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0000)
+	jr		_SS_Boot_ResetBoot							/* RESET						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0010)
+	syncp
+	/* TPpr_macro_Exception_Check */
+	jr		_Ecu_Int_handleUnknown						/* SYSERR						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0020)
+	jr		_Ecu_Int_handleUnknown						/* RESERVED						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0030)
+	jr		_Ecu_Int_handleUnknown						/* FETRAP						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0040)
+	jr		_Ecu_Int_handleUnknown						/* TRAP0n						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0050)
+	jr		_Ecu_Int_handleUnknown						/* TRAP1n						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0060)
+	jr		_Ecu_Int_handleUnknown							/* RIE							*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0070)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* FPP/FPI						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0080)
+	
+	jr		_Ecu_Int_handleUnknown						/* UCPOP						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0090)
+	jr		_Ecu_Int_handleUnknown						/* MIP/MDP						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x00A0)
+	jr		_Ecu_Int_handleUnknown							/* PIE							*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x00B0)
+	jr		_Ecu_Int_handleUnknown						/* Debug						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x00C0)
+	jr		_Ecu_Int_handleUnknown							/* MAE							*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x00D0)
+	jr		_Ecu_Int_handleUnknown						/* RESERVED						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x00E0)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* FENMI						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x00F0)
+	syncp
+	jr		_Ecu_Int_performReset					/* FEINT						*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0100)
+	syncp
+	/* TPpr_macro_RamEcc_reportErrorFactor */
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 0)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0110)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 1)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0120)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 2)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0130)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 3)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0140)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 4)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0150)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 5)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0160)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 6)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0170)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 7)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0180)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 8)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x0190)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 9)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x01a0)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 10)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x01b0)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 11)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x01c0)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 12)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x01d0)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 13)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x01e0)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 14)			*/
+
+	.org	(ECU_INT_u4VECTOR_ADDRESS + 0x01f0)
+	syncp
+	jr		_Ecu_Int_handleUnknown						/* Interrupt (Level 15)			*/
+
+
+/*----------------------------------------------------------------------------
+ *		Codes(Handler)
+ *--------------------------------------------------------------------------*/
+	.section	ECU_SAMPLE_SECTION_TEXT, "ax"
+    .align 4
+
+/**---------------------------------------------------------------------------
+ * [Format]		void Ecu_Int_handle****(void)
+ * [Function]	Handler for unrecoverable exception
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		Interrupt Handler
+ *				This function has called in DI
+ *				and must not finish (must reset)
+ *--------------------------------------------------------------------------*/
+_Ecu_Int_handleUnknown:
+	jr	_Ecu_Int_performReset
+

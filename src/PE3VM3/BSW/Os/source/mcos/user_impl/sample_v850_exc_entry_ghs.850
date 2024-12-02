@@ -1,0 +1,66 @@
+/*
+    Copyright(C) 2022 eSOL Co., Ltd. All rights reserved.
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+/****************************************************************************
+[ v850_user_exc_entry_ghs.850 ] - V850 exception handler for non-OS sample
+****************************************************************************/
+
+    #define _in_asm_source_
+
+#define OS_START_SEC_CODE_SHARED
+#include "Os_MemMap.h"
+
+ /*---------------------------------------------------------------------------
+  _mcos_v850_nonos_feexc_entry
+      Exception entry for non-OS FE level
+      This function is registered in the exception vector(EBASE) by user. 
+ ---------------------------------------------------------------------------*/
+    .type   _mcos_v850_nonos_feexc_entry, $function
+    .global _mcos_v850_nonos_feexc_entry
+
+_mcos_v850_nonos_feexc_entry:
+    /* to be implemented by user */
+    br  _mcos_v850_nonos_feexc_entry
+    .size   _mcos_v850_nonos_feexc_entry, .-_mcos_v850_nonos_feexc_entry
+
+ /*---------------------------------------------------------------------------
+  _mcos_v850_nonos_eiexc_entry
+      Exception entry for non-OS EI level
+      This function is registered in the exception vector(EBASE) by user. 
+ ---------------------------------------------------------------------------*/
+    .type   _mcos_v850_nonos_eiexc_entry, $function
+    .global _mcos_v850_nonos_eiexc_entry
+
+_mcos_v850_nonos_eiexc_entry:
+    /* to be implemented by user */
+    br  _mcos_v850_nonos_eiexc_entry
+    .size   _mcos_v850_nonos_eiexc_entry, .-_mcos_v850_nonos_eiexc_entry
+
+ /*---------------------------------------------------------------------------
+  _mcos_v850_undefint_entry
+      Undefined EIINTn entry
+      This function is registered in the interrupt vector(INTBP) by OS. 
+ ---------------------------------------------------------------------------*/
+    .type   _mcos_v850_undefint_entry, $function
+    .global _mcos_v850_undefint_entry
+
+_mcos_v850_undefint_entry:
+    /* to be implemented by user */
+    br  _mcos_v850_undefint_entry
+    .size   _mcos_v850_undefint_entry, .-_mcos_v850_undefint_entry
+
+#define OS_STOP_SEC_CODE_SHARED
+#include "Os_MemMap.h"

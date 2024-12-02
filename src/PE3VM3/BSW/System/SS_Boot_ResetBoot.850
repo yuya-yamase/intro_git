@@ -1,0 +1,351 @@
+/*****************************************************************************
+ *	Copyright DENSO Corporation. All rights reserved.
+ ****************************************************************************/
+/*****************************************************************************
+ * [File Name]		SS_Boot_ResetBoot.850
+ * [Module]			Boot
+ * [Function]		Boot
+ * [Notes]			None
+ ****************************************************************************/
+
+/*----------------------------------------------------------------------------
+ *		Headers
+ *--------------------------------------------------------------------------*/
+#include <SS_Internal.h>
+#include <SS_Boot_cfg.inc>
+#include <SS_CpuCore.h>
+
+
+
+/*----------------------------------------------------------------------------
+ *		Symbols
+ *--------------------------------------------------------------------------*/
+
+/* コアごとのスタック情報 */
+/* コア0 */
+#define SS_BOOT_u4STACKSTADDR ___ghsbegin_ss_stack /* (●)スタック領域の開始アドレス */
+#define SS_BOOT_u4STACKSIZE ___ghssize_ss_stack /* (●)スタック領域のサイズ(AB環境) */
+#define SS_BOOT_u4PRESTACKSTADDR (___ghsend_ss_stack - SS_BOOT_u4PRESTACKSIZE) /* (●)プレスタック領域の開始アドレス(コア0) */
+#define SS_BOOT_u4PRESTACKSIZE   (SS_u4PRIMARYSTACKSIZE_0)                   /* (●)プレスタック領域のサイズ */
+
+/* コア1 */
+#if (SS_USE_CORE_COUNT >= 2u)
+#define SS_BOOT_u4STACKSTADDR1 ___ghsbegin_ss_stack1 /* (●)スタック領域の開始アドレス */
+#define SS_BOOT_u4STACKSIZE1 ___ghssize_ss_stack1 /* (●)スタック領域のサイズ(AB環境) */
+#define SS_BOOT_u4PRESTACKSTADDR1 (___ghsend_ss_stack1 - SS_BOOT_u4PRESTACKSIZE1) /* (●)プレスタック領域の開始アドレス(コア1) */
+#define SS_BOOT_u4PRESTACKSIZE1   (SS_u4PRIMARYSTACKSIZE_1)                    /* (●)プレスタック領域のサイズ */
+#endif /* SS_USE_CORE_COUNT >= 2u */
+
+/* コア2 */
+#if (SS_USE_CORE_COUNT >= 3u)
+#define SS_BOOT_u4STACKSTADDR2 ___ghsbegin_ss_stack2 /* (●)スタック領域の開始アドレス */
+#define SS_BOOT_u4STACKSIZE2 ___ghssize_ss_stack2 /* (●)スタック領域のサイズ(AB環境) */
+#define SS_BOOT_u4PRESTACKSTADDR2 (___ghsend_ss_stack2 - SS_BOOT_u4PRESTACKSIZE2) /* (●)プレスタック領域の開始アドレス(コア2) */
+#define SS_BOOT_u4PRESTACKSIZE2   (SS_u4PRIMARYSTACKSIZE_2)                    /* (●)プレスタック領域のサイズ */
+#endif /* SS_USE_CORE_COUNT >= 3u */
+
+/* コア3 */
+#if (SS_USE_CORE_COUNT >= 4u)
+#define SS_BOOT_u4STACKSTADDR3 ___ghsbegin_ss_stack3 /* (●)スタック領域の開始アドレス */
+#define SS_BOOT_u4STACKSIZE3 ___ghssize_ss_stack3 /* (●)スタック領域のサイズ(AB環境) */
+#define SS_BOOT_u4PRESTACKSTADDR3 (___ghsend_ss_stack3 - SS_BOOT_u4PRESTACKSIZE3) /* (●)プレスタック領域の開始アドレス(コア3) */
+#define SS_BOOT_u4PRESTACKSIZE3   (SS_u4PRIMARYSTACKSIZE_3)                    /* (●)プレスタック領域のサイズ */
+#endif /* SS_USE_CORE_COUNT >= 4u */
+
+/* コア共通のポインタ情報 */
+#define SS_BOOT_u4INITVAL_R2 (0x00000000UL) /* (●)r2初期値 */
+
+#define SS_BOOT_u4INITVAL_GP __gp /* (●)GP(r4)初期値 */
+#define SS_BOOT_u4INITVAL_TP __tp /* (●)TP(r5)初期値 */
+
+#define SS_BOOT_u4INITVAL_EP __ep         /* (●)EP(r30)初期値 */
+#define SS_BOOT_u4INITVAL_LP (0x00000000UL) /* (●)LP(r31)初期値 */
+
+/* コア共通のシステムレジスタ設定用 */
+#define REG_u4ICCTRL_regID (24ul)
+#define REG_u4ICCTRL_selID (4ul)
+#define REG_u4IFCR_regID (5ul)
+#define REG_u4IFCR_selID (12ul)
+#define REG_u4RDBCR_regID (24ul)
+#define REG_u4RDBCR_selID (13ul)
+#define REG_u4BRPCTRL0_regID (8ul)
+#define REG_u4BRPCTRL0_selID (12ul)
+#define REG_u4EIPC_regID (0ul)
+#define REG_u4EIPC_selID (0ul)
+#define REG_u4FEPC_regID (2ul)
+#define REG_u4FEPC_selID (0ul)
+
+#define MSK_ICCTRL_CLR_AND_EN_NEN (0x00010101U)
+#define VAL_IFCR_PL_ENABLE (0x00000001U)
+#define VAL_RDBCR_CLR_AND_EN (0x00000103U)
+#define VAL_BRPCTRL0_CLR_AND_EN (0x00000003U)
+#define VAL_EIPC_CLR (0x00000000U)
+#define VAL_FEPC_CLR (0x00000000U)
+
+
+/*----------------------------------------------------------------------------
+ *		Macros
+ *--------------------------------------------------------------------------*/
+ 
+/****************************************************************************/
+/*  Syntax                                                                  */
+/*              _SS_Boot_macro_initStackArea u4StackAddr,u4StackSize        */
+/*  パラメータ                                                              */
+/*              u4StackAddr：SS_BOOT_u4PRESTACKSTADDR プレスタックアドレス  */
+/*              u4StackSize：SS_BOOT_u4PRESTACKSIZE   スタックサイズ        */
+/*  戻り値                                                                  */
+/*              なし                                                        */
+/****************************************************************************/
+
+.macro  _SS_Boot_macro_initStackArea u4StackAddr, u4StackSize
+
+    /* スタック領域アドレスの生成 */
+    mov     (u4StackAddr), r12
+    mov     (u4StackSize), r13
+    mov     (SS_STACKINITVAL), r14
+    add     r12, r13
+
+    br      L_SS_Boot_stackArea_Lp_Chk\@
+
+    /* 4バイト領域分 初期化 */
+L_SS_Boot_StackArea_Lp\@:
+    st.w    r14, 0[r12]
+    add     4, r12
+
+    /* 継続判定 */
+L_SS_Boot_stackArea_Lp_Chk\@:
+
+    cmp     r13, r12
+    bc      L_SS_Boot_StackArea_Lp\@
+
+.endm
+
+/****************************************************************************/
+/*  Syntax                                                                  */
+/*              _SS_Boot_macro_initGeneralReg                               */
+/*  パラメータ                                                              */
+/*              なし                                                        */
+/*  戻り値                                                                  */
+/*              なし                                                        */
+/****************************************************************************/
+
+.macro _SS_Boot_macro_initGeneralReg
+
+    mov     r0, r1
+    mov     r0, r6
+    mov     r0, r7
+    mov     r0, r8
+    mov     r0, r9
+    mov     r0, r10
+    mov     r0, r11
+    mov     r0, r12
+    mov     r0, r13
+    mov     r0, r14
+    mov     r0, r15
+    mov     r0, r16
+    mov     r0, r17
+    mov     r0, r18
+    mov     r0, r19
+    mov     r0, r20
+    mov     r0, r21
+    mov     r0, r22
+    mov     r0, r23
+    mov     r0, r24
+    mov     r0, r25
+    mov     r0, r26
+    mov     r0, r27
+    mov     r0, r28
+    mov     r0, r29
+
+.endm
+
+
+
+/****************************************************************************/
+/*  Syntax                                                                  */
+/*              _SS_Boot_macro_initStReg                                    */
+/*  パラメータ                                                              */
+/*              なし                                                        */
+/*  戻り値                                                                  */
+/*              なし                                                        */
+/****************************************************************************/
+
+.macro _SS_Boot_macro_initStReg
+
+    mov     SS_BOOT_u4INITVAL_R2, r2
+    mov     SS_BOOT_u4INITVAL_GP, gp
+    mov     SS_BOOT_u4INITVAL_TP, tp
+    mov     SS_BOOT_u4INITVAL_EP, ep
+    mov     SS_BOOT_u4INITVAL_LP, lp
+
+#if (SS_USE_LWH == SS_LWH_NONE)
+    /* 初期値不定のEIPC/FEPCを読み出される前に初期化 */
+    mov     VAL_EIPC_CLR, r7
+    ldsr    r7, REG_u4EIPC_regID, REG_u4EIPC_selID
+    mov     VAL_FEPC_CLR, r7
+    ldsr    r7, REG_u4FEPC_regID, REG_u4FEPC_selID
+    
+    /* 命令キャッシュをクリア&有効化&エラー通知ON */
+    mov     MSK_ICCTRL_CLR_AND_EN_NEN, r7
+    ldsr    r7, REG_u4ICCTRL_regID, REG_u4ICCTRL_selID
+
+    /* 命令フェッチプリロード機能を有効化 */
+    mov     VAL_IFCR_PL_ENABLE, r7
+    ldsr    r7, REG_u4IFCR_regID, REG_u4IFCR_selID
+
+    /* ROMデータバッファをクリア&有効化 */
+    mov VAL_RDBCR_CLR_AND_EN, r7
+    ldsr r7, REG_u4RDBCR_regID, REG_u4RDBCR_selID
+
+    /* 投機的ブランチ機能をクリア&有効化 */
+    mov VAL_BRPCTRL0_CLR_AND_EN, r7
+    ldsr r7, REG_u4BRPCTRL0_regID, REG_u4BRPCTRL0_selID
+#endif
+
+.endm
+
+/*----------------------------------------------------------------------------
+ *		Variables
+ *--------------------------------------------------------------------------*/
+    .section    ".ss_stack",    "awb"
+StackArea_0:    .space  (SS_STACKSIZE_0)    /* Stack area */
+#if (SS_USE_CORE_COUNT >= 2u)
+    .section    ".ss_stack1",    "awb"
+StackArea_1:    .space  (SS_STACKSIZE_1)    /* Stack area */
+#endif /* SS_USE_CORE_COUNT >= 2u */
+#if (SS_USE_CORE_COUNT >= 3u)
+    .section    ".ss_stack2",    "awb"
+StackArea_2:    .space  (SS_STACKSIZE_2)    /* Stack area */
+#endif /* SS_USE_CORE_COUNT >= 3u */
+#if (SS_USE_CORE_COUNT >= 4u)
+    .section    ".ss_stack3",    "awb"
+StackArea_3:    .space  (SS_STACKSIZE_3)    /* Stack area */
+#endif /* SS_USE_CORE_COUNT >= 4u */
+
+/*----------------------------------------------------------------------------
+ *		Codes
+ *--------------------------------------------------------------------------*/
+
+/****************************************************************************/
+/*  Syntax                                                                  */
+/*              void SS_Boot_ResetBoot( void )                              */
+/*  パラメータ                                                              */
+/*              なし                                                        */
+/*  戻り値                                                                  */
+/*              なし                                                        */
+/****************************************************************************/
+
+    .section ".ss_code", "ax"
+    .align 4
+    .globl _SS_Boot_ResetBoot
+_SS_Boot_ResetBoot:
+
+    di                                                  /* プロセッサ割り込み禁止 */
+
+    _SS_Boot_macro_initStReg                            /* 専用レジスタ初期化 */
+
+#if (SS_USE_CORE_COUNT >= 2u)
+    jarl    _SS_CpuCore_getCoreID, lp
+
+    cmp     SS_CPUCORE_u4MASTERCORE, r10
+    be      L_SS_Boot_MasterCore_initialize
+    cmp     SS_CPUCORE_u4SLAVECORE1, r10
+    be      L_SS_Boot_SlaveCore1_initialize
+#if (SS_USE_CORE_COUNT >= 3u)
+    cmp     SS_CPUCORE_u4SLAVECORE2, r10
+    be      L_SS_Boot_SlaveCore2_initialize
+#endif /* SS_USE_CORE_COUNT >= 3u */
+#if (SS_USE_CORE_COUNT >= 4u)
+    cmp     SS_CPUCORE_u4SLAVECORE3, r10
+    be      L_SS_Boot_SlaveCore3_initialize
+#endif /* SS_USE_CORE_COUNT >= 4u */
+    br      L_SS_Boot_resetBoot_Loop                    /* 無限ループへ */
+#endif /* SS_USE_CORE_COUNT >= 2u */
+
+/* コア毎の分岐処理 */
+L_SS_Boot_MasterCore_initialize:
+
+
+    _SS_Boot_destroyRamEcc
+    syncp
+    _SS_Boot_enableEcc
+    syncp
+    _SS_Boot_initIntPeri
+    syncp
+    _SS_Boot_initIntPE0
+    syncp
+
+    /* スタックポインタ初期化 */
+    mov     SS_BOOT_u4STACKSTADDR, sp
+    movhi   hi(SS_BOOT_u4STACKSIZE), sp, sp
+    movea   lo(SS_BOOT_u4STACKSIZE), sp, sp
+
+    
+    _SS_Boot_macro_initStackArea SS_BOOT_u4PRESTACKSTADDR, SS_BOOT_u4PRESTACKSIZE    /* プレスタック領域初期化 */
+    
+
+    br	    L_SS_Boot_common_Initialize
+
+#if (SS_USE_CORE_COUNT >= 2u)
+/* コア1用処理 */
+L_SS_Boot_SlaveCore1_initialize:
+
+    _SS_Boot_initIntPE1
+    syncp
+
+    /* スタックポインタ初期化 */
+    mov     SS_BOOT_u4STACKSTADDR1, sp
+    movhi   hi(SS_BOOT_u4STACKSIZE1), sp, sp
+    movea   lo(SS_BOOT_u4STACKSIZE1), sp, sp
+
+    _SS_Boot_macro_initStackArea SS_BOOT_u4PRESTACKSTADDR1, SS_BOOT_u4PRESTACKSIZE1
+                                                        /* プレスタック領域初期化 */
+
+    br      L_SS_Boot_common_Initialize
+#endif /* SS_USE_CORE_COUNT >= 2u */
+#if (SS_USE_CORE_COUNT >= 3u)
+/* コア2用処理 */
+L_SS_Boot_SlaveCore2_initialize:
+
+    _SS_Boot_initIntPE2
+    syncp
+
+    /* スタックポインタ初期化 */
+    mov     SS_BOOT_u4STACKSTADDR2, sp
+    movhi   hi(SS_BOOT_u4STACKSIZE2), sp, sp
+    movea   lo(SS_BOOT_u4STACKSIZE2), sp, sp
+
+    _SS_Boot_macro_initStackArea SS_BOOT_u4PRESTACKSTADDR2, SS_BOOT_u4PRESTACKSIZE2
+                                                        /* プレスタック領域初期化 */
+
+    br      L_SS_Boot_common_Initialize
+#endif /* SS_USE_CORE_COUNT >= 3u */
+#if (SS_USE_CORE_COUNT >= 4u)
+/* コア3用処理 */
+L_SS_Boot_SlaveCore3_initialize:
+
+    _SS_Boot_initIntPE3
+    syncp
+
+    /* スタックポインタ初期化 */
+    mov     SS_BOOT_u4STACKSTADDR3, sp
+    movhi   hi(SS_BOOT_u4STACKSIZE3), sp, sp
+    movea   lo(SS_BOOT_u4STACKSIZE3), sp, sp
+
+    _SS_Boot_macro_initStackArea SS_BOOT_u4PRESTACKSTADDR3, SS_BOOT_u4PRESTACKSIZE3
+                                                        /* プレスタック領域初期化 */
+
+    br      L_SS_Boot_common_Initialize
+#endif /* SS_USE_CORE_COUNT >= 4u */
+
+L_SS_Boot_common_Initialize:
+
+    _SS_Boot_macro_initGeneralReg                       /* 汎用レジスタ初期化 */
+
+    jarl    _SS_Boot_CompleteHook, lp                   /* リセットブート完了フック */
+
+L_SS_Boot_resetBoot_Loop:
+
+    halt
+    br      L_SS_Boot_resetBoot_Loop                    /* 無限ループ */
+
