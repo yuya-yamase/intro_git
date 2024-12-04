@@ -1,0 +1,11 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :sourceDir=${MCAL_DIR}
+
+    -I${LIB_DIR}
+
+# Icu
+Icu/icu_drv_wk.c
+Icu/cfg/icu_drv_wk_cfg.c

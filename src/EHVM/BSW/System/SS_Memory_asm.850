@@ -1,0 +1,336 @@
+/*****************************************************************************
+ *  Copyright DENSO Corporation. All rights reserved.
+ ****************************************************************************/
+/*****************************************************************************
+ * [File Name]		SS_Memory_asm.850
+ * [Module]			Memory
+ * [Function]		Ram
+ * [Notes]			None
+ ****************************************************************************/
+
+/*----------------------------------------------------------------------------
+ *		Headers
+ *--------------------------------------------------------------------------*/
+
+/*----------------------------------------------------------------------------
+ *		Symbols
+ *--------------------------------------------------------------------------*/
+#define	SS_MEMORY_u4CHECK_UNIT_4BYTE		(4)
+#define SS_MEMORY_u4CHECK_UNIT_32BYTE		(32)
+#define	SS_MEMORY_u4CHECK_PATTERN1		(0xAA55AA55)	/* Check pattern 1 */
+#define	SS_MEMORY_u4CHECK_PATTERN2		(0x55AA55AA)	/* Check pattern 2 */
+
+
+/*----------------------------------------------------------------------------
+ *		Globals
+ *--------------------------------------------------------------------------*/
+	.globl	_SS_Memory_copy
+	.globl	_SS_Memory_set
+	.globl	_SS_Memory_scan
+	.globl	_SS_Memory_writeScan
+
+/*----------------------------------------------------------------------------
+ *		Codes
+ *--------------------------------------------------------------------------*/
+	.section	".ss_code", "ax"
+	.align		4
+
+
+/**---------------------------------------------------------------------------
+ * [Format]		void SS_Memory_scan(volatile uint32* ptStartAddr, uint32 u4Size)
+ * [Function]	Read scan RAM 32byte
+ * [Arguments]	uint32* ptStartAddr		(r6): Start address
+  *				uint32  u4Size			(r7): Area size
+ * [Return]		None
+ * [Notes]		None
+ *----------------------------------------------------------------------*/
+_SS_Memory_scan:
+
+	prepare	{r20},	0
+
+	mov		SS_MEMORY_u4CHECK_UNIT_32BYTE,	r17
+
+SS_Memory_scan_MAIN:
+	cmp		SS_MEMORY_u4CHECK_UNIT_32BYTE, r7
+	bl		SS_Memory_scan_4BYTE_MAIN			/* goto 4byte check if r7 < 32 */ 
+
+	ld.w	0[r6],	r20
+	ld.w	4[r6],	r20
+	ld.w	8[r6],	r20
+	ld.w	12[r6],	r20
+	ld.w	16[r6],	r20
+	ld.w	20[r6],	r20
+	ld.w	24[r6],	r20
+	ld.w	28[r6],	r20
+
+	/* goto next loop */
+	add		r17,	r6					/* add 32 to check address */
+	sub		r17,	r7
+	bh		SS_Memory_scan_MAIN			/* loop when (r7 - 32 > 0) */
+
+	br		SS_Memory_scan_OK
+
+/* check 4byte */
+SS_Memory_scan_4BYTE_MAIN:
+	mov		SS_MEMORY_u4CHECK_UNIT_4BYTE,	r17
+
+SS_Memory_scan_4BYTE:
+	ld.w	0[r6],	r20
+
+	/* goto next loop */
+	add		r17,	r6						/* add SS_MEMORY_u4CHECK_UNIT_4BYTE(=4) to check address */
+	sub		r17,	r7
+	bh		SS_Memory_scan_4BYTE			/* loop when (r7 - 4 > 0) */
+
+SS_Memory_scan_OK:
+
+	dispose	0,	{r20},	[lp]				/* return */
+
+
+/**---------------------------------------------------------------------------
+ * [Format]		uint32 * SS_Memory_set(uint32* ptAddr, uint32 u4Data, uint32 u4Size)
+ * [Function]	Clear by 0
+ * [Arguments]	uint32* ptAddr	(r6): Start address
+ *				uint32 u4Data	(r7): Set Data
+  *				uint32 u4Size	(r8): Area size
+ * [Return]		uint32* ptAddr	(r10): Start address
+ * [Notes]		This Function must call in DI
+ *--------------------------------------------------------------------------*/
+_SS_Memory_set:
+
+	prepare	{r20-r28},	0
+	/* 戻り値にStart addressを設定 */
+	mov 	r6,r10
+	/* 0サイズチェック */
+	cmp		r0,		r8
+	bz		SS_Memory_set_End		/* 引数に与えられたサイズが0のときは終了 */
+
+	/* 定数をレジスタへ格納 */
+	mov		SS_MEMORY_u4CHECK_UNIT_4BYTE,		r20
+	mov		SS_MEMORY_u4CHECK_UNIT_32BYTE,	r21
+
+SS_Memory_set_Main:
+	cmp		r21,		r8
+	bl		SS_Memory_set_4byte		/* 残りサイズが32byte未満のため４BYTE単位でセット */
+
+/* 32byte以上: */
+SS_Memory_set_32byte:
+
+	st.w	r7,	0[r6]
+	st.w	r7,	4[r6]
+	st.w	r7,	8[r6]
+	st.w	r7,	12[r6]
+	st.w	r7,	16[r6]
+	st.w	r7,	20[r6]
+	st.w	r7,	24[r6]
+	st.w	r7,	28[r6]
+
+	add		r21,	r6				/* ポインタを32byteすすめる */
+	sub		r21,	r8				/* 残りサイズを32byte減算 */
+		
+	bh		SS_Memory_set_Main		/* 残り領域があり */
+	br		SS_Memory_set_End		/* 残り領域がなし */
+
+SS_Memory_set_4byte:
+	st.w	r7,		0[r6]
+	add		r20,	r6				/* ポインタを4byteすすめる */
+	sub		r20,	r8				/* 残りサイズを4byte減算 */
+
+	bh		SS_Memory_set_4byte		/* 残りサイズが0になるまで4byteコピー */
+
+SS_Memory_set_End:
+	dispose	0, {r20-r28}, [lp]		/* return */
+
+
+/**---------------------------------------------------------------------------
+ * [Format]		uint32 * SS_Memory_copy(uint32* ptDestAddr, uint32* ptSrcAddr, uint32 u4Size)
+ * [Function]	Copy initial value
+ * [Arguments]	uint32* ptDestAddr	(r6): Destination address
+ *				uint32* ptSrcAddr	(r7): Source address
+ *				uint32 u4Size		(r8): Size
+ * [Return]		uint32* ptDestAddr	(r10): Destination address
+ * [Notes]		This Function must call in DI
+ *--------------------------------------------------------------------------*/
+_SS_Memory_copy:
+	prepare	{r20-r29},	0
+	/* 戻り値にDestination addressを設定 */
+	mov 	r6,r10
+	
+	/* 0サイズチェック */
+	cmp		r0,		r8
+	bz		SS_Memory_copy_End		/* 引数に与えられたサイズが0のときは終了 */
+
+	/* 定数をレジスタへ格納 */
+	mov		SS_MEMORY_u4CHECK_UNIT_4BYTE,		r20
+	mov		SS_MEMORY_u4CHECK_UNIT_32BYTE,	r21
+
+SS_Memory_copy_Main:
+	cmp		r21,		r8			/* 32byteチェックするか判定 */
+	bl		SS_Memory_copy_4byte	/* 残りサイズが32byte以上	: 32byteごとに連続アクセスしながらコピー */
+									/* それ以外 				: 4バイトごとにコピー */
+
+SS_Memory_copy_32byte:
+	/* 32byte連続アクセスしながらコピー */
+	ld.w	0[r7],	r22				/* コピー元領域のデータをレジスタへ32byte分格納 */
+	ld.w	4[r7],	r23
+	ld.w	8[r7],	r24
+	ld.w	12[r7],	r25
+	ld.w	16[r7],	r26
+	ld.w	20[r7],	r27
+	ld.w	24[r7],	r28
+	ld.w	28[r7],	r29
+
+	add		r21,	r7				/* コピー元領域を指すポインタを32byteすすめる */
+
+	st.w	r22,	0[r6]			/* レジスタのデータをコピー先領域へ32byte分格納 */
+	st.w	r23,	4[r6]
+	st.w	r24,	8[r6]
+	st.w	r25,	12[r6]
+	st.w	r26,	16[r6]
+	st.w	r27,	20[r6]
+	st.w	r28,	24[r6]
+	st.w	r29,	28[r6]
+
+	add		r21,	r6				/* コピー先領域を指すポインタを32byteすすめる */
+	sub		r21,	r8				/* 残りサイズを32byte減算 */
+		
+	bh		SS_Memory_copy_Main		/* 残り領域が0より大きい	: SS_Memory_copy_mainへ */
+	br		SS_Memory_copy_End		/* 上記以外					: 終了 */
+
+SS_Memory_copy_4byte:
+	/* 4byteごとにコピー */
+	ld.w	0[r7],	r22				/* コピー元領域のデータをレジスタへ4byte分格納 */
+	add		r20,	r7				/* コピー元領域を指すポインタを4byteすすめる */
+	st.w	r22,	0[r6]			/* レジスタのデータをコピー先領域へ4byte分格納 */
+	add		r20,	r6				/* コピー先領域を指すポインタを4byteすすめる */
+	sub		r20,	r8				/* 残りサイズを4byte減算 */
+
+	bh		SS_Memory_copy_4byte	/* 残りサイズが0になるまで4byteコピー */
+
+SS_Memory_copy_End:
+
+	dispose	0, {r20-r29}, [lp]		/* return */
+
+/**---------------------------------------------------------------------------
+ * [Format]		void SS_Memory_writeScan(volatile uint32* ptStartAddr, uint32 u4Size)
+ * [Function]	Write read scan RAM 32byte
+ * [Arguments]	uint32* ptStartaddr	(r6): Start address
+  *				uint32  u4Size		(r7): Area size
+ * [Return]		None
+ * [Notes]		None
+ *----------------------------------------------------------------------*/
+_SS_Memory_writeScan:
+	pushsp		r11-r28
+
+	cmp		r0,		r7							/* check size */
+	bz		SS_Memory_checkSub_OK				/* if size is 0, return success */
+
+	mov		SS_MEMORY_u4CHECK_PATTERN1,	r11
+	mov		SS_MEMORY_u4CHECK_PATTERN2,	r12
+    .align  32                                  /* adjust alignment */
+
+SS_Memory_checkSub_MAIN:
+	cmp		SS_MEMORY_u4CHECK_UNIT_32BYTE, r7
+	bl		SS_Memory_checkSub_4BYTE			/* goto 4byte check if r7 < 32 */ 
+
+/* check 32byte */
+SS_Memory_checkSub_32BYTE:
+	ld.w	0[r6],	r13							/* save original value */
+	ld.w	4[r6],	r14
+	ld.w	8[r6],	r15
+	ld.w	12[r6],	r16
+	ld.w	16[r6],	r17
+	ld.w	20[r6],	r18
+	ld.w	24[r6],	r19
+	ld.w	28[r6],	r20
+
+	st.w	r11,	0[r6]						/* write pattern 1 */
+	st.w	r11,	4[r6]
+	st.w	r11,	8[r6]
+	st.w	r11,	12[r6]
+	st.w	r11,	16[r6]
+	st.w	r11,	20[r6]
+	st.w	r11,	24[r6]
+	st.w	r11,	28[r6]
+
+	ld.w	0[r6],	r21							/* read RAM */
+	ld.w	4[r6],	r22
+	ld.w	8[r6],	r23
+	ld.w	12[r6],	r24
+	ld.w	16[r6],	r25
+	ld.w	20[r6],	r26
+	ld.w	24[r6],	r27
+	ld.w	28[r6],	r28
+	
+	st.w	r12,	0[r6]						/* write pattern 2 */
+	st.w	r12,	4[r6]
+	st.w	r12,	8[r6]
+	st.w	r12,	12[r6]
+	st.w	r12,	16[r6]
+	st.w	r12,	20[r6]
+	st.w	r12,	24[r6]
+	st.w	r12,	28[r6]
+
+	ld.w	0[r6],	r21							/* read RAM */
+	ld.w	4[r6],	r22
+	ld.w	8[r6],	r23
+	ld.w	12[r6],	r24
+	ld.w	16[r6],	r25
+	ld.w	20[r6],	r26
+	ld.w	24[r6],	r27
+	ld.w	28[r6],	r28
+
+	st.w	r13,	0[r6]						/* write original value */
+	st.w	r14,	4[r6]
+	st.w	r15,	8[r6]
+	st.w	r16,	12[r6]
+	st.w	r17,	16[r6]
+	st.w	r18,	20[r6]
+	st.w	r19,	24[r6]
+	st.w	r20,	28[r6]
+
+	ld.w	0[r6],	r21							/* read RAM */
+	ld.w	4[r6],	r22
+	ld.w	8[r6],	r23
+	ld.w	12[r6],	r24
+	ld.w	16[r6],	r25
+	ld.w	20[r6],	r26
+	ld.w	24[r6],	r27
+	ld.w	28[r6],	r28
+
+	/* goto next loop */
+	mov		SS_MEMORY_u4CHECK_UNIT_32BYTE,	r17
+	add		r17,	r6							/* add 32 to check address */
+	sub		r17,	r7
+	bh		SS_Memory_checkSub_MAIN				/* loop when (r7 - 32 > 0) */
+
+	br		SS_Memory_checkSub_OK
+
+/* check 4byte */
+SS_Memory_checkSub_4BYTE:
+	ld.w	0[r6],	r13							/* save original value */
+
+	st.w	r11,	0[r6]						/* write pattern 1 */
+
+	ld.w	0[r6],	r17							/* read RAM */
+
+	st.w	r12,	0[r6]						/* write pattern 2 */
+
+	ld.w	0[r6],	r17							/* read RAM */
+
+	st.w	r13,	0[r6]						/* write original value */
+
+	ld.w	0[r6],	r17							/* read RAM */
+
+	/* goto next loop */
+	mov		SS_MEMORY_u4CHECK_UNIT_4BYTE,	r17
+	add		r17,	r6							/* add SS_MEMORY_u4CHECK_UNIT_4BYTE to check address */
+	sub		r17,	r7
+	bh		SS_Memory_checkSub_4BYTE			/* loop when (r7 - 4 > 0) */
+
+SS_Memory_checkSub_OK:
+	popsp		r11-r28
+
+	jmp		[lp]								/* return */
+
+/**** End of File ***********************************************************/

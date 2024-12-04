@@ -1,0 +1,7 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :sourceDir=${MCAL_DIR}/MCU
+
+Mcu.c

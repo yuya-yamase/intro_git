@@ -1,0 +1,5 @@
+// MBS_OPT="early"
+addhook -after connect { reset }
+addhook -after download { reset }
+addhook -after download { s; pc=0; target PIN K }
+addhook -after reset { target PIN K }

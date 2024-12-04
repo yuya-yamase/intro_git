@@ -1,0 +1,65 @@
+/*
+    Copyright (C) 2021 By eSOL Co.,Ltd. Tokyo, Japan
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+
+/****************************************************************************
+[ar_svc_if_v850_ghs.850] - MCOS assembly implements for V850
+****************************************************************************/
+
+#define _in_asm_source_
+
+#include "Os_Cfg_base.h"
+
+#include <mcos/mcos_ar_hook_code.h>
+
+#if (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON)
+
+#define OS_START_SEC_CODE_SHARED
+#include "Os_MemMap.h"
+
+ /*---------------------------------------------------------------------------
+  ar_service_call_d_dpdd_notrace
+    AP I/F routine
+  Input     :   r6 : arg1    first data arguments of SVC
+            :   r7 : p_arg2  second pointer argument of SVC
+            :   r8 : arg3    third data argument of SVC
+            :   r9 : arg4    forth data argument of SVC
+            :   0[SP] : SVCID   SVC ID
+  Output    :   return value of SVC
+  Return    :
+  Note      :   none
+ ---------------------------------------------------------------------------*/
+
+    .align 1
+
+    .global _ar_service_call_d_dpdd_notrace
+
+    .type   _ar_service_call_d_dpdd_notrace, $function
+
+_ar_service_call_d_dpdd_notrace:
+    ld.w      0[SP], r10
+    prepare   {lp}, 0
+
+    syscall   1
+
+    dispose   0, {lp}, [lp]
+
+    .size   _ar_service_call_d_dpdd_notrace, .-_ar_service_call_d_dpdd_notrace
+
+#define OS_STOP_SEC_CODE_SHARED
+#include "Os_MemMap.h"
+
+#endif /* (AR_OS_USE_SCALABILITYCLASS_3_OR_4 == STD_ON) */

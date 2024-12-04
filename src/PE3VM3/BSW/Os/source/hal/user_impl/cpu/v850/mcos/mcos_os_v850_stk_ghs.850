@@ -1,0 +1,64 @@
+/*
+    Copyright(C) 2019 eSOL Co., Ltd. All rights reserved.
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+/****************************************************************************
+[ mcos_os_v850_stk_ghs.850 ] - MCOS V850 stack support
+****************************************************************************/
+
+    #define _in_asm_source_
+
+#include "hal/cpu/v850/mcos/mcos_v850_stack.cfg"
+
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+
+    .import _mcos_mksysstack_bottom_addr_table   /* in mcos_mk_data_v850.c */
+    .import _mcos_mksysstack_top_addr_table      /* in mcos_mk_data_v850.c */
+
+/*
+ * get system stack upper address
+ *
+ * Input     :   r6 relative core index
+ * Output    :   r10 bottom address of the stack for the core
+ * Return    :   upper system stack address for micro-kernel
+ * Note      :   -
+ */
+    .type   _mcos_v850_local_memory_bottom, $function
+    .global _mcos_v850_local_memory_bottom
+_mcos_v850_local_memory_bottom:
+    mov     ___ghsend_ss_stack, r10
+    jmp     lp
+
+    .size   _mcos_v850_local_memory_bottom, .-_mcos_v850_local_memory_bottom
+
+/*
+ * get mk stack lower address
+ *
+ * Input     :   r6 relative core index
+ * Output    :   r10 stack pointer
+ * Return    :   lower system stack address for micro-kernel
+ * Note      :   -
+ */
+    .type   _mcos_v850_local_memory_top, $function
+    .global _mcos_v850_local_memory_top
+_mcos_v850_local_memory_top:
+    mov     ___ghsbegin_ss_stack, r10
+    jmp     lp
+
+    .size   _mcos_v850_local_memory_top, .-_mcos_v850_local_memory_top
+
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"

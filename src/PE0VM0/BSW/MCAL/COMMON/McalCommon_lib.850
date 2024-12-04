@@ -1,0 +1,66 @@
+/* Common-r04-30700-0000-a-v01 */
+/************************************************************************************************/
+/*																								*/
+/*		McalCommon_lib.850																		*/
+/*																								*/
+/*		Copyright : DENSO CORPORATION															*/
+/*																								*/
+/************************************************************************************************/
+
+/*==============================================================================================*/
+/* define / include files / data types / structs / unions / macros								*/
+/*==============================================================================================*/
+
+/*----------------------------------------------------------------------------------------------*/
+/* API Functions																				*/
+/*----------------------------------------------------------------------------------------------*/
+/************************************************************************************************/
+/* Service name		:	syncp instruction														*/
+/* Reentrancy		:	Reentrant								    							*/
+/* Parameters(in)	:	none                                    								*/
+/* Return value		:	none																	*/
+/* Limitation		:	none																	*/
+/************************************************************************************************/
+	.section ".MCALCOMMON_TEXT_CODE","ax"
+	.align 4
+	.globl _mcalcommon_syncp_func
+_mcalcommon_syncp_func:
+	syncp
+    jmp [lp]
+
+/************************************************************************************************/
+/* Service name		:	nop instruction															*/
+/* Reentrancy		:	Reentrant								    							*/
+/* Parameters(in)	:	none                                    								*/
+/* Return value		:	none																	*/
+/* Limitation		:	none																	*/
+/************************************************************************************************/
+	.section ".MCALCOMMON_TEXT_CODE","ax"
+	.align 4
+	.globl _mcalcommon_nop_func
+_mcalcommon_nop_func:
+	nop
+	jmp [lp]
+
+/************************************************************************************************/
+/* Service name		:	wait function 40n[cycle]												*/
+/* Reentrancy		:	Reentrant								    							*/
+/* Parameters(in)	:	wait cycle number                        								*/
+/* Return value		:	none																	*/
+/* Limitation		:	none																	*/
+/************************************************************************************************/
+	.section ".MCALCOMMON_TEXT_CODE","ax"
+	.align 4
+	.globl _mcalcommon_wait_func
+_mcalcommon_wait_func:
+					;/*	; Line	; Cycle   */	;/* Accumulate Cycle */
+	shl	3, r6		;/*	; L1	; 1		; */	;/* +1      */
+					;/* Shift left by 3 bits (8times) */
+LOOP:				;/* 1 loop = 5 cycle  */
+	syncp			;/*	; L2	; 3		; */	;/* +4      */
+	loop	r6, LOOP;/*	; L3	; 2		; */	;/* +6      */
+
+END:				;/* +3(4-1)       */
+	jmp	[lp]	;/*	; L4	  ; 2:6	; */		;/* +2-6    */
+
+/*-- End Of File -------------------------------------------------------------------------------*/
