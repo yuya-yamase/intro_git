@@ -1,0 +1,32 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${APP_DIR}
+
+    -I${CAN_DIR}/inc
+
+    -I${CAN_DIR}/CS/inc
+    -I${CAN_DIR}/Com/inc
+    -I${CAN_DIR}/CanNm/inc/common
+    -I${CAN_DIR}/BswM_CS/inc
+    -I${CAN_DIR}/Can/cfg/rscf4
+
+    -I${OXCAN_DIR}/config_U2A16_met
+    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/scc
+    -I${VEHOPE_DIR}/scc
+    -I${VEHOPE_DIR}/config_U2A16_met
+
+    -I${MS_DIR}/Rim/scc
+    -I${MS_DIR}/Rim/config
+
+    -I${IOHW_DIR}/iohw_adc
+    -I${IOHW_DIR}/iohw_adc/cfg
+    -I${IOHW_DIR}/iohw_diflt
+    -I${IOHW_DIR}/iohw_diflt/cfg
+
+    -I${LIB_DIR}
+
+Ecu_Intg_Callout.c
+ShtdwnM/bsw_m.c
+ShtdwnM/cfg/bsw_m_cfg.c
+Stub/stub_u2a.c

@@ -1,0 +1,225 @@
+/*
+    Copyright (C) 2022 eSOL Co.,Ltd. All rights reserved.
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+
+/****************************************************************************
+[ehvm_VmM_ghs.850] - EHVM assembly implements for v850
+****************************************************************************/
+    .file "ehvm_VmM_ghs.850"
+
+#define VM_EXIT_FUNC                             4
+#define VM_RESET_FACTOR_FUNC                     5
+#define VM_ENABLE_SUPPRESS_VM_NORMAL_FUNC        13
+#define VM_DISABLE_SUPPRESS_VM_NORMAL_FUNC      14
+#define VM_GET_STARTUP_STATUS_FUNC              15
+#define VM_RESET_VM_FUNC                        16
+#define VM_GET_WAKEUP_FACTOR_FUNC               18
+#define VM_SET_WAKEUP_FACTOR_FUNC               19
+#define VM_CLEAR_WAKEUP_FACTOR_FUNC             20
+#define VM_ENABLE_WAKEUP_FACTOR_FUNC            21
+#define VM_DISABLE_WAKEUP_FACTOR_FUNC           22
+#define VM_VM_STATUSCHK_FUNC                    23
+
+
+
+
+    .global _ehvm_vmm_exit_hvc
+    .type   _ehvm_vmm_exit_hvc, @function
+_ehvm_vmm_exit_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r14
+    pushsp r1 - r1
+    mov VM_EXIT_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set exit factor */
+    mov r7, r14  /* set vm action */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r14
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_get_reset_factor_hvc
+    .type   _ehvm_vmm_get_reset_factor_hvc, @function
+_ehvm_vmm_get_reset_factor_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r13
+    pushsp r1 - r1
+    mov VM_RESET_FACTOR_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set reset factor */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r13
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_enable_suppression_hvc
+    .type   _ehvm_vmm_enable_suppression_hvc, @function
+_ehvm_vmm_enable_suppression_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r12
+    pushsp r1 - r1
+    mov VM_ENABLE_SUPPRESS_VM_NORMAL_FUNC, r12  /* set functionID */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r12
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_disable_suppression_hvc
+    .type   _ehvm_vmm_disable_suppression_hvc, @function
+_ehvm_vmm_disable_suppression_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r12
+    pushsp r1 - r1
+    mov VM_DISABLE_SUPPRESS_VM_NORMAL_FUNC, r12  /* set functionID */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r12
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_get_vm_status_table_hvc
+    .type   _ehvm_vmm_get_vm_status_table_hvc, @function
+_ehvm_vmm_get_vm_status_table_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r13
+    pushsp r1 - r1
+    mov VM_GET_STARTUP_STATUS_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set vm_current_status */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r13
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_reset_vm_hvc
+    .type   _ehvm_vmm_reset_vm_hvc, @function
+_ehvm_vmm_reset_vm_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r16
+    pushsp r1 - r1
+    mov VM_RESET_VM_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set resettyp */
+    mov r7, r14  /* set contextId */
+    mov r8, r15  /* set vm_exit_factor */
+    mov r9, r16  /* set vm_action */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r16
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_get_wakeup_factor_hvc
+    .type   _ehvm_vmm_get_wakeup_factor_hvc, @function
+_ehvm_vmm_get_wakeup_factor_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r14
+    pushsp r1 - r1
+    mov VM_GET_WAKEUP_FACTOR_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set wakeup_factor_size */
+    mov r7, r14  /* set wakeup_factor_status */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r14
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_set_wakeup_factor_hvc
+    .type   _ehvm_vmm_set_wakeup_factor_hvc, @function
+_ehvm_vmm_set_wakeup_factor_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r14
+    pushsp r1 - r1
+    mov VM_SET_WAKEUP_FACTOR_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set wakeup_factor_num */
+    mov r7, r14  /* set clear_bit_num */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r14
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_clear_wakeup_factor_hvc
+    .type   _ehvm_vmm_clear_wakeup_factor_hvc, @function
+_ehvm_vmm_clear_wakeup_factor_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r14
+    pushsp r1 - r1
+    mov VM_CLEAR_WAKEUP_FACTOR_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set resettyp */
+    mov r7, r14  /* set contextId */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r14
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_enable_wakeup_factor_hvc
+    .type   _ehvm_vmm_enable_wakeup_factor_hvc, @function
+_ehvm_vmm_enable_wakeup_factor_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r14
+    pushsp r1 - r1
+    mov VM_ENABLE_WAKEUP_FACTOR_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set wakeup_factor_mask_num */
+    mov r7, r14  /* set enable_bit_num */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r14
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_disable_wakeup_factor_hvc
+    .type   _ehvm_vmm_disable_wakeup_factor_hvc, @function
+_ehvm_vmm_disable_wakeup_factor_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r14
+    pushsp r1 - r1
+    mov VM_DISABLE_WAKEUP_FACTOR_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set wakeup_factor_mask_num */
+    mov r7, r14  /* set disable_bit_num */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r14
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_vmm_get_all_other_vm_status_hvc
+    .type   _ehvm_vmm_get_all_other_vm_status_hvc, @function
+_ehvm_vmm_get_all_other_vm_status_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r13
+    pushsp r1 - r1
+    mov VM_VM_STATUSCHK_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set  vm_status_check */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r13
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+

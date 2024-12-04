@@ -1,0 +1,17 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${IOHW_DIR}
+
+    -I${IOHW_DIR}/iohw_adc
+    -I${IOHW_DIR}/iohw_adc/cfg
+    -I${IOHW_DIR}/iohw_diflt
+    -I${IOHW_DIR}/iohw_diflt/cfg
+
+    -I${LIB_DIR}
+
+
+iohw_adc/iohw_adc.c
+iohw_adc/cfg/iohw_adc_cfg.c
+iohw_diflt/iohw_diflt.c
+iohw_diflt/cfg/iohw_diflt_cfg.c
+

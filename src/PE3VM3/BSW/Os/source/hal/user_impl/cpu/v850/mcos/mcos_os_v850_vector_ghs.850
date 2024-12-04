@@ -1,0 +1,640 @@
+/*
+    Copyright(C) 2022 eSOL Co., Ltd. All rights reserved.
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+/****************************************************************************
+[ mcos_os_v850_vector_ghs.850 ] - MCOS V850 Vector table
+****************************************************************************/
+
+#define _in_asm_source_
+
+#include <mp.cfg>
+
+#define OS_START_SEC_CODE_SHARED
+#include "Os_MemMap.h"
+
+    .extern _mcos_v850_nonos_feexc_entry    /* OS */
+    .extern _mcos_v850_nonos_eiexc_entry    /* OS */
+    
+    .extern _mcos_v850_undefint_entry       /* user routine */
+
+ /*---------------------------------------------------------------------------
+  _mcos_v850_ebase_0
+      Exception vector table for OS (PE0)
+      The OS initializes EBASE as follows. 
+        - [31:9]: The address of _mcos_v850_ebase_0
+        - [1] DV: 0
+        - [0] RINT: 0
+ ---------------------------------------------------------------------------*/
+    .global _mcos_v850_ebase_0
+    .type   _mcos_v850_ebase_0, @function
+    .align  512
+_mcos_v850_ebase_0:
+              /* 0x00: reserved */
+    jr      _mcos_v850_nonos_feexc_entry
+
+    .align  16
+SYSERR_0:     /* 0x10: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+RFU010_0:     /* 0x20: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FETRAP_0:     /* 0x30: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+TRAP0_0:      /* 0x40: EI */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+TRAP1_0:      /* 0x50: EI */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+RIE_0:        /* 0x60: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FPEFXE_0:     /* 0x70: EI */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+UCPOP_0:      /* 0x80: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+MIPMDP_0:     /* 0x90: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+PIE_0:        /* 0xa0: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+RFU0B0_0:     /* 0xb0: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+MAE_0:        /* 0xc0: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+RFU0D0_0:     /* 0xd0: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FENMI_0:      /* 0xe0: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FEINT_0:      /* 0xf0: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    /*
+     * When an undefined interrupt factor with EEICn.EITBn=0 occurs, 
+     * the CPU performs vector fetch from the following table. 
+     */
+    .align  16
+EIINT_PRI00_0: /* 0x100: EIINTn (priority 0) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI01_0: /* 0x110: EIINTn (priority 1) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI02_0: /* 0x120: EIINTn (priority 2) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI03_0: /* 0x130: EIINTn (priority 3) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI04_0: /* 0x140: EIINTn (priority 4) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI05_0: /* 0x150: EIINTn (priority 5) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI06_0: /* 0x160: EIINTn (priority 6) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI07_0: /* 0x170: EIINTn (priority 7) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI08_0: /* 0x180: EIINTn (priority 8) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI09_0: /* 0x190: EIINTn (priority 9) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI10_0: /* 0x1A0: EIINTn (priority 10) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI11_0: /* 0x1B0: EIINTn (priority 11) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI12_0: /* 0x1C0: EIINTn (priority 12) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI13_0: /* 0x1D0: EIINTn (priority 13) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI14_0: /* 0x1E0: EIINTn (priority 14) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI15_0: /* 0x1F0: EIINTn (priority 15) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .size   _mcos_v850_ebase_0, .-_mcos_v850_ebase_0
+
+#if (MP_CONTROL_CORE_COUNT > 1)
+ /*---------------------------------------------------------------------------
+  _mcos_v850_ebase_1
+      Exception vector table for OS (PE1)
+      The OS initializes EBASE as follows. 
+        - [31:9]: The address of _mcos_v850_ebase_1
+        - [1] DV: 0
+        - [0] RINT: 0
+ ---------------------------------------------------------------------------*/
+    .global _mcos_v850_ebase_1
+    .type   _mcos_v850_ebase_1, @function
+    .align  512
+_mcos_v850_ebase_1:
+              /* 0x00: reserved */
+    jr      _mcos_v850_nonos_feexc_entry
+
+    .align  16
+SYSERR_1:     /* 0x10: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+RFU010_1:     /* 0x20: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FETRAP_1:     /* 0x30: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+TRAP0_1:      /* 0x40: EI */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+TRAP1_1:      /* 0x50: EI */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+RIE_1:        /* 0x60: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FPEFXE_1:     /* 0x70: EI */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+UCPOP_1:      /* 0x80: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+MIPMDP_1:     /* 0x90: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+PIE_1:        /* 0xa0: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+RFU0B0_1:     /* 0xb0: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+MAE_1:        /* 0xc0: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+RFU0D0_1:     /* 0xd0: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FENMI_1:      /* 0xe0: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FEINT_1:      /* 0xf0: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    /*
+     * When an undefined interrupt factor with EEICn.EITBn=0 occurs, 
+     * the CPU performs vector fetch from the following table. 
+     */
+    .align  16
+EIINT_PRI00_1: /* 0x100: EIINTn (priority 0) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI01_1: /* 0x110: EIINTn (priority 1) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI02_1: /* 0x120: EIINTn (priority 2) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI03_1: /* 0x130: EIINTn (priority 3) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI04_1: /* 0x140: EIINTn (priority 4) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI05_1: /* 0x150: EIINTn (priority 5) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI06_1: /* 0x160: EIINTn (priority 6) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI07_1: /* 0x170: EIINTn (priority 7) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI08_1: /* 0x180: EIINTn (priority 8) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI09_1: /* 0x190: EIINTn (priority 9) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI10_1: /* 0x1A0: EIINTn (priority 10) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI11_1: /* 0x1B0: EIINTn (priority 11) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI12_1: /* 0x1C0: EIINTn (priority 12) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI13_1: /* 0x1D0: EIINTn (priority 13) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI14_1: /* 0x1E0: EIINTn (priority 14) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI15_1: /* 0x1F0: EIINTn (priority 15) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .size   _mcos_v850_ebase_1, .-_mcos_v850_ebase_1
+
+#endif /* #if (MP_CONTROL_CORE_COUNT > 1) */
+
+#if (MP_CONTROL_CORE_COUNT > 2)
+ /*---------------------------------------------------------------------------
+  _mcos_v850_ebase_2
+      Exception vector table for OS (PE2)
+      The OS initializes EBASE as follows. 
+        - [31:9]: The address of _mcos_v850_ebase_2
+        - [1] DV: 0
+        - [0] RINT: 0
+ ---------------------------------------------------------------------------*/
+    .global _mcos_v850_ebase_2
+    .type   _mcos_v850_ebase_2, @function
+    .align  512
+_mcos_v850_ebase_2:
+              /* 0x00: reserved */
+    jr      _mcos_v850_nonos_feexc_entry
+
+    .align  16
+SYSERR_2:     /* 0x10: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+RFU010_2:     /* 0x20: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FETRAP_2:     /* 0x30: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+TRAP0_2:      /* 0x40: EI */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+TRAP1_2:      /* 0x50: EI */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+RIE_2:        /* 0x60: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FPEFXE_2:     /* 0x70: EI */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+UCPOP_2:      /* 0x80: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+MIPMDP_2:     /* 0x90: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+PIE_2:        /* 0xa0: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+RFU0B0_2:     /* 0xb0: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+MAE_2:        /* 0xc0: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+RFU0D0_2:     /* 0xd0: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FENMI_2:      /* 0xe0: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FEINT_2:      /* 0xf0: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    /*
+     * When an undefined interrupt factor with EEICn.EITBn=0 occurs, 
+     * the CPU performs vector fetch from the following table. 
+     */
+    .align  16
+EIINT_PRI00_2: /* 0x100: EIINTn (priority 0) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI01_2: /* 0x110: EIINTn (priority 1) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI02_2: /* 0x120: EIINTn (priority 2) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI03_2: /* 0x130: EIINTn (priority 3) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI04_2: /* 0x140: EIINTn (priority 4) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI05_2: /* 0x150: EIINTn (priority 5) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI06_2: /* 0x160: EIINTn (priority 6) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI07_2: /* 0x170: EIINTn (priority 7) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI08_2: /* 0x180: EIINTn (priority 8) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI09_2: /* 0x190: EIINTn (priority 9) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI10_2: /* 0x1A0: EIINTn (priority 10) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI11_2: /* 0x1B0: EIINTn (priority 11) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI12_2: /* 0x1C0: EIINTn (priority 12) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI13_2: /* 0x1D0: EIINTn (priority 13) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI14_2: /* 0x1E0: EIINTn (priority 14) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI15_2: /* 0x1F0: EIINTn (priority 15) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .size   _mcos_v850_ebase_2, .-_mcos_v850_ebase_2
+
+#endif /* #if (MP_CONTROL_CORE_COUNT > 2) */
+
+#if (MP_CONTROL_CORE_COUNT > 3)
+ /*---------------------------------------------------------------------------
+  _mcos_v850_ebase_3
+      Exception vector table for OS (PE3)
+      The OS initializes EBASE as follows. 
+        - [31:9]: The address of _mcos_v850_ebase_3
+        - [1] DV: 0
+        - [0] RINT: 0
+ ---------------------------------------------------------------------------*/
+    .global _mcos_v850_ebase_3
+    .type   _mcos_v850_ebase_3, @function
+    .align  512
+_mcos_v850_ebase_3:
+              /* 0x00: reserved */
+    jr      _mcos_v850_nonos_feexc_entry
+
+    .align  16
+SYSERR_3:     /* 0x10: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+RFU010_3:     /* 0x20: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FETRAP_3:     /* 0x30: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+TRAP0_3:      /* 0x40: EI */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+TRAP1_3:      /* 0x50: EI */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+RIE_3:        /* 0x60: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FPEFXE_3:     /* 0x70: EI */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_eiexc_entry              /* call OS */
+
+    .align  16
+UCPOP_3:      /* 0x80: FE */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+MIPMDP_3:     /* 0x90: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+PIE_3:        /* 0xa0: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+RFU0B0_3:     /* 0xb0: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+MAE_3:        /* 0xc0: FE */
+    jr      _mcos_v850_feexc_entry              /* call OS */
+
+    .align  16
+RFU0D0_3:     /* 0xd0: reserved */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FENMI_3:      /* 0xe0: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    .align  16
+FEINT_3:      /* 0xf0: FE */
+    syncp   /* Support against errata of G3M core. */
+    jr      _mcos_v850_nonos_feexc_entry        /* call user routine */
+
+    /*
+     * When an undefined interrupt factor with EEICn.EITBn=0 occurs, 
+     * the CPU performs vector fetch from the following table. 
+     */
+    .align  16
+EIINT_PRI00_3: /* 0x100: EIINTn (priority 0) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI01_3: /* 0x110: EIINTn (priority 1) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI02_3: /* 0x120: EIINTn (priority 2) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI03_3: /* 0x130: EIINTn (priority 3) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI04_3: /* 0x140: EIINTn (priority 4) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI05_3: /* 0x150: EIINTn (priority 5) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI06_3: /* 0x160: EIINTn (priority 6) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI07_3: /* 0x170: EIINTn (priority 7) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI08_3: /* 0x180: EIINTn (priority 8) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI09_3: /* 0x190: EIINTn (priority 9) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI10_3: /* 0x1A0: EIINTn (priority 10) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI11_3: /* 0x1B0: EIINTn (priority 11) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI12_3: /* 0x1C0: EIINTn (priority 12) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI13_3: /* 0x1D0: EIINTn (priority 13) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI14_3: /* 0x1E0: EIINTn (priority 14) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .align  16
+EIINT_PRI15_3: /* 0x1F0: EIINTn (priority 15) */
+    jr      _mcos_v850_undefint_entry           /* call user routine */
+
+    .size   _mcos_v850_ebase_3, .-_mcos_v850_ebase_3
+
+#endif /* #if (MP_CONTROL_CORE_COUNT > 3) */
+
+#define OS_STOP_SEC_CODE_SHARED
+#include "Os_MemMap.h"
+
