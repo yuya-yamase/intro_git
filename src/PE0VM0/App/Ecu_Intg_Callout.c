@@ -25,6 +25,7 @@
 
 #include "iohw_adc.h"
 #include "iohw_diflt.h"
+#include "xspi.h"
 
 #include "icu_drv_wk.h"
 
@@ -32,6 +33,11 @@
 #include "oxcan.h"
 
 #include "stub.h"
+
+#include "Mcu_PwrCtrl.h"
+
+/* 暫定 */
+#include "Mcu_Sys_Pwr.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -76,12 +82,21 @@ Std_ReturnType Ecu_Intg_initCdd(Ecu_Intg_BootCauseType u4BootCause)
             break;
     }
 
+    /* XSPI初期化処理 */
+    xspi_Init( XSPI_CH_01 );    /* IVI */
+    xspi_Init( XSPI_CH_02 );    /* METER */
+    xspi_Init( XSPI_CH_03 );    /* CENTRAL */
+
     return E_OK;
 }
 
 
 Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
 {
+    /* User Hook start */
+    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req( u4BootCause ); /* +B-ONウェイクアップシーケンス開始 */
+    /* User Hook end */
+
     return E_OK;
 }
 
@@ -101,12 +116,25 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
     vd_g_oXCANMainPreTask();
     vd_g_VehopemdMainTask();
 
+    /* XSPIメイン処理 */
+    xspi_Main( XSPI_CH_01 );    /* IVI */
+    xspi_Main( XSPI_CH_02 );    /* METER */
+    xspi_Main( XSPI_CH_03 );    /* CENTRAL */
+
     return E_OK;
 }
 
 
 Std_ReturnType Ecu_Intg_mainFuncApp(void)
 {
+    /* User Hook start */
+    vd_g_Mcu_PwrCtrl_Task1ms();
+
+    /* 暫定：デバイスON制御 */
+    Mcu_Dev_Pwron();
+
+    /* User Hook end */
+
     return E_OK;
 }
 
