@@ -1,0 +1,16 @@
+*.d
+*.dbo
+*.o
+*.lst
+*.dep
+*.dnm
+*.elf
+*.map
+*.run
+*.mot
+*.dla
+.vscode
+*.bak
+*.dle
+*build.log
+*.x

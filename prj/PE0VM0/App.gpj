@@ -1,8 +1,13 @@
 #!gbuild
 [Subproject]
     :sourceDir=${APP_DIR}
+    :sourceDir=${APP_DIR}/Common/PwrCtrl
+    :sourceDir=${APP_DIR}/Common/xspi
+    :sourceDir=${APP_DIR}/Product/config
 
     -I${CAN_DIR}/inc
+    -I${APP_DIR}/Common
+    -I${APP_DIR}/Common/xspi
 
     -I${CAN_DIR}/CS/inc
     -I${CAN_DIR}/Com/inc
@@ -26,7 +31,19 @@
 
     -I${LIB_DIR}
 
+    -I${APP_DIR}/Common/PwrCtrl
+
 Ecu_Intg_Callout.c
 ShtdwnM/bsw_m.c
 ShtdwnM/cfg/bsw_m_cfg.c
 Stub/stub_u2a.c
+Mcu_Main.c
+Mcu_NoRedun_PwrCtrl.c
+Mcu_PwrCtrl.c
+Mcu_Sip_Pwr.c
+Mcu_Sys_Pwr.c
+xspi.c
+xspi_ivi.c
+xspi_central.c
+xspi_meter.c
+product_cfg.c
