@@ -84,7 +84,7 @@ static uint8 u1_s_Mcu_PwrCtrl_SipPwrSts;                  /* SiPìdåπèÛë‘    */
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req(Ecu_Intg_BootCauseType u4BootCause) /* ébíËBSW_BEVCDCFD-429 */
+void vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req(Ecu_Intg_BootCauseType u4BootCause)
 {
 #if 0
     switch(u4BootCause)
