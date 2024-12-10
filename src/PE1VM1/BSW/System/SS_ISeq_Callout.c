@@ -168,6 +168,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
     {
         (void)SS_Memory_set(__ghsbegin_bsw_n_rvar_top, 0UL, (uintptr_t)BSW_N_RVAR_SIZE);
         (void)SS_Memory_copy(__ghsbegin_bsw_n_rvar_withval_top, __ghsbegin_bsw_n_rvar_ival_top, (uintptr_t)BSW_N_RVAR_WITHVAL_SIZE);
+        (void)SS_Memory_set(__ghsbegin_ecu_n_bvar_top, 0UL, (uintptr_t)ECU_N_BVAR_SIZE);
     }
 
     vd_g_Gpt_OstInit();    /* call in each VM that use OSTM */

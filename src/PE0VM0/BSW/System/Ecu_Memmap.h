@@ -55,6 +55,10 @@ extern uint32 __ghsbegin_MEM_SEC_STA_RAM_LOC_APPL[];
 extern uint32 __ghsbegin_MEM_SEC_END_RAM_LOC_APPL[];
 extern uint32 LOC_RAM_SIZE[];
 
+extern uint32 __ghsbegin_cdd_ram_top[];
+extern uint32 __ghsbegin_cdd_ram_bottom[];
+extern uint32 CDD_RAM_SIZE[];
+
 extern uint32 __ghsbegin_MEM_SEC_ADDR_STA_BSS_MS[];
 extern uint32 __ghsbegin_MEM_SEC_ADDR_END_BSS_MS[];
 extern uint32 NVMC_RAM_SIZE[];

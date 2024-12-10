@@ -170,6 +170,8 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR0_top, 0UL, (uintptr_t)ECU_N_NVAR_CR0_SIZE);
         (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR1_top, 0UL, (uintptr_t)ECU_N_NVAR_CR1_SIZE);
 
+        (void)SS_Memory_set(__ghsbegin_cluster2_share_ramtop, 0UL, (uintptr_t)BSW_SHARE_DATA_SIZE);
+
         Spi_PrePortInit();
         /* 以降、IoBufferHoldの解除(REG_STBC_STBCKCPROTの操作)までは一連の処理 */
         Port_Init( &cstPort_Config[0] );

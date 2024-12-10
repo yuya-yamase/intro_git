@@ -1048,7 +1048,7 @@ static EhvmConst ehvm_pbg_channel_t s_Pbg_ChannelData_80[11] = {
     {
         PBG_CHANNEL_2, /* PBG_ChannelNumber */
         0x00000140U,    /* PBGPROT0 */
-        0x00000002U     /* PBGPROT1 */
+        0x00005013U     /* PBGPROT1 */
     },
     {
         PBG_CHANNEL_3, /* PBG_ChannelNumber */
@@ -1088,7 +1088,7 @@ static EhvmConst ehvm_pbg_channel_t s_Pbg_ChannelData_80[11] = {
     {
         PBG_CHANNEL_10, /* PBG_ChannelNumber */
         0x00000140U,    /* PBGPROT0 */
-        0x00000002U     /* PBGPROT1 */
+        0x00005013U     /* PBGPROT1 */
     }
 };
 static EhvmConst ehvm_pbg_channel_t s_Pbg_ChannelData_90[8] = {
