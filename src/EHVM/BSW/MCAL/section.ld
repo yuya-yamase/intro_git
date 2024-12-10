@@ -370,6 +370,7 @@ SECTIONS {
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
 
     .cluster2_share_ramend                                   : > ram_end_cluster2_share 
+    _BSW_SHARE_DATA_SIZE = . - ADDR(.cluster2_share_ramtop);
 
 // TopAddress
     .lram_self_ramtop                                       : > ram_memory_lram_self

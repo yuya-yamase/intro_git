@@ -220,7 +220,11 @@ SECTIONS {
     _MCAL_RAM_SIZE = . - ADDR(.mcal_ram_top);
 
 // CDD Data
+    .cdd_ram_top                 align(4)                  : > .
     .CANIC_BSS_VAR_NO_INIT       align(4)                  : > .
+
+    .cdd_ram_bottom              align(4)                  : > .
+    _CDD_RAM_SIZE = . - ADDR(.cdd_ram_top);
 
 // EndAddress
     .cluster0_ramend                                        : > ram_end_cluster0
