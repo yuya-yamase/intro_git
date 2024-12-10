@@ -45,6 +45,10 @@ static uint8	bf_drv_ComTimeCount_meter;	/* 通信中M-SPIドライバ定周期(5
 static uint32	bf_drv_DMA_Cnt_meter;
 static uint8	bf_drv_Dbg_ErrInfo_meter;		/* デバッグ用エラー情報 */
 
+#if 1 /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
+static uint8 	bf_drv_dummy_flag_meter = 1;
+#endif /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
+
 /****************************
 *		prototype			*
 ****************************/
@@ -422,10 +426,9 @@ uint8*	xspi_Read_meter(
 		bf_drv_SpiMng_meter.rcv.page_task = page;
 
 #if 0	/* [暫定対応]meter向けにFCCチェック無効化 */
-
 		/* FCCチェック */
 		fcc = fc_drv_SpiFccCheck_meter( (uint32*)bf_drv_SpiMng_meter.rcv.page[page_current].dat );
-#else 1
+#else
 		fcc = XSPI_OK;
 #endif	/* [暫定対応]meter向けにFCCチェック無効化 */
 
@@ -676,6 +679,12 @@ void	fc_SpiStartPrepare_meter(
 		rpage = XSPI_RCV_PAGE;
 		fc_drv_SpiSetDbgErrInfo_meter( XSPI_ERR_DBG_OVERFLOW );
 	}
+#if 1 /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
+	if( bf_drv_dummy_flag_meter == 1 )
+	{
+		rpage = XSPI_RCV_PAGE;
+	}
+#endif /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
 
 	/* 受信用バッファアドレス */
 	rcv_buf = (uint8 *)&bf_drv_SpiMng_meter.rcv.page[rpage].dat[0];
@@ -690,6 +699,12 @@ void	fc_SpiStartPrepare_meter(
 	{	/* 送信用バッファ内にデータセットされていない（固定アドレスを指定して空データ送信） */
 		spage = XSPI_SND_PAGE;
 	}
+#if 1 /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
+	if( bf_drv_dummy_flag_meter == 1 )
+	{
+		spage = XSPI_SND_PAGE;
+	}
+#endif /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
 
 	/* 送信用バッファアドレス */
 	snd_buf = (uint8 *)&bf_drv_SpiMng_meter.snd.page[spage].dat[0];
@@ -752,6 +767,10 @@ void	fc_SpiEnd_meter(
 		/* 送受信バッファページ更新 */
 		fc_drv_SpiRcvDpageRenew_meter();
 		fc_drv_SpiSendDpageRenew_meter();
+
+#if 1 /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
+		bf_drv_dummy_flag_meter = 0;
+#endif /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
 	}
 
 	/* 経過時間チェック(通信開始から10ms以上経過している場合) */
@@ -1143,12 +1162,16 @@ uint32	fc_drv_CalculationFcc_meter(uint32 *ulbuf)
 	/* Frame Header 上位4byte 下位4byte 加算 */
 	ulfcc = fc_drv_CalculationFcc_Sub_Addition_meter( BYTE_SWAP_32(ulbuf[0]), BYTE_SWAP_32(ulbuf[1]));
 
+	/* Sub Frame 0 上位4byte 下位4byte 加算 */
+	ulfcc_temp = fc_drv_CalculationFcc_Sub_Addition_meter( BYTE_SWAP_32(ulbuf[2]), BYTE_SWAP_32(ulbuf[3]));
+	ulfcc = fc_drv_CalculationFcc_Sub_Addition_meter( ulfcc, ulfcc_temp );
+
 	/* 未使用、Sub Frame1～Sub Frame7 上位4byte 下位4byte 加算 */
-	for(frame_id = 0; frame_id < XSPI_SUB_FRAME_MAX; frame_id++)
+	for(frame_id = 1; frame_id < XSPI_SUB_FRAME_MAX; frame_id++)
 	{
 		subframe_offset = flame_header[frame_id];
 
-		if( (subframe_offset != (uint8)0) || (frame_id == (uint32)0) )
+		if( subframe_offset != (uint8)0 )
 		{
 			msg_offset = ((uint32)subframe_offset * (uint32)8UL) / sizeof(uint32);
 			ulfcc_temp = fc_drv_CalculationFcc_Sub_Addition_meter( BYTE_SWAP_32(ulbuf[msg_offset]), BYTE_SWAP_32(ulbuf[msg_offset + (uint32)1]) );
