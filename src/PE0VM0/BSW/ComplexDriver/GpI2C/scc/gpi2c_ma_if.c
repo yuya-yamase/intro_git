@@ -62,7 +62,7 @@ static const U4    u4_sp_GP_I2C_MA_IRQ_MASK[] = {
     (U4)0x00e0ff00U,        /* GP_I2C_MA_SEQ_WEN (2U) */
     (U4)0x00e03f00U,        /* GP_I2C_MA_SEQ_REA (3U) */
     (U4)0x00e03f00U,        /* GP_I2C_MA_SEQ_RLA (4U) */
-    (U4)0x00e00800U         /* GP_I2C_MA_SEQ_FIN (5U) */
+    (U4)0x00600800U         /* GP_I2C_MA_SEQ_FIN (5U) */
 };
 static const U4    u4_sp_GP_I2C_MA_IRQ_CRIT[] = {
     (U4)0x00e08400U,        /* GP_I2C_MA_SEQ_STA (0U) */
@@ -84,16 +84,18 @@ static const U4    u4_sp_GP_I2C_MA_IRQ_CRIT[] = {
 /*===================================================================================================================================*/
 void    vd_g_GpI2cMaIfEnaCh(const ST_GP_I2C_MA_CH * st_ap_CH, const U1 u1_a_PIN_ACT)
 {
-#ifdef PORT_DRV_H
-    if(u1_a_PIN_ACT != (U1)FALSE){
+    const ST_GP_I2C_MA_PIN *      st_tp_PIN;
 
-        vd_g_Port_SetPinMode(st_ap_CH->u2_scl_ina, (U1)TRUE);
-        vd_g_Port_SetPinMode(st_ap_CH->u2_sda_ina, (U1)TRUE);
+    st_tp_PIN = st_ap_CH->stp_PIN;
+    if((u1_a_PIN_ACT != (U1)FALSE ) &&
+       (st_tp_PIN    != vdp_PTR_NA)){
 
-        vd_g_Port_SetPinMode(st_ap_CH->u2_scl_act, (U1)FALSE);
-        vd_g_Port_SetPinMode(st_ap_CH->u2_sda_act, (U1)FALSE);
+        Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_ina);
+        Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_ina);
+
+        Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_act);
+        Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_act);
     }
-#endif
 
 #if ((GP_I2C_MA_RWC_DMA_WRI >= 2U) || (GP_I2C_MA_RWC_DMA_REA >= 4U))
     if(st_ap_CH->u1_dma_ch < u1_g_GP_I2C_MA_DMA_NUM_CH){
@@ -111,6 +113,8 @@ void    vd_g_GpI2cMaIfEnaCh(const ST_GP_I2C_MA_CH * st_ap_CH, const U1 u1_a_PIN_
 /*===================================================================================================================================*/
 void    vd_g_GpI2cMaIfDisCh(const ST_GP_I2C_MA_CH * st_ap_CH)
 {
+    const ST_GP_I2C_MA_PIN *      st_tp_PIN;
+
     vd_g_I2cStop(st_ap_CH->u1_i2c_ch);
 
 #if ((GP_I2C_MA_RWC_DMA_WRI >= 2U) || (GP_I2C_MA_RWC_DMA_REA >= 4U))
@@ -119,10 +123,12 @@ void    vd_g_GpI2cMaIfDisCh(const ST_GP_I2C_MA_CH * st_ap_CH)
     }
 #endif /* #if ((GP_I2C_MA_RWC_DMA_WRI >= 2U) || (GP_I2C_MA_RWC_DMA_REA >= 4U)) */
 
-#ifdef PORT_DRV_H
-    vd_g_Port_SetPinMode(st_ap_CH->u2_scl_ina, (U1)TRUE);
-    vd_g_Port_SetPinMode(st_ap_CH->u2_sda_ina, (U1)TRUE);
-#endif
+    st_tp_PIN = st_ap_CH->stp_PIN;
+    if(st_tp_PIN != vdp_PTR_NA){
+
+        Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_ina);
+        Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_ina);
+    }
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GpI2cMaIfResbyFrT(const ST_GP_I2C_MA_CH * st_ap_CH)                                                                 */
@@ -132,7 +138,9 @@ void    vd_g_GpI2cMaIfDisCh(const ST_GP_I2C_MA_CH * st_ap_CH)
 /*===================================================================================================================================*/
 void    vd_g_GpI2cMaIfResbyFrT(const ST_GP_I2C_MA_CH * st_ap_CH)
 {
-    static const U1               u1_s_GP_I2C_MA_CLO_MAX = (U4)4U; /* (U1)18U;    18 bits, 2 bytes TRx             */
+    static const U1               u1_s_GP_I2C_MA_CLO_MAX = (U1)18U;    /* 18 bits, 2 bytes TRx             */
+
+    const ST_GP_I2C_MA_PIN *      st_tp_PIN;
 
     vd_g_I2cDI(st_ap_CH->u1_i2c_ch);
 
@@ -151,13 +159,15 @@ void    vd_g_GpI2cMaIfResbyFrT(const ST_GP_I2C_MA_CH * st_ap_CH)
     /* ------------------------------------------------------------------------------------- */
     (void)u1_g_I2cMasSynLost(st_ap_CH->u1_i2c_ch, u1_s_GP_I2C_MA_CLO_MAX);
 
-#ifdef PORT_DRV_H
-    vd_g_Port_SetPinMode(st_ap_CH->u2_scl_ina, (U1)TRUE);
-    vd_g_Port_SetPinMode(st_ap_CH->u2_sda_ina, (U1)TRUE);
+    st_tp_PIN = st_ap_CH->stp_PIN;
+    if(st_tp_PIN != vdp_PTR_NA){
 
-    vd_g_Port_SetPinMode(st_ap_CH->u2_scl_act, (U1)FALSE);
-    vd_g_Port_SetPinMode(st_ap_CH->u2_sda_act, (U1)FALSE);
-#endif /* #ifdef PORT_DRV_H */
+        Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_ina);
+        Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_ina);
+
+        Port_SetPinMode(st_tp_PIN->u2_scl_pin, st_tp_PIN->u4_scl_act);
+        Port_SetPinMode(st_tp_PIN->u2_sda_pin, st_tp_PIN->u4_sda_act);
+    }
 
     vd_g_I2cStart(st_ap_CH->u1_i2c_ch, (U4)I2C_RXA_ACKBT_BIT__ACK);
 }

@@ -25,24 +25,31 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Control Bit Field */
-#define GP_I2C_MA_CBF_BIT_RWC                    (0x000007ffU)       /* Read/Write byte Count : Max.2047 bytes                       */
-#define GP_I2C_MA_CBF_BIT_ERR                    (0x0001f800U)       /* ERRor                 :                                      */
-#define GP_I2C_MA_CBF_BIT_PID                    (0x0ffe0000U)       /* Pdu IDentifier        : free to use for application          */
-#define GP_I2C_MA_CBF_BIT_SLA                    (0xf0000000U)       /* SLAve identifier      : see gpi2c_ma_channel.h, GP_I2C_SLA_X */
+#define GP_I2C_MA_CBF_BIT_RWC                    (0x000007ffU)      /* Read/Write byte Count  : Max.2047 bytes                       */
+#define GP_I2C_MA_CBF_BIT_RSR                    (0x00000800U)      /* Repeated Start Request :                                      */
+#define GP_I2C_MA_CBF_BIT_ERR                    (0x0003f000U)      /* ERRor                  :                                      */
+#define GP_I2C_MA_CBF_BIT_PID                    (0x0ffc0000U)      /* Pdu IDentifier         : free to use for application          */
+#define GP_I2C_MA_CBF_BIT_SLA                    (0xf0000000U)      /* SLAve identifier       : see gpi2c_ma_channel.h, GP_I2C_SLA_X */
 
-#define GP_I2C_MA_CBF_LSB_ERR                    (11U)
-#define GP_I2C_MA_CBF_LSB_PID                    (17U)
+#define GP_I2C_MA_CBF_LSB_RSR                    (11U)
+#define GP_I2C_MA_CBF_LSB_ERR                    (12U)
+#define GP_I2C_MA_CBF_LSB_PID                    (18U)
 #define GP_I2C_MA_CBF_LSB_SLA                    (28U)
 
-#define GP_I2C_MA_ERR_FR_TOUT                    (0x00000800U)       /* FRame TimeOUT                                                */
-#define GP_I2C_MA_ERR_SEQ_UNK                    (0x00001000U)       /* read/write SEQuence UNKnown                                  */
-#define GP_I2C_MA_ERR_IRQ_UNK                    (0x00002000U)       /* IRQst UNKnown                                                */
-#define GP_I2C_MA_ERR_RWC_UNK                    (0x00004000U)       /* Read/Write byte Counter UNKnown                              */
-#define GP_I2C_MA_ERR_PDU_UNK                    (0x00008000U)       /* st_gp_GP_I2C_MA_CH[].stp_QUE->u1p_PDU == vdp_PTR_NA(NULL)    */
-#define GP_I2C_MA_ERR_REQ_UNK                    (0x00010000U)       /* Read/Write Request UNKnown                                   */
+#define GP_I2C_MA_ERR_FR_TOUT                    (0x00001000U)      /* FRame TimeOUT                                                 */
+#define GP_I2C_MA_ERR_SEQ_UNK                    (0x00002000U)      /* read/write SEQuence UNKnown                                   */
+#define GP_I2C_MA_ERR_IRQ_UNK                    (0x00004000U)      /* IRQst UNKnown                                                 */
+#define GP_I2C_MA_ERR_RWC_UNK                    (0x00008000U)      /* Read/Write byte Counter UNKnown                               */
+#define GP_I2C_MA_ERR_PDU_UNK                    (0x00010000U)      /* st_gp_GP_I2C_MA_CH[].stp_QUE->u1p_PDU == vdp_PTR_NA(NULL)     */
+#define GP_I2C_MA_ERR_REQ_UNK                    (0x00020000U)      /* Read/Write Request UNKnown                                    */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GP_I2C_MA_REQ_RWC_MIN                    (2U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define GP_I2C_MA_PDU_FF_BIT_SLA                 (0xfeU)            /* PDU First Frame / SLAve device address                        */
+#define GP_I2C_MA_PDU_FF_BIT_REA                 (0x01U)            /* PDU First Frame / REAd  operation                             */
+#define GP_I2C_MA_PDU_FF_BIT_WRI                 (0x00U)            /* PDU First Frame / WRIte operation                             */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -68,8 +75,10 @@ void    vd_g_GpI2cMaMainTask(void);
 void    vd_g_GpI2cMaIRQTRx(const U1 u1_a_MA_CH);                        /* u1_a_MA_CH : GP_I2C_MA_CH_X defined in gpi2c_ma_channel.h */
 void    vd_g_GpI2cMaIRQDmaRx(const U1 u1_a_MA_CH);
 
-U1      u1_g_GpI2cMaReqTRx(const ST_GP_I2C_MA_REQ * st_ap_REQ);         /* Return : TRUE = request is accepted, else not             */
-U2      u2_g_GpI2cMaRwcRembySla(const U1 u1_a_SLA);                     /* Return : Read/Write Counter Remained by Slave             */
+U1      u1_g_GpI2cMaReqTRx(const ST_GP_I2C_MA_REQ * const st_ap_REQ, const U2 u2_a_NREQ);
+                                                                        /* Return : TRUE = request is accepted, else not             */
+U2      u2_g_GpI2cMaRwcRembySla(const U1 u1_a_SLA, const U2 u2_a_NREQ);
+                                                                        /* Return : Read/Write Counter Remained by Slave             */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

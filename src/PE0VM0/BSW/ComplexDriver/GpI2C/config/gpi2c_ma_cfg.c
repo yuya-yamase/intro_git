@@ -46,69 +46,94 @@
 ST_GP_I2C_MA_CTRL          st_gp_gpi2c_ma_ctrl[GP_I2C_MA_NUM_CH]          __attribute__((section(".bss_GPI2C")));
 U2                         u2_gp_gpi2c_ma_rwc_by_sla[GP_I2C_MA_NUM_SLA]   __attribute__((section(".bss_GPI2C")));
 
-#define GP_I2C_MA_NUM_QUE                        (16U)
-static ST_GP_I2C_MA_REQ    st_sp_gpi2c_ma_req[GP_I2C_MA_NUM_QUE]          __attribute__((section(".bss_GPI2C")));
+#define GP_I2C_MA_NUM_QUE_CH0                      (16U)
+#define GP_I2C_MA_NUM_QUE_CH1                      (16U)
+static ST_GP_I2C_MA_REQ    st_sp_gpi2c_ma_req_ch0[GP_I2C_MA_NUM_QUE_CH0]  __attribute__((section(".bss_GPI2C")));
+static ST_GP_I2C_MA_REQ    st_sp_gpi2c_ma_req_ch1[GP_I2C_MA_NUM_QUE_CH1]  __attribute__((section(".bss_GPI2C")));
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_s_GpI2cMaCfgTRxAck(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh0(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh1(const ST_GP_I2C_MA_REQ * st_ap_ACK);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_GP_I2C_MA_CH      st_gp_GP_I2C_MA_CH[GP_I2C_MA_NUM_CH] = {
+static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
     {
+        (U4)0U,                                     /* u4_scl_act */
+        (U4)0U,                                     /* u4_sda_act */
+        (U4)0U,                                     /* u4_scl_ina */
+        (U4)0U,                                     /* u4_sda_ina */
+
+        (U2)0U,                                     /* u2_scl_pin */
+        (U2)0U,                                     /* u2_sda_pin */
+    }
+};
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const ST_GP_I2C_MA_CH            st_gp_GP_I2C_MA_CH[GP_I2C_MA_NUM_CH] = {
+    /* GP_I2C_MA_CH_0 */
+    {
+        vdp_PTR_NA,                                 /* stp_PIN    */
+
         /* ------------------------------------------------------------------------------------- */
         /* Attention :                                                                           */
         /* ------------------------------------------------------------------------------------- */
         /* If a stage max of PDU TRx req. is equal to [m], the size of stp_QUE and u2_nque shall */
         /* be equal to or greater than [m + 1].                                                  */
         /* ------------------------------------------------------------------------------------- */
-        &st_sp_gpi2c_ma_req[0],                    /* stp_QUE    */
-        (U2)GP_I2C_MA_NUM_QUE,                     /* u2_nque    */
+        &st_sp_gpi2c_ma_req_ch0[0],                /* stp_QUE    */
+        (U2)GP_I2C_MA_NUM_QUE_CH0,                 /* u2_nque    */
 
         u2_GP_I2C_MA_FRT(10000U),                  /* u2_fr_tout */ /* 1000.0 microseconds */
 
-#ifdef PORT_DRV_H
-        (U2)PORT_PIN_MODE_P0_12_RIIC0SCL,          /* u2_scl_act */
-        (U2)PORT_PIN_MODE_P0_11_RIIC0SDA,          /* u2_sda_act */
-        (U2)PORT_PIN_MODE_P0_12_HIZ,               /* u2_scl_ina */
-        (U2)PORT_PIN_MODE_P0_11_HIZ,               /* u2_sda_ina */
-#else
-        (U2)U2_MAX,                                /* u2_scl_act */
-        (U2)U2_MAX,                                /* u2_sda_act */
-        (U2)U2_MAX,                                /* u2_scl_ina */
-        (U2)U2_MAX,                                /* u2_sda_ina */
-#endif
-
         (U1)I2C_CH_0,                              /* u1_i2c_ch  */
+        (U1)U1_MAX                                 /* u1_dma_ch  */
+    },
+    /* GP_I2C_MA_CH_1 */
+    {
+        vdp_PTR_NA,                                 /* stp_PIN    */
+
+        /* ------------------------------------------------------------------------------------- */
+        /* Attention :                                                                           */
+        /* ------------------------------------------------------------------------------------- */
+        /* If a stage max of PDU TRx req. is equal to [m], the size of stp_QUE and u2_nque shall */
+        /* be equal to or greater than [m + 1].                                                  */
+        /* ------------------------------------------------------------------------------------- */
+        &st_sp_gpi2c_ma_req_ch1[0],                /* stp_QUE    */
+        (U2)GP_I2C_MA_NUM_QUE_CH1,                 /* u2_nque    */
+
+        u2_GP_I2C_MA_FRT(10000U),                  /* u2_fr_tout */ /* 1000.0 microseconds */
+
+        (U1)I2C_CH_1,                              /* u1_i2c_ch  */
         (U1)U1_MAX                                 /* u1_dma_ch  */
     }
 };
-const U1                   u1_g_GP_I2C_MA_NUM_CH  = (U1)GP_I2C_MA_NUM_CH;
+const U1                         u1_g_GP_I2C_MA_NUM_CH  = (U1)GP_I2C_MA_NUM_CH;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((GP_I2C_MA_RWC_DMA_WRI >= 2U) || (GP_I2C_MA_RWC_DMA_REA >= 4U))
-const U1                   u1_g_GP_I2C_MA_DMA_NUM_CH = (U1)0U;
+const U1                         u1_g_GP_I2C_MA_DMA_NUM_CH = (U1)0U;
 #endif /* #if ((GP_I2C_MA_RWC_DMA_WRI >= 2U) || (GP_I2C_MA_RWC_DMA_REA >= 4U)) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_GP_I2C_MA_SLA     st_gp_GP_I2C_MA_SLA[GP_I2C_MA_NUM_SLA]  = {
+const ST_GP_I2C_MA_SLA           st_gp_GP_I2C_MA_SLA[GP_I2C_MA_NUM_SLA]  = {
     {
-        &vd_s_GpI2cMaCfgTRxAck,                    /* fp_vd_ACK  */
+        &vd_s_GpI2cMaCfgTRxAckCh0,                 /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
-        (U2)11U                                    /* u2_rwc_max */
+        (U2)32U                                    /* u2_rwc_max */
     },
     {
-        vdp_PTR_NA,                                /* fp_vd_ACK  */
-        &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
-        &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
-        (U2)20U                                    /* u2_rwc_max */
+        &vd_s_GpI2cMaCfgTRxAckCh1,                 /* fp_vd_ACK  */
+        &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
+        &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
+        (U2)32U                                    /* u2_rwc_max */
     }
 };
-const U1                   u1_g_GP_I2C_MA_NUM_SLA = (U1)GP_I2C_MA_NUM_SLA;
+const U1                         u1_g_GP_I2C_MA_NUM_SLA = (U1)GP_I2C_MA_NUM_SLA;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -121,6 +146,18 @@ const U1                   u1_g_GP_I2C_MA_NUM_SLA = (U1)GP_I2C_MA_NUM_SLA;
 /*===================================================================================================================================*/
 void    vd_g_GpI2cMaCfgInit(void)
 {
+    U4                          u4_t_lpcnt;
+
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)GP_I2C_MA_NUM_QUE_CH0; u4_t_lpcnt++){
+
+        st_sp_gpi2c_ma_req_ch0[u4_t_lpcnt].u1p_pdu = vdp_PTR_NA;
+        st_sp_gpi2c_ma_req_ch0[u4_t_lpcnt].u4_cbf  = (U4)0U;
+    }
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)GP_I2C_MA_NUM_QUE_CH1; u4_t_lpcnt++){
+
+        st_sp_gpi2c_ma_req_ch1[u4_t_lpcnt].u1p_pdu = vdp_PTR_NA;
+        st_sp_gpi2c_ma_req_ch1[u4_t_lpcnt].u4_cbf  = (U4)0U;
+    }
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_GpI2cMaCfgSlaActvtd(const U1 u1_a_CH)                                                                               */
@@ -138,17 +175,31 @@ U1      u1_g_GpI2cMaCfgSlaActvtd(const U1 u1_a_CH)
     return((U1)TRUE);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_GpI2cMaCfgTRxAck(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                         */
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh0(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_GpI2cMaCfgTRxAck(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+static void    vd_s_GpI2cMaCfgTRxAckCh0(const ST_GP_I2C_MA_REQ * st_ap_ACK)
 {
     /* ----------------------------------------------------------------------------------- */
     /* Attention :                                                                         */
     /* ----------------------------------------------------------------------------------- */
-    /* vd_s_GpI2cMaCfgTRxAck is being invaked at vd_g_GpI2cMaMainTask().                   */
+    /* vd_s_GpI2cMaCfgTRxAckCh0 is being invaked at vd_g_GpI2cMaMainTask().                */
+    /* ----------------------------------------------------------------------------------- */
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh1(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_GpI2cMaCfgTRxAckCh1(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+{
+    /* ----------------------------------------------------------------------------------- */
+    /* Attention :                                                                         */
+    /* ----------------------------------------------------------------------------------- */
+    /* vd_s_GpI2cMaCfgTRxAckCh1 is being invaked at vd_g_GpI2cMaMainTask().                */
     /* ----------------------------------------------------------------------------------- */
 }
 /*===================================================================================================================================*/
