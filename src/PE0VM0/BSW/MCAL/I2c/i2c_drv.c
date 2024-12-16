@@ -133,11 +133,13 @@
 #define I2C_IRQST_LSB_TXEI                       (17U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define I2C_MA_SRSC_NUM_CR2                      (4U)      /* CR2.bit.BBSY, CR2.bit.MST   */
+#define I2C_MA_SRSC_NUM_CR2                      (4U)      /* CR2.bit.BBSY, CR2.bit.MST                                          */
 #define I2C_MA_SRSC_LSB_REQ                      (2U)
-#define I2C_MA_SRSC_NUM_REQ                      (3U)      /* I2C_MA_REQ_SRSC_STAR (0U)   */
-                                                           /* I2C_MA_REQ_SRSC_REST (1U)   */
-                                                           /* I2C_MA_REQ_SRSC_STOP (2U)   */
+#define I2C_MA_SRSC_NUM_REQ                      (3U)      /* I2C_MA_REQ_SRSC_STAR (0U)                                          */
+                                                           /* I2C_MA_REQ_SRSC_REST (1U)                                          */
+                                                           /* I2C_MA_REQ_SRSC_STOP (2U)                                          */
+
+#define I2C_MA_SRSC_BBSY_WA                      (0x02U)   /* I2C_MA_REQ_SRSC_STAR (0U) and CR2.bit.BBSY = 1 and CR2.bit.MST = 0 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -633,6 +635,7 @@ U1      u1_g_I2cMasReqSrscTx(const U1 u1_a_I2C_CH, const U1 u1_a_REQ)
     volatile U1 *              u1_tp_byte;
 
     U1                         u1_t_accpt;
+    U1                         u1_t_req;
     U1                         u1_t_srsc;
 
     u1_t_accpt = (U1)FALSE;
@@ -640,20 +643,47 @@ U1      u1_g_I2cMasReqSrscTx(const U1 u1_a_I2C_CH, const U1 u1_a_REQ)
     if((u1_a_I2C_CH < u1_g_I2C_NUM_CH        ) &&
        (u1_a_REQ    < (U1)I2C_MA_SRSC_NUM_REQ)){
 
-        u1_tp_byte  = (volatile U1 *)st_gp_I2C_CH_CFG[u1_a_I2C_CH].u4p_rbase;
+        u1_tp_byte = (volatile U1 *)st_gp_I2C_CH_CFG[u1_a_I2C_CH].u4p_rbase;
 
-        u1_t_srsc   = u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR2]) >> I2C_CR2_LSB_MST;
-        u1_t_srsc  |= (U1)(u1_a_REQ << I2C_MA_SRSC_LSB_REQ);
-        u1_t_srsc   = u1_sp_I2C_MA_SRSC_TX[u1_t_srsc];
+        u1_t_req   = (U1)(u1_a_REQ << I2C_MA_SRSC_LSB_REQ);
+        u1_t_srsc  = (u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR2]) >> I2C_CR2_LSB_MST) | u1_t_req;
+        /* I2C_MA_REQ_SRSC_STAR (0U) and CR2.bit.BBSY = 1 and CR2.bit.MST = 0 */
+        if(u1_t_req == (U1)I2C_MA_SRSC_BBSY_WA){
 
-        if(u1_t_srsc != (U1)0x00U){
+            /* ------------------------------------------------------------------------------------*/
+            /* Attention :                                                                         */
+            /* ------------------------------------------------------------------------------------*/
+            /* RH850/U2A-EVA Group Userfs Manual: Hardware Renesas microcontroller RH850 Family    */
+            /* 22.3.3 RIICnCR2 \ I2C Bus Control Register 2                                        */
+            /*                                                                                     */
+            /* BBSY Flag (Bus Busy Detection)                                                      */
+            /* [Clearing conditions]                                                               */
+            /*  When the bus free time (specified in RIICnBRL) start condition is not detected     */
+            /*  after detecting a Stop condition.                                                  */
+            /*                                                                                     */
+            /* BBSY = 1b->0b Senario:                                                              */
+            /*  Start condition has NOT been detected during free-bus time which is specified by   */
+            /*  RIICnBRL, since stop condition was detected.                                       */
+            /*                                                                                     */
+            /* Thus, vd_g_Gpt_BusyWait is being performed at here in order to wait BBSY = 1b->0b   */
+            /* ------------------------------------------------------------------------------------*/
+            vd_g_Gpt_BusyWait(st_gp_I2C_CH_CFG[u1_a_I2C_CH].u2_bw_scl);
+            u1_t_srsc = (u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR2]) >> I2C_CR2_LSB_MST) | u1_t_req;
+        }
 
-            if(u1_t_srsc == (U1)I2C_CR2_BIT_ST){
-                vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_SR2],  (U1)0x00U);
-            }
+        u1_t_srsc = u1_sp_I2C_MA_SRSC_TX[u1_t_srsc];
+        if(u1_t_srsc == (U1)0x00U){
+         /* u1_t_accpt = (U1)FALSE; */
+        }
+        else if(u1_t_srsc == (U1)I2C_CR2_BIT_SP){
             vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR2], u1_t_srsc);
             vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR2]);
-
+            u1_t_accpt = (U1)TRUE;
+        }
+        else{
+            vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_SR2], (U1)0x00U);
+            vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR2], u1_t_srsc);
+            vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR2]);
             u1_t_accpt = (U1)TRUE;
         }
     }
@@ -673,7 +703,7 @@ U1      u1_g_I2cMasSynLost(const U1 u1_a_I2C_CH, const U1 u1_a_CLO_MAX)
 
     volatile U4                u4_t_gli;
     U4                         u4_t_clocnt;
-    U2                         u2_t_bw_rsl;
+    U2                         u2_t_bw_scl;
 
     U1                         u1_t_los;
     U1                         u1_t_sda;
@@ -694,12 +724,12 @@ U1      u1_g_I2cMasSynLost(const U1 u1_a_I2C_CH, const U1 u1_a_CLO_MAX)
             vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_CLO_RUN);
             vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
 
-            u2_t_bw_rsl = st_tp_CH->u2_bw_rsl;
+            u2_t_bw_scl = st_tp_CH->u2_bw_scl;
             u4_t_clocnt = (U4)0U;
             do{
 
-                vd_g_Gpt_BusyWait(u2_t_bw_rsl);
-                vd_g_Gpt_BusyWait(u2_t_bw_rsl);
+                vd_g_Gpt_BusyWait(u2_t_bw_scl);
+                vd_g_Gpt_BusyWait(u2_t_bw_scl);
                 u4_t_clocnt++;
 
                 u1_t_sda = u1_REG_READ(u1_tp_byte[I2C_RO_BYTE_CR1]) & ((U1)I2C_CR1_BIT_SDAI | (U1)I2C_CR1_BIT_CLO);
@@ -711,17 +741,17 @@ U1      u1_g_I2cMasSynLost(const U1 u1_a_I2C_CH, const U1 u1_a_CLO_MAX)
                     vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_SDAO_LO);
                     vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
 
-                    vd_g_Gpt_BusyWait(u2_t_bw_rsl);
+                    vd_g_Gpt_BusyWait(u2_t_bw_scl);
 
                     vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_SCLO_HI);
                     vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
 
-                    vd_g_Gpt_BusyWait(u2_t_bw_rsl);
+                    vd_g_Gpt_BusyWait(u2_t_bw_scl);
 
                     vd_REG_U1_WRITE(u1_tp_byte[I2C_RO_BYTE_CR1],  (U1)I2C_CR1_SDAO_HI);
                     vd_s_SYNCP_B(&u1_tp_byte[I2C_RO_BYTE_CR1]);
 
-                    vd_g_Gpt_BusyWait(u2_t_bw_rsl);
+                    vd_g_Gpt_BusyWait(u2_t_bw_scl);
 
                     vd_g_IRQ_EI(u4_t_gli);
 

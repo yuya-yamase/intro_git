@@ -54,7 +54,7 @@ const ST_I2C_CH          st_gp_I2C_CH_CFG[I2C_NUM_CH]  = {
         (U2)687U,                                 /* u2_irq_tx    */ /* INTRIICnTI                             */
         (U2)688U,                                 /* u2_irq_te    */ /* INTRIICnTE                             */
 
-        (U2)15U,                                  /* u2_bw_rsl    */ /* 1.5 microseconds >= brh/brl / 400 kbps */
+        (U2)15U,                                  /* u2_bw_scl    */ /* 1.5 microseconds >= brh/brl / 400 kbps */
 
         (U2)0x0000U,                              /* u2_sar0      */
         (U2)0x0000U,                              /* u2_sar1      */
@@ -77,7 +77,7 @@ const ST_I2C_CH          st_gp_I2C_CH_CFG[I2C_NUM_CH]  = {
         (U2)691U,                                 /* u2_irq_tx    */ /* INTRIICnTI                             */
         (U2)692U,                                 /* u2_irq_te    */ /* INTRIICnTE                             */
 
-        (U2)15U,                                  /* u2_bw_rsl    */ /* 1.5 microseconds >= brh/brl / 400 kbps */
+        (U2)15U,                                  /* u2_bw_scl    */ /* 1.5 microseconds >= brh/brl / 400 kbps */
 
         (U2)0x0000U,                              /* u2_sar0      */
         (U2)0x0000U,                              /* u2_sar1      */

@@ -86,13 +86,13 @@ static ar_tcb_t ar_tcb_Task_MM_Medium;
 static mcos_stack_t ar_stack_core0_pri1[MCOS_STACK_SIZE(1024U)];
 #pragma ghs section bss=default
 #pragma ghs section bss=".osVar_stack_core0_pri4"
-static mcos_stack_t ar_stack_core0_pri4[MCOS_STACK_SIZE(1024U)];
+static mcos_stack_t ar_stack_core0_pri4[MCOS_STACK_SIZE(8192U)];
 #pragma ghs section bss=default
 #pragma ghs section bss=".osVar_stack_core0_pri8"
-static mcos_stack_t ar_stack_core0_pri8[MCOS_STACK_SIZE(4608U)];
+static mcos_stack_t ar_stack_core0_pri8[MCOS_STACK_SIZE(8192U)];
 #pragma ghs section bss=default
 #pragma ghs section bss=".osVar_stack_core0_pri12"
-static mcos_stack_t ar_stack_core0_pri12[MCOS_STACK_SIZE(2048U)];
+static mcos_stack_t ar_stack_core0_pri12[MCOS_STACK_SIZE(4096U)];
 #pragma ghs section bss=default
 #pragma ghs section bss=".osVar_stack_core0_pri20"
 static mcos_stack_t ar_stack_core0_pri20[MCOS_STACK_SIZE(1024U)];
@@ -130,7 +130,7 @@ const ar_task_config_t ar_task_configs[AR_OS_NUM_TASKS] = {
     },
     {
         &GENNAME_TASK(Task_MM_High),
-        MCOS_STACK_SIZE(2048U),
+        MCOS_STACK_SIZE(4096U),
         (uint8)AR_MCOS_TPRI(12),
         (uint8)AR_MCOS_TPRI(12),
         1U,
@@ -140,7 +140,7 @@ const ar_task_config_t ar_task_configs[AR_OS_NUM_TASKS] = {
     },
     {
         &GENNAME_TASK(Task_MM_Low),
-        MCOS_STACK_SIZE(1024U),
+        MCOS_STACK_SIZE(8192U),
         (uint8)AR_MCOS_TPRI(4),
         (uint8)AR_MCOS_TPRI(4),
         1U,
@@ -150,7 +150,7 @@ const ar_task_config_t ar_task_configs[AR_OS_NUM_TASKS] = {
     },
     {
         &GENNAME_TASK(Task_MM_Medium),
-        MCOS_STACK_SIZE(4608U),
+        MCOS_STACK_SIZE(8192U),
         (uint8)AR_MCOS_TPRI(8),
         (uint8)AR_MCOS_TPRI(8),
         1U,

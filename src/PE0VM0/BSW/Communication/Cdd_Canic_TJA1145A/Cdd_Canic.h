@@ -231,6 +231,20 @@ typedef struct {
 /*!< Offset: -															\n*/
 /*!< Unit  : -															\n*/
 
+#define		CDD_CANIC_WPRE_DISABLE		(0x00)
+/*!< Description: WAKE Pin Enableレジスタ::WPRE値（Disable）			\n*/
+/*!< Type  : U1															\n*/
+/*!< LSB   : -															\n*/
+/*!< Offset: -															\n*/
+/*!< Unit  : -															\n*/
+
+#define		CDD_CANIC_WPFE_ENABLE		(0x01)
+/*!< Description: WAKE Pin Enableレジスタ::WPFE値（Enable）				\n*/
+/*!< Type  : U1															\n*/
+/*!< LSB   : -															\n*/
+/*!< Offset: -															\n*/
+/*!< Unit  : -															\n*/
+
 #define		CDD_CANIC_WPFE_DISABLE		(0x00)
 /*!< Description: WAKE Pin Enableレジスタ::WPFE値（Disable）			\n*/
 /*!< Type  : U1															\n*/

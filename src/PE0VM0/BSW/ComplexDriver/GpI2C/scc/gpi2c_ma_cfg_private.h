@@ -22,7 +22,7 @@
 #include "aip_common.h"
 #include "gpi2c_ma.h"
 
-/* #include "port_drv.h" */
+#include "Port.h"
 #include "i2c_drv.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -43,8 +43,34 @@
 #define GP_I2C_MA_EAS_SEQ_ABT                    (0x00000002U)
 #define GP_I2C_MA_EAS_REQ_NEX                    (0x00000001U)
 #define GP_I2C_MA_EAS_RWC_MAX                    (0x00000001U)                  /* read/write count max                              */
-#define GP_I2C_MA_EAS_OPE_REA                    (0x00000001U)
+#define GP_I2C_MA_EAS_OPE_REA                    (GP_I2C_MA_PDU_FF_BIT_REA)     /* GP_I2C_MA_PDU_FF_BIT_REA (0x01U) in gpi2c_ma.h    */
 #define GP_I2C_MA_EAS_REA_RUN                    (0x00000001U)                  /* read operation is in run                          */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Comparison of st_gp_gpi2c_ma_ctrl[].u2_req and                                        */
+/*                                    .u2_run and                                        */
+/*                                    .u2_ack                                            */
+/*---------------------------------------------------------------------------------------*/
+/*                      .u2_req     >= .u2_run    >= .u2_ack       : 110b / bit#6 = 0x40 */
+/*                      .u2_run     >= .u2_ack    >  .u2_req       : 011b / bit#3 = 0x08 */
+/*                      .u2_ack     >  .u2_req    >= .u2_run       : 101b / bit#5 = 0x20 */
+/*---------------------------------------------------------------------------------------*/
+/*                      .u2_req + 1 >  .u2_run     >= .u2_ack      : 110b / bit#6 = 0x40 */
+/*                      .u2_run     >= .u2_ack     >  .u2_req + 1  : 011b / bit#3 = 0x08 */
+/*                      .u2_ack     >  .u2_req + 1 >  .u2_run      : 101b / bit#5 = 0x20 */
+/*---------------------------------------------------------------------------------------*/
+/*                      .u2_req     >= .u2_run + 1 >  .u2_ack      : 110b / bit#6 = 0x40 */
+/*                      .u2_run + 1 >  .u2_ack     >  .u2_req      : 011b / bit#3 = 0x08 */
+/*                      .u2_ack     >  .u2_req     >= .u2_run + 1  : 101b / bit#5 = 0x20 */
+/*---------------------------------------------------------------------------------------*/
+#define GP_I2C_MA_QUE_CMPR_OK                    (0x68U)
+#define GP_I2C_MA_QUE_REQ_GT_RUN                 (0x04U)   /* (.u2_req + 1) >  .u2_run       */
+#define GP_I2C_MA_QUE_REQ_GE_RUN                 (0x04U)   /* .u2_req       >= .u2_run       */
+                                                           /* .u2_req       >= (.u2_run + 1) */
+#define GP_I2C_MA_QUE_RUN_GT_ACK                 (0x02U)   /* (.u2_run + 1) >  .u2_ack       */
+#define GP_I2C_MA_QUE_RUN_GE_ACK                 (0x02U)   /* .u2_run       >= .u2_ack       */
+#define GP_I2C_MA_QUE_ACK_GT_REQ                 (0x01U)   /* .u2_ack       >  .u2_req       */
+                                                           /* .u2_ack       >  (.u2_req + 1) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -60,15 +86,21 @@
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct{
+    U4                           u4_scl_act;
+    U4                           u4_sda_act;
+    U4                           u4_scl_ina;
+    U4                           u4_sda_ina;
+
+    U2                           u2_scl_pin;
+    U2                           u2_sda_pin;
+}ST_GP_I2C_MA_PIN;
+
+typedef struct{
+    const ST_GP_I2C_MA_PIN *     stp_PIN;
     ST_GP_I2C_MA_REQ * const     stp_QUE;                    /* PDU TRx Req. FIFO/Queue      */
 
     U2                           u2_nque;                    /* size of stp_QUE              */
     U2                           u2_fr_tout;                 /* frame timout                 */
-
-    U2                           u2_scl_act;
-    U2                           u2_sda_act;
-    U2                           u2_scl_ina;
-    U2                           u2_sda_ina;
 
     U1                           u1_i2c_ch;
     U1                           u1_dma_ch;
