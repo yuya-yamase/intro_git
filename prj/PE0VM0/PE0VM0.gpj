@@ -78,7 +78,7 @@ primaryTarget=v800_standalone.tgt
 ${CMN_DIR}/bswCAN.gpj
 ${CMN_DIR}/bswOS.gpj
 ${CMN_DIR}/ehvm_if.gpj
-${CMN_DIR}/22SS.gpj
+${PRJ_DIR}/22SS.gpj
 ${CMN_DIR}/Ecu_VMx.gpj
 
 ${CMN_DIR}/MCAL_ADC.gpj

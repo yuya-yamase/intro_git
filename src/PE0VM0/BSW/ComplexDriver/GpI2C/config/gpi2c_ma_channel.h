@@ -27,13 +27,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_NUM_CH                         (1U)
-#define GP_I2C_MA_CH_0                           (0U)
+#define GP_I2C_MA_NUM_CH                         (2U)
+#define GP_I2C_MA_CH_0                           (0U)   /* [Destination slaves]: MCU PMIC, Video-IC, GVIF-Rx, GVIF-Tx   */
+#define GP_I2C_MA_CH_1                           (1U)   /* [Destination slaves]: P-IC    , RTC-IC  , Gryo   ,           */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GP_I2C_MA_NUM_SLA                        (2U)
-#define GP_I2C_MA_SLA_0                          (0U)
-#define GP_I2C_MA_SLA_1                          (1U)
+#define GP_I2C_MA_SLA_0_PMIC                     (0U)   /* Sample configuration of MCU PMIC */
+#define GP_I2C_MA_SLA_1_RTC                      (1U)   /* Sample configuration of RTC-IC   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

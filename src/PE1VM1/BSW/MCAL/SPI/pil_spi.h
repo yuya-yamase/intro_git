@@ -108,6 +108,7 @@
 #define		PIL_SPI_BITRATE_2_5M	Pil_Spi_SetBITRATE( 1 , 4 )
 #define		PIL_SPI_BITRATE_2M		Pil_Spi_SetBITRATE( 1 , 5 )
 #define		PIL_SPI_BITRATE_1M		Pil_Spi_SetBITRATE( 1 , 10 )
+#define		PIL_SPI_BITRATE_0_91M	Pil_Spi_SetBITRATE( 1 , 11 )
 #define		PIL_SPI_BITRATE_SLAVE	Pil_Spi_SetBITRATE( 0 , 1 )
 
 /* Bit Direction(MSPInDIRmê›íËíl) */

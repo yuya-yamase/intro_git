@@ -92,7 +92,8 @@ typedef struct{
     U2                  u2_irq_tx;      /* INTRIICnTI  / Tx Buffer Empty                       */
     U2                  u2_irq_te;      /* INTRIICnTEI / Tx End                                */
 
-    U2                  u2_bw_rsl;      /* Gpt_BusyWait for Recovery from Sync. Lost           */
+    U2                  u2_bw_scl;      /* Gpt_BusyWait for Recovery from Sync. Lost and       */ 
+                                        /*                           Stop->Start Condition Tx  */ 
                                         /* see gpt_busywait.h regarding the time resolution.   */ 
 
     U2                  u2_sar0;        /* RIICnSARy I2C Slave Address Register y (y = 0 to 2) */

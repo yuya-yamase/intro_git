@@ -36,6 +36,9 @@
 #include "iohw_adc.h"
 #include "iohw_diflt.h"
 
+/* Communication         */
+#include "oxcan.h"
+
 /* Complex Device Driver */
 #include "gpi2c_ma.h"
 
@@ -426,9 +429,15 @@ void SS_Pm_shutdownCallout(void)
 {
     /* vv User Hook start vv */
     /* TPcsw_SS_Pm_shutdownCallout_if0 */
+    vd_g_oXCANShutdown();
+    vd_g_Nvmc_DeInit();
+    vd_g_Rim_DeInit();
 
+    vd_g_GpI2cMaDeInit();
+    
     Dma_DeInit();
     Spi_DeInit();
+    vd_g_I2cDeInit();
     vd_g_Gpt_D16DeInit();
     vd_g_Gpt_J32DeInit();
     vd_g_Gpt_OstDeInit();

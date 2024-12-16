@@ -33,10 +33,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u2_g_GpI2cMaIfFrt()                      ((U2)((*u4p_g_GPT_FRT_RA) >> 10U))
 
-#define vd_g_GpI2cMaIfStaTRx(ch)                 ((void)u1_g_I2cMasReqSrscTx((ch)->u1_i2c_ch, (U1)I2C_MA_REQ_SRSC_STAR))
+#define vd_g_GpI2cMaIfTRxStart(ch)               ((void)u1_g_I2cMasReqSrscTx((ch)->u1_i2c_ch, (U1)I2C_MA_REQ_SRSC_STAR))
+#define vd_g_GpI2cMaIfTRxRepeat(ch)              ((void)u1_g_I2cMasReqSrscTx((ch)->u1_i2c_ch, (U1)I2C_MA_REQ_SRSC_REST))
+#define vd_g_GpI2cMaIfTRxFinish(ch)              ((void)u1_g_I2cMasReqSrscTx((ch)->u1_i2c_ch, (U1)I2C_MA_REQ_SRSC_STOP))
+
 #define vd_g_GpI2cMaIfWriTx(ch, tx)              ((void)u1_g_I2cWriteTxByte((ch)->u1_i2c_ch, (tx), (U1)1U))
 #define vd_g_GpI2cMaIfReaRx(ch, rx)              ((void)u1_g_I2cReadRxByte((ch)->u1_i2c_ch, (rx), (U1)1U))
-#define vd_g_GpI2cMaIfFinTRx(ch)                 ((void)u1_g_I2cMasReqSrscTx((ch)->u1_i2c_ch, (U1)I2C_MA_REQ_SRSC_STOP))
 #define vd_g_GpI2cMaIfResp_Ack(ch)               (vd_g_I2cSetRxAck((ch)->u1_i2c_ch, (U4)I2C_RXA_ACKBT_BIT__ACK))
 #define vd_g_GpI2cMaIfRespNack(ch)               (vd_g_I2cSetRxAck((ch)->u1_i2c_ch, (U4)I2C_RXA_ACKBT_BIT_NACK))
 

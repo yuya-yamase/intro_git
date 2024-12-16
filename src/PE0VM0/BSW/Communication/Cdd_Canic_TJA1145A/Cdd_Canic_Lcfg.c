@@ -46,8 +46,8 @@
 	     ( (U1)CDD_CANIC_UCFG_IC##id##_CWE_DETECTION  * (U1)BIT0 ) \
 	), \
 	(U1)( /* WAKE Pin Enable Register */ \
-	     ( (U1)CDD_CANIC_WPRE_ENABLE  * (U1)BIT1 ) | \
-	     ( (U1)CDD_CANIC_WPFE_DISABLE * (U1)BIT0 ) \
+	     ( (U1)CDD_CANIC_UCFG_IC##id##_WAKEPIN_EN_WPRE  * (U1)BIT1 ) | \
+	     ( (U1)CDD_CANIC_UCFG_IC##id##_WAKEPIN_EN_WPFE * (U1)BIT0 ) \
 	), \
 	(U1)( /* CAN Control Register (Template) */ \
 	     ( (U1)CDD_CANIC_UCFG_IC##id##_CANFD_TOLERANCE * (U1)BIT6 ) | \

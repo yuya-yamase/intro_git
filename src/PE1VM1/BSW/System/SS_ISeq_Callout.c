@@ -354,6 +354,8 @@ void SS_Pm_wakeupCheckCallout(void)
 void SS_Pm_shutdownCallout(void)
 {
     /* vv User Hook start vv */
+    vd_g_Rim_DeInit();
+
     Ecu_CtgOs_stop(ECU_CTGOS_TMRES_OWNVM);
     (void)ClearPendingInterrupt((ISRType)OS_SYSTEM_COUNTER_ISR0);
     /* VMスリープ投入 */

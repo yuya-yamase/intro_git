@@ -29,6 +29,7 @@
 #include "icu_drv_wk.h"
 
 /* Memory                */
+#include "nvmc_mgr.h"
 
 /* Application           */
 
@@ -91,7 +92,8 @@ U1      u1_g_BswMCfghkShtdwnchk1st(void)
 #if (__BSW_M_CHK_1ST__ == 1)
     static const FP_U1_AND    fp_sp_u1_BSW_M_SHTDWN_CHK[] = {
         &u1_s_BswMCfgIsShtdwnOk,
-        &u1_g_oXCANEcuShtdwnOk
+        &u1_g_oXCANEcuShtdwnOk,
+        &u1_g_Nvmc_IsShtdwnOk
     };
 
     U1                        u1_t_1st;
