@@ -711,7 +711,11 @@ void	fc_SpiStartPrepare_ivi(
 	snd_buf[0] = bf_drv_Dbg_ErrInfo_ivi;
 
 	/* Calclation FCC */
+#if 0 /* [T.B.D]IVI向け暫定対応 */
 	fcc_offset = XSPI_FCC_OFFSET;
+#else
+	fcc_offset = (uint32)(5552 - 4);
+#endif /* [T.B.D]IVI向け暫定対応 */
 	fcc_calc = fc_drv_CalculationFcc_ivi((uint32*)snd_buf);
 	snd_buf[fcc_offset] = BYTE_SWAP4(fcc_calc);
 	snd_buf[fcc_offset+1] = BYTE_SWAP3(fcc_calc);
