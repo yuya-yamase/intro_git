@@ -255,10 +255,7 @@ static void vd_s_Mcu_PwrCtrl_Bon_Seq(void)
         Mcu_Sip_Pwr_MainFunction();                                         /* SiP電源 定期処理 */
         u1_t_sipon_seq = Mcu_Sip_PwrOn_GetSts();                            /* SiP電源ONシーケンス状態問い合わせ */
         if(u1_t_sipon_seq == (uint8)MCU_SIP_PWR_COMP){                      /* 処理完了 */
-            /* BEVCDCFD-277 【暫定管理】1Sボード起動用のMCUパッチ充て */
-            /* MM_STBYを確認するSTEPをスキップし、SIP電源起動完了を設定 */
-            /* u1_s_Mcu_PwrCtrl_SipPwrSts = MCU_PWRCTRL_SIP_STS_CHK_MMSTBY; */   /* SiP電源状態：実行中→MM_STBY_N=Hi判定中 */
-            u1_s_Mcu_PwrCtrl_SipPwrSts = MCU_PWRCTRL_SIP_STS_COMP;              /* SiP電源状態：実行中→完了 */
+            u1_s_Mcu_PwrCtrl_SipPwrSts = MCU_PWRCTRL_SIP_STS_CHK_MMSTBY;    /* SiP電源状態：実行中→MM_STBY_N=Hi判定中 */
         }
     }
 /* MM_STBY_N =Hi?(SOCメインドメインのQNX起動完了の確認) */
@@ -361,10 +358,7 @@ static void vd_s_Mcu_PwrCtrl_WakeUp_Seq(void)
     if(u1_s_Mcu_PwrCtrl_SipPwrSts == MCU_PWRCTRL_SIP_STS_CHK_AOSS){
         u1_t_read_lv = Dio_ReadChannel(DIO_ID_PORT17_CH0);                   /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
         if(u1_t_read_lv == MCU_DIO_LOW){
-            /* BEVCDCFD-277 【暫定管理】1Sボード起動用のMCUパッチ充て */
-            /* MM_STBYを確認するSTEPをスキップし、SIPWake了を設定 */
-            /* u1_s_Mcu_PwrCtrl_SipPwrSts = MCU_PWRCTRL_SIP_STS_CHK_MMSTBY; */    /* SiP電源状態：AOSS_SLEEP_ENTRY_EXIT=Low判定中→MM_STBY_N=Hi判定中 */
-            u1_s_Mcu_PwrCtrl_SipPwrSts = MCU_PWRCTRL_SIP_STS_COMP;     /* SiP電源状態：AOSS_SLEEP_ENTRY_EXIT=Low判定中→完了 */
+            u1_s_Mcu_PwrCtrl_SipPwrSts = MCU_PWRCTRL_SIP_STS_CHK_MMSTBY;     /* SiP電源状態：AOSS_SLEEP_ENTRY_EXIT=Low判定中→MM_STBY_N=Hi判定中 */
         }
 #if (MCU_ERR_CHK == 1U)
         u1_s_Mcu_Err_dbg_state = MCU_ERR_WAKE_AOSS_LO; /* TP */

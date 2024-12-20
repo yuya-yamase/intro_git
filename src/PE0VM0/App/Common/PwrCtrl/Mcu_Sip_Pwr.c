@@ -549,9 +549,9 @@ static void Mcu_Sip_PwrOn_MainFunction( void )
 		/* STEP3-1が完了していれば次のSTEPに進める */
 		if(Mcu_Sip_PwrOn_PM_PWR_EN_N_Step3_Time == MCU_SIP_PWRON_TIME_INVALID){
 			/* BEVCDCFD-277 【暫定管理】1Sボード起動用のMCUパッチ充て */
-			/* STEP4とSTEP5のチェックをスキップする */
+			/* STEP4のチェックをスキップする */
 			/* Mcu_Sip_PwrOn_Step = (uint8)MCU_SIP_PWRON_STEP4;*/
-			Mcu_Sip_PwrOn_Step = (uint8)MCU_SIP_PWRON_STEP6;
+			Mcu_Sip_PwrOn_Step = (uint8)MCU_SIP_PWRON_STEP5;
 		}
 		
 	}
@@ -700,10 +700,7 @@ static void Mcu_Sip_PwrOff_MainFunction( void )
 		
 		/* STEP1-1が完了していれば次のSTEPに進める */
 		if(Mcu_Sip_PwrOff_MM_OFF_REQ_Step1_Time == MCU_SIP_PWROFF_TIME_INVALID){
-			/* BEVCDCFD-277 【暫定管理】1Sボード起動用のMCUパッチ充て */
-			/* STEP2とSTEP3のチェックをスキップする */
-			/* Mcu_Sip_PwrOff_Step = (uint8)MCU_SIP_PWROFF_STEP2;*/
-			Mcu_Sip_PwrOff_Step = (uint8)MCU_SIP_PWROFF_STEP4;
+			Mcu_Sip_PwrOff_Step = (uint8)MCU_SIP_PWROFF_STEP2;
 		}
 	}
 
@@ -794,10 +791,7 @@ static void Mcu_Sip_Standby_MainFunction( void )
 		/* STEP1-1～STEP1-2が完了していれば次のSTEPに進める */
 		if((Mcu_Sip_Standby_MM_SUSPEND_REQ_N_Time == MCU_SIP_STANDBY_TIME_INVALID) &&
 		   (Mcu_Sip_Standby_STR_WAKE_Time == MCU_SIP_STANDBY_TIME_INVALID)){
-			/* BEVCDCFD-277 【暫定管理】1Sボード起動用のMCUパッチ充て */
-			/* STEP2のチェックをスキップする */
-			/* Mcu_Sip_Standby_Step = (uint8)MCU_SIP_STANDBY_STEP2;*/
-			Mcu_Sip_Standby_Step = (uint8)MCU_SIP_STANDBY_STEP3;
+			Mcu_Sip_Standby_Step = (uint8)MCU_SIP_STANDBY_STEP2;
 		}
 	}
 
