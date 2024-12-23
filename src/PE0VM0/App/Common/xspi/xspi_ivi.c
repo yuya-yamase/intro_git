@@ -1082,7 +1082,11 @@ uint8	fc_drv_SpiFccCheck_ivi(
 	uint32 fcc_calc;
 
 	/* Calclation FCC */
+#if 0 /* [T.B.D]IVI向け暫定対応 */
 	fcc = BYTE_SWAP_32(frame[XSPI_FCC_LONG_OFFSET]);
+#else
+	fcc = BYTE_SWAP_32(frame[((5552-4)/4)]);
+#endif	/* [T.B.D]IVI向け暫定対応 */
 	fcc_calc = fc_drv_CalculationFcc_ivi(frame);
 
 	if( fcc != fcc_calc ){
