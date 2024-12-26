@@ -15,10 +15,11 @@
 *																		*
 ************************************************************************/
 /*------------------------------*/
-/*	フレームバッファサイズ関連	*/
+/*	通信フレーム最大長			*/
 /*------------------------------*/
-#define		XSPI_RCV_FRM_MAX		(5628UL)		/* １フレーム最大長	(FrameHedar+SubFrame+FCC)	*/
-#define		XSPI_SND_FRM_MAX		(5628UL)		/* １フレーム最大長	(FrameHedar+SubFrame+FCC)	*/
+#define		XSPI_FRM_MAX			(5628UL)		/* フレーム最大長		*/
+#define		XSPI_RCV_FRM_MAX		(XSPI_FRM_MAX)	/* 受信フレーム最大長	*/
+#define		XSPI_SND_FRM_MAX		(XSPI_FRM_MAX)	/* 送信フレーム最大長	*/
 
 /*------------------------------*/
 /*	チャネルID					*/
@@ -41,7 +42,7 @@
 #define		XSPI_ERR_MSK_KIND		(0x0F)			/* MASK：エラー種別 */
 #define		XSPI_ERR_KIND_NONE		(0x00)			/* エラー無し       */
 #define		XSPI_ERR_KIND_TRX		(0x01)			/* 送受信エラー     */
-#define		XSPI_ERR_KIND_FCC		(0x02)			/* FCC不一致		*/
+#define		XSPI_ERR_KIND_INTG		(0x02)			/* データ整合性エラー */
 #define		XSPI_ERR_KIND_ENCHG		(0x04)			/* EN信号変化		*/
 #define		XSPI_ERR_KIND_TIM		(0x08)			/* 通信時間オーバ	*/
 
@@ -57,8 +58,8 @@
 extern void		xspi_Init( uint8 ch );					/* XSPI通信ドライバ初期化処理 */
 extern void		xspi_DeInit( uint8 ch );				/* XSPI通信ドライバ終了処理 */
 extern uint8	xspi_GetCondition( uint8 ch );			/* XSPI通信ドライバ状態取得処理 */
-extern uint8*	xspi_Write( uint8 ch, uint8* result );	/* Frame単位での送信バッファアドレス取得処理 */
-extern uint8*	xspi_Read( uint8 ch, uint8* result );	/* Frame単位での受信バッファアドレス取得処理 */
+extern uint8	xspi_Write( uint8 ch, const uint8* addr, uint32 size );	/* 送信データ書き込み処理 */
+extern uint8	xspi_Read( uint8 ch, uint8* addr, uint32 size );	/* 受信データ読み出し処理 */
 extern void		xspi_Main( uint8 ch );					/* XSPI通信ドライバメイン処理 */
 extern uint8	xspi_GetErrInfo( uint8 ch );			/* XSPI通信ドライバエラー情報取得処理 */
 

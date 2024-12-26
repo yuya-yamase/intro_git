@@ -15,12 +15,12 @@ void	xspi_DeInit_central(uint8 ch);
 uint8	xspi_GetCondition_ivi(uint8 ch);
 uint8	xspi_GetCondition_meter(uint8 ch);
 uint8	xspi_GetCondition_central(uint8 ch);
-uint8*	xspi_Write_ivi(uint8 ch, uint8* result);
-uint8*	xspi_Write_meter(uint8 ch, uint8* result);
-uint8*	xspi_Write_central(uint8 ch, uint8* result);
-uint8*	xspi_Read_ivi(uint8 ch, uint8* result);
-uint8*	xspi_Read_meter(uint8 ch, uint8* result);
-uint8*	xspi_Read_central(uint8 ch, uint8* result);
+uint8	xspi_Write_ivi(uint8 ch, const uint8* addr, uint32 size );
+uint8	xspi_Write_meter(uint8 ch, const uint8* addr, uint32 size );
+uint8	xspi_Write_central(uint8 ch, const uint8* addr, uint32 size );
+uint8	xspi_Read_ivi(uint8 ch, uint8* addr, uint32 size );
+uint8	xspi_Read_meter(uint8 ch, uint8* addr, uint32 size );
+uint8	xspi_Read_central(uint8 ch, uint8* addr, uint32 size );
 void	xspi_Main_ivi(uint8 ch);
 void	xspi_Main_meter(uint8 ch);
 void	xspi_Main_central(uint8 ch);
@@ -92,54 +92,54 @@ uint8	xspi_GetCondition(
 	return( ret );
 }
 
-uint8*	xspi_Write(
-	uint8 ch,	uint8* result
+uint8	xspi_Write(
+	uint8 ch,	const uint8* addr,	uint32 size
 )
 {
-	uint8* ret = NULL_PTR;
+	uint8 result = XSPI_NG;
 
 	switch(ch)
 	{
 		case XSPI_CH_01:
-			ret = xspi_Write_ivi(ch, result);
+			result = xspi_Write_ivi(ch, addr, size);
 			break;
 		case XSPI_CH_02:
-			ret = xspi_Write_meter(ch, result);
+			result = xspi_Write_meter(ch, addr, size);
 			break;
 		case XSPI_CH_03:
-			ret = xspi_Write_central(ch, result);
+			result = xspi_Write_central(ch, addr, size);
 			break;
 		default:
-			*result = XSPI_NG;
+			result = XSPI_NG;
 			break;
 	}
 
-	return( ret );
+	return( result );
 }
 
-uint8*	xspi_Read(
-	uint8 ch,	uint8* result
+uint8	xspi_Read(
+	uint8 ch,	uint8* addr,	uint32 size
 )
 {
-	uint8* ret = NULL_PTR;
+	uint8 result = XSPI_NG;
 
 	switch(ch)
 	{
 		case XSPI_CH_01:
-			ret = xspi_Read_ivi(ch, result);
+			result = xspi_Read_ivi(ch, addr, size);
 			break;
 		case XSPI_CH_02:
-			ret = xspi_Read_meter(ch, result);
+			result = xspi_Read_meter(ch, addr, size);
 			break;
 		case XSPI_CH_03:
-			ret = xspi_Read_central(ch, result);
+			result = xspi_Read_central(ch, addr, size);
 			break;
 		default:
-			*result = XSPI_NG;
+			result = XSPI_NG;
 			break;
 	}
 
-	return( ret );
+	return( result );
 }
 
 void	xspi_Main(

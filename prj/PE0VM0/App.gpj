@@ -46,4 +46,7 @@ xspi.c
 xspi_ivi.c
 xspi_central.c
 xspi_meter.c
+xspi_sub_ivi.c
+xspi_sub_central.c
+xspi_sub_meter.c
 product_cfg.c

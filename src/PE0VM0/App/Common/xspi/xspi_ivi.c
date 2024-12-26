@@ -1,16 +1,10 @@
 /****************************************************************************/
-/*【ファイル名】xspi.c                                                 */
-/*【モジュール名】XSPIドライバ			                                	*/
+/*【ファイル名】xspi.c                                                      */
+/*【モジュール名】XSPIドライバ			                                    */
 /****************************************************************************/
 /****************************
 *		include	files		*
 ****************************/
-#include "Rte_BswUcfg.h"
-#include "Port.h"
-#include "Spi.h"
-#include "Dma.h"
-#include "Dio.h"
-#include "xspi.h"
 #include "xspi_internal.h"
 
 /************************************************************************
@@ -18,59 +12,60 @@
 *				Ｄefine Ｄeclare Ｓection								*
 *																		*
 ************************************************************************/
-/*------------------------------------------*/
-/*	MCAL関連								*/
-/*------------------------------------------*/
-#define	XSPI_COMC_ID_ivi 		(SPI_COMC_ID_SOC_MCU2)		/* COM ID（MCAL/SPI）*/
-#define XSPI_EN_PORT_ivi 		(DIO_ID_PORT4_CH1)			/* EN端子ポート（MCAL/DIO）*/
-#define XSPI_FRM_PORT_ivi 		(DIO_ID_PORT10_CH12)		/* Frame端子ポート（MCAL/DIO）*/
-#define XSPI_SCLK_PORT_ivi 		(PORT_ID_PORT24_PIN10)		/* SCLKポート（MCAL/PORT） */
-#define XSPI_TXD_PORT_ivi 		(PORT_ID_PORT24_PIN12) 		/* TXDポート（MCAL/PORT） */
-#define XSPI_RXD_PORT_ivi 		(PORT_ID_PORT24_PIN13)		/* RXDポート（MCAL/PORT） */
-#define XSPI_SCLK_MODE_CFG_ivi 	(PORT_MODE_CFG_P24_10_17)	/* SCLKポート設定値（MCAL/PORT） */
-#define XSPI_TXD_MODE_CFG_ivi 	(PORT_MODE_CFG_P24_12_18)	/* TXDポート設定値（MCAL/PORT） */
-#define XSPI_RXD_MODE_CFG_ivi 	(PORT_MODE_CFG_P24_13_19)	/* RXDポート設定値（MCAL/PORT） */
-
 /****************************
-*		buffers				*
+*		variables			*
 ****************************/
-#define APP_COMMON_START_SEC_CRAM0_BSS
-#include "APP_COMMON_Memmap.h"
-BF_DRV_SPI		bf_drv_SpiMng_ivi;
-#define APP_COMMON_STOP_SEC_CRAM0_BSS
-#include "APP_COMMON_Memmap.h"
-
 static uint8	bf_drv_EnSignal_ivi;		/* EN信号状態 */
 static uint8	bf_drv_ComTimeCount_ivi;	/* 通信中M-SPIドライバ定周期(5ms)呼び出し回数カウンタ */
-static uint32	bf_drv_DMA_Cnt_ivi;
-static uint8	bf_drv_Dbg_ErrInfo_ivi;		/* デバッグ用エラー情報 */
+static uint32	bf_drv_DMA_Cnt_ivi;			/* DMA転送カウント */
 
-#if 1 /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
-static uint8 	bf_drv_dummy_flag_ivi = 1;
-#endif /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
+static uint8 	bf_drv_skip_first_data_ivi = XSPI_NG;		/* [T.B.D]暫定対応 初回データスキップ */
+static uint32 	bf_drv_dummy_rcvdata_ivi = 0x00000000UL;	/* [T.B.D]暫定対応 初回データスキップ */
+static uint32 	bf_drv_dummy_snddata_ivi = 0x00000000UL;	/* [T.B.D]暫定対応 初回データスキップ */
+
+extern BF_DRV_SPI_RING	bf_drv_SpiMng_ivi;		/* XSPI管理情報 */
+
+#ifdef XSPI_DEBUG
+extern uint8	bf_drv_Dbg_ErrInfo_ivi;		/* デバッグ用エラー情報 */
+#endif	/* XSPI_DEBUG */
 
 /****************************
 *		prototype			*
 ****************************/
-uint8	fs_tbl_Excute_ivi( uint8 event );					/* 処理テーブル内の該当状態・イベントの関数／状態を実施 */
-void	fc_SpiInit_ivi( void );								/* ドライバ初期化 */
-void	fc_SpiStartPrepare_ivi( void );						/* 送受信開始準備 */
-void	fc_SpiEnd_ivi( void );								/* 送受信終了 */
-void	fc_SpiAbort_ivi( void );							/* 送受信ドライバ中断 */
-void	fc_SpiStop_ivi( void );								/* 送受信ドライバ停止 */
+static uint8	fs_tbl_Excute_ivi( uint8 event );						/* 処理テーブル内の該当状態・イベントの関数／状態を実施 */
+static void		fc_SpiInit_ivi( void );									/* ドライバ初期化 */
+static void		fc_SpiStartPrepare_ivi( void );							/* 送受信開始準備 */
+static void		fc_SpiEnd_ivi( void );									/* 送受信終了 */
+static void		fc_SpiAbort_ivi( void );								/* 送受信ドライバ中断 */
+static void		fc_SpiStop_ivi( void );									/* 送受信ドライバ停止 */
 
-uint8	fc_drv_ENSigCheck_ivi( void );						/* EN信号状態チェック */
-uint8	fc_drv_Spi_SubEvent_5ms_ivi( void );				/* XSPIメインサブイベント処理(5ms経過時) */
-uint8	fc_drv_Spi_SubEvent_10ms_ivi( void );				/* XSPIメインサブイベント処理(10ms経過時) */
-uint8	fc_drv_Spi_SubEvent_15ms_ivi( void );				/* XSPIメインサブイベント処理(15ms経過時) */
-uint8	fc_drv_Spi_SubEvent_20ms_ivi( void );				/* XSPIメインサブイベント処理(20ms経過時) */
-void	fc_drv_SpiRcvDpageRenew_ivi( void );				/* ドライバ用受信バッファページ更新 */
-void	fc_drv_SpiSendDpageRenew_ivi( void );				/* ドライバ用送信バッファページ更新 */
-void	fc_drv_SpiSetErrInfoKind_ivi( uint8 kind );			/* エラー種別情報設定 */
-void	fc_drv_SpiClearErrInfoKind_ivi( uint8 kind );		/* エラー種別情報クリア */
-void	fc_drv_SpiSetDbgErrInfo_ivi( uint8 dbg_errinfo );	/* デバッグ用エラー情報設定 */
-uint8   fc_drv_SpiFccCheck_ivi( uint32* frame );			/* FCCチェック */
-uint32	fc_drv_CalculationFcc_ivi( uint32 *ulbuf );			/* FCC計算処理 */
+static uint8	fc_drv_ENSigCheck_ivi( void );							/* EN信号状態チェック */
+static uint8	fc_drv_Spi_SubEvent_5ms_ivi( void );					/* XSPIメインサブイベント処理(5ms経過時) */
+static uint8	fc_drv_Spi_SubEvent_10ms_ivi( void );					/* XSPIメインサブイベント処理(10ms経過時) */
+static uint8	fc_drv_Spi_SubEvent_15ms_ivi( void );					/* XSPIメインサブイベント処理(15ms経過時) */
+static uint8	fc_drv_Spi_SubEvent_20ms_ivi( void );					/* XSPIメインサブイベント処理(20ms経過時) */
+
+extern void		fc_drv_ClearXSpiMng_ivi( void );						/* XSPI管理情報初期化 */
+extern void		fc_drv_SpiSetErrInfoKind_ivi( uint8 kind );				/* エラー種別情報設定 */
+extern void		fc_drv_SpiClearErrInfoKind_ivi( uint8 kind );			/* エラー種別情報クリア */
+#ifdef XSPI_DEBUG
+extern void		fc_drv_SpiSetDbgErrInfo_ivi( uint8 err_info );			/* デバッグ用エラー情報設定 */
+#endif	/* XSPI_DEBUG */
+
+extern uint8	fc_drv_getRcvBufPage_ivi( void );						/* 受信バッファページ取得 */
+extern uint8	fc_drv_getSndBufPage_ivi( void );						/* 送信バッファページ取得 */
+extern uint8	fc_drv_ReadBuf_ivi( uint8* p_addr, uint32 size );		/* 受信データ読み出し */
+extern uint8	fc_drv_WriteBuf_ivi( const uint8* p_addr, uint32 size );/* 送信データ書き込み */
+
+#if (XSPI_DATA_BUFFER_ivi != XSPI_DATA_BUFFER_DOUBLE)
+extern void		fc_drv_SpiRcvDpageRenew_ivi( void );					/* ドライバ用受信バッファページ更新 */
+extern void		fc_drv_SpiSendDpageRenew_ivi( void );					/* ドライバ用送信バッファページ更新 */
+#endif	/* XSPI_DATA_BUFFER_ivi */
+
+#if (XSPI_DATA_CHECK_ivi != XSPI_DATA_CHECK_NONE)
+extern uint8	fc_drv_CheckIntegrityData_ivi( const uint8* p_frame );	/* 整合性データチェック */
+extern void		fc_drv_AddIntegrityData_ivi( uint8* p_frame );			/* 整合性データ付加 */
+#endif	/* XSPI_DATA_CHECK_ivi */
 
 /********************************
 *		table					*
@@ -134,70 +129,44 @@ static const TBL_DRV_SPI	tb_drv_SpiDrvJmp_ivi[CMDRV_STAT_MAX][CMDRV_EVT_MAX] = {
 	}
 };
 
-/************************************************************************************
-*																					*
-*		SYMBOL		:	PDR_SPI_FRM_WR												*
-*																					*
-*		DESCRIPTION	:	Frame端子ポート設定											*
-*																					*
-*		PARAMETER	:	IN  	:	uint32		level								*
-*									( 0::Low )	bit clear 							*
-*									( 1::High)	bit set   							*
-*																					*
-*						OUT 	:	None											*
-*																					*
-*						RET 	:	None											*
-*																					*
-************************************************************************************/
-static	void	PDR_SPI_FRM_WR_ivi	( uint32 level )
+/****************************************************************************
+*																			*
+*		SYMBOL		:	PDR_SPI_FRM_WR										*
+*																			*
+*		DESCRIPTION	:	Frame端子ポート設定									*
+*																			*
+*		PARAMETER	:	IN  	:	uint32		level						*
+*									( 0::Low )	bit clear 					*
+*									( 1::High)	bit set   					*
+*																			*
+*						OUT 	:	None									*
+*																			*
+*						RET 	:	None									*
+*																			*
+****************************************************************************/
+static void	PDR_SPI_FRM_WR_ivi ( uint32 level )
 {
 	Dio_WriteChannel( XSPI_FRM_PORT_ivi, level);
 }
 
-/************************************************************************************
-*																					*
-*		SYMBOL		:	PDR_SPI_EN													*
-*																					*
-*		DESCRIPTION	:	Enable端子ポート取得										*
-*																					*
-*		PARAMETER	:	IN  	:	None											*
-*																					*
-*						OUT 	:	None											*
-*																					*
-*						RET 	:	uint8 	EN端子Port状態							*
-*											( 0::Low )	Ready						*
-*											( 1::High)	Busy						*
-*																					*
-************************************************************************************/
-static	uint8	PDR_SPI_EN_ivi ( void )
+/****************************************************************************
+*																			*
+*		SYMBOL		:	PDR_SPI_EN											*
+*																			*
+*		DESCRIPTION	:	Enable端子ポート取得								*
+*																			*
+*		PARAMETER	:	IN  	:	None									*
+*																			*
+*						OUT 	:	None									*
+*																			*
+*						RET 	:	uint8 	EN端子Port状態					*
+*											( 0::Low )	Ready				*
+*											( 1::High)	Busy				*
+*																			*
+*****************************************************************************/
+static uint8	PDR_SPI_EN_ivi ( void )
 {
 	return ( Dio_ReadChannel( XSPI_EN_PORT_ivi ) );
-}
-
-/************************************************************************************
-*																					*
-*		SYMBOL		:	XSPI_MEMSET													*
-*																					*
-*		DESCRIPTION	:	memset関数(XSPI用)											*
-*																					*
-*		PARAMETER	:	IN/OUT	:	void*	address									*
-*						IN 		:	uint8	value									*
-*						IN 		:	uint32	size									*
-*																					*
-*						OUT 	:	None											*
-*																					*
-*						RET 	:	None											*
-*																					*
-************************************************************************************/
-static	void	XSPI_MEMSET_ivi ( void * address, uint8 value, uint32 size )
-{
-	uint8 *ptr = (uint8 *)address;
-	while ((unsigned int)0 < size)
-	{
-		size--;
-		*ptr = value;
-		ptr++;
-	}
 }
 
 /****************************************************************************/
@@ -225,18 +194,25 @@ void	xspi_Init_ivi(
 )
 {
 	(VOID)ch;
+	/* SPIポート設定 */
 	Port_SetPinMode( XSPI_SCLK_PORT_ivi, XSPI_SCLK_MODE_CFG_ivi );
 	Port_SetPinMode( XSPI_TXD_PORT_ivi, XSPI_TXD_MODE_CFG_ivi );
 	Port_SetPinMode( XSPI_RXD_PORT_ivi, XSPI_RXD_MODE_CFG_ivi );
 
-	XSPI_MEMSET_ivi( &bf_drv_SpiMng_ivi, 0, sizeof(bf_drv_SpiMng_ivi) );	/* ドライバ管理バッファ初期化 */
-	bf_drv_EnSignal_ivi = 0;										/* EN信号状態初期化 */
-	bf_drv_ComTimeCount_ivi = 0;									/* 通信中M-SPIドライバ定周期(5mS)呼び出し回数カウンタ初期化 */
+	/* XSPI管理情報初期化 */
+	fc_drv_ClearXSpiMng_ivi();
 
-	bf_drv_DMA_Cnt_ivi = 0;											/* DMA転送カウントを初期化 */
-	bf_drv_Dbg_ErrInfo_ivi = 0;										/* デバッグ用エラー情報を初期化 */
+	/* EN信号状態初期化 */
+	bf_drv_EnSignal_ivi = 0U;
 
-	PDR_SPI_FRM_WR_ivi( STD_HIGH );									/* Frame信号をHigh出力 */
+	/* 通信中M-SPIドライバ定周期(5mS)呼び出し回数カウンタ初期化 */
+	bf_drv_ComTimeCount_ivi = 0U;
+
+	/* DMA転送カウントを初期化 */
+	bf_drv_DMA_Cnt_ivi = 0UL;
+
+	/* Frame信号をHigh出力 */
+	PDR_SPI_FRM_WR_ivi( STD_HIGH );
 
 	return;
 }
@@ -263,19 +239,27 @@ void	xspi_DeInit_ivi(
 )
 {
 	(VOID)ch;
-	
+
 	/* SPI非同期通信中断 */
 	Spi_CancelAsyncTransmit( XSPI_COMC_ID_ivi );
-	
-	XSPI_MEMSET_ivi( &bf_drv_SpiMng_ivi, 0, sizeof(bf_drv_SpiMng_ivi) );	/* ドライバ管理バッファ初期化 */
-	bf_drv_EnSignal_ivi = 0;										/* EN信号状態初期化 */
-	bf_drv_ComTimeCount_ivi = 0;									/* 通信中M-SPIドライバ定周期(5mS)呼び出し回数カウンタ初期化 */
 
-	PDR_SPI_FRM_WR_ivi( STD_HIGH );									/* Frame信号をHigh出力 */
+	/* XSPI管理情報初期化 */
+	fc_drv_ClearXSpiMng_ivi();
+
+	/* EN信号状態初期化 */
+	bf_drv_EnSignal_ivi = 0U;
+
+	/* 通信中M-SPIドライバ定周期(5mS)呼び出し回数カウンタ初期化 */
+	bf_drv_ComTimeCount_ivi = 0U;
+
+	/* DMA転送カウントを初期化 */
+	bf_drv_DMA_Cnt_ivi = 0UL;
+
+	/* Frame信号をHigh出力 */
+	PDR_SPI_FRM_WR_ivi( STD_HIGH );
 
 	return;
 }
-
 
 /****************************************************************************
 *																			*
@@ -322,11 +306,6 @@ uint8	xspi_GetCondition_ivi(
 		break;
 
 	default :
-#if 0 /* [★XSPI暫定対応(T.B.D)]CLib関数の為無効*/
-        CLibTracePortLogOut( XSPI_TRCID_CPU_COM,     (unsigned short)0xFFFF, (unsigned short)0x0301, (unsigned short)stat,
-							 (unsigned short)0x0000, (unsigned short)0x0000, (unsigned short)0x0000, (unsigned short)0x0000);
-#endif /* [★XSPI暫定対応(T.B.D)]CLib関数の為無効*/
-
 		bf_drv_SpiMng_ivi.stat = CMDRV_STAT_INIT;	/* 念の為、初期化前へ遷移 */
 		cond = XSPI_DCOND_INIT;				/* 状態 ← 初期化前 */
 		break;
@@ -335,116 +314,66 @@ uint8	xspi_GetCondition_ivi(
 	return( cond );							/* ドライバ状態 */
 }
 
-
 /****************************************************************************
 *																			*
 *		SYMBOL		: xspi_Write											*
 *																			*
-*		DESCRIPTION	: Frame単位での送信バッファアドレス取得処理				*
+*		DESCRIPTION	: 送信データ書き込み処理								*
 *																			*
 *		PARAMETER	: IN  :	ch		チャネルID								*
 *						XSPI_CH_01	(0x00)	XSPIチャネルID：01（IVI向け）	*
 *						XSPI_CH_02	(0x01)	XSPIチャネルID：02（METER向け）	*
 *						XSPI_CH_03	(0x02)	XSPIチャネルID：03（CENTRAL向け）*
 *																			*
-*					  OUT :	*result	バッファ取得結果						*
-*						XSPI_NG	(0x00)	バッファ取得失敗 					*
-*						XSPI_OK	(0x01)	バッファ取得成功 	 				*
+*					  IN :	addr	書き込みデータアドレス					*
+*					  IN  :	size	書き込みデータサイズ					*
 *																			*
-*					  RET :	送信バッファページアドレス						*
+*					  RET :	result	書き込み結果							*
+*						XSPI_NG	(0x00)	書き込み失敗 						*
+*						XSPI_OK	(0x01)	書き込み成功 	 					*
 *																			*
 ****************************************************************************/
-uint8*	xspi_Write_ivi(
-	uint8 ch,	uint8* result
+uint8	xspi_Write_ivi(
+	uint8 ch,	const uint8* addr,	uint32 size
 )
 {
 	(VOID)ch;
-	uint8 page = bf_drv_SpiMng_ivi.snd.page_task;
-	uint8 page_current;
+	uint8 result = XSPI_NG;
 
-	*result = XSPI_NG;
+	result = fc_drv_WriteBuf_ivi( addr, size );
 
-	if( bf_drv_SpiMng_ivi.snd.page[page].inf == SND_FRM_DATA_NON )	/* 送信データ無し */
-	{
-		/* 現在ページを保存 */
-		page_current = page;
-
-		/* ページデータありを設定して送信ページ番号を更新 */
-		bf_drv_SpiMng_ivi.snd.page[page].inf = SND_FRM_DATA_FIX;
-		page++;
-		page %= (uint8)XSPI_SND_PAGE;
-		bf_drv_SpiMng_ivi.snd.page_task = page;
-
-		*result = XSPI_OK;
-
-		/* 現在ページのドライバ管理バッファ送信ページアドレス取得 */
-		return( bf_drv_SpiMng_ivi.snd.page[page_current].dat );
-	}
-
-	return( NULL_PTR );
+	return( result );
 }
-
 
 /****************************************************************************
 *																			*
 *		SYMBOL		: xspi_Read												*
 *																			*
-*		DESCRIPTION	: Frame単位での受信バッファアドレス取得処理				*
+*		DESCRIPTION	: 受信データ読み出し処理								*
 *																			*
 *		PARAMETER	: IN  :	ch		チャネルID								*
 *						XSPI_CH_01	(0x00)	XSPIチャネルID：01（IVI向け）	*
 *						XSPI_CH_02	(0x01)	XSPIチャネルID：02（METER向け）	*
 *						XSPI_CH_03	(0x02)	XSPIチャネルID：03（CENTRAL向け）*
 *																			*
-*					  OUT :	*result	バッファ取得結果						*
-*						XSPI_NG	(0x00)	バッファ取得失敗 					*
-*						XSPI_OK	(0x01)	バッファ取得成功 	 				*
+*					  OUT :	addr	読み出しデータアドレス					*
+*					  IN  :	size	読み出しデータサイズ					*
 *																			*
-*					  RET :	受信バッファページアドレス						*
+*					  RET :	result	読み出し結果							*
+*						XSPI_NG	(0x00)	読み出し失敗	 					*
+*						XSPI_OK	(0x01)	読み出し成功	 	 				*
 *																			*
 ****************************************************************************/
-uint8*	xspi_Read_ivi(
-	uint8 ch,	uint8* result
+uint8	xspi_Read_ivi(
+	uint8 ch,	uint8* addr,	uint32 size
 )
 {
 	(VOID)ch;
-	uint8 page = bf_drv_SpiMng_ivi.rcv.page_task;
-	uint8 page_current;
-	uint8 fcc;
+	uint8 result = XSPI_NG;
 
-	*result = XSPI_NG;
-	
-	if( bf_drv_SpiMng_ivi.rcv.page[page].inf == RCV_FRM_DATA_FIX )	/* 受信データあり */
-	{
-		/* 現在ページを保存 */
-		page_current = page;
+	result = fc_drv_ReadBuf_ivi( addr, size );
 
-		/* ページデータなしを設定して受信ページ番号を更新 */
-		bf_drv_SpiMng_ivi.rcv.page[page].inf = RCV_FRM_DATA_NON;
-		page++;
-		page %= (uint8)XSPI_RCV_PAGE;
-		bf_drv_SpiMng_ivi.rcv.page_task = page;
-
-		/* FCCチェック */
-		fcc = fc_drv_SpiFccCheck_ivi( (uint32*)bf_drv_SpiMng_ivi.rcv.page[page_current].dat );
-		if( fcc == XSPI_OK )
-		{
-			fc_drv_SpiClearErrInfoKind_ivi( XSPI_ERR_KIND_FCC );
-
-			*result = XSPI_OK;
-
-			/* 現在ページのドライバ管理バッファ受信ページアドレス取得 */
-			return( bf_drv_SpiMng_ivi.rcv.page[page_current].dat );
-		}
-		else
-		{
-			/* FCC不一致 */
-			fc_drv_SpiSetErrInfoKind_ivi( XSPI_ERR_KIND_FCC );
-			fc_drv_SpiSetDbgErrInfo_ivi( XSPI_ERR_DBG_FCC );
-		}
-	}
-
-	return( NULL_PTR );
+	return( result );
 }
 
 /****************************************************************************
@@ -482,13 +411,13 @@ void	xspi_Main_ivi(
 
 		case CMDRV_STAT_INIT :				/* 初期化前 */
 		case CMDRV_STAT_INVALID :			/* 通信無効（EN信号Low状態） */
-			bf_drv_ComTimeCount_ivi = 0;
+			bf_drv_ComTimeCount_ivi = 0U;
 			break;
 
 		case CMDRV_STAT_RETRY:				/* リトライ状態 */
 		case CMDRV_STAT_IDLE :				/* アイドル状態（EN信号High状態） */
 			/* EN信号がHighの場合は通信開始 */
-			bf_drv_ComTimeCount_ivi = 0;
+			bf_drv_ComTimeCount_ivi = 0U;
 
 			fc_drv_SpiClearErrInfoKind_ivi( XSPI_ERR_KIND_ENCHG );
 
@@ -512,23 +441,18 @@ void	xspi_Main_ivi(
 					event = fc_drv_Spi_SubEvent_20ms_ivi();
 					break;
 				default:
-					bf_drv_ComTimeCount_ivi = 0;
+					bf_drv_ComTimeCount_ivi = 0U;
 					break;
 				}
 			}
 			else
 			{
 				fc_drv_SpiSetErrInfoKind_ivi( XSPI_ERR_KIND_ENCHG );
-				bf_drv_ComTimeCount_ivi = 0;
+				bf_drv_ComTimeCount_ivi = 0U;
 			}
 			break;
 
 		default :							/* 状態に該当なし */
-#if 0 /* [★XSPI暫定対応(T.B.D)]CLib関数の為無効*/
-			CLibTracePortLogOut( XSPI_TRCID_CPU_COM,    (unsigned short)0xFFFF, (unsigned short)0x0302, (unsigned short)stat,
-								(unsigned short)0x0000, (unsigned short)0x0000, (unsigned short)0x0000, (unsigned short)0x0000 );
-#endif /* [★XSPI暫定対応(T.B.D)]CLib関数の為無効*/
-
 			bf_drv_SpiMng_ivi.stat = CMDRV_STAT_INIT;	/* 念の為、初期化前へ遷移 */
 			stat = CMDRV_STAT_MAX;
 			break;
@@ -560,7 +484,7 @@ void	xspi_Main_ivi(
 *					  RET :	uint8											*
 *						XSPI_ERR_KIND_NONE	(0x00)	エラー無し 				*
 *						XSPI_ERR_KIND_TRX	(0x01)	送受信エラー 			*
-*						XSPI_ERR_KIND_FCC	(0x02)	FCC不一致 				*
+*						XSPI_ERR_KIND_INTG	(0x02)	データ整合性エラー		*
 *						XSPI_ERR_KIND_ENCHG	(0x40)	EN信号変化 				*
 *						XSPI_ERR_KIND_TIM	(0x80)	通信時間オーバ 			*
 *																			*
@@ -592,7 +516,7 @@ uint8	xspi_GetErrInfo_ivi(
 *							uint8	実施後の遷移状態						*
 *																			*
 ****************************************************************************/
-uint8	fs_tbl_Excute_ivi(
+static uint8	fs_tbl_Excute_ivi(
 	uint8	event					/* イベントNo. */
 )
 {
@@ -608,12 +532,11 @@ uint8	fs_tbl_Excute_ivi(
 		tb_drv_SpiDrvJmp_ivi[stat][event].func();
 	}
 	/* 処理テーブル内の該当状態・イベントの次の状態有無チェック */
-	if( tb_drv_SpiDrvJmp_ivi[stat][event].next_stat != (uint8)0 )
+	if( tb_drv_SpiDrvJmp_ivi[stat][event].next_stat != 0U )
 	{	/* 処理テーブル内の該当状態・イベントの次の状態あり */
 		/* 該当する次の状態をセット */
 		bf_drv_SpiMng_ivi.stat = tb_drv_SpiDrvJmp_ivi[stat][event].next_stat;
 	}
-
 	return( bf_drv_SpiMng_ivi.stat );
 }
 
@@ -631,17 +554,13 @@ uint8	fs_tbl_Excute_ivi(
 *					  RET :	None											*
 *																			*
 ****************************************************************************/
-void	fc_SpiInit_ivi(
+static void	fc_SpiInit_ivi(
 	void
 )
 {
-	/* 送信バッファデータあり情報セット */
-	bf_drv_SpiMng_ivi.snd.page[XSPI_SND_PAGE].inf = SND_FRM_DATA_FIX;
-
-	/* Frame 信号High出力	*/
+	/* Frame 信号High出力 */
 	PDR_SPI_FRM_WR_ivi( STD_HIGH );
 }
-
 
 /****************************************************************************
 *																			*
@@ -656,76 +575,52 @@ void	fc_SpiInit_ivi(
 *					  RET :	None											*
 *																			*
 ****************************************************************************/
-void	fc_SpiStartPrepare_ivi(
+static void	fc_SpiStartPrepare_ivi(
 	void
 )
 {
-	uint8		spage, rpage;
-	uint8		*rcv_buf, *snd_buf;
-	uint32		fcc_offset;
-	uint32		fcc_calc;
+	uint8	spage, rpage;
+	uint8	*rcv_buf, *snd_buf;
 
-	/* 受信バッファ指定 */
-	rpage = bf_drv_SpiMng_ivi.rcv.page_drv;
+	/* バッファページ切り替え */
+	rpage = fc_drv_getRcvBufPage_ivi();
+	spage = fc_drv_getSndBufPage_ivi();
 
-	/* 受信用バッファ空チェック */
-	if( bf_drv_SpiMng_ivi.rcv.page[rpage].inf != (uint8)RCV_FRM_DATA_NON )
-	{	/* 受信用バッファにデータあり（固定アドレスへ受信＆破棄） */
-		rpage = XSPI_RCV_PAGE;
-		fc_drv_SpiSetDbgErrInfo_ivi( XSPI_ERR_DBG_OVERFLOW );
-	}
-#if 1 /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
-	if( bf_drv_dummy_flag_ivi == 1 )
-	{
-		rpage = XSPI_RCV_PAGE;
-	}
-#endif /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
-
-	/* 受信用バッファアドレス */
+	/* バッファアドレス取得 */
 	rcv_buf = (uint8 *)&bf_drv_SpiMng_ivi.rcv.page[rpage].dat[0];
-	/* 受信中バッファページ保存 */
-	bf_drv_SpiMng_ivi.rcv.page_rcv = rpage;
-
-	/* 送信バッファ指定 */
-	spage = bf_drv_SpiMng_ivi.snd.page_drv;
-
-	/* 送信用バッファデータありチェック */
-	if( bf_drv_SpiMng_ivi.snd.page[spage].inf != (uint8)SND_FRM_DATA_FIX )
-	{	/* 送信用バッファ内にデータセットされていない（固定アドレスを指定して空データ送信） */
-		spage = XSPI_SND_PAGE;
-	}
-#if 1 /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
-	if( bf_drv_dummy_flag_ivi == 1 )
-	{
-		spage = XSPI_SND_PAGE;
-	}
-#endif /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
-
-	/* 送信用バッファアドレス */
 	snd_buf = (uint8 *)&bf_drv_SpiMng_ivi.snd.page[spage].dat[0];
 
-	/* 送信中バッファページ保存 */
-	bf_drv_SpiMng_ivi.snd.page_send = spage;
-	
-	/* Frame Header未使用領域(Byte0)にデバッグ用エラー情報をセット */
-	snd_buf[0] = bf_drv_Dbg_ErrInfo_ivi;
+#ifdef XSPI_DEBUG
+	/* [T.B.D]暫定対応 初回データスキップ */
+	if( bf_drv_skip_first_data_ivi == XSPI_OK )
+	{
+		/* Frame Header未使用領域(Byte0)にデバッグ用エラー情報をセット */
+		snd_buf[0] = bf_drv_Dbg_ErrInfo_ivi;
+	}
+#endif	/* XSPI_DEBUG */
 
-	/* Calclation FCC */
-#if 0 /* [T.B.D]IVI向け暫定対応 */
-	fcc_offset = XSPI_FCC_OFFSET;
-#else
-	fcc_offset = (uint32)(5552 - 4);
-#endif /* [T.B.D]IVI向け暫定対応 */
-	fcc_calc = fc_drv_CalculationFcc_ivi((uint32*)snd_buf);
-	snd_buf[fcc_offset] = BYTE_SWAP4(fcc_calc);
-	snd_buf[fcc_offset+1] = BYTE_SWAP3(fcc_calc);
-	snd_buf[fcc_offset+2] = BYTE_SWAP2(fcc_calc);
-	snd_buf[fcc_offset+3] = BYTE_SWAP1(fcc_calc);
+	/* 整合性データ付与 */
+#if (XSPI_DATA_CHECK_ivi != XSPI_DATA_CHECK_NONE)
+	fc_drv_AddIntegrityData_ivi(snd_buf);
+#endif	/* XSPI_DATA_CHECK_ivi */
 
-	bf_drv_ComTimeCount_ivi = 1;	/* 通信中M-SPIドライバ定周期(5mS)呼び出し回数カウント開始 */
+	bf_drv_ComTimeCount_ivi = 1U;	/* 呼び出し回数カウント開始 */
 
-	/* SPI非同期通信開始 */
-	Spi_AsyncTransmit( XSPI_COMC_ID_ivi, (const Spi_ModeC_DataType *)snd_buf, (const Spi_ModeC_DataType *)rcv_buf,(U2)XSPI_SND_FRM_MAX );
+	/* [T.B.D]暫定対応 初回データスキップ */
+	if( bf_drv_skip_first_data_ivi == XSPI_NG )
+	{
+#if (XSPI_DATA_BUFFER_ivi != XSPI_DATA_BUFFER_DOUBLE)
+		bf_drv_SpiMng_ivi.rcv.page_rcv = XSPI_RCV_PAGE;
+		bf_drv_SpiMng_ivi.snd.page_send = XSPI_SND_PAGE;
+#endif
+		/* ダミーデータ送信 */
+		Spi_AsyncTransmit( XSPI_COMC_ID_ivi, (const Spi_ModeC_DataType *)&bf_drv_dummy_snddata_ivi, (const Spi_ModeC_DataType *)&bf_drv_dummy_rcvdata_ivi, sizeof(uint32) );
+	}
+	else
+	{
+		/* SPI非同期通信開始 */
+		Spi_AsyncTransmit( XSPI_COMC_ID_ivi, (const Spi_ModeC_DataType *)snd_buf, (const Spi_ModeC_DataType *)rcv_buf,(U2)XSPI_FRM_MAX );
+	}
 
 	/* Frame信号をLow出力 */
 	PDR_SPI_FRM_WR_ivi( STD_LOW );
@@ -745,7 +640,7 @@ void	fc_SpiStartPrepare_ivi(
 *					  RET :	None											*
 *																			*
 ****************************************************************************/
-void	fc_SpiEnd_ivi(
+static void	fc_SpiEnd_ivi(
 	void
 )
 {
@@ -755,21 +650,32 @@ void	fc_SpiEnd_ivi(
 
 	/* オーバーランエラー状態チェック */
 	err = Spi_GetOvrunErrStatus( XSPI_COMC_ID_ivi );
-	if( err != 0)
+	if( err != 0 )
 	{
 		fc_drv_SpiSetErrInfoKind_ivi( XSPI_ERR_KIND_TRX );
+#ifdef XSPI_DEBUG
 		fc_drv_SpiSetDbgErrInfo_ivi( XSPI_ERR_DBG_DMAOVERRUN );
+#endif	/* XSPI_DEBUG */
 	}
 	else {
 		fc_drv_SpiClearErrInfoKind_ivi( XSPI_ERR_KIND_TRX );
 
+#if (XSPI_DATA_BUFFER_ivi != XSPI_DATA_BUFFER_DOUBLE)
 		/* 送受信バッファページ更新 */
 		fc_drv_SpiRcvDpageRenew_ivi();
 		fc_drv_SpiSendDpageRenew_ivi();
+#endif	/* XSPI_DATA_BUFFER_ivi */
 
-#if 1 /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
-		bf_drv_dummy_flag_ivi = 0;
-#endif /* [★XSPI暫定対応(T.B.D)]初回データダミー対応 */
+#ifdef XSPI_DEBUG
+		/* [T.B.D]暫定対応 初回データスキップ */
+		if( bf_drv_skip_first_data_ivi == XSPI_NG )
+		{
+			bf_drv_Dbg_ErrInfo_ivi = 0U;
+		}
+#endif	/* XSPI_DEBUG */
+
+		/* [T.B.D]暫定対応 初回データスキップ */
+		bf_drv_skip_first_data_ivi = XSPI_OK;
 	}
 
 	/* 経過時間チェック(通信開始から10ms以上経過している場合) */
@@ -793,7 +699,7 @@ void	fc_SpiEnd_ivi(
 *					  RET :	None											*
 *																			*
 ****************************************************************************/
-void	fc_SpiAbort_ivi(
+static void	fc_SpiAbort_ivi(
 	void
 )
 {
@@ -818,22 +724,19 @@ void	fc_SpiAbort_ivi(
 *					  RET :	None											*
 *																			*
 ****************************************************************************/
-void	fc_SpiStop_ivi(
+static void	fc_SpiStop_ivi(
 	void
 )
 {
 	/* SPI非同期通信中断 */
 	Spi_CancelAsyncTransmit( XSPI_COMC_ID_ivi );
 
+#if (XSPI_DATA_BUFFER_ivi != XSPI_DATA_BUFFER_DOUBLE)
 	fc_drv_SpiSendDpageRenew_ivi();	/* ドライバ用送信バッファページ更新 */
+#endif	/* XSPI_DATA_BUFFER_ivi */
 
 	PDR_SPI_FRM_WR_ivi( STD_HIGH );	/* Frame 信号High出力 */
 }
-
-
-/****************************************************************************/
-/**************				ドライバ内部サブ処理				*************/
-/****************************************************************************/
 
 /****************************************************************************
 *																			*
@@ -847,40 +750,31 @@ void	fc_SpiStop_ivi(
 *																			*
 *					  RET :													*
 *							uint8	イベントNo.								*
-*										CMDRV_EVT_NORMAL (1)	EN信号変化なし		*
-*										CMDRV_EVT_ENHIGH (2)	EN信号Highへ変化	*
-*										CMDRV_EVT_ENLOW  (3)	EN信号Lowへ変化		*
+*								CMDRV_EVT_NORMAL (1)	EN信号変化なし		*
+*								CMDRV_EVT_ENHIGH (2)	EN信号Highへ変化	*
+*								CMDRV_EVT_ENLOW  (3)	EN信号Lowへ変化		*
 *																			*
 ****************************************************************************/
 uint8	fc_drv_ENSigCheck_ivi(
 	void
 )
 {
-	uint8	en_now;
+	uint8 en_now;
 
-	en_now = (uint8)PDR_SPI_EN_ivi();				/* 現在の EN信号状態を外部ポートから取得 */
+	/* 現在の EN信号状態を外部ポートから取得 */
+	en_now = (uint8)PDR_SPI_EN_ivi();
 
 	if( bf_drv_EnSignal_ivi != en_now )
 	{	/* EN信号状態変化 */
-		bf_drv_EnSignal_ivi = en_now;			/* EN信号状態更新 */
+		bf_drv_EnSignal_ivi = en_now;		/* EN信号状態更新 */
 
-		if( bf_drv_EnSignal_ivi == (uint8)STD_HIGH )
+		if( bf_drv_EnSignal_ivi == STD_HIGH )
 		{	/* EN High */
-#if 0 /* [★XSPI暫定対応(T.B.D)]CLib関数の為無効*/
-			CLibTracePortLogOut( XSPI_TRCID_CPU_COM,    (unsigned short)0xEEEE, (unsigned short)0x0001, (unsigned short)0x0000,
-								(unsigned short)0x0000, (unsigned short)0x0000, (unsigned short)0x0000, (unsigned short)0x0000);
-#endif /* [★XSPI暫定対応(T.B.D)]CLib関数の為無効*/
-
 			/* 処理テーブル内の該当状態・イベントの関数／状態を実施 */
 			return( CMDRV_EVT_ENHIGH );	/* EN信号High検知イベント */
 		}
 		else
 		{	/* EN Low */
-#if 0 /* [★XSPI暫定対応(T.B.D)]CLib関数の為無効*/
-			CLibTracePortLogOut( XSPI_TRCID_CPU_COM,    (unsigned short)0xEEEE, (unsigned short)0x0000, (unsigned short)0x0000,
-								(unsigned short)0x0000, (unsigned short)0x0000, (unsigned short)0x0000, (unsigned short)0x0000);
-#endif /* [★XSPI暫定対応(T.B.D)]CLib関数の為無効*/
-
 			/* 処理テーブル内の該当状態・イベントの関数／状態を実施 */
 			return( CMDRV_EVT_ENLOW );	/* EN信号Low検知イベント */
 		}
@@ -888,7 +782,6 @@ uint8	fc_drv_ENSigCheck_ivi(
 
 	return( CMDRV_EVT_NORMAL );			/* 変化なし */
 }
-
 
 /****************************************************************************
 *																			*
@@ -903,7 +796,7 @@ uint8	fc_drv_ENSigCheck_ivi(
 *					  RET :	uint8	イベントNo								*
 *																			*
 ****************************************************************************/
-uint8	fc_drv_Spi_SubEvent_5ms_ivi(
+static uint8	fc_drv_Spi_SubEvent_5ms_ivi(
 	void
 )
 {
@@ -943,7 +836,7 @@ uint8	fc_drv_Spi_SubEvent_5ms_ivi(
 *					  RET :	uint8	イベントNo								*
 *																			*
 ****************************************************************************/
-uint8	fc_drv_Spi_SubEvent_10ms_ivi(
+static uint8	fc_drv_Spi_SubEvent_10ms_ivi(
 	void
 )
 {
@@ -983,7 +876,7 @@ uint8	fc_drv_Spi_SubEvent_10ms_ivi(
 *					  RET :	uint8	イベントNo								*
 *																			*
 ****************************************************************************/
-uint8	fc_drv_Spi_SubEvent_15ms_ivi(
+static uint8	fc_drv_Spi_SubEvent_15ms_ivi(
 	void
 )
 {
@@ -1011,10 +904,12 @@ uint8	fc_drv_Spi_SubEvent_15ms_ivi(
 	}
 	else
 	{	/* 前回のカウント値に変化なし */
-		bf_drv_ComTimeCount_ivi = 0;
+		bf_drv_ComTimeCount_ivi = 0U;
 		event = CMDRV_EVT_TIMEOUT;
 		fc_drv_SpiSetErrInfoKind_ivi( XSPI_ERR_KIND_TIM );
+#ifdef XSPI_DEBUG
 		fc_drv_SpiSetDbgErrInfo_ivi( XSPI_ERR_DBG_SLAVETIM15 );
+#endif	/* XSPI_DEBUG */
 	}
 
 	return( event );
@@ -1033,7 +928,7 @@ uint8	fc_drv_Spi_SubEvent_15ms_ivi(
 *					  RET :	uint8	イベントNo								*
 *																			*
 ****************************************************************************/
-uint8	fc_drv_Spi_SubEvent_20ms_ivi(
+static uint8	fc_drv_Spi_SubEvent_20ms_ivi(
 	void
 )
 {
@@ -1048,264 +943,13 @@ uint8	fc_drv_Spi_SubEvent_20ms_ivi(
 	}
 	else
 	{	/* 転送未完了タイムアウト */
-		bf_drv_ComTimeCount_ivi = 0;
+		bf_drv_ComTimeCount_ivi = 0U;
 		event = CMDRV_EVT_TIMEOUT;
 		fc_drv_SpiSetErrInfoKind_ivi( XSPI_ERR_KIND_TIM );
+#ifdef XSPI_DEBUG
 		fc_drv_SpiSetDbgErrInfo_ivi( XSPI_ERR_DBG_SLAVETIM20 );
+#endif	/* XSPI_DEBUG */
 	}
 
 	return( event );
-}
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_SpiFccCheck									*
-*																			*
-*		DESCRIPTION	: FCCチェック											*
-*																			*
-*		PARAMETER	: IN  :	uint8*	フレーム								*
-*																			*
-*					  OUT :	None											*
-*																			*
-*					  RET :													*
-*							uint8	チェック結果							*
-*										XSPI_NG		(0x00)	 異常 			*
-*										XSPI_OK		(0x01)	 正常 			*
-*																			*
-****************************************************************************/
-uint8	fc_drv_SpiFccCheck_ivi(
-	uint32* frame
-)
-{
-	uint8 ret = XSPI_OK;
-	uint32 fcc;
-	uint32 fcc_calc;
-
-	/* Calclation FCC */
-#if 0 /* [T.B.D]IVI向け暫定対応 */
-	fcc = BYTE_SWAP_32(frame[XSPI_FCC_LONG_OFFSET]);
-#else
-	fcc = BYTE_SWAP_32(frame[((5552-4)/4)]);
-#endif	/* [T.B.D]IVI向け暫定対応 */
-	fcc_calc = fc_drv_CalculationFcc_ivi(frame);
-
-	if( fcc != fcc_calc ){
-		ret = XSPI_NG;
-	}
-
-	return( ret );
-}
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_CalculationFcc_Sub_Addition					*
-*																			*
-*		DESCRIPTION	: FCC 計算処理											*
-*																			*
-*		PARAMETER	: IN  	:	agvUl_data1 …	FCC 加算データ1 			*
-*							:	agvUl_data2 …	FCC 加算データ2 			*
-*																			*
-*					  OUT 	:	None										*
-*																			*
-*					  RET 	:	FCC 演算結果								*
-*																			*
-****************************************************************************/
-static	uint32	fc_drv_CalculationFcc_Sub_Addition_ivi(uint32 agvUl_data1, uint32 agvUl_data2)
-{
-	uint32	wkvUl_result;
-	uint32	wkvUl_data1;
-	uint32	wkvUl_data2;
-
-	wkvUl_data1 = agvUl_data1;
-	wkvUl_data2 = agvUl_data2;
-
-	/* Over Flowチェック([ULONG_MAX - agvUl_data1 ] vs [wkvUl_data2 ]) */
-	if(	(ULONG_MAX - wkvUl_data1 ) >= wkvUl_data2 )
-	{	/* -Yes (  >=  )- Over Flowしない時 */
-		wkvUl_result = wkvUl_data1 + wkvUl_data2;	/* fcc 算出処理 */
-	}
-	else
-	{	/* -No (  <   )- Over Flowする時 */
-		/* fcc 演算	*/
-		if( wkvUl_data1  >= wkvUl_data2 )
-		{	/* -Yes (  >=  )- 以上 */
-			wkvUl_result = wkvUl_data2 - (ULONG_MAX - wkvUl_data1 + 1UL);
-		}
-		else
-		{	/* -No  (  <   )- 未満 */
-			wkvUl_result = wkvUl_data1 - (ULONG_MAX - wkvUl_data2 + 1UL);
-		}
-	}
-
-	return( wkvUl_result );
-}
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_CalculationFcc									*
-*																			*
-*		DESCRIPTION	: FCC計算処理											*
-*																			*
-*		PARAMETER	: IN  :	ulbuf		･･･	ﾊﾞｯﾌｧﾎﾟｲﾝﾀ						*
-*																			*
-*					  OUT :	None											*
-*																			*
-*					  RET :	計算結果（FCCの１の補数）						*
-*																			*
-****************************************************************************/
-uint32	fc_drv_CalculationFcc_ivi(uint32 *ulbuf)
-{
-	uint32 ulfcc, frame_id, msg_offset;
-	uint32	ulfcc_temp;
-	uint8	*flame_header;
-	uint32	subframe_offset;
-
-	flame_header = (uint8*)&ulbuf[0];
-
-	/* Frame Header 上位4byte 下位4byte 加算 */
-	ulfcc = fc_drv_CalculationFcc_Sub_Addition_ivi( BYTE_SWAP_32(ulbuf[0]), BYTE_SWAP_32(ulbuf[1]));
-
-	/* Sub Frame 0 上位4byte 下位4byte 加算 */
-	ulfcc_temp = fc_drv_CalculationFcc_Sub_Addition_ivi( BYTE_SWAP_32(ulbuf[2]), BYTE_SWAP_32(ulbuf[3]));
-	ulfcc = fc_drv_CalculationFcc_Sub_Addition_ivi( ulfcc, ulfcc_temp );
-
-	/* 未使用、Sub Frame1～Sub Frame7 上位4byte 下位4byte 加算 */
-	for(frame_id = 1; frame_id < XSPI_SUB_FRAME_MAX; frame_id++)
-	{
-		subframe_offset = flame_header[frame_id];
-
-		if( subframe_offset != (uint8)0 )
-		{
-			msg_offset = ((uint32)subframe_offset * (uint32)8UL) / sizeof(uint32);
-			ulfcc_temp = fc_drv_CalculationFcc_Sub_Addition_ivi( BYTE_SWAP_32(ulbuf[msg_offset]), BYTE_SWAP_32(ulbuf[msg_offset + (uint32)1]) );
-			ulfcc = fc_drv_CalculationFcc_Sub_Addition_ivi( ulfcc, ulfcc_temp );
-		}
-	}
-
-	return( ulfcc );
-}
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_SpiRcvDpageRenew								*
-*																			*
-*		DESCRIPTION	: ドライバ用受信バッファページ更新						*
-*																			*
-*		PARAMETER	: IN  :	None											*
-*																			*
-*					  OUT :	None											*
-*																			*
-*					  RET :	None											*
-*																			*
-****************************************************************************/
-void	fc_drv_SpiRcvDpageRenew_ivi(
-	void
-)
-{
-	uint8	page;
-
-	/* ドライバ受信中バッファページ */
-	page = bf_drv_SpiMng_ivi.rcv.page_rcv;
-
-	if( bf_drv_SpiMng_ivi.rcv.page_drv == page )
-	{	/* 受信バッファ空で新たなデータを受信（固定ページでは無い） */
-		bf_drv_SpiMng_ivi.rcv.page[page].inf = RCV_FRM_DATA_FIX;	/* 受信データあり情報 */
-
-		/* ドライバ用受信バッファページ更新 */
-		page++;
-		page %= (uint8)XSPI_RCV_PAGE;
-		bf_drv_SpiMng_ivi.rcv.page_drv = page;
-	}
-}
-
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_SpiSendDpageRenew								*
-*																			*
-*		DESCRIPTION	: ドライバ用送信バッファページ更新						*
-*																			*
-*		PARAMETER	: IN  :	None											*
-*																			*
-*					  OUT :	None											*
-*																			*
-*					  RET :	None											*
-*																			*
-****************************************************************************/
-void	fc_drv_SpiSendDpageRenew_ivi(
-	void
-)
-{
-	uint8	page;
-
-	/* ドライバ送信中バッファページ */
-	page = bf_drv_SpiMng_ivi.snd.page_send;
-
-	if( bf_drv_SpiMng_ivi.snd.page_drv == page )
-	{	/* 送信データありを送信（固定ページでは無い） */
-		bf_drv_SpiMng_ivi.snd.page[page].inf = SND_FRM_DATA_NON;	/* 送信データなし情報 */
-
-		/* ドライバ用送信バッファページ更新 */
-		page++;
-		page %= (uint8)XSPI_SND_PAGE;
-		bf_drv_SpiMng_ivi.snd.page_drv = page;
-	}
-}
-
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_SpiSetErrInfoKind								*
-*																			*
-*		DESCRIPTION	: ドライバ用エラー情報設定								*
-*																			*
-*		PARAMETER	: IN  :	uint8 kind：エラー種別							*
-*																			*
-*					  OUT :	None											*
-*																			*
-*					  RET :	None											*
-*																			*
-****************************************************************************/
-void	fc_drv_SpiSetErrInfoKind_ivi( uint8 kind )
-{
-	/* エラー情報に種別をセット */
-	bf_drv_SpiMng_ivi.err_info |= (uint8)(kind & (uint8)XSPI_ERR_MSK_KIND) ;
-}
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_SpiclearErrInfoKind							*
-*																			*
-*		DESCRIPTION	: ドライバ用エラー情報クリア							*
-*																			*
-*		PARAMETER	: IN  :	uint8 kind：エラー種別							*
-*																			*
-*					  OUT :	None											*
-*																			*
-*					  RET :	None											*
-*																			*
-****************************************************************************/
-void	fc_drv_SpiClearErrInfoKind_ivi( uint8 kind )
-{
-	/* エラー情報種別をクリア */
-	bf_drv_SpiMng_ivi.err_info &= (~kind) ;
-}
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_SpiSetDbgErrInfo								*
-*																			*
-*		DESCRIPTION	: デバッグ用エラー情報設定処理							*
-*																			*
-*		PARAMETER	: IN  :	uint8 dbg_errinfo：デバッグ用エラー情報			*
-*																			*
-*					  OUT :	None											*
-*																			*
-*					  RET :	None											*
-*																			*
-****************************************************************************/
-void	fc_drv_SpiSetDbgErrInfo_ivi( uint8 dbg_errinfo )
-{
-	/*  デバッグ用エラー情報にエラー情報をセット */
-	bf_drv_Dbg_ErrInfo_ivi |= (uint8)(dbg_errinfo & (uint8)XSPI_ERR_MSK_DBG) ;
 }
