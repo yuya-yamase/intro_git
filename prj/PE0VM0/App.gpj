@@ -4,6 +4,7 @@
     :sourceDir=${APP_DIR}/Common/PwrCtrl
     :sourceDir=${APP_DIR}/Common/xspi
     :sourceDir=${APP_DIR}/Product/config
+    :sourceDir=${APP_DIR}/Common/ExtSigCtrl
 
     -I${CAN_DIR}/inc
     -I${APP_DIR}/Common
@@ -32,6 +33,7 @@
     -I${LIB_DIR}
 
     -I${APP_DIR}/Common/PwrCtrl
+    -I${APP_DIR}/Common/ExtSigCtrl
 
 Ecu_Intg_Callout.c
 ShtdwnM/bsw_m.c
@@ -50,3 +52,4 @@ xspi_sub_ivi.c
 xspi_sub_central.c
 xspi_sub_meter.c
 product_cfg.c
+ExtSigCtrl.c
