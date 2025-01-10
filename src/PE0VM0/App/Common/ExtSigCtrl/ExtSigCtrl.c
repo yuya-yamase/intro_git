@@ -125,7 +125,7 @@ void ExtSigCtrl_MainFunction(void)
 
 static void ExtSigCtrl_TrgTimCtrl(void)
 {
-	static U1 u1t_TrgTim = 100/EXTSIG_MAIN_TICK; /* 100ms */
+	static U1 u1t_TrgTim = (U1)(100/EXTSIG_MAIN_TICK); /* 100ms */
 
 	/* マイナスガード */
 	if (u1t_TrgTim > 0) {
@@ -150,12 +150,10 @@ static void ExtSigCtrl_Poll(void)
 			ExtSigCtrl_Cyc(u1t_Kind);
 			ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt = tb_ExtSig_Sts[u1t_Kind].u1t_CycTim;
 		} else {
-			/* Do nothing */
-		}
-
-		/* マイナスガード */
-		if (ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt > 0) {
-			ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt--;
+			/* マイナスガード */
+			if (ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt > 0) {
+				ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt--;
+			}
 		}
 	}
 
