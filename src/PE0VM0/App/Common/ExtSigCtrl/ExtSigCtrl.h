@@ -18,9 +18,9 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* 端子状態判定 */
-#define EXTSIG_TMNL_STS_NON			(U1)0x00U		/* 端子状態_未確定	*/
-#define EXTSIG_TMNL_STS_OFF			(U1)0x01U		/* 端子状態_未接続	*/
-#define EXTSIG_TMNL_STS_ON			(U1)0x02U		/* 端子状態_接続	*/
+#define EXTSIGCTRL_TMNL_STS_NON		(U1)0x00U		/* 端子状態_未確定	*/
+#define EXTSIGCTRL_TMNL_STS_OFF		(U1)0x01U		/* 端子状態_未接続	*/
+#define EXTSIGCTRL_TMNL_STS_ON		(U1)0x02U		/* 端子状態_接続	*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -30,11 +30,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* 車両信号定義 */
 typedef enum {
-	EXTSIG_KIND_BOOT = 0,		/* BOOT			*/
-	EXTSIG_KIND_TEST,			/* TEST			*/
-	EXTSIG_KIND_EXT_PWR_SW,		/* EXT-PWR-SW	*/
-	EXTSIG_KIND_NUM				/* 信号種別数	*/
-} E_EXTSIG_KIND;
+	EXTSIGCTRL_KIND_TEST,		/* TEST			*/
+	EXTSIGCTRL_KIND_BOOT,		/* BOOT			*/
+	EXTSIGCTRL_KIND_EXT_PWR_SW,	/* EXT-PWR-SW	*/
+	EXTSIGCTRL_KIND_NUM			/* 信号種別数	*/
+} E_EXTSIGCTRL_KIND;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */

@@ -20,14 +20,19 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* 車両信号ポーリング状態定義 */
-#define EXTSIG_POLL_STS_STOP		(U1)0x00U		/* ポーリング停止中	*/
-#define EXTSIG_POLL_STS_CYC			(U1)0x01U		/* ポーリング定期	*/
+#define U1_EXTSIGCTRL_POLL_STS_STOP		(U1)0x00U		/* ポーリング停止中	*/
+#define U1_EXTSIGCTRL_POLL_STS_CYC			(U1)0x01U		/* ポーリング定期	*/
 
 /* 同一論理取得回数カウント処理 */
-#define EXTSIG_SAME_CNT_INIT	(U1)0x01U		/* 同一論理取得カウント初期値	*/
+#define U1_EXTSIGCTRL_SAME_CNT_INIT	(U1)0x01U		/* 同一論理取得カウント初期値	*/
 
-/* Mainタスク周期 */
-#define EXTSIG_MAIN_TICK			(U1)0x05U		/* 5ms	*/
+#define U1_EXTSIGCTRL_PORT_LEVEL_INIT	(U1)0xFFU	/* DIOレベル初期値 */
+
+/* 時間計測用 */
+#define U1_EXTSIGCTRL_MAIN_TICK				(U1)5U		/* メインタスク周期(5ms)	*/
+#define U1_EXTSIGCTRL_TIM_CNT_25MS			(U1)(25U/U1_EXTSIGCTRL_MAIN_TICK)	/* 25ms */
+#define U1_EXTSIGCTRL_TIM_CNT_100MS			(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK)	/* 100ms */
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -35,26 +40,26 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 車両信号ステータステーブル */
+/* 外部信号ステータステーブル */
 typedef	struct	{
-	U1	u1t_CycTim;					/* 定周期時間 */
-	U1	u1t_SameCntNum;				/* 同一論理判定確定回数 */
-	U1	u1t_DioChannelId;			/* DIOチャネルID */
-} ST_EXTSIG_STS;
+	Dio_ChannelType	u2t_DioChannelId;	/* DIOチャネルID */
+	U1	u1t_CycTim;						/* 定周期時間 */
+	U1	u1t_SameCntNum;					/* 同一論理判定確定回数 */
+} ST_EXTSIGCTRL_STS;
 
 /* ポーリングステータス */
 typedef struct {
-	U1	u1t_PollTimCnt;		/* ポーリングタイマカウンタ */
-	U1	u1t_PollPreSts;		/* ポーリング端子前回状態 */
-	U1	u1t_PollSts;		/* ポーリング端子状態 */
-	U1	u1t_PollSameCnt;	/* ポーリング端子同一状態カウンタ */
-} ST_EXTSIG_POLL_STS;
+	U1				u1t_PollTimCnt;		/* ポーリングタイマカウンタ */
+	Dio_LevelType	u1t_PollTmnlPreCnc;	/* ポーリング端子前回レベル */
+	U1				u1t_PollTmnlSts;	/* ポーリング端子状態 */
+	U1				u1t_PollSameCnt;	/* ポーリング端子同一状態カウンタ */
+} ST_EXTSIGCTRL_POLL_STS;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1 u1t_PollSts;
-static ST_EXTSIG_POLL_STS ast_ExtSig_PollSts[EXTSIG_KIND_NUM];
+static U1 u1s_ExtSigCtrl_PollSts;
+static ST_EXTSIGCTRL_POLL_STS stsa_ExtSigCtrl_PollSts[EXTSIGCTRL_KIND_NUM];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -68,25 +73,25 @@ static void ExtSigCtrl_Cyc(const U1 u1t_Kind);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_EXTSIG_STS tb_ExtSig_Sts[EXTSIG_KIND_NUM]
+const ST_EXTSIGCTRL_STS tb_ExtSigCtrl_Sts[EXTSIGCTRL_KIND_NUM]
 = {
-	/* BOOT */
-	{
-		(100/EXTSIG_MAIN_TICK),	/* サンプリング周期 */
-		3,						/* 同一論理判定確定回数 */
-		DIO_ID_PORT5_CH6		/* DIOチャネルID */
-	},
 	/* TEST */
 	{
-		(100/EXTSIG_MAIN_TICK),	/* サンプリング周期 */
-		3,						/* 同一論理判定確定回数 */
-		DIO_ID_PORT0_CH2		/* DIOチャネルID */
+		DIO_ID_PORT0_CH2,				/* DIOチャネルID */
+		U1_EXTSIGCTRL_TIM_CNT_100MS,	/* サンプリング周期 */
+		(U1)3U,							/* 同一論理判定確定回数 */
+	},
+	/* BOOT */
+	{
+		DIO_ID_PORT5_CH6,				/* DIOチャネルID */
+		U1_EXTSIGCTRL_TIM_CNT_100MS,	/* サンプリング周期 */
+		(U1)3U,							/* 同一論理判定確定回数 */
 	},
 	/* EXT-PWR-SW */
 	{
-		(25/EXTSIG_MAIN_TICK),	/* サンプリング周期 */
-		2,						/* 同一論理判定確定回数 */
-		DIO_ID_PORT8_CH1		/* DIOチャネルID */
+		DIO_ID_PORT8_CH1,				/* DIOチャネルID */
+		U1_EXTSIGCTRL_TIM_CNT_25MS,		/* サンプリング周期 */
+		(U1)2U,							/* 同一論理判定確定回数 */
 	}
 };
 
@@ -98,13 +103,13 @@ void ExtSigCtrl_Init(void)
 {
 	U1 u1t_Kind;
 
-	u1t_PollSts = EXTSIG_POLL_STS_STOP;
+	u1s_ExtSigCtrl_PollSts = U1_EXTSIGCTRL_POLL_STS_STOP;
 
-	for (u1t_Kind = (U1)0; u1t_Kind < (U1)EXTSIG_KIND_NUM; u1t_Kind++) {
-		ast_ExtSig_PollSts[u1t_Kind].u1t_PollPreSts = EXTSIG_TMNL_STS_NON;
-		ast_ExtSig_PollSts[u1t_Kind].u1t_PollSts = EXTSIG_TMNL_STS_NON;
-		ast_ExtSig_PollSts[u1t_Kind].u1t_PollSameCnt = EXTSIG_SAME_CNT_INIT;
-		ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt = 0;
+	for (u1t_Kind = (U1)0; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
+		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTimCnt = (U1)0;
+		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlPreCnc = U1_EXTSIGCTRL_PORT_LEVEL_INIT;
+		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = EXTSIGCTRL_TMNL_STS_NON;
+		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSameCnt = U1_EXTSIGCTRL_SAME_CNT_INIT;
 	}
 
 	return;
@@ -112,10 +117,10 @@ void ExtSigCtrl_Init(void)
 
 void ExtSigCtrl_MainFunction(void)
 {
-	if (u1t_PollSts == EXTSIG_POLL_STS_STOP) {
-		/* 回路安定待ち処理  */
-		ExtSigCtrl_TrgTimCtrl();
-	} else {
+	/* 回路安定待ち処理  */
+	ExtSigCtrl_TrgTimCtrl();
+
+	if (u1s_ExtSigCtrl_PollSts == U1_EXTSIGCTRL_POLL_STS_CYC) {
 		/* ポーリング処理 */
 		ExtSigCtrl_Poll();
 	}
@@ -125,17 +130,12 @@ void ExtSigCtrl_MainFunction(void)
 
 static void ExtSigCtrl_TrgTimCtrl(void)
 {
-	static U1 u1t_TrgTim = (U1)(100/EXTSIG_MAIN_TICK); /* 100ms */
+	static U1 u1t_ExtSigCtrl_TrgTim = U1_EXTSIGCTRL_TIM_CNT_100MS;
 
-	/* マイナスガード */
-	if (u1t_TrgTim > 0) {
-		u1t_TrgTim--;
-	}
-
-	if (u1t_TrgTim <= 0) {
-		u1t_PollSts = EXTSIG_POLL_STS_CYC;
+	if (u1t_ExtSigCtrl_TrgTim <= (U1)0) {
+		u1s_ExtSigCtrl_PollSts = U1_EXTSIGCTRL_POLL_STS_CYC;
 	} else {
-		/* Do nothing */
+		u1t_ExtSigCtrl_TrgTim--;
 	}
 
 	return;
@@ -145,15 +145,12 @@ static void ExtSigCtrl_Poll(void)
 {
 	U1 u1t_Kind;
 
-	for (u1t_Kind = (U1)0; u1t_Kind < (U1)EXTSIG_KIND_NUM; u1t_Kind++) {
-		if (ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt <= 0) {
+	for (u1t_Kind = (U1)0; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
+		if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTimCnt <= (U1)0) {
 			ExtSigCtrl_Cyc(u1t_Kind);
-			ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt = tb_ExtSig_Sts[u1t_Kind].u1t_CycTim;
+			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTimCnt = tb_ExtSigCtrl_Sts[u1t_Kind].u1t_CycTim;
 		} else {
-			/* マイナスガード */
-			if (ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt > 0) {
-				ast_ExtSig_PollSts[u1t_Kind].u1t_PollTimCnt--;
-			}
+			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTimCnt--;
 		}
 	}
 
@@ -162,31 +159,27 @@ static void ExtSigCtrl_Poll(void)
 
 static void ExtSigCtrl_Cyc(const U1 u1t_Kind)
 {
-	U1 u1t_NowCnc;
+	Dio_LevelType u1t_NowCnc;
 
-	u1t_NowCnc = Dio_ReadChannel(tb_ExtSig_Sts[u1t_Kind].u1t_DioChannelId);
+	u1t_NowCnc = Dio_ReadChannel(tb_ExtSigCtrl_Sts[u1t_Kind].u2t_DioChannelId);
 
-	if (u1t_NowCnc == ast_ExtSig_PollSts[u1t_Kind].u1t_PollPreSts) {
-		if (ast_ExtSig_PollSts[u1t_Kind].u1t_PollSameCnt < tb_ExtSig_Sts[u1t_Kind].u1t_SameCntNum) {
-			ast_ExtSig_PollSts[u1t_Kind].u1t_PollSameCnt++;
-		} else {
-			/* Do nothing */
+	if (u1t_NowCnc == stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlPreCnc) {
+		if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSameCnt < tb_ExtSigCtrl_Sts[u1t_Kind].u1t_SameCntNum) {
+			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSameCnt++;
 		}
 	} else {
-		ast_ExtSig_PollSts[u1t_Kind].u1t_PollSameCnt = EXTSIG_SAME_CNT_INIT;
+		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSameCnt = U1_EXTSIGCTRL_SAME_CNT_INIT;
 	}
 
-	ast_ExtSig_PollSts[u1t_Kind].u1t_PollPreSts = u1t_NowCnc;
-	
-	if (ast_ExtSig_PollSts[u1t_Kind].u1t_PollSameCnt >= tb_ExtSig_Sts[u1t_Kind].u1t_SameCntNum) {
-		if (ast_ExtSig_PollSts[u1t_Kind].u1t_PollPreSts != ast_ExtSig_PollSts[u1t_Kind].u1t_PollSts) {
-			ast_ExtSig_PollSts[u1t_Kind].u1t_PollSts = ast_ExtSig_PollSts[u1t_Kind].u1t_PollPreSts;
+	if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSameCnt >= tb_ExtSigCtrl_Sts[u1t_Kind].u1t_SameCntNum) {
+		if (u1t_NowCnc == STD_HIGH) {
+			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = EXTSIGCTRL_TMNL_STS_ON;
 		} else {
-			/* Do nothing */
+			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = EXTSIGCTRL_TMNL_STS_OFF;
 		}
-	} else {
-		/* Do nothing */
 	}
+
+	stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlPreCnc = u1t_NowCnc;
 
 	return;
 }
