@@ -20,18 +20,16 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* 車両信号ポーリング状態定義 */
-#define U1_EXTSIGCTRL_POLL_STS_STOP		(U1)0x00U		/* ポーリング停止中	*/
-#define U1_EXTSIGCTRL_POLL_STS_CYC			(U1)0x01U	/* ポーリング定期	*/
+#define U1_EXTSIGCTRL_POLL_STS_STOP			(U1)0x00U		/* ポーリング停止中	*/
+#define U1_EXTSIGCTRL_POLL_STS_CYC			(U1)0x01U		/* ポーリング定期	*/
 
 /* 同一論理取得回数カウント処理 */
-#define U1_EXTSIGCTRL_SAME_CNT_INIT	(U1)0x01U		/* 同一論理取得カウント初期値	*/
+#define U1_EXTSIGCTRL_SAME_CNT_INIT			(U1)0x01U		/* 同一論理取得カウント初期値	*/
 
-#define U1_EXTSIGCTRL_PORT_LEVEL_INIT	(U1)0xFFU	/* DIOレベル初期値 */
+#define U1_EXTSIGCTRL_PORT_LEVEL_INIT		(U1)0xFFU		/* DIOレベル初期値 */
 
 /* 時間計測用 */
-#define U1_EXTSIGCTRL_MAIN_TICK				(U1)5U		/* メインタスク周期(5ms)	*/
-#define U1_EXTSIGCTRL_TIM_CNT_25MS			(U1)(25U/U1_EXTSIGCTRL_MAIN_TICK)	/* 25ms */
-#define U1_EXTSIGCTRL_TIM_CNT_100MS			(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK)	/* 100ms */
+#define U1_EXTSIGCTRL_MAIN_TICK				(U1)5U			/* メインタスク周期(5ms)	*/
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -79,24 +77,24 @@ static const ST_EXTSIGCTRL_STS stsa_ExtSigCtrl_Sts[EXTSIGCTRL_KIND_NUM]
 = {
 	/* TEST */
 	{
-		DIO_ID_PORT0_CH2,				/* DIOチャネルID */
-		U1_EXTSIGCTRL_TIM_CNT_100MS,	/* サンプリング周期 */
-		(U1)3U,							/* 同一論理判定確定回数 */
-		U1_EXTSIGCTRL_TIM_CNT_100MS,	/* ポーリング開始待ち時間 */
+		DIO_ID_PORT0_CH2,						/* DIOチャネルID */
+		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* サンプリング周期 */
+		(U1)3U,									/* 同一論理判定確定回数 */
+		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* ポーリング開始待ち時間 */
 	},
 	/* BOOT */
 	{
-		DIO_ID_PORT5_CH6,				/* DIOチャネルID */
-		U1_EXTSIGCTRL_TIM_CNT_100MS,	/* サンプリング周期 */
-		(U1)3U,							/* 同一論理判定確定回数 */
-		U1_EXTSIGCTRL_TIM_CNT_100MS,	/* ポーリング開始待ち時間 */
+		DIO_ID_PORT5_CH6,						/* DIOチャネルID */
+		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* サンプリング周期 */
+		(U1)3U,									/* 同一論理判定確定回数 */
+		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* ポーリング開始待ち時間 */
 	},
 	/* EXT-PWR-SW */
 	{
-		DIO_ID_PORT8_CH1,				/* DIOチャネルID */
-		U1_EXTSIGCTRL_TIM_CNT_25MS,		/* サンプリング周期 */
-		(U1)2U,							/* 同一論理判定確定回数 */
-		U1_EXTSIGCTRL_TIM_CNT_100MS,	/* ポーリング開始待ち時間 */
+		DIO_ID_PORT8_CH1,						/* DIOチャネルID */
+		(U1)(25U/U1_EXTSIGCTRL_MAIN_TICK),		/* サンプリング周期 */
+		(U1)2U,									/* 同一論理判定確定回数 */
+		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* ポーリング開始待ち時間 */
 	}
 };
 
@@ -108,7 +106,7 @@ void ExtSigCtrl_Init(void)
 {
 	U1 u1t_Kind;
 
-	for (u1t_Kind = (U1)0; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
+	for (u1t_Kind = (U1)0U; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlPreCnc = U1_EXTSIGCTRL_PORT_LEVEL_INIT;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts = U1_EXTSIGCTRL_POLL_STS_STOP;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTimCnt = (U1)0U;
@@ -124,7 +122,7 @@ void ExtSigCtrl_MainFunction(void)
 {
 	U1 u1t_Kind;
 
-	for (u1t_Kind = (U1)0; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
+	for (u1t_Kind = (U1)0U; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
 		/* 回路安定待ち処理  */
 		ExtSigCtrl_TrgTimCtrl(u1t_Kind);
 
