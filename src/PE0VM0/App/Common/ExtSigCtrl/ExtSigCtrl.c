@@ -2,7 +2,7 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  External Signal Controll                                                                                                                    */
+/*  External Signal Controll                                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -98,7 +98,6 @@ static const ST_EXTSIGCTRL_STS stsa_ExtSigCtrl_Sts[EXTSIGCTRL_KIND_NUM]
 	}
 };
 
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -110,7 +109,7 @@ void ExtSigCtrl_Init(void)
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlPreCnc = U1_EXTSIGCTRL_PORT_LEVEL_INIT;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts = U1_EXTSIGCTRL_POLL_STS_STOP;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTimCnt = (U1)0U;
-		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = EXTSIGCTRL_TMNL_STS_NON;
+		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = U1_EXTSIGCTRL_TMNL_STS_NON;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSameCnt = U1_EXTSIGCTRL_SAME_CNT_INIT;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTrgTimCnt = stsa_ExtSigCtrl_Sts[u1t_Kind].u1t_StrTim;
 	}
@@ -123,12 +122,12 @@ void ExtSigCtrl_MainFunction(void)
 	U1 u1t_Kind;
 
 	for (u1t_Kind = (U1)0U; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
-		/* 回路安定待ち処理  */
-		ExtSigCtrl_TrgTimCtrl(u1t_Kind);
-
 		if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts == U1_EXTSIGCTRL_POLL_STS_CYC) {
 			/* ポーリング処理 */
 			ExtSigCtrl_Poll(u1t_Kind);
+		} else {
+			/* 回路安定待ち処理  */
+			ExtSigCtrl_TrgTimCtrl(u1t_Kind);
 		}
 	}
 
@@ -137,10 +136,10 @@ void ExtSigCtrl_MainFunction(void)
 
 static void ExtSigCtrl_TrgTimCtrl(const U1 u1t_Kind)
 {
+	stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTrgTimCnt--;
+
 	if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTrgTimCnt <= (U1)0U) {
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts = U1_EXTSIGCTRL_POLL_STS_CYC;
-	} else {
-		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTrgTimCnt--;
 	}
 
 	return;
@@ -174,9 +173,9 @@ static void ExtSigCtrl_Cyc(const U1 u1t_Kind)
 
 	if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSameCnt >= stsa_ExtSigCtrl_Sts[u1t_Kind].u1t_SameCntNum) {
 		if (u1t_NowCnc == STD_HIGH) {
-			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = EXTSIGCTRL_TMNL_STS_ON;
+			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = U1_EXTSIGCTRL_TMNL_STS_ON;
 		} else {
-			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = EXTSIGCTRL_TMNL_STS_OFF;
+			stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = U1_EXTSIGCTRL_TMNL_STS_OFF;
 		}
 	}
 
