@@ -1,7 +1,7 @@
-/* pdur_cfg_h_v2-0-0                                                        */
+/* pdur_cfg_h_v3-0-0                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -37,14 +37,10 @@
 #define BSW_PDUR_CFG_MSGCANIF_NUM          (486U)
 #define BSW_PDUR_CFG_MSGLINIF_NUM          (0U)
 #define BSW_PDUR_CFG_MSGSOADIF_NUM         (0U)
-#define BSW_PDUR_CFG_MSGCDD1IF_NUM         (0U)
-#define BSW_PDUR_CFG_MSGCDD2IF_NUM         (0U)
 #define BSW_PDUR_CFG_MSGDOIPIF_NUM         (0U)
 #define BSW_PDUR_CFG_MSGCANTP_NUM          (0U)
 #define BSW_PDUR_CFG_MSGLINTP_NUM          (0U)
 #define BSW_PDUR_CFG_MSGSOADTP_NUM         (0U)
-#define BSW_PDUR_CFG_MSGCDD1TP_NUM         (0U)
-#define BSW_PDUR_CFG_MSGCDD2TP_NUM         (0U)
 #define BSW_PDUR_CFG_MSGDOIPTP_NUM         (0U)
 
 /* Message Authentication by I-PDU */
@@ -89,11 +85,12 @@
 /*  v1-0-0          :2017/10/16                                             */
 /*  v1-1-0          :2019/11/26                                             */
 /*  v2-0-0          :2021/02/12                                             */
+/*  v3-0-0          :2024/09/04                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

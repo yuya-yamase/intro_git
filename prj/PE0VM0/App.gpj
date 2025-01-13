@@ -24,6 +24,29 @@
     -I${IOHW_DIR}/iohw_diflt
     -I${IOHW_DIR}/iohw_diflt/cfg
 
+    -I${CGW_L3R_DIR}/config
+    -I${CGW_L3R_DIR}/GW/Cid/cfg
+    -I${CGW_L3R_DIR}/GW/Cid/inc
+    -I${CGW_L3R_DIR}/GW/L3R/CMN/cfg
+    -I${CGW_L3R_DIR}/GW/L3R/CMN/inc
+    -I${CGW_L3R_DIR}/GW/L3R/Relay/Basis/inc
+    -I${CGW_L3R_DIR}/GW/L3R/Relay/Ctrl/inc
+    -I${CGW_L3R_DIR}/GW/L3R/Relay/Diag/cfg
+    -I${CGW_L3R_DIR}/GW/L3R/Relay/Diag/inc
+    -I${CGW_L3R_DIR}/GW/L3R/Relay/Dynamic/inc
+    -I${CGW_L3R_DIR}/GW/L3R/RM/cfg
+    -I${CGW_L3R_DIR}/GW/L3R/Support/Fail/inc
+    -I${CGW_L3R_DIR}/GW/L3R/Support/Frm_Info/inc
+    -I${CGW_L3R_DIR}/GW/L3R/Tx/BandLimit/inc
+    -I${CGW_L3R_DIR}/GW/L3R/Tx/Gate/inc
+    -I${CGW_L3R_DIR}/GW/L3R/Tx/MBQ/cfg
+    -I${CGW_L3R_DIR}/GW/L3R/Tx/MBQ/inc
+    -I${CGW_L3R_DIR}/MDL/FW/EVT/cfg
+    -I${CGW_L3R_DIR}/MDL/FW/EVT/inc
+    -I${CGW_L3R_DIR}/MDL/FW/inc
+    -I${CGW_L3R_DIR}/MDL/INFO/CHM
+    -I${CGW_L3R_DIR}/MDL/INFO/UTIL/inc
+
     -I${LIB_DIR}
 
 Ecu_Intg_Callout.c

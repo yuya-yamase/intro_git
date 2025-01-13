@@ -30,6 +30,7 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
+#include "L3R_Scheduler.h"
 
 #include "stub.h"
 
@@ -89,6 +90,7 @@ Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
 Std_ReturnType Ecu_Intg_mainFuncCddHigh(void)
 {
     BswM_CS_MainFunctionHigh();
+    L3R_System_DriverTask();
 
     return E_OK;
 }

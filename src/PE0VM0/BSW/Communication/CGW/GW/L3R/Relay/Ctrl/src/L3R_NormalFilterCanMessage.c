@@ -1,0 +1,111 @@
+/****************************************************************************/
+/*	Copyright DENSO Corporation. All rights reserved.                       */
+/****************************************************************************/
+/*************************************************************************//**
+ * @file	L3R_NormalFilterCanMessage.c
+ * @brief	
+ * @details	
+ * @note	なし
+ * @date	v1.00	2021/10/20	R.Kagiya(NSK)		新規作成
+ ****************************************************************************/
+
+/*--------------------------------------------------------------------------*/
+/*		ファイルインクルード												*/
+/*--------------------------------------------------------------------------*/
+#include "Std_Types.h"
+
+#include "L3R_Common.h"
+#include "L3R_config.h"
+#include "L3R_GwIdRouter.h"
+
+#include "L3R_NormalFilterCanMessage.h"
+
+
+/*--------------------------------------------------------------------------*/
+/*		マクロ定義															*/
+/*--------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------*/
+/*		外部公開変数														*/
+/*--------------------------------------------------------------------------*/
+#define GW_L3R_START_SEC_CONST
+#include "GW_L3R_Memmap.h"
+CanMessageFuncList NormalFilterCanMessage_funcList[] = { { NormalFilterCanMessage_GetGwId, NormalFilterCanMessage_RelayData } };
+#define GW_L3R_STOP_SEC_CONST
+#include "GW_L3R_Memmap.h"
+
+
+/*--------------------------------------------------------------------------*/
+/*		ファイル内変数														*/
+/*--------------------------------------------------------------------------*/
+
+
+/*--------------------------------------------------------------------------*/
+/*		プロトタイプ宣言													*/
+/*--------------------------------------------------------------------------*/
+
+
+#define GW_L3R_START_SEC_CODE
+#include "GW_L3R_Memmap.h"
+/*************************************************************************//**
+ * @fn			uint16 NormalFilterCanMessage_GetGwId(CanMessage *self, uint8 rxCh, uint8 dlc, const uint8* Data, uint16 searchId)
+ * @brief		GwIdの取得
+ * @details		GwIdの取得を行う
+ * @param[in]	self	自身へのポインタ
+ * @param[in]	rxCh	受信CH
+ * @param[in]	dlc		受信データ長
+ * @param[in]	Data	受信データへのポインタ
+ * @param[in]	searchId	探索位置
+ * @return		GwID
+ * @attention 	なし
+ * @note		なし
+ ****************************************************************************/
+uint16 NormalFilterCanMessage_GetGwId(CanMessage *self, uint8 rxCh, uint8 dlc, const uint8* Data, uint16 searchId)
+{
+	uint16 gwId = self->GwId[rxCh];
+
+	if(gwId == NULL_GWID) {
+		/* 対象チャンネルが、ルーティングマップに登録されていない場合は、動的ルーティングで対応 */
+		gwId = DynamicCanMessage_GetGwId(self, rxCh, dlc, Data, searchId);
+	}else{
+		uint8 length = gwIdRouter.pBuffer[gwId]->dlc;
+		if (length != dlc) {
+			gwId = FILTERERR_GWID;
+		}
+	}
+
+	return (gwId);
+}
+
+/*************************************************************************//**
+ * @fn			void NormalFilterCanMessage_RelayData(CanMessage *self, uint8 fd, uint8 dlc, const uint8* Data, uint16 gwId, uint8 rxCh, uint16 searchId)
+ * @brief		中継処理
+ * @details		中継処理を行う
+ * @param[in]	self	自身へのポインタ
+ * @param[in]	fd		FD受信フラグ
+ * @param[in]	dlc		データ長
+ * @param[in]	Data	データへのポインタ
+ * @param[in]	gwId	GWID
+ * @param[in]	rxCh	受信CH
+ * @param[in]	searchId	探索位置
+ * @return		なし
+ * @attention 	なし
+ * @note		なし
+ ****************************************************************************/
+/* 通常のGW対象制御フレームの場合 */
+void NormalFilterCanMessage_RelayData(CanMessage *self, uint8 fd, uint8 dlc, const uint8* Data, uint16 gwId, uint8 rxCh, uint16 searchId)
+{
+	if(gwId != DYNAMIC_GWID) {
+		/* 戻り値（データを保存するCommonBufferへのポインタ）を処理する必要がない */
+		(void)IdRouter_RelayData(&gwIdRouter, (self->canid), dlc, Data, gwId, rxCh, searchId, fd);
+	}else{
+		/* 対象チャンネルが、ルーティングマップに登録されていない場合は、動的ルーティングで対応 */
+		DynamicCanMessage_RelayData(self, fd, dlc, Data, gwId, rxCh, searchId);
+	}
+
+	return;
+}
+
+#define GW_L3R_STOP_SEC_CODE
+#include "GW_L3R_Memmap.h"

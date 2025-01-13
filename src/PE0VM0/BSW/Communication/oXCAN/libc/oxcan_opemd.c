@@ -88,12 +88,12 @@ void    vd_g_oXCANOpemdEvTx(void)
     }
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_oXCANOpemdSyschk(const U1 u1_a_TIE)                                                                                 */
+/*  U4      u4_g_oXCANOpemdSyschk(const U1 u1_a_TIE)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_oXCANOpemdSyschk(const U1 u1_a_TIE)
+U4      u4_g_oXCANOpemdSyschk(const U1 u1_a_TIE)
 {
     U4           u4_t_lpcnt;
 
@@ -101,9 +101,9 @@ U1      u1_g_oXCANOpemdSyschk(const U1 u1_a_TIE)
     U4           u4_t_vom_chk;
     U4           u4_t_tim_run;
 
-    U2           u2_t_sys_chk;
+    U4           u4_t_sys_chk;
 
-    u2_t_sys_chk = (U2)OXCAN_SYS_BAT;
+    u4_t_sys_chk = (U4)OXCAN_SYS_BAT;
     u4_t_mdbit   = u4_g_oXCANOpemdCfgMdfield();
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_OPEMD_NUM_CHK; u4_t_lpcnt++){
 
@@ -125,11 +125,11 @@ U1      u1_g_oXCANOpemdSyschk(const U1 u1_a_TIE)
             else{
                 /* no processing */
             }
-            u2_t_sys_chk |= st_gp_OXCAN_OPEMD_CHK[u4_t_lpcnt].u2_sys_act;
+            u4_t_sys_chk |= (U4)st_gp_OXCAN_OPEMD_CHK[u4_t_lpcnt].u2_sys_act;
         }
     }
 
-    return((U1)u2_t_sys_chk);
+    return(u4_t_sys_chk);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXCANOpemdNmAwkTout(const U2 u2_a_THRSH)                                                                            */

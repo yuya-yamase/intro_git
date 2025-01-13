@@ -14,6 +14,7 @@ primaryTarget=v800_standalone.tgt
     :macro=CAN_DIR=${ROOT_DIR}/BSW/Aubist
     :macro=CANIC_DIR=${ROOT_DIR}/BSW/Communication/Cdd_Canic_TJA1145A
     :macro=OXCAN_DIR=${ROOT_DIR}/BSW/Communication/oXCAN
+    :macro=CGW_L3R_DIR=${ROOT_DIR}/BSW/Communication/CGW
     :macro=VEHOPE_DIR=${ROOT_DIR}/BSW/ComplexDriver/Vehopemd
 	:macro=GPI2C_DIR=${ROOT_DIR}/BSW/ComplexDriver/GpI2c
     :macro=MCAL_DIR=${ROOT_DIR}/BSW/MCAL
@@ -75,7 +76,7 @@ primaryTarget=v800_standalone.tgt
 
     -o PE0VM0.elf
 
-${CMN_DIR}/bswCAN.gpj
+${PRJ_DIR}/bswCAN.gpj
 ${CMN_DIR}/bswOS.gpj
 ${CMN_DIR}/ehvm_if.gpj
 ${PRJ_DIR}/22SS.gpj
@@ -108,5 +109,6 @@ ${CMN_DIR}/LIB.gpj
 ${PRJ_DIR}/App.gpj
 
 ${CMN_DIR}/COM_CANIC.gpj
-${CMN_DIR}/COM_OXCAN.gpj
+${PRJ_DIR}/COM_OXCAN.gpj
+${PRJ_DIR}/COM_L3R.gpj
 ${CMN_DIR}/VEHOPE.gpj

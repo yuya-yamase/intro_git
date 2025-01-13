@@ -30,6 +30,10 @@
 #if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U))
 #include "Cdd_Canic.h"
 #endif /* #if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U)) */
+
+#include "L3R_Scheduler.h"
+#include "l3r_test.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -102,12 +106,13 @@ const U4         u4_g_OXCAN_WKSRC_CHK = (BSW_CANIF_CFG_WAKEUPSRC_CTRL0 |
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U1         u1_gp_OXCAN_CTRLR_BY_CH[BSW_COM_CFG_CHNUM] = {
-    (U1)5U,  /* CAN Physical Channel =  5ch.  */
-    (U1)3U,  /* CAN Physical Channel =  3 ch. */
-    (U1)7U   /* CAN Physical Channel =  7 ch. */
+    (U1)5U,     /* CAN Physical Channel =  5ch.  */
+    (U1)3U,     /* CAN Physical Channel =  3 ch. */
+    (U1)7U,     /* CAN Physical Channel =  7 ch. */
+    (U1)U1_MAX  /* CAN Virtual Channel  =  0 ch. */
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U1         u1_g_OXCAN_SYS_POWER = ((U1)OXCAN_SYS_BAT | (U1)OXCAN_SYS_ACC | (U1)OXCAN_SYS_IGP | (U1)OXCAN_SYS_PBA | (U1)OXCAN_SYS_IGR);
+const U4         u4_g_OXCAN_SYS_POWER = ((U4)OXCAN_SYS_BAT | (U4)OXCAN_SYS_ACC | (U4)OXCAN_SYS_IGP | (U4)OXCAN_SYS_PBA | (U4)OXCAN_SYS_IGR);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0
@@ -129,11 +134,7 @@ const U2         u2_gp_OXCAN_NM_REQ_BY_ID_RIMID[OXCAN_COMCONT_NUM_CH][OXCAN_TXRX
 #if (OXCAN_AUB_E2E_SUP == 1U)
 #if (OXCAN_E2E_NUM_CHECK_MSG != 0U)
 const U2         u2_gp_OXCAN_E2E_CHECK_MSG[OXCAN_E2E_NUM_CHECK_MSG] = {
-    (U2)MSG_DDM1S17_RXCH0,
-    (U2)MSG_EPS1S90_RXCH0,
-    (U2)MSG_ADC1S10_RXCH2,
-    (U2)MSG_ADC1S14_RXCH2,
-    (U2)MSG_PDS1S01_RXCH2
+           /* No messages to check */
 };
 const U4         u4_g_OXCAN_E2E_NUM_CHECK_MSG = (U4)OXCAN_E2E_NUM_CHECK_MSG;
 #endif /* #if (OXCAN_E2E_NUM_CHECK_MSG != 0U)  */
@@ -170,7 +171,7 @@ const U2         u2_gp_OXCAN_CHKPIN[OXCAN_CHKPIN_NUM] = {
     (U2)PORT_ID_APORT5_PIN3    /* CAN(G5M)-STBY      */
 };
 #endif /* #if (defined(PORT_DRV_H)) */
-/*--------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -182,6 +183,8 @@ const U2         u2_gp_OXCAN_CHKPIN[OXCAN_CHKPIN_NUM] = {
 /*===================================================================================================================================*/
 void    vd_g_oXCANCfgRstInit(void)
 {
+    L3R_System_ResetInitialze();
+    vd_g_L3rTestInit();
     vd_s_oXCANCfgEI();                 /* vd_s_oXCANCfgEI shall be called at end                      */
 }
 /*===================================================================================================================================*/
@@ -192,16 +195,19 @@ void    vd_g_oXCANCfgRstInit(void)
 /*===================================================================================================================================*/
 void    vd_g_oXCANCfgWkupInit(void)
 {
-    vd_s_oXCANCfgEI();                 /* vd_s_oXCANCfgEI shall be called at end                      */
+    L3R_System_WakeUpInitialze();
+    vd_g_L3rTestInit();
+    vd_s_oXCANCfgEI();                /* vd_s_oXCANCfgEI shall be called at end                      */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgOpemdEvthk(const U1 u1_a_SYSBIT_PREV, const U1 u1_a_SYSBIT_NEXT)                                            */
+/*  void    vd_g_oXCANCfgOpemdEvthk(const U4 u4_a_SYSBIT_PREV, const U4 u4_a_SYSBIT_NEXT)                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgOpemdEvthk(const U1 u1_a_SYSBIT_PREV, const U1 u1_a_SYSBIT_NEXT)
+void    vd_g_oXCANCfgOpemdEvthk(const U4 u4_a_SYSBIT_PREV, const U4 u4_a_SYSBIT_NEXT)
 {
+    vd_g_L3rTestStart();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANCfgPreTask(const U1 u1_a_SYSBIT)                                                                               */
@@ -211,14 +217,19 @@ void    vd_g_oXCANCfgOpemdEvthk(const U1 u1_a_SYSBIT_PREV, const U1 u1_a_SYSBIT_
 /*===================================================================================================================================*/
 void    vd_g_oXCANCfgPreTask(const U1 u1_a_SYSBIT)
 {
+    L3R_System_MainInDrvTask();
+    L3R_System_MainInMedTask();
+    L3R_System_MainAppTask();
+    L3R_System_MainOutMedTask();
+    vd_g_L3rTestMainTask();
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgPostTask(const U1 u1_a_SYSBIT, const U2 u2_a_FATAL)                                                         */
+/*  void    vd_g_oXCANCfgPostTask(const U1 u4_a_SYSBIT, const U2 u2_a_FATAL)                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgPostTask(const U1 u1_a_SYSBIT, const U2 u2_a_FATAL)
+void    vd_g_oXCANCfgPostTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
 {
     /* ------------------------------------------------------------------------------------------------- */
     /* Attention :                                                                                       */
@@ -258,6 +269,7 @@ void    vd_g_oXCANCfgPostTask(const U1 u1_a_SYSBIT, const U2 u2_a_FATAL)
         Cdd_Canic_Idle((U1)u4_t_trcvic_no);
     }
 #endif  /* #if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U)) */
+
     vd_s_oXCANCfgEI();
 }
 /*===================================================================================================================================*/
@@ -268,7 +280,7 @@ void    vd_g_oXCANCfgPostTask(const U1 u1_a_SYSBIT, const U2 u2_a_FATAL)
 /*===================================================================================================================================*/
 void    vd_g_oXCANCfgShutdown(void)
 {
-    vd_s_oXCANCfgDI();                 /* vd_s_oXCANCfgDI shall be called at 1st                     */
+    vd_s_oXCANCfgDI();               /* vd_s_oXCANCfgDI shall be called at 1st                     */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXCANCfgEI(void)                                                                                             */

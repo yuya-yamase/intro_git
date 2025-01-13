@@ -21,6 +21,9 @@
 #include <Ecu_Int.h>
 
 #include "wdg_drv.h"
+
+#include "veh_opemd.h"
+#include "oxcan.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -28,6 +31,7 @@
 /*----------------------------------------------------------------------------
  *		変数宣言
  *--------------------------------------------------------------------------*/
+
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
 /*----------------------------------------------------------------------------
@@ -41,6 +45,22 @@ ISR(INTOSTM0_ISR);
 
 Std_ReturnType Ecu_Intg_initCdd(Ecu_Intg_BootCauseType u4BootCause)
 {
+
+    switch (u4BootCause){
+        case ECU_INTG_u4BTCAUSE_PON :
+            vd_g_oXCANRstInit();
+            vd_g_VehopemdRstInit();
+            break;
+        case ECU_INTG_u4BTCAUSE_RESET:
+            vd_g_oXCANRstInit();
+            vd_g_VehopemdRstInit();
+           break;
+        default:
+            vd_g_oXCANWkupInit();
+            vd_g_VehopemdWkupInit();
+            break;
+    }
+
     return E_OK;
 }
 
@@ -53,13 +73,20 @@ Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
 
 Std_ReturnType Ecu_Intg_mainFuncCddHigh(void)
 {
+    BswM_CS_MainFunctionHigh();
+
     return E_OK;
 }
 
 
 Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
 {
-//    vd_g_Wdg_SetTriggerCondition((U2)0U);
+    /* vd_g_Wdg_SetTriggerCondition((U2)0U); */
+
+    vd_g_oXCANMainPreTask();
+
+    vd_g_VehopemdMainTask();
+    /* vd_g_Wdg_SetTriggerCondition((U2)0U);*/
 
     return E_OK;
 }
@@ -73,6 +100,7 @@ Std_ReturnType Ecu_Intg_mainFuncApp(void)
 
 Std_ReturnType Ecu_Intg_mainFuncCddMidOut(void)
 {
+    vd_g_oXCANMainPostTask();
     return E_OK;
 }
 
@@ -126,6 +154,7 @@ void Ecu_Intg_preSTResetCallout(Ecu_Intg_STResetType u1Type, uint8 u1Reason)
 
     return;
 }
+
 
 ISR(INTOSTM0_ISR)
 {

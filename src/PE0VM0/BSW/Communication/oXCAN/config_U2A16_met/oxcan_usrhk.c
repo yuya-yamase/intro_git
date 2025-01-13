@@ -35,6 +35,8 @@
 #include "Cdd_Canic.h"
 #endif /* #if (OXCAN_IC_TJA1145_USE == 1U) */
 
+#include "l3r_test.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -119,7 +121,8 @@ static const ST_OXCAN_AUBCS_TRCV     st_sp_OXCAN_AUBCS_TRCV_INFO[BSW_COM_CFG_CHN
     /* u1_selective_use      u2_dio_ch                        */
     { (U1)TRUE,              (U2)U2_MAX                       },
     { (U1)FALSE,             (U2)U2_MAX                       },
-    { (U1)FALSE,             (U2)DIO_ID_APORT5_CH3            }
+    { (U1)FALSE,             (U2)DIO_ID_APORT5_CH3            },
+    { (U1)FALSE,             (U2)U2_MAX                       },
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -338,6 +341,8 @@ void    vd_g_oXCANUsrhkTxAck(const U2 u2_a_MSG)
 
     /* Users Configuration */
 
+    vd_g_L3rTestTxAck(u2_a_MSG);
+
     /* Sample Code */
 /*  switch(u2_a_MSG)                        */
 /*  {                                       */
@@ -374,6 +379,8 @@ void    vd_g_oXCANUsrhkRxMsg(const U2 u2_a_MSG)
     /* ---------------------------------------------------------------------------------------------------- */
 
     /* Users Configuration */
+
+    vd_g_L3rTestRxAck(u2_a_MSG);
 
     /* Sample Code */
 /*  switch(u2_a_MSG)                                        */

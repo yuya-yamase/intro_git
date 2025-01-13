@@ -1,7 +1,7 @@
-/* canif_cfg_0_h_v2-0-0                                                     */
+/* canif_cfg_0_h_v3-0-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -25,7 +25,7 @@
 /******************************************/
 /******************************************/
 /* Send-Queue Number */
-#define BSW_CANIF_CFG_0_QUENUM_PDUR             (42U)
+#define BSW_CANIF_CFG_0_QUENUM_PDUR             (41U)
 #define BSW_CANIF_CFG_0_QUENUM_CANNM            (1U)
 #define BSW_CANIF_CFG_0_QUENUM_CANTP            (0U)
 #define BSW_CANIF_CFG_0_QUENUM_CDD1             (0U)
@@ -91,7 +91,7 @@
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE039          (160U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE040          (352U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE041          (160U)
-#define BSW_CANIF_CFG_0_SIZE_SNDQUE042          (160U)
+#define BSW_CANIF_CFG_0_SIZE_SNDQUE042          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE043          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE044          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE045          (0U)
@@ -343,7 +343,7 @@
 #define BSW_CANIF_CFG_0_HOH_SNDQUE039           (0x0118U)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE040           (0x0119U)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE041           (0x011AU)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE042           (0x011BU)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE042           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE043           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE044           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE045           (BSW_CANIF_HOH_NOUSE)
@@ -805,49 +805,49 @@
 #define BSW_CANIF_CFG_0_INTV_SNDQUE249          (0U)
 
 /* Send-Queue Completion Notification Timing  */
-#define BSW_CANIF_CFG_0_CALL_SNDQUE000          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE001          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE002          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE003          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE004          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE005          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE006          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE007          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE008          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE009          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE010          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE011          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE012          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE013          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE014          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE015          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE016          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE017          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE018          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE019          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE020          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE021          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE022          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE023          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE024          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE025          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE026          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE027          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE028          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE029          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE030          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE031          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE032          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE033          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE034          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE035          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE036          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE037          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE038          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE039          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE040          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE041          (BSW_CANIF_POLL)
-#define BSW_CANIF_CFG_0_CALL_SNDQUE042          (BSW_CANIF_POLL)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE000          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE001          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE002          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE003          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE004          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE005          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE006          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE007          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE008          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE009          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE010          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE011          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE012          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE013          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE014          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE015          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE016          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE017          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE018          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE019          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE020          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE021          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE022          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE023          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE024          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE025          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE026          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE027          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE028          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE029          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE030          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE031          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE032          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE033          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE034          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE035          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE036          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE037          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE038          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE039          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE040          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE041          (BSW_CANIF_INTR)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE042          (BSW_CANIF_INTR)
 #define BSW_CANIF_CFG_0_CALL_SNDQUE043          (BSW_CANIF_INTR)
 #define BSW_CANIF_CFG_0_CALL_SNDQUE044          (BSW_CANIF_INTR)
 #define BSW_CANIF_CFG_0_CALL_SNDQUE045          (BSW_CANIF_INTR)
@@ -1109,11 +1109,12 @@
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2021/09/02                                             */
+/*  v3-0-0          :2024/08/30                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

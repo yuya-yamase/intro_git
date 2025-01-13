@@ -1,7 +1,7 @@
-/* pdur_pbcfg_c_v2-0-0                                                      */
+/* pdur_pbcfg_c_v3-0-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -1095,20 +1095,6 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stSoAdIfRoutingTbl[BSW_PDUR_CFG_MSGSOADIF
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) && (BSW_PDUR_CFG_MSGSOADIF_NUM != 0U) ) */
 
-#if ( (BSW_BSWM_CS_FUNC_CDD1IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1IF_NUM != 0U) )
-BswConst Bsw_PduR_RoutingType bsw_pdur_stCdd1IfRoutingTbl[BSW_PDUR_CFG_MSGCDD1IF_NUM] =
-{
-    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
-};
-#endif /* ( (BSW_BSWM_CS_FUNC_CDD1IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1IF_NUM != 0U) ) */
-
-#if ( (BSW_BSWM_CS_FUNC_CDD2IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2IF_NUM != 0U) )
-BswConst Bsw_PduR_RoutingType bsw_pdur_stCdd2IfRoutingTbl[BSW_PDUR_CFG_MSGCDD2IF_NUM] =
-{
-    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
-};
-#endif /* ( (BSW_BSWM_CS_FUNC_CDD2IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2IF_NUM != 0U) ) */
-
 #if ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) && (BSW_PDUR_CFG_MSGDOIPIF_NUM != 0U) )
 BswConst Bsw_PduR_RoutingType bsw_pdur_stDoIPIfRoutingTbl[BSW_PDUR_CFG_MSGDOIPIF_NUM] =
 {
@@ -1136,20 +1122,6 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stSoAdTpRoutingTbl[BSW_PDUR_CFG_MSGSOADTP
     /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) && (BSW_PDUR_CFG_MSGSOADTP_NUM != 0U) ) */
-
-#if ( (BSW_BSWM_CS_FUNC_CDD1TP == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1TP_NUM != 0U) )
-BswConst Bsw_PduR_RoutingType bsw_pdur_stCdd1TpRoutingTbl[BSW_PDUR_CFG_MSGCDD1TP_NUM] =
-{
-    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
-};
-#endif /* (BSW_BSWM_CS_FUNC_CDD1TP == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1TP_NUM != 0U) */
-
-#if ( (BSW_BSWM_CS_FUNC_CDD2TP == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2TP_NUM != 0U) )
-BswConst Bsw_PduR_RoutingType bsw_pdur_stCdd2TpRoutingTbl[BSW_PDUR_CFG_MSGCDD2TP_NUM] =
-{
-    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
-};
-#endif /* ( (BSW_BSWM_CS_FUNC_CDD2TP == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2TP_NUM != 0U) ) */
 
 #if ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) && (BSW_PDUR_CFG_MSGDOIPTP_NUM != 0U) )
 BswConst Bsw_PduR_RoutingType bsw_pdur_stDoIPTpRoutingTbl[BSW_PDUR_CFG_MSGDOIPTP_NUM] =
@@ -1221,20 +1193,6 @@ BswConst PduIdType bsw_pdur_u2SoAdIfIpduMTbl[BSW_PDUR_CFG_MSGSOADIF_NUM] =
     /* IpduM I-PDU ID */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) && (BSW_PDUR_CFG_MSGSOADIF_NUM != 0U) ) */
-
-#if ( (BSW_BSWM_CS_FUNC_CDD1IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1IF_NUM != 0U) )
-BswConst PduIdType bsw_pdur_u2Cdd1IfIpduMTbl[BSW_PDUR_CFG_MSGCDD1IF_NUM] =
-{
-    /* IpduM I-PDU ID */
-};
-#endif /* ( (BSW_BSWM_CS_FUNC_CDD1IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1IF_NUM != 0U) ) */
-
-#if ( (BSW_BSWM_CS_FUNC_CDD2IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2IF_NUM != 0U) )
-BswConst PduIdType bsw_pdur_u2Cdd2IfIpduMTbl[BSW_PDUR_CFG_MSGCDD2IF_NUM] =
-{
-    /* IpduM I-PDU ID */
-};
-#endif /* ( (BSW_BSWM_CS_FUNC_CDD2IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2IF_NUM != 0U) ) */
 
 #if ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) && (BSW_PDUR_CFG_MSGDOIPIF_NUM != 0U) )
 BswConst PduIdType bsw_pdur_u2DoIPIfIpduMTbl[BSW_PDUR_CFG_MSGDOIPIF_NUM] =
@@ -1325,11 +1283,12 @@ BswConst PduIdType bsw_pdur_u2Cdd2SecOCTbl[BSW_PDUR_CFG_MSGCDD2_NUM] =
 /*  v1-1-0          :2019/01/15                                             */
 /*  v1-2-0          :2019/11/05                                             */
 /*  v2-0-0          :2021/02/12                                             */
+/*  v3-0-0          :2024/09/04                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

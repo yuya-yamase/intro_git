@@ -1,7 +1,7 @@
-/* canIf_pbcfg_c_v2-0-0                                                     */
+/* canif_pbcfg_c_v3-0-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -137,9 +137,9 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxPduRPduTbl[BSW_CANIF_TXPDURPDUNUM]
     ,{ 0x4000058DUL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE038 }  /* [72] MET1S25_Tx_CANFD_G2M_1_BUS */
     ,{ 0x4000060CUL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE039 }  /* [73] AVN1SG6_Tx_CANFD_G2M_1_BUS */
     ,{ 0x40000611UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE040 }  /* [74] MET1S02_Tx_CANFD_G2M_1_BUS */
-    ,{ 0x40000614UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE041 }  /* [75] MET1S10_Tx_CANFD_G2M_1_BUS */
-    ,{ 0x40000615UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE041 }  /* [76] MET1S11_Tx_CANFD_G2M_1_BUS */
-    ,{ 0x40000618UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE041 }  /* [77] MET1S03_Tx_CANFD_G2M_1_BUS */
+    ,{ 0x40000614UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE040 }  /* [75] MET1S10_Tx_CANFD_G2M_1_BUS */
+    ,{ 0x40000615UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE040 }  /* [76] MET1S11_Tx_CANFD_G2M_1_BUS */
+    ,{ 0x40000618UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE040 }  /* [77] MET1S03_Tx_CANFD_G2M_1_BUS */
     ,{ 0x40000126UL, (BswU1)BSW_CANIF_CH2,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [78] AVN1S34_Tx_CANFD_G5M_BUS */
     ,{ 0x40000141UL, (BswU1)BSW_CANIF_CH2,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE001 }  /* [79] AVN1SG7_Tx_CANFD_G5M_BUS */
     ,{ 0x4000017FUL, (BswU1)BSW_CANIF_CH2,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE002 }  /* [80] AVN1S32_Tx_CANFD_G5M_BUS */
@@ -194,14 +194,28 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxPduRPduTbl[BSW_CANIF_TXPDURPDUNUM]
     ,{ 0x40000529UL, (BswU1)BSW_CANIF_CH2,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE021 }  /* [129] MET1S43_Tx_CANFD_G5M_BUS */
     ,{ 0x4000056DUL, (BswU1)BSW_CANIF_CH2,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE022 }  /* [130] CDC1N02_Tx_CANFD_G5M_BUS */
 };
+
+#if(BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE)
+BswConst BswU4 bsw_canif_stTxPduRMskTbl[BSW_CANIF_TXPDURPDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE) */
 #endif /* (BSW_CANIF_TXPDURPDUNUM != 0U) */
 
 #if(BSW_CANIF_TXCANNMPDUNUM != 0U)
 BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCanNmPduTbl[BSW_CANIF_TXCANNMPDUNUM] =
 {
    /* CAN ID      , Channel             , Extend   , Send Queue                 */
-     { 0x00000442UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [0] AIP1N01_Tx_CANFD_G2M_1_BUS */
+     { 0x00000442UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [0] CDC1N01_Tx_CANFD_G2M_1_BUS */
 };
+
+#if(BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE)
+BswConst BswU4 bsw_canif_stTxCanNmMskTbl[BSW_CANIF_TXCANNMPDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE) */
 #endif /* (BSW_CANIF_TXCANNMPDUNUM != 0U) */
 
 #if(BSW_CANIF_TXCANTPPDUNUM != 0U)
@@ -209,6 +223,13 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCanTpPduTbl[BSW_CANIF_TXCANTPPDUNU
 {
    /* CAN ID      , Channel             , Extend   , Send Queue                 */
 };
+
+#if(BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE)
+BswConst BswU4 bsw_canif_stTxCanTpMskTbl[BSW_CANIF_TXCANTPPDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE) */
 #endif /* (BSW_CANIF_TXCANTPPDUNUM != 0U) */
 
 #if(BSW_CANIF_TXCDD1PDUNUM != 0U)
@@ -216,6 +237,13 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCdd1PduTbl[BSW_CANIF_TXCDD1PDUNUM]
 {
    /* CAN ID      , Channel             , Extend   , Send Queue                 */
 };
+
+#if(BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE)
+BswConst BswU4 bsw_canif_stTxCdd1MskTbl[BSW_CANIF_TXCDD1PDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE) */
 #endif /* (BSW_CANIF_TXCDD1PDUNUM != 0U) */
 
 #if(BSW_CANIF_TXCDD2PDUNUM != 0U)
@@ -223,6 +251,13 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCdd2PduTbl[BSW_CANIF_TXCDD2PDUNUM]
 {
    /* CAN ID      , Channel             , Extend   , Send Queue                 */
 };
+
+#if(BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE)
+BswConst BswU4 bsw_canif_stTxCdd2MskTbl[BSW_CANIF_TXCDD2PDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE) */
 #endif /* (BSW_CANIF_TXCDD2PDUNUM != 0U) */
 
 #if(BSW_CANIF_TXXCPPDUNUM != 0U)
@@ -230,6 +265,13 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxXcpPduTbl[BSW_CANIF_TXXCPPDUNUM] =
 {
    /* CAN ID      , Channel             , Extend   , Send Queue                 */
 };
+
+#if(BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE)
+BswConst BswU4 bsw_canif_stTxXcpMskTbl[BSW_CANIF_TXXCPPDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE) */
 #endif /* (BSW_CANIF_TXXCPPDUNUM != 0U) */
 
 /******************************************/
@@ -599,6 +641,14 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxPduRPduTbl[BSW_CANIF_RXPDURPDUNUM]
     ,{ 0x400004A1UL, (BswU1)32U, (BswU1)BSW_CANIF_CH2,  (BswU2)0U }  /* [353] VSC1D51_Rx_CANFD_G5M_BUS */
     ,{ 0x40000262UL, (BswU1)32U, (BswU1)BSW_CANIF_CH2,  (BswU2)0U }  /* [354] VSC1G96_Rx_CANFD_G5M_BUS */
 };
+
+#if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)
+/* PduR Rx Msg CAN ID Mask Table */
+BswConst BswU4 bsw_canif_stRxPduRMskTbl[BSW_CANIF_RXPDURPDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG) */
 #endif
 
 #if(BSW_CANIF_RXCANNMPDUNUM != 0U)
@@ -608,6 +658,14 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCanNmPduTbl[BSW_CANIF_RXCANNMPDUNU
    /* CAN-ID      , DLC       , Channel             , Extend     */
      { 0x00000440UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [0] NM_Rx_CANFD_G2M_1_BUS */
 };
+
+#if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)
+/* CanNm Rx Msg CAN ID Mask Table */
+BswConst BswU4 bsw_canif_stRxCanNmMskTbl[BSW_CANIF_RXCANNMPDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG) */
 #endif
 
 #if(BSW_CANIF_RXCANTPPDUNUM != 0U)
@@ -616,6 +674,14 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCanTpPduTbl[BSW_CANIF_RXCANTPPDUNU
 {
    /* CAN-ID      , DLC       , Channel             , Extend     */
 };
+
+#if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)
+/* CanTp Rx Msg CAN ID Mask Table */
+BswConst BswU4 bsw_canif_stRxCanTpMskTbl[BSW_CANIF_RXCANTPPDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG) */
 #endif
 
 #if(BSW_CANIF_RXCDD1PDUNUM != 0U)
@@ -624,6 +690,14 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCdd1PduTbl[BSW_CANIF_RXCDD1PDUNUM]
 {
    /* CAN-ID      , DLC       , Channel             , Extend     */
 };
+
+#if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)
+/* CDD1 Rx Msg CAN ID Mask Table */
+BswConst BswU4 bsw_canif_stRxCdd1MskTbl[BSW_CANIF_RXCDD1PDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG) */
 #endif
 
 #if(BSW_CANIF_RXCDD2PDUNUM != 0U)
@@ -632,6 +706,14 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCdd2PduTbl[BSW_CANIF_RXCDD2PDUNUM]
 {
    /* CAN-ID      , DLC       , Channel             , Extend     */
 };
+
+#if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)
+/* CDD2 Rx Msg CAN ID Mask Table */
+BswConst BswU4 bsw_canif_stRxCdd2MskTbl[BSW_CANIF_RXCDD2PDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG) */
 #endif
 
 #if(BSW_CANIF_RXXCPPDUNUM != 0U)
@@ -640,6 +722,14 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxXcpPduTbl[BSW_CANIF_RXXCPPDUNUM] =
 {
    /* CAN-ID      , DLC       , Channel             , Extend     */
 };
+
+#if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)
+/* XCP Rx Msg CAN ID Mask Table */
+BswConst BswU4 bsw_canif_stRxXcpMskTbl[BSW_CANIF_RXXCPPDUNUM] =
+{
+   /* CAN-ID Mask */
+};
+#endif /* (BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG) */
 #endif
 
 /******************************************/
@@ -1161,12 +1251,12 @@ BswConst BswU1 bsw_canif_tx_u1AvcLanPriTbl[BSW_CANIF_TXPDURPDUNUM] = {
 #endif /* (BSW_CANIF_PKTCAN_EXTA2_USE == BSW_USE) */
 
 
-#if ( (BSW_CANIF_PKTCAN_EXTA1_USE == BSW_USE) || (BSW_CANIF_PKTCAN_EXTA2_USE == BSW_USE) || (BSW_CANIF_PKTCAN_EXTB_USE == BSW_USE) )
+#if ( (BSW_CANIF_PKTCAN_EXTA1_USE == BSW_USE) || (BSW_CANIF_PKTCAN_EXTA2_USE == BSW_USE) )
 #if((BSW_CANIF_TXPDURPDUNUM + BSW_CANIF_RXPDURPDUNUM) != 0U)
 BswConst BswU1 bsw_canif_u1MsgIdTbl[BSW_CANIF_TXPDURPDUNUM + BSW_CANIF_RXPDURPDUNUM] = {
 };
 #endif /* (BSW_CANIF_TXPDURPDUNUM != 0U) */
-#endif /* ( (BSW_CANIF_PKTCAN_EXTA1_USE == BSW_USE) || (BSW_CANIF_PKTCAN_EXTA2_USE == BSW_USE) || (BSW_CANIF_PKTCAN_EXTB_USE == BSW_USE) ) */
+#endif /* ( (BSW_CANIF_PKTCAN_EXTA1_USE == BSW_USE) || (BSW_CANIF_PKTCAN_EXTA2_USE == BSW_USE) ) */
 
 #endif /* (BSW_BSWM_CS_FUNC_CANIF == BSW_USE) */
 
@@ -1176,11 +1266,12 @@ BswConst BswU1 bsw_canif_u1MsgIdTbl[BSW_CANIF_TXPDURPDUNUM + BSW_CANIF_RXPDURPDU
 /*  v1-0-0          :2017/10/10                                             */
 /*  v1-1-0          :2018/12/12                                             */
 /*  v2-0-0          :2021/02/12                                             */
+/*  v3-0-0          :2024/10/03                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

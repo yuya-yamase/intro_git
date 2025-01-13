@@ -87,6 +87,15 @@ SECTIONS {
     .ecu_const_p            align(4)                        : > .               // ユーザの定数領域(ASIL)
     .text                   align(4)                        : > .               // コンパイラのデフォルト領域
 
+    .gw_l3r_code            align(4)                        : > .
+    .gw_cid_code            align(4)                        : > .
+    .gw_fw_code             align(4)                        : > .
+    .gw_util_code           align(4)                        : > .
+
+    .gw_l3r_const           align(4)                        : > .
+    .gw_cid_const           align(4)                        : > .
+    .gw_chm_const           align(4)                        : > .
+
 // MCAL
     .mcal_rom_top           align(4)                        : > .
     .ADCDIAG_TEXT_CODE      align(4)                        : > .
@@ -257,6 +266,7 @@ SECTIONS {
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
+    .bss_SHARE_COMPLEX_VEHOPEMD_SYSSTS SHARE_COMPLEX_VEHOPEMD_SYSSTS_ADDR ABS    : > .
 
     .cluster2_share_ramend                                   : > ram_end_cluster2_share 
 
@@ -305,6 +315,8 @@ SECTIONS {
 
     .ecu_nvar_top           align(4)                        : > .
     .bss                    align(4)                        : > .               // コンパイラのデフォルト領域
+    .gw_l3r_nbva_zi         align(4)                        : > .
+
     .ecu_nvar_bottom        align(4)                        : > .
     _ECU_NVAR_SIZE = . - ADDR(.ecu_nvar_top);
 
@@ -315,7 +327,6 @@ SECTIONS {
 
 // EndAddress
     .cluster2_ramend                                         : > ram_end_cluster2
-
 
 // -- RetentionRAM -------------
 // TopAddress
@@ -331,6 +342,7 @@ SECTIONS {
     .MEM_SEC_STA_BACK_APPL       ALIGN(8)                             : > .
     .bss_BACK_KEYWORD0           ALIGN(8)                             : > .
     .bss_BACK                    ALIGN(8)                             : > .
+    .gw_l3r_buva_zi              ALIGN(8)                             : > .
     .bss_BACK_KEYWORD1           ALIGN(8)                             : > .
     .bss_BACK_RIM1               ALIGN(8)                             : > .
     .bss_BACK_RIM2               ALIGN(8)                             : > .
