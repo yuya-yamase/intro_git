@@ -77,14 +77,14 @@ static const ST_EXTSIGCTRL_STS stsa_ExtSigCtrl_Sts[EXTSIGCTRL_KIND_NUM]
 = {
 	/* TEST */
 	{
-		DIO_ID_PORT0_CH2,						/* DIOチャネルID */
+		DIO_ID_PORT5_CH6,						/* DIOチャネルID */
 		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* サンプリング周期 */
 		(U1)3U,									/* 同一論理判定確定回数 */
 		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* ポーリング開始待ち時間 */
 	},
 	/* BOOT */
 	{
-		DIO_ID_PORT5_CH6,						/* DIOチャネルID */
+		DIO_ID_PORT0_CH2,						/* DIOチャネルID */
 		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* サンプリング周期 */
 		(U1)3U,									/* 同一論理判定確定回数 */
 		(U1)(100U/U1_EXTSIGCTRL_MAIN_TICK),		/* ポーリング開始待ち時間 */
