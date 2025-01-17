@@ -1,0 +1,12 @@
+#!gbuild
+[Options File]
+    :macro=IOHW_ADC_SCC_DIR=${IOHW_DIR}/Ren_U2Ax/Common/iohw_adc/scc
+    :macro=IOHW_DIFIL_SCC_DIR=${IOHW_DIR}/Ren_U2Ax/Common/iohw_diflt/scc
+
+    :macro=IOHW_ADC_CFG_DIR=${IOHW_DIR}/Ren_U2Ax/A16_373/iohw_adc/config_CDC_1SUS
+    :macro=IOHW_DIFIL_CFG_DIR=${IOHW_DIR}/Ren_U2Ax/A16_373/iohw_diflt/config_CDC
+
+    -I${IOHW_ADC_SCC_DIR}
+    -I${IOHW_ADC_CFG_DIR}
+    -I${IOHW_DIFIL_SCC_DIR}
+    -I${IOHW_DIFIL_CFG_DIR}

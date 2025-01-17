@@ -1,7 +1,7 @@
-/* bsw_bswm_cs_config_c_v3-0-0                                              */
+/* bsw_bswm_cs_config_c_v2-2-0                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -55,10 +55,6 @@
 #include <bswm_eth/bsw_bswm_eth.h>
 #endif
 
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-#include <bswm_vps/bsw_bswm_vps.h>
-#endif
-
 #include <cs/bsw_cs_system_memmap_pre.h>
 
 /*--------------------------------------------------------------------------*/
@@ -66,7 +62,6 @@
 /*--------------------------------------------------------------------------*/
 #define BSW_BSWM_CS_CHNUM               (BSW_COMM_CHNUM)
 #define BSW_BSWM_CS_IPDUGRPVCT_SIZE     (BSW_COMM_CHNUM << 1U)
-#define BSW_BSWM_CS_PWIPDUGRPVCT_SIZE   (BSW_BSWM_CS_IPDUGRPVCT_SIZE << 1U)
 #define BSW_BSWM_CS_PNCIPDUGRPVCT_SIZE  (BSW_BSWM_CS_IPDUGRPVCT_SIZE * BSW_BSWM_CS_PNC_REQNUM)
 
 /* Protocol Index, Public function table size (Editing is required when adding protocols) */
@@ -74,13 +69,17 @@
 #define BSW_BSWM_CS_FUNCTBL_CAN            (1U)
 #define BSW_BSWM_CS_FUNCTBL_LIN            (2U)
 #define BSW_BSWM_CS_FUNCTBL_ETH            (3U)
-#define BSW_BSWM_CS_FUNCTBL_SIZE           (4U)
+#define BSW_BSWM_CS_FUNCTBL_CDD1           (4U)
+#define BSW_BSWM_CS_FUNCTBL_CDD2           (5U)
+#define BSW_BSWM_CS_FUNCTBL_SIZE           (6U)
 
 /* Channel to Protocol Index Conversion (Editing is required when adding protocols) */
 #define BSW_BSWM_CS_IDX_CONV(ch)           (BSW_BSWM_CS_IDX_CONV_CAN(ch))
 #define BSW_BSWM_CS_IDX_CONV_CAN(ch)       ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_CAN)  ? BSW_BSWM_CS_FUNCTBL_CAN  : BSW_BSWM_CS_IDX_CONV_LIN(ch))
 #define BSW_BSWM_CS_IDX_CONV_LIN(ch)       ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_LIN)  ? BSW_BSWM_CS_FUNCTBL_LIN  : BSW_BSWM_CS_IDX_CONV_ETH(ch))
-#define BSW_BSWM_CS_IDX_CONV_ETH(ch)       ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_ETH)  ? BSW_BSWM_CS_FUNCTBL_ETH  : BSW_BSWM_CS_FUNCTBL_NONE)
+#define BSW_BSWM_CS_IDX_CONV_ETH(ch)       ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_ETH)  ? BSW_BSWM_CS_FUNCTBL_ETH  : BSW_BSWM_CS_IDX_CONV_CDD1(ch))
+#define BSW_BSWM_CS_IDX_CONV_CDD1(ch)      ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_CDD1) ? BSW_BSWM_CS_FUNCTBL_CDD1 : BSW_BSWM_CS_IDX_CONV_CDD2(ch))
+#define BSW_BSWM_CS_IDX_CONV_CDD2(ch)      ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_CDD2) ? BSW_BSWM_CS_FUNCTBL_CDD2 : BSW_BSWM_CS_FUNCTBL_NONE)
 
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
 /* Maximum number of event Awake hold messages by channel */
@@ -131,7 +130,11 @@
 #define BSW_BSWM_CS_PDUTXCTRL_USE_LIN(ch)     \
         ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_LIN)  ? (BswU1)BSW_NOUSE                   : BSW_BSWM_CS_PDUTXCTRL_USE_ETH(ch))
 #define BSW_BSWM_CS_PDUTXCTRL_USE_ETH(ch)     \
-        ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_ETH)  ? (BswU1)BSW_USE                     : (BswU1)BSW_NOUSE)
+        ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_ETH)  ? (BswU1)BSW_USE                     : BSW_BSWM_CS_PDUTXCTRL_USE_CDD1(ch))
+#define BSW_BSWM_CS_PDUTXCTRL_USE_CDD1(ch)    \
+        ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_CDD1) ? (BswU1)BSW_BSWM_CS_CFG_CDD1_PDUTX_USE : BSW_BSWM_CS_PDUTXCTRL_USE_CDD2(ch))
+#define BSW_BSWM_CS_PDUTXCTRL_USE_CDD2(ch)    \
+        ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_CDD2) ? (BswU1)BSW_BSWM_CS_CFG_CDD2_PDUTX_USE : (BswU1)BSW_NOUSE)
 
 #if ( (BSW_BSWM_CS_FUNC_PDUR == BSW_USE) && (BSW_BSWM_CS_FUNC_CANTX == BSW_USE) )
 #define BSW_BSWM_CS_FUNC_GETTXCHCAN         (&bsw_bswm_cs_ctrl_GetTxChCan)
@@ -151,14 +154,6 @@
 #define BSW_BSWM_CS_FUNC_CNVMSTKRUP         (&bsw_bswm_cs_system_ms2MTickRup)
 #endif
 
-#if (BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE)
-#define BSW_BSWM_CS_SETSYSSTAT_FUNC            ( &BswM_VPS_SetSystemStatusCS )
-#define BSW_BSWM_CS_GETSYSSTAT_FUNC            ( &BswM_VPS_GetWuSystemStatusCS )
-#else
-#define BSW_BSWM_CS_SETSYSSTAT_FUNC            ( &bsw_bswm_cs_sysst_SetSystemStatus_dummy )
-#define BSW_BSWM_CS_GETSYSSTAT_FUNC            ( &bsw_bswm_cs_sysst_GetWuSystemStatus )
-#endif /* (BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE) */
-
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -173,9 +168,9 @@
 /*------------------------------------------*/
 /* Unit:State management                       */
 /*------------------------------------------*/
-BswU4      bsw_bswm_cs_st_u4IpduGrpVect[BSW_BSWM_CS_PWIPDUGRPVCT_SIZE];
-BswU4      bsw_bswm_cs_st_u4DmIpduGrpVect[BSW_BSWM_CS_PWIPDUGRPVCT_SIZE];
-BswU4      bsw_bswm_cs_st_u4WkupIpduGrVct[BSW_BSWM_CS_PWIPDUGRPVCT_SIZE];
+BswU1      bsw_bswm_cs_st_u1IpduGrpVect[BSW_BSWM_CS_IPDUGRPVCT_SIZE];
+BswU1      bsw_bswm_cs_st_u1DmIpduGrpVect[BSW_BSWM_CS_IPDUGRPVCT_SIZE];
+BswU1      bsw_bswm_cs_st_u1WkupIpduGrVct[BSW_BSWM_CS_IPDUGRPVCT_SIZE];
 
 #if ( BSW_BSWM_CS_FUNC_PNCIPDU == BSW_USE )
 BswU4      bsw_bswm_cs_st_u4PncIpduGrpVect[BSW_BSWM_CS_PNCIPDUGRPVCT_SIZE];
@@ -414,6 +409,8 @@ BswConst BswU1 bsw_bswm_cs_st_u1PncIpduRx[BSW_BSWM_CS_CHNUM] =
 /* Unit:Channel control                   */
 /*------------------------------------------*/
 BswConst BswU1 bsw_bswm_cs_ctrl_u1ChNum        = (BswU1)BSW_BSWM_CS_CHNUM;
+
+BswConst BswU1 bsw_bswm_cs_sysst_u1InitStat  = (BswU1)BSW_BSWM_CS_CFG_ECUINITPOWER;
 
 BswConst BswU2 bsw_bswm_cs_system_u2MidTickTm  = (BswU2)((BswU4)BSW_BSWM_CS_MPU_TICKTIME * (BswU4)BSW_BSWM_CS_TICKTIME_MID);
 BswConst BswU2 bsw_bswm_cs_system_u2HighTickTm = (BswU2)((BswU4)BSW_BSWM_CS_MPU_TICKTIME * (BswU4)BSW_BSWM_CS_TICKTIME_HIGH);
@@ -961,6 +958,8 @@ BswConst Bsw_BswmCS_BusTxFuncTblType* BswConst bsw_bswm_cs_ctrl_ptBusTxFuncTbl[B
 #else
     ,&bsw_bswm_cs_ctrl_ptDmyTxFunc
 #endif
+    ,&bsw_bswm_cs_ctrl_ptDmyTxFunc
+    ,&bsw_bswm_cs_ctrl_ptDmyTxFunc
 };
 
 /* How to control the transmission stop/resume function */
@@ -1075,6 +1074,8 @@ void (* BswConst bsw_bswm_cs_ptBusChRstFuncTbl[BSW_BSWM_CS_FUNCTBL_SIZE])( Netwo
 #endif
     ,&bsw_bswm_cs_ctrl_RestartCh_dmy
     ,&bsw_bswm_cs_ctrl_RestartCh_dmy
+    ,&bsw_bswm_cs_ctrl_RestartCh_dmy
+    ,&bsw_bswm_cs_ctrl_RestartCh_dmy
 };
 #endif /*  ( BSW_BSWM_CS_CHRSTCTRL_FUNC == BSW_USE ) */
 
@@ -1117,11 +1118,10 @@ BswConst Bsw_BswmCS_BusDmFuncTblType* BswConst bsw_bswm_cs_ctrl_ptBusDmFuncTbl[B
 #else
     ,&bsw_bswm_cs_ctrl_ptDmyDmFunc
 #endif
+    ,&bsw_bswm_cs_ctrl_ptDmyDmFunc
+    ,&bsw_bswm_cs_ctrl_ptDmyDmFunc
 };
 #endif /* ( BSW_BSWM_CS_DMCTRL_FUNC == BSW_USE ) */
-
-void    (* BswConst bsw_bswm_cs_st_ptSetSysStatFn)( uint32* Mask, uint32* SysStatus ) = BSW_BSWM_CS_SETSYSSTAT_FUNC;
-void    (* BswConst bsw_bswm_cs_st_ptGetSysStatFn)( uint32* SysStatus )               = BSW_BSWM_CS_GETSYSSTAT_FUNC;
 
 /****************************************************************************/
 /* External Functions                                                       */
@@ -1143,7 +1143,6 @@ void    (* BswConst bsw_bswm_cs_st_ptGetSysStatFn)( uint32* SysStatus )         
 /*  v2-0-0          :2021/12/09                                             */
 /*  v2-1-0          :2023/02/03                                             */
 /*  v2-2-0          :2023/05/09                                             */
-/*  v3-0-0          :2024/11/15                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

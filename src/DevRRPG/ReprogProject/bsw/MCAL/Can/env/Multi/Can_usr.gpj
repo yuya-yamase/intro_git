@@ -1,0 +1,9 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/MCAL/Can/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/MCAL/Can/obj/Can_usr.rel.o
+
+../../usr/micon/$MICON_NAME/Can_Usr.c
+

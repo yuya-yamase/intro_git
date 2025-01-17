@@ -51,10 +51,6 @@ extern ISR(INTRIIC1TI_ISR);
 extern ISR(INTRIIC1TEI_ISR);
 extern ISR(OS_SYSTEM_COUNTER_ISR0);
 extern ISR(INTTAUD0CH14);
-extern ISR(INTRCAN5REC_ISR);
-extern ISR(INTRCAN5TRX_ISR);
-extern ISR(INTRCAN7REC_ISR);
-extern ISR(INTRCAN7TRX_ISR);
 #define OS_STOP_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"
 
@@ -150,42 +146,6 @@ extern ar_isrcb_t ar_isrcb_OS_SYSTEM_COUNTER_ISR0;
 #include "Os_MemMap.h"
 
 extern ar_isrcb_t ar_isrcb_INTTAUD0CH14;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-extern ar_isrcb_t ar_isrcb_INTRCAN5REC_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-extern ar_isrcb_t ar_isrcb_INTRCAN5TRX_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-extern ar_isrcb_t ar_isrcb_INTRCAN7REC_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-extern ar_isrcb_t ar_isrcb_INTRCAN7TRX_ISR;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"

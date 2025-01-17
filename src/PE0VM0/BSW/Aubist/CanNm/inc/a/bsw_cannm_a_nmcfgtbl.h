@@ -1,7 +1,7 @@
-/* bsw_cannm_a_nmcfgtbl_h_v3-0-0                                            */
+/* bsw_cannm_a_nmcfgtbl_v2-0-0                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -244,15 +244,6 @@ extern BswConst       Bsw_CanNmA_STConfgTblChType  bsw_cannm_a_ctrl_stChTbl[];
 extern BswConst       BswU1 bsw_cannm_a_ctrl_u1CnoChgIn[];  /* All CH No. -> CanNmA CH No  */
 extern BswConst       BswU1 bsw_cannm_a_ctrl_u1CnoChgOut[]; /* CanNmA CH No -> Entire CH No */
 
-/* CVT DisableSend Time value table */
-extern BswConst      BswU2 bsw_cannm_a_cvtnm_u2DisSendTbl[];
-
-/* CVT EnablePeriodic Time value table */
-extern BswConst      BswU2 bsw_cannm_a_cvtnm_u2EnaPeriTbl[];
-
-/* CVT Immediate Transmission Offset value table */
-extern BswConst      BswU2 bsw_cannm_a_cvtnm_u2ImmTxOfsTbl[];
-
 /* OSEK context */
 extern BswConst       Bsw_CanNmA_STNmOsekCntXTType bsw_cannm_a_oseknm_stContextTbl[];
 
@@ -268,7 +259,6 @@ extern BswConst      BswU2 bsw_cannm_a_timer_u2TmCntTbl[][BSW_CANNM_A_TIMER_TBLM
 /*  v1-0-0          :2017/07/07                                             */
 /*  v1-1-0          :2020/04/10                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,7 +1,7 @@
-/* bsw_bswm_cs_status_bswmlin_c_v3-0-0                                      */
+/* bsw_bswm_cs_status_bswmlin_c_v2-0-0                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,9 +20,16 @@
 #include "../../ComM/inc/bsw_comm_config.h"
 #include "../inc/bsw_bswm_cs_config.h"
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
-#include "../../BswM_Lin/inc/bsw_bswm_lin_MemMap.h"
-#include <bswm_lin/bsw_bswm_lin.h>
+
+#include <BswM_Lin.h>
+
+#define BSWM_LIN_START_SEC_CODE
+#include <BswM_Lin_MemMap.h>
+
 #include "../inc/bsw_bswm_cs_status_bswmlin.h"
+
+#define BSWM_LIN_STOP_SEC_CODE
+#include <BswM_Lin_MemMap.h>
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -47,9 +54,12 @@
 /****************************************************************************/
 /* External Functions                                                       */
 /****************************************************************************/
+#define BSWM_LIN_START_SEC_CODE
+#include <BswM_Lin_MemMap.h>
+
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinInit                               */
-/* Description   | Initialize LIN                                           */
+/* Description   | Initialize LIN                                                */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -63,7 +73,7 @@ bsw_bswm_cs_st_BswMLinInit( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinInitDrv                            */
-/* Description   | LIN Initialize driver                                    */
+/* Description   | LIN Initialize driver                                        */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -77,7 +87,7 @@ bsw_bswm_cs_st_BswMLinInitDrv( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinPreDeInit                          */
-/* Description   | LIN Prepare for shutdown                                 */
+/* Description   | LIN Prepare for shutdown                                    */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -91,7 +101,7 @@ bsw_bswm_cs_st_BswMLinPreDeInit( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinDeInit                             */
-/* Description   | LIN Shutdown                                             */
+/* Description   | LIN Shutdown                                        */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -106,7 +116,7 @@ bsw_bswm_cs_st_BswMLinDeInit( void )
 #if ( BSW_BSWM_CS_ECU_SLEEP == BSW_USE )
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinWakeup                             */
-/* Description   | LIN Wake-up initialization                               */
+/* Description   | LIN Wake-up initialization                                  */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -120,7 +130,7 @@ bsw_bswm_cs_st_BswMLinWakeup( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinSleep                              */
-/* Description   | LIN Sleep                                                */
+/* Description   | LIN Sleep                                              */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -135,7 +145,7 @@ bsw_bswm_cs_st_BswMLinSleep( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinReset                              */
-/* Description   | LIN Reset                                                */
+/* Description   | LIN Reset                                              */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -149,8 +159,8 @@ bsw_bswm_cs_st_BswMLinReset( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinMainHI                             */
-/* Description   | LIN High-priority periodic processing - Input            */
-/* Preconditions | When processing high-priority periodic process           */
+/* Description   | LIN High-priority periodic processing - Input                                      */
+/* Preconditions | When processing high-priority periodic process                                               */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
@@ -163,8 +173,8 @@ bsw_bswm_cs_st_BswMLinMainHI( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinMainHO                             */
-/* Description   | LIN High-priority periodic processing - Output           */
-/* Preconditions | When processing high-priority periodic process           */
+/* Description   | LIN High-priority periodic processing - Output                                      */
+/* Preconditions | When processing high-priority periodic process                                               */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
@@ -177,8 +187,8 @@ bsw_bswm_cs_st_BswMLinMainHO( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinMainMI                             */
-/* Description   | LIN Medium-priority periodic processing - Input          */
-/* Preconditions | When processing medium-priority periodic process         */
+/* Description   | LIN Medium-priority periodic processing - Input                                      */
+/* Preconditions | When processing medium-priority periodic process                                               */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
@@ -191,8 +201,8 @@ bsw_bswm_cs_st_BswMLinMainMI( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinMainMC                             */
-/* Description   | LIN Medium-Priority Control                              */
-/* Preconditions | When processing medium-priority periodic process         */
+/* Description   | LIN Medium-Priority Control                                          */
+/* Preconditions | When processing medium-priority periodic process                                               */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
@@ -205,8 +215,8 @@ bsw_bswm_cs_st_BswMLinMainMC( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinMainMO                             */
-/* Description   | LIN Medium-priority periodic processing - Output         */
-/* Preconditions | When processing medium-priority periodic process         */
+/* Description   | LIN Medium-priority periodic processing - Output                                      */
+/* Preconditions | When processing medium-priority periodic process                                               */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
@@ -219,8 +229,8 @@ bsw_bswm_cs_st_BswMLinMainMO( void )
 
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinUpdIPDUSt                          */
-/* Description   | Request LIN I-PDU group update                           */
-/* Preconditions | When processing medium-priority periodic process         */
+/* Description   | Request LIN I-PDU group update                                */
+/* Preconditions | When processing medium-priority periodic process                                               */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
 /* Notes         | None                                                     */
@@ -234,7 +244,7 @@ bsw_bswm_cs_st_BswMLinUpdIPDUSt( void )
 #if ( BSW_BSWM_CS_ECU_FAIL == BSW_NOUSE )
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_BswMLinCheckRam                           */
-/* Description   | Check RAM corruption for LIN-related components          */
+/* Description   | Check RAM corruption for LIN-related components                   */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -251,6 +261,9 @@ bsw_bswm_cs_st_BswMLinCheckRam( void )
 /* Internal Functions                                                       */
 /****************************************************************************/
 
+#define BSWM_LIN_STOP_SEC_CODE
+#include <BswM_Lin_MemMap.h>
+
 #endif /* ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_NOUSE ) */
 
 /****************************************************************************/
@@ -258,7 +271,6 @@ bsw_bswm_cs_st_BswMLinCheckRam( void )
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2018/12/12                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/09/05                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

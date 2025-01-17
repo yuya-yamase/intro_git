@@ -1,7 +1,7 @@
-/* bsw_canif_config_c_v3-0-0                                                */
+/* bsw_canif_config_c_v2-1-0                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -31,7 +31,6 @@
 #include <pdur/bsw_pdur_canif.h>
 #include <cannm/bsw_cannm.h>
 #include <cannm/bsw_cannm_cbk.h>
-#include <bswm_can/bsw_bswm_can.h>
 
 #include "../inc/bsw_canif_st.h"
 #include "../inc/bsw_canif_tx.h"
@@ -41,6 +40,7 @@
 #include "../inc/bsw_canif_rx_xcp.h"
 #include "../inc/bsw_canif_tx_xcp.h"
 
+#include "../../CanNm/inc/bsw_cannm_config.h"
 #include "../cfg/CanIf_Cfg.h"
 #include "../cfg/CanIf_Cfg_Ext.h"
 #include "../inc/bsw_canif_config.h"
@@ -1058,6 +1058,16 @@
 #define BSW_CANIF_CANTPDLCCHK_FUNC_RX(ch) BSW_CANIF_CANTPDLCPTN_PTN0_USE(ch)
 #define BSW_CANIF_CANTPDLCPTN_PTN0_USE(ch) ((BSW_CANIF_CANTPDLCCHK_PTN_CH(ch) == BSW_CANIF_DLCCHK_PTN0) ? &bsw_canif_fs_DlcCheck0 : BSW_CANIF_CANTPDLCPTN_PTN1_USE(ch))
 #define BSW_CANIF_CANTPDLCPTN_PTN1_USE(ch) ((BSW_CANIF_CANTPDLCCHK_PTN_CH(ch) == BSW_CANIF_DLCCHK_PTN1) ? &bsw_canif_fs_DlcCheck1 : &bsw_canif_fs_DlcCheckNone)
+
+#if (BSW_CANNM_COMIF_USE == BSW_USE)
+#define BSW_CANIF_CANNMBPRERXMSG_FUNC          (&CanNmB_PreRxMsg)
+#define BSW_CANIF_CANNMBPOSTRXMSG_FUNC         (&CanNmB_PostRxMsg)
+#define BSW_CANIF_CANNMBPRETXMSG_FUNC          (&CanNmB_PreTxMsg)
+#else
+#define BSW_CANIF_CANNMBPRERXMSG_FUNC          (&bsw_canif_rx_NmBPreRxMsgNone)
+#define BSW_CANIF_CANNMBPOSTRXMSG_FUNC         (&bsw_canif_rx_NmBPostRxMsgNone)
+#define BSW_CANIF_CANNMBPRETXMSG_FUNC          (&bsw_canif_tx_NmBPreTxMsgNone)
+#endif
 
 /* Enables/disables the use of the transmission failure notification function */
 #define BSW_CANIF_TXERR_NOTIFY_FUNC            (((BSW_CANIF_FUNC_SND == BSW_CANIF_EXIST) && (BSW_BSWM_CAN_FUNC_TXERR_NOTIFY == BSW_USE)) ? BSW_CANIF_EXIST : BSW_CANIF_NONE)
@@ -34769,21 +34779,6 @@ BswConst Bsw_CanIf_TxPduTblType* BswConst bsw_canif_tx_ptTxCompPduTbl[ BSW_CANIF
 };
 
 /*-------------------------------------------------------------------------------------*/
-/*  Component Pdu Access Table                                                         */
-/*      bsw_canif_stTxCompMaskTbl                                                      */
-/*          = { CAN-ID Mask Table }                                                    */
-/*-------------------------------------------------------------------------------------*/
-BswConst BswU4* BswConst bsw_canif_ptTxCompMaskTbl[ BSW_CANIF_TBL_MAX_UPCMPNUM ] =
-{
-    &bsw_canif_stTxPduRMskTbl[0],
-    &bsw_canif_stTxCanNmMskTbl[0],
-    &bsw_canif_stTxCanTpMskTbl[0],
-    &bsw_canif_stTxCdd1MskTbl[0],
-    &bsw_canif_stTxCdd2MskTbl[0],
-    &bsw_canif_stTxXcpMskTbl[0]
-};
-
-/*-------------------------------------------------------------------------------------*/
 /*  Func TxConfirmation Result                                                         */
 /*      bsw_canif_tx_u1FuncTxErrNotify                                                 */
 /*          = { BSW_CANIF_TXERR_NOTIFY_FUNC }                                          */
@@ -34799,6 +34794,9 @@ BswConst BswU1 bsw_canif_tx_u1FuncTxErrNotify = (BswU1)BSW_CANIF_TXERR_NOTIFY_FU
 /*-------------------------------------------------------------------------------------*/
 BswConst BswU1 bsw_canif_tx_u1FuncSnd = (BswU1)BSW_CANIF_FUNC_SND;
 
+#if( BSW_CANIF_PKTCAN_EXTB_USE == BSW_USE )
+void (* BswConst bsw_canif_tx_ptNmBPreTxFunc)( BswU1 u1NetID, Bsw_CanIf_PduType* ptMsg ) = BSW_CANIF_CANNMBPRETXMSG_FUNC;
+#endif
 void (* BswConst bsw_canif_tx_ptInitSndStsFunc)( void ) = BSW_CANIF_TX_INITSNDSTS_FUNC;
 void (* BswConst bsw_canif_tx_ptClrSndStsFunc)( BswU1 u1Ch ) = BSW_CANIF_TX_CLRSNDSTS_FUNC;
 void (* BswConst bsw_canif_tx_ptStrtSndStsFunc)( BswU1 u1Ch ) = BSW_CANIF_TX_STRTSNDSTS_FUNC;
@@ -34929,26 +34927,12 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxPduRPduTbl[BSW_CANIF_TBL_DUMMY_SIZ
 };
 #endif /* (BSW_CANIF_TXPDURPDUNUM == 0U) */
 
-#if( (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXPDURPDUNUM == 0U) )
-BswConst BswU4 bsw_canif_stTxPduRMskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-     0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXPDURPDUNUM == 0U) */
-
 #if(BSW_CANIF_TXCANNMPDUNUM == 0U)
 BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCanNmPduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)BSW_CANIF_CH0, (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }
 };
 #endif /* (BSW_CANIF_TXCANNMPDUNUM == 0U) */
-
-#if( (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXCANNMPDUNUM == 0U) )
-BswConst BswU4 bsw_canif_stTxCanNmMskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-     0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXCANNMPDUNUM == 0U) */
 
 #if(BSW_CANIF_TXCANTPPDUNUM == 0U)
 BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCanTpPduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
@@ -34957,26 +34941,12 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCanTpPduTbl[BSW_CANIF_TBL_DUMMY_SI
 };
 #endif /* (BSW_CANIF_TXCANTPPDUNUM == 0U) */
 
-#if( (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXCANTPPDUNUM == 0U) )
-BswConst BswU4 bsw_canif_stTxCanTpMskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-     0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXCANTPPDUNUM == 0U) */
-
 #if(BSW_CANIF_TXCDD1PDUNUM == 0U)
 BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCdd1PduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)BSW_CANIF_CH0, (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }
 };
 #endif /* (BSW_CANIF_TXCDD1PDUNUM == 0U) */
-
-#if( (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXCDD1PDUNUM == 0U) )
-BswConst BswU4 bsw_canif_stTxCdd1MskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-     0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXCDD1PDUNUM == 0U) */
 
 #if(BSW_CANIF_TXCDD2PDUNUM == 0U)
 BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCdd2PduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
@@ -34985,26 +34955,12 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCdd2PduTbl[BSW_CANIF_TBL_DUMMY_SIZ
 };
 #endif /* (BSW_CANIF_TXCDD2PDUNUM == 0U) */
 
-#if( (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXCDD2PDUNUM == 0U) )
-BswConst BswU4 bsw_canif_stTxCdd2MskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-     0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXCDD2PDUNUM == 0U) */
-
 #if(BSW_CANIF_TXXCPPDUNUM == 0U)
 BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxXcpPduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)BSW_CANIF_CH0, (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }
 };
 #endif /* (BSW_CANIF_TXXCPPDUNUM == 0U) */
-
-#if( (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXXCPPDUNUM == 0U) )
-BswConst BswU4 bsw_canif_stTxXcpMskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-     0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_CFG_METADATA_USE != BSW_CANIF_USE) || (BSW_CANIF_TXXCPPDUNUM == 0U) */
 
 
 /******************************************/
@@ -38700,7 +38656,6 @@ BswConst Bsw_CanIf_RcvCompInfoType bsw_canif_rx_stRcvPduRTbl =
     &bsw_canif_stRxPduRPduTbl[0],
     BSW_CANIF_PDUR_RXINDICATION,
     bsw_canif_rx_u4PDURCanIdMaskTbl,
-    &bsw_canif_stRxPduRMskTbl[0],
     BSW_CANIF_PDUR_RXPDUNUMTBL,
     (BswU2)BSW_CANIF_RXPDURPDUNUM
 };
@@ -38712,7 +38667,6 @@ static BswConst Bsw_CanIf_RcvCompInfoType bsw_canif_rx_stRcvCanNmTbl =
     &bsw_canif_stRxCanNmPduTbl[0],
     &CanNm_RxIndication,
     bsw_canif_rx_u4CANNMCanIdMskTbl,
-    &bsw_canif_stRxCanNmMskTbl[0],
     BSW_CANIF_CANNM_RXPDUNUMTBL,
     (BswU2)BSW_CANIF_RXCANNMPDUNUM
 };
@@ -38724,7 +38678,6 @@ BswConst Bsw_CanIf_RcvCompInfoType bsw_canif_rx_stRcvCanTpTbl =
     &bsw_canif_stRxCanTpPduTbl[0],
     &bsw_bswm_can_CanTpRxIndication,
     bsw_canif_rx_u4CANTPCanIdMskTbl,
-    &bsw_canif_stRxCanTpMskTbl[0],
     BSW_CANIF_CANTP_RXPDUNUMTBL,
     (BswU2)BSW_CANIF_RXCANTPPDUNUM,
 
@@ -38737,7 +38690,6 @@ static BswConst Bsw_CanIf_RcvCompInfoType bsw_canif_rx_stRcvCdd1Tbl =
     &bsw_canif_stRxCdd1PduTbl[0],
     &bsw_bswm_can_Cdd1RxIndication,
     bsw_canif_rx_u4CDD1CanIdMaskTbl,
-    &bsw_canif_stRxCdd1MskTbl[0],
     BSW_CANIF_CDD1_RXPDUNUMTBL,
     (BswU2)BSW_CANIF_RXCDD1PDUNUM
 };
@@ -38749,7 +38701,6 @@ static BswConst Bsw_CanIf_RcvCompInfoType bsw_canif_rx_stRcvCdd2Tbl =
     &bsw_canif_stRxCdd2PduTbl[0],
     &bsw_bswm_can_Cdd2RxIndication,
     bsw_canif_rx_u4CDD2CanIdMaskTbl,
-    &bsw_canif_stRxCdd2MskTbl[0],
     BSW_CANIF_CDD2_RXPDUNUMTBL,
     (BswU2)BSW_CANIF_RXCDD2PDUNUM
 };
@@ -38761,7 +38712,6 @@ static BswConst Bsw_CanIf_RcvCompInfoType bsw_canif_rx_stRcvXcpTbl =
     &bsw_canif_stRxXcpPduTbl[0],
     &bsw_canif_rx_XcpRxIndication,
     bsw_canif_rx_u4XCPCanIdMaskTbl,
-    &bsw_canif_stRxXcpMskTbl[0],
     BSW_CANIF_XCP_RXPDUNUMTBL,
     (BswU2)BSW_CANIF_RXXCPPDUNUM
 };
@@ -38779,7 +38729,6 @@ static BswConst Bsw_CanIf_RcvCompInfoType bsw_canif_rx_stRcvDummyTbl =
 {
     &bsw_canif_rx_stRxPduDummyTbl[0],
     &bsw_canif_rx_RxIndicationNone,
-    bsw_canif_u4MaskDummyTbl,
     bsw_canif_u4MaskDummyTbl,
     bsw_canif_rx_u2PduNumDummyTbl,
     (BswU2)0U
@@ -38810,124 +38759,60 @@ BswConst BswU4 bsw_canif_rx_u4BdyFmtCanIdLo = (BswU4)BSW_CANIF_CFG_BDYFMTCANID_L
 BswConst BswU4 bsw_canif_rx_u4BdyFmtCanIdUp = (BswU4)BSW_CANIF_CFG_BDYFMTCANID_UPPER;
 
 /*--------------------------------------------------------------------------*/
-/*  CAN ID mask setting type                                                */
-/*      bsw_canif_rx_u1CanIdMaskType                                        */
-/*          = { BSW_CANIF_CFG_CANID_MASK_TYPE }                             */
-/*--------------------------------------------------------------------------*/
-BswConst BswU1 bsw_canif_rx_u1CanIdMaskType = (BswU1)BSW_CANIF_CFG_CANID_MASK_TYPE;
-
-/*--------------------------------------------------------------------------*/
-/*  MetaData Function                                                       */
-/*      bsw_canif_rx_u1MetaDataFunc                                         */
-/*          = { BSW_CANIF_CFG_METADATA_USE }                                */
-/*--------------------------------------------------------------------------*/
-BswConst BswU1 bsw_canif_rx_u1MetaDataFunc = (BswU1)BSW_CANIF_CFG_METADATA_USE;
-
-/*--------------------------------------------------------------------------*/
 /*  Dummy Table                                                             */
 /*--------------------------------------------------------------------------*/
-#if( BSW_BSWM_CS_FUNC_PDUR == BSW_USE )
-#if( BSW_CANIF_RXPDURPDUNUM == 0U )
+#if( (BSW_BSWM_CS_FUNC_PDUR == BSW_USE) && (BSW_CANIF_RXPDURPDUNUM == 0U) )
 BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxPduRPduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)0U , (BswU1)BSW_CANIF_CH0, (BswU2)0x0001U }
 };
-#endif /* ( BSW_CANIF_RXPDURPDUNUM == 0U ) */
+#endif
 
-#if( (BSW_CANIF_RXPDURPDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) )
-BswConst BswU4 bsw_canif_stRxPduRMskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-   0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_RXPDURPDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) */
-#endif /* ( BSW_BSWM_CS_FUNC_PDUR == BSW_USE ) */
-
-#if( BSW_BSWM_CS_FUNC_CANNM == BSW_USE )
-#if( BSW_CANIF_RXCANNMPDUNUM == 0U )
+#if( (BSW_BSWM_CS_FUNC_CANNM == BSW_USE) && (BSW_CANIF_RXCANNMPDUNUM == 0U) )
 BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCanNmPduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)0U , (BswU1)BSW_CANIF_CH0, (BswU2)0x0001U }
 };
-#endif /* ( BSW_CANIF_RXCANNMPDUNUM == 0U ) */
+#endif
 
-#if( (BSW_CANIF_RXCANNMPDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) )
-BswConst BswU4 bsw_canif_stRxCanNmMskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-   0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_RXCANNMPDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) */
-#endif /* ( BSW_BSWM_CS_FUNC_CANNM == BSW_USE ) ) */
-
-
-#if( BSW_BSWM_CS_FUNC_CANTP == BSW_USE )
-#if( BSW_CANIF_RXCANTPPDUNUM == 0U )
+#if( (BSW_BSWM_CS_FUNC_CANTP == BSW_USE) && (BSW_CANIF_RXCANTPPDUNUM == 0U) )
 BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCanTpPduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)0U , (BswU1)BSW_CANIF_CH0, (BswU2)0x0001U }
 };
-#endif /* ( BSW_CANIF_RXCANTPPDUNUM == 0U ) */
+#endif
 
-#if( (BSW_CANIF_RXCANTPPDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) )
-BswConst BswU4 bsw_canif_stRxCanTpMskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-   0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_RXCANTPPDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) */
-#endif /* ( BSW_BSWM_CS_FUNC_CANTP == BSW_USE ) */
-
-#if( BSW_BSWM_CS_FUNC_CANCDD1 == BSW_USE )
-#if( BSW_CANIF_RXCDD1PDUNUM == 0U )
+#if( (BSW_BSWM_CS_FUNC_CANCDD1 == BSW_USE) && (BSW_CANIF_RXCDD1PDUNUM == 0U) )
 BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCdd1PduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)0U , (BswU1)BSW_CANIF_CH0, (BswU2)0x0001U }
 };
-#endif /* ( BSW_CANIF_RXCDD1PDUNUM == 0U ) */
+#endif
 
-#if( (BSW_CANIF_RXCDD1PDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) )
-BswConst BswU4 bsw_canif_stRxCdd1MskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-   0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_RXCDD1PDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) */
-#endif /* ( BSW_BSWM_CS_FUNC_CANCDD1 == BSW_USE ) */
-
-#if( BSW_BSWM_CS_FUNC_CANCDD2 == BSW_USE )
-#if( BSW_CANIF_RXCDD2PDUNUM == 0U )
+#if( (BSW_BSWM_CS_FUNC_CANCDD2 == BSW_USE) && (BSW_CANIF_RXCDD2PDUNUM == 0U) )
 BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCdd2PduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)0U , (BswU1)BSW_CANIF_CH0, (BswU2)0x0001U }
 };
-#endif /* ( BSW_CANIF_RXCDD2PDUNUM == 0U ) */
+#endif
 
-#if( (BSW_CANIF_RXCDD2PDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) )
-BswConst BswU4 bsw_canif_stRxCdd2MskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-   0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_RXCDD2PDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) */
-#endif /* ( BSW_BSWM_CS_FUNC_CANCDD2 == BSW_USE ) */
-
-#if( (BSW_BSWM_CS_FUNC_XCP == BSW_USE) && (BSW_BSWM_CS_XCP_KIND == BSW_BSWM_CS_XCP_KIND_CAN) )
-#if( BSW_CANIF_RXXCPPDUNUM == 0U )
+#if( (BSW_BSWM_CS_FUNC_XCP == BSW_USE) && (BSW_BSWM_CS_XCP_KIND == BSW_BSWM_CS_XCP_KIND_CAN) && (BSW_CANIF_RXXCPPDUNUM == 0U) )
 BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxXcpPduTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     { 0x00000000UL, (BswU1)0U , (BswU1)BSW_CANIF_CH0, (BswU2)0x0001U }
 };
-#endif /* ( BSW_CANIF_RXXCPPDUNUM == 0U ) */
-
-#if( (BSW_CANIF_RXXCPPDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) )
-BswConst BswU4 bsw_canif_stRxXcpMskTbl[BSW_CANIF_TBL_DUMMY_SIZE] =
-{
-   0xFFFFFFFFUL
-};
-#endif /* (BSW_CANIF_RXXCPPDUNUM == 0U) || (BSW_CANIF_CFG_CANID_MASK_TYPE != BSW_CANIF_MASK_RXMSG) */
-#endif /* (BSW_BSWM_CS_FUNC_XCP == BSW_USE) && (BSW_BSWM_CS_XCP_KIND == BSW_BSWM_CS_XCP_KIND_CAN) */
+#endif
 
 #if((BSW_CANIF_TXPDURPDUNUM + BSW_CANIF_RXPDURPDUNUM) == 0U)
 BswConst BswU1 bsw_canif_u1MsgInfo[BSW_CANIF_TBL_DUMMY_SIZE] =
 {
     (BswU1)0U
 };
+#endif
+
+#if( BSW_CANIF_PKTCAN_EXTB_USE == BSW_USE )
+Std_ReturnType (* BswConst bsw_canif_rx_ptNmBPreRxFunc)( BswU1 u1NetID, BswConstR Bsw_CanIf_PduType* ptMsg ) = BSW_CANIF_CANNMBPRERXMSG_FUNC;
+void (* BswConst bsw_canif_rx_ptNmBPostRxFunc)( BswU1 u1NetID, BswConstR Bsw_CanIf_PduType* ptMsg ) =   BSW_CANIF_CANNMBPOSTRXMSG_FUNC;
 #endif
 
 BswConst Bsw_CanIf_RxIndType bsw_canif_rx_ptRxIndCompFunc[BSW_CANIF_TBL_CHNUM][BSW_CANIF_TBL_MAX_UPCMPNUM] =
@@ -39944,7 +39829,6 @@ Std_ReturnType (* BswConst bsw_canif_fs_ptCanTpDlcFunc[BSW_CANIF_TBL_CHNUM])( Bs
 #endif
 };
 
-BswConst BswU1 bsw_canif_fs_u1RgstChk = (BswU1)BSW_BSWM_CAN_RGSTCHK;
 
 /*--------------------------------------------------------------------------*/
 /*  Dummy Table                                                             */
@@ -39977,7 +39861,6 @@ BswConst Bsw_CanIf_SumInfoType bsw_canif_fs_stSum2RxInfo[BSW_CANIF_TBL_DUMMY_SIZ
 /*  v1-1-0          :2018/12/13                                             */
 /*  v2-0-0          :2022/02/11                                             */
 /*  v2-1-0          :2022/08/29                                             */
-/*  v3-0-0          :2024/10/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

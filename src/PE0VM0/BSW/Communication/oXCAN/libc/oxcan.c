@@ -26,7 +26,7 @@
 #include "bsw_com_config.h"       /* BSW_COM_MSG_NUM is defined in bsw_com_config.h               */
                                   /* BSW_COM_TX_MSG_NUM is defined in bsw_com_config.h            */
 
-#include "bsw_com_st.h"           /* bsw_com_u4SysStatTbl[][] is defined in bsw_com_st.h          */
+#include "bsw_com_st.h"           /* bsw_com_u1SysStatTbl[] is defined in bsw_com_st.h            */
 
 #include "bsw_cannm_ch_config.h"  /* BSW_CANNM_NM_TYPE_USE(x) is defined in bsw_cannm_ch_config.h */
 #include "bsw_bswm_cs_status.h"   /* bsw_bswm_cs_st_u2CSStatus is defined in bsw_bswm_cs_status.h */
@@ -113,7 +113,7 @@ static U4               u4_sp_oxcan_back[OXCAN_BACK_NWORD]  __attribute__((secti
 static volatile U1      u1_s_oxcan_br_chk                          __attribute__((section(".bss_BACK_BSW")));
 #endif /* #if (OXCAN_BACK_NWORD > 0U) */
 
-static U4               u4_s_oxcan_sysbit;
+static U1               u1_s_oxcan_sysbit;
 
 #if OXCAN_AUB_CSM_SUP
 static U1               u1_s_oxcan_sht_ma;
@@ -178,17 +178,17 @@ void    vd_g_oXCANOpemdEvhk(void)
 /*    U4                  u4_t_cpu_md;*/
 
     U4                  u4_t_lpcnt;
-    U4                  u4_t_sysbit_next;
-    U4                  u4_t_sysbit_prev;
-    U4                  u4_t_prev;
-    U4                  u4_t_next;
+    U1                  u1_t_sysbit_next;
+    U1                  u1_t_sysbit_prev;
+    U1                  u1_t_prev;
+    U1                  u1_t_next;
 
 /*    u4_t_cpu_md = u4_g_CPUM_PRIV();  *//* CPU mode = privilege   */
 
-    u4_t_sysbit_prev = u4_s_oxcan_sysbit;
+    u1_t_sysbit_prev = u1_s_oxcan_sysbit;
 
-    u4_t_sysbit_next = u4_g_oXCANOpemdSyschk((U1)FALSE); /* Timer Increment Disabled */
-    BswM_CS_SetSystemStatus(u4_g_OXCAN_SYS_POWER, u4_s_oxcan_sysbit);
+    u1_t_sysbit_next = u1_g_oXCANOpemdSyschk((U1)FALSE); /* Timer Increment Disabled */
+    BswM_CS_SetSystemStatus(u1_g_OXCAN_SYS_POWER, u1_s_oxcan_sysbit);
 
     /* ----------------------------------------------------------------------------------------------------- */
     /* WARNING :                                                                                             */
@@ -200,25 +200,25 @@ void    vd_g_oXCANOpemdEvhk(void)
     /* #define BSW_BSWM_CS_CFG_MSGDELIVER                                                                    */
     /*                                                                                                       */
     /* If BSW_BSWM_CS_CFG_MSGDELIVER is configured with BSW_BSWM_CS_MSGDELIVER_HIGH, u1_g_oXCANMsgOnline     */
-    /* could be called from interrupts service routine. Therefore, u4_s_oxcan_sysbit shall be updated        */
+    /* could be called from interrupts service routine. Therefore, u1_s_oxcan_sysbit shall be updated        */
     /* by latest operational mode before executing Rx messages initialization.                               */
     /* ----------------------------------------------------------------------------------------------------- */
-    u4_s_oxcan_sysbit = u4_t_sysbit_next;
+    u1_s_oxcan_sysbit = u1_t_sysbit_next;
 
     for(u4_t_lpcnt = (U4)BSW_COM_TX_MSG_NUM; u4_t_lpcnt < (U4)BSW_COM_MSG_NUM; u4_t_lpcnt++){
 
-        u4_t_prev = u4_t_sysbit_prev & bsw_com_u4SysStatTbl[u4_t_lpcnt][0];
-        u4_t_next = u4_t_sysbit_next & bsw_com_u4SysStatTbl[u4_t_lpcnt][0];
-        if(((u4_t_prev != (U4)0U) && (u4_t_next == (U4)0U)) ||
-           ((u4_t_prev == (U4)0U) && (u4_t_next != (U4)0U))){
+        u1_t_prev = u1_t_sysbit_prev & bsw_com_u1SysStatTbl[u4_t_lpcnt];
+        u1_t_next = u1_t_sysbit_next & bsw_com_u1SysStatTbl[u4_t_lpcnt];
+        if(((u1_t_prev != (U1)0U) && (u1_t_next == (U1)0U)) ||
+           ((u1_t_prev == (U1)0U) && (u1_t_next != (U1)0U))){
 
             Com_InitIPDUStatus((PduIdType)u4_t_lpcnt, ((U1)COM_NO_RX | (U1)COM_TIMEOUT));
         }
     }
 
-    vd_g_oXCANRxOpemdEvthk(u4_t_sysbit_next);
+    vd_g_oXCANRxOpemdEvthk(u1_t_sysbit_next);
 
-    vd_g_oXCANCfgOpemdEvthk(u4_t_sysbit_prev, u4_t_sysbit_next);
+    vd_g_oXCANCfgOpemdEvthk(u1_t_sysbit_prev, u1_t_sysbit_next);
 
 /*    vd_g_CPUM_RSTR(u4_t_cpu_md);   */  /* CPU mode = u4_t_cpu_md */
 }
@@ -234,9 +234,9 @@ void    vd_g_oXCANMainPreTask(void)
 
 /*    u4_t_cpu_md = u4_g_CPUM_PRIV();  *//* CPU mode = privilege   */
 
-    u4_s_oxcan_sysbit = u4_g_oXCANOpemdSyschk((U1)TRUE);  /* Timer Increment Enabled */
+    u1_s_oxcan_sysbit = u1_g_oXCANOpemdSyschk((U1)TRUE);  /* Timer Increment Enabled */
 
-    BswM_CS_SetSystemStatus(u4_g_OXCAN_SYS_POWER, u4_s_oxcan_sysbit);
+    BswM_CS_SetSystemStatus(u1_g_OXCAN_SYS_POWER, u1_s_oxcan_sysbit);
 
 #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
     vd_g_oXCANNmwkMainTask();
@@ -248,8 +248,8 @@ void    vd_g_oXCANMainPreTask(void)
     CxpiCdd_MainFunction_In();
 #endif /* #ifdef CXPICDD_H */
 
-    vd_g_oXCANRxMainTask(u4_s_oxcan_sysbit);
-    vd_g_oXCANCfgPreTask(u4_s_oxcan_sysbit);
+    vd_g_oXCANRxMainTask(u1_s_oxcan_sysbit);
+    vd_g_oXCANCfgPreTask(u1_s_oxcan_sysbit);
 
 /*    vd_g_CPUM_RSTR(u4_t_cpu_md);    */ /* CPU mode = u4_t_cpu_md */
 }
@@ -280,7 +280,7 @@ void    vd_g_oXCANMainPostTask(void)
 #endif /* #if (OXCAN_RX_STOP_EN == 1U) */
 
 #ifdef CXPICDD_H
-    vd_g_TyCANCxptxMainTask(u4_s_oxcan_sysbit);
+    vd_g_TyCANCxptxMainTask(u1_s_oxcan_sysbit);
 #endif /* #ifdef CXPICDD_H */
 
 #if (OXCAN_FATAL_AUB_GIC != TRUE)
@@ -294,7 +294,7 @@ void    vd_g_oXCANMainPostTask(void)
     u2_t_fatal |= u2_s_oXCANSecurityFatal();
 #endif /* #if OXCAN_AUB_CSM_SUP */
 
-    vd_g_oXCANCfgPostTask(u4_s_oxcan_sysbit, u2_t_fatal);
+    vd_g_oXCANCfgPostTask(u1_s_oxcan_sysbit, u2_t_fatal);
 
 /*    vd_g_CPUM_RSTR(u4_t_cpu_md);    */ /* CPU mode = u4_t_cpu_md */
 }
@@ -398,20 +398,20 @@ U1      u1_g_oXCANEcuShtdwnOk(void)
 U1      u1_g_oXCANMsgOnline(const U2 u2_a_MSG)
 {
     U1                  u1_t_online;
-    U4                  u4_t_sysbit;
+    U1                  u1_t_sysbit;
 
     u1_t_online = (U1)FALSE;
     if(u2_a_MSG < (U2)BSW_COM_MSG_NUM){
 #if (OXCAN_RX_STOP_EN == 1U)
         if(u1_g_oXCANPdumsgStat(bsw_com_stMsgInfoTbl[u2_a_MSG].u1Network) != (U1)OXCAN_PDUMSG_STOP){
-            u4_t_sysbit = u4_s_oxcan_sysbit & bsw_com_u4SysStatTbl[u2_a_MSG][0];
-            if(u4_t_sysbit != (U4)0U){
+            u1_t_sysbit = u1_s_oxcan_sysbit & bsw_com_u1SysStatTbl[u2_a_MSG];
+            if(u1_t_sysbit != (U1)0U){
                 u1_t_online = (U1)TRUE;
             }
         }
 #else
-        u4_t_sysbit = u4_s_oxcan_sysbit & bsw_com_u4SysStatTbl[u2_a_MSG][0];
-        if(u4_t_sysbit != (U4)0U){
+        u1_t_sysbit = u1_s_oxcan_sysbit & bsw_com_u1SysStatTbl[u2_a_MSG];
+        if(u1_t_sysbit != (U1)0U){
             u1_t_online = (U1)TRUE;
         }
 #endif /* #if (OXCAN_RX_STOP_EN == 1U) */
@@ -653,7 +653,7 @@ static void    vd_s_oXCANInit(const U1 u1_a_WKU_INIT)
     U1                  u1_t_br_chk;
 #endif /* #if (OXCAN_BACK_NWORD > 0U) */
 
-    u4_s_oxcan_sysbit = (U4)OXCAN_SYS_BAT;
+    u1_s_oxcan_sysbit = (U1)OXCAN_SYS_BAT;
 
     vd_g_oXCANAubIfInit();
 

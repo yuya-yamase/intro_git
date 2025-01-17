@@ -1,7 +1,7 @@
-/* bsw_com_config_c_v3-0-0                                                  */
+/* bsw_com_config_c_v2-2-0                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -26,9 +26,6 @@
 #if (BSW_BSWM_CS_FUNC_COM == BSW_USE)
 
 #include <bswm_cs/bsw_bswm_cs_com.h>
-#if (BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE)
-#include <bswm_vps/bsw_bswm_vps_cbk.h>
-#endif
 #include <com/bsw_com.h>
 
 #include "../cfg/Com_Cfg.h"
@@ -43,30 +40,20 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 #if (BSW_COM_TX_TIMEOUT_USE == BSW_USE)
-#define BSW_COM_INITALLTXREQST_FUNC       (&bsw_com_tx_InitAllTxReqSt)
-#define BSW_COM_INITTXREQST_FUNC          (&bsw_com_tx_InitTxReqStat)
-#define BSW_COM_SETTXREQST_FUNC           (&bsw_com_tx_SetTxReqStat)
-#define BSW_COM_GETTXREQST_FUNC           (&bsw_com_tx_GetTxReqStat)
-#define BSW_COM_TRANSCFM_FUNC             (&bsw_com_tx_TransmitCfm)
-#define BSW_COM_TXTIMEOUT_FUNC            (&bsw_com_tx_TxTimeout)
-#define BSW_COM_CANCELTXTIMEOUTBW_FUNC    (&bsw_com_tx_CancelTxToutBusWkup)
-#if (BSW_COM_TXCLRSTOPTOUT == BSW_USE)
-#define BSW_COM_CANCELTXTIMEOUTCLR_FUNC   (&bsw_com_tx_CancelTxToutClrIpdu)
-#else  /* BSW_COM_TXCLRSTOPTOUT == BSW_USE */
-#define BSW_COM_CANCELTXTIMEOUTCLR_FUNC   (&bsw_com_tx_CnclTxToutClrIpduNn)
-#endif /* BSW_COM_TXCLRSTOPTOUT == BSW_USE*/
-#define BSW_COM_TXTIMEOUTHOOK_FUNC        (&bsw_com_tx_TimeoutTxMsg)
-#else  /* BSW_COM_TX_TIMEOUT_USE == BSW_USE */
-#define BSW_COM_INITALLTXREQST_FUNC       (&bsw_com_tx_InitAllTxReqStNone)
-#define BSW_COM_INITTXREQST_FUNC          (&bsw_com_tx_InitTxReqStatNone)
-#define BSW_COM_SETTXREQST_FUNC           (&bsw_com_tx_SetTxReqStatNone)
-#define BSW_COM_GETTXREQST_FUNC           (&bsw_com_tx_GetTxReqStatNone)
-#define BSW_COM_TRANSCFM_FUNC             (&bsw_com_tx_TransmitCfmNone)
-#define BSW_COM_TXTIMEOUT_FUNC            (&bsw_com_tx_TxTimeoutNone)
-#define BSW_COM_CANCELTXTIMEOUTBW_FUNC    (&bsw_com_tx_CnclTxToutBusWkupNn)
-#define BSW_COM_CANCELTXTIMEOUTCLR_FUNC   (&bsw_com_tx_CnclTxToutClrIpduNn)
-#define BSW_COM_TXTIMEOUTHOOK_FUNC        (&bsw_com_tx_TimeoutTxMsgNone)
-#endif /* BSW_COM_TX_TIMEOUT_USE == BSW_USE */
+#define BSW_COM_INITALLTXREQST_FUNC    (&bsw_com_tx_InitAllTxReqSt)
+#define BSW_COM_INITTXREQST_FUNC       (&bsw_com_tx_InitTxReqStat)
+#define BSW_COM_SETTXREQST_FUNC        (&bsw_com_tx_SetTxReqStat)
+#define BSW_COM_GETTXREQST_FUNC        (&bsw_com_tx_GetTxReqStat)
+#define BSW_COM_TRANSCFM_FUNC          (&bsw_com_tx_TransmitCfm)
+#define BSW_COM_TXTIMEOUT_FUNC         (&bsw_com_tx_TxTimeout)
+#else
+#define BSW_COM_INITALLTXREQST_FUNC    (&bsw_com_tx_InitAllTxReqStNone)
+#define BSW_COM_INITTXREQST_FUNC       (&bsw_com_tx_InitTxReqStatNone)
+#define BSW_COM_SETTXREQST_FUNC        (&bsw_com_tx_SetTxReqStatNone)
+#define BSW_COM_GETTXREQST_FUNC        (&bsw_com_tx_GetTxReqStatNone)
+#define BSW_COM_TRANSCFM_FUNC          (&bsw_com_tx_TransmitCfmNone)
+#define BSW_COM_TXTIMEOUT_FUNC         (&bsw_com_tx_TxTimeoutNone)
+#endif
 
 #define BSW_COM_ALIVECOUNTER_PTN_CH(ch)    (BSW_COM_ALIVECOUNTER_PTN_CH##ch)
 
@@ -134,58 +121,66 @@
 #define BSW_COM_TXWAKEUPEVENT_FUNC     (&bsw_com_tx_TxWakeupEventNone)
 #endif
 
-#if (BSW_COM_CFG_METADATA_USE == BSW_USE)
-#define BSW_COM_INITBITRSP_FUNC            (&bsw_com_tx_InitBitRsp)
-#define BSW_COM_INITCHANNELRSP_FUNC        (&bsw_com_tx_InitChannelRsp)
-#define BSW_COM_DELBITRSP_FUNC             (&bsw_com_tx_DelBitRsp)
-#define BSW_COM_GETBITRSP_FUNC             (&bsw_com_tx_GetBitRsp)
-#define BSW_COM_DELBITUSEMETADATA_FUNC     (&bsw_com_tx_DelBitUseMD)
-#define BSW_COM_CLRMETADATARMCH_FUNC       (&bsw_com_tx_ClearMDRmCh)
-#define BSW_COM_CLRMETADATARMMSG_FUNC      (&bsw_com_tx_ClearMDRmMsg)
-#define BSW_COM_GETMETADATATXMSG_FUNC      (&bsw_com_tx_GetMetaDataTxMsg)
-#define BSW_COM_CHKMETADATAUPDATED_FUNC    (&bsw_com_tx_CheckMetaDataUpdated)
-#else
-#define BSW_COM_INITBITRSP_FUNC            (&bsw_com_tx_InitBitRspNone)
-#define BSW_COM_INITCHANNELRSP_FUNC        (&bsw_com_tx_InitChannelRspNone)
-#define BSW_COM_DELBITRSP_FUNC             (&bsw_com_tx_DelBitRspNone)
-#define BSW_COM_GETBITRSP_FUNC             (&bsw_com_tx_GetBitRspNone)
-#define BSW_COM_DELBITUSEMETADATA_FUNC     (&bsw_com_tx_DelBitUseMDNone)
-#define BSW_COM_CLRMETADATARMCH_FUNC       (&bsw_com_tx_ClearMDRmChNone)
-#define BSW_COM_CLRMETADATARMMSG_FUNC      (&bsw_com_tx_ClearMDRmMsgNone)
-#define BSW_COM_GETMETADATATXMSG_FUNC      (&bsw_com_tx_GetMetaDataTxMsgNone)
-#define BSW_COM_CHKMETADATAUPDATED_FUNC    (&bsw_com_tx_CheckMDUpdatedNone)
-#endif
 
 #if ( BSW_COM_FUNC_PNCIPDU == BSW_USE )
 #define BSW_COM_CHKCHPNCUSE_FUNC       (&bsw_com_data_ChkChPncUse)
 #define BSW_COM_INITPNCTXSTAT_FUNC     (&bsw_com_tx_InitPncTxStat)
 #define BSW_COM_SHUTDOWNPNCTXSTAT_FUNC (&bsw_com_tx_ShutdownPncTxSt)
+#define BSW_COM_GETPNCCHTXST_FUNC      (&bsw_com_tx_GetPncChTxSt)
+#define BSW_COM_GETPNCCHTXENST_FUNC    (&bsw_com_tx_GetPncChTxEnSt)
+#define BSW_COM_CHKPNCIPDUTXST_FUNC    (&bsw_com_tx_ChkPncIpduTxSt)
+#define BSW_COM_SETPNCCHTXST_FUNC      (&bsw_com_tx_SetPncChTxSt)
+#define BSW_COM_SETPNCCHTXENST_FUNC    (&bsw_com_tx_SetPncChTxEnSt)
+#define BSW_COM_SETPNCTXIPDUTXSTS_FUNC (&bsw_com_tx_SetPncIpduTxEnSt)
 #define BSW_COM_GETPNCIPDUTXENST_FUNC  (&bsw_com_tx_GetPncIpduTxEnSt)
+#define BSW_COM_GETPNCIPDUPERIOFS_FUNC (&bsw_com_tx_GetPncIpduPeriOfsSt)
 #define BSW_COM_SETPNCIPDUPROFSON_FUNC (&bsw_com_tx_SetPncIpduPeriOfsOn)
-#define BSW_COM_GETPNCCHUSE_FUNC       (&bsw_com_tx_GetPncChUse)
+#define BSW_COM_GETPNCCHNUMBER_FUNC    (&bsw_com_tx_GetPncChNumber)
 #define BSW_COM_SETPNCIPDUFSTDLY_FUNC  (&bsw_com_tx_SetPncIpduFstDly)
 #define BSW_COM_GETPNCIPDUTXST_FUNC    (&bsw_com_tx_GetPncIpduTxSt)
+#define BSW_COM_JUDGEPNCTXSTPROC_FUNC  (&bsw_com_tx_JudgePncIpduTxStProc)
 #define BSW_COM_INITPNCRXSTAT_FUNC     (&bsw_com_rx_InitPncRxStat)
 #define BSW_COM_SHUTDOWNPNCRXSTAT_FUNC (&bsw_com_rx_ShutdownPncRxSt)
+#define BSW_COM_GETPNCCHRXDMST_FUNC    (&bsw_com_rx_GetPncChRxDMSt)
+#define BSW_COM_SETPNCIPDURXDMST_FUNC  (&bsw_com_rx_SetPncIpduRxDMSt)
 #define BSW_COM_GETPNCIPDURXDMST_FUNC  (&bsw_com_rx_GetPncIpduRxDMSt)
+#define BSW_COM_GETPNCCHRXST_FUNC      (&bsw_com_rx_GetPncChRxSt)
+#define BSW_COM_CHKPNCIPDURXDMST_FUNC  (&bsw_com_rx_ChkPncIpduRxDMSt)
+#define BSW_COM_CHKPNCIPDURXST_FUNC    (&bsw_com_rx_ChkPncIpduRxSt)
+#define BSW_COM_SETPNCCHRXST_FUNC      (&bsw_com_rx_SetPncChRxSt)
 #define BSW_COM_GETPNCIPDURXST_FUNC    (&bsw_com_rx_GetPncIpduRxSt)
+#define BSW_COM_GETPNCONMSKTIME_FUNC   (&bsw_com_rx_GetPnconMskTime)
+#define BSW_COM_JUDGEPNCRXSTPROC_FUNC  (&bsw_com_rx_JudgePncIpduRxStProc)
 #else
 #define BSW_COM_CHKCHPNCUSE_FUNC       (&bsw_com_data_ChkChPncUseNone)
 #define BSW_COM_INITPNCTXSTAT_FUNC     (&bsw_com_tx_InitPncTxStatNone)
 #define BSW_COM_SHUTDOWNPNCTXSTAT_FUNC (&bsw_com_tx_ShutdownPncTxStNone)
+#define BSW_COM_GETPNCCHTXST_FUNC      (&bsw_com_tx_GetPncChTxStNone)
+#define BSW_COM_GETPNCCHTXENST_FUNC    (&bsw_com_tx_GetPncChTxEnStNone)
+#define BSW_COM_CHKPNCIPDUTXST_FUNC    (&bsw_com_tx_ChkPncIpduTxStNone)
+#define BSW_COM_SETPNCCHTXST_FUNC      (&bsw_com_tx_SetPncChTxStNone)
+#define BSW_COM_SETPNCCHTXENST_FUNC    (&bsw_com_tx_SetPncChTxEnStNone)
+#define BSW_COM_SETPNCTXIPDUTXSTS_FUNC (&bsw_com_tx_SetPncIpduTxEnStNone)
 #define BSW_COM_GETPNCIPDUTXENST_FUNC  (&bsw_com_tx_GetPncIpduTxEnStNone)
+#define BSW_COM_GETPNCIPDUPERIOFS_FUNC (&bsw_com_tx_GetPncIpduPrOfsNone)
 #define BSW_COM_SETPNCIPDUPROFSON_FUNC (&bsw_com_tx_SetPncIpdPrOfsOnNone)
-#define BSW_COM_GETPNCCHUSE_FUNC       (&bsw_com_tx_GetPncChUseNone)
+#define BSW_COM_GETPNCCHNUMBER_FUNC    (&bsw_com_tx_GetPncChNumberNone)
 #define BSW_COM_SETPNCIPDUFSTDLY_FUNC  (&bsw_com_tx_SetIpduFstDly)
 #define BSW_COM_GETPNCIPDUTXST_FUNC    (&bsw_com_tx_GetPncIpduTxStNone)
+#define BSW_COM_JUDGEPNCTXSTPROC_FUNC  (&bsw_com_tx_JudgeIpduTxStProc)
 #define BSW_COM_INITPNCRXSTAT_FUNC     (&bsw_com_rx_InitPncRxStatNone)
 #define BSW_COM_SHUTDOWNPNCRXSTAT_FUNC (&bsw_com_rx_ShutdownPncRxStNone)
+#define BSW_COM_GETPNCCHRXDMST_FUNC    (&bsw_com_rx_GetPncChRxDMStNone)
+#define BSW_COM_SETPNCIPDURXDMST_FUNC  (&bsw_com_rx_SetPncIpduRxDMStNone)
 #define BSW_COM_GETPNCIPDURXDMST_FUNC  (&bsw_com_rx_GetPncIpduRxDMStNone)
+#define BSW_COM_GETPNCCHRXST_FUNC      (&bsw_com_rx_GetPncChRxStNone)
+#define BSW_COM_CHKPNCIPDURXDMST_FUNC  (&bsw_com_rx_ChkPncIpduRxDMStNone)
+#define BSW_COM_CHKPNCIPDURXST_FUNC    (&bsw_com_rx_ChkPncIpduRxStNone)
+#define BSW_COM_SETPNCCHRXST_FUNC      (&bsw_com_rx_SetPncChRxStNone)
 #define BSW_COM_GETPNCIPDURXST_FUNC    (&bsw_com_rx_GetPncIpduRxStNone)
+#define BSW_COM_GETPNCONMSKTIME_FUNC   (&bsw_com_rx_GetPnconMskTimeNone)
+#define BSW_COM_JUDGEPNCRXSTPROC_FUNC  (&bsw_com_rx_JudgeIpduRxStProc)
 #endif
-
-#define BSW_COM_UPDATETXSTATUS_FUNC(channel)   ( (BSW_BSWM_CS_PNCIPDU_USE(channel) == BSW_USE) ? ( &bsw_com_tx_UpdateTxStatusPnc ) : ( &bsw_com_tx_UpdateTxStatus ) )
-#define BSW_COM_UPDATERXSTATUS_FUNC(channel)   ( (BSW_BSWM_CS_PNCIPDU_USE(channel) == BSW_USE) ? ( &bsw_com_rx_UpdateRxStatusPnc ) : ( &bsw_com_rx_UpdateRxStatus ) )
 
 #define BSW_COM_FIRE_HANDLER_NUM       (BSW_COM_RX_MSG_NUM)
 
@@ -225,24 +220,109 @@
 
 #define BSW_COM_CPU_BYTE_ORDER_TYPE    (CPU_BYTE_ORDER)
 
+
+/* Number of PNC and PNC tables per channel */
+#if ( BSW_COM_NETWORK_NUM > 0U )
+#define BSW_COM_CH_PNCNUM_00           (BSW_COMM_CH_PNCNUM_0)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 1U )
+#define BSW_COM_CH_PNCNUM_01           (BSW_COMM_CH_PNCNUM_1)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 2U )
+#define BSW_COM_CH_PNCNUM_02           (BSW_COMM_CH_PNCNUM_2)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 3U )
+#define BSW_COM_CH_PNCNUM_03           (BSW_COMM_CH_PNCNUM_3)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 4U )
+#define BSW_COM_CH_PNCNUM_04           (BSW_COMM_CH_PNCNUM_4)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 5U )
+#define BSW_COM_CH_PNCNUM_05           (BSW_COMM_CH_PNCNUM_5)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 6U )
+#define BSW_COM_CH_PNCNUM_06           (BSW_COMM_CH_PNCNUM_6)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 7U )
+#define BSW_COM_CH_PNCNUM_07           (BSW_COMM_CH_PNCNUM_7)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 8U )
+#define BSW_COM_CH_PNCNUM_08           (BSW_COMM_CH_PNCNUM_8)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 9U )
+#define BSW_COM_CH_PNCNUM_09           (BSW_COMM_CH_PNCNUM_9)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 10U )
+#define BSW_COM_CH_PNCNUM_10           (BSW_COMM_CH_PNCNUM_10)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 11U )
+#define BSW_COM_CH_PNCNUM_11           (BSW_COMM_CH_PNCNUM_11)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 12U )
+#define BSW_COM_CH_PNCNUM_12           (BSW_COMM_CH_PNCNUM_12)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 13U )
+#define BSW_COM_CH_PNCNUM_13           (BSW_COMM_CH_PNCNUM_13)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 14U )
+#define BSW_COM_CH_PNCNUM_14           (BSW_COMM_CH_PNCNUM_14)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 15U )
+#define BSW_COM_CH_PNCNUM_15           (BSW_COMM_CH_PNCNUM_15)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 16U )
+#define BSW_COM_CH_PNCNUM_16           (BSW_COMM_CH_PNCNUM_16)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 17U )
+#define BSW_COM_CH_PNCNUM_17           (BSW_COMM_CH_PNCNUM_17)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 18U )
+#define BSW_COM_CH_PNCNUM_18           (BSW_COMM_CH_PNCNUM_18)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 19U )
+#define BSW_COM_CH_PNCNUM_19           (BSW_COMM_CH_PNCNUM_19)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 20U )
+#define BSW_COM_CH_PNCNUM_20           (BSW_COMM_CH_PNCNUM_20)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 21U )
+#define BSW_COM_CH_PNCNUM_21           (BSW_COMM_CH_PNCNUM_21)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 22U )
+#define BSW_COM_CH_PNCNUM_22           (BSW_COMM_CH_PNCNUM_22)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 23U )
+#define BSW_COM_CH_PNCNUM_23           (BSW_COMM_CH_PNCNUM_23)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 24U )
+#define BSW_COM_CH_PNCNUM_24           (BSW_COMM_CH_PNCNUM_24)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 25U )
+#define BSW_COM_CH_PNCNUM_25           (BSW_COMM_CH_PNCNUM_25)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 26U )
+#define BSW_COM_CH_PNCNUM_26           (BSW_COMM_CH_PNCNUM_26)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 27U )
+#define BSW_COM_CH_PNCNUM_27           (BSW_COMM_CH_PNCNUM_27)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 28U )
+#define BSW_COM_CH_PNCNUM_28           (BSW_COMM_CH_PNCNUM_28)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 29U )
+#define BSW_COM_CH_PNCNUM_29           (BSW_COMM_CH_PNCNUM_29)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 30U )
+#define BSW_COM_CH_PNCNUM_30           (BSW_COMM_CH_PNCNUM_30)
+#endif
+#if ( BSW_COM_NETWORK_NUM > 31U )
+#define BSW_COM_CH_PNCNUM_31           (BSW_COMM_CH_PNCNUM_31)
+#endif
+
 #if ( BSW_COM_FUNC_PNCIPDU == BSW_USE )
 /* PNC Periodic Transmission Offset Time */
 #define BSW_COM_PNC_PERIODIC_OFFSET(channel)        ( (BSW_BSWM_CS_ENABLE_PERI_PNC(channel) > BSW_BSWM_CS_SND_START_PNC(channel)) ? \
                                                       (BSW_BSWM_CS_ENABLE_PERI_PNC(channel) - BSW_BSWM_CS_SND_START_PNC(channel)) : (0U) )
-#endif
-
-#if (BSW_BSWM_CS_MSG_DELIVER == BSW_BSWM_CS_MSGDELIVER_HIGH)
-#define BSW_COM_CONVERT_MS2TICK_FUNC          (&BswM_CS_ConvertMs2Tick_High_Rup)
-#else
-#define BSW_COM_CONVERT_MS2TICK_FUNC          (&BswM_CS_ConvertMs2Tick_Mid_Rup)
-#endif
-
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-#define BSW_COM_RX_VPSRXINDICATION_FUNC        (&BswM_VPS_RxIndication)
-#define BSW_COM_TX_VPSTXIPDUCALLOUT_FUNC       (&BswM_VPS_TxIpduCallout)
-#else
-#define BSW_COM_RX_VPSRXINDICATION_FUNC        (&bsw_com_rx_VPSRxIndicationNone)
-#define BSW_COM_TX_VPSTXIPDUCALLOUT_FUNC       (&bsw_com_tx_VPSTxIpduCalloutNone)
 #endif
 
 /*--------------------------------------------------------------------------*/
@@ -256,10 +336,6 @@
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
-/*------------------------------------*/
-/* State management unit (ST)         */
-/*------------------------------------*/
-
 /*------------------------------------*/
 /* Transmission unit (TX)             */
 /*------------------------------------*/
@@ -325,9 +401,6 @@ BswU1       bsw_com_tx_u1ChgPrdIpduCnt[BSW_COM_DUMMY_SIZE];         /* Count tra
 #if (BSW_COM_TX_MSG_NUM > 0U)
 BswU1       bsw_com_tx_u1BitIndPrd[BSW_COM_BITIND_SIZE];            /* Periodic transmit queue                 */
 BswU1       bsw_com_tx_u1BitIndEv[BSW_COM_BITIND_SIZE];             /* Queue for event transmission            */
-#if (BSW_COM_CFG_METADATA_USE == BSW_USE)
-BswU1       bsw_com_tx_u1BitIndRsp[BSW_COM_BITIND_SIZE];            /* Queue for response sending              */
-#endif /* BSW_COM_CFG_METADATA_USE == BSW_USE */
 #else /* upper:BSW_COM_TX_MSG_NUM > 0  lower:BSW_COM_TX_MSG_NUM == 0 */
 BswU1       bsw_com_tx_u1BitIndPrd[BSW_COM_DUMMY_SIZE];             /* Periodic transmit queue                 */
 BswU1       bsw_com_tx_u1BitIndEv[BSW_COM_DUMMY_SIZE];              /* Queue for event transmission            */
@@ -340,16 +413,13 @@ BswU1       bsw_com_tx_u1TxRtyStop[BSW_COM_BITIND_SIZE];
 BswU1       bsw_com_tx_u1TxRtyStop[BSW_COM_DUMMY_SIZE];
 #endif /* BSW_COM_TX_MSG_NUM == 0 */
 
-BswU4       bsw_com_tx_u4TxIpduGrpReqStat[BSW_COM_NETWORK_NUM][BSW_COM_SYSSTATTBLNUM];     /* The transmit I-PDU group state (Request)      */
-BswU4       bsw_com_tx_u4TxIpduGrpStat[BSW_COM_NETWORK_NUM][BSW_COM_SYSSTATTBLNUM];        /* The transmit I-PDU group state            */
+BswU1       bsw_com_tx_u1TxIpduGrpReqStat[BSW_COM_NETWORK_NUM];     /* The transmit I-PDU group state (Request)      */
+BswU1       bsw_com_tx_u1TxIpduGrpStat[BSW_COM_NETWORK_NUM];        /* The transmit I-PDU group state            */
 BswU1       bsw_com_tx_u1EvTxStat[BSW_COM_NETWORK_NUM];             /* Event transmission availability                 */
 BswU1       bsw_com_tx_u1PrdTxStat[BSW_COM_NETWORK_NUM];            /* Enable/disable state of periodic transmission                     */
 BswU1       bsw_com_tx_u1PeriTxResetReq[BSW_COM_NETWORK_NUM];       /* Request a periodic transmission reset             */
 BswU2       bsw_com_tx_u2PeriTxOffset[BSW_COM_NETWORK_NUM];         /* Periodic transmission offset time           */
 BswU1       bsw_com_tx_u1FirstTxSetReq[BSW_COM_NETWORK_NUM];        /* Request first transmission setting */
-BswU1       bsw_com_tx_u1BusWkupReq[BSW_COM_NETWORK_NUM];           /* Request Bus Wakeup */
-BswU2       bsw_com_tx_u2DisableSend[BSW_COM_NETWORK_NUM];          /* DisableSend */
-BswU2       bsw_com_tx_u2EnablePeriodic[BSW_COM_NETWORK_NUM];       /* EnablePeriodic */
 
 #if ( BSW_COM_FUNC_PNCIPDU == BSW_USE )
 BswU4       bsw_com_tx_u4PncTxIpduGrReqStat[BSW_COM_NETWORK_NUM][BSW_COM_PNC_REQNUM];   /* PNC transmit I-PDU group state (Request)  */
@@ -371,14 +441,6 @@ BswU1 bsw_com_tx_u1PreTxMsgBuf[BSW_COM_PRETX_MAX_MSGSIZE];          /* Temporary
 BswU1 bsw_com_tx_u1PreTxMsgBuf[BSW_COM_DUMMY_SIZE];          /* Temporary buffer for notification before tansmission         */
 #endif /* (BSW_COM_PRETX_MAX_MSGSIZE != 0U) */
 
-#if (BSW_COM_CFG_METADATA_USE == BSW_USE) 
-#if (BSW_COM_CFG_METADATASIZE_MAX > 0)
-BswU1 bsw_com_tx_u1MetaDataBuf[BSW_COM_CFG_METADATASIZE_MAX];
-#else
-BswU1 bsw_com_tx_u1MetaDataBuf[BSW_COM_DUMMY_SIZE];
-#endif /* BSW_COM_CFG_METADATASIZE_MAX > 0 */
-#endif /* BSW_COM_CFG_METADATA_USE == BSW_USE */
-
 /*------------------------------------*/
 /* Receiving unit (RX)                */
 /*------------------------------------*/
@@ -395,12 +457,12 @@ BswU2       bsw_com_rx_u2DLine[BSW_COM_RX_MSG_NUM];                 /* Timeout t
 BswU2       bsw_com_rx_u2DLine[BSW_COM_DUMMY_SIZE];                 /* Timeout timer               */
 #endif /* BSW_COM_RX_MSG_NUM == 0 */
 
-BswU4       bsw_com_rx_u4RxIpduGrpReqStat[BSW_COM_NETWORK_NUM][BSW_COM_SYSSTATTBLNUM];     /* Receive I-PDU group state (Request)      */
-BswU4       bsw_com_rx_u4RxIpduGrpStat[BSW_COM_NETWORK_NUM][BSW_COM_SYSSTATTBLNUM];        /* Receive I-PDU group state            */
-BswU4       bsw_com_rx_u4RxDmReqStat[BSW_COM_NETWORK_NUM][BSW_COM_SYSSTATTBLNUM];          /* Receive disconnection monitoring state (Request)           */
-BswU4       bsw_com_rx_u4RxDmStat[BSW_COM_NETWORK_NUM][BSW_COM_SYSSTATTBLNUM];             /* Receive disconnection monitoring state                 */
-BswU4       bsw_com_rx_u4WkupMskSetReqStat[BSW_COM_NETWORK_NUM][BSW_COM_SYSSTATTBLNUM];    /* WAKEUP_MASK setting state(request)        */
-BswU4       bsw_com_rx_u4WkupMskSetStat[BSW_COM_NETWORK_NUM][BSW_COM_SYSSTATTBLNUM];       /* WAKEUP_MASK setting state              */
+BswU1       bsw_com_rx_u1RxIpduGrpReqStat[BSW_COM_NETWORK_NUM];     /* Receive I-PDU group state (Request)      */
+BswU1       bsw_com_rx_u1RxIpduGrpStat[BSW_COM_NETWORK_NUM];        /* Receive I-PDU group state            */
+BswU1       bsw_com_rx_u1RxDmReqStat[BSW_COM_NETWORK_NUM];          /* Receive disconnection monitoring state (Request)           */
+BswU1       bsw_com_rx_u1RxDmStat[BSW_COM_NETWORK_NUM];             /* Receive disconnection monitoring state                 */
+BswU1       bsw_com_rx_u1WkupMskSetReqStat[BSW_COM_NETWORK_NUM];    /* WAKEUP_MASK setting state(request)        */
+BswU1       bsw_com_rx_u1WkupMskSetStat[BSW_COM_NETWORK_NUM];       /* WAKEUP_MASK setting state              */
 
 #if ( BSW_COM_FUNC_PNCIPDU == BSW_USE )
 BswU4       bsw_com_rx_u4PncRxIpduGrReqStat[BSW_COM_NETWORK_NUM][BSW_COM_PNC_REQNUM];   /* PNC receive I-PDU group state (Request)  */
@@ -418,6 +480,7 @@ BswU1       bsw_com_fs_u1FailChk;                                   /* Failure d
 /* Data management unit (DATA)        */
 /*------------------------------------*/
 BswU1       bsw_com_data_u1MsgStat[BSW_COM_MSG_NUM];                /* Message status             */
+
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -535,101 +598,101 @@ BswConst        BswU2  bsw_com_rom_u2CHGPRDCH[BSW_COM_DUMMY_SIZE] = { (BswU2)0U 
 
 #if ( BSW_COM_FUNC_PNCIPDU == BSW_USE )
 /* Target PNC count for control */
-BswConst BswU1 bsw_com_rom_u1PncIpduUse[BSW_COM_NETWORK_NUM] = 
+BswConst BswU1 bsw_com_rom_u1PncNum[BSW_COM_NETWORK_NUM] = 
 {
-     (BswU1)BSW_BSWM_CS_PNCIPDU_USE(0)
+     (BswU1)BSW_COM_CH_PNCNUM_00
 #if ( BSW_COM_NETWORK_NUM > 1U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(1)
+    ,(BswU1)BSW_COM_CH_PNCNUM_01
 #endif
 #if ( BSW_COM_NETWORK_NUM > 2U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(2)
+    ,(BswU1)BSW_COM_CH_PNCNUM_02
 #endif
 #if ( BSW_COM_NETWORK_NUM > 3U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(3)
+    ,(BswU1)BSW_COM_CH_PNCNUM_03
 #endif
 #if ( BSW_COM_NETWORK_NUM > 4U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(4)
+    ,(BswU1)BSW_COM_CH_PNCNUM_04
 #endif
 #if ( BSW_COM_NETWORK_NUM > 5U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(5)
+    ,(BswU1)BSW_COM_CH_PNCNUM_05
 #endif
 #if ( BSW_COM_NETWORK_NUM > 6U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(6)
+    ,(BswU1)BSW_COM_CH_PNCNUM_06
 #endif
 #if ( BSW_COM_NETWORK_NUM > 7U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(7)
+    ,(BswU1)BSW_COM_CH_PNCNUM_07
 #endif
 #if ( BSW_COM_NETWORK_NUM > 8U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(8)
+    ,(BswU1)BSW_COM_CH_PNCNUM_08
 #endif
 #if ( BSW_COM_NETWORK_NUM > 9U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(9)
+    ,(BswU1)BSW_COM_CH_PNCNUM_09
 #endif
 #if ( BSW_COM_NETWORK_NUM > 10U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(10)
+    ,(BswU1)BSW_COM_CH_PNCNUM_10
 #endif
 #if ( BSW_COM_NETWORK_NUM > 11U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(11)
+    ,(BswU1)BSW_COM_CH_PNCNUM_11
 #endif
 #if ( BSW_COM_NETWORK_NUM > 12U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(12)
+    ,(BswU1)BSW_COM_CH_PNCNUM_12
 #endif
 #if ( BSW_COM_NETWORK_NUM > 13U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(13)
+    ,(BswU1)BSW_COM_CH_PNCNUM_13
 #endif
 #if ( BSW_COM_NETWORK_NUM > 14U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(14)
+    ,(BswU1)BSW_COM_CH_PNCNUM_14
 #endif
 #if ( BSW_COM_NETWORK_NUM > 15U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(15)
+    ,(BswU1)BSW_COM_CH_PNCNUM_15
 #endif
 #if ( BSW_COM_NETWORK_NUM > 16U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(16)
+    ,(BswU1)BSW_COM_CH_PNCNUM_16
 #endif
 #if ( BSW_COM_NETWORK_NUM > 17U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(17)
+    ,(BswU1)BSW_COM_CH_PNCNUM_17
 #endif
 #if ( BSW_COM_NETWORK_NUM > 18U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(18)
+    ,(BswU1)BSW_COM_CH_PNCNUM_18
 #endif
 #if ( BSW_COM_NETWORK_NUM > 19U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(19)
+    ,(BswU1)BSW_COM_CH_PNCNUM_19
 #endif
 #if ( BSW_COM_NETWORK_NUM > 20U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(20)
+    ,(BswU1)BSW_COM_CH_PNCNUM_20
 #endif
 #if ( BSW_COM_NETWORK_NUM > 21U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(21)
+    ,(BswU1)BSW_COM_CH_PNCNUM_21
 #endif
 #if ( BSW_COM_NETWORK_NUM > 22U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(22)
+    ,(BswU1)BSW_COM_CH_PNCNUM_22
 #endif
 #if ( BSW_COM_NETWORK_NUM > 23U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(23)
+    ,(BswU1)BSW_COM_CH_PNCNUM_23
 #endif
 #if ( BSW_COM_NETWORK_NUM > 24U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(24)
+    ,(BswU1)BSW_COM_CH_PNCNUM_24
 #endif
 #if ( BSW_COM_NETWORK_NUM > 25U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(25)
+    ,(BswU1)BSW_COM_CH_PNCNUM_25
 #endif
 #if ( BSW_COM_NETWORK_NUM > 26U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(26)
+    ,(BswU1)BSW_COM_CH_PNCNUM_26
 #endif
 #if ( BSW_COM_NETWORK_NUM > 27U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(27)
+    ,(BswU1)BSW_COM_CH_PNCNUM_27
 #endif
 #if ( BSW_COM_NETWORK_NUM > 28U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(28)
+    ,(BswU1)BSW_COM_CH_PNCNUM_28
 #endif
 #if ( BSW_COM_NETWORK_NUM > 29U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(29)
+    ,(BswU1)BSW_COM_CH_PNCNUM_29
 #endif
 #if ( BSW_COM_NETWORK_NUM > 30U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(30)
+    ,(BswU1)BSW_COM_CH_PNCNUM_30
 #endif
 #if ( BSW_COM_NETWORK_NUM > 31U )
-    ,(BswU1)BSW_BSWM_CS_PNCIPDU_USE(31)
+    ,(BswU1)BSW_COM_CH_PNCNUM_31
 #endif
 };
 #endif  /* ( BSW_COM_FUNC_PNCIPDU == BSW_USE ) */
@@ -735,7 +798,6 @@ BswConst BswU1  bsw_com_rom_u1NonAwakePwonWait[BSW_COM_NETWORK_NUM] =
 void (* BswConst bsw_com_rom_ptInitAllTxReqFunc)( void ) = BSW_COM_INITALLTXREQST_FUNC;
 void (* BswConst bsw_com_rom_ptInitSndNTimFunc)( void ) = BSW_COM_INITSENDNTIMES_FUNC;
 void (* BswConst bsw_com_rom_ptInitChgPrdFunc)( void ) = BSW_COM_INITCHGPRD_FUNC;
-uint16 (* BswConst bsw_com_rom_ptConvMs2TickFunc)( uint16 msTime ) = BSW_COM_CONVERT_MS2TICK_FUNC;
 
 /*------------------------------------*/
 /* Transmission unit (TX)             */
@@ -1631,106 +1693,6 @@ BswConst    BswU1   bsw_com_rom_u1TXREQCONTINUE[BSW_COM_NETWORK_NUM] =
 #endif
 };
 
-#if (BSW_COM_SENDNTIMES_MSG_NUM > 0U)
-BswConst    BswU1   bsw_com_rom_u1SENDNTIMESRTRG[BSW_COM_NETWORK_NUM] =
-{
-                             (BswU1)BSW_COM_CH00_SENDNTIMESRTRG
-#if (BSW_COM_NETWORK_NUM > 1U)
-                            ,(BswU1)BSW_COM_CH01_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 2U)
-                            ,(BswU1)BSW_COM_CH02_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 3U)
-                            ,(BswU1)BSW_COM_CH03_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 4U)
-                            ,(BswU1)BSW_COM_CH04_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 5U)
-                            ,(BswU1)BSW_COM_CH05_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 6U)
-                            ,(BswU1)BSW_COM_CH06_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 7U)
-                            ,(BswU1)BSW_COM_CH07_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 8U)
-                            ,(BswU1)BSW_COM_CH08_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 9U)
-                            ,(BswU1)BSW_COM_CH09_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 10U)
-                            ,(BswU1)BSW_COM_CH10_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 11U)
-                            ,(BswU1)BSW_COM_CH11_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 12U)
-                            ,(BswU1)BSW_COM_CH12_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 13U)
-                            ,(BswU1)BSW_COM_CH13_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 14U)
-                            ,(BswU1)BSW_COM_CH14_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 15U)
-                            ,(BswU1)BSW_COM_CH15_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 16U)
-                            ,(BswU1)BSW_COM_CH16_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 17U)
-                            ,(BswU1)BSW_COM_CH17_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 18U)
-                            ,(BswU1)BSW_COM_CH18_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 19U)
-                            ,(BswU1)BSW_COM_CH19_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 20U)
-                            ,(BswU1)BSW_COM_CH20_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 21U)
-                            ,(BswU1)BSW_COM_CH21_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 22U)
-                            ,(BswU1)BSW_COM_CH22_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 23U)
-                            ,(BswU1)BSW_COM_CH23_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 24U)
-                            ,(BswU1)BSW_COM_CH24_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 25U)
-                            ,(BswU1)BSW_COM_CH25_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 26U)
-                            ,(BswU1)BSW_COM_CH26_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 27U)
-                            ,(BswU1)BSW_COM_CH27_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 28U)
-                            ,(BswU1)BSW_COM_CH28_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 29U)
-                            ,(BswU1)BSW_COM_CH29_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 30U)
-                            ,(BswU1)BSW_COM_CH30_SENDNTIMESRTRG
-#endif
-#if (BSW_COM_NETWORK_NUM > 31U)
-                            ,(BswU1)BSW_COM_CH31_SENDNTIMESRTRG
-#endif
-};
-#endif /* (BSW_COM_SENDNTIMES_MSG_NUM > 0U) */
-
 #if ( BSW_COM_FUNC_PNCIPDU == BSW_USE )
 /* PNC Periodic Transmission Offset Time */
 BswConst        BswU2  bsw_com_rom_u2PncPeriodicOffset[BSW_COM_NETWORK_NUM] =
@@ -1832,308 +1794,11 @@ BswConst        BswU2  bsw_com_rom_u2PncPeriodicOffset[BSW_COM_NETWORK_NUM] =
 };
 #endif
 
-BswConst    BswU1   bsw_com_rom_u1TXDISTIMBYMSG[BSW_COM_NETWORK_NUM] =
-{
-                             (BswU1)BSW_COM_CFG_CH00_TX_DISTIMBYMSG
-#if (BSW_COM_NETWORK_NUM > 1U)
-                            ,(BswU1)BSW_COM_CFG_CH01_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 2U)
-                            ,(BswU1)BSW_COM_CFG_CH02_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 3U)
-                            ,(BswU1)BSW_COM_CFG_CH03_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 4U)
-                            ,(BswU1)BSW_COM_CFG_CH04_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 5U)
-                            ,(BswU1)BSW_COM_CFG_CH05_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 6U)
-                            ,(BswU1)BSW_COM_CFG_CH06_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 7U)
-                            ,(BswU1)BSW_COM_CFG_CH07_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 8U)
-                            ,(BswU1)BSW_COM_CFG_CH08_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 9U)
-                            ,(BswU1)BSW_COM_CFG_CH09_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 10U)
-                            ,(BswU1)BSW_COM_CFG_CH10_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 11U)
-                            ,(BswU1)BSW_COM_CFG_CH11_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 12U)
-                            ,(BswU1)BSW_COM_CFG_CH12_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 13U)
-                            ,(BswU1)BSW_COM_CFG_CH13_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 14U)
-                            ,(BswU1)BSW_COM_CFG_CH14_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 15U)
-                            ,(BswU1)BSW_COM_CFG_CH15_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 16U)
-                            ,(BswU1)BSW_COM_CFG_CH16_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 17U)
-                            ,(BswU1)BSW_COM_CFG_CH17_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 18U)
-                            ,(BswU1)BSW_COM_CFG_CH18_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 19U)
-                            ,(BswU1)BSW_COM_CFG_CH19_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 20U)
-                            ,(BswU1)BSW_COM_CFG_CH20_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 21U)
-                            ,(BswU1)BSW_COM_CFG_CH21_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 22U)
-                            ,(BswU1)BSW_COM_CFG_CH22_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 23U)
-                            ,(BswU1)BSW_COM_CFG_CH23_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 24U)
-                            ,(BswU1)BSW_COM_CFG_CH24_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 25U)
-                            ,(BswU1)BSW_COM_CFG_CH25_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 26U)
-                            ,(BswU1)BSW_COM_CFG_CH26_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 27U)
-                            ,(BswU1)BSW_COM_CFG_CH27_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 28U)
-                            ,(BswU1)BSW_COM_CFG_CH28_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 29U)
-                            ,(BswU1)BSW_COM_CFG_CH29_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 30U)
-                            ,(BswU1)BSW_COM_CFG_CH30_TX_DISTIMBYMSG
-#endif
-#if (BSW_COM_NETWORK_NUM > 31U)
-                            ,(BswU1)BSW_COM_CFG_CH31_TX_DISTIMBYMSG
-#endif
-};
-
-BswConst    BswU1   bsw_com_rom_u1TXCLRSTOPTOUT[BSW_COM_NETWORK_NUM] =
-{
-                             (BswU1)BSW_COM_CFG_CH00_TXCLRSTOPTOUT
-#if (BSW_COM_NETWORK_NUM > 1U)
-                            ,(BswU1)BSW_COM_CFG_CH01_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 2U)
-                            ,(BswU1)BSW_COM_CFG_CH02_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 3U)
-                            ,(BswU1)BSW_COM_CFG_CH03_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 4U)
-                            ,(BswU1)BSW_COM_CFG_CH04_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 5U)
-                            ,(BswU1)BSW_COM_CFG_CH05_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 6U)
-                            ,(BswU1)BSW_COM_CFG_CH06_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 7U)
-                            ,(BswU1)BSW_COM_CFG_CH07_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 8U)
-                            ,(BswU1)BSW_COM_CFG_CH08_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 9U)
-                            ,(BswU1)BSW_COM_CFG_CH09_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 10U)
-                            ,(BswU1)BSW_COM_CFG_CH10_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 11U)
-                            ,(BswU1)BSW_COM_CFG_CH11_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 12U)
-                            ,(BswU1)BSW_COM_CFG_CH12_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 13U)
-                            ,(BswU1)BSW_COM_CFG_CH13_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 14U)
-                            ,(BswU1)BSW_COM_CFG_CH14_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 15U)
-                            ,(BswU1)BSW_COM_CFG_CH15_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 16U)
-                            ,(BswU1)BSW_COM_CFG_CH16_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 17U)
-                            ,(BswU1)BSW_COM_CFG_CH17_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 18U)
-                            ,(BswU1)BSW_COM_CFG_CH18_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 19U)
-                            ,(BswU1)BSW_COM_CFG_CH19_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 20U)
-                            ,(BswU1)BSW_COM_CFG_CH20_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 21U)
-                            ,(BswU1)BSW_COM_CFG_CH21_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 22U)
-                            ,(BswU1)BSW_COM_CFG_CH22_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 23U)
-                            ,(BswU1)BSW_COM_CFG_CH23_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 24U)
-                            ,(BswU1)BSW_COM_CFG_CH24_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 25U)
-                            ,(BswU1)BSW_COM_CFG_CH25_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 26U)
-                            ,(BswU1)BSW_COM_CFG_CH26_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 27U)
-                            ,(BswU1)BSW_COM_CFG_CH27_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 28U)
-                            ,(BswU1)BSW_COM_CFG_CH28_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 29U)
-                            ,(BswU1)BSW_COM_CFG_CH29_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 30U)
-                            ,(BswU1)BSW_COM_CFG_CH30_TXCLRSTOPTOUT
-#endif
-#if (BSW_COM_NETWORK_NUM > 31U)
-                            ,(BswU1)BSW_COM_CFG_CH31_TXCLRSTOPTOUT
-#endif
-};
-
-BswConst    BswU1   bsw_com_rom_u1TXSTOPTOUTHOOK[BSW_COM_NETWORK_NUM] =
-{
-                             (BswU1)BSW_COM_CFG_CH00_TXSTOPTOUTHOOK
-#if (BSW_COM_NETWORK_NUM > 1U)
-                            ,(BswU1)BSW_COM_CFG_CH01_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 2U)
-                            ,(BswU1)BSW_COM_CFG_CH02_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 3U)
-                            ,(BswU1)BSW_COM_CFG_CH03_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 4U)
-                            ,(BswU1)BSW_COM_CFG_CH04_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 5U)
-                            ,(BswU1)BSW_COM_CFG_CH05_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 6U)
-                            ,(BswU1)BSW_COM_CFG_CH06_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 7U)
-                            ,(BswU1)BSW_COM_CFG_CH07_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 8U)
-                            ,(BswU1)BSW_COM_CFG_CH08_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 9U)
-                            ,(BswU1)BSW_COM_CFG_CH09_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 10U)
-                            ,(BswU1)BSW_COM_CFG_CH10_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 11U)
-                            ,(BswU1)BSW_COM_CFG_CH11_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 12U)
-                            ,(BswU1)BSW_COM_CFG_CH12_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 13U)
-                            ,(BswU1)BSW_COM_CFG_CH13_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 14U)
-                            ,(BswU1)BSW_COM_CFG_CH14_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 15U)
-                            ,(BswU1)BSW_COM_CFG_CH15_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 16U)
-                            ,(BswU1)BSW_COM_CFG_CH16_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 17U)
-                            ,(BswU1)BSW_COM_CFG_CH17_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 18U)
-                            ,(BswU1)BSW_COM_CFG_CH18_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 19U)
-                            ,(BswU1)BSW_COM_CFG_CH19_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 20U)
-                            ,(BswU1)BSW_COM_CFG_CH20_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 21U)
-                            ,(BswU1)BSW_COM_CFG_CH21_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 22U)
-                            ,(BswU1)BSW_COM_CFG_CH22_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 23U)
-                            ,(BswU1)BSW_COM_CFG_CH23_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 24U)
-                            ,(BswU1)BSW_COM_CFG_CH24_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 25U)
-                            ,(BswU1)BSW_COM_CFG_CH25_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 26U)
-                            ,(BswU1)BSW_COM_CFG_CH26_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 27U)
-                            ,(BswU1)BSW_COM_CFG_CH27_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 28U)
-                            ,(BswU1)BSW_COM_CFG_CH28_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 29U)
-                            ,(BswU1)BSW_COM_CFG_CH29_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 30U)
-                            ,(BswU1)BSW_COM_CFG_CH30_TXSTOPTOUTHOOK
-#endif
-#if (BSW_COM_NETWORK_NUM > 31U)
-                            ,(BswU1)BSW_COM_CFG_CH31_TXSTOPTOUTHOOK
-#endif
-};
-
 void  (* BswConst bsw_com_rom_ptInitTxReqStFunc)( PduIdType u2PduId ) = BSW_COM_INITTXREQST_FUNC;
 void  (* BswConst bsw_com_rom_ptSetTxReqStFunc)( PduIdType u2PduId, Bsw_Com_TxModeType u1TxMode ) = BSW_COM_SETTXREQST_FUNC;
 BswU1 (* BswConst bsw_com_rom_ptGetTxReqStFunc)( PduIdType u2PduId ) = BSW_COM_GETTXREQST_FUNC;
 void  (* BswConst bsw_com_rom_ptTransCfmFunc)( PduIdType u2PduId ) = BSW_COM_TRANSCFM_FUNC;
 BswU2 (* BswConst bsw_com_rom_ptTxTimeoutFunc)( PduIdType u2PduId ) = BSW_COM_TXTIMEOUT_FUNC;
-void  (* BswConst bsw_com_rom_ptTxCnclToutBWFunc)( PduIdType u2PduId ) = BSW_COM_CANCELTXTIMEOUTBW_FUNC;
-void  (* BswConst bsw_com_rom_ptTxCnclToutClrFunc)( PduIdType u2PduId ) = BSW_COM_CANCELTXTIMEOUTCLR_FUNC;
-void  (* BswConst bsw_com_rom_ptTxTimeoutHookFunc)( PduIdType PduId ) = BSW_COM_TXTIMEOUTHOOK_FUNC;
 void  (* BswConst bsw_com_rom_ptSndNTimCntFunc)( void ) = BSW_COM_SENDNTIMESCNT_FUNC;
 Bsw_Com_RetStatusType (* BswConst bsw_com_rom_ptChgPeriToNTimFunc)( PduIdType u2PduId, Bsw_Com_RetStatusType s1QueExist ) = BSW_COM_CHGPERITONTIM_FUNC;
 void  (* BswConst bsw_com_rom_ptSndNTimMsgFunc)( PduIdType u2PduId ) = BSW_COM_SENDNTIMESMSG_FUNC;
@@ -2149,119 +1814,19 @@ void  (* BswConst bsw_com_tx_ptSetEventAwake)( NetworkHandleType Network ) = BSW
 BswU1 (* BswConst bsw_com_tx_ptTxWakeupEvent)( NetworkHandleType Network, PduIdType PduId ) = BSW_COM_TXWAKEUPEVENT_FUNC;
 void  (* BswConst bsw_com_rom_ptInitPncTxStatFunc)( void ) = BSW_COM_INITPNCTXSTAT_FUNC;
 void  (* BswConst bsw_com_rom_ptDeInitPncTxStFunc)( void ) = BSW_COM_SHUTDOWNPNCTXSTAT_FUNC;
-BswU1 (* BswConst bsw_com_rom_ptGetPncIpduTxEnStFunc)( PduIdType u2PduId, BswU1 u1PncUse ) = BSW_COM_GETPNCIPDUTXENST_FUNC;
+void  (* BswConst bsw_com_rom_ptGetPncChTxStFunc)( NetworkHandleType Network, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg, BswU1* ptPncNum, BswU2* ptPncPeriOffset ) = BSW_COM_GETPNCCHTXST_FUNC;
+void  (* BswConst bsw_com_rom_ptGetPncChTxEnStFunc)( NetworkHandleType Network, BswU1 u1PncNum, BswU4* ptReqStat, BswU1* ptStatChg ) = BSW_COM_GETPNCCHTXENST_FUNC;
+BswU1 (* BswConst bsw_com_rom_ptChkPncIpduTxStFunc)( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat ) = BSW_COM_CHKPNCIPDUTXST_FUNC;
+void  (* BswConst bsw_com_rom_ptSetPncChTxStFunc)( NetworkHandleType Network, BswConstR BswU4* ptReqStat ) = BSW_COM_SETPNCCHTXST_FUNC;
+void  (* BswConst bsw_com_rom_ptSetPncChTxEnStFunc)( NetworkHandleType Network, BswConstR BswU4* ptReqStat ) = BSW_COM_SETPNCCHTXENST_FUNC;
+void  (* BswConst bsw_com_rom_ptSetPncIpduTxEnStFunc)( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptIpduGrpStat, BswConstR BswU4* ptTxStat, BswU2 u2PncPeriOffset ) = BSW_COM_SETPNCTXIPDUTXSTS_FUNC;
+BswU1 (* BswConst bsw_com_rom_ptGetPncIpduTxEnStFunc)( PduIdType u2PduId ) = BSW_COM_GETPNCIPDUTXENST_FUNC;
+BswU1 (* BswConst bsw_com_rom_ptGetPncIpduPeriOfsFunc)( PduIdType u2PduId ) = BSW_COM_GETPNCIPDUPERIOFS_FUNC;
 void  (* BswConst bsw_com_rom_ptSetPncIpduPrOfsOnFunc)( PduIdType u2PduId ) = BSW_COM_SETPNCIPDUPROFSON_FUNC;
-BswU1 (* BswConst bsw_com_rom_ptGetPncChUseFunc)( NetworkHandleType Network ) = BSW_COM_GETPNCCHUSE_FUNC;
-void  (* BswConst bsw_com_rom_ptSetPncIpduFstDlyFunc)( PduIdType u2PduId, BswU1 u1PncUse ) = BSW_COM_SETPNCIPDUFSTDLY_FUNC;
+BswU1 (* BswConst bsw_com_rom_ptGetPncChNumberFunc)( NetworkHandleType Network ) = BSW_COM_GETPNCCHNUMBER_FUNC;
+void  (* BswConst bsw_com_rom_ptSetPncIpduFstDlyFunc)( PduIdType u2PduId, BswU1 u1PncNum ) = BSW_COM_SETPNCIPDUFSTDLY_FUNC;
 BswU1 (* BswConst bsw_com_rom_ptGetPncIpduTxStFunc)( NetworkHandleType Network, PduIdType u2PduId ) = BSW_COM_GETPNCIPDUTXST_FUNC;
-
-void  (* BswConst bsw_com_rom_ptInitBitRspFunc)( void ) = BSW_COM_INITBITRSP_FUNC;
-void  (* BswConst bsw_com_rom_ptInitChRspFunc)( NetworkHandleType network ) = BSW_COM_INITCHANNELRSP_FUNC;
-void  (* BswConst bsw_com_rom_ptDelBitRspFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId ) = BSW_COM_DELBITRSP_FUNC;
-Bsw_Com_RetStatusType (* BswConst bsw_com_rom_ptGetBitRspFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId ) = BSW_COM_GETBITRSP_FUNC;
-void  (* BswConst bsw_com_rom_ptDelBitUseMDFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId, Bsw_Com_RetStatusType s1QueExist ) = BSW_COM_DELBITUSEMETADATA_FUNC;
-void  (* BswConst bsw_com_rom_ptClrMDRmChFunc)( NetworkHandleType Network ) = BSW_COM_CLRMETADATARMCH_FUNC;
-void  (* BswConst bsw_com_rom_ptClrMDRmMsgFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId ) = BSW_COM_CLRMETADATARMMSG_FUNC;
-void  (* BswConst bsw_com_rom_ptGetMDTxMsgFunc)( PduIdType u2PduId, PduInfoType* ptSendMsg ) = BSW_COM_GETMETADATATXMSG_FUNC;
-Std_ReturnType  (* BswConst bsw_com_rom_ptChkMDUpdatedFunc)( PduIdType u2PduId ) = BSW_COM_CHKMETADATAUPDATED_FUNC;
-
-void  (* BswConst bsw_com_rom_ptUpdateTxStsFunc[BSW_COM_NETWORK_NUM])( BswU1 u1Ch ) =
-{
-     BSW_COM_UPDATETXSTATUS_FUNC(0)
-#if ( BSW_COM_NETWORK_NUM > 1U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(1)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 2U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(2)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 3U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(3)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 4U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(4)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 5U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(5)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 6U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(6)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 7U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(7)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 8U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(8)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 9U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(9)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 10U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(10)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 11U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(11)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 12U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(12)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 13U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(13)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 14U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(14)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 15U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(15)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 16U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(16)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 17U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(17)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 18U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(18)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 19U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(19)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 20U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(20)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 21U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(21)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 22U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(22)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 23U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(23)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 24U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(24)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 25U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(25)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 26U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(26)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 27U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(27)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 28U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(28)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 29U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(29)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 30U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(30)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 31U )
-    ,BSW_COM_UPDATETXSTATUS_FUNC(31)
-#endif
-};
+void  (* BswConst bsw_com_rom_ptJdgPncTxStProcFunc)( BswU1 u1PncNum, BswU1 u1IpduChgSts, BswU1 u1PncIpduChgSts, BswU1* ptIpduProc, BswU1* ptIpduSubProc ) = BSW_COM_JUDGEPNCTXSTPROC_FUNC;
 
 /* Dummy definition when no transmission message */
 #if (BSW_COM_TX_MSG_NUM == 0U)
@@ -2286,18 +1851,6 @@ BswConst Bsw_Com_TickTimeType bsw_com_u2TxTimeoutTbl[BSW_COM_DUMMY_SIZE] = {(Bsw
 #if ( (BSW_COM_TX_TIMEOUT_USE != BSW_USE) || (BSW_COM_TX_MSG_NUM == 0U) || (BSW_COM_FIRSTTXTIMEOUT_USE != BSW_USE) )
 BswConst Bsw_Com_TickTimeType bsw_com_u2FirstTxTimeoutTbl[BSW_COM_DUMMY_SIZE] = {(BswU2)0U};
 #endif /* (BSW_COM_TX_TIMEOUT_USE != BSW_USE) || (BSW_COM_TX_MSG_NUM == 0U) || (BSW_COM_FIRSTTXTIMEOUT_USE != BSW_USE) */
-
-/* Dummy definition when not using per-message SENDSTART/DisableSend/EnablePeriodic time is disabled */
-#if ( (BSW_COM_TX_DISTIMBYMSG != BSW_USE) || (BSW_COM_TX_MSG_NUM == 0U) )
-BswConst Bsw_Com_TickTimeType bsw_com_u2SendStartPwTbl[BSW_COM_DUMMY_SIZE] = {(BswU2)0U};
-BswConst Bsw_Com_TickTimeType bsw_com_u2DisableSendTbl[BSW_COM_DUMMY_SIZE] = {(BswU2)0U};
-BswConst Bsw_Com_TickTimeType bsw_com_u2EnablePeriodicTbl[BSW_COM_DUMMY_SIZE] = {(BswU2)0U};
-#endif /* (BSW_COM_TX_DISTIMBYMSG != BSW_USE) || (BSW_COM_TX_MSG_NUM == 0U) */
-
-/* Dummy definition when MetaData function is disabled */
-#if( BSW_COM_CFG_METADATA_USE != BSW_USE )
-BswConst BswU1 bsw_com_u1MetaDataSizeTbl[BSW_COM_DUMMY_SIZE] = {(BswU1)0x00U};
-#endif /* BSW_COM_CFG_METADATA_USE != BSW_USE */
 
 /*------------------------------------*/
 /* Receiving unit (RX)                */
@@ -2508,108 +2061,16 @@ BswConst Bsw_Com_TickTimeType bsw_com_u2PnconMsk[BSW_COM_DUMMY_SIZE] = { (Bsw_Co
 
 void  (* BswConst bsw_com_rom_ptInitPncRxStatFunc)( void ) = BSW_COM_INITPNCRXSTAT_FUNC;
 void  (* BswConst bsw_com_rom_ptDeInitPncRxStFunc)( void ) = BSW_COM_SHUTDOWNPNCRXSTAT_FUNC;
+void  (* BswConst bsw_com_rom_ptGetPncChRxDMStFunc)( NetworkHandleType Network, BswU1 u1PncNum, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg ) = BSW_COM_GETPNCCHRXDMST_FUNC;
+void  (* BswConst bsw_com_rom_ptSetPncIpduRxDMStFunc)( NetworkHandleType Network, BswConstR BswU4* ptReqStat ) = BSW_COM_SETPNCIPDURXDMST_FUNC;
 BswU1 (* BswConst bsw_com_rom_ptGetPncIpduRxDMStFunc)( NetworkHandleType Network, PduIdType u2PduId ) = BSW_COM_GETPNCIPDURXDMST_FUNC;
+void  (* BswConst bsw_com_rom_ptGetPncChRxStFunc)( NetworkHandleType Network, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg, BswU1* ptPncNum ) = BSW_COM_GETPNCCHRXST_FUNC;
+BswU1 (* BswConst bsw_com_rom_ptChkPncIpduRxDMStFunc)( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat ) = BSW_COM_CHKPNCIPDURXDMST_FUNC;
+BswU1 (* BswConst bsw_com_rom_ptChkPncIpduRxStFunc)( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat ) = BSW_COM_CHKPNCIPDURXST_FUNC;
+void  (* BswConst bsw_com_rom_ptSetPncChRxStFunc)( NetworkHandleType Network, BswConstR BswU4* ptReqStat ) = BSW_COM_SETPNCCHRXST_FUNC;
 BswU1 (* BswConst bsw_com_rom_ptGetPncIpduRxStFunc)( NetworkHandleType Network, PduIdType u2PduId ) = BSW_COM_GETPNCIPDURXST_FUNC;
-void  (* BswConst bsw_com_rom_ptVpsRxIndictionFunc)( PduIdType PduId ) = BSW_COM_RX_VPSRXINDICATION_FUNC;
-void  (* BswConst bsw_com_rom_ptVpsTxIpduCOFunc)( PduIdType PduId, PduInfoType* PduInfoPtr ) = BSW_COM_TX_VPSTXIPDUCALLOUT_FUNC;
-
-void  (* BswConst bsw_com_rom_ptUpdateRxStsFunc[BSW_COM_NETWORK_NUM])( BswU1 u1Ch ) =
-{
-     BSW_COM_UPDATERXSTATUS_FUNC(0)
-#if ( BSW_COM_NETWORK_NUM > 1U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(1)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 2U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(2)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 3U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(3)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 4U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(4)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 5U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(5)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 6U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(6)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 7U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(7)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 8U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(8)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 9U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(9)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 10U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(10)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 11U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(11)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 12U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(12)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 13U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(13)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 14U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(14)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 15U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(15)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 16U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(16)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 17U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(17)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 18U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(18)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 19U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(19)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 20U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(20)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 21U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(21)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 22U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(22)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 23U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(23)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 24U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(24)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 25U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(25)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 26U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(26)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 27U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(27)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 28U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(28)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 29U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(29)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 30U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(30)
-#endif
-#if ( BSW_COM_NETWORK_NUM > 31U )
-    ,BSW_COM_UPDATERXSTATUS_FUNC(31)
-#endif
-};
+BswU2 (* BswConst bsw_com_rom_ptGetPncMskTimFunc)( BswU2 u2RxMsgIdx ) = BSW_COM_GETPNCONMSKTIME_FUNC;
+BswU1 (* BswConst bsw_com_rom_ptJdgPncRxStProcFunc)( BswU1 u1PncNum, BswU1 u1IpduChgSts, BswU1 u1PncIpduChgSts ) = BSW_COM_JUDGEPNCRXSTPROC_FUNC;
 
 /*------------------------------------*/
 /* Data management unit (DATA)        */
@@ -2620,7 +2081,6 @@ BswConst       BswU2  bsw_com_rom_u2MSGBUFSIZE           = (BswU2)BSW_COM_MSGBUF
 BswConst       BswU2  bsw_com_rom_u2SENDNTIMESMSGNUM     = (BswU2)BSW_COM_SENDNTIMES_MSG_NUM;
 BswConst       BswU2  bsw_com_rom_u2CHGPERIODMSGNUM      = (BswU2)BSW_COM_CHGPERIOD_MSG_NUM;
 BswConst       BswU1  bsw_com_rom_u1CPUBYTEORDERTYPE     = (BswU1)BSW_COM_CPU_BYTE_ORDER_TYPE;
-BswConst       BswU1  bsw_com_rom_u1METADATAFUNC         = (BswU1)BSW_COM_CFG_METADATA_USE;
 
 #if (BSW_COM_CFG_BACKUPPDU_USE == BSW_USE)
 BswConst       BswU2  bsw_com_rom_u2BACKUPPDUNUM         = (BswU2)BSW_COM_CFG_BACKUPPDU_NUM;
@@ -2774,7 +2234,6 @@ BswConst Bsw_Com_AlvCnt3RxInfoType bsw_com_AlvCnt3RxInfo[BSW_COM_DUMMY_SIZE] = {
 /*  v2-0-0          :2022/02/21                                             */
 /*  v2-1-0          :2022/11/18                                             */
 /*  v2-2-0          :2023/07/06                                             */
-/*  v3-0-0          :2024/11/15                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

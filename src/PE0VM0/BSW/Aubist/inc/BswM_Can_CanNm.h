@@ -1,7 +1,7 @@
-/* bswm_can_cannm_h_v3-0-0                                                  */
+/* bswm_can_cannm_h_v2-0-0                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -24,10 +24,6 @@
 /*------------------------------*/
 /* Unit:ctrl                    */
 /*------------------------------*/
-/* Wakeup Type */
-#define BSWM_CAN_WKUP_PWON                 (BSW_BSWM_CAN_WKUP_PWON)
-#define BSWM_CAN_WKUP_BS                   (BSW_BSWM_CAN_WKUP_BS)
-
 /* Function */
 #define BswM_Can_UpdateTxIPDU              (bsw_bswm_can_ctrl_UpdateTxIPDU)
 #define BswM_Can_BusWakeup                 (bsw_bswm_can_ctrl_BusWakeup)
@@ -59,7 +55,6 @@
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2021/09/07                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

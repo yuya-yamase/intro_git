@@ -1,0 +1,15 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/Sys/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/Sys/obj/Sys.rel.o
+
+../../src/common/Sys.c
+
+{streq(PLATFORM_NAME, RH850)} ../../src/micon/$MICON_NAME/Sys_Core.850
+
+{streq(PLATFORM_NAME, TraveoII)} ../../src/micon/$MICON_NAME/Sys_Core.arm
+{streq(PLATFORM_NAME, TraveoII)} ../../src/micon/$MICON_NAME/Sys_CoreCalc.arm
+
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Sys_Core.tri

@@ -1,0 +1,16 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${LIB_DIR}
+
+memcpy_u1.c
+memcpy_u2.c
+memcpy_u4.c
+memfill_u1.c
+memfill_u2.c
+memfill_u4.c
+gpt_busywait.850
+fpcall_u1_and.c
+bitcnt.c
+crc32.c
+lsbsrch.c
+trpl_rdndnt.c

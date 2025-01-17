@@ -1,7 +1,7 @@
-/* bsw_bswm_can_config_c_v3-0-0                                             */
+/* bsw_bswm_can_config_c_v2-1-0                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -32,7 +32,6 @@
 #include "../inc/bsw_bswm_can_ctrl.h"
 #include "../inc/bsw_bswm_can_connector.h"
 #include "../inc/bsw_bswm_can_status.h"
-#include "../inc/bsw_bswm_can_config.h"
 
 #include "../cfg/BswM_Can_Cfg.h"
 
@@ -326,114 +325,12 @@ BswConst BswU1 bsw_bswm_can_ctrl_u1DMCoAwkTbl[BSW_BSWM_CAN_CHNUM] =
 #endif /* #if( BSW_BSWM_CAN_CHNUM > 31U ) */
 };
 
-/* bus sleep enable/disable for each channel  */
-BswConst BswU1 bsw_bswm_can_ctrl_u1BsSlpUseTbl[BSW_BSWM_CAN_CHNUM] = 
-{
-    (BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(0U)
-#if( BSW_BSWM_CAN_CHNUM > 1U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(1U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 1U ) */
-#if( BSW_BSWM_CAN_CHNUM > 2U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(2U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 2U ) */
-#if( BSW_BSWM_CAN_CHNUM > 3U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(3U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 3U ) */
-#if( BSW_BSWM_CAN_CHNUM > 4U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(4U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 4U ) */
-#if( BSW_BSWM_CAN_CHNUM > 5U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(5U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 5U ) */
-#if( BSW_BSWM_CAN_CHNUM > 6U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(6U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 6U ) */
-#if( BSW_BSWM_CAN_CHNUM > 7U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(7U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 7U ) */
-#if( BSW_BSWM_CAN_CHNUM > 8U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(8U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 8U ) */
-#if( BSW_BSWM_CAN_CHNUM > 9U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(9U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 9U ) */
-#if( BSW_BSWM_CAN_CHNUM > 10U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(10U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 10U ) */
-#if( BSW_BSWM_CAN_CHNUM > 11U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(11U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 11U ) */
-#if( BSW_BSWM_CAN_CHNUM > 12U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(12U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 12U ) */
-#if( BSW_BSWM_CAN_CHNUM > 13U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(13U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 13U ) */
-#if( BSW_BSWM_CAN_CHNUM > 14U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(14U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 14U ) */
-#if( BSW_BSWM_CAN_CHNUM > 15U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(15U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 15U ) */
-#if( BSW_BSWM_CAN_CHNUM > 16U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(16U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 16U ) */
-#if( BSW_BSWM_CAN_CHNUM > 17U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(17U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 17U ) */
-#if( BSW_BSWM_CAN_CHNUM > 18U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(18U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 18U ) */
-#if( BSW_BSWM_CAN_CHNUM > 19U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(19U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 19U ) */
-#if( BSW_BSWM_CAN_CHNUM > 20U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(20U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 20U ) */
-#if( BSW_BSWM_CAN_CHNUM > 21U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(21U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 21U ) */
-#if( BSW_BSWM_CAN_CHNUM > 22U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(22U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 22U ) */
-#if( BSW_BSWM_CAN_CHNUM > 23U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(23U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 23U ) */
-#if( BSW_BSWM_CAN_CHNUM > 24U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(24U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 24U ) */
-#if( BSW_BSWM_CAN_CHNUM > 25U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(25U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 25U ) */
-#if( BSW_BSWM_CAN_CHNUM > 26U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(26U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 26U ) */
-#if( BSW_BSWM_CAN_CHNUM > 27U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(27U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 27U ) */
-#if( BSW_BSWM_CAN_CHNUM > 28U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(28U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 28U ) */
-#if( BSW_BSWM_CAN_CHNUM > 29U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(29U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 29U ) */
-#if( BSW_BSWM_CAN_CHNUM > 30U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(30U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 30U ) */
-#if( BSW_BSWM_CAN_CHNUM > 31U )
-   ,(BswU1)BSW_BSWM_CAN_BUSSLEEP_USE(31U)
-#endif /* #if( BSW_BSWM_CAN_CHNUM > 31U ) */
-};
-
 /* Setting to enable/disable register sticking check */
 BswConst       BswU1 bsw_bswm_can_ctrl_u1RegChk = (BswU1)BSW_BSWM_CAN_CFG_RGSTCHK;
 
-/* Setting to register sticking check start timing at wake-up */
-BswConst       BswU1 bsw_bswm_can_ctrl_u1WpRgCkStart = (BswU1)BSW_BSWM_CAN_CFG_WURGSTCHKSTART;
-
 /* Transmission limitation function */
 void (* BswConst bsw_bswm_can_ctrl_ptIntTxCtrFnc)( void ) = BSW_BSWM_CAN_FUNC_INTTXSTCTRL;
-BswU1 (* BswConst bsw_bswm_can_ctrl_ptUpdTxCtrFnc)( BswU1 u1Channel, BswU1 u1PeriReset ) = BSW_BSWM_CAN_FUNC_UPDTXSTCTRL;
+BswU1 (* BswConst bsw_bswm_can_ctrl_ptUpdTxCtrFnc)( BswU1 u1Channel, boolean PeriReset ) = BSW_BSWM_CAN_FUNC_UPDTXSTCTRL;
 void (* BswConst bsw_bswm_can_ctrl_ptCntTmTxFnc)( BswU1 u1Channel ) = BSW_BSWM_CAN_FUNC_CNTTIMTXCTRL;
 
 /* Channel Restart Function */
@@ -441,7 +338,7 @@ void (* BswConst bsw_bswm_can_ctrl_ptIntRstChFnc)( void ) = BSW_BSWM_CAN_FUNC_IN
 
 /* Receive disconnection monitoring function */
 void (* BswConst bsw_bswm_can_ctrl_ptIntDmCtrFnc)( void ) = BSW_BSWM_CAN_FUNC_INTDMCTRL;
-void (* BswConst bsw_bswm_can_ctrl_ptUpdDmCtrFnc)( BswU1 u1Channel, BswU4* u4DmGroup ) = BSW_BSWM_CAN_FUNC_UPDDMCTRL;
+BswU1 (* BswConst bsw_bswm_can_ctrl_ptUpdDmCtrFnc)( BswU1 u1Channel, BswU1 u1DmGroup ) = BSW_BSWM_CAN_FUNC_UPDDMCTRL;
 
 /* Disable diagnostic transmission frame transmission enable */
 void (* BswConst bsw_bswm_can_ctrl_ptTPEnTxFunc)( NetworkHandleType Network ) = BSW_BSWM_CAN_FUNC_TPENABLETX;
@@ -471,7 +368,6 @@ void (* BswConst bsw_bswm_can_st_ptTPChkRamFunc)( void ) = BSW_BSWM_CAN_FUNC_CHE
 /*  v1-1-0          :2018/12/14                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/05/24                                             */
-/*  v3-0-0          :2024/11/13                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

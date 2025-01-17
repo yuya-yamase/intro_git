@@ -45,9 +45,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0 /* Not used if other than VM0 */
 void    vd_g_VehopemdRstInit(void);
 void    vd_g_VehopemdWkupInit(void);
 void    vd_g_VehopemdMainTask(void);
+#endif
 U4      u4_g_VehopemdMdfield(void);
 U1      u1_g_VehopemdMdchk(const U4 u4_a_MASK, const U4 u4_a_CRIT); /* Return : True / False */
 

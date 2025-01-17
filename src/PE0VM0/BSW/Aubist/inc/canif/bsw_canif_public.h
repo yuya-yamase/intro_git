@@ -1,7 +1,7 @@
-/* bsw_canif_public_h_v3-0-0                                                */
+/* bsw_canif_public_h_v2-0-0                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -390,8 +390,6 @@
 #define BSW_CANIF_PROTOCOL_NOUSE        (0xFFU)
 #define BSW_CANIF_HOH_NOUSE             (0xFFFFU)
 #define BSW_CANIF_HTH_IDX_NOUSE         (0xFFU)
-#define BSW_CANIF_MASK_CH_MODULE        (0x00U)
-#define BSW_CANIF_MASK_RXMSG            (0x01U)
 
 /* CAN Controller Mode */
 #define BSW_CANIF_CS_UNINIT             (0U)
@@ -534,9 +532,7 @@ void                      bsw_canif_edge_EdgeEnableDtct( uint8 ControllerId );
 void                      bsw_canif_edge_EdgeDisableDtct( uint8 ControllerId );
 uint8                     bsw_canif_edge_EdgeGetStatus( uint8 ControllerId );
 Std_ReturnType            bsw_canif_tx_CbkPreTxMsg( PduIdType CanTxPduId, Bsw_CanIf_PduType *TxMsg );
-Std_ReturnType            bsw_canif_tx_CbkPreTxFrame( PduIdType CanTxPduId, Bsw_CanIf_PduType *TxMsg );
 Std_ReturnType            bsw_canif_rx_CbkPreRxMsg( PduIdType CanRxPduId, BswConstR Bsw_CanIf_PduType *RxMsg );
-Std_ReturnType            bsw_canif_rx_CbkPreRxFrame( PduIdType CanRxPduId, BswConstR Bsw_CanIf_PduType *RxMsg );
 void                      bsw_canif_fs_CbkLengthErr( PduIdType RxPduId );
 void                      bsw_canif_fs_CbkSumErr( PduIdType RxPduId );
 void                      bsw_canif_fs_CbkDtctMsgChkCrrct( PduIdType RxPduId );
@@ -569,7 +565,6 @@ void                      bsw_canif_st_CbkSetPduMode( uint8 ControllerId, Bsw_Ca
 /* History                                                                  */
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2021/12/12                                             */
-/*  v3-0-0          :2024/10/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

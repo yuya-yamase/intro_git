@@ -1,0 +1,10 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/PduR/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/PduR/obj/PduR.rel.o
+
+../../src/PduR.c

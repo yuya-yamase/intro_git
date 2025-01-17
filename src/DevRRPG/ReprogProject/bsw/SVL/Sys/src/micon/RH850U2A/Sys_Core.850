@@ -1,0 +1,219 @@
+/* Sys_Core_850_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | Sys/Core/CODE                                               */
+/******************************************************************************/
+/*----------------------------------------------------------------------------*/
+/* Include Files                                                              */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Macros                                                                     */
+/*----------------------------------------------------------------------------*/
+#define SYS_PSW_ID_MASK (1UL << 5U)
+
+
+/*----------------------------------------------------------------------------*/
+/* Types                                                                      */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Function Prototypes                                                        */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Data                                                                       */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Constants                                                                  */
+/*----------------------------------------------------------------------------*/
+
+
+/******************************************************************************/
+/* External Functions                                                         */
+/******************************************************************************/
+
+/******************************************************************************/
+/* Function Name | DisableInterrupt                                           */
+/* Description   | Disable all interrupts                                     */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | r10 : Interrupt status                                     */
+/*               |  0x00000000UL : Interrupt Enabled when previous state      */
+/*               |  0x00000020UL : Interrupt Disabled when previous state     */
+/* Notes         | - This function will be available for MCAL only.           */
+/*               | - Specify the return value of this function as the         */
+/*               |   argument of EnableInterrupt() function.                  */
+/******************************************************************************/
+    .section ".P_RAM_1ST_FIXED", "ax"
+    .align 2
+    .globl _DisableInterrupt
+_DisableInterrupt:
+    /* Get PSW register */
+    stsr    5, r10, 0           /* stsr    PSW, r10 */
+
+    /* Mask PSW.ID bit and set return value(r10) */
+    mov     SYS_PSW_ID_MASK, r6
+    and     r6, r10
+
+    /* If interrupt already disabled, do not anything */
+    bne     SYS_DI_END
+
+    /* Disable interrupt */
+    di
+
+SYS_DI_END:
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | EnableInterrupt                                            */
+/* Description   | Enable all interrupts                                      */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Interrupt status                                 */
+/*               |  0x00000000UL : Interrupt Enabled when previous state      */
+/*               |  0x00000020UL : Interrupt Disabled when previous state     */
+/* Return Value  | None                                                       */
+/* Notes         | - This function will be available for MCAL only.           */
+/*               | - Specify the return value of DisableInterrupt() function  */
+/*               |   as the argument of this function.                        */
+/******************************************************************************/
+    .section ".P_RAM_1ST_FIXED", "ax"
+    .align 2
+    .globl _EnableInterrupt
+_EnableInterrupt:
+    /* Check if PSW.ID bit is same as interrupt status(r6) */
+    /* if same, no action needed                           */
+    mov     SYS_PSW_ID_MASK, r7
+    cmp     r7, r6
+
+    be      SYS_EI_END
+
+    /* Enable interrupt */
+    ei
+
+SYS_EI_END:
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | MemBarrier32                                               */
+/* Description   | Memory barrier                                             */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Dummy read address                               */
+/* Return Value  | None                                                       */
+/* Notes         | It is necessary for Dummy read address to be 32 bit align. */
+/******************************************************************************/
+    .section ".P_RAM_1ST_FIXED", "ax"
+    .align 2
+    .globl _MemBarrier32
+_MemBarrier32:
+    /* Dummy read */
+    ld.w    0[r6], r6
+
+    /* Sync */
+    synci
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | MemBarrier16                                               */
+/* Description   | Memory barrier                                             */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Dummy read address                               */
+/* Return Value  | None                                                       */
+/* Notes         | It is necessary for Dummy read address to be 16 bit align. */
+/******************************************************************************/
+    .section ".P_RAM_1ST_FIXED", "ax"
+    .align 2
+    .globl _MemBarrier16
+_MemBarrier16:
+    /* Dummy read */
+    ld.h    0[r6], r6
+
+    /* Sync */
+    synci
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | MemBarrier8                                                */
+/* Description   | Memory barrier                                             */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Dummy read address                               */
+/* Return Value  | None                                                       */
+/* Notes         | It is necessary for Dummy read address to be 8 bit align.  */
+/******************************************************************************/
+    .section ".P_RAM_1ST_FIXED", "ax"
+    .align 2
+    .globl _MemBarrier8
+_MemBarrier8:
+    /* Dummy read */
+    ld.b    0[r6], r6
+
+    /* Sync */
+    synci
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Rpg_Div_u32                                                */
+/* Description   | Division                                                   */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Dividend                                         */
+/*               | [IN] r7 : Divisor                                          */
+/* Return Value  | r10 : Quotient                                             */
+/* Notes         | This function does not check arguments.                    */
+/******************************************************************************/
+    .section ".P_RAM_1ST_FIXED", "ax"
+    .align 2
+    .globl _Rpg_Div_u32
+_Rpg_Div_u32:
+    divqu   r7, r6, zero        /* r6 = r6 / r7 */
+    mov     r6, r10
+
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Rpg_Mod_u32                                                */
+/* Description   | Modulo                                                     */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Dividend                                         */
+/*               | [IN] r7 : Divisor                                          */
+/* Return Value  | r10 : Remainder                                            */
+/* Notes         | This function does not check arguments.                    */
+/******************************************************************************/
+    .section ".P_RAM_1ST_FIXED", "ax"
+    .align 2
+    .globl _Rpg_Mod_u32
+_Rpg_Mod_u32:
+    divqu   r7, r6, r10         /* r6  = r6 / r7 */
+                                /* r10 = r6 % r7 */
+
+    jmp     [lp]
+
+
+/******************************************************************************/
+/* Internal Functions                                                         */
+/******************************************************************************/
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2021/09/14 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

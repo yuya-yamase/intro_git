@@ -1,0 +1,689 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+  /* フラグ制御  */
+  enum E_Flag_Num
+  {
+    E_Flag_OFF = 0,  /* フラグオフ */
+    E_Flag_ON  = 1   /* フラグオン */
+  };
+
+  /* 自作関数戻り値定義 */
+  /* 診断CAPL関数のエラーコードが最大-100なので、自作関数のエラーの戻り値定義は-200を起点にする */
+  enum E_Return_Num
+  {
+    E_Return_OK            = 0,      /* 正常終了 */
+
+    E_Return_EOF           = -200,   /* ファイル終端 */
+
+    E_Return_NG            = -301,   /* 異常終了 */
+    E_Return_SPRMIB_Set_NG = -302,   /* SPRMIBの設定失敗 */
+    E_Return_PRAMETER_NG   = -303,   /* パラメータエラー */
+    E_Return_FILEOPEN_NG   = -304,   /* ファイルオープンエラー */
+    E_Return_FILECLOSE_NG  = -305,   /* ファイルクローズエラー */
+    E_Return_REQ_READ_NG   = -306,   /* リクエストデータ読み出しエラー */
+    E_Return_RES_READ_NG   = -307    /* レスポンスデータ読み出しエラー */
+  };
+
+
+  /* 物理アドレス/機能アドレスの指定  */
+  enum E_Send_Address_Num
+  {
+    E_Send_Address_Phy  = 0,  /* 物理アドレス */
+    E_Send_Address_Func = 1   /* 機能アドレス */
+  };
+
+  /* RequestDownload,　TransferDataに関連する情報を管理する領域の要素数 */
+  /* 今今はFingerprintの最大数と同じ値としている */
+  enum E_TransferData_info_All_Num
+  {
+    E_TransferData_info_All_Element = 32
+  };
+
+  /* 転送データの読み出し時のバッファ最大値(別の対処法が判明するまで) */
+  /* 動的なメモリ取得が出来なそうなので、CAN通信仕様のバッファサイズ最大値を指定 */
+  enum E_readbuff_maxsize_Num
+  {
+    /* CAN通信仕様のバッファサイズ最大値(4096バイト)から「TransferData Request SID」と */
+    /* 「blockSequenceCounter」の計2バイトを引いた値　*/
+    E_readbuff_maxsize = 4094                           /* 転送データサイズ */
+  };
+
+  /* ファイルオープン時のモード指定 */
+  enum E_Openfile_mode_Num
+  {
+    E_Openfile_mode_text   = 0,  /* テキストモード */
+    E_Openfile_mode_binary = 1   /* バイナリモード */
+  };
+
+  /* 4.3.1	diagnosticSessionTypeと同じ値の定義 */
+  enum E_diagnosticSessionType_Num
+  {
+    E_diagnosticSessionType_defaultSession             = 0x01, /* defaultSession */
+    E_diagnosticSessionType_ProgrammingSession         = 0x02, /* ProgrammingSession */
+    E_diagnosticSessionType_extendedDiagnosticSession  = 0x03  /* extendedDiagnosticSession */
+  };
+
+  /* 5.3.1	resetTypeと同じ値の定義 */
+  enum E_resetType_Num
+  {
+    E_resetType_hardReset  = 0x01  /* hardReset */
+  };
+
+  /* 6.3.1	securityAccessTypeと同じ値の定義 */
+  enum E_securityAccessType_Num
+  {
+    E_securityAccessType_requestSeed     = 0x01, /* requestSeed */
+    E_securityAccessType_sendKey         = 0x02  /* sendKey */
+  };
+
+  /* 7.3.1	controlTypeと同じ値の定義 */
+  enum E_controlType_Num
+  {
+    E_controlType_disableRxAndTx             = 0x03 /* disableRxAndTx */
+  };
+
+  /* 11.3.1	dataIdentifierと同じ値の定義 */
+  /* 12.3.1	dataIdentifierの定義も同居している */
+  enum E_dataIdentifier_Num
+  {
+    E_dataIdentifier_SWIdentification        = 0xF188, /* ソフトウェア番号 */
+    E_dataIdentifier_HWIdentification        = 0xF191, /* ハードウェア番号 */
+    E_dataIdentifier_ActiveDiagnosticSession = 0xF186, /* 現在のdiagnosticSession */
+    E_dataIdentifier_Nonce_00                = 0xF050, /* Noce #0 */
+    E_dataIdentifier_Nonce_01                = 0xF050, /* Noce #1 */
+    E_dataIdentifier_Nonce_02                = 0xF050, /* Noce #2 */
+    E_dataIdentifier_Nonce_03                = 0xF050, /* Noce #3 */
+    E_dataIdentifier_Nonce_04                = 0xF050, /* Noce #4 */
+    E_dataIdentifier_Nonce_05                = 0xF050, /* Noce #5 */
+    E_dataIdentifier_Nonce_06                = 0xF050, /* Noce #6 */
+    E_dataIdentifier_Nonce_07                = 0xF050, /* Noce #7 */
+    E_dataIdentifier_Nonce_08                = 0xF050, /* Noce #8 */
+    E_dataIdentifier_Nonce_09                = 0xF050, /* Noce #9 */
+    E_dataIdentifier_Nonce_10                = 0xF050, /* Noce #10 */
+    E_dataIdentifier_Nonce_11                = 0xF050, /* Noce #11 */
+    E_dataIdentifier_Nonce_12                = 0xF050, /* Noce #12 */
+    E_dataIdentifier_Nonce_13                = 0xF050, /* Noce #13 */
+    E_dataIdentifier_Nonce_14                = 0xF050, /* Noce #14 */
+    E_dataIdentifier_Nonce_15                = 0xF050, /* Noce #15 */
+    E_dataIdentifier_Nonce_16                = 0xF050, /* Noce #16 */
+    E_dataIdentifier_Nonce_17                = 0xF050, /* Noce #17 */
+    E_dataIdentifier_Nonce_18                = 0xF050, /* Noce #18 */
+    E_dataIdentifier_Nonce_19                = 0xF050, /* Noce #19 */
+    E_dataIdentifier_Nonce_20                = 0xF050, /* Noce #20 */
+    E_dataIdentifier_Nonce_21                = 0xF050, /* Noce #21 */
+    E_dataIdentifier_Nonce_22                = 0xF050, /* Noce #22 */
+    E_dataIdentifier_Nonce_23                = 0xF050, /* Noce #23 */
+    E_dataIdentifier_Nonce_24                = 0xF050, /* Noce #24 */
+    E_dataIdentifier_Nonce_25                = 0xF050, /* Noce #25 */
+    E_dataIdentifier_Nonce_26                = 0xF050, /* Noce #26 */
+    E_dataIdentifier_Nonce_27                = 0xF050, /* Noce #27 */
+    E_dataIdentifier_Nonce_28                = 0xF050, /* Noce #28 */
+    E_dataIdentifier_Nonce_29                = 0xF050, /* Noce #29 */
+    E_dataIdentifier_Nonce_30                = 0xF050, /* Noce #30 */
+    E_dataIdentifier_Nonce_31                = 0xF050, /* Noce #31 */
+    E_dataIdentifier_asfp_00                 = 0xF120, /* applicationSoftwareFingerprint #0 */
+    E_dataIdentifier_asfp_01                 = 0xF121, /* applicationSoftwareFingerprint #1 */
+    E_dataIdentifier_asfp_02                 = 0xF122, /* applicationSoftwareFingerprint #2 */
+    E_dataIdentifier_asfp_03                 = 0xF123, /* applicationSoftwareFingerprint #3 */
+    E_dataIdentifier_asfp_04                 = 0xF124, /* applicationSoftwareFingerprint #4 */
+    E_dataIdentifier_asfp_05                 = 0xF125, /* applicationSoftwareFingerprint #5 */
+    E_dataIdentifier_asfp_06                 = 0xF126, /* applicationSoftwareFingerprint #6 */
+    E_dataIdentifier_asfp_07                 = 0xF127, /* applicationSoftwareFingerprint #7 */
+    E_dataIdentifier_asfp_08                 = 0xF128, /* applicationSoftwareFingerprint #8 */
+    E_dataIdentifier_asfp_09                 = 0xF129, /* applicationSoftwareFingerprint #9 */
+    E_dataIdentifier_asfp_10                 = 0xF12A, /* applicationSoftwareFingerprint #10 */
+    E_dataIdentifier_asfp_11                 = 0xF12B, /* applicationSoftwareFingerprint #11 */
+    E_dataIdentifier_asfp_12                 = 0xF12C, /* applicationSoftwareFingerprint #12 */
+    E_dataIdentifier_asfp_13                 = 0xF12D, /* applicationSoftwareFingerprint #13 */
+    E_dataIdentifier_asfp_14                 = 0xF12E, /* applicationSoftwareFingerprint #14 */
+    E_dataIdentifier_asfp_15                 = 0xF12F, /* applicationSoftwareFingerprint #15 */
+    E_dataIdentifier_asfp_16                 = 0xF130, /* applicationSoftwareFingerprint #16 */
+    E_dataIdentifier_asfp_17                 = 0xF131, /* applicationSoftwareFingerprint #17 */
+    E_dataIdentifier_asfp_18                 = 0xF132, /* applicationSoftwareFingerprint #18 */
+    E_dataIdentifier_asfp_19                 = 0xF133, /* applicationSoftwareFingerprint #19 */
+    E_dataIdentifier_asfp_20                 = 0xF134, /* applicationSoftwareFingerprint #20 */
+    E_dataIdentifier_asfp_21                 = 0xF135, /* applicationSoftwareFingerprint #21 */
+    E_dataIdentifier_asfp_22                 = 0xF136, /* applicationSoftwareFingerprint #22 */
+    E_dataIdentifier_asfp_23                 = 0xF137, /* applicationSoftwareFingerprint #23 */
+    E_dataIdentifier_asfp_24                 = 0xF138, /* applicationSoftwareFingerprint #24 */
+    E_dataIdentifier_asfp_25                 = 0xF139, /* applicationSoftwareFingerprint #25 */
+    E_dataIdentifier_asfp_26                 = 0xF13A, /* applicationSoftwareFingerprint #26 */
+    E_dataIdentifier_asfp_27                 = 0xF13B, /* applicationSoftwareFingerprint #27 */
+    E_dataIdentifier_asfp_28                 = 0xF13C, /* applicationSoftwareFingerprint #28 */
+    E_dataIdentifier_asfp_29                 = 0xF13D, /* applicationSoftwareFingerprint #29 */
+    E_dataIdentifier_asfp_30                 = 0xF13E, /* applicationSoftwareFingerprint #30 */
+    E_dataIdentifier_asfp_31                 = 0xF13F  /* applicationSoftwareFingerprint #31 */
+  };
+
+  /* 11.3.1	dataIdentifierに対応するデータサイズの定義 */
+  enum E_dataIdentifier_Datasize_Num
+  {
+    E_dataIdentifier_Datasize_dataIdentifier    = 2,   /* dataIdentifier */
+    E_dataIdentifier_Datasize_ActiveDiagnosticSession        = 1,   /* 現在のdiagnosticSession */
+    E_dataIdentifier_Datasize_applicationSoftwareFingerprint = 512   /* applicationSoftwareFingerprint */
+  };
+
+  /* RequestDownloadの転送データ種別 */
+  enum E_RequestDownload_Type_Num
+  {
+    E_RequestDownload_Type_Erase = 0,    /* 「消去・書込みルーチン」の転送情報を送信 */
+    E_RequestDownload_Type_Reprog = 1,   /* 「書換えデータ」の転送情報を送信 */
+    E_RequestDownload_Type_Common = 2    /* 種別指定無し */
+  };
+
+  /* TransferDataの転送データ種別 */
+  enum E_TransferData_Type_Num
+  {
+    E_TransferData_Type_Erase = E_RequestDownload_Type_Erase,    /* 「消去・書込みルーチン」の転送情報を送信 */
+    E_TransferData_Type_Reprog = E_RequestDownload_Type_Reprog,  /* 「書換えデータ」の転送情報を送信 */
+    E_TransferData_Type_Common = E_RequestDownload_Type_Common   /* 種別指定無し */
+  };
+
+  /* RoutineControlの転送データ種別 */
+  enum E_RoutineControl_Type_Num
+  {
+    E_RoutineControl_Type_Erase = E_RequestDownload_Type_Erase,    /* 「消去・書込みルーチン」の転送情報を送信 */
+    E_RoutineControl_Type_Reprog = E_RequestDownload_Type_Reprog,  /* 「書換えデータ」の転送情報を送信 */
+    E_RoutineControl_Type_Common = E_RequestDownload_Type_Common   /* 種別指定無し */
+  };
+
+  /* 13.3.1	routineControlTypeと同じ値の定義 */
+  enum E_routineControlType_Num
+  {
+    E_routineControlType_startRoutine = 0x1   /* startRoutine */
+  };
+
+  /* 13.3.2	routineIdentifierと同じ値の定義 */
+  enum E_routineIdentifier_Num
+  {
+    E_routineIdentifier_eraseMemory             = 0xFF00,  /* eraseMemory */
+    E_routineIdentifier_checkMemoryFlashdriver  = 0xDD00,  /* checkMemoryFlashdriver */
+    E_routineIdentifier_checkMemorySoftwareData = 0xDD01,  /* checkMemorySoftwareData */
+    E_routineIdentifier_validApplication        = 0xDD02   /* validApplication */
+  };
+
+  /* 13.3.3 routineControlOptionRecordのバイト数 */
+  enum E_routineControlOptionRecord_Num
+  {
+    E_routineControlOptionRecord_eraseAddress        = 4,   /* eraseMemory */
+    E_routineControlOptionRecord_eraseSize           = 4,   /* eraseSize */
+    E_routineControlOptionRecord_SIGNATURE           = 384, /* checkTypeIdentifier */
+    E_routineControlOptionRecord_CMAC                = 16,  /* checkDataLength */
+    E_routineControlOptionRecord_CRC                 = 4,  /* checkData */
+    E_routineControlOptionRecord_checkDataLength     = 2   /* checkDataLength */
+  };
+
+  /* 14.3.1 dataFormatIdentifierと同じ値の定義 */
+  enum E_RequestDownload_dataFormatIdentifier_Num
+  {
+    E_RequestDownload_dataFormatIdentifier_UnCompression = 0x0,  /* 転送データ非圧縮 */
+    E_RequestDownload_dataFormatIdentifier_Compression   = 0x1,  /* 転送データ圧縮 */
+    E_RequestDownload_dataFormatIdentifier_Delta         = 0x2,  /* 転送データ差分 */
+    E_RequestDownload_dataFormatIdentifier_Plain         = 0x0,  /* 転送データ平文 */
+    E_RequestDownload_dataFormatIdentifier_Cryptogram    = 0x1   /* 転送データ暗号文 */
+  };
+
+  enum E_RoutineControlCheckStatus_Num
+  {
+    E_RoutineControlCheckStatus_verificationFailed = 0x1,
+    E_RoutineControlCheckStatus_verificationSuccess = 0x2
+  };
+
+  enum E_RoutineControlApplicationStatus_Num
+  {
+    E_RoutineControlApplicationStatus_validApplicationSoftwareIsNotPresent = 0x1,
+    E_RoutineControlApplicationStatus_validApplicationSoftwareIsPresent = 0x2,
+    E_RoutineControlApplicationStatus_multiApplicationSoftwareIsNotChanged = 0x3,
+    E_RoutineControlApplicationStatus_multiApplicationSoftwareIsChanged = 0x4
+  };
+
+  enum E_authenticationTask_Num
+  {
+    E_authenticationTask_deAuthenticate = 0x0,
+    E_authenticationTask_verifyCertificationUnidirectional = 0x1,
+    E_authenticationTask_verifyCertificationBidirectional = 0x2,
+    E_authenticationTask_proofOfOwnership = 0x3,
+    E_authenticationTask_authenticationConfiguration = 0x8
+  };
+
+  /* 14.3.2	addressAndLengthFormatIdentifierに対応するmemoryAddressとmemorySizeのバイト数 */
+  enum E_RequestDownload_Size_Num
+  {
+    E_RequestDownload_memoryAddress_Byte = 4,  /* memoryAddressのバイト数 */
+    E_RequestDownload_memorySize_Byte = 4         /* memorySizeのバイト数 */
+  };
+
+  /* リセット時に使用するSIDの指定  */
+  enum E_Reset_Service_Num
+  {
+    E_Reset_Service_0x10_ds  = 0,  /* SID 0x10[DiagnosticSessionControl(defaultSession)]を使用する */
+    E_Reset_Service_0x11_hs  = 1   /* SID 0x11[ECUReset(hardReset)]を使用する */
+  };
+
+  /* SecurityAccessで使用するシード値、キー値、Nonce、Fingerprintのバイト数 */
+  enum E_SecurityAccess_Size_Num
+  {
+    E_SecuritySeed_Byte         = 16,    /* SecuritySeed(シード値)のバイト数 */
+    E_SecurityKey_Byte          = 16,    /* SecurityKey(キー値)のバイト数 */
+    E_SecurityNonce_Byte        = 16,    /* Nonceのバイト数 */
+    E_Securityasfp_Byte         = 512    /* applicationSoftwareFingerprintのバイト数 */
+  };
+
+  /* 外部設定情報ファイルに設定しているファイル名の長さの定義 */
+  enum E_External_num
+  {
+    E_Configuration_path_size         = 256,   /* CANoeシナリオのコンフィグレーションの絶対パス長の最大値 */
+    E_Debug_log_buffer_size           = 256,   /* デバッグログの1行のバッファサイズの最大値 */
+    E_External_erase_file_name_size   = 128,   /* 消去・書込みルーチンのファイル名の最大値 */
+    E_External_reprog_file_name_size  = 128,   /* 書込みファイルのファイル名の最大値 */
+    E_External_ecudef_file_name_size  = 128,   /* ECU修飾子のファイル名の最大値 */
+    E_External_diagdef_file_name_size = 128,   /* 診断記述ファイルのファイル名の最大値 */
+    E_External_dll_file_name_size     = 128    /* DLLファイルのファイル名の最大値 */
+  };
+
+  /* Programming Phase #1のCANoeシーケンスでのシーケンス位置を示す値 */
+  enum E_PP1_Seqence_Num
+  {
+    /* ****************** ProgrammingPhase#1 Start *********************** */
+    E_PP1_Seqence_Start = 0,     /* 初期状態 */
+    /* ****************** ProgrammingPhase#1 Pre-Programming step(Setup of network for programming) ********************* */
+    E_PP1_SID_0x22_swi_req = 1,      /* SID 0x22 vehicleManufacturerECUSoftwareNumberDataIdentifier 送信 */
+    E_PP1_SID_0x22_swi_posres,   /* SID 0x22 vehicleManufacturerECUSoftwareNumberDataIdentifier 送信 */
+    E_PP1_SID_0x22_hwi_req,  /* SID 0x22 vehicleManufacturerECUHardwareNumberDataIdentifier 送信 */
+    E_PP1_SID_0x22_hwi_posres,   /* SID 0x22 ActiveDiagnosticSession ポジティブレスポンス受信 */
+    E_PP1_SID_0x10_ext_req,      /* SID 0x10 DiagnosticSessionControl(extendedDiagnosticSession) 送信 */
+    E_PP1_SID_0x10_ext_posres,   /* SID 0x10 DiagnosticSessionControl(extendedDiagnosticSession) ポジティブレスポンス受信 */
+    E_PP1_SID_0x28_rxtx_req,     /* SID 0x28 CommunicationControl(disableRxAndTx) 送信　*/
+    E_PP1_SID_0x28_rxtx_posres,  /* SID 0x28 CommunicationControl(disableRxAndTx) ポジティブレスポンス受信　*/
+    /* ****************** ProgrammingPhase#1 Programming Execute(Download of software and data) *********************** */
+    E_PP1_SID_0x10_prog_req = 30,     /* SID 0x10 DiagnosticSessionControl(ProgrammingSession) 送信　*/
+    E_PP1_SID_0x10_prog_posres,       /* SID 0x10 DiagnosticSessionControl(ProgrammingSession) ポジティブレスポンス受信 */
+    E_PP1_SID_0x27_seed_req,          /* SID 0x27 SecurityAccess(requestSeed) 送信 */
+    E_PP1_SID_0x27_seed_posres,       /* SID 0x27 SecurityAccess(requestSeed) ポジティブレスポンス受信 */
+    E_PP1_SID_0x27_key_req,           /* SID 0x27 SecurityAccess(sendKey) 送信 */
+    E_PP1_SID_0x27_key_posres,        /* SID 0x27 SecurityAccess(sendKey) ポジティブレスポンス受信 */
+    E_PP1_SID_0x2E_asfp_req,          /* SID 0x2E WriteDataByIdentifier(applicationSoftwareFingerprint) 送信 */
+    E_PP1_SID_0x2E_asfp_posres,       /* SID 0x2E WriteDataByIdentifier(applicationSoftwareFingerprint) ポジティブレスポンス受信 */
+    E_PP1_SID_0x2E_nonce_req,         /* SID 0x2E WriteDataByIdentifier(Nonce) 送信 */
+    E_PP1_SID_0x2E_nonce_posres,      /* SID 0x2E WriteDataByIdentifier(Nonce) ポジティブレスポンス受信 */
+    E_PP1_SID_0x34_SBL_req,           /* SID 0x34 RequestDownload(消去・書込みルーチン) 送信 */
+    E_PP1_SID_0x34_SBL_posres,        /* SID 0x34 RequestDownload(消去・書込みルーチン) ポジティブレスポンス受信 */
+    E_PP1_SID_0x36_dl_SBL_req,        /* SID 0x36 TransferData(ダウンロード) 送信 */
+    E_PP1_SID_0x36_dl_SBL_posres,     /* SID 0x36 TransferData(ダウンロード) ポジティブレスポンス受信 */
+    E_PP1_SID_0x37_SBL_req,           /* SID 0x37 RequestTransferExit(消去・書込みルーチン) 送信 */
+    E_PP1_SID_0x37_SBL_posres,        /* SID 0x37 RequestTransferExit(消去・書込みルーチン) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_check_mfd_signature_req,     /* SID 0x31 RoutineControl(checkMemoryFlashdriver) 送信 */
+    E_PP1_SID_0x31_check_mfd_signature_posres,  /* SID 0x31 RoutineControl(checkMemoryFlashdriver) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_check_mfd_cmac_req,     /* SID 0x31 RoutineControl(checkMemoryFlashdriver) 送信 */
+    E_PP1_SID_0x31_check_mfd_cmac_posres,  /* SID 0x31 RoutineControl(checkMemoryFlashdriver) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_check_mfd_crc_req,     /* SID 0x31 RoutineControl(checkMemoryFlashdriver) 送信 */
+    E_PP1_SID_0x31_check_mfd_crc_posres,  /* SID 0x31 RoutineControl(checkMemoryFlashdriver) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_erase_req,         /* SID 0x31 RoutineControl(eraseMemory) 送信 */
+    E_PP1_SID_0x31_erase_posres,      /* SID 0x31 RoutineControl(eraseMemory) ポジティブレスポンス受信 */
+    E_PP1_SID_0x34_APL_req,           /* SID 0x34 RequestDownload(書換えデータ) 送信 */
+    E_PP1_SID_0x34_APL_posres,        /* SID 0x34 RequestDownload(書換えデータ) ポジティブレスポンス受信 */
+    E_PP1_SID_0x36_dl_APL_req,        /* SID 0x36 TransferData(ダウンロード) 送信 */
+    E_PP1_SID_0x36_dl_APL_posres,     /* SID 0x36 TransferData(ダウンロード) ポジティブレスポンス受信 */
+    E_PP1_SID_0x37_APL_req,           /* SID 0x37 RequestTransferExit(書換えデータ) 送信 */
+    E_PP1_SID_0x37_APL_posres,        /* SID 0x37 RequestTransferExit(書換えデータ) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_check_msd_signature_req,     /* SID 0x31 RoutineControl(checkMemorySoftwareData) 送信 */
+    E_PP1_SID_0x31_check_msd_signature_posres,  /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_check_msd_cmac_req,     /* SID 0x31 RoutineControl(checkMemorySoftwareData) 送信 */
+    E_PP1_SID_0x31_check_msd_cmac_posres,  /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_check_msd_crc_req,     /* SID 0x31 RoutineControl(checkMemorySoftwareData) 送信 */
+    E_PP1_SID_0x31_check_msd_crc_posres,  /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_valid_req,         /* SID 0x31 RoutineControl(validApplication) 送信 */
+    E_PP1_SID_0x31_valid_posres,      /* SID 0x31 RoutineControl(validApplication) ポジティブレスポンス受信 */
+    E_PP1_SID_0x31_valid_sig_req,         /* SID 0x31 RoutineControl(validApplication) 送信(Sig有り) */
+    E_PP1_SID_0x31_valid_sig_posres,      /* SID 0x31 RoutineControl(validApplication) ポジティブレスポンス受信(Sig有り) */
+    /* ****************** ProgrammingPhase#1 Post-Programming step(Re-Synch of network) *********************** */
+    E_PP1_SID_0x11_ECUReset_req,        /* SID 0x11 ECUReset 送信 */
+    E_PP1_SID_0x11_ECUReset_posres,     /* SID 0x11 ECUReset ポジティブレスポンス受信 */
+    E_PP1_SID_0x10_def_req,             /* SID 0x10 DiagnosticSessionControl(defaultSession) 送信 */
+    E_PP1_SID_0x10_def_posres,          /* SID 0x10 DiagnosticSessionControl(defaultSession) ポジティブレスポンス受信  */
+    /* ****************** ProgrammingPhase#1 Completed *********************** */
+    E_PP1_Seqence_Normal_End = 256,     /* 正常終了状態 */
+
+    /* ****************** ProgrammingPhase#1 Error End *********************** */
+    E_PP1_Seqence_Error_End = -128      /* 異常終了状態 */
+  };
+
+  /* Programming Phase #2のCANoeシーケンスでのシーケンス位置を示す値 */
+  enum E_PP2_Seqence_Num
+  {
+    /* ****************** ProgrammingPhase#2 Start *********************** */
+    E_PP2_Seqence_Num_Start = 0,   /* 初期状態 */
+
+    /* ****************** ProgrammingPhase#2 Completed *********************** */
+    E_PP2_Seqence_Num_N_End = 128, /* 正常終了状態 */
+
+    /* ****************** ProgrammingPhase#2 Error *********************** */
+    E_PP2_Seqence_Num_E_End = 256  /* 異常終了状態 */
+  };
+
+  /* CANoeシナリオを途中で停止する拡張機能用のシーケンス番号マッピング用定義 */
+  enum E_CANoe_Stop_Sequence_Mapping
+  {
+    E_CANoe_Stop_Sequence_SID_0x22_swi = E_PP1_SID_0x22_swi_req,             /* SID 0x22 SWIdentification 送信 */
+    E_CANoe_Stop_Sequence_SID_0x22_hwi = E_PP1_SID_0x22_hwi_req,             /* SID 0x22 HWIdentification 送信 */
+    E_CANoe_Stop_Sequence_SID_0x10_ext = E_PP1_SID_0x10_ext_req,             /* SID 0x10 DiagnosticSessionControl(extendedDiagnosticSession) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x28 = E_PP1_SID_0x28_rxtx_req,                /* SID 0x28 CommunicationControl(disableRxAndTx) 送信　*/
+    E_CANoe_Stop_Sequence_SID_0x10_prog = E_PP1_SID_0x10_prog_req,           /* SID 0x10 DiagnosticSessionControl(ProgrammingSession) 送信　*/
+    E_CANoe_Stop_Sequence_SID_0x27_seed = E_PP1_SID_0x27_seed_req,           /* SID 0x27 SecurityAccess(requestSeed) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x27_key = E_PP1_SID_0x27_key_req,             /* SID 0x27 SecurityAccess(sendKey) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x2E_asfp = E_PP1_SID_0x2E_asfp_req,           /* SID 0x2E WriteDataByIdentifier(applicationSoftwareFingerprint) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x2E_nonce =  E_PP1_SID_0x2E_nonce_req,        /* SID 0x2E WriteDataByIdentifier(Nonce) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x34_SBL = E_PP1_SID_0x34_SBL_req,             /* SID 0x34 RequestDownload(消去・書込みルーチン) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x36_SBL = E_PP1_SID_0x36_dl_SBL_req,          /* SID 0x36 TransferData(ダウンロード) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x37_SBL = E_PP1_SID_0x37_SBL_req,             /* SID 0x37 RequestTransferExit(消去・書込みルーチン) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x31_SBL_chk_sign = E_PP1_SID_0x31_check_mfd_signature_req, /* SID 0x31 RoutineControl(check:signature) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x31_SBL_chk_cmac = E_PP1_SID_0x31_check_mfd_cmac_req,      /* SID 0x31 RoutineControl(check:cmac) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x31_SBL_chk_crc = E_PP1_SID_0x31_check_mfd_crc_req,        /* SID 0x31 RoutineControl(check:crc) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x31_erase = E_PP1_SID_0x31_erase_req,         /* SID 0x31 RoutineControl(eraseMemory) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x34_APL = E_PP1_SID_0x34_APL_req,             /* SID 0x34 RequestDownload(書換えデータ) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x36_APL = E_PP1_SID_0x36_dl_APL_req,          /* SID 0x36 TransferData(ダウンロード) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x37_APL = E_PP1_SID_0x37_APL_req,             /* SID 0x37 RequestTransferExit(書換えデータ) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x31_APL_chk_sign = E_PP1_SID_0x31_check_msd_signature_req, /* SID 0x31 RoutineControl(check:signature) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x31_APL_chk_cmac = E_PP1_SID_0x31_check_msd_cmac_req,      /* SID 0x31 RoutineControl(check:cmac) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x31_APL_chk_crc = E_PP1_SID_0x31_check_msd_crc_req,        /* SID 0x31 RoutineControl(check:crc) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x31_validate = E_PP1_SID_0x31_valid_req,      /* SID 0x31 RoutineControl(validApplication) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x11 = E_PP1_SID_0x11_ECUReset_req,            /* SID 0x11 ECUReset 送信 */
+    E_CANoe_Stop_Sequence_SID_0x10_def = E_PP1_SID_0x10_def_req,             /* SID 0x10 DiagnosticSessionControl(defaultSession) 送信 */
+    E_CANoe_Stop_Sequence_SID_0x3E = (E_PP1_Seqence_Normal_End + 1)          /* SID 0x3E TesterPresent送信(特定のシーケンス位置がないので仮の値割り当て) */
+  };
+
+  /* 時間測定に使うCANoeシーケンスのシーケンス位置の定義 */
+  enum E_Timespec_Seqence_Num
+  {
+    E_Timespec_Seqence_Start = 0,            /* CANoeシナリオの開始直前 */
+    E_Timespec_Seqence_SeedKey_0x27_Start,   /* SID 0x27 SecurityAccess[requestSeed]のリクエスト送信直前 */
+    E_Timespec_Seqence_SeedKey_0x27_End,     /* SID 0x27 SecurityAccess[sendKey]のレスポンス受信直後 */
+    E_Timespec_Seqence_erase_0x34_Start,     /* 消去ルーチンに対するSID 0x34 RequestDownloadのリクエスト送信直前 */
+    E_Timespec_Seqence_erase_0x37_End,       /* 消去ルーチンに対するSID 0x37 RequestTransferExitのレスポンス受信直後 */
+    E_Timespec_Seqence_erasemem_0x31_Start,  /* SID 0x31 RoutineControl(eraseMemory)のリクエスト送信直前 */
+    E_Timespec_Seqence_erasemem_0x31_End,    /* SID 0x31 RoutineControl(eraseMemory)のレスポンス受信直後 */
+    E_Timespec_Seqence_Apl_0x34_Start,       /* 書込みファイルに対するSID 0x34 RequestDownloadのリクエスト送信直前 */
+    E_Timespec_Seqence_Apl_0x37_End,         /* 書込みファイルに対するSID 0x37 RequestTransferExitのレスポンス受信直後 */
+    E_Timespec_Seqence_End,                  /* CANoeシナリオの終了直後 */
+    E_Timespec_Seqence_MAX                   /* 時間測定箇所の最大数 */
+  };
+
+  /* CANoeシーケンス全体で共有する必要のある情報 */
+  struct S_General_info
+  {
+      dword P2Client;                           /* P2Client(リクエスト送信完了からレスポンス受信開始までの待ち時間)*/
+      dword P6_aster_Client;                    /* P6*Client(NRC 0x78のNegRsp受信完了から対応するレスポンス受信完了までの待ち時間)*/
+      int  pp1_process;                         /* Programming Phase #1の現在処理中のシーケンスの位置 */
+      int  pp2_process;                         /* Programming Phase #2の現在処理中のシーケンスの位置 */
+      int  stop_process;                        /* 拡張機能(シーケンス停止)の停止シーケンスの位置 */
+      byte stop_lb;                             /* 拡張機能(シーケンス停止)の停止LogicalBlock */
+      byte stop_bsc;                            /* 拡張機能(シーケンス停止)の停止BlockSequenceCounter(SID36) */
+      long aplstart_wait;                       /* APL要求起動時、初回のリクエスト送信のみの遅延タイマ */
+      byte initialze;                           /* 初期化完了フラグ */
+      byte enable_autorun;                      /* 自動実行の有効フラグ */
+      byte enable_aplstart;                     /* APL起動要求の有効フラグ */
+      byte multiple_file_num;                   /* 書換え対象領域の総数 */
+      byte multiple_file_count;                 /* 書換え対象領域の何回目を実施しているかのカウンタ */
+      byte check_count;                                         /* 1回の書換え内のSID31チェック回数 */
+      char diag_def_name[E_External_diagdef_file_name_size];    /* 使用している診断記述ファイルの定義名 */
+      char ecu_modifier[E_External_ecudef_file_name_size];      /* ECU修飾子名 */
+      char dll_file_name[E_External_dll_file_name_size];        /* DLLファイル名 */
+  };
+
+  /* SecurityAccessに関連する情報 */
+  struct S_SecurityAccess_info
+  {
+    byte securityseed[E_SecuritySeed_Byte];         /* サーバから受信したシード値 */
+    byte securitykey[E_SecurityKey_Byte];           /* シード値を使って算出したキー値 */
+    byte nonce[E_TransferData_info_All_Element][E_SecurityNonce_Byte];               /* 暗号化ツールで使用したNonce値 */
+    byte applicationSoftwareFingerprint[E_TransferData_info_All_Element][E_Securityasfp_Byte]; /* applicationSoftwareFingerprint値 */
+    int  asfpsize[E_TransferData_info_All_Element]; /* asfpサイズ */
+    int  nonce_cnt;                                 /* Nonce回数のカウンタ */
+    int  asfp_cnt;                                  /* applicationSoftwareFingerprint回数のカウンタ */
+    dword securityLevel;                            /* セキュリティレベル(0x1固定で良い) */
+    dword seedArraySize;                            /* シード値の最大バイト数 */
+    dword maxKeyArraySize;                          /* キー値の最大バイト数 */
+    dword keyActualSize;                            /* 生成したKEY値のバイト数 */
+    char ToolAuthKey[32];                           /* ツール認証キー */
+    char variant[16];                               /* バリアント("BaseVariant"固定で良い)  */
+    char ipOption[16];                              /* DLLの関数のパラメータ(NULL固定で良い)  */
+  };
+
+  /* RequestDownload,　TransferDataに関連する情報 */
+  struct S_TransferData_info
+  {
+    byte cnt[1];                                             /* 消去・書込みルーチンの転送回数。診断CAPL関数の都合で1byteの要素1の配列 */
+    byte dataFormatIdentifier[1];                            /* 消去・書込みルーチンのdataFormatIdentifier。診断CAPL関数の都合で1byteの要素1の配列 */
+    byte address[E_RequestDownload_memoryAddress_Byte];      /* 消去・書込みルーチンの仮想アドレス */
+    byte size[E_RequestDownload_memorySize_Byte];            /* 消去・書込みルーチンの転送するデータサイズ */
+    byte checkTypeIdentifier;                                /* 消去・書込みルーチンのcheckTypeIdentifier値 */
+    byte checkdata[E_routineControlOptionRecord_SIGNATURE];  /* 消去・書込みルーチンのcheckData値 */
+    byte region;                                             /* 消去・書込みルーチンの書換え対象領域番号 */
+    byte checkDataLength[2];                                 /* checkDataLength */
+    dword transfer_size;                                     /* 1回の「0x36(TransferData)」で転送可能なデータサイズ */
+    dword size_max;                                          /* 消去・書込みルーチンの転送済みデータサイズ最大値 */
+    dword size_all;                                          /* 消去・書込みルーチンの転送済みデータサイズ */
+    char filename[(E_Configuration_path_size + E_External_erase_file_name_size)];  /* 消去・書込みルーチンのファイル名 */
+    dword filehandle;                                        /* 消去・書込みルーチンor書換えデータのファイルハンドル */
+  };
+
+  /* TesterPresentに関連する情報 */
+  struct S_TesterPresent_info
+  {
+    long testerPresentAddrtype;                         /* TesterPresent個別送信時のアドレス種別設定 */
+    long testerPresentSprmib;                           /* TesterPresent個別送信時のSPRMIB設定 */
+  };
+
+  /* Resetに関連する情報 */
+  struct S_Reset_info
+  {
+    int reset_service;            /* リセット時にSID 0x10とSID 0x11のどちらを使うかを制御するフラグ */
+  };
+
+  /* DiagnosticSessionControlに関連する情報 */
+  struct S_DiagnosticSessionControl_info
+  {
+    long extendedDiagnosticSession_sprmib;  /* extendedDiagnosticSession送信時のSPRMIB設定 */
+  };
+
+  /* ReadDataByIdentifierに関連する情報 */
+  struct S_ReadDataByIdentifier_info
+  {
+    int ReadDataByIdentifier_enable;        /* SID 0x22 ReadDataByIdentifierの実行可否を制御するフラグ */
+  };
+
+  /* ValidateApplicationに関連する情報 */
+  struct S_ValidateApplication_info
+  {
+    int  sendOptionRecord;                                               /* validate applicationのOptionRecord送信有無を制御するフラグ*/
+    byte checkTypeIdentifier;                                            /* validate applicationのcheckTypeIdentifier値 */
+    byte checkDataLength[E_routineControlOptionRecord_checkDataLength];  /* validate applicationでSignatureを送信する場合のcheckDataLength */
+    byte checkdata[E_routineControlOptionRecord_SIGNATURE];              /* validate applicationでSignatureを送信する場合のcheckData値 */
+  };
+
+  /* ReprogのCANoeシーケンスを制御する為の管理情報を格納するデータ型 */
+  struct S_Reprog_General_Data
+  {
+    /* CANoeシーケンス全体で共有する必要のある情報 */
+    struct S_General_info G_Info;
+
+    /* 各サービス個別で管理する必要のある情報 */
+    /* あれば追加する */
+    struct S_SecurityAccess_info S_Info;
+    struct S_TransferData_info T_Info_Erase;
+    struct S_TransferData_info T_Info_Reprog;
+    struct S_TesterPresent_info TP_Info;
+    struct S_Reset_info R_Info;
+    struct S_DiagnosticSessionControl_info DSC_Info;
+    struct S_ReadDataByIdentifier_info RDBI_Info;
+    struct S_ValidateApplication_info VLD_Info;
+
+    /* 転送データの読み出し時のバッファ最大値(別の対処法が判明するまで) */
+    dword transferdata_readsize_max;
+    /* 転送データの読み出し時のバッファ */
+    byte  transferdata_readbuff[E_readbuff_maxsize];
+  } G_Reprog_General_Data;
+
+  /* RequestDownload,　TransferDataに関連する情報を管理する領域 */
+  /* マスターファイルはこちらとなり、「G_Reprog_General_Data.T_Info」はデータコピーを入れて使用する*/
+  struct S_TransferData_info G_TransferData_Info_Erase[E_TransferData_info_All_Element];
+  struct S_TransferData_info G_TransferData_Info_Reprog[E_TransferData_info_All_Element];
+
+  /* △P2_maxのデフォルト値 */
+  long G_timer_p2_max = 950;
+  /* △P6_maxのデフォルト値 */
+  long G_timer_p6_max = 950;
+  /* P2server_maxのデフォルト値 */
+  long G_timer_p2_server_max = 50;
+  /* P2*server_maxのデフォルト値 */
+  long G_timer_p2_aster_server_max = 5000;
+  /* デフォルトのタイムアウト値 */
+  dword G_Request_timeout_default = 100;
+
+  /* 1回のリクエストで指定可能なdataIdentifierの最大数(m) */
+  int ReadDataByIdentifier_request_data_num = 3;
+
+  /* APL要求起動を受けた際に起動するタイマ */
+  msTimer APL_Start_Request_Timer;
+
+  /* SID0x10(PrgSession) 応答受けてから、SID 0x27(Seed) 出すまでの Wait タイマ */
+  msTimer TwaitTimer;
+
+  /* デフォルトで使用するタイムアウトハンドラの関数名 */
+  char G_default_timeout_handler[32]="default_timeout_handler";
+
+  /* 外部設定情報ファイルのファイル名(Nonce値等を格納している) */
+  char G_EXTEND_FILE_NAME[64]="Setting\\Reprog_Ext.ini";
+
+  /* 診断記述ファイルの定義名(CAN) */
+  char G_DIAG_DEF_CAN_BASE_NAME[64]="Reprog_Can_TMC_rsd";
+  char G_DIAG_DEF_CAN_NAME[64]="Reprog_Can_TMC_rsd.BasicDiagnosticsEcu";
+
+  /* 診断記述ファイルの定義名(Ethernet/DoIP) */
+  char G_DIAG_DEF_ETHER_BASE_NAME[64]="Reprog_Diag_Ether";
+  char G_DIAG_DEF_ETHER_NAME[64]="Reprog_Diag_Ether";
+
+  /* 各サービスのリクエストオブジェクト定義 */
+
+  /* SID 0x10 DiagnosticSessionControl用定義 */
+  diagRequest DiagnosticSessionControl_defaultSession                   G_DiagnosticSessionControl_req_01;
+  diagRequest DiagnosticSessionControl_ProgrammingSession               G_DiagnosticSessionControl_req_02;
+  diagRequest DiagnosticSessionControl_extendedDiagnosticSession        G_DiagnosticSessionControl_req_03;
+  diagRequest DiagnosticSessionControl_defaultSession_SPRMIB            G_DiagnosticSessionControl_req_04;
+  diagRequest DiagnosticSessionControl_ProgrammingSession_SPRMIB        G_DiagnosticSessionControl_req_05;
+  diagRequest DiagnosticSessionControl_extendedDiagnosticSession_SPRMIB G_DiagnosticSessionControl_req_06;
+  /* DiagnosticSessionControlのポジティブレスポンスは全て共通なので定義は代表で1つだけ用意する　*/
+  diagResponse DiagnosticSessionControl_defaultSession G_DiagnosticSessionControl_res;
+
+  /* SID 0x11 EcuReset用定義 */
+  diagRequest EcuReset_hardReset G_EcuReset_req_01;
+
+  /* SID 0x22 ReadDataByIdentifier用定義 */
+  diagRequest ReadDataByIdentifier_ActiveDiagnosticSession                   G_ReadDataByIdentifier_req_01;
+  diagRequest ReadDataByIdentifier_asfp_F120                                 G_ReadDataByIdentifier_req_02;
+  diagRequest ReadDataByIdentifier_asfp_F121_F122_F123_F124_F125_F126        G_ReadDataByIdentifier_req_03;
+  diagRequest ReadDataByIdentifier_asfp_F127_F128_F129_F12A_F12B_F12C        G_ReadDataByIdentifier_req_04;
+  diagRequest ReadDataByIdentifier_asfp_F12D_F12E_F12F_F130_F131_F132        G_ReadDataByIdentifier_req_05;
+  diagRequest ReadDataByIdentifier_asfp_F133_F134_F135_F136_F137_F138        G_ReadDataByIdentifier_req_06;
+  diagRequest ReadDataByIdentifier_asfp_F139_F13A_F13B_F13C_F13D_F13E        G_ReadDataByIdentifier_req_07;
+  diagRequest ReadDataByIdentifier_asfp_F13F                                 G_ReadDataByIdentifier_req_08;
+  diagRequest ReadDataByIdentifier_Nonce_F050                                G_ReadDataByIdentifier_req_09;
+  diagRequest ReadDataByIdentifier_HWIdentification_F191                     G_ReadDataByIdentifier_req_0A;
+  diagRequest ReadDataByIdentifier_SWIdentification_F188                     G_ReadDataByIdentifier_req_0C;
+  diagRequest ReadDataByIdentifier_serialNumber_F18C                         G_ReadDataByIdentifier_req_0B;
+
+  /* SID 0x27 SecurityAccess用定義 */
+  diagRequest SecurityAccess_requestSeed_01 G_SecurityAccess_req_01;
+  diagRequest SecurityAccess_requestSeed_03 G_SecurityAccess_req_02;
+  diagRequest SecurityAccess_requestSeed_05 G_SecurityAccess_req_03;
+  diagRequest SecurityAccess_requestSeed_07 G_SecurityAccess_req_04;
+  diagRequest SecurityAccess_requestSeed_7D G_SecurityAccess_req_05;
+  diagRequest SecurityAccess_sendKey_02     G_SecurityAccess_req_06;
+  diagRequest SecurityAccess_sendKey_04     G_SecurityAccess_req_07;
+  diagRequest SecurityAccess_sendKey_06     G_SecurityAccess_req_08;
+  diagRequest SecurityAccess_sendKey_08     G_SecurityAccess_req_09;
+  diagRequest SecurityAccess_sendKey_7E     G_SecurityAccess_req_10;
+
+  /* SID 0x28 CommunicationControl用定義 */
+  diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages        G_CommunicationControl_req_01;
+  diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages_SPRMIB G_CommunicationControl_req_02;
+
+  /* SID 0x2E WriteDataByIdentifier用定義 */
+  diagRequest WriteDataByIdentifier_Nonce_F050    G_WriteDataByIdentifier_req_01;
+  diagRequest WriteDataByIdentifier_asfp_F120     G_WriteDataByIdentifier_req_30;
+  diagRequest WriteDataByIdentifier_asfp_F121     G_WriteDataByIdentifier_req_31;
+  diagRequest WriteDataByIdentifier_asfp_F122     G_WriteDataByIdentifier_req_32;
+  diagRequest WriteDataByIdentifier_asfp_F123     G_WriteDataByIdentifier_req_33;
+  diagRequest WriteDataByIdentifier_asfp_F124     G_WriteDataByIdentifier_req_34;
+  diagRequest WriteDataByIdentifier_asfp_F125     G_WriteDataByIdentifier_req_35;
+  diagRequest WriteDataByIdentifier_asfp_F126     G_WriteDataByIdentifier_req_36;
+  diagRequest WriteDataByIdentifier_asfp_F127     G_WriteDataByIdentifier_req_37;
+  diagRequest WriteDataByIdentifier_asfp_F128     G_WriteDataByIdentifier_req_38;
+  diagRequest WriteDataByIdentifier_asfp_F129     G_WriteDataByIdentifier_req_39;
+  diagRequest WriteDataByIdentifier_asfp_F12A     G_WriteDataByIdentifier_req_40;
+  diagRequest WriteDataByIdentifier_asfp_F12B     G_WriteDataByIdentifier_req_41;
+  diagRequest WriteDataByIdentifier_asfp_F12C     G_WriteDataByIdentifier_req_42;
+  diagRequest WriteDataByIdentifier_asfp_F12D     G_WriteDataByIdentifier_req_43;
+  diagRequest WriteDataByIdentifier_asfp_F12E     G_WriteDataByIdentifier_req_44;
+  diagRequest WriteDataByIdentifier_asfp_F12F     G_WriteDataByIdentifier_req_45;
+  diagRequest WriteDataByIdentifier_asfp_F130     G_WriteDataByIdentifier_req_46;
+  diagRequest WriteDataByIdentifier_asfp_F131     G_WriteDataByIdentifier_req_47;
+  diagRequest WriteDataByIdentifier_asfp_F132     G_WriteDataByIdentifier_req_48;
+  diagRequest WriteDataByIdentifier_asfp_F133     G_WriteDataByIdentifier_req_49;
+  diagRequest WriteDataByIdentifier_asfp_F134     G_WriteDataByIdentifier_req_50;
+  diagRequest WriteDataByIdentifier_asfp_F135     G_WriteDataByIdentifier_req_51;
+  diagRequest WriteDataByIdentifier_asfp_F136     G_WriteDataByIdentifier_req_52;
+  diagRequest WriteDataByIdentifier_asfp_F137     G_WriteDataByIdentifier_req_53;
+  diagRequest WriteDataByIdentifier_asfp_F138     G_WriteDataByIdentifier_req_54;
+  diagRequest WriteDataByIdentifier_asfp_F139     G_WriteDataByIdentifier_req_55;
+  diagRequest WriteDataByIdentifier_asfp_F13A     G_WriteDataByIdentifier_req_56;
+  diagRequest WriteDataByIdentifier_asfp_F13B     G_WriteDataByIdentifier_req_57;
+  diagRequest WriteDataByIdentifier_asfp_F13C     G_WriteDataByIdentifier_req_58;
+  diagRequest WriteDataByIdentifier_asfp_F13D     G_WriteDataByIdentifier_req_59;
+  diagRequest WriteDataByIdentifier_asfp_F13E     G_WriteDataByIdentifier_req_60;
+  diagRequest WriteDataByIdentifier_asfp_F13F     G_WriteDataByIdentifier_req_61;
+
+  /* SID 0x31 RoutineControl用定義 */
+  diagRequest RoutineControl_eraseMemory              G_RoutineControl_req_01;
+  diagRequest RoutineControl_checkMemoryFlashdriver   G_RoutineControl_req_02;
+  diagRequest RoutineControl_checkMemorySoftwareData  G_RoutineControl_req_03;
+  diagRequest RoutineControl_validApplication         G_RoutineControl_req_04;
+
+  /* SID 0x34 RequestDownload用定義 */
+  diagRequest RequestDownload G_RequestDownload_req_01;
+
+  /* SID 0x36 TransferData用定義 */
+  diagRequest TransferData_Download G_TransferData_req_01;
+
+  /* SID 0x37 RequestTransferExit用定義 */
+  diagRequest RequestTransferExit G_RequestTransferExit_req_01;
+
+  /* SID 0x3E TesterPresent用定義 */
+  /* TesterPresentに関してのみdiagStartTesterPresent（）を行ってからの独立的/周期的Tester Presentリクエストとなり、
+     他のリクエスト送信とは制御が別となるのでSPRMIB付きの定義も作成する */
+  diagRequest TesterPresent_zeroSubFunction        G_TesterPresent_req_01;
+  diagRequest TesterPresent_zeroSubFunction_SPRMIB G_TesterPresent_req_02;
+
+  /* このCANoeシナリオが格納されている絶対ファイルパス */
+  char CANoe_Senario_Filepath[E_Configuration_path_size];
+
+  /* 時間測定結果を格納しておく配列 */
+  int64 G_Timespec_Array[E_Timespec_Seqence_MAX];
+
+  /* デバッグ用 */
+  dword G_debug_log_file_handle;
+}
+
+

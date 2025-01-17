@@ -48,9 +48,9 @@ U2                          u2_gp_oxcan_rx_toe_chk[OXCAN_NUM_CH];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#ifdef CXPICDD_H
+#if 0
 static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH);
-#endif /* #ifdef CXPICDD_H */
+#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -65,21 +65,1087 @@ const U2                    u2_sp_OXCAN_RX_POM_CHK[OXCAN_RX_NUM_POM] = {
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U1                    u1_gp_OXCAN_RX_SYS_BY_RX[OXCAN_PDU_NUM_RX] = {
-     ( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [4] MSG_BDC1S81_RXCH0 */
+    ( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [131] MSG_ABG1D50_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [132] MSG_ABG1D51_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [133] MSG_ABG1S01_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [134] MSG_ACN1D50_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [135] MSG_ACN1S03_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [136] MSG_ACN1S04_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [137] MSG_ACN1S05_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [138] MSG_ACN1S07_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [139] MSG_ACN1S15_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [140] MSG_ACN1S16_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [141] MSG_ACN1S22_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [142] MSG_ACN1S25_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [143] MSG_ACN1S29_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [144] MSG_ADC1S11_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [145] MSG_ADC1S13_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [146] MSG_ADC1S23_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [147] MSG_ADC1S30_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [148] MSG_ADC1S31_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [149] MSG_ADU1S07_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [150] MSG_ARS1S90_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [151] MSG_BAT1E41_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [152] MSG_BAT1E45_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [153] MSG_BAT1S01_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [154] MSG_BAT1S08_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [155] MSG_BAT1S11_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [156] MSG_BCC1S05_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [157] MSG_BDB1F01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [158] MSG_BDB1F02_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [159] MSG_BDB1F03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [160] MSG_BDB1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [161] MSG_BDB1S02_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [162] MSG_BDB1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [163] MSG_BDB1S04_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [164] MSG_BDB1S05_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [165] MSG_BDB1S08_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [166] MSG_BDB1S10_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [167] MSG_BDB1S13_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [168] MSG_BDB1S19_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [169] MSG_BDB1S25_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [170] MSG_BDB1S26_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [171] MSG_BDB1S27_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [172] MSG_BDB1S28_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [173] MSG_BDB1S29_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [174] MSG_BDB1S35_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [175] MSG_BDB1S36_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [176] MSG_BDC1S13_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [177] MSG_BDC1S14_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [178] MSG_BDC1S16_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [179] MSG_BDC1S22_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [180] MSG_BDC1S23_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [181] MSG_BDC1S30_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [182] MSG_BDC1S33_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [183] MSG_BDC1S41_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [184] MSG_BDC1S45_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [185] MSG_BDC1S46_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [186] MSG_BDC1S48_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [187] MSG_BDC1S52_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [188] MSG_BDC1S60_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [189] MSG_BDC1S74_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [190] MSG_BDC1S81_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [191] MSG_BDC1S83_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [192] MSG_BDC1S97_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [193] MSG_BDC1S98_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [194] MSG_BDC1S99_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [195] MSG_BDC1SA0_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [196] MSG_BDC1SA1_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [197] MSG_BDC1SC1_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [198] MSG_BDC1SC2_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [199] MSG_BDC1SC3_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [200] MSG_BDC1SC4_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [201] MSG_BDC1SC5_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [202] MSG_BDC1SC6_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [203] MSG_BDC1SC7_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [204] MSG_BDC1SC8_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [205] MSG_BDC1SC9_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [206] MSG_BDC1SD1_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [207] MSG_BDC1SD2_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [208] MSG_BDC1SD3_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [209] MSG_BDC1SD4_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [210] MSG_BDC1SD5_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [211] MSG_BDC1SD6_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [212] MSG_BDC1SD7_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [213] MSG_BDC1SD8_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [214] MSG_BDC1SD9_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [215] MSG_BDC1SE1_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [216] MSG_BDC1SE2_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [217] MSG_BDC1SE3_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [218] MSG_BDC1SE4_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [219] MSG_BDC1SE5_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [220] MSG_BDC1SE6_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [221] MSG_BDC1SE7_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [222] MSG_BDC1SE8_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [223] MSG_BDC1SE9_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [224] MSG_BDC1SF1_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [225] MSG_BDC1SF2_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [226] MSG_BDC1SF3_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [227] MSG_BDC1SF4_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [228] MSG_BDC1SF6_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [229] MSG_BDC1SG4_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [230] MSG_BDC1SG6_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [231] MSG_BDC1SG7_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [232] MSG_BDC1SG8_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [233] MSG_BDC1SG9_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [234] MSG_BDC1SH3_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [235] MSG_BDC1SH4_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [236] MSG_BDC1SH5_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [237] MSG_BDC1SH6_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [238] MSG_BDC1SH8_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [239] MSG_BDC1SZ1_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [240] MSG_BDC1SZ3_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [241] MSG_BDC1SZ5_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [242] MSG_BDF3S01_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [243] MSG_BDF3S02_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [244] MSG_BDR3S02_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [245] MSG_BKD1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [246] MSG_BKD1S02_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [247] MSG_BSR1S01_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [248] MSG_BSR1S02_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [249] MSG_BSR1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [250] MSG_CMB1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [251] MSG_CMB1S04_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [252] MSG_DCM1S01_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [253] MSG_DCM1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [254] MSG_DCM1S04_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [255] MSG_DCM1S08_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [256] MSG_DDM1S12_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [257] MSG_DDM1S16_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [258] MSG_DDM1S17_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [259] MSG_DDM1S20_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [260] MSG_DDM1S35_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [261] MSG_DDM1SFG_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [262] MSG_DDM1SFH_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [263] MSG_DKY1S26_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [264] MSG_DMC1S08_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [265] MSG_DRL1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [266] MSG_DRR1S03_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [267] MSG_DS11S27_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [268] MSG_DS11S37_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [269] MSG_DS11S40_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [270] MSG_DS12F02_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [271] MSG_DS12F03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [272] MSG_DST1S02_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [273] MSG_EBU1D01_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [274] MSG_ECT1G01_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [275] MSG_ECT1S93_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [276] MSG_EHV1E96_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [277] MSG_EHV1G30_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [278] MSG_EHV1S23_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [279] MSG_EHV1S26_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [280] MSG_EHV1S31_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [281] MSG_EHV1S90_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [282] MSG_EHV1S94_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [283] MSG_EHV1S95_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [284] MSG_EHV1S96_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [285] MSG_EHV1S97_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [286] MSG_EHV1SL2_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [287] MSG_EHV2G70_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [288] MSG_EIM1S01_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [289] MSG_ENG1G03_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [290] MSG_ENG1G13_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [291] MSG_ENG1G90_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [292] MSG_ENG1G92_RXCH0 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [293] MSG_ENG1S51_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [294] MSG_EPS1S11_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [295] MSG_EPS1S90_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [296] MSG_FCM1S39_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [297] MSG_FCM1S70_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [298] MSG_FCM1S78_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [299] MSG_FCM1S79_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [300] MSG_FCM1S90_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [301] MSG_IDT1S02_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [302] MSG_IDT1S07_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [303] MSG_IDT1S08_RXCH0 */
+    ,( OXCAN_SYS_BAT )                                                                      /* [304] MSG_IDT1S15_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [305] MSG_IPA1S05_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [306] MSG_ITS1S01_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [307] MSG_ITS1S04_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [308] MSG_ITS1S05_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [309] MSG_ITS1S08_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [310] MSG_LRS1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [311] MSG_LRS1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [312] MSG_LRS1S04_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [313] MSG_PCN1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [314] MSG_PDC1G01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [315] MSG_PDC1G02_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [316] MSG_PLG1G15_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [317] MSG_PLG1G16_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [318] MSG_PLG1S01_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [319] MSG_PLG1S05_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [320] MSG_PLG1S06_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [321] MSG_PLG1S20_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [322] MSG_PLG1S21_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [323] MSG_PMN1G03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [324] MSG_PST1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [325] MSG_PST1S02_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [326] MSG_RCP1S01_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [327] MSG_RCP1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [328] MSG_RRS1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [329] MSG_RRS1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [330] MSG_RRS1S04_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [331] MSG_RSE1G20_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [332] MSG_RSE1G24_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [333] MSG_RSE1G25_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [334] MSG_RSE1G26_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [335] MSG_RSE1G29_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [336] MSG_RSE1S02_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [337] MSG_RST1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [338] MSG_SCN1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [339] MSG_SCN1S02_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [340] MSG_SCS1S11_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [341] MSG_SOL1S02_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [342] MSG_SOL1S03_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [343] MSG_SOL1S04_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [344] MSG_SOL1S05_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [345] MSG_SOL1S06_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [346] MSG_TPM1S02_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [347] MSG_TPM1S03_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [348] MSG_TPM1S04_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [349] MSG_TPM1S05_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [350] MSG_TPM1S06_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [351] MSG_TPM1S07_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [352] MSG_TPM1S08_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [353] MSG_TPM1S09_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [354] MSG_TPM1S10_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [355] MSG_TPM1S11_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [356] MSG_TPM1S12_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [357] MSG_UCB1S01_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [358] MSG_VAS1S01_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [359] MSG_VSC1F01_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [360] MSG_VSC1G12_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [361] MSG_VSC1G13_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [362] MSG_VSC1G14_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [363] MSG_VUM1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [364] MSG_WIP1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [365] MSG_YGW1S01_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [366] MSG_ZN11S02_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [367] MSG_ZN11S03_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [368] MSG_ZN11S08_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [369] MSG_ZN11S14_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [370] MSG_ZN11S17_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [371] MSG_ZN11S19_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [372] MSG_ZN11S25_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [373] MSG_ZN11S26_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [374] MSG_ZN11S32_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [375] MSG_ZN11S38_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [376] MSG_ZN11S60_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [377] MSG_ZN11S63_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [378] MSG_ZN11S64_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [379] MSG_ZN11S65_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [380] MSG_ZN11S66_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [381] MSG_ZN11S67_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [382] MSG_ZN11SC6_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [383] MSG_ZN11SF6_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [384] MSG_ZN11SF7_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [385] MSG_ZN11SF8_RXCH0 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [386] MSG_ZN11SF9_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [387] MSG_ZN21S05_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [388] MSG_ZN21S13_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [389] MSG_ZN21S28_RXCH0 */
+    ,( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [390] MSG_ZN21S72_RXCH0 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [391] MSG_ABG1S04_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [392] MSG_ABG1S09_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [393] MSG_ADC1S06_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [394] MSG_ADC1S08_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [395] MSG_ADC1S10_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [396] MSG_ADC1S12_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [397] MSG_ADC1S14_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [398] MSG_ADC1S15_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [399] MSG_ADC1S16_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [400] MSG_ADC1S17_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [401] MSG_ADC1S19_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [402] MSG_ADC1S20_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [403] MSG_ADC1S27_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [404] MSG_ADU1S02_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [405] MSG_ADU1S03_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [406] MSG_ADU1S05_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [407] MSG_ADU1S06_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [408] MSG_ADU1S18_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [409] MSG_ADU1S19_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [410] MSG_ADU1S20_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [411] MSG_ADU1S21_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [412] MSG_ADU1S22_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [413] MSG_ADU1S23_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [414] MSG_ADU1S24_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [415] MSG_ADU1S25_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [416] MSG_ADU1S26_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [417] MSG_ADU1S27_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [418] MSG_ADU1S28_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [419] MSG_ARS1S01_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [420] MSG_BAT1ED1_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [421] MSG_BAT1ED4_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [422] MSG_BAT1ED5_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [423] MSG_BAT1EDA_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [424] MSG_BAT1EDB_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [425] MSG_BAT2ED2_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [426] MSG_BCC1S06_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [427] MSG_CSR1G10_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [428] MSG_CSR1S04_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [429] MSG_CSR1S07_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [430] MSG_CSR1S08_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [431] MSG_DDM1S00_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [432] MSG_DDM1S09_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [433] MSG_DDM1S32_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [434] MSG_ECT1G92_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [435] MSG_ECT1S80_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [436] MSG_EHV1F02_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [437] MSG_EHV1F04_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [438] MSG_EHV1G70_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [439] MSG_EHV1G71_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [440] MSG_EHV1S99_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [441] MSG_EHV2G02_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [442] MSG_EHV2G10_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [443] MSG_EHV2G20_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [444] MSG_ENG1C01_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [445] MSG_ENG1C02_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [446] MSG_ENG1D51_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [447] MSG_ENG1D52_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [448] MSG_ENG1D53_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [449] MSG_ENG1D55_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [450] MSG_ENG1D56_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [451] MSG_ENG1D59_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [452] MSG_ENG1D60_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [453] MSG_ENG1G17_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [454] MSG_ENG1S60_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [455] MSG_ENG1S99_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [456] MSG_EPS1D50_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [457] MSG_FCM1C01_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [458] MSG_FCM1C03_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [459] MSG_FCM1S10_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [460] MSG_FCM1S12_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [461] MSG_FCM1S40_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [462] MSG_FCM1S41_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [463] MSG_FCM1S49_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [464] MSG_FCM1S51_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [465] MSG_FCM1S52_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [466] MSG_FCM1S58_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [467] MSG_FCM1S66_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [468] MSG_FCM1S76_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [469] MSG_FCM1S88_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [470] MSG_FCM1S92_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [471] MSG_FCM1S95_RXCH2 */
+    ,( OXCAN_SYS_IGP )                                                                      /* [472] MSG_FWD1S10_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [473] MSG_LVN1S01_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [474] MSG_MGC1F13_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [475] MSG_PDS1S01_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [476] MSG_PWC1S41_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [477] MSG_RCP1S02_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [478] MSG_SBW1G02_RXCH2 */
+    ,( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                          /* [479] MSG_SCS1S10_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [480] MSG_SCS1S14_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [481] MSG_TRA1S01_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [482] MSG_TRA1S02_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [483] MSG_VGR1D50_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [484] MSG_VSC1D51_RXCH2 */
+    ,( OXCAN_SYS_IGP|OXCAN_SYS_IGR )                                                        /* [485] MSG_VSC1G96_RXCH2 */
 };
 const U2                    u2_g_OXCAN_RX_NUM_RX       = (U2)OXCAN_PDU_NUM_RX;
 
-#define OXCAN_RX_CH_POWSUPPLY  (BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2             u2_sp_OXCAN_RX_BY_RX_0[] = {
-     (U2)OXCAN_PDU_RX_CAN_BDC1S81_RXCH0
+     (U2)OXCAN_PDU_RX_CAN_ABG1D50_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ABG1D51_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ABG1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1D50_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S07_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S15_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S16_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S22_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S25_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S29_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S23_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S30_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S31_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADU1S07_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ARS1S90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1E41_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1E45_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BCC1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1F01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1F02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1F03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S10_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S19_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S25_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S27_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S28_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S29_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S35_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S36_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S14_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S16_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S22_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S23_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S30_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S33_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S41_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S45_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S46_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S48_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S52_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S60_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S74_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S81_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S83_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S97_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S98_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S99_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SA0_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SA1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SZ1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SZ3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SZ5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDF3S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDF3S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDR3S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BKD1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BKD1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BSR1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BSR1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BSR1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_CMB1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_CMB1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DCM1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DCM1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DCM1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DCM1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S12_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S16_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S20_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S35_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1SFG_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1SFH_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DKY1S26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DMC1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DRL1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DRR1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS11S27_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS11S37_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS11S40_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS12F02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS12F03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DST1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EBU1D01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ECT1G01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ECT1S93_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1E96_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1G30_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S31_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S95_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S96_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S97_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1SL2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV2G70_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EIM1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1G03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1G90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1G92_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1S51_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EPS1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EPS1S90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S39_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S70_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S78_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S79_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IDT1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IDT1S07_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IDT1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IDT1S15_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IPA1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ITS1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ITS1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ITS1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ITS1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_LRS1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_LRS1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_LRS1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PDC1G01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PDC1G02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1G15_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1G16_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S06_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S20_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S21_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PMN1G03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PST1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PST1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RCP1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RCP1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RRS1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RRS1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RRS1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G20_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G24_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G25_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G29_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RST1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SCN1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SCN1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SCS1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S06_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S06_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S07_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S09_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S10_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S12_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_UCB1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VAS1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VSC1F01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VSC1G12_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VSC1G13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VSC1G14_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VUM1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_WIP1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_YGW1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S14_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S17_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S19_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S25_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S32_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S38_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S60_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S63_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S64_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S65_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S66_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S67_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SC6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SF6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SF7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SF8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SF9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN21S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN21S13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN21S28_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN21S72_RXCH0
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2             u2_sp_OXCAN_RX_BY_CH_0[] = {
-
-     (U2)OXCAN_PDU_RX_CAN_BDC1S81_RXCH0
+     (U2)OXCAN_PDU_RX_CAN_ABG1D50_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ABG1D51_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ABG1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1D50_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S07_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S15_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S16_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S22_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S25_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ACN1S29_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S23_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S30_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADC1S31_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ADU1S07_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ARS1S90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1E41_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1E45_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BAT1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BCC1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1F01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1F02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1F03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S10_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S19_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S25_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S27_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S28_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S29_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S35_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDB1S36_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S14_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S16_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S22_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S23_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S30_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S33_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S41_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S45_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S46_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S48_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S52_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S60_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S74_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S81_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S83_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S97_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S98_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1S99_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SA0_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SA1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SC9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SD9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SE9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SF6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SG9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH4_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SH8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SZ1_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SZ3_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDC1SZ5_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDF3S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDF3S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BDR3S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BKD1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BKD1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BSR1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BSR1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_BSR1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_CMB1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_CMB1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DCM1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DCM1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DCM1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DCM1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S12_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S16_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S20_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1S35_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1SFG_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DDM1SFH_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DKY1S26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DMC1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DRL1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DRR1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS11S27_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS11S37_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS11S40_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS12F02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DS12F03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_DST1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EBU1D01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ECT1G01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ECT1S93_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1E96_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1G30_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S31_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S95_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S96_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1S97_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV1SL2_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EHV2G70_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EIM1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1G03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1G90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1G92_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ENG1S51_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EPS1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_EPS1S90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S39_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S70_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S78_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S79_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_FCM1S90_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IDT1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IDT1S07_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IDT1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IDT1S15_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_IPA1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ITS1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ITS1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ITS1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ITS1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_LRS1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_LRS1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_LRS1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PDC1G01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PDC1G02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1G15_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1G16_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S06_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S20_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PLG1S21_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PMN1G03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PST1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_PST1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RCP1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RCP1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RRS1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RRS1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RRS1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G20_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G24_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G25_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1G29_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RSE1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_RST1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SCN1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SCN1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SCS1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_SOL1S06_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S04_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S06_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S07_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S09_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S10_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S11_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_TPM1S12_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_UCB1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VAS1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VSC1F01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VSC1G12_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VSC1G13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VSC1G14_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_VUM1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_WIP1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_YGW1S01_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S02_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S03_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S08_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S14_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S17_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S19_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S25_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S26_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S32_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S38_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S60_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S63_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S64_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S65_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S66_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11S67_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SC6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SF6_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SF7_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SF8_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN11SF9_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN21S05_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN21S13_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN21S28_RXCH0,
+     (U2)OXCAN_PDU_RX_CAN_ZN21S72_RXCH0
 };
 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const U2             u2_sp_OXCAN_RX_BY_RX_2[] = {
+    (U2)OXCAN_PDU_RX_CAN_ABG1S04_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ABG1S09_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S06_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S08_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S12_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S14_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S15_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S16_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S17_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S19_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S20_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S27_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S03_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S05_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S06_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S18_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S19_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S20_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S21_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S22_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S23_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S24_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S25_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S26_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S27_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S28_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ARS1S01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1ED1_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1ED4_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1ED5_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1EDA_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1EDB_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT2ED2_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BCC1S06_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_CSR1G10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_CSR1S04_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_CSR1S07_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_CSR1S08_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_DDM1S00_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_DDM1S09_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_DDM1S32_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ECT1S80_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1F02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1G70_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1G71_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1S99_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV2G02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV2G10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV2G20_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1C01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1C02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D51_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D52_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D53_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D55_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D56_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D59_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D60_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1G17_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1S60_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1S99_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EPS1D50_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1C01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1C03_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S12_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S40_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S41_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S49_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S51_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S52_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S58_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S66_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S76_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S88_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S92_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S95_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FWD1S10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_LVN1S01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_MGC1F13_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_PDS1S01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_PWC1S41_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_RCP1S02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_SBW1G02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_SCS1S10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_SCS1S14_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_TRA1S01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_TRA1S02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_VGR1D50_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_VSC1D51_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_VSC1G96_RXCH2
+};
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const U2             u2_sp_OXCAN_RX_BY_CH_2[] = {
+    (U2)OXCAN_PDU_RX_CAN_ABG1S04_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ABG1S09_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S06_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S08_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S12_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S14_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S15_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S16_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S17_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S19_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S20_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADC1S27_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S03_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S05_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S06_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S18_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S19_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S20_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S21_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S22_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S23_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S24_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S25_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S26_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S27_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ADU1S28_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ARS1S01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1ED1_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1ED4_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1ED5_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1EDA_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT1EDB_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BAT2ED2_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_BCC1S06_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_CSR1G10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_CSR1S04_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_CSR1S07_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_CSR1S08_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_DDM1S00_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_DDM1S09_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_DDM1S32_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ECT1S80_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1F02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1G70_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1G71_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV1S99_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV2G02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV2G10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EHV2G20_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1C01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1C02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D51_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D52_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D53_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D55_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D56_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D59_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1D60_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1G17_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1S60_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_ENG1S99_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_EPS1D50_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1C01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1C03_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S12_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S40_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S41_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S49_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S51_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S52_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S58_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S66_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S76_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S88_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S92_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FCM1S95_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_FWD1S10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_LVN1S01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_MGC1F13_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_PDS1S01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_PWC1S41_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_RCP1S02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_SBW1G02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_SCS1S10_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_SCS1S14_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_TRA1S01_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_TRA1S02_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_VGR1D50_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_VSC1D51_RXCH2,
+    (U2)OXCAN_PDU_RX_CAN_VSC1G96_RXCH2
+};
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -90,10 +1156,21 @@ const ST_OXCAN_RX_CH        st_gp_OXCAN_RX_BY_CH[OXCAN_NUM_CH] = {
         &u2_sp_OXCAN_RX_BY_RX_0[0],                          /* u2p_PDU_BY_RX */
         &u2_sp_OXCAN_RX_BY_CH_0[0],                          /* u2p_PDU_BY_CH */
 
-        (U2)MSG_BDC1S81_RXCH0,                               /* u2_msg_min    */
-        (U2)MSG_BDC1S81_RXCH0,                               /* u2_msg_max    */
+        (U2)MSG_ABG1D50_RXCH0,                               /* u2_msg_min    */
+        (U2)MSG_ZN21S72_RXCH0,                               /* u2_msg_max    */
         (U2)(sizeof(u2_sp_OXCAN_RX_BY_CH_0) >> 1U),          /* u2_num_rx     */
-        (U2)OXCAN_RX_CH_POWSUPPLY                            /* u2_sys_en     */
+        (U2)BSW_COMM_CFG_CH_POWERSUPPLY_0                    /* u2_sys_en     */
+    },
+    {
+        &u1_g_oXCANNmwkRxeByCh,                              /* fp_u1_RX_EN   */
+
+        &u2_sp_OXCAN_RX_BY_RX_2[0],                          /* u2p_PDU_BY_RX */
+        &u2_sp_OXCAN_RX_BY_CH_2[0],                          /* u2p_PDU_BY_CH */
+
+        (U2)MSG_ABG1S04_RXCH2,                               /* u2_msg_min    */
+        (U2)MSG_VSC1G96_RXCH2,                               /* u2_msg_max    */
+        (U2)(sizeof(u2_sp_OXCAN_RX_BY_CH_2) >> 1U),          /* u2_num_rx     */
+        (U2)0x001fU                                          /* u2_sys_en     */
     }
 };
 const U1                    u1_g_OXCAN_RX_NUM_CH = (U1)OXCAN_NUM_CH;
@@ -167,7 +1244,7 @@ U2      u2_g_oXCANRxCfgSysXgrOn(const U2 u2_a_SYS_CHK)
     return(u2_t_xgr_on);
 #endif /* #if (defined(MSG_ENG1G92_RXCH0) && defined(ComConf_ComSignal_B_ST)) */
 }
-#ifdef CXPICDD_H
+#if 0
 /*===================================================================================================================================*/
 /*  static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -187,7 +1264,7 @@ static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH)
 
    return(u1_t_rxe);
 }
-#endif /* #ifdef CXPICDD_H */
+#endif
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

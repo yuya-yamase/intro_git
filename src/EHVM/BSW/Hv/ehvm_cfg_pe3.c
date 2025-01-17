@@ -82,7 +82,7 @@ static EhvmConst ehvm_guest_ctx_register_t ehvm_guest_initialize_ctx_list_pe3[VM
 
 static EhvmConst ehvm_guest_pc_register_t ehvm_guest_initialize_pc_list_pe3[VM_NUM_PE3] = {
     {
-        (ehvm_uint32_t)0x00C00000U  /* GMEIPC/GMFEPC */
+        (ehvm_uint32_t)0x00600000U  /* GMEIPC/GMFEPC */
     }
 };
 

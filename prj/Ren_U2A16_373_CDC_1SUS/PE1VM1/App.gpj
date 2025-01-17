@@ -1,0 +1,12 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${APP_DIR}
+
+    -I${CAN_DIR}/inc
+
+    -I${LIB_DIR}
+
+Ecu_Intg_Callout.c
+Stub/stub_u2a.c
+ShtdwnM/bsw_m.c
+ShtdwnM/cfg/bsw_m_cfg.c

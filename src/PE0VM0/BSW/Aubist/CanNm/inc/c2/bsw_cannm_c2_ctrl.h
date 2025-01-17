@@ -1,7 +1,7 @@
-/* bsw_cannm_c2_ctrl_h_v3-0-0                                               */
+/* bsw_cannm_c2_ctrl_h_v2-2-0                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -178,9 +178,7 @@ extern BswConst BswU1            bsw_cannm_c2_ctrl_u1UserDataLen[];            /
 extern BswConst BswU1            bsw_cannm_c2_ctrl_u1ActiveWkUp[];             /* Switching the ActiveWkUp function        */
 extern BswConst BswU2            bsw_cannm_c2_ctrl_u2SndStartTim[];            /* Transmission start waiting time (SendStart)                              */
 extern BswConst BswU2            bsw_cannm_c2_ctrl_u2DisSndTim[];              /* Transmission starting wait time at bus wake-up (DisableSend)        */
-extern BswConst BswU2            bsw_cannm_c2_ctrl_u2DisSdComTik[];            /* Transmission starting wait com tick at bus wake-up (DisableSend) */
 extern BswConst BswU2            bsw_cannm_c2_ctrl_u2EnaPeriTim[];             /* Periodic transmission starting wait time at bus wake-up (EnablePeriodic) */
-extern BswConst BswU2            bsw_cannm_c2_ctrl_u2EnaPrComTik[];            /* Periodic transmission starting wait com tick at bus wake-up (EnablePeriodic) */
 extern BswConst BswU1            bsw_cannm_c2_ctrl_u1NodeID[];                 /* NodeID                      */
 extern BswConst BswU2            bsw_cannm_c2_ctrl_u2WakeChkTim[];             /* External request monitoring time during PassiveWakeup */
 extern BswConst BswU2            bsw_cannm_c2_ctrl_u2TrcvWaitTim[];            /* Transceiver mode transition waiting time */
@@ -208,7 +206,6 @@ extern BswU1            (* BswConst bsw_cannm_c2_ctrl_ptChkComFunc)( BswU1 u1Net
 /*  v1-0-0          :2018/11/19                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-2-0          :2023/05/24                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

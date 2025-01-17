@@ -1,7 +1,7 @@
-/* cannm_h_v3-0-0                                                           */
+/* cannm_h_v2-4-0                                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -103,8 +103,6 @@
 #define CanNm_RequestSynchronizedPncShutdown (bsw_cannm_ch_ReqSyncPncSlp)
 #define CanNm_CancelSynchronizedPncShutdown  (bsw_cannm_ch_CancelSyncPncSlp)
 
-#define CanNm_SetDisableTxTime               (bsw_cannm_ch_SetDisableTxTime)
-
 #define CanNm_CbkPreTxRingMsg                (bsw_cannm_ch_CbkPreTxRingMsg)
 #define CanNm_CbkBusWakeup                   (bsw_cannm_ch_CbkBusWakeup)
 #define CanNm_CbkEvtWkupTxFinish             (bsw_cannm_ch_CbkEvtWUTxFn)
@@ -140,7 +138,6 @@
 /*  v2-0-0          :2022/01/13                                             */
 /*  v2-2-0          :2022/05/12                                             */
 /*  v2-4-0          :2023/12/18                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

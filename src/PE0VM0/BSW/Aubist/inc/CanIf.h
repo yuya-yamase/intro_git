@@ -1,7 +1,7 @@
-/* canif_h_v3-0-0                                                           */
+/* canif_h_v2-0-0                                                           */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -371,9 +371,7 @@
 #define CanIf_GetCurrentRxCanId            (bsw_canif_rx_GetCurrentRxCanId)
 #define CanIf_DeInit                       (bsw_canif_st_Shutdown)
 #define CanIf_CbkPreTxMsg                  (bsw_canif_tx_CbkPreTxMsg)
-#define CanIf_CbkPreTxFrame                (bsw_canif_tx_CbkPreTxFrame)
 #define CanIf_CbkPreRxMsg                  (bsw_canif_rx_CbkPreRxMsg)
-#define CanIf_CbkPreRxFrame                (bsw_canif_rx_CbkPreRxFrame)
 #define CanIf_CbkLengthErr                 (bsw_canif_fs_CbkLengthErr)
 #define CanIf_CbkSumErr                    (bsw_canif_fs_CbkSumErr)
 #define CanIf_CbkDetectMsgCheckCorrect     (bsw_canif_fs_CbkDtctMsgChkCrrct)
@@ -419,7 +417,6 @@
 /*  v1-0-0          :2017/07/10                                             */
 /*  v1-1-0          :2018/10/02                                             */
 /*  v2-0-0          :2021/12/12                                             */
-/*  v3-0-0          :2024/10/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

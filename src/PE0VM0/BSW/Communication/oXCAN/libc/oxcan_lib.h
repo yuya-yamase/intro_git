@@ -55,14 +55,14 @@ void    vd_g_oXCANNmwkEvtxByCh(const U1 u1_a_CH);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_oXCANOpemdInit(void);
 void    vd_g_oXCANOpemdEvTx(void);
-U4      u4_g_oXCANOpemdSyschk(const U1 u1_a_TIE);       /* u1_a_TCE TRUE  = Timer Increment Enable, FALSE  not */
+U1      u1_g_oXCANOpemdSyschk(const U1 u1_a_TIE);       /* u1_a_TCE TRUE  = Timer Increment Enable, FALSE  not */
 
 U1      u1_g_oXCANOpemdNmAwkTout(const U2 u2_a_THRSH);  /* TRUE / FALSE */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_oXCANRxInit(void);
-void    vd_g_oXCANRxOpemdEvthk(const U4 u4_a_SYSBIT);
-void    vd_g_oXCANRxMainTask(const U4 u4_a_SYSBIT);
+void    vd_g_oXCANRxOpemdEvthk(const U1 u1_a_SYSBIT);
+void    vd_g_oXCANRxMainTask(const U1 u1_a_SYSBIT);
 void    vd_g_oXCANRxTimerInit(const U1 u1_a_CH);
 
 void    vd_g_oXCANRxAck(const U1 u1_a_CH, const U2 u2_a_MSG_RX);

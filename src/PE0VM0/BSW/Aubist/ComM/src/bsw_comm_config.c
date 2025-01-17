@@ -1,7 +1,7 @@
-/* bsw_comm_config_c_v3-0-0                                                 */
+/* bsw_comm_config_c_v2-1-0                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -47,11 +47,7 @@
 #endif
 
 #if ( BSW_BSWM_CS_FUNC_LIN == BSW_USE )
-#include <linsm/bsw_linsm.h>
-#endif
-
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-#include <bswm_vps/bsw_bswm_vps_cbk.h>
+#include <LinSM.h>
 #endif
 
 #include <cs/bsw_cs_system_memmap_pre.h>
@@ -64,25 +60,33 @@
 #define BSW_COMM_FUNCTBL_CAN            (1U)
 #define BSW_COMM_FUNCTBL_LIN            (2U)
 #define BSW_COMM_FUNCTBL_ETH            (3U)
-#define BSW_COMM_FUNCTBL_SIZE           (4U)
+#define BSW_COMM_FUNCTBL_CDD1           (4U)
+#define BSW_COMM_FUNCTBL_CDD2           (5U)
+#define BSW_COMM_FUNCTBL_SIZE           (6U)
 
 /* Channel to Protocol Index Conversion (Editing is required when adding protocols) */
 #define BSW_COMM_IDX_CONV(ch)           (BSW_COMM_IDX_CONV_CAN(ch))
 #define BSW_COMM_IDX_CONV_CAN(ch)       ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_CAN)  ? BSW_COMM_FUNCTBL_CAN  : BSW_COMM_IDX_CONV_LIN(ch))
 #define BSW_COMM_IDX_CONV_LIN(ch)       ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_LIN)  ? BSW_COMM_FUNCTBL_LIN  : BSW_COMM_IDX_CONV_ETH(ch))
-#define BSW_COMM_IDX_CONV_ETH(ch)       ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_ETH)  ? BSW_COMM_FUNCTBL_ETH  : BSW_COMM_FUNCTBL_NONE)
+#define BSW_COMM_IDX_CONV_ETH(ch)       ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_ETH)  ? BSW_COMM_FUNCTBL_ETH  : BSW_COMM_IDX_CONV_CDD1(ch))
+#define BSW_COMM_IDX_CONV_CDD1(ch)      ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_CDD1) ? BSW_COMM_FUNCTBL_CDD1 : BSW_COMM_IDX_CONV_CDD2(ch))
+#define BSW_COMM_IDX_CONV_CDD2(ch)      ((BSW_COMM_BUSTYPE(ch) == BSW_COMM_BUS_TYPE_CDD2) ? BSW_COMM_FUNCTBL_CDD2 : BSW_COMM_FUNCTBL_NONE)
 
 #define BSW_COMM_u2MS2TICK(msTime)         (BSW_BSWM_CS_u2MILSEC2TICK_MID(msTime))
 
 /* Own-node Awake retention time per protocol */
 #define BSW_COMM_AWAKE_HOLD_TIME_CAN   (140U)
+#define BSW_COMM_AWAKE_HOLD_TIME_CDD1  (BSW_COMM_CFG_AWKHLD_TIME_CDD1)
+#define BSW_COMM_AWAKE_HOLD_TIME_CDD2  (BSW_COMM_CFG_AWKHLD_TIME_CDD2)
 #define BSW_COMM_AWAKE_HOLD_TIME_ETH   (0U)
 #define BSW_COMM_AWAKE_HOLD_TIME_LIN   (0U)
 #define BSW_COMM_AWAKE_HOLD_TIME_INV   (0U)
 
 /* Channel -> Ptrocol switching Own-node Awake holding time */
 #define BSW_COMM_AWAKE_HOLD_TIMER(ch)       (BSW_COMM_AWAKE_HOLD_TIMER_CAN(ch))
-#define BSW_COMM_AWAKE_HOLD_TIMER_CAN(ch)   ((BSW_COMM_BUSTYPE(ch)   == BSW_COMM_BUS_TYPE_CAN)      ? BSW_COMM_AWAKE_HOLD_TIME_CAN   : BSW_COMM_AWAKE_HOLD_TIMER_ETH(ch))
+#define BSW_COMM_AWAKE_HOLD_TIMER_CAN(ch)   ((BSW_COMM_BUSTYPE(ch)   == BSW_COMM_BUS_TYPE_CAN)      ? BSW_COMM_AWAKE_HOLD_TIME_CAN   : BSW_COMM_AWAKE_HOLD_TIMER_CDD1(ch))
+#define BSW_COMM_AWAKE_HOLD_TIMER_CDD1(ch)  ((BSW_COMM_BUSTYPE(ch)   == BSW_COMM_BUS_TYPE_CDD1)     ? BSW_COMM_AWAKE_HOLD_TIME_CDD1  : BSW_COMM_AWAKE_HOLD_TIMER_CDD2(ch))
+#define BSW_COMM_AWAKE_HOLD_TIMER_CDD2(ch)  ((BSW_COMM_BUSTYPE(ch)   == BSW_COMM_BUS_TYPE_CDD2)     ? BSW_COMM_AWAKE_HOLD_TIME_CDD2  : BSW_COMM_AWAKE_HOLD_TIMER_ETH(ch))
 #define BSW_COMM_AWAKE_HOLD_TIMER_ETH(ch)   ((BSW_COMM_BUSTYPE(ch)   == BSW_COMM_BUS_TYPE_ETH)      ? BSW_COMM_AWAKE_HOLD_TIME_ETH   : BSW_COMM_AWAKE_HOLD_TIMER_LIN(ch))
 #define BSW_COMM_AWAKE_HOLD_TIMER_LIN(ch)   ((BSW_COMM_BUSTYPE(ch)   == BSW_COMM_BUS_TYPE_LIN)      ? BSW_COMM_AWAKE_HOLD_TIME_LIN   : BSW_COMM_AWAKE_HOLD_TIME_INV)
 
@@ -126,16 +130,8 @@
 #define BSW_COMM_PNCECUMWAKEUPIND_FUNC      (&bsw_comm_ctrl_PNCEcuMWkUpIndNn)
 #endif /* BSW_COMM_CFG_PNC == BSW_USE */
 
-/* PN multi-stage sleep synchronization function */
-#if (BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE)
-#define BSW_COMM_STARTNETWORK_FUNC          (&BswM_VPS_StartNetwork)
-#else
-#define BSW_COMM_STARTNETWORK_FUNC          (&bsw_comm_ctrl_StartNetworkNone)
-#endif /*(BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE)*/
-
 /* Dummy table size */
 #define BSW_COMM_TBL_DUMMY_SIZE     (1U)
-#define BSW_COMM_TBL_PNAWK_DMY_SIZE (BSW_COMM_SYSSTATTBLNUM)
 
 #define BSW_COMM_PNC_INVALID        (255U)
 #define BSW_COMM_PNC_BYTE_INVALID   (255U)
@@ -2761,6 +2757,42 @@
 #define BSW_COMM_RQCMMD_FLCOM_TOREQ_FNC  (&bsw_comm_ctrl_ReqCmMdFulCmToReq)
 #endif
 
+/* PNC Awake power supply */
+#define BSW_COMM_PNC_AWAKEPOWER_0(pnc)      BSW_COMM_CFG_0_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_1(pnc)      BSW_COMM_CFG_1_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_2(pnc)      BSW_COMM_CFG_2_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_3(pnc)      BSW_COMM_CFG_3_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_4(pnc)      BSW_COMM_CFG_4_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_5(pnc)      BSW_COMM_CFG_5_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_6(pnc)      BSW_COMM_CFG_6_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_7(pnc)      BSW_COMM_CFG_7_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_8(pnc)      BSW_COMM_CFG_8_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_9(pnc)      BSW_COMM_CFG_9_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_10(pnc)     BSW_COMM_CFG_10_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_11(pnc)     BSW_COMM_CFG_11_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_12(pnc)     BSW_COMM_CFG_12_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_13(pnc)     BSW_COMM_CFG_13_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_14(pnc)     BSW_COMM_CFG_14_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_15(pnc)     BSW_COMM_CFG_15_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_16(pnc)     BSW_COMM_CFG_16_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_17(pnc)     BSW_COMM_CFG_17_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_18(pnc)     BSW_COMM_CFG_18_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_19(pnc)     BSW_COMM_CFG_19_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_20(pnc)     BSW_COMM_CFG_20_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_21(pnc)     BSW_COMM_CFG_21_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_22(pnc)     BSW_COMM_CFG_22_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_23(pnc)     BSW_COMM_CFG_23_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_24(pnc)     BSW_COMM_CFG_24_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_25(pnc)     BSW_COMM_CFG_25_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_26(pnc)     BSW_COMM_CFG_26_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_27(pnc)     BSW_COMM_CFG_27_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_28(pnc)     BSW_COMM_CFG_28_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_29(pnc)     BSW_COMM_CFG_29_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_30(pnc)     BSW_COMM_CFG_30_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER_31(pnc)     BSW_COMM_CFG_31_PNC_AWAKEPW_##pnc
+#define BSW_COMM_PNC_AWAKEPOWER(ch, pnc)  ( BSW_COMM_PNC_AWAKEPOWER_##ch(pnc) )
+#define BSW_COMM_PNC_AWAKEPW(ch,pnc)      ( (BSW_COMM_CFG_PNC_AWAKEPW_INDV == BSW_USE) ? BSW_COMM_PNC_AWAKEPOWER(ch,pnc) : (BSW_COMM_CFG_COM_CH_USER_##ch & BSW_COMM_COM_USERAWAKE_MSK) )
+
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -2773,10 +2805,8 @@
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
 Bsw_ComM_ChStsType  bsw_comm_ctrl_stChSts[BSW_COMM_CHNUM];            /* State by channel     */
-BswU4               bsw_comm_ctrl_u4RqComModeSys[BSW_COMM_SYSSTATTBLNUM];    /* User request         */
-BswU4               bsw_comm_ctrl_u4RqComModeSysMrr[BSW_COMM_SYSSTATTBLNUM]; /* User request (mirror) */
-BswU4               bsw_comm_ctrl_u4RqComModeAwk;                     /* User request User Awake */
-BswU4               bsw_comm_ctrl_u4RqComModeAwkMrr;                  /* User request User Awake (mirror) */
+BswU2              bsw_comm_ctrl_u2ReqComMode;                       /* User request         */
+BswU2              bsw_comm_ctrl_u2ReqComModeMrr;                    /* User request (mirror) */
 
 #if ( BSW_COMM_CFG_PNC == BSW_USE)
 
@@ -3017,6 +3047,22 @@ static BswConst Bsw_ComM_BusFuncTblType bsw_comm_ctrl_stEthSM_Func = {
 };
 #endif
 
+#if ( BSW_BSWM_CS_FUNC_CDD1 == BSW_USE )
+/* Bus type : CDD1 function table */
+static BswConst Bsw_ComM_BusFuncTblType bsw_comm_ctrl_stCdd1SM_Func = {
+    &bsw_bswm_cs_Cdd1SMRequestComMode
+   ,&bsw_bswm_cs_Cdd1SMGetCurrentComMode
+};
+#endif
+
+#if ( BSW_BSWM_CS_FUNC_CDD2 == BSW_USE )
+/* Bus type : CDD2 function table */
+static BswConst Bsw_ComM_BusFuncTblType bsw_comm_ctrl_stCdd2SM_Func = {
+    &bsw_bswm_cs_Cdd2SMRequestComMode
+   ,&bsw_bswm_cs_Cdd2SMGetCurrentComMode
+};
+#endif
+
 /* Bus type : Disable function table */
 static BswConst Bsw_ComM_BusFuncTblType bsw_comm_ctrl_stInvalid_Func = {
     &bsw_comm_ctrl_ReqComMode_Inv
@@ -3041,106 +3087,116 @@ BswConst Bsw_ComM_BusFuncTblType* BswConst bsw_comm_ctrl_ptBusFuncTbl[BSW_COMM_F
 #else
     ,&bsw_comm_ctrl_stInvalid_Func
 #endif
+#if ( BSW_BSWM_CS_FUNC_CDD1 == BSW_USE )
+    ,&bsw_comm_ctrl_stCdd1SM_Func
+#else
+    ,&bsw_comm_ctrl_stInvalid_Func
+#endif
+#if ( BSW_BSWM_CS_FUNC_CDD2 == BSW_USE )
+    ,&bsw_comm_ctrl_stCdd2SM_Func
+#else
+    ,&bsw_comm_ctrl_stInvalid_Func
+#endif
 };
 
 /* Channel count */
 BswConst   BswU1  bsw_comm_ctrl_u1ChNum = (BswU1)BSW_COMM_CHNUM;
 
-/* communication Activated User Awake per channel */
-BswConst   BswU4  bsw_comm_ctrl_u4UserAwakePerCh[BSW_COMM_CHNUM] = {
-     (BswU4)BSW_COMM_CFG_COM_CH_USERAWK_0
+/* Request user communication per channel */
+BswConst   BswU2  bsw_comm_ctrl_u2UserPerCh[BSW_COMM_CHNUM] = {
+     (BswU2)BSW_COMM_CFG_COM_CH_USER_0
 #if (BSW_COMM_CHNUM > 1U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_1
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_1
 #endif
 #if (BSW_COMM_CHNUM > 2U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_2
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_2
 #endif
 #if (BSW_COMM_CHNUM > 3U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_3
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_3
 #endif
 #if (BSW_COMM_CHNUM > 4U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_4
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_4
 #endif
 #if (BSW_COMM_CHNUM > 5U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_5
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_5
 #endif
 #if (BSW_COMM_CHNUM > 6U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_6
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_6
 #endif
 #if (BSW_COMM_CHNUM > 7U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_7
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_7
 #endif
 #if (BSW_COMM_CHNUM > 8U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_8
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_8
 #endif
 #if (BSW_COMM_CHNUM > 9U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_9
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_9
 #endif
 #if (BSW_COMM_CHNUM > 10U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_10
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_10
 #endif
 #if (BSW_COMM_CHNUM > 11U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_11
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_11
 #endif
 #if (BSW_COMM_CHNUM > 12U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_12
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_12
 #endif
 #if (BSW_COMM_CHNUM > 13U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_13
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_13
 #endif
 #if (BSW_COMM_CHNUM > 14U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_14
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_14
 #endif
 #if (BSW_COMM_CHNUM > 15U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_15
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_15
 #endif
 #if (BSW_COMM_CHNUM > 16U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_16
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_16
 #endif
 #if (BSW_COMM_CHNUM > 17U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_17
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_17
 #endif
 #if (BSW_COMM_CHNUM > 18U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_18
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_18
 #endif
 #if (BSW_COMM_CHNUM > 19U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_19
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_19
 #endif
 #if (BSW_COMM_CHNUM > 20U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_20
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_20
 #endif
 #if (BSW_COMM_CHNUM > 21U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_21
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_21
 #endif
 #if (BSW_COMM_CHNUM > 22U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_22
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_22
 #endif
 #if (BSW_COMM_CHNUM > 23U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_23
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_23
 #endif
 #if (BSW_COMM_CHNUM > 24U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_24
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_24
 #endif
 #if (BSW_COMM_CHNUM > 25U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_25
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_25
 #endif
 #if (BSW_COMM_CHNUM > 26U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_26
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_26
 #endif
 #if (BSW_COMM_CHNUM > 27U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_27
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_27
 #endif
 #if (BSW_COMM_CHNUM > 28U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_28
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_28
 #endif
 #if (BSW_COMM_CHNUM > 29U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_29
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_29
 #endif
 #if (BSW_COMM_CHNUM > 30U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_30
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_30
 #endif
 #if (BSW_COMM_CHNUM > 31U)
-    ,(BswU4)BSW_COMM_CFG_COM_CH_USERAWK_31
+    ,(BswU2)BSW_COMM_CFG_COM_CH_USER_31
 #endif
 };
 
@@ -3239,6 +3295,104 @@ BswConst   BswU2  bsw_comm_ctrl_u2AwakeHoldTimer[BSW_COMM_CHNUM] = {
 #endif
 #if (BSW_COMM_CHNUM > 31U)
     ,BSW_COMM_u2MS2TICK( BSW_COMM_AWAKE_HOLD_TIMER(31) )
+#endif
+};
+
+/* Channel power per channel */
+BswConst   BswU1  bsw_comm_ctrl_u1CHPowSupply[BSW_COMM_CHNUM] = {
+     (BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_0
+#if (BSW_COMM_CHNUM > 1U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_1
+#endif
+#if (BSW_COMM_CHNUM > 2U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_2
+#endif
+#if (BSW_COMM_CHNUM > 3U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_3
+#endif
+#if (BSW_COMM_CHNUM > 4U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_4
+#endif
+#if (BSW_COMM_CHNUM > 5U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_5
+#endif
+#if (BSW_COMM_CHNUM > 6U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_6
+#endif
+#if (BSW_COMM_CHNUM > 7U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_7
+#endif
+#if (BSW_COMM_CHNUM > 8U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_8
+#endif
+#if (BSW_COMM_CHNUM > 9U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_9
+#endif
+#if (BSW_COMM_CHNUM > 10U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_10
+#endif
+#if (BSW_COMM_CHNUM > 11U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_11
+#endif
+#if (BSW_COMM_CHNUM > 12U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_12
+#endif
+#if (BSW_COMM_CHNUM > 13U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_13
+#endif
+#if (BSW_COMM_CHNUM > 14U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_14
+#endif
+#if (BSW_COMM_CHNUM > 15U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_15
+#endif
+#if (BSW_COMM_CHNUM > 16U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_16
+#endif
+#if (BSW_COMM_CHNUM > 17U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_17
+#endif
+#if (BSW_COMM_CHNUM > 18U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_18
+#endif
+#if (BSW_COMM_CHNUM > 19U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_19
+#endif
+#if (BSW_COMM_CHNUM > 20U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_20
+#endif
+#if (BSW_COMM_CHNUM > 21U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_21
+#endif
+#if (BSW_COMM_CHNUM > 22U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_22
+#endif
+#if (BSW_COMM_CHNUM > 23U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_23
+#endif
+#if (BSW_COMM_CHNUM > 24U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_24
+#endif
+#if (BSW_COMM_CHNUM > 25U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_25
+#endif
+#if (BSW_COMM_CHNUM > 26U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_26
+#endif
+#if (BSW_COMM_CHNUM > 27U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_27
+#endif
+#if (BSW_COMM_CHNUM > 28U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_28
+#endif
+#if (BSW_COMM_CHNUM > 29U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_29
+#endif
+#if (BSW_COMM_CHNUM > 30U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_30
+#endif
+#if (BSW_COMM_CHNUM > 31U)
+    ,(BswU1)BSW_COMM_CFG_CH_POWERSUPPLY_31
 #endif
 };
 
@@ -10978,360 +11132,6726 @@ BswConst BswU1 bsw_comm_ctrl_u1ChPsvWakeupReq[BSW_COMM_CHNUM] = {
 #endif /* (BSW_COMM_PNC_WAKEUPREQ_FUNC == BSW_USE) || (BSW_COMM_CH_WAKEUPREQ_FUNC == BSW_USE) */
 
 #if ( BSW_COMM_CFG_PNC_AWAKEPW == BSW_USE )
-/* PNC Awake power supply(dummy)  */
+/* CH0 */
 #if ( BSW_COMM_CFG_CHNUM > 0U )
-#if ( BSW_COMM_CH_PNCNUM_0 == 0U )
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_0[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_0 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake0[ BSW_COMM_CFG_CH_PNCNUM_0 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_0_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 0),
+#endif
+#if ( BSW_COMM_CH_0_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 1),
+#endif
+#if ( BSW_COMM_CH_0_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 2),
+#endif
+#if ( BSW_COMM_CH_0_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 3),
+#endif
+#if ( BSW_COMM_CH_0_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 4),
+#endif
+#if ( BSW_COMM_CH_0_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 5),
+#endif
+#if ( BSW_COMM_CH_0_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 6),
+#endif
+#if ( BSW_COMM_CH_0_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 7),
+#endif
+#if ( BSW_COMM_CH_0_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 8),
+#endif
+#if ( BSW_COMM_CH_0_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 9),
+#endif
+#if ( BSW_COMM_CH_0_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 10),
+#endif
+#if ( BSW_COMM_CH_0_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 11),
+#endif
+#if ( BSW_COMM_CH_0_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 12),
+#endif
+#if ( BSW_COMM_CH_0_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 13),
+#endif
+#if ( BSW_COMM_CH_0_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 14),
+#endif
+#if ( BSW_COMM_CH_0_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 15),
+#endif
+#if ( BSW_COMM_CH_0_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 16),
+#endif
+#if ( BSW_COMM_CH_0_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 17),
+#endif
+#if ( BSW_COMM_CH_0_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 18),
+#endif
+#if ( BSW_COMM_CH_0_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 19),
+#endif
+#if ( BSW_COMM_CH_0_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 20),
+#endif
+#if ( BSW_COMM_CH_0_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 21),
+#endif
+#if ( BSW_COMM_CH_0_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 22),
+#endif
+#if ( BSW_COMM_CH_0_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 23),
+#endif
+#if ( BSW_COMM_CH_0_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 24),
+#endif
+#if ( BSW_COMM_CH_0_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 25),
+#endif
+#if ( BSW_COMM_CH_0_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 26),
+#endif
+#if ( BSW_COMM_CH_0_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 27),
+#endif
+#if ( BSW_COMM_CH_0_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 28),
+#endif
+#if ( BSW_COMM_CH_0_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 29),
+#endif
+#if ( BSW_COMM_CH_0_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 30),
+#endif
+#if ( BSW_COMM_CH_0_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 31),
+#endif
+#if ( BSW_COMM_CH_0_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 32),
+#endif
+#if ( BSW_COMM_CH_0_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 33),
+#endif
+#if ( BSW_COMM_CH_0_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 34),
+#endif
+#if ( BSW_COMM_CH_0_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 35),
+#endif
+#if ( BSW_COMM_CH_0_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 36),
+#endif
+#if ( BSW_COMM_CH_0_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 37),
+#endif
+#if ( BSW_COMM_CH_0_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 38),
+#endif
+#if ( BSW_COMM_CH_0_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 39),
+#endif
+#if ( BSW_COMM_CH_0_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 40),
+#endif
+#if ( BSW_COMM_CH_0_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 41),
+#endif
+#if ( BSW_COMM_CH_0_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 42),
+#endif
+#if ( BSW_COMM_CH_0_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 43),
+#endif
+#if ( BSW_COMM_CH_0_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 44),
+#endif
+#if ( BSW_COMM_CH_0_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 45),
+#endif
+#if ( BSW_COMM_CH_0_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 46),
+#endif
+#if ( BSW_COMM_CH_0_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 47),
+#endif
+#if ( BSW_COMM_CH_0_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 48),
+#endif
+#if ( BSW_COMM_CH_0_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 49),
+#endif
+#if ( BSW_COMM_CH_0_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 50),
+#endif
+#if ( BSW_COMM_CH_0_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 51),
+#endif
+#if ( BSW_COMM_CH_0_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 52),
+#endif
+#if ( BSW_COMM_CH_0_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 53),
+#endif
+#if ( BSW_COMM_CH_0_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 54),
+#endif
+#if ( BSW_COMM_CH_0_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 55),
+#endif
+#if ( BSW_COMM_CH_0_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 56),
+#endif
+#if ( BSW_COMM_CH_0_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 57),
+#endif
+#if ( BSW_COMM_CH_0_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 58),
+#endif
+#if ( BSW_COMM_CH_0_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 59),
+#endif
+#if ( BSW_COMM_CH_0_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 60),
+#endif
+#if ( BSW_COMM_CH_0_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 61),
+#endif
+#if ( BSW_COMM_CH_0_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 62),
+#endif
+#if ( BSW_COMM_CH_0_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(0, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_0 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake0[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_0 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 0U ) */
+
+/* CH1 */
 #if ( BSW_COMM_CFG_CHNUM > 1U )
-#if (BSW_COMM_CH_PNCNUM_1 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_1[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_1 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake1[ BSW_COMM_CFG_CH_PNCNUM_1 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_1_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 0),
+#endif
+#if ( BSW_COMM_CH_1_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 1),
+#endif
+#if ( BSW_COMM_CH_1_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 2),
+#endif
+#if ( BSW_COMM_CH_1_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 3),
+#endif
+#if ( BSW_COMM_CH_1_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 4),
+#endif
+#if ( BSW_COMM_CH_1_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 5),
+#endif
+#if ( BSW_COMM_CH_1_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 6),
+#endif
+#if ( BSW_COMM_CH_1_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 7),
+#endif
+#if ( BSW_COMM_CH_1_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 8),
+#endif
+#if ( BSW_COMM_CH_1_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 9),
+#endif
+#if ( BSW_COMM_CH_1_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 10),
+#endif
+#if ( BSW_COMM_CH_1_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 11),
+#endif
+#if ( BSW_COMM_CH_1_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 12),
+#endif
+#if ( BSW_COMM_CH_1_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 13),
+#endif
+#if ( BSW_COMM_CH_1_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 14),
+#endif
+#if ( BSW_COMM_CH_1_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 15),
+#endif
+#if ( BSW_COMM_CH_1_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 16),
+#endif
+#if ( BSW_COMM_CH_1_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 17),
+#endif
+#if ( BSW_COMM_CH_1_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 18),
+#endif
+#if ( BSW_COMM_CH_1_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 19),
+#endif
+#if ( BSW_COMM_CH_1_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 20),
+#endif
+#if ( BSW_COMM_CH_1_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 21),
+#endif
+#if ( BSW_COMM_CH_1_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 22),
+#endif
+#if ( BSW_COMM_CH_1_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 23),
+#endif
+#if ( BSW_COMM_CH_1_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 24),
+#endif
+#if ( BSW_COMM_CH_1_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 25),
+#endif
+#if ( BSW_COMM_CH_1_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 26),
+#endif
+#if ( BSW_COMM_CH_1_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 27),
+#endif
+#if ( BSW_COMM_CH_1_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 28),
+#endif
+#if ( BSW_COMM_CH_1_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 29),
+#endif
+#if ( BSW_COMM_CH_1_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 30),
+#endif
+#if ( BSW_COMM_CH_1_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 31),
+#endif
+#if ( BSW_COMM_CH_1_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 32),
+#endif
+#if ( BSW_COMM_CH_1_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 33),
+#endif
+#if ( BSW_COMM_CH_1_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 34),
+#endif
+#if ( BSW_COMM_CH_1_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 35),
+#endif
+#if ( BSW_COMM_CH_1_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 36),
+#endif
+#if ( BSW_COMM_CH_1_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 37),
+#endif
+#if ( BSW_COMM_CH_1_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 38),
+#endif
+#if ( BSW_COMM_CH_1_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 39),
+#endif
+#if ( BSW_COMM_CH_1_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 40),
+#endif
+#if ( BSW_COMM_CH_1_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 41),
+#endif
+#if ( BSW_COMM_CH_1_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 42),
+#endif
+#if ( BSW_COMM_CH_1_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 43),
+#endif
+#if ( BSW_COMM_CH_1_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 44),
+#endif
+#if ( BSW_COMM_CH_1_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 45),
+#endif
+#if ( BSW_COMM_CH_1_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 46),
+#endif
+#if ( BSW_COMM_CH_1_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 47),
+#endif
+#if ( BSW_COMM_CH_1_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 48),
+#endif
+#if ( BSW_COMM_CH_1_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 49),
+#endif
+#if ( BSW_COMM_CH_1_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 50),
+#endif
+#if ( BSW_COMM_CH_1_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 51),
+#endif
+#if ( BSW_COMM_CH_1_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 52),
+#endif
+#if ( BSW_COMM_CH_1_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 53),
+#endif
+#if ( BSW_COMM_CH_1_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 54),
+#endif
+#if ( BSW_COMM_CH_1_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 55),
+#endif
+#if ( BSW_COMM_CH_1_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 56),
+#endif
+#if ( BSW_COMM_CH_1_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 57),
+#endif
+#if ( BSW_COMM_CH_1_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 58),
+#endif
+#if ( BSW_COMM_CH_1_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 59),
+#endif
+#if ( BSW_COMM_CH_1_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 60),
+#endif
+#if ( BSW_COMM_CH_1_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 61),
+#endif
+#if ( BSW_COMM_CH_1_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 62),
+#endif
+#if ( BSW_COMM_CH_1_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(1, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_1 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake1[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_1 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 1U ) */
+
+/* CH2 */
 #if ( BSW_COMM_CFG_CHNUM > 2U )
-#if (BSW_COMM_CH_PNCNUM_2 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_2[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_2 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake2[ BSW_COMM_CFG_CH_PNCNUM_2 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_2_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 0),
+#endif
+#if ( BSW_COMM_CH_2_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 1),
+#endif
+#if ( BSW_COMM_CH_2_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 2),
+#endif
+#if ( BSW_COMM_CH_2_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 3),
+#endif
+#if ( BSW_COMM_CH_2_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 4),
+#endif
+#if ( BSW_COMM_CH_2_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 5),
+#endif
+#if ( BSW_COMM_CH_2_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 6),
+#endif
+#if ( BSW_COMM_CH_2_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 7),
+#endif
+#if ( BSW_COMM_CH_2_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 8),
+#endif
+#if ( BSW_COMM_CH_2_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 9),
+#endif
+#if ( BSW_COMM_CH_2_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 10),
+#endif
+#if ( BSW_COMM_CH_2_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 11),
+#endif
+#if ( BSW_COMM_CH_2_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 12),
+#endif
+#if ( BSW_COMM_CH_2_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 13),
+#endif
+#if ( BSW_COMM_CH_2_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 14),
+#endif
+#if ( BSW_COMM_CH_2_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 15),
+#endif
+#if ( BSW_COMM_CH_2_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 16),
+#endif
+#if ( BSW_COMM_CH_2_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 17),
+#endif
+#if ( BSW_COMM_CH_2_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 18),
+#endif
+#if ( BSW_COMM_CH_2_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 19),
+#endif
+#if ( BSW_COMM_CH_2_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 20),
+#endif
+#if ( BSW_COMM_CH_2_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 21),
+#endif
+#if ( BSW_COMM_CH_2_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 22),
+#endif
+#if ( BSW_COMM_CH_2_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 23),
+#endif
+#if ( BSW_COMM_CH_2_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 24),
+#endif
+#if ( BSW_COMM_CH_2_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 25),
+#endif
+#if ( BSW_COMM_CH_2_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 26),
+#endif
+#if ( BSW_COMM_CH_2_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 27),
+#endif
+#if ( BSW_COMM_CH_2_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 28),
+#endif
+#if ( BSW_COMM_CH_2_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 29),
+#endif
+#if ( BSW_COMM_CH_2_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 30),
+#endif
+#if ( BSW_COMM_CH_2_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 31),
+#endif
+#if ( BSW_COMM_CH_2_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 32),
+#endif
+#if ( BSW_COMM_CH_2_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 33),
+#endif
+#if ( BSW_COMM_CH_2_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 34),
+#endif
+#if ( BSW_COMM_CH_2_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 35),
+#endif
+#if ( BSW_COMM_CH_2_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 36),
+#endif
+#if ( BSW_COMM_CH_2_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 37),
+#endif
+#if ( BSW_COMM_CH_2_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 38),
+#endif
+#if ( BSW_COMM_CH_2_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 39),
+#endif
+#if ( BSW_COMM_CH_2_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 40),
+#endif
+#if ( BSW_COMM_CH_2_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 41),
+#endif
+#if ( BSW_COMM_CH_2_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 42),
+#endif
+#if ( BSW_COMM_CH_2_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 43),
+#endif
+#if ( BSW_COMM_CH_2_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 44),
+#endif
+#if ( BSW_COMM_CH_2_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 45),
+#endif
+#if ( BSW_COMM_CH_2_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 46),
+#endif
+#if ( BSW_COMM_CH_2_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 47),
+#endif
+#if ( BSW_COMM_CH_2_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 48),
+#endif
+#if ( BSW_COMM_CH_2_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 49),
+#endif
+#if ( BSW_COMM_CH_2_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 50),
+#endif
+#if ( BSW_COMM_CH_2_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 51),
+#endif
+#if ( BSW_COMM_CH_2_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 52),
+#endif
+#if ( BSW_COMM_CH_2_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 53),
+#endif
+#if ( BSW_COMM_CH_2_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 54),
+#endif
+#if ( BSW_COMM_CH_2_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 55),
+#endif
+#if ( BSW_COMM_CH_2_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 56),
+#endif
+#if ( BSW_COMM_CH_2_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 57),
+#endif
+#if ( BSW_COMM_CH_2_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 58),
+#endif
+#if ( BSW_COMM_CH_2_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 59),
+#endif
+#if ( BSW_COMM_CH_2_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 60),
+#endif
+#if ( BSW_COMM_CH_2_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 61),
+#endif
+#if ( BSW_COMM_CH_2_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 62),
+#endif
+#if ( BSW_COMM_CH_2_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(2, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_2 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake2[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_2 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 2U ) */
+
+/* CH3 */
 #if ( BSW_COMM_CFG_CHNUM > 3U )
-#if (BSW_COMM_CH_PNCNUM_3 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_3[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_3 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake3[ BSW_COMM_CFG_CH_PNCNUM_3 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_3_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 0),
+#endif
+#if ( BSW_COMM_CH_3_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 1),
+#endif
+#if ( BSW_COMM_CH_3_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 2),
+#endif
+#if ( BSW_COMM_CH_3_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 3),
+#endif
+#if ( BSW_COMM_CH_3_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 4),
+#endif
+#if ( BSW_COMM_CH_3_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 5),
+#endif
+#if ( BSW_COMM_CH_3_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 6),
+#endif
+#if ( BSW_COMM_CH_3_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 7),
+#endif
+#if ( BSW_COMM_CH_3_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 8),
+#endif
+#if ( BSW_COMM_CH_3_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 9),
+#endif
+#if ( BSW_COMM_CH_3_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 10),
+#endif
+#if ( BSW_COMM_CH_3_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 11),
+#endif
+#if ( BSW_COMM_CH_3_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 12),
+#endif
+#if ( BSW_COMM_CH_3_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 13),
+#endif
+#if ( BSW_COMM_CH_3_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 14),
+#endif
+#if ( BSW_COMM_CH_3_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 15),
+#endif
+#if ( BSW_COMM_CH_3_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 16),
+#endif
+#if ( BSW_COMM_CH_3_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 17),
+#endif
+#if ( BSW_COMM_CH_3_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 18),
+#endif
+#if ( BSW_COMM_CH_3_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 19),
+#endif
+#if ( BSW_COMM_CH_3_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 20),
+#endif
+#if ( BSW_COMM_CH_3_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 21),
+#endif
+#if ( BSW_COMM_CH_3_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 22),
+#endif
+#if ( BSW_COMM_CH_3_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 23),
+#endif
+#if ( BSW_COMM_CH_3_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 24),
+#endif
+#if ( BSW_COMM_CH_3_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 25),
+#endif
+#if ( BSW_COMM_CH_3_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 26),
+#endif
+#if ( BSW_COMM_CH_3_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 27),
+#endif
+#if ( BSW_COMM_CH_3_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 28),
+#endif
+#if ( BSW_COMM_CH_3_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 29),
+#endif
+#if ( BSW_COMM_CH_3_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 30),
+#endif
+#if ( BSW_COMM_CH_3_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 31),
+#endif
+#if ( BSW_COMM_CH_3_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 32),
+#endif
+#if ( BSW_COMM_CH_3_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 33),
+#endif
+#if ( BSW_COMM_CH_3_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 34),
+#endif
+#if ( BSW_COMM_CH_3_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 35),
+#endif
+#if ( BSW_COMM_CH_3_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 36),
+#endif
+#if ( BSW_COMM_CH_3_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 37),
+#endif
+#if ( BSW_COMM_CH_3_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 38),
+#endif
+#if ( BSW_COMM_CH_3_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 39),
+#endif
+#if ( BSW_COMM_CH_3_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 40),
+#endif
+#if ( BSW_COMM_CH_3_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 41),
+#endif
+#if ( BSW_COMM_CH_3_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 42),
+#endif
+#if ( BSW_COMM_CH_3_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 43),
+#endif
+#if ( BSW_COMM_CH_3_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 44),
+#endif
+#if ( BSW_COMM_CH_3_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 45),
+#endif
+#if ( BSW_COMM_CH_3_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 46),
+#endif
+#if ( BSW_COMM_CH_3_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 47),
+#endif
+#if ( BSW_COMM_CH_3_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 48),
+#endif
+#if ( BSW_COMM_CH_3_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 49),
+#endif
+#if ( BSW_COMM_CH_3_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 50),
+#endif
+#if ( BSW_COMM_CH_3_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 51),
+#endif
+#if ( BSW_COMM_CH_3_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 52),
+#endif
+#if ( BSW_COMM_CH_3_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 53),
+#endif
+#if ( BSW_COMM_CH_3_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 54),
+#endif
+#if ( BSW_COMM_CH_3_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 55),
+#endif
+#if ( BSW_COMM_CH_3_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 56),
+#endif
+#if ( BSW_COMM_CH_3_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 57),
+#endif
+#if ( BSW_COMM_CH_3_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 58),
+#endif
+#if ( BSW_COMM_CH_3_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 59),
+#endif
+#if ( BSW_COMM_CH_3_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 60),
+#endif
+#if ( BSW_COMM_CH_3_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 61),
+#endif
+#if ( BSW_COMM_CH_3_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 62),
+#endif
+#if ( BSW_COMM_CH_3_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(3, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_3 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake3[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_3 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 3U ) */
+
+/* CH4 */
 #if ( BSW_COMM_CFG_CHNUM > 4U )
-#if (BSW_COMM_CH_PNCNUM_4 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_4[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_4 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake4[ BSW_COMM_CFG_CH_PNCNUM_4 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_4_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 0),
+#endif
+#if ( BSW_COMM_CH_4_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 1),
+#endif
+#if ( BSW_COMM_CH_4_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 2),
+#endif
+#if ( BSW_COMM_CH_4_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 3),
+#endif
+#if ( BSW_COMM_CH_4_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 4),
+#endif
+#if ( BSW_COMM_CH_4_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 5),
+#endif
+#if ( BSW_COMM_CH_4_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 6),
+#endif
+#if ( BSW_COMM_CH_4_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 7),
+#endif
+#if ( BSW_COMM_CH_4_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 8),
+#endif
+#if ( BSW_COMM_CH_4_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 9),
+#endif
+#if ( BSW_COMM_CH_4_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 10),
+#endif
+#if ( BSW_COMM_CH_4_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 11),
+#endif
+#if ( BSW_COMM_CH_4_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 12),
+#endif
+#if ( BSW_COMM_CH_4_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 13),
+#endif
+#if ( BSW_COMM_CH_4_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 14),
+#endif
+#if ( BSW_COMM_CH_4_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 15),
+#endif
+#if ( BSW_COMM_CH_4_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 16),
+#endif
+#if ( BSW_COMM_CH_4_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 17),
+#endif
+#if ( BSW_COMM_CH_4_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 18),
+#endif
+#if ( BSW_COMM_CH_4_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 19),
+#endif
+#if ( BSW_COMM_CH_4_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 20),
+#endif
+#if ( BSW_COMM_CH_4_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 21),
+#endif
+#if ( BSW_COMM_CH_4_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 22),
+#endif
+#if ( BSW_COMM_CH_4_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 23),
+#endif
+#if ( BSW_COMM_CH_4_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 24),
+#endif
+#if ( BSW_COMM_CH_4_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 25),
+#endif
+#if ( BSW_COMM_CH_4_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 26),
+#endif
+#if ( BSW_COMM_CH_4_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 27),
+#endif
+#if ( BSW_COMM_CH_4_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 28),
+#endif
+#if ( BSW_COMM_CH_4_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 29),
+#endif
+#if ( BSW_COMM_CH_4_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 30),
+#endif
+#if ( BSW_COMM_CH_4_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 31),
+#endif
+#if ( BSW_COMM_CH_4_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 32),
+#endif
+#if ( BSW_COMM_CH_4_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 33),
+#endif
+#if ( BSW_COMM_CH_4_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 34),
+#endif
+#if ( BSW_COMM_CH_4_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 35),
+#endif
+#if ( BSW_COMM_CH_4_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 36),
+#endif
+#if ( BSW_COMM_CH_4_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 37),
+#endif
+#if ( BSW_COMM_CH_4_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 38),
+#endif
+#if ( BSW_COMM_CH_4_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 39),
+#endif
+#if ( BSW_COMM_CH_4_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 40),
+#endif
+#if ( BSW_COMM_CH_4_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 41),
+#endif
+#if ( BSW_COMM_CH_4_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 42),
+#endif
+#if ( BSW_COMM_CH_4_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 43),
+#endif
+#if ( BSW_COMM_CH_4_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 44),
+#endif
+#if ( BSW_COMM_CH_4_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 45),
+#endif
+#if ( BSW_COMM_CH_4_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 46),
+#endif
+#if ( BSW_COMM_CH_4_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 47),
+#endif
+#if ( BSW_COMM_CH_4_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 48),
+#endif
+#if ( BSW_COMM_CH_4_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 49),
+#endif
+#if ( BSW_COMM_CH_4_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 50),
+#endif
+#if ( BSW_COMM_CH_4_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 51),
+#endif
+#if ( BSW_COMM_CH_4_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 52),
+#endif
+#if ( BSW_COMM_CH_4_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 53),
+#endif
+#if ( BSW_COMM_CH_4_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 54),
+#endif
+#if ( BSW_COMM_CH_4_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 55),
+#endif
+#if ( BSW_COMM_CH_4_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 56),
+#endif
+#if ( BSW_COMM_CH_4_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 57),
+#endif
+#if ( BSW_COMM_CH_4_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 58),
+#endif
+#if ( BSW_COMM_CH_4_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 59),
+#endif
+#if ( BSW_COMM_CH_4_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 60),
+#endif
+#if ( BSW_COMM_CH_4_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 61),
+#endif
+#if ( BSW_COMM_CH_4_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 62),
+#endif
+#if ( BSW_COMM_CH_4_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(4, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_4 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake4[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_4 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 4U ) */
+
+/* CH5 */
 #if ( BSW_COMM_CFG_CHNUM > 5U )
-#if (BSW_COMM_CH_PNCNUM_5 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_5[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_5 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake5[ BSW_COMM_CFG_CH_PNCNUM_5 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_5_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 0),
+#endif
+#if ( BSW_COMM_CH_5_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 1),
+#endif
+#if ( BSW_COMM_CH_5_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 2),
+#endif
+#if ( BSW_COMM_CH_5_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 3),
+#endif
+#if ( BSW_COMM_CH_5_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 4),
+#endif
+#if ( BSW_COMM_CH_5_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 5),
+#endif
+#if ( BSW_COMM_CH_5_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 6),
+#endif
+#if ( BSW_COMM_CH_5_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 7),
+#endif
+#if ( BSW_COMM_CH_5_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 8),
+#endif
+#if ( BSW_COMM_CH_5_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 9),
+#endif
+#if ( BSW_COMM_CH_5_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 10),
+#endif
+#if ( BSW_COMM_CH_5_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 11),
+#endif
+#if ( BSW_COMM_CH_5_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 12),
+#endif
+#if ( BSW_COMM_CH_5_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 13),
+#endif
+#if ( BSW_COMM_CH_5_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 14),
+#endif
+#if ( BSW_COMM_CH_5_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 15),
+#endif
+#if ( BSW_COMM_CH_5_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 16),
+#endif
+#if ( BSW_COMM_CH_5_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 17),
+#endif
+#if ( BSW_COMM_CH_5_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 18),
+#endif
+#if ( BSW_COMM_CH_5_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 19),
+#endif
+#if ( BSW_COMM_CH_5_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 20),
+#endif
+#if ( BSW_COMM_CH_5_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 21),
+#endif
+#if ( BSW_COMM_CH_5_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 22),
+#endif
+#if ( BSW_COMM_CH_5_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 23),
+#endif
+#if ( BSW_COMM_CH_5_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 24),
+#endif
+#if ( BSW_COMM_CH_5_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 25),
+#endif
+#if ( BSW_COMM_CH_5_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 26),
+#endif
+#if ( BSW_COMM_CH_5_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 27),
+#endif
+#if ( BSW_COMM_CH_5_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 28),
+#endif
+#if ( BSW_COMM_CH_5_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 29),
+#endif
+#if ( BSW_COMM_CH_5_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 30),
+#endif
+#if ( BSW_COMM_CH_5_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 31),
+#endif
+#if ( BSW_COMM_CH_5_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 32),
+#endif
+#if ( BSW_COMM_CH_5_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 33),
+#endif
+#if ( BSW_COMM_CH_5_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 34),
+#endif
+#if ( BSW_COMM_CH_5_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 35),
+#endif
+#if ( BSW_COMM_CH_5_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 36),
+#endif
+#if ( BSW_COMM_CH_5_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 37),
+#endif
+#if ( BSW_COMM_CH_5_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 38),
+#endif
+#if ( BSW_COMM_CH_5_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 39),
+#endif
+#if ( BSW_COMM_CH_5_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 40),
+#endif
+#if ( BSW_COMM_CH_5_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 41),
+#endif
+#if ( BSW_COMM_CH_5_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 42),
+#endif
+#if ( BSW_COMM_CH_5_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 43),
+#endif
+#if ( BSW_COMM_CH_5_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 44),
+#endif
+#if ( BSW_COMM_CH_5_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 45),
+#endif
+#if ( BSW_COMM_CH_5_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 46),
+#endif
+#if ( BSW_COMM_CH_5_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 47),
+#endif
+#if ( BSW_COMM_CH_5_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 48),
+#endif
+#if ( BSW_COMM_CH_5_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 49),
+#endif
+#if ( BSW_COMM_CH_5_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 50),
+#endif
+#if ( BSW_COMM_CH_5_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 51),
+#endif
+#if ( BSW_COMM_CH_5_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 52),
+#endif
+#if ( BSW_COMM_CH_5_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 53),
+#endif
+#if ( BSW_COMM_CH_5_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 54),
+#endif
+#if ( BSW_COMM_CH_5_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 55),
+#endif
+#if ( BSW_COMM_CH_5_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 56),
+#endif
+#if ( BSW_COMM_CH_5_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 57),
+#endif
+#if ( BSW_COMM_CH_5_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 58),
+#endif
+#if ( BSW_COMM_CH_5_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 59),
+#endif
+#if ( BSW_COMM_CH_5_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 60),
+#endif
+#if ( BSW_COMM_CH_5_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 61),
+#endif
+#if ( BSW_COMM_CH_5_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 62),
+#endif
+#if ( BSW_COMM_CH_5_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(5, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_5 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake5[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_5 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 5U ) */
+
+/* CH6 */
 #if ( BSW_COMM_CFG_CHNUM > 6U )
-#if (BSW_COMM_CH_PNCNUM_6 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_6[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_6 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake6[ BSW_COMM_CFG_CH_PNCNUM_6 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_6_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 0),
+#endif
+#if ( BSW_COMM_CH_6_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 1),
+#endif
+#if ( BSW_COMM_CH_6_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 2),
+#endif
+#if ( BSW_COMM_CH_6_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 3),
+#endif
+#if ( BSW_COMM_CH_6_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 4),
+#endif
+#if ( BSW_COMM_CH_6_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 5),
+#endif
+#if ( BSW_COMM_CH_6_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 6),
+#endif
+#if ( BSW_COMM_CH_6_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 7),
+#endif
+#if ( BSW_COMM_CH_6_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 8),
+#endif
+#if ( BSW_COMM_CH_6_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 9),
+#endif
+#if ( BSW_COMM_CH_6_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 10),
+#endif
+#if ( BSW_COMM_CH_6_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 11),
+#endif
+#if ( BSW_COMM_CH_6_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 12),
+#endif
+#if ( BSW_COMM_CH_6_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 13),
+#endif
+#if ( BSW_COMM_CH_6_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 14),
+#endif
+#if ( BSW_COMM_CH_6_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 15),
+#endif
+#if ( BSW_COMM_CH_6_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 16),
+#endif
+#if ( BSW_COMM_CH_6_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 17),
+#endif
+#if ( BSW_COMM_CH_6_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 18),
+#endif
+#if ( BSW_COMM_CH_6_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 19),
+#endif
+#if ( BSW_COMM_CH_6_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 20),
+#endif
+#if ( BSW_COMM_CH_6_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 21),
+#endif
+#if ( BSW_COMM_CH_6_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 22),
+#endif
+#if ( BSW_COMM_CH_6_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 23),
+#endif
+#if ( BSW_COMM_CH_6_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 24),
+#endif
+#if ( BSW_COMM_CH_6_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 25),
+#endif
+#if ( BSW_COMM_CH_6_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 26),
+#endif
+#if ( BSW_COMM_CH_6_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 27),
+#endif
+#if ( BSW_COMM_CH_6_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 28),
+#endif
+#if ( BSW_COMM_CH_6_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 29),
+#endif
+#if ( BSW_COMM_CH_6_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 30),
+#endif
+#if ( BSW_COMM_CH_6_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 31),
+#endif
+#if ( BSW_COMM_CH_6_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 32),
+#endif
+#if ( BSW_COMM_CH_6_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 33),
+#endif
+#if ( BSW_COMM_CH_6_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 34),
+#endif
+#if ( BSW_COMM_CH_6_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 35),
+#endif
+#if ( BSW_COMM_CH_6_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 36),
+#endif
+#if ( BSW_COMM_CH_6_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 37),
+#endif
+#if ( BSW_COMM_CH_6_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 38),
+#endif
+#if ( BSW_COMM_CH_6_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 39),
+#endif
+#if ( BSW_COMM_CH_6_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 40),
+#endif
+#if ( BSW_COMM_CH_6_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 41),
+#endif
+#if ( BSW_COMM_CH_6_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 42),
+#endif
+#if ( BSW_COMM_CH_6_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 43),
+#endif
+#if ( BSW_COMM_CH_6_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 44),
+#endif
+#if ( BSW_COMM_CH_6_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 45),
+#endif
+#if ( BSW_COMM_CH_6_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 46),
+#endif
+#if ( BSW_COMM_CH_6_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 47),
+#endif
+#if ( BSW_COMM_CH_6_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 48),
+#endif
+#if ( BSW_COMM_CH_6_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 49),
+#endif
+#if ( BSW_COMM_CH_6_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 50),
+#endif
+#if ( BSW_COMM_CH_6_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 51),
+#endif
+#if ( BSW_COMM_CH_6_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 52),
+#endif
+#if ( BSW_COMM_CH_6_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 53),
+#endif
+#if ( BSW_COMM_CH_6_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 54),
+#endif
+#if ( BSW_COMM_CH_6_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 55),
+#endif
+#if ( BSW_COMM_CH_6_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 56),
+#endif
+#if ( BSW_COMM_CH_6_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 57),
+#endif
+#if ( BSW_COMM_CH_6_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 58),
+#endif
+#if ( BSW_COMM_CH_6_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 59),
+#endif
+#if ( BSW_COMM_CH_6_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 60),
+#endif
+#if ( BSW_COMM_CH_6_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 61),
+#endif
+#if ( BSW_COMM_CH_6_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 62),
+#endif
+#if ( BSW_COMM_CH_6_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(6, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_6 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake6[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_6 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 6U ) */
+
+/* CH7 */
 #if ( BSW_COMM_CFG_CHNUM > 7U )
-#if (BSW_COMM_CH_PNCNUM_7 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_7[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_7 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake7[ BSW_COMM_CFG_CH_PNCNUM_7 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_7_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 0),
+#endif
+#if ( BSW_COMM_CH_7_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 1),
+#endif
+#if ( BSW_COMM_CH_7_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 2),
+#endif
+#if ( BSW_COMM_CH_7_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 3),
+#endif
+#if ( BSW_COMM_CH_7_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 4),
+#endif
+#if ( BSW_COMM_CH_7_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 5),
+#endif
+#if ( BSW_COMM_CH_7_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 6),
+#endif
+#if ( BSW_COMM_CH_7_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 7),
+#endif
+#if ( BSW_COMM_CH_7_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 8),
+#endif
+#if ( BSW_COMM_CH_7_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 9),
+#endif
+#if ( BSW_COMM_CH_7_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 10),
+#endif
+#if ( BSW_COMM_CH_7_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 11),
+#endif
+#if ( BSW_COMM_CH_7_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 12),
+#endif
+#if ( BSW_COMM_CH_7_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 13),
+#endif
+#if ( BSW_COMM_CH_7_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 14),
+#endif
+#if ( BSW_COMM_CH_7_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 15),
+#endif
+#if ( BSW_COMM_CH_7_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 16),
+#endif
+#if ( BSW_COMM_CH_7_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 17),
+#endif
+#if ( BSW_COMM_CH_7_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 18),
+#endif
+#if ( BSW_COMM_CH_7_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 19),
+#endif
+#if ( BSW_COMM_CH_7_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 20),
+#endif
+#if ( BSW_COMM_CH_7_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 21),
+#endif
+#if ( BSW_COMM_CH_7_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 22),
+#endif
+#if ( BSW_COMM_CH_7_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 23),
+#endif
+#if ( BSW_COMM_CH_7_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 24),
+#endif
+#if ( BSW_COMM_CH_7_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 25),
+#endif
+#if ( BSW_COMM_CH_7_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 26),
+#endif
+#if ( BSW_COMM_CH_7_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 27),
+#endif
+#if ( BSW_COMM_CH_7_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 28),
+#endif
+#if ( BSW_COMM_CH_7_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 29),
+#endif
+#if ( BSW_COMM_CH_7_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 30),
+#endif
+#if ( BSW_COMM_CH_7_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 31),
+#endif
+#if ( BSW_COMM_CH_7_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 32),
+#endif
+#if ( BSW_COMM_CH_7_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 33),
+#endif
+#if ( BSW_COMM_CH_7_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 34),
+#endif
+#if ( BSW_COMM_CH_7_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 35),
+#endif
+#if ( BSW_COMM_CH_7_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 36),
+#endif
+#if ( BSW_COMM_CH_7_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 37),
+#endif
+#if ( BSW_COMM_CH_7_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 38),
+#endif
+#if ( BSW_COMM_CH_7_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 39),
+#endif
+#if ( BSW_COMM_CH_7_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 40),
+#endif
+#if ( BSW_COMM_CH_7_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 41),
+#endif
+#if ( BSW_COMM_CH_7_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 42),
+#endif
+#if ( BSW_COMM_CH_7_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 43),
+#endif
+#if ( BSW_COMM_CH_7_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 44),
+#endif
+#if ( BSW_COMM_CH_7_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 45),
+#endif
+#if ( BSW_COMM_CH_7_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 46),
+#endif
+#if ( BSW_COMM_CH_7_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 47),
+#endif
+#if ( BSW_COMM_CH_7_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 48),
+#endif
+#if ( BSW_COMM_CH_7_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 49),
+#endif
+#if ( BSW_COMM_CH_7_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 50),
+#endif
+#if ( BSW_COMM_CH_7_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 51),
+#endif
+#if ( BSW_COMM_CH_7_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 52),
+#endif
+#if ( BSW_COMM_CH_7_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 53),
+#endif
+#if ( BSW_COMM_CH_7_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 54),
+#endif
+#if ( BSW_COMM_CH_7_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 55),
+#endif
+#if ( BSW_COMM_CH_7_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 56),
+#endif
+#if ( BSW_COMM_CH_7_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 57),
+#endif
+#if ( BSW_COMM_CH_7_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 58),
+#endif
+#if ( BSW_COMM_CH_7_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 59),
+#endif
+#if ( BSW_COMM_CH_7_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 60),
+#endif
+#if ( BSW_COMM_CH_7_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 61),
+#endif
+#if ( BSW_COMM_CH_7_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 62),
+#endif
+#if ( BSW_COMM_CH_7_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(7, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_7 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake7[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_7 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 7U ) */
+
+/* CH8 */
 #if ( BSW_COMM_CFG_CHNUM > 8U )
-#if (BSW_COMM_CH_PNCNUM_8 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_8[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_8 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake8[ BSW_COMM_CFG_CH_PNCNUM_8 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_8_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 0),
+#endif
+#if ( BSW_COMM_CH_8_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 1),
+#endif
+#if ( BSW_COMM_CH_8_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 2),
+#endif
+#if ( BSW_COMM_CH_8_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 3),
+#endif
+#if ( BSW_COMM_CH_8_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 4),
+#endif
+#if ( BSW_COMM_CH_8_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 5),
+#endif
+#if ( BSW_COMM_CH_8_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 6),
+#endif
+#if ( BSW_COMM_CH_8_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 7),
+#endif
+#if ( BSW_COMM_CH_8_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 8),
+#endif
+#if ( BSW_COMM_CH_8_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 9),
+#endif
+#if ( BSW_COMM_CH_8_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 10),
+#endif
+#if ( BSW_COMM_CH_8_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 11),
+#endif
+#if ( BSW_COMM_CH_8_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 12),
+#endif
+#if ( BSW_COMM_CH_8_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 13),
+#endif
+#if ( BSW_COMM_CH_8_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 14),
+#endif
+#if ( BSW_COMM_CH_8_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 15),
+#endif
+#if ( BSW_COMM_CH_8_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 16),
+#endif
+#if ( BSW_COMM_CH_8_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 17),
+#endif
+#if ( BSW_COMM_CH_8_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 18),
+#endif
+#if ( BSW_COMM_CH_8_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 19),
+#endif
+#if ( BSW_COMM_CH_8_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 20),
+#endif
+#if ( BSW_COMM_CH_8_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 21),
+#endif
+#if ( BSW_COMM_CH_8_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 22),
+#endif
+#if ( BSW_COMM_CH_8_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 23),
+#endif
+#if ( BSW_COMM_CH_8_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 24),
+#endif
+#if ( BSW_COMM_CH_8_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 25),
+#endif
+#if ( BSW_COMM_CH_8_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 26),
+#endif
+#if ( BSW_COMM_CH_8_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 27),
+#endif
+#if ( BSW_COMM_CH_8_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 28),
+#endif
+#if ( BSW_COMM_CH_8_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 29),
+#endif
+#if ( BSW_COMM_CH_8_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 30),
+#endif
+#if ( BSW_COMM_CH_8_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 31),
+#endif
+#if ( BSW_COMM_CH_8_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 32),
+#endif
+#if ( BSW_COMM_CH_8_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 33),
+#endif
+#if ( BSW_COMM_CH_8_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 34),
+#endif
+#if ( BSW_COMM_CH_8_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 35),
+#endif
+#if ( BSW_COMM_CH_8_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 36),
+#endif
+#if ( BSW_COMM_CH_8_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 37),
+#endif
+#if ( BSW_COMM_CH_8_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 38),
+#endif
+#if ( BSW_COMM_CH_8_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 39),
+#endif
+#if ( BSW_COMM_CH_8_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 40),
+#endif
+#if ( BSW_COMM_CH_8_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 41),
+#endif
+#if ( BSW_COMM_CH_8_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 42),
+#endif
+#if ( BSW_COMM_CH_8_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 43),
+#endif
+#if ( BSW_COMM_CH_8_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 44),
+#endif
+#if ( BSW_COMM_CH_8_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 45),
+#endif
+#if ( BSW_COMM_CH_8_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 46),
+#endif
+#if ( BSW_COMM_CH_8_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 47),
+#endif
+#if ( BSW_COMM_CH_8_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 48),
+#endif
+#if ( BSW_COMM_CH_8_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 49),
+#endif
+#if ( BSW_COMM_CH_8_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 50),
+#endif
+#if ( BSW_COMM_CH_8_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 51),
+#endif
+#if ( BSW_COMM_CH_8_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 52),
+#endif
+#if ( BSW_COMM_CH_8_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 53),
+#endif
+#if ( BSW_COMM_CH_8_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 54),
+#endif
+#if ( BSW_COMM_CH_8_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 55),
+#endif
+#if ( BSW_COMM_CH_8_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 56),
+#endif
+#if ( BSW_COMM_CH_8_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 57),
+#endif
+#if ( BSW_COMM_CH_8_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 58),
+#endif
+#if ( BSW_COMM_CH_8_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 59),
+#endif
+#if ( BSW_COMM_CH_8_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 60),
+#endif
+#if ( BSW_COMM_CH_8_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 61),
+#endif
+#if ( BSW_COMM_CH_8_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 62),
+#endif
+#if ( BSW_COMM_CH_8_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(8, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_8 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake8[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_8 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 8U ) */
+
+/* CH9 */
 #if ( BSW_COMM_CFG_CHNUM > 9U )
-#if (BSW_COMM_CH_PNCNUM_9 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_9[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_9 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake9[ BSW_COMM_CFG_CH_PNCNUM_9 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_9_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 0),
+#endif
+#if ( BSW_COMM_CH_9_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 1),
+#endif
+#if ( BSW_COMM_CH_9_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 2),
+#endif
+#if ( BSW_COMM_CH_9_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 3),
+#endif
+#if ( BSW_COMM_CH_9_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 4),
+#endif
+#if ( BSW_COMM_CH_9_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 5),
+#endif
+#if ( BSW_COMM_CH_9_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 6),
+#endif
+#if ( BSW_COMM_CH_9_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 7),
+#endif
+#if ( BSW_COMM_CH_9_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 8),
+#endif
+#if ( BSW_COMM_CH_9_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 9),
+#endif
+#if ( BSW_COMM_CH_9_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 10),
+#endif
+#if ( BSW_COMM_CH_9_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 11),
+#endif
+#if ( BSW_COMM_CH_9_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 12),
+#endif
+#if ( BSW_COMM_CH_9_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 13),
+#endif
+#if ( BSW_COMM_CH_9_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 14),
+#endif
+#if ( BSW_COMM_CH_9_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 15),
+#endif
+#if ( BSW_COMM_CH_9_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 16),
+#endif
+#if ( BSW_COMM_CH_9_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 17),
+#endif
+#if ( BSW_COMM_CH_9_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 18),
+#endif
+#if ( BSW_COMM_CH_9_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 19),
+#endif
+#if ( BSW_COMM_CH_9_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 20),
+#endif
+#if ( BSW_COMM_CH_9_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 21),
+#endif
+#if ( BSW_COMM_CH_9_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 22),
+#endif
+#if ( BSW_COMM_CH_9_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 23),
+#endif
+#if ( BSW_COMM_CH_9_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 24),
+#endif
+#if ( BSW_COMM_CH_9_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 25),
+#endif
+#if ( BSW_COMM_CH_9_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 26),
+#endif
+#if ( BSW_COMM_CH_9_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 27),
+#endif
+#if ( BSW_COMM_CH_9_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 28),
+#endif
+#if ( BSW_COMM_CH_9_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 29),
+#endif
+#if ( BSW_COMM_CH_9_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 30),
+#endif
+#if ( BSW_COMM_CH_9_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 31),
+#endif
+#if ( BSW_COMM_CH_9_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 32),
+#endif
+#if ( BSW_COMM_CH_9_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 33),
+#endif
+#if ( BSW_COMM_CH_9_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 34),
+#endif
+#if ( BSW_COMM_CH_9_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 35),
+#endif
+#if ( BSW_COMM_CH_9_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 36),
+#endif
+#if ( BSW_COMM_CH_9_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 37),
+#endif
+#if ( BSW_COMM_CH_9_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 38),
+#endif
+#if ( BSW_COMM_CH_9_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 39),
+#endif
+#if ( BSW_COMM_CH_9_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 40),
+#endif
+#if ( BSW_COMM_CH_9_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 41),
+#endif
+#if ( BSW_COMM_CH_9_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 42),
+#endif
+#if ( BSW_COMM_CH_9_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 43),
+#endif
+#if ( BSW_COMM_CH_9_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 44),
+#endif
+#if ( BSW_COMM_CH_9_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 45),
+#endif
+#if ( BSW_COMM_CH_9_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 46),
+#endif
+#if ( BSW_COMM_CH_9_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 47),
+#endif
+#if ( BSW_COMM_CH_9_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 48),
+#endif
+#if ( BSW_COMM_CH_9_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 49),
+#endif
+#if ( BSW_COMM_CH_9_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 50),
+#endif
+#if ( BSW_COMM_CH_9_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 51),
+#endif
+#if ( BSW_COMM_CH_9_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 52),
+#endif
+#if ( BSW_COMM_CH_9_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 53),
+#endif
+#if ( BSW_COMM_CH_9_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 54),
+#endif
+#if ( BSW_COMM_CH_9_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 55),
+#endif
+#if ( BSW_COMM_CH_9_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 56),
+#endif
+#if ( BSW_COMM_CH_9_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 57),
+#endif
+#if ( BSW_COMM_CH_9_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 58),
+#endif
+#if ( BSW_COMM_CH_9_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 59),
+#endif
+#if ( BSW_COMM_CH_9_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 60),
+#endif
+#if ( BSW_COMM_CH_9_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 61),
+#endif
+#if ( BSW_COMM_CH_9_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 62),
+#endif
+#if ( BSW_COMM_CH_9_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(9, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_9 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake9[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_9 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 9U ) */
+
+/* CH10 */
 #if ( BSW_COMM_CFG_CHNUM > 10U )
-#if (BSW_COMM_CH_PNCNUM_10 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_10[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_10 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake10[ BSW_COMM_CFG_CH_PNCNUM_10 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_10_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 0),
+#endif
+#if ( BSW_COMM_CH_10_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 1),
+#endif
+#if ( BSW_COMM_CH_10_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 2),
+#endif
+#if ( BSW_COMM_CH_10_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 3),
+#endif
+#if ( BSW_COMM_CH_10_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 4),
+#endif
+#if ( BSW_COMM_CH_10_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 5),
+#endif
+#if ( BSW_COMM_CH_10_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 6),
+#endif
+#if ( BSW_COMM_CH_10_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 7),
+#endif
+#if ( BSW_COMM_CH_10_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 8),
+#endif
+#if ( BSW_COMM_CH_10_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 9),
+#endif
+#if ( BSW_COMM_CH_10_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 10),
+#endif
+#if ( BSW_COMM_CH_10_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 11),
+#endif
+#if ( BSW_COMM_CH_10_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 12),
+#endif
+#if ( BSW_COMM_CH_10_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 13),
+#endif
+#if ( BSW_COMM_CH_10_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 14),
+#endif
+#if ( BSW_COMM_CH_10_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 15),
+#endif
+#if ( BSW_COMM_CH_10_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 16),
+#endif
+#if ( BSW_COMM_CH_10_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 17),
+#endif
+#if ( BSW_COMM_CH_10_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 18),
+#endif
+#if ( BSW_COMM_CH_10_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 19),
+#endif
+#if ( BSW_COMM_CH_10_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 20),
+#endif
+#if ( BSW_COMM_CH_10_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 21),
+#endif
+#if ( BSW_COMM_CH_10_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 22),
+#endif
+#if ( BSW_COMM_CH_10_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 23),
+#endif
+#if ( BSW_COMM_CH_10_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 24),
+#endif
+#if ( BSW_COMM_CH_10_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 25),
+#endif
+#if ( BSW_COMM_CH_10_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 26),
+#endif
+#if ( BSW_COMM_CH_10_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 27),
+#endif
+#if ( BSW_COMM_CH_10_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 28),
+#endif
+#if ( BSW_COMM_CH_10_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 29),
+#endif
+#if ( BSW_COMM_CH_10_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 30),
+#endif
+#if ( BSW_COMM_CH_10_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 31),
+#endif
+#if ( BSW_COMM_CH_10_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 32),
+#endif
+#if ( BSW_COMM_CH_10_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 33),
+#endif
+#if ( BSW_COMM_CH_10_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 34),
+#endif
+#if ( BSW_COMM_CH_10_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 35),
+#endif
+#if ( BSW_COMM_CH_10_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 36),
+#endif
+#if ( BSW_COMM_CH_10_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 37),
+#endif
+#if ( BSW_COMM_CH_10_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 38),
+#endif
+#if ( BSW_COMM_CH_10_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 39),
+#endif
+#if ( BSW_COMM_CH_10_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 40),
+#endif
+#if ( BSW_COMM_CH_10_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 41),
+#endif
+#if ( BSW_COMM_CH_10_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 42),
+#endif
+#if ( BSW_COMM_CH_10_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 43),
+#endif
+#if ( BSW_COMM_CH_10_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 44),
+#endif
+#if ( BSW_COMM_CH_10_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 45),
+#endif
+#if ( BSW_COMM_CH_10_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 46),
+#endif
+#if ( BSW_COMM_CH_10_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 47),
+#endif
+#if ( BSW_COMM_CH_10_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 48),
+#endif
+#if ( BSW_COMM_CH_10_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 49),
+#endif
+#if ( BSW_COMM_CH_10_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 50),
+#endif
+#if ( BSW_COMM_CH_10_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 51),
+#endif
+#if ( BSW_COMM_CH_10_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 52),
+#endif
+#if ( BSW_COMM_CH_10_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 53),
+#endif
+#if ( BSW_COMM_CH_10_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 54),
+#endif
+#if ( BSW_COMM_CH_10_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 55),
+#endif
+#if ( BSW_COMM_CH_10_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 56),
+#endif
+#if ( BSW_COMM_CH_10_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 57),
+#endif
+#if ( BSW_COMM_CH_10_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 58),
+#endif
+#if ( BSW_COMM_CH_10_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 59),
+#endif
+#if ( BSW_COMM_CH_10_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 60),
+#endif
+#if ( BSW_COMM_CH_10_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 61),
+#endif
+#if ( BSW_COMM_CH_10_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 62),
+#endif
+#if ( BSW_COMM_CH_10_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(10, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_10 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake10[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_10 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 10U ) */
+
+/* CH11 */
 #if ( BSW_COMM_CFG_CHNUM > 11U )
-#if (BSW_COMM_CH_PNCNUM_11 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_11[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_11 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake11[ BSW_COMM_CFG_CH_PNCNUM_11 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_11_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 0),
+#endif
+#if ( BSW_COMM_CH_11_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 1),
+#endif
+#if ( BSW_COMM_CH_11_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 2),
+#endif
+#if ( BSW_COMM_CH_11_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 3),
+#endif
+#if ( BSW_COMM_CH_11_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 4),
+#endif
+#if ( BSW_COMM_CH_11_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 5),
+#endif
+#if ( BSW_COMM_CH_11_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 6),
+#endif
+#if ( BSW_COMM_CH_11_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 7),
+#endif
+#if ( BSW_COMM_CH_11_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 8),
+#endif
+#if ( BSW_COMM_CH_11_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 9),
+#endif
+#if ( BSW_COMM_CH_11_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 10),
+#endif
+#if ( BSW_COMM_CH_11_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 11),
+#endif
+#if ( BSW_COMM_CH_11_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 12),
+#endif
+#if ( BSW_COMM_CH_11_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 13),
+#endif
+#if ( BSW_COMM_CH_11_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 14),
+#endif
+#if ( BSW_COMM_CH_11_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 15),
+#endif
+#if ( BSW_COMM_CH_11_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 16),
+#endif
+#if ( BSW_COMM_CH_11_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 17),
+#endif
+#if ( BSW_COMM_CH_11_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 18),
+#endif
+#if ( BSW_COMM_CH_11_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 19),
+#endif
+#if ( BSW_COMM_CH_11_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 20),
+#endif
+#if ( BSW_COMM_CH_11_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 21),
+#endif
+#if ( BSW_COMM_CH_11_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 22),
+#endif
+#if ( BSW_COMM_CH_11_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 23),
+#endif
+#if ( BSW_COMM_CH_11_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 24),
+#endif
+#if ( BSW_COMM_CH_11_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 25),
+#endif
+#if ( BSW_COMM_CH_11_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 26),
+#endif
+#if ( BSW_COMM_CH_11_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 27),
+#endif
+#if ( BSW_COMM_CH_11_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 28),
+#endif
+#if ( BSW_COMM_CH_11_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 29),
+#endif
+#if ( BSW_COMM_CH_11_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 30),
+#endif
+#if ( BSW_COMM_CH_11_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 31),
+#endif
+#if ( BSW_COMM_CH_11_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 32),
+#endif
+#if ( BSW_COMM_CH_11_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 33),
+#endif
+#if ( BSW_COMM_CH_11_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 34),
+#endif
+#if ( BSW_COMM_CH_11_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 35),
+#endif
+#if ( BSW_COMM_CH_11_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 36),
+#endif
+#if ( BSW_COMM_CH_11_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 37),
+#endif
+#if ( BSW_COMM_CH_11_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 38),
+#endif
+#if ( BSW_COMM_CH_11_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 39),
+#endif
+#if ( BSW_COMM_CH_11_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 40),
+#endif
+#if ( BSW_COMM_CH_11_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 41),
+#endif
+#if ( BSW_COMM_CH_11_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 42),
+#endif
+#if ( BSW_COMM_CH_11_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 43),
+#endif
+#if ( BSW_COMM_CH_11_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 44),
+#endif
+#if ( BSW_COMM_CH_11_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 45),
+#endif
+#if ( BSW_COMM_CH_11_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 46),
+#endif
+#if ( BSW_COMM_CH_11_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 47),
+#endif
+#if ( BSW_COMM_CH_11_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 48),
+#endif
+#if ( BSW_COMM_CH_11_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 49),
+#endif
+#if ( BSW_COMM_CH_11_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 50),
+#endif
+#if ( BSW_COMM_CH_11_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 51),
+#endif
+#if ( BSW_COMM_CH_11_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 52),
+#endif
+#if ( BSW_COMM_CH_11_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 53),
+#endif
+#if ( BSW_COMM_CH_11_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 54),
+#endif
+#if ( BSW_COMM_CH_11_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 55),
+#endif
+#if ( BSW_COMM_CH_11_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 56),
+#endif
+#if ( BSW_COMM_CH_11_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 57),
+#endif
+#if ( BSW_COMM_CH_11_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 58),
+#endif
+#if ( BSW_COMM_CH_11_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 59),
+#endif
+#if ( BSW_COMM_CH_11_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 60),
+#endif
+#if ( BSW_COMM_CH_11_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 61),
+#endif
+#if ( BSW_COMM_CH_11_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 62),
+#endif
+#if ( BSW_COMM_CH_11_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(11, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_11 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake11[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_11 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 11U ) */
+
+/* CH12 */
 #if ( BSW_COMM_CFG_CHNUM > 12U )
-#if (BSW_COMM_CH_PNCNUM_12 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_12[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_12 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake12[ BSW_COMM_CFG_CH_PNCNUM_12 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_12_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 0),
+#endif
+#if ( BSW_COMM_CH_12_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 1),
+#endif
+#if ( BSW_COMM_CH_12_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 2),
+#endif
+#if ( BSW_COMM_CH_12_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 3),
+#endif
+#if ( BSW_COMM_CH_12_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 4),
+#endif
+#if ( BSW_COMM_CH_12_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 5),
+#endif
+#if ( BSW_COMM_CH_12_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 6),
+#endif
+#if ( BSW_COMM_CH_12_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 7),
+#endif
+#if ( BSW_COMM_CH_12_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 8),
+#endif
+#if ( BSW_COMM_CH_12_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 9),
+#endif
+#if ( BSW_COMM_CH_12_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 10),
+#endif
+#if ( BSW_COMM_CH_12_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 11),
+#endif
+#if ( BSW_COMM_CH_12_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 12),
+#endif
+#if ( BSW_COMM_CH_12_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 13),
+#endif
+#if ( BSW_COMM_CH_12_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 14),
+#endif
+#if ( BSW_COMM_CH_12_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 15),
+#endif
+#if ( BSW_COMM_CH_12_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 16),
+#endif
+#if ( BSW_COMM_CH_12_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 17),
+#endif
+#if ( BSW_COMM_CH_12_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 18),
+#endif
+#if ( BSW_COMM_CH_12_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 19),
+#endif
+#if ( BSW_COMM_CH_12_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 20),
+#endif
+#if ( BSW_COMM_CH_12_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 21),
+#endif
+#if ( BSW_COMM_CH_12_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 22),
+#endif
+#if ( BSW_COMM_CH_12_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 23),
+#endif
+#if ( BSW_COMM_CH_12_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 24),
+#endif
+#if ( BSW_COMM_CH_12_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 25),
+#endif
+#if ( BSW_COMM_CH_12_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 26),
+#endif
+#if ( BSW_COMM_CH_12_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 27),
+#endif
+#if ( BSW_COMM_CH_12_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 28),
+#endif
+#if ( BSW_COMM_CH_12_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 29),
+#endif
+#if ( BSW_COMM_CH_12_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 30),
+#endif
+#if ( BSW_COMM_CH_12_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 31),
+#endif
+#if ( BSW_COMM_CH_12_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 32),
+#endif
+#if ( BSW_COMM_CH_12_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 33),
+#endif
+#if ( BSW_COMM_CH_12_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 34),
+#endif
+#if ( BSW_COMM_CH_12_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 35),
+#endif
+#if ( BSW_COMM_CH_12_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 36),
+#endif
+#if ( BSW_COMM_CH_12_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 37),
+#endif
+#if ( BSW_COMM_CH_12_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 38),
+#endif
+#if ( BSW_COMM_CH_12_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 39),
+#endif
+#if ( BSW_COMM_CH_12_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 40),
+#endif
+#if ( BSW_COMM_CH_12_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 41),
+#endif
+#if ( BSW_COMM_CH_12_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 42),
+#endif
+#if ( BSW_COMM_CH_12_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 43),
+#endif
+#if ( BSW_COMM_CH_12_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 44),
+#endif
+#if ( BSW_COMM_CH_12_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 45),
+#endif
+#if ( BSW_COMM_CH_12_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 46),
+#endif
+#if ( BSW_COMM_CH_12_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 47),
+#endif
+#if ( BSW_COMM_CH_12_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 48),
+#endif
+#if ( BSW_COMM_CH_12_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 49),
+#endif
+#if ( BSW_COMM_CH_12_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 50),
+#endif
+#if ( BSW_COMM_CH_12_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 51),
+#endif
+#if ( BSW_COMM_CH_12_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 52),
+#endif
+#if ( BSW_COMM_CH_12_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 53),
+#endif
+#if ( BSW_COMM_CH_12_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 54),
+#endif
+#if ( BSW_COMM_CH_12_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 55),
+#endif
+#if ( BSW_COMM_CH_12_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 56),
+#endif
+#if ( BSW_COMM_CH_12_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 57),
+#endif
+#if ( BSW_COMM_CH_12_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 58),
+#endif
+#if ( BSW_COMM_CH_12_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 59),
+#endif
+#if ( BSW_COMM_CH_12_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 60),
+#endif
+#if ( BSW_COMM_CH_12_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 61),
+#endif
+#if ( BSW_COMM_CH_12_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 62),
+#endif
+#if ( BSW_COMM_CH_12_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(12, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_12 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake12[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_12 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 12U ) */
+
+/* CH13 */
 #if ( BSW_COMM_CFG_CHNUM > 13U )
-#if (BSW_COMM_CH_PNCNUM_13 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_13[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_13 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake13[ BSW_COMM_CFG_CH_PNCNUM_13 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_13_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 0),
+#endif
+#if ( BSW_COMM_CH_13_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 1),
+#endif
+#if ( BSW_COMM_CH_13_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 2),
+#endif
+#if ( BSW_COMM_CH_13_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 3),
+#endif
+#if ( BSW_COMM_CH_13_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 4),
+#endif
+#if ( BSW_COMM_CH_13_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 5),
+#endif
+#if ( BSW_COMM_CH_13_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 6),
+#endif
+#if ( BSW_COMM_CH_13_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 7),
+#endif
+#if ( BSW_COMM_CH_13_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 8),
+#endif
+#if ( BSW_COMM_CH_13_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 9),
+#endif
+#if ( BSW_COMM_CH_13_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 10),
+#endif
+#if ( BSW_COMM_CH_13_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 11),
+#endif
+#if ( BSW_COMM_CH_13_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 12),
+#endif
+#if ( BSW_COMM_CH_13_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 13),
+#endif
+#if ( BSW_COMM_CH_13_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 14),
+#endif
+#if ( BSW_COMM_CH_13_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 15),
+#endif
+#if ( BSW_COMM_CH_13_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 16),
+#endif
+#if ( BSW_COMM_CH_13_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 17),
+#endif
+#if ( BSW_COMM_CH_13_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 18),
+#endif
+#if ( BSW_COMM_CH_13_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 19),
+#endif
+#if ( BSW_COMM_CH_13_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 20),
+#endif
+#if ( BSW_COMM_CH_13_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 21),
+#endif
+#if ( BSW_COMM_CH_13_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 22),
+#endif
+#if ( BSW_COMM_CH_13_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 23),
+#endif
+#if ( BSW_COMM_CH_13_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 24),
+#endif
+#if ( BSW_COMM_CH_13_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 25),
+#endif
+#if ( BSW_COMM_CH_13_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 26),
+#endif
+#if ( BSW_COMM_CH_13_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 27),
+#endif
+#if ( BSW_COMM_CH_13_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 28),
+#endif
+#if ( BSW_COMM_CH_13_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 29),
+#endif
+#if ( BSW_COMM_CH_13_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 30),
+#endif
+#if ( BSW_COMM_CH_13_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 31),
+#endif
+#if ( BSW_COMM_CH_13_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 32),
+#endif
+#if ( BSW_COMM_CH_13_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 33),
+#endif
+#if ( BSW_COMM_CH_13_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 34),
+#endif
+#if ( BSW_COMM_CH_13_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 35),
+#endif
+#if ( BSW_COMM_CH_13_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 36),
+#endif
+#if ( BSW_COMM_CH_13_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 37),
+#endif
+#if ( BSW_COMM_CH_13_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 38),
+#endif
+#if ( BSW_COMM_CH_13_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 39),
+#endif
+#if ( BSW_COMM_CH_13_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 40),
+#endif
+#if ( BSW_COMM_CH_13_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 41),
+#endif
+#if ( BSW_COMM_CH_13_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 42),
+#endif
+#if ( BSW_COMM_CH_13_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 43),
+#endif
+#if ( BSW_COMM_CH_13_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 44),
+#endif
+#if ( BSW_COMM_CH_13_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 45),
+#endif
+#if ( BSW_COMM_CH_13_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 46),
+#endif
+#if ( BSW_COMM_CH_13_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 47),
+#endif
+#if ( BSW_COMM_CH_13_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 48),
+#endif
+#if ( BSW_COMM_CH_13_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 49),
+#endif
+#if ( BSW_COMM_CH_13_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 50),
+#endif
+#if ( BSW_COMM_CH_13_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 51),
+#endif
+#if ( BSW_COMM_CH_13_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 52),
+#endif
+#if ( BSW_COMM_CH_13_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 53),
+#endif
+#if ( BSW_COMM_CH_13_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 54),
+#endif
+#if ( BSW_COMM_CH_13_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 55),
+#endif
+#if ( BSW_COMM_CH_13_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 56),
+#endif
+#if ( BSW_COMM_CH_13_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 57),
+#endif
+#if ( BSW_COMM_CH_13_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 58),
+#endif
+#if ( BSW_COMM_CH_13_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 59),
+#endif
+#if ( BSW_COMM_CH_13_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 60),
+#endif
+#if ( BSW_COMM_CH_13_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 61),
+#endif
+#if ( BSW_COMM_CH_13_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 62),
+#endif
+#if ( BSW_COMM_CH_13_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(13, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_13 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake13[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_13 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 13U ) */
+
+/* CH14 */
 #if ( BSW_COMM_CFG_CHNUM > 14U )
-#if (BSW_COMM_CH_PNCNUM_14 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_14[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_14 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake14[ BSW_COMM_CFG_CH_PNCNUM_14 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_14_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 0),
+#endif
+#if ( BSW_COMM_CH_14_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 1),
+#endif
+#if ( BSW_COMM_CH_14_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 2),
+#endif
+#if ( BSW_COMM_CH_14_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 3),
+#endif
+#if ( BSW_COMM_CH_14_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 4),
+#endif
+#if ( BSW_COMM_CH_14_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 5),
+#endif
+#if ( BSW_COMM_CH_14_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 6),
+#endif
+#if ( BSW_COMM_CH_14_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 7),
+#endif
+#if ( BSW_COMM_CH_14_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 8),
+#endif
+#if ( BSW_COMM_CH_14_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 9),
+#endif
+#if ( BSW_COMM_CH_14_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 10),
+#endif
+#if ( BSW_COMM_CH_14_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 11),
+#endif
+#if ( BSW_COMM_CH_14_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 12),
+#endif
+#if ( BSW_COMM_CH_14_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 13),
+#endif
+#if ( BSW_COMM_CH_14_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 14),
+#endif
+#if ( BSW_COMM_CH_14_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 15),
+#endif
+#if ( BSW_COMM_CH_14_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 16),
+#endif
+#if ( BSW_COMM_CH_14_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 17),
+#endif
+#if ( BSW_COMM_CH_14_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 18),
+#endif
+#if ( BSW_COMM_CH_14_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 19),
+#endif
+#if ( BSW_COMM_CH_14_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 20),
+#endif
+#if ( BSW_COMM_CH_14_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 21),
+#endif
+#if ( BSW_COMM_CH_14_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 22),
+#endif
+#if ( BSW_COMM_CH_14_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 23),
+#endif
+#if ( BSW_COMM_CH_14_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 24),
+#endif
+#if ( BSW_COMM_CH_14_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 25),
+#endif
+#if ( BSW_COMM_CH_14_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 26),
+#endif
+#if ( BSW_COMM_CH_14_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 27),
+#endif
+#if ( BSW_COMM_CH_14_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 28),
+#endif
+#if ( BSW_COMM_CH_14_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 29),
+#endif
+#if ( BSW_COMM_CH_14_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 30),
+#endif
+#if ( BSW_COMM_CH_14_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 31),
+#endif
+#if ( BSW_COMM_CH_14_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 32),
+#endif
+#if ( BSW_COMM_CH_14_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 33),
+#endif
+#if ( BSW_COMM_CH_14_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 34),
+#endif
+#if ( BSW_COMM_CH_14_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 35),
+#endif
+#if ( BSW_COMM_CH_14_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 36),
+#endif
+#if ( BSW_COMM_CH_14_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 37),
+#endif
+#if ( BSW_COMM_CH_14_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 38),
+#endif
+#if ( BSW_COMM_CH_14_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 39),
+#endif
+#if ( BSW_COMM_CH_14_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 40),
+#endif
+#if ( BSW_COMM_CH_14_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 41),
+#endif
+#if ( BSW_COMM_CH_14_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 42),
+#endif
+#if ( BSW_COMM_CH_14_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 43),
+#endif
+#if ( BSW_COMM_CH_14_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 44),
+#endif
+#if ( BSW_COMM_CH_14_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 45),
+#endif
+#if ( BSW_COMM_CH_14_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 46),
+#endif
+#if ( BSW_COMM_CH_14_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 47),
+#endif
+#if ( BSW_COMM_CH_14_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 48),
+#endif
+#if ( BSW_COMM_CH_14_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 49),
+#endif
+#if ( BSW_COMM_CH_14_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 50),
+#endif
+#if ( BSW_COMM_CH_14_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 51),
+#endif
+#if ( BSW_COMM_CH_14_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 52),
+#endif
+#if ( BSW_COMM_CH_14_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 53),
+#endif
+#if ( BSW_COMM_CH_14_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 54),
+#endif
+#if ( BSW_COMM_CH_14_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 55),
+#endif
+#if ( BSW_COMM_CH_14_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 56),
+#endif
+#if ( BSW_COMM_CH_14_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 57),
+#endif
+#if ( BSW_COMM_CH_14_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 58),
+#endif
+#if ( BSW_COMM_CH_14_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 59),
+#endif
+#if ( BSW_COMM_CH_14_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 60),
+#endif
+#if ( BSW_COMM_CH_14_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 61),
+#endif
+#if ( BSW_COMM_CH_14_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 62),
+#endif
+#if ( BSW_COMM_CH_14_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(14, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_14 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake14[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_14 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 14U ) */
+
+/* CH15 */
 #if ( BSW_COMM_CFG_CHNUM > 15U )
-#if (BSW_COMM_CH_PNCNUM_15 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_15[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_15 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake15[ BSW_COMM_CFG_CH_PNCNUM_15 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_15_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 0),
+#endif
+#if ( BSW_COMM_CH_15_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 1),
+#endif
+#if ( BSW_COMM_CH_15_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 2),
+#endif
+#if ( BSW_COMM_CH_15_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 3),
+#endif
+#if ( BSW_COMM_CH_15_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 4),
+#endif
+#if ( BSW_COMM_CH_15_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 5),
+#endif
+#if ( BSW_COMM_CH_15_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 6),
+#endif
+#if ( BSW_COMM_CH_15_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 7),
+#endif
+#if ( BSW_COMM_CH_15_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 8),
+#endif
+#if ( BSW_COMM_CH_15_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 9),
+#endif
+#if ( BSW_COMM_CH_15_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 10),
+#endif
+#if ( BSW_COMM_CH_15_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 11),
+#endif
+#if ( BSW_COMM_CH_15_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 12),
+#endif
+#if ( BSW_COMM_CH_15_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 13),
+#endif
+#if ( BSW_COMM_CH_15_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 14),
+#endif
+#if ( BSW_COMM_CH_15_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 15),
+#endif
+#if ( BSW_COMM_CH_15_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 16),
+#endif
+#if ( BSW_COMM_CH_15_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 17),
+#endif
+#if ( BSW_COMM_CH_15_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 18),
+#endif
+#if ( BSW_COMM_CH_15_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 19),
+#endif
+#if ( BSW_COMM_CH_15_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 20),
+#endif
+#if ( BSW_COMM_CH_15_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 21),
+#endif
+#if ( BSW_COMM_CH_15_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 22),
+#endif
+#if ( BSW_COMM_CH_15_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 23),
+#endif
+#if ( BSW_COMM_CH_15_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 24),
+#endif
+#if ( BSW_COMM_CH_15_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 25),
+#endif
+#if ( BSW_COMM_CH_15_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 26),
+#endif
+#if ( BSW_COMM_CH_15_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 27),
+#endif
+#if ( BSW_COMM_CH_15_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 28),
+#endif
+#if ( BSW_COMM_CH_15_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 29),
+#endif
+#if ( BSW_COMM_CH_15_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 30),
+#endif
+#if ( BSW_COMM_CH_15_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 31),
+#endif
+#if ( BSW_COMM_CH_15_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 32),
+#endif
+#if ( BSW_COMM_CH_15_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 33),
+#endif
+#if ( BSW_COMM_CH_15_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 34),
+#endif
+#if ( BSW_COMM_CH_15_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 35),
+#endif
+#if ( BSW_COMM_CH_15_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 36),
+#endif
+#if ( BSW_COMM_CH_15_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 37),
+#endif
+#if ( BSW_COMM_CH_15_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 38),
+#endif
+#if ( BSW_COMM_CH_15_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 39),
+#endif
+#if ( BSW_COMM_CH_15_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 40),
+#endif
+#if ( BSW_COMM_CH_15_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 41),
+#endif
+#if ( BSW_COMM_CH_15_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 42),
+#endif
+#if ( BSW_COMM_CH_15_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 43),
+#endif
+#if ( BSW_COMM_CH_15_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 44),
+#endif
+#if ( BSW_COMM_CH_15_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 45),
+#endif
+#if ( BSW_COMM_CH_15_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 46),
+#endif
+#if ( BSW_COMM_CH_15_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 47),
+#endif
+#if ( BSW_COMM_CH_15_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 48),
+#endif
+#if ( BSW_COMM_CH_15_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 49),
+#endif
+#if ( BSW_COMM_CH_15_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 50),
+#endif
+#if ( BSW_COMM_CH_15_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 51),
+#endif
+#if ( BSW_COMM_CH_15_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 52),
+#endif
+#if ( BSW_COMM_CH_15_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 53),
+#endif
+#if ( BSW_COMM_CH_15_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 54),
+#endif
+#if ( BSW_COMM_CH_15_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 55),
+#endif
+#if ( BSW_COMM_CH_15_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 56),
+#endif
+#if ( BSW_COMM_CH_15_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 57),
+#endif
+#if ( BSW_COMM_CH_15_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 58),
+#endif
+#if ( BSW_COMM_CH_15_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 59),
+#endif
+#if ( BSW_COMM_CH_15_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 60),
+#endif
+#if ( BSW_COMM_CH_15_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 61),
+#endif
+#if ( BSW_COMM_CH_15_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 62),
+#endif
+#if ( BSW_COMM_CH_15_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(15, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_15 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake15[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_15 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 15U ) */
+
+/* CH16 */
 #if ( BSW_COMM_CFG_CHNUM > 16U )
-#if (BSW_COMM_CH_PNCNUM_16 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_16[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_16 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake16[ BSW_COMM_CFG_CH_PNCNUM_16 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_16_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 0),
+#endif
+#if ( BSW_COMM_CH_16_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 1),
+#endif
+#if ( BSW_COMM_CH_16_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 2),
+#endif
+#if ( BSW_COMM_CH_16_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 3),
+#endif
+#if ( BSW_COMM_CH_16_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 4),
+#endif
+#if ( BSW_COMM_CH_16_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 5),
+#endif
+#if ( BSW_COMM_CH_16_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 6),
+#endif
+#if ( BSW_COMM_CH_16_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 7),
+#endif
+#if ( BSW_COMM_CH_16_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 8),
+#endif
+#if ( BSW_COMM_CH_16_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 9),
+#endif
+#if ( BSW_COMM_CH_16_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 10),
+#endif
+#if ( BSW_COMM_CH_16_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 11),
+#endif
+#if ( BSW_COMM_CH_16_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 12),
+#endif
+#if ( BSW_COMM_CH_16_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 13),
+#endif
+#if ( BSW_COMM_CH_16_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 14),
+#endif
+#if ( BSW_COMM_CH_16_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 15),
+#endif
+#if ( BSW_COMM_CH_16_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 16),
+#endif
+#if ( BSW_COMM_CH_16_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 17),
+#endif
+#if ( BSW_COMM_CH_16_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 18),
+#endif
+#if ( BSW_COMM_CH_16_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 19),
+#endif
+#if ( BSW_COMM_CH_16_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 20),
+#endif
+#if ( BSW_COMM_CH_16_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 21),
+#endif
+#if ( BSW_COMM_CH_16_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 22),
+#endif
+#if ( BSW_COMM_CH_16_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 23),
+#endif
+#if ( BSW_COMM_CH_16_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 24),
+#endif
+#if ( BSW_COMM_CH_16_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 25),
+#endif
+#if ( BSW_COMM_CH_16_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 26),
+#endif
+#if ( BSW_COMM_CH_16_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 27),
+#endif
+#if ( BSW_COMM_CH_16_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 28),
+#endif
+#if ( BSW_COMM_CH_16_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 29),
+#endif
+#if ( BSW_COMM_CH_16_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 30),
+#endif
+#if ( BSW_COMM_CH_16_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 31),
+#endif
+#if ( BSW_COMM_CH_16_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 32),
+#endif
+#if ( BSW_COMM_CH_16_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 33),
+#endif
+#if ( BSW_COMM_CH_16_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 34),
+#endif
+#if ( BSW_COMM_CH_16_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 35),
+#endif
+#if ( BSW_COMM_CH_16_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 36),
+#endif
+#if ( BSW_COMM_CH_16_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 37),
+#endif
+#if ( BSW_COMM_CH_16_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 38),
+#endif
+#if ( BSW_COMM_CH_16_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 39),
+#endif
+#if ( BSW_COMM_CH_16_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 40),
+#endif
+#if ( BSW_COMM_CH_16_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 41),
+#endif
+#if ( BSW_COMM_CH_16_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 42),
+#endif
+#if ( BSW_COMM_CH_16_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 43),
+#endif
+#if ( BSW_COMM_CH_16_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 44),
+#endif
+#if ( BSW_COMM_CH_16_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 45),
+#endif
+#if ( BSW_COMM_CH_16_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 46),
+#endif
+#if ( BSW_COMM_CH_16_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 47),
+#endif
+#if ( BSW_COMM_CH_16_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 48),
+#endif
+#if ( BSW_COMM_CH_16_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 49),
+#endif
+#if ( BSW_COMM_CH_16_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 50),
+#endif
+#if ( BSW_COMM_CH_16_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 51),
+#endif
+#if ( BSW_COMM_CH_16_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 52),
+#endif
+#if ( BSW_COMM_CH_16_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 53),
+#endif
+#if ( BSW_COMM_CH_16_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 54),
+#endif
+#if ( BSW_COMM_CH_16_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 55),
+#endif
+#if ( BSW_COMM_CH_16_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 56),
+#endif
+#if ( BSW_COMM_CH_16_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 57),
+#endif
+#if ( BSW_COMM_CH_16_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 58),
+#endif
+#if ( BSW_COMM_CH_16_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 59),
+#endif
+#if ( BSW_COMM_CH_16_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 60),
+#endif
+#if ( BSW_COMM_CH_16_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 61),
+#endif
+#if ( BSW_COMM_CH_16_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 62),
+#endif
+#if ( BSW_COMM_CH_16_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(16, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_16 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake16[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_16 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 16U ) */
+
+/* CH17 */
 #if ( BSW_COMM_CFG_CHNUM > 17U )
-#if (BSW_COMM_CH_PNCNUM_17 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_17[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_17 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake17[ BSW_COMM_CFG_CH_PNCNUM_17 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_17_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 0),
+#endif
+#if ( BSW_COMM_CH_17_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 1),
+#endif
+#if ( BSW_COMM_CH_17_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 2),
+#endif
+#if ( BSW_COMM_CH_17_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 3),
+#endif
+#if ( BSW_COMM_CH_17_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 4),
+#endif
+#if ( BSW_COMM_CH_17_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 5),
+#endif
+#if ( BSW_COMM_CH_17_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 6),
+#endif
+#if ( BSW_COMM_CH_17_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 7),
+#endif
+#if ( BSW_COMM_CH_17_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 8),
+#endif
+#if ( BSW_COMM_CH_17_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 9),
+#endif
+#if ( BSW_COMM_CH_17_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 10),
+#endif
+#if ( BSW_COMM_CH_17_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 11),
+#endif
+#if ( BSW_COMM_CH_17_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 12),
+#endif
+#if ( BSW_COMM_CH_17_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 13),
+#endif
+#if ( BSW_COMM_CH_17_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 14),
+#endif
+#if ( BSW_COMM_CH_17_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 15),
+#endif
+#if ( BSW_COMM_CH_17_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 16),
+#endif
+#if ( BSW_COMM_CH_17_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 17),
+#endif
+#if ( BSW_COMM_CH_17_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 18),
+#endif
+#if ( BSW_COMM_CH_17_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 19),
+#endif
+#if ( BSW_COMM_CH_17_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 20),
+#endif
+#if ( BSW_COMM_CH_17_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 21),
+#endif
+#if ( BSW_COMM_CH_17_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 22),
+#endif
+#if ( BSW_COMM_CH_17_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 23),
+#endif
+#if ( BSW_COMM_CH_17_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 24),
+#endif
+#if ( BSW_COMM_CH_17_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 25),
+#endif
+#if ( BSW_COMM_CH_17_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 26),
+#endif
+#if ( BSW_COMM_CH_17_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 27),
+#endif
+#if ( BSW_COMM_CH_17_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 28),
+#endif
+#if ( BSW_COMM_CH_17_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 29),
+#endif
+#if ( BSW_COMM_CH_17_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 30),
+#endif
+#if ( BSW_COMM_CH_17_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 31),
+#endif
+#if ( BSW_COMM_CH_17_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 32),
+#endif
+#if ( BSW_COMM_CH_17_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 33),
+#endif
+#if ( BSW_COMM_CH_17_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 34),
+#endif
+#if ( BSW_COMM_CH_17_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 35),
+#endif
+#if ( BSW_COMM_CH_17_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 36),
+#endif
+#if ( BSW_COMM_CH_17_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 37),
+#endif
+#if ( BSW_COMM_CH_17_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 38),
+#endif
+#if ( BSW_COMM_CH_17_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 39),
+#endif
+#if ( BSW_COMM_CH_17_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 40),
+#endif
+#if ( BSW_COMM_CH_17_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 41),
+#endif
+#if ( BSW_COMM_CH_17_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 42),
+#endif
+#if ( BSW_COMM_CH_17_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 43),
+#endif
+#if ( BSW_COMM_CH_17_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 44),
+#endif
+#if ( BSW_COMM_CH_17_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 45),
+#endif
+#if ( BSW_COMM_CH_17_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 46),
+#endif
+#if ( BSW_COMM_CH_17_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 47),
+#endif
+#if ( BSW_COMM_CH_17_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 48),
+#endif
+#if ( BSW_COMM_CH_17_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 49),
+#endif
+#if ( BSW_COMM_CH_17_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 50),
+#endif
+#if ( BSW_COMM_CH_17_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 51),
+#endif
+#if ( BSW_COMM_CH_17_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 52),
+#endif
+#if ( BSW_COMM_CH_17_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 53),
+#endif
+#if ( BSW_COMM_CH_17_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 54),
+#endif
+#if ( BSW_COMM_CH_17_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 55),
+#endif
+#if ( BSW_COMM_CH_17_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 56),
+#endif
+#if ( BSW_COMM_CH_17_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 57),
+#endif
+#if ( BSW_COMM_CH_17_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 58),
+#endif
+#if ( BSW_COMM_CH_17_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 59),
+#endif
+#if ( BSW_COMM_CH_17_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 60),
+#endif
+#if ( BSW_COMM_CH_17_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 61),
+#endif
+#if ( BSW_COMM_CH_17_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 62),
+#endif
+#if ( BSW_COMM_CH_17_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(17, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_17 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake17[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_17 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 17U ) */
+
+/* CH18 */
 #if ( BSW_COMM_CFG_CHNUM > 18U )
-#if (BSW_COMM_CH_PNCNUM_18 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_18[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_18 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake18[ BSW_COMM_CFG_CH_PNCNUM_18 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_18_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 0),
+#endif
+#if ( BSW_COMM_CH_18_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 1),
+#endif
+#if ( BSW_COMM_CH_18_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 2),
+#endif
+#if ( BSW_COMM_CH_18_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 3),
+#endif
+#if ( BSW_COMM_CH_18_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 4),
+#endif
+#if ( BSW_COMM_CH_18_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 5),
+#endif
+#if ( BSW_COMM_CH_18_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 6),
+#endif
+#if ( BSW_COMM_CH_18_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 7),
+#endif
+#if ( BSW_COMM_CH_18_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 8),
+#endif
+#if ( BSW_COMM_CH_18_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 9),
+#endif
+#if ( BSW_COMM_CH_18_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 10),
+#endif
+#if ( BSW_COMM_CH_18_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 11),
+#endif
+#if ( BSW_COMM_CH_18_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 12),
+#endif
+#if ( BSW_COMM_CH_18_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 13),
+#endif
+#if ( BSW_COMM_CH_18_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 14),
+#endif
+#if ( BSW_COMM_CH_18_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 15),
+#endif
+#if ( BSW_COMM_CH_18_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 16),
+#endif
+#if ( BSW_COMM_CH_18_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 17),
+#endif
+#if ( BSW_COMM_CH_18_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 18),
+#endif
+#if ( BSW_COMM_CH_18_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 19),
+#endif
+#if ( BSW_COMM_CH_18_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 20),
+#endif
+#if ( BSW_COMM_CH_18_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 21),
+#endif
+#if ( BSW_COMM_CH_18_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 22),
+#endif
+#if ( BSW_COMM_CH_18_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 23),
+#endif
+#if ( BSW_COMM_CH_18_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 24),
+#endif
+#if ( BSW_COMM_CH_18_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 25),
+#endif
+#if ( BSW_COMM_CH_18_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 26),
+#endif
+#if ( BSW_COMM_CH_18_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 27),
+#endif
+#if ( BSW_COMM_CH_18_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 28),
+#endif
+#if ( BSW_COMM_CH_18_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 29),
+#endif
+#if ( BSW_COMM_CH_18_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 30),
+#endif
+#if ( BSW_COMM_CH_18_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 31),
+#endif
+#if ( BSW_COMM_CH_18_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 32),
+#endif
+#if ( BSW_COMM_CH_18_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 33),
+#endif
+#if ( BSW_COMM_CH_18_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 34),
+#endif
+#if ( BSW_COMM_CH_18_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 35),
+#endif
+#if ( BSW_COMM_CH_18_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 36),
+#endif
+#if ( BSW_COMM_CH_18_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 37),
+#endif
+#if ( BSW_COMM_CH_18_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 38),
+#endif
+#if ( BSW_COMM_CH_18_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 39),
+#endif
+#if ( BSW_COMM_CH_18_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 40),
+#endif
+#if ( BSW_COMM_CH_18_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 41),
+#endif
+#if ( BSW_COMM_CH_18_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 42),
+#endif
+#if ( BSW_COMM_CH_18_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 43),
+#endif
+#if ( BSW_COMM_CH_18_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 44),
+#endif
+#if ( BSW_COMM_CH_18_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 45),
+#endif
+#if ( BSW_COMM_CH_18_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 46),
+#endif
+#if ( BSW_COMM_CH_18_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 47),
+#endif
+#if ( BSW_COMM_CH_18_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 48),
+#endif
+#if ( BSW_COMM_CH_18_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 49),
+#endif
+#if ( BSW_COMM_CH_18_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 50),
+#endif
+#if ( BSW_COMM_CH_18_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 51),
+#endif
+#if ( BSW_COMM_CH_18_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 52),
+#endif
+#if ( BSW_COMM_CH_18_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 53),
+#endif
+#if ( BSW_COMM_CH_18_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 54),
+#endif
+#if ( BSW_COMM_CH_18_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 55),
+#endif
+#if ( BSW_COMM_CH_18_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 56),
+#endif
+#if ( BSW_COMM_CH_18_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 57),
+#endif
+#if ( BSW_COMM_CH_18_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 58),
+#endif
+#if ( BSW_COMM_CH_18_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 59),
+#endif
+#if ( BSW_COMM_CH_18_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 60),
+#endif
+#if ( BSW_COMM_CH_18_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 61),
+#endif
+#if ( BSW_COMM_CH_18_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 62),
+#endif
+#if ( BSW_COMM_CH_18_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(18, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_18 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake18[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_18 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 18U ) */
+
+/* CH19 */
 #if ( BSW_COMM_CFG_CHNUM > 19U )
-#if (BSW_COMM_CH_PNCNUM_19 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_19[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_19 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake19[ BSW_COMM_CFG_CH_PNCNUM_19 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_19_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 0),
+#endif
+#if ( BSW_COMM_CH_19_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 1),
+#endif
+#if ( BSW_COMM_CH_19_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 2),
+#endif
+#if ( BSW_COMM_CH_19_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 3),
+#endif
+#if ( BSW_COMM_CH_19_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 4),
+#endif
+#if ( BSW_COMM_CH_19_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 5),
+#endif
+#if ( BSW_COMM_CH_19_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 6),
+#endif
+#if ( BSW_COMM_CH_19_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 7),
+#endif
+#if ( BSW_COMM_CH_19_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 8),
+#endif
+#if ( BSW_COMM_CH_19_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 9),
+#endif
+#if ( BSW_COMM_CH_19_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 10),
+#endif
+#if ( BSW_COMM_CH_19_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 11),
+#endif
+#if ( BSW_COMM_CH_19_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 12),
+#endif
+#if ( BSW_COMM_CH_19_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 13),
+#endif
+#if ( BSW_COMM_CH_19_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 14),
+#endif
+#if ( BSW_COMM_CH_19_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 15),
+#endif
+#if ( BSW_COMM_CH_19_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 16),
+#endif
+#if ( BSW_COMM_CH_19_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 17),
+#endif
+#if ( BSW_COMM_CH_19_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 18),
+#endif
+#if ( BSW_COMM_CH_19_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 19),
+#endif
+#if ( BSW_COMM_CH_19_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 20),
+#endif
+#if ( BSW_COMM_CH_19_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 21),
+#endif
+#if ( BSW_COMM_CH_19_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 22),
+#endif
+#if ( BSW_COMM_CH_19_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 23),
+#endif
+#if ( BSW_COMM_CH_19_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 24),
+#endif
+#if ( BSW_COMM_CH_19_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 25),
+#endif
+#if ( BSW_COMM_CH_19_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 26),
+#endif
+#if ( BSW_COMM_CH_19_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 27),
+#endif
+#if ( BSW_COMM_CH_19_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 28),
+#endif
+#if ( BSW_COMM_CH_19_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 29),
+#endif
+#if ( BSW_COMM_CH_19_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 30),
+#endif
+#if ( BSW_COMM_CH_19_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 31),
+#endif
+#if ( BSW_COMM_CH_19_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 32),
+#endif
+#if ( BSW_COMM_CH_19_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 33),
+#endif
+#if ( BSW_COMM_CH_19_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 34),
+#endif
+#if ( BSW_COMM_CH_19_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 35),
+#endif
+#if ( BSW_COMM_CH_19_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 36),
+#endif
+#if ( BSW_COMM_CH_19_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 37),
+#endif
+#if ( BSW_COMM_CH_19_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 38),
+#endif
+#if ( BSW_COMM_CH_19_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 39),
+#endif
+#if ( BSW_COMM_CH_19_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 40),
+#endif
+#if ( BSW_COMM_CH_19_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 41),
+#endif
+#if ( BSW_COMM_CH_19_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 42),
+#endif
+#if ( BSW_COMM_CH_19_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 43),
+#endif
+#if ( BSW_COMM_CH_19_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 44),
+#endif
+#if ( BSW_COMM_CH_19_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 45),
+#endif
+#if ( BSW_COMM_CH_19_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 46),
+#endif
+#if ( BSW_COMM_CH_19_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 47),
+#endif
+#if ( BSW_COMM_CH_19_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 48),
+#endif
+#if ( BSW_COMM_CH_19_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 49),
+#endif
+#if ( BSW_COMM_CH_19_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 50),
+#endif
+#if ( BSW_COMM_CH_19_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 51),
+#endif
+#if ( BSW_COMM_CH_19_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 52),
+#endif
+#if ( BSW_COMM_CH_19_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 53),
+#endif
+#if ( BSW_COMM_CH_19_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 54),
+#endif
+#if ( BSW_COMM_CH_19_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 55),
+#endif
+#if ( BSW_COMM_CH_19_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 56),
+#endif
+#if ( BSW_COMM_CH_19_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 57),
+#endif
+#if ( BSW_COMM_CH_19_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 58),
+#endif
+#if ( BSW_COMM_CH_19_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 59),
+#endif
+#if ( BSW_COMM_CH_19_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 60),
+#endif
+#if ( BSW_COMM_CH_19_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 61),
+#endif
+#if ( BSW_COMM_CH_19_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 62),
+#endif
+#if ( BSW_COMM_CH_19_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(19, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_19 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake19[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_19 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 19U ) */
+
+/* CH20 */
 #if ( BSW_COMM_CFG_CHNUM > 20U )
-#if (BSW_COMM_CH_PNCNUM_20 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_20[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_20 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake20[ BSW_COMM_CFG_CH_PNCNUM_20 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_20_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 0),
+#endif
+#if ( BSW_COMM_CH_20_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 1),
+#endif
+#if ( BSW_COMM_CH_20_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 2),
+#endif
+#if ( BSW_COMM_CH_20_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 3),
+#endif
+#if ( BSW_COMM_CH_20_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 4),
+#endif
+#if ( BSW_COMM_CH_20_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 5),
+#endif
+#if ( BSW_COMM_CH_20_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 6),
+#endif
+#if ( BSW_COMM_CH_20_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 7),
+#endif
+#if ( BSW_COMM_CH_20_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 8),
+#endif
+#if ( BSW_COMM_CH_20_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 9),
+#endif
+#if ( BSW_COMM_CH_20_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 10),
+#endif
+#if ( BSW_COMM_CH_20_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 11),
+#endif
+#if ( BSW_COMM_CH_20_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 12),
+#endif
+#if ( BSW_COMM_CH_20_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 13),
+#endif
+#if ( BSW_COMM_CH_20_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 14),
+#endif
+#if ( BSW_COMM_CH_20_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 15),
+#endif
+#if ( BSW_COMM_CH_20_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 16),
+#endif
+#if ( BSW_COMM_CH_20_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 17),
+#endif
+#if ( BSW_COMM_CH_20_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 18),
+#endif
+#if ( BSW_COMM_CH_20_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 19),
+#endif
+#if ( BSW_COMM_CH_20_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 20),
+#endif
+#if ( BSW_COMM_CH_20_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 21),
+#endif
+#if ( BSW_COMM_CH_20_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 22),
+#endif
+#if ( BSW_COMM_CH_20_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 23),
+#endif
+#if ( BSW_COMM_CH_20_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 24),
+#endif
+#if ( BSW_COMM_CH_20_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 25),
+#endif
+#if ( BSW_COMM_CH_20_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 26),
+#endif
+#if ( BSW_COMM_CH_20_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 27),
+#endif
+#if ( BSW_COMM_CH_20_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 28),
+#endif
+#if ( BSW_COMM_CH_20_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 29),
+#endif
+#if ( BSW_COMM_CH_20_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 30),
+#endif
+#if ( BSW_COMM_CH_20_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 31),
+#endif
+#if ( BSW_COMM_CH_20_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 32),
+#endif
+#if ( BSW_COMM_CH_20_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 33),
+#endif
+#if ( BSW_COMM_CH_20_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 34),
+#endif
+#if ( BSW_COMM_CH_20_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 35),
+#endif
+#if ( BSW_COMM_CH_20_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 36),
+#endif
+#if ( BSW_COMM_CH_20_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 37),
+#endif
+#if ( BSW_COMM_CH_20_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 38),
+#endif
+#if ( BSW_COMM_CH_20_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 39),
+#endif
+#if ( BSW_COMM_CH_20_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 40),
+#endif
+#if ( BSW_COMM_CH_20_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 41),
+#endif
+#if ( BSW_COMM_CH_20_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 42),
+#endif
+#if ( BSW_COMM_CH_20_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 43),
+#endif
+#if ( BSW_COMM_CH_20_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 44),
+#endif
+#if ( BSW_COMM_CH_20_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 45),
+#endif
+#if ( BSW_COMM_CH_20_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 46),
+#endif
+#if ( BSW_COMM_CH_20_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 47),
+#endif
+#if ( BSW_COMM_CH_20_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 48),
+#endif
+#if ( BSW_COMM_CH_20_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 49),
+#endif
+#if ( BSW_COMM_CH_20_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 50),
+#endif
+#if ( BSW_COMM_CH_20_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 51),
+#endif
+#if ( BSW_COMM_CH_20_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 52),
+#endif
+#if ( BSW_COMM_CH_20_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 53),
+#endif
+#if ( BSW_COMM_CH_20_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 54),
+#endif
+#if ( BSW_COMM_CH_20_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 55),
+#endif
+#if ( BSW_COMM_CH_20_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 56),
+#endif
+#if ( BSW_COMM_CH_20_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 57),
+#endif
+#if ( BSW_COMM_CH_20_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 58),
+#endif
+#if ( BSW_COMM_CH_20_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 59),
+#endif
+#if ( BSW_COMM_CH_20_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 60),
+#endif
+#if ( BSW_COMM_CH_20_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 61),
+#endif
+#if ( BSW_COMM_CH_20_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 62),
+#endif
+#if ( BSW_COMM_CH_20_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(20, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_20 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake20[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_20 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 20U ) */
+
+/* CH21 */
 #if ( BSW_COMM_CFG_CHNUM > 21U )
-#if (BSW_COMM_CH_PNCNUM_21 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_21[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_21 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake21[ BSW_COMM_CFG_CH_PNCNUM_21 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_21_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 0),
+#endif
+#if ( BSW_COMM_CH_21_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 1),
+#endif
+#if ( BSW_COMM_CH_21_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 2),
+#endif
+#if ( BSW_COMM_CH_21_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 3),
+#endif
+#if ( BSW_COMM_CH_21_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 4),
+#endif
+#if ( BSW_COMM_CH_21_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 5),
+#endif
+#if ( BSW_COMM_CH_21_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 6),
+#endif
+#if ( BSW_COMM_CH_21_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 7),
+#endif
+#if ( BSW_COMM_CH_21_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 8),
+#endif
+#if ( BSW_COMM_CH_21_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 9),
+#endif
+#if ( BSW_COMM_CH_21_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 10),
+#endif
+#if ( BSW_COMM_CH_21_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 11),
+#endif
+#if ( BSW_COMM_CH_21_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 12),
+#endif
+#if ( BSW_COMM_CH_21_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 13),
+#endif
+#if ( BSW_COMM_CH_21_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 14),
+#endif
+#if ( BSW_COMM_CH_21_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 15),
+#endif
+#if ( BSW_COMM_CH_21_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 16),
+#endif
+#if ( BSW_COMM_CH_21_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 17),
+#endif
+#if ( BSW_COMM_CH_21_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 18),
+#endif
+#if ( BSW_COMM_CH_21_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 19),
+#endif
+#if ( BSW_COMM_CH_21_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 20),
+#endif
+#if ( BSW_COMM_CH_21_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 21),
+#endif
+#if ( BSW_COMM_CH_21_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 22),
+#endif
+#if ( BSW_COMM_CH_21_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 23),
+#endif
+#if ( BSW_COMM_CH_21_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 24),
+#endif
+#if ( BSW_COMM_CH_21_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 25),
+#endif
+#if ( BSW_COMM_CH_21_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 26),
+#endif
+#if ( BSW_COMM_CH_21_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 27),
+#endif
+#if ( BSW_COMM_CH_21_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 28),
+#endif
+#if ( BSW_COMM_CH_21_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 29),
+#endif
+#if ( BSW_COMM_CH_21_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 30),
+#endif
+#if ( BSW_COMM_CH_21_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 31),
+#endif
+#if ( BSW_COMM_CH_21_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 32),
+#endif
+#if ( BSW_COMM_CH_21_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 33),
+#endif
+#if ( BSW_COMM_CH_21_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 34),
+#endif
+#if ( BSW_COMM_CH_21_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 35),
+#endif
+#if ( BSW_COMM_CH_21_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 36),
+#endif
+#if ( BSW_COMM_CH_21_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 37),
+#endif
+#if ( BSW_COMM_CH_21_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 38),
+#endif
+#if ( BSW_COMM_CH_21_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 39),
+#endif
+#if ( BSW_COMM_CH_21_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 40),
+#endif
+#if ( BSW_COMM_CH_21_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 41),
+#endif
+#if ( BSW_COMM_CH_21_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 42),
+#endif
+#if ( BSW_COMM_CH_21_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 43),
+#endif
+#if ( BSW_COMM_CH_21_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 44),
+#endif
+#if ( BSW_COMM_CH_21_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 45),
+#endif
+#if ( BSW_COMM_CH_21_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 46),
+#endif
+#if ( BSW_COMM_CH_21_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 47),
+#endif
+#if ( BSW_COMM_CH_21_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 48),
+#endif
+#if ( BSW_COMM_CH_21_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 49),
+#endif
+#if ( BSW_COMM_CH_21_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 50),
+#endif
+#if ( BSW_COMM_CH_21_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 51),
+#endif
+#if ( BSW_COMM_CH_21_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 52),
+#endif
+#if ( BSW_COMM_CH_21_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 53),
+#endif
+#if ( BSW_COMM_CH_21_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 54),
+#endif
+#if ( BSW_COMM_CH_21_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 55),
+#endif
+#if ( BSW_COMM_CH_21_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 56),
+#endif
+#if ( BSW_COMM_CH_21_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 57),
+#endif
+#if ( BSW_COMM_CH_21_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 58),
+#endif
+#if ( BSW_COMM_CH_21_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 59),
+#endif
+#if ( BSW_COMM_CH_21_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 60),
+#endif
+#if ( BSW_COMM_CH_21_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 61),
+#endif
+#if ( BSW_COMM_CH_21_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 62),
+#endif
+#if ( BSW_COMM_CH_21_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(21, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_21 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake21[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_21 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 21U ) */
+
+/* CH22 */
 #if ( BSW_COMM_CFG_CHNUM > 22U )
-#if (BSW_COMM_CH_PNCNUM_22 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_22[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_22 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake22[ BSW_COMM_CFG_CH_PNCNUM_22 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_22_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 0),
+#endif
+#if ( BSW_COMM_CH_22_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 1),
+#endif
+#if ( BSW_COMM_CH_22_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 2),
+#endif
+#if ( BSW_COMM_CH_22_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 3),
+#endif
+#if ( BSW_COMM_CH_22_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 4),
+#endif
+#if ( BSW_COMM_CH_22_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 5),
+#endif
+#if ( BSW_COMM_CH_22_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 6),
+#endif
+#if ( BSW_COMM_CH_22_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 7),
+#endif
+#if ( BSW_COMM_CH_22_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 8),
+#endif
+#if ( BSW_COMM_CH_22_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 9),
+#endif
+#if ( BSW_COMM_CH_22_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 10),
+#endif
+#if ( BSW_COMM_CH_22_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 11),
+#endif
+#if ( BSW_COMM_CH_22_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 12),
+#endif
+#if ( BSW_COMM_CH_22_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 13),
+#endif
+#if ( BSW_COMM_CH_22_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 14),
+#endif
+#if ( BSW_COMM_CH_22_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 15),
+#endif
+#if ( BSW_COMM_CH_22_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 16),
+#endif
+#if ( BSW_COMM_CH_22_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 17),
+#endif
+#if ( BSW_COMM_CH_22_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 18),
+#endif
+#if ( BSW_COMM_CH_22_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 19),
+#endif
+#if ( BSW_COMM_CH_22_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 20),
+#endif
+#if ( BSW_COMM_CH_22_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 21),
+#endif
+#if ( BSW_COMM_CH_22_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 22),
+#endif
+#if ( BSW_COMM_CH_22_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 23),
+#endif
+#if ( BSW_COMM_CH_22_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 24),
+#endif
+#if ( BSW_COMM_CH_22_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 25),
+#endif
+#if ( BSW_COMM_CH_22_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 26),
+#endif
+#if ( BSW_COMM_CH_22_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 27),
+#endif
+#if ( BSW_COMM_CH_22_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 28),
+#endif
+#if ( BSW_COMM_CH_22_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 29),
+#endif
+#if ( BSW_COMM_CH_22_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 30),
+#endif
+#if ( BSW_COMM_CH_22_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 31),
+#endif
+#if ( BSW_COMM_CH_22_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 32),
+#endif
+#if ( BSW_COMM_CH_22_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 33),
+#endif
+#if ( BSW_COMM_CH_22_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 34),
+#endif
+#if ( BSW_COMM_CH_22_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 35),
+#endif
+#if ( BSW_COMM_CH_22_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 36),
+#endif
+#if ( BSW_COMM_CH_22_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 37),
+#endif
+#if ( BSW_COMM_CH_22_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 38),
+#endif
+#if ( BSW_COMM_CH_22_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 39),
+#endif
+#if ( BSW_COMM_CH_22_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 40),
+#endif
+#if ( BSW_COMM_CH_22_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 41),
+#endif
+#if ( BSW_COMM_CH_22_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 42),
+#endif
+#if ( BSW_COMM_CH_22_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 43),
+#endif
+#if ( BSW_COMM_CH_22_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 44),
+#endif
+#if ( BSW_COMM_CH_22_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 45),
+#endif
+#if ( BSW_COMM_CH_22_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 46),
+#endif
+#if ( BSW_COMM_CH_22_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 47),
+#endif
+#if ( BSW_COMM_CH_22_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 48),
+#endif
+#if ( BSW_COMM_CH_22_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 49),
+#endif
+#if ( BSW_COMM_CH_22_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 50),
+#endif
+#if ( BSW_COMM_CH_22_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 51),
+#endif
+#if ( BSW_COMM_CH_22_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 52),
+#endif
+#if ( BSW_COMM_CH_22_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 53),
+#endif
+#if ( BSW_COMM_CH_22_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 54),
+#endif
+#if ( BSW_COMM_CH_22_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 55),
+#endif
+#if ( BSW_COMM_CH_22_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 56),
+#endif
+#if ( BSW_COMM_CH_22_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 57),
+#endif
+#if ( BSW_COMM_CH_22_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 58),
+#endif
+#if ( BSW_COMM_CH_22_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 59),
+#endif
+#if ( BSW_COMM_CH_22_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 60),
+#endif
+#if ( BSW_COMM_CH_22_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 61),
+#endif
+#if ( BSW_COMM_CH_22_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 62),
+#endif
+#if ( BSW_COMM_CH_22_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(22, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_22 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake22[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_22 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 22U ) */
+
+/* CH23 */
 #if ( BSW_COMM_CFG_CHNUM > 23U )
-#if (BSW_COMM_CH_PNCNUM_23 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_23[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_23 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake23[ BSW_COMM_CFG_CH_PNCNUM_23 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_23_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 0),
+#endif
+#if ( BSW_COMM_CH_23_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 1),
+#endif
+#if ( BSW_COMM_CH_23_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 2),
+#endif
+#if ( BSW_COMM_CH_23_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 3),
+#endif
+#if ( BSW_COMM_CH_23_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 4),
+#endif
+#if ( BSW_COMM_CH_23_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 5),
+#endif
+#if ( BSW_COMM_CH_23_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 6),
+#endif
+#if ( BSW_COMM_CH_23_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 7),
+#endif
+#if ( BSW_COMM_CH_23_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 8),
+#endif
+#if ( BSW_COMM_CH_23_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 9),
+#endif
+#if ( BSW_COMM_CH_23_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 10),
+#endif
+#if ( BSW_COMM_CH_23_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 11),
+#endif
+#if ( BSW_COMM_CH_23_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 12),
+#endif
+#if ( BSW_COMM_CH_23_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 13),
+#endif
+#if ( BSW_COMM_CH_23_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 14),
+#endif
+#if ( BSW_COMM_CH_23_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 15),
+#endif
+#if ( BSW_COMM_CH_23_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 16),
+#endif
+#if ( BSW_COMM_CH_23_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 17),
+#endif
+#if ( BSW_COMM_CH_23_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 18),
+#endif
+#if ( BSW_COMM_CH_23_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 19),
+#endif
+#if ( BSW_COMM_CH_23_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 20),
+#endif
+#if ( BSW_COMM_CH_23_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 21),
+#endif
+#if ( BSW_COMM_CH_23_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 22),
+#endif
+#if ( BSW_COMM_CH_23_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 23),
+#endif
+#if ( BSW_COMM_CH_23_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 24),
+#endif
+#if ( BSW_COMM_CH_23_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 25),
+#endif
+#if ( BSW_COMM_CH_23_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 26),
+#endif
+#if ( BSW_COMM_CH_23_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 27),
+#endif
+#if ( BSW_COMM_CH_23_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 28),
+#endif
+#if ( BSW_COMM_CH_23_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 29),
+#endif
+#if ( BSW_COMM_CH_23_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 30),
+#endif
+#if ( BSW_COMM_CH_23_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 31),
+#endif
+#if ( BSW_COMM_CH_23_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 32),
+#endif
+#if ( BSW_COMM_CH_23_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 33),
+#endif
+#if ( BSW_COMM_CH_23_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 34),
+#endif
+#if ( BSW_COMM_CH_23_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 35),
+#endif
+#if ( BSW_COMM_CH_23_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 36),
+#endif
+#if ( BSW_COMM_CH_23_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 37),
+#endif
+#if ( BSW_COMM_CH_23_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 38),
+#endif
+#if ( BSW_COMM_CH_23_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 39),
+#endif
+#if ( BSW_COMM_CH_23_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 40),
+#endif
+#if ( BSW_COMM_CH_23_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 41),
+#endif
+#if ( BSW_COMM_CH_23_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 42),
+#endif
+#if ( BSW_COMM_CH_23_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 43),
+#endif
+#if ( BSW_COMM_CH_23_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 44),
+#endif
+#if ( BSW_COMM_CH_23_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 45),
+#endif
+#if ( BSW_COMM_CH_23_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 46),
+#endif
+#if ( BSW_COMM_CH_23_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 47),
+#endif
+#if ( BSW_COMM_CH_23_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 48),
+#endif
+#if ( BSW_COMM_CH_23_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 49),
+#endif
+#if ( BSW_COMM_CH_23_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 50),
+#endif
+#if ( BSW_COMM_CH_23_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 51),
+#endif
+#if ( BSW_COMM_CH_23_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 52),
+#endif
+#if ( BSW_COMM_CH_23_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 53),
+#endif
+#if ( BSW_COMM_CH_23_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 54),
+#endif
+#if ( BSW_COMM_CH_23_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 55),
+#endif
+#if ( BSW_COMM_CH_23_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 56),
+#endif
+#if ( BSW_COMM_CH_23_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 57),
+#endif
+#if ( BSW_COMM_CH_23_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 58),
+#endif
+#if ( BSW_COMM_CH_23_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 59),
+#endif
+#if ( BSW_COMM_CH_23_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 60),
+#endif
+#if ( BSW_COMM_CH_23_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 61),
+#endif
+#if ( BSW_COMM_CH_23_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 62),
+#endif
+#if ( BSW_COMM_CH_23_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(23, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_23 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake23[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_23 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 23U ) */
+
+/* CH24 */
 #if ( BSW_COMM_CFG_CHNUM > 24U )
-#if (BSW_COMM_CH_PNCNUM_24 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_24[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_24 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake24[ BSW_COMM_CFG_CH_PNCNUM_24 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_24_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 0),
+#endif
+#if ( BSW_COMM_CH_24_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 1),
+#endif
+#if ( BSW_COMM_CH_24_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 2),
+#endif
+#if ( BSW_COMM_CH_24_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 3),
+#endif
+#if ( BSW_COMM_CH_24_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 4),
+#endif
+#if ( BSW_COMM_CH_24_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 5),
+#endif
+#if ( BSW_COMM_CH_24_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 6),
+#endif
+#if ( BSW_COMM_CH_24_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 7),
+#endif
+#if ( BSW_COMM_CH_24_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 8),
+#endif
+#if ( BSW_COMM_CH_24_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 9),
+#endif
+#if ( BSW_COMM_CH_24_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 10),
+#endif
+#if ( BSW_COMM_CH_24_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 11),
+#endif
+#if ( BSW_COMM_CH_24_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 12),
+#endif
+#if ( BSW_COMM_CH_24_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 13),
+#endif
+#if ( BSW_COMM_CH_24_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 14),
+#endif
+#if ( BSW_COMM_CH_24_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 15),
+#endif
+#if ( BSW_COMM_CH_24_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 16),
+#endif
+#if ( BSW_COMM_CH_24_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 17),
+#endif
+#if ( BSW_COMM_CH_24_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 18),
+#endif
+#if ( BSW_COMM_CH_24_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 19),
+#endif
+#if ( BSW_COMM_CH_24_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 20),
+#endif
+#if ( BSW_COMM_CH_24_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 21),
+#endif
+#if ( BSW_COMM_CH_24_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 22),
+#endif
+#if ( BSW_COMM_CH_24_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 23),
+#endif
+#if ( BSW_COMM_CH_24_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 24),
+#endif
+#if ( BSW_COMM_CH_24_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 25),
+#endif
+#if ( BSW_COMM_CH_24_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 26),
+#endif
+#if ( BSW_COMM_CH_24_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 27),
+#endif
+#if ( BSW_COMM_CH_24_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 28),
+#endif
+#if ( BSW_COMM_CH_24_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 29),
+#endif
+#if ( BSW_COMM_CH_24_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 30),
+#endif
+#if ( BSW_COMM_CH_24_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 31),
+#endif
+#if ( BSW_COMM_CH_24_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 32),
+#endif
+#if ( BSW_COMM_CH_24_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 33),
+#endif
+#if ( BSW_COMM_CH_24_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 34),
+#endif
+#if ( BSW_COMM_CH_24_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 35),
+#endif
+#if ( BSW_COMM_CH_24_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 36),
+#endif
+#if ( BSW_COMM_CH_24_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 37),
+#endif
+#if ( BSW_COMM_CH_24_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 38),
+#endif
+#if ( BSW_COMM_CH_24_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 39),
+#endif
+#if ( BSW_COMM_CH_24_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 40),
+#endif
+#if ( BSW_COMM_CH_24_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 41),
+#endif
+#if ( BSW_COMM_CH_24_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 42),
+#endif
+#if ( BSW_COMM_CH_24_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 43),
+#endif
+#if ( BSW_COMM_CH_24_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 44),
+#endif
+#if ( BSW_COMM_CH_24_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 45),
+#endif
+#if ( BSW_COMM_CH_24_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 46),
+#endif
+#if ( BSW_COMM_CH_24_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 47),
+#endif
+#if ( BSW_COMM_CH_24_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 48),
+#endif
+#if ( BSW_COMM_CH_24_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 49),
+#endif
+#if ( BSW_COMM_CH_24_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 50),
+#endif
+#if ( BSW_COMM_CH_24_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 51),
+#endif
+#if ( BSW_COMM_CH_24_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 52),
+#endif
+#if ( BSW_COMM_CH_24_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 53),
+#endif
+#if ( BSW_COMM_CH_24_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 54),
+#endif
+#if ( BSW_COMM_CH_24_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 55),
+#endif
+#if ( BSW_COMM_CH_24_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 56),
+#endif
+#if ( BSW_COMM_CH_24_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 57),
+#endif
+#if ( BSW_COMM_CH_24_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 58),
+#endif
+#if ( BSW_COMM_CH_24_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 59),
+#endif
+#if ( BSW_COMM_CH_24_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 60),
+#endif
+#if ( BSW_COMM_CH_24_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 61),
+#endif
+#if ( BSW_COMM_CH_24_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 62),
+#endif
+#if ( BSW_COMM_CH_24_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(24, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_24 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake24[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_24 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 24U ) */
+
+/* CH25 */
 #if ( BSW_COMM_CFG_CHNUM > 25U )
-#if (BSW_COMM_CH_PNCNUM_25 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_25[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_25 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake25[ BSW_COMM_CFG_CH_PNCNUM_25 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_25_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 0),
+#endif
+#if ( BSW_COMM_CH_25_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 1),
+#endif
+#if ( BSW_COMM_CH_25_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 2),
+#endif
+#if ( BSW_COMM_CH_25_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 3),
+#endif
+#if ( BSW_COMM_CH_25_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 4),
+#endif
+#if ( BSW_COMM_CH_25_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 5),
+#endif
+#if ( BSW_COMM_CH_25_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 6),
+#endif
+#if ( BSW_COMM_CH_25_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 7),
+#endif
+#if ( BSW_COMM_CH_25_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 8),
+#endif
+#if ( BSW_COMM_CH_25_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 9),
+#endif
+#if ( BSW_COMM_CH_25_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 10),
+#endif
+#if ( BSW_COMM_CH_25_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 11),
+#endif
+#if ( BSW_COMM_CH_25_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 12),
+#endif
+#if ( BSW_COMM_CH_25_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 13),
+#endif
+#if ( BSW_COMM_CH_25_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 14),
+#endif
+#if ( BSW_COMM_CH_25_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 15),
+#endif
+#if ( BSW_COMM_CH_25_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 16),
+#endif
+#if ( BSW_COMM_CH_25_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 17),
+#endif
+#if ( BSW_COMM_CH_25_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 18),
+#endif
+#if ( BSW_COMM_CH_25_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 19),
+#endif
+#if ( BSW_COMM_CH_25_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 20),
+#endif
+#if ( BSW_COMM_CH_25_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 21),
+#endif
+#if ( BSW_COMM_CH_25_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 22),
+#endif
+#if ( BSW_COMM_CH_25_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 23),
+#endif
+#if ( BSW_COMM_CH_25_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 24),
+#endif
+#if ( BSW_COMM_CH_25_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 25),
+#endif
+#if ( BSW_COMM_CH_25_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 26),
+#endif
+#if ( BSW_COMM_CH_25_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 27),
+#endif
+#if ( BSW_COMM_CH_25_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 28),
+#endif
+#if ( BSW_COMM_CH_25_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 29),
+#endif
+#if ( BSW_COMM_CH_25_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 30),
+#endif
+#if ( BSW_COMM_CH_25_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 31),
+#endif
+#if ( BSW_COMM_CH_25_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 32),
+#endif
+#if ( BSW_COMM_CH_25_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 33),
+#endif
+#if ( BSW_COMM_CH_25_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 34),
+#endif
+#if ( BSW_COMM_CH_25_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 35),
+#endif
+#if ( BSW_COMM_CH_25_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 36),
+#endif
+#if ( BSW_COMM_CH_25_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 37),
+#endif
+#if ( BSW_COMM_CH_25_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 38),
+#endif
+#if ( BSW_COMM_CH_25_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 39),
+#endif
+#if ( BSW_COMM_CH_25_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 40),
+#endif
+#if ( BSW_COMM_CH_25_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 41),
+#endif
+#if ( BSW_COMM_CH_25_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 42),
+#endif
+#if ( BSW_COMM_CH_25_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 43),
+#endif
+#if ( BSW_COMM_CH_25_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 44),
+#endif
+#if ( BSW_COMM_CH_25_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 45),
+#endif
+#if ( BSW_COMM_CH_25_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 46),
+#endif
+#if ( BSW_COMM_CH_25_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 47),
+#endif
+#if ( BSW_COMM_CH_25_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 48),
+#endif
+#if ( BSW_COMM_CH_25_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 49),
+#endif
+#if ( BSW_COMM_CH_25_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 50),
+#endif
+#if ( BSW_COMM_CH_25_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 51),
+#endif
+#if ( BSW_COMM_CH_25_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 52),
+#endif
+#if ( BSW_COMM_CH_25_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 53),
+#endif
+#if ( BSW_COMM_CH_25_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 54),
+#endif
+#if ( BSW_COMM_CH_25_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 55),
+#endif
+#if ( BSW_COMM_CH_25_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 56),
+#endif
+#if ( BSW_COMM_CH_25_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 57),
+#endif
+#if ( BSW_COMM_CH_25_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 58),
+#endif
+#if ( BSW_COMM_CH_25_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 59),
+#endif
+#if ( BSW_COMM_CH_25_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 60),
+#endif
+#if ( BSW_COMM_CH_25_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 61),
+#endif
+#if ( BSW_COMM_CH_25_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 62),
+#endif
+#if ( BSW_COMM_CH_25_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(25, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_25 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake25[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_25 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 25U ) */
+
+/* CH26 */
 #if ( BSW_COMM_CFG_CHNUM > 26U )
-#if (BSW_COMM_CH_PNCNUM_26 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_26[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_26 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake26[ BSW_COMM_CFG_CH_PNCNUM_26 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_26_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 0),
+#endif
+#if ( BSW_COMM_CH_26_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 1),
+#endif
+#if ( BSW_COMM_CH_26_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 2),
+#endif
+#if ( BSW_COMM_CH_26_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 3),
+#endif
+#if ( BSW_COMM_CH_26_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 4),
+#endif
+#if ( BSW_COMM_CH_26_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 5),
+#endif
+#if ( BSW_COMM_CH_26_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 6),
+#endif
+#if ( BSW_COMM_CH_26_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 7),
+#endif
+#if ( BSW_COMM_CH_26_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 8),
+#endif
+#if ( BSW_COMM_CH_26_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 9),
+#endif
+#if ( BSW_COMM_CH_26_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 10),
+#endif
+#if ( BSW_COMM_CH_26_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 11),
+#endif
+#if ( BSW_COMM_CH_26_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 12),
+#endif
+#if ( BSW_COMM_CH_26_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 13),
+#endif
+#if ( BSW_COMM_CH_26_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 14),
+#endif
+#if ( BSW_COMM_CH_26_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 15),
+#endif
+#if ( BSW_COMM_CH_26_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 16),
+#endif
+#if ( BSW_COMM_CH_26_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 17),
+#endif
+#if ( BSW_COMM_CH_26_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 18),
+#endif
+#if ( BSW_COMM_CH_26_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 19),
+#endif
+#if ( BSW_COMM_CH_26_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 20),
+#endif
+#if ( BSW_COMM_CH_26_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 21),
+#endif
+#if ( BSW_COMM_CH_26_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 22),
+#endif
+#if ( BSW_COMM_CH_26_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 23),
+#endif
+#if ( BSW_COMM_CH_26_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 24),
+#endif
+#if ( BSW_COMM_CH_26_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 25),
+#endif
+#if ( BSW_COMM_CH_26_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 26),
+#endif
+#if ( BSW_COMM_CH_26_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 27),
+#endif
+#if ( BSW_COMM_CH_26_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 28),
+#endif
+#if ( BSW_COMM_CH_26_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 29),
+#endif
+#if ( BSW_COMM_CH_26_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 30),
+#endif
+#if ( BSW_COMM_CH_26_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 31),
+#endif
+#if ( BSW_COMM_CH_26_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 32),
+#endif
+#if ( BSW_COMM_CH_26_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 33),
+#endif
+#if ( BSW_COMM_CH_26_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 34),
+#endif
+#if ( BSW_COMM_CH_26_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 35),
+#endif
+#if ( BSW_COMM_CH_26_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 36),
+#endif
+#if ( BSW_COMM_CH_26_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 37),
+#endif
+#if ( BSW_COMM_CH_26_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 38),
+#endif
+#if ( BSW_COMM_CH_26_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 39),
+#endif
+#if ( BSW_COMM_CH_26_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 40),
+#endif
+#if ( BSW_COMM_CH_26_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 41),
+#endif
+#if ( BSW_COMM_CH_26_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 42),
+#endif
+#if ( BSW_COMM_CH_26_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 43),
+#endif
+#if ( BSW_COMM_CH_26_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 44),
+#endif
+#if ( BSW_COMM_CH_26_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 45),
+#endif
+#if ( BSW_COMM_CH_26_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 46),
+#endif
+#if ( BSW_COMM_CH_26_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 47),
+#endif
+#if ( BSW_COMM_CH_26_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 48),
+#endif
+#if ( BSW_COMM_CH_26_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 49),
+#endif
+#if ( BSW_COMM_CH_26_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 50),
+#endif
+#if ( BSW_COMM_CH_26_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 51),
+#endif
+#if ( BSW_COMM_CH_26_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 52),
+#endif
+#if ( BSW_COMM_CH_26_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 53),
+#endif
+#if ( BSW_COMM_CH_26_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 54),
+#endif
+#if ( BSW_COMM_CH_26_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 55),
+#endif
+#if ( BSW_COMM_CH_26_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 56),
+#endif
+#if ( BSW_COMM_CH_26_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 57),
+#endif
+#if ( BSW_COMM_CH_26_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 58),
+#endif
+#if ( BSW_COMM_CH_26_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 59),
+#endif
+#if ( BSW_COMM_CH_26_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 60),
+#endif
+#if ( BSW_COMM_CH_26_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 61),
+#endif
+#if ( BSW_COMM_CH_26_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 62),
+#endif
+#if ( BSW_COMM_CH_26_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(26, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_26 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake26[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_26 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 26U ) */
+
+/* CH27 */
 #if ( BSW_COMM_CFG_CHNUM > 27U )
-#if (BSW_COMM_CH_PNCNUM_27 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_27[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_27 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake27[ BSW_COMM_CFG_CH_PNCNUM_27 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_27_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 0),
+#endif
+#if ( BSW_COMM_CH_27_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 1),
+#endif
+#if ( BSW_COMM_CH_27_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 2),
+#endif
+#if ( BSW_COMM_CH_27_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 3),
+#endif
+#if ( BSW_COMM_CH_27_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 4),
+#endif
+#if ( BSW_COMM_CH_27_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 5),
+#endif
+#if ( BSW_COMM_CH_27_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 6),
+#endif
+#if ( BSW_COMM_CH_27_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 7),
+#endif
+#if ( BSW_COMM_CH_27_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 8),
+#endif
+#if ( BSW_COMM_CH_27_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 9),
+#endif
+#if ( BSW_COMM_CH_27_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 10),
+#endif
+#if ( BSW_COMM_CH_27_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 11),
+#endif
+#if ( BSW_COMM_CH_27_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 12),
+#endif
+#if ( BSW_COMM_CH_27_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 13),
+#endif
+#if ( BSW_COMM_CH_27_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 14),
+#endif
+#if ( BSW_COMM_CH_27_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 15),
+#endif
+#if ( BSW_COMM_CH_27_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 16),
+#endif
+#if ( BSW_COMM_CH_27_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 17),
+#endif
+#if ( BSW_COMM_CH_27_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 18),
+#endif
+#if ( BSW_COMM_CH_27_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 19),
+#endif
+#if ( BSW_COMM_CH_27_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 20),
+#endif
+#if ( BSW_COMM_CH_27_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 21),
+#endif
+#if ( BSW_COMM_CH_27_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 22),
+#endif
+#if ( BSW_COMM_CH_27_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 23),
+#endif
+#if ( BSW_COMM_CH_27_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 24),
+#endif
+#if ( BSW_COMM_CH_27_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 25),
+#endif
+#if ( BSW_COMM_CH_27_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 26),
+#endif
+#if ( BSW_COMM_CH_27_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 27),
+#endif
+#if ( BSW_COMM_CH_27_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 28),
+#endif
+#if ( BSW_COMM_CH_27_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 29),
+#endif
+#if ( BSW_COMM_CH_27_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 30),
+#endif
+#if ( BSW_COMM_CH_27_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 31),
+#endif
+#if ( BSW_COMM_CH_27_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 32),
+#endif
+#if ( BSW_COMM_CH_27_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 33),
+#endif
+#if ( BSW_COMM_CH_27_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 34),
+#endif
+#if ( BSW_COMM_CH_27_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 35),
+#endif
+#if ( BSW_COMM_CH_27_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 36),
+#endif
+#if ( BSW_COMM_CH_27_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 37),
+#endif
+#if ( BSW_COMM_CH_27_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 38),
+#endif
+#if ( BSW_COMM_CH_27_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 39),
+#endif
+#if ( BSW_COMM_CH_27_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 40),
+#endif
+#if ( BSW_COMM_CH_27_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 41),
+#endif
+#if ( BSW_COMM_CH_27_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 42),
+#endif
+#if ( BSW_COMM_CH_27_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 43),
+#endif
+#if ( BSW_COMM_CH_27_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 44),
+#endif
+#if ( BSW_COMM_CH_27_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 45),
+#endif
+#if ( BSW_COMM_CH_27_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 46),
+#endif
+#if ( BSW_COMM_CH_27_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 47),
+#endif
+#if ( BSW_COMM_CH_27_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 48),
+#endif
+#if ( BSW_COMM_CH_27_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 49),
+#endif
+#if ( BSW_COMM_CH_27_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 50),
+#endif
+#if ( BSW_COMM_CH_27_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 51),
+#endif
+#if ( BSW_COMM_CH_27_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 52),
+#endif
+#if ( BSW_COMM_CH_27_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 53),
+#endif
+#if ( BSW_COMM_CH_27_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 54),
+#endif
+#if ( BSW_COMM_CH_27_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 55),
+#endif
+#if ( BSW_COMM_CH_27_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 56),
+#endif
+#if ( BSW_COMM_CH_27_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 57),
+#endif
+#if ( BSW_COMM_CH_27_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 58),
+#endif
+#if ( BSW_COMM_CH_27_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 59),
+#endif
+#if ( BSW_COMM_CH_27_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 60),
+#endif
+#if ( BSW_COMM_CH_27_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 61),
+#endif
+#if ( BSW_COMM_CH_27_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 62),
+#endif
+#if ( BSW_COMM_CH_27_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(27, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_27 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake27[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_27 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 27U ) */
+
+/* CH28 */
 #if ( BSW_COMM_CFG_CHNUM > 28U )
-#if (BSW_COMM_CH_PNCNUM_28 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_28[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_28 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake28[ BSW_COMM_CFG_CH_PNCNUM_28 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_28_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 0),
+#endif
+#if ( BSW_COMM_CH_28_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 1),
+#endif
+#if ( BSW_COMM_CH_28_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 2),
+#endif
+#if ( BSW_COMM_CH_28_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 3),
+#endif
+#if ( BSW_COMM_CH_28_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 4),
+#endif
+#if ( BSW_COMM_CH_28_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 5),
+#endif
+#if ( BSW_COMM_CH_28_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 6),
+#endif
+#if ( BSW_COMM_CH_28_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 7),
+#endif
+#if ( BSW_COMM_CH_28_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 8),
+#endif
+#if ( BSW_COMM_CH_28_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 9),
+#endif
+#if ( BSW_COMM_CH_28_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 10),
+#endif
+#if ( BSW_COMM_CH_28_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 11),
+#endif
+#if ( BSW_COMM_CH_28_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 12),
+#endif
+#if ( BSW_COMM_CH_28_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 13),
+#endif
+#if ( BSW_COMM_CH_28_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 14),
+#endif
+#if ( BSW_COMM_CH_28_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 15),
+#endif
+#if ( BSW_COMM_CH_28_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 16),
+#endif
+#if ( BSW_COMM_CH_28_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 17),
+#endif
+#if ( BSW_COMM_CH_28_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 18),
+#endif
+#if ( BSW_COMM_CH_28_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 19),
+#endif
+#if ( BSW_COMM_CH_28_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 20),
+#endif
+#if ( BSW_COMM_CH_28_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 21),
+#endif
+#if ( BSW_COMM_CH_28_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 22),
+#endif
+#if ( BSW_COMM_CH_28_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 23),
+#endif
+#if ( BSW_COMM_CH_28_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 24),
+#endif
+#if ( BSW_COMM_CH_28_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 25),
+#endif
+#if ( BSW_COMM_CH_28_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 26),
+#endif
+#if ( BSW_COMM_CH_28_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 27),
+#endif
+#if ( BSW_COMM_CH_28_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 28),
+#endif
+#if ( BSW_COMM_CH_28_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 29),
+#endif
+#if ( BSW_COMM_CH_28_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 30),
+#endif
+#if ( BSW_COMM_CH_28_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 31),
+#endif
+#if ( BSW_COMM_CH_28_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 32),
+#endif
+#if ( BSW_COMM_CH_28_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 33),
+#endif
+#if ( BSW_COMM_CH_28_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 34),
+#endif
+#if ( BSW_COMM_CH_28_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 35),
+#endif
+#if ( BSW_COMM_CH_28_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 36),
+#endif
+#if ( BSW_COMM_CH_28_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 37),
+#endif
+#if ( BSW_COMM_CH_28_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 38),
+#endif
+#if ( BSW_COMM_CH_28_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 39),
+#endif
+#if ( BSW_COMM_CH_28_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 40),
+#endif
+#if ( BSW_COMM_CH_28_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 41),
+#endif
+#if ( BSW_COMM_CH_28_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 42),
+#endif
+#if ( BSW_COMM_CH_28_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 43),
+#endif
+#if ( BSW_COMM_CH_28_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 44),
+#endif
+#if ( BSW_COMM_CH_28_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 45),
+#endif
+#if ( BSW_COMM_CH_28_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 46),
+#endif
+#if ( BSW_COMM_CH_28_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 47),
+#endif
+#if ( BSW_COMM_CH_28_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 48),
+#endif
+#if ( BSW_COMM_CH_28_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 49),
+#endif
+#if ( BSW_COMM_CH_28_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 50),
+#endif
+#if ( BSW_COMM_CH_28_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 51),
+#endif
+#if ( BSW_COMM_CH_28_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 52),
+#endif
+#if ( BSW_COMM_CH_28_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 53),
+#endif
+#if ( BSW_COMM_CH_28_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 54),
+#endif
+#if ( BSW_COMM_CH_28_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 55),
+#endif
+#if ( BSW_COMM_CH_28_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 56),
+#endif
+#if ( BSW_COMM_CH_28_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 57),
+#endif
+#if ( BSW_COMM_CH_28_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 58),
+#endif
+#if ( BSW_COMM_CH_28_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 59),
+#endif
+#if ( BSW_COMM_CH_28_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 60),
+#endif
+#if ( BSW_COMM_CH_28_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 61),
+#endif
+#if ( BSW_COMM_CH_28_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 62),
+#endif
+#if ( BSW_COMM_CH_28_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(28, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_28 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake28[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_28 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 28U ) */
+
+/* CH29 */
 #if ( BSW_COMM_CFG_CHNUM > 29U )
-#if (BSW_COMM_CH_PNCNUM_29 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_29[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_29 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake29[ BSW_COMM_CFG_CH_PNCNUM_29 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_29_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 0),
+#endif
+#if ( BSW_COMM_CH_29_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 1),
+#endif
+#if ( BSW_COMM_CH_29_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 2),
+#endif
+#if ( BSW_COMM_CH_29_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 3),
+#endif
+#if ( BSW_COMM_CH_29_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 4),
+#endif
+#if ( BSW_COMM_CH_29_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 5),
+#endif
+#if ( BSW_COMM_CH_29_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 6),
+#endif
+#if ( BSW_COMM_CH_29_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 7),
+#endif
+#if ( BSW_COMM_CH_29_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 8),
+#endif
+#if ( BSW_COMM_CH_29_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 9),
+#endif
+#if ( BSW_COMM_CH_29_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 10),
+#endif
+#if ( BSW_COMM_CH_29_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 11),
+#endif
+#if ( BSW_COMM_CH_29_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 12),
+#endif
+#if ( BSW_COMM_CH_29_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 13),
+#endif
+#if ( BSW_COMM_CH_29_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 14),
+#endif
+#if ( BSW_COMM_CH_29_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 15),
+#endif
+#if ( BSW_COMM_CH_29_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 16),
+#endif
+#if ( BSW_COMM_CH_29_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 17),
+#endif
+#if ( BSW_COMM_CH_29_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 18),
+#endif
+#if ( BSW_COMM_CH_29_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 19),
+#endif
+#if ( BSW_COMM_CH_29_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 20),
+#endif
+#if ( BSW_COMM_CH_29_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 21),
+#endif
+#if ( BSW_COMM_CH_29_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 22),
+#endif
+#if ( BSW_COMM_CH_29_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 23),
+#endif
+#if ( BSW_COMM_CH_29_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 24),
+#endif
+#if ( BSW_COMM_CH_29_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 25),
+#endif
+#if ( BSW_COMM_CH_29_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 26),
+#endif
+#if ( BSW_COMM_CH_29_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 27),
+#endif
+#if ( BSW_COMM_CH_29_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 28),
+#endif
+#if ( BSW_COMM_CH_29_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 29),
+#endif
+#if ( BSW_COMM_CH_29_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 30),
+#endif
+#if ( BSW_COMM_CH_29_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 31),
+#endif
+#if ( BSW_COMM_CH_29_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 32),
+#endif
+#if ( BSW_COMM_CH_29_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 33),
+#endif
+#if ( BSW_COMM_CH_29_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 34),
+#endif
+#if ( BSW_COMM_CH_29_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 35),
+#endif
+#if ( BSW_COMM_CH_29_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 36),
+#endif
+#if ( BSW_COMM_CH_29_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 37),
+#endif
+#if ( BSW_COMM_CH_29_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 38),
+#endif
+#if ( BSW_COMM_CH_29_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 39),
+#endif
+#if ( BSW_COMM_CH_29_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 40),
+#endif
+#if ( BSW_COMM_CH_29_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 41),
+#endif
+#if ( BSW_COMM_CH_29_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 42),
+#endif
+#if ( BSW_COMM_CH_29_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 43),
+#endif
+#if ( BSW_COMM_CH_29_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 44),
+#endif
+#if ( BSW_COMM_CH_29_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 45),
+#endif
+#if ( BSW_COMM_CH_29_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 46),
+#endif
+#if ( BSW_COMM_CH_29_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 47),
+#endif
+#if ( BSW_COMM_CH_29_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 48),
+#endif
+#if ( BSW_COMM_CH_29_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 49),
+#endif
+#if ( BSW_COMM_CH_29_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 50),
+#endif
+#if ( BSW_COMM_CH_29_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 51),
+#endif
+#if ( BSW_COMM_CH_29_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 52),
+#endif
+#if ( BSW_COMM_CH_29_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 53),
+#endif
+#if ( BSW_COMM_CH_29_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 54),
+#endif
+#if ( BSW_COMM_CH_29_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 55),
+#endif
+#if ( BSW_COMM_CH_29_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 56),
+#endif
+#if ( BSW_COMM_CH_29_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 57),
+#endif
+#if ( BSW_COMM_CH_29_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 58),
+#endif
+#if ( BSW_COMM_CH_29_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 59),
+#endif
+#if ( BSW_COMM_CH_29_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 60),
+#endif
+#if ( BSW_COMM_CH_29_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 61),
+#endif
+#if ( BSW_COMM_CH_29_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 62),
+#endif
+#if ( BSW_COMM_CH_29_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(29, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_29 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake29[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_29 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 29U ) */
+
+/* CH30 */
 #if ( BSW_COMM_CFG_CHNUM > 30U )
-#if (BSW_COMM_CH_PNCNUM_30 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_30[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_30 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake30[ BSW_COMM_CFG_CH_PNCNUM_30 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_30_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 0),
+#endif
+#if ( BSW_COMM_CH_30_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 1),
+#endif
+#if ( BSW_COMM_CH_30_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 2),
+#endif
+#if ( BSW_COMM_CH_30_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 3),
+#endif
+#if ( BSW_COMM_CH_30_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 4),
+#endif
+#if ( BSW_COMM_CH_30_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 5),
+#endif
+#if ( BSW_COMM_CH_30_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 6),
+#endif
+#if ( BSW_COMM_CH_30_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 7),
+#endif
+#if ( BSW_COMM_CH_30_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 8),
+#endif
+#if ( BSW_COMM_CH_30_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 9),
+#endif
+#if ( BSW_COMM_CH_30_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 10),
+#endif
+#if ( BSW_COMM_CH_30_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 11),
+#endif
+#if ( BSW_COMM_CH_30_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 12),
+#endif
+#if ( BSW_COMM_CH_30_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 13),
+#endif
+#if ( BSW_COMM_CH_30_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 14),
+#endif
+#if ( BSW_COMM_CH_30_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 15),
+#endif
+#if ( BSW_COMM_CH_30_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 16),
+#endif
+#if ( BSW_COMM_CH_30_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 17),
+#endif
+#if ( BSW_COMM_CH_30_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 18),
+#endif
+#if ( BSW_COMM_CH_30_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 19),
+#endif
+#if ( BSW_COMM_CH_30_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 20),
+#endif
+#if ( BSW_COMM_CH_30_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 21),
+#endif
+#if ( BSW_COMM_CH_30_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 22),
+#endif
+#if ( BSW_COMM_CH_30_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 23),
+#endif
+#if ( BSW_COMM_CH_30_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 24),
+#endif
+#if ( BSW_COMM_CH_30_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 25),
+#endif
+#if ( BSW_COMM_CH_30_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 26),
+#endif
+#if ( BSW_COMM_CH_30_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 27),
+#endif
+#if ( BSW_COMM_CH_30_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 28),
+#endif
+#if ( BSW_COMM_CH_30_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 29),
+#endif
+#if ( BSW_COMM_CH_30_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 30),
+#endif
+#if ( BSW_COMM_CH_30_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 31),
+#endif
+#if ( BSW_COMM_CH_30_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 32),
+#endif
+#if ( BSW_COMM_CH_30_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 33),
+#endif
+#if ( BSW_COMM_CH_30_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 34),
+#endif
+#if ( BSW_COMM_CH_30_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 35),
+#endif
+#if ( BSW_COMM_CH_30_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 36),
+#endif
+#if ( BSW_COMM_CH_30_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 37),
+#endif
+#if ( BSW_COMM_CH_30_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 38),
+#endif
+#if ( BSW_COMM_CH_30_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 39),
+#endif
+#if ( BSW_COMM_CH_30_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 40),
+#endif
+#if ( BSW_COMM_CH_30_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 41),
+#endif
+#if ( BSW_COMM_CH_30_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 42),
+#endif
+#if ( BSW_COMM_CH_30_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 43),
+#endif
+#if ( BSW_COMM_CH_30_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 44),
+#endif
+#if ( BSW_COMM_CH_30_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 45),
+#endif
+#if ( BSW_COMM_CH_30_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 46),
+#endif
+#if ( BSW_COMM_CH_30_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 47),
+#endif
+#if ( BSW_COMM_CH_30_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 48),
+#endif
+#if ( BSW_COMM_CH_30_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 49),
+#endif
+#if ( BSW_COMM_CH_30_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 50),
+#endif
+#if ( BSW_COMM_CH_30_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 51),
+#endif
+#if ( BSW_COMM_CH_30_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 52),
+#endif
+#if ( BSW_COMM_CH_30_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 53),
+#endif
+#if ( BSW_COMM_CH_30_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 54),
+#endif
+#if ( BSW_COMM_CH_30_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 55),
+#endif
+#if ( BSW_COMM_CH_30_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 56),
+#endif
+#if ( BSW_COMM_CH_30_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 57),
+#endif
+#if ( BSW_COMM_CH_30_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 58),
+#endif
+#if ( BSW_COMM_CH_30_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 59),
+#endif
+#if ( BSW_COMM_CH_30_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 60),
+#endif
+#if ( BSW_COMM_CH_30_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 61),
+#endif
+#if ( BSW_COMM_CH_30_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 62),
+#endif
+#if ( BSW_COMM_CH_30_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(30, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_30 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake30[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_30 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 30U ) */
+
+/* CH31 */
 #if ( BSW_COMM_CFG_CHNUM > 31U )
-#if (BSW_COMM_CH_PNCNUM_31 == 0)
-BswConst BswU4 bsw_comm_ctrl_u4PncAwake_31[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
-    (BswU4)BSW_COMM_PWSTAT_NONE
-   ,(BswU4)BSW_COMM_PWSTAT_NONE
+#if ( BSW_COMM_CFG_CH_PNCNUM_31 > 0U )
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake31[ BSW_COMM_CFG_CH_PNCNUM_31 + BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+#if ( BSW_COMM_CH_31_PNC_0_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 0),
+#endif
+#if ( BSW_COMM_CH_31_PNC_1_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 1),
+#endif
+#if ( BSW_COMM_CH_31_PNC_2_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 2),
+#endif
+#if ( BSW_COMM_CH_31_PNC_3_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 3),
+#endif
+#if ( BSW_COMM_CH_31_PNC_4_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 4),
+#endif
+#if ( BSW_COMM_CH_31_PNC_5_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 5),
+#endif
+#if ( BSW_COMM_CH_31_PNC_6_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 6),
+#endif
+#if ( BSW_COMM_CH_31_PNC_7_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 7),
+#endif
+#if ( BSW_COMM_CH_31_PNC_8_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 8),
+#endif
+#if ( BSW_COMM_CH_31_PNC_9_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 9),
+#endif
+#if ( BSW_COMM_CH_31_PNC_10_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 10),
+#endif
+#if ( BSW_COMM_CH_31_PNC_11_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 11),
+#endif
+#if ( BSW_COMM_CH_31_PNC_12_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 12),
+#endif
+#if ( BSW_COMM_CH_31_PNC_13_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 13),
+#endif
+#if ( BSW_COMM_CH_31_PNC_14_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 14),
+#endif
+#if ( BSW_COMM_CH_31_PNC_15_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 15),
+#endif
+#if ( BSW_COMM_CH_31_PNC_16_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 16),
+#endif
+#if ( BSW_COMM_CH_31_PNC_17_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 17),
+#endif
+#if ( BSW_COMM_CH_31_PNC_18_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 18),
+#endif
+#if ( BSW_COMM_CH_31_PNC_19_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 19),
+#endif
+#if ( BSW_COMM_CH_31_PNC_20_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 20),
+#endif
+#if ( BSW_COMM_CH_31_PNC_21_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 21),
+#endif
+#if ( BSW_COMM_CH_31_PNC_22_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 22),
+#endif
+#if ( BSW_COMM_CH_31_PNC_23_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 23),
+#endif
+#if ( BSW_COMM_CH_31_PNC_24_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 24),
+#endif
+#if ( BSW_COMM_CH_31_PNC_25_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 25),
+#endif
+#if ( BSW_COMM_CH_31_PNC_26_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 26),
+#endif
+#if ( BSW_COMM_CH_31_PNC_27_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 27),
+#endif
+#if ( BSW_COMM_CH_31_PNC_28_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 28),
+#endif
+#if ( BSW_COMM_CH_31_PNC_29_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 29),
+#endif
+#if ( BSW_COMM_CH_31_PNC_30_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 30),
+#endif
+#if ( BSW_COMM_CH_31_PNC_31_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 31),
+#endif
+#if ( BSW_COMM_CH_31_PNC_32_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 32),
+#endif
+#if ( BSW_COMM_CH_31_PNC_33_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 33),
+#endif
+#if ( BSW_COMM_CH_31_PNC_34_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 34),
+#endif
+#if ( BSW_COMM_CH_31_PNC_35_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 35),
+#endif
+#if ( BSW_COMM_CH_31_PNC_36_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 36),
+#endif
+#if ( BSW_COMM_CH_31_PNC_37_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 37),
+#endif
+#if ( BSW_COMM_CH_31_PNC_38_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 38),
+#endif
+#if ( BSW_COMM_CH_31_PNC_39_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 39),
+#endif
+#if ( BSW_COMM_CH_31_PNC_40_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 40),
+#endif
+#if ( BSW_COMM_CH_31_PNC_41_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 41),
+#endif
+#if ( BSW_COMM_CH_31_PNC_42_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 42),
+#endif
+#if ( BSW_COMM_CH_31_PNC_43_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 43),
+#endif
+#if ( BSW_COMM_CH_31_PNC_44_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 44),
+#endif
+#if ( BSW_COMM_CH_31_PNC_45_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 45),
+#endif
+#if ( BSW_COMM_CH_31_PNC_46_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 46),
+#endif
+#if ( BSW_COMM_CH_31_PNC_47_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 47),
+#endif
+#if ( BSW_COMM_CH_31_PNC_48_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 48),
+#endif
+#if ( BSW_COMM_CH_31_PNC_49_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 49),
+#endif
+#if ( BSW_COMM_CH_31_PNC_50_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 50),
+#endif
+#if ( BSW_COMM_CH_31_PNC_51_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 51),
+#endif
+#if ( BSW_COMM_CH_31_PNC_52_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 52),
+#endif
+#if ( BSW_COMM_CH_31_PNC_53_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 53),
+#endif
+#if ( BSW_COMM_CH_31_PNC_54_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 54),
+#endif
+#if ( BSW_COMM_CH_31_PNC_55_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 55),
+#endif
+#if ( BSW_COMM_CH_31_PNC_56_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 56),
+#endif
+#if ( BSW_COMM_CH_31_PNC_57_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 57),
+#endif
+#if ( BSW_COMM_CH_31_PNC_58_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 58),
+#endif
+#if ( BSW_COMM_CH_31_PNC_59_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 59),
+#endif
+#if ( BSW_COMM_CH_31_PNC_60_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 60),
+#endif
+#if ( BSW_COMM_CH_31_PNC_61_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 61),
+#endif
+#if ( BSW_COMM_CH_31_PNC_62_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 62),
+#endif
+#if ( BSW_COMM_CH_31_PNC_63_USE == BSW_USE )
+    (BswU1)BSW_COMM_PNC_AWAKEPW(31, 63),
+#endif
+    (BswU1)BSW_COMM_PWSTAT_NONE
 };
-#endif /* ( BSW_COMM_CH_PNCNUM_31 == 0U ) */
+#else
+static BswConst BswU1  bsw_comm_ctrl_u1PncAwake31[ BSW_COMM_TBL_DUMMY_SIZE ] =
+{
+    (BswU1)BSW_COMM_PWSTAT_NONE
+};
+#endif /* ( BSW_COMM_CFG_CH_PNCNUM_31 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 31U ) */
 
 /* PNC Awake power supply  */
-BswConst BswU4* BswConst bsw_comm_ctrl_u4PNCAwakePW[BSW_COMM_CHNUM] =
+BswConst BswU1* BswConst  bsw_comm_ctrl_u1PNCAwakePW[BSW_COMM_CHNUM] =
 {
-    &bsw_comm_ctrl_u4PncAwake_0[0U]
+    &bsw_comm_ctrl_u1PncAwake0[0U]
 #if (BSW_COMM_CHNUM > 1U)
-    ,&bsw_comm_ctrl_u4PncAwake_1[0U]
+    ,&bsw_comm_ctrl_u1PncAwake1[0U]
 #endif
 #if (BSW_COMM_CHNUM > 2U)
-    ,&bsw_comm_ctrl_u4PncAwake_2[0U]
+    ,&bsw_comm_ctrl_u1PncAwake2[0U]
 #endif
 #if (BSW_COMM_CHNUM > 3U)
-    ,&bsw_comm_ctrl_u4PncAwake_3[0U]
+    ,&bsw_comm_ctrl_u1PncAwake3[0U]
 #endif
 #if (BSW_COMM_CHNUM > 4U)
-    ,&bsw_comm_ctrl_u4PncAwake_4[0U]
+    ,&bsw_comm_ctrl_u1PncAwake4[0U]
 #endif
 #if (BSW_COMM_CHNUM > 5U)
-    ,&bsw_comm_ctrl_u4PncAwake_5[0U]
+    ,&bsw_comm_ctrl_u1PncAwake5[0U]
 #endif
 #if (BSW_COMM_CHNUM > 6U)
-    ,&bsw_comm_ctrl_u4PncAwake_6[0U]
+    ,&bsw_comm_ctrl_u1PncAwake6[0U]
 #endif
 #if (BSW_COMM_CHNUM > 7U)
-    ,&bsw_comm_ctrl_u4PncAwake_7[0U]
+    ,&bsw_comm_ctrl_u1PncAwake7[0U]
 #endif
 #if (BSW_COMM_CHNUM > 8U)
-    ,&bsw_comm_ctrl_u4PncAwake_8[0U]
+    ,&bsw_comm_ctrl_u1PncAwake8[0U]
 #endif
 #if (BSW_COMM_CHNUM > 9U)
-    ,&bsw_comm_ctrl_u4PncAwake_9[0U]
+    ,&bsw_comm_ctrl_u1PncAwake9[0U]
 #endif
 #if (BSW_COMM_CHNUM > 10U)
-    ,&bsw_comm_ctrl_u4PncAwake_10[0U]
+    ,&bsw_comm_ctrl_u1PncAwake10[0U]
 #endif
 #if (BSW_COMM_CHNUM > 11U)
-    ,&bsw_comm_ctrl_u4PncAwake_11[0U]
+    ,&bsw_comm_ctrl_u1PncAwake11[0U]
 #endif
 #if (BSW_COMM_CHNUM > 12U)
-    ,&bsw_comm_ctrl_u4PncAwake_12[0U]
+    ,&bsw_comm_ctrl_u1PncAwake12[0U]
 #endif
 #if (BSW_COMM_CHNUM > 13U)
-    ,&bsw_comm_ctrl_u4PncAwake_13[0U]
+    ,&bsw_comm_ctrl_u1PncAwake13[0U]
 #endif
 #if (BSW_COMM_CHNUM > 14U)
-    ,&bsw_comm_ctrl_u4PncAwake_14[0U]
+    ,&bsw_comm_ctrl_u1PncAwake14[0U]
 #endif
 #if (BSW_COMM_CHNUM > 15U)
-    ,&bsw_comm_ctrl_u4PncAwake_15[0U]
+    ,&bsw_comm_ctrl_u1PncAwake15[0U]
 #endif
 #if (BSW_COMM_CHNUM > 16U)
-    ,&bsw_comm_ctrl_u4PncAwake_16[0U]
+    ,&bsw_comm_ctrl_u1PncAwake16[0U]
 #endif
 #if (BSW_COMM_CHNUM > 17U)
-    ,&bsw_comm_ctrl_u4PncAwake_17[0U]
+    ,&bsw_comm_ctrl_u1PncAwake17[0U]
 #endif
 #if (BSW_COMM_CHNUM > 18U)
-    ,&bsw_comm_ctrl_u4PncAwake_18[0U]
+    ,&bsw_comm_ctrl_u1PncAwake18[0U]
 #endif
 #if (BSW_COMM_CHNUM > 19U)
-    ,&bsw_comm_ctrl_u4PncAwake_19[0U]
+    ,&bsw_comm_ctrl_u1PncAwake19[0U]
 #endif
 #if (BSW_COMM_CHNUM > 20U)
-    ,&bsw_comm_ctrl_u4PncAwake_20[0U]
+    ,&bsw_comm_ctrl_u1PncAwake20[0U]
 #endif
 #if (BSW_COMM_CHNUM > 21U)
-    ,&bsw_comm_ctrl_u4PncAwake_21[0U]
+    ,&bsw_comm_ctrl_u1PncAwake21[0U]
 #endif
 #if (BSW_COMM_CHNUM > 22U)
-    ,&bsw_comm_ctrl_u4PncAwake_22[0U]
+    ,&bsw_comm_ctrl_u1PncAwake22[0U]
 #endif
 #if (BSW_COMM_CHNUM > 23U)
-    ,&bsw_comm_ctrl_u4PncAwake_23[0U]
+    ,&bsw_comm_ctrl_u1PncAwake23[0U]
 #endif
 #if (BSW_COMM_CHNUM > 24U)
-    ,&bsw_comm_ctrl_u4PncAwake_24[0U]
+    ,&bsw_comm_ctrl_u1PncAwake24[0U]
 #endif
 #if (BSW_COMM_CHNUM > 25U)
-    ,&bsw_comm_ctrl_u4PncAwake_25[0U]
+    ,&bsw_comm_ctrl_u1PncAwake25[0U]
 #endif
 #if (BSW_COMM_CHNUM > 26U)
-    ,&bsw_comm_ctrl_u4PncAwake_26[0U]
+    ,&bsw_comm_ctrl_u1PncAwake26[0U]
 #endif
 #if (BSW_COMM_CHNUM > 27U)
-    ,&bsw_comm_ctrl_u4PncAwake_27[0U]
+    ,&bsw_comm_ctrl_u1PncAwake27[0U]
 #endif
 #if (BSW_COMM_CHNUM > 28U)
-    ,&bsw_comm_ctrl_u4PncAwake_28[0U]
+    ,&bsw_comm_ctrl_u1PncAwake28[0U]
 #endif
 #if (BSW_COMM_CHNUM > 29U)
-    ,&bsw_comm_ctrl_u4PncAwake_29[0U]
+    ,&bsw_comm_ctrl_u1PncAwake29[0U]
 #endif
 #if (BSW_COMM_CHNUM > 30U)
-    ,&bsw_comm_ctrl_u4PncAwake_30[0U]
+    ,&bsw_comm_ctrl_u1PncAwake30[0U]
 #endif
 #if (BSW_COMM_CHNUM > 31U)
-    ,&bsw_comm_ctrl_u4PncAwake_31[0U]
+    ,&bsw_comm_ctrl_u1PncAwake31[0U]
 #endif
 };
 #endif /* (BSW_COMM_CFG_PNC_AWAKEPW == BSW_USE) */
@@ -11359,7 +17879,6 @@ void (* BswConst bsw_comm_ctrl_ptRqCmMdToReqFn)( BswU1 u1Channel, BswU1 u1BusAwa
 void (* BswConst bsw_comm_ctrl_ptRqCmMdToRdyFn)( BswU1 u1Channel ) = BSW_COMM_RQCMMD_TORDY_FNC;
 void (* BswConst bsw_comm_ctrl_ptRqCmMdFlToReqFn)( BswU1 u1Channel ) = BSW_COMM_RQCMMD_FLCOM_TOREQ_FNC;
 
-void (* BswConst  bsw_comm_ctrl_ptStartNetworkFn)( BswU1 NetworkId ) = BSW_COMM_STARTNETWORK_FUNC;
 
 /****************************************************************************/
 /* External Functions                                                       */
@@ -11380,7 +17899,6 @@ void (* BswConst  bsw_comm_ctrl_ptStartNetworkFn)( BswU1 NetworkId ) = BSW_COMM_
 /*  v1-1-0          :2018/12/13                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2023/02/03                                             */
-/*  v3-0-0          :2024/11/15                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

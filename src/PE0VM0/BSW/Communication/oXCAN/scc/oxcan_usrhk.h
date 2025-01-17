@@ -65,7 +65,6 @@ void    vd_g_oXCANUsrhkPreStoreMsg(const U1 u1_a_CH, const U4 u4_a_CANID);
 void    vd_g_oXCANUsrhkTxTOut(const U2 u2_a_MSG);                        /* called from libbswcs.a via syshook.c                */
 
 void    vd_g_oXCANUsrhkDetectBusoff(const U1 u1_a_NW);                   /* called from libbswcs.a via syshook.c                */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

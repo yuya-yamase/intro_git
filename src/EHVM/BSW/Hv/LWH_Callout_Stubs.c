@@ -468,7 +468,8 @@ void ehvm_user_wakeup_event_init(void)
     /*-----------------------*/
     /* judge Power On Reset */
     /*-----------------------*/
-    if ((reset_factor.category & EHVM_RESET_FACTOR_CATEGORY_POWER_ON_RESET) != (ehvm_reset_category_t)EHVM_RESET_FACTOR_CATEGORY_NONE)
+    if (((reset_factor.category & EHVM_RESET_FACTOR_CATEGORY_POWER_ON_RESET) != (ehvm_reset_category_t)EHVM_RESET_FACTOR_CATEGORY_NONE) ||
+        ((reset_factor.category & EHVM_RESET_FACTOR_CATEGORY_SW_SYS_RESET) != (ehvm_reset_category_t)EHVM_RESET_FACTOR_CATEGORY_NONE))
     {
         /* set +B ON to virtual wake-up factor(Mask) */
         (void)ehvm_vmm_enable_wakeup_factor(EHVM_WAKEUP_FACTOR_A0, (ehvm_wakeup_factor_bit_t)(EHVM_SYSTEM_WAKEUP_FACTOR1_BIT_BATTERY / (ehvm_uint32_t)EHVM_USER_PORT_VAL2)); /* no return check required */

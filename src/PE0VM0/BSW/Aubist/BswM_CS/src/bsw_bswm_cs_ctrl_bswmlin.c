@@ -1,7 +1,7 @@
-/* bsw_bswm_cs_ctrl_bswmlin_c_v3-0-0                                        */
+/* bsw_bswm_cs_ctrl_bswmlin_c_v2-0-0                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -20,10 +20,16 @@
 #include "../../ComM/inc/bsw_comm_config.h"
 #include "../inc/bsw_bswm_cs_config.h"
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
-#include "../../BswM_Lin/inc/bsw_bswm_lin_MemMap.h"
-#include <bswm_lin/bsw_bswm_lin.h>
+
+#include <BswM_Lin.h>
+
+#define BSWM_LIN_START_SEC_CODE
+#include <BswM_Lin_MemMap.h>
 
 #include "../inc/bsw_bswm_cs_ctrl_bswmlin.h"
+
+#define BSWM_LIN_STOP_SEC_CODE
+#include <BswM_Lin_MemMap.h>
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -48,14 +54,17 @@
 /****************************************************************************/
 /* External Functions                                                       */
 /****************************************************************************/
+#define BSWM_LIN_START_SEC_CODE
+#include <BswM_Lin_MemMap.h>
+
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_ctrl_BswMLinChkAwk                           */
-/* Description   | LIN Get CPUAwake factor                                  */
-/* Preconditions | When processing is requested                             */
+/* Description   | LIN Get CPUAwake factor                                     */
+/* Preconditions | When processing is requested                                               */
 /* Parameters    | None                                                     */
-/* Return Value  | CPUAwake factor                                          */
-/*               |  BSW_BSWM_CS_AWAKE_NONE :No CPUAwake factor              */
-/*               |  BSW_BSWM_CS_AWAKE_EXIST:CPUAwake factor exists          */
+/* Return Value  | CPUAwake factor                                             */
+/*               |  BSW_BSWM_CS_AWAKE_NONE :No CPUAwake factor               */
+/*               |  BSW_BSWM_CS_AWAKE_EXIST:CPUAwake factor exists               */
 /* Notes         | None                                                     */
 /****************************************************************************/
 BswU1
@@ -72,6 +81,9 @@ bsw_bswm_cs_ctrl_BswMLinChkAwk( void )
 /* Internal Functions                                                       */
 /****************************************************************************/
 
+#define BSWM_LIN_STOP_SEC_CODE
+#include <BswM_Lin_MemMap.h>
+
 #endif /* ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_NOUSE ) */
 
 /****************************************************************************/
@@ -79,7 +91,6 @@ bsw_bswm_cs_ctrl_BswMLinChkAwk( void )
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2018/12/12                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/09/05                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

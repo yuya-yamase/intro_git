@@ -1,7 +1,7 @@
-/* bswm_cs_cfg_h_v3-0-0                                                     */
+/* bswm_cs_cfg_h_v2-2-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -19,15 +19,16 @@
 #define BSW_BSWM_CS_CFG_TICKTIME_HIGH         (1U)
 #define BSW_BSWM_CS_CFG_TICKTIME_MID          (5U)
 #define BSW_BSWM_CS_CFG_MSGDELIVER            (BSW_BSWM_CS_MSGDELIVER_MIDDLE)
+#define BSW_BSWM_CS_CFG_ECUINITPOWER          (BSW_BSWM_CS_SYSSTAT_BAT)
 #define BSW_BSWM_CS_CFG_ECU_SLEEP             (BSW_USE)
-#define BSW_BSWM_CS_CFG_ECU_FAIL              (BSW_USE)
+#define BSW_BSWM_CS_CFG_ECU_FAIL              (BSW_NOUSE)
 
 #define BSW_BSWM_CS_CFG_FUNC_CS               (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_COM              (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_LDCOM            (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_UPPERCDD1        (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_UPPERCDD2        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_DCM              (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_DCM              (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_BSWMCS           (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_COMM             (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_PDUR             (BSW_USE)
@@ -43,12 +44,12 @@
 #define BSW_BSWM_CS_CFG_FUNC_CANTX            (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANTX_PHY        (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANTX_VIR        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_CANTP            (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_CANTP            (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANCDD1          (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_CANCDD2          (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_CANTRCV          (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANDRV           (BSW_USE)
-#define BSW_BSWM_CS_CFG_FUNC_VCAN             (BSW_USE)
+#define BSW_BSWM_CS_CFG_FUNC_VCAN             (BSW_NOUSE)
 
 #define BSW_BSWM_CS_CFG_FUNC_LIN              (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_LINTP            (BSW_NOUSE)
@@ -62,54 +63,30 @@
 #define BSW_BSWM_CS_CFG_FUNC_VETH             (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_ETHTSYN          (BSW_NOUSE)
 
+#define BSW_BSWM_CS_CFG_FUNC_CDD1             (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_CDD1TP           (BSW_NOUSE)
+
+#define BSW_BSWM_CS_CFG_FUNC_CDD2             (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_CDD2TP           (BSW_NOUSE)
+
 #define BSW_BSWM_CS_CFG_FUNC_SECOC            (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_IPDUM            (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_SOMEIP           (BSW_NOUSE)
 
-#define BSW_BSWM_CS_CFG_FUNC_BSWM_VPS         (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU          (BSW_NOUSE)
+
+#define BSW_BSWM_CS_CFG_CDD1_PDUTX_USE        (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_CDD2_PDUTX_USE        (BSW_NOUSE)
 
 #define BSW_BSWM_CS_CFG_CHRSTCTRL             (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_DMCTRL                (BSW_NOUSE)
 
 #define BSW_BSWM_CS_CFG_XCP_KIND              (BSW_BSWM_CS_XCP_KIND_NONE)
 
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_0        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_1        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_2        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_3        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_4        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_5        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_6        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_7        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_8        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_9        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_10       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_11       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_12       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_13       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_14       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_15       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_16       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_17       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_18       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_19       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_20       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_21       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_22       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_23       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_24       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_25       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_26       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_27       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_28       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_29       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_30       (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_31       (BSW_NOUSE)
-
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_0         (BSW_BSWM_CS_TXCTRL_STOPALL)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_1         (BSW_BSWM_CS_TXCTRL_STOPALL)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_2         (BSW_BSWM_CS_TXCTRL_STOPALL)
-#define BSW_BSWM_CS_CFG_TXCTRL_TYPE_3         (BSW_BSWM_CS_TXCTRL_STOPALL)
+#define BSW_BSWM_CS_CFG_TXCTRL_TYPE_3         (BSW_BSWM_CS_TXCTRL_NOUSE)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_4         (BSW_BSWM_CS_TXCTRL_NOUSE)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_5         (BSW_BSWM_CS_TXCTRL_NOUSE)
 #define BSW_BSWM_CS_CFG_TXCTRL_TYPE_6         (BSW_BSWM_CS_TXCTRL_NOUSE)
@@ -142,7 +119,7 @@
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_0        (300U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_1        (300U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_2        (300U)
-#define BSW_BSWM_CS_CFG_SENDSTART_PW_3        (300U)
+#define BSW_BSWM_CS_CFG_SENDSTART_PW_3        (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_4        (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_5        (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_6        (0U)
@@ -306,13 +283,6 @@
 #define BSW_BSWM_CS_CFG_PNCIPDU_RX_30         (BSW_BSWM_CS_PNCIPDU_RXTYPE_CH)
 #define BSW_BSWM_CS_CFG_PNCIPDU_RX_31         (BSW_BSWM_CS_PNCIPDU_RXTYPE_CH)
 
-/* Symbolic Name Reference - SysStatus */
-#define BswM_CSConf_SysStatusName_BAT                       (BSW_BSWM_CS_SYSSTAT_BAT)
-#define BswM_CSConf_SysStatusName_ACC                       (BSW_BSWM_CS_SYSSTAT_ACC)
-#define BswM_CSConf_SysStatusName_IG                        (BSW_BSWM_CS_SYSSTAT_IG)
-#define BswM_CSConf_SysStatusName_PBA                       (BSW_BSWM_CS_SYSSTAT_USER1)
-#define BswM_CSConf_SysStatusName_IGR                       (BSW_BSWM_CS_SYSSTAT_USER2)
-
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -340,12 +310,11 @@
 /*  v2-0-0          :2022/02/23                                             */
 /*  v2-1-0          :2023/01/26                                             */
 /*  v2-2-0          :2023/05/09                                             */
-/*  v3-0-0          :2024/11/11                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v3-0-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

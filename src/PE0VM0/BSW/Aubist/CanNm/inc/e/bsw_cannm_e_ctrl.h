@@ -1,7 +1,7 @@
-/* bsw_cannm_e_ctrl_h_v3-0-0                                                */
+/* bsw_cannm_e_ctrl_h_v2-0-0                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -80,9 +80,6 @@
 /* Judge the transition from reset startup */
 #define BSW_CANNM_E_u1TRNSRESETACTV_ON       ((BswU1)0x0FU)    /* Transition from reset startup         */
 #define BSW_CANNM_E_u1TRNSRESETACTV_OFF      ((BswU1)0x1EU)    /* Not a transition from reset startup */
-
-/* Tx wait time none value */
-#define BSW_CANNM_E_u2TXWAIT_NONE            ((BswU2)0U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -185,7 +182,6 @@ extern BswConst BswU1                   bsw_cannm_e_ctrl_u1CtrlTypeTbl[];       
 
 extern BswConst BswU2                   bsw_cannm_e_ctrl_u2WakeUpMsTim[];              /* Wake-up wait time(WakeUpTimer)(ms timer)         */
 extern BswConst BswU2                   bsw_cannm_e_ctrl_u2AppTim[];                   /* Repeat message state maintenance period (ApplicationTimer)                */
-extern BswConst BswU2                   bsw_cannm_e_ctrl_u2AppComTick[];               /* Repeat message state maintenance period (Com tick)(ApplicationTimer)      */
 extern BswConst BswU2                   bsw_cannm_e_ctrl_u2WaitSlpTim[];               /* Sleep transition waiting time(SleepTimer)                      */
 extern BswConst BswU2                   bsw_cannm_e_ctrl_u2SndSlpTim[];                /* Transmission stop wait time during bus sleep transition (SendSleepTimer)  */
 extern BswConst BswU2                   bsw_cannm_e_ctrl_u2RxTimeOut[];                /* NM frame receiving monitoring time                                */
@@ -206,7 +202,6 @@ extern BswConst Bsw_CanNmE_TxMsgCfgType bsw_cannm_e_TxMsgCfgTbl[];              
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2019/02/01                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

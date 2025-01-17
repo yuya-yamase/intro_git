@@ -55,10 +55,10 @@
 void    vd_g_oXCANCfgRstInit(void);
 void    vd_g_oXCANCfgWkupInit(void);
 
-void    vd_g_oXCANCfgOpemdEvthk(const U4 u4_a_SYSBIT_PREV, const U4 u4_a_SYSBIT_NEXT);
+void    vd_g_oXCANCfgOpemdEvthk(const U1 u1_a_SYSBIT_PREV, const U1 u1_a_SYSBIT_NEXT);
 
 void    vd_g_oXCANCfgPreTask(const U1 u1_a_SYSBIT);
-void    vd_g_oXCANCfgPostTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL);                  /* u1_a_FATAL : OXCAN_FATAL_AUB_XXX */
+void    vd_g_oXCANCfgPostTask(const U1 u1_a_SYSBIT, const U2 u2_a_FATAL);                  /* u1_a_FATAL : OXCAN_FATAL_AUB_XXX */
 
 void    vd_g_oXCANCfgShutdown(void);
 
@@ -67,7 +67,7 @@ void    vd_g_oXCANCfgShutdown(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 extern const U4                 u4_g_OXCAN_WKSRC_CHK;
 extern const U1                 u1_gp_OXCAN_CTRLR_BY_CH[BSW_COM_CFG_CHNUM];
-extern const U4                 u4_g_OXCAN_SYS_POWER;
+extern const U1                 u1_g_OXCAN_SYS_POWER;
 extern const U1                 u1_g_OXCAN_TXRX_NUM_ID;
 extern const U1                 u1_g_OXCAN_TXRX_NUM_CH;
 extern const U2                 u2_gp_OXCAN_PDU_REQ_BY_ID_RIMID[OXCAN_COMCONT_NUM_CH][OXCAN_TXRX_NUM_ID];

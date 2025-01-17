@@ -1,7 +1,7 @@
-/* bsw_canif_tx_h_v3-0-0                                                    */
+/* bsw_canif_tx_h_v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -142,15 +142,9 @@ extern BswConst Bsw_CanIf_TxPduTblType     bsw_canif_stTxCdd2PduTbl[];
 extern BswConst Bsw_CanIf_TxPduTblType     bsw_canif_stTxXcpPduTbl[];
 extern BswConst BswU1                      bsw_canif_tx_u1AvcLanPriTbl[];
 extern BswConst BswU1                      bsw_canif_tx_u1FuncSnd;
-extern BswConst BswU4* BswConst            bsw_canif_ptTxCompMaskTbl[];
-extern BswConst BswU4                      bsw_canif_stTxPduRMskTbl[];
-extern BswConst BswU4                      bsw_canif_stTxCanNmMskTbl[];
-extern BswConst BswU4                      bsw_canif_stTxCanTpMskTbl[];
-extern BswConst BswU4                      bsw_canif_stTxCdd1MskTbl[];
-extern BswConst BswU4                      bsw_canif_stTxCdd2MskTbl[];
-extern BswConst BswU4                      bsw_canif_stTxXcpMskTbl[];
 
 extern Std_ReturnType (* BswConst bsw_canif_tx_ptSndPduRFunc[])( BswU1 u1Ch, Bsw_CanIf_PduType *ptMsg );
+extern void (* BswConst bsw_canif_tx_ptNmBPreTxFunc)( BswU1 u1NetID, Bsw_CanIf_PduType* ptMsg );
 
 extern  BswConst BswU1 bsw_canif_tx_u1FuncTxErrNotify;
 
@@ -162,7 +156,6 @@ extern  BswConst BswU1 bsw_canif_tx_u1FuncTxErrNotify;
 /*  v1-0-0          :2017/04/27                                             */
 /*  v1-1-0          :2018/10/02                                             */
 /*  v2-0-0          :2022/01/25                                             */
-/*  v3-0-0          :2024/10/16                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

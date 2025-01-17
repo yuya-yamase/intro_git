@@ -1,7 +1,7 @@
-/* bsw_com_public_h_v3-0-0                                                  */
+/* bsw_com_public_h_v2-2-0                                                  */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -24,71 +24,15 @@
 #define BSW_COM_INVALID                     (0x22U)
 #define BSW_COM_FIRST_RX                    (0x23U)
 
-#define BSW_COM_IPDUGROUP_NONE              (0x00000000UL)
-#define BSW_COM_IPDUGROUP_BAT               (0x00000001UL)
-#define BSW_COM_IPDUGROUP_ACC               (0x00000002UL)
-#define BSW_COM_IPDUGROUP_IG                (0x00000004UL)
-#define BSW_COM_IPDUGROUP_USER1             (0x00000008UL)
-#define BSW_COM_IPDUGROUP_USER2             (0x00000010UL)
-#define BSW_COM_IPDUGROUP_USER3             (0x00000020UL)
-#define BSW_COM_IPDUGROUP_USER4             (0x00000040UL)
-#define BSW_COM_IPDUGROUP_USER5             (0x00000080UL)
-#define BSW_COM_IPDUGROUP_USER6             (0x00000100UL)
-#define BSW_COM_IPDUGROUP_USER7             (0x00000200UL)
-#define BSW_COM_IPDUGROUP_USER8             (0x00000400UL)
-#define BSW_COM_IPDUGROUP_USER9             (0x00000800UL)
-#define BSW_COM_IPDUGROUP_USER10            (0x00001000UL)
-#define BSW_COM_IPDUGROUP_USER11            (0x00002000UL)
-#define BSW_COM_IPDUGROUP_USER12            (0x00004000UL)
-#define BSW_COM_IPDUGROUP_USER13            (0x00008000UL)
-#define BSW_COM_IPDUGROUP_USER14            (0x00010000UL)
-#define BSW_COM_IPDUGROUP_USER15            (0x00020000UL)
-#define BSW_COM_IPDUGROUP_USER16            (0x00040000UL)
-#define BSW_COM_IPDUGROUP_USER17            (0x00080000UL)
-#define BSW_COM_IPDUGROUP_USER18            (0x00100000UL)
-#define BSW_COM_IPDUGROUP_USER19            (0x00200000UL)
-#define BSW_COM_IPDUGROUP_USER20            (0x00400000UL)
-#define BSW_COM_IPDUGROUP_USER21            (0x00800000UL)
-#define BSW_COM_IPDUGROUP_USER22            (0x01000000UL)
-#define BSW_COM_IPDUGROUP_USER23            (0x02000000UL)
-#define BSW_COM_IPDUGROUP_USER24            (0x04000000UL)
-#define BSW_COM_IPDUGROUP_USER25            (0x08000000UL)
-#define BSW_COM_IPDUGROUP_USER26            (0x10000000UL)
-#define BSW_COM_IPDUGROUP_USER27            (0x20000000UL)
-#define BSW_COM_IPDUGROUP_USER28            (0x40000000UL)
-#define BSW_COM_IPDUGROUP_USER29            (0x80000000UL)
-#define BSW_COM_IPDUGROUP_USER30            (0x00000001UL)
-#define BSW_COM_IPDUGROUP_USER31            (0x00000002UL)
-#define BSW_COM_IPDUGROUP_USER32            (0x00000004UL)
-#define BSW_COM_IPDUGROUP_USER33            (0x00000008UL)
-#define BSW_COM_IPDUGROUP_USER34            (0x00000010UL)
-#define BSW_COM_IPDUGROUP_USER35            (0x00000020UL)
-#define BSW_COM_IPDUGROUP_USER36            (0x00000040UL)
-#define BSW_COM_IPDUGROUP_USER37            (0x00000080UL)
-#define BSW_COM_IPDUGROUP_USER38            (0x00000100UL)
-#define BSW_COM_IPDUGROUP_USER39            (0x00000200UL)
-#define BSW_COM_IPDUGROUP_USER40            (0x00000400UL)
-#define BSW_COM_IPDUGROUP_USER41            (0x00000800UL)
-#define BSW_COM_IPDUGROUP_USER42            (0x00001000UL)
-#define BSW_COM_IPDUGROUP_USER43            (0x00002000UL)
-#define BSW_COM_IPDUGROUP_USER44            (0x00004000UL)
-#define BSW_COM_IPDUGROUP_USER45            (0x00008000UL)
-#define BSW_COM_IPDUGROUP_USER46            (0x00010000UL)
-#define BSW_COM_IPDUGROUP_USER47            (0x00020000UL)
-#define BSW_COM_IPDUGROUP_USER48            (0x00040000UL)
-#define BSW_COM_IPDUGROUP_USER49            (0x00080000UL)
-#define BSW_COM_IPDUGROUP_USER50            (0x00100000UL)
-#define BSW_COM_IPDUGROUP_USER51            (0x00200000UL)
-#define BSW_COM_IPDUGROUP_USER52            (0x00400000UL)
-#define BSW_COM_IPDUGROUP_USER53            (0x00800000UL)
-#define BSW_COM_IPDUGROUP_USER54            (0x01000000UL)
-#define BSW_COM_IPDUGROUP_USER55            (0x02000000UL)
-#define BSW_COM_IPDUGROUP_USER56            (0x04000000UL)
-#define BSW_COM_IPDUGROUP_USER57            (0x08000000UL)
-#define BSW_COM_IPDUGROUP_USER58            (0x10000000UL)
-#define BSW_COM_IPDUGROUP_USER59            (0x20000000UL)
-#define BSW_COM_IPDUGROUP_USER60            (0x40000000UL)
-#define BSW_COM_IPDUGROUP_USER61            (0x80000000UL)
+#define BSW_COM_IPDUGROUP_NONE              (0x00U)
+#define BSW_COM_IPDUGROUP_BAT               (0x01U)
+#define BSW_COM_IPDUGROUP_ACC               (0x02U)
+#define BSW_COM_IPDUGROUP_IG                (0x04U)
+#define BSW_COM_IPDUGROUP_USER1             (0x08U)
+#define BSW_COM_IPDUGROUP_USER2             (0x10U)
+#define BSW_COM_IPDUGROUP_USER3             (0x20U)
+#define BSW_COM_IPDUGROUP_USER4             (0x40U)
+#define BSW_COM_IPDUGROUP_USER5             (0x80U)
 
 #define BSW_COM_TX_MODE_PERIODIC            (0x40U)
 #define BSW_COM_TX_MODE_EVENT               (0x80U)
@@ -99,7 +43,6 @@
 #define BSW_COM_PERIODIC_TX_ENABLE          (0x01U)
 #define BSW_COM_EVENT_TX_ENABLE             (0x02U)
 
-#define BSW_COM_STATUS_NONE                 (0x00U)
 #define BSW_COM_TRX_START                   (0x80U)
 #define BSW_COM_FAILINIT                    (0x20U)
 #define BSW_COM_TXSTOP                      (0x10U)
@@ -167,10 +110,6 @@
 #define BSW_COM_TXTO_REQ_WAIT               (0x01U)
 
 /* Message Information Setting */
-/* u1ExtFunc */
-#define BSW_COM_VPS_USE                     (0x01U)
-#define BSW_COM_VPS_NOUSE                   (0x00U)
-
 /* u1TxFunc */
 #define BSW_COM_EVENTDELAY_USE              (0x01U)
 #define BSW_COM_EVENTDELAY_NOUSE            (0x00U)
@@ -285,15 +224,6 @@
 #define BSW_COM_u4IPDUGRP_PNC_62            (0x40000000UL)
 #define BSW_COM_u4IPDUGRP_PNC_63            (0x80000000UL)
 
-/* Wakeup Type */
-#define BSW_COM_WKUP_PWON                   (0x01U)
-#define BSW_COM_WKUP_BS                     (0x02U)
-
-/* Periodic Tx Reset Reason */
-#define BSW_COM_RSTR_NONE                   (0x0FU)
-#define BSW_COM_RSTR_BUSWAKEUP              (0x1EU)
-#define BSW_COM_RSTR_RESUMETX               (0x2DU)
- 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -301,13 +231,14 @@ typedef uint8          Bsw_Com_StatusType;
 typedef uint16         Bsw_Com_SignalIdType;
 typedef uint16         Bsw_Com_SignalGroupIdType;
 typedef uint16         Bsw_Com_IpduGroupIdType;
-typedef uint32*        Bsw_Com_IpduGroupVector;
+typedef uint8*         Bsw_Com_IpduGroupVector;
 typedef uint8          Bsw_Com_ServiceIdType;
 typedef uint8          Bsw_Com_ConfigType;
 typedef uint8          Bsw_Com_TxModeType;
 typedef uint8          Bsw_Com_TxStatusType;
 typedef uint16         Bsw_Com_DataHandlerType;
 typedef uint16         Bsw_Com_MsgOffsetType;
+typedef uint8          Bsw_Com_SysStatusType;
 typedef uint16         Bsw_Com_MsgSizeType;
 typedef uint8          Bsw_Com_IpduStatusType;
 typedef uint32*        Bsw_Com_PncIpduGroupVector;
@@ -325,7 +256,7 @@ void                   bsw_com_ctrl_ClearIpduGroup( Bsw_Com_IpduGroupVector ipdu
 void                   bsw_com_ctrl_SetIpduGroup( Bsw_Com_IpduGroupVector ipduGroupVector, Bsw_Com_IpduGroupIdType ipduGroupId, boolean bitval );
 void                   bsw_com_rx_ReceptionDMCtrl( BswConstR Bsw_Com_IpduGroupVector ipduGroupVector );
 void                   bsw_com_tx_SetStatus( NetworkHandleType network, Bsw_Com_TxStatusType status );
-void                   bsw_com_tx_ResetPeriodicTx( NetworkHandleType network, uint8 ResetReason, uint16 offset );
+void                   bsw_com_tx_ResetPeriodicTx( NetworkHandleType network, uint16 offset );
 void                   bsw_com_rx_SetWakeupMask( BswConstR Bsw_Com_IpduGroupVector ipduGroupVector );
 void                   bsw_com_st_GetVersionInfo( Std_VersionInfoType* Versioninfo );
 Std_ReturnType         bsw_com_tx_SetTxReq( PduIdType PduId );
@@ -369,7 +300,7 @@ void                   bsw_com_rx_ClearTickTime( PduIdType PduId );
 void                   bsw_com_rx_SetRxTickTime( NetworkHandleType network, uint16 Offset );
 Std_ReturnType         bsw_com_data_FailInitMsg( PduIdType PduId );
 void                   bsw_com_tx_ClearTxIpdu( NetworkHandleType network, Bsw_Com_TxModeType mode );
-void                   bsw_com_tx_ClearNonAwakeEvt( NetworkHandleType network, uint32* SysStatus );
+void                   bsw_com_tx_ClearNonAwakeEvt( NetworkHandleType network, uint8 SysStatus );
 void                   bsw_com_tx_StartChangePeriodCh( NetworkHandleType network );
 void                   bsw_com_tx_StopChangePeriodCh( NetworkHandleType network );
 void                   bsw_com_tx_CancelTxIpdu( PduIdType PduId, Bsw_Com_TxModeType mode );
@@ -401,55 +332,6 @@ uint8                  bsw_com_data_ReceiveSignalLOvA( Bsw_Com_DataHandlerType D
 uint8                  bsw_com_data_ReceiveSignalB64OvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData );
 uint8                  bsw_com_data_ReceiveSignalL64OvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData );
 void                   bsw_com_tx_SetFirstTxStatus( NetworkHandleType network );
-void                   bsw_com_tx_BusWakeup( NetworkHandleType network, uint8 WakeupKind, uint16 DisableSend, uint16 EnablePeriodic );
-void                   bsw_com_tx_SetTxDelayTime( PduIdType u2PduId, uint16 SetTime );
-void                   bsw_com_tx_SetPeriodicTxTime( PduIdType u2PduId, uint16 SetTime, uint8 FirstOffset );
-
-
-uint8                  bsw_com_data_SendSgnlMDB( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDL( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDEvB( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDEvL( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDB64( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDL64( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDEvB64( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDEvL64( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDBOvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDLOvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDEvBOvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDEvLOvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDB64OvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDL64OvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDEvB64OvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SendSgnlMDEvL64OvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
-
-uint8                  bsw_com_data_SndSgnlGrpArryMD( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint16 DataSize, BswConstR uint8 *ptData, BswConstR uint8 *ptMetaData );
-uint8                  bsw_com_data_SndSgnlGrpArryMDEv( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint16 DataSize, BswConstR uint8 *ptData, BswConstR uint8 *ptMetaData );
-
-Std_ReturnType         bsw_com_tx_SetTxReqMetaData( PduIdType PduId, BswConstR uint8* MetaData );
-void                   bsw_com_tx_SetPeriTxReqMetaData( PduIdType PduId, BswConstR uint8* MetaData );
-Std_ReturnType         bsw_com_data_WriteMsgMetaData( PduIdType id, BswConstR uint8* SduDataPtr, BswConstR uint8* MetaData );
-Std_ReturnType         bsw_com_data_WrtIpduMskTxCntMD( PduIdType id, BswConstR uint8* SduDataPtr, BswConstR uint8* MetaData );
-Std_ReturnType         bsw_com_data_SendIPDUMetaData( PduIdType TxPduId, BswConstR uint8 *SduDataPtr, BswConstR uint8 *MetaData );
-Std_ReturnType         bsw_com_data_SendIPDUMskTxCntMD( PduIdType TxPduId, BswConstR uint8 *SduDataPtr, BswConstR uint8 *MetaData );
-
-uint8                  bsw_com_data_ReceiveSgnlMDB( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData, uint8 *ptMetaData );
-uint8                  bsw_com_data_ReceiveSgnlMDL( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData, uint8 *ptMetaData );
-uint8                  bsw_com_data_ReceiveSgnlMDB64( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData, uint8 *ptMetaData );
-uint8                  bsw_com_data_ReceiveSgnlMDL64( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData, uint8 *ptMetaData );
-uint8                  bsw_com_data_ReceiveSgnlMDBOvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData, uint8 *ptMetaData );
-uint8                  bsw_com_data_ReceiveSgnlMDLOvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData, uint8 *ptMetaData );
-uint8                  bsw_com_data_ReceiveSgnlMDB64OvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData, uint8 *ptMetaData );
-uint8                  bsw_com_data_ReceiveSgnlMDL64OvA( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, uint8 DataType, void *ptData, uint8 *ptMetaData );
-
-uint8                  bsw_com_data_RcvSgnlGrpArryMD( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint16 DataSize, uint8 *ptData, uint8 *ptMetaData );
-
-Std_ReturnType         bsw_com_data_ReadMsgMetaData( PduIdType PduId, uint8 *ptMsg, uint8 *ptMetaData  );
-
-Std_ReturnType         bsw_com_data_RespSendMetaData( PduIdType PduId, uint8 *MetaData );
-Std_ReturnType         bsw_com_data_SetInitMetaData( PduIdType id );
-Std_ReturnType         bsw_com_data_SetSendMetaData( PduIdType TxPduId, uint8 *ptMetaData );
-Std_ReturnType         bsw_com_data_GetSendMetaData( PduIdType TxPduId, uint8 *ptMetaData );
 
 /* Callback */
 void                   bsw_com_tx_TxReqClear( NetworkHandleType network, Bsw_Com_TxModeType mode );
@@ -468,8 +350,6 @@ uint16                 bsw_com_tx_CbkPrePeriTxRtrgr( NetworkHandleType network, 
 boolean                bsw_com_tx_PreTxIpdu( PduIdType PduId, PduInfoType* PduInfoPtr );
 void                   bsw_com_tx_PreTrgTxIPdu( PduIdType PduId, PduInfoType* PduInfoPtr );
 void                   bsw_com_tx_CbkSetStatus( NetworkHandleType network, Bsw_Com_TxStatusType status );
-void                   bsw_com_tx_CbkBusWakeUp( NetworkHandleType network, uint8 WakeupKind );
-void                   bsw_com_tx_CbkEnablePeriTx( NetworkHandleType network, uint8 WakeupKind );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -487,7 +367,6 @@ void                   bsw_com_tx_CbkEnablePeriTx( NetworkHandleType network, ui
 /*  v2-0-0          :2021/09/10                                             */
 /*  v2-1-0          :2022/10/11                                             */
 /*  v2-2-0          :2023/05/24                                             */
-/*  v3-0-0          :2024/11/12                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

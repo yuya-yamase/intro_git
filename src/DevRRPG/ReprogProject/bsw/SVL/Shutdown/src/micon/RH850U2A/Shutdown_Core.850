@@ -1,0 +1,208 @@
+/* Shutdown_Core_850_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | Shutdown/Core/CODE                                          */
+/******************************************************************************/
+/*----------------------------------------------------------------------------*/
+/* Include Files                                                              */
+/*----------------------------------------------------------------------------*/
+#include "Shutdown_Reg.h"
+
+
+/*----------------------------------------------------------------------------*/
+/* Macros                                                                     */
+/*----------------------------------------------------------------------------*/
+/* Same as reset mode defined at Shutdown.h */
+#define SHUTDOWN_RESET_MCU  (0x00U)
+#define SHUTDOWN_RESET_WDT  (0x01U)
+
+
+/*----------------------------------------------------------------------------*/
+/* Types                                                                      */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Function Prototypes                                                        */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Data                                                                       */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Constants                                                                  */
+/*----------------------------------------------------------------------------*/
+    .extern _Section_StackData
+
+
+/******************************************************************************/
+/* External Functions                                                         */
+/******************************************************************************/
+
+/******************************************************************************/
+/* Function Name | Shutdown_ResetMcu                                          */
+/* Description   | Reset MCU by software reset register                       */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | This function will never return.                           */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Shutdown_ResetMcu
+_Shutdown_ResetMcu:
+    /* Enable write to protected register */
+    mov     SHUTDOWN_VAL_KCPROT_ENABLE, r12
+    mov     SHUTDOWN_REG_RESKCPROT0, r13
+    st.w    r12, 0[r13]
+
+    /* Set SWSRESA register to reset */
+    mov     SHUTDOWN_VAL_RESET_SWSRESA_ON, r12
+    mov     SHUTDOWN_REG_RESET_SWSRESA, r13
+    st.w    r12, 0[r13]
+
+    /* Disable write to protected register */
+    mov     SHUTDOWN_VAL_KCPROT_DISABLE, r12
+    mov     SHUTDOWN_REG_RESKCPROT0, r13
+    st.w    r12, 0[r13]
+
+SHUTDOWN_RESET_END:
+    br      SHUTDOWN_RESET_END
+
+/******************************************************************************/
+/* Function Name | Shutdown_ResetWdt                                          */
+/* Description   | Wait for reset by WDT                                      */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | This function will never return.                           */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Shutdown_ResetWdt
+_Shutdown_ResetWdt:
+    /* infinite loop until hardware reset will happen. */
+SHUTDOWN_RESET_WDT_END:
+    br      SHUTDOWN_RESET_WDT_END
+
+/******************************************************************************/
+/* Function Name | Shutdown_DI                                                */
+/* Description   | Disable interrupt                                          */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Shutdown_DI
+_Shutdown_DI:
+    di
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Shutdown_DeInitHwCore                                      */
+/* Description   | Initialize register values same as reset value             */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Shutdown_DeInitHwCore
+_Shutdown_DeInitHwCore:
+    /* Disable MPU function */
+    ldsr    zero, 0, 5                  /* ldsr    zero, MPM */
+    synci
+
+    /* Set PLMR register value same as reset value */
+    mov     SHUTDOWN_VAL_PLMR_RESET, r12
+    ldsr    r12, 14, 2                  /* ldsr    r12, PLMR */
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Shutdown_ResetCore                                         */
+/* Description   | Reset for each reset mode                                  */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Reset mode                                       */
+/*               |  SHUTDOWN_RESET_MCU                                        */
+/*               |  SHUTDOWN_RESET_WDT                                        */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Shutdown_ResetCore
+_Shutdown_ResetCore:
+    /* Initialize stack pointer and stack area                   */
+    /*  r13 : Section_StackData.Addr                             */
+    /*  r14 : Section_StackData.Addr - Section_StackData.MaxSize */
+    mov     _Section_StackData, r12
+    ld.w    0[r12], r13
+    ld.w    8[r12], r14
+    subr    r13, r14
+
+STACK_LOOP_START:
+    /* Initialize 4-byte data in stack area */
+    st.w    zero, -4[r13]
+
+    /* Shift address for next initialization */
+    add     -4, r13
+
+    /* Check if address reach to end   */
+    /* If not, initialize next address */
+    cmp     r14, r13
+    bh      STACK_LOOP_START
+
+    /* Call reset function for each reset mode specified by argument(r6) */
+    mov     SHUTDOWN_RESET_MCU, r12
+    cmp     r6, r12
+    bne     SHUTDOWN_WDG
+    jr      _Shutdown_ResetMcu
+
+SHUTDOWN_WDG:
+    jr      _Shutdown_ResetWdt
+
+/******************************************************************************/
+/* Function Name | Shutdown_SyncBarrier                                       */
+/* Description   | Sync Barrier                                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Shutdown_SyncBarrier
+_Shutdown_SyncBarrier:
+    /* Sync */
+    synci
+
+    /* Return to caller */
+    jmp     [lp]
+
+
+/******************************************************************************/
+/* Internal Functions                                                         */
+/******************************************************************************/
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2021/09/14 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

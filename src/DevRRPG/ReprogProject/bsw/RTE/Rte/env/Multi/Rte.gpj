@@ -1,0 +1,16 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/RTE/Rte/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/RTE/Rte/obj/Rte.rel.o
+
+../../src/Rte_BswM.c
+../../src/Rte_EcuM.c
+../../src/Rte_MemErrM.c
+../../src/Rte_RpgEvtHk.c
+../../src/Rte_Sys.c
+../../src/Rte_Tm.c
+../../src/Rte_UsrSoftIf.c
+

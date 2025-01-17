@@ -1,0 +1,12 @@
+#!gbuild
+
+macro MICON_NAME=RH850U2A
+
+primaryTarget=v800_standalone.tgt
+[Project]
+
+	:sourceDir=../../../
+	:optionsFile=common/APL.opt
+
+APL.gpj						[Program]
+

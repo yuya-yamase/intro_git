@@ -1,7 +1,7 @@
-/* nm_h_v3-0-0                                                              */
+/* nm_h_v2-0-0                                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -62,7 +62,6 @@
 #define Nm_CbkPreTxMsg                    (bsw_nm_sw_CbkPreTxMsg)
 #define Nm_CbkTRxIndication               (bsw_nm_sw_CbkTRxIndication)
 #define Nm_CbkStateChangeNotification     (bsw_nm_sw_CbkStateChangeNotif)
-#define Nm_CbkSetDisableTxTime            (bsw_nm_sw_CbkSetDisableTxTime)
 
 #define Nm_StartSyncSleep                 (bsw_nm_coord_StartSyncSleep)
 #define Nm_CancelSyncSleep                (bsw_nm_coord_CancelSyncSleep)
@@ -96,7 +95,6 @@
 /*  v1-1-0          :2018/02/23                                             */
 /*  v1-2-0          :2020/04/15                                             */
 /*  v2-0-0          :2022/01/13                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

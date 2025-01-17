@@ -1,7 +1,7 @@
-/* bsw_bswm_cs_sysstat_h_v3-0-0                                             */
+/* bsw_bswm_cs_sysstat_h_v2-0-0                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -15,11 +15,8 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define BSW_BSWM_CS_u4SS_1BITMASK        ((BswU4)0x00000001UL)            /* System state 1Bit mask */
-#define BSW_BSWM_CS_u4SS_ALLBITMSK       ((BswU4)0xFFFFFFFFUL)            /* System State All Bit Mask */
-#define BSW_BSWM_CS_u4SS_1BYTEMSK        ((BswU4)0x000000FFUL)            /* System State 1BYTE Mask */
-
-#define BSW_BSWM_CS_u1UPWR_DELIMITE      ((BswU1)32U)                     /* Maximum number of power supplies(Break position) */
+#define BSW_BSWM_CS_u1SS_1BITMASK        ((BswU1)0x01U)                   /* System state 1Bit mask */
+#define BSW_BSWM_CS_u1SS_ALLBITMSK       ((BswU1)0xFFU)                   /* System State All Bit Mask */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -34,25 +31,20 @@ void   bsw_bswm_cs_sysst_Wakeup( void );
 void   bsw_bswm_cs_sysst_UpdtSysStat( void );
 void   bsw_bswm_cs_sysst_ChkSysStatRam( void );
 
-/* Dummy Function */
-void     bsw_bswm_cs_sysst_SetSystemStatus_dummy( uint32* Mask, uint32* SysStatus );
-void     bsw_bswm_cs_sysst_GetWuSystemStatus( uint32* SysStatus );
-
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
-extern BswU4 bsw_bswm_cs_sysst_u4SysStat[];
-extern BswU4 bsw_bswm_cs_sysst_u4SysStatMrr[];
-extern BswU4 bsw_bswm_cs_sysst_u4SysStTmp[];
-extern BswU4 bsw_bswm_cs_sysst_u4SysStTmpMrr[];
+extern BswU1 bsw_bswm_cs_sysst_u1SysStat;
+extern BswU1 bsw_bswm_cs_sysst_u1SysStatMrr;
+extern BswU1 bsw_bswm_cs_sysst_u1SysStTmp;
+extern BswU1 bsw_bswm_cs_sysst_u1SysStTmpMrr;
 
-extern BswConst BswU4 bsw_bswm_cs_sysst_u4ECUInitPw[];
+extern BswConst BswU1 bsw_bswm_cs_sysst_u1InitStat;
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
-extern void    (* BswConst bsw_bswm_cs_st_ptSetSysStatFn)( uint32* Mask, uint32* SysStatus );
-extern void    (* BswConst bsw_bswm_cs_st_ptGetSysStatFn)( uint32* SysStatus );
+
 
 #endif  /* BSW_BSWM_CS_SYSSTAT_H */
 
@@ -61,7 +53,6 @@ extern void    (* BswConst bsw_bswm_cs_st_ptGetSysStatFn)( uint32* SysStatus );
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2021/12/03                                             */
-/*  v3-0-0          :2024/11/13                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/SubMiconIf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/SubMiconIf/obj/SubMiconIf_usr.rel.o
+
+../../usr/SubMiconIf.c
+../../usr/SubMiconIf_Main.c
+../../usr/SubMiconIf_Sub.c

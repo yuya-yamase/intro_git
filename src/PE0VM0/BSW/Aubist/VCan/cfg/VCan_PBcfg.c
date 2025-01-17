@@ -1,7 +1,7 @@
-/* vcan_pbcfg_c_v3-0-0                                                      */
+/* vcan_pbcfg_c_v2-1-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -61,9 +61,9 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
 {
   /*   Virtual ControllerID    */
   /*--- VM Reception(VHRH)    -----------------------------*/
-     ( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [0] */
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [1] */
+
   /*--- VM Transmission(VHTH) -----------------------------*/
+
 };
 
 /************************************************/
@@ -74,8 +74,7 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
 {
   /*   CAN ID      , Mask              */
   /*--- VM Reception(VHRH) ------------*/
-     { 0x00000000UL, 0xBFFFF800UL }   /* [0] */
-    ,{ 0x80000000UL, 0x80000000UL }   /* [1] */
+
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
 
@@ -90,9 +89,6 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
 BswConst Bsw_VCan_RxNodeTblType bsw_vcan_stRxNodeTbl_VControl0[ BSW_VCAN_CFG_RXNUM_VCONTROL0 ] =
 {
     /* Rx Node Id, Rx Timing, Extend1, Rx MaxNum(Polling), Rx MaxNum(Interrupt), Extend2 */
-    { (BswU4)0x00000005, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)1,     (BswU2)0,     (BswU2)0 }   /* [0] */
-   ,{ (BswU4)0x00000006, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)1,     (BswU2)0,     (BswU2)0 }   /* [1] */
-   ,{ (BswU4)0x00000007, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)1,     (BswU2)0,     (BswU2)0 }   /* [2] */
 };
 #endif /* ( BSW_VCAN_CFG_RXNUM_VCONTROL0 != 0U ) */
 
@@ -209,12 +205,7 @@ BswConst Bsw_VCan_RxNodeTblType bsw_vcan_stRxNodeTbl_VControl15[ BSW_VCAN_CFG_RX
 BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl0[ BSW_VCAN_TX_VMBOXNUM_0 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
-    (BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_UTRANSMIT)   /* [0] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_UTRANSMIT)   /* [1] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_UTRANSMIT)   /* [2] */
-   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_UTRANSMIT)   /* [3] */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_0 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_1 != 0U )
@@ -222,7 +213,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl1[ BSW_VCAN_TX_VMBOXNUM_1 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_1 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_2 != 0U )
@@ -230,7 +220,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl2[ BSW_VCAN_TX_VMBOXNUM_2 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_2 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_3 != 0U )
@@ -238,7 +227,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl3[ BSW_VCAN_TX_VMBOXNUM_3 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_3 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_4 != 0U )
@@ -246,7 +234,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl4[ BSW_VCAN_TX_VMBOXNUM_4 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_4 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_5 != 0U )
@@ -254,7 +241,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl5[ BSW_VCAN_TX_VMBOXNUM_5 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_5 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_6 != 0U )
@@ -262,7 +248,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl6[ BSW_VCAN_TX_VMBOXNUM_6 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_6 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_7 != 0U )
@@ -270,7 +255,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl7[ BSW_VCAN_TX_VMBOXNUM_7 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_7 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_8 != 0U )
@@ -278,7 +262,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl8[ BSW_VCAN_TX_VMBOXNUM_8 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_8 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_9 != 0U )
@@ -286,7 +269,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl9[ BSW_VCAN_TX_VMBOXNUM_9 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_9 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_10 != 0U )
@@ -294,7 +276,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl10[ BSW_VCAN_TX_VMBOXNUM_10 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_10 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_11 != 0U )
@@ -302,7 +283,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl11[ BSW_VCAN_TX_VMBOXNUM_11 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_11 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_12 != 0U )
@@ -310,7 +290,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl12[ BSW_VCAN_TX_VMBOXNUM_12 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_12 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_13 != 0U )
@@ -318,7 +297,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl13[ BSW_VCAN_TX_VMBOXNUM_13 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_13 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_14 != 0U )
@@ -326,7 +304,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl14[ BSW_VCAN_TX_VMBOXNUM_14 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_14 != 0U ) */
 
 #if ( BSW_VCAN_TX_VMBOXNUM_15 != 0U )
@@ -334,7 +311,6 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl15[ BSW_VCAN_TX_VMBOXNUM_15 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
 };
-
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_15 != 0U ) */
 
 
@@ -345,12 +321,11 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl15[ BSW_VCAN_TX_VMBOXNUM_15 ] =
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2022/02/03                                             */
 /*  v2-1-0          :2022/07/08                                             */
-/*  v3-0-0          :2024/08/30                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v3-0-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,0 +1,220 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <RequestDownload>
+/* ************************************************************ */
+/* Function                                                     */
+/*  RequestDownload_request_01_send                             */
+/* Discription                                                  */
+/*  Send Request Sid0x34 [RequestDownload]                      */
+/* IN :                                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)       */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果 または                          */
+/*  E_Return_SPRMIB_Set_NG                                      */
+/*  現時点ではsprmibは見ない                                    */
+/* ************************************************************ */
+long RequestDownload_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_RequestDownload_req_01);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <RequestDownload>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RequestDownload_req_distribution                        */
+/* Discription                                              */
+/*  Sid0x34 [RequestDownload] request distribution          */
+/* IN :                                                     */
+/*  type   : 未使用                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG または E_Return_PRAMETER_NG      */
+/* NOTE:                                                    */
+/*  現時点ではtypeは見ない                                  */
+/* ******************************************************** */
+long RequestDownload_req_distribution( dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* memoryAddressとmemorySizeをリクエストオブジェクトに設定する */
+  ret = RequestDownload_set_memory_info( type, G_RequestDownload_req_01 );
+  if( ret == E_Return_OK )
+  {
+    /* リクエスト送信実施(RequestDownload) */
+    ret = RequestDownload_request_01_send( sprmib );
+  }
+  else
+  {
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;    
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RequestDownload>
+/* ********************************************************** */
+/* Function                                                   */
+/*  RequestDownload_res_distribution                          */
+/* Discription                                                */
+/*  Sid0x34 [RequestDownload]  response distribution          */
+/* IN :                                                       */
+/*  type      : 転送可能なデータサイズ(参照渡し)              */
+/*  res_msg   : diagResponse型のPosRspメッセージ              */
+/* OUT:                                                       */
+/*  type      : 転送可能なデータサイズ(参照渡し)              */
+/* RET:                                                       */
+/*  E_Return_OK                                               */
+/* NOTE:                                                      */
+/*  None                                                      */
+/* ********************************************************** */
+long RequestDownload_res_distribution(  dword &transfer_size, diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* 読み出し用のバッファ */
+  byte read_buff[8];
+  
+  /* RequestDownloadのポジティブレスポンス受信時は、   */
+  /* 1回の「0x36(TransferData)」で転送可能なデータサイズとして採用する */
+  ret = diagGetParameterRaw(res_msg, "maxNumberOfBlockLength",
+                            read_buff, elcount(read_buff));
+  if ( ret == E_Return_OK )
+  {
+    /* maxNumberOfBlockLengthを1回の「0x36(TransferData)」で転送可能なデータサイズに設定 */
+    transfer_size = (read_buff[0] << 24);
+    transfer_size = ( transfer_size + read_buff[1] << 16 );
+    transfer_size = ( transfer_size + read_buff[2] << 8 );
+    transfer_size = ( transfer_size + read_buff[3] );
+    
+    /* 「maxNumberOfBlockLength」はデータ以外にSID(1 byte)、blockSequenceCounter(1byte)が含まれるため、 */
+    /* 「TransferData」の転送バッファとして使用できるのは上記の2バイトを除いたサイズ分だけとなる */
+    transfer_size = transfer_size - 2;
+  }
+  else
+  {
+    Error_Log_output("RequestDownload_res_distribution: diagGetParameterRaw error");
+  }
+    
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RequestDownload>
+/* ************************************************************************* */
+/* Function                                                                  */
+/*  RequestDownload_set_memory_info                                          */
+/* Discription                                                               */
+/*  memoryAddressとmemorySizeをRequestDownloadリクエストメッセージに設定する */
+/* IN :                                                                      */
+/*  type    : dataIdentifierに相当する値                                     */
+/*  req_msg : diagRequest型のリクエストメッセージ                            */
+/* OUT:                                                                      */
+/*  None                                                                     */
+/* RET:                                                                      */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK                       */
+/* NOTE:                                                                     */
+/*  None                                                                     */
+/* ************************************************************************* */
+long RequestDownload_set_memory_info( int type, diagRequest * req_msg )
+{
+  /* 戻り値 */  
+  int ret;
+
+  if ( type == E_RequestDownload_Type_Erase )
+  {
+    /* RequestDownloadのリクエストオブジェクトに消去書込みルーチンの仮想アドレスを設定 */
+    ret = diagSetParameterRaw(req_msg, "memoryAddress",
+                              G_Reprog_General_Data.T_Info_Erase.address,
+                              elcount(G_Reprog_General_Data.T_Info_Erase.address));
+    if( ret == E_Return_OK ) 
+    {
+      
+      /* RequestDownloadのリクエストオブジェクトに消去書込みルーチンの転送データのサイズを設定 */
+      ret = diagSetParameterRaw(req_msg, "memorySize",
+                G_Reprog_General_Data.T_Info_Erase.size,
+                elcount(G_Reprog_General_Data.T_Info_Erase.size));
+    }
+    if( ret == E_Return_OK ) 
+    {
+      /* RequestDownloadのリクエストオブジェクトに消去書込みルーチンのdataFormatIdentifierを設定 */
+      ret = diagSetParameterRaw(req_msg, "dataFormatIdentifier",
+                  G_Reprog_General_Data.T_Info_Erase.dataFormatIdentifier,
+                  elcount(G_Reprog_General_Data.T_Info_Erase.dataFormatIdentifier));
+    }    
+  }
+  else if( type == E_RequestDownload_Type_Reprog )
+  {
+    /* RequestDownloadのリクエストオブジェクトに書き換えデータの仮想アドレスを設定 */
+    ret = diagSetParameterRaw(req_msg, "memoryAddress",
+                  G_Reprog_General_Data.T_Info_Reprog.address,
+                  elcount(G_Reprog_General_Data.T_Info_Reprog.address));
+  
+    if( ret == E_Return_OK ) 
+    {
+      /* RequestDownloadのリクエストオブジェクトに書き換えデータの転送データのサイズを設定 */
+      ret = diagSetParameterRaw(req_msg, "memorySize",
+                  G_Reprog_General_Data.T_Info_Reprog.size,
+                  elcount(G_Reprog_General_Data.T_Info_Reprog.size));
+    }
+    if( ret == E_Return_OK ) 
+    {
+      /* RequestDownloadのリクエストオブジェクトに書き換えデータのdataFormatIdentifierを設定 */
+      ret = diagSetParameterRaw(req_msg, "dataFormatIdentifier",
+                  G_Reprog_General_Data.T_Info_Reprog.dataFormatIdentifier,
+                  elcount(G_Reprog_General_Data.T_Info_Reprog.dataFormatIdentifier));
+    }    
+  }
+  else
+  {
+    /* 使用しないルート */
+    Error_Log_output("RequestDownload_set_memory_info: Illiegal Type.");
+  }
+  
+  /* 戻り値の判断は上位関数で実施 */ 
+  return ret;
+}
+

@@ -1,7 +1,7 @@
-/* bsw_bswm_can_public_h_v3-0-0                                             */
+/* bsw_bswm_can_public_h_v2-1-0                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -22,9 +22,6 @@
 #define BSW_BSWM_CAN_RGSTCHK_EVERY           (0x01U)
 #define BSW_BSWM_CAN_RGSTCHK_NOTEVERY        (0x00U)
 #define BSW_BSWM_CAN_RGSTCHK_NONE            (0xFFU)
-
-#define BSW_BSWM_CAN_WURGSTCHK_BUSAWAKE      (0x00U)
-#define BSW_BSWM_CAN_WURGSTCHK_WAKEUP        (0x01U)
 
 /*------------------------------*/
 /* Unit:ctrl                    */
@@ -59,14 +56,6 @@
 /* Reception deadline monitoring period */
 #define BSW_BSWM_CAN_DMPRD_NET_ALL           (0x00U)
 #define BSW_BSWM_CAN_DMPRD_NET_RPTNRML       (0x01U)
-
-/* Wakeup Type */
-#define BSW_BSWM_CAN_WKUP_PWON               (0x01U)
-#define BSW_BSWM_CAN_WKUP_BS                 (0x02U)
-
-/* Maximum number of power supply */
-#define BSW_BSWM_CAN_SYSSTATMAXNUM           (64U)
-#define BSW_BSWM_CAN_SYSSTATTBLNUM           (BSW_BSWM_CAN_SYSSTATMAXNUM >> 5U)
 
 /*------------------------------*/
 /* Unit:backup                  */
@@ -124,13 +113,12 @@ Std_ReturnType       bsw_bswm_can_ctrl_GetChFailStat( NetworkHandleType network,
 Std_ReturnType       bsw_bswm_can_ctrl_GetCtrErrStat( NetworkHandleType network, uint8* state );
 uint8                bsw_bswm_can_ctrl_GetTxChannel( PduIdType PduId );
 uint8                bsw_bswm_can_ctrl_GetRxChannel( PduIdType PduId );
-Std_ReturnType       bsw_bswm_can_ctrl_CbkPreRgstChk( void );
 
 void                 bsw_bswm_can_ctrl_DetectFail( NetworkHandleType Network );
 void                 bsw_bswm_can_ctrl_ReleaseFail( NetworkHandleType Network );
 
 void                 bsw_bswm_can_ctrl_UpdateTxIPDU( NetworkHandleType Network );
-void                 bsw_bswm_can_ctrl_BusWakeup( NetworkHandleType Network, uint8 WakeupKind, uint16 DisableSend, uint16 EnablePeriodic );
+void                 bsw_bswm_can_ctrl_BusWakeup( NetworkHandleType Network );
 void                 bsw_bswm_can_ctrl_DisableTx( NetworkHandleType Network );
 void                 bsw_bswm_can_ctrl_EnableTx( NetworkHandleType Network );
 void                 bsw_bswm_can_ctrl_StopNetwork( NetworkHandleType Network );
@@ -157,7 +145,6 @@ void                 bsw_bswm_can_bkup_GetBackupData( uint8* BackupDataPtr );
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2021/12/09                                             */
 /*  v2-1-0          :2022/09/15                                             */
-/*  v3-0-0          :2024/11/12                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

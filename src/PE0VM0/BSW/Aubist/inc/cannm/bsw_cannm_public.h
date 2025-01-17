@@ -1,7 +1,7 @@
-/* bsw_cannm_public_h_v3-0-0                                                */
+/* bsw_cannm_public_h_V2-4-0                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -138,7 +138,6 @@ void            bsw_cannm_ch_TxConfirmation(PduIdType TxPduId, Std_ReturnType re
 void            bsw_cannm_ch_RxIndication(PduIdType RxPduId, BswConstR PduInfoType* PduInfoPtr);
 
 Std_ReturnType  bsw_cannm_ch_PreTxMsg( PduIdType CanPduId, NetworkHandleType nmChannelHandle, PduInfoType* PduInfoPtr );
-Std_ReturnType  bsw_cannm_ch_SetDisableTxTime(NetworkHandleType nmChannelHandle, uint8 WakeupKind, uint16* EventTimePtr, uint16* PeriTimePtr);
 
 Std_ReturnType  bsw_cannm_ch_SetSleepReadyBit( NetworkHandleType nmChannelHandle, boolean nmSleepReadyBit );
 Std_ReturnType  bsw_cannm_ch_RequestBusSync( NetworkHandleType nmChannelHandle );
@@ -160,7 +159,6 @@ Std_ReturnType  bsw_cannm_ch_CancelSyncPncSlp( NetworkHandleType nmChannelHandle
 /*  v2-0-0          :2022/01/06                                             */
 /*  v2-2-0          :2022/05/24                                             */
 /*  v2-4-0          :2023/12/18                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

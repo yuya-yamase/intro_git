@@ -1,7 +1,7 @@
-/* bsw_com_data_h_v3-0-0                                                    */
+/* bsw_com_data_h_v2-2-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -79,7 +79,6 @@ extern  BswConst BswU2                   bsw_com_rom_u2FAILSIZE;
 extern  BswConst BswU2                   bsw_com_rom_u2MSGBUFSIZE;
 extern  BswConst BswU2                   bsw_com_rom_u2BACKUPPDUNUM;
 extern  BswConst BswU1                   bsw_com_rom_u1CPUBYTEORDERTYPE;
-extern  BswConst BswU1                   bsw_com_rom_u1METADATAFUNC;
 
 extern  BswConst BswU1                   bsw_com_data_u1MsgBufInit[];            /* Message buffer initial value table             */
 extern  BswConst BswU1                   bsw_com_data_u1MsgBufFail[];            /* Fail safe value table                     */
@@ -102,7 +101,6 @@ extern  BswU1           (* BswConst bsw_com_rom_ptChkChPncUseFunc)( NetworkHandl
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/08/10                                             */
 /*  v2-2-0          :2023/05/23                                             */
-/*  v3-0-0          :2024/10/17                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

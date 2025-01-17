@@ -1,7 +1,7 @@
-/* bsw_bswm_cs_status_c_v3-0-0                                              */
+/* bsw_bswm_cs_status_c_v2-2-0                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -45,10 +45,6 @@
 
 #if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
 #include <bswm_can/bsw_bswm_can.h>
-#endif
-
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-#include <bswm_vps/bsw_bswm_vps.h>
 #endif
 
 /*--------------------------------------------------------------------------*/
@@ -103,10 +99,6 @@ BswU1    bsw_bswm_cs_st_u1Clock;        /* Clock supply log */
 void
 bsw_bswm_cs_st_Init( void )
 {
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-    BswM_VPS_InitCS();
-#endif
-
     bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_UNINIT;
 
     bsw_bswm_cs_st_InitIpduGrVct();
@@ -121,6 +113,12 @@ bsw_bswm_cs_st_Init( void )
 #endif
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinInit();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1Init();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2Init();
 #endif
 
     ComM_Init( NULL_PTR );
@@ -160,6 +158,12 @@ bsw_bswm_cs_st_Init( void )
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
         bsw_bswm_cs_st_BswMLinInitDrv();
 #endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+        bsw_bswm_cs_BswMCdd1InitDriver();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+        bsw_bswm_cs_BswMCdd2InitDriver();
+#endif
     bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_RUN;
 }
 
@@ -184,6 +188,12 @@ bsw_bswm_cs_st_PrepareDeInit( void )
 #endif
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinPreDeInit();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1PrepareDeInit();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2PrepareDeInit();
 #endif
 
     ComM_DeInit();
@@ -227,6 +237,12 @@ bsw_bswm_cs_st_DeInit( void )
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinDeInit();
 #endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1DeInit();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2DeInit();
+#endif
 
     ComM_DeInit();
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
@@ -245,10 +261,6 @@ bsw_bswm_cs_st_DeInit( void )
 #if ( BSW_BSWM_CS_FUNC_PDUR == BSW_USE )
     PduR_DeInit();
 #endif
-
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-    BswM_VPS_DeInitCS();
-#endif
 }
 
 #if ( BSW_BSWM_CS_ECU_SLEEP == BSW_USE )
@@ -263,10 +275,6 @@ bsw_bswm_cs_st_DeInit( void )
 void
 bsw_bswm_cs_st_Wakeup( void )
 {
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-    BswM_VPS_WakeupCS();
-#endif
-
     bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_UNINIT;
 
     bsw_bswm_cs_user_CbkPreWakeup();
@@ -275,9 +283,6 @@ bsw_bswm_cs_st_Wakeup( void )
     bsw_bswm_cs_sysst_Wakeup();
     bsw_bswm_cs_ctrl_Init();
 
-    /* If BswM_CS_RequestProvideClock() is called before bsw_bswm_cs_st_NotifyPrvClkWkup() is called, */
-    /* "bsw_bswm_cs_st_u1Clock" is turned on and can request a clock input.                           */
-    bsw_bswm_cs_st_u1Clock = BSW_BSWM_CS_u1CLOCKPROV_OFF;
 #if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
     BswM_Can_Wakeup();
 #endif
@@ -286,6 +291,12 @@ bsw_bswm_cs_st_Wakeup( void )
 #endif
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinWakeup();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1Wakeup();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2Wakeup();
 #endif
 
     ComM_Init( NULL_PTR );
@@ -309,6 +320,7 @@ bsw_bswm_cs_st_Wakeup( void )
     PduR_Init( NULL_PTR );
 #endif
 
+    bsw_bswm_cs_st_u1Clock = BSW_BSWM_CS_u1CLOCKPROV_OFF;
     bsw_bswm_cs_st_NotifyPrvClkWkup( BSW_BSWM_CS_u1TMGTYP_WAKEUP );
 
 #if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
@@ -319,6 +331,12 @@ bsw_bswm_cs_st_Wakeup( void )
 #endif
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
         bsw_bswm_cs_st_BswMLinInitDrv();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+        bsw_bswm_cs_BswMCdd1InitDriver();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+        bsw_bswm_cs_BswMCdd2InitDriver();
 #endif
 
     bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_RUN;
@@ -346,6 +364,12 @@ bsw_bswm_cs_st_Sleep( void )
 #endif
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinSleep();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1Sleep();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2Sleep();
 #endif
 
     ComM_DeInit();
@@ -381,10 +405,6 @@ bsw_bswm_cs_st_Sleep( void )
 void
 bsw_bswm_cs_st_Reset( void )
 {
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-    BswM_VPS_InitCS();
-#endif
-
     bsw_bswm_cs_st_u2CSStatus = BSW_BSWM_CS_u2PVTST_UNINIT;
 
     bsw_bswm_cs_st_InitIpduGrVct();
@@ -399,6 +419,12 @@ bsw_bswm_cs_st_Reset( void )
 #endif
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinReset();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1Reset();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2Reset();
 #endif
 
     ComM_Init( NULL_PTR );
@@ -456,6 +482,12 @@ bsw_bswm_cs_st_MainFunctionHigh( void )
 #endif
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
         bsw_bswm_cs_st_BswMLinMainHI();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+        bsw_bswm_cs_BswMCdd1MFuncHighIn();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+        bsw_bswm_cs_BswMCdd2MFuncHighIn();
 #endif
 
         /********         Control part         ********/
@@ -518,6 +550,12 @@ bsw_bswm_cs_st_MainFunctionHigh( void )
 #endif
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
         bsw_bswm_cs_st_BswMLinMainHO();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+        bsw_bswm_cs_BswMCdd1MFuncHighOut();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+        bsw_bswm_cs_BswMCdd2MFuncHighOut();
 #endif
         bsw_bswm_cs_user_CbkPostMFuncHi();
     }
@@ -592,13 +630,11 @@ bsw_bswm_cs_st_DetectFail( void )
 /* Description   | Check RAM corruption (2-byte data)                       */
 /* Preconditions | None                                                     */
 /* Parameters    | u2Val  Value of the check target                         */
-/*               |   (The target is data where the upper and lower levels   */
-/*               |    are mirrors.)                                         */
+/*               |   (The target is data where the upper and lower levels are mirrors.) */
 /* Return Value  | Check result                                             */
 /*               | BSW_BSWM_CS_u1RESULT_OK : Normal                         */
 /*               | BSW_BSWM_CS_u1RESULT_NG : failure                        */
-/* Notes         | Function to check that the upper and lower level         */
-/*               | are mirrors                                              */
+/* Notes         | Function to check that the upper and lower level are mirrors */
 /****************************************************************************/
 BswU1
 bsw_bswm_cs_st_ChkU2Dat( BswU2 u2Val )
@@ -639,12 +675,10 @@ bsw_bswm_cs_st_InitIpduGrVct( void )
 {
     BswU1   u1Index;
     BswU1   u1IpduGrpVectSize;
-    BswU2   u2PwVectIndex;
 #if ( BSW_BSWM_CS_FUNC_PNCIPDU == BSW_USE )
     BswU2   u2PncVectIndex;
 #endif
 
-    u2PwVectIndex = (BswU2)0U;
     u1IpduGrpVectSize = bsw_bswm_cs_st_u1IpduGrpVctSz;
 #if ( BSW_BSWM_CS_FUNC_PNCIPDU == BSW_USE )
     u2PncVectIndex = (BswU2)0U;
@@ -652,13 +686,9 @@ bsw_bswm_cs_st_InitIpduGrVct( void )
 
     for( u1Index = (BswU1)0U; u1Index < u1IpduGrpVectSize; u1Index++ )
     {
-        bsw_bswm_cs_st_u4IpduGrpVect[u2PwVectIndex + (BswU2)BSW_BSWM_CS_u1INDEX_0] = (BswU4)BSW_BSWM_CS_SYSSTAT_NONE;
-        bsw_bswm_cs_st_u4IpduGrpVect[u2PwVectIndex + (BswU2)BSW_BSWM_CS_u1INDEX_1] = (BswU4)BSW_BSWM_CS_SYSSTAT_NONE;
-        bsw_bswm_cs_st_u4DmIpduGrpVect[u2PwVectIndex + (BswU2)BSW_BSWM_CS_u1INDEX_0] = (BswU4)BSW_BSWM_CS_SYSSTAT_NONE;
-        bsw_bswm_cs_st_u4DmIpduGrpVect[u2PwVectIndex + (BswU2)BSW_BSWM_CS_u1INDEX_1] = (BswU4)BSW_BSWM_CS_SYSSTAT_NONE;
-        bsw_bswm_cs_st_u4WkupIpduGrVct[u2PwVectIndex + (BswU2)BSW_BSWM_CS_u1INDEX_0] = (BswU4)BSW_BSWM_CS_SYSSTAT_NONE;
-        bsw_bswm_cs_st_u4WkupIpduGrVct[u2PwVectIndex + (BswU2)BSW_BSWM_CS_u1INDEX_1] = (BswU4)BSW_BSWM_CS_SYSSTAT_NONE;
-        u2PwVectIndex += (BswU2)BSW_BSWM_CS_SYSSTATTBLNUM;
+        bsw_bswm_cs_st_u1IpduGrpVect[u1Index] = (BswU1)BSW_BSWM_CS_SYSSTAT_NONE;
+        bsw_bswm_cs_st_u1DmIpduGrpVect[u1Index] = (BswU1)BSW_BSWM_CS_SYSSTAT_NONE;
+        bsw_bswm_cs_st_u1WkupIpduGrVct[u1Index] = (BswU1)BSW_BSWM_CS_SYSSTAT_NONE;
 
 #if ( BSW_BSWM_CS_FUNC_PNCIPDU == BSW_USE )
         bsw_bswm_cs_st_u4PncIpduGrpVect[u2PncVectIndex + BSW_BSWM_CS_u2PNCVECT_INDEX0] = BSW_BSWM_CS_u4PNCSTAT_NONE;
@@ -678,8 +708,7 @@ bsw_bswm_cs_st_InitIpduGrVct( void )
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
 /****************************************************************************/
 /* Function Name | bsw_bswm_cs_st_SetTxStatEnable                           */
-/* Description   | Judge Event/periodic transmission enable/disable         */
-/*               | (When PDU transmission control is not used)              */
+/* Description   | Judge Event/periodic transmission enable/disable (When PDU transmission control is not used) */
 /* Preconditions | None                                                     */
 /* Parameters    | None                                                     */
 /* Return Value  | None                                                     */
@@ -697,7 +726,7 @@ bsw_bswm_cs_st_SetTxStatEnable( void )
         if(bsw_bswm_cs_ctrl_u1PduTxCtrlUse[u1Channel] != (BswU1)BSW_USE )
         {
             /* When the PDU transmission control function is not used, the periodic timer shall be reset */
-            Com_ResetPeriodicTx( u1Channel, (BswU1)COM_RSTR_RESUMETX, BSW_BSWM_CS_u2OFFSETTIME_NONE );
+            Com_ResetPeriodicTx( u1Channel, BSW_BSWM_CS_u2OFFSETTIME_NONE );
 
             /* When the PDU transmission control function is not used, event/periodic transmission is permitted */
             Com_SetTxStatus( u1Channel, (Com_TxStatusType)(COM_EVENT_TX_ENABLE|COM_PERIODIC_TX_ENABLE) );
@@ -720,10 +749,6 @@ bsw_bswm_cs_st_CheckRam( void )
 {
     BswU2 u2CSStat;
     BswU1 u1RamChk;
-
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-    BswM_VPS_CheckRam();
-#endif
 
     /* Check RAM corruption for BswM/CS */
     /* CS state RAM corruption check */
@@ -774,33 +799,6 @@ bsw_bswm_cs_st_CheckRam( void )
 static void
 bsw_bswm_cs_st_MainFuncMidIn( void )
 {
-    /* Processing the input for each protocol */
-#if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
-    BswM_Can_MainFunctionMidIn();
-#endif
-#if ( BSW_BSWM_CS_FUNC_BSWMETH == BSW_USE )
-    bsw_bswm_cs_st_BswMEthMainMI();
-#endif
-#if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
-    bsw_bswm_cs_st_BswMLinMainMI();
-#endif
-}
-
-/****************************************************************************/
-/* Function Name | bsw_bswm_cs_st_MainFuncMidCtrl                           */
-/* Description   | Medium-priority control processing                       */
-/* Preconditions | When processing medium-priority periodic process         */
-/* Parameters    | NONE                                                     */
-/* Return Value  | NONE                                                     */
-/* Notes         | NONE                                                     */
-/****************************************************************************/
-static void
-bsw_bswm_cs_st_MainFuncMidCtrl( void )
-{
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-    BswM_VPS_MainFunctionCS();
-#endif
-
     /* Power status confirmed */
     bsw_bswm_cs_sysst_UpdtSysStat();
 
@@ -821,6 +819,29 @@ bsw_bswm_cs_st_MainFuncMidCtrl( void )
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinInitDrv();
 #endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1InitDriver();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2InitDriver();
+#endif
+
+    /* Processing the input for each protocol */
+#if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
+    BswM_Can_MainFunctionMidIn();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMETH == BSW_USE )
+    bsw_bswm_cs_st_BswMEthMainMI();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
+    bsw_bswm_cs_st_BswMLinMainMI();
+#endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1MFuncMidIn();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2MFuncMidIn();
+#endif
 
     /* Control I-PDU for each protocol */
 #if ( BSW_BSWM_CS_FUNC_BSWMCAN == BSW_USE )
@@ -832,14 +853,32 @@ bsw_bswm_cs_st_MainFuncMidCtrl( void )
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinUpdIPDUSt();
 #endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1UpdateIPDUStat();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2UpdateIPDUStat();
+#endif
 
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
     /* I-PDU control request */
-    Com_IpduGroupControl( bsw_bswm_cs_st_u4IpduGrpVect );
-    Com_SetWakeupMask( bsw_bswm_cs_st_u4WkupIpduGrVct );
-    Com_ReceptionDMControl( bsw_bswm_cs_st_u4DmIpduGrpVect );
+    Com_IpduGroupControl( bsw_bswm_cs_st_u1IpduGrpVect );
+    Com_SetWakeupMask( bsw_bswm_cs_st_u1WkupIpduGrVct );
+    Com_ReceptionDMControl( bsw_bswm_cs_st_u1DmIpduGrpVect );
 #endif
+}
 
+/****************************************************************************/
+/* Function Name | bsw_bswm_cs_st_MainFuncMidCtrl                           */
+/* Description   | Medium-priority control processing                       */
+/* Preconditions | When processing medium-priority periodic process         */
+/* Parameters    | NONE                                                     */
+/* Return Value  | NONE                                                     */
+/* Notes         | NONE                                                     */
+/****************************************************************************/
+static void
+bsw_bswm_cs_st_MainFuncMidCtrl( void )
+{
 #if ( BSW_BSWM_CS_MSG_DELIVER == BSW_BSWM_CS_MSGDELIVER_MIDDLE )
 #if ( BSW_BSWM_CS_FUNC_IPDUM == BSW_USE )
 #if ( BSW_BSWM_CS_MUX_MA_PTN == BSW_BSWM_CS_MUX_MA_MSG )
@@ -896,6 +935,12 @@ bsw_bswm_cs_st_MainFuncMidCtrl( void )
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinMainMC();
 #endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1MFuncMidCtrl();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2MFuncMidCtrl();
+#endif
 
 #if ( BSW_BSWM_CS_FUNC_PNCIPDU == BSW_USE )
     bsw_bswm_cs_st_UpdPncIpduStat();
@@ -945,6 +990,12 @@ bsw_bswm_cs_st_MainFuncMidOut( void )
 #if ( BSW_BSWM_CS_FUNC_BSWMLIN == BSW_USE )
     bsw_bswm_cs_st_BswMLinMainMO();
 #endif
+#if (BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+    bsw_bswm_cs_BswMCdd1MFuncMidOut();
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+    bsw_bswm_cs_BswMCdd2MFuncMidOut();
+#endif
 }
 
 #endif /* ( BSW_BSWM_CS_FUNC_BSWMCS == BSW_USE ) */
@@ -958,7 +1009,6 @@ bsw_bswm_cs_st_MainFuncMidOut( void )
 /*  v2-0-0          :2021/12/08                                             */
 /*  v2-1-0          :2022/10/31                                             */
 /*  v2-2-0          :2023/05/08                                             */
-/*  v3-0-0          :2024/11/15                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

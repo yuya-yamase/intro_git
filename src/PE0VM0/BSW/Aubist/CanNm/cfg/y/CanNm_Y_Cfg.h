@@ -1,7 +1,7 @@
-/* cannm_y_cfg_h_v3-0-0                                                     */
+/* cannm_y_cfg_h_v2-1-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -905,39 +905,6 @@
 #define BSW_CANNM_Y_CFG_PWON_WTTX_CH30                   (BSW_CANNM_Y_DISABLESND)
 #define BSW_CANNM_Y_CFG_PWON_WTTX_CH31                   (BSW_CANNM_Y_DISABLESND)
 
-/* Stop transmission due to TxTimeout */
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH0                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH1                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH2                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH3                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH4                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH5                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH6                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH7                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH8                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH9                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH10                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH11                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH12                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH13                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH14                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH15                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH16                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH17                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH18                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH19                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH20                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH21                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH22                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH23                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH24                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH25                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH26                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH27                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH28                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH29                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH30                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_TO_TXSTOP_CH31                   (BSW_NOUSE)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -958,13 +925,12 @@
 /* History                                                                  */
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2022/01/06                                             */
-/*  v2-1-0          :2022/11/09                                             */
-/*  v3-0-0          :2024/09/13                                             */
+/*  v2-1-0          :2022/08/01                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v3-0-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

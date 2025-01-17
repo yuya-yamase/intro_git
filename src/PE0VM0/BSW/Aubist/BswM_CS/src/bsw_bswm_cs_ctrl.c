@@ -1,7 +1,7 @@
-/* bsw_bswm_cs_ctrl_c_v3-0-0                                                */
+/* bsw_bswm_cs_ctrl_c_v2-2-0                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -155,6 +155,18 @@ bsw_bswm_cs_ctrl_CheckAwake( void )
             u1Awake = bsw_bswm_cs_ctrl_BswMLinChkAwk();
         }
 #endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD1 == BSW_USE )
+        if( u1Awake == (BswU1)BSW_BSWM_CS_AWAKE_NONE )
+        {
+            u1Awake = bsw_bswm_cs_BswMCdd1CheckAwake();
+        }
+#endif
+#if ( BSW_BSWM_CS_FUNC_BSWMCDD2 == BSW_USE )
+        if( u1Awake == (BswU1)BSW_BSWM_CS_AWAKE_NONE )
+        {
+            u1Awake = bsw_bswm_cs_BswMCdd2CheckAwake();
+        }
+#endif
     }
     return u1Awake;
 }
@@ -295,32 +307,20 @@ bsw_bswm_cs_ctrl_DetectChFail( NetworkHandleType Network )
 void
 bsw_bswm_cs_ctrl_ReleaseChFail( NetworkHandleType Network )
 {
-    BswU1          u1ChNum;
-    Std_ReturnType u1Ret;
+    BswU1 u1ChNum;
 
     u1ChNum = bsw_bswm_cs_ctrl_u1ChNum;
     if( Network < u1ChNum )
     {
-        u1Ret = bsw_bswm_cs_user_CbkPrFailClrEv( Network );
-        if ( u1Ret == (Std_ReturnType)E_OK )
-        {
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
-            Com_ClearTxIpdu( Network, (Com_TxModeType)COM_TX_MODE_ALL );
+        Com_ClearTxIpdu( Network, (Com_TxModeType)COM_TX_MODE_ALL );
 #if ( BSW_COM_EVENTWAKEUPFRAME_USE == BSW_USE )
-            bsw_cs_DI()
-            bsw_bswm_cs_ctrl_EvtWkupClear( Network );
-            Nm_CancelEvtWakeup( Network );
-            bsw_cs_EI()
+        bsw_cs_DI()
+        bsw_bswm_cs_ctrl_EvtWkupClear( Network );
+        Nm_CancelEvtWakeup( Network );
+        bsw_cs_EI()
 #endif
 #endif
-        }
-        else
-        {
-#if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
-            Com_ClearTxIpdu( Network, (Com_TxModeType)COM_TX_MODE_PERIODIC );
-#endif
-        }
-
 #if ( BSW_BSWM_CS_FUNC_XCP == BSW_USE )
         bsw_bswm_cs_ctrl_XcpClearTxReq( Network );
 #endif
@@ -368,33 +368,21 @@ bsw_bswm_cs_ctrl_SetTxControl( NetworkHandleType Network, uint8 TxStatus )
 /* Description   | Request a periodic transmission reset                    */
 /* Preconditions | When processing medium-priority periodic process         */
 /* Parameters    | NetworkHandleType Network: Channel                       */
-/*               | uint8 ResetReason: Periodic tx reset reason              */
-/*               |               BSW_BSWM_CS_RSTR_BUSWAKEUP:Bus Wakeup      */
-/*               |               BSW_BSWM_CS_RSTR_RESUMETX :Resume Tx       */
 /*               | uint16 Offset            : Offset time                   */
 /* Return Value  | NONE                                                     */
 /* Notes         | Supported API : BswM_CS_ResetPeriodicTx                  */
 /*               | Called on the DI state                                   */
 /****************************************************************************/
 void
-bsw_bswm_cs_ctrl_ResetPeriTx( NetworkHandleType Network, uint8 ResetReason, uint16 offset )
+bsw_bswm_cs_ctrl_ResetPeriTx( NetworkHandleType Network, uint16 offset )
 {
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
     BswU1 u1ChNum;
-    uint8 u1TmpResetReason;
 
     u1ChNum = bsw_bswm_cs_ctrl_u1ChNum;
     if( Network < u1ChNum )
     {
-        if( ResetReason == (BswU1)BSW_BSWM_CS_RSTR_BUSWAKEUP )
-        {
-            u1TmpResetReason = (BswU1)COM_RSTR_BUSWAKEUP;
-        }
-        else
-        {
-            u1TmpResetReason = (BswU1)COM_RSTR_RESUMETX;
-        }
-        Com_ResetPeriodicTx( Network, u1TmpResetReason, offset );
+        Com_ResetPeriodicTx( Network, offset );
     }
 #endif
 }
@@ -404,12 +392,12 @@ bsw_bswm_cs_ctrl_ResetPeriTx( NetworkHandleType Network, uint8 ResetReason, uint
 /* Description   | Clear the Awake non-target event transmission request    */
 /* Preconditions | NONE                                                     */
 /* Parameters    | NetworkHandleType Network: Channel                       */
-/*               | uint32 NonBusAwakePw      :Non-bus Awake power           */
+/*               | uint8 NonBusAwakePw      :Non-bus Awake power            */
 /* Return Value  | NONE                                                     */
 /* Notes         | Supported API : BswM_CS_ClearNonAwakeEvtIpdu             */
 /****************************************************************************/
 void
-bsw_bswm_cs_ctrl_ClrNoAwkEvtPdu( NetworkHandleType Network, uint32* NonBusAwakePw )
+bsw_bswm_cs_ctrl_ClrNoAwkEvtPdu( NetworkHandleType Network, uint8 NonBusAwakePw )
 {
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
     BswU1 u1ChNum;
@@ -511,42 +499,6 @@ bsw_bswm_cs_ctrl_SetFirstTxStat( NetworkHandleType Network )
 }
 
 /****************************************************************************/
-/* Function Name | bsw_bswm_cs_ctrl_BusWakeup                               */
-/* Description   | Notify bus wake-up                                       */
-/* Preconditions | When processing medium-priority periodic process         */
-/* Parameters    | NetworkHandleType Network: Channel                       */
-/*               | uint8 WakeupKind: Wakeup Type                            */
-/*               |                   BSW_BSWM_CS_WKUP_PWON:Power ON         */
-/*               |                   BSW_BSWM_CS_WKUP_BS  :Bus Wakeup       */
-/*               | uint16 DisableSend: DisableSend[Com Tick]                */
-/*               | uint16 EnablePeriodic: EnablePeriodic[Com Tick]          */
-/* Return Value  | NONE                                                     */
-/* Notes         | Supported API : BswM_CS_BusWakeup                        */
-/****************************************************************************/
-void
-bsw_bswm_cs_ctrl_BusWakeup( NetworkHandleType Network, uint8 WakeupKind, uint16 DisableSend, uint16 EnablePeriodic )
-{
-#if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
-    BswU1 u1ChNum;
-    uint8 u1TmpWakeupKind;
-
-    u1ChNum = bsw_bswm_cs_ctrl_u1ChNum;
-    if( Network < u1ChNum )
-    {
-        if( WakeupKind == (BswU1)BSW_BSWM_CS_WKUP_BS )
-        {
-            u1TmpWakeupKind = (BswU1)COM_WKUP_BS;
-        }
-        else
-        {
-            u1TmpWakeupKind = (BswU1)COM_WKUP_PWON;
-        }
-        Com_BusWakeup( Network, u1TmpWakeupKind, DisableSend, EnablePeriodic );
-    }
-#endif
-}
-
-/****************************************************************************/
 /* Internal Functions                                                       */
 /****************************************************************************/
 
@@ -560,7 +512,6 @@ bsw_bswm_cs_ctrl_BusWakeup( NetworkHandleType Network, uint8 WakeupKind, uint16 
 /*  v1-2-0          :2020/04/15                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-2-0          :2023/05/23                                             */
-/*  v3-0-0          :2024/11/12                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

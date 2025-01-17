@@ -1,7 +1,7 @@
-/* bsw_canif_fs_h_v3-0-0                                                    */
+/* bsw_canif_fs_h_v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -161,7 +161,6 @@ extern BswU2 * BswConst                   bsw_canif_fs_ptSndLockCnt[];
 extern BswConst BswU2                     bsw_canif_fs_u2RcvLockTim[];
 extern BswConst Bsw_CanIf_SumInfoType     bsw_canif_fs_stSum2TxInfo[];
 extern BswConst Bsw_CanIf_SumInfoType     bsw_canif_fs_stSum2RxInfo[];
-extern BswConst BswU1                     bsw_canif_fs_u1RgstChk;
 
 extern BswU1 (* BswConst bsw_canif_fs_ptDtctSndLockFunc)( BswU1 u1Ch );
 extern void (* BswConst bsw_canif_fs_ptDtctRcvLockFunc)( BswU1 u1Ch );
@@ -176,7 +175,6 @@ extern BswU1 (* BswConst bsw_canif_fs_ptDctMpuFailTxFunc)( BswU1 u1Ch );
 /*  v1-0-0          :2017/04/27                                             */
 /*  v1-1-0          :2018/07/06                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/08/27                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

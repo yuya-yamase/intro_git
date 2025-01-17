@@ -1,7 +1,7 @@
-/* bsw_cantp_rx_c_v3-0-0                                                    */
+/* bsw_cantp_rx_c_v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -617,12 +617,8 @@ bsw_cantp_rx_TxConfRX( BswConst Bsw_CanTp_RxNSduCfgType * ptRxNSduCfgTbl, Std_Re
             /* NOP */
             break;
 
-        case BSW_CANTP_ST_u1STS_IDLE:
-            bsw_cantp_rx_ReceiverToIdle( pt_ReceiverStatTbl );
-            break;
-
         default:
-            /* RAM broken */
+            /* IDLE or RAM broken */
             bsw_cantp_cmn_u1ErrState = BSW_CANTP_u1RAMERR;
             bsw_cantp_rx_ReceiverToIdle( pt_ReceiverStatTbl );
             break;
@@ -1650,7 +1646,6 @@ bsw_cantp_rx_ReceiveSF( BswConst Bsw_CanTp_RxNSduCfgType * ptRxNSduCfgTbl, BswCo
 #endif /* BSW_CANTP_CFG_LOWCOSTOPERATION != BSW_USE */
     st_PduInfo.SduLength     = (PduLengthType)u1_SFDL;
     st_PduInfo.SduDataPtr    = &(ptTpPduInfo->ptSduData[u1_PciOffset + u1_SFPciSize]);
-    st_PduInfo.MetaDataPtr   = (BswU1*)NULL_PTR;
     UpperLayerBufSize        = (PduLengthType)0UL;
 
     u1_BufRet = PduR_CanTpStartOfReception( PduR_RxIndId, &st_PduInfo, (PduLengthType)u1_SFDL, &UpperLayerBufSize );
@@ -1767,7 +1762,6 @@ bsw_cantp_rx_ReceiveFF( BswConst Bsw_CanTp_RxNSduCfgType * ptRxNSduCfgTbl, BswCo
 #endif /* BSW_CANTP_CFG_LOWCOSTOPERATION != BSW_USE */
     st_PduInfo.SduLength     = (PduLengthType)u1_FFNDataLen;
     st_PduInfo.SduDataPtr    = &(ptTpPduInfo->ptSduData[u1_PciOffset + u1_FFPciSize]);
-    st_PduInfo.MetaDataPtr   = (BswU1*)NULL_PTR;
     UpperLayerBufSize        = (PduLengthType)0UL;
 
     u1_BufRet = PduR_CanTpStartOfReception( PduR_RxIndId, &st_PduInfo, (PduLengthType)u4_FFDL, &UpperLayerBufSize );
@@ -1925,7 +1919,6 @@ bsw_cantp_rx_ReceiveCF( BswConst Bsw_CanTp_CfgType * ptCfgTbl, BswConst Bsw_CanT
     /* Make data for CopyRxData */
     st_PduInfo.SduLength     = (PduLengthType)u1_NDataLen;
     st_PduInfo.SduDataPtr    = &(ptTpPduInfo->ptSduData[u1_NDataOffset]);
-    st_PduInfo.MetaDataPtr   = (BswU1*)NULL_PTR;
     UpperLayerBufSize        = (PduLengthType)0UL;
 
     /* Copy data */
@@ -2114,7 +2107,6 @@ bsw_cantp_rx_SendFCCtrl( BswConst Bsw_CanTp_CfgType * ptCfgTbl, BswConst Bsw_Can
         /* Acquisition of remaining Rx buffer size */
         st_PduInfo.SduLength     = (PduLengthType)0UL;
         st_PduInfo.SduDataPtr    = NULL_PTR;
-        st_PduInfo.MetaDataPtr   = (BswU1*)NULL_PTR;
         UpperLayerBufSize        = (PduLengthType)0UL;
 
         u1_BufRet = PduR_CanTpCopyRxData( (PduIdType)u2_PduId, &st_PduInfo, &UpperLayerBufSize );
@@ -2295,7 +2287,6 @@ bsw_cantp_rx_SendFC( BswConst Bsw_CanTp_RxNSduCfgType * ptRxNSduCfgTbl, Bsw_CanT
     /* FC Transmit */
     st_PduInfo.SduLength     = (PduLengthType)u1_CanIfTxReqLen;
     st_PduInfo.SduDataPtr    = &(bsw_cantp_cmn_u1TxBuffer[0U]);
-    st_PduInfo.MetaDataPtr   = (BswU1*)NULL_PTR;
 
     u2_CanIf_FcPduId = ptRxNSduCfgTbl->u2CanIf_FcPduId;
     u1_Ret = bsw_cantp_snd_SendMessage( (PduIdType)u2_CanIf_FcPduId, &st_PduInfo );
@@ -2456,12 +2447,11 @@ bsw_cantp_rx_ReceiverToIdle( Bsw_CanTp_st_ReceiverStatType * ptReceiverStatTbl )
 
 /****************************************************************************/
 /* History                                                                  */
-/*  Version         :Date                                                   */
-/*  v1-0-0          :2017/09/25                                             */
-/*  v1-1-0          :2018/12/26                                             */
-/*  v1-2-0          :2020/02/16                                             */
-/*  v2-0-0          :2021/09/06                                             */
-/*  v3-0-0          :2024/11/05                                             */
+/*  Version        :Date                                                    */
+/*  v1-0-0         :2017/09/25                                              */
+/*  v1-1-0         :2018/12/26                                              */
+/*  v1-2-0         :2020/02/16                                              */
+/*  v2-0-0         :2021/09/06                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

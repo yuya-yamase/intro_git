@@ -25,11 +25,14 @@
 
 /* Complex Device Driver */
 
+/* Diagnosis             */
+#include "oxdocan.h"
+
 /* MCAL                  */
 #include "icu_drv_wk.h"
 
 /* Memory                */
-#include "nvmc_mgr.h"
+/* #include "nvmc_mgr.h" */
 
 /* Application           */
 
@@ -66,7 +69,7 @@ static U1             u1_s_BswMCfgIsShtdwnOk(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2              u2_g_BSW_M_TIMOUT_TO_SHTDWN = (U2)3000U / (U2)10U;  /* 3 seconds */
+const U2              u2_g_BSW_M_TIMOUT_TO_SHTDWN = (U2)3000U / (U2)5U;   /* 3 seconds */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -93,7 +96,8 @@ U1      u1_g_BswMCfghkShtdwnchk1st(void)
     static const FP_U1_AND    fp_sp_u1_BSW_M_SHTDWN_CHK[] = {
         &u1_s_BswMCfgIsShtdwnOk,
         &u1_g_oXCANEcuShtdwnOk,
-        &u1_g_Nvmc_IsShtdwnOk
+        &u1_g_oXDoCANShtdwnOk
+        /*& u1_g_Nvmc_IsShtdwnOk */
     };
 
     U1                        u1_t_1st;

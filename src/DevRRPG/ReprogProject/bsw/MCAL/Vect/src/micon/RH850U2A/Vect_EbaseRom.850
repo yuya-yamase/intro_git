@@ -1,0 +1,348 @@
+/* Vect_EbaseRom_850_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | Vect/EbaseRom/CODE                                          */
+/******************************************************************************/
+/*----------------------------------------------------------------------------*/
+/* Include Files                                                              */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Macros                                                                     */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Types                                                                      */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Function Prototypes                                                        */
+/*----------------------------------------------------------------------------*/
+    .extern _Shutdown_ResetMcu
+
+
+/*----------------------------------------------------------------------------*/
+/* Data                                                                       */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Constants                                                                  */
+/*----------------------------------------------------------------------------*/
+
+
+/******************************************************************************/
+/* External Functions                                                         */
+/******************************************************************************/
+    .section ".P_ROM_VECT", "ax"
+    .align 2
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_RESET                                         */
+/* Description   | RESET for EBASE(ROM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0000
+VECT_RPG_ROM_RESET:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_SYSERR                                        */
+/* Description   | SYSERR for EBASE(ROM) vector                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0010
+VECT_RPG_ROM_SYSERR:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_RESERVED0                                     */
+/* Description   | RESERVED0 for EBASE(ROM) vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0020
+VECT_RPG_ROM_RESERVED0:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_FETRAP                                        */
+/* Description   | FETRAP for EBASE(ROM) vector                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0030
+VECT_RPG_ROM_FETRAP:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_TRAP0                                         */
+/* Description   | TRAP0 for EBASE(ROM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0040
+VECT_RPG_ROM_TRAP0:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_TRAP1                                         */
+/* Description   | TRAP1 for EBASE(ROM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0050
+VECT_RPG_ROM_TRAP1:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_RIE                                           */
+/* Description   | RIE for EBASE(ROM) vector                                  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0060
+VECT_RPG_ROM_RIE:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_FPEFXE                                        */
+/* Description   | FPEFXE for EBASE(ROM) vector                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0070
+VECT_RPG_ROM_FPEFXE:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_UCPOP                                         */
+/* Description   | UCPOP for EBASE(ROM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0080
+VECT_RPG_ROM_UCPOP:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_MIPMDP                                        */
+/* Description   | MIPMDP for EBASE(ROM) vector                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0090
+VECT_RPG_ROM_MIPMDP:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_PIE                                           */
+/* Description   | PIE for EBASE(ROM) vector                                  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00A0
+VECT_RPG_ROM_PIE:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_RESERVED1                                     */
+/* Description   | RESERVED1 for EBASE(ROM) vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00B0
+VECT_RPG_ROM_RESERVED1:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_MAE                                           */
+/* Description   | MAE for EBASE(ROM) vector                                  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00C0
+VECT_RPG_ROM_MAE:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_RESERVED2                                     */
+/* Description   | RESERVED2 for EBASE(ROM) vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00D0
+VECT_RPG_ROM_RESERVED2:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_FENMI                                         */
+/* Description   | FENMI for EBASE(ROM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00E0
+VECT_RPG_ROM_FENMI:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_FEINT                                         */
+/* Description   | FEINT for EBASE(ROM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00F0
+VECT_RPG_ROM_FEINT:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_ROM_EIINT                                         */
+/* Description   | EIINT for EBASE(ROM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0100
+VECT_RPG_ROM_EIINT:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+
+/******************************************************************************/
+/* Internal Functions                                                         */
+/******************************************************************************/
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2021/03/09 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

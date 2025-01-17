@@ -1,7 +1,7 @@
-/* pdur_pbcfg_c_v3-0-0                                                      */
+/* pdur_pbcfg_c_v2-0-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -554,6 +554,16 @@ BswConst PduIdType bsw_pdur_u2ComRoutingTbl[BSW_PDUR_CFG_MSGCOM_NUM] =
 BswConst PduIdType bsw_pdur_u2DcmRoutingTbl[BSW_PDUR_CFG_MSGDCM_NUM] =
 {
     /* PDU ID (Lower Component | ID)   */
+    ((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0000U)  /* [0] up:Nsdu_TX_TxNSdu_Diag_Physical_Service, low:Nsdu_TX_TxNSdu_Diag_Physical_Service */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0001U)  /* [1] up:Nsdu_TX_TxNSdu_Diag_Physical_Remote, low:Nsdu_TX_TxNSdu_Diag_Physical_Remote */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0002U)  /* [2] up:Nsdu_TX_TxNSdu_Diag_Physical_FD_Service, low:Nsdu_TX_TxNSdu_Diag_Physical_FD_Service */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0003U)  /* [3] up:Nsdu_TX_TxNSdu_Diag_Physical_FD_Remote, low:Nsdu_TX_TxNSdu_Diag_Physical_FD_Remote */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0004U)  /* [4] up:Nsdu_RX_RxNSdu_Diag_Physical_Service, low:Nsdu_RX_RxNSdu_Diag_Physical_Service */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0005U)  /* [5] up:Nsdu_RX_RxNSdu_Diag_Functional_Service, low:Nsdu_RX_RxNSdu_Diag_Functional_Service */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0006U)  /* [6] up:Nsdu_RX_RxNSdu_Diag_Physical_Remote, low:Nsdu_RX_RxNSdu_Diag_Physical_Remote */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0007U)  /* [7] up:Nsdu_RX_RxNSdu_Diag_Physical_FD_Service, low:Nsdu_RX_RxNSdu_Diag_Physical_FD_Service */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0008U)  /* [8] up:Nsdu_RX_RxNSdu_Diag_Functional_FD_Service, low:Nsdu_RX_RxNSdu_Diag_Functional_FD_Service */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANTP  | (BswU2)0x0009U)  /* [9] up:Nsdu_RX_RxNSdu_Diag_Physical_FD_Remote, low:Nsdu_RX_RxNSdu_Diag_Physical_FD_Remote */
 };
 #endif
 
@@ -1095,6 +1105,20 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stSoAdIfRoutingTbl[BSW_PDUR_CFG_MSGSOADIF
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) && (BSW_PDUR_CFG_MSGSOADIF_NUM != 0U) ) */
 
+#if ( (BSW_BSWM_CS_FUNC_CDD1IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1IF_NUM != 0U) )
+BswConst Bsw_PduR_RoutingType bsw_pdur_stCdd1IfRoutingTbl[BSW_PDUR_CFG_MSGCDD1IF_NUM] =
+{
+    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
+};
+#endif /* ( (BSW_BSWM_CS_FUNC_CDD1IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1IF_NUM != 0U) ) */
+
+#if ( (BSW_BSWM_CS_FUNC_CDD2IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2IF_NUM != 0U) )
+BswConst Bsw_PduR_RoutingType bsw_pdur_stCdd2IfRoutingTbl[BSW_PDUR_CFG_MSGCDD2IF_NUM] =
+{
+    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
+};
+#endif /* ( (BSW_BSWM_CS_FUNC_CDD2IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2IF_NUM != 0U) ) */
+
 #if ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) && (BSW_PDUR_CFG_MSGDOIPIF_NUM != 0U) )
 BswConst Bsw_PduR_RoutingType bsw_pdur_stDoIPIfRoutingTbl[BSW_PDUR_CFG_MSGDOIPIF_NUM] =
 {
@@ -1106,6 +1130,16 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stDoIPIfRoutingTbl[BSW_PDUR_CFG_MSGDOIPIF
 BswConst Bsw_PduR_RoutingType bsw_pdur_stCanTpRoutingTbl[BSW_PDUR_CFG_MSGCANTP_NUM] =
 {
     /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
+    { ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0000U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [0] up:Nsdu_TX_TxNSdu_Diag_Physical_Service, low:Nsdu_TX_TxNSdu_Diag_Physical_Service */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0001U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [1] up:Nsdu_TX_TxNSdu_Diag_Physical_Remote, low:Nsdu_TX_TxNSdu_Diag_Physical_Remote */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0002U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [2] up:Nsdu_TX_TxNSdu_Diag_Physical_FD_Service, low:Nsdu_TX_TxNSdu_Diag_Physical_FD_Service */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0003U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [3] up:Nsdu_TX_TxNSdu_Diag_Physical_FD_Remote, low:Nsdu_TX_TxNSdu_Diag_Physical_FD_Remote */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0004U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [4] up:Nsdu_RX_RxNSdu_Diag_Physical_Service, low:Nsdu_RX_RxNSdu_Diag_Physical_Service */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0005U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [5] up:Nsdu_RX_RxNSdu_Diag_Functional_Service, low:Nsdu_RX_RxNSdu_Diag_Functional_Service */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0006U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [6] up:Nsdu_RX_RxNSdu_Diag_Physical_Remote, low:Nsdu_RX_RxNSdu_Diag_Physical_Remote */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0007U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [7] up:Nsdu_RX_RxNSdu_Diag_Physical_FD_Service, low:Nsdu_RX_RxNSdu_Diag_Physical_FD_Service */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0008U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [8] up:Nsdu_RX_RxNSdu_Diag_Functional_FD_Service, low:Nsdu_RX_RxNSdu_Diag_Functional_FD_Service */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_DCM      | (BswU2)0x0009U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [9] up:Nsdu_RX_RxNSdu_Diag_Physical_FD_Remote, low:Nsdu_RX_RxNSdu_Diag_Physical_FD_Remote */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_CANTP == BSW_USE) && (BSW_PDUR_CFG_MSGCANTP_NUM != 0U) ) */
 
@@ -1122,6 +1156,20 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stSoAdTpRoutingTbl[BSW_PDUR_CFG_MSGSOADTP
     /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) && (BSW_PDUR_CFG_MSGSOADTP_NUM != 0U) ) */
+
+#if ( (BSW_BSWM_CS_FUNC_CDD1TP == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1TP_NUM != 0U) )
+BswConst Bsw_PduR_RoutingType bsw_pdur_stCdd1TpRoutingTbl[BSW_PDUR_CFG_MSGCDD1TP_NUM] =
+{
+    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
+};
+#endif /* (BSW_BSWM_CS_FUNC_CDD1TP == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1TP_NUM != 0U) */
+
+#if ( (BSW_BSWM_CS_FUNC_CDD2TP == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2TP_NUM != 0U) )
+BswConst Bsw_PduR_RoutingType bsw_pdur_stCdd2TpRoutingTbl[BSW_PDUR_CFG_MSGCDD2TP_NUM] =
+{
+    /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
+};
+#endif /* ( (BSW_BSWM_CS_FUNC_CDD2TP == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2TP_NUM != 0U) ) */
 
 #if ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) && (BSW_PDUR_CFG_MSGDOIPTP_NUM != 0U) )
 BswConst Bsw_PduR_RoutingType bsw_pdur_stDoIPTpRoutingTbl[BSW_PDUR_CFG_MSGDOIPTP_NUM] =
@@ -1193,6 +1241,20 @@ BswConst PduIdType bsw_pdur_u2SoAdIfIpduMTbl[BSW_PDUR_CFG_MSGSOADIF_NUM] =
     /* IpduM I-PDU ID */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_SOAD == BSW_USE) && (BSW_PDUR_CFG_MSGSOADIF_NUM != 0U) ) */
+
+#if ( (BSW_BSWM_CS_FUNC_CDD1IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1IF_NUM != 0U) )
+BswConst PduIdType bsw_pdur_u2Cdd1IfIpduMTbl[BSW_PDUR_CFG_MSGCDD1IF_NUM] =
+{
+    /* IpduM I-PDU ID */
+};
+#endif /* ( (BSW_BSWM_CS_FUNC_CDD1IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD1IF_NUM != 0U) ) */
+
+#if ( (BSW_BSWM_CS_FUNC_CDD2IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2IF_NUM != 0U) )
+BswConst PduIdType bsw_pdur_u2Cdd2IfIpduMTbl[BSW_PDUR_CFG_MSGCDD2IF_NUM] =
+{
+    /* IpduM I-PDU ID */
+};
+#endif /* ( (BSW_BSWM_CS_FUNC_CDD2IF == BSW_USE) && (BSW_PDUR_CFG_MSGCDD2IF_NUM != 0U) ) */
 
 #if ( (BSW_BSWM_CS_FUNC_DOIP == BSW_USE) && (BSW_PDUR_CFG_MSGDOIPIF_NUM != 0U) )
 BswConst PduIdType bsw_pdur_u2DoIPIfIpduMTbl[BSW_PDUR_CFG_MSGDOIPIF_NUM] =
@@ -1283,12 +1345,11 @@ BswConst PduIdType bsw_pdur_u2Cdd2SecOCTbl[BSW_PDUR_CFG_MSGCDD2_NUM] =
 /*  v1-1-0          :2019/01/15                                             */
 /*  v1-2-0          :2019/11/05                                             */
 /*  v2-0-0          :2021/02/12                                             */
-/*  v3-0-0          :2024/09/04                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v3-0-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

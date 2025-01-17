@@ -1,0 +1,8 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/MemErrM/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/MemErrM/obj/MemErrM.rel.o
+
+../../src/MemErrM.c

@@ -1,7 +1,7 @@
-/* bsw_cannm_a2_ctrl_h_v3-0-0                                               */
+/* bsw_cannm_a2_ctrl_h_v2-0-0                                               */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -168,9 +168,7 @@ extern BswConst BswU1            bsw_cannm_a2_ctrl_u1ActiveWkUp[];             /
 extern BswConst BswU2            bsw_cannm_a2_ctrl_u2DisWkupTim[];             /* Edge detection permission wait time after bus sleep (DisableWakeup)      */
 extern BswConst BswU2            bsw_cannm_a2_ctrl_u2SndStartTim[];            /* Transmission start waiting time (SendStart)                              */
 extern BswConst BswU2            bsw_cannm_a2_ctrl_u2DisSndTim[];              /* Transmission starting wait time at bus wake-up (DisableSend)        */
-extern BswConst BswU2            bsw_cannm_a2_ctrl_u2DisSdComTik[];            /* Transmission starting wait com tick at bus wake-up (DisableSend) */
 extern BswConst BswU2            bsw_cannm_a2_ctrl_u2EnaPeriTim[];             /* Periodic transmission starting wait time at bus wake-up (EnablePeriodic) */
-extern BswConst BswU2            bsw_cannm_a2_ctrl_u2EnaPrComTik[];            /* Periodic transmission starting wait com tick at bus wake-up (EnablePeriodic) */
 extern BswConst BswU2            bsw_cannm_a2_ctrl_u2PwOnWaitTim[];            /* Sleep wait time at power-on (PwOnWaitSleepTime)              */
 extern BswConst BswU1            bsw_cannm_a2_ctrl_u1NodeID[];                 /* NodeID                      */
 extern BswConst BswU1            bsw_cannm_a2_ctrl_u1InitTxData[];             /* Initial value of transmission data fields  */
@@ -198,7 +196,6 @@ extern BswU1   (* BswConst bsw_cannm_a2_ctrl_ChkComFunc)( BswU1 u1NetID );
 /*  v1-0-0          :2017/04/27                                             */
 /*  v1-1-0          :2018/12/17                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -43,7 +43,7 @@ static EhvmConst ehvm_mpu_guest_memory_t s_MpuGuestMemoryData_pe2[VM_NUM_PE2] = 
 
 static EhvmConst ehvm_mpu_memory_entry_t s_MpuHostEntryData_VM0_pe2[MPU_NUM_OF_VARIABLE_HOST_ENTRY_PE2] = {
     {
-        0x00000000U, /* MPLA */
+        0x00020000U, /* MPLA */
         0xFFFFFFFCU, /* MPUA */
         0x010100BFU  /* MPAT */ /* change from 0x01010080 -> 0x010100BF */
     },

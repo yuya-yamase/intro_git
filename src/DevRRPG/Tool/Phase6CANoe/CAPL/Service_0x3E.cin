@@ -1,0 +1,138 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <TesterPresent>
+/* ************************************************************************* */
+/* Function                                                                  */
+/*  TesterPresent_request_01_send                                            */
+/* Discription                                                               */
+/*  Send Request Sid0x3E [TesterPresent]                                     */
+/* IN :                                                                      */
+/*  None                                                                     */
+/* OUT:                                                                      */
+/*  None                                                                     */
+/* RET:                                                                      */
+/*  diagSendRequest()の処理結果                                              */
+/* NOTE                                                                      */
+/*  SPRMIB付きのリクエストを送信する関数を用意するのでこの関数では設定不要   */
+/* ************************************************************************* */
+long TesterPresent_request_01_send( void )
+{
+  /* 戻り値 */
+  int ret;
+
+  if( G_Reprog_General_Data.TP_Info.testerPresentAddrtype == E_Send_Address_Phy )
+  {
+    /* リクエスト送信(物理アドレス) */
+    ret = diagSendRequest(G_TesterPresent_req_01);
+  }
+  else if( G_Reprog_General_Data.TP_Info.testerPresentAddrtype == E_Send_Address_Func )
+  {
+    /* リクエスト送信(機能アドレス) */
+    ret = diagSendFunctional(G_TesterPresent_req_01);
+  }
+  else
+  {
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;    
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <TesterPresent>
+/* ************************************************************ */
+/* Function                                                     */
+/*  TesterPresent_request_02_send                               */
+/* Discription                                                  */
+/*  Send Request Sid0x3E [TesterPresent]                        */
+/* IN :                                                         */
+/*  None                                                        */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果                                 */
+/* NOTE                                                         */
+/*  SPRMIB付きのリクエストを送信する関数                        */
+/* ************************************************************ */
+long TesterPresent_request_02_send( void )
+{
+  /* 戻り値 */
+  int ret;
+
+  if( G_Reprog_General_Data.TP_Info.testerPresentAddrtype == E_Send_Address_Phy )
+  {
+    /* リクエスト送信(物理アドレス) */
+    ret = diagSendRequest(G_TesterPresent_req_02);
+  }
+  else if( G_Reprog_General_Data.TP_Info.testerPresentAddrtype == E_Send_Address_Func )
+  {
+    /* リクエスト送信(機能アドレス) */
+    ret = diagSendFunctional(G_TesterPresent_req_02);
+  }
+  else
+  {
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;    
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <TesterPresent>
+/* ********************************************************************* */
+/* Function                                                              */
+/*  TesterPresent_init                                                   */
+/* Discription                                                           */
+/*  外部設定情報ファイルを読み出してSid0x3Eのパラメータを設定する        */
+/* IN :                                                                  */
+/*  filename : 外部設定情報ファイル名                                    */
+/* OUT:                                                                  */
+/*  None                                                                 */
+/* RET:                                                                  */
+/*  None                                                                 */
+/* NOTE:                                                                 */
+/*  読み出し失敗時はデフォルトの設定となる                               */
+/* ********************************************************************* */
+void TesterPresent_init( char filename[] )
+{
+  /* ファイル読み出し(SID 0x3Eのアドレス種別) */
+  /* 読み出し失敗時は「物理アドレス」を使用する設定 */
+  G_Reprog_General_Data.TP_Info.testerPresentAddrtype =
+                         getProfileInt("TesterPresent", "addrtype", 0x0, filename); 
+  
+  /* ファイル読み出し(SID 0x3EのSPRMIB) */
+  /* 読み出し失敗時は「SPRMIB無し」を使用する設定 */
+  G_Reprog_General_Data.TP_Info.testerPresentSprmib =
+                         getProfileInt("TesterPresent", "sprmib", 0x0, filename); 
+
+  return;
+}

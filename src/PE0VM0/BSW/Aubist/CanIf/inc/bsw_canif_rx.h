@@ -1,7 +1,7 @@
-/* bsw_canif_rx_h_v3-0-0                                                    */
+/* bsw_canif_rx_h_v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -17,8 +17,6 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-/* MetaData Size */
-#define BSW_CANIF_RX_METADATA_SIZE          (4U)
 
 
 /*--------------------------------------------------------------------------*/
@@ -39,7 +37,6 @@ typedef struct
     BswConst Bsw_CanIf_RxPduTblType    *ptPduTbl;       /* PDU information table      */
     Bsw_CanIf_UpperRxIndType            ptRxInd;        /* Notify receiving completion         */
     BswConst BswU4                     *ptMaskTbl;      /* CAN ID mask table */
-    BswConst BswU4                     *ptRxMsgMaskTbl; /* CAN ID mask for Rx Msg table */
     BswConst BswU2                     *ptPduNumTbl;    /* Pdu number table        */
     BswU2                               u2PduNum;       /* Number of PduId              */
 } Bsw_CanIf_RcvCompInfoType;
@@ -103,12 +100,6 @@ extern BswConst Bsw_CanIf_RxPduTblType      bsw_canif_stRxCanTpPduTbl[];
 extern BswConst Bsw_CanIf_RxPduTblType      bsw_canif_stRxCdd1PduTbl[];
 extern BswConst Bsw_CanIf_RxPduTblType      bsw_canif_stRxCdd2PduTbl[];
 extern BswConst Bsw_CanIf_RxPduTblType      bsw_canif_stRxXcpPduTbl[];
-extern BswConst BswU4                       bsw_canif_stRxPduRMskTbl[];
-extern BswConst BswU4                       bsw_canif_stRxCanNmMskTbl[];
-extern BswConst BswU4                       bsw_canif_stRxCanTpMskTbl[];
-extern BswConst BswU4                       bsw_canif_stRxCdd1MskTbl[];
-extern BswConst BswU4                       bsw_canif_stRxCdd2MskTbl[];
-extern BswConst BswU4                       bsw_canif_stRxXcpMskTbl[];
 
 extern BswConst Bsw_CanIf_RxIndType         bsw_canif_rx_ptRxIndCompFunc[][ BSW_CANIF_TBL_MAX_UPCMPNUM ];
 
@@ -118,8 +109,8 @@ extern BswConst BswU4                      bsw_canif_rx_u4BdyFmtCanIdLo;
 extern BswConst BswU4                      bsw_canif_rx_u4BdyFmtCanIdUp;
 extern BswConst BswU2                      bsw_canif_rx_u2PDURPduNumTbl[];
 extern BswConst BswU2                      bsw_canif_rx_u2CANTPPduNumTbl[];
-extern BswConst BswU1                      bsw_canif_rx_u1CanIdMaskType;
-extern BswConst BswU1                      bsw_canif_rx_u1MetaDataFunc;
+extern Std_ReturnType (* BswConst bsw_canif_rx_ptNmBPreRxFunc)( BswU1 u1NetID, BswConstR Bsw_CanIf_PduType* ptMsg );
+extern void (* BswConst bsw_canif_rx_ptNmBPostRxFunc)( BswU1 u1NetID, BswConstR Bsw_CanIf_PduType* ptMsg );
 
 
 #endif  /* BSW_CANIF_RX_H */
@@ -130,7 +121,6 @@ extern BswConst BswU1                      bsw_canif_rx_u1MetaDataFunc;
 /*  v1-0-0          :2017/02/22                                             */
 /*  v1-1-0          :2018/10/02                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/10/16                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

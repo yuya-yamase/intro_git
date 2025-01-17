@@ -1,7 +1,7 @@
-/* bsw_nm_sw_h_v3-0-0                                                       */
+/* bsw_nm_sw_h_v2-0-0                                                       */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -81,7 +81,6 @@ Std_ReturnType  bsw_nm_sw_RequestBusSyncNone( NetworkHandleType nmChannelHandle 
 
 uint16          bsw_nm_sw_TransmitEvWakeupNone( NetworkHandleType nmChannelHandle );
 void            bsw_nm_sw_CancelEvWakeupNone( NetworkHandleType nmChannelHandle );
-void            bsw_nm_sw_NmRxIndicationNone( NetworkHandleType nmNetworkHandle, BswConstR PduInfoType* PduInfoPtr );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -105,7 +104,6 @@ extern Std_ReturnType            (* BswConst bsw_nm_sw_ptSetSlpRdyBitFuncTbl[])(
 extern Std_ReturnType            (* BswConst bsw_nm_sw_ptRqBusSyncFuncTbl[])( NetworkHandleType nmChannelHandle );                             /* Bus synchronization request table */
 extern Std_ReturnType            (* BswConst bsw_nm_sw_ptSyncPncShutdownFuncTbl[])( NetworkHandleType nmNetworkHandle, PNCHandleType PNC );          /* Cooperative PN sleep start timing notification function table */
 extern Std_ReturnType            (* BswConst bsw_nm_sw_ptCancelReqSyncPncShutdownFuncTbl[])( NetworkHandleType nmNetworkHandle, PNCHandleType PNC ); /* Cooperative PN sleep cancellation function table */
-extern void                      (* BswConst bsw_nm_sw_ptNmRxIndicationFn)( NetworkHandleType nmNetworkHandle, BswConstR PduInfoType* PduInfoPtr );
 
 #endif /* BSW_NM_SW_H */
 
@@ -117,7 +115,6 @@ extern void                      (* BswConst bsw_nm_sw_ptNmRxIndicationFn)( Netw
 /*  v1-1-0          :2018/07/11                                             */
 /*  v1-2-0          :2020/04/15                                             */
 /*  v2-0-0          :2022/01/12                                             */
-/*  v3-0-0          :2024/10/15                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

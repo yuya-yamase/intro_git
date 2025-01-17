@@ -1,7 +1,7 @@
-/* bsw_cannm_e_config_c_v3-0-0                                              */
+/* bsw_cannm_e_config_c_v2-0-0                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -47,12 +47,6 @@
 #define BSW_CANNM_E_USE(ch)                   ( (BSW_CANNM_NM_TYPE(ch) == BSW_CANNM_NMTYPE_E) ? BSW_USE : BSW_NOUSE )
 
 #define BSW_CANNM_E_u1TASK_JITTER             ( (BswU1)1U )
-
-#if (BSW_BSWM_CS_MSG_DELIVER == BSW_BSWM_CS_MSGDELIVER_HIGH)
-#define BSW_CANNM_E_u2MS2COMTICK_RUP          BSW_BSWM_CS_u2MS2TICK_RUP_HIGH
-#else
-#define BSW_CANNM_E_u2MS2COMTICK_RUP          BSW_BSWM_CS_u2MS2TICK_RUP_MID
-#endif
 
 #define BSW_CANNM_E_SNDSLPTIME_SLV            ( 0U )  /* Slave Send_Sleep timer:There is no Send_Sleep timer in Slave, so it is not configurable and fixed to 0 */
 
@@ -101,7 +95,6 @@
 
 #define BSW_CANNM_E_u2WAKEUPTIME(ch)          ( (BswU2)((BSW_CANNM_E_u1NODE_TYPE(ch) == BSW_CANNM_E_u1TYPE_MASTER) ? BSW_CANNM_E_CFG_WAKEUPTIME_MST : BSW_CANNM_E_CFG_WAKEUPTIME_SLV) )
 #define BSW_CANNM_E_u2APPTIME(ch)             ( BSW_BSWM_CS_u2MS2TICK_RUP_MID((BSW_CANNM_E_u1NODE_TYPE(ch) == BSW_CANNM_E_u1TYPE_MASTER) ? BSW_CANNM_E_CFG_APPTIME_MST : BSW_CANNM_E_CFG_APPTIME_SLV) )
-#define BSW_CANNM_E_u2APPCOMTICK(ch)          ( BSW_CANNM_E_u2MS2COMTICK_RUP((BSW_CANNM_E_u1NODE_TYPE(ch) == BSW_CANNM_E_u1TYPE_MASTER) ? BSW_CANNM_E_CFG_APPTIME_MST : BSW_CANNM_E_CFG_APPTIME_SLV) )
 #define BSW_CANNM_E_u2SLEEPTIME(ch)           ( BSW_BSWM_CS_u2MS2TICK_RUP_MID((BSW_CANNM_E_u1NODE_TYPE(ch) == BSW_CANNM_E_u1TYPE_MASTER) ? BSW_CANNM_E_CFG_SLEEPTIME_MST : BSW_CANNM_E_CFG_SLEEPTIME_SLV) )
 #define BSW_CANNM_E_u2SNDSLPTIME(ch)          ( BSW_BSWM_CS_u2MS2TICK_RUP_MID((BSW_CANNM_E_u1NODE_TYPE(ch) == BSW_CANNM_E_u1TYPE_MASTER) ? BSW_CANNM_E_CFG_SNDSLPTIME_MST : BSW_CANNM_E_SNDSLPTIME_SLV) )
 #define BSW_CANNM_E_u2RX_TIMEOUT(ch)          ( BSW_BSWM_CS_u2MS2TICK_RUP_MID(BSW_CANNM_E_CFG_RX_TIMEOUT_CH##ch) + BSW_CANNM_E_u1TASK_JITTER )
@@ -698,105 +691,6 @@ BswConst BswU2 bsw_cannm_e_ctrl_u2AppTim[BSW_CANNM_E_CHNUM] =
 #endif /* ( BSW_CANNM_E_CHNUM > 30U ) */
 #if( BSW_CANNM_E_CHNUM > 31U )
     ,BSW_CANNM_E_u2APPTIME(31)
-#endif /* ( BSW_CANNM_E_CHNUM > 31U ) */
-};
-
-/* Repeat message state maintenance period(Com tick) */
-BswConst BswU2 bsw_cannm_e_ctrl_u2AppComTick[BSW_CANNM_E_CHNUM] = 
-{
-     BSW_CANNM_E_u2APPCOMTICK(0)
-#if( BSW_CANNM_E_CHNUM > 1U )
-    ,BSW_CANNM_E_u2APPCOMTICK(1)
-#endif /* ( BSW_CANNM_E_CHNUM > 1U ) */
-#if( BSW_CANNM_E_CHNUM > 2U )
-    ,BSW_CANNM_E_u2APPCOMTICK(2)
-#endif /* ( BSW_CANNM_E_CHNUM > 2U ) */
-#if( BSW_CANNM_E_CHNUM > 3U )
-    ,BSW_CANNM_E_u2APPCOMTICK(3)
-#endif /* ( BSW_CANNM_E_CHNUM > 3U ) */
-#if( BSW_CANNM_E_CHNUM > 4U )
-    ,BSW_CANNM_E_u2APPCOMTICK(4)
-#endif /* ( BSW_CANNM_E_CHNUM > 4U ) */
-#if( BSW_CANNM_E_CHNUM > 5U )
-    ,BSW_CANNM_E_u2APPCOMTICK(5)
-#endif /* ( BSW_CANNM_E_CHNUM > 5U ) */
-#if( BSW_CANNM_E_CHNUM > 6U )
-    ,BSW_CANNM_E_u2APPCOMTICK(6)
-#endif /* ( BSW_CANNM_E_CHNUM > 6U ) */
-#if( BSW_CANNM_E_CHNUM > 7U )
-    ,BSW_CANNM_E_u2APPCOMTICK(7)
-#endif /* ( BSW_CANNM_E_CHNUM > 7U ) */
-#if( BSW_CANNM_E_CHNUM > 8U )
-    ,BSW_CANNM_E_u2APPCOMTICK(8)
-#endif /* ( BSW_CANNM_E_CHNUM > 8U ) */
-#if( BSW_CANNM_E_CHNUM > 9U )
-    ,BSW_CANNM_E_u2APPCOMTICK(9)
-#endif /* ( BSW_CANNM_E_CHNUM > 9U ) */
-#if( BSW_CANNM_E_CHNUM > 10U )
-    ,BSW_CANNM_E_u2APPCOMTICK(10)
-#endif /* ( BSW_CANNM_E_CHNUM > 10U ) */
-#if( BSW_CANNM_E_CHNUM > 11U )
-    ,BSW_CANNM_E_u2APPCOMTICK(11)
-#endif /* ( BSW_CANNM_E_CHNUM > 11U ) */
-#if( BSW_CANNM_E_CHNUM > 12U )
-    ,BSW_CANNM_E_u2APPCOMTICK(12)
-#endif /* ( BSW_CANNM_E_CHNUM > 12U ) */
-#if( BSW_CANNM_E_CHNUM > 13U )
-    ,BSW_CANNM_E_u2APPCOMTICK(13)
-#endif /* ( BSW_CANNM_E_CHNUM > 13U ) */
-#if( BSW_CANNM_E_CHNUM > 14U )
-    ,BSW_CANNM_E_u2APPCOMTICK(14)
-#endif /* ( BSW_CANNM_E_CHNUM > 14U ) */
-#if( BSW_CANNM_E_CHNUM > 15U )
-    ,BSW_CANNM_E_u2APPCOMTICK(15)
-#endif /* ( BSW_CANNM_E_CHNUM > 15U ) */
-#if( BSW_CANNM_E_CHNUM > 16U )
-    ,BSW_CANNM_E_u2APPCOMTICK(16)
-#endif /* ( BSW_CANNM_E_CHNUM > 16U ) */
-#if( BSW_CANNM_E_CHNUM > 17U )
-    ,BSW_CANNM_E_u2APPCOMTICK(17)
-#endif /* ( BSW_CANNM_E_CHNUM > 17U ) */
-#if( BSW_CANNM_E_CHNUM > 18U )
-    ,BSW_CANNM_E_u2APPCOMTICK(18)
-#endif /* ( BSW_CANNM_E_CHNUM > 18U ) */
-#if( BSW_CANNM_E_CHNUM > 19U )
-    ,BSW_CANNM_E_u2APPCOMTICK(19)
-#endif /* ( BSW_CANNM_E_CHNUM > 19U ) */
-#if( BSW_CANNM_E_CHNUM > 20U )
-    ,BSW_CANNM_E_u2APPCOMTICK(20)
-#endif /* ( BSW_CANNM_E_CHNUM > 20U ) */
-#if( BSW_CANNM_E_CHNUM > 21U )
-    ,BSW_CANNM_E_u2APPCOMTICK(21)
-#endif /* ( BSW_CANNM_E_CHNUM > 21U ) */
-#if( BSW_CANNM_E_CHNUM > 22U )
-    ,BSW_CANNM_E_u2APPCOMTICK(22)
-#endif /* ( BSW_CANNM_E_CHNUM > 22U ) */
-#if( BSW_CANNM_E_CHNUM > 23U )
-    ,BSW_CANNM_E_u2APPCOMTICK(23)
-#endif /* ( BSW_CANNM_E_CHNUM > 23U ) */
-#if( BSW_CANNM_E_CHNUM > 24U )
-    ,BSW_CANNM_E_u2APPCOMTICK(24)
-#endif /* ( BSW_CANNM_E_CHNUM > 24U ) */
-#if( BSW_CANNM_E_CHNUM > 25U )
-    ,BSW_CANNM_E_u2APPCOMTICK(25)
-#endif /* ( BSW_CANNM_E_CHNUM > 25U ) */
-#if( BSW_CANNM_E_CHNUM > 26U )
-    ,BSW_CANNM_E_u2APPCOMTICK(26)
-#endif /* ( BSW_CANNM_E_CHNUM > 26U ) */
-#if( BSW_CANNM_E_CHNUM > 27U )
-    ,BSW_CANNM_E_u2APPCOMTICK(27)
-#endif /* ( BSW_CANNM_E_CHNUM > 27U ) */
-#if( BSW_CANNM_E_CHNUM > 28U )
-    ,BSW_CANNM_E_u2APPCOMTICK(28)
-#endif /* ( BSW_CANNM_E_CHNUM > 28U ) */
-#if( BSW_CANNM_E_CHNUM > 29U )
-    ,BSW_CANNM_E_u2APPCOMTICK(29)
-#endif /* ( BSW_CANNM_E_CHNUM > 29U ) */
-#if( BSW_CANNM_E_CHNUM > 30U )
-    ,BSW_CANNM_E_u2APPCOMTICK(30)
-#endif /* ( BSW_CANNM_E_CHNUM > 30U ) */
-#if( BSW_CANNM_E_CHNUM > 31U )
-    ,BSW_CANNM_E_u2APPCOMTICK(31)
 #endif /* ( BSW_CANNM_E_CHNUM > 31U ) */
 };
 
@@ -1501,7 +1395,6 @@ void (* BswConst bsw_cannm_e_ctrl_ptAbtWkUpFrmFn[BSW_CANNM_E_CHNUM] )( BswU1 u1N
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2019/02/15                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

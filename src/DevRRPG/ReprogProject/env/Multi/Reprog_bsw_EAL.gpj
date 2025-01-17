@@ -1,0 +1,14 @@
+#!gbuild
+[Subproject]
+
+$TOP_DIR/bsw/EAL/CanIf/env/Multi/CanIf.gpj						[Relocatable Object]
+$TOP_DIR/bsw/EAL/CodeFlsIf/env/Multi/CodeFlsIf.gpj				[Relocatable Object]
+$TOP_DIR/bsw/EAL/CodeRamIf/env/Multi/CodeRamIf.gpj				[Relocatable Object]
+$TOP_DIR/bsw/EAL/WdgIf/env/Multi/WdgIf.gpj						[Relocatable Object]
+
+# usr
+$TOP_DIR/bsw/EAL/CanTrcv/env/Multi/CanTrcv_usr.gpj				[Relocatable Object]
+$TOP_DIR/bsw/EAL/ExtCodeFlsIf/env/Multi/ExtCodeFlsIf_usr.gpj	[Relocatable Object]
+$TOP_DIR/bsw/EAL/SleepIf/env/Multi/SleepIf_usr.gpj				[Relocatable Object]
+$TOP_DIR/bsw/EAL/SubMiconIf/env/Multi/SubMiconIf_usr.gpj		[Relocatable Object]
+$TOP_DIR/bsw/EAL/UsrSoftIf/env/Multi/UsrSoftIf_usr.gpj			[Relocatable Object]

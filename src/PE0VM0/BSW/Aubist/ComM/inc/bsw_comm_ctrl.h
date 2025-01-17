@@ -1,7 +1,7 @@
-/* bsw_comm_ctrl_h_v3-0-0                                                   */
+/* bsw_comm_ctrl_h_v2-2-0                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -28,11 +28,10 @@
 #define BSW_COMM_u1NO_WAKEUP_REQ               ((BswU1)0x1EU)     /* No Wake-up request  */
 #define BSW_COMM_u1EXIST_WAKEUP_REQ            ((BswU1)0xE1U)     /* Wake-up request exists */
 
-#define BSW_COMM_u1MAX_NUM_PWR                 ((Bsw_ComM_UserHandleType)BSW_COMM_SYSSTATMAXNUM)         /* Maximum number of power supplies */
-#define BSW_COMM_u1MAX_NUM_PWR_DELIMITE        ((Bsw_ComM_UserHandleType)32U)                            /* Maximum number of power supplies(Break position) */
-#define BSW_COMM_u1MAX_NUM_USRAWK              ((Bsw_ComM_UserHandleType)(BSW_COMM_SYSSTATMAXNUM + 32U)) /* Maximum number of power users Awake */
+#define BSW_COMM_u1MAX_NUM_PWR_USRAWK          ((Bsw_ComM_UserHandleType)16U)  /* Maximum number of power supplies/users Awake    */
 
 #define BSW_COMM_u2MASK_LOW                    ((BswU2)0x00FFU)   /* Lower 1BYTE mask          */
+#define BSW_COMM_u2ALLBIT                      ((BswU2)0xFFFFU)   /* For inverting bits             */
 #define BSW_COMM_u4ALLBIT                      (0xFFFFFFFFUL)     /* For inverting bits             */
 
 #define BSW_COMM_u1INDEX_0                     ((BswU1)0U)        /* Index for array access */
@@ -94,7 +93,6 @@
 #define BSW_COMM_u1USRHNDL_MSK_PNCIND          ((BswU1)0x7FU)     /* User handle PNC index mask */
 #define BSW_COMM_u1HANDLE_BIT_MASK             ((BswU1)0x1FU)
 #define BSW_COMM_u4USER_REQ_POS                (0x00000001UL)
-#define BSW_COMM_u4USER_REQ_NONE               (0x00000000UL)
 #define BSW_COMM_SHIFT_HANDLE_IDX              (5U)
 
 #define BSW_COMM_SHIFT1BYTE                    (8U)               /* Top address of 64bit upper data            */
@@ -209,7 +207,6 @@ void bsw_comm_ctrl_ClrAllCoPncAwkNn( void );
 void bsw_comm_ctrl_PNCEcuMWkUpIndNn( BswU1 u1Channel );
 void bsw_comm_ctrl_MainFuncEiraNone( void );
 void bsw_comm_ctrl_UpdPncAwakeNone( BswU1 u1Channel, BswU1 u1PncIndex, BswU4* ptPncOwnAwake );
-void bsw_comm_ctrl_StartNetworkNone( NetworkHandleType Network );
 
 /****************************************************************************/
 
@@ -217,10 +214,8 @@ void bsw_comm_ctrl_StartNetworkNone( NetworkHandleType Network );
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
 extern  Bsw_ComM_ChStsType bsw_comm_ctrl_stChSts[];                             /* State by channel     */
-extern  BswU4              bsw_comm_ctrl_u4RqComModeSys[];                      /* User request         */
-extern  BswU4              bsw_comm_ctrl_u4RqComModeSysMrr[];                   /* User request (mirror) */
-extern  BswU4              bsw_comm_ctrl_u4RqComModeAwk;                        /* User request User Awake */
-extern  BswU4              bsw_comm_ctrl_u4RqComModeAwkMrr;                     /* User request User Awake (mirror) */
+extern  BswU2              bsw_comm_ctrl_u2ReqComMode;                          /* User request         */
+extern  BswU2              bsw_comm_ctrl_u2ReqComModeMrr;                       /* User request (mirror) */
 
 extern  Bsw_ComM_PncStsType* BswConst bsw_comm_ctrl_ptPncSts[];                 /* State by PNC          */
 extern  BswU4 bsw_comm_ctrl_u4PncOwnAwake[][BSW_COMM_PNC_REQNUM];               /* Internal factor           */
@@ -244,10 +239,9 @@ extern  BswU4 bsw_comm_ctrl_u4PncEnableTxStat[][BSW_COMM_PNC_REQNUM];           
 extern  BswConst   BswU1  bsw_comm_ctrl_u1ChToIdxTbl[];                            /* Channel -> Index conversion */
 extern  BswConst   Bsw_ComM_BusFuncTblType* BswConst bsw_comm_ctrl_ptBusFuncTbl[]; /* Public function table */
 extern  BswConst   BswU1  bsw_comm_ctrl_u1ChNum;                                   /* Channel count */
-extern  BswConst   BswU4  bsw_comm_ctrl_u4SysStsPerCh[][BSW_COMM_SYSSTATTBLNUM];                           /* communication Activated System Status per channel */
-extern  BswConst   BswU4  bsw_comm_ctrl_u4UserAwakePerCh[];                        /* communication Activated User Awake per channel */
+extern  BswConst   BswU2  bsw_comm_ctrl_u2UserPerCh[];                             /* Request user communication per channel */
 extern  BswConst   BswU2  bsw_comm_ctrl_u2AwakeHoldTimer[];                        /* Own-node Awake hold time per channel */
-extern  BswConst   BswU4  bsw_comm_ctrl_u4CHPowSupply[][BSW_COMM_SYSSTATTBLNUM];                           /* Channel power per channel */
+extern  BswConst   BswU1  bsw_comm_ctrl_u1CHPowSupply[];                           /* Channel power per channel */
 
 extern  BswConst   BswU1 bsw_comm_ctrl_u1PncNum[];                                 /* Number of PNC */
 extern  BswConst   BswU2 bsw_comm_ctrl_u2PncResetTime[];                           /* EIRA reset time */
@@ -261,38 +255,7 @@ extern  BswConst   BswU1 bsw_comm_ctrl_u1PncWakeupReq[];
 extern  BswConst   BswU1 bsw_comm_ctrl_u1PncSyncWakeup[];
 extern  BswConst   BswU1 bsw_comm_ctrl_u1ChWakeupReq[];
 extern  BswConst   BswU1 bsw_comm_ctrl_u1ChPsvWakeupReq[];
-extern  BswConst   BswU4* BswConst bsw_comm_ctrl_u4PNCAwakePW[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_0[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_1[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_2[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_3[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_4[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_5[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_6[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_7[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_8[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_9[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_10[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_11[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_12[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_13[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_14[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_15[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_16[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_17[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_18[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_19[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_20[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_22[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_23[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_24[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_25[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_26[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_27[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_28[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_29[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_30[];
-extern  BswConst   BswU4 bsw_comm_ctrl_u4PncAwake_31[];
+extern  BswConst   BswU1* BswConst bsw_comm_ctrl_u1PNCAwakePW[];
 extern  BswConst   BswU2 bsw_comm_ctrl_u2PncSendStartTm[];
 
 extern  void (* BswConst bsw_comm_ctrl_ptInitPNCFunc)( void );
@@ -312,7 +275,6 @@ extern  void (* BswConst bsw_comm_ctrl_ptRqCmMdToReqFn)( BswU1 u1Channel, BswU1 
 extern  void (* BswConst bsw_comm_ctrl_ptRqCmMdToRdyFn)( BswU1 u1Channel );
 extern  void (* BswConst bsw_comm_ctrl_ptRqCmMdFlToReqFn)( BswU1 u1Channel );
 
-extern  void (* BswConst bsw_comm_ctrl_ptStartNetworkFn)( BswU1 NetworkId );
 
 #endif /* BSW_COMM_CTRL_H */
 
@@ -324,6 +286,5 @@ extern  void (* BswConst bsw_comm_ctrl_ptStartNetworkFn)( BswU1 NetworkId );
 /*  v2-0-0          :2022/01/07                                             */
 /*  v2-1-0          :2022/10/14                                             */
 /*  v2-2-0          :2023/05/08                                             */
-/*  v3-0-0          :2024/11/14                                             */
 /****************************************************************************/
 /**** End of File ***********************************************************/

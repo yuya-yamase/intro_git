@@ -1,0 +1,12 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/PrgChk/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/PrgChk/obj/PrgChk.rel.o
+
+../../src/PrgChk.c
+../../cfg/PrgChk_Cfg.c
+

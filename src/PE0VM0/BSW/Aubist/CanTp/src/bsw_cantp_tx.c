@@ -1,7 +1,7 @@
-/* bsw_cantp_tx_c_v3-0-0                                                    */
+/* bsw_cantp_tx_c_v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -635,12 +635,8 @@ bsw_cantp_tx_TxConfTX( BswConst Bsw_CanTp_TxNSduCfgType * ptTxNSduCfgTbl, Std_Re
             /* NOP */
             break;
 
-        case BSW_CANTP_ST_u1STS_IDLE:
-            bsw_cantp_tx_SenderToIdle( pt_SenderStatTbl );
-            break;
-
         default:
-            /* RAM broken */
+            /* IDLE or RAM broken */
             bsw_cantp_cmn_u1ErrState = BSW_CANTP_u1RAMERR;
             bsw_cantp_tx_SenderToIdle( pt_SenderStatTbl );
             break;
@@ -960,7 +956,6 @@ bsw_cantp_tx_SendSF( BswConst Bsw_CanTp_TxNSduCfgType * ptTxNSduCfgTbl, Bsw_CanT
     /* Make data for the PduR_CanTpCopyTxData */
     st_PduInfo.SduLength     = (PduLengthType)u1TxNSduLength;
     st_PduInfo.SduDataPtr    = &(bsw_cantp_cmn_u1TxBuffer[u1_Offset]);
-    st_PduInfo.MetaDataPtr   = (BswU1*)NULL_PTR;
     AvailableData            = (PduLengthType)0UL;
 
 #if( BSW_CANTP_CFG_LOWCOSTOPERATION != BSW_USE )
@@ -1092,7 +1087,6 @@ bsw_cantp_tx_SendFF( BswConst Bsw_CanTp_TxNSduCfgType * ptTxNSduCfgTbl, Bsw_CanT
     u1_MaxFFNDataLen         = u1_TxNPduLength - u1_Offset;
     st_PduInfo.SduLength     = (PduLengthType)u1_MaxFFNDataLen;
     st_PduInfo.SduDataPtr    = &(bsw_cantp_cmn_u1TxBuffer[u1_Offset]);
-    st_PduInfo.MetaDataPtr   = (BswU1*)NULL_PTR;
     AvailableData            = (PduLengthType)0UL;
 
 #if( BSW_CANTP_CFG_LOWCOSTOPERATION != BSW_USE )
@@ -1256,7 +1250,6 @@ bsw_cantp_tx_SendCF( BswConst Bsw_CanTp_TxNSduCfgType * ptTxNSduCfgTbl, Bsw_CanT
     /* Make data for the PduR_CanTpCopyTxData */
     st_PduInfo.SduLength     = (PduLengthType)u1_PduRCopyTxReqLen;
     st_PduInfo.SduDataPtr    = &(bsw_cantp_cmn_u1TxBuffer[u1_Offset]);
-    st_PduInfo.MetaDataPtr   = (BswU1*)NULL_PTR;
     AvailableData            = (PduLengthType)0UL;
 #if( BSW_CANTP_CFG_LOWCOSTOPERATION != BSW_USE )
     u2_PduId = (PduIdType)ptTxNSduCfgTbl->u2PduR_TxConfId;
@@ -1715,12 +1708,11 @@ bsw_cantp_tx_TerminateTxAbend( BswConst Bsw_CanTp_TxNSduCfgType * ptTxNSduCfgTbl
 
 /****************************************************************************/
 /* History                                                                  */
-/*  Version         :Date                                                   */
-/*  v1-0-0          :2017/09/25                                             */
-/*  v1-1-0          :2019/02/22                                             */
-/*  v1-2-0          :2020/02/17                                             */
-/*  v2-0-0          :2021/09/06                                             */
-/*  v3-0-0          :2024/11/05                                             */
+/*  Version        :Date                                                    */
+/*  v1-0-0         :2017/09/25                                              */
+/*  v1-1-0         :2019/02/22                                              */
+/*  v1-2-0         :2020/02/17                                              */
+/*  v2-0-0         :2021/09/06                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

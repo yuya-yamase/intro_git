@@ -1,7 +1,7 @@
-/* bsw_bswm_cs_status_h_v3-0-0                                              */
+/* bsw_bswm_cs_status_h_v2-2-0                                              */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -39,8 +39,6 @@
 #define BSW_BSWM_CS_u1INDEX_0               ((BswU1)0U)      /* Index for array access                          */
 #define BSW_BSWM_CS_u1INDEX_1               ((BswU1)1U)      /* Index for array access                          */
 
-#define BSW_BSWM_CS_SHIFT_1BIT              (1U)
-
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -59,9 +57,9 @@ void  bsw_bswm_cs_st_UpdPncIpduStat( void );
 extern BswU2    bsw_bswm_cs_st_u2CSStatus;
 extern BswU1    bsw_bswm_cs_st_u1Clock;
 
-extern BswU4    bsw_bswm_cs_st_u4IpduGrpVect[];
-extern BswU4    bsw_bswm_cs_st_u4DmIpduGrpVect[];
-extern BswU4    bsw_bswm_cs_st_u4WkupIpduGrVct[];
+extern BswU1    bsw_bswm_cs_st_u1IpduGrpVect[];
+extern BswU1    bsw_bswm_cs_st_u1DmIpduGrpVect[];
+extern BswU1    bsw_bswm_cs_st_u1WkupIpduGrVct[];
 
 extern BswU4    bsw_bswm_cs_st_u4PncIpduGrpVect[];
 extern BswU4    bsw_bswm_cs_st_u4PncDmIpduGrVct[];
@@ -83,7 +81,6 @@ extern BswConst BswU1     bsw_bswm_cs_st_u1PncIpduRx[];
 /*  v2-0-0          :2021/12/09                                             */
 /*  v2-1-0          :2022/06/08                                             */
 /*  v2-2-0          :2023/05/09                                             */
-/*  v3-0-0          :2024/11/15                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

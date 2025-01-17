@@ -1,7 +1,7 @@
-/* bsw_pdur_rt_h_v3-0-0                                                     */
+/* bsw_pdur_rt_h_v2-0-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -21,7 +21,7 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 /* Number of components to be connected to PduR (excluding SecOC/IpduM) */
-#define BSW_PDUR_MAX_LOCMPNUM      (8U)
+#define BSW_PDUR_MAX_LOCMPNUM      (12U)
 #define BSW_PDUR_MAX_UPCMPNUM      (5U)
 
 /* For PDU ID processing */
@@ -34,6 +34,8 @@
 #define BSW_PDUR_ZEROCOST_CAN      (0x00U)
 #define BSW_PDUR_ZEROCOST_LIN      (0x01U)
 #define BSW_PDUR_ZEROCOST_ETH      (0x02U)
+#define BSW_PDUR_ZEROCOST_CDD1     (0x03U)
+#define BSW_PDUR_ZEROCOST_CDD2     (0x04U)
 #define BSW_PDUR_ZEROCOST_NOUSE    (0xFFU)
 
 /* For SecOC PDU ID processing */
@@ -166,10 +168,14 @@ extern  BswConst   PduIdType bsw_pdur_u2DummyUpRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stCanIfRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stLinIfRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stSoAdIfRoutingTbl[];
+extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stCdd1IfRoutingTbl[];
+extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stCdd2IfRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stDoIPIfRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stCanTpRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stLinTpRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stSoAdTpRoutingTbl[];
+extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stCdd1TpRoutingTbl[];
+extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stCdd2TpRoutingTbl[];
 extern  BswConst   Bsw_PduR_RoutingType bsw_pdur_stDoIPTpRoutingTbl[];
 
 extern  BswConst   Bsw_PduR_RoutingType* BswConst bsw_pdur_stLoCompRoutingTbl[];
@@ -184,6 +190,9 @@ extern  BswConst   PduIdType bsw_pdur_u2CanIfIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2LinIfIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2SoAdIfIpduMTbl[];
 extern  BswConst   PduIdType bsw_pdur_u2DoIPIfIpduMTbl[];
+extern  BswConst   PduIdType bsw_pdur_u2Cdd1IfIpduMTbl[];
+extern  BswConst   PduIdType bsw_pdur_u2Cdd2IfIpduMTbl[];
+
 extern  BswConst   PduIdType bsw_pdur_u2SoAdIfSomeIpTbl[];
 
 extern  BswConst   PduIdType* BswConst bsw_pdur_ptIpduMUpRoutingTbl[];
@@ -215,9 +224,13 @@ extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_LinIfFuncTbl;
 extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_SoAdIfFuncTbl;
 extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_SecOCIfFuncTbl;
 extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_SecOCTpFuncTbl;
+extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_Cdd1IfFuncTbl;
+extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_Cdd2IfFuncTbl;
 extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_CanTpFuncTbl;
 extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_LinTpFuncTbl;
 extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_SoAdTpFuncTbl;
+extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_Cdd1TpFuncTbl;
+extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_Cdd2TpFuncTbl;
 extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_DoIPIfFuncTbl;
 extern  BswConst   Bsw_PduR_LoCompInfoType bsw_pdur_rt_DoIPTpFuncTbl;
 
@@ -287,7 +300,6 @@ extern  BswConst   PduIdType bsw_pdur_u2SecOCToLoCompIdTbl[];
 /*  v1-1-0          :2019/01/15                                             */
 /*  v1-2-0          :2019/11/05                                             */
 /*  v2-0-0          :2022/02/11                                             */
-/*  v3-0-0          :2024/09/04                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

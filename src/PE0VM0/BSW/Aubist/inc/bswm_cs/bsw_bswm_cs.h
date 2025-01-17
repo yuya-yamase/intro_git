@@ -1,7 +1,7 @@
-/* bsw_bswm_cs_h_v3-0-0                                                     */
+/* bsw_bswm_cs_h_v2-2-0                                                     */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -18,15 +18,10 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-/* Wakeup Type */
-#define BSWM_CS_WKUP_PWON                  (BSW_BSWM_CS_WKUP_PWON)
-#define BSWM_CS_WKUP_BS                    (BSW_BSWM_CS_WKUP_BS)
-
 /* Function */
 #define BswM_CS_EvtWakeupTxConfirmation    (bsw_bswm_cs_ctrl_EvtWkupTxConf)
 #define BswM_CS_SetFirstTxStatus           (bsw_bswm_cs_ctrl_SetFirstTxStat)
-#define BswM_CS_BusWakeup                  (bsw_bswm_cs_ctrl_BusWakeup)
-#define BswM_CS_RequestProvideClock        (bsw_bswm_cs_st_ReqProvideClock)
+
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -51,7 +46,6 @@
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2021/06/17                                             */
 /*  v2-2-0          :2023/05/23                                             */
-/*  v3-0-0          :2024/09/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

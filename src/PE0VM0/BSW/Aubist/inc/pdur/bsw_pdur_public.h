@@ -1,7 +1,7 @@
-/* bsw_pdur_public_h_V3-0-0                                                 */
+/* bsw_pdur_public_h_V2-0-0                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -30,6 +30,8 @@
 #define BSW_PDUR_LOCOMP_LIN                   (0x1000U)
 #define BSW_PDUR_LOCOMP_SOAD                  (0x2000U)
 #define BSW_PDUR_LOCOMP_DOIP                  (0x3000U)
+#define BSW_PDUR_LOCOMP_CDD1                  (0x4000U)
+#define BSW_PDUR_LOCOMP_CDD2                  (0x5000U)
 
 #define BSW_PDUR_LOCOMP_CANIF                 (BSW_PDUR_LOCOMP_CAN  | BSW_PDUR_LOCOMP_IF)
 #define BSW_PDUR_LOCOMP_CANTP                 (BSW_PDUR_LOCOMP_CAN  | BSW_PDUR_LOCOMP_TP)
@@ -39,6 +41,10 @@
 #define BSW_PDUR_LOCOMP_SOADTP                (BSW_PDUR_LOCOMP_SOAD | BSW_PDUR_LOCOMP_TP)
 #define BSW_PDUR_LOCOMP_DOIPIF                (BSW_PDUR_LOCOMP_DOIP | BSW_PDUR_LOCOMP_IF)
 #define BSW_PDUR_LOCOMP_DOIPTP                (BSW_PDUR_LOCOMP_DOIP | BSW_PDUR_LOCOMP_TP)
+#define BSW_PDUR_LOCOMP_CDD1IF                (BSW_PDUR_LOCOMP_CDD1 | BSW_PDUR_LOCOMP_IF)
+#define BSW_PDUR_LOCOMP_CDD1TP                (BSW_PDUR_LOCOMP_CDD1 | BSW_PDUR_LOCOMP_TP)
+#define BSW_PDUR_LOCOMP_CDD2IF                (BSW_PDUR_LOCOMP_CDD2 | BSW_PDUR_LOCOMP_IF)
+#define BSW_PDUR_LOCOMP_CDD2TP                (BSW_PDUR_LOCOMP_CDD2 | BSW_PDUR_LOCOMP_TP)
 #define BSW_PDUR_LOCOMP_CANNM                 (0x6000U)
 #define BSW_PDUR_LOCOMP_CANCDD1               (0xB800U)
 #define BSW_PDUR_LOCOMP_CANCDD2               (0xC000U)
@@ -60,6 +66,10 @@
 #define BSW_PDUR_COMPID_SOADTP                (BSW_PDUR_LOCOMP_SOAD | BSW_PDUR_LOCOMP_TP)
 #define BSW_PDUR_COMPID_DOIPIF                (BSW_PDUR_LOCOMP_DOIP | BSW_PDUR_LOCOMP_IF)
 #define BSW_PDUR_COMPID_DOIPTP                (BSW_PDUR_LOCOMP_DOIP | BSW_PDUR_LOCOMP_TP)
+#define BSW_PDUR_COMPID_CDD1IF                (BSW_PDUR_LOCOMP_CDD1 | BSW_PDUR_LOCOMP_IF)
+#define BSW_PDUR_COMPID_CDD1TP                (BSW_PDUR_LOCOMP_CDD1 | BSW_PDUR_LOCOMP_TP)
+#define BSW_PDUR_COMPID_CDD2IF                (BSW_PDUR_LOCOMP_CDD2 | BSW_PDUR_LOCOMP_IF)
+#define BSW_PDUR_COMPID_CDD2TP                (BSW_PDUR_LOCOMP_CDD2 | BSW_PDUR_LOCOMP_TP)
 
 /* Upper */
 #define BSW_PDUR_COMPID_COM                   (0xC000U)
@@ -149,9 +159,29 @@ Std_ReturnType          bsw_pdur_rt_Cdd1Transmit( PduIdType TxPduId, BswConstR P
 Std_ReturnType          bsw_pdur_rt_Cdd1CancelTx( PduIdType TxPduId );
 Std_ReturnType          bsw_pdur_rt_Cdd1CancelReceive( PduIdType RxPduId );
 
+void                    bsw_pdur_rt_Cdd1IfRxIndication( PduIdType RxPduId, BswConstR PduInfoType* PduInfoPtr );
+Std_ReturnType          bsw_pdur_rt_Cdd1IfTriggerTx( PduIdType TxPduId, PduInfoType* PduInfoPtr );
+void                    bsw_pdur_rt_Cdd1IfTxConfirm( PduIdType TxPduId, Std_ReturnType result );
+
+void                    bsw_pdur_rt_Cdd1TpRxIndication( PduIdType id, Std_ReturnType result );
+BufReq_ReturnType       bsw_pdur_rt_Cdd1TpStartOfRecept( PduIdType id, BswConstR PduInfoType* info, PduLengthType TpSduLength, PduLengthType* bufferSizePtr );
+BufReq_ReturnType       bsw_pdur_rt_Cdd1TpCopyRxData( PduIdType id, BswConstR PduInfoType* info, PduLengthType* bufferSizePtr );
+void                    bsw_pdur_rt_Cdd1TpTxConfirm( PduIdType id, Std_ReturnType result );
+BufReq_ReturnType       bsw_pdur_rt_Cdd1TpCopyTxData( PduIdType id, BswConstR PduInfoType* info, BswConstR RetryInfoType* retry, PduLengthType* availableDataPtr );
+
 Std_ReturnType          bsw_pdur_rt_Cdd2Transmit( PduIdType TxPduId, BswConstR PduInfoType* PduInfoPtr );
 Std_ReturnType          bsw_pdur_rt_Cdd2CancelTx( PduIdType TxPduId );
 Std_ReturnType          bsw_pdur_rt_Cdd2CancelReceive( PduIdType RxPduId );
+
+void                    bsw_pdur_rt_Cdd2IfRxIndication( PduIdType RxPduId, BswConstR PduInfoType* PduInfoPtr );
+Std_ReturnType          bsw_pdur_rt_Cdd2IfTriggerTx( PduIdType TxPduId, PduInfoType* PduInfoPtr );
+void                    bsw_pdur_rt_Cdd2IfTxConfirm( PduIdType TxPduId, Std_ReturnType result );
+
+void                    bsw_pdur_rt_Cdd2TpRxIndication( PduIdType id, Std_ReturnType result );
+BufReq_ReturnType       bsw_pdur_rt_Cdd2TpStartOfRecept( PduIdType id, BswConstR PduInfoType* info, PduLengthType TpSduLength, PduLengthType* bufferSizePtr );
+BufReq_ReturnType       bsw_pdur_rt_Cdd2TpCopyRxData( PduIdType id, BswConstR PduInfoType* info, PduLengthType* bufferSizePtr );
+void                    bsw_pdur_rt_Cdd2TpTxConfirm( PduIdType id, Std_ReturnType result );
+BufReq_ReturnType       bsw_pdur_rt_Cdd2TpCopyTxData( PduIdType id, BswConstR PduInfoType* info, BswConstR RetryInfoType* retry, PduLengthType* availableDataPtr );
 
 Std_ReturnType          bsw_pdur_rt_ComTransmit( PduIdType TxPduId, BswConstR PduInfoType* PduInfoPtr );
 Std_ReturnType          bsw_pdur_rt_ComCancelTransmit( PduIdType TxPduId );
@@ -231,7 +261,6 @@ BufReq_ReturnType       bsw_pdur_rt_SomeIpTpCopyTxData( PduIdType id, BswConstR 
 /* History                                                                  */
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2022/02/25                                             */
-/*  v3-0-0          :2024/09/04                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

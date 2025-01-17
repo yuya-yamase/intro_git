@@ -1,0 +1,61 @@
+	-I../../inc
+	-I../../cfg
+
+#	-c
+	-nopic
+	-nopid
+	{streq(MICON_NAME, RH850F1KMS4, RH850F1KMS2, RH850F1KMS1, RH850F1K, RH850F1L)} -cpu=rh850g3k
+	{streq(MICON_NAME, RH850D1X, RH850E1MS2, RH850E2M, RH850F1H, RH850P1ME)} -cpu=rh850g3m
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -cpu=rh850g4mh
+	-rh850_4bytewordoffset
+	-Osize
+	-sda=all
+	-notda
+	-no_callt
+	-prepare_dispose
+	-allocate_ep
+	--long_long
+	-Xv800_no_ldst_compaction
+	{!streq(MICON_NAME, RH850U2A, RH850U2B)} -G
+	-Onotailrecursion
+	-Xv800_no_jumptable_tablification
+	-no_codefactor
+	-Onoipa
+	--no_inline_tiny_functions
+	--no_commons
+	-nofarcallpatch
+	--no_keep_static_symbols
+	--diag_warning 450
+	-reserve_r2
+	--asm_warnings
+	{!streq(MICON_NAME, RH850U2A, RH850U2B)} --no_slash_comment
+	--no_alternative_tokens
+	--prototype_errors
+	-nostdinc
+	{!streq(MICON_NAME, RH850U2A, RH850U2B)} -ansi
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -gnu99
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -g
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} --xref=full
+	-precise_signed_zero_compare
+	--unsigned_fields
+	-allow_1bit_volatile_any_basetype
+	--unsigned_chars
+	-no_smaller_bitops
+	-dual_debug
+	-asm3g
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -inline_prologue
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -rh850_abi=ghs2014
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -Onoprintfuncs
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -ffunctions
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -Oinline_constant_math
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -fno_NaN_cmp_unordered
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -no_precise_signed_zero
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -no_fused_madd
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -no_float_associativity
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -half_precision_type
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} --no_vla
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -asm=-permissive_sysregs
+	-list
+	--diag_error 39,549,940,1056,1780,1999
+	--diag_warning 47,193,1705,1706,1709,1710,1718,1721,1729,1735,1777,1826,1835,2017
+

@@ -1,0 +1,12 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc/
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/parts/Csm/WrapCrypto/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/parts/Csm/WrapCrypto/obj/WrapCrypto_usr.rel.o
+
+../../usr/WrapCrypto.c
+../../usr/WrapCrypto_Decrypt.c
+../../usr/WrapCrypto_Encrypt.c
+../../usr/WrapCrypto_SigVerify.c

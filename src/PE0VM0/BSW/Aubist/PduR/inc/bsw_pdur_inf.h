@@ -1,7 +1,7 @@
-/* bsw_pdur_inf_h_v3-0-0                                                    */
+/* bsw_pdur_inf_h_v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -33,7 +33,6 @@ PduIdType bsw_pdur_inf_GetIpduIdSingle( PduIdType PduId );
 PduIdType bsw_pdur_inf_GetIpduIdMulti( PduIdType PduId );
 PduIdType bsw_pdur_inf_ComGetLpduIdSingle( PduIdType PduId );
 PduIdType bsw_pdur_inf_ComGetLpduIdMulti( PduIdType PduId );
-PduIdType bsw_pdur_inf_LdComGetLpduIdMulti( PduIdType PduId );
 PduIdType bsw_pdur_inf_Cdd1GetLpduIdMulti( PduIdType PduId );
 PduIdType bsw_pdur_inf_Cdd2GetLpduIdMulti( PduIdType PduId );
 
@@ -58,7 +57,6 @@ extern BswConst Bsw_PduR_GetLpduIdType bsw_pdur_rom_ptGetLIdFuncTbl[];
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2017/03/07                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/10/07                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -1,0 +1,10 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/MCAL/Mcu/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/MCAL/Mcu/obj/Mcu_usr.rel.o
+
+{streq(PLATFORM_NAME, RH850, TraveoII)} ../../usr/micon/$MICON_NAME/Mcu_Usr.c
+
+{streq(PLATFORM_NAME, TC3XX)} ../../usr/micon/$PLATFORM_NAME/Mcu_Usr.c

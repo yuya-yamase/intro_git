@@ -1,7 +1,7 @@
-/* bsw_nm_public_h_v3-0-0                                                   */
+/* bsw_nm_public_h_V2-1-0                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -24,7 +24,7 @@
 /* AUTOSAR Release Version */
 #define BSW_NM_AR_RELEASE_MAJOR_VERSION             (4U)
 #define BSW_NM_AR_RELEASE_MINOR_VERSION             (5U)
-#define BSW_NM_AR_RELEASE_REVISION_VERSION          (0U)
+#define BSW_NM_AR_RELEASE_REVISION_VERSION               (0U)
 
 /* Vendor Specification Version */
 #define BSW_NM_SW_MAJOR_VERSION             (4U)
@@ -61,10 +61,6 @@
 #define BSW_NM_DIRECTION_TX             (0x01U)
 #define BSW_NM_DIRECTION_RX             (0x02U)
 
-/* Wakeup Type */
-#define BSW_NM_WKUP_PWON                (0x01U)
-#define BSW_NM_WKUP_BS                  (0x02U)
-
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -99,7 +95,6 @@ void            bsw_nm_coord_CbkCtrlCoBusAwake( void );
 Std_ReturnType  bsw_nm_sw_CbkPreTxMsg( PduIdType PduId, NetworkHandleType nmNetworkHandle, PduInfoType* PduInfoPtr );
 void            bsw_nm_sw_CbkTRxIndication( PduIdType PduId, NetworkHandleType nmNetworkHandle, BswConstR PduInfoType* PduInfoPtr, Bsw_Nm_DirectionType nmDir );
 void            bsw_nm_sw_CbkStateChangeNotif( NetworkHandleType nmNetworkHandle, Bsw_Nm_StateType nmPreviousState, Bsw_Nm_StateType nmCurrentState );
-Std_ReturnType  bsw_nm_sw_CbkSetDisableTxTime( NetworkHandleType nmNetworkHandle, uint8 WakeupKind, uint16* EventTimePtr, uint16* PeriTimePtr );
 
 void            bsw_nm_sw_NetworkStartInd( NetworkHandleType nmNetworkHandle );
 void            bsw_nm_sw_NetworkMode( NetworkHandleType nmNetworkHandle );
@@ -110,7 +105,6 @@ void            bsw_nm_sw_PduRxIndication( NetworkHandleType nmNetworkHandle );
 void            bsw_nm_sw_StateChangeNotif( NetworkHandleType nmNetworkHandle, Bsw_Nm_StateType nmPreviousState, Bsw_Nm_StateType nmCurrentState );
 void            bsw_nm_sw_TxTimeoutException( NetworkHandleType nmNetworkHandle );
 void            bsw_nm_sw_EvtWkupTxConfirm( NetworkHandleType nmNetworkHandle, uint16 DisableTime );
-void            bsw_nm_sw_TRxIndication( PduIdType PduId, NetworkHandleType nmNetworkHandle, BswConstR PduInfoType* PduInfoPtr, Bsw_Nm_DirectionType nmDir );
 
 Std_ReturnType  bsw_nm_coord_StartSyncSleep( NetworkHandleType nmNetworkHandle );
 Std_ReturnType  bsw_nm_coord_CancelSyncSleep( NetworkHandleType nmNetworkHandle );
@@ -133,7 +127,6 @@ Std_ReturnType  bsw_nm_coord_CancelSyncPncSlp( NetworkHandleType nmNetworkHandle
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2022/01/12                                             */
 /*  v2-1-0          :2022/06/16                                             */
-/*  v3-0-0          :2024/10/15                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

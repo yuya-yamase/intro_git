@@ -1,7 +1,7 @@
-/* bsw_comm_config_h_v3-0-0                                                 */
+/* bsw_comm_config_h_v2-1-0                                                 */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -21,27 +21,37 @@
 #define BSW_COMM_OFFSET_NOUSE         (0U)
 
 #define BSW_COMM_BUSTYPE(ch)          (BSW_COMM_CFG_BUS_TYPE_##ch)
-#define BSW_COMM_SLPWKUP_USE(ch)      ((BSW_COMM_CFG_NM_ACT_TYPE_##ch == BSW_COMM_NM_ACT_TYPE_BSSLP) ? BSW_USE : BSW_NOUSE)
+#define BSW_COMM_POWERSUPPLY(ch)      (BSW_COMM_CFG_CH_POWERSUPPLY_##ch)
+#define BSW_COMM_COM_CH_USER(ch)      (BSW_COMM_CFG_COM_CH_USER_##ch)
+#define BSW_COMM_COM_USERAWAKE_MSK    (0x00FFU)
+
+#define BSW_COMM_SLPWKUP_USE(ch)          \
+        (((BSW_COMM_POWERSUPPLY(ch) & (BSW_COMM_COM_CH_USER(ch) & BSW_COMM_COM_USERAWAKE_MSK)) == BSW_COMM_POWERSUPPLY(ch)) \
+        ? BSW_NOUSE : BSW_USE)
 
 /* Used/unused get macro for each bus type */
 /* The argument type should be set according to the protocol type */
 /* -------------------------------------------- */
-/* Protocols         | Setting value            */
+/* Protocols         | Setting value                  */
 /* -------------------------------------------- */
 /* Can                | CAN                     */
 /* Ethernet           | ETH                     */
 /* Lin                | LIN                     */
+/* CDD1               | CDD1                    */
+/* CDD2               | CDD2                    */
 /* -------------------------------------------- */
 #define BSW_COMM_BUS_TYPE_USE(type)     (BSW_COMM_BUS_TYPE_USE_##type)
 
 /* Macro to get network handle start position for each bus type */
 /* The argument type should be set according to the protocol type */
 /* -------------------------------------------- */
-/* Protocols         | Setting value            */
+/* Protocols         | Setting value                  */
 /* -------------------------------------------- */
 /* Can                | CAN                     */
 /* Ethernet           | ETH                     */
 /* Lin                | LIN                     */
+/* CDD1               | CDD1                    */
+/* CDD2               | CDD2                    */
 /* -------------------------------------------- */
 #define BSW_COMM_BUS_TYPE_OFFSET(type)  (BSW_COMM_BUS_TYPE_OFFSET_##type)
 
@@ -348,14 +358,218 @@
 #define BSW_COMM_BUS_TYPE_OFFSET_LIN     (BSW_COMM_OFFSET_NOUSE)
 #endif
 
+#if (BSW_COMM_BUSTYPE(0) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (0U)
+#elif (BSW_COMM_BUSTYPE(1) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (1U)
+#elif (BSW_COMM_BUSTYPE(2) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (2U)
+#elif (BSW_COMM_BUSTYPE(3) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (3U)
+#elif (BSW_COMM_BUSTYPE(4) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (4U)
+#elif (BSW_COMM_BUSTYPE(5) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (5U)
+#elif (BSW_COMM_BUSTYPE(6) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (6U)
+#elif (BSW_COMM_BUSTYPE(7) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (7U)
+#elif (BSW_COMM_BUSTYPE(8) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (8U)
+#elif (BSW_COMM_BUSTYPE(9) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (9U)
+#elif (BSW_COMM_BUSTYPE(10) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (10U)
+#elif (BSW_COMM_BUSTYPE(11) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (11U)
+#elif (BSW_COMM_BUSTYPE(12) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (12U)
+#elif (BSW_COMM_BUSTYPE(13) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (13U)
+#elif (BSW_COMM_BUSTYPE(14) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (14U)
+#elif (BSW_COMM_BUSTYPE(15) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (15U)
+#elif (BSW_COMM_BUSTYPE(16) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (16U)
+#elif (BSW_COMM_BUSTYPE(17) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (17U)
+#elif (BSW_COMM_BUSTYPE(18) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (18U)
+#elif (BSW_COMM_BUSTYPE(19) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (19U)
+#elif (BSW_COMM_BUSTYPE(20) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (20U)
+#elif (BSW_COMM_BUSTYPE(21) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (21U)
+#elif (BSW_COMM_BUSTYPE(22) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (22U)
+#elif (BSW_COMM_BUSTYPE(23) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (23U)
+#elif (BSW_COMM_BUSTYPE(24) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (24U)
+#elif (BSW_COMM_BUSTYPE(25) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (25U)
+#elif (BSW_COMM_BUSTYPE(26) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (26U)
+#elif (BSW_COMM_BUSTYPE(27) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (27U)
+#elif (BSW_COMM_BUSTYPE(28) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (28U)
+#elif (BSW_COMM_BUSTYPE(29) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (29U)
+#elif (BSW_COMM_BUSTYPE(30) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (30U)
+#elif (BSW_COMM_BUSTYPE(31) == BSW_COMM_BUS_TYPE_CDD1)
+#define BSW_COMM_BUS_TYPE_USE_CDD1        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1     (31U)
+#else
+#define BSW_COMM_BUS_TYPE_USE_CDD1       (BSW_NOUSE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD1    (BSW_COMM_OFFSET_NOUSE)
+#endif
+
+#if (BSW_COMM_BUSTYPE(0) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (0U)
+#elif (BSW_COMM_BUSTYPE(1) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (1U)
+#elif (BSW_COMM_BUSTYPE(2) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (2U)
+#elif (BSW_COMM_BUSTYPE(3) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (3U)
+#elif (BSW_COMM_BUSTYPE(4) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (4U)
+#elif (BSW_COMM_BUSTYPE(5) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (5U)
+#elif (BSW_COMM_BUSTYPE(6) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (6U)
+#elif (BSW_COMM_BUSTYPE(7) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (7U)
+#elif (BSW_COMM_BUSTYPE(8) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (8U)
+#elif (BSW_COMM_BUSTYPE(9) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (9U)
+#elif (BSW_COMM_BUSTYPE(10) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (10U)
+#elif (BSW_COMM_BUSTYPE(11) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (11U)
+#elif (BSW_COMM_BUSTYPE(12) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (12U)
+#elif (BSW_COMM_BUSTYPE(13) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (13U)
+#elif (BSW_COMM_BUSTYPE(14) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (14U)
+#elif (BSW_COMM_BUSTYPE(15) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (15U)
+#elif (BSW_COMM_BUSTYPE(16) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (16U)
+#elif (BSW_COMM_BUSTYPE(17) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (17U)
+#elif (BSW_COMM_BUSTYPE(18) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (18U)
+#elif (BSW_COMM_BUSTYPE(19) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (19U)
+#elif (BSW_COMM_BUSTYPE(20) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (20U)
+#elif (BSW_COMM_BUSTYPE(21) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (21U)
+#elif (BSW_COMM_BUSTYPE(22) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (22U)
+#elif (BSW_COMM_BUSTYPE(23) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (23U)
+#elif (BSW_COMM_BUSTYPE(24) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (24U)
+#elif (BSW_COMM_BUSTYPE(25) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (25U)
+#elif (BSW_COMM_BUSTYPE(26) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (26U)
+#elif (BSW_COMM_BUSTYPE(27) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (27U)
+#elif (BSW_COMM_BUSTYPE(28) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (28U)
+#elif (BSW_COMM_BUSTYPE(29) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (29U)
+#elif (BSW_COMM_BUSTYPE(30) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (30U)
+#elif (BSW_COMM_BUSTYPE(31) == BSW_COMM_BUS_TYPE_CDD2)
+#define BSW_COMM_BUS_TYPE_USE_CDD2        (BSW_USE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2     (31U)
+#else
+#define BSW_COMM_BUS_TYPE_USE_CDD2       (BSW_NOUSE)
+#define BSW_COMM_BUS_TYPE_OFFSET_CDD2    (BSW_COMM_OFFSET_NOUSE)
+#endif
+
 /* Macro for getting the network handle count for each bus type */
 /* The argument type should be set according to the protocol type */
 /* -------------------------------------------- */
-/* Protocols         | Setting value            */
+/* Protocols         | Setting value                  */
 /* -------------------------------------------- */
 /* Can                | CAN                     */
 /* Ethernet           | ETH                     */
 /* Lin                | LIN                     */
+/* CDD1               | CDD1                    */
+/* CDD2               | CDD2                    */
 /* -------------------------------------------- */
 #define BSW_COMM_BUS_TYPE_CHNUM(type)           (BSW_COMM_BUS_TYPE_CHNUM_0_3(type) + BSW_COMM_BUS_TYPE_CHNUM_4_7(type) + BSW_COMM_BUS_TYPE_CHNUM_8_11(type) + BSW_COMM_BUS_TYPE_CHNUM_12_15(type) \
                                                + BSW_COMM_BUS_TYPE_CHNUM_16_19(type) + BSW_COMM_BUS_TYPE_CHNUM_20_23(type) + BSW_COMM_BUS_TYPE_CHNUM_24_27(type) + BSW_COMM_BUS_TYPE_CHNUM_28_31(type) )
@@ -382,11 +596,13 @@
 /* Channel attribute getting macro for protocol   */
 /* type   :Protocol type               */
 /* ------------------------------------ */
-/*  Protocols       | Setting value     */
+/*  Protocols       | Setting value           */
 /* ------------------------------------ */
 /*  Can              | CAN              */
 /*  Ethernet         | ETH              */
 /*  Lin              | LIN              */
+/*  CDD1             | CDD1             */
+/*  CDD2             | CDD2             */
 /* ------------------------------------ */
 /* ch: Relative channel number for each protocol */
 #define BSW_COMM_CH_ATTRBT(type, ch)     BSW_COMM_CH_ATTRBT_0(type, ch)
@@ -426,289 +642,225 @@
 #if ( BSW_COMM_CFG_CHNUM > 0U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_0 > 0U )
 #define BSW_COMM_CH_PNCNUM_0         BSW_COMM_CFG_CH_PNCNUM_0
-#define BSW_COMM_CH_PNAWKPW_NUM_0    (BSW_COMM_CH_PNCNUM_0 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_0         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_0    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 1U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_1 > 0U )
 #define BSW_COMM_CH_PNCNUM_1         BSW_COMM_CFG_CH_PNCNUM_1
-#define BSW_COMM_CH_PNAWKPW_NUM_1    (BSW_COMM_CH_PNCNUM_1 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_1         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_1    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 2U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_2 > 0U )
 #define BSW_COMM_CH_PNCNUM_2         BSW_COMM_CFG_CH_PNCNUM_2
-#define BSW_COMM_CH_PNAWKPW_NUM_2    (BSW_COMM_CH_PNCNUM_2 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_2         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_2    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 3U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_3 > 0U )
 #define BSW_COMM_CH_PNCNUM_3         BSW_COMM_CFG_CH_PNCNUM_3
-#define BSW_COMM_CH_PNAWKPW_NUM_3    (BSW_COMM_CH_PNCNUM_3 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_3         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_3    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 4U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_4 > 0U )
 #define BSW_COMM_CH_PNCNUM_4         BSW_COMM_CFG_CH_PNCNUM_4
-#define BSW_COMM_CH_PNAWKPW_NUM_4    (BSW_COMM_CH_PNCNUM_4 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_4         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_4    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 5U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_5 > 0U )
 #define BSW_COMM_CH_PNCNUM_5         BSW_COMM_CFG_CH_PNCNUM_5
-#define BSW_COMM_CH_PNAWKPW_NUM_5    (BSW_COMM_CH_PNCNUM_5 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_5         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_5    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 6U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_6 > 0U )
 #define BSW_COMM_CH_PNCNUM_6         BSW_COMM_CFG_CH_PNCNUM_6
-#define BSW_COMM_CH_PNAWKPW_NUM_6    (BSW_COMM_CH_PNCNUM_6 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_6         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_6    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 7U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_7 > 0U )
 #define BSW_COMM_CH_PNCNUM_7         BSW_COMM_CFG_CH_PNCNUM_7
-#define BSW_COMM_CH_PNAWKPW_NUM_7    (BSW_COMM_CH_PNCNUM_7 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_7         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_7    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 8U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_8 > 0U )
 #define BSW_COMM_CH_PNCNUM_8         BSW_COMM_CFG_CH_PNCNUM_8
-#define BSW_COMM_CH_PNAWKPW_NUM_8    (BSW_COMM_CH_PNCNUM_8 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_8         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_8    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 9U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_9 > 0U )
 #define BSW_COMM_CH_PNCNUM_9         BSW_COMM_CFG_CH_PNCNUM_9
-#define BSW_COMM_CH_PNAWKPW_NUM_9    (BSW_COMM_CH_PNCNUM_9 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_9         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_9    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 10U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_10 > 0U )
 #define BSW_COMM_CH_PNCNUM_10        BSW_COMM_CFG_CH_PNCNUM_10
-#define BSW_COMM_CH_PNAWKPW_NUM_10   (BSW_COMM_CH_PNCNUM_10 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_10        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_10   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 11U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_11 > 0U )
 #define BSW_COMM_CH_PNCNUM_11        BSW_COMM_CFG_CH_PNCNUM_11
-#define BSW_COMM_CH_PNAWKPW_NUM_11   (BSW_COMM_CH_PNCNUM_11 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_11        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_11   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 12U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_12 > 0U )
 #define BSW_COMM_CH_PNCNUM_12        BSW_COMM_CFG_CH_PNCNUM_12
-#define BSW_COMM_CH_PNAWKPW_NUM_12   (BSW_COMM_CH_PNCNUM_12 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_12        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_12   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 13U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_13 > 0U )
 #define BSW_COMM_CH_PNCNUM_13        BSW_COMM_CFG_CH_PNCNUM_13
-#define BSW_COMM_CH_PNAWKPW_NUM_13   (BSW_COMM_CH_PNCNUM_13 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_13        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_13   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 14U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_14 > 0U )
 #define BSW_COMM_CH_PNCNUM_14        BSW_COMM_CFG_CH_PNCNUM_14
-#define BSW_COMM_CH_PNAWKPW_NUM_14   (BSW_COMM_CH_PNCNUM_14 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_14        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_14   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 15U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_15 > 0U )
 #define BSW_COMM_CH_PNCNUM_15        BSW_COMM_CFG_CH_PNCNUM_15
-#define BSW_COMM_CH_PNAWKPW_NUM_15   (BSW_COMM_CH_PNCNUM_15 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_15        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_15   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 16U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_16 > 0U )
 #define BSW_COMM_CH_PNCNUM_16        BSW_COMM_CFG_CH_PNCNUM_16
-#define BSW_COMM_CH_PNAWKPW_NUM_16   (BSW_COMM_CH_PNCNUM_16 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_16        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_16   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 17U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_17 > 0U )
 #define BSW_COMM_CH_PNCNUM_17        BSW_COMM_CFG_CH_PNCNUM_17
-#define BSW_COMM_CH_PNAWKPW_NUM_17   (BSW_COMM_CH_PNCNUM_17 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_17        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_17   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 18U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_18 > 0U )
 #define BSW_COMM_CH_PNCNUM_18        BSW_COMM_CFG_CH_PNCNUM_18
-#define BSW_COMM_CH_PNAWKPW_NUM_18   (BSW_COMM_CH_PNCNUM_18 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_18        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_18   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 19U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_19 > 0U )
 #define BSW_COMM_CH_PNCNUM_19        BSW_COMM_CFG_CH_PNCNUM_19
-#define BSW_COMM_CH_PNAWKPW_NUM_19   (BSW_COMM_CH_PNCNUM_19 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_19        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_19   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 20U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_20 > 0U )
 #define BSW_COMM_CH_PNCNUM_20        BSW_COMM_CFG_CH_PNCNUM_20
-#define BSW_COMM_CH_PNAWKPW_NUM_20   (BSW_COMM_CH_PNCNUM_20 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_20        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_20   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 21U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_21 > 0U )
 #define BSW_COMM_CH_PNCNUM_21        BSW_COMM_CFG_CH_PNCNUM_21
-#define BSW_COMM_CH_PNAWKPW_NUM_21   (BSW_COMM_CH_PNCNUM_21 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_21        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_21   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 22U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_22 > 0U )
 #define BSW_COMM_CH_PNCNUM_22        BSW_COMM_CFG_CH_PNCNUM_22
-#define BSW_COMM_CH_PNAWKPW_NUM_22   (BSW_COMM_CH_PNCNUM_22 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_22        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_22   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 23U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_23 > 0U )
 #define BSW_COMM_CH_PNCNUM_23        BSW_COMM_CFG_CH_PNCNUM_23
-#define BSW_COMM_CH_PNAWKPW_NUM_23   (BSW_COMM_CH_PNCNUM_23 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_23        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_23   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 24U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_24 > 0U )
 #define BSW_COMM_CH_PNCNUM_24        BSW_COMM_CFG_CH_PNCNUM_24
-#define BSW_COMM_CH_PNAWKPW_NUM_24   (BSW_COMM_CH_PNCNUM_24 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_24        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_24   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 25U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_25 > 0U )
 #define BSW_COMM_CH_PNCNUM_25        BSW_COMM_CFG_CH_PNCNUM_25
-#define BSW_COMM_CH_PNAWKPW_NUM_25   (BSW_COMM_CH_PNCNUM_25 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_25        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_25   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 26U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_26 > 0U )
 #define BSW_COMM_CH_PNCNUM_26        BSW_COMM_CFG_CH_PNCNUM_26
-#define BSW_COMM_CH_PNAWKPW_NUM_26   (BSW_COMM_CH_PNCNUM_26 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_26        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_26   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 27U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_27 > 0U )
 #define BSW_COMM_CH_PNCNUM_27        BSW_COMM_CFG_CH_PNCNUM_27
-#define BSW_COMM_CH_PNAWKPW_NUM_27   (BSW_COMM_CH_PNCNUM_27 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_27        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_27   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 28U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_28 > 0U )
 #define BSW_COMM_CH_PNCNUM_28        BSW_COMM_CFG_CH_PNCNUM_28
-#define BSW_COMM_CH_PNAWKPW_NUM_28   (BSW_COMM_CH_PNCNUM_28 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_28        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_28   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 29U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_29 > 0U )
 #define BSW_COMM_CH_PNCNUM_29        BSW_COMM_CFG_CH_PNCNUM_29
-#define BSW_COMM_CH_PNAWKPW_NUM_29   (BSW_COMM_CH_PNCNUM_29 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_29        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_29   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 30U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_30 > 0U )
 #define BSW_COMM_CH_PNCNUM_30        BSW_COMM_CFG_CH_PNCNUM_30
-#define BSW_COMM_CH_PNAWKPW_NUM_30   (BSW_COMM_CH_PNCNUM_30 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_30        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_30   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 31U )
 #if ( BSW_COMM_CFG_CH_PNCNUM_31 > 0U )
 #define BSW_COMM_CH_PNCNUM_31        BSW_COMM_CFG_CH_PNCNUM_31
-#define BSW_COMM_CH_PNAWKPW_NUM_31   (BSW_COMM_CH_PNCNUM_31 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_31        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_31   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 
@@ -737,7 +889,6 @@
 /*  v1-1-0          :2018/07/02                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/06/09                                             */
-/*  v3-0-0          :2024/11/14                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

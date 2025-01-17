@@ -1,0 +1,149 @@
+#!gbuild
+[Program]
+	-e $ENTRY_ADR
+	-Mn
+	-map
+	-Qn
+	-no_delete
+	-no_codefactor
+	-nostdlib
+	--preprocess_linker_directive_full
+
+	-object_dir=$TOP_DIR/env/out/obj
+
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/env/out/Reprog.elf
+
+	{isdefined(ROM3_TOP_ADR)}                                              :postexec="gsrec -S3 -pad2 $ROM1_TOP_ADR $ROM1_END_ADR 0x4000 -pad2 $ROM2_TOP_ADR $ROM2_END_ADR 0x4000 -pad2 $ROM3_TOP_ADR $ROM3_END_ADR 0x4000 -start $ROM1_TOP_ADR -end $ROM3_END_ADR -bytes 16                                $TOP_DIR/env/out/Reprog.elf -o $TOP_DIR/env/out/Reprog.run"
+	{isdefined(ROM3_TOP_ADR) && streq(DOUBLE_MAP, ON_VALID, ON_INVALID)}   :postexec="gsrec -S3 -pad2 $ROM1_TOP_ADR $ROM1_END_ADR 0x4000 -pad2 $ROM2_TOP_ADR $ROM2_END_ADR 0x4000 -pad2 $ROM3_TOP_ADR $ROM3_END_ADR 0x4000 -start $ROM1_TOP_ADR -end $ROM3_END_ADR -bytes 16 -romaddr $DOUBLE_MAP_B_ROM_ADR $TOP_DIR/env/out/Reprog.elf -o $TOP_DIR/env/out/Reprog_B.run"
+	{isundefined(ROM3_TOP_ADR)}                                            :postexec="gsrec -S3 -pad2 $ROM1_TOP_ADR $ROM1_END_ADR 0x4000 -pad2 $ROM2_TOP_ADR $ROM2_END_ADR 0x4000 -start $ROM1_TOP_ADR -end $ROM2_END_ADR -bytes 16                                $TOP_DIR/env/out/Reprog.elf -o $TOP_DIR/env/out/Reprog.run"
+	{isundefined(ROM3_TOP_ADR) && streq(DOUBLE_MAP, ON_VALID, ON_INVALID)} :postexec="gsrec -S3 -pad2 $ROM1_TOP_ADR $ROM1_END_ADR 0x4000 -pad2 $ROM2_TOP_ADR $ROM2_END_ADR 0x4000 -start $ROM1_TOP_ADR -end $ROM2_END_ADR -bytes 16 -romaddr $DOUBLE_MAP_B_ROM_ADR $TOP_DIR/env/out/Reprog.elf -o $TOP_DIR/env/out/Reprog_B.run"
+
+	{streq(SBL_TYPE, DOWNLOAD)} :postexec="gsrec -S3 -pad2 $SBL_TOP_ADR $SBL_END_ADR 0x4000 -start $SBL_TOP_ADR -end $SBL_END_ADR -bytes 16 $TOP_DIR/env/out/Reprog.elf -o $TOP_DIR/env/out/Reprog_SBL.run"
+
+	#########################################
+	# PARTS                                 #
+	#########################################
+	-l$TOP_DIR/parts/Crc/obj/Crc.rel.o
+	-l$TOP_DIR/parts/Csm/CryIf/obj/CryIf.rel.o
+	-l$TOP_DIR/parts/Csm/Csm/obj/Csm.rel.o
+	-l$TOP_DIR/parts/Csm/Crypto_83_sw/AES128/obj/micon/$MICON_NAME/Crypto_83_sw_AES128.a
+	-l$TOP_DIR/parts/Csm/Crypto_83_sw/Crypto/obj/Crypto_83_sw_Crypto.rel.o
+	-l$TOP_DIR/parts/Csm/Crypto_83_sw/RSA/obj/micon/$MICON_NAME/Crypto_83_sw_RSA.a
+	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SecStd/obj/Crypto_83_sw_SecStd.rel.o
+	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SHA256/obj/micon/$MICON_NAME/Crypto_83_sw_SHA256.a
+	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SWSHE/obj/Crypto_83_sw_SWSHE.rel.o
+
+	# usr
+	-l$TOP_DIR/parts/Csm/SchM/obj/SchM_usr.rel.o
+	-l$TOP_DIR/parts/Csm/WrapCrypto/obj/WrapCrypto_usr.rel.o
+
+
+	#########################################
+	# SWC                                   #
+	#########################################
+	-l$TOP_DIR/swc/Decrypt/obj/Decrypt.rel.o
+	-l$TOP_DIR/swc/FscDtct/obj/FscDtct.rel.o
+	-l$TOP_DIR/swc/PrgChk/obj/PrgChk.rel.o
+	-l$TOP_DIR/swc/RpgLib/obj/RpgLib.rel.o
+	-l$TOP_DIR/swc/RpgMfr/obj/RpgMfr.rel.o
+	-l$TOP_DIR/swc/Sec/obj/Sec.rel.o
+
+	-l$TOP_DIR/swc/Diag/DiagSrv/obj/DiagSrv.rel.o
+	-l$TOP_DIR/swc/Diag/DiagLib/obj/DiagLib.rel.o
+
+	# usr
+	-l$TOP_DIR/swc/CmpDecmp/obj/CmpDecmp_usr.rel.o
+	-l$TOP_DIR/swc/Decrypt/obj/Decrypt_usr.rel.o
+	-l$TOP_DIR/swc/FscDtct/obj/FscDtct_usr.rel.o
+	-l$TOP_DIR/swc/RpgEvtHk/obj/RpgEvtHk_usr.rel.o
+	-l$TOP_DIR/swc/RpgMfr/obj/RpgMfr_usr.rel.o
+	-l$TOP_DIR/swc/RpgSpp/obj/RpgSpp_usr.rel.o
+	-l$TOP_DIR/swc/Sec/obj/Sec_usr.rel.o
+	-l$TOP_DIR/swc/VehInf/obj/VehInf_usr.rel.o
+
+	-l$TOP_DIR/swc/Diag/DiagSrv/obj/DiagSrv_usr.rel.o
+
+	#########################################
+	# BSW/RTE                               #
+	#########################################
+	-l$TOP_DIR/bsw/RTE/Rte/obj/Rte.rel.o
+
+	#########################################
+	# BSW/SVL                               #
+	#########################################
+	-l$TOP_DIR/bsw/SVL/BswM/obj/BswM.rel.o
+	-l$TOP_DIR/bsw/SVL/CanSM/obj/CanSM.rel.o
+	-l$TOP_DIR/bsw/SVL/ComM/obj/ComM.rel.o
+	-l$TOP_DIR/bsw/SVL/EcuM/obj/EcuM.rel.o
+	-l$TOP_DIR/bsw/SVL/MemErrM/obj/MemErrM.rel.o
+	-l$TOP_DIR/bsw/SVL/MemM/obj/MemM.rel.o
+	-l$TOP_DIR/bsw/SVL/SchM/obj/SchM.rel.o
+	-l$TOP_DIR/bsw/SVL/Shutdown/obj/Shutdown.rel.o
+	-l$TOP_DIR/bsw/SVL/Startup/obj/Startup.rel.o
+	-l$TOP_DIR/bsw/SVL/Sys/obj/Sys.rel.o
+	-l$TOP_DIR/bsw/SVL/Tm/obj/Tm.rel.o
+	-l$TOP_DIR/bsw/SVL/WdgM/obj/WdgM.rel.o
+
+	-l$TOP_DIR/bsw/SVL/PduR/obj/PduR.rel.o
+	-l$TOP_DIR/bsw/SVL/GDN/obj/GDN.rel.o
+
+	# usr
+	-l$TOP_DIR/bsw/SVL/Shutdown/obj/Shutdown_usr.rel.o
+	-l$TOP_DIR/bsw/SVL/Startup/obj/Startup_usr.rel.o
+
+	#########################################
+	# BSW/EAL                               #
+	#########################################
+	-l$TOP_DIR/bsw/EAL/CanIf/obj/CanIf.rel.o
+	-l$TOP_DIR/bsw/EAL/CodeFlsIf/obj/CodeFlsIf.rel.o
+	-l$TOP_DIR/bsw/EAL/CodeRamIf/obj/CodeRamIf.rel.o
+	-l$TOP_DIR/bsw/EAL/WdgIf/obj/WdgIf.rel.o
+
+	# usr
+	-l$TOP_DIR/bsw/EAL/CanTrcv/obj/CanTrcv_usr.rel.o
+	-l$TOP_DIR/bsw/EAL/ExtCodeFlsIf/obj/ExtCodeFlsIf_usr.rel.o
+	-l$TOP_DIR/bsw/EAL/SleepIf/obj/SleepIf_usr.rel.o
+	-l$TOP_DIR/bsw/EAL/SubMiconIf/obj/SubMiconIf_usr.rel.o
+	-l$TOP_DIR/bsw/EAL/UsrSoftIf/obj/UsrSoftIf_usr.rel.o
+
+	#########################################
+	# BSW/MCAL                              #
+	#########################################
+	-l$TOP_DIR/bsw/MCAL/IntHndlr/obj/IntHndlr.rel.o
+	-l$TOP_DIR/bsw/MCAL/Vect/obj/Vect.rel.o
+
+	# usr
+	-l$TOP_DIR/bsw/MCAL/CodeFls/obj/CodeFls_usr.rel.o
+	-l$TOP_DIR/bsw/MCAL/Can/obj/Can_usr.rel.o
+	{!streq(MICON_NAME, RH850E2M)}-l$TOP_DIR/bsw/MCAL/Mcu/obj/Mcu_usr.rel.o
+
+	# cfg
+	-l$TOP_DIR/bsw/MCAL/Can/obj/Can_cfg.rel.o
+	-l$TOP_DIR/bsw/MCAL/CodeFls/obj/CodeFls_cfg.rel.o
+	-l$TOP_DIR/bsw/MCAL/Ecc/obj/Ecc_cfg.rel.o
+	-l$TOP_DIR/bsw/MCAL/Gpt/obj/Gpt_cfg.rel.o
+	-l$TOP_DIR/bsw/MCAL/Int/obj/Int_cfg.rel.o
+	-l$TOP_DIR/bsw/MCAL/Mcu/obj/Mcu_cfg.rel.o
+	-l$TOP_DIR/bsw/MCAL/Wdg/obj/Wdg_cfg.rel.o
+
+	# lib
+	-l$TOP_DIR/bsw/MCAL/Can/obj/MakerReleaseLib/$MICON_NAME/Can.lib
+	-l$TOP_DIR/bsw/MCAL/CodeFls/obj/MakerReleaseLib/$MICON_NAME/CodeFls.lib
+	-l$TOP_DIR/bsw/MCAL/Ecc/obj/MakerReleaseLib/$MICON_NAME/Ecc.lib
+	-l$TOP_DIR/bsw/MCAL/Gpt/obj/MakerReleaseLib/$MICON_NAME/Gpt.lib
+	-l$TOP_DIR/bsw/MCAL/Int/obj/MakerReleaseLib/$MICON_NAME/Int.lib
+	-l$TOP_DIR/bsw/MCAL/Mcu/obj/MakerReleaseLib/$MICON_NAME/Mcu.lib
+
+	# usr lib
+	-l$TOP_DIR/bsw/MCAL/Dio/obj/Dio.lib
+	-l$TOP_DIR/bsw/MCAL/Port/obj/Port.lib
+	-l$TOP_DIR/bsw/MCAL/Wdg/obj/Wdg.lib
+
+$TOP_DIR/env/Version/Version.c
+$TOP_DIR/env/Multi/Multi_V800/Option/ReprogOpt.c
+
+$TOP_DIR/env/Multi/Section/Comstack_$COMSTACK_NAME/$MICON_NAME/Section.c
+{streq(SMALL_RAM, OFF)} $TOP_DIR/env/Multi/Section/Comstack_$COMSTACK_NAME/$MICON_NAME/Section.ld
+{streq(SMALL_RAM, ON)}  $TOP_DIR/env/Multi/Section/Comstack_$COMSTACK_NAME/$MICON_NAME/Section_SmallRam.ld
+
+{streq(MICON_NAME, RH850E2M)} $TOP_DIR/env/Multi/Multi_V800/Debug/$MICON_NAME/forELF/empty_G4.o

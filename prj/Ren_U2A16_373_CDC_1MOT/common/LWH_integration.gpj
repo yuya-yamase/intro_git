@@ -1,0 +1,10 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${HV_DIR}
+
+LWH_Callout_Stubs_ghs.850
+LWH_Callout_Stubs.c
+# user_clk.c
+# user_port_dep.c
+# user_port_ghs.850
+# user_stbc_dep.c

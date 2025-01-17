@@ -20,7 +20,6 @@
 
 #include "iohw_diflt.h"
 
-#include "Os.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -71,8 +70,6 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U2                       u2_sp_veh_opemd_tmelpsd[VEH_OPEMD_NUM_TM_ELPSD];
 
-U4                              u4_g_vehopemd_sysbit                    __attribute__((section(".bss_SHARE_COMPLEX_VEHOPEMD_SYSSTS")));
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Variable Definitions                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -103,8 +100,6 @@ void    vd_g_VehopemdCfgRstInit(void)
     for(u4_t_lpcnt = (U4)0; u4_t_lpcnt < (U4)VEH_OPEMD_NUM_TM_ELPSD; u4_t_lpcnt++){
         u2_sp_veh_opemd_tmelpsd[u4_t_lpcnt] = (U2)VEH_OPEMD_TM_STOP;
     }
-    
-    u4_g_vehopemd_sysbit = (U4)0U;
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VehopemdCfgWkupInit(void)                                                                                           */
@@ -119,8 +114,6 @@ void    vd_g_VehopemdCfgWkupInit(void)
     for(u4_t_lpcnt = (U4)0; u4_t_lpcnt < (U4)VEH_OPEMD_NUM_TM_ELPSD; u4_t_lpcnt++){
         u2_sp_veh_opemd_tmelpsd[u4_t_lpcnt] = (U2)VEH_OPEMD_TM_STOP;
     }
-    
-    u4_g_vehopemd_sysbit = (U4)0U;
 }
 /*===================================================================================================================================*/
 /*  U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evtbit)                                                           */
@@ -139,7 +132,6 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evtbit)
     U1                             u1_t_igon;
     U1                             u1_t_msgtout;
     U1                             u1_t_sgnl;
-    U1                             u1_t_bussts_vm0;
 
     u4_t_mdbit = (U4)0U;
     u1_t_igon  = (U1)FALSE;
@@ -179,13 +171,6 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evtbit)
     vd_s_VehopemdTmUpdt(u4_t_mdbit, u4_t_evt);
 
     (*u4_ap_evtbit) = u4_t_evt;
-
-    /*------------------------------------------------------------*/
-    u1_t_bussts_vm0 = u1_g_oXCANNmwkRxeByCh((U1)OXCAN_CH_0_CAN);
-    COMPLEX_VEHOPEMD_GETSPINLOCK();
-    u4_g_vehopemd_sysbit = (U4)(u4_t_mdbit | (U4)u1_t_bussts_vm0);
-    COMPLEX_VEHOPEMD_RELEASESPINLOCK();
-    /*------------------------------------------------------------*/
 
     return(u4_t_mdbit);
 }

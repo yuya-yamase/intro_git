@@ -53,7 +53,7 @@ static U2      u2_s_oxcan_rx_sys_chk;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static        U2      u2_s_oXCANRxToechk(const U4 u4_a_SYSBIT);
+static        U2      u2_s_oXCANRxToechk(const U1 u1_a_SYSBIT);
 static        void    vd_s_oXCANRxBatInit(const ST_OXCAN_RX_CH * st_ap_CH);
 static        void    vd_s_oXCANRxstUpdt(const ST_OXCAN_RX_CH * st_ap_CH, const U1 u1_a_SYS_CHK, const U2 u2_a_TOE_BY_CH);
 static inline U2      u2_s_oXCANRxPomchk(const U2 u2_a_SYS_CHK, const U4 u4_a_POM_TOUT);
@@ -92,35 +92,35 @@ void    vd_g_oXCANRxInit(void)
     }    
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANRxOpemdEvthk(const U4 u1_a_SYSBIT)                                                                             */
+/*  void    vd_g_oXCANRxOpemdEvthk(const U1 u1_a_SYSBIT)                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANRxOpemdEvthk(const U4 u4_a_SYSBIT)
+void    vd_g_oXCANRxOpemdEvthk(const U1 u1_a_SYSBIT)
 {
     U4                        u4_t_lpcnt;
     U2                        u2_t_sys_chk;
 
-    u2_t_sys_chk  = (u2_g_oXCANRxCfgSysXgrOn((U2)u4_a_SYSBIT) & (U2)OXCAN_RX_SYS_NRX_XGR) | (U2)u4_a_SYSBIT;
+    u2_t_sys_chk  = (u2_g_oXCANRxCfgSysXgrOn((U2)u1_a_SYSBIT) & (U2)OXCAN_RX_SYS_NRX_XGR) | (U2)u1_a_SYSBIT;
     u2_t_sys_chk |= (U2)(u2_t_sys_chk << OXCAN_RX_SYS_LSB_TOE);
     u2_s_oxcan_rx_sys_chk = u2_t_sys_chk;
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_OXCAN_RX_NUM_CH; u4_t_lpcnt++){
 
-        u2_t_sys_chk = (U2)st_gp_OXCAN_RX_BY_CH[u4_t_lpcnt].u2_sys_en & (U2)u4_a_SYSBIT;
+        u2_t_sys_chk = (U2)st_gp_OXCAN_RX_BY_CH[u4_t_lpcnt].u2_sys_en & (U2)u1_a_SYSBIT;
         if(u2_t_sys_chk == (U2)0U){
             u2_gp_oxcan_rx_nwk_elpsd[u4_t_lpcnt] = (U2)OXCAN_RX_POM_INA;
         }
     }
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANRxMainTask(const U4 u4_a_SYSBIT)                                                                               */
+/*  void    vd_g_oXCANRxMainTask(const U1 u1_a_SYSBIT)                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANRxMainTask(const U4 u4_a_SYSBIT)
+void    vd_g_oXCANRxMainTask(const U1 u1_a_SYSBIT)
 {
     const ST_OXCAN_RX_CH *    st_tp_CH;
     U4                        u4_t_ch;
@@ -131,12 +131,12 @@ void    vd_g_oXCANRxMainTask(const U4 u4_a_SYSBIT)
     U2                        u2_t_ch_en;
     U1                        u1_t_rx_en;
 
-    u2_t_toe_chk = u2_s_oXCANRxToechk(u4_a_SYSBIT);
+    u2_t_toe_chk = u2_s_oXCANRxToechk(u1_a_SYSBIT);
     for(u4_t_ch = (U4)0U; u4_t_ch < (U4)u1_g_OXCAN_RX_NUM_CH; u4_t_ch++){
 
         st_tp_CH   = &st_gp_OXCAN_RX_BY_CH[u4_t_ch];
 
-        u2_t_ch_en = st_tp_CH->u2_sys_en & (U2)u4_a_SYSBIT;
+        u2_t_ch_en = st_tp_CH->u2_sys_en & (U2)u1_a_SYSBIT;
         if((u2_t_ch_en            != (U2)0U    ) &&
            (st_tp_CH->fp_u1_RX_EN != vdp_PTR_NA)){
 
@@ -185,7 +185,7 @@ void    vd_g_oXCANRxMainTask(const U4 u4_a_SYSBIT)
         }
         u2_gp_oxcan_rx_toe_chk[u4_t_ch] = u2_t_toe_by_ch;
 
-        vd_s_oXCANRxstUpdt(st_tp_CH, (U1)u4_a_SYSBIT, u2_t_toe_by_ch);
+        vd_s_oXCANRxstUpdt(st_tp_CH, u1_a_SYSBIT, u2_t_toe_by_ch);
     }
 }
 /*===================================================================================================================================*/
@@ -368,12 +368,12 @@ void vd_g_oXCANRxTimerInit(const U1 u1_a_CH)
 }
 #endif /* #if (OXCAN_RX_STOP_EN == 1U) */
 /*===================================================================================================================================*/
-/*  static U2      u2_s_oXCANRxToechk(const U4 u4_a_SYSBIT)                                                                          */
+/*  static U2      u2_s_oXCANRxToechk(const U1 u1_a_SYSBIT)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U2      u2_s_oXCANRxToechk(const U4 u4_a_SYSBIT)
+static U2      u2_s_oXCANRxToechk(const U1 u1_a_SYSBIT)
 {
     U4                        u4_t_lpcnt;
 
@@ -382,7 +382,7 @@ static U2      u2_s_oXCANRxToechk(const U4 u4_a_SYSBIT)
     U2                        u2_t_toc_en;
     U2                        u2_t_toe_chk;
 
-    u2_t_sys_chk  = (u2_g_oXCANRxCfgSysXgrOn((U2)u4_a_SYSBIT) & (U2)OXCAN_RX_SYS_NRX_XGR) | (U2)u4_a_SYSBIT;
+    u2_t_sys_chk  = (u2_g_oXCANRxCfgSysXgrOn((U2)u1_a_SYSBIT) & (U2)OXCAN_RX_SYS_NRX_XGR) | (U2)u1_a_SYSBIT;
     u2_t_sys_chk |= (U2)(u2_t_sys_chk << OXCAN_RX_SYS_LSB_TOE);
     u2_t_pom_chk  = u2_t_sys_chk & u2_s_oxcan_rx_sys_chk;
     u2_t_toe_chk  = (U2)0U;

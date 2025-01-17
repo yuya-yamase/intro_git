@@ -1,7 +1,7 @@
-/* pdur_h_v3-0-0                                                            */
+/* pdur_h_v2-0-0                                                            */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -36,6 +36,8 @@
 #define PDUR_LOCOMP_LIN                   (BSW_PDUR_LOCOMP_LIN)
 #define PDUR_LOCOMP_SOAD                  (BSW_PDUR_LOCOMP_SOAD)
 #define PDUR_LOCOMP_DOIP                  (BSW_PDUR_LOCOMP_DOIP)
+#define PDUR_LOCOMP_CDD1                  (BSW_PDUR_LOCOMP_CDD1)
+#define PDUR_LOCOMP_CDD2                  (BSW_PDUR_LOCOMP_CDD2)
 
 #define PDUR_LOCOMP_CANIF                 (BSW_PDUR_LOCOMP_CANIF)
 #define PDUR_LOCOMP_CANTP                 (BSW_PDUR_LOCOMP_CANTP)
@@ -45,6 +47,10 @@
 #define PDUR_LOCOMP_SOADTP                (BSW_PDUR_LOCOMP_SOADTP)
 #define PDUR_LOCOMP_DOIPIF                (BSW_PDUR_LOCOMP_DOIPIF)
 #define PDUR_LOCOMP_DOIPTP                (BSW_PDUR_LOCOMP_DOIPTP)
+#define PDUR_LOCOMP_CDD1IF                (BSW_PDUR_LOCOMP_CDD1IF)
+#define PDUR_LOCOMP_CDD1TP                (BSW_PDUR_LOCOMP_CDD1TP)
+#define PDUR_LOCOMP_CDD2IF                (BSW_PDUR_LOCOMP_CDD2IF)
+#define PDUR_LOCOMP_CDD2TP                (BSW_PDUR_LOCOMP_CDD2TP)
 #define PDUR_LOCOMP_CANNM                 (BSW_PDUR_LOCOMP_CANNM)
 #define PDUR_LOCOMP_CANCDD1               (BSW_PDUR_LOCOMP_CANCDD1)
 #define PDUR_LOCOMP_CANCDD2               (BSW_PDUR_LOCOMP_CANCDD2)
@@ -66,6 +72,10 @@
 #define PDUR_COMPID_SOADTP                (BSW_PDUR_COMPID_SOADTP)
 #define PDUR_COMPID_DOIPIF                (BSW_PDUR_COMPID_DOIPIF)
 #define PDUR_COMPID_DOIPTP                (BSW_PDUR_COMPID_DOIPTP)
+#define PDUR_COMPID_CDD1IF                (BSW_PDUR_COMPID_CDD1IF)
+#define PDUR_COMPID_CDD1TP                (BSW_PDUR_COMPID_CDD1TP)
+#define PDUR_COMPID_CDD2IF                (BSW_PDUR_COMPID_CDD2IF)
+#define PDUR_COMPID_CDD2TP                (BSW_PDUR_COMPID_CDD2TP)
 
 /* Upper */
 #define PDUR_COMPID_COM                   (BSW_PDUR_COMPID_COM)
@@ -152,7 +162,6 @@
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2021/05/24                                             */
-/*  v3-0-0          :2024/09/04                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

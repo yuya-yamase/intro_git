@@ -1,0 +1,112 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+
+/// <RequestTransferExit>
+/* ************************************************************ */
+/* Function                                                     */
+/*  RequestTransferExit_request_01_send                         */
+/* Discription                                                  */
+/*  Send Request Sid0x37 [RequestTransferExit]                  */
+/* IN :                                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)       */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果 または                          */
+/*  E_Return_SPRMIB_Set_NG                                      */
+/* NOTE:                                                        */
+/*  現時点ではsprmibは見ない                                  */
+/* ************************************************************ */
+long RequestTransferExit_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_RequestTransferExit_req_01);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <RequestTransferExit>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RequestTransferExit_req_distribution                    */
+/* Discription                                              */
+/*  Sid0x37 [RequestTransferExit] request distribution      */
+/* IN :                                                     */
+/*  type   : 未使用                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果                             */
+/* NOTE:                                                    */
+/*  現時点ではtypeは見ない                                  */
+/* ******************************************************** */
+long RequestTransferExit_req_distribution( dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* リクエスト送信実施(RequestTransferExit) */
+  ret = RequestTransferExit_request_01_send( sprmib );
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RequestTransferExit>
+/* ************************************************************** */
+/* Function                                                       */
+/*  RequestTransferExit_res_distribution                          */
+/* Discription                                                    */
+/*  Sid0x37 [RequestTransferExit]  response distribution          */
+/* IN :                                                           */
+/*  res_msg   : diagResponse型のPosRspメッセージ                  */
+/* OUT:                                                           */
+/*  None                                                          */
+/* RET:                                                           */
+/*  E_Return_OK                                                   */
+/* NOTE:                                                          */
+/*  maxNumberOfBlockLengthは2バイト(値域が0~65535)である前提      */
+/* ************************************************************** */
+long RequestTransferExit_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* RequestTransferExitのポジティブレスポンス受信時は処理無し */
+  ret = E_Return_OK;
+  
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}

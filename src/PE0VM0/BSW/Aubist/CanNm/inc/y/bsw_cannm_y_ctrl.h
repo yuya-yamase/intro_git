@@ -1,7 +1,7 @@
-/* bsw_cannm_y_ctrl_h_v3-0-0                                                */
+/* bsw_cannm_y_ctrl_h_v2-1-0                                                */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -146,15 +146,6 @@
 /* For bit inversion */
 #define BSW_CANNM_Y_u4ALL_BIT                (0xFFFFFFFFUL)
 
-/* Tx wait time none value */
-#define BSW_CANNM_Y_u2TXWAIT_NONE            ((BswU2)0U)
-
-/* Flag for CanNm_CbkPreEnableTx is called or not */
-#define BSW_CANNM_Y_u1PREENA_NONE            ((BswU1)0x0FU)    /* CanNm_CbkPreEnableTx : not called (call request for wake up) */
-#define BSW_CANNM_Y_u1PREENA_DONE            ((BswU1)0x1EU)    /* CanNm_CbkPreEnableTx : called */
-#define BSW_CANNM_Y_u1PREENA_WKTO_REQ        ((BswU1)0x2DU)    /* CanNm_CbkPreEnableTx : call request for wake up and TxTimeout */
-#define BSW_CANNM_Y_u1PREENA_TXTO_REQ        ((BswU1)0x3CU)    /* CanNm_CbkPreEnableTx : call request for TxTimeout */
-
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -165,7 +156,7 @@ typedef struct
     BswU2 u2NmStateTimer;      /* Timer for state transition                               */
                                /* NM_TIMEOUTTIME,NM_WAITBUSSLEEP                   */
     BswU1 u1EdgeEnDtctTimOn;   /* Flag for edge detection permission time measurement availability               */
-    BswU1  u1PreEnaTxSts;       /* Flag for CanNm_CbkPreEnableTx is called or not */
+    BswU1 u1DummyPad;          /* Padding for alignment adjustment             */
     BswU2 u2RptMsgTimer;       /* REPEATMSG state maintenance timer                          */
     BswU1 u1TxRxEvent;         /* Transmit and receive event                                   */
     BswU1 u1BusAwakeSelf;      /* Own-node bus wake-up factor                   */
@@ -213,7 +204,7 @@ typedef struct
     BswU1 u1SleepReadyTrriger; /* Use/not use of transmit interval retrigger by cooperation bus-sleep */
     BswU1 u1RxNoPNMsg;         /* Enable/Disable non-partial NM message receive when using partial network function. */
     BswU1 u1ImmNwReq;          /* Enable/disable immediate transmission when own-node awake occurs. */
-    BswU1 u1ToTxStop;          /* Stop transmission due to TxTimeout */
+    BswU1 u1CfgDummyPad;       /* Padding for alignment adjustment             */
 } Bsw_CanNmY_CfgType;
 
 /* Structure for defining various configurations (timer) */
@@ -234,9 +225,6 @@ typedef struct
     BswU2 u2HardStpWtTim;    /* Wait time for hardware stop processing */
     BswU2 u2EvDisTim;        /* Event transmission disable time */
     BswU2 u2MsgCycOfs;       /* Periodic transmission delay time */
-    BswU2 u2DisSndComTik;    /* Transmission starting wait time at bus wake-up[Com Tick] (DisableSend) */
-    BswU2 u2EnaPeriComTik;   /* Periodic transmission starting wait time at bus wake-up[Com Tick] (EnablePeriodic) */
-    BswU2 u2MsgCycComTik;    /* Periodic transmission delay time[Com Tick] */
     BswU1 u1ImmNumOfTx;      /* Number of immediate transmissions */
     BswU1 u1StopTxNum;       /* Number of transmissions after stopping communication request */
     BswU1 u1PwOnWtTxTimType; /* Kind of waiting time to start transmission when power is turned ON. */
@@ -273,7 +261,7 @@ void            bsw_cannm_y_ctrl_TrnsRptMsgSt( BswU1 u1NetID, Bsw_CanNmY_ChStsTy
 void            bsw_cannm_y_ctrl_SetActWkUpBit( BswU1 u1NetID, BswU1 u1ActiveWakeUpBit );              /* Request to set active wake-up bit */
 void            bsw_cannm_y_ctrl_JudgeEnTxCom( BswU1 u1NetID );                                        /* Determine permission to transmit a control message */
 void            bsw_cannm_y_ctrl_DriveWaitTrcv( BswU1 u1NetID );                                       /* Processing when the driver is in the start state(Processing using transceiver mode transition waiting time) */
-void            bsw_cannm_y_ctrl_StartCom( BswU1 u1NetID, BswU1 u1Kind, BswU2* ptDisableSend, BswU2* ptEnablePeriodic );    /* Start measuring the timing of whether or not to send a control message */
+void            bsw_cannm_y_ctrl_StartCom( BswU1 u1NetID, BswU1 u1Kind );                              /* Start measuring the timing of whether or not to send a control message */
 void            bsw_cannm_y_ctrl_ProcPwOnDrWt( BswU1 u1NetID, BswU1 u1TRxEvent );                      /* Processing during the channel drive waiting state at power-on */
 void            bsw_cannm_y_ctrl_ProcDrWt( BswU1 u1NetID, BswU1 u1TRxEvent );                          /* Processing of channel drive waiting state */
 void            bsw_cannm_y_ctrl_ProcWkChk( BswU1 u1NetID, BswU1 u1TRxEvent );                         /* Processing in Wake-up check state */
@@ -345,7 +333,6 @@ extern void             (* BswConst bsw_cannm_y_ctrl_ptInitPncReqPosFn)( void );
 extern void             (* BswConst bsw_cannm_y_ctrl_ptStrPncReqPosFn)( BswU1 u1NetID, BswU1* PncReqPosPtr );
 extern void             (* BswConst bsw_cannm_y_ctrl_ptSetFinPncReqFn)( BswU1 u1NetID, BswU1* PncReqPosPtr );
 extern void             (* BswConst bsw_cannm_y_ctrl_ptActPNSRStFn)( BswU1 u1NetID, BswU1 u1TRxEvent );
-extern uint16           (* BswConst bsw_cannm_y_ctrl_ptCnvMs2TickFn)( uint16 msTime );
 
 #endif  /* BSW_CANNM_Y_CTRL_H */
 
@@ -354,7 +341,6 @@ extern uint16           (* BswConst bsw_cannm_y_ctrl_ptCnvMs2TickFn)( uint16 msT
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2022/02/21                                             */
 /*  v2-1-0          :2022/08/01                                             */
-/*  v3-0-0          :2024/09/13                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

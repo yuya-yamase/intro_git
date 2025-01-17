@@ -1,0 +1,24 @@
+#!gbuild
+[Program]
+	-e 0
+	-Mn
+	-map
+	-Qn
+	-no_delete
+	-no_codefactor
+	-nostdlib
+
+	-object_dir=../out/obj
+	--preprocess_linker_directive_full
+
+	{optgroup=GhsCommonOptions} -o ../out/ReprogAPL.elf
+	:postexec="gsrec -S3 -pad2 0x007FFDE0 0x007FFDFF 0x5AA5 -start 0x007FFDE0 -end 0x007FFDFF -bytes 16 ../out/ReprogAPL.elf -o ../out/Info_Full.run"
+	:postexec="gsrec -S3 -pad2 0x00FF0000 0x00FFFDFF 0x5AA5 -start 0x00FF0000 -end 0x00FFFDFF -bytes 16 ../out/ReprogAPL.elf -o ../out/Info_Part.run"
+
+	:postexec="gsrec -S3 -pad4 0x00004000 0x000041FF 0x5AA5A55A -pad1 0x00004200 0x00004217 0x00 -pad1 0x00004218 0x00007FFF 0xFF -start 0x00004000 -end 0x00007FFF -bytes 16 ../out/ReprogAPL.elf -o ../out/Keyword_OK.run"
+	:postexec="gsrec -S3 -pad4 0x00004000 0x000041FF 0xFFFFFFFF -pad1 0x00004200 0x00004217 0x00 -pad1 0x00004218 0x00007FFF 0xFF -start 0x00004000 -end 0x00007FFF -bytes 16 ../out/ReprogAPL.elf -o ../out/Keyword_NG.run"
+
+../../cfg/APL_Cfg.c
+
+./Section.ld
+./empty_G4.o

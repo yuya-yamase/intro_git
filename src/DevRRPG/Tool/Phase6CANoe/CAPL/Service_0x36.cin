@@ -1,0 +1,413 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <TransferData>
+/* ************************************************************ */
+/* Function                                                     */
+/*  TransferData_Download_request_01_send                       */
+/* Discription                                                  */
+/*  Send Request Sid0x36 [TransferData]                         */
+/* IN :                                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)       */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果 または                          */
+/*  E_Return_SPRMIB_Set_NG                                      */
+/* NOTE:                                                        */
+/*  現時点ではsprmibは見ない                                    */
+/* ************************************************************ */
+long TransferData_Download_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_TransferData_req_01);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <TransferData>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  TransferData_open_file                                           */
+/* Discription                                                       */
+/*  転送データファイルをオープンし、ハンドルを返す                   */
+/* IN :                                                              */
+/*  filename : 転送データのファイル名                                */
+/*  mode     : 読み出しモード(0=テキスト, 1=バイナリ)                */
+/* OUT:                                                              */
+/*  fileHandle : ファイルハンドル(後続の処理で使用)                  */
+/* RET:                                                              */
+/*  E_Return_OK または E_Return_FILEOPEN_NG                          */
+/* NOTE:                                                             */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと   */
+/* ***************************************************************** */
+long TransferData_open_file( char filename[], dword mode, dword &fileHandle )
+{
+  /* 戻り値 */
+  int ret = E_Return_OK;
+  
+  /* ファイルオープン(指定モード・読み取り専用) */
+  fileHandle = openFileRead(filename, mode);
+  if (fileHandle == 0)
+  {
+    /* ファイルオープンエラー */
+    ret = E_Return_FILEOPEN_NG;
+    
+    /* デバッグ表示 */
+    Error_Log_output("openFileRead error");
+  }
+  
+  return ret;
+}
+
+
+/// <TransferData>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  TransferData_read_file                                           */
+/* Discription                                                       */
+/*  転送データファイルを指定サイズ分読み出す                         */
+/* IN :                                                              */
+/*  fileHandle : 転送データのファイルハンドル                        */
+/*  buff_size  : 読み出しサイズ＝read_buffのバイト数                 */
+/* OUT:                                                              */
+/*  read_buff : ファイルから読み出した値を設定するバッファ           */
+/*  read_size : ファイルから読み出したバイト数                       */
+/* RET:                                                              */
+/*  E_Return_OK または E_Return_EOF または E_Return_PRAMETER_NG      */
+/* NOTE:                                                             */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと   */
+/*  2回目以降の呼び出し時に1回目と同じファイルハンドルを指定すると、 */
+/*  前回読み出した位置の続きからファイル読み出しを行います           */
+/* ***************************************************************** */
+long TransferData_read_file( dword fileHandle, dword buff_size, byte read_buff[], dword &read_size )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* ローカルデータ */
+  int cnt;
+  
+  /* パラメータチェック(ファイルハンドル) */
+  if( fileHandle == 0 )
+  {
+    /* パラメータチェックエラー(ファイルハンドルが不正) */
+    ret = E_Return_PRAMETER_NG;
+  }
+  /* パラメータチェック(buff_size) */
+  else if( buff_size == 0)
+  {
+    /* パラメータチェックエラー(バッファサイズが0) */
+    ret = E_Return_PRAMETER_NG;
+  }
+  /* パラメータチェック(buff_size) */
+  else if( buff_size > E_readbuff_maxsize )
+  {
+    /* パラメータチェックエラー(バッファサイズがCAN通信仕様の最大バッファサイズより大きい) */
+    ret = E_Return_PRAMETER_NG;
+  }
+  /* パラメータチェック(read_buff) */
+  else if( elCount(read_buff) < buff_size )
+  {
+    /* パラメータチェックエラー(バッファサイズ不足) */
+    ret = E_Return_PRAMETER_NG;
+  }  
+  else
+  {
+    /* ファイル読み出し実行 */
+    /* fileGetStringSZの仕様で読み出しサイズは「行末まで」or「第2パラメータ-1まで」となるため、+1して調整している */
+    read_size = fileGetBinaryBlock(read_buff, (buff_size), fileHandle);
+    if (read_size == 0)
+    {
+      /* EOFまで行くと0が返ってくる */
+      ret = E_Return_EOF;
+    
+      /* デバッグ表示 */
+      Debug_Log_output("TransferData_read_file:Read Complete!"); 
+    }
+    else
+    {
+      /* 読み出し成功 */
+      ret = E_Return_OK;
+    }
+  }
+  
+   return ret;  
+}
+
+
+/// <TransferData>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  TransferData_close_file                                          */
+/* Discription                                                       */
+/*  指定されたファイルハンドルを使用し、ファイルをクローズする       */
+/* IN :                                                              */
+/*  fileHandle : 転送データのファイルハンドル                        */
+/* OUT:                                                              */
+/*  None                                                             */
+/* RET:                                                              */
+/*  E_Return_OK または E_Return_FILECLOSE_NG　　　　　　　　　　     */
+/* NOTE:                                                             */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと   */
+/* ***************************************************************** */
+long TransferData_close_file( dword fileHandle )  
+{  
+  /* 戻り値 */
+  int ret;
+
+  /* ファイルクローズ */
+  ret = fileClose(fileHandle);
+  if (ret == 0)
+  {
+    /* ファイルクローズ失敗 */
+    ret = E_Return_FILECLOSE_NG;
+    
+    /* デバッグ表示 */
+    Error_Log_output("TransferData_close_file:fileClose error");
+  }
+  else
+  {
+    /* ファイルクローズ成功 */
+    ret = E_Return_OK;
+  }
+
+  return ret;  
+}
+
+
+/// <TransferData>
+/* ******************************************************** */
+/* Function                                                 */
+/*  TransferData_req_distribution                           */
+/* Discription                                              */
+/*  Sid0x36 [TransferData] request distribution             */
+/* IN :                                                     */
+/*  type   : E_TransferData_Type_Numに相当する値            */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG または E_Return_PRAMETER_NG      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long TransferData_req_distribution( dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* type毎にTransferData_set_request_data()の第1パラメータに指定するデータを切り替える */
+  if( type == E_RequestDownload_Type_Erase )
+  {
+    /* 消去・書込みルーチンの転送データ設定 */
+    ret = TransferData_set_request_data( G_Reprog_General_Data.T_Info_Erase, G_TransferData_req_01);
+  }
+  else if( type == E_RequestDownload_Type_Reprog )
+  {
+    /* 書込みファイルの転送データ設定 */
+    ret = TransferData_set_request_data( G_Reprog_General_Data.T_Info_Reprog, G_TransferData_req_01);    
+  }
+  else
+  {
+    /* 来ないはずのルート */
+    ret = E_Return_PRAMETER_NG;
+  }
+  
+  /* 処理結果判定 */
+  if( ret == E_Return_OK ) 
+  {
+    /* リクエスト送信実施(TransferData(Download)) */
+    ret = TransferData_Download_request_01_send( sprmib );
+  }
+  
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <TransferData>
+/* ******************************************************** */
+/* Function                                                 */
+/*  TransferData_res_distribution                           */
+/* Discription                                              */
+/*  Sid0x36 [TransferData]  response distribution           */
+/* IN :                                                     */
+/*  res_msg   : diagResponse型のPosRspメッセージ            */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  E_Return_OK                                             */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long TransferData_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* TransferDataのポジティブレスポンス受信時は処理無し */
+  ret = E_Return_OK;
+  
+  return ret;
+}
+
+
+/// <TransferData>
+/* ******************************************************** */
+/* Function                                                 */
+/*  TransferData_set_request_data                           */
+/* Discription                                              */
+/*  blockSequenceCounterとtransferRequestParameterRecordを  */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  T_Info  : RequestDownload,　TransferDataに関連する情報(参照渡し) */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  T_Info  : RequestDownload,　TransferDataに関連する情報(参照渡し) */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long TransferData_set_request_data( struct S_TransferData_info T_Info, diagRequest * req_msg )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* TransferDataのリクエストオブジェクトに新たなblockSequenceCounterを設定 */
+  ret = diagSetParameterRaw(req_msg, "blockSequenceCounter", T_Info.cnt, 1);
+  
+  /* TransferDataのリクエストオブジェクトに新たなtransferRequestParameterRecordを設定 */
+  /* 事前に読み出したバッファを設定する方式 */
+  ret = diagSetParameterRaw(req_msg, "transferRequestParameterRecord",
+                        G_Reprog_General_Data.transferdata_readbuff,
+                        elcount(G_Reprog_General_Data.transferdata_readbuff));
+
+  /* 1回に転送できるデータ長にリサイズする */
+  diagResize(req_msg, ( T_Info.transfer_size + 2));
+
+  /* 戻り値の判断は上位関数で実施 */ 
+  return ret;
+}
+
+
+/// <TransferData>
+/* *************************************************************************** */
+/* Function                                                                    */
+/*  TransferData_erase_init                                                    */
+/* Discription                                                                 */
+/*  外部設定情報ファイルを読み出して消去・書込みルーチンのファイル名を設定する */
+/* IN :                                                                        */
+/*  filename : 外部設定情報ファイル名                                          */
+/* OUT:                                                                        */
+/*  None                                                                       */
+/* RET:                                                                        */
+/*  None                                                                       */
+/* NOTE:                                                                       */
+/*  None                                                                       */
+/* *************************************************************************** */
+void TransferData_erase_init( char filename[] )
+{
+  /* 戻り値 */
+  long pos;
+  int ret;
+  int cnt;
+  char read_filename[E_External_erase_file_name_size];
+  char erase_filepath[E_Configuration_path_size];
+  
+  /* CANoeのコンフィグレーションファイルのあるパスの絶対パスを取得 */
+  pos = strlen(CANoe_Senario_Filepath);
+  substr_cpy(erase_filepath, CANoe_Senario_Filepath, 0, pos, elcount(erase_filepath));
+
+  /* ファイル読み出し(消去・書込みルーチンのファイル名) */
+  ret = getProfileString( "Erase", "Erasefile", "DLfile/SBL/erase.bin", read_filename, elcount(read_filename), filename );
+  if( ret <= 0 || ret > E_External_erase_file_name_size )
+  {
+    /* 消去・書込みルーチンのファイル名読み出し失敗 */
+    /* デフォルト値を設定しておく */
+    snprintf(read_filename, elcount(read_filename), "DLfile/SBL/erase.bin");
+    Error_Log_output("TransferData_erase_init: read erase filename.");
+  }
+  
+  /* 読み出した消去・書込みルーチンのファイル名を管理情報G_Reprog_General_Dataに設定 */
+  strncat(erase_filepath, read_filename, elcount(erase_filepath));
+  strncpy(G_Reprog_General_Data.T_Info_Erase.filename, erase_filepath, elcount(erase_filepath));
+  
+  return;
+}
+
+
+/// <TransferData>
+/* ************************************************************* */
+/* Function                                                      */
+/*  TransferData_reprog_init                                     */
+/* Discription                                                   */
+/*  外部設定情報ファイルを読み出して書き換えファイル名を設定する */
+/* IN :                                                          */
+/*  filename : 外部設定情報ファイル名                            */
+/* OUT:                                                          */
+/*  None                                                         */
+/* RET:                                                          */
+/*  None                                                         */
+/* NOTE:                                                         */
+/*  None                                                         */
+/* ************************************************************* */
+void TransferData_reprog_init( char filename[] )
+{
+  /* 戻り値 */
+  long pos;
+  int ret;
+  int cnt; 
+  char read_filename[E_External_reprog_file_name_size];
+  char reprog_filepath[E_Configuration_path_size];
+  
+  /* CANoeのコンフィグレーションファイルのあるパスの絶対パスを取得 */
+  pos = strlen(CANoe_Senario_Filepath);
+  substr_cpy(reprog_filepath, CANoe_Senario_Filepath, 0, pos, elcount(reprog_filepath));
+
+  /* ファイル読み出し(消去・書込みルーチンのファイル名) */
+  ret = getProfileString( "Reprog", "Reprogfile", "DLfile/APL/Reprog.bin", read_filename, elcount(read_filename), filename );
+  if( ret <= 0 || ret > E_External_reprog_file_name_size )
+  { /* 消去・書込みルーチンのファイル名読み出し失敗 */
+    /* デフォルト値を設定しておく */
+    snprintf(read_filename, elcount(read_filename),"DLfile/APL/Reprog.bin");
+    Error_Log_output("TransferData_reprog_init: read reprog filename.");
+  }
+  
+  /* 読み出した書換えファイルのファイル名を管理情報G_Reprog_General_Dataに設定 */
+  strncat(reprog_filepath, read_filename, elcount(reprog_filepath));
+  strncpy(G_Reprog_General_Data.T_Info_Reprog.filename, reprog_filepath, elcount(reprog_filepath));
+  
+  return;
+}

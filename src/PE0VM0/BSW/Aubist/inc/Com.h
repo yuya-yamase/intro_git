@@ -1,7 +1,7 @@
-/* com_h_v3-0-0                                                             */
+/* com_h_v2-1-0                                                             */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -34,7 +34,6 @@
 #define COM_TX_MODE_ALL                 (BSW_COM_TX_MODE_ALL)
 #define COM_TX_MODE_INVALID             (BSW_COM_TX_MODE_INVALID)
 
-#define COM_STATUS_NONE                 (BSW_COM_STATUS_NONE)
 #define COM_TRX_START                   (BSW_COM_TRX_START)
 #define COM_FAILINIT                    (BSW_COM_FAILINIT)
 #define COM_TXSTOP                      (BSW_COM_TXSTOP)
@@ -66,10 +65,6 @@
 
 /* Frame ID */
 #define COM_INVALID_FRAME_ID            (BSW_COM_INVALID_FRAME_ID)
-
-/* Wakeup Type */
-#define COM_WKUP_PWON                   (BSW_COM_WKUP_PWON)
-#define COM_WKUP_BS                     (BSW_COM_WKUP_BS)
 
 /* Function */
 #define Com_Init                        (bsw_com_st_Init)
@@ -145,53 +140,6 @@
 #define Com_ReceiveSignalLOvA           (bsw_com_data_ReceiveSignalLOvA)
 #define Com_ReceiveSignalB64OvA         (bsw_com_data_ReceiveSignalB64OvA)
 #define Com_ReceiveSignalL64OvA         (bsw_com_data_ReceiveSignalL64OvA)
-#define Com_SetTxDelayTime              (bsw_com_tx_SetTxDelayTime)
-#define Com_SetPeridoicTxTime           (bsw_com_tx_SetPeriodicTxTime)
-
-#define Com_SendSignalMetaDataB         (bsw_com_data_SendSgnlMDB)
-#define Com_SendSignalMetaDataL         (bsw_com_data_SendSgnlMDL)
-#define Com_SendSignalMetaDataEvB       (bsw_com_data_SendSgnlMDEvB)
-#define Com_SendSignalMetaDataEvL       (bsw_com_data_SendSgnlMDEvL)
-#define Com_SendSignalMetaDataB64       (bsw_com_data_SendSgnlMDB64)
-#define Com_SendSignalMetaDataL64       (bsw_com_data_SendSgnlMDL64)
-#define Com_SendSignalMetaDataEvB64     (bsw_com_data_SendSgnlMDEvB64)
-#define Com_SendSignalMetaDataEvL64     (bsw_com_data_SendSgnlMDEvL64)
-#define Com_SendSignalMetaDataBOvA      (bsw_com_data_SendSgnlMDBOvA)
-#define Com_SendSignalMetaDataLOvA      (bsw_com_data_SendSgnlMDLOvA)
-#define Com_SendSignalMetaDataEvBOvA    (bsw_com_data_SendSgnlMDEvBOvA)
-#define Com_SendSignalMetaDataEvLOvA    (bsw_com_data_SendSgnlMDEvLOvA)
-#define Com_SendSignalMetaDataB64OvA    (bsw_com_data_SendSgnlMDB64OvA)
-#define Com_SendSignalMetaDataL64OvA    (bsw_com_data_SendSgnlMDL64OvA)
-#define Com_SendSignalMetaDataEvB64OvA  (bsw_com_data_SendSgnlMDEvB64OvA)
-#define Com_SendSignalMetaDataEvL64OvA  (bsw_com_data_SendSgnlMDEvL64OvA)
-
-#define Com_SndSgnlGrpArryMetaData      (bsw_com_data_SndSgnlGrpArryMD)
-#define Com_SndSgnlGrpArryMetaDataEv    (bsw_com_data_SndSgnlGrpArryMDEv)
-
-#define Com_TriggerIPDUSendWithMetaData           (bsw_com_tx_SetTxReqMetaData)
-#define Com_TriggerPeriodicIPDUSendWithMetaData   (bsw_com_tx_SetPeriTxReqMetaData)
-#define Com_WriteIPDUWithMetaData                 (bsw_com_data_WriteMsgMetaData)
-#define Com_WriteIPDUMskTxCntWithMetaData         (bsw_com_data_WrtIpduMskTxCntMD)
-#define Com_SendIPDUWithMetaData                  (bsw_com_data_SendIPDUMetaData)
-#define Com_SendIPDUMskTxCntWithMetaData          (bsw_com_data_SendIPDUMskTxCntMD)
-
-#define Com_ReceiveSignalMetaDataB      (bsw_com_data_ReceiveSgnlMDB)
-#define Com_ReceiveSignalMetaDataL      (bsw_com_data_ReceiveSgnlMDL)
-#define Com_ReceiveSignalMetaDataB64    (bsw_com_data_ReceiveSgnlMDB64)
-#define Com_ReceiveSignalMetaDataL64    (bsw_com_data_ReceiveSgnlMDL64)
-#define Com_ReceiveSignalMetaDataBOvA   (bsw_com_data_ReceiveSgnlMDBOvA)
-#define Com_ReceiveSignalMetaDataLOvA   (bsw_com_data_ReceiveSgnlMDLOvA)
-#define Com_ReceiveSignalMetaDataB64OvA (bsw_com_data_ReceiveSgnlMDB64OvA)
-#define Com_ReceiveSignalMetaDataL64OvA (bsw_com_data_ReceiveSgnlMDL64OvA)
-
-#define Com_RcvSgnlGrpArryMetaData      (bsw_com_data_RcvSgnlGrpArryMD)
-
-#define Com_ReadIPDUWithMetaData                  (bsw_com_data_ReadMsgMetaData)
-
-#define Com_ResponseSendWithMetaData              (bsw_com_data_RespSendMetaData)
-#define Com_InitMetaData                          (bsw_com_data_SetInitMetaData)
-#define Com_GetSendMetaData                       (bsw_com_data_GetSendMetaData)
-#define Com_SetSendMetaData                       (bsw_com_data_SetSendMetaData)
 
 /* Function:Callback  */
 #define Com_CbkClrIPDUGrpTxReq          (bsw_com_tx_TxReqClear)
@@ -210,8 +158,6 @@
 #define Com_TxIpduCallout               (bsw_com_tx_PreTxIpdu)
 #define Com_TriggerTransmitIpduCallout  (bsw_com_tx_PreTrgTxIPdu)
 #define Com_CbkSetTxStatus              (bsw_com_tx_CbkSetStatus)
-#define Com_CbkBusWakeup                (bsw_com_tx_CbkBusWakeUp)
-#define Com_CbkEnablePeriodicTx         (bsw_com_tx_CbkEnablePeriTx)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -252,7 +198,6 @@
 /*  v1-2-0          :2019/09/27                                             */
 /*  v2-0-0          :2021/06/24                                             */
 /*  v2-1-0          :2022/09/05                                             */
-/*  v3-0-0          :2024/11/05                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

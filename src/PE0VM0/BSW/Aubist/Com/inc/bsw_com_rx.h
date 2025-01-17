@@ -1,7 +1,7 @@
-/* bsw_com_rx_h_v3-0-0                                                      */
+/* bsw_com_rx_h_v2-1-0                                                      */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -36,7 +36,7 @@
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
 void                bsw_com_rx_InitTimeOutSub( Bsw_Com_NetworkType u1Network );
-void                bsw_com_rx_InitComRxStat( NetworkHandleType Network, BswU4* ptIpduGrpStat );
+void                bsw_com_rx_InitComRxStat( Bsw_Com_IpduGroupVector ipduGroupVector );
 void                bsw_com_rx_ShutdownComRxStat( void );
 BswU1               bsw_com_rx_GetPncIpduRxSt( NetworkHandleType Network, PduIdType u2PduId );
 BswU1               bsw_com_rx_GetPncIpduRxStNone( NetworkHandleType Network, PduIdType u2PduId );
@@ -46,27 +46,40 @@ void                bsw_com_rx_InitPncRxStat( void );
 void                bsw_com_rx_InitPncRxStatNone( void );
 void                bsw_com_rx_ShutdownPncRxSt( void );
 void                bsw_com_rx_ShutdownPncRxStNone( void );
+void                bsw_com_rx_SetPncIpduRxDMSt( NetworkHandleType Network, BswConstR BswU4* ptReqStat );
+void                bsw_com_rx_SetPncIpduRxDMStNone( NetworkHandleType Network, BswConstR BswU4* ptReqStat );
 BswU1               bsw_com_rx_GetPncIpduRxDMSt( NetworkHandleType Network, PduIdType u2PduId );
 BswU1               bsw_com_rx_GetPncIpduRxDMStNone( NetworkHandleType Network, PduIdType u2PduId );
-void                bsw_com_rx_VPSRxIndicationNone( PduIdType PduId );
-void                bsw_com_rx_UpdateRxStatus( BswU1 u1Ch );
-void                bsw_com_rx_UpdateRxStatusPnc( BswU1 u1Ch );
+void                bsw_com_rx_GetPncChRxDMSt( NetworkHandleType Network, BswU1 u1PncNum, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg );
+void                bsw_com_rx_GetPncChRxDMStNone( NetworkHandleType Network, BswU1 u1PncNum, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg );
+void                bsw_com_rx_GetPncChRxSt( NetworkHandleType Network, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg, BswU1* ptPncNum );
+void                bsw_com_rx_GetPncChRxStNone( NetworkHandleType Network, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg, BswU1* ptPncNum );
+BswU1               bsw_com_rx_ChkPncIpduRxDMSt( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat );
+BswU1               bsw_com_rx_ChkPncIpduRxDMStNone( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat );
+BswU1               bsw_com_rx_ChkPncIpduRxSt( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat );
+BswU1               bsw_com_rx_ChkPncIpduRxStNone( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat );
+void                bsw_com_rx_SetPncChRxSt( NetworkHandleType Network, BswConstR BswU4* ptReqStat );
+void                bsw_com_rx_SetPncChRxStNone( NetworkHandleType Network, BswConstR BswU4* ptReqStat );
+BswU2               bsw_com_rx_GetPnconMskTime( BswU2 u2RxMsgIdx );
+BswU2               bsw_com_rx_GetPnconMskTimeNone( BswU2 u2RxMsgIdx );
+BswU1               bsw_com_rx_JudgePncIpduRxStProc( BswU1 u1PncNum, BswU1 u1IpduChgSts, BswU1 u1PncIpduChgSts );
+BswU1               bsw_com_rx_JudgeIpduRxStProc( BswU1 u1PncNum, BswU1 u1IpduChgSts, BswU1 u1PncIpduChgSts );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
-extern  BswU4       bsw_com_rx_u4RxIpduGrpReqStat[][BSW_COM_SYSSTATTBLNUM]; /* Receive I-PDU group state (Request)      */
-extern  BswU4       bsw_com_rx_u4RxIpduGrpStat[][BSW_COM_SYSSTATTBLNUM];    /* Receive I-PDU group state                */
+extern  BswU1       bsw_com_rx_u1RxIpduGrpReqStat[];       /* Receive I-PDU group state (Request)      */
+extern  BswU1       bsw_com_rx_u1RxIpduGrpStat[];          /* Receive I-PDU group state            */
 extern  BswU4       bsw_com_rx_u4PncRxIpduGrReqStat[][BSW_COM_PNC_REQNUM];  /* PNC receive I-PDU group state (Request)  */
 extern  BswU4       bsw_com_rx_u4PncRxIpduGrStat[][BSW_COM_PNC_REQNUM];     /* PNC receive I-PDU group state            */
 
 /* Unit internal public definition */
-extern  PduIdType   bsw_com_rx_u2FireHandler[];                              /* Periodic transmission time elapsed message ID     */
-extern  BswU2       bsw_com_rx_u2DLine[];                                    /* Timeout timer                                     */
-extern  BswU4       bsw_com_rx_u4RxDmReqStat[][BSW_COM_SYSSTATTBLNUM];       /* Receive disconnection monitoring state (Request)  */
-extern  BswU4       bsw_com_rx_u4RxDmStat[][BSW_COM_SYSSTATTBLNUM];          /* Receive disconnection monitoring state            */
-extern  BswU4       bsw_com_rx_u4WkupMskSetReqStat[][BSW_COM_SYSSTATTBLNUM]; /* WAKEUP_MASK setting state(request)                */
-extern  BswU4       bsw_com_rx_u4WkupMskSetStat[][BSW_COM_SYSSTATTBLNUM];    /* WAKEUP_MASK setting state                         */
+extern  PduIdType   bsw_com_rx_u2FireHandler[];            /* Periodic transmission time elapsed message ID     */
+extern  BswU2       bsw_com_rx_u2DLine[];                  /* Timeout timer               */
+extern  BswU1       bsw_com_rx_u1RxDmReqStat[];            /* Receive disconnection monitoring state (Request)           */
+extern  BswU1       bsw_com_rx_u1RxDmStat[];               /* Receive disconnection monitoring state                 */
+extern  BswU1       bsw_com_rx_u1WkupMskSetReqStat[];      /* WAKEUP_MASK setting state(request)        */
+extern  BswU1       bsw_com_rx_u1WkupMskSetStat[];         /* WAKEUP_MASK setting state              */
 extern  BswU4       bsw_com_rx_u4PncRxDmReqStat[][BSW_COM_PNC_REQNUM];       /* PNC Receive disconnection monitoring state (Request) */
 extern  BswU4       bsw_com_rx_u4PncRxDmStat[][BSW_COM_PNC_REQNUM];          /* PNC Receive disconnection monitoring state           */
 
@@ -85,9 +98,15 @@ extern BswConst BswU1                     bsw_com_rom_u1RxTimeOutMskStop[];  /* 
 extern  Std_ReturnType  (* BswConst bsw_com_rom_ptAlvCntrFuncRx[])( PduIdType u2PduId, BswConstR PduInfoType *ptCanRcvMsg, BswU1 *ptPreviousCounter, BswU1 *ptReceivedCounter );
 extern  void            (* BswConst bsw_com_rom_ptInitPncRxStatFunc)( void );
 extern  void            (* BswConst bsw_com_rom_ptDeInitPncRxStFunc)( void );
+extern  void            (* BswConst bsw_com_rom_ptGetPncChRxDMStFunc)( NetworkHandleType Network, BswU1 u1PncNum, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg );
+extern  void            (* BswConst bsw_com_rom_ptSetPncIpduRxDMStFunc)( NetworkHandleType Network, BswConstR BswU4* ptReqStat );
 extern  BswU1           (* BswConst bsw_com_rom_ptGetPncIpduRxDMStFunc)( NetworkHandleType Network, PduIdType u2PduId );
-extern  void            (* BswConst bsw_com_rom_ptVpsRxIndictionFunc)( PduIdType PduId );
-extern  void            (* BswConst bsw_com_rom_ptUpdateRxStsFunc[])( BswU1 u1Ch );
+extern  void            (* BswConst bsw_com_rom_ptGetPncChRxStFunc)( NetworkHandleType Network, BswU4* ptPrevStat, BswU4* ptReqStat, BswU1* ptStatChg, BswU1* ptPncNum );
+extern  BswU1           (* BswConst bsw_com_rom_ptChkPncIpduRxDMStFunc)( PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat );
+extern  BswU1           (* BswConst bsw_com_rom_ptChkPncIpduRxStFunc)(  PduIdType u2PduId, BswU1 u1PncNum, BswConstR BswU4* ptPrevStat, BswConstR BswU4* ptReqStat );
+extern  void            (* BswConst bsw_com_rom_ptSetPncChRxStFunc)( NetworkHandleType Network, BswConstR BswU4* ptReqStat );
+extern  BswU2           (* BswConst bsw_com_rom_ptGetPncMskTimFunc)( BswU2 u2RxMsgIdx );
+extern  BswU1           (* BswConst bsw_com_rom_ptJdgPncRxStProcFunc)( BswU1 u1PncNum, BswU1 u1IpduChgSts, BswU1 u1PncIpduChgSts );
 
 #endif /* BSW_COM_RX_H */
 
@@ -97,7 +116,6 @@ extern  void            (* BswConst bsw_com_rom_ptUpdateRxStsFunc[])( BswU1 u1Ch
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/11/18                                             */
-/*  v3-0-0          :2024/11/13                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

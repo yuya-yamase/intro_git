@@ -1,7 +1,7 @@
-/* bsw_nm_coord_h_v3-0-0                                                    */
+/* bsw_nm_coord_h_v2-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -42,7 +42,6 @@ void             bsw_nm_coord_StopSyncSleep( NetworkHandleType NetworkHandle );
 void             bsw_nm_coord_StopSleepDelay( NetworkHandleType NetworkHandle );
 Std_ReturnType   bsw_nm_coord_RequestBusSyncNone( NetworkHandleType nmChannelHandle );
 Std_ReturnType   bsw_nm_coord_CancelSyncPncSlpNone( NetworkHandleType nmNetworkHandle, PNCHandleType PNC );
-void             bsw_nm_coord_MainFunctionCoBusNone( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -56,7 +55,6 @@ extern void                      (* BswConst bsw_nm_coord_ptInitSlpSyncFunc)( vo
 extern void                      (* BswConst bsw_nm_coord_ptDelaySleepFunc)( void );
 extern Std_ReturnType            (* BswConst bsw_nm_coord_ptRqBusSyncFuncTbl[])( NetworkHandleType nmChannelHandle );
 extern Std_ReturnType            (* BswConst bsw_nm_coord_ptCancelSyncPncSlpFn)( NetworkHandleType nmNetworkHandle, PNCHandleType PNC );
-extern void                      (* BswConst bsw_nm_coord_ptMainFuncCoBusFn)( void );
 
 extern BswConst BswU2            bsw_nm_coord_ShutdownTim[];                  /* Shutdown time */
 extern BswConst BswU2            bsw_nm_coord_u2MaxShutdownTim;               /* Maximum value of the shutdown timer */
@@ -68,7 +66,6 @@ extern BswConst BswU2            bsw_nm_coord_u2MaxShutdownTim;               /*
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2022/01/06                                             */
-/*  v3-0-0          :2024/10/07                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

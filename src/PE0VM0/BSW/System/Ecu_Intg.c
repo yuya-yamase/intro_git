@@ -41,8 +41,7 @@
 #define ECU_ING_u4SLEEPNG_CLR_PERIOD (4UL)
 
 // 過敏スリープ対策の60sスリープ待ち (5ms x 200 x 60)
-// #define ECU_INTG_STAY_RUN_CNT (12000UL)
-#define ECU_INTG_u4STAY_RUN_CNT (1000UL) // デバッグ用に、5sに設定
+#define ECU_INTG_STAY_RUN_CNT (12000UL)
 
 /*----------------------------------------------------------------------------
  *		Type
@@ -65,7 +64,9 @@ static Ecu_Intg_LvDINestStackType Ecu_Intg_stLDINestStack[SS_USE_CORE_COUNT];
 #if (SS_USE_MODE == STD_ON)
 static uint32 Ecu_Intg_u4SleepNgFlag[SS_USE_CORE_COUNT];
 static uint32 u4TickCntr[SS_USE_CORE_COUNT];
+#ifndef ECU_INTG_LWH_GUEST
 static uint32 Ecu_Intg_u4StayRunCnt[SS_USE_CORE_COUNT];
+#endif
 #endif
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
@@ -78,7 +79,9 @@ static Ecu_Intg_LvDINestStackType *Ecu_Intg_selectNestStack(void);
 static void Ecu_Intg_setSTResetKey(uint8 u1Reason);
 
 #if (SS_USE_MODE == STD_ON)
+#ifndef ECU_INTG_LWH_GUEST
 static void Ecu_Intg_convSleepNg(void);
+#endif
 #endif
 
 /*----------------------------------------------------------------------------
@@ -105,7 +108,9 @@ void Ecu_Intg_init(void)
             Ecu_Intg_u4SleepNgFlag[u4Idx] = ECU_INTG_u4SLEEP_NG;
 /* @ zantei SLEEP NG */
             u4TickCntr[u4Idx]             = 0UL;
+#ifndef ECU_INTG_LWH_GUEST
             Ecu_Intg_u4StayRunCnt[u4Idx]  = 0UL;
+#endif
 #endif
         }
     }
@@ -146,6 +151,7 @@ void Ecu_Intg_postClockup(void)
 #endif
 
 #if (SS_USE_MODE == STD_ON)
+#ifndef ECU_INTG_LWH_GUEST
 static void Ecu_Intg_convSleepNg(void)
 {
     uint32 u4cId;
@@ -178,6 +184,7 @@ static void Ecu_Intg_convSleepNg(void)
     return;
 }
 #endif
+#endif
 
 #if (SS_USE_MODE == STD_ON)
 Std_ReturnType Ecu_Intg_arbitrate(SS_Mm_modeType u4SS_Mode)
@@ -199,6 +206,7 @@ Std_ReturnType Ecu_Intg_arbitrate(SS_Mm_modeType u4SS_Mode)
     u1_t_sht = u1_g_BswMShtdwnRqst();
     if(u1_t_sht != (U1)TRUE){
         SS_Mm_requestRun();
+        Ecu_Intg_sendSleepNG();
     }
     else {
         Ecu_Intg_u4SleepNgFlag[u4cId] = ECU_INTG_u4SLEEP_OK;
@@ -243,7 +251,7 @@ Std_ReturnType Ecu_Intg_arbitrate(SS_Mm_modeType u4SS_Mode)
         bAwakeArb = Ecu_Arb_mainFunction(bAwake);
         if (bAwakeArb == TRUE)
         {
-//            SS_Mm_requestRun();
+            SS_Mm_requestRun();
         }
 #if (SS_MM_USE_ASYNC_ARB == STD_ON)
         else
@@ -277,7 +285,7 @@ Std_ReturnType Ecu_Intg_arbitrate(SS_Mm_modeType u4SS_Mode)
     if (u4TickCntr[u4cId] >= ECU_ING_u4SLEEPNG_CLR_PERIOD)
     {
 /* @ zantei Sleep NG */
-//        Ecu_Intg_u4SleepNgFlag[u4cId] = ECU_INTG_u4SLEEP_OK;
+        Ecu_Intg_u4SleepNgFlag[u4cId] = ECU_INTG_u4SLEEP_OK;
 /* @ zantei Sleep NG */
         u4TickCntr[u4cId]             = 0UL;
     }

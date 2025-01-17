@@ -420,34 +420,6 @@ ar_isrcb_t ar_isrcb_INTTAUD0CH14;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-ar_isrcb_t ar_isrcb_INTRCAN5REC_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-ar_isrcb_t ar_isrcb_INTRCAN5TRX_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-ar_isrcb_t ar_isrcb_INTRCAN7REC_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-ar_isrcb_t ar_isrcb_INTRCAN7TRX_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
 
 
 
@@ -499,22 +471,6 @@ const ar_isr_config_t ar_isr_configs[AR_OS_NUM_C2ISRS] = {
     {
         &(ar_int_configs[9]),
         (const ar_osap_config_t  *)NULL
-    },
-    {
-        &(ar_int_configs[10]),
-        (const ar_osap_config_t  *)NULL
-    },
-    {
-        &(ar_int_configs[11]),
-        (const ar_osap_config_t  *)NULL
-    },
-    {
-        &(ar_int_configs[12]),
-        (const ar_osap_config_t  *)NULL
-    },
-    {
-        &(ar_int_configs[13]),
-        (const ar_osap_config_t  *)NULL
     }
 };
 
@@ -538,11 +494,7 @@ ar_isrcb_t * const ar_isrcb_ptr_table[AR_OS_NUM_C2ISRS] = {
     &ar_isrcb_INTRIIC1TI_ISR,
     &ar_isrcb_INTRIIC1TEI_ISR,
     &ar_isrcb_OS_SYSTEM_COUNTER_ISR0,
-    &ar_isrcb_INTTAUD0CH14,
-    &ar_isrcb_INTRCAN5REC_ISR,
-    &ar_isrcb_INTRCAN5TRX_ISR,
-    &ar_isrcb_INTRCAN7REC_ISR,
-    &ar_isrcb_INTRCAN7TRX_ISR
+    &ar_isrcb_INTTAUD0CH14
 };
 
 #define OS_STOP_SEC_CONST_32
@@ -618,30 +570,6 @@ const ar_int_config_t ar_int_configs[AR_OS_NUM_C2ISRS] = {
         &GENNAME_ISR(INTTAUD0CH14),
         HAL_V850_INTC1_OFFSET + 26U,  /* INTC1 : 26 */
         -1,
-        AR_DISABLE
-    },
-    {
-        &GENNAME_ISR(INTRCAN5REC_ISR),
-        HAL_V850_INTC2_OFFSET + 314U,  /* INTC2 : 314 */
-        -6,
-        AR_DISABLE
-    },
-    {
-        &GENNAME_ISR(INTRCAN5TRX_ISR),
-        HAL_V850_INTC2_OFFSET + 315U,  /* INTC2 : 315 */
-        -6,
-        AR_DISABLE
-    },
-    {
-        &GENNAME_ISR(INTRCAN7REC_ISR),
-        HAL_V850_INTC2_OFFSET + 320U,  /* INTC2 : 320 */
-        -6,
-        AR_DISABLE
-    },
-    {
-        &GENNAME_ISR(INTRCAN7TRX_ISR),
-        HAL_V850_INTC2_OFFSET + 321U,  /* INTC2 : 321 */
-        -6,
         AR_DISABLE
     }
 };

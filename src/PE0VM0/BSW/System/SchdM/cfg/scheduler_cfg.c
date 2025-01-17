@@ -64,7 +64,7 @@
 
 #include "rim_ctl.h"
 #include "bsw_m.h"
-#include "nvmc_mgr.h"
+/* #include "nvmc_mgr.h" */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -240,7 +240,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Task                                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_Nvmc_Task, (U4)SCHDLR_TASKBIT___5MS_CAL},
+    /* {&vd_g_Nvmc_Task, (U4)SCHDLR_TASKBIT___5MS_CAL}, */
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -254,7 +254,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  20ms B Task                                                      */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_Nvmc_PeriodicTask, (U4)SCHDLR_TASKBIT__20MS_B_CAL},
+    /* {&vd_g_Nvmc_PeriodicTask, (U4)SCHDLR_TASKBIT__20MS_B_CAL}, */
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

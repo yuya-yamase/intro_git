@@ -1,7 +1,7 @@
-/* bswm_can_h_v3-0-0                                                        */
+/* bswm_can_h_v2-1-0                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -60,7 +60,6 @@
 #define BswM_Can_CbkPreControlTx         (bsw_bswm_can_ctrl_CbkPreCtrlTx)
 #define BswM_Can_GetChFailStatus         (bsw_bswm_can_ctrl_GetChFailStat)
 #define BswM_Can_GetControllerErrStatus  (bsw_bswm_can_ctrl_GetCtrErrStat)
-#define BswM_Can_CbkPreRgstCheck         (bsw_bswm_can_ctrl_CbkPreRgstChk)
 
 /*------------------------------*/
 /* Unit:backup                  */
@@ -98,7 +97,6 @@
 /*  v1-1-0          :2018/12/17                                             */
 /*  v2-0-0          :2021/05/31                                             */
 /*  v2-1-0          :2022/09/15                                             */
-/*  v3-0-0          :2024/08/27                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

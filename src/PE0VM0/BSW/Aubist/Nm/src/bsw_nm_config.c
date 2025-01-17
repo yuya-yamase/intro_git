@@ -1,7 +1,7 @@
-/* bsw_nm_config_c_v3-0-0                                                   */
+/* bsw_nm_config_c_v2-1-0                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright DENSO CORPORATION                                              */
+/* Copyright AUBASS CO., LTD.                                               */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -55,12 +55,9 @@
 #endif /* BSW_BSWM_CS_FUNC_ETH == BSW_USE */
 
 #if( BSW_BSWM_CS_FUNC_LIN == BSW_USE )
-#include <linnm/bsw_linnm.h>
+#include <LinNm.h>
+#include <LinNm_Cbk.h>
 #endif /* BSW_BSWM_CS_FUNC_LIN == BSW_USE */
-
-#if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
-#include <bswm_vps/bsw_bswm_vps_cbk.h>
-#endif
 
 #include <cs/bsw_cs_system_memmap_pre.h>
 
@@ -83,13 +80,17 @@
 #define BSW_NM_FUNCTBL_CAN             (1U)
 #define BSW_NM_FUNCTBL_LIN             (2U)
 #define BSW_NM_FUNCTBL_UDP             (3U)
-#define BSW_NM_FUNCTBL_SIZE            (4U)
+#define BSW_NM_FUNCTBL_GEN1            (4U)
+#define BSW_NM_FUNCTBL_GEN2            (5U)
+#define BSW_NM_FUNCTBL_SIZE            (6U)
 
 /* Channel to Protocol Index Conversion (Editing is required when adding protocols) */
 #define BSW_NM_IDX_NM(ch)             (BSW_NM_IDX_CONV_CAN(ch))
 #define BSW_NM_IDX_CONV_CAN(ch)       ((BSW_NM_TYPE(ch) == BSW_COMM_BUS_TYPE_CAN)  ? BSW_NM_FUNCTBL_CAN  : BSW_NM_IDX_CONV_LIN(ch))
 #define BSW_NM_IDX_CONV_LIN(ch)       ((BSW_NM_TYPE(ch) == BSW_COMM_BUS_TYPE_LIN)  ? BSW_NM_FUNCTBL_LIN  : BSW_NM_IDX_CONV_UDP(ch))
-#define BSW_NM_IDX_CONV_UDP(ch)       ((BSW_NM_TYPE(ch) == BSW_COMM_BUS_TYPE_ETH)  ? BSW_NM_FUNCTBL_UDP  : BSW_NM_FUNCTBL_NONE)
+#define BSW_NM_IDX_CONV_UDP(ch)       ((BSW_NM_TYPE(ch) == BSW_COMM_BUS_TYPE_ETH)  ? BSW_NM_FUNCTBL_UDP  : BSW_NM_IDX_CONV_GEN1(ch))
+#define BSW_NM_IDX_CONV_GEN1(ch)      ((BSW_NM_TYPE(ch) == BSW_COMM_BUS_TYPE_CDD1) ? BSW_NM_FUNCTBL_GEN1 : BSW_NM_IDX_CONV_GEN2(ch))
+#define BSW_NM_IDX_CONV_GEN2(ch)      ((BSW_NM_TYPE(ch) == BSW_COMM_BUS_TYPE_CDD2) ? BSW_NM_FUNCTBL_GEN2 : BSW_NM_FUNCTBL_NONE)
 
 /* Shutdown timer time */
 #if ( BSW_NM_CFG_SHUTDOWN_TIME_CH0 > BSW_NM_CFG_SHUTDOWN_TIME_CH1 )
@@ -302,15 +303,6 @@
 #else
 #define BSW_NM_COORD_CANCELPNSLP_FUNC     ( &bsw_nm_coord_CancelSyncPncSlpNone )
 #endif /*(BSW_NM_SYNC_PNC_SHUTDOWN == BSW_USE)*/
-
-/* PN multi-stage sleep synchronization function */
-#if (BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE)
-#define BSW_NM_COORD_MAINFUNCCOBUS_FUNC   ( &BswM_VPS_MainFunctionCoBus )
-#define BSW_NM_SW_TRXIND_FUNC             ( &BswM_VPS_NmRxIndication )
-#else
-#define BSW_NM_COORD_MAINFUNCCOBUS_FUNC   ( &bsw_nm_coord_MainFunctionCoBusNone )
-#define BSW_NM_SW_TRXIND_FUNC             ( &bsw_nm_sw_NmRxIndicationNone )
-#endif /*(BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE)*/
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
@@ -578,6 +570,43 @@ static BswConst Bsw_Nm_PduFuncTblType bsw_nm_sw_ptUdp_PduFuncTbl =
 #endif /* ( ( BSW_NM_USER_DATA == BSW_USE ) || ( BSW_NM_NODE_ID == BSW_USE ) ) */
 #endif /* ( BSW_NM_TYPE_USE(ETH) == BSW_USE ) */
 
+#if( BSW_NM_TYPE_USE(CDD1) == BSW_USE )
+/* NM Type:GenericNm1 Public Function Table */
+static BswConst Bsw_Nm_FuncTblType bsw_nm_sw_ptGen1_FuncTbl = 
+{
+      &bsw_bswm_cs_Cdd1NmPassiveStartUp
+    , &bsw_bswm_cs_Cdd1NmNetworkRequest
+    , &bsw_bswm_cs_Cdd1NmNetworkRelease
+    , &bsw_bswm_cs_Cdd1NmGetState
+};
+#if ( BSW_NM_COM_CONTROL == BSW_USE )
+static BswConst Bsw_Nm_ComFuncTblType bsw_nm_sw_ptGen1_ComFuncTbl = 
+{
+      &bsw_bswm_cs_Cdd1NmDisableComm
+    , &bsw_bswm_cs_Cdd1NmEnableComm
+};
+#endif /* ( BSW_NM_COM_CONTROL == BSW_USE ) */
+#endif /* ( BSW_NM_TYPE_USE(CDD1) == BSW_USE ) */
+
+
+#if( BSW_NM_TYPE_USE(CDD2) == BSW_USE )
+/* NM Type:GenericNm2 Public Function Table */
+static BswConst Bsw_Nm_FuncTblType bsw_nm_sw_ptGen2_FuncTbl = 
+{
+      &bsw_bswm_cs_Cdd2NmPassiveStartUp
+    , &bsw_bswm_cs_Cdd2NmNetworkRequest
+    , &bsw_bswm_cs_Cdd2NmNetworkRelease
+    , &bsw_bswm_cs_Cdd2NmGetState
+};
+#if ( BSW_NM_COM_CONTROL == BSW_USE )
+static BswConst Bsw_Nm_ComFuncTblType bsw_nm_sw_ptGen2_ComFuncTbl = 
+{
+      &bsw_bswm_cs_Cdd2NmDisableComm
+    , &bsw_bswm_cs_Cdd2NmEnableComm
+};
+#endif /* ( BSW_NM_COM_CONTROL == BSW_USE ) */
+#endif /* ( BSW_NM_TYPE_USE(CDD2) == BSW_USE ) */
+
 /* Public function table (Editing is required when adding protocols) */
 BswConst Bsw_Nm_FuncTblType* BswConst bsw_nm_sw_ptFuncTbl[BSW_NM_FUNCTBL_SIZE] = {
     &bsw_nm_sw_ptNotInd_FuncTbl
@@ -599,6 +628,18 @@ BswConst Bsw_Nm_FuncTblType* BswConst bsw_nm_sw_ptFuncTbl[BSW_NM_FUNCTBL_SIZE] =
 #else
    ,&bsw_nm_sw_ptNotInd_FuncTbl
 #endif
+
+#if ( BSW_NM_TYPE_USE(CDD1)  == BSW_USE )
+   ,&bsw_nm_sw_ptGen1_FuncTbl
+#else
+   ,&bsw_nm_sw_ptNotInd_FuncTbl
+#endif
+
+#if ( BSW_NM_TYPE_USE(CDD2)  == BSW_USE )
+   ,&bsw_nm_sw_ptGen2_FuncTbl
+#else
+   ,&bsw_nm_sw_ptNotInd_FuncTbl
+#endif
 };
 
 #if ( BSW_NM_COM_CONTROL == BSW_USE )
@@ -617,6 +658,16 @@ BswConst Bsw_Nm_ComFuncTblType* BswConst bsw_nm_sw_ptComFuncTbl[BSW_NM_FUNCTBL_S
 #endif
 #if ( BSW_NM_TYPE_USE(ETH)  == BSW_USE )
    ,&bsw_nm_sw_ptUdp_ComFuncTbl
+#else
+   ,&bsw_nm_sw_ptNotInd_ComFuncTbl
+#endif
+#if ( BSW_NM_TYPE_USE(CDD1)  == BSW_USE )
+   ,&bsw_nm_sw_ptGen1_ComFuncTbl
+#else
+   ,&bsw_nm_sw_ptNotInd_ComFuncTbl
+#endif
+#if ( BSW_NM_TYPE_USE(CDD2)  == BSW_USE )
+   ,&bsw_nm_sw_ptGen2_ComFuncTbl
 #else
    ,&bsw_nm_sw_ptNotInd_ComFuncTbl
 #endif
@@ -642,6 +693,8 @@ BswConst Bsw_Nm_UsrDatFuncTblType* BswConst bsw_nm_sw_ptUsrDatFuncTbl[BSW_NM_FUN
 #else
    ,&bsw_nm_sw_ptNotInd_UsrDtFuncTbl
 #endif
+   ,&bsw_nm_sw_ptNotInd_UsrDtFuncTbl
+   ,&bsw_nm_sw_ptNotInd_UsrDtFuncTbl
 };
 #endif /* ( BSW_NM_USER_DATA == BSW_USE ) */
 
@@ -660,6 +713,8 @@ BswConst Bsw_Nm_NodeFuncTblType* BswConst bsw_nm_sw_ptNodeFuncTbl[BSW_NM_FUNCTBL
 #else
    ,&bsw_nm_sw_ptNotInd_NodeFuncTbl
 #endif
+   ,&bsw_nm_sw_ptNotInd_NodeFuncTbl
+   ,&bsw_nm_sw_ptNotInd_NodeFuncTbl
 };
 #endif /* ( BSW_NM_NODE_ID == BSW_USE ) */
 
@@ -682,6 +737,8 @@ BswConst Bsw_Nm_PduFuncTblType* BswConst bsw_nm_sw_ptPduFuncTbl[BSW_NM_FUNCTBL_S
 #else
    ,&bsw_nm_sw_ptNotInd_PduFuncTbl
 #endif
+   ,&bsw_nm_sw_ptNotInd_PduFuncTbl
+   ,&bsw_nm_sw_ptNotInd_PduFuncTbl
 };
 #endif /* ( ( BSW_NM_USER_DATA == BSW_USE ) || ( BSW_NM_NODE_ID == BSW_USE ) ) */
 
@@ -696,6 +753,8 @@ uint16 (* BswConst bsw_nm_sw_ptEvtWkupFuncTbl[BSW_NM_FUNCTBL_SIZE])( NetworkHand
 #endif
    ,&bsw_nm_sw_TransmitEvWakeupNone
    ,&bsw_nm_sw_TransmitEvWakeupNone
+   ,&bsw_nm_sw_TransmitEvWakeupNone
+   ,&bsw_nm_sw_TransmitEvWakeupNone
 };
 void (* BswConst bsw_nm_sw_ptEvtWkupClFuncTbl[BSW_NM_FUNCTBL_SIZE])( NetworkHandleType nmChannelHandle ) = {
     &bsw_nm_sw_CancelEvWakeupNone
@@ -704,6 +763,8 @@ void (* BswConst bsw_nm_sw_ptEvtWkupClFuncTbl[BSW_NM_FUNCTBL_SIZE])( NetworkHand
 #else
    ,&bsw_nm_sw_CancelEvWakeupNone
 #endif
+   ,&bsw_nm_sw_CancelEvWakeupNone
+   ,&bsw_nm_sw_CancelEvWakeupNone
    ,&bsw_nm_sw_CancelEvWakeupNone
    ,&bsw_nm_sw_CancelEvWakeupNone
 };
@@ -730,6 +791,8 @@ Std_ReturnType (* BswConst bsw_nm_sw_ptSetSlpRdyBitFuncTbl[BSW_NM_FUNCTBL_SIZE])
 #else
    ,&bsw_nm_sw_SetSleepReadyBitNone
 #endif
+   ,&bsw_nm_sw_SetSleepReadyBitNone
+   ,&bsw_nm_sw_SetSleepReadyBitNone
 };
 
 #if (BSW_NM_REQ_BUS_SYNC_USE == BSW_USE)
@@ -747,6 +810,8 @@ Std_ReturnType (* BswConst bsw_nm_sw_ptRqBusSyncFuncTbl[BSW_NM_FUNCTBL_SIZE])( N
 #else
    ,&bsw_nm_sw_RequestBusSyncNone
 #endif
+   ,&bsw_nm_sw_RequestBusSyncNone
+   ,&bsw_nm_sw_RequestBusSyncNone
 };
 #endif /* (BSW_NM_REQ_BUS_SYNC_USE == BSW_USE) */
 
@@ -965,6 +1030,8 @@ Std_ReturnType (* BswConst bsw_nm_sw_ptSyncPncShutdownFuncTbl[BSW_NM_FUNCTBL_SIZ
 #else
    ,&bsw_nm_sw_ReqSyncPncSlpNone
 #endif
+   ,&bsw_nm_sw_ReqSyncPncSlpNone
+   ,&bsw_nm_sw_ReqSyncPncSlpNone
 };
 
 /* Cooperative PN sleep cancellation function table(Editing is required when adding protocols) */
@@ -981,13 +1048,12 @@ Std_ReturnType (* BswConst bsw_nm_sw_ptCancelReqSyncPncShutdownFuncTbl[BSW_NM_FU
 #else
    ,&bsw_nm_sw_CancelSyncPncSlpNone
 #endif
+   ,&bsw_nm_sw_CancelSyncPncSlpNone
+   ,&bsw_nm_sw_CancelSyncPncSlpNone
 };
 #endif /* (BSW_NM_SYNC_PNC_SHUTDOWN == BSW_USE) */
 
 Std_ReturnType (* BswConst bsw_nm_coord_ptCancelSyncPncSlpFn)( NetworkHandleType nmNetworkHandle, PNCHandleType PNC ) = BSW_NM_COORD_CANCELPNSLP_FUNC;
-void           (* BswConst bsw_nm_coord_ptMainFuncCoBusFn)( void ) = BSW_NM_COORD_MAINFUNCCOBUS_FUNC;
-void           (* BswConst bsw_nm_sw_ptNmRxIndicationFn)(  NetworkHandleType nmNetworkHandle, BswConstR PduInfoType* PduInfoPtr ) = BSW_NM_SW_TRXIND_FUNC;
-
 
 /****************************************************************************/
 /* External Functions                                                       */
@@ -1010,7 +1076,6 @@ void           (* BswConst bsw_nm_sw_ptNmRxIndicationFn)(  NetworkHandleType nmN
 /*  v1-2-0          :2020/04/15                                             */
 /*  v2-0-0          :2022/01/13                                             */
 /*  v2-1-0          :2023/02/03                                             */
-/*  v3-0-0          :2024/10/15                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/
