@@ -310,13 +310,8 @@ SECTIONS {
     _DATA_SIZE = . - ADDR(.data);
 
     .ecu_nvar_top           align(4)                        : > .
-    .bss                    align(4)                        :                   // コンパイラのデフォルト領域
-    {
-        /* Top of Zero initialized data (.bss) section for applications on CRAM2. */
-        *(".app_common_cram0_bss")      /* ALIGN(4) MUST */
-        . = ALIGN(4);
-        /* Bottom of Zero initialized data (.bss) section for applications on CRAM2. */
-    } > .
+    .bss                    align(4)                        : > .               // コンパイラのデフォルト領域
+
     .ecu_nvar_bottom        align(4)                        : > .
     _ECU_NVAR_SIZE = . - ADDR(.ecu_nvar_top);
 

@@ -25,7 +25,6 @@
 
 #include "iohw_adc.h"
 #include "iohw_diflt.h"
-#include "xspi.h"
 
 #include "icu_drv_wk.h"
 
@@ -84,11 +83,6 @@ Std_ReturnType Ecu_Intg_initCdd(Ecu_Intg_BootCauseType u4BootCause)
             break;
     }
 
-    /* XSPI初期化処理 */
-    xspi_Init( XSPI_CH_01 );    /* IVI */
-    xspi_Init( XSPI_CH_02 );    /* METER */
-    xspi_Init( XSPI_CH_03 );    /* CENTRAL */
-
     return E_OK;
 }
 
@@ -118,11 +112,6 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
 
     vd_g_oXCANMainPreTask();
     vd_g_VehopemdMainTask();
-
-    /* XSPIメイン処理 */
-    xspi_Main( XSPI_CH_01 );    /* IVI */
-    xspi_Main( XSPI_CH_02 );    /* METER */
-    xspi_Main( XSPI_CH_03 );    /* CENTRAL */
 
     return E_OK;
 }

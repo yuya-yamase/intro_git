@@ -21,6 +21,8 @@
 #include <Ecu_Int.h>
 
 #include "wdg_drv.h"
+
+#include "xspi.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -48,6 +50,9 @@ Std_ReturnType Ecu_Intg_initCdd(Ecu_Intg_BootCauseType u4BootCause)
 
 Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
 {
+    /* XSPI初期化処理 */
+    xspi_Init( XSPI_CH_01 );
+
     return E_OK;
 }
 
@@ -131,6 +136,9 @@ void Ecu_Intg_preSTResetCallout(Ecu_Intg_STResetType u1Type, uint8 u1Reason)
 ISR(INTOSTM1_ISR)
 {
     /*    INTOSTM1_ISR;*/
+    /* XSPIメイン処理 */
+    xspi_Main( XSPI_CH_01 );
+
 }
 
 ISR(INTP38_ISR)

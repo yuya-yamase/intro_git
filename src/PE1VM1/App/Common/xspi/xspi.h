@@ -17,9 +17,9 @@
 /*------------------------------*/
 /*	通信フレーム最大長			*/
 /*------------------------------*/
-#define		XSPI_FRM_MAX			(5628UL)		/* フレーム最大長		*/
-#define		XSPI_RCV_FRM_MAX		(XSPI_FRM_MAX)	/* 受信フレーム最大長	*/
-#define		XSPI_SND_FRM_MAX		(XSPI_FRM_MAX)	/* 送信フレーム最大長	*/
+#define XSPI_FRM_MAX				(5628UL)		/* フレーム最大長		*/
+#define XSPI_RCV_FRM_MAX			(XSPI_FRM_MAX)	/* 受信フレーム最大長	*/
+#define XSPI_SND_FRM_MAX			(XSPI_FRM_MAX)	/* 送信フレーム最大長	*/
 
 /*------------------------------*/
 /*	チャネルID					*/
