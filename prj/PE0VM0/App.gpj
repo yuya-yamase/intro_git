@@ -31,6 +31,8 @@
     -I${IOHW_DIR}/iohw_diflt/cfg
 
     -I${LIB_DIR}
+    
+    -I${MCAL_DIR}/GPT
 
     -I${APP_DIR}/Common/PwrCtrl
     -I${APP_DIR}/Common/ExtSigCtrl

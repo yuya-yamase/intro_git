@@ -18,6 +18,41 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
+/* Power-IC 電源制御 */
+#define MCU_STEP_P_IC_OVERALL_1         (1U)    /* "HexagonDSP MUTE設定完了通知"送信受領まで待機 */
+#define MCU_STEP_P_IC_OVERALL_2         (2U)    /* wait min 55ms */
+#define MCU_STEP_P_IC_OVERALL_3         (3U)    /* MUTE設定 (IB2読出し) */
+#define MCU_STEP_P_IC_OVERALL_4         (4U)    /* MUTE設定 (IB2[0x82].D4=0,IB2[0x82].D3=0) */
+#define MCU_STEP_P_IC_OVERALL_5         (5U)    /* wait 100ms */
+#define MCU_STEP_P_IC_OVERALL_6         (6U)    /* Amp Off設定 (IB7読出し) */
+#define MCU_STEP_P_IC_OVERALL_7         (7U)    /* Amp Off設定 (IB7[0x87].D0=0) */
+#define MCU_STEP_P_IC_OVERALL_8         (8U)    /* wait min 5ms , スタンバイ P-ON=L */
+#define MCU_STEP_P_IC_OVERALL_9         (9U)    /* Sys電源 V33-PERI-ON=L , wait min 100ms , P-IC電源制限 PIC-POFF=L */
+#define MCU_STEP_P_IC_OVERALL_FIN       (10U)
+
+#define MCU_OFFWAIT_POWERIC_5MS         (  5U   / MCU_SYS_TASK_TIME)
+#define MCU_OFFWAIT_POWERIC_55MS        ( 55U   / MCU_SYS_TASK_TIME)
+#define MCU_OFFWAIT_POWERIC_100MS       (100U   / MCU_SYS_TASK_TIME)
+
+/* XMTuner */
+#define MCU_STEP_XMTUNER_OVERALL_1      (1U)
+#define MCU_STEP_XMTUNER_OVERALL_2      (2U)
+#define MCU_STEP_XMTUNER_OVERALL_3      (3U)
+#define MCU_STEP_XMTUNER_OVERALL_FIN    (4U)
+
+#define MCU_OFFWAIT_XMTUNER_10MS        ( 10U   / MCU_SYS_TASK_TIME)
+#define MCU_OFFWAIT_XMTUNER_5MS         (  5U   / MCU_SYS_TASK_TIME)
+
+/* GNSS */
+#define MCU_STEP_GNSS_OVERALL_1         (1U)    /* MM_STBY_N,/Bu-DTE端子監視 */
+#define MCU_STEP_GNSS_OVERALL_2         (2U)    /* MM_STBY_=H→L時における、/GPT-RST監視,GPS-PCTL操作 */
+#define MCU_STEP_GNSS_OVERALL_3         (3U)    /* /Bu-DTE=H→L時における、/GPT-RST監視,GPS-PCTL操作 */
+#define MCU_STEP_GNSS_OVERALL_4         (4U)    /* GPS-PMONIポーリング */
+#define MCU_STEP_GNSS_OVERALL_5         (5U)    /* wait t1,GPS-PCTL操作 */
+#define MCU_STEP_GNSS_OVERALL_FIN       (6U)
+
+#define MCU_OFFWAIT_GNSS_10MS           (  10U   / MCU_SYS_TASK_TIME)
+#define MCU_OFFWAIT_GNSS_100MS          ( 100U   / MCU_SYS_TASK_TIME)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -52,19 +87,19 @@ static uint16  Mcu_BetWait_Time;
 static uint8  NoRedun_MetBB_Chk;
 static uint8  Mcu_MetBB_OnStep;
 static uint8  Mcu_MetBB_OffStep;
-static uint16  Mcu_MBon_Time;
-static uint16  Mcu_Gviftx_Mbwk_Time;
-static uint16  Mcu_Gviftx_Mbwk_Off_Time;
-static uint16  Mcu_MBoff_Time;
+static uint16 Mcu_MBon_Time;
+static uint16 Mcu_Gviftx_Mbwk_Time;
+static uint16 Mcu_Gviftx_Mbwk_Off_Time;
+static uint16 Mcu_MBoff_Time;
 
 /* Center Display ON/OFF Sequence */
 static uint8  NoRedun_Disp_Chk;
 static uint8  Mcu_Disp_OnStep;
 static uint8  Mcu_Disp_OffStep;
-static uint16  Mcu_Dspon_Time;
-static uint16  Mcu_Gviftx_Dspwk_Time;
-static uint16  Mcu_Gviftx_Dspwk_Off_Time;
-static uint16  Mcu_Dspoff_Time;
+static uint16 Mcu_Dspon_Time;
+static uint16 Mcu_Gviftx_Dspwk_Time;
+static uint16 Mcu_Gviftx_Dspwk_Off_Time;
+static uint16 Mcu_Dspoff_Time;
 
 /* DSRC(HUB) ON/OFF Sequence */
 static uint8  NoRedun_Hub_Chk;
@@ -75,8 +110,15 @@ static uint16 Mcu_Hubwk_Time;
 static uint16 Mcu_Hubwk_Off_Time;
 static uint16 Mcu_Huboff_Time;
 
-/* SYS系デバイス終了状態(extern) */
-uint8  Mcu_Dev_Pwroff_Sts;
+/* SYS系デバイス終了状態 */
+uint16        Mcu_Dev_Pwroff_Sts;  /* exturn */
+static uint8  Mcu_OffStep_PowerIc;
+static uint16 Mcu_OffTime_PowerIc;
+static uint8  Mcu_OffStep_XMTuner;
+static uint16 Mcu_OffTime_XMTuner;
+static uint8  Mcu_OffStep_GNSS;
+static uint16 Mcu_OffTime_GNSS;
+static uint8  Mcu_OffCnt_GNSS;
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -148,12 +190,17 @@ void Mcu_NoRedun_PwrOff_Hub( void );
 void Mcu_NoRedun_BetWait( void );
 
 void  Mcu_Dev_Pwroff( void );
-uint8 Mcu_Dev_Pwroff_USB( void );
-uint8 Mcu_Dev_Pwroff_PictIC( void );
-uint8 Mcu_Dev_Pwroff_GVIFRx( void );
-uint8 Mcu_Dev_Pwroff_GVIFTx_CDisp( void );
-uint8 Mcu_Dev_Pwroff_Mic( void );
-uint8 Mcu_Dev_Pwroff_Ant( void );
+uint16 Mcu_Dev_Pwroff_USB( void );
+uint16 Mcu_Dev_Pwroff_PictIC( void );
+uint16 Mcu_Dev_Pwroff_GVIFRx( void );
+uint16 Mcu_Dev_Pwroff_GVIFTx_CDisp( void );
+uint16 Mcu_Dev_Pwroff_Mic( void );
+uint16 Mcu_Dev_Pwroff_Ant( void );
+uint16 Mcu_Dev_Pwroff_SoundMUTE( void );
+uint16 Mcu_Dev_Pwroff_Most( void );
+uint16 Mcu_Dev_Pwroff_PowerIC( void );
+uint16 Mcu_Dev_Pwroff_XMTuner( void );
+uint16 Mcu_Dev_Pwroff_GNSS( void );
 
 /****************************************************************************/
 /* Scheduled Functions                                                      */
@@ -209,7 +256,14 @@ void Mcu_NoRedun_PwrCtrl_Init( void )
   Mcu_Huboff_Time                   = (uint16)0U;
 
   /* SYS系デバイス終了状態 */
-  Mcu_Dev_Pwroff_Sts                = (uint8)FALSE;
+  Mcu_Dev_Pwroff_Sts                = (uint16)FALSE;
+  Mcu_OffStep_PowerIc               = (uint8)MCU_STEP_P_IC_OVERALL_1;
+  Mcu_OffTime_PowerIc               = (uint16)0U;
+  Mcu_OffStep_XMTuner               = (uint8)MCU_STEP_XMTUNER_OVERALL_1;
+  Mcu_OffTime_XMTuner               = (uint16)0U;
+  Mcu_OffStep_GNSS                  = (uint8)MCU_STEP_GNSS_OVERALL_1;
+  Mcu_OffTime_GNSS                  = (uint16)0U;
+  Mcu_OffCnt_GNSS                   = (uint8)0U;
 }
 
 /*****************************************************************************
@@ -1048,9 +1102,10 @@ uint8 Mcu_Noredun_PwrOff_GetSts( void )
 
   mcu_return  = (uint8)FALSE; /* 初期化：非冗長電源OFFシーケンス実行中 */
 
-  if(Mcu_MetBB_OffStep  == (uint8)MCU_NOREDUN_STEP_OK &&  /* Meter+BB Display OFFシーケンス完了 */
-    Mcu_Disp_OffStep    == (uint8)MCU_NOREDUN_STEP_OK &&  /* Center Display OFFシーケンス完了 */
-    Mcu_Hub_OffStep     == (uint8)MCU_NOREDUN_STEP_OK){   /* DSRC(HUB) OFFシーケンス完了 */
+  if(Mcu_MetBB_OffStep  ==  (uint8)MCU_NOREDUN_STEP_OK &&   /* Meter+BB Display OFFシーケンス完了 */
+    Mcu_Disp_OffStep    ==  (uint8)MCU_NOREDUN_STEP_OK &&   /* Center Display OFFシーケンス完了 */
+    Mcu_Hub_OffStep     ==  (uint8)MCU_NOREDUN_STEP_OK &&   /* DSRC(HUB) OFFシーケンス完了 */
+    Mcu_Dev_Pwroff_Sts  ==  (uint16)PWROFF_CONP_BIT){       /* デバイスOFF制御シーケンス完了 */
     mcu_return  = (uint8)TRUE;
   }
 
@@ -1066,110 +1121,488 @@ uint8 Mcu_Noredun_PwrOff_GetSts( void )
   Note          : 
 *****************************************************************************/
 void Mcu_Dev_Pwroff( void ){
+    if((Mcu_Pwr_Sts == (uint8)MCU_NOREDUN_CENTRAL_OFF)  &&
+        (Mcu_Dev_Pwroff_Sts  !=  (uint16)PWROFF_CONP_BIT)){
+        /* USBアダプタ接続検知 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_USB_BIT) != (uint16)PWROFF_USB_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_USB();
+        }
 
-  if((Mcu_Pwr_Sts == (uint8)MCU_NOREDUN_CENTRAL_OFF)  &&
-     (Mcu_Dev_Pwroff_Sts  ==  (uint8)FALSE)){
-    Mcu_Dev_Pwroff_Sts   =  Mcu_Dev_Pwroff_USB();           /* USBアダプタ接続検知 */
-    Mcu_Dev_Pwroff_Sts  &=  Mcu_Dev_Pwroff_PictIC();        /* 映像IC(ML86294)制御 */
-    Mcu_Dev_Pwroff_Sts  &=  Mcu_Dev_Pwroff_GVIFRx();        /* GVIF3受信(CXD4984ER)制御 */
-    Mcu_Dev_Pwroff_Sts  &=  Mcu_Dev_Pwroff_GVIFTx_CDisp();  /* GVIF3送信(CXD4937/57)制御 C-Disp */
-    Mcu_Dev_Pwroff_Sts  &=  Mcu_Dev_Pwroff_Mic();           /* マイク電源制御 */
-    Mcu_Dev_Pwroff_Sts  &=  Mcu_Dev_Pwroff_Ant();           /* アンテナ電源制御 */
-    /* 全プロセスが完了していればMcu_Dev_Pwroff_StsがTRUEとなる */
-  }
-  else if(Mcu_Pwr_Sts == (uint8)MCU_NOREDUN_CENTRAL_ON){
-    Mcu_Dev_Pwroff_Sts  = (uint8)FALSE;
-  }
-  else {
-    /* do nothing */
-  }
+        /* 映像IC(ML86294)制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_PICTIC_BIT) != (uint16)PWROFF_PICTIC_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_PictIC();
+        }
+
+        /* GVIF3受信(CXD4984ER)制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_GVIFRX_BIT) != (uint16)PWROFF_GVIFRX_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_GVIFRx();
+        }
+
+        /* GVIF3送信(CXD4937/57)制御 C-Disp */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_GVIFTX_BIT) != (uint16)PWROFF_GVIFTX_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_GVIFTx_CDisp();
+        }
+
+        /* マイク電源制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_MIC_BIT) != (uint16)PWROFF_MIC_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_Mic();
+        }
+
+        /* アンテナ電源制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_ANT_BIT) != (uint16)PWROFF_ANT_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_Ant();
+        }
+
+        /* 音声MUTE制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_SOUNDMUTE_BIT) != (uint16)PWROFF_SOUNDMUTE_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_SoundMUTE();
+        }
+
+        /* MOST(v2)システム制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_MOST_BIT) != (uint16)PWROFF_MOST_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_Most();
+        }
+
+        /* Power-IC制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_POWERIC_BIT) != (uint16)PWROFF_POWERIC_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_PowerIC();
+        }
+        /* XM TUNER制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_XMTUNER_BIT) != (uint16)PWROFF_XMTUNER_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_XMTuner();
+        }
+
+        /* GNSS制御 */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_GNSS_BIT) != (uint16)PWROFF_GNSS_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_GNSS();
+        }
+
+        /* ジャイロ・加速度センサ(SMI230)制御 */
+        /* T.B.Dのためskip */
+
+        /* 全プロセスが完了していればMcu_Dev_Pwroff_Sts=PWROFF_CONP_BITとなる */
+    }
+    else if(Mcu_Pwr_Sts == (uint8)MCU_NOREDUN_CENTRAL_ON){
+        Mcu_Dev_Pwroff_Sts  = (uint16)FALSE;    /* PowerOFF処理状態のクリア */
+        Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_1;   /* Power-IC制御の遷移状態クリア */
+        Mcu_OffTime_PowerIc = (uint16)0U;
+        Mcu_OffStep_XMTuner = (uint8)MCU_STEP_XMTUNER_OVERALL_1;   /* XM TUNER制御制御の遷移状態クリア */
+        Mcu_OffTime_XMTuner = (uint16)0U;
+        Mcu_OffStep_GNSS    = (uint8)MCU_STEP_GNSS_OVERALL_1;   /* GNSS制御の遷移状態クリア */
+        Mcu_OffTime_GNSS    = (uint16)0U;
+        Mcu_OffCnt_GNSS     = (uint8)0U;
+    }
+    else {
+        /* do nothing */
+    }
 }
 
 /*****************************************************************************
   Function      : Mcu_Dev_Pwroff_USB
   Description   : 
   param[in/out] : 
-  return        : TRUE ：プロセス完了
-                  FALSE：プロセス未完了
+  return        : PWROFF_USB_BIT ：プロセス完了
   Note          : 
 *****************************************************************************/
-uint8 Mcu_Dev_Pwroff_USB( void ){
+uint16 Mcu_Dev_Pwroff_USB( void ){
   Mcu_Dev_Pwron_SetPort(MCU_PORT_USB_LED_ON, MCU_DIO_LOW);
 
-  return((uint8)TRUE);
+  return((uint16)PWROFF_USB_BIT);
 }
 
 /*****************************************************************************
   Function      : Mcu_Dev_Pwroff_PictIC
   Description   : 
   param[in/out] : 
-  return        : TRUE ：プロセス完了
-                  FALSE：プロセス未完了
+  return        : PWROFF_PICTIC_BIT ：プロセス完了
   Note          : 
 *****************************************************************************/
-uint8 Mcu_Dev_Pwroff_PictIC( void ){
+uint16 Mcu_Dev_Pwroff_PictIC( void ){
   Mcu_Dev_Pwron_SetPort(MCU_PORT_V_IC_RST, MCU_DIO_LOW);
 
-  return((uint8)TRUE);
+  return((uint16)PWROFF_PICTIC_BIT);
 }
 
 /*****************************************************************************
   Function      : Mcu_Dev_Pwroff_GVIFRx
   Description   : 
   param[in/out] : 
-  return        : TRUE ：プロセス完了
-                  FALSE：プロセス未完了
+  return        : PWROFF_GVIFRX_BIT ：プロセス完了
   Note          : 
 *****************************************************************************/
-uint8 Mcu_Dev_Pwroff_GVIFRx( void ){
+uint16 Mcu_Dev_Pwroff_GVIFRx( void ){
   Mcu_Dev_Pwron_SetPort(MCU_PORT_GVIF_CAN_RST, MCU_DIO_LOW);
 
-  return((uint8)TRUE);
+  return((uint16)PWROFF_GVIFRX_BIT);
 }
 
 /*****************************************************************************
   Function      : Mcu_Dev_Pwroff_GVIFTx_CDisp
   Description   : 
   param[in/out] : 
-  return        : TRUE ：プロセス完了
-                  FALSE：プロセス未完了
-  Note          : 
+  return        : PWROFF_GVIFTX_BIT ：プロセス完了
+  Note          : シス検暫定対応あり
 *****************************************************************************/
-uint8 Mcu_Dev_Pwroff_GVIFTx_CDisp( void ){
+uint16 Mcu_Dev_Pwroff_GVIFTx_CDisp( void ){
+  /*****************************************************************************
+  シス検暫定対応
+  シス検の電源ステートは"見た目オン起動"or"OFF"のため、下記条件は対応しない
+  ・車両電源ステートが"駐車中起動"または"スタンバイ"の状態に遷移したとき
+  *****************************************************************************/
+
   Mcu_Dev_Pwron_SetPort(MCU_PORT_GVIF_CDISP_RST, MCU_DIO_LOW);
 
-  return((uint8)TRUE);
+  return((uint16)PWROFF_GVIFTX_BIT);
 }
 
 /*****************************************************************************
   Function      : Mcu_Dev_Pwroff_Mic
   Description   : 
   param[in/out] : 
-  return        : TRUE ：プロセス完了
-                  FALSE：プロセス未完了
+  return        : PWROFF_MIC_BIT ：プロセス完了
   Note          : 
 *****************************************************************************/
-uint8 Mcu_Dev_Pwroff_Mic( void ){
+uint16 Mcu_Dev_Pwroff_Mic( void ){
   Mcu_Dev_Pwron_SetPort(MCU_PORT_MIC_ON, MCU_DIO_LOW);
 
-  return((uint8)TRUE);
+  return((uint16)PWROFF_MIC_BIT);
 }
 
 /*****************************************************************************
   Function      : Mcu_Dev_Pwroff_Ant
   Description   : 
   param[in/out] : 
-  return        : TRUE ：プロセス完了
-                  FALSE：プロセス未完了
+  return        : PWROFF_ANT_BIT ：プロセス完了
   Note          : 
 *****************************************************************************/
-uint8 Mcu_Dev_Pwroff_Ant( void ){
+uint16 Mcu_Dev_Pwroff_Ant( void ){
   Mcu_Dev_Pwron_SetPort(MCU_PORT_AMFM_ANT_ON, MCU_DIO_LOW);
   Mcu_Dev_Pwron_SetPort(MCU_PORT_GPS_ANT_ON, MCU_DIO_LOW);
   Mcu_Dev_Pwron_SetPort(MCU_PORT_DAB_ANT_ON, MCU_DIO_LOW);
 
-  return((uint8)TRUE);
+  return((uint16)PWROFF_ANT_BIT);
 }
 
+/*****************************************************************************
+  Function      : Mcu_Dev_Pwroff_SoundMUTE
+  Description   : 
+  param[in/out] : 
+  return        : PWROFF_SOUNDMUTE_BIT ：プロセス完了
+  Note          : シス検暫定対応あり
+*****************************************************************************/
+uint16 Mcu_Dev_Pwroff_SoundMUTE( void ){
+    /*****************************************************************************
+    シス検暫定対応
+    シス検の電源ステートは"見た目オン起動"or"OFF"のため、下記条件は対応しない
+    ・車両電源ステートが"駐車中起動"または"スタンバイ"の状態に遷移したとき
+    *****************************************************************************/
+   /*****************************************************************************
+    シス検暫定対応
+    PM-SYS-MUTE端子の操作要否不明
+    *****************************************************************************/
+    Mcu_Dev_Pwron_SetPort(MCU_PORT_PM_SYS_MUTE , MCU_DIO_LOW);
+
+    return((uint16)PWROFF_SOUNDMUTE_BIT);
+}
+
+/*****************************************************************************
+  Function      : Mcu_Dev_Pwroff_Most
+  Description   : 
+  param[in/out] : 
+  return        : PWROFF_MOST_BIT ：プロセス完了
+  Note          : シス検暫定対応あり
+*****************************************************************************/
+uint16 Mcu_Dev_Pwroff_Most( void ){
+    /*****************************************************************************
+    シス検暫定対応
+    シス検の電源ステートは"見た目オン起動"or"OFF"のため、下記条件は対応しない
+    ・車両電源ステートが"駐車中起動"または"スタンバイ"の状態に遷移したとき
+    *****************************************************************************/
+    Mcu_Dev_Pwron_SetPort(MCU_PORT_MOST_WAKE_ON , MCU_DIO_LOW);
+
+    /* シス検暫定対応：SPI通信系は実装しない(SPI側未実装,IF箇所不明) */
+
+    return((uint16)PWROFF_MOST_BIT);
+}
+
+/*****************************************************************************
+  Function      : Mcu_Dev_Pwroff_PowerIC
+  Description   : 
+  param[in/out] : 
+  return        : PWROFF_POWERIC_BIT ：プロセス完了
+  Note          : シス検暫定対応あり
+*****************************************************************************/
+uint16 Mcu_Dev_Pwroff_PowerIC( void ){
+    uint8   mcu_read_v33_peri;
+    uint16  mcu_return;
+
+    mcu_read_v33_peri   = (uint8)STD_HIGH;
+    mcu_return          = (uint16)FALSE;
+    
+    switch (Mcu_OffStep_PowerIc)
+    {
+        case MCU_STEP_P_IC_OVERALL_1:
+            /*****************************************************************************
+            シス検暫定対応
+            SPI通信系は未実装のため、下記開始条件は実装しない
+            SiP→MCU "HexagonDSP MUTE設定完了通知" 送信
+            *****************************************************************************/
+            /* HexagonDSP MUTE設定完了通知があるまでとどまる */
+            Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_2;         /* 次状態に遷移 */
+            break;
+
+        case MCU_STEP_P_IC_OVERALL_2:
+            if(Mcu_OffTime_PowerIc != MCU_NOREDUN_WAIT_TIME_FIN){
+                Mcu_OffTime_PowerIc++;
+            }
+            if(Mcu_OffTime_PowerIc >= MCU_OFFWAIT_POWERIC_55MS){
+                Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_3;       /* 次状態に遷移 */
+                Mcu_OffTime_PowerIc = (uint16)0U;                   /* タイマクリア */
+            }
+            break;
+
+        case MCU_STEP_P_IC_OVERALL_3:
+            /* レジスタ読出し処理：IB2 */
+            Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_4;       /* 次状態に遷移 */
+            break;
+
+        case MCU_STEP_P_IC_OVERALL_4:
+            /* I2CによるレジスタWrite */
+            /* MUTE解除設定 IB2[0x82].D4=1,IB2[0x82].D3=1 */
+            Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_5;       /* 次状態に遷移 */
+            break;
+        
+        case MCU_STEP_P_IC_OVERALL_5:
+            if(Mcu_OffTime_PowerIc != MCU_NOREDUN_WAIT_TIME_FIN){
+                Mcu_OffTime_PowerIc++;
+            }
+            if(Mcu_OffTime_PowerIc >= MCU_OFFWAIT_POWERIC_100MS){
+                Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_6;   /* 次状態に遷移 */
+                Mcu_OffTime_PowerIc = (uint16)0U;                       /* タイマクリア */
+            }
+            break;
+
+        case MCU_STEP_P_IC_OVERALL_6:
+            /* レジスタ読出し処理：IB7 */
+            Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_7;       /* 次状態に遷移 */
+            break;
+
+        case MCU_STEP_P_IC_OVERALL_7:
+            /* I2CによるレジスタWrite */
+            /* Amp On設定 IB7[0x87].D0=1 */
+            Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_8;       /* 次状態に遷移 */
+            break;
+
+        case MCU_STEP_P_IC_OVERALL_8:
+            if(Mcu_OffTime_PowerIc != MCU_NOREDUN_WAIT_TIME_FIN){
+                Mcu_OffTime_PowerIc++;
+            }
+            if(Mcu_OffTime_PowerIc >= MCU_OFFWAIT_POWERIC_5MS){
+                Mcu_Dev_Pwron_SetPort(MCU_PORT_P_ON , MCU_DIO_LOW);      /* スタンバイ */
+                Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_9;   /* 次状態に遷移 */
+                Mcu_OffTime_PowerIc = (uint16)0U;                       /* タイマクリア */
+            }
+            break;
+
+        case MCU_STEP_P_IC_OVERALL_9:
+            if(Mcu_OffTime_PowerIc != MCU_NOREDUN_WAIT_TIME_FIN){
+                Mcu_OffTime_PowerIc++;
+            }
+
+            mcu_read_v33_peri = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_V33_PERI]); /* V33-PERI-ON読み出し */
+            if(mcu_read_v33_peri == (uint8)STD_HIGH){
+                Mcu_OffTime_PowerIc = (uint16)0U;       /* V33-PERI-ON=Highの場合次処理への遷移を抑制する */
+            }
+
+            if(Mcu_OffTime_PowerIc >= MCU_OFFWAIT_POWERIC_100MS){
+                Mcu_Dev_Pwron_SetPort(MCU_PORT_PIC_POFF , MCU_DIO_LOW);     /* P-IC電源制限 */
+                Mcu_OffStep_PowerIc = (uint8)MCU_STEP_P_IC_OVERALL_FIN;     /* 次状態に遷移 */
+                Mcu_OffTime_PowerIc = (uint16)0U;                           /* タイマクリア */
+                mcu_return = (uint16)PWROFF_POWERIC_BIT;                    /* 完了通知 */
+            }
+            break;
+
+        case MCU_STEP_P_IC_OVERALL_FIN:
+            mcu_return = (uint16)PWROFF_POWERIC_BIT;    /* 完了通知 */
+            break;
+
+        default:
+            /* do nothing */
+            break;
+    }
+    return(mcu_return);
+}
+
+/*****************************************************************************
+  Function      : Mcu_Dev_Pwroff_XMTuner
+  Description   : 
+  param[in/out] : 
+  return        : PWROFF_MOST_BIT ：プロセス完了
+  Note          : シス検暫定対応あり
+*****************************************************************************/
+uint16 Mcu_Dev_Pwroff_XMTuner( void ){
+    uint16  mcu_return;
+
+    mcu_return = (uint16)FALSE;
+
+    switch (Mcu_OffStep_XMTuner)
+    {
+    case MCU_STEP_XMTUNER_OVERALL_1:
+        /*****************************************************************************
+        シス検暫定対応
+        端子削除されているため、暫定的に下記条件は無視する
+        ・V33-PMIC-ON端子がH→Lに変化したとき
+        *****************************************************************************/
+        /* V33-PMIC-ON=Lまでとどまる */
+        Mcu_OffStep_XMTuner = (uint8)MCU_STEP_XMTUNER_OVERALL_2;
+        break;
+    
+    case MCU_STEP_XMTUNER_OVERALL_2:
+        if(Mcu_OffTime_XMTuner != MCU_NOREDUN_WAIT_TIME_FIN){
+            Mcu_OffTime_XMTuner++;
+        }
+        if(Mcu_OffTime_XMTuner >= MCU_OFFWAIT_XMTUNER_10MS){
+            Mcu_Dev_Pwron_SetPort(MCU_PORT_XM_SHDN , MCU_DIO_LOW);     /* /XM-SHDN=H→L */
+            Mcu_OffStep_XMTuner = (uint8)MCU_STEP_XMTUNER_OVERALL_3;       /* 次状態に遷移 */
+            Mcu_OffTime_XMTuner = (uint16)0U;                   /* タイマクリア */
+        }
+        break;
+
+    case MCU_STEP_XMTUNER_OVERALL_3:
+        if(Mcu_OffTime_XMTuner != MCU_NOREDUN_WAIT_TIME_FIN){
+            Mcu_OffTime_XMTuner++;
+        }
+        if(Mcu_OffTime_XMTuner >= MCU_OFFWAIT_XMTUNER_5MS){
+            Mcu_Dev_Pwron_SetPort(MCU_PORT_XM_ON , MCU_DIO_LOW);    /* /XM-ON=H→L */
+            Mcu_OffStep_XMTuner = (uint8)MCU_STEP_XMTUNER_OVERALL_FIN;          /* 次状態に遷移 */
+            Mcu_OffTime_XMTuner = (uint16)0U;                       /* タイマクリア */
+            mcu_return = (uint16)PWROFF_XMTUNER_BIT;                /* 完了通知 */
+        }
+        break;
+
+    case MCU_STEP_XMTUNER_OVERALL_FIN:
+        mcu_return = (uint16)PWROFF_XMTUNER_BIT;    /* 完了通知 */
+        break;
+    
+    default:
+        /* do nothing */
+        break;
+    }
+
+    return(mcu_return);
+}
+
+/*****************************************************************************
+  Function      : Mcu_Dev_Pwroff_GNSS
+  Description   : 
+  param[in/out] : 
+  return        : PWROFF_GNSS_BIT ：プロセス完了
+  Note          : シス検暫定対応あり
+*****************************************************************************/
+uint16 Mcu_Dev_Pwroff_GNSS( void ){
+    static const uint32 MCU_GNSS_POLING_MAX      =   (45U);       /* Checkﾘﾄﾗｲ 45回後、Hibernateに移行しない場合は、Reset（H→L遷移）し、状態を保持する */
+
+    uint16  mcu_return;
+    uint8   mcu_dio_ret_mmstby;
+    uint8   mcu_dio_ret_budte;
+    uint8   mcu_dio_ret_gpsrst;
+    uint8   mcu_dio_ret_pmoni;
+
+    mcu_return  = (uint16)FALSE;
+    mcu_dio_ret_mmstby = (uint8)STD_HIGH;
+    mcu_dio_ret_budte = (uint8)STD_LOW;
+    mcu_dio_ret_gpsrst = (uint8)STD_LOW;
+    mcu_dio_ret_pmoni = (uint8)STD_HIGH;
+
+    switch (Mcu_OffStep_GNSS)
+    {
+    case MCU_STEP_GNSS_OVERALL_1:
+        mcu_dio_ret_budte   =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_BU_DTE]);
+        mcu_dio_ret_mmstby  =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
+        
+        if(mcu_dio_ret_budte == (uint8)STD_HIGH){
+            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_2;       /* 次状態に遷移 */
+        }
+        else if(mcu_dio_ret_mmstby == (uint8)STD_LOW){
+            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_3;      /* 次状態に遷移 */
+        }
+        else{
+            /* do nothing */
+        }
+        break;
+
+    case MCU_STEP_GNSS_OVERALL_2:
+        mcu_dio_ret_gpsrst   =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_RST]);
+        if(mcu_dio_ret_gpsrst == (uint8)STD_HIGH){
+            /* t10はmin0msのため、判定せず即次処理を実施する */
+            Mcu_Dev_Pwron_SetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
+            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_4;      /* 次状態に遷移 */
+        }
+        else{
+            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_5;      /* 次状態に遷移 */
+        }
+        break;
+
+    case MCU_STEP_GNSS_OVERALL_3:
+        mcu_dio_ret_gpsrst   =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_RST]);
+        if(mcu_dio_ret_gpsrst == (uint8)STD_HIGH){
+            /* t10はmin0msのため、判定せず即次処理を実施する */
+            Mcu_Dev_Pwron_SetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
+            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_FIN;      /* 次状態に遷移 */
+        }
+        else{
+            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_5;      /* 次状態に遷移 */
+        }
+        break;
+    case MCU_STEP_GNSS_OVERALL_4:
+        if(Mcu_OffTime_GNSS != MCU_NOREDUN_WAIT_TIME_FIN){
+            Mcu_OffTime_GNSS++;
+        }
+        if(Mcu_OffCnt_GNSS >= MCU_GNSS_POLING_MAX){
+            Mcu_Dev_Pwron_SetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
+            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_FIN;     /* 次状態に遷移 */
+            Mcu_OffTime_GNSS = (uint16)0U;                      /* タイマクリア */
+        }
+        else if(Mcu_OffTime_GNSS >= MCU_OFFWAIT_GNSS_100MS){
+            mcu_dio_ret_pmoni   =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);
+
+            if(mcu_dio_ret_pmoni == (uint8)STD_LOW){
+                /* Hibernate移行確認 → /GPS-RST=H保持 */
+                Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_FIN;      /* 次状態に遷移 */
+                Mcu_OffTime_GNSS = (uint16)0U;                      /* タイマクリア */
+                Mcu_OffCnt_GNSS  = (uint8)0U;                       /* カウンタクリア */
+            }
+            else{
+                Mcu_OffCnt_GNSS++;
+            }
+        }
+        else{
+            /* do nothing */
+        }
+        break;
+
+    case MCU_STEP_GNSS_OVERALL_5:
+        if(Mcu_OffTime_GNSS != MCU_NOREDUN_WAIT_TIME_FIN){
+            Mcu_OffTime_GNSS++;
+        }
+        if(Mcu_OffTime_GNSS >= MCU_OFFWAIT_GNSS_10MS){
+            Mcu_Dev_Pwron_SetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
+            Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_FIN;      /* 次状態に遷移 */
+            Mcu_OffTime_GNSS = (uint16)0U;                   /* タイマクリア */
+        }
+        break;
+
+    case MCU_STEP_GNSS_OVERALL_FIN:
+        mcu_return = (uint16)PWROFF_GNSS_BIT;    /* 完了通知 */
+        break;
+    
+    default:
+        /* do nothing */
+        break;
+    }
+
+
+    return(mcu_return);
+}
 
 /**** End of File ***********************************************************/

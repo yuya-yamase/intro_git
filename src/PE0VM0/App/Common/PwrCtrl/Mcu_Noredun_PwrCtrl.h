@@ -21,9 +21,6 @@
 /*  Literal Definitions                                                     */
 /*--------------------------------------------------------------------------*/
 
-/* 周期の時間指定(LSB:1ms) */
-#define     MCU_SYS_TASK_TIME               (5U)    
-
 /* 非冗長電源ON/OFF ウェイトタイム設定 */
 /* 待ち時間はMINを設定 "-"であれば中間値(TYP)を指定 */
 #define     MCU_WAIT_BETWEEN_TIME           (10U    / MCU_SYS_TASK_TIME )
@@ -53,8 +50,8 @@
 #define     MCU_NOREDUN_STEP4               (4U)
 #define     MCU_NOREDUN_STEP_OK             (5U)
 
-/* 状態遷移管理用ステータス */
-#define     MCU_NOREDUN_STATE_NUM           (4U)    /* 状態遷移総数 */
+/* 現在車両電源ステート管理用ステータス */
+#define     MCU_NOREDUN_STATE_NUM           (4U)    /* 総数 */
 #define     MCU_NOREDUN_STATE_OFF           (0U)    /* OFF */
 #define     MCU_NOREDUN_STATE_PARK          (1U)    /* 駐車中起動 */
 #define     MCU_NOREDUN_STATE_APPOFF        (2U)    /* 見た目オフ起動 */
@@ -76,6 +73,20 @@
 #define     MCU_NOREDUN_CENTRAL_OFF         (0U)
 #define     MCU_NOREDUN_CENTRAL_ON          (1U)
 
+/* デバイスOFF制御実施状況管理マクロ */
+#define     PWROFF_USB_BIT                  (0x0001U)
+#define     PWROFF_PICTIC_BIT               (0x0002U)
+#define     PWROFF_GVIFRX_BIT               (0x0004U)
+#define     PWROFF_GVIFTX_BIT               (0x0008U)
+#define     PWROFF_MIC_BIT                  (0x0010U)
+#define     PWROFF_ANT_BIT                  (0x0020U)
+#define     PWROFF_SOUNDMUTE_BIT            (0x0040U)
+#define     PWROFF_MOST_BIT                 (0x0080U)
+#define     PWROFF_POWERIC_BIT              (0x0100U)
+#define     PWROFF_XMTUNER_BIT              (0x0200U)
+#define     PWROFF_GNSS_BIT                 (0x0400U)
+#define     PWROFF_CONP_BIT                 (0x07FFU)
+
 /*--------------------------------------------------------------------------*/
 /*  Function Prototypes                                                     */
 /*--------------------------------------------------------------------------*/
@@ -91,7 +102,7 @@ uint8   Mcu_Noredun_PwrOff_GetSts( void );            /* 非冗長電源OFFシーケンス
 /*  Constant Externs                                                        */
 /*--------------------------------------------------------------------------*/
 /* SYS系デバイス終了状態 */
-extern  uint8   Mcu_Dev_Pwroff_Sts;
+extern  uint16  Mcu_Dev_Pwroff_Sts;
 extern  uint8   Mcu_Pwr_Sts;
 
 #endif /* MCU_NOREDUN_PWRCTRL_H */

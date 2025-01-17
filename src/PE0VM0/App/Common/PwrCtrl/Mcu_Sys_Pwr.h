@@ -29,9 +29,6 @@
 #define     MCU_SYS_PWM_PERIOD              (164U)		/* 80MHz, (1/487.805)*80000 = 163.99[counts] */
 #define 	MCU_SYS_PWM_DUTYCYCLE(i)        ((uint16)(((uint32)(i) * (uint32)PWM_DRV_DUTY_MAX) / (uint32)10000U))
 
-/* 周期の時間指定(LSB:1ms) */
-#define     MCU_SYS_TASK_TIME               (5U)    
-
 /* SYS電源ON ウェイトタイム設定 */
 /* 待ち時間は中間値(TYP)を設定 "-"であればMINを指定 */
 #define     MCU_WAIT_DISCHARGE_TIME         (50U / MCU_SYS_TASK_TIME)
@@ -52,10 +49,10 @@
 /* 仕様から全端子共通の時間設定のためウェイトタイム設定も共通とする */
 #define     MCU_WAIT_SYSOFF                 (0U                     )
 
-/* 待機時間測定完了判定 */
-#define     MCU_SYS_WAIT_TIME_FIN               (0xFFU)
+/* カウンタ最大値 */
+#define     MCU_SYS_COUNTTIME_FIN               (0xFFFFFFFFU)
 
-/* 状態管理 */
+/* SYS電源ON/OFF 現在起動ステップ状態管理 */
 #define     MCU_SYS_STEP1             (1U)
 #define     MCU_SYS_STEP2             (2U)
 #define     MCU_SYS_STEP3             (3U)
