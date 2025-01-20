@@ -1,0 +1,10 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/CanTrcv/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/CanTrcv/obj/CanTrcv_usr.rel.o
+
+../../usr/CanTrcv.c

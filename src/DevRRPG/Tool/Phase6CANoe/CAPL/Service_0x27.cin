@@ -1,0 +1,677 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_requestSeed_01_request_01_send          */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_requestSeed_01_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_01);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_requestSeed_03_request_02_send          */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_requestSeed_03_request_02_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_02); 
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_requestSeed_05_request_03_send          */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_requestSeed_05_request_03_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_03); 
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_requestSeed_07_request_04_send          */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_requestSeed_07_request_04_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_04);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_requestSeed_7D_request_05_send          */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_requestSeed_7D_request_05_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_05);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_sendKey_02_request_01_send              */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_sendKey_02_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_06);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_sendKey_04_request_02_send              */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_sendKey_04_request_02_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_07);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_sendKey_06_request_03_send              */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_sendKey_06_request_03_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_08);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_sendKey_08_request_04_send              */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_sendKey_08_request_04_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_09);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************* */
+/* Function                                                */
+/*  SecurityAccess_sendKey_7E_request_05_send              */
+/* Discription                                             */
+/*  Send Request Sid0x27 [SecurityAccess]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long SecurityAccess_sendKey_7E_request_05_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_SecurityAccess_req_10);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  SecurityAccess_Set_Generate_Key_Pram                             */
+/* Discription                                                       */
+/*  SecurityAccess_Generate_Keyに引き渡すパラメータを生成            */
+/* IN :                                                              */
+/*  res_msg : diagResponse型の受信メッセージ                         */
+/* OUT:                                                              */
+/*  None                                                             */
+/* RET:                                                              */
+/*  None                                                             */
+/* NOTE:                                                             */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと   */
+/*  生成したパラメータ値はG_Reprog_General_Data.S_Infoに設定する */
+/* ***************************************************************** */
+void SecurityAccess_Set_Generate_Key_Pram( diagResponse * res_msg )
+{
+  
+  /* シード値の最大バイト数の設定 */ 
+  G_Reprog_General_Data.S_Info.seedArraySize = E_SecuritySeed_Byte;
+  /* キー値の最大バイト数の設定 */ 
+  G_Reprog_General_Data.S_Info.maxKeyArraySize = E_SecurityKey_Byte;
+  /* セキュリティレベル(0x1固定で良い)の設定 */
+  G_Reprog_General_Data.S_Info.securityLevel = 0x1;
+  /* バリアント("BaseVariant"固定で良い)の設定 */
+  memcpy(G_Reprog_General_Data.S_Info.variant,"BaseVariant", 12);
+  /* DLLの関数のパラメータ(NULL固定で良い)の設定 */
+  memcpy(G_Reprog_General_Data.S_Info.ipOption,"", 1);
+ 
+  /* securitySeedフィールドの設定 */
+  diagGetParameterRaw(res_msg, "securitySeed",
+                      G_Reprog_General_Data.S_Info.securityseed,
+                      elcount(G_Reprog_General_Data.S_Info.securityseed));
+ 
+  Debug_Log_output("SecurityAccess_Set_Generate_Key_Pram");
+  
+  return;
+}
+
+
+/// <SecurityAccess>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  SecurityAccess_Generate_Key                                      */
+/* Discription                                                       */
+/*  DLLを使ってSID 0x27のsendKeyで使用するKEY値を生成する            */
+/* IN :                                                              */
+/*  seedArray       : 事前にサーバから取得したシード値               */
+/*  seedArraySize   : シード値のバイト数                             */
+/*  securityLevel   : セキュリティレベル(0x1固定で良い)              */
+/*  variant         : バリアント("BaseVariant"固定で良い)            */
+/*  ipOption        : DLLの関数のパラメータ(NULL固定で良い)          */
+/*  maxKeyArraySize : KEY値の最大バイト数                            */
+/* OUT:                                                              */
+/*  keyArray        : DLLの関数を使って生成したKEY値                 */
+/*  keyActualSize   : 生成したKEY値のバイト数                        */
+/* RET:                                                              */
+/*  diagSetTarget()/diagGenerateKeyFromSeed()の処理結果              */
+/*   または E_Return_PRAMETER_NG                                     */
+/* NOTE:                                                             */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと   */
+/* ***************************************************************** */
+long SecurityAccess_Generate_Key( 
+  byte seedArray[], dword seedArraySize, dword securityLevel,
+  char variant[], char ipOption[], dword maxKeyArraySize,
+  byte keyArray[], dword keyActualSize
+  )
+{
+  // 戻り値
+  int ret;
+  
+  // ローカルデータ(デバッグ表示用)
+  int cnt;
+  
+  /* DLLが関連付けられている診断記述ファイルを読み込み */
+  /* 診断記述ファイルがCDDでないとシードキーDLLを取り込めないのかもしれない */
+  ret = diagSetTarget(G_Reprog_General_Data.G_Info.diag_def_name);
+  if( 0 != ret )
+  {
+    Error_Log_output("SecurityAccess_Generate_Key:diagSetTarget failed");
+  }
+  
+  /* シード値のデバッグ表示 */
+  /* 処理速度に関わってくるので、デバッグ時以外は無効化しておく
+  for (cnt = 0;cnt < seedArraySize; cnt++)
+  {
+    write("seed[%ld]=%x",cnt,seedArray[cnt]);
+  }
+  */
+  
+  /* DLLの関数を使ってKEY値を生成 */
+  ret = diagGenerateKeyFromSeed(seedArray, seedArraySize, securityLevel,
+            G_Reprog_General_Data.S_Info.ToolAuthKey, ipOption, keyArray, maxKeyArraySize, keyActualSize);
+  if( ret == 0 )
+  {
+    /* キー値のデバッグ表示 */
+    Debug_Log_output("SecurityAccess_Generate_Key:diagGenerateKeyFromSeed success");
+    
+    /* キー値デバッグ表示 */
+    /* 処理速度に関わってくるので、デバッグ時以外は無効化しておく */
+    /*
+    for (cnt = 0;cnt < maxKeyArraySize; cnt++)
+    {
+      write("Key[%ld]=%x",cnt,keyArray[cnt]);
+    }
+    */
+  }
+  else
+  {
+    /* デバッグ表示 */
+    Error_Log_output("SecurityAccess_Generate_Key:diagGenerateKeyFromSeed failed");   
+  }
+
+  /* 元々使っていた診断記述ファイルを再度読み込み */
+  ret = diagSetTarget(G_Reprog_General_Data.G_Info.ecu_modifier);
+  if( ret != 0 )
+  {
+    /* デバッグ表示 */
+    Error_Log_output("SecurityAccess_Generate_Key:diagSetTarget failed");
+  }
+  
+  return ret;  
+}
+
+
+/// <SecurityAccess>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  SecurityAccess_Clear_SeedKey                                     */
+/* Discription                                                       */
+/*  保存しているシード値とキー値を破棄する                           */
+/* IN :                                                              */
+/*  seedArraySize   : シード値のバイト数                             */
+/*  maxKeyArraySize : KEY値の最大バイト数                            */
+/* OUT:                                                              */
+/*  None                                                             */
+/* RET:                                                              */
+/*  None                                                             */
+/* NOTE:                                                             */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと   */
+/* ***************************************************************** */
+void SecurityAccess_Clear_SeedKey( dword seedArraySize, dword maxKeyArraySize )
+{
+  dword loop_cnt;
+ 
+  /* 管理情報G_Reprog_General_Dataのシード値を先頭から指定されたバイト数分初期化する */
+  for (loop_cnt = 0; loop_cnt < seedArraySize; loop_cnt++ )
+  {
+    /* シード値の初期化 */
+    G_Reprog_General_Data.S_Info.securityseed[loop_cnt] = 0x00;
+  }
+  
+  /* 管理情報G_Reprog_General_Dataのキー値を先頭から指定されたバイト数分初期化する */
+  for (loop_cnt = 0; loop_cnt < maxKeyArraySize; loop_cnt++ )
+  {
+    /* シード値の初期化 */
+    /* キー値の0x00には別の意味が割り当てられているので、0xFFを使って指定されたバイト数分初期化する */
+    G_Reprog_General_Data.S_Info.securitykey[loop_cnt] = 0xFF;
+  }
+  
+  return;
+}
+
+
+/// <SecurityAccess>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  SecurityAccess_Set_Seed                                          */
+/* Discription                                                       */
+/*  SID 0x27のRequestSeedでサーバから取得したシード値を保存する      */
+/* IN :                                                              */
+/*  seedArray       : サーバから取得したシード値                     */
+/*  seedArraySize   : シード値のバイト数                             */
+/* OUT:                                                              */
+/*  None                                                             */
+/* RET:                                                              */
+/*  None                                                             */
+/* NOTE:                                                             */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと   */
+/* ***************************************************************** */
+void SecurityAccess_Set_Seed( diagResponse *res_msg, dword seedArraySize )
+{
+  dword loop_cnt;
+  byte seedArray[E_SecuritySeed_Byte+2];
+  long size;
+  
+  /* レスポンスデータをByte配列に展開 */
+  size = DiagGetPrimitiveData( res_msg, seedArray, elcount( seedArray ));
+
+  /* 管理情報G_Reprog_General_Dataのシード値を先頭から指定されたバイト数分保存する */
+  for (loop_cnt = 0; loop_cnt < seedArraySize; loop_cnt++ )
+  {
+    /* シード値の設定 */
+    G_Reprog_General_Data.S_Info.securityseed[loop_cnt] = seedArray[loop_cnt+2];
+  }
+  
+  return;  
+}
+
+
+/// <SecurityAccess>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  SecurityAccess_Set_Key                                           */
+/* Discription                                                       */
+/*  SID 0x27のSendKeyでサーバに送信する為のキー値を保存する          */
+/* IN :                                                              */
+/*  keyArray        : DLLの関数を使って生成したKEY値                 */
+/*  maxKeyArraySize : KEY値の最大バイト数                            */
+/* OUT:                                                              */
+/*  None                                                             */
+/* RET:                                                              */
+/*  None                                                             */
+/* NOTE:                                                             */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと   */
+/* ***************************************************************** */
+void SecurityAccess_Set_Key( byte keyArray[], dword maxKeyArraySize )
+{
+  dword loop_cnt;
+ 
+  /* 管理情報G_Reprog_General_Dataのキー値を先頭から指定されたバイト数分設定する */
+  for (loop_cnt = 0; loop_cnt < maxKeyArraySize; loop_cnt++ )
+  {
+    /* キー値の設定 */
+    G_Reprog_General_Data.S_Info.securitykey[loop_cnt] = keyArray[loop_cnt];
+  }
+  
+  return;
+}
+
+
+/// <SecurityAccess>
+/* ********************************************************************* */
+/* Function                                                              */
+/*  LinkControl_req_distribution                                         */
+/* Discription                                                           */
+/*  Sid0x27 [SecurityAccess] request distribution                        */
+/* IN :                                                                  */
+/*  type   : securityAccessTypeに相当する値                              */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)                */
+/* OUT:                                                                  */
+/*  None                                                                 */
+/* RET:                                                                  */
+/*  diagSendRequest()の処理結果 または                                   */
+/*  E_Return_SPRMIB_Set_NG または E_Return_PRAMETER_NG                   */
+/* NOTE:                                                                 */
+/*  本関数に引き渡すパラメータは全て呼び出し側で初期化しておくこと。     */
+/*  securityAccessTypeはLevel1のみサポートする前提。                     */
+/*  機能上SPRMIBが有効になることはないが他のIFと統一する為用意しておく。 */
+/* ********************************************************************* */
+long SecurityAccess_req_distribution( dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* securityAccessTypeの指定によってリクエスト送信処理を振り分ける */
+  if ( type == E_securityAccessType_requestSeed )
+  {
+    /* リクエスト送信実施(requestSeed) */   
+    ret = SecurityAccess_requestSeed_01_request_01_send( sprmib );
+  }
+  else if( type == E_securityAccessType_sendKey )
+  {
+    /* リクエスト送信実施(sendKey) */
+    /* securityKeyフィールドの設定 */
+    diagSetParameterRaw(G_SecurityAccess_req_06, "securityKey",
+                        G_Reprog_General_Data.S_Info.securitykey,
+                        G_Reprog_General_Data.S_Info.maxKeyArraySize);
+    
+    ret = SecurityAccess_sendKey_02_request_01_send( sprmib );
+  }
+  else
+  {
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;    
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************** */
+/* Function                                                 */
+/*  SecurityAccess_res_distribution                         */
+/* Discription                                              */
+/*  Sid0x27 [SecurityAccess] response distribution          */
+/* IN :                                                     */
+/*  res_msg   : diagResponse型のPosRspメッセージ            */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  E_Return_OK 　　　　　　　　　　　　　　　              */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long SecurityAccess_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* SecurityAccessのポジティブレスポンス受信時は処理無し */
+  ret = E_Return_OK;
+  
+  return ret;
+}
+
+
+/// <SecurityAccess>
+/* ******************************************************** */
+/* Function                                                 */
+/*  SecurityAccess_init                                     */
+/* Discription                                              */
+/*  外部設定情報ファイルからツール認証キーを読み出す        */
+/* IN :                                                     */
+/*  filename : 外部設定情報ファイル名                       */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  E_Return_OK 　　　　　　　　　　　　　　　              */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long SecurityAccess_init( char filename[] )
+{
+  /* 戻り値 */
+  int ret;
+  int cnt;
+  int tool_index;
+  int buff_index;
+  char read_buff[16*5];
+  
+  /* ファイル読み出し(ツール認証キー) */
+  /* ここでは文字列型として読み出す */
+  ret = getProfileString( "SecurityAccess", "ToolAuthKey", 
+          "0x00,0x11,0x22,0x33,0x44,0x55,0x66,0x77,0x88,0x99,0xAA,0xBB,0xCC,0xDD,0xEE,0xFF",
+          read_buff, elcount(read_buff), filename );
+  if( ret <= 0 || ret > (16*5) )
+  {
+    /* ツール認証キー読み出し失敗 */
+    Error_Log_output("SecurityAccess_init: Read ToolAuthKey Error.");
+  }
+
+  /* 2バイト*16個のツール認証キーを設定するまでループ */
+  for ( cnt = 0; cnt < 16 ; cnt++ )
+  {
+    /* ツール認証キーのindex値を設定 */
+    tool_index = cnt * 2;
+    /* 読み出したバッファのindex値を設定*/
+    buff_index = (cnt * 5) + 2;
+      
+    /* ファイルから読み出したツール認証キーを2バイト毎に管理情報G_Reprog_General_Dataに設定　*/
+    G_Reprog_General_Data.S_Info.ToolAuthKey[tool_index] = read_buff[buff_index];      
+    G_Reprog_General_Data.S_Info.ToolAuthKey[tool_index+1] = read_buff[buff_index+1];
+  }
+  
+  return ret;
+}

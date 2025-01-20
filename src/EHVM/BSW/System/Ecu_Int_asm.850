@@ -43,6 +43,22 @@
 #define VAL_u4FEINTMSK_ENABLE_ECM (0x00000003UL)
 #define VAL_u4ID_ERRINT_AF_DE (0x0000000AUL)
 
+/*ECM内部リセット有効化暫定対応*/
+/*IRCFG0～IRCFG7は予約設計*/
+#define VAL_u4IRCFG0  (0x00000000UL)
+#define VAL_u4IRCFG1  (0x00000000UL)
+#define VAL_u4IRCFG2  (0x00000000UL)
+#define VAL_u4IRCFG3  (0x00000000UL)
+#define VAL_u4IRCFG4  (0x00000000UL)
+#define VAL_u4IRCFG5  (0x00000000UL)
+#define VAL_u4IRCFG6  (0x00000000UL)
+#define VAL_u4IRCFG7  (0x00000010UL) /*WDTB0内部リセット有効*/
+#define VAL_u4IRCFG8  (0x00000010UL) /*WDTB1内部リセット有効*/
+#define VAL_u4IRCFG9  (0x00000010UL) /*WDTB2内部リセット有効*/
+#define VAL_u4IRCFG10 (0x00000010UL) /*WDTB3内部リセット有効*/
+/*ECM内部リセット有効化暫定対応*/
+
+
 /*レジスタアドレス*/
 #define REG_u4ECCKCPROT     (0xFFFB2800UL)
 #define REG_ptMECCCAP_CFL   (0xFFC52400UL)
@@ -61,6 +77,22 @@
 #define REG_u4ECMESSTCj     (BA_u4ECM + 0x478UL)
 #define REG_u4ECMISCFGj     (BA_u4ECM + 4UL)
 #define REG_u4ECMINCFGi_j   (BA_u4ECM + 0x40UL)
+
+/*ECM内部リセット有効化暫定対応*/
+/*IRCFG0～IRCFG7は予約設計*/
+#define REG_u4ECMIRCFG0     (BA_u4ECM + 0x220UL)
+#define REG_u4ECMIRCFG1     (BA_u4ECM + 0x224UL)
+#define REG_u4ECMIRCFG2     (BA_u4ECM + 0x228UL)
+#define REG_u4ECMIRCFG3     (BA_u4ECM + 0x22CUL)
+#define REG_u4ECMIRCFG4     (BA_u4ECM + 0x230UL)
+#define REG_u4ECMIRCFG5     (BA_u4ECM + 0x234UL)
+#define REG_u4ECMIRCFG6     (BA_u4ECM + 0x238UL)
+#define REG_u4ECMIRCFG7     (BA_u4ECM + 0x23CUL)
+#define REG_u4ECMIRCFG8     (BA_u4ECM + 0x240UL)
+#define REG_u4ECMIRCFG9     (BA_u4ECM + 0x244UL)
+#define REG_u4ECMIRCFG10    (BA_u4ECM + 0x248UL)
+/*ECM内部リセット有効化暫定対応*/
+
 #define REG_u4FEINTMSK      (0xFF9A3B04UL)
 #define REG_ptMECCCAP_ID    (0xFFC51800UL)
 #define REG_u4IDECCCTL      (0xFFC49400UL)
@@ -296,7 +328,7 @@ Ecu_Int_set_Icache_Tag:
     st.w    r8, 24[r6]
     /* Enable ECC Enc/Dec, parity Check */ 
     mov     VAL_u4ECCCTL_AF_ECC, r8
-    add     REG_u4ITECCCTL, r6
+    mov     REG_u4ITECCCTL, r6
     add     r15, r6
     st.w    r8, 0[r6]
     /* Enable ECC Err and parity Err Reporitng */
@@ -451,6 +483,13 @@ _Ecu_Int_initPeri:
         330: Local RAM (PE3) - ECC overflow error
         332: Instruction cache RAM(PE3) - Address  feedback
              compare error - Data EDC error
+
+        ■ECM内部リセット有効化暫定対応
+        228:Watchdog timer error (PE0)
+        260:Watchdog timer error (PE1)
+        292:Watchdog timer error (PE2)
+        324:Watchdog timer error (PE3)
+           
     */
 
     /* Unlock Registers */ 
@@ -528,6 +567,53 @@ Ecu_Int_set_Core_ActivateECMchAsFEINT:
     sub     r16,  r7
     bh      Ecu_Int_set_Core_ActivateECMchAsFEINT 
 
+    /*ECM内部リセット有効化暫定対応*/
+    /*IRCFG0～IRCFG7は予約設計*/
+    /*ECMIRCFGj - ECM Internal Reset Configuration*/
+    mov     VAL_u4IRCFG0, r7
+    mov     REG_u4ECMIRCFG0, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG1, r7
+    mov     REG_u4ECMIRCFG1, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG2, r7
+    mov     REG_u4ECMIRCFG2, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG3, r7
+    mov     REG_u4ECMIRCFG3, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG4, r7
+    mov     REG_u4ECMIRCFG4, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG5, r7
+    mov     REG_u4ECMIRCFG5, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG6, r7
+    mov     REG_u4ECMIRCFG6, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG7, r7
+    mov     REG_u4ECMIRCFG7, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG8, r7
+    mov     REG_u4ECMIRCFG8, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG9, r7
+    mov     REG_u4ECMIRCFG9, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG10, r7
+    mov     REG_u4ECMIRCFG10, r6
+    st.w    r7, 0[r6]
+    /*ECM内部リセット有効化暫定対応*/
 
     /* Lock Registers */
     mov     VAL_u4ECCKCPROT_LOCK, r7

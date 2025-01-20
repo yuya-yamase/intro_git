@@ -60,7 +60,7 @@
 #endif
 
 #include "rim_ctl.h"
-//#include "bsw_m.h"
+#include "bsw_m.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -228,9 +228,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Platform Post Task                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_Rim_Task,     (uint32)SCHDLR_TASKBIT__10MS_A_CAL}
+    {&vd_g_Rim_Task,     (uint32)SCHDLR_TASKBIT__10MS_A_CAL},
 
-//    {&vd_g_BswMMainTask, (uint32)SCHDLR_TASKBIT___5MS_CAL}
+    {&vd_g_BswMMainTask, (uint32)SCHDLR_TASKBIT__5MS_A_CAL}
 
 };
 const uint16 u2_g_SCHDLR_RGLR_NUM_TASK = (uint16)(sizeof(st_gp_SCHDLR_RGLR_TASK) / sizeof(ST_SCHDLR_RGLR));

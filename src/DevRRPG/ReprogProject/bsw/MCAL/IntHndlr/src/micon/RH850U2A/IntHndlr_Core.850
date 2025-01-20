@@ -1,0 +1,182 @@
+/* IntHndlr_Core_850_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | IntHndlr/Core/CODE                                          */
+/******************************************************************************/
+/*----------------------------------------------------------------------------*/
+/* Include Files                                                              */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Macros                                                                     */
+/*----------------------------------------------------------------------------*/
+/* Save stack size */
+#define INTHNDLR_FEINT_STACKSIZE  (12UL)
+#define INTHNDLR_EIINT_STACKSIZE  (12UL)
+
+/* Same as RTE_RPGEVTHK_EXCPT_RECOVER defined at Rte_RpgEvtHk.h */
+#define INTHNDLR_RTE_RPGEVTHK_EXCPT_RECOVER     (0UL)
+
+
+/*----------------------------------------------------------------------------*/
+/* Types                                                                      */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Function Prototypes                                                        */
+/*----------------------------------------------------------------------------*/
+    .extern _IntHndlr_EIINT_Sub
+    .extern _Rte_RpgEvtHk_ExcptEvt
+    .extern _Shutdown_ResetMcuRam
+
+
+/*----------------------------------------------------------------------------*/
+/* Data                                                                       */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Constants                                                                  */
+/*----------------------------------------------------------------------------*/
+
+
+/******************************************************************************/
+/* External Functions                                                         */
+/******************************************************************************/
+
+/******************************************************************************/
+/* Function Name | IntHndlr_FEINT                                             */
+/* Description   | Handle FE level interrupt                                  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | This function will never return when Rte returned          */
+/*               | as unrecoverable.                                          */
+/******************************************************************************/
+    .section ".P_RAM_2ND", "ax"
+    .align 2
+    .globl _IntHndlr_FEINT
+_IntHndlr_FEINT:
+    /* Reserve stack area for 3 registers */
+    addi    -INTHNDLR_FEINT_STACKSIZE, sp, sp
+
+    /* Backup r6 register */
+    st.w    r6, 8[sp]
+
+    /* Backup FEPC register */
+    stsr    2, r6, 0                    /* stsr    FEPC, r6 */
+    st.w    r6, 4[sp]
+
+    /* Backup FEPSW register */
+    stsr    3, r6, 0                    /* stsr    FEPSW, r6 */
+    st.w    r6, 0[sp]
+
+    /* Set argument(r6) of Rte_RpgEvtHk_ExcptEvt function  */
+    /* to FE level interrupt factor                        */
+    stsr    14, r6, 0                   /* stsr    FEIC, r6 */
+
+    /* Backup all general registers for calling function(C language) */
+    pushsp  r1-r31
+
+    /* Call Rte_RpgEvtHk_ExcptEvt function */
+    jarl    _Rte_RpgEvtHk_ExcptEvt, lp
+
+    /* Reset MCU if return value(r10) is not recoverable (no return) */
+    mov     INTHNDLR_RTE_RPGEVTHK_EXCPT_RECOVER, r6
+    cmp     r10, r6
+    be      INTHNDLR_FEINT_NOT_RESET
+    jr      _Shutdown_ResetMcuRam
+
+INTHNDLR_FEINT_NOT_RESET:
+    /* Restore all general registers for calling function(C language) */
+    popsp   r1-r31
+
+    /* Restore FEPSW register */
+    ld.w    0[sp], r6
+    ldsr    r6, 3, 0                    /* ldsr    r6, FEPSW */
+
+    /* Restore FEPC register */
+    ld.w    4[sp], r6
+    ldsr    r6, 2, 0                    /* ldsr    r6, FEPC */
+
+    /* Restore r6 register */
+    ld.w    8[sp], r6
+
+    addi    INTHNDLR_FEINT_STACKSIZE, sp, sp
+    feret
+
+/******************************************************************************/
+/* Function Name | IntHndlr_EIINT                                             */
+/* Description   | Handle EI level interrupt                                  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | This function will never return unless interrupt factor is */
+/*               | timer or CAN or user defined interrupt.                    */
+/******************************************************************************/
+    .section ".P_RAM_2ND", "ax"
+    .align 2
+    .globl _IntHndlr_EIINT
+_IntHndlr_EIINT:
+    /* Reserve stack area for 3 registers */
+    addi    -INTHNDLR_EIINT_STACKSIZE, sp, sp
+
+    /* Backup r6 register */
+    st.w    r6, 8[sp]
+
+    /* Backup EIPC register */
+    stsr    0, r6, 0                    /* stsr    EIPC, r6 */
+    st.w    r6, 4[sp]
+
+    /* Backup EIPSW register */
+    stsr    1, r6, 0                    /* stsr    EIPSW, r6 */
+    st.w    r6, 0[sp]
+
+    /* Set argument(r6) of IntHndlr_EIINT_Sub function */
+    /* to EI level interrupt factor                    */
+    stsr    13, r6, 0                   /* stsr    EIIC, r6 */
+
+    /* If executing ei instruction here, nested interrupts will be enabled. */
+    /* But, nested interrupts are disabled because of GDN API limitations.  */
+
+    /* Backup all general registers for calling function(C language) */
+    pushsp  r1-r31
+
+    /* Handle EI level interrupt */
+    jarl    _IntHndlr_EIINT_Sub, lp
+
+    /* Restore all general registers for calling function(C language) */
+    popsp   r1-r31
+
+    /* Restore EIPSW register */
+    ld.w    0[sp], r6
+    ldsr    r6, 1, 0                    /* ldsr    r6, EIPSW */
+
+    /* Restore EIPC register */
+    ld.w    4[sp], r6
+    ldsr    r6, 0, 0                    /* ldsr    r6, EIPC */
+
+    /* Restore r6 register */
+    ld.w    8[sp], r6
+
+    addi    INTHNDLR_EIINT_STACKSIZE, sp, sp
+    eiret
+
+/******************************************************************************/
+/* Internal Functions                                                         */
+/******************************************************************************/
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2022/07/05 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

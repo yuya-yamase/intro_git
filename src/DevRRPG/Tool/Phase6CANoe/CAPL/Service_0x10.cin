@@ -1,0 +1,440 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <DiagnosticSessionControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  DiagnosticSessionControl_request_01_send                */
+/* Discription                                              */
+/*  Send Request Sid0x10 [DiagnosticSessionControl]         */
+/* IN :                                                     */
+/*  addrtype : 機能/物理アドレスの指定                      */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long DiagnosticSessionControl_request_01_send( int addrtype, long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* アドレス指定によって物理アドレスか機能アドレスのどちらに送信するか判定 */
+  if ( addrtype == E_Send_Address_Phy )
+  {
+    /* 物理アドレスにリクエスト送信 */
+    /* 物理アドレスにリクエスト送信 */
+    if ( sprmib == E_Flag_OFF )
+    {
+      /* リクエスト送信 */
+      ret = diagSendRequest( G_DiagnosticSessionControl_req_01 );
+    }
+    else if( sprmib == E_Flag_ON )
+    {
+      /* SPRMIBを設定するので、タイムアウト時に次のシーケンスに移れるよう専用のタイムアウトハンドラを再登録する */
+      ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_04, "DiagnosticSessionControl_timeout_handler");
+      if(ret != 0)
+      {
+        /* ハンドラ設定失敗 */
+        /* デバッグ表示 */
+        Error_Log_output("DiagnosticSessionControl_request_01_send:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_04");
+      }
+      /* リクエスト送信 */
+      ret = diagSendRequest( G_DiagnosticSessionControl_req_04 );    
+    }
+    else
+    {
+      Error_Log_output("DiagnosticSessionControl_request_01_send: illegal sprmib set.");
+    }
+  }
+  else if (addrtype == E_Send_Address_Func )
+  {
+    /* 機能アドレスにリクエスト送信 */
+    if ( sprmib == E_Flag_OFF )
+    {
+      /* リクエスト送信 */
+      ret = diagSendFunctional( G_DiagnosticSessionControl_req_01 );
+    }
+    else if( sprmib == E_Flag_ON )
+    {
+      /* SPRMIBを設定するので、タイムアウト時に次のシーケンスに移れるよう専用のタイムアウトハンドラを再登録する */
+      ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_04, "DiagnosticSessionControl_timeout_handler");
+      if(ret != 0)
+      {
+        /* ハンドラ設定失敗 */
+        /* デバッグ表示 */
+        Error_Log_output("DiagnosticSessionControl_request_01_send:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_04");
+      }
+      /* リクエスト送信 */
+      ret = diagSendFunctional( G_DiagnosticSessionControl_req_04 );    
+    }
+    else
+    {
+      Error_Log_output("DiagnosticSessionControl_request_01_send: illegal sprmib set.");
+    }
+  }
+  else
+  {
+    /* 通常ありえないがアドレス指定異常 */
+    Error_Log_output("DiagnosticSessionControl_request_01_send:illegal addrtype.");
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;  
+}
+
+
+/// <DiagnosticSessionControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  DiagnosticSessionControl_request_02_send                */
+/* Discription                                              */
+/*  Send Request Sid0x10 [DiagnosticSessionControl]         */
+/* IN :                                                     */
+/*  addrtype : 機能/物理アドレスの指定                      */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long DiagnosticSessionControl_request_02_send( int addrtype, long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* アドレス指定によって物理アドレスか機能アドレスのどちらに送信するか判定 */
+  if ( addrtype == E_Send_Address_Phy )
+  {
+    /* 物理アドレスにリクエスト送信 */
+    if ( sprmib == E_Flag_OFF )
+    {
+      /* リクエスト送信 */
+      ret = diagSendRequest( G_DiagnosticSessionControl_req_02 );
+    }
+    else if( sprmib == E_Flag_ON )
+    {
+      /* SPRMIBを設定するので、タイムアウト時に次のシーケンスに移れるよう専用のタイムアウトハンドラを再登録する */
+      ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_05, "DiagnosticSessionControl_timeout_handler");
+      if(ret != 0)
+      {
+        /* ハンドラ設定失敗 */
+        /* デバッグ表示 */
+        Error_Log_output("DiagnosticSessionControl_request_02_send:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_05");
+      }
+      /* リクエスト送信 */
+      ret = diagSendRequest( G_DiagnosticSessionControl_req_05 );    
+    }
+    else
+    {
+      Error_Log_output("DiagnosticSessionControl_request_02_send: illegal sprmib set.");
+    }
+  }
+  else if (addrtype == E_Send_Address_Func )
+  {
+    /* 機能アドレスにリクエスト送信 */
+    if ( sprmib == E_Flag_OFF )
+    {
+      /* リクエスト送信 */
+      ret = diagSendFunctional( G_DiagnosticSessionControl_req_02 );
+    }
+    else if( sprmib == E_Flag_ON )
+    {
+      /* SPRMIBを設定するので、タイムアウト時に次のシーケンスに移れるよう専用のタイムアウトハンドラを再登録する */
+      ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_05, "DiagnosticSessionControl_timeout_handler");
+      if(ret != 0)
+      {
+        /* ハンドラ設定失敗 */
+        /* デバッグ表示 */
+        Error_Log_output("DiagnosticSessionControl_request_02_send:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_05");
+      }
+      /* リクエスト送信 */
+      ret = diagSendFunctional( G_DiagnosticSessionControl_req_05 );    
+    }
+    else
+    {
+      Error_Log_output("DiagnosticSessionControl_request_02_send: illegal sprmib set.");
+    }
+  }
+  else
+  {
+    /* 通常ありえないがアドレス指定異常 */
+    Error_Log_output("DiagnosticSessionControl_request_02_send:illegal addrtype.");
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;  
+}
+
+
+/// <DiagnosticSessionControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  DiagnosticSessionControl_request_03_send                */
+/* Discription                                              */
+/*  Send Request Sid0x10 [DiagnosticSessionControl]         */
+/* IN :                                                     */
+/*  addrtype : 機能/物理アドレスの指定                      */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long DiagnosticSessionControl_request_03_send( int addrtype, long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* アドレス指定によって物理アドレスか機能アドレスのどちらに送信するか判定 */
+  if ( addrtype == E_Send_Address_Phy )
+  {
+    /* 物理アドレスにリクエスト送信 */
+    if ( sprmib == E_Flag_OFF )
+    {
+      /* リクエスト送信 */
+      ret = diagSendRequest( G_DiagnosticSessionControl_req_03 );
+    }
+    else if( sprmib == E_Flag_ON )
+    {
+      /* SPRMIBを設定するので、タイムアウト時に次のシーケンスに移れるよう専用のタイムアウトハンドラを再登録する */
+      ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_06, "DiagnosticSessionControl_timeout_handler");
+      if(ret != 0)
+      {
+        /* ハンドラ設定失敗 */
+        /* デバッグ表示 */
+        Error_Log_output("DiagnosticSessionControl_request_03_send:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_06");
+      }
+      /* リクエスト送信 */
+      ret = diagSendRequest( G_DiagnosticSessionControl_req_06 );    
+    }
+    else
+    {
+      Error_Log_output("DiagnosticSessionControl_request_03_send: illegal sprmib set.");
+    }
+  }
+  else if (addrtype == E_Send_Address_Func )
+  {
+    /* 機能アドレスにリクエスト送信 */
+    if ( sprmib == E_Flag_OFF )
+    {
+      /* リクエスト送信 */
+      ret = diagSendFunctional( G_DiagnosticSessionControl_req_03 );
+    }
+    else if( sprmib == E_Flag_ON )
+    {
+      /* SPRMIBを設定するので、タイムアウト時に次のシーケンスに移れるよう専用のタイムアウトハンドラを再登録する */
+      ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_06, "DiagnosticSessionControl_timeout_handler");
+      if(ret != 0)
+      {
+        /* ハンドラ設定失敗 */
+        /* デバッグ表示 */
+        Error_Log_output("DiagnosticSessionControl_request_03_send:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_06");
+      }
+      /* リクエスト送信 */
+      ret = diagSendFunctional( G_DiagnosticSessionControl_req_06 );    
+    }
+    else
+    {
+      Error_Log_output("DiagnosticSessionControl_request_03_send: illegal sprmib set.");
+    }
+  }
+  else
+  {
+    /* 通常ありえないがアドレス指定異常 */
+    Error_Log_output("DiagnosticSessionControl_request_03_send:illegal addrtype.");
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;  
+}
+
+
+/// <DiagnosticSessionControl>
+/* ********************************************************** */
+/* Function                                                   */
+/*  DiagnosticSessionControl_req_distribution                 */
+/* Discription                                                */
+/*  Sid 0x10 [DiagnosticSessionControl] request distribution  */
+/* IN :                                                       */
+/*  addrtype : 機能/物理アドレスの指定                        */
+/*  type   : diagnosticSessionTypeに相当する値                */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)     */
+/* OUT:                                                       */
+/*  None                                                      */
+/* RET:                                                       */
+/*  diagSendRequest()の処理結果 または                        */
+/*  E_Return_SPRMIB_Set_NG または E_Return_PRAMETER_NG        */
+/* NOTE:                                                      */
+/*  None                                                      */
+/* ********************************************************** */
+long DiagnosticSessionControl_req_distribution( int addrtype, dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* diagnosticSessionTypeの指定によってリクエスト送信処理を振り分ける */
+  if ( type == E_diagnosticSessionType_defaultSession )
+  {
+    /* リクエスト送信実施(defaultSession) */
+    ret = DiagnosticSessionControl_request_01_send( addrtype, sprmib );
+  }
+  else if ( type == E_diagnosticSessionType_ProgrammingSession )
+  {
+    /* リクエスト送信実施(ProgrammingSession) */
+    ret = DiagnosticSessionControl_request_02_send( addrtype, sprmib );
+  }
+  else if ( type == E_diagnosticSessionType_extendedDiagnosticSession )
+  {
+    /* リクエスト送信実施(extendedDiagnosticSession) */
+    ret = DiagnosticSessionControl_request_03_send( addrtype, sprmib );
+  }
+  else
+  {
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;    
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <DiagnosticSessionControl>
+/* *********************************************************** */
+/* Function                                                    */
+/*  DiagnosticSessionControl_res_distribution                  */
+/* Discription                                                 */
+/*  Sid 0x10 [DiagnosticSessionControl] response distribution  */
+/* IN :                                                        */
+/*  res_msg   : diagResponse型のPosRspメッセージ               */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  diagSetP2Timeouts()の処理結果                              */
+/* NOTE:                                                       */
+/*  byte#1 DiagnosticSessionControl Response SID               */
+/*  byte#2 diagnosticSessionType                               */
+/*  byte#3 P2Server_max(high byte)                             */
+/*  byte#4 P2Server_max(low byte)                              */
+/*  byte#5 P2*Server_max(high byte)                            */
+/*  byte#6 P2*Server_max(low byte)                             */
+/* *********************************************************** */
+long DiagnosticSessionControl_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+  /* PosRspの格納用バッファ */
+  byte res_buff[6];
+  
+  /* sessionParameterRecordからP2Server_maxとP2*Server_maxの値を取り出す */
+  /* P2*Server_maxは10ms単位なので10倍する */
+  res_msg.GetPrimitiveData(res_buff, elcount(res_buff)); 
+  G_timer_p2_server_max = (( res_buff[2] << 8) | res_buff[3] );
+  G_timer_p2_aster_server_max = (( res_buff[4] << 8) | res_buff[5] ) * 10;
+  
+  /* P2Clientの再設定 */
+  G_Reprog_General_Data.G_Info.P2Client = (G_timer_p2_max + G_timer_p2_server_max);
+  /* P6*Clientの再設定 */
+  G_Reprog_General_Data.G_Info.P6_aster_Client = (G_timer_p6_max + G_timer_p2_aster_server_max);  
+
+  /* P2ClientとP6*Clientを設定 */
+  ret = diagSetP2Timeouts(G_Reprog_General_Data.G_Info.P2Client,
+                          G_Reprog_General_Data.G_Info.P6_aster_Client);
+  if (ret != E_Return_OK )
+  {
+    /* デバッグ表示 */
+    Error_Log_output("diagSetP2Timeouts error.");
+  }
+
+  return ret;
+}
+
+/// <DiagnosticSessionControl>
+/* ************************************************************************************** */
+/* Function                                                                               */
+/*  DiagnosticSessionControl_timeout_handler                                              */
+/* Discription                                                                            */
+/*  Sid 0x10 [DiagnosticSessionControl] timeout handler(NORSP対策)                        */
+/* IN :                                                                                   */
+/*  None                                                                                  */
+/* OUT:                                                                                   */
+/*  None                                                                                  */
+/* RET:                                                                                   */
+/*  None                                                                                  */
+/* NOTE:                                                                                  */
+/*  diagnosticSessionTypeがextendedDiagnosticSessionの場合のタイムアウト時のみ実行される  */
+/* ************************************************************************************** */
+void DiagnosticSessionControl_timeout_handler(void)
+{
+  /* Sid 0x10 [DiagnosticSessionControl]のレスポンスメッセージ型のオブジェクトを定義 */
+  diagResponse DiagnosticSessionControl_extendedDiagnosticSession res_msg;
+  
+  Debug_Log_output("DiagnosticSessionControl_timeout_handler: timeout detected.");
+  
+  /* レスポンス受信ハンドラを呼び出して処理を継続する */
+  Diag_Response_handler(res_msg);
+  
+  return;
+}
+
+/// <DiagnosticSessionControl>
+/* ************************************************************************************** */
+/* Function                                                                               */
+/*  DiagnosticSessionControl_init                                                         */
+/* Discription                                                                            */
+/*  外部設定情報ファイルを読み出してextendedDiagnosticSession送信時のSPRMIB設定を取得     */
+/* IN :                                                                                   */
+/*  filename : 外部設定情報ファイル名                                                     */
+/* OUT:                                                                                   */
+/*  None                                                                                  */
+/* RET:                                                                                   */
+/*  None                                                                                  */
+/* NOTE:                                                                                  */
+/*  デフォルトは0x1(SPRMIB有り)＝応答抑止                                                 */
+/* ************************************************************************************** */
+void DiagnosticSessionControl_init( char filename[] )
+{
+  long sprmib;
+  
+  /* 外部設定情報ファイルからextendedDiagnosticSession送信時のSPRMIB設定を読み出し */
+  /* 読み出しNG時はデフォルト値である0x1(SPRMIB有り)＝応答抑止を使用 */
+  sprmib = getProfileInt("DiagnosticSessionControl", "sprmib", 0x1, filename); 
+  G_Reprog_General_Data.DSC_Info.extendedDiagnosticSession_sprmib = (sprmib & 0x1);
+  
+  return;
+}

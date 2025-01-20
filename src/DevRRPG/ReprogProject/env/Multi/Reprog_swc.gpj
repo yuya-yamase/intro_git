@@ -1,0 +1,22 @@
+#!gbuild
+[Subproject]
+
+$TOP_DIR/swc/Decrypt/env/Multi/Decrypt.gpj			[Relocatable Object]
+$TOP_DIR/swc/FscDtct/env/Multi/FscDtct.gpj			[Relocatable Object]
+$TOP_DIR/swc/PrgChk/env/Multi/PrgChk.gpj			[Relocatable Object]
+$TOP_DIR/swc/RpgLib/env/Multi/RpgLib.gpj			[Relocatable Object]
+$TOP_DIR/swc/RpgMfr/env/Multi/RpgMfr.gpj			[Relocatable Object]
+$TOP_DIR/swc/Sec/env/Multi/Sec.gpj					[Relocatable Object]
+$TOP_DIR/swc/Diag/DiagSrv/env/Multi/DiagSrv.gpj		[Relocatable Object]
+$TOP_DIR/swc/Diag/DiagLib/env/Multi/DiagLib.gpj		[Relocatable Object]
+
+# usr
+$TOP_DIR/swc/CmpDecmp/env/Multi/CmpDecmp_usr.gpj	[Relocatable Object]
+$TOP_DIR/swc/Decrypt/env/Multi/Decrypt_usr.gpj		[Relocatable Object]
+$TOP_DIR/swc/FscDtct/env/Multi/FscDtct_usr.gpj		[Relocatable Object]
+$TOP_DIR/swc/RpgEvtHk/env/Multi/RpgEvtHk_usr.gpj	[Relocatable Object]
+$TOP_DIR/swc/RpgMfr/env/Multi/RpgMfr_usr.gpj		[Relocatable Object]
+$TOP_DIR/swc/RpgSpp/env/Multi/RpgSpp_usr.gpj		[Relocatable Object]
+$TOP_DIR/swc/Sec/env/Multi/Sec_usr.gpj				[Relocatable Object]
+$TOP_DIR/swc/VehInf/env/Multi/VehInf_usr.gpj		[Relocatable Object]
+$TOP_DIR/swc/Diag/DiagSrv/env/Multi/DiagSrv_usr.gpj	[Relocatable Object]

@@ -1,0 +1,13 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/EcuM/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/EcuM/obj/EcuM.rel.o
+
+../../src/EcuM.c
+../../src/EcuM_BootMode.c
+../../src/EcuM_Error.c
+../../cfg/EcuM_Cfg.c

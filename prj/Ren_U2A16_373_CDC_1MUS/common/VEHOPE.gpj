@@ -1,0 +1,19 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${VEHOPE_DIR}
+
+#    -I${ROOT_DIR}/BSW/CmnHdr/CmnHdr/Platform
+    -I${LIB_DIR}
+
+    -I${VEHOPE_DIR}/config_U2A16_met
+    -I${VEHOPE_DIR}/scc
+
+    -I${OXCAN_DIR}/config_U2A16_met
+    -I${OXCAN_DIR}/libc
+    -I${CAN_DIR}/CS/inc
+
+config_U2A16_met/veh_opemd_evthk.c
+config_U2A16_met/veh_opemd_tycan.c
+
+scc/veh_opemd.c
+scc/veh_opemd.h

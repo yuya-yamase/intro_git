@@ -1,0 +1,11 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :sourceDir=${MCAL_COMMON_SCC_DIR}
+    :sourceDir=${MCAL_COMMON_CFG_DIR}
+
+McalCommon_lib.850
+# McalCommon_Timer.c
+Reg_Pic2.c
+Reg_Adc.c

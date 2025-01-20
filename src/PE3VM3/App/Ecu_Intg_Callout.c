@@ -65,8 +65,6 @@ Std_ReturnType Ecu_Intg_mainFuncCddHigh(void)
 
 Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
 {
-//    vd_g_Wdg_SetTriggerCondition((U2)0U);
-
     return E_OK;
 }
 
@@ -85,6 +83,7 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidOut(void)
 
 Std_ReturnType Ecu_Intg_mainFuncCddLow(void)   /* C-DC CEN VM Low Task: 1ms */
 {
+    vd_g_Wdg_SetTriggerCondition((U2)0U);
     return E_OK;
 }
 

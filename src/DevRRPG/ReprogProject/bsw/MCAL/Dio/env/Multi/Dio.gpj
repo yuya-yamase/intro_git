@@ -1,0 +1,11 @@
+#!gbuild
+[Library]
+	-I../../inc
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/MCAL/Dio/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/MCAL/Dio/obj/Dio.lib
+
+{streq(PLATFORM_NAME, RH850, TraveoII)} ../../usr/micon/$MICON_NAME/Dio.c
+
+{streq(PLATFORM_NAME, TC3XX)} ../../usr/micon/$PLATFORM_NAME/Dio.c

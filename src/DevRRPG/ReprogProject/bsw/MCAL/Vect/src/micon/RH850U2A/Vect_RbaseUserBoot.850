@@ -1,0 +1,604 @@
+/* Vect_RbaseUserBoot_850_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | Vect/RbaseUserBoot/CODE                                     */
+/******************************************************************************/
+/*----------------------------------------------------------------------------*/
+/* Include Files                                                              */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Macros                                                                     */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Types                                                                      */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Function Prototypes                                                        */
+/*----------------------------------------------------------------------------*/
+    .extern _Startup_PreStart
+    .extern _Shutdown_ResetMcu
+
+
+/*----------------------------------------------------------------------------*/
+/* Data                                                                       */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Constants                                                                  */
+/*----------------------------------------------------------------------------*/
+
+
+/******************************************************************************/
+/* External Functions                                                         */
+/******************************************************************************/
+    .section .P_ROM_VECT_USERBOOT, "ax"
+    .align 2
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_RESET                                        */
+/* Description   | RESET for UserBoot RBASE vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0000
+VECT_USERBOOT_RESET:
+    jr32    _Startup_PreStart
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_SYSERR                                       */
+/* Description   | SYSERR for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0010
+VECT_USERBOOT_SYSERR:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_RESERVED0                                    */
+/* Description   | RESERVED0 for UserBoot RBASE vector                        */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0020
+VECT_USERBOOT_RESERVED0:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_FETRAP                                       */
+/* Description   | FETRAP for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0030
+VECT_USERBOOT_FETRAP:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_TRAP0                                        */
+/* Description   | TRAP0 for UserBoot RBASE vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0040
+VECT_USERBOOT_TRAP0:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_TRAP1                                        */
+/* Description   | TRAP1 for UserBoot RBASE vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0050
+VECT_USERBOOT_TRAP1:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_RIE                                          */
+/* Description   | RIE for UserBoot RBASE vector                              */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0060
+VECT_USERBOOT_RIE:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_FPEFXE                                       */
+/* Description   | FPEFXE for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0070
+VECT_USERBOOT_FPEFXE:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_UCPOP                                        */
+/* Description   | UCPOP for UserBoot RBASE vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0080
+VECT_USERBOOT_UCPOP:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_MIPMDP                                       */
+/* Description   | MIPMDP for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0090
+VECT_USERBOOT_MIPMDP:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_PIE                                          */
+/* Description   | PIE for UserBoot RBASE vector                              */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00A0
+VECT_USERBOOT_PIE:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_RESERVED1                                    */
+/* Description   | RESERVED1 for UserBoot RBASE vector                        */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00B0
+VECT_USERBOOT_RESERVED1:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_MAE                                          */
+/* Description   | MAE for UserBoot RBASE vector                              */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00C0
+VECT_USERBOOT_MAE:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_RESERVED2                                    */
+/* Description   | RESERVED2 for UserBoot RBASE vector                        */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00D0
+VECT_USERBOOT_RESERVED2:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_FENMI                                        */
+/* Description   | FENMI for UserBoot RBASE vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00E0
+VECT_USERBOOT_FENMI:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_FEINT                                        */
+/* Description   | FEINT for UserBoot RBASE vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00F0
+VECT_USERBOOT_FEINT:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT0                                       */
+/* Description   | EIINT0 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0100
+VECT_USERBOOT_EIINT0:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT1                                       */
+/* Description   | EIINT1 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0110
+VECT_USERBOOT_EIINT1:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT2                                       */
+/* Description   | EIINT2 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0120
+VECT_USERBOOT_EIINT2:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT3                                       */
+/* Description   | EIINT3 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0130
+VECT_USERBOOT_EIINT3:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT4                                       */
+/* Description   | EIINT4 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0140
+VECT_USERBOOT_EIINT4:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT5                                       */
+/* Description   | EIINT5 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0150
+VECT_USERBOOT_EIINT5:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT6                                       */
+/* Description   | EIINT6 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0160
+VECT_USERBOOT_EIINT6:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT7                                       */
+/* Description   | EIINT7 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0170
+VECT_USERBOOT_EIINT7:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT8                                       */
+/* Description   | EIINT8 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0180
+VECT_USERBOOT_EIINT8:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT9                                       */
+/* Description   | EIINT9 for UserBoot RBASE vector                           */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0190
+VECT_USERBOOT_EIINT9:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT10                                      */
+/* Description   | EIINT10 for UserBoot RBASE vector                          */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x01A0
+VECT_USERBOOT_EIINT10:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT11                                      */
+/* Description   | EIINT11 for UserBoot RBASE vector                          */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x01B0
+VECT_USERBOOT_EIINT11:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT12                                      */
+/* Description   | EIINT12 for UserBoot RBASE vector                          */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x01C0
+VECT_USERBOOT_EIINT12:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT13                                      */
+/* Description   | EIINT13 for UserBoot RBASE vector                          */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x01D0
+VECT_USERBOOT_EIINT13:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT14                                      */
+/* Description   | EIINT14 for UserBoot RBASE vector                          */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x01E0
+VECT_USERBOOT_EIINT14:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_USERBOOT_EIINT15                                      */
+/* Description   | EIINT15 for UserBoot RBASE vector                          */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x01F0
+VECT_USERBOOT_EIINT15:
+    jr32    _Shutdown_ResetMcu
+    rie
+    rie
+    rie
+    rie
+    rie
+
+
+/******************************************************************************/
+/* Internal Functions                                                         */
+/******************************************************************************/
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2021/03/09 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

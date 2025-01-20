@@ -1,0 +1,17 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${APP_DIR}
+    :sourceDir=${APP_DIR}/Common/xspi
+    
+    -I${APP_DIR}/Common/xspi
+
+    -I${CAN_DIR}/inc
+
+    -I${LIB_DIR}
+
+Ecu_Intg_Callout.c
+xspi.c
+xspi_sub.c
+Stub/stub_u2a.c
+ShtdwnM/bsw_m.c
+ShtdwnM/cfg/bsw_m_cfg.c

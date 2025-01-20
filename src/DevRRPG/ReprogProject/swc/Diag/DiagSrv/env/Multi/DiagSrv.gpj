@@ -1,0 +1,50 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../inc/Sid
+	-I../../cfg
+	-I../../cfg/Sid
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/Diag/DiagSrv/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/Diag/DiagSrv/obj/DiagSrv.rel.o
+
+../../src/DiagSrv.c
+../../src/DiagSrv_lib_Core.c
+../../src/DiagSrv_lib.c
+../../src/DiagSrv_SubMicon_Core.c
+../../src/DiagSrv_SubMicon.c
+
+../../cfg/DiagSrv_Cfg.c
+../../cfg/DiagSrv_lib_Core_Cfg.c
+../../cfg/DiagSrv_lib_Cfg.c
+../../cfg/DiagSrv_SubMicon_Core_Cfg.c
+../../cfg/DiagSrv_SubMicon_Cfg.c
+
+../../src/Sid/DiagSrv_0x2E.c
+../../src/Sid/DiagSrv_0x3E.c
+../../src/Sid/DiagSrv_0x10.c
+../../src/Sid/DiagSrv_0x11.c
+../../src/Sid/DiagSrv_0x22.c
+../../src/Sid/DiagSrv_0x27.c
+../../src/Sid/DiagSrv_0x31.c
+../../src/Sid/DiagSrv_0x31_Erase.c
+../../src/Sid/DiagSrv_0x31_Check.c
+../../src/Sid/DiagSrv_0x31_Validate.c
+../../src/Sid/DiagSrv_0x34.c
+../../src/Sid/DiagSrv_0x36.c
+../../src/Sid/DiagSrv_0x37.c
+# ../../src/Sid/DiagSrv_Template.c
+
+../../cfg/Sid/DiagSrv_0x2E_Cfg.c
+../../cfg/Sid/DiagSrv_0x3E_Cfg.c
+../../cfg/Sid/DiagSrv_0x10_Cfg.c
+../../cfg/Sid/DiagSrv_0x11_Cfg.c
+../../cfg/Sid/DiagSrv_0x22_Cfg.c
+../../cfg/Sid/DiagSrv_0x27_Cfg.c
+../../cfg/Sid/DiagSrv_0x31_Cfg.c
+../../cfg/Sid/DiagSrv_0x34_Cfg.c
+../../cfg/Sid/DiagSrv_0x36_Cfg.c
+../../cfg/Sid/DiagSrv_0x37_Cfg.c
+# ../../cfg/Sid/DiagSrv_Template_Cfg.c
+

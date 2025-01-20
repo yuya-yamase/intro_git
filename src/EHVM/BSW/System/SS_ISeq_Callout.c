@@ -17,11 +17,13 @@
 #include <SS.h>
 
 /* MCAL */
-#include <Port.h>
+#include "Port.h"
+#include "Port_PIC.h"
+#include "Port_Ext.h"
 #include "Spi.h"
 #include "Dma.h"
 #include "Dio.h"
-#include "Reg_Stbc.h"
+#include "icu_drv_wk.h"
 
 /* vv include start vv */
 #include <Ecu_Memmap_SdaDisableB_env.h>
@@ -38,6 +40,7 @@
 #endif /* ECU_SAMPLE_ON */
 /* ^^ include end ^^ */
 /* vv extern start vv */
+extern void __SYNCP(void);
 /* ^^ extern end ^^ */
 
 /* vv include start vv */
@@ -137,9 +140,10 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 {
     /* vv User Hook start vv */
     // Port_Init(&cstPort_Config[0]);
-
+    Ecu_Intg_BootCauseType u4BootCause;
     SS_CoreIdType u4_CoreId;
 
+    u4BootCause = Ecu_IntgHAL_getBootCause();
     u4_CoreId = SS_CpuCore_getCoreID();
 
     (void)SS_Memory_set(__ghsbegin_ecu_nvar_lram_top, 0UL, (uint32)ECU_NVAR_LRAM_SIZE);
@@ -175,6 +179,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         Spi_PrePortInit();
         /* 以降、IoBufferHoldの解除(REG_STBC_STBCKCPROTの操作)までは一連の処理 */
         Port_Init( &cstPort_Config[0] );
+        Port_InitPic();
         if (u4_BootSource == SS_PM_BOOT_SUP)
         {
             Port_SetPinMode(PORT_ID_PORT8_PIN0, PORT_MODE_CFG_P8_0_21);
@@ -183,14 +188,22 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         }
         else
         {
+            /* WakeUp時にP10_5の出力を保持するための処理 */
             Dio_LevelType u1_PinLv;
+            volatile Dio_PortLevelType u1_PortLv;
             u1_PinLv = Dio_ReadChannel(DIO_ID_PORT10_CH5);
             Dio_WriteChannel(DIO_ID_PORT10_CH5, u1_PinLv);
+            u1_PortLv = Dio_ReadPort(DIO_ID_PORT10); /* DummyRead */
+            __SYNCP();
         }
-        *REG_STBC_STBCKCPROT = REG_STBC_STBCKCPROT_WRITE_ENABLE;
-        *REG_STBC_IOHOLD0 = REG_STBC_RELEASE_IOBUFFERHOLD;
-        *REG_STBC_IOHOLD2 = REG_STBC_RELEASE_IOBUFFERHOLD;
-        *REG_STBC_STBCKCPROT = REG_STBC_STBCKCPROT_WRITE_DISABLE;
+        Port_Release_IOHOLD();
+
+        if((u4BootCause == ECU_INTG_u4BTCAUSE_PON  ) ||
+           (u4BootCause == ECU_INTG_u4BTCAUSE_RESET)){
+            vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_RST);
+        }else{
+            vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_WK);
+        }
 
         Spi_Init1();
 

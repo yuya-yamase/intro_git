@@ -1,0 +1,350 @@
+/* Vect_EbaseRam_850_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | Vect/EbaseRam/CODE                                          */
+/******************************************************************************/
+/*----------------------------------------------------------------------------*/
+/* Include Files                                                              */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Macros                                                                     */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Types                                                                      */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Function Prototypes                                                        */
+/*----------------------------------------------------------------------------*/
+    .extern _Shutdown_ResetMcuRam
+    .extern _IntHndlr_FEINT
+    .extern _IntHndlr_EIINT
+
+
+/*----------------------------------------------------------------------------*/
+/* Data                                                                       */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Constants                                                                  */
+/*----------------------------------------------------------------------------*/
+
+
+/******************************************************************************/
+/* External Functions                                                         */
+/******************************************************************************/
+    .section ".P_RAM_VECT", "ax"
+    .align 2
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_RESET                                         */
+/* Description   | RESET for EBASE(RAM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0000
+VECT_RPG_RAM_RESET:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_SYSERR                                        */
+/* Description   | SYSERR for EBASE(RAM) vector                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0010
+VECT_RPG_RAM_SYSERR:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_RESERVED0                                     */
+/* Description   | RESERVED0 for EBASE(RAM) vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0020
+VECT_RPG_RAM_RESERVED0:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_FETRAP                                        */
+/* Description   | FETRAP for EBASE(RAM) vector                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0030
+VECT_RPG_RAM_FETRAP:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_TRAP0                                         */
+/* Description   | TRAP0 for EBASE(RAM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0040
+VECT_RPG_RAM_TRAP0:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_TRAP1                                         */
+/* Description   | TRAP1 for EBASE(RAM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0050
+VECT_RPG_RAM_TRAP1:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_RIE                                           */
+/* Description   | RIE for EBASE(RAM) vector                                  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0060
+VECT_RPG_RAM_RIE:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_FPEFXE                                        */
+/* Description   | FPEFXE for EBASE(RAM) vector                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0070
+VECT_RPG_RAM_FPEFXE:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_UCPOP                                         */
+/* Description   | UCPOP for EBASE(RAM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0080
+VECT_RPG_RAM_UCPOP:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_MIPMDP                                        */
+/* Description   | MIPMDP for EBASE(RAM) vector                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0090
+VECT_RPG_RAM_MIPMDP:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_PIE                                           */
+/* Description   | PIE for EBASE(RAM) vector                                  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00A0
+VECT_RPG_RAM_PIE:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_RESERVED1                                     */
+/* Description   | RESERVED1 for EBASE(RAM) vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00B0
+VECT_RPG_RAM_RESERVED1:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_MAE                                           */
+/* Description   | MAE for EBASE(RAM) vector                                  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00C0
+VECT_RPG_RAM_MAE:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_RESERVED2                                     */
+/* Description   | RESERVED2 for EBASE(RAM) vector                            */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00D0
+VECT_RPG_RAM_RESERVED2:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_FENMI                                         */
+/* Description   | FENMI for EBASE(RAM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00E0
+VECT_RPG_RAM_FENMI:
+    jr32    _Shutdown_ResetMcuRam
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_FEINT                                         */
+/* Description   | FEINT for EBASE(RAM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x00F0
+VECT_RPG_RAM_FEINT:
+    jr32    _IntHndlr_FEINT
+    rie
+    rie
+    rie
+    rie
+    rie
+
+/******************************************************************************/
+/* Function Name | VECT_RPG_RAM_EIINT                                         */
+/* Description   | EIINT for EBASE(RAM) vector                                */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .offset 0x0100
+VECT_RPG_RAM_EIINT:
+    jr32    _IntHndlr_EIINT
+    rie
+    rie
+    rie
+    rie
+    rie
+
+
+/******************************************************************************/
+/* Internal Functions                                                         */
+/******************************************************************************/
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2021/03/09 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

@@ -62,13 +62,22 @@ static void    vd_s_GpI2cMaCfgTRxAckCh1(const ST_GP_I2C_MA_REQ * st_ap_ACK);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
     {
-        (U4)0U,                                     /* u4_scl_act */
-        (U4)0U,                                     /* u4_sda_act */
-        (U4)0U,                                     /* u4_scl_ina */
-        (U4)0U,                                     /* u4_sda_ina */
+        (U4)PORT_MODE_CFG_P10_1_25,                 /* u4_scl_act */
+        (U4)PORT_MODE_CFG_P10_0_24,                 /* u4_sda_act */
+        (U4)PORT_MODE_CFG_P10_1_29,                 /* u4_scl_ina */
+        (U4)PORT_MODE_CFG_P10_0_28,                 /* u4_sda_ina */
 
-        (U2)0U,                                     /* u2_scl_pin */
-        (U2)0U,                                     /* u2_sda_pin */
+        (U2)PORT_ID_PORT10_PIN1,                    /* u2_scl_pin */
+        (U2)PORT_ID_PORT10_PIN0,                    /* u2_sda_pin */
+    },
+    {
+        (U4)PORT_MODE_CFG_P22_4_27,                 /* u4_scl_act */
+        (U4)PORT_MODE_CFG_P22_3_26,                 /* u4_sda_act */
+        (U4)PORT_MODE_CFG_P22_4_31,                 /* u4_scl_ina */
+        (U4)PORT_MODE_CFG_P22_3_30,                 /* u4_sda_ina */
+
+        (U2)PORT_ID_PORT22_PIN4,                    /* u2_scl_pin */
+        (U2)PORT_ID_PORT22_PIN3,                    /* u2_sda_pin */
     }
 };
 
@@ -76,7 +85,7 @@ static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
 const ST_GP_I2C_MA_CH            st_gp_GP_I2C_MA_CH[GP_I2C_MA_NUM_CH] = {
     /* GP_I2C_MA_CH_0 */
     {
-        vdp_PTR_NA,                                 /* stp_PIN    */
+        &st_s_GP_I2C_MA_PIN[0],                    /* stp_PIN    */
 
         /* ------------------------------------------------------------------------------------- */
         /* Attention :                                                                           */
@@ -94,7 +103,7 @@ const ST_GP_I2C_MA_CH            st_gp_GP_I2C_MA_CH[GP_I2C_MA_NUM_CH] = {
     },
     /* GP_I2C_MA_CH_1 */
     {
-        vdp_PTR_NA,                                 /* stp_PIN    */
+        &st_s_GP_I2C_MA_PIN[1],                    /* stp_PIN    */
 
         /* ------------------------------------------------------------------------------------- */
         /* Attention :                                                                           */

@@ -1,0 +1,12 @@
+#!gbuild
+[Relocatable Object]
+	{streq(DECOMPRESS, ON)} -I../../emCompress/
+	{streq(DECOMPRESS, ON)} --slash_comment
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/CmpDecmp/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/CmpDecmp/obj/CmpDecmp_usr.rel.o
+
+../../usr/CmpDecmp.c
+
+{streq(DECOMPRESS, ON)} ../../emCompress/COMPRESS_LZMA_Decode.c

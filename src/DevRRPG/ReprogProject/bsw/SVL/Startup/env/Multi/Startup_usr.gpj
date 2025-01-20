@@ -1,0 +1,23 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc/common
+	-I../../cfg/common
+	{streq(PLATFORM_NAME, RH850, TraveoII)} -I../../inc/micon/$MICON_NAME
+	{streq(PLATFORM_NAME, RH850)} -I../../cfg/micon/$MICON_NAME
+	{streq(PLATFORM_NAME, TC3XX)} -I../../inc/micon/$PLATFORM_NAME
+	{streq(PLATFORM_NAME, TC3XX)} -I../../cfg/micon/$PLATFORM_NAME
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/Startup/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/Startup/obj/Startup_usr.rel.o
+
+{streq(PLATFORM_NAME, RH850)} ../../usr/micon/$MICON_NAME/Startup_Usr_Core.850
+{streq(PLATFORM_NAME, RH850)} ../../usr/micon/$MICON_NAME/Startup_Usr.c
+{streq(PLATFORM_NAME, RH850) && isdefined(STAYINBOOT_TIME) && STAYINBOOT_TIME > 0} ../../usr/micon/$MICON_NAME/Startup_Usr_StayInBoot.c
+
+{streq(PLATFORM_NAME, TraveoII)} ../../usr/micon/$MICON_NAME/Startup_Usr_Core.arm
+{streq(PLATFORM_NAME, TraveoII)} ../../usr/micon/$MICON_NAME/Startup_Usr.c
+
+{streq(PLATFORM_NAME, TC3XX)} ../../usr/micon/$PLATFORM_NAME/Startup_Usr_Core.tri
+{streq(PLATFORM_NAME, TC3XX)} ../../usr/micon/$PLATFORM_NAME/Startup_Usr.c
+{streq(PLATFORM_NAME, TC3XX) && isdefined(STAYINBOOT_TIME) && STAYINBOOT_TIME > 0} ../../usr/micon/$PLATFORM_NAME/Startup_Usr_StayInBoot.c

@@ -1,0 +1,33 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc/common
+	-I../../cfg/common
+	{streq(PLATFORM_NAME, RH850, TraveoII)} -I../../inc/micon/$MICON_NAME
+	{streq(PLATFORM_NAME, RH850)} -I../../cfg/micon/$MICON_NAME
+	{streq(PLATFORM_NAME, TC3XX)} -I../../inc/micon/$PLATFORM_NAME
+	{streq(PLATFORM_NAME, TC3XX)} -I../../cfg/micon/$PLATFORM_NAME
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/Startup/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/Startup/obj/Startup.rel.o
+
+../../src/common/Startup.c
+../../cfg/common/Startup_Cfg.c
+../../cfg/common/Startup_Ucfg.c
+
+{streq(PLATFORM_NAME, RH850)} ../../src/micon/$MICON_NAME/Startup_Core.850
+{streq(PLATFORM_NAME, RH850)} ../../src/micon/$MICON_NAME/Startup_Micon.c
+{streq(MICON_NAME, RH850U2A, RH850U2B)} ../../src/micon/$MICON_NAME/Startup_MiconHw.c
+
+{streq(MICON_NAME, RH850E2M, RH850U2A, RH850U2B)} ../../cfg/micon/$MICON_NAME/Startup_Micon_Cfg.c
+{streq(MICON_NAME, RH850D1X, RH850F1KM, RH850E2M, RH850U2A, RH850U2B)} ../../cfg/micon/$MICON_NAME/Startup_Micon_Ucfg.c
+
+{streq(PLATFORM_NAME, TraveoII)} ../../src/micon/$MICON_NAME/Startup_Core.arm
+{streq(PLATFORM_NAME, TraveoII)} ../../src/micon/$MICON_NAME/Startup_Micon.c
+
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Startup_Core.tri
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Startup_Drv_Core.tri
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Startup_Drv.c
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Startup_Local_Micon.c
+{streq(PLATFORM_NAME, TC3XX)} ../../cfg/micon/$PLATFORM_NAME/Startup_Micon_Ucfg.c
+

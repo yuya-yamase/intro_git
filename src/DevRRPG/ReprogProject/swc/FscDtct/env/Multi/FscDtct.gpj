@@ -1,0 +1,12 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/FscDtct/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/FscDtct/obj/FscDtct.rel.o
+
+../../src/FscDtct_Core.c
+../../cfg/FscDtct_Cfg.c
+

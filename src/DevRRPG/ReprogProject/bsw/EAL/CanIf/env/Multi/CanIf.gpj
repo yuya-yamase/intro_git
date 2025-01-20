@@ -1,0 +1,12 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/CanIf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/CanIf/obj/CanIf.rel.o
+
+../../src/CanIf.c
+../../cfg/CanIf_Cfg.c
+../../cfg/CanIf_Ucfg.c

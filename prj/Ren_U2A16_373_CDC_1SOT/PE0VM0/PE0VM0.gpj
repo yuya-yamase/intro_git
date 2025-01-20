@@ -1,0 +1,110 @@
+#!gbuild
+gbuildDir=C:\GHS\RH850_V.R9144\comp_201715
+primaryTarget=v800_standalone.tgt
+[Program]
+    :macro=COMP_DIR=c:/GHS/RH850_V.R9144/comp_201715
+	:macro=PRJ_DIR=${%expand_path(.)}
+    :macro=CMN_DIR=${PRJ_DIR}/../common
+    :macro=ROOT_DIR=${%expand_path(${PRJ_DIR}/../../../src/PE0VM0)}
+    :macro=OBJ_DIR=obj
+    :macro=OUT_DIR=dst
+    :macro=EHVM_IF_DIR=${ROOT_DIR}/BSW/ehvm_if
+    :macro=OS_DIR=${ROOT_DIR}/BSW/Os/source
+    :macro=SS_DIR=${ROOT_DIR}/BSW/System
+    :macro=CAN_DIR=${ROOT_DIR}/BSW/Aubist
+    :macro=CANIC_DIR=${ROOT_DIR}/BSW/Communication/Cdd_Canic_TJA1145A
+    :macro=OXCAN_DIR=${ROOT_DIR}/BSW/Communication/oXCAN
+    :macro=OXDOCAN_DIR=${ROOT_DIR}/BSW/Diagnosis/oXDoCAN
+    :macro=VEHOPE_DIR=${ROOT_DIR}/BSW/ComplexDriver/Vehopemd
+	:macro=GPI2C_DIR=${ROOT_DIR}/BSW/ComplexDriver/GpI2c
+    :macro=MCAL_DIR=${ROOT_DIR}/BSW/MCAL
+	:macro=MS_DIR=${ROOT_DIR}/BSW/Memory
+	:macro=IOHW_DIR=${ROOT_DIR}/BSW/IoHwAbstract
+	:macro=APP_DIR=${ROOT_DIR}/App
+	:macro=LIB_DIR=${ROOT_DIR}/LIB
+
+    :optionsFile=${CMN_DIR}/common.opt
+    :optionsFile=${CMN_DIR}/MCAL.opt
+    :optionsFile=${CMN_DIR}/IOHW.opt
+
+    -I${GPI2C_DIR}/config
+    -I${GPI2C_DIR}/scc
+
+    -I${COMP_DIR}/include/v800
+    -I${COMP_DIR}/ansi
+    -L${COMP_DIR}/lib/rh850
+
+    -I${ROOT_DIR}/BSW/CmnHdr
+    -I${SS_DIR}
+    -I${OS_DIR}/include
+    -I${OS_DIR}/include/ar_api
+    -I${OS_DIR}/include/generated
+	-I${OS_DIR}/include/ar_sys
+    -I${OS_DIR}/config
+    -I${EHVM_IF_DIR}/include/ehvm
+
+	-I${APP_DIR}
+	-I${APP_DIR}/ShtdwnM
+	-I${APP_DIR}/Stub
+
+    -L${ROOT_DIR}/BSW/Os/os_lib/release
+    -lsc1.sc.notrace.rh850u2a.a
+
+    -I${CAN_DIR}/inc
+    -I${CAN_DIR}/Com/cfg
+
+    -I${MS_DIR}/Rim/config
+    -I${MS_DIR}/Rim/scc
+
+    -I${MS_DIR}/Nvmc/core/config/Common
+    -I${MS_DIR}/Nvmc/core/config/Ren_U2A
+    -I${MS_DIR}/Nvmc/core/scc/Common
+    -I${MS_DIR}/Nvmc/core/scc/Ren_U2A
+    -I${MS_DIR}/Nvmc/module/config_Ren_U2A
+    -I${MS_DIR}/Nvmc/module/scc
+
+    -T ${MCAL_SECTION_DIR}/memory_map_VM0.ld
+    -T ${MCAL_SECTION_DIR}/section.ld
+
+    -DAR_OS_USE_HYPERVISOR
+    -DECU_VM0
+    -DECU_INTG_LWH_GUEST
+
+    -o PE0VM0.elf
+
+${CMN_DIR}/bswCAN.gpj
+${CMN_DIR}/bswOS.gpj
+${CMN_DIR}/ehvm_if.gpj
+${PRJ_DIR}/22SS.gpj
+${CMN_DIR}/Ecu_VMx.gpj
+
+${CMN_DIR}/MCAL_ADC.gpj
+${CMN_DIR}/MCAL_COMMON.gpj
+${CMN_DIR}/MCAL_DIO.gpj
+${CMN_DIR}/MCAL_DMA.gpj
+${CMN_DIR}/MCAL_Gpt.gpj
+${CMN_DIR}/MCAL_MCU.gpj
+${CMN_DIR}/MCAL_PORT.gpj
+${CMN_DIR}/MCAL_Pwm.gpj
+${CMN_DIR}/MCAL_SPI.gpj
+${CMN_DIR}/MCAL_Icu.gpj
+${CMN_DIR}/MCAL_Wdg.gpj
+${CMN_DIR}/MCAL_Intc.gpj
+${CMN_DIR}/MCAL_DUMMY.gpj
+${CMN_DIR}/MCAL_I2c.gpj
+${CMN_DIR}/MCAL_Uart.gpj
+
+${CMN_DIR}/GpI2c.gpj
+
+#${CMN_DIR}/bswMS.gpj
+${CMN_DIR}/MS_Rim.gpj
+#${CMN_DIR}/MS_NVMC.gpj
+
+${CMN_DIR}/IOHW.gpj
+${CMN_DIR}/LIB.gpj
+${PRJ_DIR}/App.gpj
+
+${CMN_DIR}/COM_CANIC.gpj
+${CMN_DIR}/COM_OXCAN.gpj
+${CMN_DIR}/VEHOPE.gpj
+${CMN_DIR}/DIAG_oXDoCAN.gpj

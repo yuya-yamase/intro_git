@@ -1,0 +1,71 @@
+#!gbuild
+[Options File]
+    -DEcuM_WakeupSourceType=uint32
+    -DEcuM_SetWakeupEvent(a)=(void)(a)
+
+    :macro=MCAL_ADC_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/ADC/scc
+    :macro=MCAL_ADCDIAG_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/ADCDIAG/scc
+    :macro=MCAL_COMMON_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/COMMON/scc
+    :macro=MCAL_DIO_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/DIO/scc
+    :macro=MCAL_DMA_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/DMA/scc
+    :macro=MCAL_DUMMY_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/DUMMY/scc
+    :macro=MCAL_GPT_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Gpt/scc
+    :macro=MCAL_I2C_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/I2C/scc
+    :macro=MCAL_ICU_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Icu/scc
+    :macro=MCAL_INTC_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Intc/scc
+    :macro=MCAL_MCU_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/MCU/scc
+    :macro=MCAL_PORT_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/PORT/scc
+    :macro=MCAL_PWM_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Pwm/scc
+    :macro=MCAL_SPI_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/SPI/scc
+    :macro=MCAL_UART_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Uart/scc
+    :macro=MCAL_WDG_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Wdg/scc
+
+    :macro=MCAL_ADC_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/ADC/config_CDC_1SOT
+    :macro=MCAL_ADCDIAG_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/ADCDIAG/config_CDC
+    :macro=MCAL_COMMON_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/COMMON/config_CDC
+    :macro=MCAL_DIO_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/DIO/config_CDC
+    :macro=MCAL_DMA_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/DMA/config_CDC
+    :macro=MCAL_GPT_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Gpt/config_CDC
+    :macro=MCAL_I2C_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/I2C/config_CDC
+    :macro=MCAL_ICU_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Icu/config_CDC
+    :macro=MCAL_MCU_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/MCU/config_CDC_1S
+    :macro=MCAL_PORT_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/PORT/config_CDC_1SOT
+    :macro=MCAL_PWM_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Pwm/config_CDC
+    :macro=MCAL_SPI_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/SPI/config_CDC_1S
+    :macro=MCAL_UART_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Uart/config_CDC_1S
+    :macro=MCAL_WDG_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Wdg/config_CDC
+    
+    :macro=MCAL_SECTION_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/SECTION/config_CDC
+
+    -I${MCAL_ADC_SCC_DIR}
+    -I${MCAL_ADCDIAG_SCC_DIR}
+    -I${MCAL_COMMON_SCC_DIR}
+    -I${MCAL_DIO_SCC_DIR}
+    -I${MCAL_DMA_SCC_DIR}
+    -I${MCAL_DUMMY_SCC_DIR}
+    -I${MCAL_GPT_SCC_DIR}
+    -I${MCAL_I2C_SCC_DIR}
+    -I${MCAL_ICU_SCC_DIR}
+    -I${MCAL_INTC_SCC_DIR}
+    -I${MCAL_MCU_SCC_DIR}
+    -I${MCAL_PORT_SCC_DIR}
+    -I${MCAL_PWM_SCC_DIR}
+    -I${MCAL_SPI_SCC_DIR}
+    -I${MCAL_UART_SCC_DIR}
+    -I${MCAL_WDG_SCC_DIR}
+
+    -I${MCAL_ADC_CFG_DIR}
+    -I${MCAL_ADCDIAG_CFG_DIR}
+    -I${MCAL_COMMON_CFG_DIR}
+    -I${MCAL_DIO_CFG_DIR}
+    -I${MCAL_DMA_CFG_DIR}
+    -I${MCAL_GPT_CFG_DIR}
+    -I${MCAL_I2C_CFG_DIR}
+    -I${MCAL_ICU_CFG_DIR}
+    -I${MCAL_MCU_CFG_DIR}
+    -I${MCAL_PORT_CFG_DIR}
+    -I${MCAL_PWM_CFG_DIR}
+    -I${MCAL_SPI_CFG_DIR}
+    -I${MCAL_UART_CFG_DIR}
+    -I${MCAL_WDG_CFG_DIR}
+

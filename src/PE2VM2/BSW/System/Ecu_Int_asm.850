@@ -296,7 +296,7 @@ Ecu_Int_set_Icache_Tag:
     st.w    r8, 24[r6]
     /* Enable ECC Enc/Dec, parity Check */ 
     mov     VAL_u4ECCCTL_AF_ECC, r8
-    add     REG_u4ITECCCTL, r6
+    mov     REG_u4ITECCCTL, r6
     add     r15, r6
     st.w    r8, 0[r6]
     /* Enable ECC Err and parity Err Reporitng */

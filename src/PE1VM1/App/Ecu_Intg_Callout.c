@@ -22,6 +22,8 @@
 
 #include "wdg_drv.h"
 
+#include "stub.h"
+
 #include "xspi.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -43,6 +45,19 @@ ISR(INTOSTM0_ISR);
 
 Std_ReturnType Ecu_Intg_initCdd(Ecu_Intg_BootCauseType u4BootCause)
 {
+
+    switch (u4BootCause){
+        case ECU_INTG_u4BTCAUSE_PON :
+            vd_g_StubBonInit();
+            break;
+        case ECU_INTG_u4BTCAUSE_RESET:
+            vd_g_StubRstInit();
+            break;
+        default:
+            vd_g_StubWkupInit();
+            break;
+    }
+
     return E_OK;
 }
 
@@ -64,8 +79,6 @@ Std_ReturnType Ecu_Intg_mainFuncCddHigh(void)
 
 Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
 {
-//    vd_g_Wdg_SetTriggerCondition((U2)0U);
-
     return E_OK;
 }
 
@@ -84,6 +97,7 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidOut(void)
 
 Std_ReturnType Ecu_Intg_mainFuncCddLow(void)   /* C-DC MET Low Task: 10ms */
 {
+    vd_g_Wdg_SetTriggerCondition((U2)0U);
     return E_OK;
 }
 

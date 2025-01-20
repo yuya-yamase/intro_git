@@ -1,0 +1,34 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc/common
+	-I../../../Startup/inc/common
+	-I../../../Startup/cfg/common
+	{streq(PLATFORM_NAME, RH850, TraveoII)} -I../../inc/micon/$MICON_NAME
+	{streq(PLATFORM_NAME, RH850)} -I../../../Startup/inc/micon/$MICON_NAME
+	{streq(PLATFORM_NAME, RH850)} -I../../../Startup/cfg/micon/$MICON_NAME
+	{streq(PLATFORM_NAME, TC3XX)} -I../../inc/micon/$PLATFORM_NAME
+	{streq(PLATFORM_NAME, TC3XX)} -I../../../Startup/inc/micon/$PLATFORM_NAME
+	{streq(PLATFORM_NAME, TC3XX)} -I../../../Startup/cfg/micon/$PLATFORM_NAME
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/Shutdown/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/Shutdown/obj/Shutdown.rel.o
+
+../../src/common/Shutdown.c
+
+{streq(PLATFORM_NAME, RH850)} ../../src/micon/$MICON_NAME/Shutdown_Micon.c
+{streq(PLATFORM_NAME, RH850)} ../../src/micon/$MICON_NAME/Shutdown_Core.850
+{streq(PLATFORM_NAME, RH850)} ../../src/micon/$MICON_NAME/Shutdown_Ram_Core.850
+
+{streq(PLATFORM_NAME, TraveoII)} ../../src/micon/$MICON_NAME/Shutdown_Micon.c
+{streq(PLATFORM_NAME, TraveoII)} ../../src/micon/$MICON_NAME/Shutdown_Core.arm
+{streq(PLATFORM_NAME, TraveoII)} ../../src/micon/$MICON_NAME/Shutdown_Ram_Core.arm
+
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Shutdown_Micon.c
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Shutdown_Drv.c
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Shutdown_Local_Micon.c
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Shutdown_Core.tri
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Shutdown_Drv_Core.tri
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Shutdown_Ram_Core.tri
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Shutdown_Drv_Ram_Core.tri
+{streq(PLATFORM_NAME, TC3XX)} ../../src/micon/$PLATFORM_NAME/Shutdown_Local_Core.tri

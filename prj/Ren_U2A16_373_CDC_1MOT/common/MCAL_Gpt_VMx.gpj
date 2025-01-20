@@ -1,0 +1,16 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :sourceDir=${MCAL_GPT_SCC_DIR}
+    :sourceDir=${MCAL_GPT_CFG_DIR}
+
+    -I${LIB_DIR}
+
+#gpt_drv_d16.c
+#gpt_drv_j32.c
+gpt_drv_ost.c
+gpt_drv_frt.c
+#gpt_drv_d16_cfg.c
+#gpt_drv_j32_cfg.c
+gpt_drv_ost_cfg.c

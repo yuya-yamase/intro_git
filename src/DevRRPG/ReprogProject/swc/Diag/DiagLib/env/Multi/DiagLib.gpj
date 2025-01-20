@@ -1,0 +1,13 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-I../../../DiagSrv/cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/Diag/DiagLib/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/Diag/DiagLib/obj/DiagLib.rel.o
+
+../../src/DiagLib.c
+../../cfg/DiagLib_Cfg.c
+

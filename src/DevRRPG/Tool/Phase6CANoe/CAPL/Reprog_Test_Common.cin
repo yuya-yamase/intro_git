@@ -1,0 +1,365 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+    /* Default Log file name */
+    char DefaultLogFileName[64]="Log\\{ConfigName}_{MeasurementStart}";
+
+    diagRequest DiagnosticSessionControl_defaultSession                     SID_0x10_01;
+    diagRequest DiagnosticSessionControl_defaultSession_SPRMIB              SID_0x10_81;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession_SPRMIB   SID_0x10_83;
+    diagRequest DiagnosticSessionControl_ProgrammingSession                 SID_0x10_02;
+    diagRequest DiagnosticSessionControl_ProgrammingSession_SPRMIB          SID_0x10_82;
+    diagRequest EcuReset_hardReset                                          SID_0x11_01;
+    diagRequest EcuReset_NRC12                                              SID_0x11_02;
+    diagRequest EcuReset_hardReset_SPRMIB                                   SID_0x11_81;
+    diagRequest WriteDataByIdentifier_Nonce_F050                            SID_0x2E_F050;
+    diagRequest WriteDataByIdentifier_asfp_F120                             SID_0x2E_F120;
+    diagRequest ReadDataByIdentifier_asfp_F120                              SID_0x22_F120;
+    diagRequest ReadDataByIdentifier_asfp_F13F                              SID_0x22_F13F;
+    diagRequest ReadDataByIdentifier_Nonce_F050                             SID_0x22_F050;
+    diagRequest ReadDataByIdentifier_ActiveDiagnosticSession                SID_0x22_F186;
+
+    diagRequest RoutineControl_SubfunctionError                             SID_0x31_01_FF05;
+    diagRequest RoutineControl_checkMemoryFlashdriver_RCTerr                SID_0x31_02_DD00;
+    diagRequest RoutineControl_checkMemorySoftwareData_RCTerr               SID_0x31_02_DD01;
+    diagRequest RoutineControl_validApplication_RCTerr                      SID_0x31_02_DD02;
+    diagRequest RoutineControl_eraseMemory_RCTErr                           SID_0x31_02_FF00;
+    diagRequest RoutineControl_eraseMemory                                  SID_0x31_erase;
+    diagRequest RoutineControl_checkMemoryFlashdriver                       SID_0x31_checkFlash;
+    diagRequest RoutineControl_checkMemorySoftwareData                      SID_0x31_checkSoft;
+    diagRequest RoutineControl_validApplication                             SID_0x31_valid;
+    diagRequest RequestDownload                                             SID_0x34;
+    diagRequest TransferData_Download                                       SID_0x36;
+    diagRequest RequestTransferExit                                         SID_0x37;
+    diagRequest SecurityAccess_requestSeed_01                               SID_0x27_01;
+    diagRequest SecurityAccess_sendKey_02                                   SID_0x27_02;
+    diagRequest SecurityAccess_sendKey_04                                   SID_0x27_04;
+
+    diagRequest ReadDataByIdentifier_SWIdentification_F188                  SID_0x22_F188;
+    diagRequest ReadDataByIdentifier_HWIdentification_F191                  SID_0x22_F191;
+    diagRequest ReadDataByIdentifier_serialNumber_F18C                      SID_0x22_F18C;
+    diagRequest TesterPresent_zeroSubFunction                               SID_0x3E;
+    diagRequest ReadDataByIdentifier_sig_F080                               SID_0x22_F080;
+    diagRequest ReadDataByIdentifier_sig_F09F                               SID_0x22_F09F;
+    diagRequest ReadDataByIdentifier_sig_F081_F082_F083_F084_F085_F086      SID_0x22_F081_F086;
+
+    // NRC Test
+    // test for Common
+    diagRequest ControlDTCSetting1330 SID_NOT_SUPPORT;
+    diagRequest AccessTimingParameter1310 SID_ATP_NRC11;
+    diagRequest AccessTimingParameter1310_SPRMIB SID_ATP_SPRMIB_NRC11;
+    diagRequest AccessTimingParameter1310_SPRMIB SID_NOT_SUPPORT_SPRMIB;
+
+    // test for SID10
+    diagRequest DiagnosticSessionControl_defaultSession SID_DSC_NRCTestNormal_def;
+    diagRequest DiagnosticSessionControl_defaultSession_SPRMIB SID_DSC_NRCTestNormal_def_SPRMIB;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession SID_DSC_NRCTestNormal_ext;
+    diagRequest DiagnosticSessionControl_ProgrammingSession SID_DSC_NRCTestNormal_prg;
+    diagRequest DiagnosticSessionControl_defaultSession SID_DSC_NRC7F_def;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession SID_DSC_NRC7F_ext;
+    diagRequest DiagnosticSessionControl_ProgrammingSession SID_DSC_NRC7F_prg;
+    diagRequest DiagnosticSessionControl_defaultSession SID_DSC_NRC33;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession SID_DSC_NRC13;
+    diagRequest DiagnosticSessionControl_NRC12 SID_DSC_NRC12;
+    diagRequest DiagnosticSessionControl_defaultSession SID_DSC_NRC7E_def;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession SID_DSC_NRC7E_ext;
+    diagRequest DiagnosticSessionControl_ProgrammingSession SID_DSC_NRC7E_prg;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession SID_DSC_NRC13_2;
+    diagRequest DiagnosticSessionControl_defaultSession_SPRMIB SID_DSC_SPRMIB_NRC13_def;
+    diagRequest DiagnosticSessionControl_defaultSession SID_DSC_def;
+    diagRequest DiagnosticSessionControl_defaultSession_SPRMIB SID_DSC_SPRMIB_def;
+    diagRequest DiagnosticSessionControl_ProgrammingSession SID_DSC_prg;
+    diagRequest DiagnosticSessionControl_ProgrammingSession_SPRMIB SID_DSC_SPRMIB_prg;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession SID_DSC_ext;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession_SPRMIB SID_DSC_SPRMIB_ext;
+
+    // test for SID11
+    diagRequest EcuReset_hardReset SID_ER_NRCTestNormal;
+    diagRequest EcuReset_hardReset SID_ER_NRC13_1;
+    diagRequest EcuReset_NRC12 SID_ER_NRC12;
+    diagRequest EcuReset_hardReset SID_ER_NRC13_2;
+    diagRequest EcuReset_hardReset SID_ER_NRC33;
+    diagRequest EcuReset_hardReset SID_ER_NRC7E;
+    diagRequest EcuReset_hardReset SID_ER_NRC7F;
+    diagRequest EcuReset_hardReset_SPRMIB SID_ER_NRCTestNormal_SPRMIB;
+
+    // test for SID3E
+    diagRequest TesterPresent_zeroSubFunction SID_TP_NRCTestNormal;
+    diagRequest TesterPresent_zeroSubFunction SID_TP_NRC13_1;
+    diagRequest TesterPresent_NRC12 SID_TP_NRC12;
+    diagRequest TesterPresent_zeroSubFunction SID_TP_NRC13_2;
+    diagRequest TesterPresent_zeroSubFunction SID_TP_NRC33;
+    diagRequest TesterPresent_zeroSubFunction SID_TP_NRC7E;
+    diagRequest TesterPresent_zeroSubFunction SID_TP_NRC7F;
+    diagRequest TesterPresent_zeroSubFunction_SPRMIB SID_TP_NRCTest_SPRMIB;
+
+    // test for SID28
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages SID_CC_NRCTestNormal;
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages SID_CC_NRC13_1;
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages SID_CC_NRC13_2;
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages SID_CC_NRC33;
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages SID_CC_NRC7E;
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages SID_CC_NRC7F;
+    diagRequest CommunicationControl_enableRxAndTx SID_CC_NRC12;
+    diagRequest CommunicationControl_enableRxAndTx_SPRMIB SID_CC_NRC12_SPRMIB;
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages_SPRMIB SID_CC_NRCTestSPRMIB;
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages_SPRMIB SID_CC_NRC13_SPRMIB;
+    diagRequest CommunicationControl_disableRxAndTx_normalCommunicationMessages_SPRMIB SID_CC_NRC7E_SPRMIB;
+    diagRequest CommunicationControl404 SID_CC_NRC31;
+
+    // test for SID85
+    diagRequest ControlDTCSetting_off SID_CDS_NRCTestNormal;
+    diagRequest ControlDTCSetting_off SID_CDS_NRC13_1;
+    diagRequest ControlDTCSetting_off SID_CDS_NRC13_2;
+    diagRequest ControlDTCSetting_off SID_CDS_NRC33;
+    diagRequest ControlDTCSetting_off SID_CDS_NRC7E;
+    diagRequest ControlDTCSetting_on SID_CDS_NRC12;
+    diagRequest ControlDTCSetting_on SID_CDS_NRC7F;
+
+    // test for SID87
+    // common
+    diagRequest LinkControl_verifyModeTransitionWithFixedParameter SID_LC_VMTWFP_NRCTestNormal1;
+    diagRequest LinkControl_verifyModeTransitionWithSpecificParameter SID_LC_VMTWSP_NRCTestNormal2;
+    diagRequest LinkControl_transitionMode SID_LC_NRCTestNormal3;
+    diagRequest LinkControl_verifyModeTransitionWithFixedParameter SID_LC_VMTWFP_NRC13_1;
+    diagRequest LinkControl_verifyModeTransitionWithFixedParameter SID_LC_VMTWFP_NRC33;
+    diagRequest LinkControl_verifyModeTransitionWithFixedParameter SID_LC_VMTWFP_NRC7E;
+    diagRequest LinkControl_NRC12 SID_LC_NRC12;
+
+    // verifyModeTransitionWithFixedParameter
+    diagRequest LinkControl_verifyModeTransitionWithFixedParameter SID_LC_VMTWFP_NRC13_2;
+    diagRequest LinkControl_verifyModeTransitionWithFixedParameter SID_LC_VMTWFP_NRC31_1;
+    diagRequest LinkControl_verifyModeTransitionWithFixedParameter SID_LC_VMTWFP_NRC7F;
+    diagRequest LinkControl_verifyModeTransitionWithFixedParameter_SPRMIB SID_LC_VMTWFP_SPRMIB;
+
+    // verifyModeTransitionWithSpecificParameter
+    diagRequest LinkControl_verifyModeTransitionWithSpecificParameter SID_LC_VMTWSP_NRC13_3;
+    diagRequest LinkControl_verifyModeTransitionWithSpecificParameter SID_LC_VMTWSP_NRC31_2;
+    diagRequest LinkControl_verifyModeTransitionWithSpecificParameter SID_LC_VMTWSP_NRC7F;
+    diagRequest LinkControl_verifyModeTransitionWithSpecificParameter SID_LC_VMTWSP_Normal;
+
+    // transitionMode
+    diagRequest LinkControl_transitionMode SID_LC_TM_NRC24;
+    diagRequest LinkControl_transitionMode SID_LC_TM_NRC13_4;
+    diagRequest LinkControl_transitionMode SID_LC_TM_NRC7F;
+    diagRequest LinkControl_transitionMode SID_LC_TM_TestNormal;
+    diagRequest LinkControl_transitionMode_SPRMIB SID_LC_TM_TestNormal_SPRMIB;
+
+    // test for SID27
+    // common
+    diagRequest SecurityAccess_requestSeed_01 SID_SA_Common_Normal;
+    diagRequest SecurityAccess_requestSeed_01_SPRMIB SID_SA_Common_Normal_SPRMIB;
+    diagRequest SecurityAccess_requestSeed_01 SID_SA_Common_NRC13_1;
+    diagRequest SecurityAccess_NRC12          SID_SA_Common_NRC12;
+
+    // requestSeed
+    diagRequest SecurityAccess_requestSeed_01 SID_SA_RS_NRC13_2;
+    diagRequest SecurityAccess_requestSeed_01 SID_SA_RS_NRC37;
+    diagRequest SecurityAccess_requestSeed_01 SID_SA_RS_NRC7E;
+    diagRequest SecurityAccess_requestSeed_01 SID_SA_RS_NRC7F;
+    diagRequest SecurityAccess_requestSeed_01_SPRMIB SID_SA_RS_SPRMIB;
+    diagRequest SecurityAccess_requestSeed_03 SID_SA_RS_NRC22;
+    diagRequest SecurityAccess_requestSeed_03 SID_SA_RS_Level2;
+
+    // sendKey
+    diagRequest SecurityAccess_sendKey_02 SID_SA_SK_NRC24;
+    diagRequest SecurityAccess_sendKey_02 SID_SA_SK_NRC13_3;
+    diagRequest SecurityAccess_sendKey_02 SID_SA_SK_NRC36;
+    diagRequest SecurityAccess_sendKey_02 SID_SA_SK_NRC35;
+    diagRequest SecurityAccess_sendKey_02 SID_SA_SK_NRC37;
+    diagRequest SecurityAccess_sendKey_02 SID_SA_SK_NRC7E;
+    diagRequest SecurityAccess_sendKey_02 SID_SA_SK_NRC7F;
+    diagRequest SecurityAccess_sendKey_02 SID_SA_SK_Normal;
+    diagRequest SecurityAccess_sendKey_02_SPRMIB SID_SA_SK_SPRMIB;
+    diagRequest SecurityAccess_sendKey_04 SID_SA_SK_Level2;
+
+    // test for SID2E
+    diagRequest WriteDataByIdentifier_Nonce_F050 SID_WDBI_NRCTestNormal;
+    diagRequest WriteDataByIdentifier_Fingerprint_C030 SID_WDBI_NRCTestNormal_finger;
+    diagRequest WriteDataByIdentifier_Nonce_F050 SID_WDBI_NRC33_01;
+    diagRequest WriteDataByIdentifier_Fingerprint_C030 SID_WDBI_NRC33_finger;
+    diagRequest WriteDataByIdentifier_Nonce_0202 SID_WDBI_NRC31_01;
+    diagRequest WriteDataByIdentifier_Fingerprint_C030 SID_WDBI_NRC31_02;
+    diagRequest WriteDataByIdentifier_Nonce_C010 SID_WDBI_NRC31_03;     //未サポート値BSCは0x2E 0202となっていた。
+    diagRequest WriteDataByIdentifier_Nonce_F050 SID_WDBI_NONCE_NRC33_02;
+    diagRequest WriteDataByIdentifier_Fingerprint_C030 SID_WDBI_FINGER_NRC33_03;
+    diagRequest WriteDataByIdentifier_Nonce_F050 SID_WDBI_NRC13_01;
+    diagRequest WriteDataByIdentifier_Nonce_F050 SID_WDBI_NRC13_02_01;
+    diagRequest WriteDataByIdentifier_Fingerprint_C030 SID_WDBI_NRC13_02_02;
+    diagRequest WriteDataByIdentifier_Nonce_F050 SID_WDBI_NRC22_01;
+    diagRequest WriteDataByIdentifier_asfp_F120 SID_WDBI_NRC22_02;
+    diagRequest WriteDataByIdentifier_Nonce_C011 SID_WDBI_NRC22_03;
+    diagRequest WriteDataByIdentifier_Fingerprint_C031 SID_WDBI_NRC22_04;
+    diagRequest WriteDataByIdentifier_Nonce_F050 SID_WDBI_NRC7F;
+    diagRequest WriteDataByIdentifier_asfp_F120 SID_WDBI_NRC7F_finger;
+
+    // test for SID22
+    diagRequest ReadDataByIdentifier_asfp_F120 SID_RDBI_NRCTestNormal;
+    diagRequest ReadDataByIdentifier_asfp_F120 SID_RDBI_NRC13_1;
+    diagRequest ReadDataByIdentifier_asfp_F120 SID_RDBI_NRC13_2;
+    diagRequest ReadDataByIdentifier_asfp_F120 SID_RDBI_NRC13_3;
+    diagRequest ReadDataByIdentifier_asfp_F120 SID_RDBI_NRC14;
+    diagRequest ReadDataByIdentifier_asfp_F120 SID_RDBI_NRC33;
+    diagRequest ReadDataByIdentifier_asfp_F120 SID_RDBI_NRC7F;
+    diagRequest ReadDataByIdentifier_NRC31 SID_RDBI_NRC31;
+    diagRequest ReadDataByIdentifier_ActiveDiagnosticSession SID_RDBI_WithNotSupportDID;
+    diagRequest ReadDataByIdentifier_ActiveDiagnosticSession SID_RDBI_NRCTestNormal_sesread;
+    //diagRequest ReadDataByIdentifier_diagnosticSession SID_RDBI_NRCTestNormal_sesread;
+    diagRequest ReadDataByIdentifier_Fingerprint_C030 SID_RDBI_NRCTestNormal_finger;
+    diagRequest ReadDataByIdentifier_Fingerprint_C030 SID_RDBI_NRCTestNormal_NRC22;
+    diagRequest ReadDataByIdentifier_Fingerprint_C031_C032_C033 SID_RDBI_NRCTestNormal_multifinger;
+    diagRequest vehicleManufacturerECUHardwareNumberDataIdentifier SID_ecuRead;
+    diagRequest serialNumber SID_SerialNumberRead;
+    diagRequest ReadDataByIdentifier_Nonce_F050 SID_RDBI_Nonce;
+
+    // test for SID31
+    // common
+    diagRequest RoutineControl_eraseMemory SID_RC_common_Normal;
+    diagRequest RoutineControl_eraseMemory_SPRMIB SID_RC_common_Normal_SPRMIB;
+    diagRequest RoutineControl_eraseMemory SID_RC_common_NRC33;
+    diagRequest RoutineControl_eraseMemory SID_RC_common_NRC13_1;
+    diagRequest RoutineControl_eraseMemory SID_RC_common_NRC72;
+    diagRequest RoutineControl_DataParamError SID_RC_common_NRC_31;
+    diagRequest RoutineControl_DataParamError_SPRMIB SID_RC_common_NRC_SPRMIB_31;
+    diagRequest RoutineControl_SubfunctionError SID_RC_common_NRC_12;
+    diagRequest RoutineControl_SubfunctionError_SPRMIB SID_RC_common_NRC_SPRMIB_12;
+
+    // eraseMemory
+    diagRequest RoutineControl_eraseMemory SID_RC_erase_Normal;
+    diagRequest RoutineControl_eraseMemory SID_RC_erase_NRC13_2;
+    diagRequest RoutineControl_eraseMemory_RCTErr SID_RC_EraseMemory_NRC12;
+    diagRequest RoutineControl_eraseMemory_SPRMIB SID_RC_erase_SPRMIB;
+    diagRequest RoutineControl_eraseMemory SID_RC_erase_NRC31_1_1;
+    diagRequest RoutineControl_eraseMemory SID_RC_erase_NRC31_1_2;
+    diagRequest RoutineControl_eraseMemory SID_RC_erase_NRC22_1;
+    diagRequest RoutineControl_eraseMemory SID_RC_erase_NRC7F;
+
+    // checkProgrammingDependencies
+    diagRequest RoutineControl_checkMemoryFlashdriver SID_RC_checkMFD_Normal;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_checkMSD_Normal;
+    diagRequest RoutineControl_checkMemoryFlashdriver_RCTerr SID_RC_checkMFD_NRC12;
+    diagRequest RoutineControl_checkMemoryFlashdriver SID_RC_check_NRC12;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_checkMSF_Normal;
+    diagRequest RoutineControl_checkMemorySoftwareData_RCTerr SID_RC_checkMSD_NRC12;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC22_2;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC22_3;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC13_3;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC13_4;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC31;
+    diagRequest RoutineControl_checkMemoryFlashdriver SID_RC_check_NRC31_1;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC31_2;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC33;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC72;
+    diagRequest RoutineControl_checkMemorySoftwareData SID_RC_check_NRC7F;
+    diagRequest RoutineControl_checkProgrammingDependencies_SPRMIB SID_RC_check_SPRMIB;
+    diagRequest RoutineControl_checkProgrammingDependencies SID_RC_00subfunc_check;
+    diagRequest RoutineControl_SubfunctionError_SPRMIB SID_RC_00subfunc_check_SPRMIB;
+    diagRequest RoutineControl_checkProgrammingDependencies_SPRMIB SID_RC_check_SPRMIB_NRC13;
+    diagRequest RoutineControl_checkProgrammingDependencies_SPRMIB SID_RC_check_SPRMIB_NRC7F;
+
+    // validateApplication
+    diagRequest RoutineControl_validApplication SID_RC_valid_Normal;
+    diagRequest RoutineControl_validApplication_RCTerr SID_RC_valid_NRC12;
+    diagRequest RoutineControl_validApplication SID_RC_valid_NRC13_4;
+    diagRequest RoutineControl_validApplication SID_RC_valid_NRC22_3;
+    diagRequest RoutineControl_validApplication SID_RC_valid_NRC33;
+    diagRequest RoutineControl_validApplication SID_RC_valid_NRC7F;
+    diagRequest RoutineControl_validApplication_SPRMIB SID_RC_valid_Normal_SPRMIB;
+
+    // test for SID34
+    diagRequest RequestDownload SID_RD_NRCTestNormal;
+    diagRequest RequestDownload SID_RD_NRC33_1;
+    diagRequest RequestDownload SID_RD_NRC13_1;
+    diagRequest RequestDownload SID_RD_NRC12_1;
+    diagRequest RequestDownload SID_RD_NRC12_2;
+    diagRequest RequestDownload SID_RD_NRC13_2;
+    diagRequest RequestDownload SID_RD_NRC31_1_1;     // for memoryAddress
+    diagRequest RequestDownload SID_RD_NRC31_1_2;     // for memorySize
+    diagRequest RequestDownload SID_RD_NRC31_2_1;     // for memoryAddress
+    diagRequest RequestDownload SID_RD_NRC31_2_2;     // for memorySize
+    diagRequest RequestDownload SID_RD_NRC22;
+    diagRequest RequestDownload SID_RD_NRC70;
+    diagRequest RequestDownload SID_RD_NRC7F;
+
+    // test for SID36
+    diagRequest TransferData_Download SID_TD_NRCTestNormal;
+    diagRequest TransferData_Download SID_TD_NRC33;
+    diagRequest TransferData_Download SID_TD_NRC13;
+    diagRequest TransferData_Download SID_TD_NRC24;
+    diagRequest TransferData_Download SID_TD_NRC71;
+    diagRequest TransferData_Download SID_TD_NRC73_1;
+    diagRequest TransferData_Download SID_TD_NRC73_2;
+    diagRequest TransferData_Download SID_TD_NRC31_1;
+    diagRequest TransferData_Download SID_TD_NRC31_2;
+    diagRequest TransferData_Download SID_TD_NRC7F;
+
+    // test for SID37
+    diagRequest RequestTransferExit SID_RTE_NRCTestNormal;
+    diagRequest RequestTransferExit SID_RTE_NRC33;
+    diagRequest RequestTransferExit SID_RTE_NRC24;
+    diagRequest RequestTransferExit SID_RTE_NRC13;
+    diagRequest RequestTransferExit SID_RTE_NRC7F;
+
+    // test for Support Session
+    diagRequest DiagnosticSessionControl_defaultSession SID_DSC_Def;
+    diagRequest DiagnosticSessionControl_extendedDiagnosticSession SID_DSC_Ext;
+    diagRequest DiagnosticSessionControl_ProgrammingSession SID_DSC_PRG;
+
+    // test for Addressing Support
+    // SID27
+    diagRequest SecurityAccess_requestSeed_01 SID_SA_ReqSeed;
+
+    dword posresWait = 0; // P2server
+    const dword messageSentTimeout = 2000;  // 送信タイムアウト
+    const dword finalRespTimeout = 185000;  // 最終応答待ちタイムアウト(仕様上の最大時間180秒+P2*Server_maxの5秒)
+    const dword noRsptimeout= 200;
+    const dword RESET_WAIT_TIME = 5000;     // reset after waiting time
+    const int SBLsize = 4096;
+
+    // TestWaitForDiagResponse return value
+    const long TIMEOUT_OCCURED = 0;
+    const long EVENT_OCCURED = 1;
+
+    const long NRC10 = 0x10;
+    const long NRC11 = 0x11;
+    const long NRC12 = 0x12;
+    const long NRC13 = 0x13;
+    const long NRC14 = 0x14;
+    const long NRC22 = 0x22;
+    const long NRC24 = 0x24;
+    const long NRC31 = 0x31;
+    const long NRC33 = 0x33;
+    const long NRC35 = 0x35;
+    const long NRC36 = 0x36;
+    const long NRC37 = 0x37;
+    const long NRC70 = 0x70;
+    const long NRC71 = 0x71;
+    const long NRC72 = 0x72;
+    const long NRC73 = 0x73;
+    const long NRC7E = 0x7E;
+    const long NRC7F = 0x7F;
+    const long NRC93 = 0x93;
+
+    const long NRC44 = 0x44;
+    const long NRC55 = 0x55;
+
+    const int RET_OK = 0x00;
+    const int RET_NG = 0x01;
+
+    const int TRUE = 0x01;
+    const int FALSE = 0x00;
+
+    const int FUNCTIONAL = 0x00;
+    const int PHYSICAL = 0x01;
+}
