@@ -26,3 +26,12 @@ obj/
 Reprog_CAPL.cbf
 Reprog_CANFD.stcfg
 tags
+!Can.lib
+!CodeFls.lib
+!Ecc.lib
+!Gpt.lib
+!Int.lib
+!Mcu.lib
+!Crypto_83_sw_AES128.a
+!Crypto_83_sw_RSA.a
+!Crypto_83_sw_SHA256.a
