@@ -1,6 +1,7 @@
 #include <Std_Types.h>
 #include <Ecu_Intg.h>
-#include "Mcu_PwrCtrl.h"
+#warning "VM_Layout"
+/* #include "Mcu_PwrCtrl.h" */
 #include "Pmic_Pwr.h"
 #include "EthSwt_SWIC.h"
 #include "EthSwt_SWIC_Reg.h"

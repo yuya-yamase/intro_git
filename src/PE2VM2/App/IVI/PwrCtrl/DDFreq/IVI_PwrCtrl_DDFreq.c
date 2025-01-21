@@ -17,7 +17,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "IVI_PwrCtrl_DDFreq.h"
 
-#include    "pwm_drv.h"
+#warning "VM_Layout"
+/* #include    "pwm_drv.h" */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -96,10 +97,14 @@ void            vd_g_Ivi_PwrCtrl_DDFreq(void)
     U2 u2_t_duty;
 
     if(u1_g_pwrctrl_ddfreq_flg < IVI_DDFREQ_PTRN_NUM) {
-        u2_t_duty = IVI_SYS_PWM_DUTYCYCLE(5000U);    /* 50% */
-        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ,       u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
-        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_01_DDC_SIP_FREQ,   u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
-        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ,  u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
+        #warning "VM_Layout"
+        /* u2_t_duty = IVI_SYS_PWM_DUTYCYCLE(5000U); */    /* 50% */
+        #warning "VM_Layout"
+        /* vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ,       u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty); */
+        #warning "VM_Layout"
+        /* vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_01_DDC_SIP_FREQ,   u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty); */
+        #warning "VM_Layout"
+        /* vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ,  u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty); */
 
         /* 変更したらXSPIの応答関数をコールし、フラグを要求なしに変更 */
         vd_g_XspiIviSub1DDconSend(u1_g_pwrctrl_ddfreq_flg);

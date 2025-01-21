@@ -4,6 +4,7 @@
     :sourceDir=${APP_DIR}/Common/xspi
     :sourceDir=${APP_DIR}/IVI/XSPI
     :sourceDir=${APP_DIR}/IVI/PwrCtrl
+    :sourceDir=${APP_DIR}/IVI/PwrCtrl/DDFreq
     :sourceDir=${APP_DIR}/IVI/ExtSigCtrl
     :sourceDir=${APP_DIR}/IVI/PictCtrl
     :sourceDir=${APP_DIR}/IVI/GyrCtrl

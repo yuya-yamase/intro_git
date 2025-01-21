@@ -9,9 +9,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "PictCtl.h"
 
-#include "gpi2c_ma.h"
+#warning "VM_Layout"
+/* #include "gpi2c_ma.h" */
 #include "Dio.h"
-#include "oxcan.h"
+#warning "VM_Layout"
+/* #include "oxcan.h" */
 #include "x_spi_ivi_sub1_camera.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -2592,17 +2594,21 @@ static void vd_s_PictCtl_MLIniChk(void)
     U1 u1_t_mlcmp;
     
     /* 映像IC起動処理完了状態取得(暫定) */
-	u1_t_mlcmp = (U1)FALSE; /* u1_g_PictCtl_MlCompsts(); /*起動処理完了状態取得(暫定) */
+    #warning "VM_Layout"
+	/* u1_t_mlcmp = (U1)FALSE; */ /* u1_g_PictCtl_MlCompsts(); /*起動処理完了状態取得(暫定) */
     /* 映像IC起動処理完了時に処理を実施(暫定) */
+    #warning "VM_Layout"
+    /*
     if((u1_s_pict_mlcmp_old == (U1)FALSE) && (u1_t_mlcmp == (U1)TRUE)){
         if(u1_s_pict_mliniflg == (U1)FALSE){
-            /* メインマイコンのCAMERA-MODE1=Hi検知異常のフェールセーフタイマ起動(40ms) */
+            メインマイコンのCAMERA-MODE1=Hi検知異常のフェールセーフタイマ起動(40ms)
             vd_s_PictCtl_SetTim((U1)PICT_TIMID_ML_CAM_MODE1_ERR_CHKCYC, (U2)PICT_TIMER_ML_CAM_MODE_H_MAIN_CHKERR_CHKCYC);
             bfg_Ml_Ctl.u1_CamModeHMainChkErrCnt_N1 = (U1)PICT_CNT_INI;
             u1_s_pict_mliniflg = (U1)TRUE;
         }
     }
     u1_s_pict_mlcmp_old = u1_t_mlcmp;
+    */
 }
 
 /*============================================================================
@@ -2860,7 +2866,8 @@ static U1 u1_s_PictCtl_CamKindjdg(void)
     /************************************************************************************************/
     u1_t_camkind = (U1)0U;
     u1_t_chgflg = (U1)FALSE;
-    Com_ReceiveSignal(ComConf_ComSignal_MAVTYPE, &u1_t_camkind); /* MAVTYPE信号取得 */
+    #warning "VM_Layout"
+    /* Com_ReceiveSignal(ComConf_ComSignal_MAVTYPE, &u1_t_camkind); */ /* MAVTYPE信号取得 */
 
     /* カメラ種別は有効値かを判断 */
     u1_t_chk = u1_s_PictCtl_CamKindValidChk(u1_t_camkind);
@@ -3024,7 +3031,8 @@ static U1 u1_s_PictCtl_CenterCamSizjdg(void)
     /************************************************************************************************/
     u1_t_centercamsiz = (U1)0U;
 	u1_t_chgflg = (U1)FALSE;
-    Com_ReceiveSignal(ComConf_ComSignal_R_CROP_0, &u1_t_centercamsiz); /* R_CROP_0信号取得 */
+    #warning "VM_Layout"
+    /* Com_ReceiveSignal(ComConf_ComSignal_R_CROP_0, &u1_t_centercamsiz); */ /* R_CROP_0信号取得 */
     /* センターカメラサイズは有効値かを判断 */
     u1_t_chk = u1_s_PictCtl_CenterCamSizValidChk(u1_t_centercamsiz);
     if(u1_t_chk == (U1)TRUE){
@@ -3238,6 +3246,8 @@ static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void)
   u1_t_VPSINFO   = (U1)0U;
   u1_t_boot      = STD_LOW;
 
+  #warning "VM_Layout"
+  /*
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &u1_t_VPSINFO1 );
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &u1_t_VPSINFO2 );
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &u1_t_VPSINFO3 );
@@ -3246,6 +3256,7 @@ static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void)
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, &u1_t_VPSINFO6 );
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, &u1_t_VPSINFO7 );
   (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ  , &u1_t_appea    );
+  */
 
   /* BOOT入力値取得処理 */
 	u1_t_boot = (U1)Dio_ReadChannel(DIO_ID_PORT0_CH2);
