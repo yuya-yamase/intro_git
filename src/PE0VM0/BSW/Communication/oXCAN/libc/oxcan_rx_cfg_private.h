@@ -25,6 +25,7 @@
                                   /* Com_Cfg.h is included in CS_Can_Cfg.h                        */
                                   /* CS_Can_Cfg.h is included in oxcan.h                          */
 #include "oxcan_usrhk.h"
+#include "bsw_comm_ctrl.h"
 #include "oxcan_lib.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

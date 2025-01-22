@@ -29,8 +29,8 @@ MEMORY {
     ram_end_cluster2_share    : ORIGIN = 0xFE440000, LENGTH = 0
 
 // Address Space:Cluster RAM (Cluster2)
-    ram_memory_cluster2 : ORIGIN = 0xFE440000, LENGTH = 0x40000                   //LENGTH:256KB
-    ram_end_cluster2    : ORIGIN = 0xFE480000, LENGTH = 0
+    ram_memory_cluster2 : ORIGIN = 0xFE440000, LENGTH = 0x80000                   //LENGTH:512KB
+    ram_end_cluster2    : ORIGIN = 0xFE4C0000, LENGTH = 0
 
 // Address Space:Cluster RAM (Cluster3) (Retention RAM)
     retention_ram       : ORIGIN = 0xFE808000, LENGTH = 0x8000                    //LENGTH:32KB
@@ -50,4 +50,5 @@ DEFAULTS {
     SHARE_DMA_NOTICATION_ADDR   = 0xFE431200
     SHARE_SPI_MODEA_CHANNELDATA_ADDR   = 0xFE431300
     SHARE_SPI_MODEC_CHANNELDATA_ADDR   = 0xFE431400
+    SHARE_COMPLEX_VEHOPEMD_SYSSTS_ADDR = 0xFE431500                                     //LENGTH:4byte
 }

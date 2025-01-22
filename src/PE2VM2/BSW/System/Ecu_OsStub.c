@@ -20,6 +20,7 @@
 #include <Ecu_Memmap.h>
 #include <Ecu_Int.h>
 
+#include "gpi2c_ma.h"
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 /*----------------------------------------------------------------------------
@@ -32,6 +33,14 @@
 ISR(OS_SYSTEM_COUNTER_ISR0);
 
 ISR(INTSDMAC0CH3_ISR);
+ISR(INTRIIC0EE_ISR);
+ISR(INTRIIC0RI_ISR);
+ISR(INTRIIC0TI_ISR);
+ISR(INTRIIC0TEI_ISR);
+ISR(INTRIIC1EE_ISR);
+ISR(INTRIIC1RI_ISR);
+ISR(INTRIIC1TI_ISR);
+ISR(INTRIIC1TEI_ISR);
 
 /*----------------------------------------------------------------------------
  *		Codes
@@ -146,5 +155,47 @@ ISR(INTSDMAC0CH3_ISR)
 {
     Dma_INTSDMAC0CH3();
 }
+
+ISR(INTRIIC0EE_ISR)
+{
+	/*    INTRIIC0EE_ISR;*/
+    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_0);
+}
+ISR(INTRIIC0RI_ISR)
+{
+    /*    INTRIIC0RI_ISR;*/
+    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_0);
+}
+ISR(INTRIIC0TI_ISR)
+{
+    /*    INTRIIC0TI_ISR;*/
+    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_0);
+}
+ISR(INTRIIC0TEI_ISR)
+{
+    /*    INTRIIC0TEI_ISR;*/
+    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_0);
+}
+ISR(INTRIIC1EE_ISR)
+{
+    /*    INTRIIC1EE_ISR;*/
+    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_1);
+}
+ISR(INTRIIC1RI_ISR)
+{
+    /*    INTRIIC1RI_ISR;*/
+    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_1);
+}
+ISR(INTRIIC1TEI_ISR)
+{
+    /*    INTRIIC1TEI_ISR;*/
+    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_1);
+}
+ISR(INTRIIC1TI_ISR)
+{
+    /*    INTRIIC1TI_ISR;*/
+    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_1);
+}
+
 #define OS_STOP_SEC_CALLOUT_CODE
 #include <Os_MemMap.h>

@@ -22,6 +22,9 @@
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
 
+/* Communication         */
+#include "oxcan.h"
+
 /* Memory               */
 #include "rim_ctl.h"
 #include "nvmc_mgr.h"
@@ -378,6 +381,7 @@ void SS_Pm_shutdownCallout(void)
 {
     /* vv User Hook start vv */
     vd_g_Nvmc_DeInit();
+    vd_g_oXCANShutdown();
     vd_g_Rim_DeInit();
 
     Ecu_CtgOs_stop(ECU_CTGOS_TMRES_OWNVM);

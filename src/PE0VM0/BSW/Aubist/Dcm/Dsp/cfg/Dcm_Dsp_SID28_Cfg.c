@@ -47,7 +47,9 @@
 static CONST ( AB_83_ConstV Dcm_Dsp_ComControlAllChType, DCM_CONFIG_DATA ) Dcm_P_SID28_stComCtrlAllCh_Tbl[ DCM_P_COMCTRL_ALLCH_N ] =
 {
     /* Used */          /* ChannelRef */
-    { (boolean)TRUE,    (uint8)0x00U   }
+    { (boolean)TRUE,    (uint8)0x00U   },
+    { (boolean)TRUE,    (uint8)0x01U   },
+    { (boolean)TRUE,    (uint8)0x02U   }
 };
 
 
