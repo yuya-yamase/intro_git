@@ -100,15 +100,6 @@ Std_ReturnType Ecu_Intg_mainFuncApp(void)   /* C-DC IVI Mid Task: 1ms */
     vd_g_Ivi_GyrCtrl_Main();
     vd_g_Ivi_DspCtrl_Main();
 
-    /* IVI */
-    #warning "VM_Layout"
-    /* 97-101行目の処理と重複しているが問題ないか */
-    vd_g_Ivi_PwrCtrl_Main();
-    vd_g_Ivi_ExtSigCtrl_Main();
-    vd_g_Ivi_PictCtrl_Main_5ms();
-    vd_g_Ivi_GyrCtrl_Main();
-    vd_g_Ivi_DspCtrl_Main();
-
     /* XSPI Send */
     vd_g_XspiIviMain2nd();
 
