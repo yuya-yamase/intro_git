@@ -93,6 +93,7 @@ Std_ReturnType Ecu_Intg_mainFuncApp(void)   /* C-DC IVI Mid Task: 1ms */
     /* XSPI Receive */
     vd_g_XspiIviMain1st();
 
+    /* IVI */
     vd_g_Ivi_PwrCtrl_Main();
     vd_g_Ivi_ExtSigCtrl_Main();
     vd_g_Ivi_PictCtrl_Main_5ms();
