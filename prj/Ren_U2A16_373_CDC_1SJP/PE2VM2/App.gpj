@@ -2,12 +2,43 @@
 [Subproject]
     :sourceDir=${APP_DIR}
     :sourceDir=${APP_DIR}/Common/xspi
+    :sourceDir=${APP_DIR}/IVI/XSPI
+    :sourceDir=${APP_DIR}/IVI/PwrCtrl
+    :sourceDir=${APP_DIR}/IVI/PwrCtrl/DDFreq
+    :sourceDir=${APP_DIR}/IVI/ExtSigCtrl
+    :sourceDir=${APP_DIR}/IVI/PictCtrl
+    :sourceDir=${APP_DIR}/IVI/GyrCtrl
+    :sourceDir=${APP_DIR}/IVI/DspCtrl
 
     -I${APP_DIR}/Common/xspi
     -I${LIB_DIR}
+
+    -I${APP_DIR}/IVI
+    -I${APP_DIR}/IVI/XSPI
+    -I${APP_DIR}/IVI/PwrCtrl
+    -I${APP_DIR}/IVI/PwrCtrl/DDFreq
+    -I${APP_DIR}/IVI/ExtSigCtrl
+    -I${APP_DIR}/IVI/PictCtrl
+    -I${APP_DIR}/IVI/GyrCtrl
+    -I${APP_DIR}/IVI/DspCtrl
 
 Ecu_Intg_Callout.c
 xspi.c
 xspi_sub.c
 ShtdwnM/bsw_m.c
 ShtdwnM/cfg/bsw_m_cfg.c
+x_spi_ivi.c
+x_spi_ivi_sub4.c
+x_spi_ivi_sub1.c
+x_spi_ivi_sub1_camera.c
+x_spi_ivi_sub1_control.c
+x_spi_ivi_sub1_power.c
+x_spi_ivi_sub1_system.c
+x_spi_ivi_queue.c
+IVI_PwrCtrl_Main.c
+IVI_PwrCtrl_DDFreq.c
+IVI_ExtSigCtrl_Main.c
+IVI_PictCtrl_Main.c
+IVI_GyrCtrl_Main.c
+IVI_DspCtrl_Main.c
+PictCtl.c

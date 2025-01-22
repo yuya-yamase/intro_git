@@ -23,6 +23,15 @@
 #include "wdg_drv.h"
 
 #include "xspi.h"
+
+/* IVI */
+#include "x_spi_ivi.h"
+
+#include "IVI_PwrCtrl_Main.h"
+#include "IVI_ExtSigCtrl_Main.h"
+#include "IVI_PictCtrl_Main.h"
+#include "IVI_GyrCtrl_Main.h"
+#include "IVI_DspCtrl_Main.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -53,12 +62,22 @@ Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
     /* XSPI初期化処理 */
     xspi_Init( XSPI_CH_01 );
 
+    /* IVI */
+    vd_g_Ivi_PwrCtrl_Main_Bon_init();
+    vd_g_Ivi_ExtSigCtrl_Main_Bon_init();
+    vd_g_Ivi_PictCtrl_Main_Bon_init();
+    vd_g_Ivi_GyrCtrl_Main_Bon_init();
+    vd_g_Ivi_DspCtrl_Main_Bon_init();
+
     return E_OK;
 }
 
 
 Std_ReturnType Ecu_Intg_mainFuncCddHigh(void)
 {
+    /* IVI */
+    vd_g_Ivi_PictCtrl_Main_1ms();
+
     return E_OK;
 }
 
@@ -71,6 +90,28 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)   /* C-DC IVI Mid Task: 1ms */
 
 Std_ReturnType Ecu_Intg_mainFuncApp(void)   /* C-DC IVI Mid Task: 1ms */
 {
+    /* XSPI Receive */
+    vd_g_XspiIviMain1st();
+
+    /* IVI */
+    vd_g_Ivi_PwrCtrl_Main();
+    vd_g_Ivi_ExtSigCtrl_Main();
+    vd_g_Ivi_PictCtrl_Main_5ms();
+    vd_g_Ivi_GyrCtrl_Main();
+    vd_g_Ivi_DspCtrl_Main();
+
+    /* IVI */
+    #warning "VM_Layout"
+    /* 97-101行目の処理と重複しているが問題ないか */
+    vd_g_Ivi_PwrCtrl_Main();
+    vd_g_Ivi_ExtSigCtrl_Main();
+    vd_g_Ivi_PictCtrl_Main_5ms();
+    vd_g_Ivi_GyrCtrl_Main();
+    vd_g_Ivi_DspCtrl_Main();
+
+    /* XSPI Send */
+    vd_g_XspiIviMain2nd();
+
     return E_OK;
 }
 
