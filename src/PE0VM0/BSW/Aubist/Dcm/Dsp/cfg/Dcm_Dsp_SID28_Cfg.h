@@ -23,7 +23,7 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define DCM_P_COMCTRL_ALLCH_N               ((uint8)1U)
+#define DCM_P_COMCTRL_ALLCH_N               ((uint8)3U)
 #define DCM_P_COMCTRL_SPCH_N                ((uint8)0U)
 #define DCM_P_COMCTRL_SUBN_N                ((uint16)0U)
 

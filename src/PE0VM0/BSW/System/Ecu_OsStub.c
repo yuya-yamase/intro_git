@@ -19,7 +19,13 @@
 #include <Ecu_Memmap.h>
 #include <Ecu_Int.h>
 
-#include "gpi2c_ma.h"
+/* Communication         */
+#include "Can.h"
+#include "can_rscf4_cfg.h"
+
+/* Communication         */
+#include "Can.h"
+#include "can_rscf4_cfg.h"
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 /*----------------------------------------------------------------------------
@@ -31,16 +37,13 @@
  *--------------------------------------------------------------------------*/
 ISR(OS_SYSTEM_COUNTER_ISR0);
 
-ISR(INTRIIC0EE_ISR);
-ISR(INTRIIC0RI_ISR);
-ISR(INTRIIC0TI_ISR);
-ISR(INTRIIC0TEI_ISR);
-ISR(INTRIIC1EE_ISR);
-ISR(INTRIIC1RI_ISR);
-ISR(INTRIIC1TI_ISR);
-ISR(INTRIIC1TEI_ISR);
-
 ISR(INTTAUD0CH14);
+
+ISR(INTRCAN5REC_ISR);
+ISR(INTRCAN5TRX_ISR);
+ISR(INTRCAN7REC_ISR);
+ISR(INTRCAN7TRX_ISR);
+
 /*----------------------------------------------------------------------------
  *		Codes
  *--------------------------------------------------------------------------*/
@@ -157,49 +160,41 @@ void PreTaskHook(void)
  * [Return] 	None
  * [Notes]		Launched from the OS
  *--------------------------------------------------------------------------*/
-ISR(INTRIIC0EE_ISR)
-{
-	/*    INTRIIC0EE_ISR;*/
-    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_0);
-}
-ISR(INTRIIC0RI_ISR)
-{
-    /*    INTRIIC0RI_ISR;*/
-    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_0);
-}
-ISR(INTRIIC0TI_ISR)
-{
-    /*    INTRIIC0TI_ISR;*/
-    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_0);
-}
-ISR(INTRIIC0TEI_ISR)
-{
-    /*    INTRIIC0TEI_ISR;*/
-    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_0);
-}
-ISR(INTRIIC1EE_ISR)
-{
-    /*    INTRIIC1RI_ISR;*/
-    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_1);
-}
-ISR(INTRIIC1RI_ISR)
-{
-    /*    INTRIIC1RI_ISR;*/
-    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_1);
-}
-ISR(INTRIIC1TEI_ISR)
-{
-    /*    INTRIIC1TEI_ISR;*/
-    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_1);
-}
-ISR(INTRIIC1TI_ISR)
-{
-    /*    INTRIIC1TI_ISR;*/
-    vd_g_GpI2cMaIRQTRx(GP_I2C_MA_CH_1);
-}
 ISR(INTTAUD0CH14)
 {
     /*    INTTAUD0CH14;*/
 }
+
+ISR(INTRCAN5REC_ISR)
+{
+    /*    INTRCAN5REC_ISR;*/
+#if (CAN_CFG_RX_PROCESSING_5 == CAN_INTERRUPT)
+    Can_RxFinish_5();
+#endif
+}
+ISR(INTRCAN5TRX_ISR)
+{
+    /*    INTRCAN5TRX_ISR;*/
+#if (CAN_CFG_TX_PROCESSING_5 == CAN_INTERRUPT)
+    Can_TxFinish_5();
+#endif
+
+}
+ISR(INTRCAN7REC_ISR)
+{
+    /*    INTRCAN7REC_ISR;*/
+#if (CAN_CFG_RX_PROCESSING_7 == CAN_INTERRUPT)
+    Can_RxFinish_7();
+#endif
+
+}
+ISR(INTRCAN7TRX_ISR)
+{
+    /*    INTRCAN7TRX_ISR;*/
+#if (CAN_CFG_TX_PROCESSING_7 == CAN_INTERRUPT)
+    Can_TxFinish_7();
+#endif
+}
+
 #define OS_STOP_SEC_CALLOUT_CODE
 #include <Os_MemMap.h>

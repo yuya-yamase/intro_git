@@ -37,9 +37,9 @@
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct{
-    U2                  u2_vom_chk;          /* Refer to the return of u4_g_oXCANOpemdCfgMdfield */
-    U2                  u2_tim_run;          /* Refer to the return of u4_g_oXCANOpemdCfgMdfield */
-    U2                  u2_sys_act;          /* OXCAN_SYS_XXX                                    */
+    U4                  u4_vom_chk;          /* Refer to the return of u4_g_oXCANOpemdCfgMdfield */
+    U4                  u4_tim_run;          /* Refer to the return of u4_g_oXCANOpemdCfgMdfield */
+    U4                  u4_sys_act;          /* OXCAN_SYS_XXX                                    */
 }ST_OXCAN_OPEMD_CHK;
 
 typedef struct{

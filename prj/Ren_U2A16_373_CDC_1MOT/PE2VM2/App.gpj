@@ -2,6 +2,19 @@
 [Subproject]
     :sourceDir=${APP_DIR}
 
+    -I${CAN_DIR}/inc
+
+    -I${CAN_DIR}/CS/inc
+    -I${CAN_DIR}/Com/inc
+    -I${CAN_DIR}/CanNm/inc/common
+    -I${CAN_DIR}/BswM_CS/inc
+    -I${CAN_DIR}/Can/cfg/rscf4
+
+    -I${OXCAN_DIR}/config_U2A16_met
+    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/scc
+    -I${VEHOPE_DIR}/scc
+    -I${VEHOPE_DIR}/config_U2A16_met
     -I${LIB_DIR}
 
 Ecu_Intg_Callout.c
