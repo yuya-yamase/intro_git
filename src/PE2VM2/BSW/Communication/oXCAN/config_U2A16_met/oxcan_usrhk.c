@@ -31,9 +31,13 @@
 
 #include "oxcan_lib.h"
 
+#include "x_spi_ivi_sub4.h"
+
 #if (OXCAN_IC_TJA1145_USE == 1U)
 #include "Cdd_Canic.h"
 #endif /* #if (OXCAN_IC_TJA1145_USE == 1U) */
+
+#include "PictCtl.h"
 
 #include "l3r_test.h"
 
@@ -408,6 +412,16 @@ void    vd_g_oXCANUsrhkRxMsg(const U2 u2_a_MSG)
 /*          break;                                          */
 /*  }                                                       */
 
+    vd_g_XspiIviCANGWPushPDU(u2_a_MSG);
+
+	switch(u2_a_MSG)
+	{
+	    case MSG_BCC1S05_RXCH0:
+	        vd_g_PictCtl_RcvBCC1S05();
+	        break;
+	    default:
+	        break;
+	}
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANUsrhkNwToAct(const U1 u1_a_CH)                                                                                 */
