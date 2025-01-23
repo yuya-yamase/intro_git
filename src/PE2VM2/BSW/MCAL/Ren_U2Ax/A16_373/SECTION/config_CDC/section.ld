@@ -23,6 +23,9 @@ SECTIONS {
     {
         *(".osCode*")
     } > .
+    .bsw_cs_text            align(16)                       : > .
+    .bsw_can_text           align(16)                       : > .
+    .bsw_e2e_text           align(16)                       : > .
     .bsw_code_bottom        align(4)                        : > .
 
     .bsw_const_top          align(4)                        : > .
@@ -30,6 +33,8 @@ SECTIONS {
     {
         *(".osConst*")
     } > .
+    .bsw_cs_const           align(4)                        : > .
+    .bsw_can_const          align(4)                        : > .
     .bsw_const_bottom       align(4)                        : > .
 
     .bsw_e_nvar_ival_top    align(4)  ROM(.bsw_e_nvar_withval_top)     : > .
@@ -114,6 +119,7 @@ SECTIONS {
     _APP_N_NVARLR_WITHVAL_SIZE = . - ADDR(.app_n_nvarLR_withval);
     .ecu_n_nvarLR_top            align(4)                  : > .
     .app_n_nvarLR                align(4)                  : > .
+    .bss_GPI2C                   align(4)                  : > .
     .ecu_n_nvarLR_bottom         align(4)                  : > .
     _ECU_N_NVAR_LR_SIZE = . - ADDR(.ecu_n_nvarLR_top);
 
@@ -188,6 +194,7 @@ SECTIONS {
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
+    .bss_SHARE_COMPLEX_VEHOPEMD_SYSSTS SHARE_COMPLEX_VEHOPEMD_SYSSTS_ADDR ABS    : > .
 
     .cluster2_share_ramend                                   : > ram_end_cluster2_share 
 
@@ -197,6 +204,8 @@ SECTIONS {
 // BSW
     .bsw_e_nvar_top         align(4)                        : > .
     .ecu_nvar_sw            align(4)                        : > .
+    .bsw_cs_data            align(4)                        : > .
+    .bsw_can_data           align(4)                        : > .
     .os_var_top             align(4)                        : > .
     .osVarCleared ALIGN(4):
     {

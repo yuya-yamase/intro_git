@@ -30,6 +30,7 @@
 #define OXCAN_SYS_PBA                            (0x0008U)    /* +BA-ON                                                       */
 #define OXCAN_SYS_IGR                            (0x0010U)    /* Ignition"R"-ON            IG voltage >= 7 volt               */
 
+#define OXCAN_SYS_VCAN                           (0x80000000U)  /* VCAN BUS                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* 2nd parameter "u2_a_SYS_CHK" of u1_g_oXCANRxStat                                                                                  */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -74,13 +75,14 @@
 /* #define OXCAN_RX_POM_PTC                      (5U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_OPEMD_NUM_CHK                      (5U)
+#define OXCAN_OPEMD_NUM_CHK                      (6U)
 
 #define OXCAN_OPEMD_CHK_NM_AWK                   (0U)
 #define OXCAN_OPEMD_CHK_ACC_ON                   (1U)
 #define OXCAN_OPEMD_CHK_IGP_ON                   (2U)
 #define OXCAN_OPEMD_CHK_PBA_ON                   (3U)
 #define OXCAN_OPEMD_CHK_IGR_ON                   (4U)
+#define OXCAN_OPEMD_CHK_VCAN_ON                  (5U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

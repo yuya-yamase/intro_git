@@ -54,33 +54,39 @@ static void    vd_s_oXCANOpemdEvTxIgnOn250ms(void);
 const ST_OXCAN_OPEMD_CHK           st_gp_OXCAN_OPEMD_CHK[OXCAN_OPEMD_NUM_CHK] = {
     /* OXCAN_OPEMD_CHK_NM_AWK  (0U) */
     {
-        (U2)VEH_OPEMD_MDBIT_IGN,       /* u2_vom_chk */
-        (U2)0x0000U,                   /* u2_tim_run */
-        (U2)0x0000U                    /* u2_sys_act */
+        (U4)VEH_OPEMD_MDBIT_IGN,       /* u4_vom_chk */
+        (U4)0x0000U,                   /* u4_tim_run */
+        (U4)0x0000U                    /* u4_sys_act */
     },
     /* OXCAN_OPEMD_CHK_ACC_ON  (1U) */
     {
-        (U2)VEH_OPEMD_MDBIT_ACC,       /* u2_vom_chk */
-        (U2)VEH_OPEMD_MDBIT_ACC,       /* u2_tim_run */
-        (U2)OXCAN_SYS_ACC              /* u2_sys_act */
+        (U4)VEH_OPEMD_MDBIT_ACC,       /* u4_vom_chk */
+        (U4)VEH_OPEMD_MDBIT_ACC,       /* u4_tim_run */
+        (U4)OXCAN_SYS_ACC              /* u4_sys_act */
     },
     /* OXCAN_OPEMD_CHK_IGP_ON  (2U) */
     {
-        (U2)VEH_OPEMD_MDBIT_IGNP,      /* u2_vom_chk */
-        (U2)VEH_OPEMD_MDBIT_IGNP,      /* u2_tim_run */
-        (U2)OXCAN_SYS_IGP              /* u2_sys_act */
+        (U4)VEH_OPEMD_MDBIT_IGNP,      /* u4_vom_chk */
+        (U4)VEH_OPEMD_MDBIT_IGNP,      /* u4_tim_run */
+        (U4)OXCAN_SYS_IGP              /* u4_sys_act */
     },
     /* OXCAN_OPEMD_CHK_PBA_ON  (3U) */
     {
-        (U2)VEH_OPEMD_MDBIT_PBA,       /* u2_vom_chk */
-        (U2)VEH_OPEMD_MDBIT_PBA,       /* u2_tim_run */
-        (U2)OXCAN_SYS_PBA              /* u2_sys_act */
+        (U4)VEH_OPEMD_MDBIT_PBA,       /* u4_vom_chk */
+        (U4)VEH_OPEMD_MDBIT_PBA,       /* u4_tim_run */
+        (U4)OXCAN_SYS_PBA              /* u4_sys_act */
     },
     /* OXCAN_OPEMD_CHK_IGR_ON  (4U) */
     {
-        (U2)VEH_OPEMD_MDBIT_IGN,       /* u2_vom_chk */
-        (U2)VEH_OPEMD_MDBIT_IGN,       /* u2_tim_run */
-        (U2)OXCAN_SYS_IGR              /* u2_sys_act */
+        (U4)VEH_OPEMD_MDBIT_IGN,       /* u4_vom_chk */
+        (U4)VEH_OPEMD_MDBIT_IGN,       /* u4_tim_run */
+        (U4)OXCAN_SYS_IGR              /* u4_sys_act */
+    },
+    /* OXCAN_OPEMD_CHK_VCAN_ON (5U) */
+    {
+        (U4)0x80000000,                /* u4_vom_chk */
+        (U4)0x80000000,                /* u4_tim_run */
+        (U4)OXCAN_SYS_VCAN             /* u4_sys_act */
     }
 };
 
@@ -115,7 +121,16 @@ const U1                           u1_g_OXCAN_OPEMD_NUM_EVTX = (U1)3U;
 /*===================================================================================================================================*/
 U4      u4_g_oXCANOpemdCfgMdfield(void)
 {
-    return(u4_g_VehopemdMdfield());
+    U4    u4_t_vehopemd;
+    U1    u1_t_rx_sts;
+
+    u4_t_vehopemd = u4_g_VehopemdMdfield();
+
+    u1_t_rx_sts = u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_CAN);
+    
+    u4_t_vehopemd |= (U4)((U4)u1_t_rx_sts << 31U);
+    
+    return(u4_t_vehopemd);
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXCANOpemdEvTxAccOn250ms(void)                                                                               */

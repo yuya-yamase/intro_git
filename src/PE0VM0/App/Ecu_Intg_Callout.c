@@ -31,6 +31,7 @@
 #include "veh_opemd.h"
 #include "oxcan.h"
 #include "oxdocan.h"
+#include "L3R_Scheduler.h"
 
 #include "stub.h"
 
@@ -63,7 +64,6 @@ static U1                    u1_s_iohw_adc_flipcount;
 /*----------------------------------------------------------------------------
  *      プロトタイプ宣言
  *--------------------------------------------------------------------------*/
-/*static void SS_CpuCore_requestReprog(void);*/
 
 /*----------------------------------------------------------------------------
  *		プログラム
@@ -112,6 +112,7 @@ Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
 Std_ReturnType Ecu_Intg_mainFuncCddHigh(void)
 {
     BswM_CS_MainFunctionHigh();
+    L3R_System_DriverTask();
 
     return E_OK;
 }

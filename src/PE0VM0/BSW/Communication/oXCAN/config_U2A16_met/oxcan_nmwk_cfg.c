@@ -69,6 +69,7 @@ const U2                    u2_g_OXCAN_NMWK_TIMOUT_ARQWK = (U2)10000U / (U2)OXCA
 const U1                    u1_gp_OXCAN_NMWK_CH_COM_TO_NM[BSW_COM_CFG_CHNUM] = {
     (U1)OXCAN_NMWK_NM_NET_ID_0,
     (U1)U1_MAX,
+    (U1)U1_MAX,
     (U1)U1_MAX
 };
 /* -------------------------------------------------------------------------------- */

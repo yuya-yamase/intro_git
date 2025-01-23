@@ -5,6 +5,9 @@
     -I${SS_DIR}/SchdM
     -I${SS_DIR}/SchdM/cfg
 
+    -I${CAN_DIR}/Can/cfg/rscf4
+    -I${CAN_DIR}/inc
+
 Ecu_CtgOs.c
 Ecu_Int.c
 Ecu_OsStub.c
