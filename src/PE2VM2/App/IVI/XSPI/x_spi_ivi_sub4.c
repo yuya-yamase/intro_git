@@ -263,8 +263,7 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         
         if(u4_t_msg_aubistid != (U4)0xFFFFFFFFU){
         /* フレーム送信処理 */
-            #warning "VM_Layout"
-            /* (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] ); */
+            (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
         }
 
         /* 読み出したデータ分ポインタを移動する */
@@ -576,10 +575,9 @@ static U2              u2_s_XspiIviSub4SendCanMsg(U1 * u1_ap_buf, const U2 u2_a_
 /*===================================================================================================================================*/
 void            vd_g_XspiIviCANGWPushPDU(const U2 u2_a_MSG)
 {
+    static const U2 u2_s_XSPI_IVI_CANGW_MIN      = (U2)MSG_ABG1S01_RXCH0;
     #warning "VM_Layout"
-    /* static const U2 u2_s_XSPI_IVI_CANGW_MIN      = (U2)MSG_ABG1S01_RXCH0; */
-    #warning "VM_Layout"
-    /* static const U2 u2_s_XSPI_IVI_CANGW_MAX      = (U2)MSG_TRA1S02_RXCH2; */
+    static const U2 u2_s_XSPI_IVI_CANGW_MAX      /* = (U2)MSG_TRA1S02_RXCH2 */;
 
     static const ST_XSPI_IVI_MSG2POSLEN st_sp_LCOM_SPI_MSG2POSLEN[] = {
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B100000},       /*      1:MSG_ABG1S01_RXCH0    (133U) */
@@ -940,26 +938,23 @@ void            vd_g_XspiIviCANGWPushPDU(const U2 u2_a_MSG)
     U4  u4_t_time;
     U1  u1_tp_sgnl[XSPI_IVI_CAN_64];
 
-    #warning "VM_Layout"
-    /*
     if ((u2_a_MSG >= u2_s_XSPI_IVI_CANGW_MIN) &&
        (u2_a_MSG <= u2_s_XSPI_IVI_CANGW_MAX)    ) {
         u2_t_idx = u2_a_MSG - u2_s_XSPI_IVI_CANGW_MIN;
         u1_t_act = st_sp_LCOM_SPI_MSG2POSLEN[u2_t_idx].u1_act;
         if (u1_t_act != (U1)FALSE) {
-            CANデータ受信
+            /* CANデータ受信 */
             u1_t_dlc = st_sp_LCOM_SPI_MSG2POSLEN[u2_t_idx].u1_dlc;
             vd_g_MemfillU1(&u1_tp_sgnl[0], (U1)0U, (U4)XSPI_IVI_CAN_64);
             (void)Com_ReadIPDU((PduIdType)u2_a_MSG, &u1_tp_sgnl[0] );
 
-            タイムスタンプ取得処理
+            /* タイムスタンプ取得処理 */
             u4_t_time = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
             u4_t_time = (U4)(u4_t_time / MCU_FRT_1MS);
 
             vd_s_XspiIviCANGWStuckBuff(u4_t_time, st_sp_LCOM_SPI_MSG2POSLEN[u2_t_idx].u4_flame_id, u1_t_dlc, &u1_tp_sgnl[0]);
         }
     }
-    */
 }
 
 /*===================================================================================================================================*/

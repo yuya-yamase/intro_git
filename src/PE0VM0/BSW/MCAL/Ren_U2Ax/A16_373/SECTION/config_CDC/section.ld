@@ -146,7 +146,7 @@ SECTIONS {
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
-// #warning “VM_Layout”
+// #warning "VM_Layout"
 // Production Code (Address Fix)
 //    _product_code_start_address = 0x003FFF00;
 //    .app_product_const (_product_code_start_address) : {
