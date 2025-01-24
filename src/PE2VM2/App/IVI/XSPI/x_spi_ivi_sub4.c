@@ -282,34 +282,32 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
 static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
     // ソート済みのCANIDとAubist定義のマッピング
     static const ST_XSPI_IVI_CANID_PAIR canid_aubist_map[] = {
-        #warning "VM_Layout"
-        /*
         {0x00000121,    MSG_AVN1S38_TXCH0},
         {0x0000014C,    MSG_AVN1S71_TXCH0},
         {0x00000185,    MSG_AVN1SD4_TXCH0},
-        {0x000001A1,    MSG_AVN1SD6_TXCH2},
-        {0x000001A2,    MSG_AVN1SD7_TXCH2},
-        {0x000001A5,    MSG_AVN1SF4_TXCH2},
-        {0x000001A7,    MSG_AVN1SF5_TXCH2},
-        {0x000001A8,    MSG_AVN1SE9_TXCH2},
-        {0x000001A9,    MSG_AVN1SF1_TXCH2},
-        {0x000001AB,    MSG_AVN1SF2_TXCH2},
-        {0x000001AC,    MSG_AVN1SF3_TXCH2},
-        {0x000001AD,    MSG_AVN1SE3_TXCH2},
-        {0x000001AE,    MSG_AVN1SE8_TXCH2},
-        {0x000001AF,    MSG_AVN1SE4_TXCH2},
-        {0x000001B0,    MSG_AVN1SE5_TXCH2},
-        {0x000001B3,    MSG_AVN1SE6_TXCH2},
-        {0x000001B4,    MSG_AVN1SE7_TXCH2},
-        {0x000001B5,    MSG_AVN1SE2_TXCH2},
-        {0x000001B7,    MSG_AVN1SE1_TXCH2},
-        {0x000001B8,    MSG_AVN1SD8_TXCH2},
-        {0x000001B9,    MSG_AVN1SD9_TXCH2},
+        {0x000001A1,    MSG_AVN1SD6_TXCH0},
+        {0x000001A2,    MSG_AVN1SD7_TXCH0},
+        {0x000001A5,    MSG_AVN1SF4_TXCH0},
+        {0x000001A7,    MSG_AVN1SF5_TXCH0},
+        {0x000001A8,    MSG_AVN1SE9_TXCH0},
+        {0x000001A9,    MSG_AVN1SF1_TXCH0},
+        {0x000001AB,    MSG_AVN1SF2_TXCH0},
+        {0x000001AC,    MSG_AVN1SF3_TXCH0},
+        {0x000001AD,    MSG_AVN1SE3_TXCH0},
+        {0x000001AE,    MSG_AVN1SE8_TXCH0},
+        {0x000001AF,    MSG_AVN1SE4_TXCH0},
+        {0x000001B0,    MSG_AVN1SE5_TXCH0},
+        {0x000001B3,    MSG_AVN1SE6_TXCH0},
+        {0x000001B4,    MSG_AVN1SE7_TXCH0},
+        {0x000001B5,    MSG_AVN1SE2_TXCH0},
+        {0x000001B7,    MSG_AVN1SE1_TXCH0},
+        {0x000001B8,    MSG_AVN1SD8_TXCH0},
+        {0x000001B9,    MSG_AVN1SD9_TXCH0},
         {0x000001BD,    MSG_AVN1S52_TXCH0},
-        {0x000001FC,    MSG_AVN1S40_TXCH2},
-        {0x000001FD,    MSG_AVN1S41_TXCH2},
-        {0x000001FE,    MSG_AVN1S42_TXCH2},
-        {0x000001FF,    MSG_AVN1S43_TXCH2},
+        {0x000001FC,    MSG_AVN1S40_TXCH0},
+        {0x000001FD,    MSG_AVN1S41_TXCH0},
+        {0x000001FE,    MSG_AVN1S42_TXCH0},
+        {0x000001FF,    MSG_AVN1S43_TXCH0},
         {0x000002AA,    MSG_AVN1S73_TXCH0},
         {0x000002D4,    MSG_AVN1SC1_TXCH0},
         {0x000002D5,    MSG_AVN1SC2_TXCH0},
@@ -323,51 +321,55 @@ static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
         {0x000002F0,    MSG_AVN1SD1_TXCH0},
         {0x000002F2,    MSG_AVN1SD2_TXCH0},
         {0x000002F5,    MSG_AVN1SD3_TXCH0},
-        {0x000002F7,    MSG_AVN1SF7_TXCH2},
+        {0x000002F7,    MSG_AVN1SF7_TXCH0},
         {0x000002F8,    MSG_AVN1SF8_TXCH0},
         {0x000002FA,    MSG_AVN1SF9_TXCH0},
         {0x000002FB,    MSG_AVN1SG1_TXCH0},
         {0x0000030E,    MSG_AVN1S67_TXCH0},
-        {0x0000030F,    MSG_AVN1S68_TXCH2},
+        {0x0000030F,    MSG_AVN1S68_TXCH0},
         {0x00000313,    MSG_AVN1SB2_TXCH0},
         {0x0000031A,    MSG_AVN1S30_TXCH0},
-        {0x0000031D,    MSG_AVN1SA1_TXCH2},
+        {0x0000031D,    MSG_AVN1SA1_TXCH0},
         {0x0000033A,    MSG_AVN1SG3_TXCH0},
         {0x00000345,    MSG_AVN1S94_TXCH0},
         {0x00000346,    MSG_AVN1S95_TXCH0},
-        {0x00000357,    MSG_MET1S70_TXCH2},
+        #warning "VM_Layout"
+        /* {0x00000357,    MSG_MET1S70_TXCH2} */
         {0x0000035A,    MSG_AVN1SA7_TXCH0},
         {0x0000035B,    MSG_AVN1S62_TXCH0},
-        {0x0000037E,    MSG_MET1S28_TXCH0},
+        #warning "VM_Layout"
+        /* {0x0000037E,    MSG_MET1S28_TXCH2}, */
         {0x00000384,    MSG_AVN1S01_TXCH0},
-        {0x00000386,    MSG_AVN1S03_TXCH2},
+        {0x00000386,    MSG_AVN1S03_TXCH0},
         {0x00000387,    MSG_AVN1S05_TXCH0},
         {0x00000388,    MSG_AVN1S06_TXCH0},
-        {0x00000389,    MSG_AVN1S08_TXCH2},
+        {0x00000389,    MSG_AVN1S08_TXCH0},
         {0x0000038E,    MSG_AVN1S04_TXCH0},
         {0x0000038F,    MSG_AVN1S07_TXCH0},
         {0x000003C0,    MSG_AVN1S99_TXCH0},
-        {0x000003C4,    MSG_AVN1S78_TXCH2},
+        {0x000003C4,    MSG_AVN1S78_TXCH0},
         {0x000003C9,    MSG_AVN1S63_TXCH0},
         {0x000003D9,    MSG_AVN1S97_TXCH0},
         {0x000003E4,    MSG_AVN1S98_TXCH0},
         {0x000003E6,    MSG_AVN1S11_TXCH0},
-        {0x000003EA,    MSG_MET1S27_TXCH0},
-        {0x000003F1,    MSG_AVN1SA8_TXCH2},
-        {0x0000040E,    MSG_AVN1SB1_TXCH2},
-        {0x00000427,    MSG_DMS1S02_TXCH0},
+        #warning "VM_Layout"
+        /* {0x000003EA,    MSG_MET1S27_TXCH2}, */
+        {0x000003F1,    MSG_AVN1SA8_TXCH0},
+        {0x0000040E,    MSG_AVN1SB1_TXCH0},
+        #warning "VM_Layout"
+        /* {0x00000427,    MSG_DMS1S02_TXCH2}, */
         {0x00000434,    MSG_AVN1S20_TXCH0},
         {0x0000043E,    MSG_AVN1SG5_TXCH0},
         {0x00000490,    MSG_AVN1S64_TXCH0},
-        {0x0000051A,    MSG_AVN1SB4_TXCH2},
-        {0x0000051B,    MSG_AVN1SB5_TXCH2},
+        {0x0000051A,    MSG_AVN1SB4_TXCH0},
+        {0x0000051B,    MSG_AVN1SB5_TXCH0},
         {0x0000051D,    MSG_AVN1S44_TXCH0},
         {0x0000051F,    MSG_AVN1S65_TXCH0},
         {0x00000521,    MSG_AVN1S69_TXCH0},
-        {0x00000529,    MSG_MET1S43_TXCH2},
+        #warning "VM_Layout"
+        /* {0x00000529,    MSG_MET1S43_TXCH2}, */
         {0x0000052A,    MSG_AVN1S66_TXCH0},
         {0x0000058A,    MSG_AVN1S39_TXCH0}
-        */
     };
 
     U4  u4_t_ret;
@@ -576,8 +578,7 @@ static U2              u2_s_XspiIviSub4SendCanMsg(U1 * u1_ap_buf, const U2 u2_a_
 void            vd_g_XspiIviCANGWPushPDU(const U2 u2_a_MSG)
 {
     static const U2 u2_s_XSPI_IVI_CANGW_MIN      = (U2)MSG_ABG1S01_RXCH0;
-    #warning "VM_Layout"
-    static const U2 u2_s_XSPI_IVI_CANGW_MAX      /* = (U2)MSG_TRA1S02_RXCH2 */;
+    static const U2 u2_s_XSPI_IVI_CANGW_MAX      = (U2)MSG_TRA1S02_RXCH0;
 
     static const ST_XSPI_IVI_MSG2POSLEN st_sp_LCOM_SPI_MSG2POSLEN[] = {
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x3B100000},       /*      1:MSG_ABG1S01_RXCH0    (133U) */
