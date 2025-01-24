@@ -1,7 +1,7 @@
-/* vcan_cfg_h_v2-0-0                                                        */
+/* vcan_cfg_h_v3-0-0                                                        */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -19,7 +19,7 @@
 /******************************************/
 /*   Connection IPC                       */
 /******************************************/
-#define BSW_VCAN_CFG_IPC_VCONTROLLER0           (BSW_VCAN_NOUSE)
+#define BSW_VCAN_CFG_IPC_VCONTROLLER0           (BSW_VCAN_VCC)
 #define BSW_VCAN_CFG_IPC_VCONTROLLER1           (BSW_VCAN_NOUSE)
 #define BSW_VCAN_CFG_IPC_VCONTROLLER2           (BSW_VCAN_NOUSE)
 #define BSW_VCAN_CFG_IPC_VCONTROLLER3           (BSW_VCAN_NOUSE)
@@ -39,7 +39,7 @@
 /******************************************/
 /*   Tx Limit                             */
 /******************************************/
-#define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR0          (0U)
+#define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR0          (250U)
 #define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR1          (0U)
 #define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR2          (0U)
 #define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR3          (0U)
@@ -59,7 +59,7 @@
 /******************************************/
 /*   Continuous Tx Mode for User Tx       */
 /******************************************/
-#define BSW_VCAN_CFG_USER_CONTINUE_TX0          (BSW_NOUSE)
+#define BSW_VCAN_CFG_USER_CONTINUE_TX0          (BSW_USE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX1          (BSW_NOUSE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX2          (BSW_NOUSE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX3          (BSW_NOUSE)
@@ -99,7 +99,7 @@
 /***********************************************/
 /*  Transmit QUE ID for VCC / Node ID for Ipc  */
 /***********************************************/
-#define BSW_VCAN_CFG_TX_VCONTROLLER0            (BSW_VCAN_INVALID_NODE_ID)
+#define BSW_VCAN_CFG_TX_VCONTROLLER0            (0x00000004)
 #define BSW_VCAN_CFG_TX_VCONTROLLER1            (BSW_VCAN_INVALID_NODE_ID)
 #define BSW_VCAN_CFG_TX_VCONTROLLER2            (BSW_VCAN_INVALID_NODE_ID)
 #define BSW_VCAN_CFG_TX_VCONTROLLER3            (BSW_VCAN_INVALID_NODE_ID)
@@ -119,7 +119,7 @@
 /******************************************************/
 /*  Receive QUE Number for VCC / Node Number for Ipc  */
 /******************************************************/
-#define BSW_VCAN_CFG_RXNUM_VCONTROL0            (0U)
+#define BSW_VCAN_CFG_RXNUM_VCONTROL0            (3U)
 #define BSW_VCAN_CFG_RXNUM_VCONTROL1            (0U)
 #define BSW_VCAN_CFG_RXNUM_VCONTROL2            (0U)
 #define BSW_VCAN_CFG_RXNUM_VCONTROL3            (0U)
@@ -181,7 +181,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Virtual MBOX Number for UserTx */
-#define BSW_VCAN_CFG_USERTX_VMBOXNUM_0         (0U)
+#define BSW_VCAN_CFG_USERTX_VMBOXNUM_0         (4U)
 #define BSW_VCAN_CFG_USERTX_VMBOXNUM_1         (0U)
 #define BSW_VCAN_CFG_USERTX_VMBOXNUM_2         (0U)
 #define BSW_VCAN_CFG_USERTX_VMBOXNUM_3         (0U)
@@ -199,7 +199,7 @@
 #define BSW_VCAN_CFG_USERTX_VMBOXNUM_15        (0U)
 
 /* First Virtual MBOX Number fot UserTx */
-#define BSW_VCAN_CFG_VMBOX_UTXOFFSET_0         (0U)
+#define BSW_VCAN_CFG_VMBOX_UTXOFFSET_0         (2U)
 #define BSW_VCAN_CFG_VMBOX_UTXOFFSET_1         (0U)
 #define BSW_VCAN_CFG_VMBOX_UTXOFFSET_2         (0U)
 #define BSW_VCAN_CFG_VMBOX_UTXOFFSET_3         (0U)
@@ -221,7 +221,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Rx VHOH(VHRH) Number */
-#define BSW_VCAN_CFG_VHRHNUM_0                  (0U)
+#define BSW_VCAN_CFG_VHRHNUM_0                  (2U)
 #define BSW_VCAN_CFG_VHRHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_3                  (0U)
@@ -282,11 +282,12 @@
 /* History                                                                  */
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2021/11/25                                             */
+/*  v3-0-0          :2024/08/30                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

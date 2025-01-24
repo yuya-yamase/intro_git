@@ -27,8 +27,7 @@
 #include    "x_spi_ivi_queue_private.h"
 
 /* Platform */
-#warning "VM_Layout"
-/* #include    "oxcan.h" */
+#include    "oxcan.h"
 #include    "memcpy_u1.h"
 #include    "memcpy_u2.h"
 #include    "memcpy_u4.h"

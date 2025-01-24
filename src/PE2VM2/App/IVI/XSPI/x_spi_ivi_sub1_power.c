@@ -170,8 +170,6 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
     vd_g_MemcpyU1(&u1_s_xspi_ivi_power_state_pre[0],&u1_s_xspi_ivi_power_state[0],(U1)4U);
 
     /*電源ステートをCANから受信（シス検暫定）*/
-    #warning "VM_Layout"
-    /*
     (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &u1_t_VPSINFO1 );
     (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &u1_t_VPSINFO2 );
     (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &u1_t_VPSINFO3 );
@@ -182,10 +180,7 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
     (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, &u1_t_VPSINFOS );
     (void)Com_ReceiveSignal(ComConf_ComSignal_VPSISOTA, &u1_t_VPSISOTA );
     (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ  , &u1_t_APOFRQ    );
-    */
     
-    #warning "VM_Layout"
-    /*
     if(u1_t_VPSINFO1 == (U1)TRUE) {
         u1_s_xspi_ivi_power_state[0] = (U1)XSPI_IVI_POWER_STATE_OFF;
     } else if(u1_t_VPSINFO4 == (U1)TRUE){
@@ -205,12 +200,10 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
     } else {
         
     }
-    */
 
-    #warning "VM_Layout"
-    /* u1_s_xspi_ivi_power_state[1] = u1_t_VPSINFOS; */ /*特殊ステートのCAN信号値*/
-    /* u1_s_xspi_ivi_power_state[2] = u1_t_VPSISOTA; */ /*OTAステートのCAN信号値*/
-    /* u1_s_xspi_ivi_power_state[3] = u1_t_APOFRQ; */ /*見た目ON/OFFのCAN信号値*/
+    u1_s_xspi_ivi_power_state[1] = u1_t_VPSINFOS; /*特殊ステートのCAN信号値*/
+    u1_s_xspi_ivi_power_state[2] = u1_t_VPSISOTA; /*OTAステートのCAN信号値*/
+    u1_s_xspi_ivi_power_state[3] = u1_t_APOFRQ; /*見た目ON/OFFのCAN信号値*/
     
     /* シス検暫定対応*/
     /* BOOT入力値取得処理 */

@@ -60,8 +60,6 @@
 #include "esm_m_tpm.h"
 #endif
 
-#include "gpi2c_ma.h"
-
 #include "rim_ctl.h"
 #include "bsw_m.h"
 /* #include "nvmc_mgr.h" */
@@ -233,7 +231,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Platform Pre Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_GpI2cMaMainTask, (uint32)SCHDLR_TASKBIT__10MS_A_CAL},
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

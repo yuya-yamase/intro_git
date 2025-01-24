@@ -24,7 +24,6 @@
 #include "gpt_drv_d16.h"
 #include "gpt_drv_frt.h"
 #include "Spi.h"
-#include "i2c_drv.h"
 #include "spi_uart.h"
 #include "Dma.h"
 #include "Adc.h"
@@ -38,9 +37,6 @@
 
 /* Communication         */
 #include "oxcan.h"
-
-/* Complex Device Driver */
-#include "gpi2c_ma.h"
 
 /* Diagnosis             */
 #include "oxdocan.h"
@@ -218,14 +214,12 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
     vd_g_Gpt_J32Init();
     vd_g_Gpt_D16Init();
 /*    Spi_Init1(); */           /* call in Host side */
-    vd_g_I2cInit();
     vd_g_SpiUartInit();
 /*    Dma_Init(); */           /* call in Host side */
 
     Adc_Init(NULL_PTR);
     vd_g_IoHwAdcInit();
     vd_g_IoHwDifltInit();
-    vd_g_GpI2cMaInit();
     
     vd_g_SchdlrInit();
     vd_g_BswMInit();
@@ -440,11 +434,8 @@ void SS_Pm_shutdownCallout(void)
     /* vd_g_Nvmc_DeInit(); */
     vd_g_Rim_DeInit();
 
-    vd_g_GpI2cMaDeInit();
-    
     Dma_DeInit();
     Spi_DeInit();
-    vd_g_I2cDeInit();
     vd_g_Gpt_D16DeInit();
     vd_g_Gpt_J32DeInit();
     vd_g_Gpt_OstDeInit();

@@ -1,7 +1,7 @@
-/* cannm_ch_cfg_h_v2-0-0                                                    */
+/* cannm_ch_cfg_h_v3-0-0                                                    */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -18,7 +18,7 @@
 #define BSW_CANNM_CFG_NM_TYPE_CH0       (BSW_CANNM_NMTYPE_Y)
 #define BSW_CANNM_CFG_NM_TYPE_CH1       (BSW_CANNM_NMTYPE_Z)
 #define BSW_CANNM_CFG_NM_TYPE_CH2       (BSW_CANNM_NMTYPE_Z)
-#define BSW_CANNM_CFG_NM_TYPE_CH3       (BSW_CANNM_NMTYPE_NONE)
+#define BSW_CANNM_CFG_NM_TYPE_CH3       (BSW_CANNM_NMTYPE_Z)
 #define BSW_CANNM_CFG_NM_TYPE_CH4       (BSW_CANNM_NMTYPE_NONE)
 #define BSW_CANNM_CFG_NM_TYPE_CH5       (BSW_CANNM_NMTYPE_NONE)
 #define BSW_CANNM_CFG_NM_TYPE_CH6       (BSW_CANNM_NMTYPE_NONE)
@@ -103,11 +103,12 @@
 /*  v1-0-0          :2017/02/22                                             */
 /*  v1-1-0          :2018/12/13                                             */
 /*  v2-0-0          :2021/08/06                                             */
+/*  v3-0-0          :2024/08/30                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

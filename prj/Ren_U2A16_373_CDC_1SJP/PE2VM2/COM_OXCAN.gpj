@@ -1,0 +1,49 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${OXCAN_DIR}
+
+    -I${LIB_DIR}
+
+    -I${CAN_DIR}/CS/inc
+    -I${CAN_DIR}/Com/inc
+    -I${CAN_DIR}/CanNm/inc/common
+    -I${CAN_DIR}/BswM_CS/inc
+    -I${CAN_DIR}/Can/cfg/rscf4
+    -I${CAN_DIR}/Can/cfg/common
+    -I${CAN_DIR}/VCan/inc
+
+    -I${MCAL_DIR}/Intc
+    -I${MCAL_DIR}/Wfd
+    -I${MCAL_DIR}/PORT
+
+    -I${VEHOPE_DIR}/scc
+    -I${VEHOPE_DIR}/config_U2A16_met
+
+    -I${OXCAN_DIR}/config_U2A16_met
+    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/scc
+
+    -I${APP_DIR}/IVI/XSPI
+    -I${APP_DIR}/IVI/PictCtrl
+
+    -T ${MCAL_DIR}/section.ld
+
+config_U2A16_met/oxcan_cfg.c
+config_U2A16_met/oxcan_nmwk_cfg.c
+config_U2A16_met/oxcan_opemd_cfg.c
+config_U2A16_met/oxcan_rx_cfg.c
+config_U2A16_met/oxcan_usrhk.c
+config_U2A16_met/l3r_test.c
+
+libc/oxcan.c
+libc/oxcan_nmwk.c
+libc/oxcan_opemd.c
+libc/oxcan_rx.c
+
+scc/oxcan_aubif.c
+scc/oxcan_aubif_can.c
+scc/oxcan_aubif_canif.c
+scc/oxcan_aubif_cannm.c
+scc/oxcan_aubif_cansm.c
+scc/oxcan_aubif_com.c
+scc/oxcan_aubif_vcan.c
