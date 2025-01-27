@@ -2,6 +2,7 @@
 [Subproject]
     :sourceDir=${APP_DIR}
     :sourceDir=${APP_DIR}/Common/xspi
+    :sourceDir=${APP_DIR}/Product/config
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/src
     :sourceDir=${APP_DIR}/Central/LIB
     :sourceDir=${APP_DIR}/Central/IoHwAb/src
@@ -44,4 +45,5 @@ EthSwt_SWIC_SpiS1.c
 LIB_interrupt.c
 LIB_memset.c
 Pmic_Pwr.c
+product_cfg.c
 Central_Stub.c

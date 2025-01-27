@@ -146,15 +146,6 @@ SECTIONS {
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
-// #warning "VM_Layout"
-// Production Code (Address Fix)
-//    _product_code_start_address = 0x003FFF00;
-//    .app_product_const (_product_code_start_address) : {
-//        *(.app_product_const)
-//        .=ALIGN(4);
-//    } > .
-
-
 // -- RAM -------------------
 // TopAddress
     .ram_local_top                                          : > ram_memory_core
