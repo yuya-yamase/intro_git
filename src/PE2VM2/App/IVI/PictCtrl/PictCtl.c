@@ -2453,10 +2453,12 @@ static void vd_s_PictCtl_CamSyncJdg(void)
         switch (u1_s_pict_camsynccyc_step)
         {
             case PICT_SEQ_CAMSYNCCHK_STEP0:
+				if(u1_s_pict_syncstarteflg == (U1)TRUE){   /* 暫定 同期検知開始フラグONなら */
                     u1_t_sts = u1_g_Pict_MlRegGet(&u1_s_pict_camsyncinfo);
                     if(u1_t_sts == (U1)TRUE){
                         u1_s_pict_camsynccyc_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP1;
                     }
+				}
                     break;
 
                 case PICT_SEQ_CAMSYNCCHK_STEP1:
