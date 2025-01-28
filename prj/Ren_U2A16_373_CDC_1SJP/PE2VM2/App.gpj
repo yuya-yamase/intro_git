@@ -79,3 +79,5 @@ pictic.c
 gyro.c
 poweric.c
 CXD4984ERCtl.c
+ML86294Ctl.c
+CXD4937Ctl.c
