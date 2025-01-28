@@ -1,46 +1,26 @@
-/* 1.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  General Purpose I2C Communication / Master                                                                                       */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  WARNING :                                                                                                                        */
-/*  gpi2c_channel.h is included in gpi2c.h.                                                                                          */
-/*  DO NOT include this file in any file even though this configuration header is public.                                            */
-/*                                                                                                                                   */
-/*===================================================================================================================================*/
-
-#ifndef GP_I2C_MA_CHANNEL_H
-#define GP_I2C_MA_CHANNEL_H
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Version                                                                                                                          */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_CHANNEL_H_MAJOR                (1)
-#define GP_I2C_MA_CHANNEL_H_MINOR                (1)
-#define GP_I2C_MA_CHANNEL_H_PATCH                (0)
-
+#ifndef MCU_SYS_PWR_EIZOIC_H
+#define MCU_SYS_PWR_EIZOIC_H
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "gpi2c_ma.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_NUM_CH                         (2U)
-#define GP_I2C_MA_CH_0                           (0U)   /* [Destination slaves]: MCU PMIC, Video-IC, GVIF-Rx, GVIF-Tx   */
-#define GP_I2C_MA_CH_1                           (1U)   /* [Destination slaves]: P-IC    , RTC-IC  , Gryo   ,           */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_NUM_SLA                        (8U)
-#define GP_I2C_MA_SLA_0_PMIC                     (0U)   /* MCU PMIC : W 0xA2, R 0xA3 */
-#define GP_I2C_MA_SLA_1_VIDEO_IC                 (1U)   /* Video-IC : W 0x72, R 0x73 */
-#define GP_I2C_MA_SLA_2_GVIF_RX                  (2U)   /* GVIF-Rx  : W 0x46, R 0x47 */
-#define GP_I2C_MA_SLA_3_GVIF_TX                  (3U)   /* GVIF-Tx  : W 0x48, R 0x49 */
-#define GP_I2C_MA_SLA_4_POWER                    (4U)   /* P-IC     : W 0xDE, R 0xDF */
-#define GP_I2C_MA_SLA_5_RTC                      (5U)   /* RTC-IC   : W 0x64, R 0x65 */
-#define GP_I2C_MA_SLA_6_GYRO                     (6U)   /* Gryo     : W 0xD2, R 0xD3 */
-#define GP_I2C_MA_SLA_7_G_MONI                   (7U)   /* Gmoni    : W 0x32, R 0x33 */
+#define MCU_SYS_PWR_EIZOIC_SLAVEADR_WR                      (0x72U)
+#define MCU_SYS_PWR_EIZOIC_SLAVEADR_RD                      (0x73U)
+#define MCU_SYS_PWR_EIZOIC_RWC_BYTE1                        (1U)
+#define MCU_SYS_PWR_EIZOIC_RWC_BYTE2                        (2U)
+#define MCU_SYS_PWR_EIZOIC_RWC_BYTE3                        (3U)
+#define MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_NUM                (471U)
+#define MCU_SYS_PWR_EIZOIC_MlSETREG_SIP_NUM                 (4U)
+#define MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_NUM         (143U)
+#define MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_NUM        (143U)
+#define MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON_NUM       (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -57,11 +37,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_SIP[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_CENTERDISP_ON[];
 
-#endif      /* GP_I2C_CHANNEL_H */
-
+#endif      /* MCU_SYS_PWR_EIZOIC_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  gpi2c_cfg.c                                                                                                   */
+/*  Change History  :  Mcu_Sys_Pwr_EizoIc.c                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

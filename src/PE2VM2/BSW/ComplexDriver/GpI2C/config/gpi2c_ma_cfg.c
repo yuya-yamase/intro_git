@@ -22,6 +22,8 @@
 #include "DMA.h"
 #endif /* #if ((GP_I2C_MA_RWC_DMA_WRI >= 2U) || (GP_I2C_MA_RWC_DMA_REA >= 4U)) */
 
+#include "Mcu_I2c_Ctrl.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -54,13 +56,40 @@ static ST_GP_I2C_MA_REQ    st_sp_gpi2c_ma_req_ch1[GP_I2C_MA_NUM_QUE_CH1]  __attr
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_s_GpI2cMaCfgTRxAckCh0(const ST_GP_I2C_MA_REQ * st_ap_ACK);
-static void    vd_s_GpI2cMaCfgTRxAckCh1(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh0_Pmic(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh0_VIc(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh0_GvifRx(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh0_GvifTx(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh1_PIc(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh1_Rtc(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh1_Gyro(const ST_GP_I2C_MA_REQ * st_ap_ACK);
+static void    vd_s_GpI2cMaCfgTRxAckCh1_Gmoni(const ST_GP_I2C_MA_REQ * st_ap_ACK);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
+#warning "VM_Layout" /* develop_IVI_Can_connect（12/13版BSWベース）と1/23版BSWで異なる変更がされている。#ifで両方の変更を残したうえで、1/23 Hotfix1版BSWの変更を有効にする。*/
+#if 0 /* develop_IVI_Can_connectの変更 */
+    {   /* GP_I2C_MA_CH_0 */
+        (U4)0U,                                     /* u4_scl_act */
+        (U4)0U,                                     /* u4_sda_act */
+        (U4)0U,                                     /* u4_scl_ina */
+        (U4)0U,                                     /* u4_sda_ina */
+
+        (U2)0,                                      /* u2_scl_pin */
+        (U2)0                                       /* u2_sda_pin */
+    },
+    {   /* GP_I2C_MA_CH_1 */
+        (U4)0U,                                     /* u4_scl_act */
+        (U4)0U,                                     /* u4_sda_act */
+        (U4)0U,                                     /* u4_scl_ina */
+        (U4)0U,                                     /* u4_sda_ina */
+
+        (U2)0,                                      /* u2_scl_pin */
+        (U2)0                                       /* u2_sda_pin */
+    }
+#else /* 1/23 Hotfix1版BSWの変更 */
     {
         (U4)PORT_MODE_CFG_P10_1_25,                 /* u4_scl_act */
         (U4)PORT_MODE_CFG_P10_0_24,                 /* u4_sda_act */
@@ -79,6 +108,7 @@ static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
         (U2)PORT_ID_PORT22_PIN4,                    /* u2_scl_pin */
         (U2)PORT_ID_PORT22_PIN3,                    /* u2_sda_pin */
     }
+#endif
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -129,14 +159,50 @@ const U1                         u1_g_GP_I2C_MA_DMA_NUM_CH = (U1)0U;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_GP_I2C_MA_SLA           st_gp_GP_I2C_MA_SLA[GP_I2C_MA_NUM_SLA]  = {
-    {
-        &vd_s_GpI2cMaCfgTRxAckCh0,                 /* fp_vd_ACK  */
+    {   /* MCU PMIC : W 0xA2, R 0xA3 */
+        &vd_s_GpI2cMaCfgTRxAckCh0_Pmic,            /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
         (U2)32U                                    /* u2_rwc_max */
     },
-    {
-        &vd_s_GpI2cMaCfgTRxAckCh1,                 /* fp_vd_ACK  */
+    {   /* Video-IC : W 0x72, R 0x73 */
+        &vd_s_GpI2cMaCfgTRxAckCh0_VIc,             /* fp_vd_ACK  */
+        &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
+        &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
+        (U2)32U                                    /* u2_rwc_max */
+    },
+    {   /* GVIF-Rx  : W 0x46, R 0x47 */
+        &vd_s_GpI2cMaCfgTRxAckCh0_GvifRx,          /* fp_vd_ACK  */
+        &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
+        &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
+        (U2)32U                                    /* u2_rwc_max */
+    },
+    {   /* GVIF-Tx  : W 0x48, R 0x49 */
+        &vd_s_GpI2cMaCfgTRxAckCh0_GvifTx,          /* fp_vd_ACK  */
+        &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
+        &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
+        (U2)32U                                    /* u2_rwc_max */
+    },
+    {   /* P-IC     : W 0xDE, R 0xDF */
+        &vd_s_GpI2cMaCfgTRxAckCh1_PIc,             /* fp_vd_ACK  */
+        &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
+        &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
+        (U2)32U                                    /* u2_rwc_max */
+    },
+    {   /* RTC-IC   : W 0x64, R 0x65 */
+        &vd_s_GpI2cMaCfgTRxAckCh1_Rtc,             /* fp_vd_ACK  */
+        &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
+        &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
+        (U2)32U                                    /* u2_rwc_max */
+    },
+    {   /* Gryo     : W 0xD2, R 0xD3 */
+        &vd_s_GpI2cMaCfgTRxAckCh1_Gyro,            /* fp_vd_ACK  */
+        &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
+        &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
+        (U2)32U                                    /* u2_rwc_max */
+    },
+    {   /* Gmoni    : W 0x32, R 0x33 */
+        &vd_s_GpI2cMaCfgTRxAckCh1_Gmoni,           /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
         (U2)32U                                    /* u2_rwc_max */
@@ -184,32 +250,182 @@ U1      u1_g_GpI2cMaCfgSlaActvtd(const U1 u1_a_CH)
     return((U1)TRUE);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_GpI2cMaCfgTRxAckCh0(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                      */
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh0_Pmic(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_GpI2cMaCfgTRxAckCh0(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+static void    vd_s_GpI2cMaCfgTRxAckCh0_Pmic(const ST_GP_I2C_MA_REQ * st_ap_ACK)
 {
     /* ----------------------------------------------------------------------------------- */
     /* Attention :                                                                         */
     /* ----------------------------------------------------------------------------------- */
-    /* vd_s_GpI2cMaCfgTRxAckCh0 is being invaked at vd_g_GpI2cMaMainTask().                */
+    /* vd_s_GpI2cMaCfgTRxAckCh0_Pmic is being invaked at vd_g_GpI2cMaMainTask().           */
     /* ----------------------------------------------------------------------------------- */
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_GpI2cMaCfgTRxAckCh1(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                      */
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh0_VIc(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_GpI2cMaCfgTRxAckCh1(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+static void    vd_s_GpI2cMaCfgTRxAckCh0_VIc(const ST_GP_I2C_MA_REQ * st_ap_ACK)
 {
     /* ----------------------------------------------------------------------------------- */
     /* Attention :                                                                         */
     /* ----------------------------------------------------------------------------------- */
-    /* vd_s_GpI2cMaCfgTRxAckCh1 is being invaked at vd_g_GpI2cMaMainTask().                */
+    /* vd_s_GpI2cMaCfgTRxAckCh0_VIc is being invaked at vd_g_GpI2cMaMainTask().            */
     /* ----------------------------------------------------------------------------------- */
+    U1  u1_t_err;
+    U1  u1_t_ret;
+
+    u1_t_err    = (U1)(((st_ap_ACK->u4_cbf) & GP_I2C_MA_CBF_BIT_ERR) >> GP_I2C_MA_CBF_LSB_ERR);
+    u1_t_ret    = (U1)MCU_REGWRI_ACK_ERR;
+
+    if(u1_t_err == (U1)0U) {
+        u1_t_ret    = (U1)MCU_REGWRI_ACK_RCV;
+    }
+
+    Mcu_Dev_I2c_Ctrl_Ack_VideoIc(u1_t_ret);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh0_GvifRx(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_GpI2cMaCfgTRxAckCh0_GvifRx(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+{
+    /* ----------------------------------------------------------------------------------- */
+    /* Attention :                                                                         */
+    /* ----------------------------------------------------------------------------------- */
+    /* vd_s_GpI2cMaCfgTRxAckCh0_GvifRx is being invaked at vd_g_GpI2cMaMainTask().         */
+    /* ----------------------------------------------------------------------------------- */
+    U1  u1_t_err;
+    U1  u1_t_ret;
+
+    u1_t_err    = (U1)(((st_ap_ACK->u4_cbf) & GP_I2C_MA_CBF_BIT_ERR) >> GP_I2C_MA_CBF_LSB_ERR);
+    u1_t_ret    = (U1)MCU_REGWRI_ACK_ERR;
+
+    if(u1_t_err == (U1)0U) {
+        u1_t_ret    = (U1)MCU_REGWRI_ACK_RCV;
+    }
+
+    Mcu_Dev_I2c_Ctrl_Ack_GvifRx(u1_t_ret);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh0_GvifTx(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_GpI2cMaCfgTRxAckCh0_GvifTx(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+{
+    /* ----------------------------------------------------------------------------------- */
+    /* Attention :                                                                         */
+    /* ----------------------------------------------------------------------------------- */
+    /* vd_s_GpI2cMaCfgTRxAckCh0_GvifTx is being invaked at vd_g_GpI2cMaMainTask().         */
+    /* ----------------------------------------------------------------------------------- */
+    U1  u1_t_err;
+    U1  u1_t_ret;
+
+    u1_t_err    = (U1)(((st_ap_ACK->u4_cbf) & GP_I2C_MA_CBF_BIT_ERR) >> GP_I2C_MA_CBF_LSB_ERR);
+    u1_t_ret    = (U1)MCU_REGWRI_ACK_ERR;
+
+    if(u1_t_err == (U1)0U) {
+        u1_t_ret    = (U1)MCU_REGWRI_ACK_RCV;
+    }
+
+    Mcu_Dev_I2c_Ctrl_Ack_GvifTx(u1_t_ret);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh1_PIc(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_GpI2cMaCfgTRxAckCh1_PIc(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+{
+    /* ----------------------------------------------------------------------------------- */
+    /* Attention :                                                                         */
+    /* ----------------------------------------------------------------------------------- */
+    /* vd_s_GpI2cMaCfgTRxAckCh1_PIc is being invaked at vd_g_GpI2cMaMainTask().            */
+    /* ----------------------------------------------------------------------------------- */
+    U1  u1_t_err;
+    U1  u1_t_ret;
+
+    u1_t_err    = (U1)(((st_ap_ACK->u4_cbf) & GP_I2C_MA_CBF_BIT_ERR) >> GP_I2C_MA_CBF_LSB_ERR);
+    u1_t_ret    = (U1)MCU_REGWRI_ACK_ERR;
+
+    if(u1_t_err == (U1)0U) {
+        u1_t_ret    = (U1)MCU_REGWRI_ACK_RCV;
+    }
+
+    Mcu_Dev_I2c_Ctrl_Ack_Power(u1_t_ret);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh1_Rtc(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_GpI2cMaCfgTRxAckCh1_Rtc(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+{
+    /* ----------------------------------------------------------------------------------- */
+    /* Attention :                                                                         */
+    /* ----------------------------------------------------------------------------------- */
+    /* vd_s_GpI2cMaCfgTRxAckCh1_Rtc is being invaked at vd_g_GpI2cMaMainTask().            */
+    /* ----------------------------------------------------------------------------------- */
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh1_PIc(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_GpI2cMaCfgTRxAckCh1_Gyro(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+{
+    /* ----------------------------------------------------------------------------------- */
+    /* Attention :                                                                         */
+    /* ----------------------------------------------------------------------------------- */
+    /* vd_s_GpI2cMaCfgTRxAckCh1_Gyro is being invaked at vd_g_GpI2cMaMainTask().           */
+    /* ----------------------------------------------------------------------------------- */
+    U1  u1_t_err;
+    U1  u1_t_ret;
+
+    u1_t_err    = (U1)(((st_ap_ACK->u4_cbf) & GP_I2C_MA_CBF_BIT_ERR) >> GP_I2C_MA_CBF_LSB_ERR);
+    u1_t_ret    = (U1)MCU_REGWRI_ACK_ERR;
+
+    if(u1_t_err == (U1)0U) {
+        u1_t_ret    = (U1)MCU_REGWRI_ACK_RCV;
+    }
+
+    Mcu_Dev_I2c_Ctrl_Ack_Gyro(u1_t_ret);
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_GpI2cMaCfgTRxAckCh1_Gmoni(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_GpI2cMaCfgTRxAckCh1_Gmoni(const ST_GP_I2C_MA_REQ * st_ap_ACK)
+{
+    /* ----------------------------------------------------------------------------------- */
+    /* Attention :                                                                         */
+    /* ----------------------------------------------------------------------------------- */
+    /* vd_s_GpI2cMaCfgTRxAckCh1_Gyro is being invaked at vd_g_GpI2cMaMainTask().           */
+    /* ----------------------------------------------------------------------------------- */
+    U1  u1_t_err;
+    U1  u1_t_ret;
+
+    u1_t_err    = (U1)(((st_ap_ACK->u4_cbf) & GP_I2C_MA_CBF_BIT_ERR) >> GP_I2C_MA_CBF_LSB_ERR);
+    u1_t_ret    = (U1)MCU_REGWRI_ACK_ERR;
+
+    if(u1_t_err == (U1)0U) {
+        u1_t_ret    = (U1)MCU_REGWRI_ACK_RCV;
+    }
+
+    Mcu_Dev_I2c_Ctrl_Ack_Gmoni(u1_t_ret);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

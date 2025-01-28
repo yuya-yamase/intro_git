@@ -19,6 +19,7 @@
 #include    "x_spi_ivi_sub1_private.h"
 #include    "x_spi_ivi_sub1_control.h"
 #include    "x_spi_ivi_sub1_power.h"
+#include    "x_spi_ivi_sub1_system.h"
 #include    "x_spi_ivi_sub4.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -122,10 +123,12 @@ void            vd_g_XspiIviSub1ControlAna(const U1 * u1_ap_XSPI_ADD, const U2 u
 /*===================================================================================================================================*/
 void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)
 {
-    /*OS起動通知をトリガーに動くIF呼び出し*/
+    /*OS起動通知をトリガーに動くIFを登録*/
     vd_s_XspiIviSub1_ControlOsWakeToQueue(u1_ap_XSPI_ADD[1]);
     vd_g_XspiIviSub1_PowerState1stSend();
     vd_g_XspiIviCANBusSend();
+    vd_g_XspiIviSub1GpsStsSend();
+    vd_g_XspiIviSub1ExtSiGSend();
 }
 
 /*===================================================================================================================================*/
