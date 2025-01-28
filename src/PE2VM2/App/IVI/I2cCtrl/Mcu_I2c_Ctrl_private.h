@@ -1,46 +1,44 @@
-/* 1.1.0 */
+/* 0.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  General Purpose I2C Communication / Master                                                                                       */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  WARNING :                                                                                                                        */
-/*  gpi2c_channel.h is included in gpi2c.h.                                                                                          */
-/*  DO NOT include this file in any file even though this configuration header is public.                                            */
-/*                                                                                                                                   */
+/*  MCU IVI I2C Read/Write                                                                                                           */
 /*===================================================================================================================================*/
 
-#ifndef GP_I2C_MA_CHANNEL_H
-#define GP_I2C_MA_CHANNEL_H
+#ifndef MCU_IVI_I2C_CTRL_PRIVATE_H
+#define MCU_IVI_I2C_CTRL_PRIVATE_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_CHANNEL_H_MAJOR                (1)
-#define GP_I2C_MA_CHANNEL_H_MINOR                (1)
-#define GP_I2C_MA_CHANNEL_H_PATCH                (0)
+#define MCU_IVI_I2C_CTRL_PRIVATE_H_MAJOR        (0)
+#define MCU_IVI_I2C_CTRL_PRIVATE_H_MINOR        (0)
+#define MCU_IVI_I2C_CTRL_PRIVATE_H_PATCH        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "aip_common.h"
+#include "gpi2c_ma.h"
+
+#include "Mcu_I2c_Ctrl.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_NUM_CH                         (2U)
-#define GP_I2C_MA_CH_0                           (0U)   /* [Destination slaves]: MCU PMIC, Video-IC, GVIF-Rx, GVIF-Tx   */
-#define GP_I2C_MA_CH_1                           (1U)   /* [Destination slaves]: P-IC    , RTC-IC  , Gryo   ,           */
+/* レジスタ読出し/書込み */
+#define MCU_REGWRI_RTRN_NONACT                  (0U)    /* レジスタ書込み処理 要求なし */
+#define MCU_REGWRI_RTRN_ACT                     (1U)    /* レジスタ書込み処理 書込み開始要求 */
+#define MCU_REGWRI_RTRN_FIN                     (0xFFU) /* レジスタ書込み処理 全データ書込み完了通知 */
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_NUM_SLA                        (8U)
-#define GP_I2C_MA_SLA_0_PMIC                     (0U)   /* MCU PMIC : W 0xA2, R 0xA3 */
-#define GP_I2C_MA_SLA_1_VIDEO_IC                 (1U)   /* Video-IC : W 0x72, R 0x73 */
-#define GP_I2C_MA_SLA_2_GVIF_RX                  (2U)   /* GVIF-Rx  : W 0x46, R 0x47 */
-#define GP_I2C_MA_SLA_3_GVIF_TX                  (3U)   /* GVIF-Tx  : W 0x48, R 0x49 */
-#define GP_I2C_MA_SLA_4_POWER                    (4U)   /* P-IC     : W 0xDE, R 0xDF */
-#define GP_I2C_MA_SLA_5_RTC                      (5U)   /* RTC-IC   : W 0x64, R 0x65 */
-#define GP_I2C_MA_SLA_6_GYRO                     (6U)   /* Gryo     : W 0xD2, R 0xD3 */
-#define GP_I2C_MA_SLA_7_G_MONI                   (7U)   /* Gmoni    : W 0x32, R 0x33 */
+/* Ack管理 */
+#define MCU_I2C_ACK_NUM                         (6U)    /* Ack監視RAM 総数 */
+#define MCU_I2C_ACK_VIDEO_IC                    (0U)
+#define MCU_I2C_ACK_GVIF_RX                     (1U)
+#define MCU_I2C_ACK_GVIF_TX                     (2U)
+#define MCU_I2C_ACK_POWER                       (3U)
+#define MCU_I2C_ACK_GYRO                        (4U)
+#define MCU_I2C_ACK_G_MONI                      (5U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -48,20 +46,37 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct{
+    U2              u2_strt;        /* レジスタ配列の書込み開始位置 */
+    U2              u2_num;         /* 連続書込み個数 */
+    U2              u2_wait;        /* レジスタアクセス間Wait時間 */
+}ST_REG_WRI_REQ;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* 初期化 */
+static void Mcu_Dev_I2c_Ctrl_Cfg_Init();
+
+/* I2C書込み用IF */
+uint8 Mcu_Dev_I2c_Ctrl_RegSet(uint8 mcu_ack, uint16 * mcu_regstep, const uint16 mcu_wri_max,
+                                const uint8 mcu_i2c_sla, const ST_REG_WRI_REQ * I2C_WR_REGSET, uint32 * mcu_timeout_cnt,
+                                const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt);
+
+/* I2C読出し用IF */
+uint8 Mcu_Dev_I2c_Ctrl_RegRead(uint8 mcu_ack, uint16 * mcu_regstep, const uint8 mcu_i2c_sla,
+                                uint32 * mcu_timeout_cnt, const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* GP_I2C_CHANNEL_H */
-
+#endif /* MCU_IVI_I2C_CTRL_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  gpi2c_cfg.c                                                                                                   */
+/*  Change History  :  Mcu_I2c_Ctrl.c                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

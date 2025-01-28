@@ -1,67 +1,97 @@
-/* 1.1.0 */
+/* 0.0.0 */
 /*===================================================================================================================================*/
-/*  Copyright DENSO Corporation                                                                                                      */
+/*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
-/*  General Purpose I2C Communication / Master                                                                                       */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  WARNING :                                                                                                                        */
-/*  gpi2c_channel.h is included in gpi2c.h.                                                                                          */
-/*  DO NOT include this file in any file even though this configuration header is public.                                            */
-/*                                                                                                                                   */
+/*  Transmission and reception processing of subframe 4 in XSPI communication.                                                       */
+/*  Handled data: CAN Data/Repro/LCAN Data                                                                                           */
 /*===================================================================================================================================*/
 
-#ifndef GP_I2C_MA_CHANNEL_H
-#define GP_I2C_MA_CHANNEL_H
+#ifndef XSPI_IVI_UB2_H
+#define XSPI_IVI_UB2_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_CHANNEL_H_MAJOR                (1)
-#define GP_I2C_MA_CHANNEL_H_MINOR                (1)
-#define GP_I2C_MA_CHANNEL_H_PATCH                (0)
+#define XSPI_IVI_SUB2_H_MAJOR           (0)
+#define XSPI_IVI_SUB2_H_MINOR           (0)
+#define XSPI_IVI_SUB2_H_PATCH           (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include    <Std_Types.h>
+#include    "aip_common.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_NUM_CH                         (2U)
-#define GP_I2C_MA_CH_0                           (0U)   /* [Destination slaves]: MCU PMIC, Video-IC, GVIF-Rx, GVIF-Tx   */
-#define GP_I2C_MA_CH_1                           (1U)   /* [Destination slaves]: P-IC    , RTC-IC  , Gryo   ,           */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_NUM_SLA                        (8U)
-#define GP_I2C_MA_SLA_0_PMIC                     (0U)   /* MCU PMIC : W 0xA2, R 0xA3 */
-#define GP_I2C_MA_SLA_1_VIDEO_IC                 (1U)   /* Video-IC : W 0x72, R 0x73 */
-#define GP_I2C_MA_SLA_2_GVIF_RX                  (2U)   /* GVIF-Rx  : W 0x46, R 0x47 */
-#define GP_I2C_MA_SLA_3_GVIF_TX                  (3U)   /* GVIF-Tx  : W 0x48, R 0x49 */
-#define GP_I2C_MA_SLA_4_POWER                    (4U)   /* P-IC     : W 0xDE, R 0xDF */
-#define GP_I2C_MA_SLA_5_RTC                      (5U)   /* RTC-IC   : W 0x64, R 0x65 */
-#define GP_I2C_MA_SLA_6_GYRO                     (6U)   /* Gryo     : W 0xD2, R 0xD3 */
-#define GP_I2C_MA_SLA_7_G_MONI                   (7U)   /* Gmoni    : W 0x32, R 0x33 */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct{
+    /*分解能*/
+    U2                          u2_gyro_xyz_reso;
+    U2                          u2_gyro_temp_reso;
+    U2                          u2_accel_xyz_reso;
+    U2                          u2_accel_temp_reso;
+    /*中央値*/
+    U1                          u1_gyro_xyz_center;
+    U1                          u1_gyro_temp_center;
+    U1                          u1_accel_xyz_center;
+    U1                          u1_accel_temp_center;
+}ST_XSPI_IVI_GYRO_RESO_DATA;
+
+typedef struct{
+    /*中央値・分解能*/
+    ST_XSPI_IVI_GYRO_RESO_DATA st_gyro_reso;
+    /*Gyro Data*/
+    U2                          u2_gyro_x_data;
+    U2                          u2_gyro_y_data;
+    U2                          u2_gyro_z_data;
+    U1                          u1_gyro_temp_data;
+    U1                          u1_gyro_x_data_sts;
+    U1                          u1_gyro_y_data_sts;
+    U1                          u1_gyro_z_data_sts;
+    U1                          u1_gyro_temp_data_sts;
+
+    /*Accel Data*/
+    U2                          u2_accl_x_data;
+    U2                          u2_accl_y_data;
+    U2                          u2_accl_z_data;
+    U2                          u2_accl_temp_data;
+    U1                          u1_accl_x_data_sts;
+    U1                          u1_accl_y_data_sts;
+    U1                          u1_accl_z_data_sts;
+    U1                          u1_accl_temp_data_sts;
+}ST_XSPI_IVI_GYRO_SENSOR_DATA;
+
+/*パルス数 */
+typedef struct{
+    /*Pulse Width Data*/
+    U4                          u4_pulse_width[32];   /*パルス幅*/
+    U1                          u1_clock_freq;    /*クロック周波数*/
+    U4                          u4_pulse_count;   /*パルスカウント*/   
+}ST_XSPI_IVI_PULSE_WID_DATA;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+void            vd_g_XspiIviSub2GyroDataPut(const ST_XSPI_IVI_GYRO_SENSOR_DATA st_a_GYRO_DATA);
+void            vd_g_XspiIviSub2PulseNumDataPut(const U2 u2_a_PULSE_NUM);
+void            vd_g_XspiIviSub2PulseWidDataPut(const ST_XSPI_IVI_PULSE_WID_DATA st_a_PULSE_WID);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#endif      /* GP_I2C_CHANNEL_H */
-
+#endif /* XSPI_IVI_UB2_PRIVATE_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  gpi2c_cfg.c                                                                                                   */
+/*  Change History  :  x_spi_ivi_sub2.c                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

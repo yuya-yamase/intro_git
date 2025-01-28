@@ -98,6 +98,8 @@ static U1            u1_s_XspiIviSub1SendMISCData(U2 * u2_ap_data_len, U1 * u1_a
 void            vd_g_XspiIviSub1Init(void)
 {
     vd_g_XspiIviSub1PowerInit();
+    vd_g_XspiIviSub1SystemInit();
+    vd_g_XspiIviSub1CameraInit();
 }
 
 /*===================================================================================================================================*/
@@ -232,6 +234,7 @@ static void            vd_s_XspiIviSub1SendCommandPeriCall(void)
     /*各コマンドの定期処理を呼び出し*/
     vd_g_XspiIviSub1PowerMainTask();
     vd_g_XspiIviSub1CameraMainTask();
+    vd_g_XspiIviSub1SystemMainTask();
 
 }
 

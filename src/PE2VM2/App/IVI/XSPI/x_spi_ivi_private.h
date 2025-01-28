@@ -32,6 +32,8 @@
 #include    "memcpy_u2.h"
 #include    "memcpy_u4.h"
 #include    "memfill_u1.h"
+#include    "memfill_u2.h"
+#include    "memfill_u4.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
