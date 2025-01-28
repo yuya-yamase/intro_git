@@ -161,8 +161,6 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
     U1 u1_t_VPSISOTA; /*OTAステート*/
     U1 u1_t_APOFRQ;   /*見た目ON/OFF*/
 
-    U1 u1_t_VPSINFO;
-
     /*Boot起動用*/
     U1 u1_t_boot;
 
