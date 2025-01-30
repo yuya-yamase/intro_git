@@ -102,6 +102,7 @@ SECTIONS {
         .=ALIGN(4);
     } > .
 
+
 // -- RAM -------------------
 // TopAddress
     .ram_local_top                                          : > ram_memory_core

@@ -146,6 +146,7 @@ SECTIONS {
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
+
 // -- RAM -------------------
 // TopAddress
     .ram_local_top                                          : > ram_memory_core
