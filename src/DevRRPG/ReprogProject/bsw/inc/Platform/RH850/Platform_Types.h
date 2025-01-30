@@ -47,6 +47,12 @@ typedef double                          float64;            /* SWS_Platform_0004
 typedef uint8                           U1;
 typedef uint16                          U2;
 typedef uint32                          U4;
+typedef sint8                           S1;
+typedef sint16                          S2;
+typedef sint32                          S4;
+
+typedef	float				            PL;
+typedef	U1          					Std_StatusType;		/* ON/OFF */
 
 /*-----------------------------------------------------------------------------*/
 /*    Symbol definitions                                                       */

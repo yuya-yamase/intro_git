@@ -145,7 +145,7 @@ void L3R_GateM_MainTask(void)
 	for(LogicCh = 0U; LogicCh < CHM_LOG_CAN_CH_NUM; LogicCh++) {
 		
 		/* CSバス状態を取得 */
-		Status = (BswM_CS_GetTRXStatus(CHM_ChCnvtr_Log_To_ComCh[LogicCh]));
+		Status = (BswM_CS_GetTRXStatus(CHM_ChCnvtr_Log_To_AubCh[LogicCh]));
 		
 		/* CSバス状態情報生成 */
 		switch(Status) {

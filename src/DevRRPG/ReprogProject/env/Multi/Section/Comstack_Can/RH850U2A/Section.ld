@@ -86,6 +86,8 @@ SECTIONS
 			.ROM_C_PORT					ROM(.C_PORT)							: > .
 			.ROM_C_DIO					ROM(.C_DIO)								: > .
 			.ROM_C_GPT					ROM(.C_GPT)								: > .
+			.ROM_C_SPI					ROM(.SPI_RODATA_CONST)					: > .
+			.ROM_C_CANIC				ROM(.CANIC_RODATA_CONST)				: > .
 			.ROM_C_RAM_1ST				ROM(.C_RAM_1ST)							: > .
 		.RamCopy1st_1_Cst_SrcEnd		ALIGN(16)								: > .
 
@@ -288,6 +290,8 @@ SECTIONS
 			.ROM_P_PORT					ROM(.P_PORT)							: > .
 			.ROM_P_DIO					ROM(.P_DIO)								: > .
 			.ROM_P_GPT					ROM(.P_GPT)								: > .
+			.ROM_P_SPI					ROM(.SPI_TEXT_CODE)						: > .
+			.ROM_P_CANIC				ROM(.CANIC_TEXT_CODE)					: > .
 			.ROM_P_RAM_1ST				ROM(.P_RAM_1ST)							: > .
 		.RamCopy1st_1_Code_SrcEnd		ALIGN(16)								: > .
 		.RamCopy2nd_1_Code_SrcStart		ALIGN(16)								: > .
@@ -352,6 +356,8 @@ SECTIONS
 			.B_PORT						ALIGN(4)								: > .
 			.B_DIO						ALIGN(4)								: > .
 			.B_GPT						ALIGN(4)								: > .
+			.bss_SHARE_SPI_MODEA_CHANNELDATA	ALIGN(4)						: > .
+			.CANIC_BSS_VAR_NO_INIT		ALIGN(4)								: > .
 			.B_RAM_1ST					ALIGN(4)								: > .
 		.Ram1st_1_B_End					ALIGN(16)								: > .
 		.Ram1st_2_B_Start				ALIGN(16)								: > .
@@ -405,6 +411,8 @@ SECTIONS
 			.C_PORT						ALIGN(4)								: > .
 			.C_DIO						ALIGN(4)								: > .
 			.C_GPT						ALIGN(4)								: > .
+			.SPI_RODATA_CONST			ALIGN(4)								: > .
+			.CANIC_RODATA_CONST			ALIGN(4)								: > .
 			.C_RAM_1ST					ALIGN(4)								: > .
 		.RamCopy1st_1_Cst_DstEnd		ALIGN(16)								: > .
 		.RamCopy1st_2_Cst_DstStart		ALIGN(16)								: > .
@@ -508,6 +516,8 @@ SECTIONS
 			.P_PORT						ALIGN(4)								: > .
 			.P_DIO						ALIGN(4)								: > .
 			.P_GPT						ALIGN(4)								: > .
+			.SPI_TEXT_CODE				ALIGN(4)								: > .
+			.CANIC_TEXT_CODE			ALIGN(4)								: > .
 			.P_RAM_1ST					ALIGN(4)								: > .
 		.RamCopy1st_1_Code_DstEnd		ALIGN(16)								: > .
 		.RamCopy1st_2_Code_DstStart		ALIGN(16)								: > .

@@ -41,7 +41,8 @@
 #define     CDD_CANIC_UCFG_IC0_WAKEPIN_EN_WPRE  (CDD_CANIC_WPRE_DISABLE)
 #define     CDD_CANIC_UCFG_IC0_WAKEPIN_EN_WPFE  (CDD_CANIC_WPFE_ENABLE)
 
-#define     DIOH_ID_O_CANIC_WAKE_0              (DIO_ID_APORT5_CH2)
+#define     DIOH_ID_O_CANIC_WAKE_0              (0)
+/*#define     DIOH_ID_O_CANIC_WAKE_0              (DIO_ID_APORT5_CH2)*/
 /*#define     DIOH_ID_O_CANIC_WAKE_1              (DIO_ID_PORT2_CH15)*//* Reservation Design */
 /*==============================================================================================*/
 /* include files																				*/
