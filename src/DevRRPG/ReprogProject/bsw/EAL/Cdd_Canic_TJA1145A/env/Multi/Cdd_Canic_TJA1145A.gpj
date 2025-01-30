@@ -1,0 +1,9 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/Cdd_Canic_TJA1145A/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/Cdd_Canic_TJA1145A/obj/Cdd_Canic_TJA1145A.rel.o
+
+../../Cdd_Canic.c
+../../Cdd_Canic_Lcfg.c
