@@ -621,7 +621,7 @@ U1	u1_g_HcomGetCstmCnttSts(U1 u1_t_cntt)
 /*===================================================================================================================================*/
 U1 u1_g_HcomNavmask(void)
 {
-    U1 u1_t_rim_sts;      /* RIM�ǂݏo����� */
+    U1 u1_t_rim_sts;      /* RIM読み出し状態 */
     U1 u1_t_navmask_rim;
 
     u1_t_rim_sts = u1_HCOM_RIM_RD_NAV_MASK(&u1_t_navmask_rim);
@@ -1251,7 +1251,7 @@ U1 u1_g_HcomGetCanMsgSts(void)
 /*                                         * Correction of comments                                                                  */
 /*  0.0.17          2017.05.24   YN      * Change of vd_g_HcomInit(), vd_g_HcomBon(), vd_g_HcomWakeup() and vd_g_HcomIgon()          */
 /*  0.0.18          2017.08.03   SM      * Change of the Macroname in hudcom.h (HUDCOM_* -> HCOM_*)                                  */
-/*  0.0.19          2018.07.27   TH      * �i�r���荞�݃}�X�N�L����RIM�ǂݏo���ُ펞�̓���ǉ�                                       */
+/*  0.0.19          2018.07.27   TH      * ナビ割り込みマスク有無のRIM読み出し異常時の動作追加                                       */
 /*                                                                                                                                   */
 /*  * YN = Yousuke Nakashima, DENSO                                                                                                  */
 /*  * SM = Shota Maegawa, Denso Techno                                                                                               */

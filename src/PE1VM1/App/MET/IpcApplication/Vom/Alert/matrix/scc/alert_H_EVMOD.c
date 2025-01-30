@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -203,7 +208,7 @@ static U4      u4_s_AlertH_evmodTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 
     u4_t_src_chk = (U4)u1_t_sgnl << u1_s_ALERT_HEVMODETT_LSB_PTSYS_SIGSTS;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_31,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
@@ -233,7 +238,7 @@ static U4      u4_s_AlertH_evmodPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 
     u4_t_src_chk = (U4)u1_t_sgnl << u1_s_ALERT_HEVMODEPD_LSB_PTSYS_SIGSTS;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_31,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
@@ -263,7 +268,7 @@ static U4      u4_s_AlertH_evmodBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 
     u4_t_src_chk = (U4)u1_t_sgnl << u1_s_ALERT_HEVMODEBC_LSB_PTSYS_SIGSTS;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_31,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 

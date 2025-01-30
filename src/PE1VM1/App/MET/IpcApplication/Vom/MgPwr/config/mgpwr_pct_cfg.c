@@ -19,6 +19,11 @@
 #include "mgpwr_pct_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -74,7 +79,7 @@ U1      u1_g_MgPwrCfgComRxMGPWRMET(S1 * const s1p_a_mgpwrmet)
 #if defined(ComConf_ComSignal_MGPWRMET)
     U1                  u1_t_stsbit;                                            /* Receiving Status                                  */
 
-    u1_t_stsbit = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04,
+    u1_t_stsbit = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0,
                                         (U2)(OXCAN_RX_SYS_NRX_IGR | OXCAN_RX_SYS_TOE_IGR),
                                         (U2)MGPWR_EHV1F04_TO_THRSH) & (U1)(COM_TIMEOUT | COM_NO_RX);
 
@@ -94,10 +99,10 @@ U1      u1_g_MgPwrCfgComRxMGPWRMET(S1 * const s1p_a_mgpwrmet)
 /*===================================================================================================================================*/
 U1      u1_g_MgPwrCfgComRxEvcnt(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_EHV1F04)
+#if defined(OXCAN_PDU_RX_CAN_EHV1F04_RXCH0)
     U1                  u1_t_rxev_cnt;
 
-    u1_t_rxev_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1F04);
+    u1_t_rxev_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0);
 
     return(u1_t_rxev_cnt);
 #else

@@ -18,9 +18,22 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "mcst_cfg_private.h"
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "vardef.h"
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
+#else
+#include "es_inspect_STUB.h"
+#endif
 #include "dimmer.h"
 #include "datesi_tim.h"
 #include "hmimcst.h"
@@ -762,8 +775,12 @@ U1      u1_g_McstCfgEsichk(void)
 #if ((ES_INSPECT_MDBF_NUO_DI != MCST_ESI_NUO_DI) || \
      (ES_INSPECT_MDBF_SI_ACT != MCST_ESI_SI_ACT))
 #error "mcst_cfg.c : MCST_ESI_XXX shall be equal to ES_INSPECT_MDBF_XXX."
-#endif    
+#endif
+#if 0   /* BEV BSW provisionally */
     return(u1_g_ESInspectMdBfield());
+#else
+    return((U1)0U);
+#endif
 #else
     return((U1)0U);
 #endif /* #ifdef ES_INSPECT_H */

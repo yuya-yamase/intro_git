@@ -17,7 +17,9 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
+#if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
+#endif
 
 #include "hmifuel.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -87,7 +89,11 @@ void    vd_g_HmiFuelMainTask(void)
     u1_t_to = u1_g_HmiProxyToc(&u2_s_hmifuel_to, u2_s_HMIFUEL_TO);
 
     if(u1_t_to == (U1)FALSE){
+#if 0   /* BEV BSW provisionally */
         u1_t_rmc_act = u1_g_FuelvolTauEasAct((U1)FUEL_TAU_EAS_ID_AVG_I, (U1)FUEL_TAU_EAS_EDG_CRNT);
+#else
+        u1_t_rmc_act = (U1)FALSE;
+#endif
 
         if(u1_t_rmc_act == (U1)TRUE){
             u1_s_hmifuel_rmc_act = (U1)HMIFUEL_UPDT_REQ;
@@ -96,15 +102,19 @@ void    vd_g_HmiFuelMainTask(void)
             u1_s_hmifuel_rmc_act = (U1)HMIFUEL_UPDT_UD2;
         }
 
+#if 0   /* BEV BSW provisionally */
         if(u1_s_hmifuel_rmc_req == (U1)TRUE){
             (void)u1_g_FuelvolTauRcmAct();
         }
         else {
             vd_g_FuelvolTauRcmDeAct();
         }
+#endif
     }
     else{
+#if 0   /* BEV BSW provisionally */
         vd_g_FuelvolTauRcmDeAct();
+#endif
         u1_s_hmifuel_rmc_act = (U1)HMIFUEL_UPDT_UD2;
     }
 }

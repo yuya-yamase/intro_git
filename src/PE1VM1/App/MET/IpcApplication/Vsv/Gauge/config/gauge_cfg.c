@@ -21,7 +21,9 @@
 #include "vehspd_kmph.h"
 #include "gagdst_nxmph.h"
 /* LOW FUEL WARNING         */
+#if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau_gag.h"
+#endif
 #include "gagdst_lowfuel.h"
 /* TEMP GAUGE - SEGMENT     */
 #include "ptsctmp_cel.h"
@@ -81,7 +83,11 @@ const ST_GAUGE_IF           st_gp_GAUGE_IF_CFG[GAUGE_NUM_CH] = {
     },
     /* Low Fuel Warning     */
     {
+#if 0   /* BEV BSW provisionally */
         &u1_g_FuelvolTauGagLitEst,              /* fp_u1_SRC     */
+#else
+        vdp_PTR_NA,                             /* fp_u1_SRC     */
+#endif
         &vd_g_GagdstLowFuelUpdt                 /* fp_vd_DST     */
     },
     /* Temp Gauge Segment   */

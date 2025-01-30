@@ -20,8 +20,13 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "hmivardef.h"
-#include "lcom_spi_ch0.h"
+#include "xspi_met_ch0.h"
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

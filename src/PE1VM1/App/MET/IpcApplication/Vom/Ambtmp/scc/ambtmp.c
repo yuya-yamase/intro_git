@@ -424,7 +424,11 @@ static void vd_s_AmbtmpIceWrnChk(void)
     U1 u1_t_trvl_dst_flg;               /* Travelling Distance Flag         */
     U4 u4_t_loop;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_trvl_dst_flg = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF);
+#else
+    u1_t_trvl_dst_flg = (U1)FALSE;
+#endif
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)AMBTMP_NUM_DEGREE ; u4_t_loop++){
         if(u1_s_ambtmp_sts != (U1)AMBTMP_STS_VALID){

@@ -20,8 +20,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 #include "evschg.h"
 

@@ -21,6 +21,11 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -378,7 +383,7 @@ static U4      u4_s_AlertB_rseremIgoffSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                      u2_s_ALERT_B_RSEREM_IGOFF_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -412,7 +417,7 @@ static U4      u4_s_AlertB_rseremBatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                      u2_s_ALERT_B_RSEREM_BAT_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -446,7 +451,7 @@ static U4      u4_s_AlertB_rseremOffttSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                      u2_s_ALERT_B_RSEREM_OFFTT_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -482,7 +487,7 @@ static U4      u4_s_AlertB_rseremBat2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                      u2_s_ALERT_B_RSEREM_BAT2_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -516,7 +521,7 @@ static U4      u4_s_AlertB_rseremBat3Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                      u2_s_ALERT_B_RSEREM_BAT3_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -550,7 +555,7 @@ static U4      u4_s_AlertB_rseremIgoff2Srcchk(const U1 u1_a_VOM, const U4 u4_a_I
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                      u2_s_ALERT_B_RSEREM_IGOFF2_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 

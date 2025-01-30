@@ -784,9 +784,12 @@ void vd_g_GwmmCfgPreTask(void)
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)GWMMCFG_MSG_MM_NUM; u4_t_lpcnt++){
         u2_t_msgid = u2_sp_GWMMCFG_CANRXMSG[u4_t_lpcnt];
+#if 0   /* BEV BSW provisionally */
         u1_t_msgsts  = (U1)Com_GetIPDUStatus((PduIdType)u2_t_msgid);
         u1_t_msgsts &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
+#else
+        u1_t_msgsts = ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#endif
         if(u1_t_msgsts == (U1)0U){
             u1_t_bufidx = (U1)(u4_t_lpcnt * (U4)GWMMCFG_MSGBUF_LSB);
             (void)Com_ReadIPDU((PduIdType)u2_t_msgid, &u1_tp_msgbuf[0]);
@@ -864,6 +867,10 @@ void vd_g_GwmmCfgSend_MMCKPT(const U1 u1_a_pwrsts)
     U1    u1_t_rcvsig;
     U1    u1_t_pwrsts_jdg;
     
+#if 0   /* BEV BSW provisionally */
+#else
+    u1_t_rcvsig = (U1)0U;
+#endif
     u1_t_varsup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISMM);
     u1_t_pwrsts_jdg = u1_a_pwrsts & (U1)GWMM_PWRSTS_IGR;
     (void)Com_ReceiveSignal(ComConf_ComSignal_MMCKPT, &u1_t_rcvsig);
@@ -886,6 +893,10 @@ void vd_g_GwmmCfgSend_L_TBC_FUNC(const U1 u1_a_pwrsts)
     U1    u1_t_rcvsig;
     U1    u1_t_pwrsts_jdg;
     
+#if 0   /* BEV BSW provisionally */
+#else
+    u1_t_rcvsig = (U1)0U;
+#endif
     u1_t_varsup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SW_TBC);
     u1_t_pwrsts_jdg = u1_a_pwrsts & (U1)GWMM_PWRSTS_IGR;
     (void)Com_ReceiveSignal(ComConf_ComSignal_L_TBC_FUNC, &u1_t_rcvsig);

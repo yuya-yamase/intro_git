@@ -20,6 +20,11 @@
 #include "hmimm2c124n_cfg_private.h"
 /* Platform */
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "vardef.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -51,7 +56,9 @@
 #define HMIMM2C124N_TOUT_STS                        (1U)
 #define HMIMM2C124N_1BITSHIFT                       (1U)
 #define HMIMM2C124N_1BITMASK                        (0x01U)
+#if 0   /* BEV BSW provisionally */
 #define MM_AVNMS73_CH1                              (MSG_AVNMS73_RXCH1)
+#endif
 #define HMIMM2C124N_NUM_CAN_BUF                     (8U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -74,9 +81,11 @@ static void   vd_s_HmiMM2C124NSubBusDataProcess(U4 * u4_ap_pdu_tx);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 static const ST_HMI_MM_124N st_gp_HMI_MM124NMSG[] = {
         {   (U1)0U,     (U2)MM_AVNMS73_CH1  }    /*  000: 000:AVNMS73       */
 };
+#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -243,10 +252,12 @@ static void   vd_s_HmiMM2C124NSubBusDataProcess(U4 * u4_ap_pdu_tx)
     const ST_HMI_MM_124N*        st_tp_hmimm2c124frame;
     U1                           u1_t_sts;
 
+#if 0   /* BEV BSW provisionally */
     u2_t_num_tbl = (U2)(sizeof(st_gp_HMI_MM124NMSG) / sizeof(st_gp_HMI_MM124NMSG[0]));
     st_tp_hmimm2c124frame = st_gp_HMI_MM124NMSG;
+#endif
     u4p_t_data   = &u4_ap_pdu_tx[HMIMM2C124N_FIRST_DTA];
-
+#if 0   /* BEV BSW provisionally */
     for(u2_t_lpcnt = (U2)0U ; u2_t_lpcnt < u2_t_num_tbl ; u2_t_lpcnt++){
         u2_t_msgidx = st_tp_hmimm2c124frame[u2_t_lpcnt].u2_msgid;
         for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIMM2C124N_NUM_CAN_BUF ; u4_t_loop++){
@@ -268,6 +279,9 @@ static void   vd_s_HmiMM2C124NSubBusDataProcess(U4 * u4_ap_pdu_tx)
                         (U4)u1_tp_sgnl[4]);
         u4p_t_data++;
     }
+#else
+    u1_t_sts = ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#endif
 
     u4_ap_pdu_tx[HMIMM2C124N_STS_DTA] = (U4)u1_t_sts;
 

@@ -21,11 +21,25 @@
 #include "dim_usadjbysw_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
+#else
+#include "es_inspect_STUB.h"
+#endif
 
 #include "dio_if.h"
 #include "iohw_diflt.h"
-#include "lcom_spi_ch0.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "iohw_adc_channel_STUB.h"
+#include "iohw_diflt_sgnl_STUB.h"
+#endif
+#include "xspi_met_ch0.h"
 #include "iohw_adc.h"
 #include "mcst.h"
 #include "hmiscreen.h"
@@ -131,7 +145,7 @@ void    vd_g_DimCfgInit(void)
     vd_g_DimDaynightInit();
     vd_g_DimUsadjbySwInit();
 
-    u1_s_dim_adim_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01);
+    u1_s_dim_adim_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01_RXCH0);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimCfgIFidx(void)                                                                                                   */
@@ -167,7 +181,7 @@ U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)
 
     u1_t_rx_evt = (U1)FALSE;
 
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01);
+    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01_RXCH0);
     if(u1_t_rx_cnt != u1_s_dim_adim_rxcnt){
 
         u1_t_adim = (U1)0U;
@@ -272,7 +286,7 @@ U1      u1_g_DimUsadjbySwCfgUpdwchk(void)
             }
             break;
         case (U1)CALIB_MCUID0430_SOFTSW:
-            u1_t_ch_act = u1_g_LcomSpiDimSw();
+            u1_t_ch_act = u1_g_XSpiDimSw();
             if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_UP){
                 u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
             }
@@ -353,7 +367,11 @@ void    vd_g_DimUsadjbySwCfgNvmWrite(const U2 * u2_ap_LVL)
 {
     U1          u1_t_esi_chk;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_esi_chk = u1_g_ESInspectMdBfield();
+#else
+    u1_t_esi_chk = (U1)0U;
+#endif
     if(u1_t_esi_chk == (U1)0U){
         vd_g_McstBfPut((U1)MCST_BFI_RHEO_DAY,   (U1)u2_ap_LVL[DIM_DAYNIGHT_LVL_DAY]  );
         vd_g_McstBfPut((U1)MCST_BFI_RHEO_NIGHT, (U1)u2_ap_LVL[DIM_DAYNIGHT_LVL_NIGHT]);

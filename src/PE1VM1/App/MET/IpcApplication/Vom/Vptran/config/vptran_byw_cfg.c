@@ -18,6 +18,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vptran_byw_cfg_private.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -84,7 +89,7 @@ U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 {
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01,
+    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
                              ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
                              (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
@@ -97,7 +102,7 @@ U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 {
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92,
+    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
                              ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
                              (U2)VPTRAN_TIM_ECT1G92_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }

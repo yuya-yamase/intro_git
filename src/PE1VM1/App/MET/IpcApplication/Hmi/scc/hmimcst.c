@@ -22,11 +22,26 @@
 #include "mcst.h"
 #include "vardef.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "calibration.h"
 #include "hdimmgr.h"
 #include "veh_opemd.h"
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
+
 #include "iohw_diflt.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "iohw_adc_channel_STUB.h"
+#include "iohw_diflt_sgnl_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

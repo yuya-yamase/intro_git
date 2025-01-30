@@ -20,10 +20,14 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
+#if 0   /* BEV BSW provisionally */
 #include "tydocan_sal.h"
+#endif
 #include "datesi_tim.h"
 #include "rtime.h"
+#if 0   /* BEV BSW provisionally */
 #include "date_clk.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -53,6 +57,10 @@
 #define DATESI_TIM_DIAG_INFO_BAC                (1U)
 #define DATESI_TIM_DIAG_INFO_NEW                (2U)
 
+#if 0   /* BEV BSW provisionally */
+#else
+#define OXDC_DID_SSR_SS_NDWORD                  (3U)
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

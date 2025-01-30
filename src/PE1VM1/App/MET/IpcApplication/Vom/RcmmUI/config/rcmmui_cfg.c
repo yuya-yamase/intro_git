@@ -18,6 +18,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "rcmmui_cfg_private.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "vds_ci.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -69,8 +74,8 @@ static  U1                                      u1_s_rcmmui_prereq;
 /*===================================================================================================================================*/
 void            vd_g_RcmmUIInitCfg(void)
 {
-#ifdef OXCAN_PDU_RX_CAN_BDB1S13
-    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13);
+#ifdef OXCAN_PDU_RX_CAN_BDB1S13_RXCH0
+    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13_RXCH0);
 #else
 	u1_s_rcmmui_rxcnt  = (U1)0U;
 #endif
@@ -90,8 +95,8 @@ void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm, U1 * u1p_a_powreq)
     U1          u1_t_req2;
     U1          u1_t_req3;
 
-#ifdef OXCAN_PDU_RX_CAN_BDB1S13
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13);
+#ifdef OXCAN_PDU_RX_CAN_BDB1S13_RXCH0
+    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13_RXCH0);
 #else
 	u1_t_rx_cnt = (U1)0U;
 #endif

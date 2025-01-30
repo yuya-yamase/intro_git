@@ -19,9 +19,18 @@
 #include "sbltwrn_cfg_private.h"
 
 #include "nvmc_mgr.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "nvmc_mgr_cfg_STUB.h"
+#endif
 #include "vardef.h"
 #include "vardef_dest.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

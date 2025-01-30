@@ -22,6 +22,10 @@
 #include "aip_common.h"
 
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 #include "veh_opemd.h"
 #include "vehspd_kmph.h"

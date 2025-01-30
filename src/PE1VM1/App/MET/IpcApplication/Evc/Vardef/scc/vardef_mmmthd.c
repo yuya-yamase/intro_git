@@ -149,7 +149,11 @@ void    vd_g_VardefMmMthdMainTask(const U2 u2_a_EOM)
         u2_s_vdf_mmmthd_tocnt = (U2)0U;
     }
 
+#if 0   /* BEV BSW provisionally */
     u1_t_esi_chk = u1_g_ESInspectMdBfield();
+#else
+    u1_t_esi_chk = (U1)0U;
+#endif
 
     if((u1_s_vdf_mmmthd_sts_nvm != u1_s_vdf_mmmthd_sts) &&
        (u1_t_esi_chk           == (U1)0U              )){

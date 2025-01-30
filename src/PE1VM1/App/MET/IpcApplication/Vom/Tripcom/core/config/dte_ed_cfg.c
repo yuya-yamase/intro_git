@@ -18,7 +18,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "dte_ed_cfg_private.h"
 
+#if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
+#endif
 #include "vardef.h"
 #include "calibration.h"
 #include "tripcom_calc.h"
@@ -80,7 +82,11 @@ U1      u1_g_DteEdCfgFuelOOR(void)
 {
     U1  u1_t_abn;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_abn = u1_g_FuelvolTauEasAct((U1)FUEL_TAU_EAS_ID_VEU_OOR, (U1)FUEL_TAU_EAS_EDG_CRNT);
+#else
+    u1_t_abn = (U1)FALSE;
+#endif
     return(u1_t_abn);
 }
 
@@ -94,8 +100,12 @@ U1      u1_g_DteEdCfgFuelRcmGsiAct(void)
 {
     U1  u1_t_refuel;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_refuel  = u1_g_FuelvolTauEasAct((U1)FUEL_TAU_EAS_ID_RCM_ACT   , (U1)FUEL_TAU_EAS_EDG_CRNT);
     u1_t_refuel |= u1_g_FuelvolTauEasAct((U1)FUEL_TAU_EAS_ID_VEU_GFI   , (U1)FUEL_TAU_EAS_EDG_CRNT);
+#else
+    u1_t_refuel = (U1)FALSE;
+#endif
 
     return(u1_t_refuel);
 }
@@ -110,7 +120,11 @@ U1      u1_g_DteEdCfgFuelInitComp(void)
 {
     U1  u1_t_initcomp;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_initcomp  = u1_g_FuelvolTauEasAct((U1)FUEL_TAU_EAS_ID_AVG_I   , (U1)FUEL_TAU_EAS_EDG_CRNT);
+#else
+    u1_t_initcomp  = (U1)FALSE;
+#endif
     return(u1_t_initcomp);
 }
 
@@ -126,10 +140,14 @@ U2      u2_g_DteEdCfgCurrLit0p01BaseME(void)
     U1 u1_t_sts;
 
     u2_t_lit_0p01 = (U2)0U;
+#if 0   /* BEV BSW provisionally */
     u1_t_sts      = u1_g_FuelvolTauLitEst((U1)TRUE, &u2_t_lit_0p01);
     if(u1_t_sts != (U1)FUEL_TAU_STSBIT_VALID){
         u2_t_lit_0p01 = (U2)0U;
     }
+#else
+    u2_t_lit_0p01 = (U2)0U;
+#endif
     return(u2_t_lit_0p01);
 }
 
@@ -145,10 +163,14 @@ U2      u2_g_DteEdCfgCurrLit0p01BaseSE(void)
     U1 u1_t_sts;
 
     u2_t_lit_0p01 = (U2)0U;
+#if 0   /* BEV BSW provisionally */
     u1_t_sts      = u1_g_FuelvolTauLitEst((U1)FALSE, &u2_t_lit_0p01);
     if(u1_t_sts != (U1)FUEL_TAU_STSBIT_VALID){
         u2_t_lit_0p01 = (U2)0U;
     }
+#else
+    u2_t_lit_0p01 = (U2)0U;
+#endif
     return(u2_t_lit_0p01);
 }
 
@@ -161,17 +183,25 @@ U2      u2_g_DteEdCfgCurrLit0p01BaseSE(void)
 U2      u2_g_DteEdCfgSeFullLit0p01(void)
 {
     U1  u1_t_sts;
+#if 0   /* BEV BSW provisionally */
     U2  u2_tp_lit[FUEL_TAU_LITTBL_ID_NUM];
+#endif
     U4  u4_t_loop;
     U2  u2_t_lit_sf;
 
+#if 0   /* BEV BSW provisionally */
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)FUEL_TAU_LITTBL_ID_NUM ; u4_t_loop++){
         u2_tp_lit[u4_t_loop] = (U2)0U;
     }
     u1_t_sts = u1_g_FuelvolTauLitTbl(&u2_tp_lit[0], (U1)FUEL_TAU_LITTBL_ID_NUM);
+#else
+    u1_t_sts = (U1)FALSE;
+#endif
     u2_t_lit_sf = (U2)0U;
     if(u1_t_sts == (U1)TRUE){
+#if 0   /* BEV BSW provisionally */
         u2_t_lit_sf = u2_tp_lit[FUEL_TAU_LITTBL_ID_SF];
+#endif
     }
 
     return(u2_t_lit_sf);

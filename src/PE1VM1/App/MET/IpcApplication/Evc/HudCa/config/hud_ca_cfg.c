@@ -17,7 +17,11 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hud_ca_cfg_private.h"
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
+#else
+#include "es_inspect_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -88,7 +92,11 @@ U1      u1_g_HudCaCfgEsichk(void)
      (HUD_CA_ESI_NUO_DI != ES_INSPECT_MDBF_NUO_DI))
 #error "hud_ca_cfg.c : HUD_CA_ESI_XXX shall be equal to ES_INSPECT_MDBF_XXX."
 #endif
+#if 0   /* BEV BSW provisionally */
     return(u1_g_ESInspectMdBfield());
+#else
+    return((U1)0U);
+#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

@@ -49,7 +49,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u1_g_TripsnsrIgnOn()                    (u1_g_VehopemdIgnOn())
 #define u1_g_TripsnsrAccOn()                    (u1_g_VehopemdAccOn())
+#if 0   /* BEV BSW provisionally */
 #define u1_g_TripsnsrPtsOn()                    (u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF))
+#else
+#define u1_g_TripsnsrPtsOn()                    ((U1)FALSE)
+#endif
                                                                     /* If any pts souce signal is invalid/rxto, return PTS-OFF/FALSE */
 #define u1_g_TripsnsrVspKmph(x)                 (u1_g_VehspdKmphInst((x), (U1)TRUE))
 

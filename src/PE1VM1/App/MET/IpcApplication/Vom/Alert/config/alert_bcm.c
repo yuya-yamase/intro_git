@@ -20,7 +20,17 @@
 #include "alert_bcm.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "iohw_diflt.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "iohw_adc_channel_STUB.h"
+#include "iohw_diflt_sgnl_STUB.h"
+#endif
 #include "veh_opemd.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -41,8 +51,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Project Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #if (__PRJ_LIB_ALERT_D1L1_330D_HEV__ != 1)
 #error "alert_bcm.c : Target project is inactive!"
+#endif
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -136,7 +148,7 @@ void        vd_g_AlertBcmTask(const U1 u1_a_VOM)
         }
 
         u1_t_rdyind = (U1)0U;
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G90,
+        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G90_RXCH0,
                                             (U2)OXCAN_RX_SYS_NRX_IGR,
                                             (U2)U2_MAX) & (U1)COM_NO_RX;
         if(u1_t_msgsts != (U1)COM_NO_RX){
@@ -146,7 +158,11 @@ void        vd_g_AlertBcmTask(const U1 u1_a_VOM)
             u2_t_src_chk |= (U2)ALERT_BCM_SRC_RDY_ON;
         }
 
+#if 0   /* BEV BSW provisionally */
         u1_t_pts = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_ON);
+#else
+        u1_t_pts = (U1)FALSE;
+#endif
         if(u1_t_pts != (U1)TRUE){
             u2_t_bcm_act |= (U2)ALERT_BCM_PTS;
         }

@@ -1,4 +1,4 @@
-/* 1.6.0 */
+/* 1.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -33,8 +33,9 @@
 
 /* calibration header file */
 #include "calibration.h"
+#include "reg_dma.h"
 
-#include "port_drv.h"
+#include "Port.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -438,8 +439,8 @@ void    vd_g_SoundCriMgrInitialize(void)
 
     u4_s_sound_ow_unlock    = (U4)0U;
     u1_s_sound_ow_reqid     = (U1)U1_MAX;
-    vd_g_Port_SetPinMode((U2)PORT_PIN_MODE_P3_2_PCMP0_AP0,   (U1)TRUE); 
-    vd_g_Port_SetPinMode((U2)PORT_PIN_MODE_P3_4_PCMP0_AP1,   (U1)TRUE);
+    Port_SetPinMode((U2)PORT_ID_PORT20_PIN1,   (U4)PORT_MODE_CFG_P20_1_9); 
+    Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_10);
 }
 
 /*===================================================================================================================================*/
@@ -473,10 +474,14 @@ void    vd_g_SoundCriMgrFinalize(void)
 void    vd_g_SoundCriMgrMainTask(void)
 {
     U1          u1_t_playnum;                                                               /* Number of playing sound groups        */
-    U4          u4_t_errsts;
+    U1          u1_t_errsts;
 
-    u4_t_errsts = u4_g_DmaStsfield((U1)SOUND_CRI_DRV_DMA_CH, (U4)DMA_CLRBIT_NOTCLR) & (U4)DMA_STSBIT_IRQST_TX_FAIL;
-    if(u4_t_errsts == (U4)DMA_STSBIT_IRQST_TX_FAIL){
+#if 0   /* BEV BSW provisionally */
+    u1_t_errsts = (U1)Dma_CheckDmaError((U1)SOUND_CRI_DRV_DMA_CH) & (U1)DMA_DTSER_DTSER;
+#else
+    u1_t_errsts = (U1)0U;
+#endif
+    if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
         vd_g_SoundCriMgrFinalize();
         vd_g_SoundCriMgrInitialize();
     }

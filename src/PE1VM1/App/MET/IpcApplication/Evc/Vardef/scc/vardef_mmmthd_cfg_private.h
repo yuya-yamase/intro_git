@@ -21,7 +21,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "nvmc_mgr.h"
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
+#else
+#include "nvmc_mgr_cfg_STUB.h"
+#include "es_inspect_STUB.h"
+#endif
 
 #include "vardef.h"
 

@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -95,13 +100,13 @@ static U4      u4_s_AlertH_batlowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 #endif /* ComConf_ComSignal_SBT_VLWF */ /* 840B_CAN */
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S94)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94,
+#if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0)
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) */ /* 840B_CAN */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) */ /* 840B_CAN */
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_BATLOW_LSB_MSGSTS);
 
     return(u4_t_src_chk);

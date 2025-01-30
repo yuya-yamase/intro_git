@@ -17,8 +17,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef_mmmthd_cfg_private.h"
 
+#include "xspi_met_ch1.h"
 #include "nvmc_mgr.h"
-#include "lcom_spi_ch1.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "nvmc_mgr_cfg_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -62,9 +66,9 @@ U1      u1_g_VardefMmMthdCfgComSts(void)
     U1                 u1_t_sts;
     U1                 u1_t_ret;
 
-    u1_t_sts = u1_g_LcomSpiEtherComSts();
+    u1_t_sts = u1_g_XSpiEtherComSts();
 
-    if(u1_t_sts == (U1)LCOM_SPI_ETHER_COMSCCS){
+    if(u1_t_sts == (U1)XSPI_ETHER_COMSCCS){
         u1_t_ret = (U1)VDF_MMMTHD_STS_COMSCCS;
     }
     else{

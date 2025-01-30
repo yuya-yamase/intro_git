@@ -18,6 +18,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "pitchroll_cfg_private.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -100,8 +105,8 @@ const ST_RNG_CMPR_U2    st_s_PITCHROLL_THRESHOLD_CMPR = {
 U1              u1_g_PitchRollCfgGetMsgStsYawG(void)
 {
     U1    u1_t_msgsts;
-#if defined(OXCAN_PDU_RX_CAN_VSC1G12)
-    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1G12,
+#if defined(OXCAN_PDU_RX_CAN_VSC1G12_RXCH0)
+    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1G12_RXCH0,
                                         ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
                                         (U2)PITCHROLL_TO_VSC1G12) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
@@ -119,8 +124,8 @@ U1              u1_g_PitchRollCfgGetMsgStsYawG(void)
 U1              u1_g_PitchRollCfgGetMsgStsSp(void)
 {
     U1    u1_t_msgsts;
-#if defined(OXCAN_PDU_RX_CAN_VSC1G13)
-    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1G13,
+#if defined(OXCAN_PDU_RX_CAN_VSC1G13_RXCH0)
+    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1G13_RXCH0,
                                         ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
                                         (U2)PITCHROLL_TO_VSC1G13) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else

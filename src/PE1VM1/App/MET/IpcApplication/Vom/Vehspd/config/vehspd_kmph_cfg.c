@@ -20,6 +20,11 @@
 #include "vehspd_can_sp1x_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "odo_km.h"
 #include "odo_vslmt.h"
 #include "tripcom.h"

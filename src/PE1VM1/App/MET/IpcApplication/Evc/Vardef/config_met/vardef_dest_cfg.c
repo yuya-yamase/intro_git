@@ -21,8 +21,17 @@
 #include "locale.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 #include "calibration.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -461,7 +470,7 @@ U1      u1_g_VardefDestCfg(U2 * u2p_a_c_code, U1 * u1p_a_dest_bdb, U1 * u1p_a_st
     U1  u1_t_c_code;
 
     u1_t_c_code = (U1)0U;
-    u1_t_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S08);
+    u1_t_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S08_RXCH0);
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE1, &u1_t_c_code);
     *u2p_a_c_code =  ((U2)u1_t_c_code & u2_s_VDF_DST_C_CODE_MSK) << u1_s_VDF_DST_C_CODE1_BIT;

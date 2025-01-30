@@ -18,6 +18,11 @@
 #include "hdimmgr_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /* #include "illmnsnsr.h" */
 #ifdef ILLMNSNSR_H
@@ -962,6 +967,10 @@ static U2    u2_s_HdimillmnCnlghtGet_N_LX(void)
 {
     U2 u2_t_lxdata;
 
+#if 0   /* BEV BSW provisionally */
+#else
+    u2_t_lxdata = (U2)HDIMILLMN_CNLGHT_LXDATA_JUDGE_ERR;
+#endif
     (void)Com_ReceiveSignal(ComConf_ComSignal_N_LX, &u2_t_lxdata);
     if(u2_t_lxdata >= (U2)HDIMILLMN_CNLGHT_LXDATA_JUDGE_ERR){
         u2_t_lxdata = (U2)HDIMILLMN_CNLGHT_LXDATA_FAIL;

@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -169,9 +174,9 @@ static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 {
     static const U1 u1_s_ALERT_H_PEXI_TT_LSB_NDBW    = (U1)3U;
     static const U1 u1_s_ALERT_H_PEXI_TT_LSB_EHV1S90 = (U1)5U;
-#if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID)
+#if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_SOCLOWID)
     static const U1 u1_s_ALERT_H_PEXI_TT_LSB_EHV1S94 = (U1)4U;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID) */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_SOCLOWID) */
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
@@ -182,25 +187,25 @@ static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 #endif /* ComConf_ComSignal_NDBW */ /* 840B_CAN */
     u4_t_src_chk  = ((U4)u1_t_sgnl   << u1_s_ALERT_H_PEXI_TT_LSB_NDBW);
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S90)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S90,
+#if defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0)
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S90_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90) */ /* 840B_CAN */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0) */ /* 840B_CAN */
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_PEXI_TT_LSB_EHV1S90);
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID)
+#if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_SOCLOWID)
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_SOCLOWID, &u1_t_sgnl);
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_PEXI_TT_LSB_EHV1S94);
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID) */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_SOCLOWID) */
 
     return(u4_t_src_chk);
 }
@@ -214,9 +219,9 @@ static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 static U4      u4_s_AlertH_pexiWarnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
     static const U1 u1_s_ALERT_H_PEXI_WARN_LSB_MSG   = (U1)1U;
-#if defined(OXCAN_PDU_RX_CAN_EHV1S90)
+#if defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0)
     static const U2 u2_s_ALERT_H_PEXI_WARN_TO_THRESH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90) */ /* 840B_CAN */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0) */ /* 840B_CAN */
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
@@ -227,13 +232,13 @@ static U4      u4_s_AlertH_pexiWarnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #endif /* ComConf_ComSignal_NDBW */ /* 840B_CAN */
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S90)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S90,
+#if defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0)
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S90_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_H_PEXI_WARN_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90) */ /* 840B_CAN */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0) */ /* 840B_CAN */
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_PEXI_WARN_LSB_MSG);
 
     return(u4_t_src_chk);

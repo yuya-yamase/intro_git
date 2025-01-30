@@ -22,6 +22,10 @@
 #include "aip_common.h"
 #include "calc_u8.h"
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 #include "tripcom.h"
 #include "tripcom_cfg_private.h"
 #include "tripsnsr_cfg_private.h"

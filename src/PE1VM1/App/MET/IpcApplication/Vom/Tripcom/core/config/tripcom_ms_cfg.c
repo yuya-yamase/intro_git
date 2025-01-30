@@ -21,7 +21,15 @@
 #include "tripcom_nvmif_grph_cfg_private.h"
 #include "tripcom_ms.h"
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
+#else
+#include "es_inspect_STUB.h"
+#endif
 
 #include "dte_ed.h"
 
@@ -516,7 +524,11 @@ const U2 u2_g_TRIPCOM_NVMIF_GRPH_NVMCID_DATA = (U2)NVMCID_APP_TRIPCOM_GRPH;
 /*===================================================================================================================================*/
 U1              u1_g_TripcomMsEsichk(void)
 {
+#if 0   /* BEV BSW provisionally */
     return (u1_g_ESInspectMdBfield());
+#else
+    return ((U1)0U);
+#endif
 }
 
 /*===================================================================================================================================*/

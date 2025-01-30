@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -121,15 +126,15 @@ static U4      u4_s_AlertD_cvtoilSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-#ifdef OXCAN_PDU_RX_CAN_ECT1G92
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92,
+#ifdef OXCAN_PDU_RX_CAN_ECT1G92_RXCH0
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1S93,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1S93_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
-#endif /* OXCAN_PDU_RX_CAN_ECT1G92 */
+#endif /* OXCAN_PDU_RX_CAN_ECT1G92_RXCH0 */
 
     u1_t_sgnl     = (U1)0U;
 #ifdef ComConf_ComSignal_B_OILWMI

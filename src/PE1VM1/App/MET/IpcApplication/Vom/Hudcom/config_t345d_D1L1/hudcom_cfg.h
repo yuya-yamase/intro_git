@@ -20,11 +20,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* ! Caution for cross-reference with Vardef domain ! */
 #include "aip_common.h"
-#include "lcom_spi_ch0.h"
+#include "xspi_met_ch0.h"
 
 #include "veh_opemd.h"
 
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 #include "vardef_esopt.h"
 #include "mcst.h"
@@ -32,6 +36,11 @@
 #include "hudcom.h"
 #include "hudcstmsup.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type definition                                                                                                                  */
@@ -57,8 +66,8 @@
 /*  Macros                                                                                                                           */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u1_HCOM_GETIG()					((U1)((u4_g_VehopemdMdfield()&(U4)VEH_OPEMD_MDBIT_IGN)>>HCOM_VOM_SHIFT))           /* IG                             */ 
-#define u1_HCOM_GETMSTWRN()				(u1_g_LcomSpiCfgRxMstTtSts())                          /* MTC Disp Req                 */
-#define u1_HCOM_GETCNTT()				(u1_g_LcomSpiGetDspSTM00Cntt())               /* DSP_STM00_CNTT       */
+#define u1_HCOM_GETMSTWRN()				(u1_g_XSpiCfgRxMstTtSts())                          /* MTC Disp Req                 */
+#define u1_HCOM_GETCNTT()				(u1_g_XSpiGetDspSTM00Cntt())               /* DSP_STM00_CNTT       */
 #define vd_HCOM_CANSGNL_NAV_MASK(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MASK,  (x)))
 #define u1_HCOM_GET_TBT_INT_SUP()		(u1_g_VardefEsOptAvaByCh(VDF_ESO_CH_MM_NAVI) & u1_g_McstBf(MCST_BFI_CROSS_ADV))
 #define u1_HCOM_CANMSGSTS_HUDSTS()		((U1)u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_HUD1S01,(U2)(OXCAN_RX_SYS_NRX_IGR | OXCAN_RX_SYS_TOE_IGR),(U2)HCOM_HUD1S01_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX))  /*  HUD1S01              */

@@ -28,13 +28,30 @@
 #include "locale.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 #include "nvmc_mgr.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "nvmc_mgr_cfg_STUB.h"
+#endif
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 #include "vardef_esopt.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
+#else
+#include "es_inspect_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -199,7 +216,9 @@ U2      u2_g_VardefCfgEomchk(void)
 
     u2_t_eom  = (U2)VDF_EOM_PB_ON;
     u2_t_eom |= (U2)u4_g_VehopemdMdfield() & ((U2)VDF_EOM_ACC_ON | (U2)VDF_EOM_IGR_ON | (U2)VDF_EOM_PBA_ON | (U2)VDF_EOM_IGP_ON);
+#if 0   /* BEV BSW provisionally */
     u2_t_eom |= ((U2)u1_g_ESInspectMdBfield() << 8U);
+#endif
 
     return(u2_t_eom);
 }
@@ -217,7 +236,7 @@ U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
 {
 #ifdef ComConf_ComSignal_PTSYS
     (void)Com_ReceiveSignal(ComConf_ComSignal_PTSYS, u1_ap_ptsys_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13));
+    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0));
 #else
     (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_1F_NRX;
     return((U1)OXCAN_RX_RXEV_CNT_UNK);
@@ -240,7 +259,7 @@ U1      u1_g_VardefPtsRxMlrqCfgPtsyschk(U1* u1_ap_ptsys_rx)
 {
 #ifdef ComConf_ComSignal_PTSYS
     (void)Com_ReceiveSignal(ComConf_ComSignal_PTSYS, u1_ap_ptsys_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13));
+    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0));
 #else
     (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_MILREQ_1F_NRX;
     return((U1)OXCAN_RX_RXEV_CNT_UNK);
@@ -322,7 +341,11 @@ void    vd_g_VardefCfgSendMmcProt(const U1 u1_a_SIG)
 U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 {
     (void)Com_ReceiveSignal(ComConf_ComSignal_ASCEXT, u1_ap_ascext_rx);
+#if 0   /* BEV BSW provisionally */
     return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ASC1S90));
+#else
+    return((U1)OXCAN_RX_RXEV_CNT_UNK);
+#endif
 }
 
 /*===================================================================================================================================*/

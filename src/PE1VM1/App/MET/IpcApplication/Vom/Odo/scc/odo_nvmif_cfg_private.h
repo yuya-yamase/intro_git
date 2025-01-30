@@ -22,6 +22,10 @@
 #include "aip_common.h"
 #include "crc32.h"
 #include "nvmc_mgr.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "nvmc_mgr_cfg_STUB.h"
+#endif
 #include "odo_nvmif.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

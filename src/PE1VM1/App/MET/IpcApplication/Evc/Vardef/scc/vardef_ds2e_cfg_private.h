@@ -24,6 +24,10 @@
 /* #include "vardef_ds2e.h" */ /* vardef_ds2e.h is included in vardef_dbf.h" */
 
 #include "nvmc_mgr.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "nvmc_mgr_cfg_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */

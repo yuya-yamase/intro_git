@@ -24,7 +24,16 @@
 #include "vardef_dest.h"
 #include "odo_km.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -44,8 +53,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Project Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #if (__PRJ_LIB_ALERT_D1L1_330D_HEV__ != 1)
 #error "alert_cfg.c : Target project is inactive!"
+#endif
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

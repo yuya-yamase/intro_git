@@ -19,7 +19,9 @@
 #include "gagdst_lowfuel_cfg_private.h"
 
 #include "gauge_if.h"
+#if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau_gag.h"
+#endif
 
 #include "gagdst_gss.h"
 #include "gagdst_acdctx.h"
@@ -54,10 +56,10 @@
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U2                                u2_g_GAGDST_LOWFUEL_SRC_IGN    = (U2)GAUGE_SRC_CHK_IGN_ON;          /* Low Fuel Waning input bit:Ignition is on              */
-const U2                                u2_g_GAGDST_LOWFUEL_SRC_UNK    = (U2)FUEL_TAU_GAG_STSBIT_UNK;       /* Low Fuel Waning input bit:Config is unknown           */
-const U2                                u2_g_GAGDST_LOWFUEL_SRC_AVG_I  = (U2)FUEL_TAU_GAG_STSBIT_AVG_I;     /* Low Fuel Waning input bit:Initial data I              */
-const U2                                u2_g_GAGDST_LOWFUEL_SRC_OS     = (U2)FUEL_TAU_GAG_STSBIT_OS;        /* Low Fuel Waning input bit:Open/Short                  */
-const U2                                u2_g_GAGDST_LOWFUEL_SRC_GFI    = (U2)FUEL_TAU_GAG_STSBIT_GFI;       /* Low Fuel Waning input bit:Refueling(Gas Filling)      */
+const U2                                u2_g_GAGDST_LOWFUEL_SRC_UNK    = (U2)0x02U;       /* Low Fuel Waning input bit:Config is unknown           */
+const U2                                u2_g_GAGDST_LOWFUEL_SRC_AVG_I  = (U2)0x04U;     /* Low Fuel Waning input bit:Initial data I              */
+const U2                                u2_g_GAGDST_LOWFUEL_SRC_OS     = (U2)0x01U;        /* Low Fuel Waning input bit:Open/Short                  */
+const U2                                u2_g_GAGDST_LOWFUEL_SRC_GFI    = (U2)0x08U;       /* Low Fuel Waning input bit:Refueling(Gas Filling)      */
 const ST_GAGDST_LOWFUEL_CFG             st_g_GAGDST_LOWFUEL_INIT       = {
         (U1)GAGDST_LOWFUEL_WRNLAMP_LMP,    /* u1_wrnlamp */
         (U2)0U,                            /* u2_lit_wrnoff */

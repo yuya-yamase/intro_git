@@ -20,7 +20,9 @@
 #include "datesi_tim_cfg_private.h"
 #include "datesi_cfg_private.h"
 #include "rtime.h"
+#if 0   /* BEV BSW provisionally */
 #include "date_clk.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -248,7 +250,11 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
         u4_t_adj = u4_t_yymmdd;
     }
     else{
+#if 0   /* BEV BSW provisionally */
         u4_t_now = u4_g_DateclkYymmddwk();
+#else
+        u4_t_now = (U4)0U;
+#endif
         u4_t_adj = (U4)YYMMDDWK_UNKNWN;
     }
 
@@ -285,10 +291,14 @@ static U1       u1_s_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD)
 {
     U1  u1_t_ret;
     
+#if 0   /* BEV BSW provisionally */
     (void)u1_g_DateclkAdjUnLock((U1)DATE_CLK_ADJ_YYMMDD);
     u1_t_ret = u1_g_DateclkAdjYymmdd(u4_a_YYYYMMDD);
     vd_g_DateclkSet();
     vd_g_DateclkAdjLock((U1)DATE_CLK_ADJ_YYMMDD);
+#else
+    u1_t_ret = (U1)0U;
+#endif
     
     return(u1_t_ret);
 }
@@ -386,7 +396,11 @@ static U4       u4_s_DateSICalToUpdtDate(const U4 u4_a_YYMMDD_DISP, const U1 u1_
     S4  s4_t_total_offset;
     U4  u4_t_yymmddwk_abs;
 
+#if 0   /* BEV BSW provisionally */
     u4_t_hhmmss_abs   = u4_g_DateclkHhmmss24h();
+#else
+    u4_t_hhmmss_abs   = (U4)0U;
+#endif
     s4_t_total_offset = s4_g_DateSITimTotalOffset();
     u4_t_yymmddwk_abs = u4_s_DateSICalAddDay(u4_a_YYMMDD_DISP, u4_t_hhmmss_abs, s4_t_total_offset, u1_a_KIND);
 
@@ -729,7 +743,11 @@ void            vd_g_DateSICalAdjustUpdate(void)
        (u1_t_sts                == (U1)FALSE             )){
         u4_t_abs_yymmdd     = u4_s_DateSICalToUpdtDate(u4_s_datesi_cal_adj_date, (U1)DATESI_CAL_ABS_DATE);
         u1_t_result         = u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+#if 0   /* BEV BSW provisionally */
         u4_t_abs_yymmdd     = u4_g_DateclkYymmddwk();
+#else
+        u4_t_abs_yymmdd     =  (U4)0U;
+#endif
         u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
 
         if(u1_t_result == (U1)TRUE){

@@ -20,8 +20,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 #include "veh_opemd.h"
 
@@ -41,7 +50,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define u1_FSPOSNSR_RXMSG_ENG1G17STS(time)       (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G17_50   , \
+#define u1_FSPOSNSR_RXMSG_ENG1G17STS(time)       (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G17_RXCH0   , \
                                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR, \
                                                   (time)))
 #define vd_FSPOSNSR_RXMSG_B_POM(sgnl)            ((void)Com_ReceiveSignal(ComConf_ComSignal_B_POM_3,  (sgnl)))

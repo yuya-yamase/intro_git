@@ -1,4 +1,4 @@
-/* 1.2.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SOUND_CRI_DRV_C_MAJOR                        (1)
-#define SOUND_CRI_DRV_C_MINOR                        (2)
+#define SOUND_CRI_DRV_C_MINOR                        (3)
 #define SOUND_CRI_DRV_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -24,8 +24,13 @@
 #include "cri_atom_rh850d1.h"
 
 /* MCAL */
-#include "dma_drv.h"
+#include "Dma.h"
+#if 0   /* BEV BSW provisionally */
 #include "gpt_drv_j32.h"
+#else
+#include "gpt_drv_j32_channel_STUB.h"
+#include "dma_drv_STUB.h"
+#endif
 #include "int_drv.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -97,8 +102,6 @@ typedef struct RegDmacChannelTag
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4 u4_sp_soundmiddle_dmadata[DMA_CFG_CH_NUM_WORD];                       /* DMAC data for enabling                            */
-
 static U1 u1_s_soundmiddle_under_di;                                            /* Under interrupt                                   */
 static U4 u4_s_soundmiddle_gli;                                                 /* Return value of u4_g_IRQ_DI function              */
 
@@ -131,6 +134,7 @@ void vd_g_SoundCriDrvInitialize(void)
 /*===================================================================================================================================*/
 void vd_g_SoundCriDrvTimerInitialize(void)
 {
+#if 0   /* BEV BSW provisionally */
     U4  u4_tp_j32[GPT_J32_START_NUM_CFG];
 
     u4_tp_j32[GPT_J32_START_CTRL] = (U4)GPT_J32_START_CTRL_BIT_TRG_ST;
@@ -139,6 +143,7 @@ void vd_g_SoundCriDrvTimerInitialize(void)
     /* Stop -> Start the channel */
     vd_g_Gpt_J32Stop((U1)SOUND_CRI_DRV_TAUJ_CH);
     vd_g_Gpt_J32Start((U1)SOUND_CRI_DRV_TAUJ_CH, &u4_tp_j32[0U]);
+#endif
 }
 
 
@@ -150,7 +155,9 @@ void vd_g_SoundCriDrvTimerInitialize(void)
 /*===================================================================================================================================*/
 void vd_g_SoundCriDrvTimerFinalize(void)
 {
+#if 0   /* BEV BSW provisionally */
     vd_g_Gpt_J32Stop((U1)SOUND_CRI_DRV_TAUJ_CH);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -161,7 +168,11 @@ void vd_g_SoundCriDrvTimerFinalize(void)
 /*===================================================================================================================================*/
 CriUint32 u4_g_SoundCriDrvTimerGetCount(void)
 {
+#if 0   /* BEV BSW provisionally */
     return ((CriUint32)u4_g_Gpt_J32GetTimeElapsed((U1)SOUND_CRI_DRV_TAUJ_CH, vdp_PTR_NA));
+#else
+    return ((CriUint32)0U);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -198,23 +209,45 @@ void vd_g_SoundCriDrvDmacFinalize(void)
 void vd_g_SoundCriDrvDmacStart(const CriUint32 u4_a_DSA, const CriUint32 u4_a_DDA, const CriUint32 u4_a_DTC, const CriUint32 u4_a_DTCT,
                                const CriUint32 u4_a_DRSA, const CriUint32 u4_a_DRDA, const CriUint32 u4_a_DRTC, const CriUint32 u4_a_DTCC, const CriUint32 u4_a_DTFR)
 {
-    U4  u4_t_stsbit;
+    U2  u2_t_transnum;
+    U4  u4_t_setval;
+    U1  u1_t_transsize;
+    U1  u1_t_halfie;
+    U1  u1_t_endie;
+    static const U4 u4_s_SOUND_DTC_TRC_BITMSK  = (U4)0x0000ffffU;
+    static const U4 u4_s_SOUND_DTCT_DS_BITMSK  = (U4)0x0000001cU;
+    static const U4 u4_s_SOUND_DTCT_CCE_BITMSK = (U4)0x00008000U;
+    static const U4 u4_s_SOUND_DTCT_TCE_BITMSK = (U4)0x00004000U;
+    static const U1 u1_s_SOUND_DTCT_CCE_BITSFT = (U1)15U;
+    static const U1 u1_s_SOUND_DTCT_TCE_BITSFT = (U1)14U;
 
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_ADDR_SRC]  = u4_a_DSA;                 /* DMAC Source Address Register (DSAn)               */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_ADDR_DST]  = u4_a_DDA;                 /* DMAC Destination Address Register (DDAn)          */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_CTRL_DTC]  = u4_a_DTC;                 /* DMAC Transfer Count Register (DTCn)               */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_CTRL_DTCT] = u4_a_DTCT;                /* DMAC Transfer Control Register (DTCTn)            */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_ADDR_RSRC] = u4_a_DRSA;                /* DMAC Reload Source Address Register (DRSAn)       */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_ADDR_RDST] = u4_a_DRDA;                /* DMAC Reload Destination Address Register (DRDAn)  */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_CTRL_DRTC] = u4_a_DRTC;                /* DMAC Reload Transfer Count Register (DRTCn)       */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_CTRL_DTCC] = u4_a_DTCC;                /* DMAC Transfer Count Compare Register (DTCCn)      */
+    u2_t_transnum = (U2)(u4_a_DTC & u4_s_SOUND_DTC_TRC_BITMSK);
 
-    /*vd_g_DmaDisCh(SOUND_CRI_DRV_DMA_CH);*/
-    u4_t_stsbit = u4_g_DmaEnaCh((U1)SOUND_CRI_DRV_DMA_CH, &u4_sp_soundmiddle_dmadata[0U]);
-    if((u4_t_stsbit & (U4)DMA_STSBIT_HLT) == (U4)DMA_STSBIT_HLT){
-        (void)u4_g_DmaEnaCh((U1)SOUND_CRI_DRV_DMA_CH, &u4_sp_soundmiddle_dmadata[0U]); /* Retry(See. PCS-V)                          */
+    u4_t_setval = u4_a_DTCT & u4_s_SOUND_DTCT_DS_BITMSK;
+    switch(u4_t_setval){
+        case DMA_CTRL_DTCT_BIT_TXW_BYTE:                                        /* 1byte                                              */
+            u1_t_transsize = (U1)u1DMA_TRANSSIZE_1;
+            break;
+        case DMA_CTRL_DTCT_BIT_TXW_HALF:                                        /* 2byte                                              */
+            u1_t_transsize = (U1)u1DMA_TRANSSIZE_2;
+            break;
+        case DMA_CTRL_DTCT_BIT_TXW_WORD:                                        /* 4byte                                              */
+            u1_t_transsize = (U1)u1DMA_TRANSSIZE_4;
+            break;
+        default:
+            u1_t_transsize = (U1)u1DMA_TRANSSIZE_4;
     }
 
+    u1_t_halfie = (U1)((u4_a_DTCT & u4_s_SOUND_DTCT_CCE_BITMSK) >> u1_s_SOUND_DTCT_CCE_BITSFT);
+    u1_t_endie  = (U1)((u4_a_DTCT & u4_s_SOUND_DTCT_TCE_BITMSK) >> u1_s_SOUND_DTCT_TCE_BITSFT);
+
+    /*vd_g_DmaDisCh(SOUND_CRI_DRV_DMA_CH);*/
+#if 0   /* BEV BSW provisionally */
+    Dma_SetTransMode((U1)SOUND_CRI_DRV_DMA_CH, u1_t_transsize, (U1)DMA_DMAMODE2,
+                     (volatile const void*)u4_a_DSA, (volatile const void*)u4_a_DDA, u4_a_DTC, u2_t_transnum);
+    Dma_SetInterrupt((U1)SOUND_CRI_DRV_DMA_CH, u1_t_halfie, u1_t_endie);
+    Dma_EnableTrans((U1)SOUND_CRI_DRV_DMA_CH);
+#endif
     /*vd_g_DmaSwTrgrTx(SOUND_CRI_DRV_DMA_CH);*/
 }
 
@@ -240,12 +273,14 @@ void vd_g_SoundCriDrvDmacIntr(const CriUint32 u4_a_DRSA, const CriUint32 u4_a_DR
     volatile ST_SOUND_CRI_DRV_REGDMACCHANNEL *st_tp_reg_dmac_ch = SOUND_CRI_DRV_DMA_CHANNEL_HEAD;
 
     /* Clear all of transfer flags */
+#if 0   /* BEV BSW provisionally */
     st_tp_reg_dmac_ch[SOUND_CRI_DRV_DMA_CH].u4_dcstcn = (U4)0x000000B1U;
 
     /* Set reload registers */
     st_tp_reg_dmac_ch[SOUND_CRI_DRV_DMA_CH].u4_drsan  = u4_a_DRSA;
     st_tp_reg_dmac_ch[SOUND_CRI_DRV_DMA_CH].u4_drdan  = u4_a_DRDA;
     st_tp_reg_dmac_ch[SOUND_CRI_DRV_DMA_CH].u4_drtcn  = u4_a_DRTC;
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -256,16 +291,10 @@ void vd_g_SoundCriDrvDmacIntr(const CriUint32 u4_a_DRSA, const CriUint32 u4_a_DR
 /*===================================================================================================================================*/
 void vd_g_SoundCriDrvDmacStop(void)
 {
-    vd_g_DmaDisCh((U1)SOUND_CRI_DRV_DMA_CH);
-
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_ADDR_SRC]  = (U4)0U;                   /* DMAC Source Address Register (DSAn)               */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_ADDR_DST]  = (U4)0U;                   /* DMAC Destination Address Register (DDAn)          */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_CTRL_DTC]  = (U4)0U;                   /* DMAC Transfer Count Register (DTCn)               */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_CTRL_DTCT] = (U4)0U;                   /* DMAC Transfer Control Register (DTCTn)            */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_ADDR_RSRC] = (U4)0U;                   /* DMAC Reload Source Address Register (DRSAn)       */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_ADDR_RDST] = (U4)0U;                   /* DMAC Reload Destination Address Register (DRDAn)  */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_CTRL_DRTC] = (U4)0U;                   /* DMAC Reload Transfer Count Register (DRTCn)       */
-    u4_sp_soundmiddle_dmadata[DMA_CFG_CH_CTRL_DTCC] = (U4)0U;                   /* DMAC Transfer Count Compare Register (DTCCn)      */
+#if 0   /* BEV BSW provisionally */
+    Dma_DisableTrans((U1)SOUND_CRI_DRV_DMA_CH);
+    Dma_SetInterrupt((U1)SOUND_CRI_DRV_DMA_CH, (U1)DMA_OFF, (U1)DMA_OFF);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -365,6 +394,7 @@ void vd_g_SoundCriDrvIntrEnable(void)
 /*  1.1.0     3/31/2020  TN       Implement DI/EI and apply coding rule.                                                             */
 /*  1.1.1     9/ 8/2020  SK       Correct the way calculate DMAC registers address.(Fix the bug inherited from TY3S soft)            */
 /*  1.2.0     6/10/2021  NK       Add CRI reset processing when DMA transfer error occurred.                                         */
+/*  1.3.0    25/10/2024  KI       modify for BSW update.                                                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -374,5 +404,6 @@ void vd_g_SoundCriDrvIntrEnable(void)
 /*  * TN   = Toshiharu Nagata, Denso Techno                                                                                          */
 /*  * SK   = Sakae Kitamura, Denso Techno                                                                                            */
 /*  * NK   = Naoki Kondo, Denso Techno                                                                                               */
+/*  * KI   = Kanji Ito, DensoTechno                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

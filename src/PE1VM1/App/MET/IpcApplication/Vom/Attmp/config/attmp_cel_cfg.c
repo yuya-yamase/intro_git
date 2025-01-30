@@ -18,6 +18,11 @@
 #include "attmp_cel_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -79,8 +84,8 @@ U1      u1_g_AttmpCfgB_THOCL(U2 * u2p_a_b_thocl, U1 * u1_a_rxcnt)
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_THOCL, &u2_t_b_thocl);
     *u2p_a_b_thocl = u2_t_b_thocl;
 
-    *u1_a_rxcnt    = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ECT1G92);
-    u1_t_rxstat    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92,
+    *u1_a_rxcnt    = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0);
+    u1_t_rxstat    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
                                            (U2)(OXCAN_RX_SYS_NRX_IGR | OXCAN_RX_SYS_TOE_IGR),
                                            (U2)ATTMP_ECT1G92_TO_THRSH) & (U1)(COM_TIMEOUT | COM_NO_RX);
     if((U2)ATTMP_B_THOCL_MAX < u2_t_b_thocl){
@@ -101,8 +106,8 @@ U1      u1_g_AttmpCfgB_THOCL(U2 * u2p_a_b_thocl, U1 * u1_a_rxcnt)
 /*===================================================================================================================================*/
 U1      u1_g_AttmpCfgRxCnt(void)
 {
-#ifdef OXCAN_PDU_RX_CAN_ECT1G92
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ECT1G92));
+#ifdef OXCAN_PDU_RX_CAN_ECT1G92_RXCH0
+    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0));
 #else
     return((U1)OXCAN_RX_RXEV_CNT_UNK);
 #endif

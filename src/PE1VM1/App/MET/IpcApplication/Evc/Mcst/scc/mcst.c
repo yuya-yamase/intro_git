@@ -381,7 +381,7 @@ void    vd_g_McstMainTask(void)
     else{
         /* Do Nothing */
     }
-    /* Set initial value for LcomSPI */ 
+    /* Set initial value for XSPI */ 
     vd_g_MemfillU4(&u4_sp_mcst_note_bfword[0], (U4)0U, (U4)MCST_NUM_WORD_USER);
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)MCST_NUM_BF; u4_t_loop++) {
         u1_t_bfidx = st_gp_MCST_BF[u4_t_loop].u1_wid;

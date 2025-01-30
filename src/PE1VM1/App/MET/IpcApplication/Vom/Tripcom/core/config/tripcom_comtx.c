@@ -19,6 +19,11 @@
 #include "tripcom_cfg_private.h"
 #include "tripcom_comtx.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "vardef.h"
 #include "veh_opemd.h"
 #include "locale.h"
@@ -387,7 +392,11 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
     }
     u1_t_igsts = u1_g_VehopemdIgnOn();
     if (u1_t_igsts == (U1)TRUE) {
+#if 0   /* BEV BSW provisionally */
         u1_t_ptssts = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF);
+#else
+        u1_t_ptssts = (U1)FALSE;
+#endif
         if (u1_t_ptssts == (U1)TRUE) {
             u1_s_tripcom_tx_drvcyc <<= TRIPCOM_COMTX_PREVSTS_SFT;
             u1_s_tripcom_tx_drvcyc |= (U1)TRUE;

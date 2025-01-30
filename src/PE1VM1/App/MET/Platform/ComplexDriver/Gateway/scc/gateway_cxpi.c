@@ -94,7 +94,7 @@ void vd_g_GatewayCxpiMainTask(void)
     U1    u1_t_igpon;         /*  IGP ON Status             */
     U4    u4_t_lpcnt;         /*  Loop Counter              */
 
-    u1_t_baon  = u1_g_VehopemdBaOn();
+    u1_t_baon  = u1_g_VehopemdPbaOn();
     u1_t_accon = u1_g_VehopemdAccOn();
     u1_t_igron = u1_g_VehopemdIgnOn();
     u1_t_igpon = u1_g_VehopemdIgnpOn();

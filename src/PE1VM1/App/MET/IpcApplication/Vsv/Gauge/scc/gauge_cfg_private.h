@@ -37,10 +37,12 @@
 
 #define u2_g_GaugeCfgVomchk()                    ((U2)((u4_g_VehopemdMdfield() & (U4)GAUGE_VOM_MASK) << GAUGE_VOM_SHIFT))
 
+#if 0   /* BEV BSW provisionally */
 #if((GAUGE_SRC_CHK_ACC_ON != (VEH_OPEMD_MDBIT_ACC << GAUGE_VOM_SHIFT)) || \
     (GAUGE_SRC_CHK_STA_ON != (VEH_OPEMD_MDBIT_STA << GAUGE_VOM_SHIFT)) || \
     (GAUGE_SRC_CHK_IGN_ON != (VEH_OPEMD_MDBIT_IGN << GAUGE_VOM_SHIFT)))
 #error "gauge_cfg_private.h : GAUGE_SRC_CHK_XXX_ON shall be compatible with VEH_OPEMD_MDBIT_XXX"
+#endif
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

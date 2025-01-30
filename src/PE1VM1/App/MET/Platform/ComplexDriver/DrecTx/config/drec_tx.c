@@ -20,12 +20,23 @@
 #include "drec_tx.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 #include "rim_ctl_cfg.h"
 #include "dio_if.h"
 #include "iohw_adc.h"
 
+#if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
+#endif
 #include "gauge.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -315,7 +326,11 @@ static void    vd_s_DrectxMsg_MET1D50(const U1 * u1_ap_FNC)
     }
     (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
 
+#if 0   /* BEV BSW provisionally */
     u1_t_tx = u1_g_FuelvolTauLwAct();
+#else
+    u1_t_tx = (U1)FALSE;
+#endif
     (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
 
  /* (void)Com_SendSignal(ComConf_ComSignal_FL_DISP,  &u1_t_tx); */ /* written by fuelvol */

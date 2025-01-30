@@ -21,6 +21,11 @@
 #include "alert_brx.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -216,7 +221,7 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_DOA_BUZ, &u1_t_sgnl);
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BSR1S01,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BSR1S01_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
                                      u2_s_ALERT_S_SEA_BC_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -251,7 +256,7 @@ static U4      u4_s_AlertS_seaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_DOAM_MSG, &u1_t_sgnl);
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BSR1S02,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BSR1S02_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
                                      u2_s_ALERT_S_SEA_PD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 

@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -53,9 +58,9 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_sp_alert_s_cleson_csr1s07[ALERT_S_CLESON_CI_NUM_CSR1S07];
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -64,39 +69,39 @@ static U4      u4_s_AlertS_clesonTtSrcchk   (const U1 u1_a_VOM, const U4 u4_a_IG
 static U4      u4_s_AlertS_clesonBzSrcchk   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertS_clesonVolSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertS_clesonCutinSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonDispChg    (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonCSRDISP3   (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonFLC_POS    (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonFRC_POS    (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonFL_POS     (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonFR_POS     (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonRLC_POS    (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonRRC_POS    (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonRL_POS     (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonRR_POS     (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonCSMUTESW   (void);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -273,13 +278,13 @@ const ST_ALERT_MTRX st_gp_ALERT_S_CLESON_MTRX[4] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertS_clesonInit(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
     U4              u4_t_loop;
 
     for(u4_t_loop = (U4)0U; u4_t_loop < (U4)ALERT_S_CLESON_CI_NUM_CSR1S07; u4_t_loop++){
         u1_sp_alert_s_cleson_csr1s07[u4_t_loop] = (U1)0U;
     }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 }
 
 /*===================================================================================================================================*/
@@ -290,14 +295,14 @@ void    vd_g_AlertS_clesonInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_clesonTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07) && defined(ComConf_ComSignal_CS_LAMP)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) && defined(ComConf_ComSignal_CS_LAMP)
     static const U2 u2_s_ALERT_S_CLESON_TT_TO_THRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_CLESON_TT_LSB_STS  = (U1)2U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S07,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S07_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_S_CLESON_TT_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sgnl     = (U1)0U;
@@ -308,7 +313,7 @@ static U4      u4_s_AlertS_clesonTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) && defined(ComConf_ComSignal_CS_LAMP) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) && defined(ComConf_ComSignal_CS_LAMP) */
 }
 
 /*===================================================================================================================================*/
@@ -319,14 +324,14 @@ static U4      u4_s_AlertS_clesonTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_clesonBzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_CSR1S08) && defined(ComConf_ComSignal_CSR_BUZ)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S08_RXCH0) && defined(ComConf_ComSignal_CSR_BUZ)
     static const U2 u2_s_ALERT_S_CLESON_BZ_TO_THRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_CLESON_BZ_LSB_STS  = (U1)4U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S08,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S08_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_S_CLESON_BZ_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sgnl     = (U1)0U;
@@ -337,7 +342,7 @@ static U4      u4_s_AlertS_clesonBzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S08) && defined(ComConf_ComSignal_CSR_BUZ) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S08_RXCH0) && defined(ComConf_ComSignal_CSR_BUZ) */
 }
 
 /*===================================================================================================================================*/
@@ -348,13 +353,13 @@ static U4      u4_s_AlertS_clesonBzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_clesonVolSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_CSR1S08) && defined(ComConf_ComSignal_CSR_VOL)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S08_RXCH0) && defined(ComConf_ComSignal_CSR_VOL)
     static const U1 u1_s_ALERT_S_CLESON_VOL_LSB_STS = (U1)3U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S08,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S08_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl     = (U1)0U;
@@ -365,7 +370,7 @@ static U4      u4_s_AlertS_clesonVolSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0x00000008U); /* UNKNOWN */
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S08) && defined(ComConf_ComSignal_CSR_VOL) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S08_RXCH0) && defined(ComConf_ComSignal_CSR_VOL) */
 }
 
 /*===================================================================================================================================*/
@@ -376,7 +381,7 @@ static U4      u4_s_AlertS_clesonVolSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_clesonCutinSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
     static const U4 u4_s_ALERT_S_CLESON_CI_BIT_NODSP = (U4)0x00000004U;
     static const U1 u1_s_ALERT_S_CLESON_CI_LSB_LSTST = (U1)1U;
     static const U1 u1_s_ALERT_S_CLESON_CI_MSK_REQ   = (U1)0x03U;
@@ -397,7 +402,7 @@ static U4      u4_s_AlertS_clesonCutinSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     return(u4_t_src_chk);
 #else
     return((U4)0x00000004U); /* UNKNOWN */
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 }
 
 /*===================================================================================================================================*/
@@ -406,7 +411,7 @@ static U4      u4_s_AlertS_clesonCutinSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static U1      u1_s_AlertS_clesonDispChg(void)
 {
     static const ST_ALERT_S_CLESON_SGNLCFG st_sp_ALERT_S_CLESON_CSR1S07[ALERT_S_CLESON_CI_NUM_CSR1S07] = {
@@ -433,7 +438,7 @@ static U1      u1_s_AlertS_clesonDispChg(void)
 
     u1_t_change      = (U1)0U;
 
-    u1_t_msg_csr1s07 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S07,
+    u1_t_msg_csr1s07 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S07_RXCH0,
                                              (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                              u2_s_ALERT_S_CLESON_CI_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -453,7 +458,7 @@ static U1      u1_s_AlertS_clesonDispChg(void)
 
     return(u1_t_change);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonCSRDISP3(void)                                                                                  */
@@ -461,7 +466,7 @@ static U1      u1_s_AlertS_clesonDispChg(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonCSRDISP3(void)
 {
     U1          u1_t_sgnl;
@@ -472,7 +477,7 @@ static  U1      u1_s_AlertS_clesonCSRDISP3(void)
 #endif /* defined(ComConf_ComSignal_CSRDISP3) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonFLC_POS(void)                                                                                   */
@@ -480,7 +485,7 @@ static  U1      u1_s_AlertS_clesonCSRDISP3(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonFLC_POS(void)
 {
     U1          u1_t_sgnl;
@@ -491,7 +496,7 @@ static  U1      u1_s_AlertS_clesonFLC_POS(void)
 #endif /* defined(ComConf_ComSignal_FLC_POS) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonFRC_POS(void)                                                                                   */
@@ -499,7 +504,7 @@ static  U1      u1_s_AlertS_clesonFLC_POS(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonFRC_POS(void)
 {
     U1          u1_t_sgnl;
@@ -510,7 +515,7 @@ static  U1      u1_s_AlertS_clesonFRC_POS(void)
 #endif /* defined(ComConf_ComSignal_FRC_POS) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonFL_POS(void)                                                                                    */
@@ -518,7 +523,7 @@ static  U1      u1_s_AlertS_clesonFRC_POS(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonFL_POS(void)
 {
     U1          u1_t_sgnl;
@@ -529,7 +534,7 @@ static  U1      u1_s_AlertS_clesonFL_POS(void)
 #endif /* defined(ComConf_ComSignal_FL_POS) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonFR_POS(void)                                                                                    */
@@ -537,7 +542,7 @@ static  U1      u1_s_AlertS_clesonFL_POS(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonFR_POS(void)
 {
     U1          u1_t_sgnl;
@@ -548,7 +553,7 @@ static  U1      u1_s_AlertS_clesonFR_POS(void)
 #endif /* defined(ComConf_ComSignal_FR_POS) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonRL_POS(void)                                                                                    */
@@ -556,7 +561,7 @@ static  U1      u1_s_AlertS_clesonFR_POS(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonRL_POS(void)
 {
     U1          u1_t_sgnl;
@@ -567,7 +572,7 @@ static  U1      u1_s_AlertS_clesonRL_POS(void)
 #endif /* defined(ComConf_ComSignal_RL_POS) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonRR_POS(void)                                                                                    */
@@ -575,7 +580,7 @@ static  U1      u1_s_AlertS_clesonRL_POS(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonRR_POS(void)
 {
     U1          u1_t_sgnl;
@@ -586,7 +591,7 @@ static  U1      u1_s_AlertS_clesonRR_POS(void)
 #endif /* defined(ComConf_ComSignal_RR_POS) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonRLC_POS(void)                                                                                   */
@@ -594,7 +599,7 @@ static  U1      u1_s_AlertS_clesonRR_POS(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonRLC_POS(void)
 {
     U1          u1_t_sgnl;
@@ -605,7 +610,7 @@ static  U1      u1_s_AlertS_clesonRLC_POS(void)
 #endif /* defined(ComConf_ComSignal_RLC_POS) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonRRC_POS(void)                                                                                   */
@@ -613,7 +618,7 @@ static  U1      u1_s_AlertS_clesonRLC_POS(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonRRC_POS(void)
 {
     U1          u1_t_sgnl;
@@ -624,7 +629,7 @@ static  U1      u1_s_AlertS_clesonRRC_POS(void)
 #endif /* defined(ComConf_ComSignal_RRC_POS) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /* static  U1      u1_s_AlertS_clesonCSMUTESW(void)                                                                                  */
@@ -632,7 +637,7 @@ static  U1      u1_s_AlertS_clesonRRC_POS(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if defined(OXCAN_PDU_RX_CAN_CSR1S07)
+#if defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0)
 static  U1      u1_s_AlertS_clesonCSMUTESW(void)
 {
     U1          u1_t_sgnl;
@@ -643,7 +648,7 @@ static  U1      u1_s_AlertS_clesonCSMUTESW(void)
 #endif /* defined(ComConf_ComSignal_CSMUTESW) */
     return (u1_t_sgnl);
 }
-#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07) */
+#endif /* defined(OXCAN_PDU_RX_CAN_CSR1S07_RXCH0) */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

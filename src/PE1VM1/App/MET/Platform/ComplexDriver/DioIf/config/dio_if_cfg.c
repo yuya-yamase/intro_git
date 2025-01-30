@@ -17,11 +17,20 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "dio_if_cfg_private.h"
+#if 0   /* BEV BSW provisionally */
 #include "dio_drv.h"
+#endif
 #include "iohw_diflt.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "iohw_adc_channel_STUB.h"
+#include "iohw_diflt_sgnl_STUB.h"
+#endif
 #include "telltale.h"
 #include "thblnkr.h"
+#if 0   /* BEV BSW provisionally */
 #include "cxstsw.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -95,7 +104,11 @@ static U2      u2_s_DioIfRea_Ub_ST(void)
 {
     U2               u2_t_gr;
 
+#if 0   /* BEV BSW provisionally */
     vd_g_CxStswGetDioStsw(&u2_t_gr);
+#else
+    u2_t_gr = (U2)0U;
+#endif
 
     return(u2_t_gr);
 }

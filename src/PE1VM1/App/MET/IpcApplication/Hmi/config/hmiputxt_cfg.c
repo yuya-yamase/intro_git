@@ -20,8 +20,15 @@
 #include "hmiputxt_if_cfg.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "alert.h"
+#if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
+#endif
 #include "ambtmp.h"
 #include "oilmil.h"
 #include "odo_om_rst_if.h"
@@ -29,6 +36,10 @@
 #include "veh_opemd.h"
 #include "vardef.h"
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 #include "calibration.h"
 #if (HMIPUTXT_TIMCHG_JDG == HMIPUTXT_JDG_ON)
 #include "evschg.h"
@@ -226,7 +237,11 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT, u2_t_num_reqbit, u4_ap_req, (U1)HMIPUTXT_NWORD);
 
     /*  LoFuel  */
+#if 0   /* BEV BSW provisionally */
     u1_t_sts = u1_g_FuelvolTauLwAct();
+#else
+    u1_t_sts = (U1)FALSE;
+#endif
     if(u1_t_sts == (U1)TRUE){
         u2_t_blkpos             = (U2)HMIPUTXT_FUEL_IDX >> HMIPUTXT_IDX_SFT;
         u2_t_bitpos             = (U2)HMIPUTXT_FUEL_IDX &  (U2)HMIPUTXT_REM_MSK;
@@ -732,7 +747,7 @@ static U1 u1_s_HmiPuTxtCfgTimchgReq(void)
     U1 u1_t_timchg_pncdsp;   /* P_NCDSPVarlue  */
 
     u1_t_igon = u1_g_VehopemdIgnOn();
-    u1_t_baon = u1_g_VehopemdBaOn();
+    u1_t_baon = u1_g_VehopemdPbaOn();
     u1_t_timchg_pncdsp = (U1)0U;
 
     u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_PLG1G10_RXCH0);

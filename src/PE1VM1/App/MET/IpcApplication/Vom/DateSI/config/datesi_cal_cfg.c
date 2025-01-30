@@ -19,8 +19,21 @@
 #include "datesi_cal_cfg_private.h"
 #include "datesi_cfg_private.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
+#else
+#include "es_inspect_STUB.h"
+#endif
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -220,7 +233,11 @@ void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVE
 /*===================================================================================================================================*/
 U1              u1_g_DateSICalCfgEsichk(void)
 {
+#if 0   /* BEV BSW provisionally */
     return (u1_g_ESInspectMdBfield());
+#else
+    return ((U1)0U);
+#endif
 }
 
 /*===================================================================================================================================*/

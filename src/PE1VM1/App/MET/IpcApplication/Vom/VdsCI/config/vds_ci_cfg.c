@@ -18,10 +18,20 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vds_ci_cfg_private.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 
 #include "veh_opemd.h"
 #include "iohw_diflt.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "iohw_adc_channel_STUB.h"
+#include "iohw_diflt_sgnl_STUB.h"
+#endif
 #include "odo_km.h"
 #include "vardef.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

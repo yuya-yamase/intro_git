@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -187,16 +192,16 @@ static U4      u4_s_AlertB_bdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_sgnl;
     U1              u1_t_slp;
 
-    u1_t_msgsts_bdb1s01 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S01,
+    u1_t_msgsts_bdb1s01 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S01_RXCH0,
                                                 (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                                 u2_s_ALERT_B_BDOOR_THSH_TO_BDB1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
-    u1_t_msgsts_bdb1f01 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1F01,
+    u1_t_msgsts_bdb1f01 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1F01_RXCH0,
                                                 (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                                 u2_s_ALERT_B_BDOOR_THSH_TO_BDB1F) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
 #if (ALERT_CFG_B_BDOOR_LPSDWARN == TRUE)
-    u1_t_msgsts_drl1s03 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DRL1S03,
+    u1_t_msgsts_drl1s03 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DRL1S03_RXCH0,
                                                 (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                                 u2_s_ALERT_B_BDOOR_THSH_TO_DRL1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
@@ -204,7 +209,7 @@ static U4      u4_s_AlertB_bdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 #endif /* (ALERT_CFG_B_BDOOR_LPSDWARN == TRUE) */
 
 #if (ALERT_CFG_B_BDOOR_RPSDWARN == TRUE)
-    u1_t_msgsts_drr1s03 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DRR1S03,
+    u1_t_msgsts_drr1s03 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DRR1S03_RXCH0,
                                                 (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                                 u2_s_ALERT_B_BDOOR_THSH_TO_DRR1S) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else

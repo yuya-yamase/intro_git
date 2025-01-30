@@ -19,10 +19,24 @@
 #include "mmlang_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "veh_opemd.h"
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 #include "nvmc_mgr_cfg.h"
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
+#else
+#include "nvmc_mgr_cfg_STUB.h"
+#include "es_inspect_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -192,7 +206,11 @@ U1  u1_g_MmlangCfgAccchk(void)
 /*===================================================================================================================================*/
 U1      u1_g_MmlangCfgEsichk(void)
 {
+#if 0   /* BEV BSW provisionally */
     return(u1_g_ESInspectMdBfield());
+#else
+    return((U1)0U);
+#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_MmlangCfgPts(void)                                                                                                  */
@@ -202,7 +220,11 @@ U1      u1_g_MmlangCfgEsichk(void)
 /*===================================================================================================================================*/
 U1      u1_g_MmlangCfgPts(void)
 {
+#if 0   /* BEV BSW provisionally */
     return(u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_LAS));
+#else
+    return((U1)FALSE);
+#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_MmlangCfgLangDBType(void)                                                                                           */

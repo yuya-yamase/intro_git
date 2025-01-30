@@ -3456,7 +3456,7 @@ static U1 u1_s_GwcxCfg_BDB1S22_Msgsts(void)
 }
 #endif
 
-#if defined(OXCAN_PDU_RX_CAN_WIP1S01)
+#if defined(OXCAN_PDU_RX_CAN_WIP1S01_RXCH0)
 /*===================================================================================================================================*/
 /*  CXPI to CAN gateway                                                                                                              */
 /*  Scope : Private                                                                                                                  */
@@ -3468,7 +3468,7 @@ static U1 u1_s_GwcxCfg_WIP1S01_Msgsts(void)
 {
     U1 u1_t_msgsts;                     /*  Receive Status              */
 
-    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_WIP1S01,
+    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_WIP1S01_RXCH0,
                                         (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                         u2_GATEWAY_WIP1S01_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -4462,7 +4462,9 @@ static void vd_s_GwcxCfg_CXMET1S01_Send(void)
 {
     vd_s_GwcxCfg_RHEOSTAT_Send();
 
+#if 0   /* BEV BSW provisionally */
     vd_g_oXCANCxptxTrgrTx((U1)CXPICDD_FRM_0_CH0_CXMET1S01_INDEX);
+#endif
 }
 #elif defined(CXPICDD_FRM_0_CH0_CXMET1S02_INDEX)
 /*===================================================================================================================================*/
@@ -4504,7 +4506,9 @@ static void vd_s_GwcxCfg_CXMET1S03_Send(void)
     vd_s_GwcxCfg_VIBSTRG_Send();
     vd_s_GwcxCfg_VIBTONG_Send();
 
+#if 0   /* BEV BSW provisionally */
     vd_g_oXCANCxptxTrgrTx((U1)CXPICDD_FRM_0_CH0_CXMET1S03_INDEX);
+#endif
 }
 #elif defined(CXPICDD_FRM_0_CH0_CXMET1S03_INDEX)
 /*===================================================================================================================================*/
@@ -4545,7 +4549,9 @@ static void vd_s_GwcxCfg_CXMET1S04_Send(void)
 {
     vd_s_GwcxCfg_O_STG_F_Send();
 
+#if 0   /* BEV BSW provisionally */
     vd_g_oXCANCxptxTrgrTx((U1)CXPICDD_FRM_0_CH0_CXMET1S04_INDEX);
+#endif
 }
 #elif defined(CXPICDD_FRM_0_CH0_CXMET1S04_INDEX)
 /*===================================================================================================================================*/
@@ -4586,7 +4592,9 @@ static void vd_s_GwcxCfg_CXMET1S05_Send(void)
     vd_s_GwcxCfg_T_LOGI_Send();
     vd_s_GwcxCfg_EL_SENS_Send();
 
+#if 0   /* BEV BSW provisionally */
     vd_g_oXCANCxptxTrgrTx((U1)CXPICDD_FRM_0_CH0_CXMET1S05_INDEX);
+#endif
 }
 #elif defined(CXPICDD_FRM_0_CH0_CXMET1S05_INDEX)
 /*===================================================================================================================================*/
@@ -4637,7 +4645,9 @@ static void vd_s_GwcxCfg_CXMET1S06_Send(void)
     vd_s_GwcxCfg_BW_SW_PR_Send();
     vd_s_GwcxCfg_AUTINT_Send();
 
+#if 0   /* BEV BSW provisionally */
     vd_g_oXCANCxptxTrgrTx((U1)CXPICDD_FRM_0_CH0_CXMET1S06_INDEX);
+#endif
 }
 #elif defined(CXPICDD_FRM_0_CH0_CXMET1S06_INDEX)
 /*===================================================================================================================================*/

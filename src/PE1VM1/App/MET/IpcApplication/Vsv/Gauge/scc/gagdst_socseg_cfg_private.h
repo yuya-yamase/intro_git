@@ -22,6 +22,10 @@
 #include "aip_common.h"
 #include "rngcmpr_u2.h"
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 #include "gauge_if.h"
 #include "veh_opemd.h"

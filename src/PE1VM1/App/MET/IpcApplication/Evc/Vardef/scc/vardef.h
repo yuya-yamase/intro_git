@@ -35,11 +35,19 @@
 #define VDF_TSLOT_4                              (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #define VDF_EOM_ACC_ON                           (0x0001U)
 #define VDF_EOM_IGR_ON                           (0x0002U)
 #define VDF_EOM_PBA_ON                           (0x0008U)
 #define VDF_EOM_IGP_ON                           (0x0010U)
 #define VDF_EOM_PB_ON                            (0x0080U)
+#else
+#define VDF_EOM_ACC_ON                           (0x00000010U)
+#define VDF_EOM_IGR_ON                           (0x00000040U)
+#define VDF_EOM_PBA_ON                           (0x00000400U)
+#define VDF_EOM_IGP_ON                           (0x00000200U)
+#define VDF_EOM_PB_ON                            (0x00000080U)
+#endif
 
 #define VDF_EOM_VOM_ON                           (0x00ffU)
 

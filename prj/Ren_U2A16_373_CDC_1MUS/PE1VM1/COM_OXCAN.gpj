@@ -16,6 +16,8 @@
     -I${MCAL_DIR}/Wfd
     -I${MCAL_DIR}/PORT
 
+    -I${APP_DIR}/MET/XSPI_MET/config
+    
     -I${VEHOPE_DIR}/scc
     -I${VEHOPE_DIR}/config_U2A16_met
 
@@ -30,7 +32,6 @@ config_U2A16_met/oxcan_nmwk_cfg.c
 config_U2A16_met/oxcan_opemd_cfg.c
 config_U2A16_met/oxcan_rx_cfg.c
 config_U2A16_met/oxcan_usrhk.c
-config_U2A16_met/l3r_test.c
 
 libc/oxcan.c
 libc/oxcan_nmwk.c

@@ -38,8 +38,15 @@
 #include "tripcom_nvmif.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "vardef.h"
+#if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
+#endif
 
 #include "alert.h"
 #include "alert_mtrx.h"
@@ -524,7 +531,11 @@ U1              u1_g_TripcomCfgJdgRefuelEnd(void)
     U1     u1_t_ret;
 
 
+#if 0   /* BEV BSW provisionally */
     u1_t_ret = u1_g_FuelvolTauEasAct((U1)FUEL_TAU_EAS_ID_VEU_GFI, (U1)FUEL_TAU_EAS_EDG_OFF);
+#else
+    u1_t_ret = (U1)FALSE;
+#endif
 
     return (u1_t_ret);
 }

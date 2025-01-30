@@ -20,6 +20,11 @@
 #include "vehspd_kmph.h"
 #include "vardef.h"
 #include "iohw_diflt.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "iohw_adc_channel_STUB.h"
+#include "iohw_diflt_sgnl_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

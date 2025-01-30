@@ -19,7 +19,7 @@
 #include "hmiproxy_cfg_private.h"
 
 #include "hmivardef.h"
-#include "lcom_spi_ch1.h"
+#include "xspi_met_ch1.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -66,6 +66,7 @@ static const U1 u1_sp_HMIVARDEF_FLAMEID[HMIVARDEF_SIG_NUM] =
     (U1)HMIVARDEF_FLM_MM2C118N,
     (U1)HMIVARDEF_FLM_MM2C112N_CTY
 };
+#if 0   /* BEV BSW provisionally */
 static const ST_LCOM_RX_CNT u1_sp_HMIVARDEF_RXCNT[HMIVARDEF_SIG_NUM] =
 {
     { &u1_g_LcomSpiMm2c100n_rxcnt },
@@ -74,6 +75,16 @@ static const ST_LCOM_RX_CNT u1_sp_HMIVARDEF_RXCNT[HMIVARDEF_SIG_NUM] =
     { &u1_g_LcomSpiMm2c118n_rxcnt },
     { &u1_g_LcomSpiMm2c112n_rxcnt }
 };
+#else
+static const ST_LCOM_RX_CNT u1_sp_HMIVARDEF_RXCNT[HMIVARDEF_SIG_NUM] =
+{
+    { &u1_g_XSpiMm2c100n_rxcnt },
+    { &u1_g_XSpiMm2c107n_rxcnt },
+    { &u1_g_XSpiMm2c112n_rxcnt },
+    { &u1_g_XSpiMm2c118n_rxcnt },
+    { &u1_g_XSpiMm2c112n_rxcnt }
+};
+#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

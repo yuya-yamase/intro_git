@@ -23,6 +23,10 @@
 #include "veh_opemd.h"
 
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 #include "vardef_esopt.h"
 #include "mcst.h"
@@ -30,6 +34,11 @@
 #include "hudcom.h"
 #include "hudcstmsup.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 #include "dspbld_tt_bldr.h"
 #include "dspmgr.h"

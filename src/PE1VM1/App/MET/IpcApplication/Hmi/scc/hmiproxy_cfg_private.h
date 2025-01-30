@@ -22,6 +22,10 @@
 #include "aip_common.h"
 #include "fpcall_vd_fvd.h"
 #include "scheduler.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "scheduler_taskdef.h"
+#endif
 
 #include "hmiproxy.h"
 

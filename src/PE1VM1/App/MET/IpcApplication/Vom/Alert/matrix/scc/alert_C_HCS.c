@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 #include "alert_brx.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -325,7 +330,7 @@ static U4      u4_s_AlertC_hcsTtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ASC1S90,
                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                      u2_s_ALERT_C_HCS_TTB_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    
+
     vd_g_AlertBRxTrnsSts(&u1_s_alert_c_hcs_ttb_msgsts, u1_t_msgsts);
 
     u1_t_sgnl = (U1)0U;

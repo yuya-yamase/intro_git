@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -196,7 +201,7 @@ static U4      u4_s_AlertP_tecolp2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
                                         (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                         u2_s_ALERT_P_TECOLP2_TO_B_ECO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
-    u1_t_ehv1f04_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_31,
+    u1_t_ehv1f04_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0,
                                         (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                         u2_s_ALERT_P_TECOLP2_TO_IECO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 

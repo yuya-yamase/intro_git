@@ -137,10 +137,12 @@ U1              u1_g_DateSITimAdjAct(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimAdjustOwnClk(const U4 u4_a_HHMMSS)
 {
+#if 0   /* BEV BSW provisionally */
     (void)u1_g_DateclkAdjUnLock((U1)DATE_CLK_ADJ_HHMMSS);
     (void)u1_g_DateclkAdjHhmmss24h(u4_a_HHMMSS);
     vd_g_DateclkSet();
     vd_g_DateclkAdjLock((U1)DATE_CLK_ADJ_HHMMSS);
+#endif
 }
 
 /*===================================================================================================================================*/

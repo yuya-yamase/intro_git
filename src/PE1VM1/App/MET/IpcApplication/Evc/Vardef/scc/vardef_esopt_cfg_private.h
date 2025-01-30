@@ -24,7 +24,15 @@
 /* #include "vardef_esopt.h" */ /* vardef_esopt.h is included in vardef_dbf.h" */
 
 #include "nvmc_mgr.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "nvmc_mgr_cfg_STUB.h"
+#endif
 #include "rim_ctl.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "rim_ctl_cfg_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */

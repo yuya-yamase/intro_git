@@ -20,6 +20,11 @@
 #include "vardef.h"
 #include "vardef_esopt.h"
 #include "iohw_diflt.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "iohw_adc_channel_STUB.h"
+#include "iohw_diflt_sgnl_STUB.h"
+#endif
 #include "vehspd_kmph.h"
 #include "engspd_rpm.h"
 #include "odo_km.h"
@@ -27,7 +32,9 @@
 #include "unitconvrt.h"
 #include "veh_opemd.h"
 #include "ptsctmp_cel.h"
+#if 0   /* BEV BSW provisionally */
 #include "flid_open.h"
+#endif
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -312,13 +319,25 @@
 #define u1_g_AlertSpdKmphBiased(u2_ap_kmph, u1_a_BC)                (u1_g_VehspdKmphBiased(u2_ap_kmph, u1_a_BC))
 #define u1_g_AlertSpdKmphInst(u2_ap_kmph, u1_a_OW_EN)               (u1_g_VehspdKmphInst(u2_ap_kmph, u1_a_OW_EN))
 #define u1_g_AlertSpdFluctStat()                                    (u1_g_VehspdFluctStat())
+#if 0   /* BEV BSW provisionally */
 #define u1_g_AlertEngspdRpmInst(u2p_a_rpm)                          (u1_g_EngspdRpmInst(u2p_a_rpm))
+#else
+#define u1_g_AlertEngspdRpmInst(u2p_a_rpm)                          ((U1)0U)
+#endif
 #define u4_g_AlertUnitconvtrKmtoMi(x)                               (u4_g_UnitconvtrKmtoMi(x))
 #define u1_g_AlertUnit(u1_a_IDX)                                    (u1_g_Unit(u1_a_IDX))
+#if 0   /* BEV BSW provisionally */
 #define u1_g_AlertPtsOn(u1_a_INV)                                   (u1_g_VehopemdPtsOn(u1_a_INV))
+#else
+#define u1_g_AlertPtsOn(u1_a_INV)                                   ((U1)FALSE)
+#endif
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
 #define u1_g_AlertEsOptAvailable(u2_a_CH)                           (u1_g_VardefEsOptAvaByCh(u2_a_CH))
+#if 0   /* BEV BSW provisionally */
 #define u1_g_AlertFLidopenMsgRqst()                                 (u1_g_FLidopenMsgRqst())
+#else
+#define u1_g_AlertFLidopenMsgRqst()                                 ((U1)FALSE)
+#endif
 #define u1_g_AlertOillvSw()                                         ((U1)FALSE)
 #define u1_g_AlertShiftSbwFunc()                                    (u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW))
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))

@@ -18,6 +18,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "battpow_cfg_private.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "vardef.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -99,7 +104,7 @@ U1              u1_g_BattpowCfgSOCDSP(U1 * const u1p_a_socdsp)
     U1                  u1_t_sts;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_SOC_DSP, u1p_a_socdsp);
-    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1S06,
+    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1S06_RXCH0,
                                 ((U2)OXCAN_RX_SYS_NRX_BAT |
                                  (U2)OXCAN_RX_SYS_TOE_BAT),
                                 u2_OXCAN_RXTO_THRSH(5000U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
@@ -117,7 +122,7 @@ U1              u1_g_BattpowCfgSOCINDLL(U1 * const u1p_a_socindll)
     U1                  u1_t_sts;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_SOCINDLL, u1p_a_socindll);
-    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S31,
+    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S31_RXCH0,
                                 ((U2)OXCAN_RX_SYS_NRX_IGP |
                                  (U2)OXCAN_RX_SYS_TOE_IGP),
                                 u2_OXCAN_RXTO_THRSH(5000U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);

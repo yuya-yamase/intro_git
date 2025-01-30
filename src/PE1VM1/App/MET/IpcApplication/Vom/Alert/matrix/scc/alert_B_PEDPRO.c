@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -97,14 +102,14 @@ const ST_ALERT_MTRX st_gp_ALERT_B_PEDPRO_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_pedproSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_PDU_RX_CAN_PDS1S01) /* _840B_CAN_ */
+#if defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_PDU_RX_CAN_PDS1S01_RXCH0) /* _840B_CAN_ */
     static const U2 u2_s_ALERT_B_PEDPRO_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_PEDPRO_LSB_MSGSTS = (U1)2U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PDS1S01,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PDS1S01_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_B_PEDPRO_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -115,9 +120,9 @@ static U4      u4_s_AlertB_pedproSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_PEDPRO_LSB_MSGSTS);
 
     return(u4_t_src_chk);
-#else /* defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_PDU_RX_CAN_PDS1S01)  */
+#else /* defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_PDU_RX_CAN_PDS1S01_RXCH0)  */
     return((U4)0U);
-#endif /* defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_PDU_RX_CAN_PDS1S01)  */
+#endif /* defined(ComConf_ComSignal_PDS_WL) && defined(OXCAN_PDU_RX_CAN_PDS1S01_RXCH0)  */
 }
 
 /*===================================================================================================================================*/

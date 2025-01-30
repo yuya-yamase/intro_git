@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -152,15 +157,15 @@ static U4      u4_s_AlertD_atmalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-#if defined(OXCAN_PDU_RX_CAN_ECT1G92)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92,
+#if defined(OXCAN_PDU_RX_CAN_ECT1G92_RXCH0)
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1S93,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1S93_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_ECT1G92) */
+#endif /* defined(OXCAN_PDU_RX_CAN_ECT1G92_RXCH0) */
 
     u1_t_sgnl     = (U1)0U;
 #if defined(ComConf_ComSignal_TMSYS_WM)
@@ -170,7 +175,7 @@ static U4      u4_s_AlertD_atmalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_ATMAL_LSB_ECT1);
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S99,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S99_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_ATMAL_LSB_EN99);

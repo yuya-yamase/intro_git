@@ -18,6 +18,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "ecojdg_cfg_private.h"
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 #include "veh_opemd.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -100,15 +105,15 @@ U1          u1_g_EcoJdgCfgScrInst(U1 * u1p_a_id, U1 * u1p_a_scr, U1 * u1p_a_cnt)
     (void)Com_ReceiveSignal(ComConf_ComSignal_ESPOHVVL, &u1_t_espohvvl);
 #endif/* >>ComConf_ComSignal_ESPOHVVL */
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S23)
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1S23);
-    u1_t_rx_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S23,
+#if defined(OXCAN_PDU_RX_CAN_EHV1S23_RXCH0)
+    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0);
+    u1_t_rx_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0,
                                    (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),
                                    (U2)ECOJDG_EHV1S23_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_rx_cnt = (U1)OXCAN_RX_RXEV_CNT_UNK;
     u1_t_rx_sts = (U1)COM_NO_RX;
-#endif/* >>OXCAN_PDU_RX_CAN_EHV1S23 */
+#endif/* >>OXCAN_PDU_RX_CAN_EHV1S23_RXCH0 */
     if(u1_t_espohvid < (U1)ECOJDG_ESPOHVID_NUM){
         *u1p_a_id = u1_sp_ECOJDG_ID_CHK[u1_t_espohvid];
     }
@@ -125,11 +130,11 @@ U1          u1_g_EcoJdgCfgScrInst(U1 * u1p_a_id, U1 * u1p_a_scr, U1 * u1p_a_cnt)
 /*===================================================================================================================================*/
 U1          u1_g_EcoJdgCfgRxCnt(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_EHV1S23)
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1S23));
+#if defined(OXCAN_PDU_RX_CAN_EHV1S23_RXCH0)
+    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0));
 #else
     return((U1)OXCAN_RX_RXEV_CNT_UNK);
-#endif/* >>OXCAN_PDU_RX_CAN_EHV1S23 */
+#endif/* >>OXCAN_PDU_RX_CAN_EHV1S23_RXCH0 */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

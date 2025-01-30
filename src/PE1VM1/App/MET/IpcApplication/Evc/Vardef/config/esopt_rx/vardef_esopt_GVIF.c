@@ -60,9 +60,9 @@ U1      u1_g_VdfEsoRx_GVIF(void)
     U1                 u1_t_sts;
     U1                 u1_t_ava_rx;
 
-    u1_t_sts = u1_g_LcomSpiGvifSts();
+    u1_t_sts = u1_g_XSpiGvifSts();
     
-    if(u1_t_sts == (U1)LCOM_SPI_GVIF_LINKNML){
+    if(u1_t_sts == (U1)XSPI_GVIF_LINKNML){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -82,9 +82,9 @@ U1      u1_g_VdfEsoRx_GVIF_METDISP(void)
     U1                 u1_t_sts;
     U1                 u1_t_ava_rx;
 
-    u1_t_sts = u1_g_LcomSpiGvifSts_METDISP();
+    u1_t_sts = u1_g_XSpiGvifSts_METDISP();
 
-    if(u1_t_sts == (U1)LCOM_SPI_GVIF_METDSP_NML){
+    if(u1_t_sts == (U1)XSPI_GVIF_METDSP_NML){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{

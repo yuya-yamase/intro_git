@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -185,12 +190,12 @@ static U4      u4_s_AlertH_unioveTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_sgnl_b_exkame;
 #endif /* defined(OXCAN_PDU_RX_CAN_ENG1G97) && defined(ComConf_ComSignal_B_EXKAME) */
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID)
+#if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_HVOTID)
     static const U1 u1_s_ALERT_H_UNIOVE_TTBC_LSB_EHV = (U1)5U;
     static const U1 u1_s_ALERT_H_UNIOVE_TTBC_LSB_SGN = (U1)3U;
     U1              u1_t_msgsts_ehv;
     U1              u1_t_sgnl_hvotid;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID) */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_HVOTID) */
 
     U4              u4_t_src_chk;
 
@@ -206,15 +211,15 @@ static U4      u4_s_AlertH_unioveTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk       = (U4)0U;
 #endif /* defined(OXCAN_PDU_RX_CAN_ENG1G97) && defined(ComConf_ComSignal_B_EXKAME) */
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID)
-    u1_t_msgsts_ehv    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94,
+#if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_HVOTID)
+    u1_t_msgsts_ehv    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
                                                (U2)OXCAN_RX_SYS_NRX_IGR,
                                                (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl_hvotid   = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVOTID, &u1_t_sgnl_hvotid);
     u4_t_src_chk      |= ((U4)u1_t_sgnl_hvotid << u1_s_ALERT_H_UNIOVE_TTBC_LSB_SGN);
     u4_t_src_chk      |= ((U4)u1_t_msgsts_ehv  << u1_s_ALERT_H_UNIOVE_TTBC_LSB_EHV);
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID) */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_HVOTID) */
 
     return(u4_t_src_chk);
 }
@@ -227,14 +232,14 @@ static U4      u4_s_AlertH_unioveTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_uniovePdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID)
+#if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_HVOTID)
     static const U1 u1_s_ALERT_H_UNIOVE_PD_LSB_EHV   = (U1)2U;
     static const U1 u1_s_ALERT_H_UNIOVE_PD_LSB_PTSYS = (U1)3U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 
@@ -253,7 +258,7 @@ static U4      u4_s_AlertH_uniovePdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID) */
+#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_HVOTID) */
 }
 
 /*===================================================================================================================================*/

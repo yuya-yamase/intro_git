@@ -68,7 +68,7 @@ U1      u1_g_VdfEsoRx_4WDSYS(void)
     u1_t_wrg = (U1)0U;
     u1_t_rx = (U1)0U;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGP,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 

@@ -324,7 +324,11 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
        (u1_t_sync_range_is_ok                     != (U1)TRUE                   ) ||
        ((st_t_tim_rx.u1p_time[HHMMSS_24H_TIME_HR] == u1_s_datesi_tim_prv_hr     ) &&
         (u1_s_datesi_tim_sync                     == (U1)TRUE                   ))){
+#if 0   /* BEV BSW provisionally */
         u4_t_now = u4_g_DateclkHhmmss24h();
+#else
+        u4_t_now = (U4)0U;
+#endif
         u4_t_adj = (U4)HHMMSS_UNKNWN;
     }
     else{
@@ -667,7 +671,11 @@ void            vd_g_DateSITimExecTmSet(void)
 
     vd_g_DateSITimAdjustOwnClk(u4_t_hhmmss_zerorst);
 
+#if 0   /* BEV BSW provisionally */
     u4_t_hhmmss_diag = u4_g_DateclkHhmmss24h();
+#else
+    u4_t_hhmmss_diag   = (U4)0U;
+#endif
     u4_t_hhmmss_diag = u4_s_DateSITimUpdateNow(u4_t_hhmmss_diag, s4_s_datesi_tim_ofst);
     vd_s_DateSITimDiagClkNewBak(u4_t_hhmmss_diag);
     vd_g_DateSITimSetDispClk(u4_t_hhmmss_diag);
@@ -876,7 +884,11 @@ void            vd_g_DateSITimClockUpdate(void)
 
         vd_g_DateSITimAdjustOwnClk(u4_t_hhmmss_update);
 
+#if 0   /* BEV BSW provisionally */
         u4_t_hhmmss_diag = u4_g_DateclkHhmmss24h();
+#else
+        u4_t_hhmmss_diag = (U4)0U;
+#endif
         u4_t_hhmmss_diag = u4_s_DateSITimUpdateNow(u4_t_hhmmss_diag, s4_s_datesi_tim_ofst);
         vd_s_DateSITimDiagClkNewBak(u4_t_hhmmss_diag);
         vd_g_DateSITimSetDispClk(u4_t_hhmmss_diag);

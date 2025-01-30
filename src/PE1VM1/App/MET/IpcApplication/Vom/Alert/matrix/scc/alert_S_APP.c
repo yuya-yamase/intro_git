@@ -20,6 +20,11 @@
 #include "alert_mtrx_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "Com_Cfg_STUB.h"
+#include "oxcan_channel_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -196,14 +201,14 @@ const ST_ALERT_MTRX st_gp_ALERT_S_APP_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_appBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_IPA1S05) && defined(ComConf_ComSignal_IPA_BZ2)
+#if defined(OXCAN_PDU_RX_CAN_IPA1S05_RXCH0) && defined(ComConf_ComSignal_IPA_BZ2)
     static const U2 u2_s_ALERT_S_APP_BC_THRSH_TO   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_APP_BC_LSB_COMSTS = (U1)3U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_IPA1S05,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_IPA1S05_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_S_APP_BC_THRSH_TO) & (U1)(COM_TIMEOUT | COM_NO_RX);
 
@@ -216,7 +221,7 @@ static U4      u4_s_AlertS_appBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_IPA1S05) && defined(ComConf_ComSignal_IPA_BZ2) */
+#endif /* defined(OXCAN_PDU_RX_CAN_IPA1S05_RXCH0) && defined(ComConf_ComSignal_IPA_BZ2) */
 }
 
 /*===================================================================================================================================*/
@@ -227,14 +232,14 @@ static U4      u4_s_AlertS_appBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_appPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_IPA1S05) && defined(ComConf_ComSignal_APPME)
+#if defined(OXCAN_PDU_RX_CAN_IPA1S05_RXCH0) && defined(ComConf_ComSignal_APPME)
     static const U2 u2_s_ALERT_S_APP_PD_THRSH_TO   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_APP_PD_LSB_COMSTS = (U1)4U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_IPA1S05,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_IPA1S05_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_S_APP_PD_THRSH_TO) & (U1)(COM_TIMEOUT | COM_NO_RX);
 
@@ -247,7 +252,7 @@ static U4      u4_s_AlertS_appPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_IPA1S05) && defined(ComConf_ComSignal_APPME) */
+#endif /* defined(OXCAN_PDU_RX_CAN_IPA1S05_RXCH0) && defined(ComConf_ComSignal_APPME) */
 }
 
 /*===================================================================================================================================*/
