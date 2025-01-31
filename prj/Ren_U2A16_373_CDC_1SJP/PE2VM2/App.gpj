@@ -26,6 +26,8 @@
     -I${VEHOPE_DIR}/scc
     -I${VEHOPE_DIR}/config_U2A16_met
     -I${LIB_DIR}
+    
+    -I${MCAL_PWM_SCC_DIR}
 
     -I${APP_DIR}/IVI
     -I${APP_DIR}/IVI/XSPI
