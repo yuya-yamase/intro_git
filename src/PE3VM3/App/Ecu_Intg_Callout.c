@@ -24,8 +24,7 @@
 
 #include "xspi.h"
 
-#warning "VM_Layout" /* 暫定のコメントがあるが、PE3VM3に下の1行を移植する */
-#include "Central_Stub.h"  /* 暫定_CentralApp VM0用 */
+#include "EthSW_Task.h"
 
 #include "veh_opemd.h"
 #include "oxcan.h"
@@ -76,8 +75,7 @@ Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
     /* XSPI初期化処理 */
     xspi_Init( XSPI_CH_03 );
 
-    #warning "VM_Layout" /* 暫定のコメントがあるが、PE3VM3に下の1行を移植する */
-    vd_Central_Stub_Init();                           /* 暫定_CentralApp VM0用 */
+    EthSW_Sch_PowerOnInit();
 
     return E_OK;
 }
@@ -87,6 +85,8 @@ Std_ReturnType Ecu_Intg_mainFuncCddHigh(void)
 {
     vd_g_L3rTestCycleHigh();
     BswM_CS_MainFunctionHigh();
+
+	EthSW_HighTask();
 
     return E_OK;
 }
@@ -106,8 +106,7 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
 
 Std_ReturnType Ecu_Intg_mainFuncApp(void)
 {
-    #warning "VM_Layout" /* 暫定のコメントがあるが、PE3VM3に下の1行を移植する */
-    vd_Central_Stub_Midtask();    /* 暫定_CentralApp VM0用 */
+    EthSW_MediumTask();
 
     return E_OK;
 }
@@ -128,8 +127,7 @@ Std_ReturnType Ecu_Intg_mainFuncCddLow(void)   /* C-DC CEN VM Low Task: 1ms */
 {
     vd_g_Wdg_SetTriggerCondition((U2)0U);
 
-    #warning "VM_Layout" /* 暫定のコメントがあるが、PE3VM3に下の1行を移植する */
-    vd_Central_Stub_Lowtask();    /* 暫定_CentralApp VM0用 */
+    EthSW_LowTask();
 
     return E_OK;
 }

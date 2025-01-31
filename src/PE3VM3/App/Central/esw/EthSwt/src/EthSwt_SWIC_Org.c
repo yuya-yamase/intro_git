@@ -79,6 +79,10 @@ void EthSwt_SWIC_Org_Init(void){
 	EthSwt_SWIC_Org_Port_SetSpiPortMode( (uint8)ETHSWT_SWIC_PORT_MODE_GPO );
 	u1_s_Port_SpiSts     = (uint8)ETHSWT_SWIC_PORT_SPISTATE_NOTAVAILABLE;
 }
+void EthSwt_SWIC_Org_DeInit(void){
+	EthSwt_SWIC_Org_Port_SetSpiPortMode( (uint8)ETHSWT_SWIC_PORT_MODE_GPO );
+	u1_s_Port_SpiSts     = (uint8)ETHSWT_SWIC_PORT_SPISTATE_NOTAVAILABLE;
+}
 void EthSwt_SWIC_Org_MainFunction(void)  /* 5ms’èŠú */
 {
     if ( u1_s_Port_TaskCounter < (uint8)ETHSWT_SWIC_PORT_DAT_MAX )
@@ -106,10 +110,10 @@ static void EthSwt_SWIC_Org_Port_SetSpiPortMode( uint8 u1SetModeIndex )
     /* GPIO mode */
     else{
 #if 0   /* šPortConfig‚ÌMode’è‹`‘Î‰ž‘Ò‚¿ */
-        Port_SetPinMode( PORT_ID_PORT2_PIN11, **** );
-        Port_SetPinMode( PORT_ID_PORT2_PIN12, **** );
-        Port_SetPinMode( PORT_ID_PORT2_PIN13, **** );
-        Port_SetPinMode( PORT_ID_PORT2_PIN14, **** );
+        Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_33 );
+        Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_34 );
+        Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_35 );
+        Port_SetPinMode( PORT_ID_PORT2_PIN14, PORT_MODE_CFG_P2_14_36 );
 #endif
     }
 }

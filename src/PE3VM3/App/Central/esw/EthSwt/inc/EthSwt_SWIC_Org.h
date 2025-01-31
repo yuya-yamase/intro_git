@@ -8,6 +8,7 @@ Std_ReturnType EthSwt_SWIC_Org_INTN(void);
 void EthSwt_SWIC_Org_ResetSig_Hi(void);
 void EthSwt_SWIC_Org_ResetSig_Lo(void);
 void EthSwt_SWIC_Org_Init(void);
+void EthSwt_SWIC_Org_DeInit(void);
 void EthSwt_SWIC_Org_MainFunction(void);
 
 #endif /* ETHSWT_SWIC_ORG_H */

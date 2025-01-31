@@ -27,10 +27,10 @@
 #include <EthSwt_SWIC_Spi.h>
 #include <EthSwt_SWIC_Org.h>
 #include <EthSwt_SWIC_Log.h>
-#if 0  /* VM0_5msタスク配置用暫定 */
+#if 0  /* 外部IFが未対応のため無効化 */
 #include <app_VSM.h>
 #include <chipcom.h>
-#endif /* VM0_5msタスク配置用暫定 */
+#endif /* 外部IFが未対応のため無効化 */
 
 typedef enum										/* EthSwt_SWIC初期化状態 */
 {	ETHSWT_SWIC_STATE_UNINIT = ETHSWT_STATE_UNINIT	/* 停止 -> ETHSWT_SWIC_STATE_INIT */
@@ -59,22 +59,16 @@ static void debugMib_init(void);
 #define ETHSWT_START_SEC_CONFIG_DATA_PREBUILD
 #include <EthSwt_SWIC_MemMap.h>
 static const Eth_ModeType	swic_Reg_InitPort[] = ETHSWT_SWIC_INITPORT; /* ポートモードテーブル */
-static const uint8			swic_Reg_MibPort[]  = ETHSWT_SWIC_MIBPORT; /* MIB対象ポート */
+static const uint8			swic_Reg_MibPort[]  = ETHSWT_SWIC_MIBPORT;  /* MIB対象ポート */
 static const uint8			swic_Reg_FastLinkChkPort[] = ETHSWT_SWIC_FASTLINKCHK;	/* 高速リンク確認ポート */
 static const struct {
 	sint32	tmo;						/* 周期(ms) */
 	void	(*fnc)(void);				/* 周期処理:NULL_PTR禁止 */
 	uint8	ini;						/* ACTIVE遷移時のswic_Reg_Inf.cyc[].req状態 */
 }	swic_Reg_TimFnc[]					/* 優先度順 */
-#if 0 /* VM0_5msタスク配置用暫定 */
 =	{ {100, swic_Reg_CycLINK, STD_ON}	/* リンク状態 */
 	, {100, swic_Reg_CycMIB,  STD_ON}	/* MIB取得 */
 	, {100, swic_Reg_CycIDS,  STD_OFF}	/* IDS取得 */
-#else /* VM0_5msタスク配置用暫定 */
-=	{ {20, swic_Reg_CycLINK, STD_ON}	/* リンク状態 */
-	, {20, swic_Reg_CycMIB,  STD_ON}	/* MIB取得 */
-	, {20, swic_Reg_CycIDS,  STD_OFF}	/* IDS取得 */
-#endif /* VM0_5msタスク配置用暫定 */
 };
 #define ETHSWT_STOP_SEC_CONFIG_DATA_PREBUILD
 #include <EthSwt_SWIC_MemMap.h>
@@ -169,7 +163,7 @@ static void swic_Reg_LinkTimSet(const uint8 SwitchPortIdx, const EthTrcv_LinkSta
 		swic_Reg_Mode[SwitchPortIdx].lnk_tmo = tmo;
 	}
 }
-#if 0  /* VM0_5msタスク配置用暫定 */
+#if 0  /* 外部IFが未対応のため無効化 */
 static void swic_Reg_CheckSleepNG(void)
 {
 	uint32		i;
@@ -182,7 +176,7 @@ static void swic_Reg_CheckSleepNG(void)
 	PutCnSleepNG_Eth(K_VSM_SLEEPOK);
 	return;
 }
-#endif /* VM0_5msタスク配置用暫定 */
+#endif /* 外部IFが未対応のため無効化 */
 void EthSwt_SWIC_Reg_Init(void)
 {	/* 初期化タスク */
 	uint8		i;
@@ -230,7 +224,9 @@ void EthSwt_SWIC_Reg_Init(void)
 #endif /* EthswtDebugMode2 */
 /* ★Debug_End---------------------------------------------------------------- */
 }
-
+void EthSwt_SWIC_DeInit(void){
+	EthSwt_SWIC_Org_DeInit();
+}
 static void swic_Reg_TimUpd(sint32 *tim, sint32 tmo, uint8 *req)
 {
 	if (tmo > 0) {
@@ -268,7 +264,7 @@ void EthSwt_SWIC_MainFunction1MS(void)
 }
 void EthSwt_SWIC_MainFunction5MS(void)
 {	/* Ethの周期タスク */
-#if 0  /* VM0_5msタスク配置用暫定 */
+#if 0  /* 外部IFが未対応のため無効化 */
 	uint8 transreq_mcu_info[MCUINFO_DATASIZE];
 	uint8 idx;
 	uint8 port;
@@ -293,9 +289,9 @@ void EthSwt_SWIC_MainFunction5MS(void)
 		PutCnSleepNG_Eth(K_VSM_SLEEPOK);
 		break;
 	}
-#endif /* VM0_5msタスク配置用暫定 */
+#endif /* 外部IFが未対応のため無効化 */
 	EthSwt_SWIC_Org_MainFunction();
-#if 0  /* VM0_5msタスク配置用暫定 */
+#if 0  /* 外部IFが未対応のため無効化 */
 	transreq_mcu_info[SWIC_STS_DATAPOS] = swic_Reg_Inf.sts;
 	for (port = 0; port < SWIC_PORT_NUM; port++)	/* ポート毎に情報を格納 */
 	{
@@ -312,9 +308,9 @@ void EthSwt_SWIC_MainFunction5MS(void)
 		}
 	}
 	(void)ChipCom_Transmit(CHIPCOM_DATAID_ETHERSWT_MCUINFO,(uint16)MCUINFO_DATASIZE, transreq_mcu_info);/* ChipComにポート状態、リンク状態、EthSWT内部状態を通知 */
-#endif /* VM0_5msタスク配置用暫定 */
+#endif /* 外部IFが未対応のため無効化 */
 }
-#if 0  /* VM0_5msタスク配置用暫定 */
+#if 0  /* 外部IFが未対応のため無効化 */
 void EthSwt_SWIC_Port1ModeReq(const uint16 transreq_len, const uint8* const transreq_data)
 {
 	Eth_ModeType port_mode = 0u;
@@ -405,7 +401,7 @@ void EthSwt_SWIC_Port8ModeReq(const uint16 transreq_len, const uint8* const tran
 	}
 	return;
 }
-#endif /* VM0_5msタスク配置用暫定 */
+#endif /* 外部IFが未対応のため無効化 */
 void EthSwt_SWIC_RESET_N_Lo(void)
 {
 	EthSwt_SWIC_Org_ResetSig_Lo();
