@@ -90,6 +90,10 @@ static CONST(Port_SetTableType, PORT_CONST) Port_SetTable[] = {
      /* Pn_m,    ALT_IN/OUT,    ALTx */
      {  4U, 12U, PORT_ALT_IN,   2U }    /* CAN5RX(P04_12, ALT_IN 2) */
     ,{  4U, 11U, PORT_ALT_OUT,  2U }    /* CAN5TX(P04_11, ALT_OUT2) */
+    ,{ 11U,  1U, PORT_ALT_IN,   1U }    /* MSPI6SI(P11_1, ALT_IN1) */
+    ,{ 11U,  0U, PORT_ALT_OUT,  1U }    /* MSPI6SC(P11_0, ALT_OUT1) */
+    ,{ 11U,  3U, PORT_ALT_OUT,  1U }    /* MSPI6CSS0(P11_3, ALT_OUT1) */
+    ,{ 11U,  2U, PORT_ALT_OUT,  1U }    /* MSPI6SO(P11_2, ALT_OUT1) */
 };
 
 static CONST(volatile Port_SetInfoType, PORT_CONST) Port_SetInfo = {

@@ -27,7 +27,8 @@
 #include <Port.h>
 #include <Wdg.h>
 #include <Ecc.h>
-
+#include <Spi.h>
+#include <Cdd_Canic.h>
 
 /*----------------------------------------------------------------------------*/
 /* Macros                                                                     */
@@ -350,12 +351,19 @@ FUNC(void, STARTUP_CODE_FAST) Startup_SetGearUp (void)
     }
 
     /* Initialize MCAL */
+    Spi_Init1();
+
     Gpt_Init(InitConfigPtr->GptConfigTypePtr);
+
+    Spi_PrePortInit();
 
     Port_Init(NULL_PTR);
 
+    WDG_REG_WDTB0WDTE = WDG_WDTB0WDTE_VALUE;
 //    Wdg_Init(InitConfigPtr->WdgConfigTypePtr);
+    Cdd_Canic_Init();
 
+    WDG_REG_WDTB0WDTE = WDG_WDTB0WDTE_VALUE;
     WdgM_Init(InitConfigPtr->WdgMConfigTypePtr);
 
     StdRet = EcuM_CheckError();

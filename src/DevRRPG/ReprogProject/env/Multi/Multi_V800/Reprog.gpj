@@ -98,6 +98,7 @@
 	-l$TOP_DIR/bsw/EAL/CodeFlsIf/obj/CodeFlsIf.rel.o
 	-l$TOP_DIR/bsw/EAL/CodeRamIf/obj/CodeRamIf.rel.o
 	-l$TOP_DIR/bsw/EAL/WdgIf/obj/WdgIf.rel.o
+	-l$TOP_DIR/bsw/EAL/Cdd_Canic_TJA1145A/obj/Cdd_Canic_TJA1145A.rel.o
 
 	# usr
 	-l$TOP_DIR/bsw/EAL/CanTrcv/obj/CanTrcv_usr.rel.o
@@ -116,6 +117,7 @@
 	-l$TOP_DIR/bsw/MCAL/CodeFls/obj/CodeFls_usr.rel.o
 	-l$TOP_DIR/bsw/MCAL/Can/obj/Can_usr.rel.o
 	{!streq(MICON_NAME, RH850E2M)}-l$TOP_DIR/bsw/MCAL/Mcu/obj/Mcu_usr.rel.o
+	-l$TOP_DIR/bsw/MCAL/Spi/obj/Spi.rel.o
 
 	# cfg
 	-l$TOP_DIR/bsw/MCAL/Can/obj/Can_cfg.rel.o

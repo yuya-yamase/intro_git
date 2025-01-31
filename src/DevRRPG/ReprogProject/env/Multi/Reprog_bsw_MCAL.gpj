@@ -20,4 +20,5 @@ $TOP_DIR/bsw/MCAL/Wdg/env/Multi/Wdg.gpj						[Library]
 {streq(PLATFORM_NAME, RH850, TraveoII)} $TOP_DIR/bsw/MCAL/Can/env/Multi/Can_usr.gpj				[Relocatable Object]
 {streq(PLATFORM_NAME, RH850)} $TOP_DIR/bsw/MCAL/CodeFls/env/Multi/CodeFls_usr.gpj				[Relocatable Object]
 {!streq(MICON_NAME, RH850E2M)}$TOP_DIR/bsw/MCAL/Mcu/env/Multi/Mcu_usr.gpj						[Relocatable Object]
+$TOP_DIR/bsw/MCAL/Spi/env/Multi/Spi.gpj						[Relocatable Object]
 

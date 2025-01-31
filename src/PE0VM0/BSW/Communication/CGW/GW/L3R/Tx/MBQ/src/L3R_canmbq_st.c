@@ -60,7 +60,7 @@ uint8 CANMBQ_GetMode(uint8 ch)
 	ComM_StateType ComM_Status;
 	uint8 ret = CANMBQ_NOCOMM;
 	
-	(void)ComM_GetState(CHM_ChCnvtr_Log_To_ComCh[ch], &ComM_Status);
+	(void)ComM_GetState(CHM_ChCnvtr_Log_To_AubCh[ch], &ComM_Status);
 	if ((ComM_Status == COMM_FULL_COM_NETWORK_REQUESTED) || 
 		(ComM_Status == COMM_FULL_COM_READY_SLEEP) ||
 		(ComM_Status == COMM_SILENT_COM )) {
