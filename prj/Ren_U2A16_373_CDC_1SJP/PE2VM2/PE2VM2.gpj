@@ -24,6 +24,8 @@ primaryTarget=v800_standalone.tgt
     # Compile Switch
     # 1Sboard
     :macro=BOARD_SW_1S=
+    # JP
+    :macro=COUNTRY_SW_JP=
 
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
