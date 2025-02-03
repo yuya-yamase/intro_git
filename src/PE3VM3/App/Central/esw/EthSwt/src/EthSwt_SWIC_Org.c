@@ -78,22 +78,24 @@ void EthSwt_SWIC_Org_Init(void){
 	u1_s_Port_TaskCounter = (uint8)ETHSWT_SWIC_PORT_DAT_0;
 	EthSwt_SWIC_Org_Port_SetSpiPortMode( (uint8)ETHSWT_SWIC_PORT_MODE_GPO );
 	u1_s_Port_SpiSts     = (uint8)ETHSWT_SWIC_PORT_SPISTATE_NOTAVAILABLE;
+	return;
 }
 void EthSwt_SWIC_Org_DeInit(void){
 	EthSwt_SWIC_Org_Port_SetSpiPortMode( (uint8)ETHSWT_SWIC_PORT_MODE_GPO );
 	u1_s_Port_SpiSts     = (uint8)ETHSWT_SWIC_PORT_SPISTATE_NOTAVAILABLE;
+	return;
 }
 void EthSwt_SWIC_Org_MainFunction(void)  /* 5ms’èŠú */
 {
-    if ( u1_s_Port_TaskCounter < (uint8)ETHSWT_SWIC_PORT_DAT_MAX )
-    {
-        u1_s_Port_TaskCounter++;
-    }
-
-    if ( u1_s_Port_TaskCounter >= (uint8)ETHSWT_SWIC_PORT_T8_T9_TIME )
+    if ( u1_s_Port_TaskCounter == (uint8)ETHSWT_SWIC_PORT_T8_T9_TIME )
     {
         (void)EthSwt_SWIC_Org_Port_SetSpiPortMode( (uint8)ETHSWT_SWIC_PORT_MODE_SPI );
         u1_s_Port_SpiSts = (uint8)ETHSWT_SWIC_PORT_SPISTATE_AVAILABLE;
+    }
+
+    if ( u1_s_Port_TaskCounter < (uint8)ETHSWT_SWIC_PORT_DAT_MAX )
+    {
+        u1_s_Port_TaskCounter++;
     }
 
     return;
@@ -109,12 +111,10 @@ static void EthSwt_SWIC_Org_Port_SetSpiPortMode( uint8 u1SetModeIndex )
     }
     /* GPIO mode */
     else{
-#if 0   /* šPortConfig‚ÌMode’è‹`‘Î‰ž‘Ò‚¿ */
         Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_33 );
         Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_34 );
         Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_35 );
         Port_SetPinMode( PORT_ID_PORT2_PIN14, PORT_MODE_CFG_P2_14_36 );
-#endif
     }
 }
 

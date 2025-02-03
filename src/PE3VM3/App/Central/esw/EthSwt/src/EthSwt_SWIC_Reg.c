@@ -226,6 +226,7 @@ void EthSwt_SWIC_Reg_Init(void)
 }
 void EthSwt_SWIC_DeInit(void){
 	EthSwt_SWIC_Org_DeInit();
+	return;
 }
 static void swic_Reg_TimUpd(sint32 *tim, sint32 tmo, uint8 *req)
 {
