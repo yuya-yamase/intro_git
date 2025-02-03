@@ -59,6 +59,7 @@ x_spi_ivi_sub1_camera.c
 x_spi_ivi_sub1_control.c
 x_spi_ivi_sub1_power.c
 x_spi_ivi_sub1_system.c
+x_spi_ivi_sub1_version.c
 x_spi_ivi_queue.c
 IVI_PwrCtrl_Main.c
 IVI_PwrCtrl_DDFreq.c
