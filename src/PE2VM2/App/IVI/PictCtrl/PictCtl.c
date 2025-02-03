@@ -382,7 +382,7 @@ static U1    u1_s_pict_mmstby_flg;
 static U1    u1_s_pict_mliniflg;
 static U1    u1_s_pict_mlcmp_old;
 static U1    u1_s_pict_vicstasts;
-static U1    u1_s_pict_campass_chg_flg;
+static U1    u1_s_pict_camoff_muteoff_flg;
 static U1    u1_s_pict_camsynccyc_flg;
 static U1    u1_s_pict_camsynccyc_step;
 static U1    u1_s_pict_camsyncng_step;
@@ -462,6 +462,7 @@ static U1   u1_s_PictCtl_CenterCamSizValidChk(U1 u1_a_CenterCamSiz);
 static void vd_s_PictCtl_Bkup_Write(void);
 static void vd_s_PictCtl_CamKindNtyChk(void);
 static void vd_s_PictCtl_CamKindNtySnd(void);
+static void vd_s_PictCtl_CamOffMuteOff(void);
 /* 暫定対応 */
 static void fc_PictCtl_MuteMng(U1 u1_a_port);
 static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void);
@@ -627,6 +628,7 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_mliniflg = (U1)FALSE;
     u1_s_pict_mlcmp_old = (U1)FALSE;
     u1_s_pict_vicstasts = (U1)FALSE;
+    u1_s_pict_camoff_muteoff_flg = (U1)FALSE;
     u1_s_pict_camsynccyc_flg = (U1)FALSE;
     u1_s_pict_camsynccyc_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP0;
     u1_s_pict_camsyncng_step  = (U1)PICT_SEQ_CAMONSYNCNG_STEP0;
@@ -1698,6 +1700,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
                 /* I2C MUTE OFF設定 */
             u1_t_sts = u1_g_Pict_MlI2cMuteSet((U1)PICT_ML_I2C_MUTE_OFF);
             if(u1_t_sts == (U1)TRUE){
+                u1_s_pict_camoff_muteoff_flg = (U1)TRUE;
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_OFF;
                 /* アイドルシーケンスへ遷移 */
                 vd_s_PictCtl_ClrMlSeqInf();
@@ -1729,6 +1732,23 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             break;
     }
 }
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_PictCtl_CamOffMuteOff(void)                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_CamOffMuteOff(void)
+{
+    if((u1_s_pict_camoff_muteoff_flg == (U1)TRUE) &&
+        (bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_END)){
+         /* PM_BL_MUTE制御実施トリガ */
+         fc_PictCtl_MuteMng((U1)FALSE);
+            u1_s_pict_camoff_muteoff_flg = (U1)FALSE;
+        }
+}
+
 
 /*===================================================================================================================================*/
 /*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
