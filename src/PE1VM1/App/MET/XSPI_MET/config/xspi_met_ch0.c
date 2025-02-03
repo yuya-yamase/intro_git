@@ -233,7 +233,7 @@
 #define XSPI_MAINTEDIST_OFFSET              (32768)
 
 #define XSPI_AMB_CEL_MAX                    (10000U)
-#define XSPI_AMB_FAH_MAX                    (18090U)
+#define XSPI_AMB_FAH_MAX                    (18100U)
 #define XSPI_AMB_LSB_1                      (100U)
 
 #define XSPI_DTE_STS_VALID                  (0U)
@@ -841,30 +841,28 @@ static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx) {
     U1  u1_t_sts;
-    U2  u2_t_cel;
-    U2  u2_t_fah;
-    U2  u2_t_cel_work;
+    U2  u2_t_tmp;
 
-    u2_t_cel  = (U2)0U;
-    u2_t_fah  = (U2)0U;
+    u2_t_tmp = (U2)0U;
 
-    u1_t_sts = u1_g_AmbtmpFah(&u2_t_fah);
-    if(u2_t_fah > (U2)XSPI_AMB_FAH_MAX) {
-        u2_t_fah = (U2)XSPI_AMB_FAH_MAX;
+    u1_t_sts = u1_g_AmbtmpCel(&u2_t_tmp);
+    if(u2_t_tmp > (U2)XSPI_AMB_CEL_MAX) {
+        u2_t_tmp = (U2)XSPI_AMB_CEL_MAX;
     }
 
-    u1_t_sts = u1_g_AmbtmpCel(&u2_t_cel);
-    if(u2_t_cel > (U2)XSPI_AMB_CEL_MAX) {
-        u2_t_cel = (U2)XSPI_AMB_CEL_MAX;
-    } else {
-        u2_t_cel_work = u2_t_cel % (U2)XSPI_AMB_LSB_1;
-        u2_t_cel      = u2_t_cel - u2_t_cel_work;
-    }
-    
+    u2_t_tmp /= (U2)XSPI_AMB_LSB_1;
 
-    u4_ap_pdu_tx[0]   = (U4)u1_t_sts;                                          /* AMBTMP_STS                                                  */
-    u4_ap_pdu_tx[1]   = (U4)u2_t_cel;                                          /* AMB_TEMP_CEL                                                */
-    u4_ap_pdu_tx[1]  |= ((U4)u2_t_fah << XSPI_SHIFT_2BYTE);                /* AMB_TEMP_FAH                                                */
+    u4_ap_pdu_tx[0] =  (U4)u1_t_sts;                                           /* AMBTMP_STS                                         */
+    u4_ap_pdu_tx[1] =  (U4)u2_t_tmp;                                           /* AMB_TEMP_CEL                                       */
+
+    (void)u1_g_AmbtmpFah(&u2_t_tmp);
+    if(u2_t_tmp > (U2)XSPI_AMB_FAH_MAX) {
+        u2_t_tmp = (U2)XSPI_AMB_FAH_MAX;
+    }
+
+    u2_t_tmp /= (U2)XSPI_AMB_LSB_1;
+
+    u4_ap_pdu_tx[1] |= ((U4)u2_t_tmp << XSPI_SHIFT_2BYTE);                     /* AMB_TEMP_FAH                                       */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxBatcare(U4 * u4_ap_pdu_tx)                                                                          */
