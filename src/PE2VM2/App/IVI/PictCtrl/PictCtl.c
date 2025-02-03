@@ -706,6 +706,7 @@ void vd_g_PictCtl_MainTask(void)
     vd_s_PictCtl_MipiChg();
     vd_s_PictCtl_CamPathChg();
     vd_s_PictCtl_CamSyncJdg();
+    vd_s_PictCtl_CamOffMuteOff();
     vd_s_PictCtl_CamKindNtyChk();
     vd_s_PictCtl_CamSyncPathInfoNtyChk();
 }
