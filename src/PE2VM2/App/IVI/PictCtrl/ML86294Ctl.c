@@ -16248,7 +16248,7 @@ static U1    u1_s_Pict_MLCycChk(void)   /* 暫定 100ms定期 */
                                                            st_sp_ML86294_MLSYNCCYCCHK_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP4;
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP5;
             }
             break;
         case ML86294_CYCCHK_STEP5:                                       /* STEP5 */
@@ -16571,7 +16571,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
                                                           st_sp_ML86294_SET_BANK2_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP10;
+                u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP15;
             }
             break;
         case ML86294_FRZDAT_CYCCHK_STEP15:                                      /* STEP15 */
