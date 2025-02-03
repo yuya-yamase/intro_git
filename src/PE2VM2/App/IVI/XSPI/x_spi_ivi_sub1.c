@@ -21,6 +21,7 @@
 #include    "x_spi_ivi_sub1_power.h"
 #include    "x_spi_ivi_sub1_system.h"
 #include    "x_spi_ivi_sub1_camera.h"
+#include    "x_spi_ivi_sub1_version.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -39,14 +40,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_SFT_01                     ( 1U)
-#define XSPI_IVI_SFT_02                     ( 2U)
-#define XSPI_IVI_SFT_04                     ( 4U)
-#define XSPI_IVI_SFT_08                     ( 8U)
-#define XSPI_IVI_SFT_16                     (16U)
-#define XSPI_IVI_SFT_24                     (24U)
-
-
 #define XSPI_IVI_MISC_ID                    (0x4D495343U)
 #define XSPI_IVI_MISC_CONTROL               (0x01U)
 #define XSPI_IVI_MISC_POWER                 (0x21U)
@@ -162,6 +155,7 @@ static void            vd_s_XspiIviSub1MiscAna(const U1 * u1_ap_SUB1_ADD, const 
             /*シス検 skip*/
             break;
             case XSPI_IVI_MISC_VERSION:
+                vd_g_XspiIviSub1VersionAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             case XSPI_IVI_MISC_SECURITY:
             /*シス検 skip*/
