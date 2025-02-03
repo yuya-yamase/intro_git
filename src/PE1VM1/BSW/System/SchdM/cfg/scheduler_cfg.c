@@ -62,7 +62,63 @@
 #include "rim_ctl.h"
 #include "bsw_m.h"
 #include "nvmc_mgr.h"
-
+/*---------------------------------------------------------------------------*/
+/* Application Header                                                        */
+/*---------------------------------------------------------------------------*/
+#include "dimmer.h"
+#include "illumi.h"
+#include "thblnkr.h"
+#include "vehspd_kmph.h"
+#include "vptran_sel.h"
+#include "ptsctmp_cel.h"
+#include "alert.h"
+#include "sbltwrn.h"
+#include "engspd_rpm.h"
+#include "engspd_det_rpm.h"
+#include "odo_km.h"
+#include "tripsnsr.h"
+#include "tripcom.h"
+#include "tripcom_comtx.h"
+#include "ambtmp.h"
+#include "datesi.h"
+#include "mulmed_color.h"
+#include "mulmed_mulfr.h"
+#include "rcmmui.h"
+#include "telltale.h"
+#include "wchime.h"
+#include "gauge.h"
+#include "sbltsync.h"
+#include "locale.h"
+#include "vardef.h"
+#include "hud_ca.h"
+#include "mcst.h"
+#include "vds_ci.h"
+#include "hmiproxy.h"
+#include "battpow.h"
+#include "drvind_pwr_pct.h"
+#include "drvind_eco.h"
+#include "drvind_hv_pct.h"
+#include "oilmil.h"
+#include "hdimmgr.h"
+#include "himgadj.h"
+#include "mmlang.h"
+#include "vmmunit.h"
+#include "fspomgr.h"
+#include "ecojdg.h"
+#include "attmp_cel.h"
+#include "mmvar.h"
+#include "mmappctrl.h"
+#include "evschg.h"
+#include "batcare.h"
+/*---------------------------------------------------------------------------*/
+/* Platform Header                                                           */
+/*---------------------------------------------------------------------------*/
+#include "drec_tx.h"
+#include "nwcm.h"
+#include "dio_if.h"
+#include "sound_cri_mgr.h"
+#include "gateway_cxpi.h"
+#include "gateway_mm.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -253,7 +309,101 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_g_Rim_Task,     (uint32)SCHDLR_TASKBIT__10MS_A_CAL},
 
-    {&vd_g_BswMMainTask, (uint32)SCHDLR_TASKBIT___5MS_CAL}
+    {&vd_g_BswMMainTask, (uint32)SCHDLR_TASKBIT___5MS_CAL},
+	/*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  Platform Pre Task                                                */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_SoundCriMgrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_DioIfMainIn,                 (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*                                                                   */
+    /*  Evc : Variation and Configuration                                */
+    /*                                                                   */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
+    {&vd_g_HudCaMainTask,               (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
+    {&vd_g_McstMainTask,                (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*                                                                   */
+    /*  Vom : Vehicle Operation Model                                    */
+    /*                                                                   */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_MmLangCstmzTask,             (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_VardefMmUnitCstmzTask,       (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_LocaleMainTask,              (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
+    {&vd_g_VdsCIMainTask,               (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_EngspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_EngspdDetMainTask,           (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_PtsctmpMainTask,             (U4)SCHDLR_TASKBIT_100MS_A_CAL  },
+    {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_OdoMainTask,                 (U4)SCHDLR_TASKBIT__50MS_C_CAL  },
+    {&vd_g_EvschgMainTask,              (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
+    {&vd_g_Evschg10msTask,              (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_AlertMainTask,               (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_SbltwrnMainTask,             (U4)SCHDLR_TASKBIT__50MS_C_CAL  },
+    {&vd_g_TripsnsrSmplngTask,          (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_TripcomMainTask,             (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
+    {&vd_g_TripcomComTxTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_TripcomSmoothingTask,        (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_AmbtmpMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_MulmedColorMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_MulmedMulfrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
+    {&vd_g_BattpowMainTask,             (U4)SCHDLR_TASKBIT_100MS_E_CAL  },
+    {&vd_g_DrvIndPwrMainTask,           (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_DrvIndEcoMainTask,           (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_DrvIndHvMainTask,            (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_OilmilMainTask,              (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
+    {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_Fsposnsr10msTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_FspomgrRoutine,              (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
+    {&vd_g_EcoJdgMainTask,              (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
+    {&vd_g_AttmpMainTask,               (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_MMVarTask,                   (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_MMAppCtrlTask,               (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
+    {&vd_g_BatcareMainTask,             (U4)SCHDLR_TASKBIT__50MS_B_CAL  },
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*                                                                   */
+    /*  Hmi : Human Machine Interface                                    */
+    /*                                                                   */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_HmiProxyMainTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*                                                                   */
+    /*  Vsv : Vehicle Status Viewer                                      */
+    /*                                                                   */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_IllumiMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_GaugeMainTask,               (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
+    {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_TelltaleMainTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_wChimeMainTask,              (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  Platform Post Task                                               */
+    /*                                                                   */
+    /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_DioIfMainOut,                (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_NWCMMainTask,                (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A_CAL  },
+    {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A_CAL  }
 
 };
 const uint16 u2_g_SCHDLR_RGLR_NUM_TASK = (uint16)(sizeof(st_gp_SCHDLR_RGLR_TASK) / sizeof(ST_SCHDLR_RGLR));

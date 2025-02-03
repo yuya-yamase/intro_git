@@ -31,11 +31,10 @@
 
 #include "oxcan_lib.h"
 
+#include "xspi_met_can.h"
 #if (OXCAN_IC_TJA1145_USE == 1U)
 #include "Cdd_Canic.h"
 #endif /* #if (OXCAN_IC_TJA1145_USE == 1U) */
-
-#include "l3r_test.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -305,8 +304,6 @@ void    vd_g_oXCANUsrhkTxConfirm(const U2 u2_a_MSG, const U1 u1_a_CH, const U1 u
 
     /* Users Configuration */
 
-    vd_g_L3rTestTxAck(u2_a_MSG);
-
     /* Sample Code */
 /*  switch(u2_a_MSG)                        */
 /*  {                                       */
@@ -388,8 +385,6 @@ void    vd_g_oXCANUsrhkRxMsg(const U2 u2_a_MSG)
 
     /* Users Configuration */
 
-    vd_g_L3rTestRxAck(u2_a_MSG);
-
     /* Sample Code */
 /*  switch(u2_a_MSG)                                        */
 /*  {                                                       */
@@ -408,6 +403,7 @@ void    vd_g_oXCANUsrhkRxMsg(const U2 u2_a_MSG)
 /*          break;                                          */
 /*  }                                                       */
 
+    vd_g_XSpiMETCANGWPushPDU(u2_a_MSG);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANUsrhkNwToAct(const U1 u1_a_CH)                                                                                 */
