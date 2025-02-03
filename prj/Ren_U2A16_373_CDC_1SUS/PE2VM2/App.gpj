@@ -21,3 +21,4 @@ Ecu_Intg_Callout.c
 ShtdwnM/bsw_m.c
 ShtdwnM/cfg/bsw_m_cfg.c
 GyroDevCtl.c
+GNSSCtl.c
