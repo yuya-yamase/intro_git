@@ -70,7 +70,6 @@ static void    vd_s_GpI2cMaCfgTRxAckCh1_Gmoni(const ST_GP_I2C_MA_REQ * st_ap_ACK
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
 #ifdef I2C_PIN_JP    /* JP以外はPORTのConfigが存在しないため、コンパイルSWで暫定的に切り分け */
-#warning JPJPJP
     {
         (U4)PORT_MODE_CFG_P10_1_25,                 /* u4_scl_act */
         (U4)PORT_MODE_CFG_P10_0_24,                 /* u4_sda_act */
@@ -90,7 +89,6 @@ static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
         (U2)PORT_ID_PORT22_PIN3,                    /* u2_sda_pin */
     }
 #else /* JP以外 */
-#warning JPjanai
     {   /* GP_I2C_MA_CH_0 */
         (U4)0U,                                     /* u4_scl_act */
         (U4)0U,                                     /* u4_sda_act */
