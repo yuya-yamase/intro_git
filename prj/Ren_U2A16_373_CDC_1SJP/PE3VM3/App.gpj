@@ -10,7 +10,7 @@
 
 
     -I${APP_DIR}/Common/xspi
--I${APP_DIR}/Common/PwrCtrl
+    -I${APP_DIR}/Common/PwrCtrl
 
     -I${CAN_DIR}/inc
 
