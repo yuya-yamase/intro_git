@@ -204,7 +204,7 @@ void SS_ISeq_stupBoot(SS_BootType u4BootSource)
 #if (SS_USE_SLEEP == STD_ON)
         if (u4BootSource == SS_PM_BOOT_WUP)
         {
-//            SS_ISeq_checkWakeupAndReSleep();
+            SS_ISeq_checkWakeupAndReSleep();
         }
 #endif
     }

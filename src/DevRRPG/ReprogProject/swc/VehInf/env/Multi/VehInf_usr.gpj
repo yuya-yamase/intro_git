@@ -1,0 +1,8 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/VehInf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/VehInf/obj/VehInf_usr.rel.o
+
+../../usr/VehInf.c

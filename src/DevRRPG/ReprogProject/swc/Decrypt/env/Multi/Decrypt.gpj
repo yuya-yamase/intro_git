@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc/
+	-I../../cfg/
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/Decrypt/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/Decrypt/obj/Decrypt.rel.o
+
+../../src/Decrypt_Core.c
+../../cfg/Decrypt_Cfg.c

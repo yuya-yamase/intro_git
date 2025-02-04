@@ -1,0 +1,208 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <CommunicationControl>
+/* ************************************************************ */
+/* Function                                                     */
+/*  CommunicationControl_disableRxAndTx_request_01_send         */
+/* Discription                                                  */
+/*  Send Request Sid0x28 [CommunicationControl]                 */
+/* IN :                                                         */
+/*  addrtype : 機能/物理アドレスの指定                          */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)       */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果 または                          */
+/*  E_Return_SPRMIB_Set_NG                                      */
+/* NOTE:                                                        */
+/*  None                                                        */
+/* ************************************************************ */
+long CommunicationControl_disableRxAndTx_request_01_send( int addrtype, long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* アドレス指定によって物理アドレスか機能アドレスのどちらに送信するか判定 */
+  if ( addrtype == E_Send_Address_Phy )
+  {
+    /* 物理アドレスにリクエスト送信 */
+    if ( sprmib == E_Flag_OFF )
+    {
+      /* リクエスト送信 */
+      ret = diagSendRequest( G_CommunicationControl_req_01 );
+    }
+    else if( sprmib == E_Flag_ON )
+    {
+      /* SPRMIBを設定するので、タイムアウト時に次のシーケンスに移れるよう専用のタイムアウトハンドラを再登録する */
+      ret = diagSetTimeoutHandler(G_CommunicationControl_req_02, "CommunicationControll_timeout_handler");
+      if(ret != 0)
+      {
+        /* ハンドラ設定失敗 */
+        /* デバッグ表示 */
+        Error_Log_output("CommunicationControl_disableRxAndTx_request_01_send:diagSetTimeoutHandler error. for G_CommunicationControl_req_02");
+      }
+      /* リクエスト送信 */
+      ret = diagSendRequest( G_CommunicationControl_req_02 );    
+    }
+    else
+    {
+      Error_Log_output("CommunicationControl_disableRxAndTx_request_01_send: illegal sprmib set.");
+    }
+  }
+  else if (addrtype == E_Send_Address_Func )
+  {
+    /* 機能アドレスにリクエスト送信 */
+    if ( sprmib == E_Flag_OFF )
+    {
+      /* リクエスト送信 */
+      ret = diagSendFunctional( G_CommunicationControl_req_01 );
+    }
+    else if( sprmib == E_Flag_ON )
+    {
+      /* SPRMIBを設定するので、タイムアウト時に次のシーケンスに移れるよう専用のタイムアウトハンドラを再登録する */
+      ret = diagSetTimeoutHandler(G_CommunicationControl_req_02, "CommunicationControll_timeout_handler");
+      if(ret != 0)
+      {
+        /* ハンドラ設定失敗 */
+        /* デバッグ表示 */
+        Error_Log_output("CommunicationControl_disableRxAndTx_request_01_send:diagSetTimeoutHandler error. for G_CommunicationControl_req_02");
+      }
+      /* リクエスト送信 */
+      ret = diagSendFunctional( G_CommunicationControl_req_02 );    
+    }
+    else
+    {
+      Error_Log_output("CommunicationControl_disableRxAndTx_request_01_send: illegal sprmib set.");
+    }
+  }
+  else
+  {
+    /* 通常ありえないがアドレス指定異常 */
+    Error_Log_output(":illegal addrtype.");
+  }
+  
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <CommunicationControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  CommunicationControl_req_distribution　　               */
+/* Discription                                              */
+/*  Sid0x28 [CommunicationControl] request distribution     */
+/* IN :                                                     */
+/*  addrtype : 機能/物理アドレスの指定                      */
+/*  type   : controlTypeに相当する値                        */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG または E_Return_PRAMETER_NG      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long CommunicationControl_req_distribution( int addrtype, dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* controlTypeの指定によってリクエスト送信処理を振り分ける */
+  if ( type == E_controlType_disableRxAndTx )
+  {
+    /* リクエスト送信実施(disableRxAndTx) */
+    ret = CommunicationControl_disableRxAndTx_request_01_send( addrtype, sprmib );
+  }
+  else
+  {
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;    
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <CommunicationControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  CommunicationControl_res_distribution                   */
+/* Discription                                              */
+/*  Sid0x28 [CommunicationControl]  response distribution   */
+/* IN :                                                     */
+/*  res_msg   : diagResponse型のPosRspメッセージ            */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  E_Return_OK                                             */
+/* NOTE:                                                    */
+/*  byte#1 CommunicationControl Response SID                */
+/*  byte#2 DTCSettingType                                   */
+/* ******************************************************** */
+long CommunicationControl_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* CommunicationControlのポジティブレスポンス受信時は処理無し */
+  ret = E_Return_OK;
+  
+  return ret;
+}
+
+/// <CommunicationControl>
+/* ************************************************************************************** */
+/* Function                                                                               */
+/*  CommunicationControll_timeout_handler                                                 */
+/* Discription                                                                            */
+/*  Sid0x28 [CommunicationControl] timeout handler(NORSP対策)                             */
+/* IN :                                                                                   */
+/*  None                                                                                  */
+/* OUT:                                                                                   */
+/*  None                                                                                  */
+/* RET:                                                                                   */
+/*  None                                                                                  */
+/* NOTE:                                                                                  */
+/*  controlTypeがdisableRxAndTxの場合のタイムアウト時のみ実行される                       */
+/* ************************************************************************************** */
+void CommunicationControll_timeout_handler(void)
+{
+  /* Sid0x28 [CommunicationControl]のレスポンスメッセージ型のオブジェクトを定義 */
+  diagResponse CommunicationControl_disableRxAndTx_normalCommunicationMessages res_msg;
+  
+  Debug_Log_output("CommunicationControll_timeout_handler: timeout detected.");
+  
+  /* レスポンス受信ハンドラを呼び出して処理を継続する */
+  Diag_Response_handler(res_msg);
+  
+  return;
+}

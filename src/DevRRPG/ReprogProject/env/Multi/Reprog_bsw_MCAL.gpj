@@ -1,0 +1,24 @@
+#!gbuild
+[Subproject]
+
+$TOP_DIR/bsw/MCAL/IntHndlr/env/Multi/IntHndlr.gpj			[Relocatable Object]
+$TOP_DIR/bsw/MCAL/Vect/env/Multi/Vect.gpj					[Relocatable Object]
+
+# cfg
+$TOP_DIR/bsw/MCAL/Can/env/Multi/Can_cfg.gpj					[Relocatable Object]
+$TOP_DIR/bsw/MCAL/CodeFls/env/Multi/CodeFls_cfg.gpj			[Relocatable Object]
+$TOP_DIR/bsw/MCAL/Ecc/env/Multi/Ecc_cfg.gpj					[Relocatable Object]
+$TOP_DIR/bsw/MCAL/Gpt/env/Multi/Gpt_cfg.gpj					[Relocatable Object]
+$TOP_DIR/bsw/MCAL/Int/env/Multi/Int_cfg.gpj					[Relocatable Object]
+$TOP_DIR/bsw/MCAL/Mcu/env/Multi/Mcu_cfg.gpj					[Relocatable Object]
+$TOP_DIR/bsw/MCAL/Wdg/env/Multi/Wdg_cfg.gpj					[Relocatable Object]
+
+# usr
+$TOP_DIR/bsw/MCAL/Dio/env/Multi/Dio.gpj						[Library]
+$TOP_DIR/bsw/MCAL/Port/env/Multi/Port.gpj					[Library]
+$TOP_DIR/bsw/MCAL/Wdg/env/Multi/Wdg.gpj						[Library]
+{streq(PLATFORM_NAME, RH850, TraveoII)} $TOP_DIR/bsw/MCAL/Can/env/Multi/Can_usr.gpj				[Relocatable Object]
+{streq(PLATFORM_NAME, RH850)} $TOP_DIR/bsw/MCAL/CodeFls/env/Multi/CodeFls_usr.gpj				[Relocatable Object]
+{!streq(MICON_NAME, RH850E2M)}$TOP_DIR/bsw/MCAL/Mcu/env/Multi/Mcu_usr.gpj						[Relocatable Object]
+$TOP_DIR/bsw/MCAL/Spi/env/Multi/Spi.gpj						[Relocatable Object]
+

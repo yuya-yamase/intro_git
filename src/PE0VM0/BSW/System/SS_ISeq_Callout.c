@@ -24,7 +24,6 @@
 #include "gpt_drv_d16.h"
 #include "gpt_drv_frt.h"
 #include "Spi.h"
-#include "i2c_drv.h"
 #include "spi_uart.h"
 #include "Dma.h"
 #include "Adc.h"
@@ -39,12 +38,12 @@
 /* Communication         */
 #include "oxcan.h"
 
-/* Complex Device Driver */
-#include "gpi2c_ma.h"
+/* Diagnosis             */
+#include "oxdocan.h"
 
 /* Memory               */
 #include "rim_ctl.h"
-#include "nvmc_mgr.h"
+/* #include "nvmc_mgr.h" */
 
 /* System               */
 #include "scheduler.h"
@@ -203,25 +202,24 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 
 /*  Spi_PrePortInit(); */           /* call in Host side */
 
-    if((u4BootCause == ECU_INTG_u4BTCAUSE_PON  ) ||
-       (u4BootCause == ECU_INTG_u4BTCAUSE_RESET)){
-        vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_RST);
-    }else{
-        vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_WK);
-    }
+/*  if((u4BootCause == ECU_INTG_u4BTCAUSE_PON  ) || */           /* call in Host side */
+/*     (u4BootCause == ECU_INTG_u4BTCAUSE_RESET)){  */
+/*       vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_RST); */
+/*   }else{ */
+/*       vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_WK); */
+/*  } */
+
     vd_g_Gpt_FrtInit();
 /*    vd_g_Gpt_OstInit(); */    /* call in each VM that use OSTM */
     vd_g_Gpt_J32Init();
     vd_g_Gpt_D16Init();
 /*    Spi_Init1(); */           /* call in Host side */
-    vd_g_I2cInit();
     vd_g_SpiUartInit();
 /*    Dma_Init(); */           /* call in Host side */
 
     Adc_Init(NULL_PTR);
     vd_g_IoHwAdcInit();
     vd_g_IoHwDifltInit();
-    vd_g_GpI2cMaInit();
     
     vd_g_SchdlrInit();
     vd_g_BswMInit();
@@ -242,6 +240,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         vd_g_Rim_WkupInit();
     }
 
+#if 0
     /* 仮：Nvmc起動時処理                                            */
     /* ※Bon/Wkup判定条件は仮                                        */
     /*     BRAMが正常か否かで切り分ける(起動時に必ずどちらかを実施)  */
@@ -264,6 +263,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
             u1_t_rslt = u1_g_Nvmc_WkupRead();
         }while(u1_t_rslt != (U1)FALSE);
     }
+#endif
 
 #ifdef ECU_SAMPLE_ON
     Ecu_App_postClockUp(u4_BootSource);
@@ -429,15 +429,13 @@ void SS_Pm_shutdownCallout(void)
 {
     /* vv User Hook start vv */
     /* TPcsw_SS_Pm_shutdownCallout_if0 */
+    vd_g_oXDoCANShutdown();
     vd_g_oXCANShutdown();
-    vd_g_Nvmc_DeInit();
+    /* vd_g_Nvmc_DeInit(); */
     vd_g_Rim_DeInit();
 
-    vd_g_GpI2cMaDeInit();
-    
     Dma_DeInit();
     Spi_DeInit();
-    vd_g_I2cDeInit();
     vd_g_Gpt_D16DeInit();
     vd_g_Gpt_J32DeInit();
     vd_g_Gpt_OstDeInit();

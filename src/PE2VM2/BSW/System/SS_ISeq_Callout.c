@@ -20,7 +20,13 @@
 
 /* MCAL */
 #include "gpt_drv_ost.h"
+#include "i2c_drv.h"
 #include "wdg_drv.h"
+
+/* Communication         */
+#include "oxcan.h"
+/* Complex Device Driver */
+#include "gpi2c_ma.h"
 
 /* Memory               */
 #include "rim_ctl.h"
@@ -172,6 +178,10 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
     }
 
     vd_g_Gpt_OstInit();    /* call in each VM that use OSTM */
+
+    vd_g_I2cInit();
+
+    vd_g_GpI2cMaInit();
 
     vd_g_SchdlrInit();
 
@@ -354,7 +364,12 @@ void SS_Pm_wakeupCheckCallout(void)
 void SS_Pm_shutdownCallout(void)
 {
     /* vv User Hook start vv */
+    vd_g_oXCANShutdown();
     vd_g_Rim_DeInit();
+
+    vd_g_GpI2cMaDeInit();
+    
+    vd_g_I2cDeInit();
 
     Ecu_CtgOs_stop(ECU_CTGOS_TMRES_OWNVM);
     (void)ClearPendingInterrupt((ISRType)OS_SYSTEM_COUNTER_ISR0);

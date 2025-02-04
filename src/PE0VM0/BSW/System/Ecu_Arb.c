@@ -285,7 +285,7 @@ static void Ecu_Arb_stateOpe_VMm(boolean bAwake)
     /* SleepOK判定 */
     for (u1VmNum = 0U; u1VmNum < ECU_ARB_SLAVE_VM_NUM; u1VmNum++)
     {
-//        bSleepOK &= Ecu_Arb_bVMxSleepOKFlag[u1VmNum];
+        bSleepOK &= Ecu_Arb_bVMxSleepOKFlag[u1VmNum];
     }
 
     /* 全VMスリープOKならPRPSLPに移行 */
@@ -318,7 +318,7 @@ static void Ecu_Arb_statePrpSlp_VMm(boolean bAwake)
     /* SleepOK判定 */
     for (u1VmNum = 0U; u1VmNum < ECU_ARB_SLAVE_VM_NUM; u1VmNum++)
     {
-//        bSleepOK &= Ecu_Arb_bVMxSleepOKFlag[u1VmNum];
+        bSleepOK &= Ecu_Arb_bVMxSleepOKFlag[u1VmNum];
     }
 
     /* SleepNGの場合、OPEに移行 */
@@ -365,7 +365,7 @@ static void Ecu_Arb_stateRdySlp_VMm(boolean bAwake)
     /* SleepOK判定 */
     for (u1VmNum = 0U; u1VmNum < ECU_ARB_SLAVE_VM_NUM; u1VmNum++)
     {
-//        bSleepOK &= Ecu_Arb_bVMxSleepOKFlag[u1VmNum];
+        bSleepOK &= Ecu_Arb_bVMxSleepOKFlag[u1VmNum];
     }
 
     /* スリープOKの場合 */
@@ -407,8 +407,7 @@ static boolean Ecu_Arb_stateSleep_VMm(void)
     boolean bSleepOK;
     boolean bAwake;
 
-//    bSleepOK = Ecu_Arb_isVMxAllSleep();
-    bSleepOK = TRUE;
+    bSleepOK = Ecu_Arb_isVMxAllSleep();
 
     if (bSleepOK == TRUE)
     {

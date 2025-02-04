@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/Sec/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/Sec/obj/Sec.rel.o
+
+../../src/Sec_Core.c
+../../cfg/Sec_Cfg.c

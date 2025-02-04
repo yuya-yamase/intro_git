@@ -1,0 +1,1099 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <RoutineControl>
+/* ******************************************************* */
+/* Function                                                */
+/*  RoutineControl_eraseMemory_request_01_send             */
+/* Discription                                             */
+/*  Send Request Sid0x31 [RoutineControl]                  */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  None                                                   */
+/*  現時点ではsprmibは見ない                               */
+/* ******************************************************* */
+long RoutineControl_eraseMemory_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_RoutineControl_req_01);
+
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ************************************************************ */
+/* Function                                                     */
+/*  RoutineControl_checkMemoryFlashdriver_request_01_send       */
+/* Discription                                                  */
+/*  Send Request Sid0x31 [RoutineControl]                       */
+/* IN :                                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)       */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果 または                          */
+/*  E_Return_SPRMIB_Set_NG                                      */
+/* NOTE:                                                        */
+/*  現時点ではsprmibは見ない                                    */
+/* ************************************************************ */
+long RoutineControl_checkMemoryFlashdriver_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_RoutineControl_req_02);
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ************************************************************ */
+/* Function                                                     */
+/*  RoutineControl_checkMemorySoftwareData_request_01_send      */
+/* Discription                                                  */
+/*  Send Request Sid0x31 [RoutineControl]                       */
+/* IN :                                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)       */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果 または                          */
+/*  E_Return_SPRMIB_Set_NG                                      */
+/* NOTE:                                                        */
+/*  現時点ではsprmibは見ない                                    */
+/* ************************************************************ */
+long RoutineControl_checkMemorySoftwareData_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_RoutineControl_req_03);
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ************************************************************ */
+/* Function                                                     */
+/*  RoutineControl_validApplication_request_01_send             */
+/* Discription                                                  */
+/*  Send Request Sid0x31 [RoutineControl]                       */
+/* IN :                                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)       */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果 または                          */
+/*  E_Return_SPRMIB_Set_NG                                      */
+/* NOTE:                                                        */
+/*  現時点ではsprmibは見ない                                    */
+/* ************************************************************ */
+long RoutineControl_validApplication_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */
+  ret = diagSendRequest(G_RoutineControl_req_04);
+
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ************************************************************ */
+/* Function                                                     */
+/*  RoutineControl_req_distribution                             */
+/* Discription                                                  */
+/*  Sid0x31 [RoutineControl] request distribution               */
+/* IN :                                                         */
+/*  type        : E_RoutineControl_Type_Numに相当する値         */
+/*  routinetype : routineIdentifierに相当する値                 */
+/*  sprmib      : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果                                 */
+/* NOTE:                                                        */
+/*  None                                                        */
+/* ************************************************************ */
+long RoutineControl_req_distribution( dword type, dword routinetype, long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* dataIdentifierの指定によってリクエスト送信処理を振り分ける */
+  if ( routinetype == E_routineIdentifier_eraseMemory )
+  {
+    /* 送信データ設定 */
+    ret = RoutineControl_set_request_eraseMemory(G_RoutineControl_req_01);
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(RoutineControl(eraseMemory)) */
+      ret = RoutineControl_eraseMemory_request_01_send( sprmib );
+    }
+  }
+  else if( routinetype == E_routineIdentifier_checkMemoryFlashdriver )
+  {
+    /* 送信データ設定 */
+    if( type == E_RoutineControl_Type_Erase )
+    {
+      if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_signature_req )
+      {
+        ret = RoutineControl_set_request_check_mfd_signature( type, G_RoutineControl_req_02, G_Reprog_General_Data.T_Info_Erase );
+        if( ret == E_Return_OK )
+        {
+          /* リクエスト送信実施(RoutineControl(checkMemoryFlashdriver)) */
+          ret = RoutineControl_checkMemoryFlashdriver_request_01_send( sprmib );
+        }
+      }
+      else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_cmac_req )
+      {
+        ret = RoutineControl_set_request_check_mfd_cmac( type, G_RoutineControl_req_02 );
+        if( ret == E_Return_OK )
+        {
+          /* リクエスト送信実施(RoutineControl(checkMemoryFlashdriver)) */
+          ret = RoutineControl_checkMemoryFlashdriver_request_01_send( sprmib );
+        }
+      }
+      else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_crc_req )
+      {
+        ret = RoutineControl_set_request_check_mfd_crc( type, G_RoutineControl_req_02, G_Reprog_General_Data.T_Info_Erase );
+        if( ret == E_Return_OK )
+        {
+          /* リクエスト送信実施(RoutineControl(checkMemoryFlashdriver)) */
+          ret = RoutineControl_checkMemoryFlashdriver_request_01_send( sprmib );
+        }
+      }
+    }
+    else
+    {
+      /* 使用しないルート */
+      Error_Log_output("RoutineControl_req_distribution: Illiegal Type.");
+      /* パラメータエラー */
+      ret = E_Return_PRAMETER_NG;
+    }
+  }
+  else if( routinetype == E_routineIdentifier_checkMemorySoftwareData )
+  {
+    /* 送信データ設定 */
+    if( type == E_RoutineControl_Type_Reprog )
+    {
+      if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_signature_req )
+      {
+        ret = RoutineControl_set_request_check_msd_signature( type, G_RoutineControl_req_03, G_Reprog_General_Data.T_Info_Reprog );
+        if( ret == E_Return_OK )
+        {
+          /* リクエスト送信実施(RoutineControl(checkMemorySoftwareData)) */
+          ret = RoutineControl_checkMemorySoftwareData_request_01_send( sprmib );
+        }
+      }
+      else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_cmac_req )
+      {
+        ret = RoutineControl_set_request_check_msd_cmac( type, G_RoutineControl_req_03 );
+        if( ret == E_Return_OK )
+        {
+          /* リクエスト送信実施(RoutineControl(checkMemorySoftwareData)) */
+          ret = RoutineControl_checkMemorySoftwareData_request_01_send( sprmib );
+        }
+      }
+      else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_crc_req )
+      {
+        ret = RoutineControl_set_request_check_msd_crc( type, G_RoutineControl_req_03, G_Reprog_General_Data.T_Info_Reprog );
+        if( ret == E_Return_OK )
+        {
+          /* リクエスト送信実施(RoutineControl(checkMemorySoftwareData)) */
+          ret = RoutineControl_checkMemorySoftwareData_request_01_send( sprmib );
+        }
+      }
+    }
+    else
+    {
+      /* 使用しないルート */
+      Error_Log_output("RoutineControl_req_distribution: Illiegal Type.");
+      /* パラメータエラー */
+      ret = E_Return_PRAMETER_NG;
+    }
+  }
+  else if( routinetype == E_routineIdentifier_validApplication )
+  {
+    if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_req )
+    {
+      ret = ret = RoutineControl_set_request_validApplication( type, G_RoutineControl_req_04, G_Reprog_General_Data.VLD_Info );
+      if( ret == E_Return_OK )
+      {
+        /* リクエスト送信実施(RoutineControl(validApplication)) */
+        ret = RoutineControl_validApplication_request_01_send( sprmib );
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_sig_req )
+    {
+      ret = RoutineControl_set_request_validApplication_signature( type, G_RoutineControl_req_04, G_Reprog_General_Data.VLD_Info );
+      if( ret == E_Return_OK )
+      {
+        /* リクエスト送信実施(RoutineControl(validApplication)) */
+        ret = RoutineControl_validApplication_request_01_send( sprmib );
+      }
+    }
+  }
+  else
+  {
+    /* 使用しないルート */
+    Error_Log_output("RoutineControl_req_distribution: Illiegal routinetype.");
+
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* *********************************************************** */
+/* Function                                                    */
+/*  RoutineControl_res_distribution                            */
+/* Discription                                                 */
+/*  Sid0x31 [RoutineControl]  response distribution            */
+/* IN :                                                        */
+/*  res_msg   : diagResponse型のPosRspメッセージ               */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  E_Return_OK                                                */
+/* NOTE:                                                       */
+/*  maxNumberOfBlockLengthは2バイト(値域が0~65535)である前提   */
+/* *********************************************************** */
+long RoutineControl_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+  /* PosRspの格納用バッファ */
+  byte res_buff[7];
+  /* RoutineIdentifier取得用 */
+  long Rid;
+
+  res_msg.GetPrimitiveData(res_buff, elcount(res_buff));
+  Rid = (( res_buff[2] << 8 ) | res_buff[3] );
+
+  if (( Rid == E_routineIdentifier_checkMemoryFlashdriver ) ||
+      ( Rid == E_routineIdentifier_checkMemorySoftwareData ))
+  {
+    if ( res_buff[5] == E_RoutineControlCheckStatus_verificationSuccess )
+    {
+      ret = E_Return_OK;
+    }
+    else
+    {
+      ret = E_Return_NG;
+    }
+  }
+  else if ( Rid == E_routineIdentifier_validApplication )
+  {
+    /* Reprog_Ext.iniのsendOptionRecordが0x1の場合 */
+    /* レスポンスメッセージのcheckStatusを判定 */
+    if( G_Reprog_General_Data.VLD_Info.sendOptionRecord == 0x1 )
+    {
+      if ( res_buff[5] == E_RoutineControlCheckStatus_verificationSuccess )
+      {
+        ret = E_Return_OK;
+      }
+      else
+      {
+        ret = E_Return_NG;
+      }
+    }
+    /* Reprog_Ext.iniのsendOptionRecordが0x0の場合 */
+    /* レスポンスメッセージのApplicationStatusを判定 */
+    else if( G_Reprog_General_Data.VLD_Info.sendOptionRecord == 0x0 )
+    {
+      if (( res_buff[5] == E_RoutineControlApplicationStatus_validApplicationSoftwareIsPresent ) ||
+          ( res_buff[5] == E_RoutineControlApplicationStatus_multiApplicationSoftwareIsChanged ))
+      {
+        ret = E_Return_OK;
+      }
+      else
+      {
+        ret = E_Return_NG;
+      }
+    }
+    else
+    {
+      /* Reprog_Ext.iniのsendOptionRecordの設定値が0x0,0x1でなかった場合の異常系確認ルート */
+      ret = E_Return_NG;
+    }
+  }
+  else
+  {
+    ret = E_Return_OK;
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_check_mfd_signature          */
+/* Discription                                              */
+/*  routineIdentifierとSignatureを                          */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  type    : E_RoutineControl_Type_Numに相当する値         */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_check_mfd_signature( dword type, diagRequest * req_msg, struct S_TransferData_info T_Info )
+{
+  /* 戻り値 */
+  int ret;
+  int checkDataLength;
+  byte checkTypeIdentifier_buff[1];
+  byte checkDataLength_buff[2];
+
+  checkTypeIdentifier_buff[0] = 0x01;
+  checkDataLength_buff[0] = T_Info.checkDataLength[0];
+  checkDataLength_buff[1] = T_Info.checkDataLength[1];
+
+  /* 「消去・書込みルーチン」かを判定 */
+  if( type == E_RoutineControl_Type_Erase )
+  {
+    /* RoutineControlのリクエストオブジェクトにcheckTypeIdentifierを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkTypeIdentifier",
+                              checkTypeIdentifier_buff,
+                              elcount(checkTypeIdentifier_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataLengthを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkDataLength",
+                              checkDataLength_buff,
+                              elcount(checkDataLength_buff));
+
+    /* RoutineControlのリクエストオブジェクトに新たなcheckDataを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "checkData",
+                              G_Reprog_General_Data.T_Info_Erase.checkData,
+                              elcount(G_Reprog_General_Data.T_Info_Erase.checkData));
+
+    checkDataLength = T_Info.checkDataLength[0] * 256 + T_Info.checkDataLength[1];
+    diagResize( req_msg, 7+checkDataLength );
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_check_mfd_signature: Illiegal Type.");
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_check_mfd_cmac               */
+/* Discription                                              */
+/*  routineIdentifierとCMACを                               */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  type    : E_RoutineControl_Type_Numに相当する値         */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_check_mfd_cmac( dword type, diagRequest * req_msg )
+{
+  /* 戻り値 */
+  int ret;
+  int cnt;
+  byte checkTypeIdentifier_buff[1];
+  byte checkDataLength_buff[2];
+  byte checkData_buff[E_routineControlOptionRecord_SIGNATURE];
+
+  checkTypeIdentifier_buff[0] = 0x02;
+  checkDataLength_buff[0] = 0x00;
+  checkDataLength_buff[1] = 0x10;
+
+  /* checkData初期化 */
+  for( cnt = 0; cnt < E_routineControlOptionRecord_SIGNATURE; cnt++ )
+  {
+    checkData_buff[cnt] = 0xCC;
+  }
+
+  for( cnt = 0; cnt < E_routineControlOptionRecord_CMAC; cnt++ )
+  {
+    checkData_buff[cnt] = G_Reprog_General_Data.T_Info_Erase.checkData[cnt];
+  }
+
+  /* 「消去・書込みルーチン」かを判定 */
+  if( type == E_RoutineControl_Type_Erase )
+  {
+    /* RoutineControlのリクエストオブジェクトにcheckTypeIdentifierを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkTypeIdentifier",
+                              checkTypeIdentifier_buff,
+                              elcount(checkTypeIdentifier_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataLengthを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkDataLength",
+                              checkDataLength_buff,
+                              elcount(checkDataLength_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "checkData",
+                              checkData_buff,
+                              elcount(checkData_buff));
+
+    diagResize( req_msg, 23 );
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_check_mfd_cmac: Illiegal Type.");
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_check_mfd_crc                */
+/* Discription                                              */
+/* routineIdentifierとCRCを                                 */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  type    : E_RoutineControl_Type_Numに相当する値         */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_check_mfd_crc( dword type, diagRequest * req_msg, struct S_TransferData_info T_Info )
+{
+  /* 戻り値 */
+  int ret;
+  int cnt;
+  int checkDataLength;
+  byte checkTypeIdentifier_buff[1];
+  byte checkDataLength_buff[2];
+  byte checkData_buff[E_routineControlOptionRecord_SIGNATURE];
+
+  checkTypeIdentifier_buff[0] = 0x02;
+  checkDataLength_buff[0] = T_Info.checkDataLength[0];
+  checkDataLength_buff[1] = T_Info.checkDataLength[1];
+
+  /* checkData初期化 */
+  for( cnt = 0; cnt < E_routineControlOptionRecord_SIGNATURE; cnt++ )
+  {
+    checkData_buff[cnt] = 0xCC;
+  }
+
+  for( cnt = 0; cnt < E_routineControlOptionRecord_CRC; cnt++ )
+  {
+    checkData_buff[cnt] = G_Reprog_General_Data.T_Info_Erase.checkData[cnt];
+  }
+
+  /* 「消去・書込みルーチン」かを判定 */
+  if( type == E_RoutineControl_Type_Erase )
+  {
+    /* RoutineControlのリクエストオブジェクトにcheckTypeIdentifierを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkTypeIdentifier",
+                              checkTypeIdentifier_buff,
+                              elcount(checkTypeIdentifier_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataLengthを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkDataLength",
+                              checkDataLength_buff,
+                              elcount(checkDataLength_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "checkData",
+                              checkData_buff,
+                              elcount(checkData_buff));
+
+    checkDataLength = T_Info.checkDataLength[0] * 256 + T_Info.checkDataLength[1];
+    diagResize( req_msg, 7+checkDataLength );
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_check_mfd_crc: Illiegal Type.");
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_check_msd_signature          */
+/* Discription                                              */
+/*  routineIdentifierとSignatureを                          */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  type    : E_RoutineControl_Type_Numに相当する値         */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_check_msd_signature( dword type, diagRequest * req_msg, struct S_TransferData_info T_Info )
+{
+  /* 戻り値 */
+  int ret;
+  int checkDataLength;
+  byte checkTypeIdentifier_buff[1];
+  byte checkDataLength_buff[2];
+
+  checkTypeIdentifier_buff[0] = 0x01;
+  checkDataLength_buff[0] = T_Info.checkDataLength[0];
+  checkDataLength_buff[1] = T_Info.checkDataLength[1];
+
+  /* 「書換えデータ」かを判定 */
+  if( type == E_RoutineControl_Type_Reprog )
+  {
+    /* RoutineControlのリクエストオブジェクトにcheckTypeIdentifierを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkTypeIdentifier",
+                              checkTypeIdentifier_buff,
+                              elcount(checkTypeIdentifier_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataLengthを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkDataLength",
+                              checkDataLength_buff,
+                              elcount(checkDataLength_buff));
+
+    /* RoutineControlのリクエストオブジェクトに新たなcheckDataを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "checkData",
+                              G_Reprog_General_Data.T_Info_Reprog.checkData,
+                              elcount(G_Reprog_General_Data.T_Info_Reprog.checkData));
+
+    checkDataLength = T_Info.checkDataLength[0] * 256 + T_Info.checkDataLength[1];
+    diagResize( req_msg, 7+checkDataLength );
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_check_msd_signature: Illiegal Type.");
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_check_msd_cmac               */
+/* Discription                                              */
+/*  routineIdentifierとCMACを                               */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  type    : E_RoutineControl_Type_Numに相当する値         */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_check_msd_cmac( dword type, diagRequest * req_msg )
+{
+  /* 戻り値 */
+  int ret;
+  int cnt;
+  byte checkTypeIdentifier_buff[1];
+  byte checkDataLength_buff[2];
+  byte checkData_buff[E_routineControlOptionRecord_SIGNATURE];
+
+  checkTypeIdentifier_buff[0] = 0x02;
+  checkDataLength_buff[0] = 0x00;
+  checkDataLength_buff[1] = 0x10;
+
+  /* checkData初期化 */
+  for( cnt = 0; cnt < E_routineControlOptionRecord_SIGNATURE; cnt++ )
+  {
+    checkData_buff[cnt] = 0xCC;
+  }
+
+  for( cnt = 0; cnt < E_routineControlOptionRecord_CMAC; cnt++ )
+  {
+    checkData_buff[cnt] = G_Reprog_General_Data.T_Info_Reprog.checkData[cnt];
+  }
+
+  /* 「書換えデータ」かを判定 */
+  if( type == E_RoutineControl_Type_Reprog )
+  {
+    /* RoutineControlのリクエストオブジェクトにcheckTypeIdentifierを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkTypeIdentifier",
+                              checkTypeIdentifier_buff,
+                              elcount(checkTypeIdentifier_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataLengthを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkDataLength",
+                              checkDataLength_buff,
+                              elcount(checkDataLength_buff));
+
+    /* RoutineControlのリクエストオブジェクトに新たなcheckDataを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "checkData",
+                              checkData_buff,
+                              elcount(checkData_buff));
+
+    diagResize( req_msg, 23 );
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_check_msd_cmac: Illiegal Type.");
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_check_msd_crc                */
+/* Discription                                              */
+/*  routineIdentifierとCRCを                                */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  type    : E_RoutineControl_Type_Numに相当する値         */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_check_msd_crc( dword type, diagRequest * req_msg, struct S_TransferData_info T_Info )
+{
+  /* 戻り値 */
+  int ret;
+  int cnt;
+  int checkDataLength;
+  byte checkTypeIdentifier_buff[1];
+  byte checkDataLength_buff[2];
+  byte checkData_buff[E_routineControlOptionRecord_SIGNATURE];
+
+  checkTypeIdentifier_buff[0] = 0x02;
+  checkDataLength_buff[0] = T_Info.checkDataLength[0];
+  checkDataLength_buff[1] = T_Info.checkDataLength[1];
+
+  /* checkData初期化 */
+  for( cnt = 0; cnt < E_routineControlOptionRecord_SIGNATURE; cnt++ )
+  {
+    checkData_buff[cnt] = 0xCC;
+  }
+
+  for( cnt = 0; cnt < E_routineControlOptionRecord_CRC; cnt++ )
+  {
+    checkData_buff[cnt] = G_Reprog_General_Data.T_Info_Reprog.checkData[cnt];
+  }
+
+  /* 「書換えデータ」かを判定 */
+  if( type == E_RoutineControl_Type_Reprog )
+  {
+    /* RoutineControlのリクエストオブジェクトにcheckTypeIdentifierを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkTypeIdentifier",
+                              checkTypeIdentifier_buff,
+                              elcount(checkTypeIdentifier_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataLengthを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkDataLength",
+                              checkDataLength_buff,
+                              elcount(checkDataLength_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "checkData",
+                              checkData_buff,
+                              elcount(checkData_buff));
+
+    checkDataLength = T_Info.checkDataLength[0] * 256 + T_Info.checkDataLength[1];
+    diagResize( req_msg, 7+checkDataLength );
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_check_msd_crc: Illiegal Type.");
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_eraseMemory                  */
+/* Discription                                              */
+/*  memoryAddressとmemorySizeを                             */
+/*  RoutineControlリクエストメッセージに設定する            */
+/* IN :                                                     */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_eraseMemory( diagRequest * req_msg )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* RoutineControlのリクエストオブジェクトに新たなmemoryAddressを設定 */
+  /* 事前に読み出したバッファを設定する方式 */
+  ret = diagSetParameterRaw(req_msg, "memoryAddress",
+                            G_Reprog_General_Data.T_Info_Reprog.address,
+                            elcount(G_Reprog_General_Data.T_Info_Reprog.address));
+  if ( ret == E_Return_OK )
+  {
+    /* RoutineControlのリクエストオブジェクトに新たなmemorySizeを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "memorySize",
+                              G_Reprog_General_Data.T_Info_Reprog.size,
+                              elcount(G_Reprog_General_Data.T_Info_Reprog.size));
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_validApplication_signature   */
+/* Discription                                              */
+/*  routineIdentifierとSignatureを                          */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  type    : E_RoutineControl_Type_Numに相当する値         */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_validApplication_signature( dword type, diagRequest * req_msg, struct S_ValidateApplication_info T_Info )
+{
+  /* 戻り値 */
+  int ret;
+  int checkDataLength;
+  byte checkTypeIdentifier_buff[1];
+  byte checkDataLength_buff[2];
+
+  checkTypeIdentifier_buff[0] = 0x01;
+  checkDataLength_buff[0] = T_Info.checkDataLength[0];
+  checkDataLength_buff[1] = T_Info.checkDataLength[1];
+
+  /* 「種別指定無し」かを判定 */
+  if( type == E_RoutineControl_Type_Common )
+  {
+    /* RoutineControlのリクエストオブジェクトにcheckTypeIdentifierを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkTypeIdentifier",
+                              checkTypeIdentifier_buff,
+                              elcount(checkTypeIdentifier_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataLengthを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkDataLength",
+                              checkDataLength_buff,
+                              elcount(checkDataLength_buff));
+
+    /* RoutineControlのリクエストオブジェクトに新たなcheckDataを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "checkData",
+                              G_Reprog_General_Data.VLD_Info.checkData,
+                              elcount(G_Reprog_General_Data.VLD_Info.checkData));
+
+    checkDataLength = T_Info.checkDataLength[0] * 256 + T_Info.checkDataLength[1];
+    diagResize( req_msg, 7+checkDataLength );
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_validApplication_signature: Illiegal Type.");
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  RoutineControl_set_request_validApplication             */
+/* Discription                                              */
+/* routineIdentifierとCRCを                                 */
+/*  TransferDataリクエストメッセージに設定する              */
+/* IN :                                                     */
+/*  type    : E_RoutineControl_Type_Numに相当する値         */
+/*  req_msg : diagRequest型のリクエストメッセージ           */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSetParameterRaw()の処理結果 または E_Return_OK      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long RoutineControl_set_request_validApplication( dword type, diagRequest * req_msg, struct S_ValidateApplication_info T_Info )
+{
+  /* 戻り値 */
+  int ret;
+  int cnt;
+  byte checkTypeIdentifier_buff[1];
+  byte checkDataLength_buff[2];
+  byte checkData_buff[E_routineControlOptionRecord_SIGNATURE];
+
+  checkTypeIdentifier_buff[0] = 0xCC;
+  checkDataLength_buff[0] = 0xCC;
+  checkDataLength_buff[1] = 0xCC;
+
+  /* checkData初期化 */
+  for( cnt = 0; cnt < E_routineControlOptionRecord_SIGNATURE; cnt++ )
+  {
+    checkData_buff[cnt] = 0xCC;
+  }
+
+  /* 「種別指定無し」かを判定 */
+  if( type == E_RoutineControl_Type_Common )
+  {
+    /* RoutineControlのリクエストオブジェクトにcheckTypeIdentifierを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkTypeIdentifier",
+                              checkTypeIdentifier_buff,
+                              elcount(checkTypeIdentifier_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataLengthを設定 */
+    ret = diagSetParameterRaw(req_msg, "checkDataLength",
+                              checkDataLength_buff,
+                              elcount(checkDataLength_buff));
+
+    /* RoutineControlのリクエストオブジェクトにcheckDataを設定 */
+    /* 事前に読み出したバッファを設定する方式 */
+    ret = diagSetParameterRaw(req_msg, "checkData",
+                              checkData_buff,
+                              elcount(checkData_buff));
+
+    diagResize( req_msg, 4 );
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_validApplication: Illiegal Type.");
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+/// <RoutineControl>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ValidateApplication_init                                */
+/* Discription                                              */
+/*  外部設定情報ファイルを読み出してcheckTypeIdentifierと   */
+/*  checkDataを設定する                                     */
+/* IN :                                                     */
+/*  filename : 外部設定情報ファイル名                       */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  E_Return_OK                                             */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+
+int ValidateApplication_init( char filename[] ){
+  char vldcsvFilePath[128];
+  char vldsigFilePath[128];
+  int canOpenFile;
+  dword vldcsvHandle;
+  dword vldsigHandle;
+
+  int num_ValidateApplication_info_All_Element = 1;
+  int rowCount;
+  int read_cnt;
+  long oldOffset;
+  long newOffset;
+  char buff[1024];
+  char tmp_checkTypeIdentifier[5];
+  char tmp_sendOptionRecord[4];
+  struct S_ValidateApplication_info Work_VLD_Info;
+  int checkDataLength;
+  int EOF = 0;
+  byte read_buff[E_routineControlOptionRecord_SIGNATURE];
+
+
+  /* Reprog_Ext.iniからsendOptionRecordを読み込んで構造体に格納 */
+  canOpenFile = getProfileString("ValidateApplication", "sendOptionRecord", "0x0", tmp_sendOptionRecord, elcount(tmp_sendOptionRecord), filename);
+  if( canOpenFile <= 0 ){
+    Error_Log_output("ValidateApplication_init: Ext File Read Error.");
+    return (int) E_Return_FILEOPEN_NG;
+  }
+  Work_VLD_Info.sendOptionRecord = atol(tmp_sendOptionRecord);
+
+
+  /* Reprog_Ext.iniからVLD.csvのファイルパスを読み込む */
+  canOpenFile = getProfileString("ValidateApplication", "VLDSettingFile", "DLfile\\VLD.csv", vldcsvFilePath, elcount(vldcsvFilePath), filename);
+  if( canOpenFile <= 0 ){
+    Error_Log_output("ValidateApplication_init: Ext File Read Error.");
+    return (int) E_Return_FILEOPEN_NG;
+  }
+
+  /* VLD.csvを開く */
+  vldcsvHandle = openFileRead(vldcsvFilePath, E_Openfile_mode_text);
+  if ( vldcsvHandle == 0 ){
+    Error_Log_output("ValidateApplication_init: VLD CSV File Open Error.");
+    return (int) E_Return_FILEOPEN_NG;
+  }
+
+  for( rowCount = 0; rowCount < num_ValidateApplication_info_All_Element+1; rowCount++){
+    /* ファイル終端 */
+    if ( fileGetStringSZ(buff, elCount(buff), vldcsvHandle) == EOF ){
+      break;
+    }
+
+    /* 読み出したデータに,以外何も設定されていなかったら読み出し終了する */
+    if( strncmp(buff, ",", elcount(buff)) == 0 )
+    {
+      break;
+    }
+
+    /* 見出し行を読み捨てる */
+    if ( rowCount == 0){
+      continue;
+    }
+
+    /* バッファのオフセット値をクリア */
+    oldOffset = 0;
+    newOffset = 0;
+
+    /* checkTypeIdentifierを読み出す */
+    newOffset = strstr_off(buff, oldOffset, ",");
+    strncpy( tmp_checkTypeIdentifier, buff, (newOffset - oldOffset + 1));
+    Work_VLD_Info.checkTypeIdentifier = atol(tmp_checkTypeIdentifier);
+    oldOffset = newOffset + 1;
+
+    /* validateのsignatureファイルパスを読み出す */
+    newOffset = strlen(buff);
+    substr_cpy_off(vldsigFilePath, 0, buff, oldOffset,(newOffset - oldOffset), elcount(vldsigFilePath));
+
+    /* signatureファイルを開く*/
+    vldsigHandle = openFileRead( vldsigFilePath, E_Openfile_mode_binary );
+    if ( vldsigHandle == 0 ){
+      Error_Log_output("ValidateApplication_init: VLD checkData File Open Error.");
+      return (int) E_Return_FILEOPEN_NG;
+    }
+
+    /* checkdataの長さと中身をsignatureファイルから読み出す*/
+    checkDataLength = fileGetBinaryBlock( Work_VLD_Info.checkData, elcount(read_buff), vldsigHandle );
+    if ( checkDataLength == 0 ){
+      Error_Log_output("ValidateApplication_init: VLD checkData File Read Error.");
+      return (int) E_Return_FILEOPEN_NG;
+    }
+    Work_VLD_Info.checkDataLength[0] = (byte)((checkDataLength & 0x0000FF00) >> 8);
+    Work_VLD_Info.checkDataLength[1] = (byte)(checkDataLength & (0x000000FF));
+
+    /* signatureファイルClose */
+    if ( fileClose(vldsigHandle) == 0 ){
+      Error_Log_output("ValidateApplication_init: fileClose error(checkData)");
+      return (int) E_Return_FILECLOSE_NG;
+    }
+
+    /* 作業用の構造体からG_Reprog_General_Dataに再配置 */
+    G_Reprog_General_Data.VLD_Info.sendOptionRecord = Work_VLD_Info.sendOptionRecord;
+    G_Reprog_General_Data.VLD_Info.checkTypeIdentifier = Work_VLD_Info.checkTypeIdentifier;
+    for( read_cnt = 0; read_cnt < E_routineControlOptionRecord_checkDataLength; read_cnt++ )
+    {
+        G_Reprog_General_Data.VLD_Info.checkDataLength[read_cnt] = Work_VLD_Info.checkDataLength[read_cnt];
+    }
+    for( read_cnt = 0; read_cnt < E_routineControlOptionRecord_SIGNATURE; read_cnt++ )
+    {
+      G_Reprog_General_Data.VLD_Info.checkData[read_cnt] = Work_VLD_Info.checkData[read_cnt];
+    }
+  }
+
+  Debug_Log_output("ValidateApplication_init:Read Complete!");
+
+  /* CSVファイルClose */
+  if ( fileClose(vldcsvHandle) == 0 ){
+    Error_Log_output("ValidateApplication_init: fileClose error");
+    return (int) E_Return_FILECLOSE_NG;
+  }
+  return (int) E_Return_OK;
+}

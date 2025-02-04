@@ -1,0 +1,26 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/GDN/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/GDN/obj/GDN.rel.o
+
+../../cfg/CanTp/Gdn_CanTp_Ucfg.c
+../../cfg/Dcm/Gdn_Dcm_Ucfg.c
+../../cfg/Dcm/Dcp/Gdn_Dcm_Dcp_Ucfg.c
+../../cfg/GdnWrapper/Gdn_TmrSrv_Ucfg.c
+../../cfg/PduR/Gdn_PduR_NwIfUcfg.c
+../../cfg/PduR/Gdn_PduR_TpIfUcfg.c
+../../cfg/PduR/Gdn_PduR_Ucfg.c
+../../src/Gdn.c
+../../src/Gdn_LocalNotification.c
+../../src/CanTp/Gdn_CanTp.c
+../../src/Dcm/Gdn_Dcm.c
+../../src/Dcm/Dcp/Gdn_Dcm_Dcp.c
+../../src/GdnWrapper/Gdn_CanIf.c
+../../src/GdnWrapper/Gdn_Rte_EvtDistributor.c
+../../src/GdnWrapper/Gdn_TmrSrv.c
+../../src/PduR/Gdn_PduR_Core.c
+

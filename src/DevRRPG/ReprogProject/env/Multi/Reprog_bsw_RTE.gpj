@@ -1,0 +1,4 @@
+#!gbuild
+[Subproject]
+
+$TOP_DIR/bsw/RTE/Rte/env/Multi/Rte.gpj							[Relocatable Object]

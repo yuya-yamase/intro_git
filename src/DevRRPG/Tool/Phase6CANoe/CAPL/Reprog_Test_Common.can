@@ -1,0 +1,554 @@
+/*@!Encoding:932*/
+
+includes
+{
+    #include "Reprog_Test_Common.cin"
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+
+}
+
+/// <General>
+/* **************************************************** */
+/* Function     | ReprogTest_Initialize                 */
+/* Description  | Initializes ReprogTest                */
+/* Parameters   | [IN] LogFileName : LogFile name       */
+/* Return Value | None                                  */
+/* **************************************************** */
+void ReprogTest_Initialize( char LogFileName[] )
+{
+    getAbsFilePath("", CANoe_Senario_Filepath, elcount(CANoe_Senario_Filepath)); 
+
+    /* グローバル変数の一括初期化 */
+    variable_initialize();
+
+    /* Logging開始されてたら終了 */
+    stopLogging();
+
+    /* Logファイル名指定 */
+    setLogFileName(LogFileName);
+
+    /* Loggging 開始 */
+    startLogging();
+}
+
+/// <General>
+/* **************************************************** */
+/* Function     | ReprogTest_Finalize                   */
+/* Description  | Finalizes ReprogTest                  */
+/* Parameters   | None                                  */
+/* Return Value | None                                  */
+/* **************************************************** */
+ReprogTest_Finalize( void )
+{
+    /* Loggging 終了 */
+    stopLogging();
+
+    /* Logファイル名をDefaultに戻す */
+    setLogFileName(DefaultLogFileName);
+}
+
+/// <General>
+/* **************************************************** */
+/* Function                                             */
+/*  CANoe_Seqence_Setup                                 */
+/* Discription                                          */
+/*  シーケンス位置を指定したシーケンスに書き換える      */
+/* IN :                                                 */
+/*  startSequence : 開始シーケンス位置                  */
+/*  stopSequence  : 停止シーケンス位置                  */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+void CANoe_Seqence_Setup(int startSequence, int stopSequence)
+{
+    /* シーケンス位置を直接更新 */
+    G_Reprog_General_Data.G_Info.pp1_process = startSequence;
+    G_Reprog_General_Data.G_Info.stop_process = stopSequence;
+
+    return;
+}
+
+/* **************************************************** */
+/* Function                                             */
+/*  setupPreCondition                                   */
+/* Discription                                          */
+/*  前提条件までシーケンスを実行する(テスト実施用)      */
+/* IN :                                                 */
+/*  startSequence : 開始シーケンス位置                  */
+/*  stopSequence  : 停止シーケンス位置                  */
+/*  stopLb        : 停止LogicalBlock (Index)    (※)    */
+/*  stopBsc       : 停止BlockSequenceCounter    (※)    */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  (※)stopLb, stopBscは省略可。省略時はそれぞれ、     */
+/*      stopLb : 0x00(先頭LB)                           */
+/*      stopBsc: 0x01(初回)  として動作                 */
+/* **************************************************** */
+int setupPreConditionCore(int startSequence, int stopSequence)
+{
+    int ret;
+    int preCondition;
+
+    preCondition = FALSE;
+
+    /* 初期設定を実行 */
+    ret = Reprog_Seqence_Start();
+    /* デフォルトのタイムアウト値を設定 */
+    diagSetTimeout(G_Request_timeout_default);
+
+    /* 初期設定が成功している場合のみ次の処理を行う */
+    if (ret == E_Return_OK )
+    {
+        /* 自動実行を有効化する */
+        G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_ON;
+
+        /* CANoeシナリオの流す範囲を指定する */
+        CANoe_Seqence_Setup(startSequence, stopSequence);
+
+        /* CANoeシナリオの開始直前の時間測定 */
+        G_Timespec_Array[E_Timespec_Seqence_Start] = timeNowInt64();
+
+        /* CANoeシナリオの起点となるリクエストの送信を実施 */
+        /* 以後はレスポンス受信/タイムアウトのイベント毎に次の処理を行う */
+        Request_sender();
+
+        while(1)
+        {
+            if( TestWaitForTimeout(1000) == 0 )
+            {
+                if(G_Reprog_General_Data.G_Info.pp1_process == stopSequence)
+                {
+                    preCondition = TRUE;
+                    break;
+                }
+            }
+        }
+    }
+
+    return preCondition;
+}
+
+int setupPreCondition(int startSequence, int stopSequence)
+{
+    int preCondition;
+
+    variable_initialize();
+
+    preCondition = setupPreConditionCore(startSequence, stopSequence);
+
+    return preCondition;
+}
+
+int setupPreCondition(int startSequence, int stopSequence, byte stopLb)
+{
+    int preCondition;
+
+    variable_initialize();
+
+    G_Reprog_General_Data.G_Info.stop_lb = stopLb;
+
+    preCondition = setupPreConditionCore(startSequence, stopSequence);
+
+    return preCondition; 
+}
+
+int setupPreCondition(int startSequence, int stopSequence, byte stopLb, byte stopBsc)
+{
+    int preCondition;
+
+    variable_initialize();
+
+    G_Reprog_General_Data.G_Info.stop_lb = stopLb;
+    G_Reprog_General_Data.G_Info.stop_bsc = stopBsc;
+
+    preCondition = setupPreConditionCore(startSequence, stopSequence);
+
+    return preCondition; 
+}
+
+/* **************************************************** */
+/* Function                                             */
+/*  execSequence                                        */
+/* Discription                                          */
+/*  指定した範囲のシーケンスを実行する(テスト実施用)    */
+/* IN :                                                 */
+/*  startSequence : 開始シーケンス位置                  */
+/*  stopSequence  : 停止シーケンス位置                  */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+void execSequence(int startSequence, int stopSequence)
+{
+    int ret;
+    /* 自動実行を有効化する */
+    G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_ON;
+
+    /* CANoeシナリオの流す範囲を指定する */
+    CANoe_Seqence_Setup(startSequence, stopSequence);
+
+    /* CANoeシナリオの開始直前の時間測定 */
+    G_Timespec_Array[E_Timespec_Seqence_Start] = timeNowInt64();
+
+    /* CANoeシナリオの起点となるリクエストの送信を実施 */
+    /* 以後はレスポンス受信/タイムアウトのイベント毎に次の処理を行う */
+    Request_sender();
+
+    while(1)
+    {
+        if( TestWaitForTimeout(1000) == 0 )
+        {
+            if(G_Reprog_General_Data.G_Info.pp1_process == stopSequence)
+            {
+                break;
+            }
+        }
+    }
+}
+
+/* **************************************************** */
+/* Function     | setupTransferData_Pre                 */
+/* Description  | Prepare TransferData                  */
+/* Parameters   | [IN] fileName : File name             */
+/* Return Value | File handle                           */
+/* **************************************************** */
+dword setupTransferData_Pre( char fileName[] )
+{
+    dword fileHandle;
+
+    TransferData_open_file(fileName, E_Openfile_mode_binary, fileHandle );
+
+    return fileHandle;
+}
+
+/* **************************************************** */
+/* Function     | setupTransferData                     */
+/* Description  | Set TransferData                      */
+/* Parameters   | [IN] fileHandle : File handle         */
+/*              | [IN] size       : Size                */
+/*              | [OUT] buff[]    : Buffer              */
+/* Return Value | Size set for the buffer               */
+/* **************************************************** */
+dword setupTransferData( dword fileHandle, dword size, byte buff[] )
+{
+    dword result_size = 0;
+    byte read_buff[4096];
+    long i;
+
+    TransferData_read_file(fileHandle, size, read_buff, result_size);
+
+    for( i = 0; i < result_size; i++ )
+    {
+        buff[i + 2] = read_buff[i];
+    }
+
+    return result_size;
+}
+
+/* **************************************************** */
+/* Function     | setupTransferData_Post                */
+/* Description  | Post TransferData                     */
+/* Parameters   | [IN] fileHandle : File handle         */
+/* Return Value | None                                  */
+/* **************************************************** */
+void setupTransferData_Post( dword fileHandle )
+{
+    TransferData_close_file(fileHandle);
+}
+
+/* **************************************************** */
+/* Function                                             */
+/*  tearDown                                            */
+/* Discription                                          */
+/*  テスト実施の後始末処理                              */
+/* IN :                                                 */
+/*  baudRateChanged : baudRateの変更有無                */
+/*                    変更有り時は、クライアントの      */
+/*                    baudRate設定を戻す                */
+/*  waitTime        : S3タイマおよびリセット後の        */
+/*                    DelayTimerの経過時間を待機する    */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+void tearDown(int baudRateChanged, int waitTime)
+{
+    if( waitTime > 0)
+    {
+        // ECU Reset後の後始末（他のテストに影響を及ぼさないよう、TestCase内でReset後のECU起動・DelayTimer経過分をWaitする。）
+        TestWaitForTimeout(waitTime);
+    }
+}
+
+/* **************************************************** */
+/* Function                                             */
+/*  sendDiagMessage_forPosRsp                           */
+/* Discription                                          */
+/*  対象SIDの応答がPosRsp期待関数                       */
+/* IN :                                                 */
+/*  objectName  : 要求・応答する診断オブジェクト(SID)   */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+testfunction sendDiagMessage_forPosRsp(diagRequest * objectName, int addressType)
+{
+    char exp_out[100] = "期待値(PosRsp)と一致";
+    char unexp_out[100] = "期待値(PosRsp)と不一致";
+
+    if (addressType == FUNCTIONAL)
+    {
+        diagSendFunctional(objectName);
+    }
+    else
+    {
+        diagSendRequest(objectName);
+    }
+    if( TestWaitForDiagRequestSent(objectName, messageSentTimeout) == 1 )
+    {
+        TestReportWriteDiagObject(objectName);
+        switch (TestWaitForDiagResponse(objectName, finalRespTimeout) )
+        {
+        case TIMEOUT_OCCURED:
+            TestStepFail("TestStep.2", "応答メッセージなし");
+            break;
+
+        case EVENT_OCCURED:
+            TestReportWriteDiagResponse(objectName);
+
+            if( diagGetLastResponseCode(objectName) == -1)
+            {
+                // A Expected Positive response was received.
+                TestStepPass("TestStep.1.1", exp_out);
+            }
+            else
+            {
+                // A Unexpected Negative response was received.
+                TestStepFail("TestStep.1.2", unexp_out);
+            }
+            break;
+
+        default:
+            TestStepFail("TestStep.3", "Error in TestCase! Verdict unreliable.");
+            break;
+        }
+    }
+    else
+    {
+        TestStepFail("TestStep.4", "要求メッセージ送信失敗");
+    }
+}
+
+/* **************************************************** */
+/* Function                                             */
+/*  sendDiagMessage_forNRCRsp                           */
+/* Discription                                          */
+/*  対象SIDの応答がNegRsp期待関数                       */
+/* IN :                                                 */
+/*  objectName  : 要求・応答する診断オブジェクト(SID)   */
+/*  Nrc         : NRC(期待値)                           */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+testfunction sendDiagMessage_forNRCRsp(diagRequest * objectName, int Nrc, int addressType)
+{
+    char exp_out[100] = "期待値(NegRsp)と一致";
+    char unexp_out[100] = "期待値(NegRsp)と不一致";
+
+    if (addressType == FUNCTIONAL)
+    {
+        diagSendFunctional(objectName);
+    }
+    else
+    {
+        diagSendRequest(objectName);
+    }
+    if( TestWaitForDiagRequestSent(objectName, messageSentTimeout) == 1 )
+    {
+        TestReportWriteDiagObject(objectName);
+        switch (TestWaitForDiagResponse(objectName, finalRespTimeout) )
+        {
+        case TIMEOUT_OCCURED:
+            TestStepFail("TestStep.2", "応答メッセージなし");
+            break;
+
+        case EVENT_OCCURED:
+            TestReportWriteDiagResponse(objectName);
+
+            if( diagGetLastResponseCode(objectName) == Nrc)
+            {
+                // A Expected Negative response was received.
+                TestStepPass("TestStep.1.1", exp_out);
+            }
+            else
+            {
+                // A Unexpected Negative response was received.
+                TestStepFail("TestStep.1.2", unexp_out);
+            }
+            break;
+
+        default:
+            TestStepFail("TestStep.3", "Error in TestCase! Verdict unreliable.");
+            break;
+        }
+    }
+    else
+    {
+        TestStepFail("TestStep.4", "要求メッセージ送信失敗");
+    }
+}
+
+/* **************************************************** */
+/* Function                                             */
+/*  sendDiagMessage_forNoRsp                            */
+/* Discription                                          */
+/*  対象SIDの応答がNoRsp期待関数                        */
+/* IN :                                                 */
+/*  objectName  : 要求・応答する診断オブジェクト(SID)   */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+testfunction sendDiagMessage_forNoRsp(diagRequest * objectName, int addressType)
+{
+    char exp_out[100] = "期待値(NoRsp)と一致";
+    char unexp_out[100] = "期待値(NoRsp)と不一致";
+
+    if (addressType == FUNCTIONAL)
+    {
+        diagSendFunctional(objectName);
+    }
+    else
+    {
+        diagSendRequest(objectName);
+    }
+    if( TestWaitForDiagRequestSent(objectName, messageSentTimeout) == 1 )
+    {
+        TestReportWriteDiagObject(objectName);
+        switch (TestWaitForDiagResponse(objectName, noRsptimeout) )
+        {
+        case TIMEOUT_OCCURED:
+            TestStepPass("TestStep.1.1", exp_out);
+            break;
+
+        case EVENT_OCCURED:
+            TestReportWriteDiagResponse(objectName);
+
+            // A Unexpected Response was received.
+            TestStepFail("TestStep.1.2", unexp_out);
+            break;
+
+        default:
+            TestStepFail("TestStep.2", "Error in TestCase! Verdict unreliable.");
+            break;
+        }
+    }
+    else
+    {
+        TestStepFail("TestStep.3", "要求メッセージ送信失敗");
+    }
+}
+
+/* **************************************************** */
+/* Function                                             */
+/*  sendDiagMessage_cmpvalue                            */
+/* Discription                                          */
+/*  値の応答を比較・期待値確認関数                      */
+/* IN :                                                 */
+/*  objectName  : 要求・応答する診断オブジェクト(SID)   */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+testfunction sendDiagMessage_cmpvalue(diagRequest * objectName, byte Value[], int addressType, int num)
+{
+    char exp_out[100] = "期待値(PosRsp)と一致";
+    char unexp_out[100] = "期待値(PosRsp)と不一致";
+    diagResponse * res_msg;
+    byte res_buff[247];
+    int cnt;
+    int flg = 1;
+
+    if (addressType == FUNCTIONAL)
+    {
+        diagSendFunctional(objectName);
+    }
+    else
+    {
+        diagSendRequest(objectName);
+    }
+    if( TestWaitForDiagRequestSent(objectName, messageSentTimeout) == 1 )
+    {
+        TestReportWriteDiagObject(objectName);
+        switch (TestWaitForDiagResponse(objectName, finalRespTimeout) )
+        {
+        case TIMEOUT_OCCURED:
+            TestStepFail("TestStep.2", "応答メッセージなし");
+            break;
+
+        case EVENT_OCCURED:
+            TestReportWriteDiagResponse(objectName);
+            diagGetLastResponse(objectName, res_msg);
+            res_msg.GetPrimitiveData(res_buff, elcount(res_buff));
+            for(cnt = 0; cnt < num; cnt++)
+            {
+                if(res_buff[cnt] != Value[cnt])
+                {
+                    flg = 0;
+                    break;
+                }
+            }
+            if(flg == 1)
+            {
+                // A Expected Positive response was received.
+                TestStepPass("TestStep.1.1", exp_out);
+            }
+            else
+            {
+                // A Unexpected Negative response was received.
+                TestStepFail("TestStep.1.2", unexp_out);
+            }
+            break;
+
+        default:
+            TestStepFail("TestStep.3", "Error in TestCase! Verdict unreliable.");
+            break;
+        }
+    }
+    else
+    {
+        TestStepFail("TestStep.4", "要求メッセージ送信失敗");
+    }
+}

@@ -1,0 +1,689 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+
+/// <WriteDataByIdentifier>
+/* ******************************************************* */
+/* Function                                                */
+/*  WriteDataByIdentifier_Nonce_request_01_send            */
+/* Discription                                             */
+/*  Send Request Sid0x2E [WriteDataByIdentifier]           */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/*  req_msg   : diagRequest型のリクエストメッセージ        */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  None                                                   */
+/* ******************************************************* */
+long WriteDataByIdentifier_Nonce_request_01_send( long sprmib, diagRequest * req_msg )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* リクエスト送信 */  
+  ret = diagSendRequest(req_msg);
+
+  /* リクエスト送信の戻り値を返す */
+  return ret;
+}
+
+
+/// <WriteDataByIdentifier>
+/* ******************************************************* */
+/* Function                                                */
+/*  WriteDataByIdentifier_Fingerprint_request_01_send      */
+/* Discription                                             */
+/*  Send Request Sid0x2E [WriteDataByIdentifier]           */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/*  req_msg   : diagRequest型のリクエストメッセージ        */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  None                                                   */
+/* ******************************************************* */
+long WriteDataByIdentifier_Fingerprint_request_01_send( long sprmib, diagRequest * req_msg )
+{
+  /* 戻り値 */
+  int ret;
+ 
+  /* リクエスト送信 */
+  ret = diagSendRequest(req_msg);
+
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <WriteDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  WriteDataByIdentifier_req_distribution                  */
+/* Discription                                              */
+/*  Sid0x2E [WriteDataByIdentifier] request distribution    */
+/* IN :                                                     */
+/*  type   : dataIdentifierに相当する値                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG または E_Return_PRAMETER_NG      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long WriteDataByIdentifier_req_distribution( dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* dataIdentifierの指定によってリクエスト送信処理を振り分ける */
+  if ( type == E_dataIdentifier_Nonce_00 )
+  {
+    /* Nonce値をリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Nonce( G_WriteDataByIdentifier_req_01 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Nonce) */
+      ret = WriteDataByIdentifier_Nonce_request_01_send( sprmib, G_WriteDataByIdentifier_req_01 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_00 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_30 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_30 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_01 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_31 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_31 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_02 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_32 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_32 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_03 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_33 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_33 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_04 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_34 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_34 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_05 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_35 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_35 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_06 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_36 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_36 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_07 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_37 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_37 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_08 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_38 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_38 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_09 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_39 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_39 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_10 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_40 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_40 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_11 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_41 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_41 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_12 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_42 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_42 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_13 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_43 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_43 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_14 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_44 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_44 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_15 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_45 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_45 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_16 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_46 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_46 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_17 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_47 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_47 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_18 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_48 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_48 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_19 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_49 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_49 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_20 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_50 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_50 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_21 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_51 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_51 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_22 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_52 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_52 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_23 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_53 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_53 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_24 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_54 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_54 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_25 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_55 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_55 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_26 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_56 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_56 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_27 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_57 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_57 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_28 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_58 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_58 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_29 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_59 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_59 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_30 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_60 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_60 );
+    }
+  }
+  else if( type == E_dataIdentifier_asfp_31 )
+  {
+    /* Fingerprintをリクエストオブジェクトに設定する */
+    ret = WriteDataByIdentifier_set_Fingerprint( G_WriteDataByIdentifier_req_61 );
+    if( ret == E_Return_OK )
+    {
+      /* リクエスト送信実施(Fingerprint) */
+      ret = WriteDataByIdentifier_Fingerprint_request_01_send( sprmib, G_WriteDataByIdentifier_req_61 );
+    }
+  }
+  else
+  {
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;    
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <WriteDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  WriteDataByIdentifier_res_distribution                  */
+/* Discription                                              */
+/*  Sid0x2E [WriteDataByIdentifier]  response distribution  */
+/* IN :                                                     */
+/*  res_msg   : diagResponse型のPosRspメッセージ            */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  E_Return_OK                                             */
+/* NOTE:                                                    */
+/*  byte#1 WriteDataByIdentifier Response SID               */
+/*  byte#2 dataIdentifier #1                                */
+/*  byte#2 dataIdentifier #2                                */
+/* ******************************************************** */
+long WriteDataByIdentifier_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+  
+   /* WriteDataByIdentifierのポジティブレスポンス受信時は処理無し */
+  ret = E_Return_OK; 
+
+  return ret;
+}
+
+
+/// <WriteDataByIdentifier>
+/* *********************************************************************** */
+/* Function                                                                */
+/*  WriteDataByIdentifier_set_Nonce                                        */
+/* Discription                                                             */
+/*  設定済みのNonce値をWriteDataByIdentifierリクエストメッセージに設定する */
+/* IN :                                                                    */
+/*  req_msg   : diagRequest型のリクエストメッセージ                        */
+/* OUT:                                                                    */
+/*  None                                                                   */
+/* RET:                                                                    */
+/*  E_Return_OK                                                            */
+/* NOTE:                                                                   */
+/*  None                                                                   */
+/* *********************************************************************** */
+long WriteDataByIdentifier_set_Nonce( diagRequest * req_msg )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* dataIdentifierの値を設定しておく領域 */
+  byte dataIdentifier_buff[2];
+  
+  /* WriteDataByIdentifier_NonceのリクエストオブジェクトからdataIdentifier値を取得 */
+  ret = diagGetParameterRaw(req_msg, "dataIdentifier",
+                  dataIdentifier_buff,
+                  elcount(dataIdentifier_buff)); 
+  if( ret == E_Return_OK )
+  {
+      /* WriteDataByIdentifier_Nonceのリクエストオブジェクトに、 */
+      /* 管理情報G_Reprog_General_DataのNonce値を設定 */
+      ret = diagSetParameterRaw(req_msg, "Nonce",
+             G_Reprog_General_Data.S_Info.nonce[G_Reprog_General_Data.S_Info.nonce_cnt],
+             elcount(G_Reprog_General_Data.S_Info.nonce[G_Reprog_General_Data.S_Info.nonce_cnt]));
+  }
+  
+  /* 戻り値の判断は上位関数で実施 */ 
+  return ret;
+}
+
+
+/// <WriteDataByIdentifier>
+/* ******************************************************************************** */
+/* Function                                                                         */
+/*  WriteDataByIdentifier_set_Fingerprint                                           */
+/* Discription                                                                      */
+/*  設定済みのFingerprintをWriteDataByIdentifierリクエストメッセージに設定する      */
+/* IN :                                                                             */
+/*  req_msg   : diagRequest型のリクエストメッセージ                                 */
+/* OUT:                                                                             */
+/*  None                                                                            */
+/* RET:                                                                             */
+/*  E_Return_OK                                                                     */
+/* NOTE:                                                                            */
+/*  None                                                                            */
+/* ******************************************************************************** */
+long WriteDataByIdentifier_set_Fingerprint( diagRequest * req_msg )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* WriteDataByIdentifier_Nonceのリクエストオブジェクトに、 */
+  /* 管理情報G_Reprog_General_DataのNonce値を設定 */
+  ret = diagSetParameterRaw(req_msg, "applicationSoftwareFingerprint",
+         G_Reprog_General_Data.S_Info.applicationSoftwareFingerprint[G_Reprog_General_Data.S_Info.asfp_cnt],
+         elcount(G_Reprog_General_Data.S_Info.applicationSoftwareFingerprint[G_Reprog_General_Data.S_Info.asfp_cnt]));
+  diagResize( req_msg, 3+G_Reprog_General_Data.S_Info.asfpsize[G_Reprog_General_Data.S_Info.asfp_cnt] );
+  
+  /* 戻り値の判断は上位関数で実施 */ 
+  return ret;
+}
+
+
+/// <WriteDataByIdentifier>
+/* ************************************************************************ */
+/* Function                                                                 */
+/*  WriteDataByIdentifier_init                                              */
+/* Discription                                                              */
+/*  外部設定情報ファイルを読み出してNonce値とテスターシリアル番号を設定する */
+/* IN :                                                                     */
+/*  filename : 外部設定情報ファイル名                                       */
+/* OUT:                                                                     */
+/*  None                                                                    */
+/* RET:                                                                     */
+/*  E_Return_OK                                                             */
+/* NOTE:                                                                    */
+/*  None                                                                    */
+/* ************************************************************************ */
+long WriteDataByIdentifier_init( char filename[] )
+{
+  /* 戻り値 */
+  int ret;
+  char read_nonce[(E_SecurityNonce_Byte*2)+2];
+  char read_asfp[(E_Securityasfp_Byte*2)+2];
+  char temp_filename[E_External_erase_file_name_size];
+  char temp_buff[5];
+  int cnt;
+  int nonce_cnt;
+  int asfp_cnt;
+  int text_cnt;
+  dword temp_handle;
+
+  /* ファイル読み出し(Nonce) */
+  ret = getProfileString( "Nonce", "Nonce", "Nonce.bin", temp_filename, elcount(temp_filename), filename );
+  if( ret > 0 )
+  {
+    temp_handle = openFileRead( temp_filename, E_Openfile_mode_text );
+    if( temp_handle > 0 )
+    {
+      /* Nonceの要素数＋１回ループ */
+      /* 最初の1行は見出し行の為処理スキップする */
+      for( nonce_cnt = 0; nonce_cnt < (E_TransferData_info_All_Element+1); nonce_cnt++)
+      {
+        ret = fileGetStringSZ( read_nonce, elcount(read_nonce), temp_handle );
+        if( ret > 0 )
+        {
+          /* 最初の行のみ見出しなので読み捨て */
+          if( nonce_cnt == 0)
+          {
+            continue;
+          }
+                
+          /* 文字列をバイト配列に変換 */
+          /* 2文字=1バイトとして変換していく */
+          for( cnt = 0; cnt < E_SecurityNonce_Byte  ; cnt++ )
+          {
+            text_cnt = cnt * 2;
+            temp_buff[0] = '0';
+            temp_buff[1] = 'x';
+            temp_buff[2] = read_nonce[text_cnt];
+            temp_buff[3] = read_nonce[text_cnt+1];
+        
+            /* 読み出したNonce値を管理情報G_Reprog_General_Dataに設定 */
+            G_Reprog_General_Data.S_Info.nonce[nonce_cnt-1][cnt] = atol(temp_buff);
+          }
+        }
+        else
+        {
+          Error_Log_output("WriteDataByIdentifier_init: Nonce File Read Error.");
+        }
+      }
+    }
+    else
+    {
+      Error_Log_output("WriteDataByIdentifier_init: Nonce File Open Error.");
+    }
+  }
+  else
+  {
+    Error_Log_output("WriteDataByIdentifier_init: Ext File Read Error.");
+  }
+
+  /* ファイル読み出し(applicationSoftwareFingerprint) */
+  ret = getProfileString( "applicationSoftwareFingerprint", "applicationSoftwareFingerprint", "applicationSoftwareFingerprint.bin", temp_filename, elcount(temp_filename), filename );
+  if( ret > 0 )
+  {
+    temp_handle = openFileRead( temp_filename, E_Openfile_mode_text );
+    if( temp_handle > 0 )
+    {
+      /* applicationSoftwareFingerprintの要素数＋１回ループ */
+      /* 最初の1行は見出し行の為処理スキップする */
+      for( asfp_cnt = 0; asfp_cnt < (E_TransferData_info_All_Element+1); asfp_cnt++)
+      {
+        ret = fileGetStringSZ( read_asfp, elcount(read_asfp), temp_handle );
+        if( ret > 0 )
+        {
+          /* 最初の行のみ見出しなので読み捨て */
+          if( asfp_cnt == 0)
+          {
+            continue;
+          }
+          
+          /* applicationSoftwareFingerprintサイズを取得する */
+          G_Reprog_General_Data.S_Info.asfpsize[asfp_cnt-1] = strlen(read_asfp)/2;
+          
+          /* 文字列をバイト配列に変換 */
+          /* 2文字=1バイトとして変換していく */
+          for( cnt = 0; cnt < E_Securityasfp_Byte  ; cnt++ )
+          {
+            text_cnt = cnt * 2;
+            temp_buff[0] = '0';
+            temp_buff[1] = 'x';
+            temp_buff[2] = read_asfp[text_cnt];
+            temp_buff[3] = read_asfp[text_cnt+1];
+            
+            /* 読み出したapplicationSoftwareFingerprint値を管理情報G_Reprog_General_Dataに設定 */
+            G_Reprog_General_Data.S_Info.applicationSoftwareFingerprint[asfp_cnt-1][cnt] = atol(temp_buff);
+          }
+        }
+        else
+        {
+          Error_Log_output("WriteDataByIdentifier_init: applicationSoftwareFingerprint File Read Error.");
+        }
+      }
+    }
+    else
+    {
+      Error_Log_output("WriteDataByIdentifier_init: applicationSoftwareFingerprint File Open Error.");
+    }
+  }
+  else
+  {
+    Error_Log_output("WriteDataByIdentifier_init: Ext File Read Error.");
+  }
+
+  return ret;
+}
+

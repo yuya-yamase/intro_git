@@ -29,7 +29,7 @@
 /****************************************************************************************/
 /* Hv4mVmConfig                                                                         */
 /****************************************************************************************/
-static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe2[6] = {
+static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe2[14] = {
     {
         50U,  /* intno */
         PEID_2,  /* Peid */
@@ -59,6 +59,46 @@ static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe2[6] = {
         582U,  /* intno */
         PEID_2,  /* Peid */
         GPID_VM0  /* Gpid */
+    },
+    {
+        685U,  /* intno */
+        PEID_2,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        686U,  /* intno */
+        PEID_2,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        687U,  /* intno */
+        PEID_2,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        688U,  /* intno */
+        PEID_2,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        689U,  /* intno */
+        PEID_2,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        690U,  /* intno */
+        PEID_2,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        691U,  /* intno */
+        PEID_2,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        692U,  /* intno */
+        PEID_2,  /* Peid */
+        GPID_VM0  /* Gpid */
     }
 };
 
@@ -82,7 +122,7 @@ static EhvmConst ehvm_guest_ctx_register_t ehvm_guest_initialize_ctx_list_pe2[VM
 
 static EhvmConst ehvm_guest_pc_register_t ehvm_guest_initialize_pc_list_pe2[VM_NUM_PE2] = {
     {
-        (ehvm_uint32_t)0x00800000U  /* GMEIPC/GMFEPC */
+        (ehvm_uint32_t)0x00400000U  /* GMEIPC/GMFEPC */
     }
 };
 
@@ -189,7 +229,7 @@ EhvmConst ehvm_cfg_tbl_t ehvm_cfg_tbl_pe2 =
 {
     0U,                             /* tptm_dividingratio */
     VM_NUM_PE2,                     /* vmnum */
-    6U,                            /* guest_int_num */
+    14U,                            /* guest_int_num */
     (ehvm_uint32_t)500U,           /* hv_cycle */
     MPU_MPCFG_HBE_PE2,                  /* mpu_mpcfg_hbe */
     MPU_NUM_OF_HOST_ENTRY_PE2,          /* mpu_num_of_host_entry */

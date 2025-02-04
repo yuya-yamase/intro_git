@@ -1,0 +1,8 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/WdgIf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/WdgIf/obj/WdgIf.rel.o
+
+../../src/WdgIf.c

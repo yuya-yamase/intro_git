@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/WdgM/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/WdgM/obj/WdgM.rel.o
+
+../../src/WdgM.c
+../../cfg/WdgM_Cfg.c
+

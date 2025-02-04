@@ -1,7 +1,7 @@
-/* cannm_y_pbcfg_c_v2-1-0                                                   */
+/* cannm_y_pbcfg_c_v3-0-0                                                   */
 /****************************************************************************/
 /* Protected                                                                */
-/* Copyright AUBASS CO., LTD.                                               */
+/* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
@@ -57,6 +57,7 @@ BswConst BswU1 bsw_cannm_y_u1TxData[BSW_CANNM_Y_CAN_CH_NUM][BSW_CANNM_Y_PDU_DATA
     { (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU }   /* [0] */
    ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU }   /* [1] */
    ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU }   /* [2] */
+   ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU }   /* [3] */
 };
 
 #endif /* ( BSW_CANNM_NM_TYPE_USE_Y == BSW_USE ) */
@@ -67,11 +68,12 @@ BswConst BswU1 bsw_cannm_y_u1TxData[BSW_CANNM_Y_CAN_CH_NUM][BSW_CANNM_Y_PDU_DATA
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2021/05/31                                             */
 /*  v2-1-0          :2023/01/27                                             */
+/*  v3-0-0          :2024/08/30                                             */
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

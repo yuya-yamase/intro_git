@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/CodeRamIf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/CodeRamIf/obj/CodeRamIf.rel.o
+
+../../src/CodeRamIf.c
+../../cfg/CodeRamIf_Cfg.c

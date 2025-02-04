@@ -1,0 +1,32 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/BswM/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/BswM/obj/BswM.rel.o
+
+../../src/BswM.c
+../../src/BswM_InitUnit.c
+../../src/BswM_DeinitUnit.c
+../../src/BswM_RequestMode.c
+../../src/BswM_RequestModeSession.c
+../../src/BswM_RequestModeSecurity.c
+../../src/BswM_RequestModeFlsPrg.c
+../../src/BswM_RequestModeEcuReset.c
+../../src/BswM_RequestModeFinish.c
+../../src/BswM_RequestModeRewrite.c
+../../src/BswM_RequestModeUsrReset.c
+../../src/BswM_RequestModeUsrSleep.c
+../../src/BswM_RequestModeAcc.c
+../../src/BswM_RequestModeIg.c
+../../src/BswM_RequestModeMainErr.c
+../../src/BswM_RequestMode_Mmicon_Session.c
+../../src/BswM_RequestMode_Mmicon_Security.c
+../../src/BswM_RequestMode_Mmicon_MainErr.c
+../../src/BswM_CanSM.c
+../../src/BswM_EcuM.c
+../../src/BswM_ReportError.c
+../../cfg/BswM_Cfg.c
+../../cfg/BswM_Ucfg.c

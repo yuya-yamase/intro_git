@@ -48,5 +48,6 @@ uint32  Ecu_Intg_reSleepCallout(void);
 boolean Ecu_Intg_isWakeupCallout(Ecu_Intg_BootCauseType u4BootCause);
 #endif
 void Ecu_Intg_preSTResetCallout(Ecu_Intg_STResetType u1Type, uint8 u1Reason);
+void SS_CpuCore_requestReprog(void);        /* @@@ */
 
 #endif /* ECU_INTG_CALLOUT_H */

@@ -14,3 +14,14 @@
 *.dle
 *build.log
 *.x
+*.out
+*.bin
+#RRPG
+APL.txt
+Reprog_SBL.txt
+!empty_G4.o
+*.crc
+log/
+Reprog_CAPL.cbf
+Reprog_CANFD.stcfg
+tags

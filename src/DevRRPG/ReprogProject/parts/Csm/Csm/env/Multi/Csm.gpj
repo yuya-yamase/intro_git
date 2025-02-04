@@ -1,0 +1,15 @@
+#!gbuild
+[Relocatable Object]
+	{streq(PLATFORM_NAME, RH850)} -sda=0
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/parts/Csm/Csm/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/parts/Csm/Csm/obj/Csm.rel.o
+
+../../src/Csm_DirectApi.c
+../../src/Csm_General.c
+../../src/Csm_JobBasedApi.c
+../../src/Csm_Queue.c
+../../cfg/Csm_Cfg.c

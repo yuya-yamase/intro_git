@@ -1,0 +1,9 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :sourceDir=${MCAL_DIO_SCC_DIR}
+    :sourceDir=${MCAL_DIO_CFG_DIR}
+
+Dio.c
+Dio_Cfg.c

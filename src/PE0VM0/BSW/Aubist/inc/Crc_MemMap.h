@@ -33,13 +33,9 @@
 
 #elif defined CRC_START_SEC_APPL_DATA
 #undef CRC_START_SEC_APPL_DATA
-/* Pragma statement Start */
-#undef MEMMAP_ERROR
 
 #elif defined CRC_STOP_SEC_APPL_DATA
 #undef CRC_STOP_SEC_APPL_DATA
-/* Pragma statement Stop */
-#undef MEMMAP_ERROR
 
 #elif defined CRC_START_SEC_CONST_8
 #undef CRC_START_SEC_CONST_8

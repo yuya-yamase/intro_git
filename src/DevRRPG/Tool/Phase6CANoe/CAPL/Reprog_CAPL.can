@@ -1,0 +1,4190 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+  /* 共通の各種定義、グローバルデータ等はこちらに記載 */
+  #include "Reprog_CAPL.cin"
+
+  /* SID 0x10 DiagnosticSessionControlに関連する処理 */
+  #include "Service_0x10.cin"
+  /* SID 0x11 EcuResetに関連する処理 */
+  #include "Service_0x11.cin"
+  /* SID 0x22 ReadDataByIdentifierに関連する処理 */
+  #include "Service_0x22.cin"
+  /* SID 0x27 SecurityAccessに関連する処理 */
+  #include "Service_0x27.cin"
+  /* SID 0x28 CommunicationControlに関連する処理 */
+  #include "Service_0x28.cin"
+  /* SID 0x2E WriteDataByIdentifierに関連する処理 */
+  #include "Service_0x2E.cin"
+  /* SID 0x31 RoutineControlに関連する処理 */
+  #include "Service_0x31.cin"
+  /* SID 0x34 RequestDownloadに関連する処理 */
+  #include "Service_0x34.cin"
+  /* SID 0x36 TransferDataに関連する処理 */
+  #include "Service_0x36.cin"
+  /* SID 0x37 RequestTransferExitに関連する処理 */
+  #include "Service_0x37.cin"
+  /* SID 0x3E TesterPresentに関連する処理 */
+  #include "Service_0x3E.cin"
+  /* SID 0x29 Authenticationに関連する処理 */
+  #include "Service_0x29.cin"
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+  /* 各種定義、グローバルデータ等はincludeに移動 */
+
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 'o'                                                 */
+/* Discription                                                 */
+/*  指定のキー('o')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  トランスポート層の初期設定のみを実行する                   */
+/*  シナリオとは別にキー押下で直接リクエストを                 */
+/*  送信する処理の為の対応                                     */
+/* *********************************************************** */
+on key 'o'
+{
+  int ret;
+
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Transport Setting");
+
+  /* 初期設定を実行 */
+  ret = Reprog_Seqence_Start();
+  /* 初期設定が成功している場合のみ次の処理を行う */
+  if (ret == E_Return_OK )
+  {
+    write("Setup Done.");
+  }
+
+  return;
+}
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key '1'                                                 */
+/* Discription                                                 */
+/*  指定のキー('1')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x22のFingerpirnt領域(#0～#2)の読み出しサービスを起動  */
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key '1'
+{
+  int ret;
+  /* dataIdentifierの値を設定しておく領域 */
+  byte dataIdentifier_buff[7];
+
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Finger Print)");
+
+  diagResize( G_ReadDataByIdentifier_req_02, 7 );
+  /* Fingerprint #0～#2 */
+  dataIdentifier_buff[0] = 0x22;
+  dataIdentifier_buff[1] = 0xF1;
+  dataIdentifier_buff[2] = 0x20;
+  dataIdentifier_buff[3] = 0xF1;
+  dataIdentifier_buff[4] = 0x21;
+  dataIdentifier_buff[5] = 0xF1;
+  dataIdentifier_buff[6] = 0x22;
+  diagSetPrimitiveData ( G_ReadDataByIdentifier_req_02, dataIdentifier_buff, 7 );
+  ret = diagSendRequest( G_ReadDataByIdentifier_req_02 );
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key '2'                                                 */
+/* Discription                                                 */
+/*  指定のキー('2')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x22のFingerpirnt領域(#1～#6)の読み出しサービスを起動  */
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key '2'
+{
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Finger Print)");
+
+  /* SID 0x22 リクエスト送信 */
+  ReadDataByIdentifier_req_distribution(E_dataIdentifier_asfp_01 ,E_Flag_OFF);
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key '3'                                                 */
+/* Discription                                                 */
+/*  指定のキー('3')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x22のFingerpirnt領域(#7～#12)の読み出しサービスを起動 */
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key '3'
+{
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Finger Print)");
+
+  /* SID 0x22 リクエスト送信 */
+  ReadDataByIdentifier_req_distribution(E_dataIdentifier_asfp_07 ,E_Flag_OFF);
+
+  return;
+}
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key '4'                                                 */
+/* Discription                                                 */
+/*  指定のキー('4')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x22のFingerpirnt領域(#13～#18)の読み出しサービスを起動*/
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key '4'
+{
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Finger Print)");
+
+  /* SID 0x22 リクエスト送信 */
+  ReadDataByIdentifier_req_distribution(E_dataIdentifier_asfp_13 ,E_Flag_OFF);
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key '5'                                                 */
+/* Discription                                                 */
+/*  指定のキー('5')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x22のFingerpirnt領域(#19～#24)の読み出しサービスを起動*/
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key '5'
+{
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Finger Print)");
+
+  /* SID 0x22 リクエスト送信 */
+  ReadDataByIdentifier_req_distribution(E_dataIdentifier_asfp_19 ,E_Flag_OFF);
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key '6'                                                 */
+/* Discription                                                 */
+/*  指定のキー('6')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x22のFingerpirnt領域(#25～#30)の読み出しサービスを起動*/
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key '6'
+{
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Finger Print)");
+
+  /* SID 0x22 リクエスト送信 */
+  ReadDataByIdentifier_req_distribution(E_dataIdentifier_asfp_25 ,E_Flag_OFF);
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key '7'                                                 */
+/* Discription                                                 */
+/*  指定のキー('7')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x22のFingerpirnt領域(#31)の読み出しサービスを起動     */
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key '7'
+{
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Finger Print)");
+
+  /* SID 0x22 リクエスト送信 */
+  ReadDataByIdentifier_req_distribution(E_dataIdentifier_asfp_31 ,E_Flag_OFF);
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 'a'                                                 */
+/* Discription                                                 */
+/*  指定のキー('a')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  CANoeシナリオのAPL起動要求待ち状態となる                   */
+/*  SID 0x10 (ProgrammingSession)のポジティブレスポンスを      */
+/*  受信後にCANoeシナリオの自動実行を開始する                  */
+/* *********************************************************** */
+on key 'a'
+{
+  int ret;
+
+  /* デバッグ表示 */
+  Debug_Log_output("CANoe Senario APL Start Waiting");
+
+  /* 初期設定を実行 */
+  ret = Reprog_Seqence_Start();
+  /* 初期設定が成功している場合のみ次の処理を行う */
+  if (ret == E_Return_OK )
+  {
+    /* デバッグ表示 */
+    Debug_Log_output("APL_Start:Waiting APL Start Request");
+
+    /* CANoeシナリオのAPL起動要求有効フラグをONにする */
+    G_Reprog_General_Data.G_Info.enable_aplstart = E_Flag_ON;
+  }
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 'b'                                                 */
+/* Discription                                                 */
+/*  指定のキー('b')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  TesterPresentの周期実行を開始                              */
+/* *********************************************************** */
+on key 'b'
+{
+  long ret;
+
+  ret = diagStartTesterPresent();
+  if (ret != E_Return_OK )
+  {
+    /* デバッグ表示 */
+    Error_Log_output("diagStartTesterPresent error.");
+  }
+  else
+  {
+    /* ユーザが視認できるよう出力windowに表示 */
+    write("SID 0x3E send start.");
+  }
+
+  return;
+}
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 'v'                                                 */
+/* Discription                                                 */
+/*  指定のキー('v')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  TesterPresentの周期実行を停止                              */
+/* *********************************************************** */
+on key 'v'
+{
+  long ret;
+
+  ret = diagStopTesterPresent();
+  if (ret != E_Return_OK )
+  {
+    /* デバッグ表示 */
+    Error_Log_output("diagStopTesterPresent error.");
+  }
+  else
+  {
+    /* ユーザが視認できるよう出力windowに表示 */
+    write("SID 0x3E send stop.");
+  }
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 's'                                                 */
+/* Discription                                                 */
+/*  指定のキー('s')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  CANoeシナリオの自動実行を開始する                          */
+/* *********************************************************** */
+on key 's'
+{
+  int ret;
+
+  /* デバッグ表示 */
+  Debug_Log_output("CANoe Senario Start");
+
+  /* 初期設定を実行 */
+  ret = Reprog_Seqence_Start();
+
+  /* 初期設定が成功している場合のみ次の処理を行う */
+  if (ret == E_Return_OK )
+  {
+    /* デバッグ表示 */
+    Debug_Log_output("Reprog_Seqence_Start:Reprogramming Seqence Start");
+
+    /* 自動実行を有効化する */
+    G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_ON;
+
+    CANoe_Seqence_Direct_Update(E_PP1_SID_0x22_swi_req);
+
+    /* CANoeシナリオの開始直前の時間測定 */
+    G_Timespec_Array[E_Timespec_Seqence_Start] = timeNowInt64();
+
+    /* CANoeシナリオの起点となるリクエストの送信を実施 */
+    /* 以後はレスポンス受信/タイムアウトのイベント毎に次の処理を行う */
+    Request_sender();
+  }
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 'z'                                                 */
+/* Discription                                                 */
+/*  指定のキー('z')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  CANoeシナリオの自動実行を開始する                          */
+/* *********************************************************** */
+on key 'z'
+{
+  int ret;
+
+  /* デバッグ表示 */
+  Debug_Log_output("CANoe Senario Start");
+
+  /* 初期設定を実行 */
+  ret = Reprog_Seqence_Start();
+
+  /* 初期設定が成功している場合のみ次の処理を行う */
+  if (ret == E_Return_OK )
+  {
+    /* デバッグ表示 */
+    Debug_Log_output("Reprog_Seqence_Start:Reprogramming Seqence Start");
+
+    /* 自動実行を有効化する */
+    G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_ON;
+
+    //Reprog_Ext.ini の[TesterPresent] addrtypeを0x1とする。
+    TesterPresent_request_02_send(); //機能アドレスかつSPRMIB=Trueで3Eを送信
+    setTimer(TwaitTimer, 1 * 1000); // 機能アドレスの応答が破棄されるまで1 秒待ち
+    CANoe_Seqence_Direct_Update(E_PP1_SID_0x27_seed_req);
+
+    /* CANoeシナリオの開始直前の時間測定 */
+    G_Timespec_Array[E_Timespec_Seqence_Start] = timeNowInt64();
+
+    /* CANoeシナリオの起点となるリクエストの送信を実施 */
+    /* 以後はレスポンス受信/タイムアウトのイベント毎に次の処理を行う */
+    Request_sender();
+  }
+
+  return;
+}
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key ','                                                 */
+/* Discription                                                 */
+/*  指定のキー(',')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  CANoeシナリオの自動実行を開始する                          */
+/* *********************************************************** */
+on key ','
+{
+  int ret;
+
+  /* デバッグ表示 */
+  Debug_Log_output("CANoe Senario Start");
+
+  /* 初期設定を実行 */
+  ret = Reprog_Seqence_Start();
+
+  /* 初期設定が成功している場合のみ次の処理を行う */
+  if (ret == E_Return_OK )
+  {
+    /* デバッグ表示 */
+    Debug_Log_output("Reprog_Seqence_Start:StayInBoot Seqence Start");
+
+    /* 自動実行を有効化する */
+    G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_ON;
+
+    /* SID 0x10 DiagnosticSessionControl(ProgrammingSession) 送信から */
+    CANoe_Seqence_Direct_Update(E_PP1_SID_0x10_prog_req);
+
+    /* CANoeシナリオの開始直前の時間測定 */
+    G_Timespec_Array[E_Timespec_Seqence_Start] = timeNowInt64();
+
+    /* CANoeシナリオの起点となるリクエストの送信を実施 */
+    /* 以後はレスポンス受信/タイムアウトのイベント毎に次の処理を行う */
+    Request_sender();
+  }
+
+  return;
+}
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 'q'                                                 */
+/* Discription                                                 */
+/*  指定のキー('q')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  CANoeでの測定を停止する(CANoeは終了しない)                 */
+/* *********************************************************** */
+on key 'q'
+{
+  /* 特に後処理は不要なのでそのまま終了する */
+
+    /* デバッグ表示 */
+  Debug_Log_output("CANoe Senario Stop");
+
+  /* 測定を停止(CANoeは起動したまま) */
+  stop();
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************************** */
+/* Function                                                                */
+/*  on key 'c'                                                             */
+/* Discription                                                             */
+/*  指定のキー('c')が押下された際に起動するイベントハンドラ                */
+/* IN :                                                                    */
+/*  None                                                                   */
+/* OUT:                                                                    */
+/*  None                                                                   */
+/* RET:                                                                    */
+/*  None                                                                   */
+/* NOTE:                                                                   */
+/*  CANoeシーケンス停止機能でシナリオ停止後、再度CANoeシーケンスを再開する */
+/* *********************************************************************** */
+on key 'c'
+{
+    /* デバッグ表示 */
+  Debug_Log_output("CANoe Senario ReStart");
+
+  /* 自動実行を有効化する */
+  G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_ON;
+
+  /* CANoeシーケンスの停止時点からの起点となるリクエストの送信を実施 */
+  /* 以後はレスポンス受信/タイムアウトのイベント毎に次の処理を行う */
+  Request_sender();
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key '@'                                                 */
+/* Discription                                                 */
+/*  指定のキー('@')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x22のアクティブセッションの読み出しサービスを起動     */
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key '@'
+{
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Active Session)");
+
+  /* SID 0x22 リクエスト送信 */
+  ReadDataByIdentifier_req_distribution(E_dataIdentifier_ActiveDiagnosticSession ,E_Flag_OFF);
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 't'                                                 */
+/* Discription                                                 */
+/*  指定のキー('t')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x10のdefault sessionへの遷移を行うサービスを起動      */
+/*  シナリオとは別にキー押下で直接リクエストを送信する処理     */
+/* *********************************************************** */
+on key 't'
+{
+  int ret;
+
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to ReadDataByIdentifier(Default Session)");
+
+  /* リクエスト送信(DiagnosticSessionControl(defaultSession)) */
+  ret = DiagnosticSessionControl_req_distribution( E_Send_Address_Func, E_diagnosticSessionType_defaultSession, E_Flag_OFF );
+  if ( ret != E_Return_OK )
+  {
+    /* リクエスト送信エラー */
+    Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x10_def_req.");
+  }
+
+  return;
+}
+
+
+/// <on_key_Event>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on key 'p'                                                 */
+/* Discription                                                 */
+/*  指定のキー('p')が押下された際に起動するイベントハンドラ    */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  SID 0x3Eをシナリオとは別にキー押下で直接送信する処理       */
+/* *********************************************************** */
+on key 'p'
+{
+  int ret;
+
+  /* デバッグ表示 */
+  Debug_Log_output("Debug Send to TesterPresent");
+
+  if( G_Reprog_General_Data.TP_Info.testerPresentSprmib == 0x0 )
+  {
+    /* リクエスト送信(TesterPresent(SPRMIB=0x0)) */
+    ret = TesterPresent_request_01_send();
+  }
+  else
+  {
+    /* リクエスト送信(TesterPresent(SPRMIB=0x1)) */
+    ret = TesterPresent_request_02_send();
+  }
+
+  if ( ret != E_Return_OK )
+  {
+    /* リクエスト送信エラー */
+    Error_Log_output("Request_sender: Request Send Error. SID_0x3E.");
+  }
+
+  return;
+}
+
+
+/// <on_system_evnet>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on preStart                                                */
+/* Discription                                                 */
+/*  CANoeのStart(開始)押下時に起動するイベントハンドラ         */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* *********************************************************** */
+on preStart
+{
+  /* CanoeをStart押下時に起動するイベントハンドラ */
+
+  /* 動作中のCANoeシナリオのコンフィグレーションファイルが格納されているディレクトリのフルパスを取得 */
+  getAbsFilePath("", CANoe_Senario_Filepath, elcount(CANoe_Senario_Filepath));
+
+  /* グローバル変数の一括初期化 */
+  variable_initialize();
+
+  /* デバッグ表示 */
+  write("Reprog_CAPL Initialize Complete");
+
+  return;
+}
+
+
+/// <on_system_evnet>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on start                                                   */
+/* Discription                                                 */
+/*  PreStartイベントの後に起動するイベントハンドラ             */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  トレースウィンドウ上に実装済みのKeyEventの説明を出力する   */
+/* *********************************************************** */
+on start
+{
+  /* PreStartイベントの後に起動するイベントハンドラ */
+
+  long pos;
+  char debug_filepath[E_Configuration_path_size];
+  char msg_buff[128]="********************** Start CANoe **********************\n";
+
+  /* デバッグログファイルの出力パスを指定 */
+  /* CANoeのコンフィグレーションファイルのあるパスの絶対パスを取得 */
+  pos = strlen(CANoe_Senario_Filepath);
+  substr_cpy(debug_filepath, CANoe_Senario_Filepath, 0, pos, elcount(debug_filepath));
+  /* CANoeのコンフィグレーションファイルのあるパスからの相対パス指定を追加する */
+  strncat(debug_filepath, "Log", elcount(debug_filepath));
+  /* デバッグログの書込み先のファイルパスを設定 */
+  setWritePath(debug_filepath);
+
+  /* 書込みモード(追記モード)でデバッグログファイルをオープンする */
+  G_debug_log_file_handle = OpenFileWrite("CANoe_debug.log", 2);
+  if ( G_debug_log_file_handle != 0 )
+  {
+    /* 仕切り用のメッセージを出力しておく */
+    filePutString (msg_buff, elcount(msg_buff), G_debug_log_file_handle);
+  }
+  else
+  {
+    /* オープン失敗時は出力windowへエラー通知 */
+    write ("CANoe_debug.log Open Error, OpenFileWrite.");
+  }
+
+  /* CAPL Key Event Guide */
+  write("************************************************");
+  write(" Press 's' to Start Reprog CANoe Senario");
+  write(" Press 'z' to APL Start Request");
+  write(" Press ',' to Stay In Boot Request");
+  write("************************************************");
+
+  return;
+}
+
+
+/// <on_system_evnet>
+/* *********************************************************** */
+/* Function                                                    */
+/*  on stopMeasurement                                         */
+/* Discription                                                 */
+/*  CANoeの測定停止時に呼び出されるイベントハンドラ            */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  終了処理を行う                                             */
+/* *********************************************************** */
+on stopMeasurement
+{
+  /* 終了時に時間測定結果をデバッグログファイルに出力する */
+  Timespec_Log_output();
+
+  /* デバッグログファイルをクローズする */
+  fileClose(G_debug_log_file_handle);
+
+  /* ハンドラには無効値を設定しておく */
+  G_debug_log_file_handle = 0;
+
+  return;
+}
+
+
+
+/* *********************************************************** */
+/* Function                                                    */
+/*  on timer APL_Start_Request_Timer                           */
+/* Discription                                                 */
+/*  APL要求起動の実処理                                        */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  APL要求起動の判定の為にのみ使用する。                      */
+/*  CANの受信ハンドラ内で本関数内の処理を実行すると、          */
+/*  diagResponseのハンドラ受信前にdiagRequestを行うので、      */
+/*  APL要求起動で使用したSID 0x10のポジティブレスポンスが      */
+/*  diagResponseの受信ハンドラで起動してしまう為、遅延実行している */
+/* *********************************************************** */
+on timer APL_Start_Request_Timer
+{
+  /* APL起動要求によりCANoeシーケンスの実行開始 */
+  Debug_Log_output("APL Start:Reprogramming Seqence Start");
+
+  /* 自動実行を有効化する */
+  G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_ON;
+
+  /* APL要求起動の有効フラグはもう不要なのでフラグを落とす */
+  G_Reprog_General_Data.G_Info.enable_aplstart = E_Flag_OFF;
+
+  /* CANoeシナリオの開始直前の時間測定 */
+  G_Timespec_Array[E_Timespec_Seqence_Start] = timeNowInt64();
+
+  /* APL要求起動時はSID 0x10[DiagnosticSessionControl]のProgrammingSessionのポジティブレスポンス受信以降から再開となる */
+  CANoe_Seqence_Direct_Update(E_PP1_SID_0x27_seed_req);
+
+  /* SID 0x27 SecurityAccess(requestSeed)がCANoeシナリオ停止機能の対象となっている可能性があるのでここでも判定 */
+  CANoe_Seqence_Stop_Check();
+
+  /* APL起動要求待ち中にSID 0x10 [DiagnosticSessionControl]のProgrammingSessionのポジティブレスポンスを受信したので、 */
+  /* CANoeシナリオの起点となるリクエストの送信を実施 */
+  Request_sender();
+
+  return;
+}
+
+
+
+/* *********************************************************** */
+/* Function                                                    */
+/*  on timer TwaitTimer                                        */
+/* Discription                                                 */
+/*  SID0x10(PrgSession) 応答受けてから、SID 0x27(Seed) 出す    */
+/*  までの Wait タイマ                                         */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  None                                                       */
+/* *********************************************************** */
+on timer TwaitTimer
+{
+  /* 次のリクエストの送信を実施 */
+  Request_sender();
+
+  return;
+}
+
+/* ************************************************************** */
+/*                            CAN                                 */
+/* ************************************************************** */
+
+/* *********************************************************** */
+/* Function                                                    */
+/*  on message 0x18daf140                                      */
+/* Discription                                                 */
+/*  CAN ID：0x18daf140の受信ハンドラ関数                       */
+/* IN :                                                        */
+/*  message型のオブジェクト                                    */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  APL要求起動の判定の為にのみ使用する                        */
+/*  デバッグしやすくする為variable_initialize()による初期化後  */
+/*   かつ　APL要求起動待ち中のみ処理が有効になる               */
+/* *********************************************************** */
+on message 0x18dae017x  /* ^^^ */
+{
+  long first_byte;
+  long second_byte;
+
+  /* 「初期化済み」かどうかを判定 */
+  /* 「初期化済み」でない場合は特に何もせず受信データを読み捨て */
+  if (G_Reprog_General_Data.G_Info.initialze == E_Flag_ON )
+  {
+    /* 初期化済み かつ 自動実行の有効フラグがOFF かつ APL起動要求の有効フラグがONの場合のみAPL起動要求判定を行う */
+    if( G_Reprog_General_Data.G_Info.enable_autorun == E_Flag_OFF &&
+         G_Reprog_General_Data.G_Info.enable_aplstart == E_Flag_ON )
+    {
+
+      /* 受信データがSID 0x10 (ProgrammingSession)のポジティブレスポンスであるか判定 */
+      /* APL起動要求待ち中ではSID 0x10 (ProgrammingSession)のポジティブレスポンス以外は無視する */
+      /* SID 0x10 (ProgrammingSession)のポジティブレスポンスは、1バイト目が'0x50'で2バイト目が'0x02' */
+      /* 1バイト目を読み出し(エラーチェックはこの後の読み出し値のチェックで代用するので不要)*/
+      first_byte = this.BYTE(1);
+      /* 2バイト目を読み出し(エラーチェックはこの後の読み出し値のチェックで代用するので不要)*/
+      /* TBD:SID 0x37のレスポンス受信時にWarningが出るが処理に影響はないので低優先対応する */
+      second_byte = this.BYTE(2);
+
+      /* SID 0x10 (ProgrammingSession)のポジティブレスポンスであるか判定 */
+      if( first_byte == 0x50 && second_byte == 0x02 )
+      {
+        /* APL要求起動受信時の遅延起動用タイマを設定 */
+        /* 現在の動作しているCANの受信ハンドラは一度終了させる必要がある */
+        setTimer(APL_Start_Request_Timer , G_Reprog_General_Data.G_Info.aplstart_wait);
+      }
+    }
+    else
+    {
+      /* 「初期化済み かつ 自動実行の有効フラグがON」でない */
+      /* このような場合は特に何もせず受信データを読み捨て */
+
+      /* デバッグ表示(性能に影響するのでデバッグ時のみ有効にすること) */
+      /* Debug_Log_output("Not Initialize. Discard Receive CAN Message"); */
+    }
+  }
+
+  return;
+}
+
+
+/* ************************************************************** */
+/*                        Diagnostics                             */
+/* ************************************************************** */
+
+/* *********************************************************** */
+/* Function                                                    */
+/*  on diagResponse *                                          */
+/* Discription                                                 */
+/*  レスポンス受信時に起動する受信ハンドラ関数                 */
+/* IN :                                                        */
+/*  diagResponse型のオブジェクト                               */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  ポジティブ/ネガティブ問わずレスポンス受信時に実行する      */
+/*  デバッグしやすくする為variable_initialize()による初期化後  */
+/*   かつ　CANoeシナリオ自動実行中のみ処理が有効になる         */
+/* *********************************************************** */
+on diagResponse *
+{
+  Diag_Response_handler(this);
+
+  return;
+}
+
+on diagResponse TesterPresent_zeroSubFunction_SPRMIB
+{
+  write("TP Received");
+}
+
+on diagRequest TesterPresent_zeroSubFunction_SPRMIB
+{
+  write("TP Send");
+}
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <General>
+/* **************************************************** */
+/* Function                                             */
+/*  variable_initialize                                 */
+/* Discription                                          */
+/*  グローバル変数の初期化                              */
+/* IN :                                                 */
+/*  filename : 外部設定情報ファイル名                   */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+void variable_initialize(void)
+{
+  long pos;
+  int cnt;
+  char extend_filepath[E_Configuration_path_size];
+  char filename[E_Configuration_path_size];
+
+  /* デバッグログファイルの出力パスを指定 */
+  /* CANoeのコンフィグレーションファイルのあるパスの絶対パスを取得 */
+  pos = strlen(CANoe_Senario_Filepath);
+  substr_cpy(extend_filepath, CANoe_Senario_Filepath, 0, pos, elcount(extend_filepath));
+
+  /* CANoeのコンフィグレーションファイルのあるパスからの相対パス指定を追加する */
+  strncat(extend_filepath, G_EXTEND_FILE_NAME, elcount(extend_filepath));
+
+  /* ReprogのCANoeシーケンスを制御する為の管理情報の初期設定 */
+  G_Reprog_General_Data.G_Info.pp1_process = E_PP1_Seqence_Start;
+  G_Reprog_General_Data.G_Info.pp2_process = E_PP2_Seqence_Num_Start;
+  G_Reprog_General_Data.G_Info.multiple_file_count = 0;
+  G_Reprog_General_Data.G_Info.check_count = 0;
+  G_Reprog_General_Data.S_Info.nonce_cnt = 0;
+  G_Reprog_General_Data.S_Info.asfp_cnt = 0;
+
+  /* 自動実行用に初期値を設定 */
+  G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_OFF;
+  G_Reprog_General_Data.G_Info.enable_aplstart = E_Flag_OFF;
+  G_Reprog_General_Data.G_Info.initialze = E_Flag_ON;
+  G_Reprog_General_Data.G_Info.stop_process = 0xFF;
+  G_Reprog_General_Data.G_Info.stop_lb = 0x00;
+  G_Reprog_General_Data.G_Info.stop_bsc = 0x01;
+
+  /* P2Clientの設定(ここではデフォルト値設定) */
+  G_Reprog_General_Data.G_Info.P2Client = (G_timer_p2_max + G_timer_p2_server_max);
+  /* P6*Clientの設定(ここではデフォルト値設定) */
+  G_Reprog_General_Data.G_Info.P6_aster_Client = (G_timer_p6_max + G_timer_p2_aster_server_max);
+
+  /* デフォルトのタイムアウト値を設定 */
+  diagSetTimeout(G_Request_timeout_default);
+
+  /* シード値とキー値を初期化 */
+  SecurityAccess_Clear_SeedKey(E_SecuritySeed_Byte, E_SecurityKey_Byte);
+
+  /* ツール認証キーを設定 */
+  SecurityAccess_init(extend_filepath);
+
+  /* 暗号化ツール側で使用したNonce値と、テスターシリアル番号を外部設定情報から読み出して設定する */
+  WriteDataByIdentifier_init(extend_filepath);
+
+  /* 転送データ読み出しに使用するバッファの最大値 */
+  /* 動的なメモリ取得が出来なそうなので仮決めの値で制限する */
+  G_Reprog_General_Data.transferdata_readsize_max = E_readbuff_maxsize;
+
+  /* 消去・書込みルーチンの管理情報を設定 */
+  TransferData_Setting_Filename(E_RequestDownload_Type_Erase, filename, extend_filepath);
+
+  TransferData_Setting(filename, G_TransferData_Info_Erase);
+  /* 書換えデータの管理情報を設定 */
+  TransferData_Setting_Filename(E_RequestDownload_Type_Reprog, filename, extend_filepath);
+  TransferData_Setting(filename, G_TransferData_Info_Reprog);
+
+  /* APL要求起動時、初回のリクエスト送信のみの遅延タイマ値読み出し */
+  CANoe_APLStart_Waittime(extend_filepath);
+
+  /* CANoeシナリオの停止機能の対象となっているSIDを設定 */
+  CANoe_Seqence_Stop_Setting(extend_filepath);
+
+  /* SID 0x10 DiagnosticSessionControl(extendedDiagnosticSession)送信時のSPRMIB設定を取得 */
+  DiagnosticSessionControl_init(extend_filepath);
+
+  /* Sid 0x22 [ReadDataByIdentifier]の実行可否を取得 */
+  ReadDataByIdentifier_init(extend_filepath);
+
+  /* Sid0x3E [TesterPresent]のパラメータ設定を取得 */
+  TesterPresent_init(extend_filepath);
+
+  /* Sid0x31 [RoutineControl(ValidateApplication_init)]のパラメータ設定を取得 */
+  ValidateApplication_init(extend_filepath);
+
+  /* リセット時に使用するサービスの制御の情報を取得 */
+  Reset_Service_init(extend_filepath);
+
+  /* 初期設定情報を読み出し */
+  Reprog_Seqence_Init(extend_filepath);
+
+  /* 時間測定の全測定箇所の初期値設定を行うまでループ */
+  for( cnt = 0; cnt < E_Timespec_Seqence_MAX; cnt++ )
+  {
+    /* 初期値設定 */
+    G_Timespec_Array[cnt] = 0;
+  }
+
+  return;
+}
+
+
+/// <General>
+/* ********************************************************** */
+/* Function                                                   */
+/*  CANoe_Seqence_Request_Update                              */
+/* Discription                                                */
+/*  リクエスト送信後にシーケンス位置を次の位置に更新          */
+/* IN :                                                       */
+/*  None                                                      */
+/* OUT:                                                       */
+/*  None                                                      */
+/* RET:                                                       */
+/*  None                                                      */
+/* NOTE:                                                      */
+/*  正常系でのリクエスト送信成功時にシーケンス位置更新に使用  */
+/* ********************************************************** */
+void CANoe_Seqence_Request_Update( void )
+{
+  /* 現在のシーケンス位置を判定し、その次のシーケンス位置に更新する */
+
+  if( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x22_hwi_req )
+  {
+    /* SID 0x22 vehicleManufacturerECUHardwareNumberDataIdentifier 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x22_hwi_posres;
+  }
+  else if( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x22_swi_req )
+  {
+    /* SID 0x22 vehicleManufacturerECUSoftwareNumberDataIdentifier 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x22_swi_posres;
+  }
+  else if( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_ext_req )
+  {
+    /* SID 0x10 DiagnosticSessionControl(extendedDiagnosticSession) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x10_ext_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x28_rxtx_req )
+  {
+    /* SID 0x28 CommunicationControl(disableRxAndTx) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x28_rxtx_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_prog_req )
+  {
+    /* SID 0x10 DiagnosticSessionControl(ProgrammingSession) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x10_prog_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_seed_req )
+  {
+    /* SID 0x27 SecurityAccess(requestSeed) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x27_seed_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_key_req )
+  {
+    /* SID 0x27 SecurityAccess(sendKey) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x27_key_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x2E_asfp_req )
+  {
+    /* SID 0x2E WriteDataByIdentifier(applicationSoftwareFingerprint) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x2E_asfp_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x2E_nonce_req )
+  {
+    /* SID 0x2E WriteDataByIdentifier(Nonce) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x2E_nonce_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x34_SBL_req )
+  {
+    /* SID 0x34 RequestDownload(消去・書込みルーチン) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x34_SBL_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x36_dl_SBL_req )
+  {
+    /* SID 0x36 TransferData(ダウンロード) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x36_dl_SBL_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x37_SBL_req )
+  {
+    /* SID 0x37 RequestTransferExit(消去・書込みルーチン) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x37_SBL_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_signature_req )
+  {
+    /* SID 0x31 RoutineControl(checkMemoryFlashdriver) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_mfd_signature_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_cmac_req )
+  {
+    /* SID 0x31 RoutineControl(checkMemoryFlashdriver) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_mfd_cmac_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_crc_req )
+  {
+    /* SID 0x31 RoutineControl(checkMemoryFlashdriver) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_mfd_crc_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_erase_req )
+  {
+    /* SID 0x31 RoutineControl(eraseMemory) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_erase_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x34_APL_req )
+  {
+    /* SID 0x34 RequestDownload(書換えデータ) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x34_APL_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x36_dl_APL_req )
+  {
+    /* SID 0x36 TransferData(ダウンロード) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x36_dl_APL_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x37_APL_req )
+  {
+    /* SID 0x37 RequestTransferExit(書換えデータ) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x37_APL_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_signature_req )
+  {
+    /* SID 0x31 RoutineControl(checkMemorySoftwareData) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_msd_signature_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_cmac_req )
+  {
+    /* SID 0x31 RoutineControl(checkMemorySoftwareData) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_msd_cmac_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_crc_req )
+  {
+    /* SID 0x31 RoutineControl(checkMemorySoftwareData) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_msd_crc_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_req )
+  {
+    /* SID 0x31 RoutineControl(validApplication) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_sig_req )
+  {
+    /* SID 0x31 RoutineControl(validApplication) 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_sig_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x11_ECUReset_req )
+  {
+    /* SID 0x11 ECUReset 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x11_ECUReset_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_def_req )
+  {
+    /* SID 0x10 DiagnosticSessionControl(defaultSession) 送信 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x10_def_posres;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_Seqence_Normal_End )
+  {
+    /* 正常終了状態 */
+    /* 処理無し */
+  }
+  else
+  {
+    /* CANoe_Seqence_Direct_Updateで変な値にしていない限りエラーは発生しない */
+    Error_Log_output("CANoe_Seqence_Request_Update: Illigal Seqence.");
+  }
+
+  return;
+}
+
+
+/// <General>
+/* ******************************************************************  */
+/* Function                                                            */
+/*  CANoe_Seqence_Response_Update                                      */
+/* Discription                                                         */
+/*  レスポンス受信後にシーケンス位置を次の位置に更新                   */
+/* IN :                                                                */
+/*  None                                                               */
+/* OUT:                                                                */
+/*  None                                                               */
+/* RET:                                                                */
+/*  None                                                               */
+/* NOTE:                                                               */
+/*  正常系でのポジティブレスポンス受信成功時にシーケンス位置更新に使用 */
+/*  SPRMIBをONにして送信したリクエストのタイムアウト時にもこちらを使用 */
+/* ******************************************************************* */
+void CANoe_Seqence_Response_Update( void )
+{
+  /* 現在のシーケンス位置を判定し、その次のシーケンス位置に更新する */
+
+  if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x22_hwi_posres )
+  {
+    /* SID 0x22 vehicleManufacturerECUHardwareNumberDataIdentifier ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x10_ext_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x22_swi_posres )
+  {
+    /* SID 0x22 vehicleManufacturerECUSoftwareNumberDataIdentifier ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x22_hwi_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_ext_posres )
+  {
+    /* SID 0x10 DiagnosticSessionControl(extendedDiagnosticSession) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x28_rxtx_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x28_rxtx_posres )
+  {
+    /* SID 0x28 CommunicationControl(disableRxAndTx) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x10_prog_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_prog_posres )
+  {
+    /* SID 0x10 DiagnosticSessionControl(ProgrammingSession) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x27_seed_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_seed_posres )
+  {
+    /* SID 0x27 SecurityAccess(requestSeed) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x27_key_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_key_posres )
+  {
+    /* SID 0x27 SecurityAccess(sendKey) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x2E_asfp_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x2E_asfp_posres )
+  {
+    /* SID 0x2E WriteDataByIdentifier(applicationSoftwareFingerprint) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x2E_nonce_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x2E_nonce_posres )
+  {
+    /* SID 0x2E WriteDataByIdentifier(Nonce) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x34_SBL_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x34_SBL_posres )
+  {
+    /* SID 0x34 RequestDownload(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x36_dl_SBL_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x36_dl_SBL_posres )
+  {
+    /* SID 0x36 TransferData(ダウンロード) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x37_SBL_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x37_SBL_posres )
+  {
+    if ( G_TransferData_Info_Erase[G_Reprog_General_Data.G_Info.multiple_file_count].checkTypeIdentifier == 1 )
+    {
+      /* SID 0x37 RequestTransferExit(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_mfd_signature_req;
+    }
+    else if ( G_TransferData_Info_Erase[G_Reprog_General_Data.G_Info.multiple_file_count].checkTypeIdentifier == 3 )
+    {
+      /* SID 0x37 RequestTransferExit(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_mfd_cmac_req;
+    }
+    else if ( G_TransferData_Info_Erase[G_Reprog_General_Data.G_Info.multiple_file_count].checkTypeIdentifier == 2 )
+    {
+      /* SID 0x37 RequestTransferExit(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_mfd_crc_req;
+    }
+    else
+    {
+      /* SID 0x37 RequestTransferExit(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_erase_req;
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_signature_posres )
+  {
+    /* SID 0x37 RequestTransferExit(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_erase_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_cmac_posres )
+  {
+    /* SID 0x37 RequestTransferExit(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_erase_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_crc_posres )
+  {
+    /* SID 0x31 RoutineControl(checkMemoryFlashdriver) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_erase_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_erase_posres )
+  {
+    /* SID 0x31 RoutineControl(eraseMemory) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x34_APL_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x34_APL_posres )
+  {
+    /* SID 0x34 RequestDownload(書換えデータ) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x36_dl_APL_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x36_dl_APL_posres )
+  {
+    /* SID 0x36 TransferData(ダウンロード) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x37_APL_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x37_APL_posres )
+  {
+    if ( G_TransferData_Info_Reprog[G_Reprog_General_Data.G_Info.multiple_file_count].checkTypeIdentifier == 1 )
+    {
+      /* SID 0x37 RequestTransferExit(書換えデータ) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_msd_signature_req;
+    }
+    else if ( G_TransferData_Info_Reprog[G_Reprog_General_Data.G_Info.multiple_file_count].checkTypeIdentifier == 3 )
+    {
+      /* SID 0x37 RequestTransferExit(書換えデータ) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_msd_cmac_req;
+    }
+    else if ( G_TransferData_Info_Reprog[G_Reprog_General_Data.G_Info.multiple_file_count].checkTypeIdentifier == 2 )
+    {
+      /* SID 0x37 RequestTransferExit(書換えデータ) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_check_msd_crc_req;
+    }
+    else
+    {
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_req;
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_signature_posres )
+  {
+    if ( G_Reprog_General_Data.VLD_Info.sendOptionRecord == 0x1 )
+    {
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_sig_req;
+    }
+    else if ( G_Reprog_General_Data.VLD_Info.sendOptionRecord == 0x0 )
+    {
+     /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+     G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_req;
+    }
+    else
+    {
+      /* 異常系確認ルート */
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_req;
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_cmac_posres )
+  {
+    if ( G_Reprog_General_Data.VLD_Info.sendOptionRecord == 0x1 )
+    {
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_sig_req;
+    }
+    else if ( G_Reprog_General_Data.VLD_Info.sendOptionRecord == 0x0 )
+    {
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_req;
+    }
+    else
+    {
+      /* 異常系確認ルート */
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_req;
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_crc_posres )
+  {
+    if ( G_Reprog_General_Data.VLD_Info.sendOptionRecord == 0x1 )
+    {
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_sig_req;
+    }
+    else if ( G_Reprog_General_Data.VLD_Info.sendOptionRecord == 0x0 )
+    {
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_req;
+    }
+    else
+    {
+      /* 異常系確認ルート */
+      /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+      G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x31_valid_req;
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_posres )
+  {
+    /* SID 0x31 RoutineControl(validApplication) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x11_ECUReset_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_sig_posres )
+  {
+    /* SID 0x31 RoutineControl(validApplication) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x11_ECUReset_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x11_ECUReset_posres )
+  {
+    /* SID 0x11 ECUReset ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x10_def_req;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_def_posres )
+  {
+    /* SID 0x10 DiagnosticSessionControl(defaultSession) ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_Seqence_Normal_End;
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_Seqence_Normal_End )
+  {
+    /* CANoeシナリオ正常終了後に謎のポジティブレスポンス受信 */
+    /* 特に処理無し */
+    Debug_Log_output("CANoe_Seqence_Response_Update: Unknown Positive Response.");
+  }
+  else
+  {
+    /* CANoe_Seqence_Direct_Updateで変な値にしていない限りエラーは発生しない */
+    Error_Log_output("CANoe_Seqence_Response_Update: Illigal Seqence.");
+  }
+
+  return;
+}
+
+
+/// <General>
+/* **************************************************** */
+/* Function                                             */
+/*  CANoe_Seqence_Direct_Update                         */
+/* Discription                                          */
+/*  シーケンス位置を指定したシーケンスに書き換える      */
+/* IN :                                                 */
+/*  seqence : 書き換えるシーケンス位置の値              */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+void CANoe_Seqence_Direct_Update(int seqence)
+{
+  /* シーケンス位置を直接更新 */
+  G_Reprog_General_Data.G_Info.pp1_process = seqence;
+
+  return;
+}
+
+
+/// <General>
+/* **************************************************** */
+/* Function                                             */
+/*  CANoe_Seqence_Get                                   */
+/* Discription                                          */
+/*  シーケンス位置を返す                                */
+/* IN :                                                 */
+/*  None                                                */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  シーケンス位置                                      */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+int CANoe_Seqence_Get(void)
+{
+  /* シーケンス位置を返す */
+  return G_Reprog_General_Data.G_Info.pp1_process;
+}
+
+
+/// <General>
+/* ***************************************************************** */
+/* Function                                                          */
+/*  CANoe_Seqence_Stop_Check                                         */
+/* Discription                                                       */
+/*  シナリオ停止対象SIDのリクエスト送信時にシナリオを停止する処理    */
+/* IN :                                                              */
+/*  None                                                             */
+/* OUT:                                                              */
+/*  None                                                             */
+/* RET:                                                              */
+/*  None                                                             */
+/* NOTE:                                                             */
+/*  止め方は単純にautorunのフラグを落とすだけ(再開させることも考慮)  */
+/* ***************************************************************** */
+void CANoe_Seqence_Stop_Check( void )
+{
+  int seqence;
+  int bsc;
+
+  /* 現在のシーケンス位置を取得*/
+  seqence = CANoe_Seqence_Get();
+
+  /* 停止シーケンス到達 */
+  if( G_Reprog_General_Data.G_Info.stop_process == seqence )
+  {
+    /* SID2E(asfp)～SID31(checkAPL) */
+    if( (seqence >= E_PP1_SID_0x2E_asfp_req) && (seqence < E_PP1_SID_0x31_valid_req) )
+    {
+      /* 終了対象LB到達 */
+      if( G_Reprog_General_Data.G_Info.multiple_file_count == G_Reprog_General_Data.G_Info.stop_lb )
+      {
+        if( seqence == E_PP1_SID_0x36_dl_SBL_req )
+        {
+          if( G_Reprog_General_Data.T_Info_Erase.cnt[0] == G_Reprog_General_Data.G_Info.stop_bsc )
+          {
+            /* シーケンス停止 */
+            G_Reprog_General_Data.G_Info.enable_autorun = 0;
+          }
+        }
+        else if( seqence == E_PP1_SID_0x36_dl_APL_req )
+        {
+          if( G_Reprog_General_Data.T_Info_Reprog.cnt[0] == G_Reprog_General_Data.G_Info.stop_bsc )
+          {
+            /* シーケンス停止 */
+            G_Reprog_General_Data.G_Info.enable_autorun = 0;
+          }
+        }
+        else
+        {
+          /* シーケンス停止 */
+          G_Reprog_General_Data.G_Info.enable_autorun = 0;
+        }
+      }
+    }
+    else
+    {
+      /* シーケンス停止 */
+      G_Reprog_General_Data.G_Info.enable_autorun = 0;
+    }
+  }
+
+  return;
+}
+
+
+/// <General>
+/* **************************************************** */
+/* Function                                             */
+/*  CANoe_Seqence_Stop_Setting                          */
+/* Discription                                          */
+/*  シナリオ停止対象SID設定処理                         */
+/* IN :                                                 */
+/*  filename : 外部設定情報ファイル名                   */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  None                                                */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+void CANoe_Seqence_Stop_Setting( char filename[] )
+{
+  int stop_seqence;
+  byte stop_lb;
+  byte stop_bsc;
+  long sid;
+  long subfunc;
+  long timing;
+
+  stop_seqence = 0x0000FFFF;    /* 無効値 */
+  stop_lb = 0x00;               /* 初回 */
+
+  /* 外部設定情報(Reprog_Ext.ini)読み出し */
+  /* sid (失敗時:無効値(0x0000FFFF)) */
+  sid = getProfileInt("CANoeStop", "sid", 0x0000FFFF, filename);
+
+  /* subfunc (失敗時:無効値(0x0000FFFF)) */
+  subfunc = getProfileInt("CANoeStop", "subfunc", 0x0000FFFF, filename);
+
+  /* timing (失敗時:SBL(0x00)) */
+  timing = getProfileInt("CANoeStop", "timing", 0x00000000, filename);
+
+  /* lb (失敗時:SBL(0x00)) */
+  stop_lb = (byte)getProfileInt("CANoeStop", "lb", 0x00, filename);
+
+  /* bsc (失敗時:0x01)) */
+  stop_bsc = (byte)getProfileInt("CANoeStop", "bsc", 0x01, filename);
+
+  /*======================================================*/
+  /* | sid  | subfunc | timing | 停止契機サービス       | */
+  /* |------|---------|--------|------------------------| */
+  /* | 0x10 | 0x01    | －     | SID10 (default)        | */
+  /* | 0x10 | 0x02    | －     | SID10 (programming)    | */
+  /* | 0x11 | －      | －     | SID11                  | */
+  /* | 0x27 | 0x01    | －     | SID27 (requestSeed)    | */
+  /* | 0x27 | 0x02    | －     | SID27 (sendKey)        | */
+  /* | 0x28 | －      | －     | SID28                  | */
+  /* | 0x2E | 0xF160  | －     | SID2E (asfp )          | */
+  /* | 0x2E | 0xF050  | －     | SID2E (Nonce)          | */
+  /* | 0x31 | 0x01    | －     | SID31 (eraseMemory)    | */
+  /* | 0x31 | 0x02    | 0x00   | SID31 (checkSBL：署名) | */
+  /* | 0x31 | 0x02    | 0x01   | SID31 (checkAPL：署名) | */
+  /* | 0x31 | 0x02    | 0x02   | SID31 (checkSBL：CRC)  | */
+  /* | 0x31 | 0x02    | 0x03   | SID31 (checkAPL：CRC)  | */
+  /* | 0x31 | 0x03    | －     | SID31 (valdAPL)        | */
+  /* | 0x34 | －      | 0x00   | SID34 (SBL)            | */
+  /* | 0x34 | －      | 0x01   | SID34 (APL)            | */
+  /* | 0x36 | －      | 0x00   | SID36 (SBL)            | */
+  /* | 0x36 | －      | 0x01   | SID36 (APL)            | */
+  /* | 0x37 | －      | 0x00   | SID37 (SBL)            | */
+  /* | 0x37 | －      | 0x01   | SID37 (APL)            | */
+  /*======================================================*/
+  /* stop_lb : 停止LogicalBlockのIndex番号                */
+  /*           SID2E(asfp) ～ SID31(checkAPL) で指定可能  */
+  /*           何回目のLB転送かを指定(0:1回目, 1:2回目…) */
+  /* stop_bsc: 停止BlockSequenceCounter (SID36のみ)       */
+  /*           指定bsc値の転送直前に停止                  */
+  /*======================================================*/
+
+  if( sid == 0x10 )
+  {
+    /* SID 0x10 DiagnosticSessionControl */
+    subfunc = (subfunc & ~0x80);
+    if( subfunc == 0x01 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x10_def;
+    }
+    else if( subfunc == 0x02 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x10_prog;
+    }
+    else if( subfunc == 0x03 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x10_ext;
+    }
+    else
+    {
+      Error_Log_output("CANoe_Seqence_Stop_Setting: SID 0x10 Sub_Function Invalid Value.");
+    }
+  }
+  else if( sid == 0x11 )
+  {
+    /* SID 0x11 ECUReset */
+    stop_seqence = E_CANoe_Stop_Sequence_SID_0x11;
+  }
+  else if( sid == 0x27 )
+  {
+    /* SID 0x27 SecurityAccess */
+    subfunc = (subfunc & ~0x80);
+    if( subfunc == 0x01 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x27_seed;
+    }
+    else if( subfunc == 0x02 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x27_key;
+    }
+    else
+    {
+      Error_Log_output("CANoe_Seqence_Stop_Setting: SID 0x27 Sub_Function Invalid Value.");
+    }
+  }
+  else if( sid == 0x28 )
+  {
+    /* SID 0x28 CommunicationControl */
+    stop_seqence = E_CANoe_Stop_Sequence_SID_0x28;
+  }
+  else if( sid == 0x3E )
+  {
+    /* SID 0x3E TesterPresent */
+    /* TBD：現状0x3Eを設定しても停止機能は動作しない */
+    stop_seqence = E_CANoe_Stop_Sequence_SID_0x3E;
+  }
+  else if( sid == 0x2E )
+  {
+    /* SID 0x2E WriteDataByIdentifier */
+    /* subfunc を dataIdentifier として判定 */
+    if( subfunc == 0xF050 )         /* Nonce */
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x2E_nonce;
+    }
+    else if( subfunc == 0xF160 )    /* Fingerprint */
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x2E_asfp;
+    }
+    else
+    {
+      Error_Log_output("CANoe_Seqence_Stop_Setting: SID 0x2E dataIdentifier Invalid Value.");
+    }
+  }
+  else if( sid == 0x31 )
+  {
+    /* SID 0x31 RoutineControl */
+    /* subfunc を RID判別情報として判定 */
+    if( subfunc == 0x01 )       /* eraseMemory */
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x31_erase;
+    }
+    else if( subfunc == 0x02 )  /* checkMemory */
+    {
+      /* timing をチェック種別として判定 */
+      if( timing == 0x00 )      /* checkSBL：署名 */
+      {
+        stop_seqence = E_CANoe_Stop_Sequence_SID_0x31_SBL_chk_sign;
+      }
+      else if( timing == 0x01 ) /* checkAPL：署名 */
+      {
+        stop_seqence = E_CANoe_Stop_Sequence_SID_0x31_APL_chk_sign;
+      }
+      else if( timing == 0x02 ) /* checkSBL：CRC */
+      {
+        stop_seqence = E_CANoe_Stop_Sequence_SID_0x31_SBL_chk_crc;
+      }
+      else if( timing == 0x03 ) /* checkAPL：CRC */
+      {
+        stop_seqence = E_CANoe_Stop_Sequence_SID_0x31_APL_chk_crc;
+      }
+      else if( timing == 0x04 ) /* checkSBL：CMAC */
+      {
+        stop_seqence = E_CANoe_Stop_Sequence_SID_0x31_SBL_chk_cmac;
+      }
+      else if( timing == 0x05 ) /* checkAPL：CMAC */
+      {
+        stop_seqence = E_CANoe_Stop_Sequence_SID_0x31_APL_chk_cmac;
+      }
+      else
+      {
+        Error_Log_output("CANoe_Seqence_Stop_Setting: SID 0x31 timing Invalid Value.");
+      }
+    }
+    else if( subfunc == 0x03 )  /* validateApplication */
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x31_validate;
+    }
+    else
+    {
+      Error_Log_output("CANoe_Seqence_Stop_Setting: SID 0x31 Sub_Function Invalid Value.");
+    }
+  }
+  else if( sid == 0x34 )
+  {
+    /* SID 0x34 RequestDownload */
+    /* timing を SBL/APL判別情報として判定 */
+    if( timing == 0x00 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x34_SBL;
+    }
+    else if( timing == 0x01 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x34_APL;
+    }
+    else
+    {
+      Error_Log_output("CANoe_Seqence_Stop_Setting: SID 0x34 timing Invalid Value.");
+    }
+  }
+  else if( sid == 0x36 )
+  {
+    /* SID 0x36 TransferData */
+    /* timing を SBL/APL判別情報として判定 */
+    if( timing == 0x00 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x36_SBL;
+    }
+    else if( timing == 0x01 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x36_APL;
+    }
+    else
+    {
+      Error_Log_output("CANoe_Seqence_Stop_Setting: SID 0x36 timing Invalid Value.");
+    }
+  }
+  else if( sid == 0x37 )
+  {
+    /* SID 0x37 RequestTransferExit */
+    /* timing を SBL/APL判別情報として判定 */
+    if( timing == 0x00 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x37_SBL;
+    }
+    else if( timing == 0x01 )
+    {
+      stop_seqence = E_CANoe_Stop_Sequence_SID_0x37_APL;
+    }
+    else
+    {
+      Error_Log_output("CANoe_Seqence_Stop_Setting: SID 0x37 timing Invalid Value.");
+    }
+  }
+  else
+  {
+    /* 該当するSIDがなかったので、CANoeシナリオの停止機能は未使用と判断 */
+    /* デバッグ表示 */
+    Debug_Log_output("CANoe Senario Stop Function Disabled");
+  }
+
+  /* CANoeシナリオの停止機能の対象のSIDのシーケンス番号を設定 */
+  G_Reprog_General_Data.G_Info.stop_process = stop_seqence;
+  G_Reprog_General_Data.G_Info.stop_lb = stop_lb;
+  G_Reprog_General_Data.G_Info.stop_bsc = stop_bsc;
+
+  return;
+}
+
+
+/// <General>
+/* ******************************************************** */
+/* Function                                                 */
+/*  CANoe_APLStart_Waittime                                 */
+/* Discription                                              */
+/*  APL要求起動時に、初回のリクエストの遅延タイマに設定する */
+/*  Wait値を取得する処理                                    */
+/* IN :                                                     */
+/*  filename : 外部設定情報ファイル名                       */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  None                                                    */
+/* NOTE:                                                    */
+/*  読み出し失敗時はデフォルト値()を設定                    */
+/* ******************************************************** */
+void CANoe_APLStart_Waittime( char filename[] )
+{
+  /* 外部設定情報から遅延タイマ値を読み出し */
+  /* 読み出し失敗時はデフォルト値(10ミリ秒)を使用する設定 */
+  G_Reprog_General_Data.G_Info.aplstart_wait = getProfileInt("APLstart", "wait", 10, filename);
+
+  return;
+}
+
+/// <General>
+/* ********************************************************* */
+/* Function                                                  */
+/*  Request_default_timeout                                  */
+/* Discription                                               */
+/*  全リクエストに対するタイムアウト時に呼び出すハンドラ設定 */
+/* IN :                                                      */
+/*  None                                                     */
+/* OUT:                                                      */
+/*  None                                                     */
+/* RET:                                                      */
+/*  diagSetTimeoutHandler()の処理結果                        */
+/* NOTE:                                                     */
+/*  タイムアウト値はデフォルトの1000msのままとなるので、     */
+/*  必要であればdiagSetTimeout()で再設定すること             */
+/* ********************************************************* */
+int Request_setup_timeout_handler(char handler_name[])
+{
+  /* 戻り値 */
+  int ret;
+
+  do
+  {
+    /* SID 0x10 DiagnosticSessionControl用定義 */
+    ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_01");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_02, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_02");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_03, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_03");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_DiagnosticSessionControl_req_06, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_DiagnosticSessionControl_req_06");
+      break;
+    }
+    /* SID 0x11 EcuReset用定義 */
+    ret = diagSetTimeoutHandler(G_EcuReset_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_EcuReset_req_01");
+      break;
+    }
+
+    /* SID 0x22 ReadDataByIdentifier用定義 */
+    ret = diagSetTimeoutHandler(G_ReadDataByIdentifier_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_ReadDataByIdentifier_req_01");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_ReadDataByIdentifier_req_02, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_ReadDataByIdentifier_req_02");
+      break;
+    }
+
+    /* SID 0x27 SecurityAccess用定義 */
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_01");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_02, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_02");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_03, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_03");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_04, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_04");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_05, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_05");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_06, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_06");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_07, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_07");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_08, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_08");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_09, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_09");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_SecurityAccess_req_10, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_SecurityAccess_req_10");
+      break;
+    }
+
+    /* SID 0x28 CommunicationControl用定義 */
+    ret = diagSetTimeoutHandler(G_CommunicationControl_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_CommunicationControl_req_01");
+      break;
+    }
+
+    /* SID 0x2E WriteDataByIdentifier用定義 */
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_01");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_30, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_30");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_31, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_31");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_32, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_32");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_33, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_33");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_34, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_34");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_35, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_35");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_36, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_36");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_37, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_37");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_38, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_38");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_WriteDataByIdentifier_req_39, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_WriteDataByIdentifier_req_39");
+      break;
+    }
+
+
+
+    /* SID 0x31 RoutineControl用定義 */
+    ret = diagSetTimeoutHandler(G_RoutineControl_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_RoutineControl_req_01");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_RoutineControl_req_02, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_RoutineControl_req_02");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_RoutineControl_req_03, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_RoutineControl_req_03");
+      break;
+    }
+    ret = diagSetTimeoutHandler(G_RoutineControl_req_04, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_RoutineControl_req_04");
+      break;
+    }
+
+
+    /* SID 0x34 RequestDownload用定義 */
+    ret = diagSetTimeoutHandler(G_RequestDownload_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_RequestDownload_req_01");
+      break;
+    }
+
+    /* SID 0x36 TransferData用定義 */
+    ret = diagSetTimeoutHandler(G_TransferData_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_TransferData_req_01");
+      break;
+    }
+
+    /* SID 0x37 RequestTransferExit用定義 */
+    ret = diagSetTimeoutHandler(G_RequestTransferExit_req_01, handler_name);
+    if(ret != 0)
+    {
+      /* ハンドラ設定失敗 */
+      /* デバッグ表示 */
+      Error_Log_output("Request_setup_timeout_handler:diagSetTimeoutHandler error. for G_RequestTransferExit_req_01");
+      break;
+    }
+
+    /* SID 0x38 TesterPresent用定義 */
+    /* TesterPresentは独立周期的なリクエストなのでハンドラは不要 */
+
+  }
+  while(0);
+
+  return ret;
+}
+
+
+/// <General>
+/* **************************************************** */
+/* Function                                             */
+/*  Control_transportlayer_setup                        */
+/* Discription                                          */
+/*  診断記述ファイルの定義に従ってTP層の設定            */
+/* IN :                                                 */
+/*  diag_def_name : 診断記述ファイルのECU修飾子         */
+/* OUT:                                                 */
+/*  None                                                */
+/* RET:                                                 */
+/*  diagSetTarget()の処理結果                           */
+/* NOTE:                                                */
+/*  None                                                */
+/* **************************************************** */
+int Control_transportlayer_setup(char diag_def_name[])
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 診断記述ファイルから、対象となる制御デバイスの選択し初期設定を行う */
+  ret = diagSetTarget(diag_def_name);
+
+  /* diagSetTarget()の戻り値を返す */
+  return ret;
+}
+
+
+/// <General>
+/* *********************************************************** */
+/* Function                                                    */
+/*  Request_sender                                             */
+/* Discription                                                 */
+/*  CANoeシーケンスに対応するリクエスト送信関数の選定          */
+/* IN :                                                        */
+/*  None                                                       */
+/* OUT:                                                        */
+/*  None                                                       */
+/* RET:                                                        */
+/*  None                                                       */
+/* NOTE:                                                       */
+/*  デバッグしやすくする為variable_initialize()による初期化後  */
+/*   かつ　CANoeシナリオ自動実行中のみ処理が有効になる         */
+/* *********************************************************** */
+void Request_sender(void)
+{
+  /* 戻り値 */
+  int ret;
+  char errolog_buff[128];
+
+  /* 初期化済み かつ 自動実行の有効フラグがON場合のみ次シーケンスの動作を起動する */
+  if (G_Reprog_General_Data.G_Info.initialze == E_Flag_ON &&
+      G_Reprog_General_Data.G_Info.enable_autorun == E_Flag_ON )
+  {
+    /* シーケンス位置によって送信するリクエストを特定 */
+    /* (switch文は使わない方が良さそうなのでif～elseif～elseで実現)  */
+    if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x22_hwi_req )
+    {
+      /* リクエスト送信(ReadDataByIdentifier) */
+      ret = ReadDataByIdentifier_req_distribution( E_dataIdentifier_HWIdentification, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x22_hwi_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x22_swi_req )
+    {
+      /* リクエスト送信(ReadDataByIdentifier) */
+      ret = ReadDataByIdentifier_req_distribution( E_dataIdentifier_SWIdentification, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x22_swi_req.");
+      }
+    }
+    else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_ext_req )
+    {
+      /* 機能アドレスにリクエスト送信(DiagnosticSessionControl(extendedDiagnosticSession)) */
+      ret = DiagnosticSessionControl_req_distribution( E_Send_Address_Func,
+                               E_diagnosticSessionType_extendedDiagnosticSession,
+                               G_Reprog_General_Data.DSC_Info.extendedDiagnosticSession_sprmib );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        snprintf(errolog_buff, elcount(errolog_buff), "Request_sender: Request Send Error. seq = %ld, ret = %ld", E_PP1_SID_0x10_ext_req, ret);
+        Error_Log_output(errolog_buff);
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x28_rxtx_req )
+    {
+      /* リクエスト送信(CommunicationControl) */
+      ret = CommunicationControl_req_distribution( E_Send_Address_Func, E_controlType_disableRxAndTx, E_Flag_ON );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x28_rxtx_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_prog_req )
+    {
+      /* リクエスト送信(DiagnosticSessionControl(ProgrammingSession)) */
+      ret = DiagnosticSessionControl_req_distribution( E_Send_Address_Phy, E_diagnosticSessionType_ProgrammingSession, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x10_prog_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_seed_req )
+    {
+      /* SID 0x27 SecurityAccess[requestSeed]のリクエスト送信直前の時間測定 */
+      G_Timespec_Array[E_Timespec_Seqence_SeedKey_0x27_Start] = timeNowInt64();
+
+      /* リクエスト送信(SecurityAccess(requestSeed)) */
+      ret = SecurityAccess_req_distribution( E_securityAccessType_requestSeed, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x27_seed_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_key_req )
+    {
+      /* リクエスト送信(SecurityAccess(sendKey)) */
+      ret = SecurityAccess_req_distribution( E_securityAccessType_sendKey, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x27_key_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x2E_nonce_req )
+    {
+      /* リクエスト送信(WriteDataByIdentifier(Nonce)) */
+      ret = WriteDataByIdentifier_req_distribution(
+              ( E_dataIdentifier_Nonce_00 ), E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x2E_nonce_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x2E_asfp_req )
+    {
+      /* リクエスト送信(WriteDataByIdentifier(applicationSoftwareFingerprint)) */
+      ret = WriteDataByIdentifier_req_distribution(
+              ( E_dataIdentifier_asfp_00 + G_TransferData_Info_Erase[G_Reprog_General_Data.G_Info.multiple_file_count].region ), E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x2E_asfp_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x34_SBL_req )
+    {
+      /* 消去ルーチンに対するSID 0x34 RequestDownloadのリクエスト送信直前の時間測定 */
+      G_Timespec_Array[E_Timespec_Seqence_erase_0x34_Start] = timeNowInt64();
+
+      /* リクエスト送信(RequestDownload) */
+      ret = RequestDownload_req_distribution( E_RequestDownload_Type_Erase, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x34_SBL_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x36_dl_SBL_req )
+    {
+      /* リクエスト送信(TransferData) */
+      ret = TransferData_req_distribution( E_TransferData_Type_Erase, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x36_dl_SBL_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x37_SBL_req )
+    {
+      /* リクエスト送信(RequestTransferExit) */
+      ret = RequestTransferExit_req_distribution( 0, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x37_SBL_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_signature_req )
+    {
+      /* リクエスト送信(RoutineControl(checkMemoryFlashdriver)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Erase, E_routineIdentifier_checkMemoryFlashdriver, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_check_mfd_signature_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_cmac_req )
+    {
+      /* リクエスト送信(RoutineControl(checkMemoryFlashdriver)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Erase, E_routineIdentifier_checkMemoryFlashdriver, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_check_mfd_cmac_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_crc_req )
+    {
+      /* リクエスト送信(RoutineControl(checkMemoryFlashdriver)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Erase, E_routineIdentifier_checkMemoryFlashdriver, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_check_mfd_crc_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_erase_req )
+    {
+      /* SID 0x31 RoutineControl(eraseMemory)のリクエスト送信直前の時間測定 */
+      G_Timespec_Array[E_Timespec_Seqence_erasemem_0x31_Start] = timeNowInt64();
+
+      /* リクエスト送信(RoutineControl(eraseMemory)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Common, E_routineIdentifier_eraseMemory, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_erase_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x34_APL_req )
+    {
+      /* 書込みファイルに対するSID 0x34 RequestDownloadのリクエスト送信直前の時間測定 */
+      G_Timespec_Array[E_Timespec_Seqence_Apl_0x34_Start] = timeNowInt64();
+
+      /* リクエスト送信(RequestDownload) */
+      ret = RequestDownload_req_distribution( E_RequestDownload_Type_Reprog, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x34_APL_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x36_dl_APL_req )
+    {
+      /* リクエスト送信(TransferData) */
+      ret = TransferData_req_distribution( E_TransferData_Type_Reprog, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x36_dl_APL_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x37_APL_req )
+    {
+      /* リクエスト送信(RequestTransferExit) */
+      ret = RequestTransferExit_req_distribution( 0, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x37_APL_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_signature_req )
+    {
+      /* リクエスト送信(RoutineControl(checkMemorySoftwareData)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Reprog, E_routineIdentifier_checkMemorySoftwareData, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_check_msd_signature_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_cmac_req )
+    {
+      /* リクエスト送信(RoutineControl(checkMemorySoftwareData)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Reprog, E_routineIdentifier_checkMemorySoftwareData, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_check_msd_cmac_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_crc_req )
+    {
+      /* リクエスト送信(RoutineControl(checkMemorySoftwareData)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Reprog, E_routineIdentifier_checkMemorySoftwareData, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_check_msd_crc_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_req )
+    {
+      /* リクエスト送信(RoutineControl(validApplication)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Common, E_routineIdentifier_validApplication, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_valid_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_sig_req )
+    {
+      /* リクエスト送信(RoutineControl(validApplication)) */
+      ret = RoutineControl_req_distribution( E_RoutineControl_Type_Common, E_routineIdentifier_validApplication, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x31_valid_sig_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x11_ECUReset_req )
+    {
+      /* リクエスト送信(EcuReset(hardReset)) */
+      ret = ECUReset_req_distribution( E_Send_Address_Phy, E_resetType_hardReset, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x11_ECUReset_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_def_req )
+    {
+      /* リクエスト送信(DiagnosticSessionControl(defaultSession)) */
+      ret = DiagnosticSessionControl_req_distribution( E_Send_Address_Func, E_diagnosticSessionType_defaultSession, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+      else
+      {
+        /* リクエスト送信エラー */
+        Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x10_def_req.");
+      }
+    }
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_Seqence_Normal_End )
+    {
+      /* CANoeシーケンス正常終了 */
+      /* 終了記念にログを出したり統計情報を出力したりする方が良いか？ */
+      Debug_Log_output("Request_sender: All OK.");
+    }
+    else
+    {
+      /* デバッグ表示 */
+      snprintf(errolog_buff, elcount(errolog_buff), "Request_sender:illegal seqence nunber = %ld", G_Reprog_General_Data.G_Info.pp1_process);
+      Error_Log_output(errolog_buff);
+    }
+  }
+
+  return;
+}
+
+
+/// <General>
+/* ******************************************************** */
+/* Function                                                 */
+/*  Response_Receiver                                       */
+/* Discription                                              */
+/*  ポジティブレスポンス受信時の処理                        */
+/* IN :                                                     */
+/*  res_msg : diagResponse型の受信メッセージ                */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  TBD                                                     */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+int Response_Receiver( diagResponse *res_msg )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 現在のシーケンス位置を判定し、そのシーケンス位置で行うべき処理に振り分け */
+  if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x22_hwi_posres )
+  {
+    /* SID 0x22 ReadDataByIdentifier(HWIdentification) ポジティブレスポンス受信完了 */
+    ret = ReadDataByIdentifier_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x22_hwi_posres.");
+    }
+    {
+      ret = Authentication_req_distribution( E_authenticationTask_authenticationConfiguration, E_Flag_OFF );
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x22_swi_posres )
+  {
+    /* SID 0x22 ReadDataByIdentifier(HWIdentification) ポジティブレスポンス受信完了 */
+    ret = ReadDataByIdentifier_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x22_swi_posres.");
+    }
+  }
+  else if( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_ext_posres )
+  {
+    /* SID 0x10 DiagnosticSessionControl(extendedDiagnosticSession) ポジティブレスポンス受信完了 */
+    ret = DiagnosticSessionControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x10_ext_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x28_rxtx_posres )
+  {
+    /* SID 0x28 CommunicationControl(disableRxAndTx) ポジティブレスポンス受信完了 */
+    ret = CommunicationControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x28_rxtx_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_prog_posres )
+  {
+    /* SID 0x10 DiagnosticSessionControl(ProgrammingSession) ポジティブレスポンス受信完了 */
+    ret = DiagnosticSessionControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x10_prog_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_seed_posres )
+  {
+    /* SID 0x27 SecurityAccess(requestSeed) ポジティブレスポンス受信完了 */
+    ret = SecurityAccess_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x27_seed_posres.");
+    }
+    else
+    {
+      /* シード値を保存する */
+      SecurityAccess_Set_Seed(res_msg, E_SecuritySeed_Byte);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_key_posres )
+  {
+    /* SID 0x27 SecurityAccess(sendKey) ポジティブレスポンス受信完了 */
+    ret = SecurityAccess_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x27_key_posres.");
+    }
+
+    /* SID 0x27 SecurityAccess[sendKey]のレスポンス受信直後の時間測定 */
+    G_Timespec_Array[E_Timespec_Seqence_SeedKey_0x27_End] = timeNowInt64();
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x2E_nonce_posres )
+  {
+    /* SID 0x2E WriteDataByIdentifier(Nonce) ポジティブレスポンス受信完了 */
+    ret = WriteDataByIdentifier_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x2E_nonce_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x2E_asfp_posres )
+  {
+    /* SID 0x2E WriteDataByIdentifier(applicationSoftwareFingerprint) ポジティブレスポンス受信完了 */
+    ret = WriteDataByIdentifier_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x2E_asfp_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x34_SBL_posres )
+  {
+    /* SID 0x34 RequestDownload(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+    ret = RequestDownload_res_distribution( G_Reprog_General_Data.T_Info_Erase.transfer_size, res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x34_SBL_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x36_dl_SBL_posres )
+  {
+    /* SID 0x36 TransferData(ダウンロード) ポジティブレスポンス受信完了 */
+    ret = TransferData_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x36_dl_SBL_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x37_SBL_posres )
+  {
+    /* SID 0x37 RequestTransferExit(消去・書込みルーチン) ポジティブレスポンス受信完了 */
+    ret = RequestTransferExit_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x37_SBL_posres.");
+    }
+
+    /* 消去ルーチンに対するSID 0x37 RequestTransferExitのレスポンス受信直後の時間測定 */
+    G_Timespec_Array[E_Timespec_Seqence_erase_0x37_End] = timeNowInt64();
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_signature_posres )
+  {
+    /* SID 0x31 RoutineControl(checkMemoryFlashdriver) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_check_mfd_signature_posres.");
+      CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_cmac_posres )
+  {
+    /* SID 0x31 RoutineControl(checkMemoryFlashdriver) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_check_mfd_cmac_posres.");
+      CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_mfd_crc_posres )
+  {
+    /* SID 0x31 RoutineControl(checkMemoryFlashdriver) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_check_mfd_crc_posres.");
+      CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_erase_posres )
+  {
+    /* SID 0x31 RoutineControl(eraseMemory) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_erase_posres.");
+    }
+    /* SID 0x31 RoutineControl(eraseMemory)のレスポンス受信直後の時間測定 */
+    G_Timespec_Array[E_Timespec_Seqence_erasemem_0x31_End] = timeNowInt64();
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x34_APL_posres )
+  {
+    /* SID 0x34 RequestDownload(書換えデータ) ポジティブレスポンス受信完了 */
+    ret = RequestDownload_res_distribution( G_Reprog_General_Data.T_Info_Reprog.transfer_size, res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x34_APL_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x36_dl_APL_posres )
+  {
+    /* SID 0x36 TransferData(ダウンロード) ポジティブレスポンス受信完了 */
+    ret = TransferData_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x36_dl_APL_posres.");
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x37_APL_posres )
+  {
+    /* SID 0x37 RequestTransferExit(書換えデータ) ポジティブレスポンス受信完了 */
+    ret = RequestTransferExit_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x37_APL_posres.");
+    }
+
+    /* 書込みファイルに対するSID 0x37 RequestTransferExitのレスポンス受信直後の時間測定 */
+    G_Timespec_Array[E_Timespec_Seqence_Apl_0x37_End] = timeNowInt64();
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_signature_posres )
+  {
+    /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_check_msd_signature_posres.");
+      CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_cmac_posres )
+  {
+    /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_check_msd_cmac_posres.");
+      CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_check_msd_crc_posres )
+  {
+    /* SID 0x31 RoutineControl(checkMemorySoftwareData) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_check_msd_crc_posres.");
+      CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_posres )
+  {
+    /* SID 0x31 RoutineControl(validApplication) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_valid_posres.");
+      CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x31_valid_sig_posres )
+  {
+    /* SID 0x31 RoutineControl(validApplication) ポジティブレスポンス受信完了 */
+    ret = RoutineControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x31_valid_sig_posres.");
+      CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    }
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x11_ECUReset_posres )
+  {
+    /* SID 0x11 ECUReset ポジティブレスポンス受信完了 */
+    ret = ECUReset_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x11_ECUReset_posres.");
+    }
+
+    /* CANoeシナリオの終了直後の時間測定 */
+    /* CANoeシナリオの最後のシーケンスはSID 0x10かSID 0x11なので両方に処理を追加 */
+    G_Timespec_Array[E_Timespec_Seqence_End] = timeNowInt64();
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_def_posres )
+  {
+    /* SID 0x10 DiagnosticSessionControl(defaultSession) ポジティブレスポンス受信完了 */
+    ret = DiagnosticSessionControl_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP1_SID_0x10_def_posres.");
+    }
+
+    /* CANoeシナリオの終了直後の時間測定 */
+    /* CANoeシナリオの最後のシーケンスはSID 0x10かSID 0x11なので両方に処理を追加 */
+    G_Timespec_Array[E_Timespec_Seqence_End] = timeNowInt64();
+  }
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_Seqence_Normal_End )
+  {
+    /* CANoeシナリオ正常終了後に謎のポジティブレスポンス受信 */
+    Debug_Log_output("Response_Receiver: Unknown Response.");
+  }
+  else
+  {
+    /* CANoe_Seqence_Direct_Updateで変な値にしていない限りエラーは発生しない */
+    Error_Log_output("Response_Receiver: Response Error. Illegal Seqnece.");
+    write("%d",G_Reprog_General_Data.G_Info.pp1_process);
+  }
+
+  return ret;
+}
+
+
+/// <General>
+/* ******************************************************** */
+/* Function                                                 */
+/*  Response_After_Receiver                                 */
+/* Discription                                              */
+/*  ポジティブレスポンス受信時のサービス固有処理の選定      */
+/* IN :                                                     */
+/*  before_seqence: 更新前のシーケンス位置                  */
+/*  res_msg : diagResponse型の受信メッセージ                */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_OK                                             */
+/* NOTE:                                                    */
+/*  処理ループの為のシーケンス位置の制御等はここで実施      */
+/* ******************************************************** */
+int Response_After_Receiver( int before_seqence, diagResponse *res_msg )
+{
+  /* 戻り値 */
+  int ret;
+  int skipflg;
+  dword read_size;  /* 読み出したバッファサイズを格納 */
+
+  /*　初期値を設定 */
+  ret = E_Return_OK;
+  skipflg = E_Flag_OFF;
+
+  /* 更新前のシーケンス位置を判定し、そのシーケンス位置で行うべき処理に振り分け */
+  if ( before_seqence == E_PP1_SID_0x27_seed_posres )
+  {
+    /* SID 0x27 SecurityAccess(requestSeed) ポジティブレスポンス受信完了 */
+    /* シード値からキー値を生成する */
+
+    /* SecurityAccess_Generate_Keyで使用するパラメータを生成 */
+    SecurityAccess_Set_Generate_Key_Pram(res_msg);
+
+    /* DLLを使ってシード値からキー値を生成 */
+    ret = SecurityAccess_Generate_Key(G_Reprog_General_Data.S_Info.securityseed,
+                                      G_Reprog_General_Data.S_Info.seedArraySize,
+                                      G_Reprog_General_Data.S_Info.securityLevel,
+                                      G_Reprog_General_Data.S_Info.variant,
+                                      G_Reprog_General_Data.S_Info.ipOption,
+                                      G_Reprog_General_Data.S_Info.maxKeyArraySize,
+                                      G_Reprog_General_Data.S_Info.securitykey,
+                                      G_Reprog_General_Data.S_Info.keyActualSize );
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x27_seed_req.");
+    }
+  }
+  else if ( before_seqence == E_PP1_SID_0x2E_nonce_posres )
+  {
+    /* SID　0x2E WriteDataByIdentifier(Nonce) ポジティブレスポンス受信完了 */
+  }
+  else if ( before_seqence == E_PP1_SID_0x2E_asfp_posres )
+  {
+    /* SID　0x2E WriteDataByIdentifier(applicationSoftwareFingerprint) ポジティブレスポンス受信完了 */
+    /* applicationSoftwareFingerprintのカウンタをカウントアップする */
+    G_Reprog_General_Data.S_Info.asfp_cnt = (G_Reprog_General_Data.S_Info.asfp_cnt + 1);
+    G_Reprog_General_Data.G_Info.check_count = 0;
+
+    /* 後続の処理の為、RequestDownload,　TransferDataに関連する情報をマスターファイルから作業領域にコピー */
+    memcpy(G_Reprog_General_Data.T_Info_Erase, G_TransferData_Info_Erase[G_Reprog_General_Data.G_Info.multiple_file_count]);
+    memcpy(G_Reprog_General_Data.T_Info_Reprog, G_TransferData_Info_Reprog[G_Reprog_General_Data.G_Info.multiple_file_count]);
+  }
+  else if ( before_seqence == E_PP1_SID_0x34_SBL_posres )
+  {
+    /* 消去書込みルーチンを事前にオープンしておく */
+    ret = TransferData_open_file(G_Reprog_General_Data.T_Info_Erase.filename,
+                                 E_Openfile_mode_binary, G_Reprog_General_Data.T_Info_Erase.filehandle );
+
+    if( ret == E_Return_OK )
+    {
+      /* 初回の読み出しはこのタイミングで実施しておく */
+      ret = TransferData_read_file( G_Reprog_General_Data.T_Info_Erase.filehandle,
+                                    G_Reprog_General_Data.T_Info_Erase.transfer_size,
+                                    G_Reprog_General_Data.transferdata_readbuff,
+                                    read_size );
+      if( ret == E_Return_OK )
+      {
+        /* 読み出したバッファサイズを加算 */
+        G_Reprog_General_Data.T_Info_Erase.size_all = G_Reprog_General_Data.T_Info_Erase.size_all + read_size;
+        /* 常時読みだしたサイズを送信する */
+        G_Reprog_General_Data.T_Info_Erase.transfer_size = read_size;
+      }
+      else
+      {
+        /* エラーの場合はどうすればいいんだろうね？ */
+        Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x34_SBL_req(read).");
+      }
+
+    }
+    else
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x34_SBL_req(open).");
+    }
+  }
+  else if ( before_seqence == E_PP1_SID_0x36_dl_SBL_posres )
+  {
+    /* SID 0x36 TransferData(ダウンロード) ポジティブレスポンス受信完了 */
+    /* 消去・書込みルーチンの転送回数をカウントアップ */
+    /* 1回目のblockSequenceCounterは0x01だが、256回目のblockSequenceCounterは0x00なので、桁あふれの対処はしない */
+    G_Reprog_General_Data.T_Info_Erase.cnt[0] = ( G_Reprog_General_Data.T_Info_Erase.cnt[0] + 1 );
+
+    /* 次の読み出しはこのタイミングで実施しておく */
+    ret = TransferData_read_file( G_Reprog_General_Data.T_Info_Erase.filehandle,
+                                  G_Reprog_General_Data.T_Info_Erase.transfer_size,
+                                  G_Reprog_General_Data.transferdata_readbuff,
+                                  read_size );
+
+    /* 転送データがまだ存在するかどうかを判定し、転送データがまだ残っている場合は再度SID 0x36 TransferData(ダウンロード)送信を実行 */
+    if( ret == E_Return_OK )
+    {
+      /* 読み出したバッファサイズを加算 */
+      G_Reprog_General_Data.T_Info_Erase.size_all = G_Reprog_General_Data.T_Info_Erase.size_all + read_size;
+      /* 常時読みだしたサイズを送信する */
+      G_Reprog_General_Data.T_Info_Erase.transfer_size = read_size;
+
+      /* 転送データがまだある場合はシーケンス位置を強制的に「SID 0x36 TransferData(ダウンロード) 送信」に変更してループさせる */
+      CANoe_Seqence_Direct_Update(E_PP1_SID_0x36_dl_SBL_req);
+    }
+    else if( ret == E_Return_EOF )
+    {
+      /* シーケンス位置の再設定を行わずに、次のシーケンスへ進む */
+      /* 消去書込みルーチンのクローズ処理 */
+      ret = TransferData_close_file(G_Reprog_General_Data.T_Info_Erase.filehandle);
+      if( ret != E_Return_OK )
+      {
+        /* エラーの場合はどうすればいいんだろうね？ */
+        Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x36_dl_SBL_req(Close).");
+      }
+    }
+    else
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x36_dl_SBL_req(Read).");
+    }
+  }
+  else if ( before_seqence == E_PP1_SID_0x34_APL_posres )
+  {
+    /* 書込みデータを事前にオープンしておく */
+    ret = TransferData_open_file(G_Reprog_General_Data.T_Info_Reprog.filename, E_Openfile_mode_binary,
+                     G_Reprog_General_Data.T_Info_Reprog.filehandle );
+    if( ret == E_Return_OK )
+    {
+      /* 初回の読み出しはこのタイミングで実施しておく */
+      ret = TransferData_read_file( G_Reprog_General_Data.T_Info_Reprog.filehandle,
+                                    G_Reprog_General_Data.T_Info_Reprog.transfer_size,
+                                    G_Reprog_General_Data.transferdata_readbuff,
+                                    read_size );
+      if( ret == E_Return_OK )
+      {
+        /* 読み出したバッファサイズを加算 */
+        G_Reprog_General_Data.T_Info_Reprog.size_all = G_Reprog_General_Data.T_Info_Reprog.size_all + read_size;
+        /* 常時読みだしたサイズを送信する */
+        G_Reprog_General_Data.T_Info_Reprog.transfer_size = read_size;
+
+      }
+      else
+      {
+        /* エラーの場合はどうすればいいんだろうね？ */
+        Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x34_APL_req(Close).");
+      }
+    }
+    else
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x34_APL_req(Read).");
+    }
+  }
+  else if ( before_seqence == E_PP1_SID_0x36_dl_APL_posres )
+  {
+    /* SID 0x36 TransferData(ダウンロード) ポジティブレスポンス受信完了 */
+    /* 書込みデータの転送回数をカウントアップ */
+    /* 1回目のblockSequenceCounterは0x01だが、256回目のblockSequenceCounterは0x00なので、桁あふれの対処はしない */
+    G_Reprog_General_Data.T_Info_Reprog.cnt[0] = ( G_Reprog_General_Data.T_Info_Reprog.cnt[0] + 1 );
+
+    /* 次の読み出しはこのタイミングで実施しておく */
+    ret = TransferData_read_file( G_Reprog_General_Data.T_Info_Reprog.filehandle,
+                                  G_Reprog_General_Data.T_Info_Reprog.transfer_size,
+                                  G_Reprog_General_Data.transferdata_readbuff,
+                                  read_size );
+
+    /* 転送データがまだ存在するかどうかを判定し、転送データがまだ残っている場合は再度SID 0x36 TransferData(ダウンロード)送信を実行 */
+    if( ret == E_Return_OK )
+    {
+      /* 読み出したバッファサイズを加算 */
+      G_Reprog_General_Data.T_Info_Reprog.size_all = G_Reprog_General_Data.T_Info_Reprog.size_all + read_size;
+      /* 常時読みだしたサイズを送信する */
+      G_Reprog_General_Data.T_Info_Reprog.transfer_size = read_size;
+
+      /* 転送データがまだある場合はシーケンス位置を強制的に「SID 0x36 TransferData(ダウンロード) 送信」に変更してループさせる */
+      CANoe_Seqence_Direct_Update(E_PP1_SID_0x36_dl_APL_req);
+    }
+    else if( ret == E_Return_EOF )
+    {
+      /* シーケンス位置の再設定を行わずに、次のシーケンスへ進む */
+      /* 書込みデータのクローズ処理 */
+      ret = TransferData_close_file(G_Reprog_General_Data.T_Info_Reprog.filehandle);
+      if( ret != E_Return_OK )
+      {
+        /* エラーの場合はどうすればいいんだろうね？ */
+        Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x36_dl_APL_req(Close).");
+      }
+    }
+    else
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_After_Receiver: Response Error. E_PP1_SID_0x36_dl_APL_req(Read).");
+    }
+  }
+  else if ( before_seqence == E_PP1_SID_0x31_check_msd_signature_posres  ||
+            before_seqence == E_PP1_SID_0x31_check_msd_cmac_posres ||
+            before_seqence == E_PP1_SID_0x31_check_msd_crc_posres)
+  {
+    if ( G_Reprog_General_Data.G_Info.check_count == 0 )
+    {
+      /* 1連の消去～書き換えの処理が完了したので、書換え対象領域の何回目を実施しているかのカウンタを更新 */
+      G_Reprog_General_Data.G_Info.multiple_file_count = G_Reprog_General_Data.G_Info.multiple_file_count + 1;
+      G_Reprog_General_Data.G_Info.check_count = G_Reprog_General_Data.G_Info.check_count + 1;
+
+      /* 書換え対象領域の総数分の消去～書き換えの処理を実施したかどうか判定 */
+      if( G_Reprog_General_Data.G_Info.multiple_file_count < G_Reprog_General_Data.G_Info.multiple_file_num)
+      {
+        /* 書換え対象領域の総数分の処理を実施していない場合はシーケンス位置を強制的に「SID 0x2E WriteDataByIdentifier(Nonce) 送信」に変更してループさせる */
+        CANoe_Seqence_Direct_Update(E_PP1_SID_0x2E_asfp_req);
+      }
+    }
+  }
+  else if ( before_seqence == E_PP1_SID_0x31_valid_posres )
+  {
+    /* SID 0x10 DiagnosticSessionControl(defaultSession) 送信を使用する指定か判定 */
+    if( G_Reprog_General_Data.R_Info.reset_service == E_Reset_Service_0x10_ds )
+    {
+      /* シーケンス位置を強制的に「SID 0x10 DiagnosticSessionControl(defaultSession) 送信」に変更する */
+      CANoe_Seqence_Direct_Update(E_PP1_SID_0x10_def_req);
+    }
+  }
+ else if ( before_seqence == E_PP1_SID_0x31_valid_sig_posres )
+  {
+    /* SID 0x10 DiagnosticSessionControl(defaultSession) 送信を使用する指定か判定 */
+    if( G_Reprog_General_Data.R_Info.reset_service == E_Reset_Service_0x10_ds )
+    {
+      /* シーケンス位置を強制的に「SID 0x10 DiagnosticSessionControl(defaultSession) 送信」に変更する */
+      CANoe_Seqence_Direct_Update(E_PP1_SID_0x10_def_req);
+    }
+  }
+  else if ( before_seqence == E_PP1_SID_0x11_ECUReset_posres )
+  {
+    /* SID 0x11 EcuResetとSID 0x10 DiagnosticSessionControl(defaultSession)はどちらかを実行すれば良いので、 */
+    /* SID 0x11 EcuResetの次のシーケンスは、SID 0x10 DiagnosticSessionControl(defaultSession)の次のシーケンスと同じ */
+    CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+  }
+  else
+  {
+    /* 事後処理が必要でないシーケンスはここを通る */
+  }
+
+  return ret;
+}
+
+
+/// <General>
+/* ************************************************************************  */
+/* Function                                                                  */
+/*  Diag_Response_handler                                                    */
+/* Discription                                                               */
+/*  診断機能のレスポンス受信時の受信ハンドラ                                 */
+/* IN :                                                                      */
+/*  res_msg : diagResponse型の受信メッセージ                                 */
+/* OUT:                                                                      */
+/*  None                                                                     */
+/* RET:                                                                      */
+/*  None                                                                     */
+/* NOTE:                                                                     */
+/*  「on diagResponse」と特定のメッセージのタイムアウトハンドラから呼ばれる  */
+/* ************************************************************************* */
+
+void Diag_Response_handler(diagResponse *res_msg)
+{
+  int before_seqence;
+  long first_byte;
+  long second_byte;
+  long third_byte;
+
+  /* 「初期化済み」かどうかを判定 */
+  /* 「初期化済み」でない場合は特に何もせず受信データを読み捨て */
+  if (G_Reprog_General_Data.G_Info.initialze == E_Flag_ON )
+  {
+    /* 初期化済み かつ 自動実行の有効フラグがONの場合は次シーケンスの動作を起動する */
+    /* 初期化済み かつ 自動実行の有効フラグがON かつ APL起動要求の有効フラグがONの場合も同様の処理を行う */
+    if( G_Reprog_General_Data.G_Info.enable_autorun == E_Flag_ON )
+    {
+      /* 受信したレポンスがポジティブレスポンスかネガティブレスポンスかを判定する */
+      if (res_msg.IsPositiveResponse() == 1)
+      {
+        /* 受信データがSID 0x10 (ProgrammingSession)のポジティブレスポンスであるか判定 */
+        /* SID 0x10 (ProgrammingSession)のポジティブレスポンスは、0バイト目が'0x50'で1バイト目が'0x02' */
+        /* 0バイト目を読み出し(エラーチェックはこの後の読み出し値のチェックで代用するので不要)*/
+        first_byte = diagGetPrimitiveByte( res_msg, 0);
+        /* 1バイト目を読み出し(エラーチェックはこの後の読み出し値のチェックで代用するので不要)*/
+        /* TBD：SID 0x37の受信時にCANoeのウィンドウにwarningが出るので(実害は無いが)なんとかしたい */
+        second_byte = diagGetPrimitiveByte( res_msg, 1);
+
+        /* SID 0x10 (ProgrammingSession)のポジティブレスポンスであるか判定 */
+        /* このルートでは既にCANoeシナリオ実行中であり、APL要求起動のメッセージは無視したい */
+        if( first_byte != 0x50 || second_byte != 0x02 ||
+             G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_prog_posres)
+        {
+          /* ポジティブレスポンス受信ルート */
+          /* デバッグ表示(性能に影響するのでデバッグ時のみ有効にすること) */
+          /* Debug_Log_output("Positive response received."); */
+
+          /* ポジティブレスポンス受信処理を実施 */
+          Response_Receiver( res_msg );
+
+          /* 追加処理の為、更新前のシーケンス位置を記録しておく */
+          before_seqence = CANoe_Seqence_Get();
+
+          /* ポジティブレスポンスであれば次のシーケンスに移行する */
+          CANoe_Seqence_Response_Update();
+
+          /* 追加で処理が必要なサービスはここで処理を実施する */
+          /* (処理ループの為のシーケンス位置の制御等)*/
+          Response_After_Receiver( before_seqence , res_msg );
+
+          /* CANoeシナリオの停止機能の対象となっている場合はCANoeシナリオを停止する設定 */
+          CANoe_Seqence_Stop_Check();
+
+          /* Phase6 の場合はSID 0x27(Seed) 前に、Wait 入れる */
+          if( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_seed_req )
+          {
+            setTimer(TwaitTimer, 1 * 1000); // 1 秒待ち
+          }
+          else
+          {
+            /* 次のリクエストの送信を実施 */
+            Request_sender();
+          }
+        }
+      }
+      else
+      {
+        /* ネガティブレスポンス受信ルート */
+        second_byte = diagGetPrimitiveByte( res_msg, 1);
+        third_byte = diagGetPrimitiveByte( res_msg, 2);
+        if( second_byte == 0x29 && third_byte == 0x11 )
+        {
+          /* SID 0x29 がネガティブレスポンスでもシーケンス継続 */
+          CANoe_Seqence_Direct_Update(E_PP1_SID_0x10_ext_req);
+
+          /* CANoeシナリオの停止機能の対象となっている場合はCANoeシナリオを停止する設定 */
+          CANoe_Seqence_Stop_Check();
+
+          /* 次のリクエストの送信を実施 */
+          Request_sender();
+        }
+        else
+        {
+          /* デバッグ表示 */
+          Debug_Log_output("Negative response received.");
+        }
+      }
+    }
+    else
+    {
+      /* 「初期化済み かつ 自動実行の有効フラグがON」でない */
+      /* このような場合は特に何もせず受信データを読み捨て */
+
+      /* デバッグ表示(性能に影響するのでデバッグ時のみ有効にすること) */
+      /* Debug_Log_output("Not Initialize. Discard Receive Data"); */
+    }
+  }
+
+  return;
+}
+
+/// <General>
+/* ******************************************************** */
+/* Function                                                 */
+/*  Debug_Log_output                                        */
+/* Discription                                              */
+/*  ログメッセージをデバッグログに出力する                  */
+/* IN :                                                     */
+/*  logmsg : 出力するログメッセージ                         */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  None                                                    */
+/* NOTE:                                                    */
+/*  ログメッセージは先頭に"DEBUG：”を付与して出力する      */
+/*  ログメッセージは1行辺り120文字までとする                */
+/* ******************************************************** */
+void Debug_Log_output( char logmsg[] )
+{
+  long retval;                /* 戻り値 */
+  char debug_log_msg[E_Debug_log_buffer_size];    /* ログメッセージバッファ */
+
+  /* 文字列長チェック */
+  if( strlen(logmsg) > (E_Debug_log_buffer_size - 8) )
+  {
+    /* 文字列長がE_Debug_log_buffer_size - 8文字(固定の文字列分)以上の場合はエラー終了 */
+    return;
+  }
+
+  /* 書込むメッセージを生成 */
+  retval = snprintf(debug_log_msg,  elcount(debug_log_msg), "DEBUG: %s\n", logmsg );
+  if( retval > 0 && retval <= E_Debug_log_buffer_size )
+  {
+    /* メッセージ生成成功 */
+    /* 生成したメッセージをログファイルに書き込み */
+    filePutString (debug_log_msg, elcount(debug_log_msg), G_debug_log_file_handle);
+  }
+  else
+  {
+    /* メッセージ生成失敗 */
+    /* メッセージ生成失敗時は出力windowへ出力 */
+    write ("%s", logmsg);
+  }
+
+  return;
+}
+
+
+/// <General>
+/* ******************************************************** */
+/* Function                                                 */
+/*  Error_Log_output                                        */
+/* Discription                                              */
+/*  エラーメッセージをデバッグログに出力する                */
+/* IN :                                                     */
+/*  logmsg : 出力するエラーメッセージ                       */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  None                                                    */
+/* NOTE:                                                    */
+/*  エラーメッセージは先頭に"ERROR：”を付与して出力する    */
+/*  ログメッセージは1行辺り120文字までとする                */
+/* ******************************************************** */
+void Error_Log_output( char logmsg[] )
+{
+  long retval;                /* 戻り値 */
+  char error_log_msg[E_Debug_log_buffer_size];    /* ログメッセージバッファ */
+
+  /* 文字列長チェック */
+  if( strlen(logmsg) > (E_Debug_log_buffer_size - 8) )
+  {
+    /* 文字列長がE_Debug_log_buffer_size - 8文字(固定の文字列分)以上の場合はエラー終了 */
+    return;
+  }
+
+  /* 書込むメッセージを生成 */
+  retval = snprintf(error_log_msg,  elcount(error_log_msg), "ERROR: %s\n", logmsg );
+  if( retval > 0 && retval <= E_Debug_log_buffer_size )
+  {
+    /* メッセージ生成成功 */
+    /* 生成したメッセージをログファイルに書き込み */
+    filePutString (error_log_msg, elcount(error_log_msg), G_debug_log_file_handle);
+  }
+  else
+  {
+    /* メッセージ生成失敗 */
+    /* メッセージ生成失敗時は出力windowへ出力 */
+    write ("%s", logmsg);
+  }
+
+  return;
+}
+
+
+
+/// <General>
+/* ******************************************************** */
+/* Function                                                 */
+/*  Timespec_Log_output                                     */
+/* Discription                                              */
+/*  時間測定結果をデバッグログに出力する                    */
+/* IN :                                                     */
+/*  None                                                    */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  None                                                    */
+/* NOTE:                                                    */
+/*  時間測定メッセージは先頭に"TIME：”を付与して出力する   */
+/*  ログメッセージは1行辺り120文字までとする                */
+/* ******************************************************** */
+void Timespec_Log_output(void)
+{
+  long retval;                /* 戻り値 */
+  int cnt;
+  char time_log_msg[E_Debug_log_buffer_size];    /* ログメッセージバッファ */
+
+  /* 時間測定の全測定箇所のログ出力を行うまでループ */
+  for( cnt = 0; cnt < E_Timespec_Seqence_MAX; cnt++ )
+  {
+    /* 書込むメッセージを生成 */
+    retval = snprintf(time_log_msg,  elcount(time_log_msg), "TIME: timespec[%d]=%lld(nanosecond)\n", cnt, G_Timespec_Array[cnt] );
+    if( retval > 0 && retval <= E_Debug_log_buffer_size )
+    {
+      /* メッセージ生成成功 */
+      /* 生成したメッセージをログファイルに書き込み */
+      filePutString (time_log_msg, elcount(time_log_msg), G_debug_log_file_handle);
+    }
+    else
+    {
+      /* メッセージ生成失敗 */
+      /* メッセージ生成失敗時は出力windowへ出力 */
+      write ("%s", time_log_msg);
+    }
+  }
+
+  return;
+}
+
+
+/// <General>
+/* **************************************************************************** */
+/* Function                                                                     */
+/*  TransferData_Setting                                                        */
+/* Discription                                                                  */
+/*  転送データに関する各種設定情報を、管理領域に設定する処理                    */
+/* IN :                                                                         */
+/*  type         : E_RoutineControl_Type_Numに相当する値                        */
+/*  filename     : 転送データに関する設定情報を記述したファイル名を格納する領域 */
+/*  ext_filename : 外部設定情報ファイル名                                       */
+/* OUT:                                                                         */
+/*  filename : 転送データに関する設定情報を記述したファイル名                   */
+/* RET:                                                                         */
+/*  None                                                                        */
+/* NOTE:                                                                        */
+/*  None                                                                        */
+/* **************************************************************************** */
+int TransferData_Setting_Filename( int type, char filename[], char ext_filename[] )
+{
+  /* 戻り値 */
+  long pos;
+  int ret;
+  int cnt;
+  char read_filename[E_Configuration_path_size];
+  char filepath[E_Configuration_path_size];
+
+  /* CANoeのコンフィグレーションファイルのあるパスの絶対パスを取得 */
+  pos = strlen(CANoe_Senario_Filepath);
+  substr_cpy(filepath, CANoe_Senario_Filepath, 0, pos, elcount(filepath));
+
+  /* 「消去・書込みルーチン」か「書換えデータ」のどちらの処理かを判定 */
+  if( type == E_RoutineControl_Type_Erase )
+  {
+    /* ファイル読み出し(消去・書込みルーチンのファイル名) */
+    ret = getProfileString( "SBL", "SBLSettingFile", "DLfile/Erase.bin", read_filename, elcount(read_filename), ext_filename );
+    if( ret <= 0 || ret > E_Configuration_path_size )
+    {
+      /* 消去・書込みルーチンのファイル名読み出し失敗 */
+      /* デフォルト値を設定しておく */
+      snprintf(read_filename, elcount(read_filename), "DLfile/Erase.bin");
+      Error_Log_output("TransferData_erase_init: read erase filename.");
+    }
+    else
+    {
+      /* 読み出し成功 */
+      ret = E_Return_OK;
+    }
+  }
+  else if( type == E_RoutineControl_Type_Reprog )
+  {
+    /* ファイル読み出し(消去・書込みルーチンのファイル名) */
+    ret = getProfileString( "APL", "APLSettingFile", "DLfile/Reprog.bin", read_filename, elcount(read_filename), ext_filename );
+    if( ret <= 0 || ret > E_Configuration_path_size )
+    { /* 消去・書込みルーチンのファイル名読み出し失敗 */
+      /* デフォルト値を設定しておく */
+      snprintf(read_filename, elcount(read_filename),"DLfile/Reprog.bin");
+      Error_Log_output("TransferData_reprog_init: read reprog filename.");
+    }
+    else
+    {
+      /* 読み出し成功 */
+      ret = E_Return_OK;
+    }
+  }
+  else
+  {
+    /* このルートは使用されない */
+    Error_Log_output("RoutineControl_set_request_checkProgramming: Illiegal Type.");
+  }
+
+  /* 読み出したファイル名をIN/OUTパラメータ「filename」に設定 */
+  strncat(filepath, read_filename, elcount(filepath));
+  strncpy(filename, filepath, elcount(filename));
+
+  return ret;
+}
+
+/// <General>
+/* ********************************************************** */
+/* Function                                                   */
+/*  TransferData_Setting                                      */
+/* Discription                                                */
+/*  転送データに関する各種設定情報を、管理領域に設定する処理  */
+/* IN :                                                       */
+/*  filename : 転送データに関する設定情報を記述したファイル名 */
+/*  T_Info   : 転送データに関する情報を管理する領域           */
+/* OUT:                                                       */
+/*  None                                                      */
+/* RET:                                                       */
+/*  None                                                      */
+/* NOTE:                                                      */
+/*  None                                                      */
+/* ********************************************************** */
+int TransferData_Setting( char filename[], struct S_TransferData_info T_Info[] )
+{
+  /* 戻り値 */
+  int ret;
+  int cnt;
+  int elem_cnt;
+  int read_cnt;
+  int checkDataLength;
+  long index;
+  long old_offset;
+  long new_offset;
+  char buff[1024];
+  dword fileHandle;
+  dword temp_handle;
+  qword temp_strtoull;
+  char tempbuff[5];
+  byte read_buff[E_routineControlOptionRecord_SIGNATURE];
+  char result_region[5];
+  char result_address[11];
+  char result_size[11];
+  char result_Compression[5];
+  char result_Cryptogram[5];
+  char result_checkTypeIdentifier[5];
+  char result_checkData[258];
+  char result_index[5];
+  struct S_TransferData_info work_T_Info;
+
+  /* ファイルオープン(指定モード・読み取り専用) */
+  fileHandle = openFileRead(filename, E_Openfile_mode_text);
+  if (fileHandle == 0)
+  {
+    /* ファイルオープンエラー */
+    ret = E_Return_FILEOPEN_NG;
+
+    /* デバッグ表示 */
+    Error_Log_output("TransferData_Setting：openFileRead error");
+
+    return ret;
+  }
+
+  /* RequestDownload,　TransferDataに関連する情報を管理する領域の要素数＋１回ループ */
+  /* 最初の1行は見出し行の為処理スキップする */
+  for(cnt = 0; cnt < (E_TransferData_info_All_Element+1); cnt++ )
+  {
+    /* バッファのオフセット値をクリア */
+    old_offset = 0;
+    new_offset = 0;
+
+    /* 1行読み出し */
+    ret = fileGetStringSZ(buff, elCount(buff), fileHandle);
+    if (ret == 0)
+    {
+      /* EOFまで行くと0が返ってくる */
+      ret = E_Return_EOF;
+
+      /* デバッグ表示 */
+      Debug_Log_output("TransferData_Setting:Read Complete!");
+
+      /* 読むべきデータがないのでループを終了する */
+      break;
+    }
+    else
+    {
+      /* 読み出し成功 */
+
+      /* 最初の行のみ見出しなので読み捨て */
+      if(cnt == 0)
+      {
+        continue;
+      }
+
+      /* 読み出したデータが区切り文字以外何も設定されていないかどうかを判定 */
+      if( strncmp(buff, ",,,,,,,,,", elcount(buff)) == 0 )
+      {
+        /* 未設定のデータが見つかった時点でループを終了する */
+        break;
+      }
+
+      /* ','が区切り文字なので、読み出したバッファ内で','がある位置を検索 */
+      new_offset = strstr_off(buff, old_offset, ",");
+      /* 「Erasefile(消去・書込みルーチンのファイル名)」を取得 */
+      strncpy( work_T_Info.filename, buff, (new_offset - old_offset + 1));
+
+      /* オフセットを更新、直前の処理でコピーしたオフセットの次の位置から再検索 */
+      old_offset = new_offset + 1;
+
+      new_offset = strstr_off(buff, old_offset, ",");
+      /* 「Eraseregion（消去・書込みルーチンの仮想アドレスの一部）」を取得 */
+      substr_cpy_off(result_region, 0, buff, old_offset,(new_offset - old_offset), elcount(result_region));
+
+      /* オフセットを更新、直前の処理でコピーしたオフセットの次の位置から再検索 */
+      old_offset = new_offset + 1;
+
+      new_offset = strstr_off(buff, old_offset, ",");
+      /* 「Memoryaddress（消去・書込みルーチンの仮想アドレス）」を取得 */
+      substr_cpy_off(result_address, 0, buff, old_offset,(new_offset - old_offset), elcount(result_address));
+
+      /* オフセットを更新、直前の処理でコピーしたオフセットの次の位置から再検索 */
+      old_offset = new_offset + 1;
+
+      new_offset = strstr_off(buff, old_offset, ",");
+      /* 「Memorysize(消去・書込みルーチンの転送するデータサイズ)」を取得 */
+      substr_cpy_off(result_size, 0, buff, old_offset,(new_offset - old_offset), elcount(result_size));
+
+      /* オフセットを更新、直前の処理でコピーしたオフセットの次の位置から再検索 */
+      old_offset = new_offset + 1;
+
+      new_offset = strstr_off(buff, old_offset, ",");
+      /* 「Compression(消去・書込みルーチンのdataFormatIdentifierの一部)」を取得 */
+      substr_cpy_off(result_Compression, 0, buff, old_offset,(new_offset - old_offset), elcount(result_Compression));
+
+      /* オフセットを更新、直前の処理でコピーしたオフセットの次の位置から再検索 */
+      old_offset = new_offset + 1;
+
+      new_offset = strstr_off(buff, old_offset, ",");
+      /* 「Cryptogram(消去・書込みルーチンのdataFormatIdentifierの一部)」を取得 */
+      substr_cpy_off(result_Cryptogram, 0, buff, old_offset,(new_offset - old_offset), elcount(result_Cryptogram));
+
+      /* オフセットを更新、直前の処理でコピーしたオフセットの次の位置から再検索 */
+      old_offset = new_offset + 1;
+
+      new_offset = strstr_off(buff, old_offset, ",");
+      /* 「checkTypeIdentifier（消去・書込みルーチンのcheckTypeIdentifier値）」を取得 */
+      substr_cpy_off(result_checkTypeIdentifier, 0, buff, old_offset,(new_offset - old_offset), elcount(result_checkTypeIdentifier));
+
+      /* オフセットを更新、直前の処理でコピーしたオフセットの次の位置から再検索 */
+      old_offset = new_offset + 1;
+
+      new_offset = strlen(buff);
+      /* 「checkData(消去・書込みルーチンのcheckData値を記述したファイルのファイル名)」を取得 */
+      substr_cpy_off(result_checkData, 0, buff, old_offset,(new_offset - old_offset), elcount(result_checkData));
+
+      /* 処理順番(T_Infoの格納index値)」を取得する */
+      /* 処理順番は上から順に設定する */
+      index = cnt - 1;
+
+      /* 消去・書込みルーチンの仮想アドレスを記述した文字列をバイト配列に変換 */
+      /* 2文字=1バイトとして変換していく */
+      work_T_Info.region = atol(result_region);
+
+      /* 「転送するアドレス」を変換する */
+      for( read_cnt = 0; read_cnt < (E_RequestDownload_memoryAddress_Byte-1) ; read_cnt++ )
+      {
+        elem_cnt = read_cnt * 2;
+        tempbuff[0] = '0';
+        tempbuff[1] = 'x';
+        tempbuff[2] = result_address[2+elem_cnt];
+        tempbuff[3] = result_address[2+elem_cnt+1];
+        work_T_Info.address[(read_cnt)] = atol(tempbuff);
+      }
+
+      /* 「転送するデータサイズ」を変換する */
+      for( read_cnt = 0; read_cnt < E_RequestDownload_memorySize_Byte ; read_cnt++ )
+      {
+        elem_cnt = read_cnt * 2;
+        tempbuff[0] = '0';
+        tempbuff[1] = 'x';
+        tempbuff[2] = result_size[2+elem_cnt];
+        tempbuff[3] = result_size[2+elem_cnt+1];
+        work_T_Info.size[(read_cnt)] = atol(tempbuff);
+      }
+
+      /* データ転送時に参照するので予め整数値に変換しておく */
+      snprintf(result_size, elcount(result_size), "0x%02x%02x%02x%02x",
+        work_T_Info.size[0], work_T_Info.size[1],
+        work_T_Info.size[2], work_T_Info.size[3]);
+
+      ret = strtoull(result_size, temp_strtoull );
+      if (ret >= 0 )
+      {
+        /* 読み出した消去・書込みルーチンの転送するデータのサイズ最大値を管理情報G_Reprog_General_Dataに設定 */
+        work_T_Info.size_max = (temp_strtoull & 0xFFFFFFFF );
+      }
+
+      /* 「dataFormatIdentifier」を変換する */
+      work_T_Info.dataFormatIdentifier[0] = atol(result_Compression) << 4;
+      work_T_Info.dataFormatIdentifier[0] = work_T_Info.dataFormatIdentifier[0] | atol(result_Cryptogram);
+      /* 消去・書込みルーチンのcheckTypeIdentifierを記述した文字列をバイト配列に変換 */
+      /* 2文字=1バイトとして変換していく */
+      work_T_Info.checkTypeIdentifier = atol(result_checkTypeIdentifier);
+
+      /* 「checkData」を変換する */
+      /* ファイル名読み出し(checkData値) */
+      work_T_Info.checkDataLength[0] = 0;
+      work_T_Info.checkDataLength[1] = 0;
+      checkDataLength = 0;
+
+      temp_handle = openFileRead( result_checkData, E_Openfile_mode_binary );
+      if( temp_handle > 0 )
+      {
+        checkDataLength = fileGetBinaryBlock( work_T_Info.checkData, elcount(read_buff), temp_handle );
+        if( checkDataLength == 0 )
+        {
+          Error_Log_output("TransferData_Setting： checkData File Read Error.");  }
+        else
+        {
+          work_T_Info.checkDataLength[0] = (byte)((checkDataLength & 0x0000FF00) >> 8);
+          work_T_Info.checkDataLength[1] = (byte)(checkDataLength & (0x000000FF));
+        }
+      }
+      else
+      {
+        Error_Log_output("TransferData_Setting： checkData File Read Error.");
+      }
+
+      /* 1回の「0x36(TransferData)」で転送可能なデータサイズ */
+      work_T_Info.transfer_size = 0;
+      /* 消去・書込みルーチンの転送回数(blockSequenceCounterに使用するので初期値は1) */
+      /* 書換えデータの転送回数(blockSequenceCounterに使用するので初期値は1) */
+      work_T_Info.cnt[0] = 1;
+      /* 消去・書込みルーチンの転送済みデータサイズ */
+      /* 書換えデータの転送済みデータサイズ */
+      work_T_Info.size_all = 0;
+
+      /* ファイルクローズ */
+      ret = fileClose(temp_handle);
+      if (ret == 0)
+      {
+        /* デバッグ表示 */
+        Error_Log_output("TransferData_Setting：fileClose error(checkData)");
+      }
+    }
+
+    /* 作業用の構造体から処理順番で指定されたindexに再配置 */
+    strncpy( T_Info[index].filename, work_T_Info.filename, elcount(T_Info[index].filename));
+    for( read_cnt = 0; read_cnt < E_RequestDownload_memoryAddress_Byte ; read_cnt++ )
+    {
+      T_Info[index].address[read_cnt] = work_T_Info.address[read_cnt];
+    }
+    T_Info[index].region = work_T_Info.region;
+    for( read_cnt = 0; read_cnt < E_RequestDownload_memorySize_Byte ; read_cnt++ )
+    {
+      T_Info[index].size[read_cnt] = work_T_Info.size[read_cnt];
+    }
+    T_Info[index].size_max = work_T_Info.size_max;
+    T_Info[index].dataFormatIdentifier[0] = work_T_Info.dataFormatIdentifier[0];
+    T_Info[index].checkTypeIdentifier = work_T_Info.checkTypeIdentifier;
+    for( read_cnt = 0; read_cnt < E_routineControlOptionRecord_SIGNATURE  ; read_cnt++ )
+    {
+      T_Info[index].checkData[read_cnt] = work_T_Info.checkData[read_cnt];
+    }
+    T_Info[index].transfer_size = work_T_Info.transfer_size;
+    T_Info[index].cnt[0] = work_T_Info.cnt[0];
+    T_Info[index].size_all = work_T_Info.size_all;
+    for( read_cnt = 0; read_cnt < E_routineControlOptionRecord_checkDataLength  ; read_cnt++ )
+    {
+        T_Info[index].checkDataLength[read_cnt] = work_T_Info.checkDataLength[read_cnt];
+    }
+  }
+
+  /* 書換え対象領域の総数を設定 */
+  /* 2回目の呼び出しで1回目の設定が上書きされるが、消去ルーチンの数と書き換えデータの数は一致する前提 */
+  G_Reprog_General_Data.G_Info.multiple_file_num = cnt - 1;
+
+  /* ファイルクローズ */
+  ret = fileClose(fileHandle);
+  if (ret == 0)
+  {
+    /* ファイルクローズ失敗 */
+    ret = E_Return_FILECLOSE_NG;
+
+    /* デバッグ表示 */
+    Error_Log_output("TransferData_Setting：fileClose error");
+  }
+  else
+  {
+    /* ファイルクローズ成功 */
+    ret = E_Return_OK;
+  }
+
+  return ret;
+}
+
+
+/// <General>
+/* *********************************************************************** */
+/* Function                                                                */
+/*  Reset_Service_init                                                     */
+/* Discription                                                             */
+/*  外部設定情報ファイルを読み出してリセット時に使用するサービスを制御する */
+/* IN :                                                                    */
+/*  filename : 外部設定情報ファイル名                                      */
+/* OUT:                                                                    */
+/*  None                                                                   */
+/* RET:                                                                    */
+/*  None                                                                   */
+/* NOTE:                                                                   */
+/*  読み出し失敗時はSID 0x11[ECUReset(hardReset)]を使用する設定となる      */
+/* *********************************************************************** */
+void Reset_Service_init( char filename[] )
+{
+  long baudrate;
+
+  /* ファイル読み出し(リセット時に使用するサービスの実行制御) */
+  /* 読み出し失敗時はSID 0x11[ECUReset(hardReset)]を使用する設定 */
+  G_Reprog_General_Data.R_Info.reset_service =
+        getProfileInt("Post-Programming", "ResetService", E_Reset_Service_0x11_hs, filename);
+
+  return;
+}
+
+
+/// <Reprog_Seqence>
+/* *********************************************************************** */
+/* Function                                                                */
+/*  Reprog_Seqence_Start                                                   */
+/* Discription                                                             */
+/*  リプログシーケンスを実行前の初期化処理                                 */
+/* IN :                                                                    */
+/*  None                                                                   */
+/* OUT:                                                                    */
+/*  None                                                                   */
+/* RET:                                                                    */
+/*  canGetConfiguration()/canSetConfiguration()の処理結果 または           */
+/*  E_Return_PRAMETER_NG                                                   */
+/* NOTE:                                                                   */
+/*  リプログのCANoeシナリオの自動実行を実施する為の初期設定を行う          */
+/* *********************************************************************** */
+int Reprog_Seqence_Start( void )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 診断記述ファイルからTP層の設定を行う */
+  ret = Control_transportlayer_setup(G_Reprog_General_Data.G_Info.ecu_modifier);
+  if (ret != E_Return_OK )
+  {
+    /* デバッグ表示 */
+    Error_Log_output("Reprog_Seqence_Start:Control_transportlayer_setup error.");
+  }
+
+  /* TP層の設定が成功している場合のみ次の処理を行う */
+  if (ret == E_Return_OK )
+  {
+    /* P2ClientとP6*Clientを設定 */
+    ret = diagSetP2Timeouts(G_Reprog_General_Data.G_Info.P2Client,
+                            G_Reprog_General_Data.G_Info.P6_aster_Client);
+    if (ret != E_Return_OK )
+    {
+      /* デバッグ表示 */
+      Error_Log_output("Reprog_Seqence_Start:diagSetP2Timeouts error.");
+    }
+  }
+
+  /* P2ClientとP6*Clientの設定が成功している場合のみ次の処理を行う */
+  if (ret == E_Return_OK )
+  {
+    /* デフォルトのタイムアウトハンドラ設定 */
+    ret = Request_setup_timeout_handler(G_default_timeout_handler);
+    if (ret != E_Return_OK )
+    {
+      /* デバッグ表示 */
+      Error_Log_output("Reprog_Seqence_Start:Request_setup_timeout_handler error.");
+    }
+  }
+
+  /* タイムアウトハンドラ設定が成功している場合のみ次の処理を行う */
+  if (ret == E_Return_OK )
+  {
+    /* TesterPresentの周期送信を開始する */
+/*    ret = diagStartTesterPresent();*/
+    if (ret != E_Return_OK )
+    {
+      /* デバッグ表示 */
+      Error_Log_output("Reprog_Seqence_Start:diagStartTesterPresent error.");
+    }
+  }
+
+  return ret;
+}
+
+
+/// <Reprog_Seqence>
+/* ****************************************************************************** */
+/* Function                                                                       */
+/*  Reprog_Seqence_Init                                                           */
+/* Discription                                                                    */
+/*  外部設定情報ファイルを読み出して ECU修飾子名と診断記述ファイル名を設定する    */
+/* IN :                                                                           */
+/*  filename : 外部設定情報ファイル名                                             */
+/* OUT:                                                                           */
+/*  None                                                                          */
+/* RET:                                                                           */
+/*  canGetConfiguration()/canSetConfiguration()の処理結果 または                  */
+/*  E_Return_PRAMETER_NG                                                          */
+/* NOTE:                                                                          */
+/*  None　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　*/
+/* ****************************************************************************** */
+void Reprog_Seqence_Init( char filename[] )
+{
+   /* 戻り値 */
+  int ret;
+  char read_ecudef[E_External_ecudef_file_name_size];
+  char read_diagdef[E_External_diagdef_file_name_size];
+  int cnt;
+
+  /* ファイル読み出し(ECU修飾子名) */
+  ret = getProfileString( "General", "Ecudef", G_DIAG_DEF_CAN_NAME, read_ecudef, elcount(read_ecudef), filename );
+  if( ret <= 0 || ret > E_External_ecudef_file_name_size )
+  {
+    /* ECU修飾子名読み出し失敗 */
+    /* デフォルト値を設定しておく */
+    strncpy(read_ecudef, G_DIAG_DEF_CAN_NAME, E_External_ecudef_file_name_size);
+  }
+
+  /* 読み出したECU修飾子名を管理情報G_Reprog_General_Dataに設定 */
+  memcpy(G_Reprog_General_Data.G_Info.ecu_modifier, read_ecudef, elcount(read_ecudef));
+
+  /* ファイル読み出し(診断記述ファイル名) */
+  ret = getProfileString( "General", "DLL", G_DIAG_DEF_CAN_BASE_NAME, read_diagdef, elcount(read_diagdef), filename );
+  if( ret <= 0 || ret > E_External_diagdef_file_name_size )
+  {
+    /* ECU修飾子名読み出し失敗 */
+    /* デフォルト値を設定しておく */
+    strncpy(read_diagdef, G_DIAG_DEF_CAN_BASE_NAME, E_External_diagdef_file_name_size);
+  }
+
+  /* 読み出した診断記述ファイル名を管理情報G_Reprog_General_Dataに設定 */
+  memcpy(G_Reprog_General_Data.G_Info.diag_def_name, read_diagdef, elcount(read_diagdef));
+
+  return;
+}
+
+
+/// <CAPL_Callback>
+/* ****************************************************************************** */
+/* Function                                                                       */
+/*  _Diag_GenerateKeyResult                                                       */
+/* Discription                                                                    */
+/*  DLLを使用したKEY値生成の処理結果が通知されるコールバック関数                  */
+/* IN :                                                                           */
+/*  None                                                                          */
+/* OUT:                                                                           */
+/*  result      : diagGenerateKeyFromSeed()の処理結果                             */
+/*  computedKey : 生成されたキー値                                                */
+/* RET:                                                                           */
+/*  None                                                                          */
+/* NOTE:                                                                          */
+/*  シードキーの生成に1ms以上かかるときはdiagGenerateKeyFromSeed()の結果ではなく  */
+/*  こちらのハンドラが呼ばれるらしいが、diagGenerateKeyFromSeed()の               */
+/*  OUTパラメータにキー値を格納する領域を設定しておくと、                         */
+/*  そちらにキー値が設定されてこちらのハンドラは実行されない模様                  */
+/* ****************************************************************************** */
+_Diag_GenerateKeyResult(long result, BYTE computedKey[])
+{
+    /* デバッグ表示 */
+    Debug_Log_output("_Diag_GenerateKeyResult CALLBACK");
+}
+
+
+/// <CAPL_Callback>
+/* ****************************************************************************** */
+/* Function                                                                       */
+/*  default_timeout_handler                                                       */
+/* Discription                                                                    */
+/*  デフォルトのタイムアウト検出時のハンドラ関数                                  */
+/* IN :                                                                           */
+/*  None                                                                          */
+/* OUT:                                                                           */
+/*  None                                                                          */
+/* RET:                                                                           */
+/*  None                                                                          */
+/* NOTE:                                                                          */
+/*  None                                                                          */
+/* ****************************************************************************** */
+void default_timeout_handler(void)
+{
+  Debug_Log_output("default_timeout_handler: timeout detected.");
+
+  return;
+}
+
