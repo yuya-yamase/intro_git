@@ -12,6 +12,10 @@
 
 #ifndef     MCU_PWRCTRL_H
 #define     MCU_PWRCTRL_H
+
+#include <Ecu_Intg.h>
+#include <Ecu_IntgHAL.h>
+
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
@@ -28,6 +32,8 @@ void vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req(Ecu_Intg_BootCauseType u4BootCause);
 void vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req(void);
 void vd_g_Mcu_PwrCtrl_Standby_Req(void);
 void vd_g_Mcu_PwrCtrl_Task1ms(void);
+
+uint8 u1_g_Mcu_PwrCtrl_ShtdwnOk(void);
 
 #endif /* MCU_PWRCTRL_H */
 

@@ -1,6 +1,6 @@
 #include <Std_Types.h>
 #include <EthSwt_SWIC.h>
-#include <Rte_BswUcfg.h>  /* šQÆ‚·‚éSPI’è‹`‚Íb’è */
+#include <Rte_BswUcfg.h>
 #include <Spi.h>
 #include <LIB.h>
 #include "EthSwt_SWIC_Def.h"
@@ -194,42 +194,17 @@ void EthSwt_SWIC_Spi_ReqInit(void)
 	swic_SpiS1_Cmd.wri	= 0u;
 	swic_SpiS1_Cmd.rcv	= 0u;
 }
-/* SPI BSW IFb’è‘ÎˆStart */
-#if 0 /* b’èSPI */
-void byteComm(uint8 t_u1ModeAChannelID, const uint8* SrcDataBufferPtr, uint8* DesDataBufferPtr, uint8 t_u1Length)
-{
-    uint8 t_u1Loop;
-    for ( t_u1Loop = 0; t_u1Loop < t_u1Length; t_u1Loop++ )
-    {
-        DesDataBufferPtr[t_u1Loop] = (uint8)Spi_SyncTransmit( t_u1ModeAChannelID, (uint32)SrcDataBufferPtr[t_u1Loop] );
-    }
-}
-#else /* b’èSPI */
-/* SPI BSW IFb’è‘ÎˆEnd */
 static Std_ReturnType swic_SpiS1_Req1(const Spi_DataBufferType *const cmd, Spi_DataBufferType *const dat, const Spi_NumberOfDataType len)
 {
 	Std_ReturnType		err;
 	Spi_SeqResultType	rslt;
-	/* šQÆ‚·‚éSPI’è‹`‚Íb’è */
 	(void)Spi_SetupEB((Spi_ChannelType)SPI_COMA_ID_ETHSW, cmd, dat, len);	/* [CodeSonar‘Î‰]Spi_SetupEB‚ÍE_OK‚µ‚©•Ô‚³‚È‚¢ */
-	/* šQÆ‚·‚éSPI’è‹`‚Íb’è */
 	err = Spi_SyncTransmit((Spi_SequenceType)SPI_COMA_SEQID_ETHSW);
 	if (err != E_OK)		{ return E_NOT_OK; }
-	/* šQÆ‚·‚éSPI’è‹`‚Íb’è */
 	rslt = Spi_GetSequenceResult((Spi_SequenceType)SPI_COMA_SEQID_ETHSW);
 	if (rslt != SPI_SEQ_OK) { return E_NOT_OK; }
 	return E_OK;
 }
-/* SPI BSW IFb’è‘ÎˆStart */
-#endif /* b’èSPI */
-#if 0 /* b’èSPI */
-static Std_ReturnType swic_SpiS1_Req1(const Spi_DataBufferType *const cmd, Spi_DataBufferType *const dat, const Spi_NumberOfDataType len)
-{
-	byteComm(SPI_CHANNEL_ID0, cmd, dat, len);	/* [CodeSonar‘Î‰]Spi_SetupEB‚ÍE_OK‚µ‚©•Ô‚³‚È‚¢ */
-	return E_OK;
-}
-#endif /* b’èSPI */
-/* SPI BSW IFb’è‘ÎˆEnd */
 Std_ReturnType EthSwt_SWIC_Spi_WriteSPI(const swic_reg_data_t tbl[], const uint32 idx, const uint16 SndData)
 {
 	const uint8		Paddr = tbl[idx].devAddr;

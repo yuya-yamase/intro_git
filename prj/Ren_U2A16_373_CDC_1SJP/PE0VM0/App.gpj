@@ -2,7 +2,11 @@
 [Subproject]
     :optionsFile=${CMN_DIR}/IOHW.opt
     :sourceDir=${APP_DIR}
+<<<<<<< 3da9346f3b0535214972cced946ed29b783ce0cf
+    :sourceDir=${APP_DIR}/Product/config
+=======
     :sourceDir=${APP_DIR}/Common/PwrCtrl
+>>>>>>> 42b0cbec7c41534e0212aeab629180cb766858bb
     :sourceDir=${APP_DIR}/Common/ExtSigCtrl
 
     -I${CAN_DIR}/inc
@@ -52,16 +56,19 @@
     
     -I${MCAL_DIR}/GPT
 
-    -I${APP_DIR}/Common/PwrCtrl
     -I${APP_DIR}/Common/ExtSigCtrl
 
 Ecu_Intg_Callout.c
 ShtdwnM/bsw_m.c
 ShtdwnM/cfg/bsw_m_cfg.c
 Stub/stub_u2a.c
+<<<<<<< 3da9346f3b0535214972cced946ed29b783ce0cf
+product_cfg.c
+=======
 Mcu_Main.c
 Mcu_NoRedun_PwrCtrl.c
 Mcu_PwrCtrl.c
 Mcu_Sip_Pwr.c
 Mcu_Sys_Pwr.c
+>>>>>>> 42b0cbec7c41534e0212aeab629180cb766858bb
 ExtSigCtrl.c
