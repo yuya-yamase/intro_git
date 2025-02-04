@@ -20,6 +20,7 @@
 #include "Mcu_Main.h"
 #include "Mcu_Sys_Pwr.h"
 #include "Mcu_Noredun_PwrCtrl.h"
+#include "EthSW_Task.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -163,6 +164,7 @@ void vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req(void)
                 u1_s_Mcu_PwrCtrl_Sts = MCU_PWRCTRL_SIPOFF_MCUSTANDBY_REQ;
                 vd_s_Mcu_PwrCtrl_Start_Set();
                 u1_s_Mcu_PwrCtrl_BusSleepFlag = (U1)MCU_SYS_PWR_OFF;
+                EthSW_PowerOff_Req(); /* 暫定_EtherSW終了要求 */
             }
         }
     }
@@ -182,6 +184,7 @@ void vd_g_Mcu_PwrCtrl_Standby_Req(void)
 	if(u1_s_Mcu_PwrCtrl_Sts == MCU_PWRCTRL_NO_REQ){
 		u1_s_Mcu_PwrCtrl_Sts = MCU_PWRCTRL_STANDBY_REQ;
         vd_s_Mcu_PwrCtrl_Start_Set();
+        EthSW_PowerOff_Req(); /* 暫定_EtherSW終了要求 */
 	}
 }
 
