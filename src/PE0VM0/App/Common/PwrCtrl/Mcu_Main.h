@@ -23,11 +23,6 @@
 /* 周期の時間指定(LSB:1ms) */
 #define     MCU_SYS_TASK_TIME               (1U)
 
-#define     MCU_VARIATION_JPN               (0U)    /* 日本仕向け */
-#define     MCU_VARIATION_NOA               (1U)    /* 北米仕向け */
-#define     MCU_VARIATION_OTH               (2U)    /* その他仕向け */
-#define     MCU_VARIATION                   (MCU_VARIATION_JPN) /* 現在の仕向け */
-
 /*--------------------------------------------------------------------------*/
 /*  Function Prototypes                                                     */
 /*--------------------------------------------------------------------------*/

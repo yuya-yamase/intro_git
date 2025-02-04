@@ -1,80 +1,61 @@
-/* 0.0.0 */
 /*===================================================================================================================================*/
-/*  Copyright DENSO TECHNO Corporation                                                                                               */
+/*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Transmission and reception processing of subframe 4 in XSPI communication.                                                       */
-/*  Handled data: CAN Data/Repro/LCAN Data                                                                                           */
-/*===================================================================================================================================*/
-
-#ifndef XSPI_IVI_SUB1_SYSTEM_H
-#define XSPI_IVI_SUB1_SYSTEM_H
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Version                                                                                                                          */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_SUB1_SYSTEM_H_MAJOR           (0)
-#define XSPI_IVI_SUB1_SYSTEM_H_MINOR           (0)
-#define XSPI_IVI_SUB1_SYSTEM_H_PATCH           (0)
-
+#ifndef GNSSCTL_H
+#define GNSSCTL_H
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "aip_common.h"
+
+#include "Dio.h"
+#include "x_spi_ivi_sub1_system.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define GNSS_PWRON_COMP                         (1U)
+
+#define GNSS_OSCMD_NOTIF_STANDBY                (0U)
+#define GNSS_OSCMD_NOTIF_NORMAL                 (1U)
+#define GNSS_OSCMD_RESET                        (0U)
+#define GNSS_OSCMD_STOP                         (1U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_EXTSIG_NUM                  (15U)
-#define XSPI_IVI_EXTSIG_TEST                 (0U)
-#define XSPI_IVI_EXTSIG_USB                  (1U)
-#define XSPI_IVI_EXTSIG_MIC                  (2U)
-#define XSPI_IVI_EXTSIG_MIC2                 (3U)
-#define XSPI_IVI_EXTSIG_MIC3                 (4U)
-#define XSPI_IVI_EXTSIG_MIC4                 (5U)
-#define XSPI_IVI_EXTSIG_WIFI                 (6U)
-#define XSPI_IVI_EXTSIG_WIFI2                (7U)
-#define XSPI_IVI_EXTSIG_DTV                  (8U)
-#define XSPI_IVI_EXTSIG_DTV2                 (9U)
-#define XSPI_IVI_EXTSIG_DTV3                 (10U)
-#define XSPI_IVI_EXTSIG_DTV4                 (11U)
-#define XSPI_IVI_EXTSIG_GNSS                 (12U)
-#define XSPI_IVI_EXTSIG_DAB                  (13U)
-#define XSPI_IVI_EXTSIG_DAB2                 (14U)
+#define GNSS_IO_STS_LOW                         (0U)
+#define GNSS_IO_STS_HIGH                        (1U)
+
+#define u1_GNSS_GET_GPS_RST()                   (Dio_ReadChannel(DIO_ID_APORT4_CH8))
+#define u1_GNSS_GET_GPS_PMONI()                 (Dio_ReadChannel(DIO_ID_PORT6_CH3))
+#define u1_GNSS_SET_GPS_RST_L()                 (Dio_WriteChannel(DIO_ID_APORT4_CH8, (Dio_LevelType)GNSS_IO_STS_LOW))
+
+#define u1_GNSS_OSCMD_GPS_STS_NOTIF(x)          (vd_g_XspiIviSub1GpsStsPut(x))
+#define u1_GNSS_OSCMD_GPS_RES(x)                (vd_g_XspiIviSub1GpsOpeResPut(x))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*車速カウンタ */
-typedef struct{
-    /*Pulse Width Data*/
-    U1                          u1_clock_freq;  /*クロック周波数*/
-    U4                          u4_sp_count;    /*車速カウンタ値*/
-}ST_XSPI_IVI_SP_CNT_DATA;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_g_XspiIviSub1SystemInit(void);
-void            vd_g_XspiIviSub1SystemMainTask(void);
-void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
-void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA);
-void            vd_g_XspiIviSub1GpsStsSend(void);
-void            vd_g_XspiIviSub1GpsStsPut(const U1 u1_a_DATA);
-void            vd_g_XspiIviSub1ExtSiGSend(void);
-void            vd_g_XspiIviSub1ExtSgnlPut(const U1 u1_a_ID,const U1 u1_a_DATA);
-void            vd_g_XspiIviSub1GpsOpeResPut(const U1 u1_a_DATA);
-void            vd_g_XspiIviSub1VehspdCntSend(void);
-void            vd_g_XspiIviSub1SpCntPut(const ST_XSPI_IVI_SP_CNT_DATA st_a_DATA);
-void            vd_g_XspiIviSub1USBPowSupPut(const U2 u2_a_DATA);
+void    vd_g_Gnss_Init(void);
+void    vd_g_Gnss_Routine(void);
+void    vd_g_Gnss_GpsReq(U1 u1_a_gpsreq);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#endif /* XSPI_IVI_SUB1_SYSTEM_H */
+
+#endif      /* GNSSCTL_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  x_spi_ivi_sub1_system.c                                                                                      */
+/*  Change History  :  GNSSCtl.c                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

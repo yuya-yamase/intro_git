@@ -69,27 +69,7 @@ static void    vd_s_GpI2cMaCfgTRxAckCh1_Gmoni(const ST_GP_I2C_MA_REQ * st_ap_ACK
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
-#warning "VM_Layout" /* develop_IVI_Can_connect（12/13版BSWベース）と1/23版BSWで異なる変更がされている。#ifで両方の変更を残したうえで、1/23 Hotfix1版BSWの変更を有効にする。*/
-#if 0 /* develop_IVI_Can_connectの変更 */
-    {   /* GP_I2C_MA_CH_0 */
-        (U4)0U,                                     /* u4_scl_act */
-        (U4)0U,                                     /* u4_sda_act */
-        (U4)0U,                                     /* u4_scl_ina */
-        (U4)0U,                                     /* u4_sda_ina */
-
-        (U2)0,                                      /* u2_scl_pin */
-        (U2)0                                       /* u2_sda_pin */
-    },
-    {   /* GP_I2C_MA_CH_1 */
-        (U4)0U,                                     /* u4_scl_act */
-        (U4)0U,                                     /* u4_sda_act */
-        (U4)0U,                                     /* u4_scl_ina */
-        (U4)0U,                                     /* u4_sda_ina */
-
-        (U2)0,                                      /* u2_scl_pin */
-        (U2)0                                       /* u2_sda_pin */
-    }
-#else /* 1/23 Hotfix1版BSWの変更 */
+#ifdef I2C_PIN_JP    /* JP以外はPORTのConfigが存在しないため、コンパイルSWで暫定的に切り分け */
     {
         (U4)PORT_MODE_CFG_P10_1_25,                 /* u4_scl_act */
         (U4)PORT_MODE_CFG_P10_0_24,                 /* u4_sda_act */
@@ -107,6 +87,25 @@ static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
 
         (U2)PORT_ID_PORT22_PIN4,                    /* u2_scl_pin */
         (U2)PORT_ID_PORT22_PIN3,                    /* u2_sda_pin */
+    }
+#else /* JP以外 */
+    {   /* GP_I2C_MA_CH_0 */
+        (U4)0U,                                     /* u4_scl_act */
+        (U4)0U,                                     /* u4_sda_act */
+        (U4)0U,                                     /* u4_scl_ina */
+        (U4)0U,                                     /* u4_sda_ina */
+
+        (U2)0,                                      /* u2_scl_pin */
+        (U2)0                                       /* u2_sda_pin */
+    },
+    {   /* GP_I2C_MA_CH_1 */
+        (U4)0U,                                     /* u4_scl_act */
+        (U4)0U,                                     /* u4_sda_act */
+        (U4)0U,                                     /* u4_scl_ina */
+        (U4)0U,                                     /* u4_sda_ina */
+
+        (U2)0,                                      /* u2_scl_pin */
+        (U2)0                                       /* u2_sda_pin */
     }
 #endif
 };

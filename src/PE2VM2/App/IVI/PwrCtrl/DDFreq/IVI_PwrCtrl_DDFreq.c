@@ -17,8 +17,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "IVI_PwrCtrl_DDFreq.h"
 
-#warning "VM_Layout"
-/* #include    "pwm_drv.h" */
+#include    "pwm_drv.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -37,7 +36,7 @@
 
 /* パターンA */
 /* 周波数：487.804878[kHz], デューティ：50[%], カウントクロック周波数：80[MHz] 分周なし */
-#define     IVI_SYS_PWM_PERIOD_A            (164U)		/* (1/487.805)*80000 = 163.99[counts] */
+#define     IVI_SYS_PWM_PERIOD_A            (163U)		/* (1/487.805)*80000 = 163.99[counts] */
 
 /* パターンB */
 /* 周波数：454.5454545[kHz], デューティ：50[%], カウントクロック周波数：80[MHz] 分周なし */
@@ -97,14 +96,10 @@ void            vd_g_Ivi_PwrCtrl_DDFreq(void)
     U2 u2_t_duty;
 
     if(u1_g_pwrctrl_ddfreq_flg < IVI_DDFREQ_PTRN_NUM) {
-        #warning "VM_Layout"
-        /* u2_t_duty = IVI_SYS_PWM_DUTYCYCLE(5000U); */    /* 50% */
-        #warning "VM_Layout"
-        /* vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ,       u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty); */
-        #warning "VM_Layout"
-        /* vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_01_DDC_SIP_FREQ,   u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty); */
-        #warning "VM_Layout"
-        /* vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ,  u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty); */
+        u2_t_duty = IVI_SYS_PWM_DUTYCYCLE(5000U);     /* 50% */
+        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ,       u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
+        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_01_DDC_SIP_FREQ,   u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
+        vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ,  u2_sp_DDFREQ_PERIOD[u1_g_pwrctrl_ddfreq_flg], u2_t_duty);
 
         /* 変更したらXSPIの応答関数をコールし、フラグを要求なしに変更 */
         vd_g_XspiIviSub1DDconSend(u1_g_pwrctrl_ddfreq_flg);

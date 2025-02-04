@@ -19,6 +19,7 @@
 #include    "x_spi_ivi_sub1_private.h"
 #include    "x_spi_ivi_sub1_system.h"
 #include    "IVI_PwrCtrl_DDFreq.h"
+#include    "GNSSCtl.h"
 #include    "Dio.h"
 #include    "Dio_Symbols.h"
 
@@ -44,11 +45,13 @@
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define    XSPI_IVI_SYSTEM_ID              (0x22U)
+#define    XSPI_IVI_SYSTEM_USB_POWSUP      (0x01U)
 #define    XSPI_IVI_SYSTEM_DDCON_REC       (0x10U)
 #define    XSPI_IVI_SYSTEM_DDCON_SEND      (0x11U)
 #define    XSPI_IVI_SYSTEM_GPS_STS         (0x20U)
 #define    XSPI_IVI_SYSTEM_GPS_OPE_RECUEST (0x21U)
 #define    XSPI_IVI_SYSTEM_GPS_OPE_RESPON  (0x22U)
+#define    XSPI_IVI_SYSTEM_VEHSPD_CNT      (0x30U)
 #define    XSPI_IVI_SYSTEM_EXTSIG_SEND     (0x40U)
 
 #define    XSPI_IVI_EXTSIG_ID_TEST         (0x01U)
@@ -73,6 +76,8 @@
 #define    XSPI_IIV_SYSTEM_GPS_STS_TASK    (10000U / 5U)
 #define    XSPI_IIV_SYSTEM_EXTSIG_STS_TASK (3000U / 5U)
 #define    XSPI_IIV_SYSTEM_TEST_SAMPL_TASK (100U / 5U)
+#define    XSPI_IIV_SYSTEM_VEHSPDCNT_TASK  (240U / 5U)
+#define    XSPI_IIV_SYSTEM_USBPOWSUP_TASK  (500U / 5U)
 
 #define    XSPI_IVI_TESTTERM_UNKNOWN       (0U)
 #define    XSPI_IVI_TESTTERM_OFF           (1U)
@@ -89,14 +94,21 @@ static U1              u1_s_xspi_ivi_system_gps_sts_pre;
 static U1              u1_sp_xspi_ivi_system_extsig_data[XSPI_IVI_EXTSIG_NUM]; /*外部信号の状態格納*/
 static U1              u1_sp_xspi_ivi_system_extsig_data_pre[XSPI_IVI_EXTSIG_NUM];
 static U1              u1_s_xspi_ivi_system_extsig_testterm_data[3];  /*TEST端子から取得したデータ*/
+static U1              u1_s_xspi_ivi_system_clkfreq;
+static U4              u4_s_xspi_ivi_system_vehspd_cnt;
+static U2              u2_s_xspi_ivi_system_usbpowsup;
 
 static U1              u1_s_xspi_ivi_system_gps_sts_1stsend_flg;
 static U1              u1_s_xspi_ivi_system_extsig_1stsend_flg;
 static U1              u1_s_xspi_ivi_system_perion_flg;
+static U1              u1_s_xspi_ivi_system_vehspd_cnt_send_flg;
+static U1              u1_s_xspi_ivi_system_usbpowsup_send_flg;
 
 static U4              u4_s_xspi_ivi_system_gps_sts_cnt_pre;
 static U4              u4_s_xspi_ivi_system_extsig_cnt_pre;
-static U4              u4_s_xspi_ivi_system_teatterm_sample_cnt_pre;
+static U4              u4_s_xspi_ivi_system_testterm_sample_cnt_pre;
+static U4              u4_s_xspi_ivi_system_vehspdcnt_cnt_pre;
+static U4              u4_s_xspi_ivi_system_usbpowsup_cnt_pre;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -109,6 +121,7 @@ static U4              u4_s_xspi_ivi_system_teatterm_sample_cnt_pre;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void            vd_s_XspiIviSub1SystemDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD);
 static U1              u1_s_XspiIviSub1SystemDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
+static void            vd_s_XspiIviSub1USBPowSupSend(void);
 /*===================================================================================================================================*/
 /*  void            vd_g_XspiIviSub1SystemInit(void)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -130,7 +143,16 @@ void            vd_g_XspiIviSub1SystemInit(void)
 
     u4_s_xspi_ivi_system_gps_sts_cnt_pre = (U4)0U;
     u4_s_xspi_ivi_system_extsig_cnt_pre = (U4)0U;
-    u4_s_xspi_ivi_system_teatterm_sample_cnt_pre = (U4)0U;
+    u4_s_xspi_ivi_system_testterm_sample_cnt_pre = (U4)0U;
+
+    u1_s_xspi_ivi_system_clkfreq = (U1)0U;
+    u4_s_xspi_ivi_system_vehspd_cnt = (U4)0U;
+    u4_s_xspi_ivi_system_vehspdcnt_cnt_pre = (U4)0U;
+    u1_s_xspi_ivi_system_vehspd_cnt_send_flg = (U1)FALSE;
+
+    u2_s_xspi_ivi_system_usbpowsup = (U2)0U;
+    u4_s_xspi_ivi_system_usbpowsup_cnt_pre = (U4)0U;
+    u1_s_xspi_ivi_system_usbpowsup_send_flg = (U1)FALSE;
 }
 
 /*===================================================================================================================================*/
@@ -152,13 +174,13 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
     /* TEST端子入力値取得処理 */
     u1_t_event_jdg = (U1)FALSE;
 
-    u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_teatterm_sample_cnt_pre;
+    u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_testterm_sample_cnt_pre;
 
     u1_t_perion = Dio_ReadChannel(DIO_ID_PORT10_CH2);
     if((u1_t_perion == (U1)STD_HIGH) &&
        (u1_s_xspi_ivi_system_perion_flg == (U1)FALSE)){
         u1_s_xspi_ivi_system_perion_flg = (U1)TRUE;
-        u4_s_xspi_ivi_system_teatterm_sample_cnt_pre = u4_s_xspi_ivi_task_cnt;
+        u4_s_xspi_ivi_system_testterm_sample_cnt_pre = u4_s_xspi_ivi_task_cnt;
     } else if(u1_t_perion == (U1)STD_LOW) {
         u1_s_xspi_ivi_system_perion_flg = (U1)FALSE;
     } else {
@@ -184,7 +206,7 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
             } else {
                 /*Do Nothing*/
             }
-            u4_s_xspi_ivi_system_teatterm_sample_cnt_pre = u4_s_xspi_ivi_task_cnt;
+            u4_s_xspi_ivi_system_testterm_sample_cnt_pre = u4_s_xspi_ivi_task_cnt;
         }
     }
 
@@ -204,6 +226,22 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
         if((u4_t_task >= (U4)XSPI_IIV_SYSTEM_GPS_STS_TASK) ||
            (u1_s_xspi_ivi_system_gps_sts != u1_s_xspi_ivi_system_gps_sts_pre)){
             vd_g_XspiIviSub1GpsStsSend();
+        }
+    }
+
+    /*車速カウンタ値の定期送信*/
+    if(u1_s_xspi_ivi_system_vehspd_cnt_send_flg == (U1)TRUE) {
+        u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_vehspdcnt_cnt_pre;
+        if(u4_t_task >= (U4)XSPI_IIV_SYSTEM_VEHSPDCNT_TASK) {
+            vd_g_XspiIviSub1VehspdCntSend();
+        }
+    }
+
+    /*USB給電量の定期送信*/
+    if(u1_s_xspi_ivi_system_usbpowsup_send_flg == (U1)TRUE) {
+        u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_usbpowsup_cnt_pre;
+        if(u4_t_task >= (U4)XSPI_IIV_SYSTEM_USBPOWSUP_TASK) {
+            vd_s_XspiIviSub1USBPowSupSend();
         }
     }
 }
@@ -229,7 +267,7 @@ void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2
         break;
     case XSPI_IVI_SYSTEM_GPS_OPE_RECUEST:
         /*GPS動作要求の通知先IFをコール*/
-        
+        vd_g_Gnss_GpsReq(u1_ap_XSPI_ADD[1]);
         break;
     /*SystemのSip⇒MCUのその他コマンド解析処理いれる*/
     
@@ -239,13 +277,13 @@ void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1DDconSend(U1 u1_a_DATA)                                                                          */
+/*  void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA)                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
 /*  Arguments:      u1_a_DATA : 切り替え周波数                                                                                        */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1DDconSend(U1 u1_a_DATA)
+void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA)
 {
     U2     u2_s_SYSTEM_DDCON_SIZE = (U2)2U;
     U1     u1_tp_data[2];
@@ -279,13 +317,13 @@ void            vd_g_XspiIviSub1GpsStsSend(void)
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1GpsStsPut(U1 u1_a_DATA)                                                                          */
+/*  void            vd_g_XspiIviSub1GpsStsPut(const U1 u1_a_DATA)                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
 /*  Arguments:      u1_a_DATA : GPSステータス                                                                                         */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1GpsStsPut(U1 u1_a_DATA)
+void            vd_g_XspiIviSub1GpsStsPut(const U1 u1_a_DATA)
 {
     u1_s_xspi_ivi_system_gps_sts = u1_a_DATA;
 }
@@ -387,13 +425,90 @@ void            vd_g_XspiIviSub1ExtSgnlPut(const U1 u1_a_ID,const U1 u1_a_DATA)
 }
 
 /*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1VehspdCntSend(void)                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1VehspdCntSend(void)
+{
+    U2     u2_s_SYSTEM_VEHSPDCNT_SIZE = (U2)5U;
+    U1     u1_tp_data[5];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_SYSTEM_VEHSPD_CNT;
+    u1_tp_data[1] = u1_s_xspi_ivi_system_clkfreq;
+    u1_tp_data[2] = (U1)((u4_s_xspi_ivi_system_vehspd_cnt & 0x00FF0000U) >> XSPI_IVI_SFT_16);
+    u1_tp_data[3] = (U1)((u4_s_xspi_ivi_system_vehspd_cnt & 0x0000FF00U) >> XSPI_IVI_SFT_08);
+    u1_tp_data[4] = (U1)(u4_s_xspi_ivi_system_vehspd_cnt & 0x000000FFU);
+    vd_s_XspiIviSub1SystemDataToQueue(u2_s_SYSTEM_VEHSPDCNT_SIZE,u1_tp_data);
+
+    if(u1_s_xspi_ivi_system_vehspd_cnt_send_flg == (U1)FALSE) {
+        u1_s_xspi_ivi_system_vehspd_cnt_send_flg = (U1)TRUE;
+    }
+    u4_s_xspi_ivi_system_vehspdcnt_cnt_pre = u4_s_xspi_ivi_task_cnt;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1SpCntPut(const ST_XSPI_IVI_SP_CNT_DATA st_a_DATA)                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      st_a_DATA : 車速カウンタ値                                                                                        */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1SpCntPut(const ST_XSPI_IVI_SP_CNT_DATA st_a_DATA)
+{
+    u1_s_xspi_ivi_system_clkfreq = st_a_DATA.u1_clock_freq;
+    u4_s_xspi_ivi_system_vehspd_cnt = st_a_DATA.u4_sp_count;
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub1USBPowSupSend(void)                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1USBPowSupSend(void)
+{
+    U2     u2_s_SYSTEM_USBPOWSUP_SIZE = (U2)3U;
+    U1     u1_tp_data[3];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_SYSTEM_USB_POWSUP;
+    u1_tp_data[1] = (U1)((u2_s_xspi_ivi_system_usbpowsup & 0x0F00U) >> XSPI_IVI_SFT_08);
+    u1_tp_data[2] = (U1)(u2_s_xspi_ivi_system_usbpowsup & 0x00FFU);
+    vd_s_XspiIviSub1SystemDataToQueue(u2_s_SYSTEM_USBPOWSUP_SIZE,u1_tp_data);
+
+    if(u1_s_xspi_ivi_system_usbpowsup_send_flg == (U1)FALSE) {
+        u1_s_xspi_ivi_system_usbpowsup_send_flg = (U1)TRUE;
+    }
+    u4_s_xspi_ivi_system_usbpowsup_cnt_pre = u4_s_xspi_ivi_task_cnt;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1USBPowSupPut(const U2 u2_a_DATA)                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_a_DATA : GPS要求動作                                                                                           */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1USBPowSupPut(const U2 u2_a_DATA)
+{
+    u2_s_xspi_ivi_system_usbpowsup = (U2)u2_a_DATA;
+
+    if(u1_s_xspi_ivi_system_usbpowsup_send_flg == (U1)FALSE) {
+        vd_s_XspiIviSub1USBPowSupSend();
+    }
+}
+
+/*===================================================================================================================================*/
 /*  void            vd_g_XspiIviSub1GpsOpeResPut(U1 u1_a_DATA)                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
 /*  Arguments:      u1_a_DATA : GPS要求動作                                                                                           */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1GpsOpeResPut(U1 u1_a_DATA)
+void            vd_g_XspiIviSub1GpsOpeResPut(const U1 u1_a_DATA)
 {
     U2     u2_s_SYSTEM_GPSOPERES_SIZE = (U2)2U;
     U1     u1_tp_data[2];

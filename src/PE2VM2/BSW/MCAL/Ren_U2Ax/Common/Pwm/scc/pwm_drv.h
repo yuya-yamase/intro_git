@@ -1,80 +1,69 @@
-/* 0.0.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
-/*  Copyright DENSO TECHNO Corporation                                                                                               */
+/*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Transmission and reception processing of subframe 4 in XSPI communication.                                                       */
-/*  Handled data: CAN Data/Repro/LCAN Data                                                                                           */
+/*  Renesas RH850/F1KM : PWM Driver                                                                                                  */
+/*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_IVI_SUB1_SYSTEM_H
-#define XSPI_IVI_SUB1_SYSTEM_H
+#ifndef PWM_DRV_H
+#define PWM_DRV_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_SUB1_SYSTEM_H_MAJOR           (0)
-#define XSPI_IVI_SUB1_SYSTEM_H_MINOR           (0)
-#define XSPI_IVI_SUB1_SYSTEM_H_PATCH           (0)
+#define PWM_DRV_H_MAJOR                          (1)
+#define PWM_DRV_H_MINOR                          (0)
+#define PWM_DRV_H_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "pwm_drv_channel.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  void    vd_g_Pwm_SetPeriodAndDuty(const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY)                                */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* u2_a_PERIOD : LSB is depends on "st_gp_PWM_DRV_CFG[u1_a_PWM_CH].u2_gpt" count clock  */
+/* u2_a_DUTY   : LSB is (1/32768*100)[%]                                                */
+#define PWM_DRV_DUTY_MAX                         (32768U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_EXTSIG_NUM                  (15U)
-#define XSPI_IVI_EXTSIG_TEST                 (0U)
-#define XSPI_IVI_EXTSIG_USB                  (1U)
-#define XSPI_IVI_EXTSIG_MIC                  (2U)
-#define XSPI_IVI_EXTSIG_MIC2                 (3U)
-#define XSPI_IVI_EXTSIG_MIC3                 (4U)
-#define XSPI_IVI_EXTSIG_MIC4                 (5U)
-#define XSPI_IVI_EXTSIG_WIFI                 (6U)
-#define XSPI_IVI_EXTSIG_WIFI2                (7U)
-#define XSPI_IVI_EXTSIG_DTV                  (8U)
-#define XSPI_IVI_EXTSIG_DTV2                 (9U)
-#define XSPI_IVI_EXTSIG_DTV3                 (10U)
-#define XSPI_IVI_EXTSIG_DTV4                 (11U)
-#define XSPI_IVI_EXTSIG_GNSS                 (12U)
-#define XSPI_IVI_EXTSIG_DAB                  (13U)
-#define XSPI_IVI_EXTSIG_DAB2                 (14U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*車速カウンタ */
-typedef struct{
-    /*Pulse Width Data*/
-    U1                          u1_clock_freq;  /*クロック周波数*/
-    U4                          u4_sp_count;    /*車速カウンタ値*/
-}ST_XSPI_IVI_SP_CNT_DATA;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_g_XspiIviSub1SystemInit(void);
-void            vd_g_XspiIviSub1SystemMainTask(void);
-void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
-void            vd_g_XspiIviSub1DDconSend(const U1 u1_a_DATA);
-void            vd_g_XspiIviSub1GpsStsSend(void);
-void            vd_g_XspiIviSub1GpsStsPut(const U1 u1_a_DATA);
-void            vd_g_XspiIviSub1ExtSiGSend(void);
-void            vd_g_XspiIviSub1ExtSgnlPut(const U1 u1_a_ID,const U1 u1_a_DATA);
-void            vd_g_XspiIviSub1GpsOpeResPut(const U1 u1_a_DATA);
-void            vd_g_XspiIviSub1VehspdCntSend(void);
-void            vd_g_XspiIviSub1SpCntPut(const ST_XSPI_IVI_SP_CNT_DATA st_a_DATA);
-void            vd_g_XspiIviSub1USBPowSupPut(const U2 u2_a_DATA);
+/* AUTOSAR v4 API                                                                                                   */
+/* void                Pwm_Init(const Pwm_ConfigType* ConfigPtr)                                                    */
+/* void                Pwm_DeInit(void)                                                                             */
+/* void                Pwm_SetDutyCycle(Pwm_ChannelType ChannelNumber, uint16 DutyCycle)                            */
+/* void                Pwm_SetPeriodAndDuty(Pwm_ChannelType ChannelNumber, Pwm_PeriodType Period, uint16 DutyCycle) */
+/* void                Pwm_SetOutputToIdle(Pwm_ChannelType ChannelNumber)                                           */
+/* Pwm_OutputStateType Pwm_GetOutputState(Pwm_ChannelType ChannelNumber)                                            */
+/* void                Pwm_DisableNotification(Pwm_ChannelType ChannelNumber)                                       */
+/* void                Pwm_EnableNotification(Pwm_ChannelType ChannelNumber, Pwm_EdgeNotificationType Notification) */
+/* void                Pwm_GetVersionInfo(Std_VersionInfoType* versioninfo)                                         */
+
+void    vd_g_Pwm_SetPeriodAndDuty(const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#endif /* XSPI_IVI_SUB1_SYSTEM_H */
+
+#endif /* PWM_DRV_H */
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  x_spi_ivi_sub1_system.c                                                                                      */
+/*  Change History  :  see pwm_drv.c                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

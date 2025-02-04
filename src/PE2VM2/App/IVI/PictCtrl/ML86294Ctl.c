@@ -16248,7 +16248,7 @@ static U1    u1_s_Pict_MLCycChk(void)   /* 暫定 100ms定期 */
                                                            st_sp_ML86294_MLSYNCCYCCHK_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP4;
+                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP5;
             }
             break;
         case ML86294_CYCCHK_STEP5:                                       /* STEP5 */
@@ -16571,7 +16571,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
                                                           st_sp_ML86294_SET_BANK2_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP10;
+                u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP15;
             }
             break;
         case ML86294_FRZDAT_CYCCHK_STEP15:                                      /* STEP15 */
@@ -16663,20 +16663,20 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)   /* 暫定 20ms定期 */
     static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_SET3[ML86294_IRQHPD_DPCD_SET3_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank9 */
-        {        0,         1,         0},
-        {        0,         1,         0},  /* Bank8 */
-        {        0,         4,         0},
-        {        0,         1,         0},  /* Bank9 */
-        {        0,         5,         0},
-        {        0,         1,         0},  /* Bank10 */
-        {        0,        10,         0},
-        {        0,        10,         0},
-        {        0,         1,         0},  /* Bank8 */
-        {        0,         3,         0},
-        {        0,         1,         0},  /* Bank9 */
-        {        0,         1,         0},
-        {        0,         1,         0},  /* Bank8 */
-        {        0,         1,         0}
+        {        1,         1,         0},
+        {        2,         1,         0},  /* Bank8 */
+        {        3,         4,         0},
+        {        7,         1,         0},  /* Bank9 */
+        {        8,         5,         0},
+        {       13,         1,         0},  /* Bank10 */
+        {       14,        10,         0},
+        {       24,        10,         0},
+        {       34,         1,         0},  /* Bank8 */
+        {       35,         3,         0},
+        {       38,         1,         0},  /* Bank9 */
+        {       39,         1,         0},
+        {       40,         1,         0},  /* Bank8 */
+        {       41,         1,         0}
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */
@@ -16890,29 +16890,29 @@ U1    u1_g_Pict_MlCamAreaSet(void)
     static const ST_REG_WRI_REQ ML86294_CAMAREA_SET[ML86294_CAMAREA_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
-        {        0,         7,         0},
-        {        0,         7,         0},
-        {        0,         1,         0},  /* Bank1 */
-        {        0,         8,         0},
-        {        0,         8,         0},
-        {        0,         1,         0},  /* Bank11 */
-        {        0,         8,         0},
-        {        0,         1,         0},  /* Bank12 */
-        {        0,        10,         0},
-        {        0,        10,         0},
-        {        0,        10,         0},
-        {        0,        10,         0},
-        {        0,        10,         0},
-        {        0,        10,         0},
-        {        0,        10,         0},
-        {        0,         1,         0},  /* Bank15 */
-        {        0,         2,         0},
-        {        0,         1,         0},  /* Bank22 */
-        {        0,         4,         0},
-        {        0,         1,         0},  /* Bank25 */
-        {        0,         8,         0},
-        {        0,         7,         0},
-        {        0,         7,         0}
+        {        1,         7,         0},
+        {        8,         7,         0},
+        {       15,         1,         0},  /* Bank1 */
+        {       16,         8,         0},
+        {       24,         8,         0},
+        {       32,         1,         0},  /* Bank11 */
+        {       33,         8,         0},
+        {       41,         1,         0},  /* Bank12 */
+        {       42,        10,         0},
+        {       52,        10,         0},
+        {       62,        10,         0},
+        {       72,        10,         0},
+        {       82,        10,         0},
+        {       92,        10,         0},
+        {      102,        10,         0},
+        {      112,         1,         0},  /* Bank15 */
+        {      113,         2,         0},
+        {      115,         1,         0},  /* Bank22 */
+        {      116,         4,         0},
+        {      120,         1,         0},  /* Bank25 */
+        {      121,         8,         0},
+        {      129,         7,         0},
+        {      136,         7,         0}
     };
 
     static const U1  u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP[PICT_ML_CAN_CAM_SIZE_MAX] = { /* 暫定 カメラサイズI/F展開後に見直す */
@@ -17149,29 +17149,29 @@ U1    u1_g_Pict_MlFrzChgSet(const U1 u1_a_req_sts)
     static const ST_REG_WRI_REQ ML86294_FRZCHG_ON_SET[ML86294_FRZCHG_ON_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
-        {        0,         2,         0},
-        {        0,         1,         0},  /* Bank1 */
-        {        0,         2,         0},
-        {        0,         1,         0},  /* Bank25 */
-        {        0,         1,         0},
-        {        0,         1,         0},  /* Bank12 */
-        {        0,         2,         0},
-        {        0,         1,         0},  /* Bank25 */
-        {        0,         2,         0}
+        {        1,         2,         0},
+        {        3,         1,         0},  /* Bank1 */
+        {        4,         2,         0},
+        {        6,         1,         0},  /* Bank25 */
+        {        7,         1,         0},
+        {        8,         1,         0},  /* Bank12 */
+        {        9,         2,         0},
+        {       11,         1,         0},  /* Bank25 */
+        {       12,         2,         0}
     };
 
     static const ST_REG_WRI_REQ ML86294_FRZCHG_OFF_SET[ML86294_FRZCHG_OFF_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
-        {        0,         1,         0},
-        {        0,         1,         0},  /* Bank1 */
-        {        0,         2,         0},
-        {        0,         1,         0},  /* Bank25 */
-        {        0,         1,         0},
-        {        0,         1,         0},  /* Bank12 */
-        {        0,         2,         0},
-        {        0,         1,         0},  /* Bank25 */
-        {        0,         2,         0}
+        {        1,         1,         0},
+        {        2,         1,         0},  /* Bank1 */
+        {        3,         2,         0},
+        {        5,         1,         0},  /* Bank25 */
+        {        6,         1,         0},
+        {        7,         1,         0},  /* Bank12 */
+        {        8,         2,         0},
+        {       10,         1,         0},  /* Bank25 */
+        {       11,         2,         0}
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */
@@ -17223,9 +17223,9 @@ U1    u1_g_Pict_MlCamPathSet(const U1 u1_a_req_path)
     static const ST_REG_WRI_REQ ML86294_CAMPATH_SET[ML86294_CAMPATH_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
-        {        0,         1,         0},
-        {        0,         1,         0},  /* Bank2 */
-        {        0,         4,         0}
+        {        1,         1,         0},
+        {        2,         1,         0},  /* Bank2 */
+        {        3,         4,         0}
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */
@@ -17331,7 +17331,7 @@ U1    u1_g_Pict_MlI2cMuteSet(const U1 u1_a_req_sts)
     static const ST_REG_WRI_REQ ML86294_I2CMUTE_SET[ML86294_I2CMUTE_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank2 */
-        {        0,         1,         0}
+        {        1,         1,         0}
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */
@@ -17374,7 +17374,7 @@ U1    u1_g_Pict_MlNoAisMuteSet(const U1 u1_a_req_sts)
     static const ST_REG_WRI_REQ ML86294_NOAISMUTE_SET[ML86294_NOAISMUTE_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank11 */
-        {        0,         1,         0}
+        {        1,         1,         0}
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */

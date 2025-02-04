@@ -30,6 +30,8 @@
     -I${VEHOPE_DIR}/scc
     -I${VEHOPE_DIR}/config_U2A16_met
     -I${LIB_DIR}
+    
+    -I${MCAL_PWM_SCC_DIR}
 
     -I${APP_DIR}/IVI
     -I${APP_DIR}/IVI/XSPI
@@ -57,6 +59,7 @@ x_spi_ivi_sub1_camera.c
 x_spi_ivi_sub1_control.c
 x_spi_ivi_sub1_power.c
 x_spi_ivi_sub1_system.c
+x_spi_ivi_sub1_version.c
 x_spi_ivi_queue.c
 IVI_PwrCtrl_Main.c
 IVI_PwrCtrl_DDFreq.c
@@ -79,3 +82,5 @@ poweric.c
 CXD4984ERCtl.c
 ML86294Ctl.c
 CXD4937Ctl.c
+GyroDevCtl.c
+GNSSCtl.c

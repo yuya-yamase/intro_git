@@ -1056,12 +1056,13 @@ void    Mcu_Dev_Pwron_Ant( void ){
         /* GNSSアンテナ */
         Mcu_Dev_Pwron_SetPort(MCU_PORT_GPS_ANT_ON , MCU_DIO_HIGH);
 
+
         /* DABアンテナ(日本/北米仕向け以外のみ) */
-#if(MCU_VARIATION == MCU_VARIATION_OTH)
+#ifdef SYS_PWR_ANT_DAB
         Mcu_Dev_Pwron_SetPort(MCU_PORT_DAB_ANT_ON , MCU_DIO_HIGH);
 #endif
         /* DTVアンテナ(日本仕向けのみ) */
-#if(MCU_VARIATION == MCU_VARIATION_JPN)
+#ifdef SYS_PWR_ANT_DTV
         Mcu_Dev_Pwron_SetPort(MCU_PORT_DTV_ANT_ON , MCU_DIO_HIGH);
 #endif
     }
@@ -1255,7 +1256,7 @@ void    Mcu_Dev_Pwron_XMTuner( void ){
 
     if(mcu_time_chk_xmshdn ==  (uint8)TRUE) {
         /* 北米仕向けのみ */
-#if(MCU_VARIATION == MCU_VARIATION_NOA)
+#ifdef SYS_PWR_ANT_XM_SHDN
         Mcu_Dev_Pwron_SetPort(MCU_PORT_XM_SHDN , MCU_DIO_HIGH);
 #endif
         /*****************************************************************************
