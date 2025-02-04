@@ -52,4 +52,3 @@ LIB_interrupt.c
 LIB_memset.c
 Pmic_Pwr.c
 EthSW_Task.c
-Central_Stub.c
