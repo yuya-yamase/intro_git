@@ -40,6 +40,12 @@ primaryTarget=v800_standalone.tgt
 	-I${APP_DIR}
 	-I${APP_DIR}/Stub
 	-I${APP_DIR}/ShtdwnM
+    -L${APP_DIR}/MET/lib/Platform/D1L1
+    -llibcri_atom_rh850d1.a
+    -llibcri_base_rh850d1.a
+    -llibcri_damp_rh850d1.a
+	
+	-I${APP_DIR}/MET/STUB/config
 
     -L${ROOT_DIR}/BSW/Aubist/Os/os_lib/release
     -lsc1.sc.notrace.rh850u2a.a
@@ -50,6 +56,7 @@ primaryTarget=v800_standalone.tgt
     -I${MS_DIR}/Rim/config
     -I${MS_DIR}/Rim/scc
 
+	-lLIBARCH.A
     -I${MS_DIR}/Nvmc/core/config/Common
     -I${MS_DIR}/Nvmc/core/config/Ren_U2A
     -I${MS_DIR}/Nvmc/core/scc/Common

@@ -95,6 +95,13 @@ SECTIONS {
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
+// Production Code (Address Fix)
+    _product_code_start_address = 0x007FFB00;
+    .app_product_const (_product_code_start_address) : {
+        *(.app_product_const)
+        .=ALIGN(4);
+    } > .
+
 
 // -- RAM -------------------
 // TopAddress
