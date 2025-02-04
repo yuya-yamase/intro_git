@@ -2,6 +2,7 @@
 [Subproject]
     :sourceDir=${APP_DIR}
     :sourceDir=${APP_DIR}/Common/xspi
+    :sourceDir=${APP_DIR}/Common/PwrCtrl
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/src
     :sourceDir=${APP_DIR}/Central/LIB
     :sourceDir=${APP_DIR}/Central/IoHwAb/src
@@ -10,6 +11,7 @@
     :sourceDir=${APP_DIR}/Central/stub/Central_VM0_Stub
 
     -I${APP_DIR}/Common/xspi
+-I${APP_DIR}/Common/PwrCtrl
 
     -I${CAN_DIR}/inc
 
@@ -35,6 +37,11 @@
 Ecu_Intg_Callout.c
 xspi.c
 xspi_sub.c
+Mcu_Main.c
+Mcu_NoRedun_PwrCtrl.c
+Mcu_PwrCtrl.c
+Mcu_Sip_Pwr.c
+Mcu_Sys_Pwr.c
 ShtdwnM/bsw_m.c
 ShtdwnM/cfg/bsw_m_cfg.c
 EthSwt_SWIC.c

@@ -20,6 +20,7 @@
 #include <Ecu_Intg_Callout.h>
 #include <Ecu_Int.h>
 
+#include "Dio.h" /* 暫定 */
 #include "wdg_drv.h"
 
 #include "xspi.h"
@@ -30,6 +31,9 @@
 #include "veh_opemd.h"
 #include "oxcan.h"
 #include "l3r_test.h"
+
+#include "Mcu_PwrCtrl.h"
+#include "Mcu_Sys_Pwr.h" /* 暫定 */
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -77,6 +81,8 @@ Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
     xspi_Init( XSPI_CH_03 );
 
     #warning "VM_Layout" /* 暫定のコメントがあるが、PE3VM3に下の1行を移植する */
+    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req( u4BootCause ); /* +B-ONウェイクアップシーケンス開始 */
+
     vd_Central_Stub_Init();                           /* 暫定_CentralApp VM0用 */
 
     return E_OK;
@@ -107,6 +113,11 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
 Std_ReturnType Ecu_Intg_mainFuncApp(void)
 {
     #warning "VM_Layout" /* 暫定のコメントがあるが、PE3VM3に下の1行を移植する */
+    vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req(); /* 暫定 */
+    vd_g_Mcu_PwrCtrl_Task1ms();
+   /* 暫定：デバイスON制御 */
+    Mcu_Dev_Pwron();
+    
     vd_Central_Stub_Midtask();    /* 暫定_CentralApp VM0用 */
 
     return E_OK;

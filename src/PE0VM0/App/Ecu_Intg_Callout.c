@@ -35,11 +35,6 @@
 
 #include "stub.h"
 
-#include "Mcu_PwrCtrl.h"
-
-/* 暫定 */
-#include "Mcu_Sys_Pwr.h"
-
 #include "ExtSigCtrl_Main.h"
 
 /*----------------------------------------------------------------------------
@@ -113,7 +108,6 @@ Std_ReturnType Ecu_Intg_initCdd(Ecu_Intg_BootCauseType u4BootCause)
 Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
 {
     /* User Hook start */
-    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req( u4BootCause ); /* +B-ONウェイクアップシーケンス開始 */
     ExtSigCtrl_Init();
     /* User Hook end */
 
@@ -142,12 +136,7 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
 Std_ReturnType Ecu_Intg_mainFuncApp(void)
 {
     /* User Hook start */
-    vd_g_Mcu_PwrCtrl_Task1ms();
     ExtSigCtrl_MainFunction();
-
-    /* 暫定：デバイスON制御 */
-    Mcu_Dev_Pwron();
-
     /* User Hook end */
 
     return E_OK;

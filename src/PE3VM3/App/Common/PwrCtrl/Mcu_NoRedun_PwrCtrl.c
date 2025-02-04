@@ -12,6 +12,8 @@
 /*--------------------------------------------------------------------------*/
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
+#include "oxcan.h" /* 暫定 */
+
 #include "Mcu_Main.h"
 #include "Mcu_NoRedun_PwrCtrl.h"
 
@@ -341,8 +343,6 @@ uint8 Mcu_NoRedun_PwrCtrl_Nxtsts( void )
   mcu_VPSINFO   = (uint8)0U;
   mcu_boot      = STD_LOW;
 
-  /* シス検暫定対応：CAN入力取得処理 シス検ではPowerON固定のためコメントアウトする */
-  /*
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &mcu_VPSINFO1 );
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &mcu_VPSINFO2 );
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &mcu_VPSINFO3 );
@@ -351,8 +351,6 @@ uint8 Mcu_NoRedun_PwrCtrl_Nxtsts( void )
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, &mcu_VPSINFO6 );
   (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, &mcu_VPSINFO7 );
   (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ  , &mcu_appea    );
-  */
-  /* シス検暫定ここまで */
 
   /* BOOT入力値取得処理 */
   mcu_boot = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_BOOT]);
@@ -373,46 +371,46 @@ uint8 Mcu_NoRedun_PwrCtrl_Nxtsts( void )
     /* 次回状態判定 電源ステートはONOFF仕様 図5-3 参照 */
     switch (mcu_VPSINFO)
     {
-    case  0x40U:    /* 見た目：オフ ステート：状態未定 */
+    case  0x40U:    /* 見た目：オン ステート：状態未定 */
       mcu_return  = Mcu_NoRedun_Sts;  /* 前回状態保持 */
       break;
-    case  0x20U:    /* 見た目：オフ ステート：駐車中 */
+    case  0x20U:    /* 見た目：オン ステート：駐車中 */
       mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
       break;
-    case  0x33U:    /* 見た目：オフ ステート：乗車中 */
+    case  0x33U:    /* 見た目：オン ステート：乗車中 */
+      mcu_return  = MCU_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
+      break;
+    case  0x37U:    /* 見た目：オン ステート：PowerON緊急停止 */
+      mcu_return  = MCU_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
+      break;
+    case  0x3FU:    /* 見た目：オン ステート：PowerON通常 */
+      mcu_return  = MCU_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
+      break;
+    case  0x22U:    /* 見た目：オン ステート：駐車中 高圧起動 */
+      mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
+      break;
+    case  0x23U:    /* 見た目：オン ステート：駐車中 高圧・温調起動 */
+      mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
+      break;
+    case  0xC0U:    /* 見た目：オフ ステート：状態未定 */
+      mcu_return  = Mcu_NoRedun_Sts;  /* 前回状態保持 */
+      break;
+    case  0xA0U:    /* 見た目：オフ ステート：駐車中 */
+      mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
+      break;
+    case  0xB3U:    /* 見た目：オフ ステート：乗車中 */
       mcu_return  = MCU_NOREDUN_STATE_APPOFF;  /* 見た目オフ起動 */
       break;
-    case  0x3BU:    /* 見た目：オフ ステート：PowerON緊急停止 */
+    case  0xB7U:    /* 見た目：オフ ステート：PowerON緊急停止 */
       mcu_return  = MCU_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
       break;
-    case  0x3FU:    /* 見た目：オフ ステート：PowerON通常 */
+    case  0xBFU:    /* 見た目：オフ ステート：PowerON通常 */
       mcu_return  = MCU_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
       break;
-    case  0x22U:    /* 見た目：オフ ステート：駐車中 高圧起動 */
+    case  0xA2U:    /* 見た目：オフ ステート：駐車中 高圧起動 */
       mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
       break;
-    case  0x23U:    /* 見た目：オフ ステート：駐車中 高圧・温調起動 */
-      mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    case  0xC0U:    /* 見た目：オン ステート：状態未定 */
-      mcu_return  = Mcu_NoRedun_Sts;  /* 前回状態保持 */
-      break;
-    case  0xA0U:    /* 見た目：オン ステート：駐車中 */
-      mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    case  0xB3U:    /* 見た目：オン ステート：乗車中 */
-      mcu_return  = MCU_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-      break;
-    case  0xBBU:    /* 見た目：オン ステート：PowerON緊急停止 */
-      mcu_return  = MCU_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-      break;
-    case  0xBFU:    /* 見た目：オン ステート：PowerON通常 */
-      mcu_return  = MCU_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-      break;
-    case  0xA2U:    /* 見た目：オン ステート：駐車中 高圧起動 */
-      mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    case  0xA3U:    /* 見た目：オン ステート：駐車中 高圧・温調起動 */
+    case  0xA3U:    /* 見た目：オフ ステート：駐車中 高圧・温調起動 */
       mcu_return  = MCU_NOREDUN_STATE_PARK;  /* 駐車中起動 */
       break;
     default:
