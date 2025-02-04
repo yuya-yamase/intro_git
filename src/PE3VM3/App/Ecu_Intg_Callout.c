@@ -29,7 +29,6 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
-#include "l3r_test.h"
 
 #include "Mcu_PwrCtrl.h"
 #include "Mcu_Sys_Pwr.h" /* 暫定 */
@@ -88,7 +87,6 @@ Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
 
 Std_ReturnType Ecu_Intg_mainFuncCddHigh(void)
 {
-    vd_g_L3rTestCycleHigh();
     BswM_CS_MainFunctionHigh();
 
 	EthSW_HighTask();
