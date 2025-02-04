@@ -1,0 +1,187 @@
+/* 1.0.1 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/*  Renesas RH850/D1x, F1KM : sum_u4.850                                                                                             */
+/*                                                                                                                                   */
+/*  Compiler : Greenhills RH850                                                                                                      */
+/*                                                                                                                                   */
+/*  Usage of General Register :                                                                                                      */
+/*  Register, Alternate Name, Common Usage,                                 Attribute,    Notes                                      */
+/*  r0        zero            Zero (read-only)                              Permanent                                                */
+/*  r1                        Address generation in compiler and assembler  ?                                                        */
+/*  r2        hp              Handler stack pointer/Temporary               Temporary                                                */
+/*  r3        sp              Stack pointer                                 N/A                                                      */
+/*  r4        gp              Global pointer (SDA and PID base register)    Permanent                                                */
+/*  r5        tp              ROSDA base register                           Permanent                                                */
+/*  r6                        Parameters                                    Temporary                                                */
+/*  r7                        Parameters                                    Temporary                                                */
+/*  r8                        Parameters                                    Temporary                                                */
+/*  r9                        Parameters                                    Temporary                                                */
+/*  r10                       Function return value/temporary               Temporary                                                */
+/*  r11                       High part of 64-bit return value/temporary    Temporary                                                */
+/*  r12                       Temporary                                     Temporary                                                */
+/*  r13                       Temporary                                     Temporary                                                */
+/*  r14                       Temporary                                     Temporary                                                */
+/*  r15                       Temporary                                     Temporary     Unused in 22-register mode                 */
+/*  r16                       Temporary                                     Temporary     Unused in 22-register mode                 */
+/*  r17                       Temporary                                     Temporary     Unused in 22- and 26-register modes        */
+/*  r18                       Temporary                                     Temporary     Unused in 22- and 26-register modes        */
+/*  r19                       Temporary                                     Temporary     Unused in 22- and 26-register modes        */
+/*  r20                       Permanent                                     Permanent     Unused in 22- and 26-register modes        */
+/*  r21                       Permanent                                     Permanent     Unused in 22- and 26-register modes        */
+/*  r22                       Permanent                                     Permanent     Unused in 22- and 26-register modes        */
+/*  r23                       Permanent                                     Permanent     Unused in 22-register mode                 */
+/*  r24                       Permanent                                     Permanent     Unused in 22-register mode                 */
+/*  r25                       Permanent                                     Permanent                                                */
+/*  r26                       Permanent                                     Permanent                                                */
+/*  r27                       Permanent                                     Permanent                                                */
+/*  r28       fp              Frame pointer/permanent                       Permanent                                                */
+/*  r29                       Local PIC base register/permanent             Permanent                                                */
+/*  r30       ep              Temporary by default. TDA base register                     Not allocated to if the-no_allocate_ep     */
+/*                            Permanent when TDA is enabled.                Permanent     option is used.                            */
+/*  r31       lp              Link pointer                                  N/A                                                      */
+/*===================================================================================================================================*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version                                                                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define SUM_WORD_ASM_MAJOR                       (1U)
+#define SUM_WORD_ASM_MINOR                       (0U)
+#define SUM_WORD_ASM_PATCH                       (1U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Include File                                                                                                                     */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version Check                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* external declaration of symbols                                                                                                   */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+        .global    _u4_g_SumU4
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* local definitions                                                                                                                 */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Macro                                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Variable Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Constant Variable Definitions                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Static Function Prototypes                                                                                                       */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Function Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Section Definition                                                                                                                */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+        .section    ".text","ax"
+
+/*===================================================================================================================================*/
+/*  U4      u4_g_SumU4(const U4 * u4_ap_WORD, const U2 u2_a_NUM_WORD)                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+_u4_g_SumU4:
+        mov     r0,             r10                                  /* sum = 0                                           */
+
+        cmp     r0,             r6
+        be      eculib_sum_u4_end                                    /* if(u4_ap_WORD == NULL(0)), then eculib_sum_u4_end */
+        cmp     r0,             r7
+        be      eculib_sum_u4_end                                    /* if(u4_a_NUM_WORD == 0U), then eculib_sum_u4_end   */
+
+        shl     0x02,           r7
+
+        mov     0x04,           r8
+        and     r6,             r8
+        cmp     r0,             r8
+        be      eculib_sum_u4_32b_init                               /* if(r8 == 0U), then eculib_sum_u4_32b_init         */
+
+        ld.w    0x0000[r6],     r10
+        add     r8,             r6
+        sub     r8,             r7
+
+eculib_sum_u4_32b_init:
+        movea   0x0020,         r0,             r8
+        cmp     r8,             r7
+        bl      eculib_sum_u4_16b_init                               /* if(r7 < 32U), then eculib_sum_u4_16b_init         */
+
+eculib_sum_u4_32b_next:
+        ld.dw   0x0000[r6],     r12
+        ld.dw   0x0008[r6],     r14
+        ld.dw   0x0010[r6],     r16
+        ld.dw   0x0018[r6],     r18
+
+        add     r12,            r10
+        add     r13,            r10
+        add     r14,            r10
+        add     r15,            r10
+        add     r16,            r10
+        add     r17,            r10
+        add     r18,            r10
+        add     r19,            r10
+
+        add     r8,             r6                                   /* r6 = r6 + 32                                      */
+        sub     r8,             r7                                   /* r7 = r7 - 32                                      */
+        cmp     r8,             r7
+        bnl     eculib_sum_u4_32b_next                                 /* if(r7 >= 32U), then eculib_sum_u4_32b_next      */
+
+eculib_sum_u4_16b_init:
+        movea   0x0010,         r0,             r8
+        cmp     r8,             r7
+        bl      eculib_sum_u4_8b_init                                /* if(r7 >= 16U), then eculib_sum_u4_8b_init         */
+
+        ld.dw   0x0000[r6],     r12
+        ld.dw   0x0008[r6],     r14
+
+        add     r12,            r10
+        add     r13,            r10
+        add     r14,            r10
+        add     r15,            r10
+
+        add     r8,             r6                                   /* r6 = r6 + 16                                      */
+        sub     r8,             r7                                   /* r7 = r7 - 16                                      */
+
+eculib_sum_u4_8b_init:
+        mov     0x08,           r8
+        cmp     r8,             r7
+        bl      eculib_sum_u4_4b_init                                /* if(r7 >= 4U), then eculib_sum_u4_4b_init          */
+
+        ld.dw   0x0000[r6],     r12
+
+        add     r12,            r10
+        add     r13,            r10
+
+        add     r8,             r6                                   /* r6 = r6 + 8                                       */
+        sub     r8,             r7                                   /* r7 = r7 - 8                                       */
+
+eculib_sum_u4_4b_init:
+        mov     0x04,           r8
+        cmp     r8,             r7
+        bl      eculib_sum_u4_end                                    /* if(r7 < 4U), then eculib_sum_u4_end               */
+
+        ld.w    0x0000[r6],     r12
+        add     r12,            r10
+
+eculib_sum_u4_end:
+        jmp     [lp]
+
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Version         Date        Author  Change Description                                                                           */
+/* ---------------  ----------  ------  -------------------------------------------------------------------------------------------  */
+/*  1.0.0            9/ 8/2022  TN      new                                                                                          */
+/*  1.0.1           11/ 9/2023  KN      Improvement : Warning MISRA-C-Rule7.2 was fixed.                                             */
+/*                                                                                                                                   */
+/*  * TN = Takashi Nagai, DENSO                                                                                                      */
+/*  * KN = Keigo Nomura , Denso Create                                                                                               */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/

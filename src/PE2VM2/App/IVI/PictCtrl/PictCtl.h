@@ -11,6 +11,50 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* 電源起動状態(暫定) */
+#define PICT_NOREDUN_STATE_OFF                          (0U)    /* OFF */
+#define PICT_NOREDUN_STATE_PARK                         (1U)    /* 駐車中起動 */
+#define PICT_NOREDUN_STATE_APPOFF                       (2U)    /* 見た目オフ起動 */
+#define PICT_NOREDUN_STATE_APPON                        (3U)    /* 見た目オン起動 */
+
+/* SIP異常情報(暫定) */
+#define PICT_SIP_ERR_OFF                                (0U)
+#define PICT_SIP_ERR_ON                                 (1U)
+
+/* カメラ有効領域 */
+#define PICT_CAN_CAM_SIZE_NONE                          (0x00U) /* 未確定 */
+#define PICT_CAN_CAM_SIZE_1920X1080                     (0x01U) /* 1920 x 1080 */
+#define PICT_CAN_CAM_SIZE_1920X954                      (0x02U) /* 1920 x 954 */
+#define PICT_CAN_CAM_SIZE_1920X900                      (0x03U) /* 1920 x 900 */
+#define PICT_CAN_CAM_SIZE_1920X720                      (0x04U) /* 1920 x 720 */
+#define PICT_CAN_CAM_SIZE_1280X846                      (0x05U) /* 1280 x 846 */
+#define PICT_CAN_CAM_SIZE_1280X720                      (0x06U) /* 1280 x 720 */
+#define PICT_CAN_CAM_SIZE_1280x621                      (0x07U) /* 1280 x 621 */
+#define PICT_CAN_CAM_SIZE_1696X954                      (0x08U) /* 1696 x 954 */
+#define PICT_CAN_CAM_SIZE_1104X621                      (0x09U) /* 1104 x 621 */
+
+/* カメラシステム種別(ADAS/変換BOX) */
+#define PICT_GVIFIF_NONE                                (0x00U) /* GVIF IF 無し */
+#define PICT_GVIFIF_ADAS                                (0x01U) /* GVIF IF ADAS */
+#define PICT_GVIFIF_CNVBOX                              (0x02U) /* GVIF IF 変換BOX */
+
+/* カメラシステム種別(ドメコン有/ドメコン無) */
+#define PICT_KIND_CAM_NONE                              (0x00U) /* カメラ無し */
+#define PICT_KIND_DOMECON_NONE                          (0x01U) /* ドメコン無 */
+#define PICT_KIND_DOMECON_EXIST                         (0x02U) /* ドメコン有 */
+
+/* カメラ同期判定 */
+#define PICT_CAM_SYNC_CHK_OK                            (0x00U) /* カメラ同期判定結果：「正常」 */
+#define PICT_CAM_SYNC_CHK_NG                            (0x01U) /* カメラ同期判定結果：「異常」 */
+#define PICT_CAM_SYNC_CHK_UNJDG                         (0xFFU) /* カメラ同期判定結果：「未判定」   */
+
+/* 画質モード */
+#define PICT_VIS_KIND_CAM                               (1U)    /* 画質モード:カメラ     */
+
+/* ポーリング結果 */        
+#define PICT_POLLPORT_OFF                               (0U)    /* OFF */
+#define PICT_POLLPORT_ON                                (1U)    /* ON */
+#define PICT_POLLPORT_UNFIX                             (0xFFU) /* 未確定 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -31,9 +75,17 @@ void    vd_g_PictCtl_Init(void);
 void    vd_g_PictCtl_MainTask(void);
 void    vd_g_PictCtl_RcvBCC1S05(void);
 void    vd_g_PictCtl_DispICFail(void);
-void    vd_g_PictCtl_RcvPwCamKindReq(void);
 void    vd_g_PictCtl_DispQualPraChk(U1 u1_a_MODE);
-
+U1      u1_g_PictCtl_CamStsGet(void);
+U1      u1_g_PictCtl_GetCamDiagMode(void);
+U1      u1_g_PictCtl_CamSizeSts(void);
+U1      u1_g_PictCtl_CamKindSts(void);
+U1      u1_g_PictCtl_CamSyncSts(void);
+U1      u1_g_PictCtl_RcvQualModeRevFlgSts(void);
+U1      u1_g_PictCtl_RcvQualModeRevDate(void);
+/* 暫定 */
+U1      u1_g_PictCtl_StartSts(void);
+U1      u1_s_PictCtl_SiPErrstsInfo(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

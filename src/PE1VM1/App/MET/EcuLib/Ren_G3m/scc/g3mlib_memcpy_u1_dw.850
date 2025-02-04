@@ -1,0 +1,483 @@
+/* 1.0.1 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/*  Renesas RH850/D1x : memcpy_u1_dw.850                                                                                             */
+/*                                                                                                                                   */
+/*  Compiler : Greenhills RH850                                                                                                      */
+/*                                                                                                                                   */
+/*  Usage of General Register :                                                                                                      */
+/*  Register, Alternate Name, Common Usage,                                 Attribute,    Notes                                      */
+/*  r0        zero            Zero (read-only)                              Permanent                                                */
+/*  r1                        Address generation in compiler and assembler  ?                                                        */
+/*  r2        hp              Handler stack pointer/Temporary               Temporary                                                */
+/*  r3        sp              Stack pointer                                 N/A                                                      */
+/*  r4        gp              Global pointer (SDA and PID base register)    Permanent                                                */
+/*  r5        tp              ROSDA base register                           Permanent                                                */
+/*  r6                        Parameters                                    Temporary                                                */
+/*  r7                        Parameters                                    Temporary                                                */
+/*  r8                        Parameters                                    Temporary                                                */
+/*  r9                        Parameters                                    Temporary                                                */
+/*  r10                       Function return value/temporary               Temporary                                                */
+/*  r11                       High part of 64-bit return value/temporary    Temporary                                                */
+/*  r12                       Temporary                                     Temporary                                                */
+/*  r13                       Temporary                                     Temporary                                                */
+/*  r14                       Temporary                                     Temporary                                                */
+/*  r15                       Temporary                                     Temporary     Unused in 22-register mode                 */
+/*  r16                       Temporary                                     Temporary     Unused in 22-register mode                 */
+/*  r17                       Temporary                                     Temporary     Unused in 22- and 26-register modes        */
+/*  r18                       Temporary                                     Temporary     Unused in 22- and 26-register modes        */
+/*  r19                       Temporary                                     Temporary     Unused in 22- and 26-register modes        */
+/*  r20                       Permanent                                     Permanent     Unused in 22- and 26-register modes        */
+/*  r21                       Permanent                                     Permanent     Unused in 22- and 26-register modes        */
+/*  r22                       Permanent                                     Permanent     Unused in 22- and 26-register modes        */
+/*  r23                       Permanent                                     Permanent     Unused in 22-register mode                 */
+/*  r24                       Permanent                                     Permanent     Unused in 22-register mode                 */
+/*  r25                       Permanent                                     Permanent                                                */
+/*  r26                       Permanent                                     Permanent                                                */
+/*  r27                       Permanent                                     Permanent                                                */
+/*  r28       fp              Frame pointer/permanent                       Permanent                                                */
+/*  r29                       Local PIC base register/permanent             Permanent                                                */
+/*  r30       ep              Temporary by default. TDA base register                     Not allocated to if the-no_allocate_ep     */
+/*                            Permanent when TDA is enabled.                Permanent     option is used.                            */
+/*  r31       lp              Link pointer                                  N/A                                                      */
+/*===================================================================================================================================*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version                                                                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define MEM_CPY_BYTE_DW_MAJOR                   (1U)
+#define MEM_CPY_BYTE_DW_MINOR                   (0U)
+#define MEM_CPY_BYTE_DW_PATCH                   (1U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Include File                                                                                                                     */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version Check                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* external declaration of symbols                                                                                                   */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+        .global    _vd_g_MemcpyU1_dw
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* local definitions                                                                                                                 */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* '< 11' will slow down copying due to branching overhead      */
+/* In this case, copy in a simple loop                          */
+#define OPT_BYTES_DW            8
+
+#define OFS1_LSR                24
+#define OFS1_LSL                8
+#define OFS2_LSR                16
+#define OFS2_LSL                16
+#define OFS3_LSR                8
+#define OFS3_LSL                24
+#define W4_BYTES                16
+#define W2_BYTES                8
+#define W1_BYTES                4
+
+#define HALF_BITS               16
+#define BYTE_BITS               8
+
+/*===================================================================================================================================*/
+/*  void    vd_g_MemcpyU1_dw(U1 * u1_ap_cpydst, const U1 * u1_ap_CPYSRC, const U4 u4_a_NUM_BYTE)                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+_vd_g_MemcpyU1_dw:
+        cmp     OPT_BYTES_DW,    r8
+        bl      byte_copy_dw
+        
+        /*****  align source to word  *****/
+loop_sa:
+        andi    0x03,    r7,     r9
+        be      ofs_switch
+        ld.b    0x0000[r7],     r9
+        st.b    r9,             0x0000[r6]
+        add     0x01,    r7             /* r7 = r7 + 1  */
+        add     0x01,    r6             /* r6 = r6 + 1  */
+        addi    -1,      r8,     r8     /* r8 = r8 - 1  */
+        jr      loop_sa
+
+        /*****  switch by alignment of destination  *****/
+ofs_switch:
+        andi    0x03,    r6,     r9
+        be      ofs0
+        cmp     2,              r9
+        be      ofs2
+        bnl     ofs3
+        jr      ofs1
+        
+        /*****  destination is aligned to word  *****/
+ofs0:
+        cmp     W4_BYTES,       r8
+        bl      ofs0_2w
+
+ofs0_4w_lp:
+        ld.dw   0x0000[r7],     r14
+        ld.dw   0x0008[r7],     r16
+        st.dw   r14,            0x0000[r6]
+        st.dw   r16,            0x0008[r6]
+
+        addi    16,     r7,       r7   /* r7 = r7 + 16 */
+        addi    16,     r6,       r6   /* r6 = r6 + 16 */
+        addi    -16,    r8,       r8   /* r8 = r8 - 16 */
+        cmp     W4_BYTES,       r8
+        bnl     ofs0_4w_lp
+
+ofs0_2w:
+        cmp     W2_BYTES,       r8
+        bl      ofs0_1w
+        ld.dw   0x0000[r7],     r14
+        st.dw   r14,            0x0000[r6]
+        addi    8,      r7,     r7
+        addi    8,      r6,     r6
+        addi    -8,     r8,     r8      /* r8 = r8 - 8  */
+
+ofs0_1w:
+        cmp     W1_BYTES,       r8
+        bl      opt_end
+        ld.w    0x0000[r7],     r9
+        st.w    r9,             0x0000[r6]
+        addi    4,      r7,     r7
+        addi    4,      r6,     r6
+        addi    -4,     r8,     r8        /* r8 = r8 - 4  */
+        jr      opt_end
+        
+        /*****  destination is aligned to word + 1  *****/
+ofs1:
+        ld.w    0x0000[r7],     r15
+        add     0x04,    r7
+        addi    -4,     r8,       r8        /* r8 = r8 - 4  */
+        st.b    r15,            0x0000[r6]
+        add     1,      r6
+        shr     BYTE_BITS,        r15
+        st.h    r15,            0x0000[r6]
+        add     2,      r6
+        shr     HALF_BITS,     r15
+        mov     r15,     r12      /* pass 1 bytes to next loop */
+        cmp     W4_BYTES,       r8
+        bl      ofs1_2w
+
+ofs1_4w_lp:
+/*----------------------------------------------*/
+/* register usage                               */
+/* [in]  r12     : 1 byte from previous loop    */
+/* [in]  r16-r19 : read data from source        */
+/* [out] r12-r15 : write data to destination    */
+/* [tmp] r9,r10                                 */
+/*----------------------------------------------*/
+        ld.dw   0x0000[r7],   r16
+        ld.dw   0x0008[r7],   r18
+        mov     OFS1_LSL,       r9
+        shl     r9,    r16,     r10    /* r10 = r16 << 8             */
+        or      r10,    r12            /* r12 = r12 | r10(r16 << 8)  */
+        mov     OFS1_LSR,       r9
+        shr     r9,    r16,     r13    /* r13 = r16 >> 24            */
+        mov     OFS1_LSL,       r9
+        shl     r9,    r17,    r10    /* r10 = r17 << 8            */
+        or      r10,    r13            /* r13 = r13 | r10(r17 << 8) */
+        mov     OFS1_LSR,       r9
+        shr     r9,    r17,    r14    /* r14 = r17 >> 24           */
+
+        mov     OFS1_LSL,       r9
+        shl     r9,    r18,     r10    /* r10 = r18 << 8             */
+        or      r10,    r14            /* r14 = r14 | r10(r18 << 8)  */
+        mov     OFS1_LSR,       r9
+        shr     r9,    r18,     r15    /* r15 = r18 >> 24            */
+        mov     OFS1_LSL,       r9
+        shl     r9,    r19,    r10    /* r10 = r19 << 8            */
+        or      r10,    r15            /* r15 = r15 | r10(r19 << 8) */
+        st.dw   r12,    0x0000[r6]
+        st.dw   r14,    0x0008[r6]
+        mov     OFS1_LSR,       r9
+        shr     r9,    r19,    r12    /* r12 = r19 >> 24           */
+                                       /* pass 1 bytes to next loop */
+        addi    16,     r7,      r7   /* r7 = r7 + 16          */
+        addi    16,     r6,      r6   /* r6 = r6 + 16          */
+        addi    -16,    r8,      r8    /* r8 = r8 - 16         */
+        cmp     W4_BYTES,       r8
+        bnl     ofs1_4w_lp
+
+ofs1_2w:
+        cmp     W2_BYTES,       r8
+        bl      ofs1_1w
+/*----------------------------------------------*/
+/* register usage                               */
+/* [in]  r12     : 1 byte from previous loop    */
+/* [in]  r16,r17 : read data from source        */
+/* [out] r12,r13 : write data to destination    */
+/* [tmp] r9,r10                                 */
+/*----------------------------------------------*/
+        ld.dw   0x0000[r7],   r16
+        mov     OFS1_LSL,       r9
+        shl     r9,    r16,     r10    /* r10 = r16 << 8             */
+        or      r10,    r12            /* r12 = r12 | r10(r16 << 8)  */
+        mov     OFS1_LSR,       r9
+        shr     r9,    r16,     r13    /* r13 = r16 >> 24            */
+        mov     OFS1_LSL,       r9
+        shl     r9,    r17,    r10    /* r10 = r17 << 8            */
+        or      r10,    r13            /* r13 = r13 | r10(r17 << 8) */
+        st.dw   r12,    0x0000[r6]
+        mov     OFS1_LSR,       r9
+        shr     r9,    r17,    r12    /* r12 = r17 >> 24           */
+                                       /* pass 1 bytes to next loop */
+        addi    8,      r7,      r7    /* r7 = r7 + 8               */
+        addi    8,      r6,      r6    /* r6 = r6 + 8               */
+        addi    -8,     r8,      r8    /* r8 = r8 - 8               */
+        
+ofs1_1w:
+        cmp     W1_BYTES,       r8
+        bl      ofs1_e
+        mov     OFS1_LSR,       r18     /* r18 = 24                  */
+        mov     OFS1_LSL,       r19     /* r19 = 8                   */
+        ld.w    0x0000[r7],     r9
+        shl     r19,    r9,     r10    /* r10 = r9 << 8              */
+        or      r10,    r12            /* r12 = r12 | r10(r9 << 8)   */
+        st.w    r12,            0x0000[r6]
+        shr     r18,    r9,     r12    /* r12 = r9 >> 24            */
+                                       /* pass 1 bytes to next loop */
+        addi    4,      r7,      r7    /* r7 = r7 + 4               */
+        addi    4,      r6,      r6    /* r6 = r6 + 4               */
+        addi    -4,     r8,      r8    /* r8 = r8 - 4               */
+        
+ofs1_e:
+        st.b    r12,    0x0000[r6]      /* write 1 byte from previous loop */
+        add     0x01,   r6       /* write 1 byte from previous loop */
+        jr      opt_end
+
+        /*****  destination is aligned to word + 2  *****/
+ofs2:
+        ld.w    0x0000[r7],     r9
+        st.h    r9,             0x0000[r6]
+        mov     OFS2_LSR,       r18     /* r18 = 16                     */
+        shr     r18,    r9,     r12     /* pass 2 bytes to next loop */
+        
+        addi    4,      r7,     r7      /* r7 = r7 + 4                  */
+        addi    2,      r6,     r6      /* r6 = r6 + 2                  */
+        addi    -4,     r8,     r8      /* r8 = r8 - 4                  */
+        cmp     W4_BYTES,       r8
+        bl      ofs2_2w
+        
+ofs2_4w_lp:
+/*----------------------------------------------*/
+/* register usage                               */
+/* [in]  r12     : 1 byte from previous loop    */
+/* [in]  r16-r19 : read data from source        */
+/* [out] r12-r15 : write data to destination    */
+/* [tmp] r9,r10                                 */
+/*----------------------------------------------*/
+        ld.dw   0x0000[r7],   r16
+        ld.dw   0x0008[r7],   r18
+        mov     OFS2_LSL,       r9
+        shl     r9,    r16,     r10    /* r10 = r16 << 16             */
+        or      r10,    r12            /* r12 = r12 | r10(r16 << 16)  */
+        mov     OFS2_LSR,       r9
+        shr     r9,    r16,     r13    /* r13 = r16 >> 16            */
+        mov     OFS2_LSL,       r9
+        shl     r9,    r17,    r10    /* r10 = r17 << 16            */
+        or      r10,    r13            /* r13 = r13 | r10(r17 << 16) */
+        mov     OFS2_LSR,       r9
+        shr     r9,    r17,    r14    /* r14 = r17 >> 16           */
+
+        mov     OFS2_LSL,       r9
+        shl     r9,    r18,     r10    /* r10 = r18 << 16             */
+        or      r10,    r14            /* r14 = r14 | r10(r18 << 16)  */
+        mov     OFS2_LSR,       r9
+        shr     r9,    r18,     r15    /* r15 = r18 >> 16            */
+        mov     OFS2_LSL,       r9
+        shl     r9,    r19,    r10    /* r10 = r19 << 16            */
+        or      r10,    r15            /* r15 = r15 | r10(r19 << 16) */
+        st.dw   r12,    0x0000[r6]
+        st.dw   r14,    0x0008[r6]
+        mov     OFS2_LSR,       r9
+        shr     r9,    r19,    r12    /* r12 = r19 >> 16           */
+                                       /* pass 2 bytes to next loop */
+        addi    16,     r7,      r7   /* r7 = r7 + 16          */
+        addi    16,     r6,      r6   /* r6 = r6 + 16          */
+        addi    -16,    r8,      r8    /* r8 = r8 - 16         */
+        cmp     W4_BYTES,       r8
+        bnl     ofs2_4w_lp
+
+ofs2_2w:
+        cmp     W2_BYTES,       r8
+        bl      ofs2_1w
+/*----------------------------------------------*/
+/* register usage                               */
+/* [in]  r12     : 1 byte from previous loop    */
+/* [in]  r16,r17 : read data from source        */
+/* [out] r12,r13 : write data to destination    */
+/* [tmp] r9,r10                                 */
+/*----------------------------------------------*/
+        ld.dw   0x0000[r7],     r16
+        mov     OFS2_LSL,       r9
+        shl     r9,    r16,     r10     /* r10 = r16 << 16              */
+        or      r10,    r12             /* r12 = r12 | r10(r16 << 16)   */
+        mov     OFS2_LSR,       r9
+        shr     r9,    r16,     r13     /* r13 = r16 >> 16              */
+        mov     OFS2_LSL,       r9
+        shl     r9,    r17,     r10     /* r10 = r17 << 16              */
+        or      r10,    r13             /* r13 = r13 | r10(r17 << 16)   */
+        st.dw   r12,    0x0000[r6]
+        mov     OFS2_LSR,       r9
+        shr     r9,    r17,     r12     /* r12 = r17 >> 16              */
+                                        /* pass 2 bytes to next loop    */
+        addi    8,      r7,     r7      /* r7 = r7 + 8                  */
+        addi    8,      r6,     r6      /* r6 = r6 + 8                  */
+        addi    -8,     r8,     r8      /* r8 = r8 - 8                  */
+        
+ofs2_1w:
+        cmp     W1_BYTES,       r8
+        bl      ofs2_e
+        mov     OFS2_LSR,       r18     /* r18 = 16                     */
+        mov     OFS2_LSL,       r19     /* r19 = 16                     */
+        ld.w    0x0000[r7],     r9
+        shl     r19,    r9,     r10     /* r10 = r9 << 16               */
+        or      r10,    r12             /* r12 = r12 | r10(r9 << 16)    */
+        st.w    r12,            0x0000[r6]
+        shr     r18,    r9,     r12     /* r12 = r9 >> 16               */
+                                        /* pass 2 bytes to next loop    */
+        addi    4,      r7,      r7     /* r7 = r7 + 4                  */
+        addi    4,      r6,      r6     /* r6 = r6 + 4                  */
+        addi    -4,     r8,      r8     /* r8 = r8 - 4                  */
+        
+ofs2_e:
+        st.h    r12,    0x0000[r6]      /* write 2 byte from previous loop */
+        add     0x02,   r6
+        jr      opt_end
+
+        /*****  destination is aligned to word + 3  *****/
+ofs3:
+        ld.w    0x0000[r7],     r9
+        addi    4,      r7,     r7
+        addi    -4,     r8,     r8      /* r8 = r8 - 4  */
+        st.b    r9,             0x0000[r6]
+        addi    1,      r6,     r6
+        mov     OFS3_LSR,       r18     /* r18 = 8                   */
+        shr     r18,    r9,     r12     /* pass 3 bytes to next loop */
+        cmp     W4_BYTES,       r8
+        bl      ofs3_2w
+
+ofs3_4w_lp:
+/*----------------------------------------------*/
+/* register usage                               */
+/* [in]  r12     : 1 byte from previous loop    */
+/* [in]  r16-r19 : read data from source        */
+/* [out] r12-r15 : write data to destination    */
+/* [tmp] r9,r10                                 */
+/*----------------------------------------------*/
+        ld.dw   0x0000[r7],   r16
+        ld.dw   0x0008[r7],   r18
+        mov     OFS3_LSL,       r9
+        shl     r9,    r16,     r10    /* r10 = r16 << 24            */
+        or      r10,    r12            /* r12 = r12 | r10(r16 << 8)  */
+        mov     OFS3_LSR,       r9
+        shr     r9,    r16,     r13    /* r13 = r16 >> 8             */
+        mov     OFS3_LSL,       r9
+        shl     r9,    r17,    r10    /* r10 = r17 << 24           */
+        or      r10,    r13            /* r13 = r13 | r10(r17 << 8) */
+        mov     OFS3_LSR,       r9
+        shr     r9,    r17,    r14    /* r14 = r17 >> 8            */
+
+        mov     OFS3_LSL,       r9
+        shl     r9,    r18,     r10    /* r10 = r18 << 24            */
+        or      r10,    r14            /* r14 = r14 | r10(r18 << 8)  */
+        mov     OFS3_LSR,       r9
+        shr     r9,    r18,     r15    /* r15 = r18 >> 8             */
+        mov     OFS3_LSL,       r9
+        shl     r9,    r19,    r10    /* r10 = r19 << 24           */
+        or      r10,    r15            /* r15 = r15 | r10(r19 << 8) */
+        st.dw   r12,    0x0000[r6]
+        st.dw   r14,    0x0008[r6]
+        mov     OFS3_LSR,       r9
+        shr     r9,    r19,    r12    /* r12 = r19 >> 8            */
+                                       /* pass 3 bytes to next loop */
+        addi    16,     r7,      r7   /* r7 = r7 + 16          */
+        addi    16,     r6,      r6   /* r6 = r6 + 16          */
+        addi    -16,    r8,      r8    /* r8 = r8 - 16         */
+        cmp     W4_BYTES,       r8
+        bnl     ofs3_4w_lp
+
+ofs3_2w:
+        cmp     W2_BYTES,       r8
+        bl      ofs3_1w
+/*----------------------------------------------*/
+/* register usage                               */
+/* [in]  r12     : 3 byte from previous loop    */
+/* [in]  r16,r17 : read data from source        */
+/* [out] r12,r13 : write data to destination    */
+/* [tmp] r9,r10                                 */
+/*----------------------------------------------*/
+        ld.dw   0x0000[r7],     r16
+        mov     OFS3_LSL,       r9
+        shl     r9,     r16,    r10     /* r10 = r16 << 24              */
+        or      r10,    r12             /* r12 = r12 | r10(r16 << 24)   */
+        mov     OFS3_LSR,       r9
+        shr     r9,     r16,    r13     /* r13 = r16 >> 8               */
+        mov     OFS3_LSL,       r9
+        shl     r9,     r17,    r10     /* r10 = r17 << 24              */
+        or      r10,    r13             /* r13 = r13 | r10(r17 << 24)   */
+        st.dw   r12,    0x0000[r6]
+        mov     OFS3_LSR,       r9
+        shr     r9,    r17,     r12     /* r14 = r17 >> 8               */
+                                        /* pass 3 bytes to next loop    */
+        addi    8,      r7,     r7      /* r7 = r7 + 8                  */
+        addi    8,      r6,     r6      /* r6 = r6 + 8                  */
+        addi    -8,     r8,     r8      /* r8 = r8 - 8                  */
+        
+ofs3_1w:
+        cmp     W1_BYTES,       r8
+        bl      ofs3_e
+
+        mov     OFS3_LSR,       r18     /* r18 = 8                      */
+        mov     OFS3_LSL,       r19     /* r19 = 24                     */
+        ld.w    0x0000[r7],     r9
+        shl     r19,    r9,     r10     /* r10 = r9 << 24               */
+        or      r10,    r12             /* r12 = r12 | r10(r9 << 24)    */
+        st.w    r12,            0x0000[r6]
+        shr     r18,    r9,     r12     /* r12 = r9 >> 8                */
+                                        /* pass 1 bytes to next loop    */
+        addi    4,      r7,     r7      /* r7 = r7 + 4                  */
+        addi    4,      r6,     r6      /* r6 = r6 + 4                  */
+        addi    -4,     r8,     r8      /* r8 = r8 - 4                  */
+        
+ofs3_e:
+        st.h    r12,    0x0000[r6]      /* write bytes from previous loop       */
+        shr     16,     r12             /* right shift written bytes            */
+        st.b    r12,    0x0002[r6]
+        addi    3,      r6,      r6     /* r6 = r6 + 3               */
+        
+opt_end:
+        
+byte_copy_dw:
+        cmp     r0,     r8              /* r8 == 0?     */
+        be      exit_memcpy_dw
+byte_lp_dw:
+        ld.b    0x00[r7],       r9
+        st.b    r9,             0x00[r6]
+        addi    1,      r7,     r7      /* r7 = r7 + 1  */
+        addi    1,      r6,     r6      /* r6 = r6 + 1  */
+        addi    -1,     r8,     r8      /* r8 = r8 - 1  */
+        bne     byte_lp_dw
+        
+exit_memcpy_dw:
+        jmp     [lp]
+
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Change History                                                                                                                   */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Version  Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  1.0.0     3/15/2023  AM       new                                                                                                */
+/*  1.0.1    11/ 9/2023  KN       Improvement : Warning MISRA-C-Rule7.2 was fixed.                                                   */
+/*                                                                                                                                   */
+/*  * AM = Akira Motomatsu, Denso Create                                                                                             */
+/*  * KN = Keigo Nomura   , Denso Create                                                                                             */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/

@@ -22,6 +22,7 @@
 #include "Mcu_PwrCtrl.h"
 
 /* Communication         */
+#include "oxcan.h"
 /* Complex Device Driver */
 /* MCAL                  */
 /* Memory                */
@@ -87,6 +88,7 @@ U1      u1_g_BswMCfghkShtdwnchk1st(void)
     static const FP_U1_AND    fp_sp_u1_BSW_M_SHTDWN_CHK[] = {
         &u1_s_BswMCfgIsShtdwnOk,
         &u1_g_Mcu_PwrCtrl_ShtdwnOk
+        &u1_g_oXCANEcuShtdwnOk
     };
 
     U1                        u1_t_1st;

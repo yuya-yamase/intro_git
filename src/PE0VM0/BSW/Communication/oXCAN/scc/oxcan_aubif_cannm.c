@@ -110,7 +110,7 @@ Std_ReturnType CanTrcv_SetOpMode(uint8 Transceiver, CanTrcv_TrcvModeType OpMode)
 /*===================================================================================================================================*/
 void    CanNm_CbkBusWakeup( NetworkHandleType nmChannelHandle, uint8 WkupKind )
 {
-	L3R_GateM_NmWakeup(nmChannelHandle);
+	L3R_GateM_NmWakeup(CHM_ChCnvtr_Aub_To_LogCh[nmChannelHandle]);
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 

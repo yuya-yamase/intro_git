@@ -38,7 +38,7 @@
 
 #elif defined FLS_STOP_SEC_CONST_32
 #undef FLS_STOP_SEC_CONST_32
-#pragma ghs section text = default
+#pragma ghs section rodata = default
 #undef MEMMAP_ERROR
 
 #elif defined FLS_START_SEC_CONST_CONFIG_32
@@ -49,12 +49,12 @@
 
 #elif defined FLS_START_SEC_VAR_NO_INIT_32
 #undef FLS_START_SEC_VAR_NO_INIT_32
-#pragma ghs section text = "bsw_memif_text"
+#pragma ghs section bss = "bsw_fls_bss"
 #undef MEMMAP_ERROR
 
 #elif defined FLS_STOP_SEC_VAR_NO_INIT_32
 #undef FLS_STOP_SEC_VAR_NO_INIT_32
-#pragma ghs section text = default
+#pragma ghs section bss = default
 #undef MEMMAP_ERROR
 
 #elif defined FLS_START_SEC_VAR_INIT_WAKEUP_32

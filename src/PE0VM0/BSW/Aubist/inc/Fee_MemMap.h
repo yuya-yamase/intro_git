@@ -58,7 +58,7 @@
 
 #elif defined FEE_STOP_SEC_CONST_32
 #undef FEE_STOP_SEC_CONST_32
-#pragma ghs section text = default
+#pragma ghs section rodata = default
 #undef MEMMAP_ERROR
 
 #elif defined FEE_START_SEC_CONST_CONFIG_32
@@ -68,7 +68,7 @@
 
 #elif defined FEE_STOP_SEC_CONST_CONFIG_32
 #undef FEE_STOP_SEC_CONST_CONFIG_32
-#pragma ghs section text = default
+#pragma ghs section rodata = default
 #undef MEMMAP_ERROR
 
 #elif defined FEE_PROXY_START_SEC_CONST_CONFIG
@@ -78,7 +78,7 @@
 
 #elif defined FEE_PROXY_STOP_SEC_CONST_CONFIG
 #undef FEE_PROXY_STOP_SEC_CONST_CONFIG
-#pragma ghs section text = default
+#pragma ghs section rodata = default
 #undef MEMMAP_ERROR
 
 #elif defined FEE_START_SEC_VAR_NO_INIT_32
@@ -88,7 +88,7 @@
 
 #elif defined FEE_STOP_SEC_VAR_NO_INIT_32
 #undef FEE_STOP_SEC_VAR_NO_INIT_32
-#pragma ghs section text = default
+#pragma ghs section bss = default
 #undef MEMMAP_ERROR
 
 #elif defined FEE_START_SEC_VAR_INIT_WAKEUP_32
@@ -98,7 +98,7 @@
 
 #elif defined FEE_STOP_SEC_VAR_INIT_WAKEUP_32
 #undef FEE_STOP_SEC_VAR_INIT_WAKEUP_32
-#pragma ghs section text = default
+#pragma ghs section bss = default
 #undef MEMMAP_ERROR
 
 #elif defined FEE_START_SEC_VAR_CLEARED_32
@@ -108,7 +108,7 @@
 
 #elif defined FEE_STOP_SEC_VAR_CLEARED_32
 #undef FEE_STOP_SEC_VAR_CLEARED_32
-#pragma ghs section text = default
+#pragma ghs section bss = default
 #undef MEMMAP_ERROR
 
 #elif defined FEE_PROXY_START_SEC_VAR_NO_INIT_SHARE
@@ -118,7 +118,7 @@
 
 #elif defined FEE_PROXY_STOP_SEC_VAR_NO_INIT_SHARE
 #undef FEE_PROXY_STOP_SEC_VAR_NO_INIT_SHARE
-#pragma ghs section text = default
+#pragma ghs section bss = default
 #undef MEMMAP_ERROR
 
 #elif defined FEE_START_SEC_APPL_DATA

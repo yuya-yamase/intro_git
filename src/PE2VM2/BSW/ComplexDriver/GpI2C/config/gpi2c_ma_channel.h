@@ -32,9 +32,15 @@
 #define GP_I2C_MA_CH_1                           (1U)   /* [Destination slaves]: P-IC    , RTC-IC  , Gryo   ,           */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GP_I2C_MA_NUM_SLA                        (2U)
-#define GP_I2C_MA_SLA_0_PMIC                     (0U)   /* Sample configuration of MCU PMIC */
-#define GP_I2C_MA_SLA_1_RTC                      (1U)   /* Sample configuration of RTC-IC   */
+#define GP_I2C_MA_NUM_SLA                        (8U)
+#define GP_I2C_MA_SLA_0_PMIC                     (0U)   /* MCU PMIC : W 0xA2, R 0xA3 */
+#define GP_I2C_MA_SLA_1_VIDEO_IC                 (1U)   /* Video-IC : W 0x72, R 0x73 */
+#define GP_I2C_MA_SLA_2_GVIF_RX                  (2U)   /* GVIF-Rx  : W 0x46, R 0x47 */
+#define GP_I2C_MA_SLA_3_GVIF_TX                  (3U)   /* GVIF-Tx  : W 0x48, R 0x49 */
+#define GP_I2C_MA_SLA_4_POWER                    (4U)   /* P-IC     : W 0xDE, R 0xDF */
+#define GP_I2C_MA_SLA_5_RTC                      (5U)   /* RTC-IC   : W 0x64, R 0x65 */
+#define GP_I2C_MA_SLA_6_GYRO                     (6U)   /* Gryo     : W 0xD2, R 0xD3 */
+#define GP_I2C_MA_SLA_7_G_MONI                   (7U)   /* Gmoni    : W 0x32, R 0x33 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

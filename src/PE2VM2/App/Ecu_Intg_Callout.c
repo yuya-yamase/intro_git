@@ -75,6 +75,9 @@ Std_ReturnType Ecu_Intg_initCdd(Ecu_Intg_BootCauseType u4BootCause)
     }
 
     u1_s_5ms_counter = 0;
+
+    vd_g_XspiIviInit();
+
     return E_OK;
 }
 
@@ -83,6 +86,8 @@ Std_ReturnType Ecu_Intg_initAppCallout(Ecu_Intg_BootCauseType u4BootCause)
 {
     /* XSPI初期化処理 */
     xspi_Init( XSPI_CH_01 );
+
+    vd_g_XspiIviInit();
 
     /* IVI */
     vd_g_Ivi_PwrCtrl_Main_Bon_init();
