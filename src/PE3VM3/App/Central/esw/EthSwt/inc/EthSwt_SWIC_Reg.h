@@ -10,8 +10,6 @@ void EthSwt_SWIC_Port5ModeReq(const uint16 transreq_len, const uint8* const tran
 void EthSwt_SWIC_Port6ModeReq(const uint16 transreq_len, const uint8* const transreq_data);
 void EthSwt_SWIC_Port7ModeReq(const uint16 transreq_len, const uint8* const transreq_data);
 void EthSwt_SWIC_Port8ModeReq(const uint16 transreq_len, const uint8* const transreq_data);
-void EthSwt_SWIC_RESET_N_Lo(void);
-void EthSwt_SWIC_RESET_N_Hi(void);
 #if 0    /* VN-HILS‚Æ‚µ‚Ä‚Í•s—v‚È‚½‚ß–³Œø‰» */
 Std_ReturnType EthSwt_SWIC_Reg_GetLinkState(const uint8 SwitchPortIdx, EthTrcv_LinkStateType *const LinkStatePtr);
 Std_ReturnType EthSwt_SWIC_Reg_GetFrameInfo(const uint8 SwitchPortIdx, EthSwt_DiscardInfoType *const FrameInfoPtr);

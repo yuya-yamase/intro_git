@@ -24,6 +24,7 @@ typedef uint8 EthTrcv_LinkStateType;
 #define ETHTRCV_LINK_STATE_ACTIVE               ((EthTrcv_LinkStateType)1U)
 
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr);
+void EthSwt_SWIC_DeInit(void);
 #if 0    /* VN-HILSとしては不要なため無効化 */
 Std_ReturnType EthSwt_SWIC_GetLinkState(uint8 SwitchIdx, uint8 SwitchPortIdx, EthTrcv_LinkStateType *LinkStatePtr);
 #endif    /* VN-HILSとしては不要なため無効化 */
@@ -42,4 +43,7 @@ Std_ReturnType EthSwt_SWIC_GetIDS_FiltFrmInfo(const uint8 SwitchIdx, const uint8
 void EthSwt_SWIC_Log_Init(void);
 #endif    /* VN-HILSでは、SWICのログ記録を行わない想定のため、実装しない。シス検以降で使用するかは検討が必要。 */
 void EthSwt_SWIC_SpiRegChkNotify(uint32 status);
+void EthSwt_SWIC_RESET_N_Lo(void);
+void EthSwt_SWIC_RESET_N_Hi(void);
+
 #endif /*ETHSWT_SWIC_H*/
