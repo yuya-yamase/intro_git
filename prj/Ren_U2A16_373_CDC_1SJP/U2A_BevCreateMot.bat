@@ -1,5 +1,7 @@
 @echo off
 
+call build_cfg.bat
+
 rem *** elf->motファイル変換用パスとオプション
 set BUILDER=C:\GHS\RH850_V.R9144\comp_201715\
 set GSREC_EXE=%BUILDER%\gsrec.exe
@@ -45,7 +47,6 @@ rem *** PE3VM3設定
 set PE3VM3_OUT=%PE3VM3_ROM_DIR%PE3VM3.elf
 set PE3VM3_MAP=%PE3VM3_ROM_DIR%PE3VM3.map
 
-set MOT_FILE=CDC_Hypervisor_U2A16.mot
 set MOT_FILE_TEMP=CDC_Hypervisor_U2A16_temp.mot
 
 echo ***************************************
@@ -135,14 +136,14 @@ goto CONVERT_COMPLETE
 
 :ERROR_CONVERT
 echo.
-echo [ERROR]:CDC_Hypervisor_U2A16.mot は作成できませんでした。
+echo [ERROR]:%MOT_FILE% は作成できませんでした。
 echo.
 REM pause
 exit \b
 
 :CONVERT_COMPLETE
 echo.
-echo [COMPLETE]:CDC_Hypervisor_U2A16.mot を作成しました。
+echo [COMPLETE]:%MOT_FILE% を作成しました。
 echo.
 
 REM pause
