@@ -29,6 +29,7 @@
 #else
 #include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
+#include "veh_opemd_STUB.h"
 #endif
 
 #include "g3mlib_mtrxsrch.h"
@@ -196,9 +197,15 @@ void    vd_g_AlertOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     U4                       u4_t_evt;
     U1                       u1_t_vom_chk;
 
+#if 0   /* BEV BSW provisionally */
     u4_t_mdbit   = u4_a_MDBIT & ((U4)VEH_OPEMD_MDBIT_ACC |
                                  (U4)VEH_OPEMD_MDBIT_IGN |
                                  (U4)VEH_OPEMD_MDBIT_STA);
+#else
+    u4_t_mdbit   = u4_a_MDBIT & ((U4)VEH_OPEMD_STUB_MDBIT_ACC |
+                                 (U4)VEH_OPEMD_STUB_MDBIT_IGN |
+                                 (U4)VEH_OPEMD_STUB_MDBIT_STA);
+#endif
 
     u1_t_vom_chk = u1_sp_ALERT_VOM_CHK[u4_t_mdbit];
     u4_t_evt     = u4_a_EVTBIT & ((U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF | (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON);
@@ -404,9 +411,15 @@ static U1      u1_s_AlertVomchk(void)
         u2_s_alert_rmtx_tm_elpsd++;
     }
 
+#if 0   /* BEV BSW provisionally */
     u4_t_mdbit   = u4_g_VehopemdMdfield() & ((U4)VEH_OPEMD_MDBIT_ACC |
                                              (U4)VEH_OPEMD_MDBIT_IGN |
                                              (U4)VEH_OPEMD_MDBIT_STA);
+#else
+    u4_t_mdbit   = u4_g_VehopemdConvertMdfield() & ((U4)VEH_OPEMD_STUB_MDBIT_ACC |
+                                                    (U4)VEH_OPEMD_STUB_MDBIT_IGN |
+                                                    (U4)VEH_OPEMD_STUB_MDBIT_STA);
+#endif
 
     u1_t_vom_chk = u1_sp_ALERT_VOM_CHK[u4_t_mdbit];
     u1_t_ign_on  = u1_t_vom_chk & (U1)ALERT_VOM_IGN_ON;

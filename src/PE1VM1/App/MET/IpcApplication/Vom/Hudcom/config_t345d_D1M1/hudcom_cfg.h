@@ -21,6 +21,10 @@
 /* ! Caution for cross-reference with Vardef domain ! */
 #include "aip_common.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_STUB.h"
+#endif
 
 #include "rim_ctl.h"
 #if 0   /* BEV BSW provisionally */
@@ -67,7 +71,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macros                                                                                                                           */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #define u1_HCOM_GETIG()					((U1)((u4_g_VehopemdMdfield()&(U4)VEH_OPEMD_MDBIT_IGN)>>HCOM_VOM_SHIFT))           /* IG                             */ 
+#else
+#define u1_HCOM_GETIG()					((U1)((u4_g_VehopemdConvertMdfield()&(U4)VEH_OPEMD_STUB_MDBIT_IGN)>>HCOM_VOM_SHIFT))           /* IG                             */ 
+#endif
 #define u1_HCOM_GETMSTWRN()				(u1_g_DspbldTtBldrGetMstTt())                          /* MSC Disp Req                 */
 #define u1_HCOM_GETCNTT()				(u1_g_DspmgrGetCntt((U1)HCOM_DSPSTM_00))               /* DSP_STM00_CNTT       */
 #define vd_HCOM_CANSGNL_NAV_MASK(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MASK,  (x)))
