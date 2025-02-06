@@ -274,7 +274,7 @@
 #define XSPI_MCUID_MINMAXCHK_NUM            (5U)
 #define XSPI_EVSCHG_TMCHG_LINK_SIZE         (EVSCHG_TIMCHG_SCHDINFO_SIZE)
 
-#define XSPI_VDF_AREA_SIZE                  (7U)
+#define XSPI_VDF_AREA_SIZE                  (9U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -558,6 +558,8 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     }
 
     vd_s_XSpiCfgEsopt(&u4_ap_pdu_tx[4]);
+
+    u4_ap_pdu_tx[11] |= (U4)TRUE << 7;                                 /*  SYS_PERSET               */ /* BEV SV1 provisionally */
 
     u1_t_var_ecojdg_type = u1_g_VardefEcoJudge();
     u4_ap_pdu_tx[13]  = ((U4)u1_t_var_ecojdg_type & (U4)0x01U) << 9;   /*  VAR_ECOJDG_TYPE                                      */
