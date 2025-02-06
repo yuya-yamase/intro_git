@@ -85,7 +85,7 @@ ar_inttbl_0:   /* Core 0 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 49 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 50 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 51 */
-    .word   ar_c2isr_INTSDMAC0CH5_ISR  /* INTC2 : 52 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 52 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 53 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 54 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 55 */
@@ -834,15 +834,6 @@ _ar_v850_get_interrupt_base:
 #include "Os_MemMap.h"
     .extern _mcos_v850_cat2isr_entry
     .extern _mcos_v850_cat1isr_entry
-
-    .type   ar_c2isr_INTSDMAC0CH5_ISR, $function
-    .global ar_c2isr_INTSDMAC0CH5_ISR
-    .extern _ar_isrcb_INTSDMAC0CH5_ISR
-ar_c2isr_INTSDMAC0CH5_ISR:
-    pushsp  r1
-    mov     _ar_isrcb_INTSDMAC0CH5_ISR, r1
-    jmp     _mcos_v850_cat2isr_entry[r0]
-    .size   ar_c2isr_INTSDMAC0CH5_ISR, .-ar_c2isr_INTSDMAC0CH5_ISR
 
     .type   ar_c2isr_INTOSTM3_ISR, $function
     .global ar_c2isr_INTOSTM3_ISR

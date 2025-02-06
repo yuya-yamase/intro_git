@@ -4,7 +4,7 @@
 
     -I${LIB_DIR}
     -I${VEHOPE_DIR}/scc
-    -I${VEHOPE_DIR}/config_U2A16_met
+    -I${VEHOPE_DIR}/config
     -I${CAN_DIR}/inc
 
     -I${MS_DIR}/Nvmc/core/config/Common

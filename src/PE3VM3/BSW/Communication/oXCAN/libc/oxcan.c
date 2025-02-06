@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_C_MAJOR                            (1U)
-#define OXCAN_C_MINOR                            (4U)
+#define OXCAN_C_MAJOR                            (2U)
+#define OXCAN_C_MINOR                            (0U)
 #define OXCAN_C_PATCH                            (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -653,7 +653,7 @@ static void    vd_s_oXCANInit(const U1 u1_a_WKU_INIT)
     U1                  u1_t_br_chk;
 #endif /* #if (OXCAN_BACK_NWORD > 0U) */
 
-    u4_s_oxcan_sysbit = (U4)OXCAN_SYS_BAT;
+    u4_s_oxcan_sysbit = (U4)OXCAN_SYS_PAR;
 
     vd_g_oXCANAubIfInit();
 
@@ -1001,11 +1001,13 @@ static void    vd_s_oXCANSecurityDeInit(void)
 /*  1.2.1     1/31/2024  TI       Changed oxcan_usrhk.h include order.                                                               */
 /*  1.3.0     2/22/2024  MI       Support GetErrorStatus for Aubist/SEC(Icus/Csm/Crypto-sw).                                         */
 /*  1.4.0     5/23/2024  HU       Bug Fix : CXPI Tranciever IC was stopped in vd_g_oXCANShutdown if CXPI was supported.              */
+/*  2.0.0     2/ 3/2025  ST       Support BevStep3                                                                                   */
 /*                                                                                                                                   */
 /*  * HU   = Hayato Usui, DENSO                                                                                                      */
 /*  * TM   = Takanori Maruyama, DENSO                                                                                                */
 /*  * SY   = Satoshi Yamada, DENSO                                                                                                   */
 /*  * TI   = Tomoko Inuzuka, DENSO                                                                                                   */
 /*  * MI   = Masahiko Izumi, DENSO                                                                                                   */
+/*  * ST   = Satoshi Tanaka, DENSO                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -5,7 +5,7 @@
 #    -I${ROOT_DIR}/BSW/CmnHdr/CmnHdr/Platform
     -I${LIB_DIR}
 
-    -I${VEHOPE_DIR}/config_U2A16_met
+    -I${VEHOPE_DIR}/config
     -I${VEHOPE_DIR}/scc
 
 scc/veh_opemd.c

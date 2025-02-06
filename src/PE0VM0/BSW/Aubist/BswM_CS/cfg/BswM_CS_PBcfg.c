@@ -49,7 +49,7 @@
 /*--------------------------------------------------------------------------*/
 /* ECU power supply */
 BswConst BswU4 bsw_bswm_cs_sysst_u4ECUInitPw[BSW_BSWM_CS_SYSSTATTBLNUM] = {
-    (BswU4)(BSW_BSWM_CS_SYSSTAT_BAT)
+    (BswU4)(BswM_CSConf_SysStatusName_PAR)
    ,(BswU4)(BSW_BSWM_CS_SYSSTAT_NONE)
 };
 

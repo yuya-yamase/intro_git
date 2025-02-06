@@ -26,15 +26,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_MDBIT_UNKNWN                   (0x80000000U)
 #define VEH_OPEMD_MDBIT_LMTD                     (0x00000000U)
-#define VEH_OPEMD_MDBIT_NRML                     (0x00000001U)
-#define VEH_OPEMD_MDBIT_CRNK                     (0x00000002U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define u1_g_VehopemdInNrml()                    (u1_g_VehopemdMdchk((U4)0x00000003U,          (U4)VEH_OPEMD_MDBIT_NRML))
-#define u1_g_VehopemdInCrnk()                    (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_CRNK, (U4)VEH_OPEMD_MDBIT_CRNK))
-#define u1_g_VehopemdInLmtd()                    (u1_g_VehopemdMdchk((U4)0x00000003U,          (U4)VEH_OPEMD_MDBIT_LMTD))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */

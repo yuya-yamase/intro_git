@@ -353,13 +353,6 @@ ar_alarmcb_t * const ar_alarmcb_ptr_table[AR_OS_NUM_ALARMS] = {
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTSDMAC0CH5_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
 ar_isrcb_t ar_isrcb_INTOSTM3_ISR;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
@@ -401,10 +394,6 @@ const ar_isr_config_t ar_isr_configs[AR_OS_NUM_C2ISRS] = {
     {
         &(ar_int_configs[2]),
         (const ar_osap_config_t  *)NULL
-    },
-    {
-        &(ar_int_configs[3]),
-        (const ar_osap_config_t  *)NULL
     }
 };
 
@@ -419,7 +408,6 @@ const ar_isr_config_t ar_isr_configs[AR_OS_NUM_C2ISRS] = {
 #include "Os_MemMap.h"
 
 ar_isrcb_t * const ar_isrcb_ptr_table[AR_OS_NUM_C2ISRS] = {
-    &ar_isrcb_INTSDMAC0CH5_ISR,
     &ar_isrcb_INTOSTM3_ISR,
     &ar_isrcb_INTP4_ISR,
     &ar_isrcb_OS_SYSTEM_COUNTER_ISR0
@@ -440,12 +428,6 @@ ar_isrcb_t * const ar_isrcb_ptr_table[AR_OS_NUM_C2ISRS] = {
 const ar_int_config_t ar_int_configs[AR_OS_NUM_C2ISRS] = {
     /* for Category 2 ISR */
 
-    {
-        &GENNAME_ISR(INTSDMAC0CH5_ISR),
-        HAL_V850_INTC2_OFFSET + 52U,  /* INTC2 : 52 */
-        -4,
-        AR_DISABLE
-    },
     {
         &GENNAME_ISR(INTOSTM3_ISR),
         HAL_V850_INTC2_OFFSET + 202U,  /* INTC2 : 202 */

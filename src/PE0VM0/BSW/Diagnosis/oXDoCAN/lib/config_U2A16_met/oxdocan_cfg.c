@@ -604,7 +604,7 @@ U1      u1_g_oXDoCANCfgEomchk(void)
 
     return(u1_t_eom);
 #else  /* #ifdef ES_INSPECT_H */
-    return(u1_g_VehopemdIgnOn() | (U1)OXDC_EOM_RPG_EN);
+    return(u1_g_VehopemdPonEmr() | (U1)OXDC_EOM_RPG_EN);
 #endif /* #ifdef ES_INSPECT_H */
 }
 #ifdef OXDC_FUNC_DTC_EXTEND
