@@ -132,7 +132,7 @@ BswConst Bsw_Com_MsgInfoType bsw_com_stMsgInfoTbl[BSW_COM_MSG_NUM] = {
 BswConst BswU4 bsw_com_u4SysStatTbl[BSW_COM_MSG_NUM][BSW_COM_SYSSTATTBLNUM] =
 {
      {    /* [0] MSG_BDC1S81_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
 };

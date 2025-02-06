@@ -696,11 +696,21 @@
 #define bsw_com_UD_R_ComConf_ComSignal_KZK1E3_D(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_KZK1E3_D), ((BswU2)DAT_OFS_KZK1E3_D), (BswU1)32U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 
 /* Symbolic Name Reference - SysStatus */
-#define ComConf_SysStatusName_BAT                           (BSW_COM_u4IPDUGROUP_BAT)
-#define ComConf_SysStatusName_ACC                           (BSW_COM_u4IPDUGROUP_ACC)
-#define ComConf_SysStatusName_IG                            (BSW_COM_u4IPDUGROUP_IG)
-#define ComConf_SysStatusName_PBA                           (BSW_COM_u4IPDUGROUP_USER1)
-#define ComConf_SysStatusName_IGR                           (BSW_COM_u4IPDUGROUP_USER2)
+#define ComConf_SysStatusName_PAR                           (BSW_COM_u4IPDUGROUP_BAT)
+#define ComConf_SysStatusName_RID                           (BSW_COM_u4IPDUGROUP_ACC)
+#define ComConf_SysStatusName_PON                           (BSW_COM_u4IPDUGROUP_IG)
+#define ComConf_SysStatusName_POE                           (BSW_COM_u4IPDUGROUP_USER1)
+#define ComConf_SysStatusName_PAR_HV                        (BSW_COM_u4IPDUGROUP_USER2)
+#define ComConf_SysStatusName_PAR_HVHC                      (BSW_COM_u4IPDUGROUP_USER3)
+#define ComConf_SysStatusName_CHK                           (BSW_COM_u4IPDUGROUP_USER4)
+#define ComConf_SysStatusName_PDM                           (BSW_COM_u4IPDUGROUP_USER5)
+#define ComConf_SysStatusName_OTA1                          (BSW_COM_u4IPDUGROUP_USER6)
+#define ComConf_SysStatusName_OTA2                          (BSW_COM_u4IPDUGROUP_USER7)
+#define ComConf_SysStatusName_OTA3                          (BSW_COM_u4IPDUGROUP_USER8)
+#define ComConf_SysStatusName_OTA4                          (BSW_COM_u4IPDUGROUP_USER9)
+#define ComConf_SysStatusName_WRP                           (BSW_COM_u4IPDUGROUP_USER10)
+#define ComConf_SysStatusName_EDS                           (BSW_COM_u4IPDUGROUP_USER11)
+#define ComConf_SysStatusName_PAO                           (BSW_COM_u4IPDUGROUP_USER12)
 #define ComConf_SysStatusName_VCAN                          (BSW_COM_u4IPDUGROUP_USER29)
 
 

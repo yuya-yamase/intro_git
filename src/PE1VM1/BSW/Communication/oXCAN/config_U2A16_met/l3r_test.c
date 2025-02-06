@@ -341,7 +341,7 @@ static void    vd_s_L3rTestEvTx(void)
     U4                          u4_t_offset;
     U4                          u4_t_vom;
 
-    u4_t_vom = u4_g_VehopemdMdfield() & (U4)VEH_OPEMD_MDBIT_IGN;
+    u4_t_vom = u4_g_VehopemdMdfield() & (U4)VEH_OPEMD_MDBIT_POE;
     if(u4_t_vom == (U4)0U){
 
         u4_s_l3r_test_ev_frt = (U4)U4_MAX;

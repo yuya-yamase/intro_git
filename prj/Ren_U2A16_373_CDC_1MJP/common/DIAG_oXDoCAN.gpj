@@ -28,7 +28,7 @@
     -I${OXCAN_DIR}/scc
 
     -I${VEHOPE_DIR}/scc
-    -I${VEHOPE_DIR}/config_U2A16_met
+    -I${VEHOPE_DIR}/config
 
     -I${OXDOCAN_DIR}/lib/config_U2A16_met
     -I${OXDOCAN_DIR}/lib/scc

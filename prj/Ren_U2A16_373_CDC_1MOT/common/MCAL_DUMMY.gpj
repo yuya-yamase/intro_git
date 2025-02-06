@@ -6,5 +6,4 @@
 
     -I${LIB_DIR}
 
-#Rte_Dem_Type.c
 int_drv.c

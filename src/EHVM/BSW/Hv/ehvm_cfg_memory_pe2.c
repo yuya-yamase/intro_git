@@ -166,10 +166,7 @@ EhvmConst ehvm_peg_config_t ehvm_PegConfigData_pe2 = {
 /****************************************************************************************/
 /* Hv4mCommonInterruptControllerGuardConfig - Hv4mIntc2gCoreConfig                      */
 /****************************************************************************************/
-static EhvmConst ehvm_intc2g_n_channel_switch_t s_Intc2g_ChannelSwitchData_VM0_pe2[14] = {
-    {
-        INTC2GPROT_ADDRESS(50U)  /* Intc2gProtAddress */
-    },
+static EhvmConst ehvm_intc2g_n_channel_switch_t s_Intc2g_ChannelSwitchData_VM0_pe2[13] = {
     {
         INTC2GPROT_ADDRESS(107U)  /* Intc2gProtAddress */
     },
@@ -215,7 +212,7 @@ static EhvmConst ehvm_intc2g_prot_switch_t s_Intc2g_ProtSwitchData_pe2[VM_NUM_PE
     {
         INTC2GMPID_ADDRESS(PEID_2),             /* Intc2gMpidAddress */
         0x0000000CU,                            /* Intc2gSPID */
-        14U,                                    /* Intc2gNumOfChannelSwitch */
+        13U,                                    /* Intc2gNumOfChannelSwitch */
         &s_Intc2g_ChannelSwitchData_VM0_pe2[0]  /* Intc2gChannelSwitchPtr */
     }
 };

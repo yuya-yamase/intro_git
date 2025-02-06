@@ -477,11 +477,21 @@
 /* Symbolic Name Reference - PNC No. */
 
 /* Symbolic Name Reference - SysStatus */
-#define ComMConf_SysStatusName_BAT                          (BSW_COMM_PWSTAT_BAT)
-#define ComMConf_SysStatusName_ACC                          (BSW_COMM_PWSTAT_ACC)
-#define ComMConf_SysStatusName_IG                           (BSW_COMM_PWSTAT_IG)
-#define ComMConf_SysStatusName_PBA                          (BSW_COMM_PWSTAT_USER1)
-#define ComMConf_SysStatusName_IGR                          (BSW_COMM_PWSTAT_USER2)
+#define ComMConf_SysStatusName_PAR                          (BSW_COMM_PWSTAT_BAT)
+#define ComMConf_SysStatusName_RID                          (BSW_COMM_PWSTAT_ACC)
+#define ComMConf_SysStatusName_PON                          (BSW_COMM_PWSTAT_IG)
+#define ComMConf_SysStatusName_POE                          (BSW_COMM_PWSTAT_USER1)
+#define ComMConf_SysStatusName_PAR_HV                       (BSW_COMM_PWSTAT_USER2)
+#define ComMConf_SysStatusName_PAR_HVHC                     (BSW_COMM_PWSTAT_USER3)
+#define ComMConf_SysStatusName_CHK                          (BSW_COMM_PWSTAT_USER4)
+#define ComMConf_SysStatusName_PDM                          (BSW_COMM_PWSTAT_USER5)
+#define ComMConf_SysStatusName_OTA1                         (BSW_COMM_PWSTAT_USER6)
+#define ComMConf_SysStatusName_OTA2                         (BSW_COMM_PWSTAT_USER7)
+#define ComMConf_SysStatusName_OTA3                         (BSW_COMM_PWSTAT_USER8)
+#define ComMConf_SysStatusName_OTA4                         (BSW_COMM_PWSTAT_USER9)
+#define ComMConf_SysStatusName_WRP                          (BSW_COMM_PWSTAT_USER10)
+#define ComMConf_SysStatusName_EDS                          (BSW_COMM_PWSTAT_USER11)
+#define ComMConf_SysStatusName_PAO                          (BSW_COMM_PWSTAT_USER12)
 #define ComMConf_SysStatusName_VCAN                         (BSW_COMM_PWSTAT_USER29)
 
 /* Symbolic Name Reference - UserAwake */

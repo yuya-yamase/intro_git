@@ -41,7 +41,6 @@ extern TASK(Task_MM_Medium);
 
 #define OS_START_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"
-extern ISR(INTSDMAC0CH3_ISR);
 extern ISR(INTOSTM1_ISR);
 extern ISR(INTP38_ISR);
 extern ISR(OS_SYSTEM_COUNTER_ISR0);
@@ -61,15 +60,6 @@ extern ISR(INTRIIC1TEI_ISR);
 /*
  * Category 2 ISR control blocks
  */
-
-
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-extern ar_isrcb_t ar_isrcb_INTSDMAC0CH3_ISR;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
 
 
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
