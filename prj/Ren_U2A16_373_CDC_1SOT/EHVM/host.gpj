@@ -48,6 +48,6 @@ ${CMN_DIR}/MCAL_PORT.gpj
 ${CMN_DIR}/MCAL_SPI.gpj
 #${CMN_DIR}/MCAL_WDG.gpj
 ${CMN_DIR}/MCAL_Intc.gpj
-${PRJ_DIR}/EHVM/MCAL_DUMMY.gpj
+${CMN_DIR}/MCAL_DUMMY.gpj
 ${CMN_DIR}/LWH_project.gpj
 ${CMN_DIR}/LWH_integration.gpj

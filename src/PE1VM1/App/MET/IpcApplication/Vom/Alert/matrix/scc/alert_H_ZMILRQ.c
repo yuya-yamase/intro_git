@@ -291,7 +291,7 @@ static U4      u4_s_AlertH_zmilrqTtAmbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u1_t_disp_jdg = u1_g_AlertZmilrqDispJdg();
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S99_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_H_ZMILRQ_TTAMB_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQA, &u1_t_sgnl);
@@ -322,7 +322,7 @@ static U4      u4_s_AlertH_zmilrqTtRedSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u1_t_disp_jdg = u1_g_AlertZmilrqDispJdg();
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S99_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_H_ZMILRQ_TTRED_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQR, &u1_t_sgnl);
@@ -351,7 +351,7 @@ static U4      u4_s_AlertH_zmilrqRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_sgnl_red;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S99_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_H_ZMILRQ_RWRN_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sgnl_red = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQR, &u1_t_sgnl_red);

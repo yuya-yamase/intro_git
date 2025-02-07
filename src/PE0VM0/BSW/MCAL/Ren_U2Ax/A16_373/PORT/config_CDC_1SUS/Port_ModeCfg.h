@@ -928,6 +928,956 @@ extern CONST(Port_SetPinModeType, PORT_CONST) cstPort_SetPinMode[];
 #define	PORT_U2A_MODE_CFG_MODE_FLAG_23					(1U)
 #define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_23			(0U)
 #define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_23			(0U)
+/* P10_0 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_24					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_MODE_24						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_24					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_24					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_24					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_24			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_24				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_24					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_24					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_24					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_24				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_24			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_24		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_24				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_24				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_24				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_24			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PORT_24						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_24					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_24				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_24					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_24		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_24					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_24		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_24			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_24				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_24			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_24					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_24			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_24			(0U)
+/* P10_1 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_25					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_MODE_25						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_25					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_25					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_25					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_25			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_25				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_25					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_25					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_25					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_25				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_25			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_25		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_25				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_25				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_25				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_25			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PORT_25						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_25					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_25				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_25					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_25		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_25					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_25		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_25			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_25				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_25			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_25					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_25			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_25			(0U)
+/* P22_3 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_26					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_MODE_26						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_26					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_26					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_26					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_26			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_26				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_26					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_26					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_26					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_26				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_26			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_26		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_26				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_26				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_26				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_26			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PORT_26						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_26					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_26				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_26					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_26		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_26					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_26		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_26			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_26				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_26			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_26					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_26			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_26			(0U)
+/* P22_4 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_27					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_MODE_27						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_27					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_27					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_27					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_27			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_27				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_27					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_27					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_27					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_27				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_27			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_27		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_27				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_27				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_27				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_27			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PORT_27						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_27					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_27				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_27					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_27		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_27					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_27		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_27			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_27				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_27			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_27					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_27			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_27			(0U)
+/* P10_0 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_28						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_28			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_28				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_28				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_28			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_28		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_28				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_28				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_28				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_28			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_28						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_28				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_28					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_28		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_28					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_28		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_28			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_28				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_28			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_28					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_28			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_28			(0U)
+/* P10_1 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_29						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_29			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_29				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_29				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_29			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_29		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_29				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_29				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_29				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_29			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_29						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_29				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_29					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_29		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_29					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_29		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_29			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_29				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_29			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_29					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_29			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_29			(0U)
+/* P22_3 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_30						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_30			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_30				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_30				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_30			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_30		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_30				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_30				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_30				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_30			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_30						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_30				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_30					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_30		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_30					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_30		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_30			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_30				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_30			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_30					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_30			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_30			(0U)
+/* P22_4 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_31						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_31			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_31				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_31				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_31			((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_31		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_31				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_31				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_31				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_31			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_31						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_31				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_31					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_31		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_31					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_31		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_31			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_31				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_31			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_31					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_31			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_31			(0U)
+/* P2_10 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_32						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_32			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_32				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_32				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_32			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_32		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_32				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_32				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_32				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_32			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_32						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_32				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_32					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_32		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_32					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_32		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_32			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_32				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_32			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_32					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_32			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_32			(0U)
+/* P2_11 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_33					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_33						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_33					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_33					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_33					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_33			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_33				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_33					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_33					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_33					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_33				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_33			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_33		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_33				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_33				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_33				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_33			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_33						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_33					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_33				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_33					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_33		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_33					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_33		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_33			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_33				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_33			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_33					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_33			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_33			(0U)
+/* P2_12 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_34						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_34			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_34				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_34				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_34			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_34		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_34				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_34				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_34				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_34			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_34						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_34				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_34					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_34		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_34					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_34		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_34			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_34				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_34			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_34					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_34			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_34			(0U)
+/* P2_13 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_35						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_35			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_35				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_35				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_35			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_35		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_35				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_35				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_35				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_35			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_35						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_35				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_35					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_35		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_35					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_35		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_35			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_35				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_35			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_35					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_35			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_35			(0U)
+/* P2_14 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_36						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_36			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_36				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_36				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_36			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_36		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_36				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_36				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_36				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_36			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_36						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_36				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_36					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_36		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_36					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_36		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_36			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_36				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_36			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_36					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_36			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_36			(0U)
+/* P4_5 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_37						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_37			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_37				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_37				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_37			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_37		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_37				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_37				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_37				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_37			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_37						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_37				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_37					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_37		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_37					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_37		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_37			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_37				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_37			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_37					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_37			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_37			(0U)
+/* P4_6 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_38						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_38			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_38				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_38				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_38			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_38		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_38				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_38				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_38				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_38			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_38						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_38				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_38					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_38		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_38					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_38		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_38			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_38				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_38			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_38					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_38			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_38			(0U)
+/* P4_7 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_39					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_39						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_39					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_39					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_39					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_39			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_39				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_39					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_39					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_39					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_39				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_39			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_39		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_39				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_39				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_39				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_39			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_39						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_39					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_39				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_39					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_39		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_39					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_39		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_39			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_39				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_39			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_39					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_39			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_39			(0U)
+/* P4_10 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_40					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_40						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_40					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_40					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_40					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_40			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_40				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_40					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_40					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_40					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_40				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_40			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_40		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_40				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_40				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_40				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_40			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_40						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_40					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_40				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_40					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_40		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_40					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_40		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_40			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_40				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_40			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_40					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_40			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_40			(0U)
+/* P20_1 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_41						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_41			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_41				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_41				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_41			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_41		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_41				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_41				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_41				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_41			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_41						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_41				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_41					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_41		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_41					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_41		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_41			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_41				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_41			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_41					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_41			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_41			(0U)
+/* P20_2 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_42						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_42			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_42				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_42				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_42			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_42		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_42				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_42				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_42				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_42			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_42						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_42				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_42					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_42		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_42					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_42		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_42			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_42				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_42			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_42					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_42			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_42			(0U)
+/* P21_0 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_43					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_43						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_43					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_43					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_43					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_43			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_43				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_43					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_43					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_43					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_43				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_43			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_43		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_43				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_43				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_43				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_43			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_43						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_43					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_43				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_43					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_43		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_43					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_43		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_43			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_43				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_43			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_43					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_43			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_43			(0U)
+/* P21_1 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_44					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_44						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_44					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_44					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_44					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_44			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_44				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_44					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_44					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_44					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_44				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_44			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_44		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_44				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_44				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_44				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_44			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_44						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_44					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_44				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_44					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_44		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_44					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_44		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_44			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_44				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_44			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_44					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_44			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_44			(0U)
+/* P21_2 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_45						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_45			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_45				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_45				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_45			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_45		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_45				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_45				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_45				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_45			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_45						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_45				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_45					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_45		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_45					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_45		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_45			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_45				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_45			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_45					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_45			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_45			(0U)
+/* P24_10 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_46					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_46						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_46					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_46					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_46					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_46			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_46				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_46					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_46					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_46					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_46				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_46			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_46		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_46				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_46				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_46				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_46			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_46						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_46					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_46				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_46					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_46		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_46					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_46		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_46			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_46				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_46			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_46					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_46			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_46			(0U)
+/* P24_12 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_47					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_47						((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_47					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_47					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_47					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_47			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_47				((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_47					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_47					((uint8)0x01U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_47					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_47				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_47			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_47		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_47				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_47				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_47				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_47			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_47						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_47					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_47				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_47					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_47		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_47					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_47		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_47			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_47				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_47			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_47					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_47			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_47			(0U)
+/* P24_13 */
+/* Pin Assign And Function */
+#define	PORT_U2A_MODE_CFG_MODE_CTRL_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_MODE_48						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IP_CTRL_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_CTRL_EXP_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_FUNC_CTRL_ADD_EXP_48			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_CTRL_48				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_UP_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PULL_DOWN_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_IN_BUF_SEL_ADV_48				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_48			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OPEN_DRAIN_CTRL_EXP_48		((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DRIVE_STR_CTRL_48				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_UNIV_CHAR_CTRL_48				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_OUT_VAL_INV_48				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_BI_DIRECTION_CTRL_48			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_48						((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_PORT_NOT_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_VOLTAGE_48				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_LVDS_USE_48					((uint8)0x00U)
+
+/* Noise Filter */
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_ENABLE_48		((uint16)0x0000U)
+#define	PORT_U2A_MODE_CFG_FLT_CTRL_48					((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_DIG_NOISE_ELIM_CTRL_48		((uint8)0x00U)
+
+/* Safe State */
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_CTRL_48			((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_48				((uint8)0x00U)
+#define	PORT_U2A_MODE_CFG_ERR_TRG_SEL_EXP_48			((uint8)0x00U)
+
+/* Change Flag */
+#define	PORT_U2A_MODE_CFG_MODE_FLAG_48					(1U)
+#define	PORT_U2A_MODE_CFG_NOISE_FILTER_FLAG_48			(0U)
+#define	PORT_U2A_MODE_CFG_SAFE_STATE_FLAG_48			(0U)
 
 #define	PORT_MODE_CFG_P2_11_0				((Port_PinModeType)0U)
 #define	PORT_MODE_CFG_P2_12_1				((Port_PinModeType)1U)
@@ -953,8 +1903,33 @@ extern CONST(Port_SetPinModeType, PORT_CONST) cstPort_SetPinMode[];
 #define	PORT_MODE_CFG_P8_0_21				((Port_PinModeType)21U)
 #define	PORT_MODE_CFG_P8_2_22				((Port_PinModeType)22U)
 #define	PORT_MODE_CFG_AP5_1_23				((Port_PinModeType)23U)
+#define	PORT_MODE_CFG_P10_0_24				((Port_PinModeType)24U)
+#define	PORT_MODE_CFG_P10_1_25				((Port_PinModeType)25U)
+#define	PORT_MODE_CFG_P22_3_26				((Port_PinModeType)26U)
+#define	PORT_MODE_CFG_P22_4_27				((Port_PinModeType)27U)
+#define	PORT_MODE_CFG_P10_0_28				((Port_PinModeType)28U)
+#define	PORT_MODE_CFG_P10_1_29				((Port_PinModeType)29U)
+#define	PORT_MODE_CFG_P22_3_30				((Port_PinModeType)30U)
+#define	PORT_MODE_CFG_P22_4_31				((Port_PinModeType)31U)
+#define	PORT_MODE_CFG_P2_10_32				((Port_PinModeType)32U)
+#define	PORT_MODE_CFG_P2_11_33				((Port_PinModeType)33U)
+#define	PORT_MODE_CFG_P2_12_34				((Port_PinModeType)34U)
+#define	PORT_MODE_CFG_P2_13_35				((Port_PinModeType)35U)
+#define	PORT_MODE_CFG_P2_14_36				((Port_PinModeType)36U)
+#define	PORT_MODE_CFG_P4_5_37				((Port_PinModeType)37U)
+#define	PORT_MODE_CFG_P4_6_38				((Port_PinModeType)38U)
+#define	PORT_MODE_CFG_P4_7_39				((Port_PinModeType)39U)
+#define	PORT_MODE_CFG_P4_10_40				((Port_PinModeType)40U)
+#define	PORT_MODE_CFG_P20_1_41				((Port_PinModeType)41U)
+#define	PORT_MODE_CFG_P20_2_42				((Port_PinModeType)42U)
+#define	PORT_MODE_CFG_P21_0_43				((Port_PinModeType)43U)
+#define	PORT_MODE_CFG_P21_1_44				((Port_PinModeType)44U)
+#define	PORT_MODE_CFG_P21_2_45				((Port_PinModeType)45U)
+#define	PORT_MODE_CFG_P24_10_46				((Port_PinModeType)46U)
+#define	PORT_MODE_CFG_P24_12_47				((Port_PinModeType)47U)
+#define	PORT_MODE_CFG_P24_13_48				((Port_PinModeType)48U)
 
-#define PORT_MODE_MAX						((Port_PinModeType)24U)
+#define PORT_MODE_MAX						((Port_PinModeType)49U)
 
 #endif /* PORT_MODE_CFG_H */
 /*-- End Of File -------------------------------------------------------------------------------*/

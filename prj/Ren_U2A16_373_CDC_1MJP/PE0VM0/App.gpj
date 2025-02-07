@@ -2,8 +2,10 @@
 [Subproject]
     :optionsFile=${CMN_DIR}/IOHW.opt
     :sourceDir=${APP_DIR}
+    :sourceDir=${APP_DIR}/Common/ExtSigCtrl
 
     -I${CAN_DIR}/inc
+    -I${APP_DIR}/Common
 
     -I${CAN_DIR}/CS/inc
     -I${CAN_DIR}/Com/inc
@@ -15,7 +17,7 @@
     -I${OXCAN_DIR}/libc
     -I${OXCAN_DIR}/scc
     -I${VEHOPE_DIR}/scc
-    -I${VEHOPE_DIR}/config_U2A16_met
+    -I${VEHOPE_DIR}/config
 
     -I${OXDOCAN_DIR}/lib/scc
 
@@ -46,8 +48,13 @@
     -I${CGW_L3R_DIR}/MDL/INFO/UTIL/inc
 
     -I${LIB_DIR}
+    
+    -I${MCAL_DIR}/GPT
+
+    -I${APP_DIR}/Common/ExtSigCtrl
 
 Ecu_Intg_Callout.c
 ShtdwnM/bsw_m.c
 ShtdwnM/cfg/bsw_m_cfg.c
 Stub/stub_u2a.c
+ExtSigCtrl.c

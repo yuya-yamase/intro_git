@@ -328,7 +328,7 @@ static U4      u4_s_AlertC_hcsTtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_msgsts;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ASC1S90,
-                                     (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                     (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                      u2_s_ALERT_C_HCS_TTB_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_c_hcs_ttb_msgsts, u1_t_msgsts);
@@ -364,7 +364,7 @@ static U4      u4_s_AlertC_hcsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_ascext;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ASC1S90,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_C_HCS_TT_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -396,7 +396,7 @@ static U4      u4_s_AlertC_hcsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_ascext;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ASC1S90,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_C_HCS_PD_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sgnl   = (U1)0U;
     u1_t_ascext = u1_g_AlertHcsAscext() & u1_s_ALERT_C_HCS_PD_ASCEXT_MSK;

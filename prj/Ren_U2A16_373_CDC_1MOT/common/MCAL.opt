@@ -28,10 +28,10 @@
     :macro=MCAL_GPT_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Gpt/config_CDC
     :macro=MCAL_I2C_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/I2C/config_CDC
     :macro=MCAL_ICU_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Icu/config_CDC
-    :macro=MCAL_MCU_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/MCU/config_CDC_1M
+    :macro=MCAL_MCU_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/MCU/config_CDC
     :macro=MCAL_PORT_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/PORT/config_CDC_1MOT
     :macro=MCAL_PWM_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Pwm/config_CDC
-    :macro=MCAL_SPI_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/SPI/config_CDC_1M
+    :macro=MCAL_SPI_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/SPI/config_CDC
     :macro=MCAL_UART_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Uart/config_CDC_1M
     :macro=MCAL_WDG_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Wdg/config_CDC
     

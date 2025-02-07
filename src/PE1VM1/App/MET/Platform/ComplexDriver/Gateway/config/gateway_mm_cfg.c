@@ -802,7 +802,7 @@ void vd_g_GwmmCfgPreTask(void)
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)GWMMCFG_TMM_MSG_MM_NUM; u4_t_lpcnt++){
 #ifdef MSG_TBC1S01_RXCH0
         u2_t_msgid = st_sp_GWMMCFG_TMM_CANRXMSG[u4_t_lpcnt].u2_msgid;
-        u1_t_msgsts  = u1_g_oXCANRxStat(u2_t_msgid, (U2)(OXCAN_RX_SYS_NRX_IGR | OXCAN_RX_SYS_TOE_IGR),
+        u1_t_msgsts  = u1_g_oXCANRxStat(u2_t_msgid, (U2)(OXCAN_RX_SYS_NRX_POE | OXCAN_RX_SYS_TOE_POE),
                                         st_sp_GWMMCFG_TMM_CANRXMSG[u4_t_lpcnt].u2_failtim) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_msgsts == (U1)0U){
             u1_t_bufidx = (U1)(u4_t_lpcnt * (U4)GWMMCFG_MSGBUF_LSB);

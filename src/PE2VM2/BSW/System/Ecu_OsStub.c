@@ -32,7 +32,6 @@
  *--------------------------------------------------------------------------*/
 ISR(OS_SYSTEM_COUNTER_ISR0);
 
-ISR(INTSDMAC0CH3_ISR);
 ISR(INTRIIC0EE_ISR);
 ISR(INTRIIC0RI_ISR);
 ISR(INTRIIC0TI_ISR);
@@ -150,11 +149,6 @@ void PreTaskHook(void)
     return;
 }
 #endif /* (AR_OS_USE_PRETASKHOOK == STD_ON) */
-
-ISR(INTSDMAC0CH3_ISR)
-{
-    Dma_INTSDMAC0CH3();
-}
 
 ISR(INTRIIC0EE_ISR)
 {

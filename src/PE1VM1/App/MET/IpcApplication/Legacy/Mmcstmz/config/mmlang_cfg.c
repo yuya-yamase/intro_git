@@ -25,6 +25,10 @@
 #include "oxcan_channel_STUB.h"
 #endif
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 #include "rim_ctl.h"
 #if 0   /* BEV BSW provisionally */
 #else
@@ -249,7 +253,7 @@ U1  u1_g_MmlangCfgMsgsts(void)
     U1  u1_t_msg_sts;
 
     u1_t_msg_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S20,
-                                         (U2)OXCAN_RX_SYS_NRX_ACC | (U2)OXCAN_RX_SYS_TOE_ACC,
+                                         (U2)OXCAN_RX_SYS_NRX_RID | (U2)OXCAN_RX_SYS_TOE_RID,
                                          u2_s_MMLANG_AVN1S20_TOTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_msg_sts);

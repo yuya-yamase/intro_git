@@ -158,7 +158,7 @@ static U4      u4_s_AlertH_tevrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u1_t_enable = u1_g_AlertCfgH_tevrnIsEnable();
     if(u1_t_enable == (U1)TRUE){
         u1_t_msgsts     = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1G02,
-                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                           (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                            u2_s_ALERT_H_TEVRN_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
         u4_t_src_chk    = ((U4)u1_t_msgsts     << u1_s_ALERT_H_TEVRN_LSB_MSG_STS);

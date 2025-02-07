@@ -24,6 +24,10 @@
 #include "gpt_drv_j32.h"
 #include "gpt_drv_b16.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 #include "iohw_diflt.h"
 

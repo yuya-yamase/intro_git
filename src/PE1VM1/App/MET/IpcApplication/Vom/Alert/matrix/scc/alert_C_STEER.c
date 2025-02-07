@@ -332,7 +332,7 @@ static U4      u4_s_AlertC_steerTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPS1S90_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_C_STEERTT_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -364,7 +364,7 @@ static U4      u4_s_AlertC_steerBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     U4              u4_t_src_chk;
 
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPS1S90_RXCH0,
-                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                   (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                    u2_s_ALERT_C_STEERBC_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl       = (U1)0U;
@@ -401,7 +401,7 @@ static U4      u4_s_AlertC_steerPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     U4              u4_t_src_chk;
 
 	u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPS1S90_RXCH0,
-                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                   (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                    u2_s_ALERT_C_STEERPD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_s_alert_c_steerpd_msgsts = u1_t_msgsts;
@@ -459,7 +459,7 @@ static U4      u4_s_AlertC_steerRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts__7v = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPS1S90_RXCH0,
-                                       (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                       (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                        u2_s_ALERT_C_STEERRW_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_t_msgsts__7v & (U1)COM_TIMEOUT) == (U1)0U){
@@ -467,7 +467,7 @@ static U4      u4_s_AlertC_steerRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     }
     else{
         u1_t_msgsts_10v = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPS1S90_RXCH0,
-                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_VDC,
+                                           (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_VDC,
                                            u2_s_ALERT_C_STEERRW_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if((u1_t_msgsts_10v & (U1)COM_TIMEOUT) != (U1)0U){
             u1_s_alert_c_steerrw_msgsts = u1_t_msgsts_10v;

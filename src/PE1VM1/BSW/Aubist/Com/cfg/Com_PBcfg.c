@@ -11360,1083 +11360,1083 @@ BswConst Bsw_Com_MsgInfoType bsw_com_stMsgInfoTbl[BSW_COM_MSG_NUM] = {
 BswConst BswU4 bsw_com_u4SysStatTbl[BSW_COM_MSG_NUM][BSW_COM_SYSSTATTBLNUM] =
 {
      {    /* [0] MSG_CDC1N02_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [1] MSG_CDC1S01_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [2] MSG_CDC1S03_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [3] MSG_DMS1S02_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [4] MSG_HUD1S01_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [5] MSG_MET1S01_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [6] MSG_MET1S02_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [7] MSG_MET1S03_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [8] MSG_MET1S10_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [9] MSG_MET1S11_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [10] MSG_MET1S25_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [11] MSG_MET1S27_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [12] MSG_MET1S28_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [13] MSG_MET1S29_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [14] MSG_MET1S30_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [15] MSG_MET1S33_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [16] MSG_MET1S38_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [17] MSG_MET1S41_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [18] MSG_MET1S43_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [19] MSG_MET1S44_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [20] MSG_MET1S47_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [21] MSG_MET1S52_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [22] MSG_MET1S55_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [23] MSG_MET1S62_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [24] MSG_MET1S70_TXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [25] MSG_ABG1D50_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [26] MSG_ABG1D51_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [27] MSG_ABG1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [28] MSG_ABG1S09_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [29] MSG_ACN1D50_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [30] MSG_ACN1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [31] MSG_ACN1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [32] MSG_ACN1S07_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [33] MSG_ACN1S15_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [34] MSG_ACN1S25_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [35] MSG_ACN1S29_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [36] MSG_ADC1S08_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [37] MSG_ADC1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [38] MSG_ADC1S11_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [39] MSG_ADC1S12_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [40] MSG_ADC1S13_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [41] MSG_ADC1S14_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [42] MSG_ADC1S15_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [43] MSG_ADC1S16_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [44] MSG_ADC1S17_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [45] MSG_ADC1S27_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [46] MSG_ADC1S31_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [47] MSG_ADU1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [48] MSG_ADU1S05_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [49] MSG_ADU1S06_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [50] MSG_ADU1S07_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [51] MSG_ARS1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [52] MSG_ARS1S90_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [53] MSG_BAT1E45_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [54] MSG_BAT1ED1_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [55] MSG_BAT1ED4_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [56] MSG_BAT1ED5_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [57] MSG_BAT1EDA_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [58] MSG_BAT1EDB_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [59] MSG_BAT1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [60] MSG_BAT1S08_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [61] MSG_BAT1S11_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [62] MSG_BAT2ED2_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [63] MSG_BCC1S06_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [64] MSG_BDB1F01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [65] MSG_BDB1F02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [66] MSG_BDB1F03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [67] MSG_BDB1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [68] MSG_BDB1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [69] MSG_BDB1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [70] MSG_BDB1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [71] MSG_BDB1S05_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [72] MSG_BDB1S08_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [73] MSG_BDB1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [74] MSG_BDB1S13_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [75] MSG_BDB1S27_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [76] MSG_BDB1S28_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [77] MSG_BDB1S29_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [78] MSG_BDB1S36_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [79] MSG_BDC1S13_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [80] MSG_BDC1S22_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [81] MSG_BDC1S23_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [82] MSG_BDC1S33_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [83] MSG_BDC1S41_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [84] MSG_BDC1S45_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [85] MSG_BDC1S46_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [86] MSG_BDC1S48_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [87] MSG_BDC1S52_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [88] MSG_BDC1S60_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [89] MSG_BDC1S74_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [90] MSG_BDC1S81_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [91] MSG_BDC1SH8_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [92] MSG_BDC1SZ1_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [93] MSG_BDC1SZ3_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [94] MSG_BDC1SZ5_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [95] MSG_BDF3S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [96] MSG_BDF3S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [97] MSG_BDR3S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [98] MSG_BKD1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [99] MSG_BKD1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [100] MSG_BSR1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [101] MSG_BSR1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [102] MSG_BSR1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [103] MSG_CMB1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [104] MSG_CMB1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [105] MSG_CSR1G10_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [106] MSG_CSR1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [107] MSG_CSR1S07_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [108] MSG_CSR1S08_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [109] MSG_DDM1S00_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [110] MSG_DDM1S09_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [111] MSG_DDM1S12_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [112] MSG_DDM1S16_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [113] MSG_DDM1S17_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [114] MSG_DDM1S32_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [115] MSG_DDM1S35_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [116] MSG_DDM1SFG_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [117] MSG_DDM1SFH_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [118] MSG_DKY1S26_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [119] MSG_DMC1S08_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [120] MSG_DRL1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [121] MSG_DRR1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [122] MSG_DS11S27_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [123] MSG_DS11S37_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [124] MSG_DS11S40_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [125] MSG_DS12F02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [126] MSG_DS12F03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [127] MSG_DST1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [128] MSG_EBU1D01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [129] MSG_ECT1G01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [130] MSG_ECT1G92_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [131] MSG_ECT1S80_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [132] MSG_ECT1S93_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [133] MSG_EHV1E96_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [134] MSG_EHV1F02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [135] MSG_EHV1F04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [136] MSG_EHV1G30_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [137] MSG_EHV1S23_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [138] MSG_EHV1S26_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [139] MSG_EHV1S31_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [140] MSG_EHV1S90_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [141] MSG_EHV1S94_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [142] MSG_EHV1S95_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [143] MSG_EHV1S96_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [144] MSG_EHV1S97_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [145] MSG_EHV1S99_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [146] MSG_EHV2G02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [147] MSG_EHV2G10_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [148] MSG_EHV2G20_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [149] MSG_EHV2G70_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [150] MSG_EIM1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [151] MSG_ENG1C01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [152] MSG_ENG1C02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [153] MSG_ENG1D51_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [154] MSG_ENG1D52_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [155] MSG_ENG1D53_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [156] MSG_ENG1D55_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [157] MSG_ENG1D56_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [158] MSG_ENG1D59_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [159] MSG_ENG1D60_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [160] MSG_ENG1G03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [161] MSG_ENG1G13_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [162] MSG_ENG1G17_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [163] MSG_ENG1G90_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [164] MSG_ENG1G92_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [165] MSG_ENG1S60_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [166] MSG_ENG1S99_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [167] MSG_EPS1D50_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [168] MSG_EPS1S11_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [169] MSG_EPS1S90_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [170] MSG_FCM1C01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [171] MSG_FCM1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [172] MSG_FCM1S12_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [173] MSG_FCM1S39_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [174] MSG_FCM1S40_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [175] MSG_FCM1S41_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [176] MSG_FCM1S49_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [177] MSG_FCM1S51_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [178] MSG_FCM1S52_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [179] MSG_FCM1S58_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [180] MSG_FCM1S70_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [181] MSG_FCM1S76_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [182] MSG_FCM1S78_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [183] MSG_FCM1S79_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [184] MSG_FCM1S90_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [185] MSG_FCM1S92_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [186] MSG_FCM1S95_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [187] MSG_FWD1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG )
+          ( ComConf_SysStatusName_PON )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [188] MSG_IDT1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [189] MSG_IDT1S07_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [190] MSG_IDT1S15_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [191] MSG_IPA1S05_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [192] MSG_ITS1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [193] MSG_ITS1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [194] MSG_ITS1S05_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [195] MSG_LRS1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [196] MSG_LRS1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [197] MSG_LRS1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [198] MSG_LVN1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [199] MSG_MGC1F13_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [200] MSG_PCN1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [201] MSG_PDC1G01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [202] MSG_PDC1G02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [203] MSG_PDS1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [204] MSG_PLG1G15_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [205] MSG_PLG1G16_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [206] MSG_PLG1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [207] MSG_PLG1S05_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [208] MSG_PLG1S06_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [209] MSG_PLG1S20_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [210] MSG_PLG1S21_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [211] MSG_PMN1G03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [212] MSG_PST1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [213] MSG_PWC1S41_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [214] MSG_RCP1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [215] MSG_RCP1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [216] MSG_RRS1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [217] MSG_RRS1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [218] MSG_RRS1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [219] MSG_RSE1G20_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [220] MSG_RSE1G24_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [221] MSG_RSE1G25_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [222] MSG_RSE1G26_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [223] MSG_RSE1G29_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [224] MSG_RSE1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [225] MSG_SBW1G02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [226] MSG_SCN1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [227] MSG_SCN1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [228] MSG_SCS1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [229] MSG_SCS1S11_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [230] MSG_SCS1S14_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [231] MSG_SOL1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [232] MSG_SOL1S06_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [233] MSG_TPM1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [234] MSG_TPM1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [235] MSG_TPM1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [236] MSG_TPM1S05_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [237] MSG_TPM1S07_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [238] MSG_TRA1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [239] MSG_UCB1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [240] MSG_VAS1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [241] MSG_VGR1D50_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [242] MSG_VSC1D51_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [243] MSG_VSC1F01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [244] MSG_VSC1G12_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [245] MSG_VSC1G13_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [246] MSG_VSC1G14_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [247] MSG_VSC1G96_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [248] MSG_VUM1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [249] MSG_WIP1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [250] MSG_ZN11S02_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [251] MSG_ZN11S03_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [252] MSG_ZN11S08_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [253] MSG_ZN11S17_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [254] MSG_ZN11S19_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [255] MSG_ZN11S26_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [256] MSG_ZN11S32_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [257] MSG_ZN11S38_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [258] MSG_ZN11S60_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [259] MSG_ZN11S63_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [260] MSG_ZN11S64_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [261] MSG_ZN11S65_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [262] MSG_ZN11S66_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [263] MSG_ZN11S67_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [264] MSG_ZN11SC6_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [265] MSG_ZN11SF6_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [266] MSG_ZN11SF7_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [267] MSG_ZN21S05_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [268] MSG_ZN21S13_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [269] MSG_ZN21S72_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
+          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
 };

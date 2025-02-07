@@ -37,9 +37,9 @@
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct{
-    U2                  u2_vom_chk;          /* Refer to the return of u4_g_oXCANOpemdCfgMdfield */
-    U2                  u2_tim_run;          /* Refer to the return of u4_g_oXCANOpemdCfgMdfield */
-    U2                  u2_sys_act;          /* OXCAN_SYS_XXX                                    */
+    U4                  u4_vom_chk;          /* Refer to the return of u4_g_oXCANOpemdCfgMdfield */
+    U4                  u4_tim_run;          /* Refer to the return of u4_g_oXCANOpemdCfgMdfield */
+    U4                  u4_sys_act;          /* OXCAN_SYS_XXX                                    */
 }ST_OXCAN_OPEMD_CHK;
 
 typedef struct{
@@ -63,6 +63,11 @@ extern const ST_OXCAN_OPEMD_CHK           st_gp_OXCAN_OPEMD_CHK[OXCAN_OPEMD_NUM_
 
 extern const ST_OXCAN_OPEMD_EVTX          st_gp_OXCAN_OPEMD_EVTX[];
 extern const U1                           u1_g_OXCAN_OPEMD_NUM_EVTX;
+
+#pragma ghs startdata
+extern  U4 __ghsbegin_bss_SHARE_OXCAN_NMSTS;
+#pragma ghs enddata
+#define u4_g_oxcan_nmsts  ((U4 *)((U4)&__ghsbegin_bss_SHARE_OXCAN_NMSTS))
 
 #endif /* OXCAN_OPEMD_CFG_H */
 

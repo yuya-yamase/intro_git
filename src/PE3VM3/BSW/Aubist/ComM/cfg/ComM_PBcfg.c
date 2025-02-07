@@ -52,7 +52,7 @@
 /* communication Activated System Status per channel */
 BswConst BswU4 bsw_comm_ctrl_u4SysStsPerCh[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNUM] = {
     {    /* ComMConf_ComMChannel_CDC_VCAN_BUS */
-        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR|ComMConf_SysStatusName_Special)
+        (BswU4)(ComMConf_SysStatusName_PAR|ComMConf_SysStatusName_RID|ComMConf_SysStatusName_PON|ComMConf_SysStatusName_POE|ComMConf_SysStatusName_PAR_HV|ComMConf_SysStatusName_PAR_HVHC|ComMConf_SysStatusName_CHK)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
 };
@@ -60,7 +60,7 @@ BswConst BswU4 bsw_comm_ctrl_u4SysStsPerCh[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
 /* Channel power per channel */
 BswConst BswU4 bsw_comm_ctrl_u4CHPowSupply[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNUM] = {
     {    /* ComMConf_ComMChannel_CDC_VCAN_BUS */
-        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR|ComMConf_SysStatusName_Special)
+        (BswU4)(ComMConf_SysStatusName_PAR|ComMConf_SysStatusName_RID|ComMConf_SysStatusName_PON|ComMConf_SysStatusName_POE|ComMConf_SysStatusName_PAR_HV|ComMConf_SysStatusName_PAR_HVHC|ComMConf_SysStatusName_CHK)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
 };

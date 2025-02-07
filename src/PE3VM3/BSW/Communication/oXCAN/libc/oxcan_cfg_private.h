@@ -1,4 +1,4 @@
-/* 1.4.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -12,8 +12,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_CFG_H_MAJOR                        (1U)
-#define OXCAN_CFG_H_MINOR                        (4U)
+#define OXCAN_CFG_H_MAJOR                        (2U)
+#define OXCAN_CFG_H_MINOR                        (0U)
 #define OXCAN_CFG_H_PATCH                        (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -57,7 +57,7 @@ void    vd_g_oXCANCfgWkupInit(void);
 
 void    vd_g_oXCANCfgOpemdEvthk(const U4 u4_a_SYSBIT_PREV, const U4 u4_a_SYSBIT_NEXT);
 
-void    vd_g_oXCANCfgPreTask(const U1 u1_a_SYSBIT);
+void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYSBIT);
 void    vd_g_oXCANCfgPostTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL);                  /* u1_a_FATAL : OXCAN_FATAL_AUB_XXX */
 
 void    vd_g_oXCANCfgShutdown(void);

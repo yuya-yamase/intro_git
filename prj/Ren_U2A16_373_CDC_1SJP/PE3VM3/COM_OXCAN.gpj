@@ -17,7 +17,7 @@
     -I${MCAL_DIR}/PORT
 
     -I${VEHOPE_DIR}/scc
-    -I${VEHOPE_DIR}/config_U2A16_met
+    -I${VEHOPE_DIR}/config
 
     -I${OXCAN_DIR}/config_U2A16_met
     -I${OXCAN_DIR}/libc

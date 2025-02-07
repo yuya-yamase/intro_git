@@ -71,6 +71,7 @@ ${CMN_DIR}/MCAL_DUMMY.gpj
 ${CMN_DIR}/MCAL_Gpt.gpj
 ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_PORT.gpj
+${CMN_DIR}/MCAL_Pwm.gpj
 ${CMN_DIR}/MCAL_SPI.gpj
 ${CMN_DIR}/MCAL_Icu.gpj
 ${CMN_DIR}/MCAL_Wdg.gpj

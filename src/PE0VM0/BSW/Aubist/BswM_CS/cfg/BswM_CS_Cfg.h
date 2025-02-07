@@ -307,11 +307,21 @@
 #define BSW_BSWM_CS_CFG_PNCIPDU_RX_31         (BSW_BSWM_CS_PNCIPDU_RXTYPE_CH)
 
 /* Symbolic Name Reference - SysStatus */
-#define BswM_CSConf_SysStatusName_BAT                       (BSW_BSWM_CS_SYSSTAT_BAT)
-#define BswM_CSConf_SysStatusName_ACC                       (BSW_BSWM_CS_SYSSTAT_ACC)
-#define BswM_CSConf_SysStatusName_IG                        (BSW_BSWM_CS_SYSSTAT_IG)
-#define BswM_CSConf_SysStatusName_PBA                       (BSW_BSWM_CS_SYSSTAT_USER1)
-#define BswM_CSConf_SysStatusName_IGR                       (BSW_BSWM_CS_SYSSTAT_USER2)
+#define BswM_CSConf_SysStatusName_PAR                       (BSW_BSWM_CS_SYSSTAT_BAT)
+#define BswM_CSConf_SysStatusName_RID                       (BSW_BSWM_CS_SYSSTAT_ACC)
+#define BswM_CSConf_SysStatusName_PON                       (BSW_BSWM_CS_SYSSTAT_IG)
+#define BswM_CSConf_SysStatusName_POE                       (BSW_BSWM_CS_SYSSTAT_USER1)
+#define BswM_CSConf_SysStatusName_PAR_HV                    (BSW_BSWM_CS_SYSSTAT_USER2)
+#define BswM_CSConf_SysStatusName_PAR_HVHC                  (BSW_BSWM_CS_SYSSTAT_USER3)
+#define BswM_CSConf_SysStatusName_CHK                       (BSW_BSWM_CS_SYSSTAT_USER4)
+#define BswM_CSConf_SysStatusName_PDM                       (BSW_BSWM_CS_SYSSTAT_USER5)
+#define BswM_CSConf_SysStatusName_OTA1                      (BSW_BSWM_CS_SYSSTAT_USER6)
+#define BswM_CSConf_SysStatusName_OTA2                      (BSW_BSWM_CS_SYSSTAT_USER7)
+#define BswM_CSConf_SysStatusName_OTA3                      (BSW_BSWM_CS_SYSSTAT_USER8)
+#define BswM_CSConf_SysStatusName_OTA4                      (BSW_BSWM_CS_SYSSTAT_USER9)
+#define BswM_CSConf_SysStatusName_WRP                       (BSW_BSWM_CS_SYSSTAT_USER10)
+#define BswM_CSConf_SysStatusName_EDS                       (BSW_BSWM_CS_SYSSTAT_USER11)
+#define BswM_CSConf_SysStatusName_PAO                       (BSW_BSWM_CS_SYSSTAT_USER12)
 #define BswM_CSConf_SysStatusName_VCAN                      (BSW_BSWM_CS_SYSSTAT_USER29)
 
 /*--------------------------------------------------------------------------*/

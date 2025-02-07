@@ -21,6 +21,10 @@
 #include "pitchroll.h"
 
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 #include "calc_u8.h"
 #include "rngcmpr_u2.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -122,7 +122,7 @@ static U4      u4_s_AlertB_thesenSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U4              u4_t_src_chk;
 
     u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1F01_RXCH0,
-                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                      (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                       u2_s_ALERT_B_THESEN_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){

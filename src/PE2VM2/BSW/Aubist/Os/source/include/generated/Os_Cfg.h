@@ -140,9 +140,9 @@
 #define AR_OS_NUM_ALARMS                                    ((uint16)0x0003U)
 #define AR_OS_NUM_OSAPPLICATIONS                            ((uint16)0x0000U)
 #define AR_OS_NUM_APPMODES                                  ((uint16)0x0001U)
-#define AR_OS_NUM_ISRS                                      ((uint16)0x000CU)
+#define AR_OS_NUM_ISRS                                      ((uint16)0x000BU)
 #define AR_OS_NUM_C1ISRS                                    ((uint16)0x0000U)
-#define AR_OS_NUM_C2ISRS                                    ((uint16)0x000CU)
+#define AR_OS_NUM_C2ISRS                                    ((uint16)0x000BU)
 #define AR_OS_NUM_IOC_COMMUNICATIONS                        ((uint16)0x0000U)
 #define AR_OS_NUM_IOC_RECEIVERS                             ((uint16)0x0000U)
 #define AR_OS_NUM_IOC_SENDERS                               ((uint16)0x0000U)
@@ -190,18 +190,17 @@
  * ISR ID
  */
 /* Category 2 ISRs */
-#define INTSDMAC0CH3_ISR                                    ((uint16)0x0000U)
-#define INTOSTM1_ISR                                        ((uint16)0x0001U)
-#define INTP38_ISR                                          ((uint16)0x0002U)
-#define OS_SYSTEM_COUNTER_ISR0                              ((uint16)0x0003U)
-#define INTRIIC0EE_ISR                                      ((uint16)0x0004U)
-#define INTRIIC0RI_ISR                                      ((uint16)0x0005U)
-#define INTRIIC0TI_ISR                                      ((uint16)0x0006U)
-#define INTRIIC0TEI_ISR                                     ((uint16)0x0007U)
-#define INTRIIC1EE_ISR                                      ((uint16)0x0008U)
-#define INTRIIC1RI_ISR                                      ((uint16)0x0009U)
-#define INTRIIC1TI_ISR                                      ((uint16)0x000AU)
-#define INTRIIC1TEI_ISR                                     ((uint16)0x000BU)
+#define INTOSTM1_ISR                                        ((uint16)0x0000U)
+#define INTP38_ISR                                          ((uint16)0x0001U)
+#define OS_SYSTEM_COUNTER_ISR0                              ((uint16)0x0002U)
+#define INTRIIC0EE_ISR                                      ((uint16)0x0003U)
+#define INTRIIC0RI_ISR                                      ((uint16)0x0004U)
+#define INTRIIC0TI_ISR                                      ((uint16)0x0005U)
+#define INTRIIC0TEI_ISR                                     ((uint16)0x0006U)
+#define INTRIIC1EE_ISR                                      ((uint16)0x0007U)
+#define INTRIIC1RI_ISR                                      ((uint16)0x0008U)
+#define INTRIIC1TI_ISR                                      ((uint16)0x0009U)
+#define INTRIIC1TEI_ISR                                     ((uint16)0x000AU)
 
 
 

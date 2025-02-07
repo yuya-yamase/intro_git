@@ -31,7 +31,6 @@
  *--------------------------------------------------------------------------*/
 ISR(OS_SYSTEM_COUNTER_ISR0);
 
-ISR(INTSDMAC0CH1_ISR);
 /*----------------------------------------------------------------------------
  *		Codes
  *--------------------------------------------------------------------------*/
@@ -141,9 +140,5 @@ void PreTaskHook(void)
 }
 #endif /* (AR_OS_USE_PRETASKHOOK == STD_ON) */
 
-ISR(INTSDMAC0CH1_ISR)
-{
-    Dma_INTSDMAC0CH1();
-}
 #define OS_STOP_SEC_CALLOUT_CODE
 #include <Os_MemMap.h>

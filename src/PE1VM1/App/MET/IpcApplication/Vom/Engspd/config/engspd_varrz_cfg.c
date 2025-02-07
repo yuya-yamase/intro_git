@@ -73,7 +73,7 @@ U1  u1_g_EngspdVarrzCfgSig(U1 * const u1p_a_sig)
     U1 u1_t_msgsts;
 
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S99_RXCH0,
-                                   (U2)OXCAN_RX_SYS_NRX_IGP,
+                                   (U2)OXCAN_RX_SYS_NRX_PON,
                                    (U2)U2_MAX) & (U1)COM_NO_RX;
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_RZRPM, u1p_a_sig);
 

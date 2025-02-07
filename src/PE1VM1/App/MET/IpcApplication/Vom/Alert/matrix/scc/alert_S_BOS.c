@@ -143,11 +143,11 @@ static U4      u4_s_AlertS_bosSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 
 #if defined(OXCAN_PDU_RX_CAN_ENG1G92_RXCH0)
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G92_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                           u2_s_ALERT_S_BOS_TO_TRSH_ENG1G92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #elif defined(OXCAN_PDU_RX_CAN_ENG1S92)
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S92,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                           u2_s_ALERT_S_BOS_TO_TRSH_ENG1S92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts   = (U1)0U;

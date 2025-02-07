@@ -17,11 +17,14 @@
     -I${MCAL_DIR}/PORT
 
     -I${VEHOPE_DIR}/scc
-    -I${VEHOPE_DIR}/config_U2A16_met
+    -I${VEHOPE_DIR}/config
 
     -I${OXCAN_DIR}/config_U2A16_met
     -I${OXCAN_DIR}/libc
     -I${OXCAN_DIR}/scc
+
+    -I${APP_DIR}/IVI/XSPI
+    -I${APP_DIR}/IVI/PictCtrl
 
     -T ${MCAL_DIR}/section.ld
 
