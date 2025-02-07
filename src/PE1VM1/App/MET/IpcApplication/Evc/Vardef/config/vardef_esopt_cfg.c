@@ -202,22 +202,6 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         }
     },
     {
-        vdp_PTR_NA,                             /* fp_u1_AVA_RX        */
-        (U2)VDF_ESO_CH_EPB,                     /* u2_eso_ch           */
-        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-#if 0   /* BEV BSW provisionally */
-        (U2)OXCAN_PDU_RX_CAN_EPB1F01,           /* u2_msg_rx           */
-#else
-        (U2)U2_MAX,                             /* u2_msg_rx           */
-#endif
-        (U2)0x0002U,                            /* u2_vom_act          */
-        ((U2)200U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
-        {
-            (U2)U2_MAX,                         /* u2_rxc_min[MIN_INA] */
-            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
-        }
-    },
-    {
         &u1_g_VdfEsoRx_BSM,                     /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_BSM,                     /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */

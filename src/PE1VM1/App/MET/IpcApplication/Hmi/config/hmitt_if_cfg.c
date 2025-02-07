@@ -78,7 +78,27 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
     {  (U2)ALERT_CH_C_STEER_TT,       (U1)ALERT_REQ_C_STEER_TT_ON_R,            (U1)1U,    u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_STEER_TT,       (U1)ALERT_REQ_C_STEER_TT_FLASH_4HZ,       (U1)1U,    u4_HMITT_HB4(HMITT_BLINK_CO_4P00HZ__50P_STEER)              },
     {  (U2)ALERT_CH_C_STEER_TT,       (U1)ALERT_REQ_C_STEER_TT_ON_A,            (U1)1U,    u4_HMITT_HB5(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_EPB_TT_ATOFF,   (U1)ALERT_REQ_C_EPB_TT_ATOFF_TT_ON,       (U1)2U,    u4_HMITT_HB0(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_EPB_TT_PKB,     (U1)ALERT_REQ_C_EPB_TT_PKB_TT_ON,         (U1)1U,    u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_EPB_TT_PKB,     (U1)ALERT_REQ_C_EPB_TT_PKB_FLASH_1HZ,     (U1)1U,    u4_HMITT_HB6(HMITT_BLINK_CO_1P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_EPB_TT_PKB,     (U1)ALERT_REQ_C_EPB_TT_PKB_FLASH_2HZ,     (U1)1U,    u4_HMITT_HB6(HMITT_BLINK_CO_2P00HZ__50P_EPB)                },
+    {  (U2)ALERT_CH_C_EPB_TT_PKB,     (U1)ALERT_REQ_C_EPB_TT_PKB_FLASH_4HZ,     (U1)1U,    u4_HMITT_HB6(HMITT_BLINK_CO_4P00HZ__50P_EPB)                },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_MALFUNC,              (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_MFNC_RW,              (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_MFNC_DISP,            (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_MFNC_DISP_RW,         (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_UNAVAILABL,           (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_UNABL_RW,             (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_UNABL_DISP,           (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_UNABL_DISP_RW,        (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_LERNING1,             (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_1P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_LNG1_DISP,            (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_1P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_LNG1_DISP_RW,         (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_1P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_TESTMODE,             (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_4P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_TM_DISP,              (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_4P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_TM_DISP_RW,           (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_4P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_LERNING2,             (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_4P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_LNG2_DISP,            (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_4P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_ECB,            (U1)ALERT_REQ_C_ECB_LNG2_DISP_RW,         (U1)1U,    u4_HMITT_HB7(HMITT_BLINK_CO_4P00HZ__50P)                    },
     {  (U2)ALERT_CH_C_BRLV_2_WRN,     (U1)ALERT_REQ_C_BRLV_2_WRN_MALFUNC,       (U1)2U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_BRK_1,          (U1)ALERT_REQ_C_BRK_1_ON,                 (U1)2U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_BRK_1,          (U1)ALERT_REQ_C_BRK_1_ON_MLFNC,           (U1)2U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
@@ -295,6 +315,7 @@ U2 u2_g_HmittSizeReqbit(void){
 /*  19PFv3-2 07/10/2024  YR       Added config for HCS                                                                               */
 /*  BEV-1    10/15/2024  KO       Change for BEV System_Consideration_1.(MET-C_STEER-CSTD-0-00-A-C0)                                 */
 /*  BEV-2    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
+/*  BEV-3    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
