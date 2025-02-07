@@ -1,4 +1,4 @@
-/* 1.5.0 */
+/* 1.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_IF_CFG_C_MAJOR                  (1)
-#define HMIPUTXT_IF_CFG_C_MINOR                  (5)
+#define HMIPUTXT_IF_CFG_C_MINOR                  (6)
 #define HMIPUTXT_IF_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -202,7 +202,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_H_BATLOW,             (U1)ALERT_REQ_H_BATLOW_MALFUNC,         (U1)7U,     (U4)0x40000000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_INSPECTION,      (U1)7U,     (U4)0x80000000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_INSPECTION_BZ,   (U1)7U,     (U4)0x80000000U    },
-    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OVHT,            (U1)8U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OVHT_CHN,        (U1)8U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_H_UNIOVE_PD,          (U1)ALERT_REQ_H_UNIOVE_PD_FCVSYSOVHT,   (U1)8U,     (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_UNIOVE_PD,          (U1)ALERT_REQ_H_UNIOVE_PD_HVSYSOVHT,    (U1)8U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_D_SBW_PD_PSWF,        (U1)ALERT_REQ_D_SBW_PD_PSWF_MSG_04,     (U1)8U,     (U4)0x00000100U    },
@@ -237,7 +237,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_S_BOS,                (U1)ALERT_REQ_S_BOS_ON_MSG3,            (U1)9U,     (U4)0x00200000U    },
     {    (U2)ALERT_CH_S_BOS,                (U1)ALERT_REQ_S_BOS_FLSH_MSG3,          (U1)9U,     (U4)0x00200000U    },
     {    (U2)ALERT_CH_S_BOS,                (U1)ALERT_REQ_S_BOS_MSG3,               (U1)9U,     (U4)0x00200000U    },
-    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_BATLOW,          (U1)9U,     (U4)0x00400000U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_BATLOW_CHN,      (U1)9U,     (U4)0x00400000U    },
     {    (U2)ALERT_CH_H_SOCLOW_TT_PD,       (U1)ALERT_REQ_H_SOCLOW_TT_PD_N_POS1,    (U1)9U,     (U4)0x00800000U    },
     {    (U2)ALERT_CH_H_SOCLOW_TT_PD,       (U1)ALERT_REQ_H_SOCLOW_TT_PD_N_POS2,    (U1)9U,     (U4)0x00800000U    },
     {    (U2)ALERT_CH_H_SOCLOW_TT_PD,       (U1)ALERT_REQ_H_SOCLOW_TT_PD_HV_OFF1,   (U1)9U,     (U4)0x01000000U    },
@@ -276,7 +276,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_H_TCBM,               (U1)ALERT_REQ_H_TCBM_LIMIT,             (U1)11U,    (U4)0x20000000U    },
     {    (U2)ALERT_CH_O_POWMAN,             (U1)ALERT_REQ_O_POWMAN_BATLOW,          (U1)11U,    (U4)0x40000000U    },
     {    (U2)ALERT_CH_P_TMNT_PD,            (U1)ALERT_REQ_P_TMNT_PD_WRN,            (U1)12U,    (U4)0x00000004U    },
-    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OTHER,           (U1)12U,    (U4)0x00000010U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OTHER_CHN,       (U1)12U,    (U4)0x00000010U    },
     {    (U2)ALERT_CH_H_BATCOO_TT_PD,       (U1)ALERT_REQ_H_BATCOO_TT_PD_PD03,      (U1)12U,    (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_BATCOO_TT_PD,       (U1)ALERT_REQ_H_BATCOO_TT_PD_TT_PD03,   (U1)12U,    (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_TOWWAR,             (U1)ALERT_REQ_H_TOWWAR_MLFNC_EV,        (U1)12U,    (U4)0x00000040U    },
@@ -291,6 +291,9 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_D_SBW_PD_CHK,         (U1)ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW8,   (U1)12U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_D_SBW_PD_CHK,         (U1)ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW9,   (U1)12U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_B_SMASTA_S1B,         (U1)ALERT_REQ_B_SMASTA_S1B_MALFUNC,     (U1)12U,    (U4)0x00004000U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OVHT,            (U1)12U,    (U4)0x00010000U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_BATLOW,          (U1)12U,    (U4)0x00020000U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OTHER,           (U1)12U,    (U4)0x00040000U    },
     {    (U2)ALERT_CH_P_STOSTA_PD_COA,      (U1)ALERT_REQ_P_STOSTA_PD_COA_CNTN,     (U1)12U,    (U4)0x00080000U    },
     {    (U2)ALERT_CH_P_STOSTA_PD_COA,      (U1)ALERT_REQ_P_STOSTA_PD_COA_CNT_WT,   (U1)12U,    (U4)0x00080000U    },
     {    (U2)ALERT_CH_H_TOWWAR,             (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,        (U1)12U,    (U4)0x00100000U    },
@@ -761,15 +764,18 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  1.2.0    09/09/2020  TH       Setting for 800B CV-R.                                                                             */
 /*  1.3.0    01/06/2021  TH       Setting for 800B 1A.                                                                               */
 /*  1.4.0    06/04/2021  TH       Setting for 22-24FGM CV.                                                                           */
+/*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3-1 02/20/2024  GM       Change config for 19PFv3 CV                                                                        */
 /*  19PFv3-2 07/10/2024  YR       Added config for HCS                                                                               */
+/*  BEV-1    10/25/2024  RS       Change for BEV System_Consideration_1.(MET-H_DRIPOW-CSTD-1-00-A-C0)                                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

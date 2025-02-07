@@ -1,4 +1,4 @@
-/* 1.5.0 */
+/* 1.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_CFG_C_MAJOR                     (1)
-#define HMIPUTXT_CFG_C_MINOR                     (5)
+#define HMIPUTXT_CFG_C_MINOR                     (6)
 #define HMIPUTXT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -897,6 +897,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  1.2.0    09/09/2020  TH       Setting for 800B CV-R.                                                                             */
 /*  1.3.0    01/06/2021  TH       Setting for 800B 1A.                                                                               */
 /*  1.4.0    06/04/2021  TH       Setting for 22-24FGM CV.                                                                           */
+/*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1                                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -918,5 +919,6 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * JMH  = James Michael D. Hilarion, DTPH                                                                                         */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

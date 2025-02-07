@@ -1,4 +1,4 @@
-/* 5.0.0 */
+/* 5.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -819,10 +819,12 @@
 #define ALERT_REQ_H_BATCOO_TT_PD_TT_PD03         (4U)
 #define ALERT_REQ_H_BATCOO_BC_MALFUNC            (0U)
 #define ALERT_REQ_H_BATLOW_MALFUNC               (0U)
-#define ALERT_REQ_H_DRIPOW_PRMRYCHK              (0U)
-#define ALERT_REQ_H_DRIPOW_OVHT                  (1U)
-#define ALERT_REQ_H_DRIPOW_BATLOW                (2U)
-#define ALERT_REQ_H_DRIPOW_OTHER                 (3U)
+#define ALERT_REQ_H_DRIPOW_OVHT_CHN              (0U)
+#define ALERT_REQ_H_DRIPOW_BATLOW_CHN            (1U)
+#define ALERT_REQ_H_DRIPOW_OTHER_CHN             (2U)
+#define ALERT_REQ_H_DRIPOW_OVHT                  (3U)
+#define ALERT_REQ_H_DRIPOW_BATLOW                (4U)
+#define ALERT_REQ_H_DRIPOW_OTHER                 (5U)
 #define ALERT_REQ_H_EVMOD_TT_FLS_LOWBT_V         (0U)
 #define ALERT_REQ_H_EVMOD_TT_FLS_SPD_V           (1U)
 #define ALERT_REQ_H_EVMOD_TT_FLS_ACCL_V          (2U)
