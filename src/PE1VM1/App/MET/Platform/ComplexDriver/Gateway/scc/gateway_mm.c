@@ -1,4 +1,4 @@
-/* 1.6.0 */
+/* 1.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GATEWAY_MM_C_MAJOR                         (1)
-#define GATEWAY_MM_C_MINOR                         (6)
+#define GATEWAY_MM_C_MINOR                         (7)
 #define GATEWAY_MM_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -381,11 +381,13 @@ static void    vd_s_GwmmGCanGTW(const U1 u1_a_PWRSTS , const U1 u1_a_SIG_IDX , c
 /*  1.4.0    11/19/2022  NT       Change : Combine Ehter and MM-SUB-BUS logic.                                                       */
 /*  1.5.0     1/22/2024  TH       Delete Ether & Add Global to Local-CAN.                                                            */
 /*  1.6.0     3/26/2024  SW       Delete transmission process for drive mode when MM is invalid(for arbitration with VdsCI).         */
+/*  1.7.0     1/30/2025  KO       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  * RS   = Ryosuke Sato, KSE                                                                                                       */
 /*  * SK   = Shinichi Kato, KSE                                                                                                      */
 /*  * NT   = Noriaki Takashima, DT                                                                                                   */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * SW   = Shun Watanabe, Denso Techno                                                                                             */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

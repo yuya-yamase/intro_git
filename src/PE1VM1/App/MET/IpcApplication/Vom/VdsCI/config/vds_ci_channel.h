@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDS_CI_CHANNEL_H_MAJOR                 (2)
-#define VDS_CI_CHANNEL_H_MINOR                 (3)
+#define VDS_CI_CHANNEL_H_MINOR                 (4)
 #define VDS_CI_CHANNEL_H_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -22,7 +22,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDS_CI_NUM_CH         (148U)
+#define VDS_CI_NUM_CH         (146U)
 
 #define VDS_CI_SW_ASD_CONT    ( 0U)
 #define VDS_CI_SW_ASD_CANC    ( 1U)
@@ -165,13 +165,11 @@
 #define VDS_CI_SW_DM_SW_A2    (138U)
 #define VDS_CI_SW_AHSSWVSW    (139U)
 #define VDS_CI_SW_AHSSDESW    (140U)
-#define VDS_CI_SW_SW_AS02     (141U)
-#define VDS_CI_SW_SW_AS01     (142U)
-#define VDS_CI_SW_M_BB        (143U)
-#define VDS_CI_SW_MLR_BB      (144U)
-#define VDS_CI_SW_RLM_BB      (145U)
-#define VDS_CI_SW_MRT_BB      (146U)
-#define VDS_CI_SW_ART_BB      (147U)
+#define VDS_CI_SW_M_BB        (141U)
+#define VDS_CI_SW_MLR_BB      (142U)
+#define VDS_CI_SW_RLM_BB      (143U)
+#define VDS_CI_SW_MRT_BB      (144U)
+#define VDS_CI_SW_ART_BB      (145U)
 
 #define VDS_CI_LCASGAPR_MAX   ( 2U)
 #define VDS_CI_M_COP_S_MAX    ( 3U)

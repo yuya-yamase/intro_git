@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDS_CI_CFG_C_MAJOR                     (2)
-#define VDS_CI_CFG_C_MINOR                     (3)
+#define VDS_CI_CFG_C_MINOR                     (4)
 #define VDS_CI_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -209,8 +209,6 @@ static void vd_s_VdsCIReqTx_DISSUISW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_DM_SW_A2(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_AHSSWVSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_AHSSDESW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
-static void vd_s_VdsCIReqTx_SW_AS02 (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
-static void vd_s_VdsCIReqTx_SW_AS01 (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_M_BB    (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_MLR_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_RLM_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
@@ -368,13 +366,11 @@ const ST_VDS_CI_TRX    st_gp_VDS_CI_TRX[VDS_CI_NUM_CH] = {
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DM_SW_A2,    (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 138 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_AHSSWVSW,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 139 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_AHSSDESW,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 140 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SW_AS02,     (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 141 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SW_AS01,     (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 142 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_BB,        (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 143 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MLR_BB,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 144 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RLM_BB,      (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 145 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MRT_BB,      (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 146 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ART_BB,      (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 147 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_BB,        (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 141 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MLR_BB,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 142 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RLM_BB,      (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 143 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MRT_BB,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 144 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ART_BB,      (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 145 */
 };
 const U1               u1_g_VDS_CI_NUM_CH = (U1)VDS_CI_NUM_CH;
 
@@ -3882,46 +3878,6 @@ static void    vd_s_VdsCIReqTx_AHSSDESW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 #endif /* ComConf_ComSignal_AHSSDESW */
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_VdsCIReqTx_SW_AS01(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
-/*                  u2_a_ELPSD: elapsed time                                                                                         */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_VdsCIReqTx_SW_AS01(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
-{
-    U1                 u1_t_tx;
-
-    if (u1_a_OPT <= (U1)VDS_CI_OPT_ON) {
-        u1_t_tx = u1_a_OPT;
-    }
-    else {
-        u1_t_tx = (U1)VDS_CI_OPT_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_SW_AS01, &u1_t_tx);
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_VdsCIReqTx_SW_AS02(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
-/*                  u2_a_ELPSD: elapsed time                                                                                         */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_VdsCIReqTx_SW_AS02(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
-{
-    U1                 u1_t_tx;
-
-    if (u1_a_OPT <= (U1)VDS_CI_OPT_ON) {
-        u1_t_tx = u1_a_OPT;
-    }
-    else {
-        u1_t_tx = (U1)VDS_CI_OPT_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_SW_AS02, &u1_t_tx);
-}
-/*===================================================================================================================================*/
 /*  static void    vd_s_VdsCIReqTx_M_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      u1_a_OPT: send signal value                                                                                      */
@@ -4080,6 +4036,7 @@ static void    vd_s_VdsCIReqTx_ART_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*  2.1.1    10/18/2021  TA(M)    vds_ci.c v1.1.0 -> v2.1.1                                                                          */
 /*  2.2.0    10/06/2022  TA(M)    vds_ci.c v2.1.1 -> v2.2.0                                                                          */
 /*  2.3.0     3/22/2024  SW       vds_ci.c v2.2.0 -> v2.3.0 (add member for transmission mask to ST_VDS_CI_TRX)                      */
+/*  2.4.0     1/30/2025  KO       vds_ci.c v2.3.0 -> v2.4.0                                                                          */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -4098,6 +4055,7 @@ static void    vd_s_VdsCIReqTx_ART_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /* 19PFv3-11 05/07/2024  TR       Change config for 19PFv3 CV                                                                        */
 /* 19PFv3-12 07/10/2024  YR       Added config for HCS                                                                               */
 /* BEV-1     10/10/2024  KT       Change config for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                                 */
+/* BEV-2     01/30/2025  KO       Change config for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-)                                   */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -4112,6 +4070,6 @@ static void    vd_s_VdsCIReqTx_ART_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*  * TR   = Tebs Ramos,   DTPH                                                                                                      */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
-/*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -58,11 +58,6 @@ U1      u1_g_VdfEsoRx_SW_DM_CAMERA(void);
 U1      u1_g_VdfEsoRx_SW_WRN_SEN(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_ASC1S90.c */
-U1      u1_g_VdfEsoRx_SW_VHCL_HCTRL(void);
-U1      u1_g_VdfEsoRx_SW_ACCESS_MODE(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_AVN1S30.c */
 U1      u1_g_VdfEsoRx_CNTR_DISP(void);
 
