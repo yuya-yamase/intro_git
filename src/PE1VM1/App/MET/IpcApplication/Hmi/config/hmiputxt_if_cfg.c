@@ -260,7 +260,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_S_LCA_PD_SG,          (U1)ALERT_REQ_S_LCA_PD_SG_SGST1,        (U1)11U,    (U4)0x00000004U    },
     {    (U2)ALERT_CH_D_SBW_PD_APRJ,        (U1)ALERT_REQ_D_SBW_PD_APRJ_MSG_37,     (U1)11U,    (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND5,        (U1)11U,    (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_TRCOFF_PD,          (U1)ALERT_REQ_C_TRCOFF_PD_MALFUNC,      (U1)11U,    (U4)0x00001000U    },
     {    (U2)ALERT_CH_H_ONACCP,             (U1)ALERT_REQ_H_ONACCP_MALFUNC,         (U1)11U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_D_SBW_PD_SFML,        (U1)ALERT_REQ_D_SBW_PD_SFML_MSG_28,     (U1)11U,    (U4)0x00004000U    },
     {    (U2)ALERT_CH_B_THESEN,             (U1)ALERT_REQ_B_THESEN_SENOFF,          (U1)11U,    (U4)0x00008000U    },
@@ -770,11 +769,13 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  19PFv3-2 07/10/2024  YR       Added config for HCS                                                                               */
 /*  BEV-1    10/25/2024  RS       Change for BEV System_Consideration_1.(MET-H_DRIPOW-CSTD-1-00-A-C0)                                */
 /*  BEV-2    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
+/*  BEV-3    10/31/2024  KO       Change for BEV System_Consideration_1.(MET-C_TRCOFF-CSTD-1-00-A-C0)                                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

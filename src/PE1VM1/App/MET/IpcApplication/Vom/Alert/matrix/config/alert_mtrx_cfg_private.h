@@ -134,7 +134,7 @@
 #define ALERT_C_SLIP_CH_NUM                      (1U)
 #define ALERT_C_TPKBON_CH_NUM                    (1U)
 #define ALERT_C_TPMS_CH_NUM                      (3U)
-#define ALERT_C_TRCOFF_CH_NUM                    (2U)
+#define ALERT_C_TRCOFF_CH_NUM                    (1U)
 #define ALERT_C_VSCOFF_CH_NUM                    (1U)
 #define ALERT_C_STEER_CH_NUM                     (4U)
 #define ALERT_D_4WDSYS_CH_NUM                    (3U)
