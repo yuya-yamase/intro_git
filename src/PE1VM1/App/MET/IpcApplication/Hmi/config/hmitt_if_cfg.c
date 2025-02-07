@@ -1,4 +1,4 @@
-/* 1.6.0 */
+/* 1.8.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMITT_IF_CFG_C_MAJOR                  (1)
-#define HMITT_IF_CFG_C_MINOR                  (6)
+#define HMITT_IF_CFG_C_MINOR                  (8)
 #define HMITT_IF_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -76,8 +76,7 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
     {  (U2)ALERT_CH_C_SLIP,           (U1)ALERT_REQ_C_SLIP_OPERATING,           (U1)1U,    u4_HMITT_HB3(HMITT_BLINK_CO_2P00HZ__50P)                    },
     {  (U2)ALERT_CH_C_SLIP,           (U1)ALERT_REQ_C_SLIP_TESTMODE,            (U1)1U,    u4_HMITT_HB3(HMITT_BLINK_CO_4P00HZ__50P)                    },
     {  (U2)ALERT_CH_C_STEER_TT,       (U1)ALERT_REQ_C_STEER_TT_ON_R,            (U1)1U,    u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_STEER_TT,       (U1)ALERT_REQ_C_STEER_TT_FLASH_2HZ,       (U1)1U,    u4_HMITT_HB4(HMITT_BLINK_CO_2P00HZ__50P)                    },
-    {  (U2)ALERT_CH_C_STEER_TT,       (U1)ALERT_REQ_C_STEER_TT_FLASH_4HZ,       (U1)1U,    u4_HMITT_HB4(HMITT_BLINK_CO_4P00HZ__50P)                    },
+    {  (U2)ALERT_CH_C_STEER_TT,       (U1)ALERT_REQ_C_STEER_TT_FLASH_4HZ,       (U1)1U,    u4_HMITT_HB4(HMITT_BLINK_CO_4P00HZ__50P_STEER)              },
     {  (U2)ALERT_CH_C_STEER_TT,       (U1)ALERT_REQ_C_STEER_TT_ON_A,            (U1)1U,    u4_HMITT_HB5(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_EPB_TT_ATOFF,   (U1)ALERT_REQ_C_EPB_TT_ATOFF_TT_ON,       (U1)2U,    u4_HMITT_HB0(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_BRLV_1_WRN,     (U1)ALERT_REQ_C_BRLV_1_WRN_MALFUNC,       (U1)2U,    u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
@@ -287,17 +286,20 @@ U2 u2_g_HmittSizeReqbit(void){
 /*  1.3.0    01/06/2021  TH       Setting for 800B 1A.                                                                               */
 /*  1.4.0    06/02/2021  TH       Setting for 22-24FGM CV.                                                                           */
 /*  1.6.0    02/02/2024  DR       Setting for 19PFv3                                                                                 */
+/*  1.8.0    10/15/2024  KO       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3-1 02/20/2024  GM       Change config for 19PFv3 CV                                                                        */
 /*  19PFv3-2 07/10/2024  YR       Added config for HCS                                                                               */
+/*  BEV-1    10/15/2024  KO       Change for BEV System_Consideration_1.(MET-C_STEER-CSTD-0-00-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
