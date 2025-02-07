@@ -77,7 +77,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_ON_MLFNC,         (U1)2U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_MLFNC_RW,         (U1)2U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_WRN,              (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRLV_1_WRN,         (U1)ALERT_REQ_C_BRLV_1_WRN_MALFUNC,     (U1)2U,     (U4)0x00000020U    },
+    {    (U2)ALERT_CH_C_BRLV_2_WRN,         (U1)ALERT_REQ_C_BRLV_2_WRN_MALFUNC,     (U1)2U,     (U4)0x00000020U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FAILDISP,           (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FDISP_RW,           (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_TM_DISP,            (U1)2U,     (U4)0x00000040U    },
@@ -770,6 +770,7 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-1    10/25/2024  RS       Change for BEV System_Consideration_1.(MET-H_DRIPOW-CSTD-1-00-A-C0)                                */
 /*  BEV-2    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
 /*  BEV-3    10/31/2024  KO       Change for BEV System_Consideration_1.(MET-C_TRCOFF-CSTD-1-00-A-C0)                                */
+/*  BEV-4    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */

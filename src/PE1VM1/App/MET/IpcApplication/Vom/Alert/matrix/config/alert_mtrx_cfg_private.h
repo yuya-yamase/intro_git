@@ -105,7 +105,7 @@
 #define ALERT_B_TRWIP_CH_NUM                     (1U)
 #define ALERT_C_BRKBZ_CH_NUM                     (1U)
 #define ALERT_C_BRK_1_CH_NUM                     (1U)
-#define ALERT_C_BRLV_1_CH_NUM                    (2U)
+#define ALERT_C_BRLV_2_CH_NUM                    (2U)
 #define ALERT_C_ECB_CH_NUM                       (1U)
 #define ALERT_C_PKBWAR_CH_NUM                    (2U)
 #define ALERT_H_MAICER_CH_NUM                    (4U)
@@ -388,7 +388,7 @@ void    vd_g_AlertB_tbeam12Init(void);
 void    vd_g_AlertB_tdoorInit(void);
 void    vd_g_AlertB_tpwsrInit(void);
 void    vd_g_AlertC_brkbzInit(void);
-void    vd_g_AlertC_brlv_1Init(void);
+void    vd_g_AlertC_brlv_2Init(void);
 void    vd_g_AlertC_pkbwarInit(void);
 void    vd_g_AlertO_eigconInit(void);
 void    vd_g_AlertP_oilpreInit(void);
@@ -482,7 +482,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_TPWSR_MTRX[ALERT_B_TPWSR_CH_NUM
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TRWIP_MTRX[ALERT_B_TRWIP_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRKBZ_MTRX[ALERT_C_BRKBZ_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRK_1_MTRX[ALERT_C_BRK_1_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRLV_1_MTRX[ALERT_C_BRLV_1_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRLV_2_MTRX[ALERT_C_BRLV_2_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_ECB_MTRX[ALERT_C_ECB_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_PKBWAR_MTRX[ALERT_C_PKBWAR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_MAICER_MTRX[ALERT_H_MAICER_CH_NUM];

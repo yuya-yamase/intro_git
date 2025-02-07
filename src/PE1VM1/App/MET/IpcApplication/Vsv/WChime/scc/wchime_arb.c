@@ -1,4 +1,4 @@
-/* 2.0.1 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define WCHIME_ARB_C_MAJOR                      (2)
-#define WCHIME_ARB_C_MINOR                      (0)
-#define WCHIME_ARB_C_PATCH                      (1)
+#define WCHIME_ARB_C_MINOR                      (1)
+#define WCHIME_ARB_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -664,6 +664,7 @@ static void    vd_s_wChimeMMInfo(void)
 /*                                depend on the buzzer condition.                                                                    */
 /*                                Improvement : u1_gp_WCHIME_REQ_SW_CTRL[] -> u1_g_wChimeReqSwCtrl(...)                              */
 /*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
+/*  2.1.0    11/14/2024  KO       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -671,5 +672,6 @@ static void    vd_s_wChimeMMInfo(void)
 /*  * TF   = Tomohiro Furuichi, Denso Techno                                                                                         */
 /*  * YK   = Yuki Kawai, Denso Techno                                                                                                */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

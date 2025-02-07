@@ -1,4 +1,4 @@
-/* 2.0.1 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define WCHIME_ARB_CFG_C_MAJOR                   (2)
-#define WCHIME_ARB_CFG_C_MINOR                   (0)
-#define WCHIME_ARB_CFG_C_PATCH                   (1)
+#define WCHIME_ARB_CFG_C_MINOR                   (1)
+#define WCHIME_ARB_CFG_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -270,7 +270,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_S_CLESON_BZ,      (U1)ALERT_REQ_S_CLESON_BZ_RR_LD,       (U1)WCHIME_REQ_IN_CSR_RR_FD          >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_CSR_RR_FD          & (U1)0x1FU)  }, /* MET-S_CLESON-CSTD-            */
         {  (U2)ALERT_CH_S_CLESON_BZ,      (U1)ALERT_REQ_S_CLESON_BZ_LD,          (U1)WCHIME_REQ_IN_CSR_FRRR_FD        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_CSR_FRRR_FD        & (U1)0x1FU)  }, /* MET-S_CLESON-CSTD-            */
         {  (U2)ALERT_CH_S_TCHAR_BC,       (U1)ALERT_REQ_S_TCHAR_BC_CYCL1,        (U1)WCHIME_REQ_IN_TCHAR_CYCL1        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TCHAR_CYCL1        & (U1)0x1FU)  }, /* MET-S_TCHAR-CSTD--            */
-        {  (U2)ALERT_CH_C_BRLV_1_BC,      (U1)ALERT_REQ_C_BRLV_1_BC_MALFUNC,     (U1)WCHIME_REQ_IN_BRK_FLDLEAK        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BRK_FLDLEAK        & (U1)0x1FU)  }, /* MET-C_BRLV-CSTD-              */
+        {  (U2)ALERT_CH_C_BRLV_2_BC,      (U1)ALERT_REQ_C_BRLV_2_BC_MALFUNC,     (U1)WCHIME_REQ_IN_BRK_FLDLEAK        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BRK_FLDLEAK        & (U1)0x1FU)  }, /* MET-C_BRLV-CSTD-              */
         {  (U2)ALERT_CH_C_STEER_BC,       (U1)ALERT_REQ_C_STEER_BC_CYCL,         (U1)WCHIME_REQ_IN_STEER_STP          >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_STEER_STP          & (U1)0x1FU)  }, /* MET-C_STEER-CSTD--            */
         {  (U2)ALERT_CH_P_ROLAWA_BC,      (U1)ALERT_REQ_P_ROLAWA_BC_VEHRUN,      (U1)WCHIME_REQ_IN_ROLAWA_ENST_VRUN   >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_ROLAWA_ENST_VRUN   & (U1)0x1FU)  }, /* MET-P_ROLAWA-CSTD-            */
         {  (U2)ALERT_CH_D_SBW_BZ_BSFT,    (U1)ALERT_REQ_D_SBW_BZ_BSFT_DOUBLE,    (U1)WCHIME_REQ_SI_SBW_RJCT           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_SBW_RJCT           & (U1)0x1FU)  }, /* MET-D_SBW-CSTD--              */
@@ -911,6 +911,7 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  1.4.1    11/24/2020  TF       wchime_arb.c v1.4.0 -> v1.4.1.                                                                     */
 /*  1.5.0    12/23/2020  YK       wchime_arb.c v1.4.1 -> v1.5.0.                                                                     */
 /*  2.0.1    10/21/2021  MG       wchime_arb.c v1.5.0 -> v2.0.1.                                                                     */
+/*  2.1.0    11/12/2024  KO       wchime_arb.c v2.0.1 -> v2.1.0.                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -963,6 +964,7 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  19PFv3-14 6/27/2024  T.Nakano Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-15 7/12/2024  T.Nakano Add Calibration Guard to Unify Vehicle Operation.                                                  */
 /*  19PFv3-16 7/10/2024  TR       Add SBRDMB config and function buzzer req.                                                         */
+/*  BEV-1    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -981,5 +983,6 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * TR   = Tebs Ramos, DTPH                                                                                                        */
 /*  * T.Nakano   = Tetsushi Nakano, Denso Techno                                                                                     */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
