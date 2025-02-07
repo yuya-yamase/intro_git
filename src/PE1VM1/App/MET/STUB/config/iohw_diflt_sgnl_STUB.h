@@ -22,29 +22,29 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IOHW_DISGNL_IGN__3P8V                    (0U)   /* Warning Chime/Buzzer     */
-#define IOHW_DISGNL_IGN__7V                      (1U)   /* Vehicle Operational Mode */
-#define IOHW_DISGNL_IGN_10P5V                    (2U)   /* Diag Trouble Code Record */
-#define IOHW_DISGNL_RHEO_UP                      (3U)   /* RHEOSTAT_UP              */
-#define IOHW_DISGNL_RHEO_DN                      (4U)   /* RHEOSTAT_DOWN            */
-#define IOHW_DISGNL_HAZARD                       (5U)   /* HAZARD                   */
-#define IOHW_DISGNL_PMIC_INT_6                   (6U)   /* PMIC_INT                 */
-#define IOHW_DISGNL_ODO                          (7U)   /* ODO_SW                   */
-#define IOHW_DISGNL_B_MONI_3P6V                  (8U)   /* SWB_MONI_3P6V            */
-#define IOHW_DISGNL_B_MONI_7P2V_6                (9U)   /* SWB_MONI_7P2V            */
-#define IOHW_DISGNL_B_MONI_6P7V_6                (10U)  /* SWB_MONI_6P7V            */
-#define IOHW_DISGNL_IGN__7P2V_6                  (11U)  /* IG_MONI_7P2V             */
-#define IOHW_DISGNL_IGN__6P7V_6                  (12U)  /* IG_MONI_6P7V             */
-#define IOHW_DISGNL_PMIC_INT_20                  (13U)  /* PMIC_INT                 */
-#define IOHW_DISGNL_PMIC_VIN_6                   (14U)  /* PMIC_VIN_MONI            */
-#define IOHW_DISGNL_PMIC_VIN_20                  (15U)  /* PMIC_VIN_MONI            */
-#define IOHW_DISGNL_LID_IN                       (16U)  /* LID_IN                   */
-#define IOHW_DISGNL_TURN_L_IN                    (17U)  /* TURN_L_IN                */
-#define IOHW_DISGNL_TURN_R_IN                    (18U)  /* TURN_R_IN                */
-#define IOHW_DISGNL_HUD_MAIN_SW_IN               (19U)  /* HUD_MAIN_SW_IN           */
-#define IOHW_DISGNL_RHEOSTAT_DOWN_SW             (20U)  /* RHEOSTAT_DOWN_SW         */
-#define IOHW_DISGNL_TAIL_CANCEL_IN               (21U)  /* TAIL_CANCEL_IN           */
-#define IOHW_DISGNL_RCAR_COM_EN                  (22U)  /* RCAR_COM_EN              */
+#define IOHW_DISGNL_IGN__3P8V                    (U2_MAX)   /* Warning Chime/Buzzer     */
+#define IOHW_DISGNL_IGN__7V                      (U2_MAX)   /* Vehicle Operational Mode */
+#define IOHW_DISGNL_IGN_10P5V                    (U2_MAX)   /* Diag Trouble Code Record */
+#define IOHW_DISGNL_RHEO_UP                      (U2_MAX)   /* RHEOSTAT_UP              */
+#define IOHW_DISGNL_RHEO_DN                      (U2_MAX)   /* RHEOSTAT_DOWN            */
+#define IOHW_DISGNL_HAZARD                       (U2_MAX)   /* HAZARD                   */
+#define IOHW_DISGNL_PMIC_INT_6                   (U2_MAX)   /* PMIC_INT                 */
+#define IOHW_DISGNL_ODO                          (U2_MAX)   /* ODO_SW                   */
+#define IOHW_DISGNL_B_MONI_3P6V                  (U2_MAX)   /* SWB_MONI_3P6V            */
+#define IOHW_DISGNL_B_MONI_7P2V_6                (U2_MAX)   /* SWB_MONI_7P2V            */
+#define IOHW_DISGNL_B_MONI_6P7V_6                (U2_MAX)  /* SWB_MONI_6P7V            */
+#define IOHW_DISGNL_IGN__7P2V_6                  (U2_MAX)  /* IG_MONI_7P2V             */
+#define IOHW_DISGNL_IGN__6P7V_6                  (U2_MAX)  /* IG_MONI_6P7V             */
+#define IOHW_DISGNL_PMIC_INT_20                  (U2_MAX)  /* PMIC_INT                 */
+#define IOHW_DISGNL_PMIC_VIN_6                   (U2_MAX)  /* PMIC_VIN_MONI            */
+#define IOHW_DISGNL_PMIC_VIN_20                  (U2_MAX)  /* PMIC_VIN_MONI            */
+#define IOHW_DISGNL_LID_IN                       (U2_MAX)  /* LID_IN                   */
+#define IOHW_DISGNL_TURN_L_IN                    (U2_MAX)  /* TURN_L_IN                */
+#define IOHW_DISGNL_TURN_R_IN                    (U2_MAX)  /* TURN_R_IN                */
+#define IOHW_DISGNL_HUD_MAIN_SW_IN               (U2_MAX)  /* HUD_MAIN_SW_IN           */
+#define IOHW_DISGNL_RHEOSTAT_DOWN_SW             (U2_MAX)  /* RHEOSTAT_DOWN_SW         */
+#define IOHW_DISGNL_TAIL_CANCEL_IN               (U2_MAX)  /* TAIL_CANCEL_IN           */
+#define IOHW_DISGNL_RCAR_COM_EN                  (U2_MAX)  /* RCAR_COM_EN              */
 
 /* No Function Common Macro */
 #define IOHW_DISGNL_EXHEAT                       (U2_MAX)  /* EXHAUST_HEAT_IN          */
@@ -69,8 +69,8 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#define IOHW_DIFLT_DIGR_UB_MIS                   (0U)  /* user button : odo/trip select, dimming up/down */
-#define IOHW_DIFLT_DIGR_UB_STE                   (1U)
+#define IOHW_DIFLT_DIGR_UB_MIS                   (U2_MAX)  /* user button : odo/trip select, dimming up/down */
+#define IOHW_DIFLT_DIGR_UB_STE                   (U2_MAX)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

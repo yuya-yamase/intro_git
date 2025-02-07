@@ -23,6 +23,10 @@
 #include "gauge.h"
 #include "gauge_if.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -32,15 +36,29 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #define GAUGE_VOM_MASK                          (VEH_OPEMD_MDBIT_ACC | VEH_OPEMD_MDBIT_STA | VEH_OPEMD_MDBIT_IGN)
+#else
+#define GAUGE_VOM_MASK                          (VEH_OPEMD_STUB_MDBIT_ACC | VEH_OPEMD_STUB_MDBIT_STA | VEH_OPEMD_STUB_MDBIT_IGN)
+#endif
 #define GAUGE_VOM_SHIFT                         (10U)
 
+#if 0   /* BEV BSW provisionally */
 #define u2_g_GaugeCfgVomchk()                    ((U2)((u4_g_VehopemdMdfield() & (U4)GAUGE_VOM_MASK) << GAUGE_VOM_SHIFT))
+#else
+#define u2_g_GaugeCfgVomchk()                    ((U2)((u4_g_VehopemdConvertMdfield() & (U4)GAUGE_VOM_MASK) << GAUGE_VOM_SHIFT))
+#endif
 
 #if 0   /* BEV BSW provisionally */
 #if((GAUGE_SRC_CHK_ACC_ON != (VEH_OPEMD_MDBIT_ACC << GAUGE_VOM_SHIFT)) || \
     (GAUGE_SRC_CHK_STA_ON != (VEH_OPEMD_MDBIT_STA << GAUGE_VOM_SHIFT)) || \
     (GAUGE_SRC_CHK_IGN_ON != (VEH_OPEMD_MDBIT_IGN << GAUGE_VOM_SHIFT)))
+#error "gauge_cfg_private.h : GAUGE_SRC_CHK_XXX_ON shall be compatible with VEH_OPEMD_MDBIT_XXX"
+#endif
+#else
+#if((GAUGE_SRC_CHK_ACC_ON != (VEH_OPEMD_STUB_MDBIT_ACC << GAUGE_VOM_SHIFT)) || \
+    (GAUGE_SRC_CHK_STA_ON != (VEH_OPEMD_STUB_MDBIT_STA << GAUGE_VOM_SHIFT)) || \
+    (GAUGE_SRC_CHK_IGN_ON != (VEH_OPEMD_STUB_MDBIT_IGN << GAUGE_VOM_SHIFT)))
 #error "gauge_cfg_private.h : GAUGE_SRC_CHK_XXX_ON shall be compatible with VEH_OPEMD_MDBIT_XXX"
 #endif
 #endif
