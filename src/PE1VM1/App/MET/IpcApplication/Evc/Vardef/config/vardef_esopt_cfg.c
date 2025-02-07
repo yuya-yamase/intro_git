@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_RX                           (165U)
+#define VDF_ESO_NUM_RX                           (170U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -2120,6 +2120,66 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
             (U2)U2_MAX,                         /* u2_rxc_min[MIN_INA] */
             (U2)2U                              /* u2_rxc_min[MIN_ACT] */
         }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_OMRBB,                /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SW_OMRBB,                /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_PDU_RX_CAN_ZN11S19_RXCH0,     /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_OMRBB_MLRSEL,         /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SW_OMRBB_MLRSEL,         /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_PDU_RX_CAN_ZN11S19_RXCH0,     /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_OMRBB_REVERSE,        /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SW_OMRBB_REVERSE,        /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_PDU_RX_CAN_ZN11S19_RXCH0,     /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_OMRBB_AUTO,           /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SW_OMRBB_AUTO,           /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_PDU_RX_CAN_ZN11S19_RXCH0,     /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
+    },
+    {
+        &u1_g_VdfEsoRx_SW_OMRBB_NONAUTO,        /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SW_OMRBB_NONAUTO,        /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_PDU_RX_CAN_ZN11S19_RXCH0,     /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
     }
 };
 
@@ -2185,8 +2245,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
     {
         (U4)VDF_ESO_INI_W6,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W6,                        /* u4_nvm */
-        (U4)0x00000FFFU,                           /* u4_unk */
-        (U4)0x01A7FFFFU,                           /* u4_rx  */
+        (U4)0x3E000FFFU,                           /* u4_unk */
+        (U4)0x3FA7FFFFU,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W6,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W6                    /* u2_bid */
@@ -2306,6 +2366,7 @@ U1      u1_g_VardefEsOptCfgAvaByAVN(void)
 /*  19PFv3-13 6/20/2024  PG       Change config for 19PFv3 R1.2                                                                      */
 /*  19PFv3-14 7/08/2024  YR       Change config for 19PFv3 R1.2                                                                      */
 /*  19PFv3-15 8/01/2024  SN       Change config for 19PFv3 R1.2                                                                      */
+/*  BEV-1     10/10/2024  KT      Change config for for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                             */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
@@ -2324,5 +2385,6 @@ U1      u1_g_VardefEsOptCfgAvaByAVN(void)
 /*  * TR   = Tebs Ramos, DTPH                                                                                                        */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

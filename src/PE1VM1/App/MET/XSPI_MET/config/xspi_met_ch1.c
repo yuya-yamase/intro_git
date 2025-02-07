@@ -2399,9 +2399,7 @@ static inline void    vd_s_XSpiCanTx_M_BB(const U4* u4_ap_pck_rx)
 
     if (u1_t_rxdata != u1_s_prem_bb) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_M_BB_MAX) {
-#if 0   /* BEV BSW provisionally */
             vd_g_VdsCIReqTx((U1)VDS_CI_SW_M_BB, u1_t_rxdata);
-#endif
         }
     }
     u1_s_prem_bb = u1_t_rxdata;  
@@ -2422,9 +2420,7 @@ static inline void    vd_s_XSpiCanTx_MLR_BB(const U4* u4_ap_pck_rx)
 
     if (u1_t_rxdata != u1_s_premlr_bb) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_MLR_BB_MAX) {
-#if 0   /* BEV BSW provisionally */
             vd_g_VdsCIReqTx((U1)VDS_CI_SW_MLR_BB, u1_t_rxdata);
-#endif
         }
     }
     u1_s_premlr_bb = u1_t_rxdata; 
@@ -2445,9 +2441,7 @@ static inline void    vd_s_XSpiCanTx_RLM_BB(const U4* u4_ap_pck_rx)
 
     if (u1_t_rxdata != u1_s_prerlm_bb) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_RLM_BB_MAX) {
-#if 0   /* BEV BSW provisionally */
             vd_g_VdsCIReqTx((U1)VDS_CI_SW_RLM_BB, u1_t_rxdata);
-#endif
         }
     }
     u1_s_prerlm_bb = u1_t_rxdata;
@@ -2468,9 +2462,7 @@ static inline void    vd_s_XSpiCanTx_MRT_BB(const U4* u4_ap_pck_rx)
 
     if (u1_t_rxdata != u1_s_premrt_bb) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_MRT_BB_MAX) {
-#if 0   /* BEV BSW provisionally */
             vd_g_VdsCIReqTx((U1)VDS_CI_SW_MRT_BB, u1_t_rxdata);
-#endif
         }
     }
     u1_s_premrt_bb = u1_t_rxdata;
@@ -2491,9 +2483,7 @@ static inline void    vd_s_XSpiCanTx_ART_BB(const U4* u4_ap_pck_rx)
 
     if (u1_t_rxdata != u1_s_preart_bb) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_ART_BB_MAX) {
-#if 0   /* BEV BSW provisionally */
             vd_g_VdsCIReqTx((U1)VDS_CI_SW_ART_BB, u1_t_rxdata);
-#endif
         }
     }
     u1_s_preart_bb = u1_t_rxdata;
@@ -2531,7 +2521,7 @@ static inline void    vd_s_XSpiCanTx_ART_BB(const U4* u4_ap_pck_rx)
 /*           05/07/2024  TR       Delete LCOM config functions of DK_METDL and DK_DLCNL                                              */
 /*           07/10/2024  YR       Added config for 19PFv3 HCS                                                                        */
 /*  BEV                                                                                                                              */
-/*           10/10/2024  KT       Change for BEV B_OMRBB                                                                             */
+/*           10/10/2024  KT       Change for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
