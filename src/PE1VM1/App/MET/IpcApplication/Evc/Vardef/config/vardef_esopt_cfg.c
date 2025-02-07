@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_RX                           (168U)
+#define VDF_ESO_NUM_RX                           (167U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -2148,6 +2148,18 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
             (U2)2U,                             /* u2_rxc_min[MIN_INA] */
             (U2)2U                              /* u2_rxc_min[MIN_ACT] */
         }
+    },
+    {
+        &u1_g_VdfEsoRx_SOLCHG,                  /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_SOLCHG,                  /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_PDU_RX_CAN_SOL1S02_RXCH0,           /* u2_msg_rx           */
+        (U2)0x0002U,                            /* u2_vom_act          */
+        ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
     }
 };
 
@@ -2160,7 +2172,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W0,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W0,                        /* u4_nvm */
         (U4)0x08000000U,                           /* u4_unk */
-        (U4)0xFFFFCEFFU,                           /* u4_rx  */
+        (U4)0xFFFFCE7FU,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W0,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W0                    /* u2_bid */
@@ -2213,14 +2225,31 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
     {
         (U4)VDF_ESO_INI_W6,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W6,                        /* u4_nvm */
-        (U4)0x3E000FFFU,                           /* u4_unk */
-        (U4)0x3FA7FFFFU,                           /* u4_rx  */
+        (U4)0x3E800FFFU,                           /* u4_unk */
+        (U4)0x3FA4FFFFU,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W6,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W6                    /* u2_bid */
+    },
+    {
+        (U4)VDF_ESO_INI_W7,                        /* u4_ini */
+        (U4)VDF_ESO_NVM_W7,                        /* u4_nvm */
+        (U4)0x00000000U,                           /* u4_unk */
+        (U4)0x40000000U,                           /* u4_rx  */
+
+        (U2)NVMCID_U4_VDF_ESO_W7,                  /* u2_nid */
+        (U2)RIMID_U4_VDF_ESO_W7                    /* u2_bid */
+    },
+    {
+        (U4)VDF_ESO_INI_W8,                        /* u4_ini */
+        (U4)VDF_ESO_NVM_W8,                        /* u4_nvm */
+        (U4)0x00000000U,                           /* u4_unk */
+        (U4)0x00000000U,                           /* u4_rx  */
+
+        (U2)NVMCID_U4_VDF_ESO_W8,                  /* u2_nid */
+        (U2)RIMID_U4_VDF_ESO_W8                    /* u2_bid */
     }
 };
-
 const U1               u1_g_VDF_ESO_NOW_AVA = (U1)VDF_ESO_NOW_AVA;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -2305,6 +2334,7 @@ U1      u1_g_VardefEsOptCfgAvaByAVN(void)
 /*  2.1.0     1/25/2021  SF       vardef_esopt.c v2.1.0 -> v2.2.0                                                                    */
 /*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
 /*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
+/*  2.5.0    11/25/2024  KO       vardef_esopt.c v2.4.0 -> v2.5.0                                                                    */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -2335,8 +2365,11 @@ U1      u1_g_VardefEsOptCfgAvaByAVN(void)
 /*  19PFv3-13 6/20/2024  PG       Change config for 19PFv3 R1.2                                                                      */
 /*  19PFv3-14 7/08/2024  YR       Change config for 19PFv3 R1.2                                                                      */
 /*  19PFv3-15 8/01/2024  SN       Change config for 19PFv3 R1.2                                                                      */
-/*  BEV-1     10/10/2024  KT      Change config for for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                             */
-/*  BEV-2     11/25/2024  KO      Change config for for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-/MET-C_EPB-CSTD-1-)             */
+/*  BEV-1     10/10/2024  KT      Change config for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                                 */
+/*  BEV-2     11/25/2024  KO      Change config for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-/MET-C_EPB-CSTD-1-)                 */
+/*  BEV-3     12/20/2024  KO      Change config for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1)                                */
+/*  BEV-4     01/13/2025  KO      Change config for BEV System_Consideration_1.(MET-H_SOLCHG-CSTD-1)                                 */
+/*  BEV-5     01/30/2025  KO      Change config for BEV System_Consideration_1.(MET-C_HCS-CSTD-0)                                    */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */

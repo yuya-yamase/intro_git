@@ -360,6 +360,8 @@
 #define NVMCID_OTR_OXDC_DTC_UDM_FFD054           (U2_MAX)
 #define NVMCID_OTR_OXDC_DTC_UDM_FFD055           (U2_MAX)
 #define NVMCID_U2_EEP_DUMMY                      (U2_MAX)
+#define NVMCID_U4_VDF_ESO_W7                     (U2_MAX)
+#define NVMCID_U4_VDF_ESO_W8                     (U2_MAX)
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */
