@@ -23,6 +23,10 @@
 #include "gauge.h"
 #include "gauge_if.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -32,7 +36,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #define GAUGE_VOM_MASK                          (VEH_OPEMD_MDBIT_ACC | VEH_OPEMD_MDBIT_STA | VEH_OPEMD_MDBIT_IGN)
+#else
+#define GAUGE_VOM_MASK                          (0x00000007U)
+#endif
 #define GAUGE_VOM_SHIFT                         (10U)
 
 #define u2_g_GaugeCfgVomchk()                    ((U2)((u4_g_VehopemdMdfield() & (U4)GAUGE_VOM_MASK) << GAUGE_VOM_SHIFT))

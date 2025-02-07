@@ -169,7 +169,7 @@ static U1      u1_s_EngspdDetRpmCanNeMetComRx(U2 * u2p_a_ne, U1 * u1p_a_stsbit)
     s2_t_ne       = (S2)0;
     u4_t_inst     = (U4)0U;
 
-    (*u1p_a_stsbit)  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S98, ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR), u2_ENGSPD_RPM_RXTO_THRSH);
+    (*u1p_a_stsbit)  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S98, ((U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE), u2_ENGSPD_RPM_RXTO_THRSH);
     (*u1p_a_stsbit) &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((*u1p_a_stsbit) == (U1)0U){
@@ -222,7 +222,7 @@ static U1      u1_s_EngspdDetRpmCanHvNeComRx(U2 * u2p_a_ne, U1 * u1p_a_stsbit)
     s2_t_ne       = (S2)0;
     u4_t_inst     = (U4)0U;
 
-    (*u1p_a_stsbit)  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0, ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR), u2_ENGSPD_DET_RPM_RXTO_THRSH);
+    (*u1p_a_stsbit)  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0, ((U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE), u2_ENGSPD_DET_RPM_RXTO_THRSH);
     (*u1p_a_stsbit) &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((*u1p_a_stsbit) == (U1)0U){
@@ -269,7 +269,7 @@ static U1      u1_s_EngspdDetRpmCanNe1ComRx(U2 * u2p_a_ne, U1 * u1p_a_stsbit)
     s2_t_ne       = (S2)0;
     u4_t_inst     = (U4)0U;
 
-    (*u1p_a_stsbit)  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G02, ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR), u2_ENGSPD_DET_RPM_RXTO_THRSH);
+    (*u1p_a_stsbit)  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G02, ((U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE), u2_ENGSPD_DET_RPM_RXTO_THRSH);
     (*u1p_a_stsbit) &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((*u1p_a_stsbit) == (U1)0U){

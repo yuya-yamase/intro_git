@@ -125,7 +125,7 @@ static U4      u4_s_AlertC_avswarSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_msgsts;
 
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SCS1S90,
-                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                   (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                    u2_s_u2_s_ALERT_CH_C_AVSWAR_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl = (U1)0U;

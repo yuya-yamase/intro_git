@@ -32,6 +32,10 @@
 #include "iohw_diflt_sgnl_STUB.h"
 #endif
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -149,7 +153,7 @@ void        vd_g_AlertBcmTask(const U1 u1_a_VOM)
 
         u1_t_rdyind = (U1)0U;
         u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G90_RXCH0,
-                                            (U2)OXCAN_RX_SYS_NRX_IGR,
+                                            (U2)OXCAN_RX_SYS_NRX_POE,
                                             (U2)U2_MAX) & (U1)COM_NO_RX;
         if(u1_t_msgsts != (U1)COM_NO_RX){
             (void)Com_ReceiveSignal(ComConf_ComSignal_RDYIND, &u1_t_rdyind);

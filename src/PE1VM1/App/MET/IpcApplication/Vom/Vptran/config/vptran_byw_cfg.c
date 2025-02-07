@@ -77,7 +77,7 @@
 U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 {
     return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
-                             ((U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT),
+                             ((U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
@@ -90,7 +90,7 @@ U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 {
     return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
-                             ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
+                             ((U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE),
                              (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
@@ -103,7 +103,7 @@ U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 {
     return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
-                             ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
+                             ((U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE),
                              (U2)VPTRAN_TIM_ECT1G92_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
@@ -116,7 +116,7 @@ U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 U1              u1_g_VptranBywCfgGetMsgStsSftBlks(void)
 {
     return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
-                             ((U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT),
+                             ((U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 

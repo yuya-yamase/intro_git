@@ -157,7 +157,7 @@ static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 
 #if defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND)
     u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AFS1S01,
-                                           (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                           (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                            u2_s_ALERT_B_TBEAM_THRSH_TO_AFS) & (U1)(COM_TIMEOUT | COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
@@ -176,7 +176,7 @@ static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 
 #if defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH)
     u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
-                                           (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                           (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                            u2_s_ALERT_B_TBEAM_THRSH_TO_BDB) & (U1)(COM_TIMEOUT | COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){

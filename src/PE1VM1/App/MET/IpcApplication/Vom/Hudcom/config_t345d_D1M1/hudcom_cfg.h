@@ -21,6 +21,10 @@
 /* ! Caution for cross-reference with Vardef domain ! */
 #include "aip_common.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 #include "rim_ctl.h"
 #if 0   /* BEV BSW provisionally */
@@ -67,12 +71,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macros                                                                                                                           */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #define u1_HCOM_GETIG()					((U1)((u4_g_VehopemdMdfield()&(U4)VEH_OPEMD_MDBIT_IGN)>>HCOM_VOM_SHIFT))           /* IG                             */ 
+#else
+#define u1_HCOM_GETIG()					((U1)((u4_g_VehopemdMdfield()&(U4)0x00000002U)>>HCOM_VOM_SHIFT))           /* IG                             */ 
+#endif
+
 #define u1_HCOM_GETMSTWRN()				(u1_g_DspbldTtBldrGetMstTt())                          /* MSC Disp Req                 */
 #define u1_HCOM_GETCNTT()				(u1_g_DspmgrGetCntt((U1)HCOM_DSPSTM_00))               /* DSP_STM00_CNTT       */
 #define vd_HCOM_CANSGNL_NAV_MASK(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MASK,  (x)))
 #define u1_HCOM_GET_TBT_INT_SUP()		(u1_g_VardefEsOptAvaByCh(VDF_ESO_CH_MM_NAVI) & u1_g_McstBf(MCST_BFI_CROSS_ADV))
-#define u1_HCOM_CANMSGSTS_HUDSTS()		((U1)u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_HUD1S01,(U2)(OXCAN_RX_SYS_NRX_IGR | OXCAN_RX_SYS_TOE_IGR),(U2)HCOM_HUD1S01_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX))  /*  HUD1S01              */
+#define u1_HCOM_CANMSGSTS_HUDSTS()		((U1)u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_HUD1S01,(U2)(OXCAN_RX_SYS_NRX_POE | OXCAN_RX_SYS_TOE_POE),(U2)HCOM_HUD1S01_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX))  /*  HUD1S01              */
 #define vd_HCOMRX_GET_HUD_PWST(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_HUD_PWST,  (x)))
 #define vd_HCOMRX_GET_HUDSW_PS(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_HUDSW_PS,  (x)))
 #define vd_HCOMRX_GET_HUDSW_RT(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_HUDSW_RT,  (x)))

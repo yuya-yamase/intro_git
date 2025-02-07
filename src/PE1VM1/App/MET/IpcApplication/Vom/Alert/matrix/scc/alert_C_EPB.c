@@ -332,7 +332,7 @@ static U4      u4_s_AlertC_epbTtPkbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_trns_fact;
 
     u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPB1F01,
-                                           (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                           (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                            u2_s_ALERT_C_EPB_PKB_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
@@ -374,7 +374,7 @@ static U4      u4_s_AlertC_epbWrnIgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPB1F01,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                           u2_s_ALERT_C_EPB_WRNIG_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -413,7 +413,7 @@ static U4      u4_s_AlertC_epbWrnBatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPB1F01,
-                                          (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                          (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                           u2_s_ALERT_C_EPB_WRNBAT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_epb_msgsts_wrnbat, u1_t_msgsts);
 
@@ -447,7 +447,7 @@ static U4      u4_s_AlertC_epbTtAtoffSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EPB1F01,
-                                          (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                          (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                           u2_s_ALERT_C_EPB_ATOF_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_epb_msgsts_atoff, u1_t_msgsts);
 

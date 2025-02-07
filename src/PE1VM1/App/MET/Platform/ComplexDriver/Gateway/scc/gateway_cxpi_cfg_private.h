@@ -27,6 +27,10 @@
 #include "oxcan_channel_STUB.h"
 #endif
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 #ifdef CXPICDD_H
 #include "CxpiCdd_App.h"
