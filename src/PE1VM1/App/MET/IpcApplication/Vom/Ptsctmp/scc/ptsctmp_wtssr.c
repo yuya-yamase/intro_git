@@ -96,8 +96,12 @@ void    vd_g_PtsctmpWtssrInit(void)
 void    vd_g_PtsctmpWtssrOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
 {
     U4                  u4_t_evtchk;
-
+#if 0   /* BEV BSW provisionally */
     u4_t_evtchk = u4_a_EVTBIT & ((U4)VEH_OPEMD_EVTBIT_IGN_TO_ON |(U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF);
+#else
+    u4_t_evtchk = u4_a_EVTBIT & ((U4)0x00000020U |(U4)0x00002000U);
+
+#endif
     if(u4_t_evtchk != (U4)0U){
         vd_g_PtsctmpWtssrInit();
     }

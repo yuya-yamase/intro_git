@@ -98,7 +98,7 @@ static U4      u4_s_AlertS_pssdi_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_msgsts;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_CSR1S08_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl    = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_PKSSINFO, &u1_t_sgnl);

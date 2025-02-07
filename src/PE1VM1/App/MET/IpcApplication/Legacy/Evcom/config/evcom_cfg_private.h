@@ -28,6 +28,10 @@
 
 #include "memfill_u1.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 #include "locale.h"
 /*#include "dsptimchgctl.h" *This parameter is used only by Tm-2. */
 #include "rim_ctl_cfg.h"

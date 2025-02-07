@@ -26,6 +26,10 @@
 #include "tydocan_dtc_ecuslp_cfg_private.h"
 #include "tydocan_dtc_nmgbl_cfg_private.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 /*#include "ecu_m.h"*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

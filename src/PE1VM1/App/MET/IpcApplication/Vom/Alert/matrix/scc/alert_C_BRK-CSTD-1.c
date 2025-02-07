@@ -256,7 +256,7 @@ static U4      u4_s_AlertC_brk_1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
 #ifdef OXCAN_PDU_RX_CAN_VSC1S95
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S95,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                           u2_s_ALERT_C_BRK_TO_THRESH_95) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_brk_jdg  = (U1)(u1_t_msgsts                            << u1_s_ALERT_C_BRK_LSB_MGSSTS_95);
@@ -283,7 +283,7 @@ static U4      u4_s_AlertC_brk_1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
 #ifdef OXCAN_PDU_RX_CAN_VSC1S97
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S97,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                           u2_s_ALERT_C_BRK_TO_THRESH_97) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_brk_jdg  = (U1)(u1_t_msgsts                            << u1_s_ALERT_C_BRK_LSB_MGSSTS_97);

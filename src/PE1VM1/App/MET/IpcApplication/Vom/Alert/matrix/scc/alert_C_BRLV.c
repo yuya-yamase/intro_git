@@ -156,7 +156,7 @@ static U4      u4_s_AlertC_brlv_1WrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 
 #if defined(OXCAN_PDU_RX_CAN_VSC1S97) && defined(ComConf_ComSignal_B_BRLV2)
     u1_t_msgsts_vsc97 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S97,
-                                              (U2)OXCAN_RX_SYS_NRX_IGR,
+                                              (U2)OXCAN_RX_SYS_NRX_POE,
                                               (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl_brlv2   = (U1)0U;
@@ -169,7 +169,7 @@ static U4      u4_s_AlertC_brlv_1WrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 
 #if defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BRLV)
     u1_t_msgsts_vsc95 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S95,
-                                              (U2)OXCAN_RX_SYS_NRX_IGR,
+                                              (U2)OXCAN_RX_SYS_NRX_POE,
                                               (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl_brlv    = (U1)0U;
@@ -210,7 +210,7 @@ static U4      u4_s_AlertC_brlv_1BcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
 #if defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BRLV)
     u1_t_msg_vsc95  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S95,
-                                            (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                            (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                             u2_s_ALERT_BRLV_BC_TO_THRESH95) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl_brlv  = (U1)0U;
@@ -221,7 +221,7 @@ static U4      u4_s_AlertC_brlv_1BcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
 #if defined(OXCAN_PDU_RX_CAN_VSC1S97) && defined(ComConf_ComSignal_B_BRLV2)
     u1_t_msg_vsc97  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S97,
-                                            (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                            (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                             u2_s_ALERT_BRLV_BC_TO_THRESH97) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl_brlv2 = (U1)0U;

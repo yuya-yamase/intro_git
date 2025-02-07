@@ -31,6 +31,10 @@
 
 #include "iohw_adc.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 #include "unitconvrt.h"
 #include "odo_km.h"

@@ -131,7 +131,7 @@ static U4      u4_s_AlertS_swsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS12F03_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
@@ -158,7 +158,7 @@ static U4      u4_s_AlertS_swsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U4              u4_t_src_chk;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS12F03_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_S_SWS_PD_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;

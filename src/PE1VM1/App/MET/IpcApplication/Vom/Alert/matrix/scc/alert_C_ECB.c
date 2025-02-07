@@ -309,7 +309,7 @@ static U4      u4_s_AlertC_ecbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 
 #if defined(OXCAN_PDU_RX_CAN_VSC1S95) && (defined(ComConf_ComSignal_B_EBW) || defined(ComConf_ComSignal_DDRTWV) || defined(ComConf_ComSignal_EBW_MID))
     u1_t_vsc1s95_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S95,
-                                                (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                                (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                                 u2_s_ALERT_C_ECB_TO_THRESH95) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_vsc1s95_msgsts = (U1)COM_NO_RX;
@@ -317,7 +317,7 @@ static U4      u4_s_AlertC_ecbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 
 #if defined(OXCAN_PDU_RX_CAN_VSC1S97) && (defined(ComConf_ComSignal_B_EBW2) || defined(ComConf_ComSignal_DDRTWV2) || defined(ComConf_ComSignal_EBW_MID2))
     u1_t_vsc1s97_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S97,
-                                                (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                                (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                                 u2_s_ALERT_C_ECB_TO_THRESH97) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_vsc1s97_msgsts = (U1)COM_NO_RX;

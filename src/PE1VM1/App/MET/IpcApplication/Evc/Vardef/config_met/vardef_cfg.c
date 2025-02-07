@@ -48,6 +48,10 @@
 #include "vardef_esopt.h"
 #include "veh_opemd.h"
 #if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
+#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
 #else
 #include "es_inspect_STUB.h"
@@ -202,9 +206,12 @@ void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT)
 /*===================================================================================================================================*/
 U2      u2_g_VardefCfgEomchk(void)
 {
+#if 0   /* BEV BSW provisionally */
 #if ((VDF_EOM_ACC_ON != VEH_OPEMD_MDBIT_ACC) || \
      (VDF_EOM_IGR_ON != VEH_OPEMD_MDBIT_IGN))
 #error "vardef_fg.c : VDF_EOM_XXX shall be equal to VEH_OPEMD_MDBIT_XXX."
+#endif
+#else
 #endif
 
 #if ((ES_INSPECT_MDBF_NUO_DI != (VDF_EOM_NUO_DI >> 8U)) ||  \
