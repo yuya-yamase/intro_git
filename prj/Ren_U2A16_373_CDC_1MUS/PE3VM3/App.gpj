@@ -1,6 +1,17 @@
 #!gbuild
 [Subproject]
     :sourceDir=${APP_DIR}
+    :sourceDir=${APP_DIR}/Common/xspi
+    :sourceDir=${APP_DIR}/Common/PwrCtrl
+    :sourceDir=${APP_DIR}/Product/config
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt/src
+    :sourceDir=${APP_DIR}/Central/LIB
+    :sourceDir=${APP_DIR}/Central/Pmic/src
+    :sourceDir=${APP_DIR}/Central/EthSW_Task
+
+
+    -I${APP_DIR}/Common/xspi
+    -I${APP_DIR}/Common/PwrCtrl
 
     -I${CAN_DIR}/inc
 
@@ -17,6 +28,27 @@
     -I${VEHOPE_DIR}/config
     -I${LIB_DIR}
 
+    -I${APP_DIR}/Central/esw/EthSwt/cfg
+    -I${APP_DIR}/Central/esw/EthSwt/inc
+    -I${APP_DIR}/Central/esw/inc
+    -I${APP_DIR}/Central/inc
+
 Ecu_Intg_Callout.c
+xspi.c
+xspi_sub.c
+Mcu_Main.c
+Mcu_NoRedun_PwrCtrl.c
+Mcu_PwrCtrl.c
+Mcu_Sip_Pwr.c
+Mcu_Sys_Pwr.c
+product_cfg.c
 ShtdwnM/bsw_m.c
 ShtdwnM/cfg/bsw_m_cfg.c
+EthSwt_SWIC.c
+EthSwt_SWIC_Org.c
+EthSwt_SWIC_Reg.c
+EthSwt_SWIC_SpiS1.c
+LIB_interrupt.c
+LIB_memset.c
+Pmic_Pwr.c
+EthSW_Task.c

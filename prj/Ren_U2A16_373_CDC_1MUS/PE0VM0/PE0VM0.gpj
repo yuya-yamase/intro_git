@@ -23,9 +23,12 @@ primaryTarget=v800_standalone.tgt
 	:macro=APP_DIR=${ROOT_DIR}/App
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
 
+    # Compile Switch
+
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
     :optionsFile=${CMN_DIR}/IOHW.opt
+    :optionsFile=${PRJ_DIR}/PE0VM0_CmpSW.opt
 
     -I${COMP_DIR}/include/v800
     -I${COMP_DIR}/ansi

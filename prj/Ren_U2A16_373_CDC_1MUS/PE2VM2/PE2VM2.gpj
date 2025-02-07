@@ -22,8 +22,6 @@ primaryTarget=v800_standalone.tgt
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
 
     # Compile Switch
-    # 1Mboard
-    :macro=BOARD_SW_1M=
     # US
     :macro=COUNTRY_SW_US=
 
