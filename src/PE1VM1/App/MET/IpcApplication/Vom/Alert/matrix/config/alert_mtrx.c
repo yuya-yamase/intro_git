@@ -498,6 +498,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-3    11/01/2024  KO       Change for BEV System_Consideration_1.(MET-C_STEER-CSTD-0-00-A-C0)                                 */
 /*  BEV-4    11/03/2024  KO       Change for BEV System_Consideration_1.(MET-C_TRCOFF-CSTD-1-00-A-C0)                                */
 /*  BEV-5    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
+/*  BEV-6    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
