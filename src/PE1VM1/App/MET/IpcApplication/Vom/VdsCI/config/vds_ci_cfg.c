@@ -211,6 +211,11 @@ static void vd_s_VdsCIReqTx_AHSSWVSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_AHSSDESW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_SW_AS02 (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_SW_AS01 (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_M_BB    (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_MLR_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_RLM_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_MRT_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_ART_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -364,7 +369,12 @@ const ST_VDS_CI_TRX    st_gp_VDS_CI_TRX[VDS_CI_NUM_CH] = {
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_AHSSWVSW,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 139 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_AHSSDESW,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 140 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SW_AS02,     (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 141 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SW_AS01,     (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }  /* 142 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SW_AS01,     (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 142 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_BB,        (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 143 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MLR_BB,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 144 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RLM_BB,      (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 145 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MRT_BB,      (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 146 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ART_BB,      (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 147 */
 };
 const U1               u1_g_VDS_CI_NUM_CH = (U1)VDS_CI_NUM_CH;
 
@@ -3911,6 +3921,151 @@ static void    vd_s_VdsCIReqTx_SW_AS02(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 
     (void)Com_SendSignal(ComConf_ComSignal_SW_AS02, &u1_t_tx);
 }
+/*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_M_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_M_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_M_BB
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_M_BB_MAX){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_M_BB, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_M_BB, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S30_TXCH0);
+    }
+#endif /* ComConf_ComSignal_M_BB */
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_MLR_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_MLR_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_MLR_BB
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_MLR_BB_MAX){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_MLR_BB, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_MLR_BB, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S30_TXCH0);
+    }
+#endif /* ComConf_ComSignal_MLR_BB */
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_RLM_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_RLM_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_RLM_BB
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_RLM_BB_MAX){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RLM_BB, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_RLM_BB, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S30_TXCH0);
+    }
+#endif /* ComConf_ComSignal_RLM_BB */
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_MRT_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_MRT_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_MRT_BB
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_MRT_BB_MAX){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_MRT_BB, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_MRT_BB, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S30_TXCH0);
+    }
+#endif /* ComConf_ComSignal_MRT_BB */
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_ART_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_ART_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_ART_BB
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_ART_BB_MAX){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ART_BB, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_ART_BB, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S30_TXCH0);
+    }
+#endif /* ComConf_ComSignal_ART_BB */
+}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -3942,6 +4097,7 @@ static void    vd_s_VdsCIReqTx_SW_AS02(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /* 19PFv3-10 04/08/2024  SN       Change config for ADASCS                                                                           */
 /* 19PFv3-11 05/07/2024  TR       Change config for 19PFv3 CV                                                                        */
 /* 19PFv3-12 07/10/2024  YR       Added config for HCS                                                                               */
+/* BEV-1     10/10/2024  KT       Change config for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -3956,5 +4112,6 @@ static void    vd_s_VdsCIReqTx_SW_AS02(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
 /*  * TR   = Tebs Ramos,   DTPH                                                                                                      */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

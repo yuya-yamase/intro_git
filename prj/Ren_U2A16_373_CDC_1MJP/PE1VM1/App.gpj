@@ -250,6 +250,7 @@ MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SW_BATCSW.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_TPM1S02.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_VSC1S95.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_VSC1S96.c
+MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ZN11S19.c
 MET/IpcApplication/Evc/Vardef/config/vardef_esopt_cfg.c
 MET/IpcApplication/Evc/Vardef/config/vardef_mmmthd_cfg.c
 MET/IpcApplication/Evc/Vardef/config/vardef_navspdlmt_cfg.c
