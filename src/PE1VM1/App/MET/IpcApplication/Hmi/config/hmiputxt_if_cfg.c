@@ -106,16 +106,14 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_P_COOTEM_TT_PD,       (U1)ALERT_REQ_P_COOTEM_TT_PD_WRN,       (U1)2U,     (U4)0x10000000U    },
     {    (U2)ALERT_CH_B_SMASTA_S2IG,        (U1)ALERT_REQ_B_SMASTA_S2IG_SAFE,       (U1)2U,     (U4)0x20000000U    },
     {    (U2)ALERT_CH_P_ROLAWA_PD,          (U1)ALERT_REQ_P_ROLAWA_PD_VEHRUN,       (U1)2U,     (U4)0x40000000U    },
-    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND16,       (U1)2U,     (U4)0x80000000U    },
-    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND17,       (U1)3U,     (U4)0x00000001U    },
-    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND14,       (U1)3U,     (U4)0x00000002U    },
+    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND15,       (U1)2U,     (U4)0x80000000U    },
     {    (U2)ALERT_CH_D_CVTOIL,             (U1)ALERT_REQ_D_CVTOIL_TEMPH,           (U1)3U,     (U4)0x00000004U    },
     {    (U2)ALERT_CH_D_CVTOIL,             (U1)ALERT_REQ_D_CVTOIL_ON_TEMPH,        (U1)3U,     (U4)0x00000004U    },
     {    (U2)ALERT_CH_D_CVTOIL,             (U1)ALERT_REQ_D_CVTOIL_FLASH_TEMPH,     (U1)3U,     (U4)0x00000004U    },
     {    (U2)ALERT_CH_H_ACCHOL,             (U1)ALERT_REQ_H_ACCHOL_HVSYSOVHT,       (U1)3U,     (U4)0x00000008U    },
     {    (U2)ALERT_CH_B_SMASTA_S2IG,        (U1)ALERT_REQ_B_SMASTA_S2IG_HVSAFE,     (U1)3U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND7,        (U1)3U,     (U4)0x00000020U    },
-    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND15,       (U1)3U,     (U4)0x00000100U    },
+    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND14,       (U1)3U,     (U4)0x00000100U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND2,        (U1)3U,     (U4)0x00000200U    },
     {    (U2)ALERT_CH_H_PEXI_WARN,          (U1)ALERT_REQ_H_PEXI_WARN_MALFUNC,      (U1)3U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_ADVICE1,     (U1)3U,     (U4)0x00020000U    },
@@ -771,6 +769,7 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  19PFv3-1 02/20/2024  GM       Change config for 19PFv3 CV                                                                        */
 /*  19PFv3-2 07/10/2024  YR       Added config for HCS                                                                               */
 /*  BEV-1    10/25/2024  RS       Change for BEV System_Consideration_1.(MET-H_DRIPOW-CSTD-1-00-A-C0)                                */
+/*  BEV-2    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */

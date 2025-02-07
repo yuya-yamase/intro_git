@@ -356,39 +356,21 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 
     switch (u1_t_sysmal_req) {
         case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT1:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT3:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_2BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT4:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT2:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_3BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT5:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT3:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_4BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_5BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT7:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT4:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_6BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT8:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT5:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_7BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT9:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_8BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT10:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_9BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT11:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_10BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT12:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_11BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT13:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_12BIT_SHIFT;
             break;
         default:
@@ -523,8 +505,6 @@ static void vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask) {
 #if (HMIPUTXT_SYSMAL_JDG == HMIPUTXT_JDG_ON)
     static const U2 u2_sp_HMIPUTXT_SYSMAL[] = {
         (U2)95U,
-        (U2)96U,
-        (U2)97U,
         (U2)101U,
         (U2)104U,
         (U2)105U,
@@ -909,6 +889,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  19PFv3-5 05/17/2024  PG       Deleted PROSRV process                                                                             */
 /*  19PFv3-6 06/21/2024  JMH      Added LBW Mask Function                                                                            */
 /*  19PFv3-7 07/04/2024  TN       Delete Calibration Guard Process.                                                                  */
+/*  BEV-1    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
