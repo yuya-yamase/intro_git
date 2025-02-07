@@ -53,7 +53,6 @@
 #define ALERT_OPT_ID_B_PEDPRO_PUH_FLG            (VDF_ESO_CH_PEDPRO)
 #define ALERT_OPT_ID_C_BRKHLD_BHEXIST            (VDF_ESO_CH_BRKHLD)
 #define ALERT_OPT_ID_C_DRS_ARS1S90               (VDF_ESO_CH_DRS)
-#define ALERT_OPT_ID_C_EPB_EPB                   (VDF_ESO_CH_EPB)
 #define ALERT_OPT_ID_C_SLIP_VSCEXIST             (VDF_ESO_CH_VSC)
 #define ALERT_OPT_ID_C_TPMS_TPM_DISC             (VDF_ESO_CH_TPMSCHN)
 #define ALERT_OPT_ID_C_TPMS_TPM_VAR              (VDF_ESO_CH_TPMS)
@@ -105,7 +104,7 @@
 #define ALERT_B_TRWIP_CH_NUM                     (1U)
 #define ALERT_C_BRKBZ_CH_NUM                     (1U)
 #define ALERT_C_BRK_1_CH_NUM                     (1U)
-#define ALERT_C_BRLV_1_CH_NUM                    (2U)
+#define ALERT_C_BRLV_2_CH_NUM                    (2U)
 #define ALERT_C_ECB_CH_NUM                       (1U)
 #define ALERT_C_PKBWAR_CH_NUM                    (2U)
 #define ALERT_H_MAICER_CH_NUM                    (4U)
@@ -129,12 +128,12 @@
 #define ALERT_C_BRKHLD_CH_NUM                    (4U)
 #define ALERT_C_DRIMOD_CH_NUM                    (1U)
 #define ALERT_C_DRS_CH_NUM                       (1U)
-#define ALERT_C_EPB_CH_NUM                       (4U)
+#define ALERT_C_EPB_CH_NUM                       (3U)
 #define ALERT_C_MCBW_CH_NUM                      (1U)
 #define ALERT_C_SLIP_CH_NUM                      (1U)
 #define ALERT_C_TPKBON_CH_NUM                    (1U)
 #define ALERT_C_TPMS_CH_NUM                      (3U)
-#define ALERT_C_TRCOFF_CH_NUM                    (2U)
+#define ALERT_C_TRCOFF_CH_NUM                    (1U)
 #define ALERT_C_VSCOFF_CH_NUM                    (1U)
 #define ALERT_C_STEER_CH_NUM                     (4U)
 #define ALERT_D_4WDSYS_CH_NUM                    (3U)
@@ -272,7 +271,7 @@
 #define ALERT_H_PARLON_RWRN_CH_NUM               (1U)
 #define ALERT_H_LBW_CH_NUM                       (1U)
 #define ALERT_C_BRPADW_CH_NUM                    (1U)
-#define ALERT_H_ZMILRQ_CH_NUM                    (3U)
+#define ALERT_H_ZMILRQ_CH_NUM                    (1U)
 #define ALERT_P_CIRMOD_CH_NUM                    (4U)
 #define ALERT_C_SBRDMB_CH_NUM                    (1U)
 #define ALERT_C_HCS_CH_NUM                       (3U)
@@ -342,7 +341,6 @@
 #define u1_g_AlertShiftSbwFunc()                                    (u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW))
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
 #define u1_g_AlertRevBzrDest()                                      (u1_g_VardefBzRevDstByPid())
-#define u1_g_AlertZmilrqDispJdg()                                   (u1_g_VardefZmilrqDispJdg())
 #define u1_g_AlertHcsAscext()                                       (u1_g_VardefHcsRxAscext())
 
 #define u1_g_AlertCfgP_tmntOdoTripKm(u4p)                           (u1_g_OdoTripKm((U1)ODO_TRIP_CH_OM, (u4p)))
@@ -388,7 +386,7 @@ void    vd_g_AlertB_tbeam12Init(void);
 void    vd_g_AlertB_tdoorInit(void);
 void    vd_g_AlertB_tpwsrInit(void);
 void    vd_g_AlertC_brkbzInit(void);
-void    vd_g_AlertC_brlv_1Init(void);
+void    vd_g_AlertC_brlv_2Init(void);
 void    vd_g_AlertC_pkbwarInit(void);
 void    vd_g_AlertO_eigconInit(void);
 void    vd_g_AlertP_oilpreInit(void);
@@ -482,7 +480,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_TPWSR_MTRX[ALERT_B_TPWSR_CH_NUM
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TRWIP_MTRX[ALERT_B_TRWIP_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRKBZ_MTRX[ALERT_C_BRKBZ_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRK_1_MTRX[ALERT_C_BRK_1_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRLV_1_MTRX[ALERT_C_BRLV_1_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRLV_2_MTRX[ALERT_C_BRLV_2_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_ECB_MTRX[ALERT_C_ECB_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_PKBWAR_MTRX[ALERT_C_PKBWAR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_MAICER_MTRX[ALERT_H_MAICER_CH_NUM];

@@ -1,4 +1,4 @@
-/* 5.0.1 */
+/* 5.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_HCS_C_MAJOR                      (5)
-#define ALERT_C_HCS_C_MINOR                      (0)
-#define ALERT_C_HCS_C_PATCH                      (1)
+#define ALERT_C_HCS_C_MINOR                      (1)
+#define ALERT_C_HCS_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -327,10 +327,10 @@ static U4      u4_s_AlertC_hcsTtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_sgnl;
     U1              u1_t_msgsts;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ASC1S90,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SCS1S11_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
                                      u2_s_ALERT_C_HCS_TTB_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
+    
     vd_g_AlertBRxTrnsSts(&u1_s_alert_c_hcs_ttb_msgsts, u1_t_msgsts);
 
     u1_t_sgnl = (U1)0U;
@@ -363,7 +363,7 @@ static U4      u4_s_AlertC_hcsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_msgsts;
     U1              u1_t_ascext;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ASC1S90,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SCS1S11_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_C_HCS_TT_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -395,7 +395,7 @@ static U4      u4_s_AlertC_hcsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_msgsts;
     U1              u1_t_ascext;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ASC1S90,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SCS1S11_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_C_HCS_PD_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sgnl   = (U1)0U;
@@ -443,8 +443,10 @@ static void    vd_s_AlertC_hcsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0    07/09/2024  YR       Newly created for 19PFv3                                                                           */
 /*  5.0.1    07/26/2024  YR       QAC Fix                                                                                            */
+/*  5.1.0     1/30/2025  KO        Change for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

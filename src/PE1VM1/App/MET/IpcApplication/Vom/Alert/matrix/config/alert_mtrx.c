@@ -102,7 +102,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRKBZ_MTRX[0],         (U2)ALERT_CH_C_BRKBZ,                  (U1)ALERT_C_BRKBZ_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_C_BRK_0_MTRX[0],         (U2)ALERT_CH_C_BRK_0,                  (U1)ALERT_C_BRK_0_CH_NUM,           (U1)0U  },
     {  &st_gp_ALERT_C_BRK_1_MTRX[0],         (U2)ALERT_CH_C_BRK_1,                  (U1)ALERT_C_BRK_1_CH_NUM,           (U1)0U  },
-    {  &st_gp_ALERT_C_BRLV_1_MTRX[0],        (U2)ALERT_CH_C_BRLV_1_WRN,             (U1)ALERT_C_BRLV_1_CH_NUM,          (U1)0U  },
+    {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)0U  },
     {  &st_gp_ALERT_C_PKBWAR_MTRX[0],        (U2)ALERT_CH_C_PKBWAR_BC,              (U1)ALERT_C_PKBWAR_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_D_ATMAL_MTRX[0],         (U2)ALERT_CH_D_ATMAL,                  (U1)ALERT_D_ATMAL_CH_NUM,           (U1)0U  },
@@ -164,7 +164,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRKBZ_MTRX[0],         (U2)ALERT_CH_C_BRKBZ,                  (U1)ALERT_C_BRKBZ_CH_NUM,           (U1)1U  },
     {  &st_gp_ALERT_C_BRK_0_MTRX[0],         (U2)ALERT_CH_C_BRK_0,                  (U1)ALERT_C_BRK_0_CH_NUM,           (U1)1U  },
     {  &st_gp_ALERT_C_BRK_1_MTRX[0],         (U2)ALERT_CH_C_BRK_1,                  (U1)ALERT_C_BRK_1_CH_NUM,           (U1)1U  },
-    {  &st_gp_ALERT_C_BRLV_1_MTRX[0],        (U2)ALERT_CH_C_BRLV_1_WRN,             (U1)ALERT_C_BRLV_1_CH_NUM,          (U1)1U  },
+    {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)1U  },
     {  &st_gp_ALERT_C_PKBWAR_MTRX[0],        (U2)ALERT_CH_C_PKBWAR_BC,              (U1)ALERT_C_PKBWAR_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_D_ATMAL_MTRX[0],         (U2)ALERT_CH_D_ATMAL,                  (U1)ALERT_D_ATMAL_CH_NUM,           (U1)1U  },
@@ -202,7 +202,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_SDM_RWRN_MTRX[0],      (U2)ALERT_CH_C_SDM_RWRN,               (U1)ALERT_C_SDM_RWRN_CH_NUM,        (U1)1U  },
     {  &st_gp_ALERT_H_DCLDSP_MTRX[0],        (U2)ALERT_CH_H_DCLDSP,                 (U1)ALERT_H_DCLDSP_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)1U  },
-    {  &st_gp_ALERT_H_ZMILRQ_MTRX[0],        (U2)ALERT_CH_H_ZMILRQ_TT_AMB,          (U1)ALERT_H_ZMILRQ_CH_NUM,          (U1)1U  },
+    {  &st_gp_ALERT_H_ZMILRQ_MTRX[0],        (U2)ALERT_CH_H_ZMILRQ_RWRN,            (U1)ALERT_H_ZMILRQ_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_SBRDMB_MTRX[0],        (U2)ALERT_CH_C_SBRDMB,                 (U1)ALERT_C_SBRDMB_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_BRK_0_MTRX[0],         (U2)ALERT_CH_C_BRK_0,                  (U1)ALERT_C_BRK_0_CH_NUM,           (U1)2U  },
     {  &st_gp_ALERT_C_STEER_MTRX[0],         (U2)ALERT_CH_C_STEER_TT,               (U1)ALERT_C_STEER_CH_NUM,           (U1)2U  },
@@ -237,7 +237,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_TRWIP_MTRX[0],         (U2)ALERT_CH_B_TRWIP,                  (U1)ALERT_B_TRWIP_CH_NUM,           (U1)2U  },
     {  &st_gp_ALERT_C_BRKBZ_MTRX[0],         (U2)ALERT_CH_C_BRKBZ,                  (U1)ALERT_C_BRKBZ_CH_NUM,           (U1)2U  },
     {  &st_gp_ALERT_C_BRK_1_MTRX[0],         (U2)ALERT_CH_C_BRK_1,                  (U1)ALERT_C_BRK_1_CH_NUM,           (U1)2U  },
-    {  &st_gp_ALERT_C_BRLV_1_MTRX[0],        (U2)ALERT_CH_C_BRLV_1_WRN,             (U1)ALERT_C_BRLV_1_CH_NUM,          (U1)2U  },
+    {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)2U  },
     {  &st_gp_ALERT_C_PKBWAR_MTRX[0],        (U2)ALERT_CH_C_PKBWAR_BC,              (U1)ALERT_C_PKBWAR_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_D_ATMAL_MTRX[0],         (U2)ALERT_CH_D_ATMAL,                  (U1)ALERT_D_ATMAL_CH_NUM,           (U1)2U  },
@@ -306,7 +306,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRKBZ_MTRX[0],         (U2)ALERT_CH_C_BRKBZ,                  (U1)ALERT_C_BRKBZ_CH_NUM,           (U1)3U  },
     {  &st_gp_ALERT_C_BRK_0_MTRX[0],         (U2)ALERT_CH_C_BRK_0,                  (U1)ALERT_C_BRK_0_CH_NUM,           (U1)3U  },
     {  &st_gp_ALERT_C_BRK_1_MTRX[0],         (U2)ALERT_CH_C_BRK_1,                  (U1)ALERT_C_BRK_1_CH_NUM,           (U1)3U  },
-    {  &st_gp_ALERT_C_BRLV_1_MTRX[0],        (U2)ALERT_CH_C_BRLV_1_WRN,             (U1)ALERT_C_BRLV_1_CH_NUM,          (U1)3U  },
+    {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)3U  },
     {  &st_gp_ALERT_C_PKBWAR_MTRX[0],        (U2)ALERT_CH_C_PKBWAR_BC,              (U1)ALERT_C_PKBWAR_CH_NUM,          (U1)3U  },
     {  &st_gp_ALERT_D_ATMAL_MTRX[0],         (U2)ALERT_CH_D_ATMAL,                  (U1)ALERT_D_ATMAL_CH_NUM,           (U1)3U  },
@@ -388,7 +388,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_BRKBZ_MTRX[0],         (U2)ALERT_CH_C_BRKBZ,                  (U1)ALERT_C_BRKBZ_CH_NUM,           (U1)4U  },
     {  &st_gp_ALERT_C_BRK_0_MTRX[0],         (U2)ALERT_CH_C_BRK_0,                  (U1)ALERT_C_BRK_0_CH_NUM,           (U1)4U  },
     {  &st_gp_ALERT_C_BRK_1_MTRX[0],         (U2)ALERT_CH_C_BRK_1,                  (U1)ALERT_C_BRK_1_CH_NUM,           (U1)4U  },
-    {  &st_gp_ALERT_C_BRLV_1_MTRX[0],        (U2)ALERT_CH_C_BRLV_1_WRN,             (U1)ALERT_C_BRLV_1_CH_NUM,          (U1)4U  },
+    {  &st_gp_ALERT_C_BRLV_2_MTRX[0],        (U2)ALERT_CH_C_BRLV_2_WRN,             (U1)ALERT_C_BRLV_2_CH_NUM,          (U1)4U  },
     {  &st_gp_ALERT_C_ECB_MTRX[0],           (U2)ALERT_CH_C_ECB,                    (U1)ALERT_C_ECB_CH_NUM,             (U1)4U  },
     {  &st_gp_ALERT_C_PKBWAR_MTRX[0],        (U2)ALERT_CH_C_PKBWAR_BC,              (U1)ALERT_C_PKBWAR_CH_NUM,          (U1)4U  },
     {  &st_gp_ALERT_D_ATMAL_MTRX[0],         (U2)ALERT_CH_D_ATMAL,                  (U1)ALERT_D_ATMAL_CH_NUM,           (U1)4U  },
@@ -446,7 +446,7 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertB_tdoorInit,
         &vd_g_AlertB_tpwsrInit,
         &vd_g_AlertC_brkbzInit,
-        &vd_g_AlertC_brlv_1Init,
+        &vd_g_AlertC_brlv_2Init,
         &vd_g_AlertC_pkbwarInit,
         &vd_g_AlertO_eigconInit,
         &vd_g_AlertP_oilpreInit,
@@ -495,8 +495,14 @@ void    vd_g_AlertMtrxInit(void)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  BEV-1    10/25/2024  RS       Change for BEV System_Consideration_1.(MET-H_DRIPOW-CSTD-1-00-A-C0)                                */
 /*  BEV-2    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
+/*  BEV-3    11/01/2024  KO       Change for BEV System_Consideration_1.(MET-C_STEER-CSTD-0-00-A-C0)                                 */
+/*  BEV-4    11/03/2024  KO       Change for BEV System_Consideration_1.(MET-C_TRCOFF-CSTD-1-00-A-C0)                                */
+/*  BEV-5    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
+/*  BEV-6    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
+/*  BEV-7    12/20/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
+/*  * KO   = Kazuto Oishi,    Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

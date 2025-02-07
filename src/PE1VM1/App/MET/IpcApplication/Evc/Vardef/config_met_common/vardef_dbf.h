@@ -26,7 +26,6 @@
 #include "vardef_dest.h"
 #include "vardef_mmmthd.h"
 #include "vardef_navspdlmt.h"
-#include "vardef_zmilrq.h"
 #include "vardef_hcs.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

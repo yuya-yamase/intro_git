@@ -373,6 +373,8 @@
 #define RIMID_U4_NVMC_DA_DTF_WRI_113             (U2_MAX)
 #define RIMID_U4_NVMC_DA_DTF_WRI_114             (U2_MAX)
 #define RIMID_U4_NVMC_DA_DTF_WRI_125             (U2_MAX)
+#define RIMID_U4_VDF_ESO_W7                      (U2_MAX)
+#define RIMID_U4_VDF_ESO_W8                      (U2_MAX)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
 #define RIMID_OTR_RESERVE_BBB                    (U2_MAX)

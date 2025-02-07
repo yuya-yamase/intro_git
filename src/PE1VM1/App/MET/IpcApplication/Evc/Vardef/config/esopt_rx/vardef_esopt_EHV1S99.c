@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_ESOPT_EHV1S99_C_MAJOR             (2)
-#define VARDEF_ESOPT_EHV1S99_C_MINOR             (4)
+#define VARDEF_ESOPT_EHV1S99_C_MINOR             (5)
 #define VARDEF_ESOPT_EHV1S99_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,20 +50,26 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQR(void)                                                                                      */
+/*  U1      u1_g_VdfEsoRx_EVMIL_RED(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQR(void)
+U1      u1_g_VdfEsoRx_EVMIL_RED(void)
 {
-    U1                 u1_t_rx;
+    U1                 u1_t_rx_evmilrqr;
+    U1                 u1_t_rx_evmilrqa;
     U1                 u1_t_ava_rx;
 
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQR, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
+    u1_t_rx_evmilrqr = (U1)0U;
+    u1_t_rx_evmilrqa = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQR, &u1_t_rx_evmilrqr);  
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQA, &u1_t_rx_evmilrqa);
+    if(u1_t_rx_evmilrqr != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else if((u1_t_rx_evmilrqa != (U1)0U) && (u1_t_rx_evmilrqr == (U1)0U)){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
     }
     else{
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
@@ -73,19 +79,25 @@ U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQR(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQA(void)                                                                                      */
+/*  U1      u1_g_VdfEsoRx_EVMIL_AMBER(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQA(void)
+U1      u1_g_VdfEsoRx_EVMIL_AMBER(void)
 {
-    U1                 u1_t_rx;
+    U1                 u1_t_rx_evmilrqr;
+    U1                 u1_t_rx_evmilrqa;
     U1                 u1_t_ava_rx;
 
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQA, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
+    u1_t_rx_evmilrqr = (U1)0U;
+    u1_t_rx_evmilrqa = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQR, &u1_t_rx_evmilrqr);  
+    (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQA, &u1_t_rx_evmilrqa);
+    if(u1_t_rx_evmilrqr != (U1)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+    else if((u1_t_rx_evmilrqa != (U1)0U) && (u1_t_rx_evmilrqr == (U1)0U)){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -104,7 +116,13 @@ U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQA(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  2.4.0    07/08/2020  PG       Newly created for 19PFv3                                                                           */
+/*  2.5.0    11/25/2024  KO       vardef_esopt.c v2.4.0 -> v2.5.0                                                                    */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    12/23/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
 /*                                                                                                                                   */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

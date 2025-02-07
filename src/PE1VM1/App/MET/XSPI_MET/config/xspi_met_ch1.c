@@ -163,8 +163,6 @@ static U1             u1_s_predissuisw;           /*  DISSUISW Previous RxValue*
 static U1             u1_s_predm_sw_a2;           /*  DM_SW_A2 Previous RxValue*/
 static U1             u1_s_preahsswvsw;           /*  AHSSWVSW Previous RxValue*/
 static U1             u1_s_preahssdesw;           /*  AHSSDESW Previous RxValue*/
-static U1             u1_s_presw_as02;            /*  SW_AS02 Previous RxValue */
-static U1             u1_s_presw_as01;            /*  SW_AS01 Previous RxValue */
 static U1             u1_s_prem_bb;               /*  M_BB Previous RxValue    */
 static U1             u1_s_premlr_bb;             /*  MLR_BB Previous RxValue  */
 static U1             u1_s_prerlm_bb;             /*  RLM_BB Previous RxValue  */
@@ -249,8 +247,6 @@ static inline void    vd_s_XSpiCanTx_DISSUISW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_DM_SW_A2(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_AHSSWVSW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_AHSSDESW(const U4 * u4_ap_pck_rx);
-static inline void    vd_s_XSpiCanTx_SW_AS02(const U4* u4_ap_pck_rx);
-static inline void    vd_s_XSpiCanTx_SW_AS01(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_M_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_MLR_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_RLM_BB(const U4* u4_ap_pck_rx);
@@ -352,8 +348,6 @@ void    vd_g_XSpiCfgInitCh1(void)
     u1_s_preahsswvsw = (U1)0U;
     u1_s_preahssdesw = (U1)0U;
     u1_s_prelddamsw  = (U1)0U;
-    u1_s_presw_as02  = (U1)0U;
-    u1_s_presw_as01  = (U1)0U;
     u1_s_prem_bb     = (U1)0U;
     u1_s_premlr_bb   = (U1)0U;
     u1_s_prerlm_bb   = (U1)0U;
@@ -452,8 +446,6 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCanTx_AHSSWVSW(&u4_ap_PDU_RX[51]);
     vd_s_XSpiCanTx_AHSSDESW(&u4_ap_PDU_RX[51]);
     vd_s_XSpiCanTx_RSCSW_OP(&u4_ap_PDU_RX[31]);
-    vd_s_XSpiCanTx_SW_AS02(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_SW_AS01(&u4_ap_PDU_RX[33]);
     vd_s_XSpiCanTx_M_BB(&u4_ap_PDU_RX[35]);
     vd_s_XSpiCanTx_MLR_BB(&u4_ap_PDU_RX[35]);
     vd_s_XSpiCanTx_RLM_BB(&u4_ap_PDU_RX[35]);
@@ -2335,56 +2327,6 @@ static inline void vd_s_XSpiCanTx_CANSignal(const U4 * u4_ap_pck_rx){
 }
 
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_SW_AS02(const U4* u4_ap_pck_rx)                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_pck_rx                                                                                                      */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_SW_AS02(const U4* u4_ap_pck_rx)
-{
-    static const U1 u1_s_xSPI_ACS_MODE_ON = (U1)0x01U;
-    U1  u1_t_mmsup;
-    U1  u1_t_rxdata;
-
-    u1_t_mmsup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
-    if (u1_t_mmsup == (U1)FALSE) {
-        u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)30U, (U1)1U);
-
-        if (u1_t_rxdata != u1_s_presw_as02) {
-            if (u1_t_rxdata <= u1_s_xSPI_ACS_MODE_ON) {
-                vd_g_VdsCIReqTx((U1)VDS_CI_SW_SW_AS02, u1_t_rxdata);
-            }
-        }
-        u1_s_presw_as02 = u1_t_rxdata;
-    }
-}
-
-/*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_SW_AS01(const U4* u4_ap_pck_rx)                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:     u4_ap_pck_rx                                                                                                      */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_SW_AS01(const U4* u4_ap_pck_rx)
-{
-    static const U1 u1_s_xSPI_VHC_ON = (U1)0x01U;
-    U1  u1_t_mmsup;
-    U1  u1_t_rxdata;
-
-    u1_t_mmsup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
-    if (u1_t_mmsup == (U1)FALSE) {
-        u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)31U, (U1)1U);
-
-        if (u1_t_rxdata != u1_s_presw_as01) {
-            if (u1_t_rxdata <= u1_s_xSPI_VHC_ON) {
-                vd_g_VdsCIReqTx((U1)VDS_CI_SW_SW_AS01, u1_t_rxdata);
-            }
-        }
-        u1_s_presw_as01 = u1_t_rxdata;
-    }
-}
-
-/*===================================================================================================================================*/
 /*  static inline void    vd_s_XSpiCanTx_M_BB(const U4* u4_ap_pck_rx)                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:     u4_ap_pck_rx                                                                                                      */
@@ -2522,6 +2464,7 @@ static inline void    vd_s_XSpiCanTx_ART_BB(const U4* u4_ap_pck_rx)
 /*           07/10/2024  YR       Added config for 19PFv3 HCS                                                                        */
 /*  BEV                                                                                                                              */
 /*           10/10/2024  KT       Change for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                                        */
+/*           01/30/2025  KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-)                                          */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2533,5 +2476,6 @@ static inline void    vd_s_XSpiCanTx_ART_BB(const U4* u4_ap_pck_rx)
 /*  * TR   = Tebs Ramos,     DTPH                                                                                                    */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.0.1 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define WCHIME_ARB_CFG_C_MAJOR                   (2)
-#define WCHIME_ARB_CFG_C_MINOR                   (0)
-#define WCHIME_ARB_CFG_C_PATCH                   (1)
+#define WCHIME_ARB_CFG_C_MINOR                   (1)
+#define WCHIME_ARB_CFG_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -100,7 +100,6 @@ static  void    vd_s_wChimeCfgMindspDelchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgAppDelchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgBglfspdDelchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgBlgtDelchk(U4 * u4p_a_reqbit);
-static  void    vd_s_wChimeCfgEpbDelchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgAppReqchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgMWVCReqchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgSbrdmbReqchk(U4* u4p_a_reqbit);
@@ -270,7 +269,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_S_CLESON_BZ,      (U1)ALERT_REQ_S_CLESON_BZ_RR_LD,       (U1)WCHIME_REQ_IN_CSR_RR_FD          >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_CSR_RR_FD          & (U1)0x1FU)  }, /* MET-S_CLESON-CSTD-            */
         {  (U2)ALERT_CH_S_CLESON_BZ,      (U1)ALERT_REQ_S_CLESON_BZ_LD,          (U1)WCHIME_REQ_IN_CSR_FRRR_FD        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_CSR_FRRR_FD        & (U1)0x1FU)  }, /* MET-S_CLESON-CSTD-            */
         {  (U2)ALERT_CH_S_TCHAR_BC,       (U1)ALERT_REQ_S_TCHAR_BC_CYCL1,        (U1)WCHIME_REQ_IN_TCHAR_CYCL1        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_TCHAR_CYCL1        & (U1)0x1FU)  }, /* MET-S_TCHAR-CSTD--            */
-        {  (U2)ALERT_CH_C_BRLV_1_BC,      (U1)ALERT_REQ_C_BRLV_1_BC_MALFUNC,     (U1)WCHIME_REQ_IN_BRK_FLDLEAK        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BRK_FLDLEAK        & (U1)0x1FU)  }, /* MET-C_BRLV-CSTD-              */
+        {  (U2)ALERT_CH_C_BRLV_2_BC,      (U1)ALERT_REQ_C_BRLV_2_BC_MALFUNC,     (U1)WCHIME_REQ_IN_BRK_FLDLEAK        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BRK_FLDLEAK        & (U1)0x1FU)  }, /* MET-C_BRLV-CSTD-              */
         {  (U2)ALERT_CH_C_STEER_BC,       (U1)ALERT_REQ_C_STEER_BC_CYCL,         (U1)WCHIME_REQ_IN_STEER_STP          >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_STEER_STP          & (U1)0x1FU)  }, /* MET-C_STEER-CSTD--            */
         {  (U2)ALERT_CH_P_ROLAWA_BC,      (U1)ALERT_REQ_P_ROLAWA_BC_VEHRUN,      (U1)WCHIME_REQ_IN_ROLAWA_ENST_VRUN   >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_ROLAWA_ENST_VRUN   & (U1)0x1FU)  }, /* MET-P_ROLAWA-CSTD-            */
         {  (U2)ALERT_CH_D_SBW_BZ_BSFT,    (U1)ALERT_REQ_D_SBW_BZ_BSFT_DOUBLE,    (U1)WCHIME_REQ_SI_SBW_RJCT           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_SBW_RJCT           & (U1)0x1FU)  }, /* MET-D_SBW-CSTD--              */
@@ -300,8 +299,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_H_SYSMAL_BC,      (U1)ALERT_REQ_H_SYSMAL_BC_CYCL2,       (U1)WCHIME_REQ_IN_SYSMAL_REQSTP      >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_SYSMAL_REQSTP      & (U1)0x1FU)  }, /* MET-H_SYSMAL-CSTD-            */
         {  (U2)ALERT_CH_S_ADTJA_BC,       (U1)ALERT_REQ_S_ADTJA_BC_PTN3,         (U1)WCHIME_REQ_SI_ADTJA_PTN3         >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_ADTJA_PTN3         & (U1)0x1FU)  }, /* MET-S_ADTJA-CSTD-             */
         {  (U2)ALERT_CH_C_EPB_WRN_IG,     (U1)ALERT_REQ_C_EPB_WRN_IG_LOCK,       (U1)WCHIME_REQ_IN_EPB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_EPB                & (U1)0x1FU)  }, /* MET-C_EPB-CSTD-               */
-        {  (U2)ALERT_CH_C_EPB_WRN_IG,     (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEF1,    (U1)WCHIME_REQ_IN_EPB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_EPB                & (U1)0x1FU)  }, /* MET-C_EPB-CSTD-               */
-        {  (U2)ALERT_CH_C_EPB_WRN_IG,     (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW1,  (U1)WCHIME_REQ_IN_EPB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_EPB                & (U1)0x1FU)  }, /* MET-C_EPB-CSTD-               */
         {  (U2)ALERT_CH_O_EIGCON_ENG,     (U1)ALERT_REQ_O_EIGCON_ENG_ON,         (U1)WCHIME_REQ_CO_EIGCON_IGOFF       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_EIGCON_IGOFF       & (U1)0x1FU)  }, /* MET-O_EIGCON-CSTD-            */
         {  (U2)ALERT_CH_H_SPDL_0_BC,      (U1)ALERT_REQ_H_SPDL_0_BC_DISACT,      (U1)WCHIME_REQ_SI_SPDL_DISACT        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_SPDL_DISACT        & (U1)0x1FU)  }, /* MET-H_SPDL-CSTD-              */
         {  (U2)ALERT_CH_S_ACC_BC,         (U1)ALERT_REQ_S_ACC_BC_CANCEL,         (U1)WCHIME_REQ_SI_ACC_LSPDCNSL       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_ACC_LSPDCNSL       & (U1)0x1FU)  }, /* MET-S_ACC-CSTD-               */
@@ -427,7 +424,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
     vd_s_wChimeCfgAppDelchk(u4p_a_reqbit);                          /* Check to delete Advanced Park buzzer req.   */
     vd_s_wChimeCfgBglfspdDelchk(u4p_a_reqbit);                      /* Check to delete BGLFSPD warning buzzer req. */
     vd_s_wChimeCfgBlgtDelchk(u4p_a_reqbit);                         /* Check to delete Light Reminder buzzer req.  */
-    vd_s_wChimeCfgEpbDelchk(u4p_a_reqbit);                          /* Check to delete EPB warning buzzer req.     */
     vd_s_wChimeCfgAppReqchk(u4p_a_reqbit);                          /* Check to add silencetime APP buzzer req.    */
     vd_s_wChimeCfgSbrdmbReqchk(u4p_a_reqbit);                       /* Set Subaru Drive Mode update buzzer req.    */
 }
@@ -810,25 +806,6 @@ static void     vd_s_wChimeCfgBlgtDelchk(U4 * u4p_a_reqbit)
 }
 
 /*===================================================================================================================================*/
-/*  static  void    vd_s_wChimeCfgEpbDelchk(U4 * u4p_a_reqbit)                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static  void    vd_s_wChimeCfgEpbDelchk(U4 * u4p_a_reqbit)
-{
-    U1 u1_t_epb;
-
-    u1_t_epb = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_EPB);
-
-    if(u1_t_epb == (U1)TRUE){
-        vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_IN_PKBWAR);
-    }
-    else{
-        vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_IN_EPB);
-    }
-}
-/*===================================================================================================================================*/
 /*  static  void    vd_s_wChimeCfgSbrdmbReqchk(U4 * u4p_a_reqbit)                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -911,6 +888,7 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  1.4.1    11/24/2020  TF       wchime_arb.c v1.4.0 -> v1.4.1.                                                                     */
 /*  1.5.0    12/23/2020  YK       wchime_arb.c v1.4.1 -> v1.5.0.                                                                     */
 /*  2.0.1    10/21/2021  MG       wchime_arb.c v1.5.0 -> v2.0.1.                                                                     */
+/*  2.1.0    11/12/2024  KO       wchime_arb.c v2.0.1 -> v2.1.0.                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -963,6 +941,8 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  19PFv3-14 6/27/2024  T.Nakano Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-15 7/12/2024  T.Nakano Add Calibration Guard to Unify Vehicle Operation.                                                  */
 /*  19PFv3-16 7/10/2024  TR       Add SBRDMB config and function buzzer req.                                                         */
+/*  BEV-1    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
+/*  BEV-1    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -981,5 +961,6 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * TR   = Tebs Ramos, DTPH                                                                                                        */
 /*  * T.Nakano   = Tetsushi Nakano, Denso Techno                                                                                     */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

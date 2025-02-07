@@ -1,4 +1,4 @@
-/* 1.6.0 */
+/* 1.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GATEWAY_MM_CFG_C_MAJOR                     (1)
-#define GATEWAY_MM_CFG_C_MINOR                     (6)
+#define GATEWAY_MM_CFG_C_MINOR                     (7)
 #define GATEWAY_MM_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,7 +42,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GWMMCFG_SIG_NUM                          (114U)                   /*  Gateway Number           */
+#define GWMMCFG_SIG_NUM                          (112U)                   /*  Gateway Number           */
 
 #define GWMMCFG_MSGBUF_NUM                       (34U)                    /*  Message Buf Number       */
 
@@ -108,8 +108,6 @@ static void vd_s_GwmmCfgSend_TPINSEL(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_TPINSELF(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_TPINSELR(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_TPUNTSET(const U1 u1_a_SIG);
-static void vd_s_GwmmCfgSend_SW_AS02(const U1 u1_a_SIG);
-static void vd_s_GwmmCfgSend_SW_AS01(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_SW_AS05(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_TBCSW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_TBWSW(const U1 u1_a_SIG);
@@ -223,8 +221,6 @@ static U1 u1_s_GwmmCfgRead_TPINSEL(void);
 static U1 u1_s_GwmmCfgRead_TPINSELF(void);
 static U1 u1_s_GwmmCfgRead_TPINSELR(void);
 static U1 u1_s_GwmmCfgRead_TPUNTSET(void);
-static U1 u1_s_GwmmCfgRead_SW_AS02(void);
-static U1 u1_s_GwmmCfgRead_SW_AS01(void);
 static U1 u1_s_GwmmCfgRead_SW_AS05(void);
 static U1 u1_s_GwmmCfgRead_TBCSW(void);
 static U1 u1_s_GwmmCfgRead_TBWSW(void);
@@ -361,8 +357,6 @@ const ST_GWMM_MSGCOMVERT st_gp_GWMM_MSGCOMVERT[GWMMCFG_SIG_NUM] = {
     {(U1)8U,       (U1)16U,      (U4)0x00000007U},         /*  TPINSELF  */
     {(U1)8U,       (U1)20U,      (U4)0x00000007U},         /*  TPINSELR  */
     {(U1)8U,       (U1)13U,      (U4)0x00000007U},         /*  TPUNTSET  */
-    {(U1)8U,       (U1)6U,       (U4)0x00000001U},         /*  SW_AS02   */
-    {(U1)8U,       (U1)7U,       (U4)0x00000001U},         /*  SW_AS01   */
     {(U1)8U,       (U1)30U,      (U4)0x00000003U},         /*  SW_AS05   */
     {(U1)27U,      (U1)9U,       (U4)0x00000001U},         /*  TBCSW     */
     {(U1)27U,      (U1)8U,       (U4)0x00000001U},         /*  TBWSW     */
@@ -479,8 +473,6 @@ const ST_GWMM_SIGCONF st_gp_GWMM_SIGCONF[GWMMCFG_SIG_NUM] = {
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC05,        (U1)7U,        (U1)0xFFU},                    /*  TPINSELF  */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC05,        (U1)7U,        (U1)0xFFU},                    /*  TPINSELR  */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC05,        (U1)7U,        (U1)0xFFU},                    /*  TPUNTSET  */
-    {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC05,        (U1)1U,        (U1)0xFFU},                    /*  SW_AS02   */
-    {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC05,        (U1)1U,        (U1)0xFFU},                    /*  SW_AS01   */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC05,        (U1)3U,        (U1)0xFFU},                    /*  SW_AS05   */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC14,        (U1)1U,        (U1)0xFFU},                    /*  TBCSW     */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC14,        (U1)1U,        (U1)0xFFU},                    /*  TBWSW     */
@@ -597,8 +589,6 @@ const ST_GWMM_COMIF st_gp_GWMM_COMIF[GWMMCFG_SIG_NUM] = {
     {&vd_s_GwmmCfgSend_TPINSELF,        &u1_s_GwmmCfgRead_TPINSELF},        /*  TPINSELF  */
     {&vd_s_GwmmCfgSend_TPINSELR,        &u1_s_GwmmCfgRead_TPINSELR},        /*  TPINSELR  */
     {&vd_s_GwmmCfgSend_TPUNTSET,        &u1_s_GwmmCfgRead_TPUNTSET},        /*  TPUNTSET  */
-    {&vd_s_GwmmCfgSend_SW_AS02,         &u1_s_GwmmCfgRead_SW_AS02},         /*  SW_AS02   */
-    {&vd_s_GwmmCfgSend_SW_AS01,         &u1_s_GwmmCfgRead_SW_AS01},         /*  SW_AS01   */
     {&vd_s_GwmmCfgSend_SW_AS05,         &u1_s_GwmmCfgRead_SW_AS05},         /*  SW_AS05   */
     {&vd_s_GwmmCfgSend_TBCSW,           &u1_s_GwmmCfgRead_TBCSW},           /*  TBCSW     */
     {&vd_s_GwmmCfgSend_TBWSW,           &u1_s_GwmmCfgRead_TBWSW},           /*  TBWSW     */
@@ -1020,34 +1010,6 @@ static void vd_s_GwmmCfgSend_TPUNTSET(const U1 u1_a_SIG)
     u1_t_sig = u1_a_SIG;
     (void)Com_SendSignal(ComConf_ComSignal_TPUNTSET, &u1_t_sig);
 #endif /* ComConf_ComSignal_TPUNTSET */
-}
-/*===================================================================================================================================*/
-/*  static void vd_s_GwmmCfgSend_SW_AS02(const U1 u1_a_SIG)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_SIG : Send Signal Value                                                                                     */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_GwmmCfgSend_SW_AS02(const U1 u1_a_SIG)
-{
-#ifdef ComConf_ComSignal_SW_AS02
-    U1    u1_t_sig;
-    u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_SW_AS02, &u1_t_sig);
-#endif /* ComConf_ComSignal_SW_AS02 */
-}
-/*===================================================================================================================================*/
-/*  static void vd_s_GwmmCfgSend_SW_AS01(const U1 u1_a_SIG)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_SIG : Send Signal Value                                                                                     */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_GwmmCfgSend_SW_AS01(const U1 u1_a_SIG)
-{
-#ifdef ComConf_ComSignal_SW_AS01
-    U1    u1_t_sig;
-    u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_SW_AS01, &u1_t_sig);
-#endif /* ComConf_ComSignal_SW_AS01 */
 }
 /*===================================================================================================================================*/
 /*  static void vd_s_GwmmCfgSend_SW_AS05(const U1 u1_a_SIG)                                                                          */
@@ -2658,36 +2620,6 @@ static U1 u1_s_GwmmCfgRead_TPUNTSET(void)
 #ifdef ComConf_ComSignal_TPUNTSET
     (void)Com_ReceiveSignal(ComConf_ComSignal_TPUNTSET, &u1_t_sig);
 #endif /* ComConf_ComSignal_TPUNTSET */
-    return(u1_t_sig);
-}
-/*===================================================================================================================================*/
-/*  static U1 u1_s_GwmmCfgRead_SW_AS02(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_t_sig : Receive Signal Value                                                                                  */
-/*===================================================================================================================================*/
-static U1 u1_s_GwmmCfgRead_SW_AS02(void)
-{
-    U1  u1_t_sig;
-    u1_t_sig = (U1)0U;
-#ifdef ComConf_ComSignal_SW_AS02
-    (void)Com_ReceiveSignal(ComConf_ComSignal_SW_AS02, &u1_t_sig);
-#endif /* ComConf_ComSignal_SW_AS02 */
-    return(u1_t_sig);
-}
-/*===================================================================================================================================*/
-/*  static U1 u1_s_GwmmCfgRead_SW_AS01(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_t_sig : Receive Signal Value                                                                                  */
-/*===================================================================================================================================*/
-static U1 u1_s_GwmmCfgRead_SW_AS01(void)
-{
-    U1  u1_t_sig;
-    u1_t_sig = (U1)0U;
-#ifdef ComConf_ComSignal_SW_AS01
-    (void)Com_ReceiveSignal(ComConf_ComSignal_SW_AS01, &u1_t_sig);
-#endif /* ComConf_ComSignal_SW_AS01 */
     return(u1_t_sig);
 }
 /*===================================================================================================================================*/
@@ -4391,6 +4323,7 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
 /*  1.4.0    11/19/2022  NT       gateway_mm.c v1.3.0 -> v1.4.0                                                                      */
 /*  1.5.0     1/22/2024  TH       gateway_mm.c v1.4.0 -> v1.5.0                                                                      */
 /*  1.6.0     3/26/2024  SW       gateway_mm.c v1.5.0 -> v1.6.0                                                                      */
+/*  1.7.0     1/30/2025  KO       gateway_mm.c v1.6.0 -> v1.7.0                                                                      */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -4398,6 +4331,7 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
 /*  800B-2   23/ 4/2021  RS       Change PBDMSW Power Jdg PRM.                                                                       */
 /*  296D-1   10/21/2022  TX       Delete DVCN_OPE and DVAT_OPE.                                                                      */
 /*  296D-2   11/08/2022  TX       Add MMCUSREQ.                                                                                      */
+/*  BEV-1     1/30/2025  KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-00-A-C0)                                   */
 /*                                                                                                                                   */
 /*  * RS   = Ryosuke Sato, KSE                                                                                                       */
 /*  * SK   = Shinichi Kato, KSE                                                                                                      */
@@ -4405,5 +4339,6 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
 /*  * NT   = Noriaki Takashima, DT                                                                                                   */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * SW   = Shun Watanabe, Denso Techno                                                                                             */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

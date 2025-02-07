@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDS_CI_C_MAJOR                         (2)
-#define VDS_CI_C_MINOR                         (3)
+#define VDS_CI_C_MINOR                         (4)
 #define VDS_CI_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -222,11 +222,13 @@ U1      u1_g_VdsCISelRx(const U1 u1_a_CH)
 /*  2.2.0    10/06/2022  TA(M)    Change hold time settigns to be configurable.                                                      */
 /*                                Change to call fp_vd_TX in the send buffer even if u1_req_tx is 0.                                 */
 /*  2.3.0    03/22/2024  SW       Add Transmission mask process for arbitration with Gateway.                                        */
+/*  2.4.0     1/30/2025  KO       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * SW   = Shun Watanabe, Denso Techno                                                                                             */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

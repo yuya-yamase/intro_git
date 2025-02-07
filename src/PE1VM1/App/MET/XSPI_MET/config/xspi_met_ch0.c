@@ -617,6 +617,8 @@ static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[4] = u4_tp_xspi_esopt[4];
     u4_ap_pdu_tx[5] = u4_tp_xspi_esopt[5];
     u4_ap_pdu_tx[6] = u4_tp_xspi_esopt[6];
+    u4_ap_pdu_tx[7] = u4_tp_xspi_esopt[7];
+    u4_ap_pdu_tx[8] = u4_tp_xspi_esopt[8];
 
 }
 
