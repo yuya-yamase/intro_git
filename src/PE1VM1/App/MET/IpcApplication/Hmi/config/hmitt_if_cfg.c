@@ -265,12 +265,6 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
     {  (U2)ALERT_CH_C_VSCEXP_WDSTEP,  (U1)ALERT_REQ_C_VSCEXP_WDSTEP_5ST_3,      (U1)23U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_100P_VSCEXP_3)               },
     {  (U2)ALERT_CH_C_VSCEXP_WDSTEP,  (U1)ALERT_REQ_C_VSCEXP_WDSTEP_5ST_4,      (U1)23U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_100P_VSCEXP_4)               },
     {  (U2)ALERT_CH_C_VSCEXP_WDSTEP,  (U1)ALERT_REQ_C_VSCEXP_WDSTEP_5ST_5,      (U1)23U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_100P_VSCEXP_5)               },
-    {  (U2)ALERT_CH_H_ZMILRQ_TT_AMB,  (U1)ALERT_REQ_H_ZMILRQ_TT_AMB_ON,         (U1)23U,   u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_H_ZMILRQ_TT_AMB,  (U1)ALERT_REQ_H_ZMILRQ_TT_AMB_FLSH1H,     (U1)23U,   u4_HMITT_HB7(HMITT_BLINK_CO_1P00HZ__50P)                    },
-    {  (U2)ALERT_CH_H_ZMILRQ_TT_AMB,  (U1)ALERT_REQ_H_ZMILRQ_TT_AMB_FLSH4H,     (U1)23U,   u4_HMITT_HB7(HMITT_BLINK_CO_4P00HZ__50P)                    },
-    {  (U2)ALERT_CH_H_ZMILRQ_TT_RED,  (U1)ALERT_REQ_H_ZMILRQ_TT_RED_ON,         (U1)24U,   u4_HMITT_HB0(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_H_ZMILRQ_TT_RED,  (U1)ALERT_REQ_H_ZMILRQ_TT_RED_FLSH1H,     (U1)24U,   u4_HMITT_HB0(HMITT_BLINK_CO_1P00HZ__50P)                    },
-    {  (U2)ALERT_CH_H_ZMILRQ_TT_RED,  (U1)ALERT_REQ_H_ZMILRQ_TT_RED_FLSH4H,     (U1)24U,   u4_HMITT_HB0(HMITT_BLINK_CO_4P00HZ__50P)                    },
     {  (U2)ALERT_CH_C_HCS_TTB,        (U1)ALERT_REQ_C_HCS_TTB_ACCESS_MODE,      (U1)24U,   u4_HMITT_HB1(HMITT_BLINK_CO_ON_____100P)                    }
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -316,6 +310,7 @@ U2 u2_g_HmittSizeReqbit(void){
 /*  BEV-1    10/15/2024  KO       Change for BEV System_Consideration_1.(MET-C_STEER-CSTD-0-00-A-C0)                                 */
 /*  BEV-2    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
 /*  BEV-3    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
+/*  BEV-4    12/23/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0                       )        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */

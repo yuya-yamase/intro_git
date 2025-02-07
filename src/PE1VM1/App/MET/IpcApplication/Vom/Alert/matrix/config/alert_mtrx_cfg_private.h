@@ -271,7 +271,7 @@
 #define ALERT_H_PARLON_RWRN_CH_NUM               (1U)
 #define ALERT_H_LBW_CH_NUM                       (1U)
 #define ALERT_C_BRPADW_CH_NUM                    (1U)
-#define ALERT_H_ZMILRQ_CH_NUM                    (3U)
+#define ALERT_H_ZMILRQ_CH_NUM                    (1U)
 #define ALERT_P_CIRMOD_CH_NUM                    (4U)
 #define ALERT_C_SBRDMB_CH_NUM                    (1U)
 #define ALERT_C_HCS_CH_NUM                       (3U)
@@ -341,7 +341,6 @@
 #define u1_g_AlertShiftSbwFunc()                                    (u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW))
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
 #define u1_g_AlertRevBzrDest()                                      (u1_g_VardefBzRevDstByPid())
-#define u1_g_AlertZmilrqDispJdg()                                   (u1_g_VardefZmilrqDispJdg())
 #define u1_g_AlertHcsAscext()                                       (u1_g_VardefHcsRxAscext())
 
 #define u1_g_AlertCfgP_tmntOdoTripKm(u4p)                           (u1_g_OdoTripKm((U1)ODO_TRIP_CH_OM, (u4p)))

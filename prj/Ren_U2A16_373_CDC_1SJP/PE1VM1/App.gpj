@@ -267,7 +267,6 @@ MET/IpcApplication/Evc/Vardef/scc/vardef_mmmthd.c
 MET/IpcApplication/Evc/Vardef/scc/vardef_navspdlmt.c
 MET/IpcApplication/Evc/Vardef/scc/vardef_ptsrx_milreq.c
 MET/IpcApplication/Evc/Vardef/scc/vardef_ptsrx.c
-MET/IpcApplication/Evc/Vardef/scc/vardef_zmilrq.c
 MET/IpcApplication/Evc/Vardef/scc/vardef.c
 MET/IpcApplication/Hmi/config/hmimm2c100n_cfg.c
 MET/IpcApplication/Hmi/config/hmimm2c107n_cfg.c

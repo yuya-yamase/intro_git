@@ -202,7 +202,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_SDM_RWRN_MTRX[0],      (U2)ALERT_CH_C_SDM_RWRN,               (U1)ALERT_C_SDM_RWRN_CH_NUM,        (U1)1U  },
     {  &st_gp_ALERT_H_DCLDSP_MTRX[0],        (U2)ALERT_CH_H_DCLDSP,                 (U1)ALERT_H_DCLDSP_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)1U  },
-    {  &st_gp_ALERT_H_ZMILRQ_MTRX[0],        (U2)ALERT_CH_H_ZMILRQ_TT_AMB,          (U1)ALERT_H_ZMILRQ_CH_NUM,          (U1)1U  },
+    {  &st_gp_ALERT_H_ZMILRQ_MTRX[0],        (U2)ALERT_CH_H_ZMILRQ_RWRN,            (U1)ALERT_H_ZMILRQ_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_SBRDMB_MTRX[0],        (U2)ALERT_CH_C_SBRDMB,                 (U1)ALERT_C_SBRDMB_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_BRK_0_MTRX[0],         (U2)ALERT_CH_C_BRK_0,                  (U1)ALERT_C_BRK_0_CH_NUM,           (U1)2U  },
     {  &st_gp_ALERT_C_STEER_MTRX[0],         (U2)ALERT_CH_C_STEER_TT,               (U1)ALERT_C_STEER_CH_NUM,           (U1)2U  },
@@ -499,6 +499,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-4    11/03/2024  KO       Change for BEV System_Consideration_1.(MET-C_TRCOFF-CSTD-1-00-A-C0)                                */
 /*  BEV-5    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
 /*  BEV-6    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
+/*  BEV-7    12/20/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */

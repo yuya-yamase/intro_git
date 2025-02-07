@@ -83,8 +83,6 @@
 #define HMITT_TAIL_DATPOS                         (0U)
 #define HMITT_TECBLP2_DATPOS                      (9U)
 #define HMITT_LBW_DATPOS                          (6U)
-#define HMITT_ZMILRQ_AMB_DATPOS                   (23U)
-#define HMITT_ZMILRQ_RED_DATPOS                   (24U)
 
 #define HMITT_SBLT_R2L_SFT                        (3U)
 #define HMITT_SBLT_R2C_SFT                        (4U)
@@ -127,7 +125,6 @@ typedef struct{
 static void    vd_s_HmiTtTurn(U4 * u4_ap_req);
 static void    vd_s_HmiTtTECOLP2(U4* u4_ap_req);
 static void    vd_s_HmiTtLbwTt(U4* u4_ap_req);
-static void    vd_s_HmiTtZmilrqTt(U4* u4_ap_req);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -218,7 +215,6 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     vd_s_HmiTtTurn(u4_ap_req);
     vd_s_HmiTtTECOLP2(u4_ap_req);
     vd_s_HmiTtLbwTt(u4_ap_req);
-    vd_s_HmiTtZmilrqTt(u4_ap_req);
 }
 
 /*===================================================================================================================================*/
@@ -291,30 +287,6 @@ static void    vd_s_HmiTtLbwTt(U4* u4_ap_req)
         {
             u4_ap_req[HMITT_LBW_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_28BIT_SHIFT));
         }
-    }
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiTtZmilrqTt(U4 * u4_ap_req)                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_HmiTtZmilrqTt(U4* u4_ap_req)
-{
-    U1  u1_t_milreq_ava;
-
-    u1_t_milreq_ava = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_PTS_MILREQ);
-
-    /*MILREQ TT and ZMILRQ TT is exclusive*/
-    /*When MILREQ is Available, ZMILRQ will be Not Available*/
-    /*MILREQ TT esopt judge is controled by vd_g_HmiTtCfgVarmask*/
-    if(u1_t_milreq_ava == (U1)TRUE){
-        u4_ap_req[HMITT_ZMILRQ_AMB_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_28BIT_SHIFT));
-        u4_ap_req[HMITT_ZMILRQ_RED_DATPOS] &= (~((U4)HMITT_VAR_MASK                     ));
-    }
-    else{
-       /* Do Nothing */
     }
 }
 
@@ -435,6 +407,7 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  19PFv3-1 02/20/2024  GM       Change config for 19PFv3 CV                                                                        */
 /*  19PFv3-2 07/08/2024  PG       Add mask process for H_ZMILRQ for 19PFv3 R1.2                                                      */
 /*  BEV-1    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
+/*  BEV-2    12/23/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */

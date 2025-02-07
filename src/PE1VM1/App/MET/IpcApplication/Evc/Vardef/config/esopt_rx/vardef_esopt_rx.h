@@ -194,8 +194,8 @@ U1      u1_g_VdfEsoRx_SW_ACINV_7200W(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_EHV1S99.c */
-U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQR(void);
-U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQA(void);
+U1      u1_g_VdfEsoRx_EVMIL_RED(void);
+U1      u1_g_VdfEsoRx_EVMIL_AMBER(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ENG1G13.c */
