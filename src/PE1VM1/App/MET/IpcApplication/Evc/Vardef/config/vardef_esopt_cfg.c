@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_RX                           (167U)
+#define VDF_ESO_NUM_RX                           (162U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -131,18 +131,6 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         {
             (U2)U2_MAX,                         /* u2_rxc_min[MIN_INA] */
             (U2)1U                              /* u2_rxc_min[MIN_ACT] */
-        }
-    },
-    {
-        &u1_g_VdfEsoRx_ECOFLAG,                 /* fp_u1_AVA_RX        */
-        (U2)VDF_ESO_CH_ECOFLAG,                 /* u2_eso_ch           */
-        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0,     /* u2_msg_rx           */
-        (U2)0x0002U,                            /* u2_vom_act          */
-        ((U2)600U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
-        {
-            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
-            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
         }
     },
     {
@@ -598,30 +586,6 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         }
     },
     {
-        &u1_g_VdfEsoRx_MT,                      /* fp_u1_AVA_RX        */
-        (U2)VDF_ESO_CH_MT,                      /* u2_eso_ch           */
-        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0,     /* u2_msg_rx           */
-        (U2)0x0002U,                            /* u2_vom_act          */
-        ((U2)600U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
-        {
-            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
-            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
-        }
-    },
-    {
-        &u1_g_VdfEsoRx_AT,                      /* fp_u1_AVA_RX        */
-        (U2)VDF_ESO_CH_AT,                      /* u2_eso_ch           */
-        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0,     /* u2_msg_rx           */
-        (U2)0x0002U,                            /* u2_vom_act          */
-        ((U2)600U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
-        {
-            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
-            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
-        }
-    },
-    {
         &u1_g_VdfEsoRx_MM_NAVI,                 /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_MM_NAVI,                 /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
@@ -668,18 +632,6 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         (U2)OXCAN_PDU_RX_CAN_CSR1S04_RXCH0,     /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)2100U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
-        {
-            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
-            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
-        }
-    },
-    {
-        &u1_g_VdfEsoRx_MMT_SMT,                 /* fp_u1_AVA_RX        */
-        (U2)VDF_ESO_CH_MMT_SMT,                 /* u2_eso_ch           */
-        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-        (U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0,     /* u2_msg_rx           */
-        (U2)0x0002U,                            /* u2_vom_act          */
-        ((U2)600U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
         {
             (U2)2U,                             /* u2_rxc_min[MIN_INA] */
             (U2)2U                              /* u2_rxc_min[MIN_ACT] */
@@ -1622,22 +1574,6 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         }
     },
     {
-        vdp_PTR_NA,                             /* fp_u1_AVA_RX        */
-        (U2)VDF_ESO_CH_MOP,                     /* u2_eso_ch           */
-        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-#if 0   /* BEV BSW provisionally */
-        (U2)OXCAN_PDU_RX_CAN_AVN1S30,           /* u2_msg_rx           */
-#else
-        (U2)U2_MAX,                             /* u2_msg_rx           */
-#endif
-        (U2)0x0080U,                            /* u2_vom_act          */
-        ((U2)6300U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
-        {
-            (U2)U2_MAX,                         /* u2_rxc_min[MIN_INA] */
-            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
-        }
-    },
-    {
         &u1_g_VdfEsoRx_ADIEXIST,                /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_ADIEXIST,                /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
@@ -2140,7 +2076,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W0,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W0,                        /* u4_nvm */
         (U4)0x08000000U,                           /* u4_unk */
-        (U4)0xFFFFCE7FU,                           /* u4_rx  */
+        (U4)0xFFFFCE3FU,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W0,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W0                    /* u2_bid */
@@ -2149,7 +2085,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W1,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W1,                        /* u4_nvm */
         (U4)0x30000100U,                           /* u4_unk */
-        (U4)0xFC03FFADU,                           /* u4_rx  */
+        (U4)0xBC00FFADU,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W1,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W1                    /* u2_bid */
@@ -2185,7 +2121,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W5,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W5,                        /* u4_nvm */
         (U4)0xC000E000U,                           /* u4_unk */
-        (U4)0xFFFEFF7FU,                           /* u4_rx  */
+        (U4)0xFFFCFF7FU,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W5,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W5                    /* u2_bid */
@@ -2338,6 +2274,7 @@ U1      u1_g_VardefEsOptCfgAvaByAVN(void)
 /*  BEV-3     12/20/2024  KO      Change config for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1)                                */
 /*  BEV-4     01/13/2025  KO      Change config for BEV System_Consideration_1.(MET-H_SOLCHG-CSTD-1)                                 */
 /*  BEV-5     01/30/2025  KO      Change config for BEV System_Consideration_1.(MET-C_HCS-CSTD-0)                                    */
+/*  BEV-6     02/05/2025  SF      Change config for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                          */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
@@ -2358,5 +2295,6 @@ U1      u1_g_VardefEsOptCfgAvaByAVN(void)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
