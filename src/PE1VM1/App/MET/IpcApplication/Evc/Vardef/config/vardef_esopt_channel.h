@@ -307,7 +307,7 @@
 #define VDF_ESO_NOW_AVA                          ((VDF_ESO_NUM_CH + 31U) >> 5U)
 
 #define VDF_ESO_INI_W0                           (0x00000801U)
-#define VDF_ESO_INI_W1                           (0x00010000U)
+#define VDF_ESO_INI_W1                           (0x00000000U)
 #define VDF_ESO_INI_W2                           (0x00000000U)
 #define VDF_ESO_INI_W3                           (0x00000000U)
 #define VDF_ESO_INI_W4                           (0x00000001U)
