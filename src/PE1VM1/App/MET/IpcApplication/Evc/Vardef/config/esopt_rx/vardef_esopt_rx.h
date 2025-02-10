@@ -327,10 +327,6 @@ U1      u1_g_VdfEsoRx_TPMS(void);
 U1      u1_g_VdfEsoRx_TPMSCHN(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_SBW1G01.c */
-U1      u1_g_VdfEsoRx_SBW(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_SCS1S90.c */
 U1      u1_g_VdfEsoRx_AVSEXT(void);
 
@@ -368,6 +364,16 @@ U1      u1_g_VdfEsoRx_SW_OMRBB_AUTO(void);
 U1      u1_g_VdfEsoRx_SW_OMRBB_NONAUTO(void);
 U1      u1_g_VdfEsoRx_SW_OBBPWL(void);
 U1      u1_g_VdfEsoRx_SW_SERVICE_POS(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_AUT(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_HED(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_TAL(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_TAL_DBL(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_DRLOFF(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_OFF(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_OFF_DBL(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_DRL(void);
+U1      u1_g_VdfEsoRx_SW_FRONT_FOG(void);
+U1      u1_g_VdfEsoRx_SW_REAR_FOG(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ZN11S26.c */

@@ -244,7 +244,6 @@ MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_MM2C107N.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_MM2C112N.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_PDS1S01.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_PLG1S21.c
-MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SBW1G01.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SCS1S90.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SW_BATCSW.c
 MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_TPM1S02.c
@@ -354,7 +353,7 @@ MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_TTAIL.c
 MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_WASLEV.c
 MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_ABS.c
 MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_AVSWAR.c
-MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRK-CSTD-1.c
+MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRK-CSTD-2.c
 MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRK-CSTD-A0.c
 MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRKBZ.c
 MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRKHLD.c
@@ -626,10 +625,8 @@ MET/IpcApplication/Vom/Vehspd/config/vehspd_kmph_cfg.c
 MET/IpcApplication/Vom/Vehspd/scc/vehspd_can_sp1x.c
 MET/IpcApplication/Vom/Vehspd/scc/vehspd_kmph.c
 MET/IpcApplication/Vom/Vptran/config/vptran_byw_cfg.c
-MET/IpcApplication/Vom/Vptran/config/vptran_cvt_cfg.c
 MET/IpcApplication/Vom/Vptran/config/vptran_sel_cfg.c
 MET/IpcApplication/Vom/Vptran/scc/vptran_byw.c
-MET/IpcApplication/Vom/Vptran/scc/vptran_cvt.c
 MET/IpcApplication/Vom/Vptran/scc/vptran_sel.c
 MET/IpcApplication/Vsv/Gauge/config/gagdst_acdctx.c
 MET/IpcApplication/Vsv/Gauge/config/gagdst_attempovhtind.c

@@ -370,7 +370,6 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
     static const ST_HMIPUTXT_ESOPT st_sp_HMIPUTXT_ESOPT[] = {
         {    (U2)52U,     (U2)VDF_ESO_CH_EPB      },
         {    (U2)70U,     (U2)VDF_ESO_CH_ECB      },
-        {    (U2)278U,    (U2)VDF_ESO_CH_SBW      },
         {    (U2)308U,    (U2)VDF_ESO_CH_DSC      },
         {    (U2)314U,    (U2)VDF_ESO_CH_AUTOP    },
         {    (U2)394U,    (U2)VDF_ESO_CH_OILMNT   },
@@ -865,6 +864,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  19PFv3-7 07/04/2024  TN       Delete Calibration Guard Process.                                                                  */
 /*  BEV-1    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
 /*  BEV-2    12/23/2024  MN       Change for BEV System_Consideration_1.(MET-B_LEDHEA-CSTD-1-01-A-C0)                                */
+/*  BEV-3     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -877,5 +877,6 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*  * MN   = Mikiya Negishi,  KSE                                                                                                    */
+/*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

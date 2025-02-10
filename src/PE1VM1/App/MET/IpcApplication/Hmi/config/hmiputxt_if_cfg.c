@@ -70,10 +70,10 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_B_SMASTA_S2IG,        (U1)ALERT_REQ_B_SMASTA_S2IG_HV_EMG,     (U1)1U,     (U4)0x80000000U    },
     {    (U2)ALERT_CH_C_BRK_0,              (U1)ALERT_REQ_C_BRK_0_LOW,              (U1)2U,     (U4)0x00000002U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_ASSIST_STOP,   (U1)2U,     (U4)0x00000008U    },
-    {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_MALFUNC,          (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_ON_MLFNC,         (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_MLFNC_RW,         (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_WRN,              (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_MALFUNC,          (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,         (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_MLFNC_RW,         (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_WRN,              (U1)2U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_C_BRLV_2_WRN,         (U1)ALERT_REQ_C_BRLV_2_WRN_MALFUNC,     (U1)2U,     (U4)0x00000020U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FAILDISP,           (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FDISP_RW,           (U1)2U,     (U4)0x00000040U    },
@@ -132,7 +132,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_18,      (U1)4U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_36,      (U1)4U,     (U4)0x00000800U    },
     {    (U2)ALERT_CH_D_SBW_PD_NSFT,        (U1)ALERT_REQ_D_SBW_PD_NSFT_MSG_24,     (U1)4U,     (U4)0x00001000U    },
-    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_40,      (U1)4U,     (U4)0x00002000U    },
     {    (U2)ALERT_CH_D_SBW_PD_ACCN,        (U1)ALERT_REQ_D_SBW_PD_ACCN_MSG_32,     (U1)4U,     (U4)0x00004000U    },
     {    (U2)ALERT_CH_D_SBW_PD_DAP,         (U1)ALERT_REQ_D_SBW_PD_DAP_MSG_29,      (U1)4U,     (U4)0x00008000U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND6,        (U1)4U,     (U4)0x00010000U    },
@@ -146,9 +145,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_UNAVBL3,     (U1)4U,     (U4)0x80000000U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_EVA_LOW,       (U1)5U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_33,      (U1)5U,     (U4)0x00000080U    },
-    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_34,      (U1)5U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_P_CHEENG_WRN,         (U1)ALERT_REQ_P_CHEENG_WRN_MLFNC2,      (U1)5U,     (U4)0x00010000U    },
-    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_10,      (U1)5U,     (U4)0x00020000U    },
     {    (U2)ALERT_CH_P_CHEENG_WRN,         (U1)ALERT_REQ_P_CHEENG_WRN_MLFNC4_RW,   (U1)5U,     (U4)0x00040000U    },
     {    (U2)ALERT_CH_P_CHEENG_WRN,         (U1)ALERT_REQ_P_CHEENG_WRN_MLFNC3_RW,   (U1)5U,     (U4)0x00080000U    },
     {    (U2)ALERT_CH_B_BVOOPE,             (U1)ALERT_REQ_B_BVOOPE_OPERATING,       (U1)5U,     (U4)0x00800000U    },
@@ -164,7 +161,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_39,      (U1)6U,     (U4)0x00000004U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_11,      (U1)6U,     (U4)0x00000008U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_EVM_LOW,       (U1)6U,     (U4)0x00000400U    },
-    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_09,      (U1)6U,     (U4)0x00000800U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_CHG_DEACT,     (U1)6U,     (U4)0x00002000U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_CHG_NOT,       (U1)6U,     (U4)0x00004000U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_CHG_FULL,      (U1)6U,     (U4)0x00008000U    },
@@ -245,7 +241,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_S_LCA_PD_SG,          (U1)ALERT_REQ_S_LCA_PD_SG_SGST3,        (U1)11U,    (U4)0x00000001U    },
     {    (U2)ALERT_CH_S_LCA_PD_SG,          (U1)ALERT_REQ_S_LCA_PD_SG_SGST2,        (U1)11U,    (U4)0x00000002U    },
     {    (U2)ALERT_CH_S_LCA_PD_SG,          (U1)ALERT_REQ_S_LCA_PD_SG_SGST1,        (U1)11U,    (U4)0x00000004U    },
-    {    (U2)ALERT_CH_D_SBW_PD_APRJ,        (U1)ALERT_REQ_D_SBW_PD_APRJ_MSG_37,     (U1)11U,    (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND5,        (U1)11U,    (U4)0x00000040U    },
     {    (U2)ALERT_CH_H_ONACCP,             (U1)ALERT_REQ_H_ONACCP_MALFUNC,         (U1)11U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_D_SBW_PD_SFML,        (U1)ALERT_REQ_D_SBW_PD_SFML_MSG_28,     (U1)11U,    (U4)0x00004000U    },
@@ -505,10 +500,8 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_CC_ACT_RW,       (U1)24U,    (U4)0x00010000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_SFT_P_AUTO,      (U1)24U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_SFT_P_AUTO_RW,   (U1)24U,    (U4)0x00020000U    },
-    {    (U2)ALERT_CH_S_DSC,                (U1)ALERT_REQ_S_DSC_MSG2,               (U1)24U,    (U4)0x00080000U    },
-    {    (U2)ALERT_CH_S_DSC,                (U1)ALERT_REQ_S_DSC_MSG2_RW,            (U1)24U,    (U4)0x00080000U    },
-    {    (U2)ALERT_CH_S_CVRS,               (U1)ALERT_REQ_S_CVRS_SC,                (U1)24U,    (U4)0x00100000U    },
-    {    (U2)ALERT_CH_S_CVRS,               (U1)ALERT_REQ_S_CVRS_SC_REP,            (U1)24U,    (U4)0x00100000U    },
+    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_40,      (U1)24U,    (U4)0x00080000U    },
+    {    (U2)ALERT_CH_D_SBW_PD_SILUA,       (U1)ALERT_REQ_D_SBW_PD_SILUA_MSG_41,    (U1)24U,    (U4)0x00100000U    },
     {    (U2)ALERT_CH_S_SWS_PD,             (U1)ALERT_REQ_S_SWS_PD_BREAK,           (U1)24U,    (U4)0x00200000U    },
     {    (U2)ALERT_CH_S_FHL,                (U1)ALERT_REQ_S_FHL_ACTIVATION,         (U1)24U,    (U4)0x00400000U    },
     {    (U2)ALERT_CH_S_LTA_2_PD,           (U1)ALERT_REQ_S_LTA_2_PD_WRN1,          (U1)24U,    (U4)0x00800000U    },
@@ -610,7 +603,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_C_DRS,                (U1)ALERT_REQ_C_DRS_TESTMODE,           (U1)34U,    (U4)0x00000080U    },
     {    (U2)ALERT_CH_H_LEAUNF_PD_PWC,      (U1)ALERT_REQ_H_LEAUNF_PD_PWC_UNCOMP,   (U1)34U,    (U4)0x00000100U    },
     {    (U2)ALERT_CH_H_LEAUNF_PD_EHV,      (U1)ALERT_REQ_H_LEAUNF_PD_EHV_UNCOMP,   (U1)34U,    (U4)0x00000100U    },
-    {    (U2)ALERT_CH_D_SBW_PD_SILUA,       (U1)ALERT_REQ_D_SBW_PD_SILUA_MSG_41,    (U1)34U,    (U4)0x00000100U    },
+    {    (U2)ALERT_CH_D_SBW_PD_SFPF,        (U1)ALERT_REQ_D_SBW_PD_SFPF_MSG_42,     (U1)34U,    (U4)0x00000400U    },
     {    (U2)ALERT_CH_S_DMC_PD,             (U1)ALERT_REQ_S_DMC_PD_DMC_RESTRCT,     (U1)34U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_C_PKBWAR_PD,          (U1)ALERT_REQ_C_PKBWAR_PD_ON,           (U1)34U,    (U4)0x00080000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_REQ_BRK2,        (U1)34U,    (U4)0x00100000U    },
@@ -748,6 +741,8 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-3    10/31/2024  KO       Change for BEV System_Consideration_1.(MET-C_TRCOFF-CSTD-1-00-A-C0)                                */
 /*  BEV-4    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
 /*  BEV-5    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
+/*  BEV-6     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-C_BRK-CSTD-2-00-A-C0)                                   */
+/*  BEV-7     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -755,5 +750,6 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

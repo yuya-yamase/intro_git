@@ -52,8 +52,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_SFT_SBW, const U1 u1_a_RNG_STS, const U2 u2_a_RNG, const U1 u1_a_GEAR);
-static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_SFT_SBW, const U1 u1_a_RNG, const U1 u1_a_GEAR);
+static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_RNG_STS, const U2 u2_a_RNG, const U1 u1_a_GEAR);
+static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_RNG, const U1 u1_a_GEAR);
 static  U1      u1_s_XSpiCfgCvtVptranShiftPos(const U2 u2_a_RNG, const U1 u1_a_XSPI_RNG);
 static  U1      u1_s_XSpiCfgVptranHideDispJdg(void);
 
@@ -81,7 +81,7 @@ U1    u1_g_XSpiCfgCvtVptranGear(void)
     u1_t_ger_sts       = u1_g_VptranGearSelected(&u2_t_gear);
     u1_t_hide_disp_jdg = u1_s_XSpiCfgVptranHideDispJdg();
 
-    /* Turn-Off the Gear if a shift range is not shown OR shift range is P, R or N. */
+    /* Turn-Off the Gear if a shift range is not shown OR shift range is other than DMS range. */
     if (u1_t_hide_disp_jdg == (U1)TRUE){
         u2_t_gear = (U2)0U;
     }
@@ -103,7 +103,6 @@ void  vd_g_XSpiCfgCvtVptranShift(U1* u1p_a_blnk, U1* u1p_a_pos)
 {
     U2      u2_t_rng;
     U2      u2_t_gear;
-    U1      u1_t_sft_sbw;
     U1      u1_t_rng_sts;
     U1      u1_t_ger_sts;
     U1      u1_t_xspi_rng;
@@ -112,13 +111,12 @@ void  vd_g_XSpiCfgCvtVptranShift(U1* u1p_a_blnk, U1* u1p_a_pos)
     u2_t_gear = (U2)0U;
     u1_t_rng_sts = u1_g_VptranRangeSelected(&u2_t_rng);
     u1_t_ger_sts = u1_g_VptranGearSelected(&u2_t_gear);
-    u1_t_sft_sbw = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW);
 
     if ((u1_t_ger_sts & (U1)(VPTRAN_INVALID | VPTRAN_UNKNOWN)) != (U1)0U) {
         u2_t_gear = (U2)0U;
     }
 
-    u1_t_xspi_rng = u1_s_XSpiCfgCvtVptranSftRng(u1_t_sft_sbw, u1_t_rng_sts, u2_t_rng, (U1)u2_t_gear);
+    u1_t_xspi_rng = u1_s_XSpiCfgCvtVptranSftRng(u1_t_rng_sts, u2_t_rng, (U1)u2_t_gear);
 
     if ((u1p_a_blnk != vdp_PTR_NA) && (u1p_a_pos != vdp_PTR_NA)) {
         if (u1_t_xspi_rng != (U1)XSPI_VPTRAN_SFT_OFF) {
@@ -148,7 +146,7 @@ U1      u1_g_XSpiCfgCvtVptranGsi(void)
     u1_t_sts          = u1_g_VptranGearShiftIndicator(&u2_t_gsi);
     u1_t_hide_disp_jdg = u1_s_XSpiCfgVptranHideDispJdg();
 
-    /* Turn-Off the GSI if a shift range is not shown OR shift range is P, R or N. */
+    /* Turn-Off the GSI if a shift range is not shown OR shift range is other than DMS range. */
     if (u1_t_hide_disp_jdg == (U1)TRUE){
         u2_t_gsi = (U2)0x0000U;
     }
@@ -162,15 +160,14 @@ U1      u1_g_XSpiCfgCvtVptranGsi(void)
 }
 
 /*===================================================================================================================================*/
-/* static  U1      u1_s_XSpiCfgGetSftRng(const U1 u1_a_SFT_SBW, const U1 u1_a_RNG_STS, const U1 u1_a_RNG, const U1 u1_a_GEAR)        */
+/* static  U1      u1_s_XSpiCfgGetSftRng(const U1 u1_a_RNG_STS, const U1 u1_a_RNG, const U1 u1_a_GEAR)                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_SFT_TYP        : Shift Type (Use return value of u1_g_VptranShiftTypeCfg)                                   */
-/*                  u1_a_RNG_STS        : Status bits of Range info (Use return value of u1_g_VptranRangeSelected)                   */
+/*  Arguments:      u1_a_RNG_STS        : Status bits of Range info (Use return value of u1_g_VptranRangeSelected)                   */
 /*                  u1_a_RNG            : Selected Range (u1_g_VptranRangeSelected)                                                  */
 /*                  u1_a_GEAR           : Selected Gear (u1_g_VptranGearSelected)                                                    */
 /*  Return:         A range value to store the Xspi buffer                                                                           */
 /*===================================================================================================================================*/
-static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_SFT_SBW, const U1 u1_a_RNG_STS, const U2 u2_a_RNG, const U1 u1_a_GEAR)
+static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_RNG_STS, const U2 u2_a_RNG, const U1 u1_a_GEAR)
 {
     static const    U1      u1_s_VALID_SEL_RNG = (U1)1U;
     U2                      u2_t_rng;
@@ -183,7 +180,7 @@ static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_SFT_SBW, const U1 u1_a
     u1_t_rng_bitcnt = u1_g_BitCnt((U4)u2_t_rng);
     u1_t_rng_num = u1_g_LsbSrch((U4)u2_t_rng);
     if ((u1_t_rng_bitcnt == u1_s_VALID_SEL_RNG) && (u1_t_rng_num < (U1)XSPI_VPTRAN_SFTRNG_NUM) && (u1_a_RNG_STS == (U1)0U)) {
-        u1_t_rng_out = u1_s_XSpiCfgCvtVptranSftOut(u1_a_SFT_SBW, u1_t_rng_num, u1_a_GEAR);
+        u1_t_rng_out = u1_s_XSpiCfgCvtVptranSftOut(u1_t_rng_num, u1_a_GEAR);
     } else {
         u1_t_rng_out = (U1)XSPI_VPTRAN_SFT_OFF;
     }
@@ -191,28 +188,14 @@ static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_SFT_SBW, const U1 u1_a
 }
 
 /*===================================================================================================================================*/
-/* static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_SFT_SBW, const U1 u1_a_RNG, const U1 u1_a_GEAR)                         */
+/* static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_RNG, const U1 u1_a_GEAR)                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_SFT_SBW, const U1 u1_a_RNG, const U1 u1_a_GEAR)
+static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_RNG, const U1 u1_a_GEAR)
 {
     static const    U1  u1_sp_SFTRNG_SBW_TBL[XSPI_VPTRAN_SFTRNG_BUF_NUM] = {
-        /* GEAR Inactive */                  /* GEAR Active */
-        (U1)XSPI_VPTRAN_SFT_P   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_P_ON  */
-        (U1)XSPI_VPTRAN_SFT_R   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_R_ON  */
-        (U1)XSPI_VPTRAN_SFT_N   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_N_ON  */
-        (U1)XSPI_VPTRAN_SFT_D   ,        (U1)XSPI_VPTRAN_SFT_DM  ,      /* VPTRAN_RNG_D_ON  */
-        (U1)XSPI_VPTRAN_SFT_B   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_B_ON  */
-        (U1)XSPI_VPTRAN_SFT_S   ,        (U1)XSPI_VPTRAN_SFT_SM  ,      /* VPTRAN_RNG_S_ON  */
-        (U1)XSPI_VPTRAN_SFT_DM  ,        (U1)XSPI_VPTRAN_SFT_DM  ,      /* VPTRAN_RNG_DM_ON */
-        (U1)XSPI_VPTRAN_SFT_SM  ,        (U1)XSPI_VPTRAN_SFT_SM  ,      /* VPTRAN_RNG_SM_ON */
-        (U1)XSPI_VPTRAN_SFT_MM  ,        (U1)XSPI_VPTRAN_SFT_MM  ,      /* VPTRAN_RNG_MM_ON */
-        (U1)XSPI_VPTRAN_SFT_M   ,        (U1)XSPI_VPTRAN_SFT_MM  ,      /* VPTRAN_RNG_M_ON  */
-        (U1)XSPI_VPTRAN_SFT_SD  ,        (U1)XSPI_VPTRAN_SFT_OFF        /* VPTRAN_RNG_SD_ON */
-    };
-    static const    U1  u1_sp_SFTRNG_CVT_TBL[XSPI_VPTRAN_SFTRNG_BUF_NUM] = {
         /* GEAR Inactive */                  /* GEAR Active */
         (U1)XSPI_VPTRAN_SFT_P   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_P_ON  */
         (U1)XSPI_VPTRAN_SFT_R   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_R_ON  */
@@ -238,12 +221,7 @@ static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_SFT_SBW, const U1 u1_a
         u1_t_pos += u1_s_GEAR_OFST;
     }
 
-    u1_t_rng_out = (U1)XSPI_VPTRAN_SFT_OFF;
-    if (u1_a_SFT_SBW == (U1)TRUE) {
-            u1_t_rng_out = u1_sp_SFTRNG_SBW_TBL[u1_t_pos];
-    } else {
-            u1_t_rng_out = u1_sp_SFTRNG_CVT_TBL[u1_t_pos];
-    }
+    u1_t_rng_out = u1_sp_SFTRNG_SBW_TBL[u1_t_pos];
 
     return (u1_t_rng_out);
 }
@@ -261,15 +239,6 @@ static  U1      u1_s_XSpiCfgCvtVptranShiftPos(const U2 u2_a_RNG, const U1 u1_a_X
     if ((u1_a_XSPI_RNG == (U1)XSPI_VPTRAN_SFT_N) &&
         ((u2_a_RNG & (U2)VPTRAN_STS_DBL_PARK) != (U2)0U)) {
         u1_t_pos = (U1)XSPI_VPTRAN_SFT_POS_BLNK_1;
-    }
-    else if ((u2_a_RNG & (U2)VPTRAN_STS_OILWRN) != (U2)0U) {
-        u1_t_pos = (U1)XSPI_VPTRAN_SFT_POS_BLNK_1;
-    }
-    else if ((u2_a_RNG & (U2)VPTRAN_STS_CLATCHENGAGE) != (U2)0U) {
-        u1_t_pos = (U1)XSPI_VPTRAN_SFT_POS_BLNK_2;
-    }
-    else if ((u2_a_RNG & (U2)VPTRAN_STS_SPTMDENABLE) != (U2)0U) {
-        u1_t_pos = (U1)XSPI_VPTRAN_SFT_POS_BLNK_3;
     }
     else {
         u1_t_pos = (U1)XSPI_VPTRAN_SFT_POS_ON;
@@ -335,10 +304,12 @@ static  U1      u1_s_XSpiCfgVptranHideDispJdg(void)
 /*  1.4.0     9/20/2021  TN       Add Notification Processing Of Shift Blinking State                                                */
 /*  1.5.0     1/16/2024  GM       19PFv3 Update                                                                                      */
 /*  1.6.0     4/12/2024  GM       Fix a bug (Send Shift Pos Blink Pattern 1 when N Range and Double parking mode)                    */
+/*  1.7.0    10/10/2024  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                                */
 /*                                                                                                                                   */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
 /*  * KK   = Kohei Kato,      Denso Techno                                                                                           */
 /*  * TN   = Tetsu Naruse,    Denso Techno                                                                                           */
 /*  * GM   = Glen Monteposo,  DTPH                                                                                                   */
+/*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

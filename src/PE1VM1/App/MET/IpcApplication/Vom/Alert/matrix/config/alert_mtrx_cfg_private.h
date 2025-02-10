@@ -103,7 +103,7 @@
 #define ALERT_B_TPWSR_CH_NUM                     (1U)
 #define ALERT_B_TRWIP_CH_NUM                     (1U)
 #define ALERT_C_BRKBZ_CH_NUM                     (1U)
-#define ALERT_C_BRK_1_CH_NUM                     (1U)
+#define ALERT_C_BRK_2_CH_NUM                     (1U)
 #define ALERT_C_BRLV_2_CH_NUM                    (2U)
 #define ALERT_C_ECB_CH_NUM                       (1U)
 #define ALERT_C_PKBWAR_CH_NUM                    (2U)
@@ -479,7 +479,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_TDOOR_MTRX[ALERT_B_TDOOR_CH_NUM
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TPWSR_MTRX[ALERT_B_TPWSR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_TRWIP_MTRX[ALERT_B_TRWIP_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRKBZ_MTRX[ALERT_C_BRKBZ_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRK_1_MTRX[ALERT_C_BRK_1_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRK_2_MTRX[ALERT_C_BRK_2_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_BRLV_2_MTRX[ALERT_C_BRLV_2_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_ECB_MTRX[ALERT_C_ECB_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_PKBWAR_MTRX[ALERT_C_PKBWAR_CH_NUM];
