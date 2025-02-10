@@ -19,6 +19,7 @@
 
 #include    "gyro.h"
 #include    "GyroDevCtl.h"
+#include    "CarSpdPls.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -63,6 +64,7 @@
 void            vd_g_Ivi_GyrCtrl_Main_Bon_init(void)
 {
     gyro_Init();
+	vd_g_CarSpdPls_Init();
     vd_g_GyroDev_BonInit();
 }
 
@@ -76,6 +78,7 @@ void            vd_g_Ivi_GyrCtrl_Main_Bon_init(void)
 void            vd_g_Ivi_GyrCtrl_Main_Wkup_init(void)
 {
     gyro_Init();
+	vd_g_CarSpdPls_Init();
     vd_g_GyroDev_WkupInit();
 }
 
@@ -89,6 +92,7 @@ void            vd_g_Ivi_GyrCtrl_Main_Wkup_init(void)
 void            vd_g_Ivi_GyrCtrl_Main(void)
 {
     gyro_main();
+	vd_g_CarSpdPls_MainTask();
 	vd_g_GyroDev_Routine();
 }
 
