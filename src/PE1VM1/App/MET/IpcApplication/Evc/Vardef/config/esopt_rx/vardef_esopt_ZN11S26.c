@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_ZN11S19_C_MAJOR             (2)
-#define VARDEF_ESOPT_ZN11S19_C_MINOR             (5)
-#define VARDEF_ESOPT_ZN11S19_C_PATCH             (0)
+#define VARDEF_ESOPT_ZN11S26_C_MAJOR             (2)
+#define VARDEF_ESOPT_ZN11S26_C_MINOR             (5)
+#define VARDEF_ESOPT_ZN11S26_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_ZN11S19_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_ZN11S19_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_ZN11S19_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_ZN11S19.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_ZN11S26_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_ZN11S26_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_ZN11S26_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_ZN11S26.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,146 +50,21 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_OMRBB(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_OMRBB(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_M_FNC, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_OMRBB_MLRSEL(void)                                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_OMRBB_MLRSEL(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_MLR_FNC, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_OMRBB_REVERSE(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_OMRBB_REVERSE(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RLM_FNC, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_OMRBB_AUTO(void)                                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_OMRBB_AUTO(void)
-{
-    static const U1    u1_s_VDF_ESO_OMRBB_MRTR_ON = (U1)1U;
-    static const U1    u1_s_VDF_ESO_OMRBB_ARTR_ON = (U1)1U;
-    U1                 u1_t_rx_mrtr;
-    U1                 u1_t_rx_artr;    
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx_mrtr = (U1)0U;
-    u1_t_rx_artr = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_MRTR_FNC, &u1_t_rx_mrtr);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ARTR_FNC, &u1_t_rx_artr);
-    if((u1_t_rx_mrtr == u1_s_VDF_ESO_OMRBB_MRTR_ON) && (u1_t_rx_artr == u1_s_VDF_ESO_OMRBB_ARTR_ON)){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_OMRBB_NONAUTO(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_OMRBB_NONAUTO(void)
-{
-    static const U1    u1_s_VDF_ESO_OMRBB_MRTR_ON = (U1)1U;
-    static const U1    u1_s_VDF_ESO_OMRBB_ARTR_OFF = (U1)0U;
-    U1                 u1_t_rx_mrtr;
-    U1                 u1_t_rx_artr;  
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx_mrtr = (U1)0U;
-    u1_t_rx_artr = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_MRTR_FNC, &u1_t_rx_mrtr);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ARTR_FNC, &u1_t_rx_artr);
-    if((u1_t_rx_mrtr == u1_s_VDF_ESO_OMRBB_MRTR_ON) && (u1_t_rx_artr == u1_s_VDF_ESO_OMRBB_ARTR_OFF)) {
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_OBBPWL(void)                                                                                            */
+/*  U1      u1_g_VdfEsoRx_SW_RAINDROP_SENSOR(void)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_OBBPWL(void)
+U1      u1_g_VdfEsoRx_SW_RAINDROP_SENSOR(void)
 {
-    static const U1 u1_s_VDF_ESO_SW_OBBPWL_ACT = (U1)1U;
+    static const U1 u1_s_VDF_ESO_SW_RAINDROP_SENSOR_ACT = (U1)2U;
 
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PWL_PRE, &u1_t_rx);
-    if(u1_t_rx == u1_s_VDF_ESO_SW_OBBPWL_ACT){
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WVR_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_RAINDROP_SENSOR_ACT){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -200,21 +75,98 @@ U1      u1_g_VdfEsoRx_SW_OBBPWL(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_SERVICE_POS(void)                                                                                       */
+/*  U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void)                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_SERVICE_POS(void)
+U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void)
 {
-    static const U1 u1_s_VDF_ESO_SW_SERVICE_POS_ACT = (U1)1U;
+    static const U1 u1_s_VDF_ESO_SW_INTTIME_AJUST_ACT = (U1)1U;
 
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_WSVS_FNC, &u1_t_rx);
-    if(u1_t_rx == u1_s_VDF_ESO_SW_SERVICE_POS_ACT){
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WVR_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_INTTIME_AJUST_ACT){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_REAR_WIPER_INTLO_ACT = (U1)1U;
+    static const U1 u1_s_VDF_ESO_SW_REAR_WIPER_LO_ACT = (U1)2U;
+
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WR_FNC, &u1_t_rx);
+    if((u1_t_rx == u1_s_VDF_ESO_SW_REAR_WIPER_INTLO_ACT) ||
+       (u1_t_rx == u1_s_VDF_ESO_SW_REAR_WIPER_LO_ACT)){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_REAR_WIPER_INT_ACT = (U1)1U;
+
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WR_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_REAR_WIPER_INT_ACT){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_REAR_WASHER_ACT = (U1)1U;
+
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_WRSW_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_REAR_WASHER_ACT){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -232,16 +184,12 @@ U1      u1_g_VdfEsoRx_SW_SERVICE_POS(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.5.0    10/10/2024   KT      Newly Created                                                                                      */
-/*                                                                                                                                   */
+/*  2.5.0    12/16/2024  HT       Newly Created                                                                                      */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV      10/10/2024   KT      Added function for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                                */
-/*  BEV-2    12/03/2024   HY      Added function for BEV System_Consideration_1.(MET-B_PWLBB-CSTD-0-)                                */
-/*  BEV-3    12/16/2024   HT      Added function for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                 */
+/*  BEV-1    12/16/2024  HT       Added function for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                 */
 /*                                                                                                                                   */
-/*  * KT = Kenta Takaji, Denso Techno                                                                                                */
-/*  * HY = Haruki Yagi, KSE                                                                                                          */
 /*  * HT = Hibiki Tanii, KSE                                                                                                         */
+/*                                                                                                                                   */
 /*===================================================================================================================================*/

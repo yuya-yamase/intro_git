@@ -201,16 +201,9 @@ static void    vd_s_HmiPuTxtCfgIGOffInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 {
-    static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT[] = {
+    static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[] = {
         /*  u2_idx    u2_chid                      u1_req                                   u2_eso_ch             */
-        {   (U2)331U, (U2)ALERT_CH_S_ADAFRO_PD,    (U1)ALERT_REQ_S_ADAFRO_PD_MLFNC,         (U2)U2_MAX           }     /* WARNING_ID_331 */
-    };
-
-    static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[] = {
-        /*  u2_idx    u2_chid                      u1_req                                   u2_eso_ch             */
-        {   (U2)786U, (U2)ALERT_CH_B_LEDHEA,       (U1)ALERT_REQ_B_LEDHEA_MALFUNC,          (U2)U2_MAX           },    /* WARNING_ID_786 */
-        {   (U2)786U, (U2)ALERT_CH_S_HEALEV_PD,    (U1)ALERT_REQ_S_HEALEV_PD_MALFUNC,       (U2)U2_MAX           },    /* WARNING_ID_786 */
-        {   (U2)786U, (U2)ALERT_CH_S_MWL_PD,       (U1)ALERT_REQ_S_MWL_PD_MALFUNC,          (U2)VDF_ESO_CH_MWL   }     /* WARNING_ID_786 */
+        {   (U2)331U, (U2)ALERT_CH_B_LEDHEA,       (U1)ALERT_REQ_B_LEDHEA_MALFUNC,          (U2)U2_MAX           }     /* WARNING_ID_331 */
     };
 
     U2              u2_t_num_reqbit;
@@ -299,38 +292,19 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     /* Evmod */
     vd_s_HmiPuTxtCfgEvmReq(&u4_ap_req[0]);
 
-    u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT[0]);
-    for(u4_t_loop = (U4)0U; u4_t_loop < u4_t_num_tbl; u4_t_loop++){
-        u1_t_exist = (U1)TRUE;
-        if(st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_eso_ch < (U2)VDF_ESO_NUM_CH){
-            u1_t_exist = u1_g_VardefEsOptAvaByCh(st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_eso_ch);
-        }
-        if(u1_t_exist == (U1)TRUE){
-            u2_t_chid  = st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_chid;
-            u1_t_req    = u1_g_AlertReqByCh(u2_t_chid);
-            if(u1_t_req == st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u1_req){
-                u2_t_blkpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_idx >>     HMIPUTXT_IDX_SFT);
-                u2_t_bitpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_idx &  (U2)HMIPUTXT_REM_MSK);
-                if(u2_t_blkpos < (U2)HMIPUTXT_NWORD){
-                    u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-                }
-            }
-        }
-    }
-
-    /* WARNING_ID_786 */
-    u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[0]);
+    /* Head lamp */
+    u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[0]);
     for (u4_t_loop = (U4)0U; u4_t_loop < u4_t_num_tbl; u4_t_loop++) {
         u1_t_exist = (U1)TRUE;
-        if (st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_eso_ch < (U2)VDF_ESO_NUM_CH) {
-            u1_t_exist = u1_g_VardefEsOptAvaByCh(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_eso_ch);
+        if (st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_eso_ch < (U2)VDF_ESO_NUM_CH) {
+            u1_t_exist = u1_g_VardefEsOptAvaByCh(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_eso_ch);
         }
         if (u1_t_exist == (U1)TRUE) {
-            u2_t_chid = st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_chid;
+            u2_t_chid = st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_chid;
             u1_t_req = u1_g_AlertReqByCh(u2_t_chid);
-            if (u1_t_req == st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u1_req) {
-                u2_t_blkpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_idx >> HMIPUTXT_IDX_SFT);
-                u2_t_bitpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_idx & (U2)HMIPUTXT_REM_MSK);
+            if (u1_t_req == st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u1_req) {
+                u2_t_blkpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_idx >> HMIPUTXT_IDX_SFT);
+                u2_t_bitpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_idx & (U2)HMIPUTXT_REM_MSK);
                 if (u2_t_blkpos < (U2)HMIPUTXT_NWORD) {
                     u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
                 }
@@ -890,6 +864,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  19PFv3-6 06/21/2024  JMH      Added LBW Mask Function                                                                            */
 /*  19PFv3-7 07/04/2024  TN       Delete Calibration Guard Process.                                                                  */
 /*  BEV-1    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
+/*  BEV-2    12/23/2024  MN       Change for BEV System_Consideration_1.(MET-B_LEDHEA-CSTD-1-01-A-C0)                                */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -901,5 +876,6 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  * JMH  = James Michael D. Hilarion, DTPH                                                                                         */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
+/*  * MN   = Mikiya Negishi,  KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

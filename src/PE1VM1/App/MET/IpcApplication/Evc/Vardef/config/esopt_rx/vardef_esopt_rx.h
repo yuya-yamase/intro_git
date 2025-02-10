@@ -364,6 +364,16 @@ U1      u1_g_VdfEsoRx_SW_OMRBB_MLRSEL(void);
 U1      u1_g_VdfEsoRx_SW_OMRBB_REVERSE(void);
 U1      u1_g_VdfEsoRx_SW_OMRBB_AUTO(void);
 U1      u1_g_VdfEsoRx_SW_OMRBB_NONAUTO(void);
+U1      u1_g_VdfEsoRx_SW_OBBPWL(void);
+U1      u1_g_VdfEsoRx_SW_SERVICE_POS(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_ZN11S26.c */
+U1      u1_g_VdfEsoRx_SW_RAINDROP_SENSOR(void);
+U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void);
+U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void);
+U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void);
+U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
