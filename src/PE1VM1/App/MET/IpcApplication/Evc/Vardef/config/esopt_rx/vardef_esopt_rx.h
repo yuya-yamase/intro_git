@@ -194,10 +194,6 @@ U1      u1_g_VdfEsoRx_EVMIL_AMBER(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ENG1G13.c */
-U1      u1_g_VdfEsoRx_ECOFLAG(void);
-U1      u1_g_VdfEsoRx_MT(void);
-U1      u1_g_VdfEsoRx_AT(void);
-U1      u1_g_VdfEsoRx_MMT_SMT(void);
 U1      u1_g_VdfEsoRx_PTS_MILREQ(void);
 U1      u1_g_VdfEsoRx_SGAUGE(void);
 

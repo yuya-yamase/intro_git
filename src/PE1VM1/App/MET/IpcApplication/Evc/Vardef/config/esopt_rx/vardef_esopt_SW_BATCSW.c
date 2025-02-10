@@ -62,7 +62,11 @@ U1      u1_g_VdfEsoRx_SW_BATCSW(void)
     U1                 u1_t_ava_rx;
 
     u1_t_ptsys = u1_g_VardefPtsRx();
+#if 0   /* BEV provisionally */
     u1_t_mmsup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)TRUE;
+#endif
     u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
 
     if(u1_t_mmsup == (U1)FALSE){
@@ -88,8 +92,10 @@ U1      u1_g_VdfEsoRx_SW_BATCSW(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3    2/28/2024  HF       Change config for 19PFv3 PreCV                                                                     */
+/*  BEV-1     2/05/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

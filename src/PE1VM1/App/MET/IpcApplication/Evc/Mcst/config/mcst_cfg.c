@@ -1295,7 +1295,7 @@ static U1    u1_s_McstCfgJdg_L_STSWRHCSTM2(void)
         {    (U1)U1_MAX  ,  (U2)VDF_ESO_CH_PVM      },        /*  PVM                  */
         {    (U1)U1_MAX  ,  (U2)VDF_ESO_CH_MTM      },        /*  MTM                  */
         {    (U1)U1_MAX  ,  (U2)VDF_ESO_CH_SIM      },        /*  SIM                  */
-        {    (U1)U1_MAX  ,  (U2)VDF_ESO_CH_ECOFLAG  }         /*  Idling stop          */
+        {    (U1)FALSE   ,  (U2)U2_MAX              }         /*  Idling stop          */
     };
 
     U1  u1_t_result;
@@ -2770,16 +2770,13 @@ static  U4      u4_s_McstCfgIllumiAdjInit(const U1 u1_a_id)
 /*===================================================================================================================================*/
 static  U4      u4_s_McstCfgEcoIndInit(const U1 u1_a_id)
 {
-    U1      u1_t_at;
     U1      u1_t_ptsys;
     U1      u1_t_ecoind_sup;
     U4      u4_t_result;
 
-    u1_t_at    = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AT);
     u1_t_ptsys = u1_g_VardefPtsRx();
-    if((u1_t_at    == (U1)TRUE                 ) && 
-      ((u1_t_ptsys == (U1)VDF_PTS_RX_01_GAS    ) ||
-       (u1_t_ptsys == (U1)VDF_PTS_RX_02_GAS_ISS))) {
+    if((u1_t_ptsys == (U1)VDF_PTS_RX_01_GAS    ) ||
+       (u1_t_ptsys == (U1)VDF_PTS_RX_02_GAS_ISS)) {
         u1_t_ecoind_sup = (U1)TRUE;
     }
     else{
@@ -3250,6 +3247,7 @@ void vd_g_McstCfgGetLeftFuelEco(U4 * u4_ap_bf){
 /* 19PFv3-10 07/04/2024  TN       Delete Calibration Guard Process except for out of array references.                               */
 /* 19PFv3-11 07/12/2024  TN       Add Calibration Guard to Unify Vehicle Operation.                                                  */
 /* 19PFv3-12 07/12/2024  SW       Add IF for Left Contents of IG-ON ChargeMode                                                       */
+/* BEV-1     02/06/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TM   = Takuya Mitsui,   Denso Techno                                                                                           */
@@ -3259,5 +3257,6 @@ void vd_g_McstCfgGetLeftFuelEco(U4 * u4_ap_bf){
 /*  * GM   = Glen Monteposo,  DTPH                                                                                                   */
 /*  * SK   = Shintaro Kano,   Denso Techno                                                                                           */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * SF   = Shiro Furui,     Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -383,11 +383,6 @@ static U4      u4_s_AlertD_sftposBRcvtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
         u4_t_src_chk              |= u4_s_ALERT_D_SFTPOS_BIT_PTS_ON;
     }
 
-    u1_t_trnsmssn = u1_g_AlertEsOptAvailable((U2)ALERT_OPT_ID_D_SFTPOS_VARTRM1);
-    if(u1_t_trnsmssn != (U1)TRUE){
-        u4_t_src_chk |= u4_s_ALERT_D_SFTPOS_BIT_TRNSMSSN;
-    }
-
     u1_t_dest = u1_g_AlertRevBzrDest();
     if(u1_t_dest == (U1)ALERT_SHIFT_BZ_REV_DEST_JPN){
         u4_t_src_chk |= u4_s_ALERT_D_SFTPOS_BIT_DEST;
@@ -449,6 +444,8 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*  5.2.1     5/26/2022  HU       Fix QAC Warning(Empty if Statement).                                                               */
 /*  5.2.2     1/24/2023  SS       Update for 345D 1A(Version update).                                                                */
 /*  5.3.3    12/19/2023  GM       Update for 19PFv3 CV              .                                                                */
+/*  5.3.3-BEV-1                                                                                                                      */
+/*            2/ 6/2025  SF       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  * SM   = Shingo Miyamoto, NTTD MSE                                                                                               */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
@@ -456,5 +453,6 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*  * HU   = Hidekazu Usui, NTTD MSE                                                                                                 */
 /*  * SS   = Shuji Suzuki, NTTD MSE                                                                                                  */
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

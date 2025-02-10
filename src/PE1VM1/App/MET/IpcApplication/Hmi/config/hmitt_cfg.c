@@ -244,14 +244,11 @@ static void    vd_s_HmiTtTurn(U4 * u4_ap_req)
 /*===================================================================================================================================*/
 static void    vd_s_HmiTtTECOLP2(U4* u4_ap_req)
 {
-    U1  u1_t_at;
     U1  u1_t_ptsys;
 
-    u1_t_at =  u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AT);
     u1_t_ptsys = u1_g_VardefPtsRx();
-   if((u1_t_at      == (U1)TRUE                  ) && 
-      ((u1_t_ptsys == (U1)VDF_PTS_RX_01_GAS      ) ||
-       (u1_t_ptsys == (U1)VDF_PTS_RX_02_GAS_ISS))) {
+   if((u1_t_ptsys == (U1)VDF_PTS_RX_01_GAS      ) ||
+       (u1_t_ptsys == (U1)VDF_PTS_RX_02_GAS_ISS)) {
       /* Do Nothing */
    }
    else{
@@ -408,6 +405,7 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  BEV-1    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
 /*  BEV-2    12/23/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
 /*  BEV-3    02/10/2025  RO       Change for BEV System_Consideration_1.(MET-S_ADTT-CSTD-0-)                                         */
+/*  BEV-4    02/10/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -418,5 +416,6 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

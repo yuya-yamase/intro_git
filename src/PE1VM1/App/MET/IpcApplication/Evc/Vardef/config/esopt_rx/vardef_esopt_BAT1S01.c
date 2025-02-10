@@ -62,7 +62,11 @@ U1      u1_g_VdfEsoRx_SW_BATWSW(void)
     U1                 u1_t_ava_rx;
     U1                 u1_t_opt;
 
+#if 0   /* BEV provisionally */
     u1_t_opt = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_opt = (U1)TRUE;
+#endif
 
     u1_t_rx = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_TBW_EN, &u1_t_rx);
@@ -89,8 +93,10 @@ U1      u1_g_VdfEsoRx_SW_BATWSW(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  351D-1   11/17/2022  SK       Change config for 351D CV                                                                          */
+/*  BEV-1    02/05/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * SK   = Shotaro Kitayama, PSL                                                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

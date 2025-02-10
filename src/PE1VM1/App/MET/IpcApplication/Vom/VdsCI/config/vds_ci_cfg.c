@@ -441,7 +441,11 @@ U1      u1_g_VdsCICfgGetMMEsopt(void)
 {
     U1 u1_t_ret;
 
+#if 0   /* BEV provisionally */
     u1_t_ret = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_ret = (U1)FALSE;
+#endif
     return(u1_t_ret);
 }
 /*===================================================================================================================================*/
@@ -4325,6 +4329,7 @@ static void    vd_s_VdsCIReqTx_RFG_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /* BEV-5     02/10/2025  RO       Change config for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                 */
 /* BEV-6     02/10/2025  RO       Change config for BEV System_Consideration_1.(MET-S_ADVMID-CSTD-0-)                                */
 /* BEV-7     02/10/2025  HF       Change config for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                 */
+/* BEV-8     02/10/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -4343,5 +4348,6 @@ static void    vd_s_VdsCIReqTx_RFG_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
