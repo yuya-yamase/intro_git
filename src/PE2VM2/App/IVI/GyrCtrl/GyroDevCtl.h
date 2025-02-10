@@ -11,6 +11,7 @@
 #include "Dio.h"
 #include "Mcu_I2c_Ctrl_private.h"
 #include "x_spi_ivi_sub2.h"
+#include "CarSpdPls.h"
 #include "PictCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -66,7 +67,8 @@
 #define GYRODEV_APPOFF                              (PICT_NOREDUN_STATE_APPOFF)
 #define GYRODEV_APPON                               (PICT_NOREDUN_STATE_APPON)
 
-#define GYRODEV_LAST_PLS_8KM                        (6898U)/* 暫定 CARSPDPLS_PLS_8KM_CYC */
+#define GYRODEV_LAST_PLS_STOP                       (CARSPDPLS_PLS_STP_CYC)
+#define GYRODEV_LAST_PLS_8KM                        (CARSPDPLS_PLS_8KM_CYC)
 
 #define u1_GYRODEV_GYRO_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GYRO, (u), (v), (U1)GP_I2C_MA_SLA_6_GYRO, (w), (x), (y), (z)))
 #define u1_GYRODEV_GYRO_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_GYRO, (w), (U1)GP_I2C_MA_SLA_6_GYRO, (x), (y), (z)))
@@ -78,7 +80,7 @@
 #define u1_GYRODEV_SET_SENSOR_ON_H()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_HIGH))
 #define u1_GYRODEV_GET_APP_ON()                     (u1_g_PictCtl_StartSts())
 #define u1_GYRODEV_OSCMD_GYRO_DATA_NOTIF(x)         (vd_g_XspiIviSub2GyroDataPut(x))
-//#define u1_GYRODEV_GET_LAST_PLS()                 (fs_CarSpdPls_LastPlsGet())/* 暫定 車速パルス実装時に見直し */
+#define u1_GYRODEV_GET_LAST_PLS()                   (u2_g_CarSpdPls_LastPlsGet())
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */

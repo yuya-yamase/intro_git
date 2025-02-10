@@ -662,8 +662,9 @@ static void    vd_s_GyroDev_GyroDtcChk()
 
     u1_t_error_flag = (U1)FALSE;
 
-    u1_t_last_pls = (U1)0U; //u1_GYRODEV_GET_LAST_PLS();   /* 暫定 車速パルス実装時に見直し */
-    if(u1_t_last_pls > (U1)GYRODEV_LAST_PLS_8KM){
+    u1_t_last_pls = u1_GYRODEV_GET_LAST_PLS();
+    if((u1_t_last_pls == (U1)GYRODEV_LAST_PLS_STOP)
+    || (u1_t_last_pls > (U1)GYRODEV_LAST_PLS_8KM)){
         /* MAX Freeze Chek */
         if((st_gyrodev_readdata.u2_gyro_x_data == (U2)GYRODEV_GYRODTC_XYZ_MAX)
         || (st_gyrodev_readdata.u2_gyro_y_data == (U2)GYRODEV_GYRODTC_XYZ_MAX)
