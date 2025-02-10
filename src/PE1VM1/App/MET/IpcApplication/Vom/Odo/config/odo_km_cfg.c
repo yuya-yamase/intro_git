@@ -22,6 +22,10 @@
 #include "odo_om_rst_if.h"
 
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 #include "vardef.h"
 
 #include "oxcan.h"

@@ -26,6 +26,10 @@
 #include "vardef.h"
 #include "vardef_esopt.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

@@ -91,10 +91,9 @@
 #define ADC_GR_0							(ADC_GRP00)							/* ID (ADC_GRPxx not changed)					*/
 #define ADC_CFG_GRP00_HWUNIT				(ADC_HWUNIT0)						/* HW Unit										*/
 #define ADC_CFG_GRP00_SG					(ADC_SG0)							/* Scan Group									*/
-#define ADC_CFG_GRP00_CNV_CH_SIZE			(12U)								/* Total number of conversion channels			*/
-#define ADC_CFG_GRP00_CNV_CH				{ADC_CH00,ADC_CH01,ADC_CH02,ADC_CH03,ADC_CH04,	\
-											 ADC_CH05,ADC_CH06,ADC_CH07,ADC_CH08,ADC_CH17,	\
-											 ADC_CH18,ADC_CH19}					/* Conversion channels							*/
+#define ADC_CFG_GRP00_CNV_CH_SIZE			(8U)								/* Total number of conversion channels			*/
+#define ADC_CFG_GRP00_CNV_CH				{ADC_CH00,ADC_CH01,ADC_CH06,ADC_CH07,ADC_CH08,	\
+											 ADC_CH17,ADC_CH18,ADC_CH19}			/* Conversion channels							*/
 #define ADC_CFG_GRP00_CNV_MODE				(ADC_CONV_MODE_ONESHOT)				/* Conversion Mode								*/
 #define ADC_CFG_GRP00_TRIGG_SRC				(ADC_TRIGG_SRC_SW)					/* Conversion Trigger							*/
 #define ADC_CFG_GRP00_USE_CNV_INT			(STD_OFF)							/* Interrupt Use								*/

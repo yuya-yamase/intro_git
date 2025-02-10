@@ -19,6 +19,10 @@
 #include "wchime_cfg_private.h"
 
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 #include "alert.h"
 #include "sbltsync.h"

@@ -19,6 +19,10 @@
 #include "gagdst_lowfuel_cfg_private.h"
 
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -110,9 +114,12 @@ void    vd_g_GagdstLowFuelRstwkInit(void)
 void    vd_g_GagdstLowFuelOpemdEvhk(const U4 u4_a_EVTBIT)
 {
     U4                             u4_t_ign_chk;                                /* Ignition check                                    */
-
+#if 0   /* BEV BSW provisionally */
     u4_t_ign_chk = u4_a_EVTBIT & ((U4)VEH_OPEMD_EVTBIT_IGN_TO_ON  |
                                   (U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF);
+#else
+    u4_t_ign_chk = u4_a_EVTBIT & ((U4)0x00002020U);
+#endif
     if(u4_t_ign_chk != (U4)0U){
         u1_s_gagdst_lowfuel_lfw    = (U1)FALSE;
         u1_s_gagdst_lowfuel_stsbit = (U1)0x00U;

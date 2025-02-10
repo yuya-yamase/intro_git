@@ -48,7 +48,7 @@
 #include "veh_opemd.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "veh_opemd_STUB.h"
+#include "veh_opemd_xmode_STUB.h"
 #endif
 #if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
@@ -198,10 +198,6 @@ U2      u2_g_VardefCfgEomchk(void)
 #error "vardef_fg.c : VDF_EOM_XXX shall be equal to VEH_OPEMD_MDBIT_XXX."
 #endif
 #else
-#if ((VDF_EOM_ACC_ON != VEH_OPEMD_STUB_MDBIT_ACC) || \
-     (VDF_EOM_IGR_ON != VEH_OPEMD_STUB_MDBIT_IGN))
-#error "vardef_fg.c : VDF_EOM_XXX shall be equal to VEH_OPEMD_MDBIT_XXX."
-#endif
 #endif
 
 #if ((ES_INSPECT_MDBF_NUO_DI != (VDF_EOM_NUO_DI >> 8U)) ||  \
@@ -212,11 +208,7 @@ U2      u2_g_VardefCfgEomchk(void)
     U2          u2_t_eom;
 
     u2_t_eom  = (U2)VDF_EOM_PB_ON;
-#if 0   /* BEV BSW provisionally */
     u2_t_eom |= (U2)u4_g_VehopemdMdfield() & ((U2)VDF_EOM_ACC_ON | (U2)VDF_EOM_IGR_ON | (U2)VDF_EOM_PBA_ON | (U2)VDF_EOM_IGP_ON);
-#else
-    u2_t_eom |= (U2)u4_g_VehopemdConvertMdfield() & ((U2)VDF_EOM_ACC_ON | (U2)VDF_EOM_IGR_ON | (U2)VDF_EOM_PBA_ON | (U2)VDF_EOM_IGP_ON);
-#endif
 #if 0   /* BEV BSW provisionally */
     u2_t_eom |= ((U2)u1_g_ESInspectMdBfield() << 8U);
 #endif

@@ -30,6 +30,10 @@
 #include "calibration.h"
 #include "hdimmgr.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 #include "rim_ctl.h"
 #if 0   /* BEV BSW provisionally */
 #else

@@ -117,7 +117,11 @@ U1      u1_g_VehspdCanSp1xOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     U1                    u1_t_updt;
 
     u1_t_updt = (U1)FALSE;
+#if 0   /* BEV BSW provisionally */
     u4_t_evtchk = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON;
+#else
+    u4_t_evtchk = u4_a_EVTBIT & (U4)0x00000020U;
+#endif
     if(u4_t_evtchk != (U4)0U){
 
         u2_t_sp1    = (U2)0U;

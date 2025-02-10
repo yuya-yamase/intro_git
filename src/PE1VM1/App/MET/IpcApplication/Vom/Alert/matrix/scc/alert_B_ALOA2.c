@@ -170,7 +170,7 @@ static U4      u4_s_AlertB_aloa2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_msgsts;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ZN11S19_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                     (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                      u2_s_u2_s_ALERT_CH_B_ALOA2_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_aloa2_zn11S19_sts, u1_t_msgsts);

@@ -33,6 +33,10 @@
 #endif
 
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 #include "vardef.h"
 #include "fspomgr.h"
@@ -51,7 +55,7 @@
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u1_FSPOSNSR_RXMSG_ENG1G17STS(time)       (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G17_RXCH0   , \
-                                                  (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR, \
+                                                  (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE, \
                                                   (time)))
 #define vd_FSPOSNSR_RXMSG_B_POM(sgnl)            ((void)Com_ReceiveSignal(ComConf_ComSignal_B_POM_3,  (sgnl)))
 #define vd_FSPOSNSR_RXMSG_B_THOE(sgnl)           ((void)Com_ReceiveSignal(ComConf_ComSignal_B_THOE_3, (sgnl)))
