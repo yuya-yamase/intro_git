@@ -562,6 +562,8 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     vd_s_XSpiCfgEsopt(&u4_ap_pdu_tx[4]);
 
+    u4_ap_pdu_tx[9] |= (U4)TRUE << 17;                                 /*  SYS_MOP                  */ /* BEV SV1 provisionally */
+
     u4_ap_pdu_tx[11] |= (U4)TRUE << 7;                                 /*  SYS_PERSET               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 9;                                 /*  SYS_EPS_EPSSBW           */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE;                                      /*  SYS_SW_OBBPBD            */ /* BEV SV1 provisionally */
@@ -2978,6 +2980,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  19PFv3-24 07/10/2024 YR       Add HCS config                                                                                     */
 /*  19PFv3-25 07/15/2024 AA       Revised LcomIF used for HmiScreenPut                                                               */
 /*  BEV-1     02/10/2025 RO       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-)                                        */
+/*  BEV-2     02/10/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2992,5 +2995,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

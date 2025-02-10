@@ -384,17 +384,15 @@ static U2   u2_s_IllumiILFadeJdg(const U2 u2_a_LVL, const U2 u2_a_PCT)
         (U2)8249U       /* 1000ms */
     };
 
-    U1                  u1_t_at;
     U1                  u1_t_ig;
     U2                  u2_t_cnt;
     U2                  u2_t_min;
     U1                  u1_t_sts;
     U2                  u2_t_pct;
 
-    u1_t_at = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AT);
     u1_t_ig = u1_g_VehopemdIgnOn();
 
-    if((u1_CALIB_MCUID0741_IL2OUTILLRUN == (U1)TRUE) && (u1_t_at == (U1)TRUE)
+    if((u1_CALIB_MCUID0741_IL2OUTILLRUN == (U1)TRUE)
     && (u1_t_ig == (U1)TRUE)){
         if(u2_a_LVL == (U2)0U){
             u2_t_min = u2_CALIB_MCUID0743_IOUTILLRUNMAX;
@@ -870,6 +868,7 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
 /* 19PFv3-3   2/23/2024  SH       Change ILL_OF control                                                                              */
 /* 19PFv3-4   4/12/2024  SH       Add calibration guard                                                                              */
 /* 19PFv3-5   6/27/2024  TN(DT)   Delete Calibration Guard Process.                                                                  */
+/* BEV-1      2/06/2025  SF(DT)   Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
@@ -880,5 +879,6 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
 /*  * TH     = Taisuke Hirakawa, KSE                                                                                                 */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
+/*  * SF(DT) = Shiro Furui, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

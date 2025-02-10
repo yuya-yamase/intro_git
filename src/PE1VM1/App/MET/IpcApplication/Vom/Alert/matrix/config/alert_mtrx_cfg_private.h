@@ -56,13 +56,11 @@
 #define ALERT_OPT_ID_C_SLIP_VSCEXIST             (VDF_ESO_CH_VSC)
 #define ALERT_OPT_ID_C_TPMS_TPM_DISC             (VDF_ESO_CH_TPMSCHN)
 #define ALERT_OPT_ID_C_TPMS_TPM_VAR              (VDF_ESO_CH_TPMS)
-#define ALERT_OPT_ID_P_TMNT_ECORUN               (VDF_ESO_CH_ECOFLAG)
 #define ALERT_OPT_ID_S_APP_APP_EXT               (VDF_ESO_CH_AUTOP)
 #define ALERT_OPT_ID_S_DSC_DSCEXIST              (VDF_ESO_CH_DSC)
 #define ALERT_OPT_ID_S_FHL_FHL_EQ                (VDF_ESO_CH_FHL)
 #define ALERT_OPT_ID_S_RSA_TSREQPD               (VDF_ESO_CH_RSA)
 #define ALERT_OPT_ID_C_AVSWAR_AVSEXT             (VDF_ESO_CH_AVSEXT)
-#define ALERT_OPT_ID_D_SFTPOS_VARTRM1            (VDF_ESO_CH_MT)
 #define ALERT_OPT_ID_C_BRPADW_PWIINFO            (VDF_ESO_CH_BRPADW)
 #define ALERT_OPT_ID_P_MILREQ_PTSYS              (VDF_ESO_CH_PTS_MILREQ)
 

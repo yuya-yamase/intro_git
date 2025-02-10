@@ -54,11 +54,6 @@
 #define VDF_MMPROT_21CY_ETH_W_AR                 (3U)                /* 21CY : Ethernet with AR-HUD                                 */
 #define VDF_MMPROT_AUTO                          (255U)              /* Automatic Judgment                                           */
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_NUM_TRNSMSSN                         (3U)
-#define VDF_TRNSMSSN_MT                          (0U)
-#define VDF_TRNSMSSN_AT                          (1U)
-#define VDF_TRNSMSSN_MMT_SMT                     (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -77,7 +72,6 @@ void    vd_g_VardefRstwkInit(void);
 void    vd_g_VardefOpemdEvhk(void);
 void    vd_g_VardefMainTask(void);
 
-U1      u1_g_VardefTrnsmssn(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

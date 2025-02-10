@@ -326,7 +326,11 @@ static U1      u1_s_AlertP_tmntMSTEDG(void)
     U1              u1_t_retval;
     U1              u1_t_msgsts;
 
+#if 0   /* BEV provisionally */
     u1_t_ecorun = u1_g_AlertEsOptAvailable((U2)ALERT_OPT_ID_P_TMNT_ECORUN);
+#else
+    u1_t_ecorun = (U1)FALSE;
+#endif
     u1_t_retval = (U1)0U;
 
     if(u1_t_ecorun == (U1)TRUE){
@@ -475,6 +479,8 @@ static void    vd_s_AlertP_tmntPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*  5.6.1     8/ 5/2022  TM       Update for 840B#2 CV(Version update).                                                              */
 /*  5.7.0     9/ 6/2022  SAO      Fixed Bug.(change method of judgement when invalid status)                                         */
 /*  5.8.0     2/22/2024  DR       Updated for 19PFv3                                                                                 */
+/*  5.8.0-BEV-1                                                                                                                      */
+/*            2/ 5/2025  SF       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  * FN   = Farah Niwa, NTTD MSE                                                                                                    */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
@@ -484,5 +490,6 @@ static void    vd_s_AlertP_tmntPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*  * MO   = Masayuki Oofuji, NTTD MSE                                                                                               */
 /*  * SAO  = Sachiko Oono, NTTD MSE                                                                                                  */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

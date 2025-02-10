@@ -714,7 +714,11 @@ static inline void    vd_s_XSpiCanTx_BSMMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
 
     u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)29U, (U1)1U);
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
 
     if(u1_t_mmsup == (U1)TRUE){
         if((u1_t_rxdata == (U1)1U) && (u1_t_rxdata != u1_s_prebsmope)){
@@ -747,7 +751,11 @@ static inline void    vd_s_XSpiCanTx_CSRMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
 
     u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)26U, (U1)1U);
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
 
     if(u1_t_mmsup == (U1)TRUE){
         if((u1_t_rxdata == (U1)1U) && (u1_t_rxdata != u1_s_precsrmope)){
@@ -805,7 +813,11 @@ static inline void    vd_s_XSpiCanTx_ACINVSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
 
     u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)31U, (U1)1U);
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
 
     if(u1_t_mmsup == (U1)TRUE){
         if((u1_t_rxdata == (U1)1U) && (u1_t_rxdata != u1_s_preacinvope)){
@@ -883,7 +895,11 @@ static inline void    vd_s_XSpiCanTx_LDASW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)8U, (U1)1U);
 
@@ -907,7 +923,11 @@ static inline void    vd_s_XSpiCanTx_LDA_SFB(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)8U, (U1)3U);
 
@@ -932,7 +952,11 @@ static inline void    vd_s_XSpiCanTx_LDAMCUS(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)22U, (U1)2U);
 
@@ -956,7 +980,11 @@ static inline void    vd_s_XSpiCanTx_FCMMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)12U, (U1)1U);
 
@@ -980,7 +1008,11 @@ static inline void    vd_s_XSpiCanTx_RSR_TIM(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)13U, (U1)3U);
 
@@ -1004,7 +1036,11 @@ static inline void    vd_s_XSpiCanTx_BSMM_ILV(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)4U, (U1)2U);
 
@@ -1028,7 +1064,11 @@ static inline void    vd_s_XSpiCanTx_PCSMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)16U, (U1)1U);
 
@@ -1052,7 +1092,11 @@ static inline void    vd_s_XSpiCanTx_IDASESW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)20U, (U1)2U);
 
@@ -1076,7 +1120,11 @@ static inline void    vd_s_XSpiCanTx_IDAMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)22U, (U1)1U);
 
@@ -1120,7 +1168,11 @@ static inline void    vd_s_XSpiCanTx_RCTAMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)31U, (U1)1U);
 
@@ -1144,7 +1196,11 @@ static inline void    vd_s_XSpiCanTx_SW_RCD01(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)24U, (U1)1U);
 
@@ -1168,7 +1224,11 @@ static inline void    vd_s_XSpiCanTx_ICSMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)30U, (U1)1U);
 
@@ -1212,7 +1272,11 @@ static inline void    vd_s_XSpiCanTx_RTAN_TIM(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)2U, (U1)2U);
 
@@ -1236,7 +1300,11 @@ static inline void    vd_s_XSpiCanTx_RTAN_MSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)1U, (U1)1U);
 
@@ -1260,7 +1328,11 @@ static inline void    vd_s_XSpiCanTx_SW_LTC01(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)26U, (U1)1U);
 
@@ -1284,7 +1356,11 @@ static inline void    vd_s_XSpiCanTx_LCASGMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)29U, (U1)1U);
 
@@ -1308,7 +1384,11 @@ static inline void    vd_s_XSpiCanTx_SW_ITS04(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)25U, (U1)1U);
 
@@ -1332,7 +1412,11 @@ static inline void    vd_s_XSpiCanTx_ACCRACSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[4], (U1)21U, (U1)1U);
 
@@ -1356,7 +1440,11 @@ static inline void    vd_s_XSpiCanTx_ACCSSOSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[4], (U1)22U, (U1)2U);
 
@@ -1380,7 +1468,11 @@ static inline void    vd_s_XSpiCanTx_ACCROSSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[4], (U1)19U, (U1)1U);
 
@@ -1404,7 +1496,11 @@ static inline void    vd_s_XSpiCanTx_ACCACLSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[4], (U1)13U, (U1)3U);
 
@@ -1428,7 +1524,11 @@ static inline void    vd_s_XSpiCanTx_CTAMSW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)21U, (U1)1U);
 
@@ -1532,7 +1632,11 @@ static inline void    vd_s_XSpiCanTx_TPUNTSET(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)21U, (U1)3U);
 
@@ -1556,7 +1660,11 @@ static inline void    vd_s_XSpiCanTx_TPINSEL(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)16U, (U1)4U);
 
@@ -1580,7 +1688,11 @@ static inline void    vd_s_XSpiCanTx_TPINSELF(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)8U, (U1)3U);
 
@@ -1604,7 +1716,11 @@ static inline void    vd_s_XSpiCanTx_TPINSELR(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)12U, (U1)3U);
 
@@ -1648,7 +1764,11 @@ static inline void    vd_s_XSpiCanTx_RSCSW_OP(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)16U, (U1)1U);
 
@@ -1672,7 +1792,11 @@ static inline void    vd_s_XSpiCanTx_MINTRSOF(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)31U, (U1)1U);
 
@@ -1716,7 +1840,11 @@ static inline void    vd_s_XSpiCanTx_TBWSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)16U, (U1)1U);
 
@@ -1740,7 +1868,11 @@ static inline void    vd_s_XSpiCanTx_SRPMSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)22U, (U1)1U);
 
@@ -1805,7 +1937,11 @@ static inline void    vd_s_XSpiCanTx_RG_MD_SW(const U4 * u4_ap_pck_rx)
     U1 u1_t_mmsup;
 
     u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)2U, (U1)1U);
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
 
     if(u1_t_mmsup == (U1)TRUE){
         if((u1_t_rxdata == (U1)1U) && (u1_t_rxdata != u1_s_prergmdsw)){
@@ -1856,7 +1992,11 @@ static inline void    vd_s_XSpiCanTx_LDAAMSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)13U, (U1)3U);
 
@@ -1879,7 +2019,11 @@ static inline void    vd_s_XSpiCanTx_RSA_NEM(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)21U, (U1)3U);
 
@@ -1902,7 +2046,11 @@ static inline void    vd_s_XSpiCanTx_RSA_LSM(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)18U, (U1)3U);
 
@@ -1925,7 +2073,11 @@ static inline void    vd_s_XSpiCanTx_TRA_SW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)7U, (U1)1U);
 
@@ -1948,7 +2100,11 @@ static inline void    vd_s_XSpiCanTx_ERMSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)8U, (U1)2U);
 
@@ -1971,7 +2127,11 @@ static inline void    vd_s_XSpiCanTx_ACCSPMSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[4], (U1)10U, (U1)3U);
 
@@ -1994,7 +2154,11 @@ static inline void    vd_s_XSpiCanTx_ACCGCRSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)20U, (U1)1U);
 
@@ -2017,7 +2181,11 @@ static inline void    vd_s_XSpiCanTx_CCSMDMSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)10U, (U1)1U);
 
@@ -2040,7 +2208,11 @@ static inline void    vd_s_XSpiCanTx_SLSSOSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[4], (U1)2U, (U1)2U);
 
@@ -2063,7 +2235,11 @@ static inline void    vd_s_XSpiCanTx_PMARSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)17U, (U1)1U);
 
@@ -2086,7 +2262,11 @@ static inline void    vd_s_XSpiCanTx_DOAM_SW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)12U, (U1)1U);
 
@@ -2109,7 +2289,11 @@ static inline void    vd_s_XSpiCanTx_DOAM_TIM(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)6U, (U1)2U);
 
@@ -2132,7 +2316,11 @@ static inline void    vd_s_XSpiCanTx_TMNVSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)10U, (U1)3U);
 
@@ -2155,7 +2343,11 @@ static inline void    vd_s_XSpiCanTx_TMNSSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)7U, (U1)3U);
 
@@ -2178,7 +2370,11 @@ static inline void    vd_s_XSpiCanTx_ITSSETSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)2U, (U1)1U);
 
@@ -2201,7 +2397,11 @@ static inline void    vd_s_XSpiCanTx_DISSUISW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)3U, (U1)1U);
 
@@ -2224,7 +2424,11 @@ static inline void    vd_s_XSpiCanTx_DM_SW_A2(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)4U, (U1)3U);
 
@@ -2247,7 +2451,11 @@ static inline void    vd_s_XSpiCanTx_AHSSWVSW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)12U, (U1)1U);
 
@@ -2270,7 +2478,11 @@ static inline void    vd_s_XSpiCanTx_AHSSDESW(const U4 * u4_ap_pck_rx)
     U1  u1_t_mmsup;
     U1  u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
     if(u1_t_mmsup == (U1)FALSE){
         u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)13U, (U1)3U);
 
@@ -2321,7 +2533,11 @@ static inline void vd_s_XSpiCanTx_CANSignal(const U4 * u4_ap_pck_rx){
     U1 u1_t_loop;
     U1 u1_t_rxdata;
 
+#if 0   /* BEV provisionally */
     u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
+#else
+    u1_t_mmsup = (U1)FALSE;
+#endif
         if(u1_t_mmsup == (U1)TRUE){
         for (u1_t_loop = (U1)0U; u1_t_loop < (U1)XSPI_MMCUS_NUM_TXSIGNAL; u1_t_loop++) {
             u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[st_sp_XSPI_MMCUS_TXSIG[u1_t_loop].u1_xspiid],
@@ -2745,6 +2961,7 @@ static inline void    vd_s_XSpiCanTx_RFG_BB(const U4 * u4_ap_pck_rx)
 /*           02/10/2024  RO       Change for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                        */
 /*           02/10/2024  RO       Change for BEV System_Consideration_1.(MET-S_ADVMID-CSTD-0-)                                       */
 /*           02/10/2025  RO       Change for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                        */
+/*           02/10/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2761,5 +2978,6 @@ static inline void    vd_s_XSpiCanTx_RFG_BB(const U4 * u4_ap_pck_rx)
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
