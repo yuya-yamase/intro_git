@@ -84,3 +84,4 @@ ML86294Ctl.c
 CXD4937Ctl.c
 GyroDevCtl.c
 GNSSCtl.c
+USBCtl.c
