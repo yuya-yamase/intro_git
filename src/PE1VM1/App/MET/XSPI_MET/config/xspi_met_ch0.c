@@ -457,6 +457,9 @@ static inline void    vd_s_XSpiCfgTxPowerMd(       U4 * u4_ap_pdu_tx) {
 #if 0   /* BEV BSW provisionally */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF) << 5);      /* CAN_MOVE_FLAG                             */
 #endif
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdIgnpOn() << 7);                              /* IGP_ON                                    */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdPbaOn() << 8);                               /* BA ON                                     */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehspdGetStopFlg() << 9);                            /* STOP_JDG_FLAG                             */
 }
 
 static inline void    vd_s_XSpiCfgTxTripCnt(       U4 * u4_ap_pdu_tx) {} /* @@Stub */
@@ -2974,6 +2977,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  19PFV3-24 07/11/2024 TN       Add Calibration Guard to Unify Vehicle Operation.                                                  */
 /*  19PFv3-24 07/10/2024 YR       Add HCS config                                                                                     */
 /*  19PFv3-25 07/15/2024 AA       Revised LcomIF used for HmiScreenPut                                                               */
+/*  BEV-1     02/10/2025 RO       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-)                                        */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2987,5 +2991,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * TR   = Tebs Ramos, DTPH                                                                                                        */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
+/*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

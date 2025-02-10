@@ -42,7 +42,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GWMMCFG_SIG_NUM                          (112U)                   /*  Gateway Number           */
+#define GWMMCFG_SIG_NUM                          (111U)                   /*  Gateway Number           */
 
 #define GWMMCFG_MSGBUF_NUM                       (34U)                    /*  Message Buf Number       */
 
@@ -188,7 +188,6 @@ static void vd_s_GwmmCfgSend_CS_MD_SW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_PDAMSW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_SDGMSW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_USMMAIN(const U1 u1_a_SIG);
-static void vd_s_GwmmCfgSend_HOFDIOPE(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_HOFCUS(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_DRECSW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_DM_SW_AL(const U1 u1_a_SIG);
@@ -301,7 +300,6 @@ static U1 u1_s_GwmmCfgRead_CS_MD_SW(void);
 static U1 u1_s_GwmmCfgRead_PDAMSW(void);
 static U1 u1_s_GwmmCfgRead_SDGMSW(void);
 static U1 u1_s_GwmmCfgRead_USMMAIN(void);
-static U1 u1_s_GwmmCfgRead_HOFDIOPE(void);
 static U1 u1_s_GwmmCfgRead_HOFCUS(void);
 static U1 u1_s_GwmmCfgRead_DRECSW(void);
 static U1 u1_s_GwmmCfgRead_DM_SW_AL(void);
@@ -395,7 +393,6 @@ const ST_GWMM_MSGCOMVERT st_gp_GWMM_MSGCOMVERT[GWMMCFG_SIG_NUM] = {
     {(U1)5U,       (U1)21U,      (U4)0x00000007U},         /*  LDAAMSW   */
     {(U1)0U,       (U1)2U,       (U4)0x00000001U},         /*  SW_LTC01  */
     {(U1)4U,       (U1)5U,       (U4)0x00000001U},         /*  LCASGMSW  */
-    {(U1)5U,       (U1)2U,       (U4)0x00000003U},         /*  HOFDIOPE  */
     {(U1)5U,       (U1)7U,       (U4)0x00000001U},         /*  HOFCUS    */
     {(U1)5U,       (U1)6U,       (U4)0x00000001U},         /*  DRECSW    */
     {(U1)3U,       (U1)8U,       (U4)0x00000001U},         /*  DM_SW_AL  */
@@ -511,7 +508,6 @@ const ST_GWMM_SIGCONF st_gp_GWMM_SIGCONF[GWMMCFG_SIG_NUM] = {
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)7U,        (U1)0xFFU},                    /*  LDAAMSW   */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC01,        (U1)1U,        (U1)0xFFU},                    /*  SW_LTC01  */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)1U,        (U1)0xFFU},                    /*  LCASGMSW  */
-    {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)3U,        (U1)GATEWAY_MM_HOFDIOPE},      /*  HOFDIOPE  */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)1U,        (U1)0xFFU},                    /*  HOFCUS    */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)1U,        (U1)0xFFU},                    /*  DRECSW    */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC02,        (U1)1U,        (U1)0xFFU},                    /*  DM_SW_AL  */
@@ -627,7 +623,6 @@ const ST_GWMM_COMIF st_gp_GWMM_COMIF[GWMMCFG_SIG_NUM] = {
     {&vd_s_GwmmCfgSend_LDAAMSW,         &u1_s_GwmmCfgRead_LDAAMSW},         /*  LDAAMSW   */
     {&vd_s_GwmmCfgSend_SW_LTC01,        &u1_s_GwmmCfgRead_SW_LTC01},        /*  SW_LTC01  */
     {&vd_s_GwmmCfgSend_LCASGMSW,        &u1_s_GwmmCfgRead_LCASGMSW},        /*  LCASGMSW  */
-    {&vd_s_GwmmCfgSend_HOFDIOPE,        &u1_s_GwmmCfgRead_HOFDIOPE},        /*  HOFDIOPE  */
     {&vd_s_GwmmCfgSend_HOFCUS,          &u1_s_GwmmCfgRead_HOFCUS},          /*  HOFCUS    */
     {&vd_s_GwmmCfgSend_DRECSW,          &u1_s_GwmmCfgRead_DRECSW},          /*  DRECSW    */
     {&vd_s_GwmmCfgSend_DM_SW_AL,        &u1_s_GwmmCfgRead_DM_SW_AL},        /*  DM_SW_AL  */
@@ -699,7 +694,6 @@ const U1 u1_gp_GWMM_DRVMDPWCONF[GATEWAY_MM_DRVMD_NUM] = {
     (U1)GWMM_PWRSTS_IGR,                                                        /*  BBMS SW                  */
     (U1)GWMM_PWRSTS_IGR,                                                        /*  CSRM SW                  */
     (U1)GWMM_PWRSTS_IGR,                                                        /*  ACINV SW                 */
-    (U1)GWMM_PWRSTS_IGR,                                                        /*  HOFDIOPE                 */
     (U1)GWMM_PWRSTS_IGR,                                                        /*  RG_MD_SW                 */
     (U1)GWMM_PWRSTS_IGR,                                                        /*  MRMRQSW                  */
     (U1)GWMM_PWRSTS_IGR                                                         /*  MRMRQBK                  */
@@ -2153,20 +2147,6 @@ static void vd_s_GwmmCfgSend_USMMAIN(const U1 u1_a_SIG)
     u1_t_sig = u1_a_SIG;
     (void)Com_SendSignal(ComConf_ComSignal_USMMAIN, &u1_t_sig);
 #endif /* ComConf_ComSignal_USMMAIN */
-}
-/*===================================================================================================================================*/
-/*  static void vd_s_GwmmCfgSend_HOFDIOPE(const U1 u1_a_SIG)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_SIG : Send Signal Value                                                                                     */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_GwmmCfgSend_HOFDIOPE(const U1 u1_a_SIG)
-{
-#ifdef ComConf_ComSignal_HOFDIOPE
-    U1    u1_t_sig;
-    u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_HOFDIOPE, &u1_t_sig);
-#endif /* ComConf_ComSignal_HOFDIOPE */
 }
 /*===================================================================================================================================*/
 /*  static void vd_s_GwmmCfgSend_HOFCUS(const U1 u1_a_SIG)                                                                           */
@@ -3836,21 +3816,6 @@ static U1 u1_s_GwmmCfgRead_USMMAIN(void)
     return(u1_t_sig);
 }
 /*===================================================================================================================================*/
-/*  static U1 vd_s_GwmmCfgRead_HOFDIOPE(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_t_sig : Receive Signal Value                                                                                  */
-/*===================================================================================================================================*/
-static U1 u1_s_GwmmCfgRead_HOFDIOPE(void)
-{
-    U1  u1_t_sig;
-    u1_t_sig = (U1)0U;
-#ifdef ComConf_ComSignal_HOFDIOPE
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HOFDIOPE, &u1_t_sig);
-#endif /* ComConf_ComSignal_HOFDIOPE */
-    return(u1_t_sig);
-}
-/*===================================================================================================================================*/
 /*  static U1 vd_s_GwmmCfgRead_HOFCUS(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -4332,6 +4297,7 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
 /*  296D-1   10/21/2022  TX       Delete DVCN_OPE and DVAT_OPE.                                                                      */
 /*  296D-2   11/08/2022  TX       Add MMCUSREQ.                                                                                      */
 /*  BEV-1     1/30/2025  KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-00-A-C0)                                   */
+/*  BEV-2    02/10/2025  RO       Change for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                        */
 /*                                                                                                                                   */
 /*  * RS   = Ryosuke Sato, KSE                                                                                                       */
 /*  * SK   = Shinichi Kato, KSE                                                                                                      */
@@ -4340,5 +4306,6 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * SW   = Shun Watanabe, Denso Techno                                                                                             */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

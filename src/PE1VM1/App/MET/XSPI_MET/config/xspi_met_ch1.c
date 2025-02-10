@@ -135,7 +135,6 @@ static U1             u1_s_prerscsw_op;           /* RSCSW_OP Previous RxValue *
 static U1             u1_s_premintrsof;           /* MINTRSOF Previous RxValue */
 static U1             u1_s_precsr_mute;           /* CSR_MUTE Previous RxValue */
 static U1             u1_s_pretbwsw;              /* TBWSW Previous RxValue    */
-static U1             u1_s_premetmspdi;           /* METMSPDI Previous RxValue */
 static U1             u1_s_presrpmsw;             /* SRPMSW Previous RxValue   */
 static U1             u1_s_preulkmsw;             /* ULKMSW Previous RxValue   */
 static U1             u1_s_prelkmsw;              /* LKMSW Previous RxValue    */
@@ -176,6 +175,7 @@ static U1             u1_s_prewrlo_bb;            /*  WRLO_BB Previous RxValue *
 static U1             u1_s_prewrin_bb;            /*  WRIN_BB Previous RxValue */
 static U1             u1_s_prewrsw_bb;            /*  WRSW_BB Previous RxValue */
 static U1             u1_s_prewsvs_bb;            /*  WSVS_BB Previous RxValue */
+static U1             u1_s_pretrnbbsw;            /*  TRNBBSW Previous RxValue */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -229,7 +229,6 @@ static inline void    vd_s_XSpiCanTx_RSCSW_OP(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_MINTRSOF(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_CSR_MUTE(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_TBWSW(const U4 * u4_ap_pck_rx);
-static inline void    vd_s_XSpiCanTx_METMSPDI(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_SRPMSW(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_ULKMSW(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_LKMSW(const U4* u4_ap_pck_rx);
@@ -268,6 +267,7 @@ static inline void    vd_s_XSpiCanTx_WRLO_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_WRIN_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_WRSW_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_WSVS_BB(const U4* u4_ap_pck_rx);
+static inline void    vd_s_XSpiCanTx_TRNBBSW(const U4* u4_ap_pck_rx);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -339,7 +339,6 @@ void    vd_g_XSpiCfgInitCh1(void)
     u1_s_premintrsof = (U1)0U;
     u1_s_precsr_mute = (U1)0U;
     u1_s_pretbwsw = (U1)0U;
-    u1_s_premetmspdi = (U1)0U;
     u1_s_presrpmsw   = (U1)0U;
     u1_s_preulkmsw = (U1)0U;
     u1_s_prelkmsw = (U1)0U;
@@ -377,6 +376,7 @@ void    vd_g_XSpiCfgInitCh1(void)
     u1_s_prewrin_bb  = (U1)0U;
     u1_s_prewrsw_bb  = (U1)0U;
     u1_s_prewsvs_bb  = (U1)0U;
+    u1_s_pretrnbbsw  = (U1)0U;
 
     for (u1_t_loop = (U1)0U; u1_t_loop < (U1)XSPI_MMCUS_NUM_TXSIGNAL; u1_t_loop++) {
         u1_sp_xspi_mmcus_pretxsig[u1_t_loop] = (U1)0U;
@@ -448,7 +448,6 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCanTx_MINTRSOF(&u4_ap_PDU_RX[35]);
     vd_s_XSpiCanTx_CSR_MUTE(&u4_ap_PDU_RX[29]);
     vd_s_XSpiCanTx_TBWSW(&u4_ap_PDU_RX[49]);
-    vd_s_XSpiCanTx_METMSPDI(&u4_ap_PDU_RX[51]);
     vd_s_XSpiCanTx_SRPMSW(&u4_ap_PDU_RX[35]);	
     vd_s_XSpiCanTx_ULKMSW(&u4_ap_PDU_RX[35]);
     vd_s_XSpiCanTx_LKMSW(&u4_ap_PDU_RX[35]);
@@ -483,6 +482,7 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCanTx_WRIN_BB(&u4_ap_PDU_RX[33]);
     vd_s_XSpiCanTx_WRSW_BB(&u4_ap_PDU_RX[33]);
     vd_s_XSpiCanTx_WSVS_BB(&u4_ap_PDU_RX[35]);
+    vd_s_XSpiCanTx_TRNBBSW(&u4_ap_PDU_RX[47]);
 
 }
 
@@ -1718,26 +1718,6 @@ static inline void    vd_s_XSpiCanTx_TBWSW(const U4 * u4_ap_pck_rx)
 }
 
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_METMSPDI(U4 * u4_ap_pdu_tx)                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_METMSPDI(const U4 * u4_ap_pck_rx)
-{
-    U1 u1_t_rxdata;
-
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)19U, (U1)1U);
-
-    if(u1_t_rxdata != u1_s_premetmspdi){
-        if(u1_t_rxdata <= (U1)1U){
-            vd_g_VdsCIReqTx((U1)VDS_CI_SW_METMSPDI, u1_t_rxdata);
-        }
-    }
-    u1_s_premetmspdi = u1_t_rxdata;
-}
-
-/*===================================================================================================================================*/
 /*  static inline void    vd_s_XSpiCanTx_SRPMSW(U4 * u4_ap_pdu_tx)                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -2629,6 +2609,26 @@ static inline void    vd_s_XSpiCanTx_WSVS_BB(const U4* u4_ap_pck_rx)
     }
     u1_s_prewsvs_bb = u1_t_rxdata;
 }
+/*===================================================================================================================================*/
+/*  static inline void    vd_s_XSpiCanTx_TRNBBSW(const U4* u4_ap_pck_rx)                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static inline void    vd_s_XSpiCanTx_TRNBBSW(const U4* u4_ap_pck_rx)
+{
+    static const U1 u1_s_XSPI_MET_TRNBBSW_MAX = (U1)0x02U;
+    U1 u1_t_rxdata;
+
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)3U, (U1)3U);
+
+    if(u1_t_rxdata != u1_s_pretrnbbsw){
+        if(u1_t_rxdata <= u1_s_XSPI_MET_TRNBBSW_MAX){
+            vd_g_VdsCIReqTx((U1)VDS_CI_SW_TRNBBSW, u1_t_rxdata);
+        }
+    }
+    u1_s_pretrnbbsw = u1_t_rxdata;
+}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -2667,6 +2667,8 @@ static inline void    vd_s_XSpiCanTx_WSVS_BB(const U4* u4_ap_pck_rx)
 /*           01/30/2025  KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-)                                          */
 /*           01/31/2025  MN       Change for BEV System_Consideration_1.(MET-B_PWLBB-CSTD-0-)                                        */
 /*           01/31/2025  HY       Change for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                         */
+/*           02/10/2024  RO       Change for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                        */
+/*           02/10/2024  RO       Change for BEV System_Consideration_1.(MET-S_ADVMID-CSTD-0-)                                       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2681,5 +2683,6 @@ static inline void    vd_s_XSpiCanTx_WSVS_BB(const U4* u4_ap_pck_rx)
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

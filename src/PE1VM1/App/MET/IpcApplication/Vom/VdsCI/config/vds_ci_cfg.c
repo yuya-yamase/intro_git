@@ -156,7 +156,6 @@ static void vd_s_VdsCIReqTx_LPSDBZVL(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_RPSDBZVL(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_RPSDKSW (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_SSMMODE (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
-static void vd_s_VdsCIReqTx_HOFOK   (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_GPFGENSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_GPFINDSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_ACINV_SW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
@@ -165,7 +164,6 @@ static void vd_s_VdsCIReqTx_SDGMSW  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_USMMAIN (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_PDAMSW  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_DRECSW  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
-static void vd_s_VdsCIReqTx_HOFDIOPE(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_ADDS_MSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_SPBZ_OPE(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_RSRCANSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
@@ -179,7 +177,6 @@ static void vd_s_VdsCIReqTx_SETDCLVI(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_SETDCLVM(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_METMDREJ(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_TRLC_YN (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
-static void vd_s_VdsCIReqTx_METMSPDI(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_M_SLMDRQ(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_TBWSW   (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_ULKMSW  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
@@ -222,6 +219,7 @@ static void vd_s_VdsCIReqTx_WRLO_BB (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_WRIN_BB (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_WRSW_BB (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_WSVS_BB (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_TRNBBSW (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -321,72 +319,70 @@ const ST_VDS_CI_TRX    st_gp_VDS_CI_TRX[VDS_CI_NUM_CH] = {
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RPSDBZVL,    (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 85 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RPSDKSW,     (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 86 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SSMMODE,     (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 87 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_HOFOK,       (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 88 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_GPFGENSW,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 89 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_GPFINDSW,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 90 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ACINV_SW,    (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 91 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SR_NUM,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 92 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SDGMSW,      (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 93 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_USMMAIN,     (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 94 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_PDAMSW,      (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 95 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DRECSW,      (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 96 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_HOFDIOPE,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 97 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ADDS_MSW,    (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 98 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SPBZ_OPE,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 99 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RSRCANSW,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 100 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_VRAPRMSW,    (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 101 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_VRAPMSWS,    (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 102 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_VRAPRDIS,    (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 103 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RTWMSW,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 104 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_BSD_SMSB,    (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 105 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_BSD_SMSS,    (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 106 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SETDCLVI,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 107 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SETDCLVM,    (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 108 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_METMDREJ,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 109 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TRLC_YN,     (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 110 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_METMSPDI,    (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 111 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_SLMDRQ,    (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_DELAY_HOLD,   (U1)VDS_CI_TX_MASK_NON       }, /* 112 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TBWSW,       (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 113 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ULKMSW,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 114 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_LKMSW,       (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 115 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_PNCSW,     (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_DELAY_HOLD,   (U1)VDS_CI_TX_MASK_NON       }, /* 116 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_LMTDAANS,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 117 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_OCOFOK,    (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 118 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SRPMSW,      (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 119 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RG_MD_SW,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 120 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RNGMSW,      (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 121 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_LDAAMSW,     (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 122 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RSA_NEM,     (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 123 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RSA_LSM,     (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 124 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TRA_SW,      (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 125 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ERMSW,       (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 126 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ACCSPMSW,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 127 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ACCGCRSW,    (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 128 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_CCSMDMSW,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 129 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SLSSOSW,     (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 130 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_PMARSW,      (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 131 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DOAM_SW,     (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 132 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DOAM_TIM,    (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 133 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TMNVSW,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 134 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TMNSSW,      (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 135 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ITSSETSW,    (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 136 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DISSUISW,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 137 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DM_SW_A2,    (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 138 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_AHSSWVSW,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 139 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_AHSSDESW,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 140 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_BB,        (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 141 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MLR_BB,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 142 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RLM_BB,      (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 143 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MRT_BB,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 144 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ART_BB,      (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 145 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_PWLSW,       (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 146 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WVRD_BB,     (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 147 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WVRU_BB,     (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 148 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WROF_BB,     (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 149 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WRLO_BB,     (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 150 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WRIN_BB,     (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 151 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WRSW_BB,     (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 152 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WSVS_BB,     (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 153 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_GPFGENSW,    (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 88 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_GPFINDSW,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 89 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ACINV_SW,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 90 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SR_NUM,      (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 91 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SDGMSW,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 92 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_USMMAIN,     (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 93 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_PDAMSW,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 94 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DRECSW,      (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 95 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ADDS_MSW,    (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 96 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SPBZ_OPE,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 97 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RSRCANSW,    (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 98 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_VRAPRMSW,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 99 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_VRAPMSWS,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 100 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_VRAPRDIS,    (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 101 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RTWMSW,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 102 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_BSD_SMSB,    (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 103 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_BSD_SMSS,    (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 104 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SETDCLVI,    (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 105 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SETDCLVM,    (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 106 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_METMDREJ,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 107 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TRLC_YN,     (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 108 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_SLMDRQ,    (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_DELAY_HOLD,   (U1)VDS_CI_TX_MASK_NON       }, /* 109 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TBWSW,       (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 110 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ULKMSW,      (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 111 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_LKMSW,       (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 112 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_PNCSW,     (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_DELAY_HOLD,   (U1)VDS_CI_TX_MASK_NON       }, /* 113 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_LMTDAANS,    (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 114 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_OCOFOK,    (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 115 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SRPMSW,      (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 116 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RG_MD_SW,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 117 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RNGMSW,      (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 118 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_LDAAMSW,     (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 119 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RSA_NEM,     (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 120 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RSA_LSM,     (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 121 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TRA_SW,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 122 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ERMSW,       (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 123 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ACCSPMSW,    (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 124 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ACCGCRSW,    (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 125 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_CCSMDMSW,    (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 126 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_SLSSOSW,     (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 127 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_PMARSW,      (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 128 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DOAM_SW,     (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 129 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DOAM_TIM,    (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 130 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TMNVSW,      (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 131 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TMNSSW,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 132 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ITSSETSW,    (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 133 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DISSUISW,    (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 134 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DM_SW_A2,    (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 135 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_AHSSWVSW,    (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 136 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_AHSSDESW,    (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_MM_ESOPT  }, /* 137 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_M_BB,        (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 138 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MLR_BB,      (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 139 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RLM_BB,      (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 140 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_MRT_BB,      (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 141 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ART_BB,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 142 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_PWLSW,       (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 143 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WVRD_BB,     (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 144 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WVRU_BB,     (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 145 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WROF_BB,     (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 146 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WRLO_BB,     (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 147 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WRIN_BB,     (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 148 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WRSW_BB,     (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 149 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WSVS_BB,     (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 150 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TRNBBSW,     (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 151 */
 };
 const U1               u1_g_VDS_CI_NUM_CH = (U1)VDS_CI_NUM_CH;
 
@@ -2585,27 +2581,6 @@ static void    vd_s_VdsCIReqTx_SSMMODE(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 #endif /* ComConf_ComSignal_SSMMODE */
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_VdsCIReqTx_HOFOK(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
-/*                  u2_a_ELPSD: elapsed time                                                                                         */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_VdsCIReqTx_HOFOK(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
-{
-#ifdef ComConf_ComSignal_HOFOK
-    U1                 u1_t_tx;
-
-    if(u1_a_OPT <= (U1)VDS_CI_HOFOK_MAX){
-        u1_t_tx = u1_a_OPT;
-    }
-    else{
-        u1_t_tx = (U1)VDS_CI_OPT_OFF;
-    }
-    (void)Com_SendSignal(ComConf_ComSignal_HOFOK, &u1_t_tx);
-#endif /* ComConf_ComSignal_HOFOK */
-}
-/*===================================================================================================================================*/
 /*  static void    vd_s_VdsCIReqTx_GPFGENSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      u1_a_OPT: send signal value                                                                                      */
@@ -2788,29 +2763,6 @@ static void    vd_s_VdsCIReqTx_DRECSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
     (void)Com_SendSignal(ComConf_ComSignal_DRECSW, &u1_t_tx);
 
 #endif /* ComConf_ComSignal_DRECSW */
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_VdsCIReqTx_HOFDIOPE(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
-/*                  u2_a_ELPSD: elapsed time                                                                                         */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_VdsCIReqTx_HOFDIOPE(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
-{
-#ifdef ComConf_ComSignal_HOFDIOPE
-    U1                 u1_t_tx;
-
-    if(u1_a_OPT <= (U1)VDS_CI_HOFDIOPE_MAX){
-        u1_t_tx = u1_a_OPT;
-    }
-    else{
-        u1_t_tx = (U1)VDS_CI_OPT_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_HOFDIOPE, &u1_t_tx);
-
-#endif /* ComConf_ComSignal_HOFDIOPE */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_VdsCIReqTx_ADDS_MSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
@@ -3136,30 +3088,6 @@ static void    vd_s_VdsCIReqTx_TRLC_YN(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
     (void)Com_SendSignal(ComConf_ComSignal_TRLC_YN, &u1_t_tx);
 
 #endif /* ComConf_ComSignal_TRLC_YN */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_VdsCIReqTx_METMSPDI(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
-/*                  u2_a_ELPSD: elapsed time                                                                                         */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_VdsCIReqTx_METMSPDI(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
-{
-#ifdef ComConf_ComSignal_METMSPDI
-    U1                 u1_t_tx;
-
-    if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
-        u1_t_tx = u1_a_OPT;
-    }
-    else{
-        u1_t_tx = (U1)VDS_CI_OPT_OFF;
-    }
-
-    (void)Com_SendSignal(ComConf_ComSignal_METMSPDI, &u1_t_tx);
-
-#endif /* ComConf_ComSignal_METMSPDI */
 }
 
 /*===================================================================================================================================*/
@@ -4236,6 +4164,36 @@ static void    vd_s_VdsCIReqTx_WSVS_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 }
 
 /*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_TRNBBSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_TRNBBSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_TRNBBSW
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_TRNBBSW_MAX){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_TRNBBSW, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_TRNBBSW, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
+    }
+#endif /* ComConf_ComSignal_TRNBBSW */
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -4270,6 +4228,8 @@ static void    vd_s_VdsCIReqTx_WSVS_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /* BEV-2     01/30/2025  KO       Change config for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-)                                   */
 /* BEV-3     01/31/2025  HY       Change config for BEV System_Consideration_1.(MET-B_PWLBB-CSTD-0-)                                 */
 /* BEV-4     01/31/2025  HY       Change config for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                  */
+/* BEV-5     02/10/2025  RO       Change config for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                 */
+/* BEV-6     02/10/2025  RO       Change config for BEV System_Consideration_1.(MET-S_ADVMID-CSTD-0-)                                */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -4286,5 +4246,6 @@ static void    vd_s_VdsCIReqTx_WSVS_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
