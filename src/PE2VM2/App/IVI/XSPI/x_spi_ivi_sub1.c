@@ -22,6 +22,7 @@
 #include    "x_spi_ivi_sub1_system.h"
 #include    "x_spi_ivi_sub1_camera.h"
 #include    "x_spi_ivi_sub1_version.h"
+#include    "x_spi_ivi_sub1_diag.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -93,6 +94,7 @@ void            vd_g_XspiIviSub1Init(void)
     vd_g_XspiIviSub1PowerInit();
     vd_g_XspiIviSub1SystemInit();
     vd_g_XspiIviSub1CameraInit();
+	vd_g_XspiIviSub1DiagInit();
 }
 
 /*===================================================================================================================================*/
@@ -152,7 +154,7 @@ static void            vd_s_XspiIviSub1MiscAna(const U1 * u1_ap_SUB1_ADD, const 
                 vd_g_XspiIviSub1SystemAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             case XSPI_IVI_MISC_DIAG:
-            /*シス検 skip*/
+                vd_g_XspiIviSub1DiagAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             case XSPI_IVI_MISC_VERSION:
                 vd_g_XspiIviSub1VersionAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
