@@ -62,6 +62,61 @@
 #define    XSPI_IVI_POWER_STATE_PARK_HI_PRE     (5U)    /* 駐車中高圧起動  */
 #define    XSPI_IVI_POWER_STATE_PARK_TEMP_CON   (6U)    /* 駐車中高圧・温調起動  */
 #define    XSPI_IVI_POWER_STATE_UNKNOWN         (0xFFU) /* 未確定  */
+
+/*デバイス初期化確認Pin*/
+/* SYS電源制御 Port設定 */
+#define     MCU_PORT_BU_DD_MODE             (0U)         /* (DIO_ID_APORT0_CH12) */
+#define     MCU_PORT_BOOST_DCDC             (1U)         /* (DIO_ID_PORT10_CH4)  */
+#define     MCU_PORT_BOOST_ASIL_DCDC        (2U)         /* (DIO_ID_APORT0_CH15) */
+/*Readのみのため初期化確認対象外*/
+/*#define     MCU_PORT_DD_FREQ                (xxx)*/         /* (DIO_ID_PORT2_CH6)   */
+/*Readのみのため初期化確認対象外*/
+/*#define     MCU_PORT_BOOST_ASIL_FREQ        (xxx) */        /* (DIO_ID_PORT21_CH3)  */
+#define     MCU_PORT_V33_PERI               (3U)         /* (DIO_ID_PORT10_CH2)  */
+#define     MCU_PORT_V33_ASIL               (4U)         /* (DIO_ID_APORT0_CH13) */
+#define     MCU_PORT_V18                    (5U)         /* (DIO_ID_APORT1_CH0)  */
+#define     MCU_PORT_V18_ASIL               (6U)         /* (DIO_ID_APORT0_CH9)  */
+#define     MCU_PORT_AUDIO                  (7U)         /* (DIO_ID_APORT5_CH0)  */
+#define     MCU_PORT_V11_ASIL               (8U)        /* (DIO_ID_APORT0_CH11) */
+#define     MCU_PORT_EIZO                   (9U)        /* (DIO_ID_PORT6_CH11)  */
+/* 非冗長電源制御 Port設定 */
+#define     MCU_PORT_BOOT                   (10U)        /* (DIO_ID_PORT0_CH2)   */
+#define     MCU_PORT_MBPWR                  (11U)        /* (DIO_ID_PORT22_CH1)  */
+#define     MCU_PORT_GVIF_TX_MBWK           (12U)        /* (DIO_ID_PORT20_CH9)  */
+#define     MCU_PORT_DISP                   (13U)        /* (DIO_ID_PORT22_CH2)  */
+#define     MCU_PORT_GVIF_TX_DSPWK          (14U)        /* (DIO_ID_PORT2_CH0)   */
+#define     MCU_PORT_HUB_PWRON              (15U)        /* (DIO_ID_PORT4_CH14)  */
+#define     MCU_PORT_HUB_WK                 (16U)        /* (DIO_ID_PORT4_CH0)   */
+/* デバイスON/OFF制御用 Port設定 */
+// #define     MCU_PORT_V33_PERI               (xxx) 
+#define     MCU_PORT_USB_LED_ON             (17U)        /* (DIO_ID_APORT0_CH10) */
+#define     MCU_PORT_V_IC_RST               (18U)        /* (DIO_ID_PORT3_CH3)   */
+/*Writeされることがないためデバイス初期化確認対象外*/
+/* #define     MCU_PORT_DISP_REQ_GPIO0         (xxx)*/        /* (DIO_ID_PORT2_CH2)   */
+// #define     MCU_PORT_AUDIO                  (xxx)
+#define     MCU_PORT_GVIF_CAN_RST           (19U)        /* (DIO_ID_PORT10_CH6)  */
+#define     MCU_PORT_GVIF_CDISP_RST         (20U)        /* (DIO_ID_PORT17_CH4)  */
+#define     MCU_PORT_MIC_ON                 (21U)        /* (DIO_ID_PORT11_CH13) */
+#define     MCU_PORT_AMFM_ANT_ON            (22U)        /* (DIO_ID_PORT4_CH8)   */
+#define     MCU_PORT_GPS_ANT_ON             (23U)        /* (DIO_ID_APORT4_CH2)  */
+#define     MCU_PORT_DAB_ANT_ON             (24U)        /* (DIO_ID_PORT11_CH4)  */
+#define     MCU_PORT_DTV_ANT_ON             (25U)        /* (DIO_ID_PORT11_CH4) */
+#define     MCU_PORT_PM_SYS_MUTE            (26U)        /* (DIO_ID_PORT20_CH8)  */
+#define     MCU_PORT_MOST_WAKE_ON           (27U)        /* (DIO_ID_PORT24_CH11) */
+#define     MCU_PORT_PIC_POFF               (28U)        /* (DIO_ID_PORT11_CH7)  */
+#define     MCU_PORT_P_ON                   (29U)        /* (DIO_ID_PORT11_CH6)  */
+#define     MCU_PORT_XM_ON                  (30U)        /* (DIO_ID_APORT4_CH10) */
+#define     MCU_PORT_XM_SHDN                (31U)        /* (DIO_ID_PORT11_CH4)  */
+#define     MCU_PORT_SENSOR_ON              (32U)        /* (DIO_ID_PORT8_CH7)   */
+#define     MCU_PORT_GPS_RST                (33U)        /* (DIO_ID_APORT4_CH8)  */
+/*Readのみのため初期化確認対象外*/
+/*#define     MCU_PORT_GPS_PMONI              (xxx)*/        /* (DIO_ID_PORT6_CH3)   */
+/*Readのみのため初期化確認対象外*/
+/*#define     MCU_PORT_MM_STBY_N              (xxx)*/        /* (DIO_ID_PORT10_CH11) */
+#define     MCU_PORT_GPS_PCTL               (34U)        /* (DIO_ID_APORT4_CH5)  */
+/*Readのみのため初期化確認対象外*/
+/*#define     MCU_PORT_BU_DTE                 (xxx)*/        /* (DIO_ID_PORT0_CH4)   */
+#define     MCU_PORT_NUM                    (35U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -98,6 +153,54 @@ static U1 u1_s_xspi_ivi_power_start_flg;
 static U1 u1_s_xspi_ivi_power_state_trans_flg;
 /*デバイス初期化状態*/
 static U1 u1_s_xspi_ivi_power_device_init_fin_flg;
+
+/*デバイス初期化確認Port配列*/
+static U2 Mcu_Dio_PortId[MCU_PORT_NUM] = {
+    /* SYS電源制御 Port設定 */
+        DIO_ID_APORT0_CH12,
+        DIO_ID_PORT10_CH4,
+        DIO_ID_APORT0_CH15,
+        /*DIO_ID_PORT2_CH6,*/ /*Readのみのため初期化確認対象外*/
+        /*DIO_ID_PORT21_CH3,*/ /*Readのみのため初期化確認対象外*/
+        DIO_ID_PORT10_CH2,
+        DIO_ID_APORT0_CH13,
+        DIO_ID_APORT1_CH0,
+        DIO_ID_APORT0_CH9,
+        DIO_ID_APORT5_CH0,
+        DIO_ID_APORT0_CH11,
+        DIO_ID_PORT6_CH11,
+    /* 非冗長電源制御 Port設定 */
+        DIO_ID_PORT0_CH2,  /*BOOT端子のためシス検のみ*/
+        DIO_ID_PORT22_CH1,
+        DIO_ID_PORT20_CH9,
+        DIO_ID_PORT22_CH2,
+        DIO_ID_PORT2_CH0,
+        DIO_ID_PORT4_CH14,
+        DIO_ID_PORT4_CH0,
+    /* デバイスON/OFF制御用 Port設定 */
+        DIO_ID_APORT0_CH10,
+        DIO_ID_PORT3_CH3,
+        /*DIO_ID_PORT2_CH2,*/ /*Writeされることがないためデバイス初期化確認対象外*/
+        DIO_ID_PORT10_CH6,
+        DIO_ID_PORT17_CH4,
+        DIO_ID_PORT11_CH13,
+        DIO_ID_PORT4_CH8,
+        DIO_ID_APORT4_CH2,
+        DIO_ID_PORT11_CH4,
+        DIO_ID_PORT11_CH4,
+        DIO_ID_PORT20_CH8,
+        DIO_ID_PORT24_CH11,
+        DIO_ID_PORT11_CH7,
+        DIO_ID_PORT11_CH6,
+        DIO_ID_APORT4_CH10,
+        DIO_ID_PORT11_CH4,
+        DIO_ID_PORT8_CH7,
+        DIO_ID_APORT4_CH8,
+        /*DIO_ID_PORT6_CH3,*/ /*Readのみのため初期化確認対象外*/
+        /*DIO_ID_PORT10_CH11,*/ /*Readのみのため初期化確認対象外*/
+        DIO_ID_APORT4_CH5
+        /*DIO_ID_PORT0_CH4*/  /*Readのみのため初期化確認対象外*/
+};
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -323,7 +426,22 @@ static void            vd_s_XspiIviSub1_PowerStateTransRec(const U1 * u1_ap_XSPI
 /*===================================================================================================================================*/
 void            vd_g_XspiIviSub1DevInitFinish(void)
 {
-    u1_s_xspi_ivi_power_device_init_fin_flg = (U1)TRUE;
+    U1 u1_t_result; 
+    U4 u4_t_loop;
+
+    u1_t_result = (U1)TRUE;
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)MCU_PORT_NUM; u4_t_loop++) {
+        if(u4_t_loop == (U4)MCU_PORT_PM_SYS_MUTE){
+            u1_t_result &= ~Dio_ReadChannel(Mcu_Dio_PortId[u4_t_loop]);
+        } else {
+            u1_t_result &= Dio_ReadChannel(Mcu_Dio_PortId[u4_t_loop]);
+        }
+    }
+
+    if(u1_t_result == (U1)TRUE) {
+        u1_s_xspi_ivi_power_device_init_fin_flg = (U1)TRUE;
+    }
 }
 
 /*===================================================================================================================================*/
