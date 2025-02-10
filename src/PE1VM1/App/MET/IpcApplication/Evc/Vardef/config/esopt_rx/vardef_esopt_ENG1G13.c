@@ -78,28 +78,6 @@ U1      u1_g_VdfEsoRx_ECOFLAG(void)
     return(u1_t_ava_rx);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_DSC(void)                                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_DSC(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_DSCEXIST, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
 /*  U1      u1_g_VdfEsoRx_MT(void)                                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -269,6 +247,7 @@ U1      u1_g_VdfEsoRx_SGAUGE(void)
 /*  19PFv3   12/20/2023  RO       Change config for 19PFv3                                                                           */
 /*  19PFv3   02/26/2024  RO       Change config for 19PFv3 CV                                                                        */
 /*  19PFv3   06/20/2024  PG       Change config for 19PFv3 R1.2                                                                      */
+/*  BEV      10/31/2024  RO       Added function for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                */
 /*                                                                                                                                   */
 /*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
 /*  * RO = Reiya Okuda, KSE                                                                                                          */
@@ -277,5 +256,6 @@ U1      u1_g_VdfEsoRx_SGAUGE(void)
 /*  * RO = Ryo Oohashi, KSE                                                                                                          */
 /*  * PG = Patrick Garcia, DTPH                                                                                                      */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * RO = Ryo Oohashi, KSE                                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

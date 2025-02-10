@@ -318,7 +318,6 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_4HZ             },
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_EUREADY         },
         {  (U1)12U,   (U1)16U,    (U2)VDF_ESO_CH_ICS,           (U2)ALERT_CH_S_PKSB_TT,            (U1)ALERT_REQ_S_PKSB_TT_ON                   },
-        {  (U1)18U,   (U1)0U,     (U2)VDF_ESO_CH_HOF_EXT,       (U2)ALERT_CH_S_ADTJA_TT,           (U1)ALERT_REQ_S_ADTJA_TT_MALFUNC             },
         {  (U1)20U,   (U1)16U,    (U2)VDF_ESO_CH_ADIEXIST,      (U2)ALERT_CH_S_ADASTT_TT,          (U1)ALERT_REQ_S_ADASTT_TT_A_ABN              },
         {  (U1)22U,   (U1)24U,    (U2)VDF_ESO_CH_DMC,           (U2)ALERT_CH_S_DMC_TT,             (U1)ALERT_REQ_S_DMC_TT_MAL_DMC               }
     };
@@ -408,6 +407,7 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  19PFv3-2 07/08/2024  PG       Add mask process for H_ZMILRQ for 19PFv3 R1.2                                                      */
 /*  BEV-1    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
 /*  BEV-2    12/23/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
+/*  BEV-3    02/10/2025  RO       Change for BEV System_Consideration_1.(MET-S_ADTT-CSTD-0-)                                         */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -417,5 +417,6 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * JMH  = James Michael D. Hilarion, DTPH                                                                                         */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

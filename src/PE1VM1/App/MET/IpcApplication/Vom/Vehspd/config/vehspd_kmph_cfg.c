@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEHSPD_KMPH_CFG_C_MAJOR                  (2)
-#define VEHSPD_KMPH_CFG_C_MINOR                  (1)
+#define VEHSPD_KMPH_CFG_C_MINOR                  (2)
 #define VEHSPD_KMPH_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -208,6 +208,7 @@ U1      u1_g_VehspdCanSp1xComRx(U2 * u2_ap_sp1, U1 * u1_ap_sp1p)
 /*  1.7.0     7/ 7/2020  HY       vehspd_kmph.c v1.6.0 -> v1.7.0.                                                                    */
 /*  2.0.1    10/18/2021  TA(M)    vehspd_kmph.c v1.7.0 -> v2.0.1                                                                     */
 /*  2.1.0    06/06/2024  SM       Corrected the method of calculating the tolerance of the median tolerance to linear imputation.    */
+/*  2.2.0    01/30/2025  RO       vehspd_kmph.c v2.1.0 -> v2.2.0. (Setting for BEV System_Consideration_1.)                          */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -221,5 +222,6 @@ U1      u1_g_VehspdCanSp1xComRx(U2 * u2_ap_sp1, U1 * u1_ap_sp1p)
 /*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * SM   = Shota Maegawa, Denso Techno                                                                                             */
+/*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

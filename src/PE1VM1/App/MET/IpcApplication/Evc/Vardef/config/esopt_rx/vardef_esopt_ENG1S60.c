@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_FCM1S92_C_MAJOR             (2)
-#define VARDEF_ESOPT_FCM1S92_C_MINOR             (5)
-#define VARDEF_ESOPT_FCM1S92_C_PATCH             (0)
+#define VARDEF_ESOPT_ENG1S60_C_MAJOR             (2)
+#define VARDEF_ESOPT_ENG1S60_C_MINOR             (5)
+#define VARDEF_ESOPT_ENG1S60_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_FCM1S92_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_FCM1S92_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_FCM1S92_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_FCM1S92.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_ENG1S60_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_ENG1S60_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_ENG1S60_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_ENG1S60.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,72 +50,23 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_LTA(void)                                                                                               */
+/*  U1      u1_g_VdfEsoRx_DSC(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_LTA(void)
+U1      u1_g_VdfEsoRx_DSC(void)
 {
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_EXT, &u1_t_rx);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DSCEXIST, &u1_t_rx);
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_LTA_HOFDI(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_LTA_HOFDI(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HOFDIEXT, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_LTA_NA(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_LTA_NA(void)
-{
-    static const U1 u1_s_VDF_ESO_HOF_PROP_ACT = (U1)3U;
-    U1                 u1_data1_rx;
-    U1                 u1_data2_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_data1_rx = (U1)0U;
-    u1_data2_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_EXT, &u1_data1_rx);
-    (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_PROP, &u1_data2_rx);
-    if((u1_data1_rx != (U1)0U) &&
-       (u1_data2_rx == u1_s_VDF_ESO_HOF_PROP_ACT)){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
     }
 
     return(u1_t_ava_rx);
@@ -128,23 +79,12 @@ U1      u1_g_VdfEsoRx_SW_LTA_NA(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.1.0     9/28/2020  SF       NEW!                                                                                               */
-/*  2.2.0     1/25/2021  SF       vardef_esopt.c v2.1.0 -> v2.2.0                                                                    */
-/*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
-/*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
-/*  2.5.0    11/25/2024  KO       vardef_esopt.c v2.4.0 -> v2.5.0                                                                    */
+/*  2.5.0    10/31/2024  RO       NEW!                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  893B-1   11/05/2021  RO       Change config for 893B 1A                                                                          */
-/*  920B-1   10/07/2022  SK       Change config for 920B CV-R                                                                        */
-/*  19PFv3-1  4/18/2024  SN       Change config for 19PFv3 CV(add function for ADASCS)                                               */
-/*  BEV1     02/10/2024  RO2      Change config for BEV System_Consideration_1.(MET-S_ADTT-CSTD-0-)                                  */
+/*  BEV      02/10/2025  RO       Added function for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                */
 /*                                                                                                                                   */
-/*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
-/*  * RO   = Reiya Okuda, KSE                                                                                                        */
-/*  * SK   = Shotaro Kitayama, PRD                                                                                                   */
-/*  * SN = Shimon Nambu, Denso Techno                                                                                                */
-/*  * RO2= Ryo Oohashi, KSE                                                                                                          */
+/*  * RO = Ryo Oohashi, KSE                                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
