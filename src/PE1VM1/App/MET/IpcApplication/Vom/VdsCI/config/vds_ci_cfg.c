@@ -220,6 +220,9 @@ static void vd_s_VdsCIReqTx_WRIN_BB (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_WRSW_BB (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_WSVS_BB (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_TRNBBSW (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_LSW_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_FOG_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_RFG_BB  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -382,7 +385,10 @@ const ST_VDS_CI_TRX    st_gp_VDS_CI_TRX[VDS_CI_NUM_CH] = {
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WRIN_BB,     (U2)0xFFFFU, (U2)0x0100U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 148 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WRSW_BB,     (U2)0xFFFFU, (U2)0x0200U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 149 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_WSVS_BB,     (U2)0xFFFFU, (U2)0x0001U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 150 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TRNBBSW,     (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 151 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_TRNBBSW,     (U2)0xFFFFU, (U2)0x0002U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 151 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_LSW_BB,      (U2)0xFFFFU, (U2)0x0004U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 152 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_FOG_BB,      (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 153 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_RFG_BB,      (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 154 */
 };
 const U1               u1_g_VDS_CI_NUM_CH = (U1)VDS_CI_NUM_CH;
 
@@ -4194,6 +4200,94 @@ static void    vd_s_VdsCIReqTx_TRNBBSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 }
 
 /*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_LSW_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_LSW_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_LSW_BB
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_LSW_BB_MAX){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_LSW_BB, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_LSW_BB, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S30_TXCH0);
+    }
+#endif /* ComConf_ComSignal_LSW_BB */
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_FOG_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_FOG_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_FOG_BB
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_FOG_BB, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_FOG_BB, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S30_TXCH0);
+    }
+#endif /* ComConf_ComSignal_FOG_BB */
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_RFG_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_RFG_BB(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+#ifdef ComConf_ComSignal_RFG_BB
+    U1                 u1_t_tx;
+    U1                 u1_t_pre_tx;
+
+    if(u1_a_OPT <= (U1)VDS_CI_OPT_ON){
+        u1_t_tx = u1_a_OPT;
+    }
+    else{
+        u1_t_tx = (U1)VDS_CI_OPT_OFF;
+    }
+    u1_t_pre_tx = (U1)VDS_CI_OPT_OFF;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RFG_BB, &u1_t_pre_tx);
+
+    (void)Com_SendSignal(ComConf_ComSignal_RFG_BB, &u1_t_tx);
+    if(u1_t_pre_tx != u1_t_tx){
+        (void)Com_TriggerIPDUSend(MSG_MET1S30_TXCH0);
+    }
+#endif /* ComConf_ComSignal_RFG_BB */
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -4230,6 +4324,7 @@ static void    vd_s_VdsCIReqTx_TRNBBSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /* BEV-4     01/31/2025  HY       Change config for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                  */
 /* BEV-5     02/10/2025  RO       Change config for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                 */
 /* BEV-6     02/10/2025  RO       Change config for BEV System_Consideration_1.(MET-S_ADVMID-CSTD-0-)                                */
+/* BEV-7     02/10/2025  HF       Change config for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -4247,5 +4342,6 @@ static void    vd_s_VdsCIReqTx_TRNBBSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
+/*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

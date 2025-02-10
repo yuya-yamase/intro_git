@@ -1,4 +1,4 @@
-/* 2.1.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VPTRAN_BYW_CFG_C_MAJOR                  (2)
-#define VPTRAN_BYW_CFG_C_MINOR                  (1)
+#define VPTRAN_BYW_CFG_C_MINOR                  (2)
 #define VPTRAN_BYW_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -76,7 +76,7 @@
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 {
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
+    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
                              ((U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
@@ -115,7 +115,7 @@ U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsSftBlks(void)
 {
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
+    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
                              ((U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
@@ -181,21 +181,6 @@ U1              u1_g_VptranBywCfgGetBGEARS(void)
 }
 
 /*===================================================================================================================================*/
-/* U1              u1_g_VptranBywCfgGetSFTBLNK(void)                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_VptranBywCfgGetSFTBLNK(void)
-{
-    U1          u1_t_sgnl;
-
-    u1_t_sgnl = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_SFT_BLNK, &u1_t_sgnl);
-    return (u1_t_sgnl);
-}
-
-/*===================================================================================================================================*/
 /* U1              u1_g_VptranBywCfgGetSFTBLKS(void)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -226,6 +211,7 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
 /*  2.0.0    01/21/2021  TA       vptran_byw.c v1.3.0 -> v2.0.0.                                                                     */
 /*  2.0.1    10/18/2021  TA(M)    vptran_byw.c v2.0.0 -> v2.0.1.                                                                     */
 /*  2.1.0    12/15/2023  GM       vptran_cvt.c v2.0.1 -> v2.1.0                                                                      */
+/*  2.2.0     2/10/2025  HF       vptran_cvt.c v2.1.0 -> v2.2.0                                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision    Date        Author   Change Description                                                                              */
@@ -235,6 +221,7 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
 /*  200D-2      09/05/2022  YK       200D Correspondence                                                                             */
 /*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
 /*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
+/*  BEV-1       02/10/2025  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                             */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * YI   = Yoshiki  Iwata,   Denso                                                                                                 */
@@ -245,5 +232,6 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
 /*  * XY   = XuYang,           DNKT                                                                                                  */
 /*  * YK   = Yuki Kawai,       Denso Techno                                                                                          */
 /*  * GM   = Glen Monteposo,   DTPH                                                                                                  */
+/*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

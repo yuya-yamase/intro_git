@@ -225,6 +225,251 @@ U1      u1_g_VdfEsoRx_SW_SERVICE_POS(void)
 }
 
 /*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_HEDLMP_AUT(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_HEDLMP_AUT(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_AUT = (U1)2U;
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_DRL = (U1)2U;
+
+    U1                 u1_t_autfnc;
+    U1                 u1_t_drlfnc;
+    U1                 u1_t_ava_rx;
+
+    u1_t_autfnc = (U1)0U;
+    u1_t_drlfnc = (U1)0U;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_AUT_FNC, &u1_t_autfnc);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DRL_FNC, &u1_t_drlfnc);
+
+    if((u1_t_autfnc == u1_s_VDF_ESO_SW_HEDLMP_AUT) &&
+       (u1_t_drlfnc != u1_s_VDF_ESO_SW_HEDLMP_DRL)){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_HEDLMP_HED(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_HEDLMP_HED(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_HED = (U1)2U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_HED_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_HEDLMP_HED){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_HEDLMP_TAL(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_HEDLMP_TAL(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_TAL = (U1)2U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_TAL_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_HEDLMP_TAL){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_HEDLMP_TAL_DBL(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_HEDLMP_TAL_DBL(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_TAL_DBL = (U1)3U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_TAL_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_HEDLMP_TAL_DBL){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_HEDLMP_DRLOFF(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_HEDLMP_DRLOFF(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_DRLOFF = (U1)2U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_OFF_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_HEDLMP_DRLOFF){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_HEDLMP_OFF(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_HEDLMP_OFF(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_OFF = (U1)3U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_OFF_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_HEDLMP_OFF){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_HEDLMP_OFF_DBL(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_HEDLMP_OFF_DBL(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_OFF_DBL = (U1)4U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_OFF_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_HEDLMP_OFF_DBL){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_HEDLMP_DRL(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_HEDLMP_DRL(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_DRL = (U1)2U;
+    static const U1 u1_s_VDF_ESO_SW_HEDLMP_AUT = (U1)2U;
+
+    U1                 u1_t_drlfnc;
+    U1                 u1_t_autfnc;
+    U1                 u1_t_ava_rx;
+
+    u1_t_drlfnc = (U1)0U;
+    u1_t_autfnc = (U1)0U;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DRL_FNC, &u1_t_drlfnc);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_AUT_FNC, &u1_t_autfnc);
+
+    if((u1_t_drlfnc == u1_s_VDF_ESO_SW_HEDLMP_DRL) &&
+       (u1_t_autfnc != u1_s_VDF_ESO_SW_HEDLMP_AUT)){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_FRONT_FOG(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_FRONT_FOG(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_FRONT_FOG = (U1)2U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_FOG_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_FRONT_FOG){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_REAR_FOG(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_REAR_FOG(void)
+{
+    static const U1 u1_s_VDF_ESO_SW_REAR_FOG = (U1)2U;
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_RFG_FNC, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_SW_REAR_FOG){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
+    }
+
+    return(u1_t_ava_rx);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -240,8 +485,10 @@ U1      u1_g_VdfEsoRx_SW_SERVICE_POS(void)
 /*  BEV      10/10/2024   KT      Added function for BEV System_Consideration_1.(MET-B_OMRBB-CSTD-0-)                                */
 /*  BEV-2    12/03/2024   HY      Added function for BEV System_Consideration_1.(MET-B_PWLBB-CSTD-0-)                                */
 /*  BEV-3    12/16/2024   HT      Added function for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                 */
+/*  BEV-4     2/10/2025   HF      Added function for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                */
 /*                                                                                                                                   */
 /*  * KT = Kenta Takaji, Denso Techno                                                                                                */
 /*  * HY = Haruki Yagi, KSE                                                                                                          */
 /*  * HT = Hibiki Tanii, KSE                                                                                                         */
+/*  * HF = Hinari Fukamachi, KSE                                                                                                     */
 /*===================================================================================================================================*/

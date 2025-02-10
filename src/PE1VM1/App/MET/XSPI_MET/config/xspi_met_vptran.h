@@ -41,8 +41,6 @@
 #define XSPI_VPTRAN_SFT_POS_OFF             (0U)    /* Position: OFF */
 #define XSPI_VPTRAN_SFT_POS_ON              (1U)    /* Position: ON */
 #define XSPI_VPTRAN_SFT_POS_BLNK_1          (2U)    /* Position: Blink (T=0.5s, 50%) */
-#define XSPI_VPTRAN_SFT_POS_BLNK_2          (3U)    /* Position: Blink (T=1.0s, 50%) */
-#define XSPI_VPTRAN_SFT_POS_BLNK_3          (4U)    /* Position: Blink (T=0.5s, 60%) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

@@ -22,7 +22,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDS_CI_NUM_CH         (152U)
+#define VDS_CI_NUM_CH         (155U)
 
 #define VDS_CI_SW_ASD_CONT    ( 0U)
 #define VDS_CI_SW_ASD_CANC    ( 1U)
@@ -176,6 +176,9 @@
 #define VDS_CI_SW_WRSW_BB     (149U)
 #define VDS_CI_SW_WSVS_BB     (150U)
 #define VDS_CI_SW_TRNBBSW     (151U)
+#define VDS_CI_SW_LSW_BB      (152U)
+#define VDS_CI_SW_FOG_BB      (153U)
+#define VDS_CI_SW_RFG_BB      (154U)
 
 #define VDS_CI_LCASGAPR_MAX   ( 2U)
 #define VDS_CI_M_COP_S_MAX    ( 3U)
@@ -239,6 +242,7 @@
 #define VDS_CI_MRT_BB_MAX     ( 3U)
 #define VDS_CI_ART_BB_MAX     ( 3U)
 #define VDS_CI_TRNBBSW_MAX    ( 7U)
+#define VDS_CI_LSW_BB_MAX     ( 7U)
 
 /* SETDCLVI */
 #define VDS_CI_SETDCLVI_INIT  ( 0U)
