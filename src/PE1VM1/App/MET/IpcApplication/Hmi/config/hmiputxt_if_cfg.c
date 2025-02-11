@@ -1,4 +1,4 @@
-/* 1.5.0 */
+/* 1.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_IF_CFG_C_MAJOR                  (1)
-#define HMIPUTXT_IF_CFG_C_MINOR                  (5)
+#define HMIPUTXT_IF_CFG_C_MINOR                  (6)
 #define HMIPUTXT_IF_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -63,9 +63,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_P_CHADYN,             (U1)ALERT_REQ_P_CHADYN_2WD_CDY,         (U1)0U,     (U4)0x00010000U    },
     {    (U2)ALERT_CH_P_CHADYN,             (U1)ALERT_REQ_P_CHADYN_4WD_CDY,         (U1)0U,     (U4)0x00020000U    },
     {    (U2)ALERT_CH_H_BATINS_PD,          (U1)ALERT_REQ_H_BATINS_PD_DIAGNOSIS,    (U1)0U,     (U4)0x08000000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_NOTUSE1,    (U1)1U,     (U4)0x00080000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_MALFUNC,     (U1)1U,     (U4)0x00100000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW6,   (U1)1U,     (U4)0x00100000U    },
     {    (U2)ALERT_CH_S_SCB,                (U1)ALERT_REQ_S_SCB_SCB_OPE,            (U1)1U,     (U4)0x00200000U    },
     {    (U2)ALERT_CH_S_SCB,                (U1)ALERT_REQ_S_SCB_CYCL_SCB_OPE,       (U1)1U,     (U4)0x00200000U    },
     {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_STOPPED,    (U1)1U,     (U4)0x04000000U    },
@@ -73,11 +70,11 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_B_SMASTA_S2IG,        (U1)ALERT_REQ_B_SMASTA_S2IG_HV_EMG,     (U1)1U,     (U4)0x80000000U    },
     {    (U2)ALERT_CH_C_BRK_0,              (U1)ALERT_REQ_C_BRK_0_LOW,              (U1)2U,     (U4)0x00000002U    },
     {    (U2)ALERT_CH_C_STEER_PD,           (U1)ALERT_REQ_C_STEER_PD_ASSIST_STOP,   (U1)2U,     (U4)0x00000008U    },
-    {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_MALFUNC,          (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_ON_MLFNC,         (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_MLFNC_RW,         (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRK_1,              (U1)ALERT_REQ_C_BRK_1_WRN,              (U1)2U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_BRLV_1_WRN,         (U1)ALERT_REQ_C_BRLV_1_WRN_MALFUNC,     (U1)2U,     (U4)0x00000020U    },
+    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_MALFUNC,          (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_ON_MLFNC,         (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_MLFNC_RW,         (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRK_2,              (U1)ALERT_REQ_C_BRK_2_WRN,              (U1)2U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_BRLV_2_WRN,         (U1)ALERT_REQ_C_BRLV_2_WRN_MALFUNC,     (U1)2U,     (U4)0x00000020U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FAILDISP,           (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_FDISP_RW,           (U1)2U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_C_ECB,                (U1)ALERT_REQ_C_ECB_TM_DISP,            (U1)2U,     (U4)0x00000040U    },
@@ -106,21 +103,16 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_P_COOTEM_TT_PD,       (U1)ALERT_REQ_P_COOTEM_TT_PD_WRN,       (U1)2U,     (U4)0x10000000U    },
     {    (U2)ALERT_CH_B_SMASTA_S2IG,        (U1)ALERT_REQ_B_SMASTA_S2IG_SAFE,       (U1)2U,     (U4)0x20000000U    },
     {    (U2)ALERT_CH_P_ROLAWA_PD,          (U1)ALERT_REQ_P_ROLAWA_PD_VEHRUN,       (U1)2U,     (U4)0x40000000U    },
-    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND16,       (U1)2U,     (U4)0x80000000U    },
-    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND17,       (U1)3U,     (U4)0x00000001U    },
-    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND14,       (U1)3U,     (U4)0x00000002U    },
+    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND15,       (U1)2U,     (U4)0x80000000U    },
     {    (U2)ALERT_CH_D_CVTOIL,             (U1)ALERT_REQ_D_CVTOIL_TEMPH,           (U1)3U,     (U4)0x00000004U    },
     {    (U2)ALERT_CH_D_CVTOIL,             (U1)ALERT_REQ_D_CVTOIL_ON_TEMPH,        (U1)3U,     (U4)0x00000004U    },
     {    (U2)ALERT_CH_D_CVTOIL,             (U1)ALERT_REQ_D_CVTOIL_FLASH_TEMPH,     (U1)3U,     (U4)0x00000004U    },
     {    (U2)ALERT_CH_H_ACCHOL,             (U1)ALERT_REQ_H_ACCHOL_HVSYSOVHT,       (U1)3U,     (U4)0x00000008U    },
     {    (U2)ALERT_CH_B_SMASTA_S2IG,        (U1)ALERT_REQ_B_SMASTA_S2IG_HVSAFE,     (U1)3U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND7,        (U1)3U,     (U4)0x00000020U    },
-    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND15,       (U1)3U,     (U4)0x00000100U    },
+    {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND14,       (U1)3U,     (U4)0x00000100U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND2,        (U1)3U,     (U4)0x00000200U    },
     {    (U2)ALERT_CH_H_PEXI_WARN,          (U1)ALERT_REQ_H_PEXI_WARN_MALFUNC,      (U1)3U,     (U4)0x00000400U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_ADVICE1,     (U1)3U,     (U4)0x00020000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEF2,     (U1)3U,     (U4)0x00020000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW2,   (U1)3U,     (U4)0x00020000U    },
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_CANCEL,       (U1)3U,     (U4)0x00040000U    },
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_UNAVLBL3,     (U1)3U,     (U4)0x00200000U    },
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_UNAVLBL2,     (U1)3U,     (U4)0x00400000U    },
@@ -140,7 +132,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_18,      (U1)4U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_36,      (U1)4U,     (U4)0x00000800U    },
     {    (U2)ALERT_CH_D_SBW_PD_NSFT,        (U1)ALERT_REQ_D_SBW_PD_NSFT_MSG_24,     (U1)4U,     (U4)0x00001000U    },
-    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_40,      (U1)4U,     (U4)0x00002000U    },
     {    (U2)ALERT_CH_D_SBW_PD_ACCN,        (U1)ALERT_REQ_D_SBW_PD_ACCN_MSG_32,     (U1)4U,     (U4)0x00004000U    },
     {    (U2)ALERT_CH_D_SBW_PD_DAP,         (U1)ALERT_REQ_D_SBW_PD_DAP_MSG_29,      (U1)4U,     (U4)0x00008000U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND6,        (U1)4U,     (U4)0x00010000U    },
@@ -152,17 +143,9 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_UNAVBL1,     (U1)4U,     (U4)0x10000000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_WRN2,        (U1)4U,     (U4)0x40000000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_UNAVBL3,     (U1)4U,     (U4)0x80000000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_LOCK,        (U1)5U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEF1,     (U1)5U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW1,   (U1)5U,     (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_ADVICE2,     (U1)5U,     (U4)0x00000020U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEF5,     (U1)5U,     (U4)0x00000020U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW5,   (U1)5U,     (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_EVA_LOW,       (U1)5U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_33,      (U1)5U,     (U4)0x00000080U    },
-    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_34,      (U1)5U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_P_CHEENG_WRN,         (U1)ALERT_REQ_P_CHEENG_WRN_MLFNC2,      (U1)5U,     (U4)0x00010000U    },
-    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_10,      (U1)5U,     (U4)0x00020000U    },
     {    (U2)ALERT_CH_P_CHEENG_WRN,         (U1)ALERT_REQ_P_CHEENG_WRN_MLFNC4_RW,   (U1)5U,     (U4)0x00040000U    },
     {    (U2)ALERT_CH_P_CHEENG_WRN,         (U1)ALERT_REQ_P_CHEENG_WRN_MLFNC3_RW,   (U1)5U,     (U4)0x00080000U    },
     {    (U2)ALERT_CH_B_BVOOPE,             (U1)ALERT_REQ_B_BVOOPE_OPERATING,       (U1)5U,     (U4)0x00800000U    },
@@ -178,7 +161,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_39,      (U1)6U,     (U4)0x00000004U    },
     {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_11,      (U1)6U,     (U4)0x00000008U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_EVM_LOW,       (U1)6U,     (U4)0x00000400U    },
-    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_09,      (U1)6U,     (U4)0x00000800U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_CHG_DEACT,     (U1)6U,     (U4)0x00002000U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_CHG_NOT,       (U1)6U,     (U4)0x00004000U    },
     {    (U2)ALERT_CH_H_THEVM_PD,           (U1)ALERT_REQ_H_THEVM_PD_CHG_FULL,      (U1)6U,     (U4)0x00008000U    },
@@ -202,14 +184,13 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_H_BATLOW,             (U1)ALERT_REQ_H_BATLOW_MALFUNC,         (U1)7U,     (U4)0x40000000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_INSPECTION,      (U1)7U,     (U4)0x80000000U    },
     {    (U2)ALERT_CH_O_CHAMAL,             (U1)ALERT_REQ_O_CHAMAL_INSPECTION_BZ,   (U1)7U,     (U4)0x80000000U    },
-    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OVHT,            (U1)8U,     (U4)0x00000010U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OVHT_CHN,        (U1)8U,     (U4)0x00000010U    },
     {    (U2)ALERT_CH_H_UNIOVE_PD,          (U1)ALERT_REQ_H_UNIOVE_PD_FCVSYSOVHT,   (U1)8U,     (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_UNIOVE_PD,          (U1)ALERT_REQ_H_UNIOVE_PD_HVSYSOVHT,    (U1)8U,     (U4)0x00000040U    },
     {    (U2)ALERT_CH_D_SBW_PD_PSWF,        (U1)ALERT_REQ_D_SBW_PD_PSWF_MSG_04,     (U1)8U,     (U4)0x00000100U    },
     {    (U2)ALERT_CH_S_APP_PD,             (U1)ALERT_REQ_S_APP_PD_BRAKE,           (U1)8U,     (U4)0x00000200U    },
     {    (U2)ALERT_CH_S_APP_PD,             (U1)ALERT_REQ_S_APP_PD_CANCELLED,       (U1)8U,     (U4)0x00000400U    },
     {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_AUTOLOCK,   (U1)8U,     (U4)0x00000800U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_NOTUSE2,    (U1)8U,     (U4)0x00001000U    },
     {    (U2)ALERT_CH_P_ROLAWA_PD,          (U1)ALERT_REQ_P_ROLAWA_PD_VEHSTP,       (U1)8U,     (U4)0x00010000U    },
     {    (U2)ALERT_CH_B_SMASTA_S1B,         (U1)ALERT_REQ_B_SMASTA_S1B_NOTKEY,      (U1)8U,     (U4)0x00080000U    },
     {    (U2)ALERT_CH_D_SBW_PD_SFTF,        (U1)ALERT_REQ_D_SBW_PD_SFTF_MSG_07,     (U1)8U,     (U4)0x00100000U    },
@@ -237,7 +218,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_S_BOS,                (U1)ALERT_REQ_S_BOS_ON_MSG3,            (U1)9U,     (U4)0x00200000U    },
     {    (U2)ALERT_CH_S_BOS,                (U1)ALERT_REQ_S_BOS_FLSH_MSG3,          (U1)9U,     (U4)0x00200000U    },
     {    (U2)ALERT_CH_S_BOS,                (U1)ALERT_REQ_S_BOS_MSG3,               (U1)9U,     (U4)0x00200000U    },
-    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_BATLOW,          (U1)9U,     (U4)0x00400000U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_BATLOW_CHN,      (U1)9U,     (U4)0x00400000U    },
     {    (U2)ALERT_CH_H_SOCLOW_TT_PD,       (U1)ALERT_REQ_H_SOCLOW_TT_PD_N_POS1,    (U1)9U,     (U4)0x00800000U    },
     {    (U2)ALERT_CH_H_SOCLOW_TT_PD,       (U1)ALERT_REQ_H_SOCLOW_TT_PD_N_POS2,    (U1)9U,     (U4)0x00800000U    },
     {    (U2)ALERT_CH_H_SOCLOW_TT_PD,       (U1)ALERT_REQ_H_SOCLOW_TT_PD_HV_OFF1,   (U1)9U,     (U4)0x01000000U    },
@@ -260,9 +241,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_S_LCA_PD_SG,          (U1)ALERT_REQ_S_LCA_PD_SG_SGST3,        (U1)11U,    (U4)0x00000001U    },
     {    (U2)ALERT_CH_S_LCA_PD_SG,          (U1)ALERT_REQ_S_LCA_PD_SG_SGST2,        (U1)11U,    (U4)0x00000002U    },
     {    (U2)ALERT_CH_S_LCA_PD_SG,          (U1)ALERT_REQ_S_LCA_PD_SG_SGST1,        (U1)11U,    (U4)0x00000004U    },
-    {    (U2)ALERT_CH_D_SBW_PD_APRJ,        (U1)ALERT_REQ_D_SBW_PD_APRJ_MSG_37,     (U1)11U,    (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_SYSMAL_PD2,         (U1)ALERT_REQ_H_SYSMAL_PD2_IND5,        (U1)11U,    (U4)0x00000040U    },
-    {    (U2)ALERT_CH_C_TRCOFF_PD,          (U1)ALERT_REQ_C_TRCOFF_PD_MALFUNC,      (U1)11U,    (U4)0x00001000U    },
     {    (U2)ALERT_CH_H_ONACCP,             (U1)ALERT_REQ_H_ONACCP_MALFUNC,         (U1)11U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_D_SBW_PD_SFML,        (U1)ALERT_REQ_D_SBW_PD_SFML_MSG_28,     (U1)11U,    (U4)0x00004000U    },
     {    (U2)ALERT_CH_B_THESEN,             (U1)ALERT_REQ_B_THESEN_SENOFF,          (U1)11U,    (U4)0x00008000U    },
@@ -276,7 +255,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_H_TCBM,               (U1)ALERT_REQ_H_TCBM_LIMIT,             (U1)11U,    (U4)0x20000000U    },
     {    (U2)ALERT_CH_O_POWMAN,             (U1)ALERT_REQ_O_POWMAN_BATLOW,          (U1)11U,    (U4)0x40000000U    },
     {    (U2)ALERT_CH_P_TMNT_PD,            (U1)ALERT_REQ_P_TMNT_PD_WRN,            (U1)12U,    (U4)0x00000004U    },
-    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OTHER,           (U1)12U,    (U4)0x00000010U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OTHER_CHN,       (U1)12U,    (U4)0x00000010U    },
     {    (U2)ALERT_CH_H_BATCOO_TT_PD,       (U1)ALERT_REQ_H_BATCOO_TT_PD_PD03,      (U1)12U,    (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_BATCOO_TT_PD,       (U1)ALERT_REQ_H_BATCOO_TT_PD_TT_PD03,   (U1)12U,    (U4)0x00000020U    },
     {    (U2)ALERT_CH_H_TOWWAR,             (U1)ALERT_REQ_H_TOWWAR_MLFNC_EV,        (U1)12U,    (U4)0x00000040U    },
@@ -291,6 +270,9 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_D_SBW_PD_CHK,         (U1)ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW8,   (U1)12U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_D_SBW_PD_CHK,         (U1)ALERT_REQ_D_SBW_PD_CHK_MSG6_SBW9,   (U1)12U,    (U4)0x00002000U    },
     {    (U2)ALERT_CH_B_SMASTA_S1B,         (U1)ALERT_REQ_B_SMASTA_S1B_MALFUNC,     (U1)12U,    (U4)0x00004000U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OVHT,            (U1)12U,    (U4)0x00010000U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_BATLOW,          (U1)12U,    (U4)0x00020000U    },
+    {    (U2)ALERT_CH_H_DRIPOW,             (U1)ALERT_REQ_H_DRIPOW_OTHER,           (U1)12U,    (U4)0x00040000U    },
     {    (U2)ALERT_CH_P_STOSTA_PD_COA,      (U1)ALERT_REQ_P_STOSTA_PD_COA_CNTN,     (U1)12U,    (U4)0x00080000U    },
     {    (U2)ALERT_CH_P_STOSTA_PD_COA,      (U1)ALERT_REQ_P_STOSTA_PD_COA_CNT_WT,   (U1)12U,    (U4)0x00080000U    },
     {    (U2)ALERT_CH_H_TOWWAR,             (U1)ALERT_REQ_H_TOWWAR_MLFNC_HV,        (U1)12U,    (U4)0x00100000U    },
@@ -318,12 +300,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_MAINT1,      (U1)13U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_MALFNC1,     (U1)13U,    (U4)0x00080000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_MALFNC2,     (U1)13U,    (U4)0x00100000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_DEACTIVE,    (U1)13U,    (U4)0x00400000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEF4,     (U1)13U,    (U4)0x00400000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW4,   (U1)13U,    (U4)0x00400000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_ACTIVE,      (U1)13U,    (U4)0x00800000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEF3,     (U1)13U,    (U4)0x00800000U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW3,   (U1)13U,    (U4)0x00800000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_MAINT3,      (U1)13U,    (U4)0x01000000U    },
     {    (U2)ALERT_CH_C_BRKHLD_WRN,         (U1)ALERT_REQ_C_BRKHLD_WRN_MAINT2,      (U1)13U,    (U4)0x02000000U    },
     {    (U2)ALERT_CH_B_WASLEV,             (U1)ALERT_REQ_B_WASLEV_TT_PD_ON,        (U1)13U,    (U4)0x04000000U    },
@@ -507,27 +483,25 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_AVAIL,        (U1)24U,    (U4)0x00000001U    },
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_AVAIL,        (U1)24U,    (U4)0x00000002U    },
     {    (U2)ALERT_CH_S_EDSS_PD,            (U1)ALERT_REQ_S_EDSS_PD_FUNC1,          (U1)24U,    (U4)0x00000008U    },
-    {    (U2)ALERT_CH_S_EDSS_PD,            (U1)ALERT_REQ_S_EDSS_PD_FUNC2,          (U1)24U,    (U4)0x00000010U    },
-    {    (U2)ALERT_CH_S_EDSS_PD,            (U1)ALERT_REQ_S_EDSS_PD_FUNC3,          (U1)24U,    (U4)0x00000020U    },
-    {    (U2)ALERT_CH_S_EDSS_PD,            (U1)ALERT_REQ_S_EDSS_PD_FUNC4,          (U1)24U,    (U4)0x00000040U    },
-    {    (U2)ALERT_CH_S_EDSS_PD,            (U1)ALERT_REQ_S_EDSS_PD_FUNC5,          (U1)24U,    (U4)0x00000080U    },
-    {    (U2)ALERT_CH_S_EDSS_PD,            (U1)ALERT_REQ_S_EDSS_PD_FUNC1,          (U1)24U,    (U4)0x00000100U    },
-    {    (U2)ALERT_CH_S_EDSS_PD,            (U1)ALERT_REQ_S_EDSS_PD_FUNC2,          (U1)24U,    (U4)0x00000200U    },
-    {    (U2)ALERT_CH_S_ADASTT_BSM,         (U1)ALERT_REQ_S_ADASTT_BSM_OFF,         (U1)24U,    (U4)0x00000400U    },
-    {    (U2)ALERT_CH_S_ADASTT_SEA,         (U1)ALERT_REQ_S_ADASTT_SEA_OFF,         (U1)24U,    (U4)0x00000800U    },
-    {    (U2)ALERT_CH_S_ADASTT_RCD,         (U1)ALERT_REQ_S_ADASTT_RCD_OFF,         (U1)24U,    (U4)0x00001000U    },
-    {    (U2)ALERT_CH_S_ADASTT_RCTA,        (U1)ALERT_REQ_S_ADASTT_RCTA_OFF,        (U1)24U,    (U4)0x00002000U    },
-    {    (U2)ALERT_CH_S_ADASTT_SAS,         (U1)ALERT_REQ_S_ADASTT_SAS_OFF,         (U1)24U,    (U4)0x00004000U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_UNRELABLE,   (U1)24U,    (U4)0x00000010U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_ADVICE1,    (U1)24U,    (U4)0x00000020U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_ADVICE2,    (U1)24U,    (U4)0x00000040U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_LOCK,        (U1)24U,    (U4)0x00000080U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_ADVICE1,     (U1)24U,    (U4)0x00000100U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_ADVICE2,     (U1)24U,    (U4)0x00000200U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_NOTUSE1,    (U1)24U,    (U4)0x00000400U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_NOTUSE2,    (U1)24U,    (U4)0x00000800U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_MALFUNC,     (U1)24U,    (U4)0x00001000U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_ACTIVE,      (U1)24U,    (U4)0x00002000U    },
+    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_DEACTIVE,    (U1)24U,    (U4)0x00004000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_JST_ACT2,        (U1)24U,    (U4)0x00008000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_JST_ACT2_RW,     (U1)24U,    (U4)0x00008000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_CC_ACT,          (U1)24U,    (U4)0x00010000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_CC_ACT_RW,       (U1)24U,    (U4)0x00010000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_SFT_P_AUTO,      (U1)24U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_SFT_P_AUTO_RW,   (U1)24U,    (U4)0x00020000U    },
-    {    (U2)ALERT_CH_S_DSC,                (U1)ALERT_REQ_S_DSC_MSG2,               (U1)24U,    (U4)0x00080000U    },
-    {    (U2)ALERT_CH_S_DSC,                (U1)ALERT_REQ_S_DSC_MSG2_RW,            (U1)24U,    (U4)0x00080000U    },
-    {    (U2)ALERT_CH_S_CVRS,               (U1)ALERT_REQ_S_CVRS_SC,                (U1)24U,    (U4)0x00100000U    },
-    {    (U2)ALERT_CH_S_CVRS,               (U1)ALERT_REQ_S_CVRS_SC_REP,            (U1)24U,    (U4)0x00100000U    },
+    {    (U2)ALERT_CH_D_SBW_PD_RIS,         (U1)ALERT_REQ_D_SBW_PD_RIS_MSG_40,      (U1)24U,    (U4)0x00080000U    },
+    {    (U2)ALERT_CH_D_SBW_PD_SILUA,       (U1)ALERT_REQ_D_SBW_PD_SILUA_MSG_41,    (U1)24U,    (U4)0x00100000U    },
     {    (U2)ALERT_CH_S_SWS_PD,             (U1)ALERT_REQ_S_SWS_PD_BREAK,           (U1)24U,    (U4)0x00200000U    },
     {    (U2)ALERT_CH_S_FHL,                (U1)ALERT_REQ_S_FHL_ACTIVATION,         (U1)24U,    (U4)0x00400000U    },
     {    (U2)ALERT_CH_S_LTA_2_PD,           (U1)ALERT_REQ_S_LTA_2_PD_WRN1,          (U1)24U,    (U4)0x00800000U    },
@@ -629,7 +603,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_C_DRS,                (U1)ALERT_REQ_C_DRS_TESTMODE,           (U1)34U,    (U4)0x00000080U    },
     {    (U2)ALERT_CH_H_LEAUNF_PD_PWC,      (U1)ALERT_REQ_H_LEAUNF_PD_PWC_UNCOMP,   (U1)34U,    (U4)0x00000100U    },
     {    (U2)ALERT_CH_H_LEAUNF_PD_EHV,      (U1)ALERT_REQ_H_LEAUNF_PD_EHV_UNCOMP,   (U1)34U,    (U4)0x00000100U    },
-    {    (U2)ALERT_CH_D_SBW_PD_SILUA,       (U1)ALERT_REQ_D_SBW_PD_SILUA_MSG_41,    (U1)34U,    (U4)0x00000100U    },
+    {    (U2)ALERT_CH_D_SBW_PD_SFPF,        (U1)ALERT_REQ_D_SBW_PD_SFPF_MSG_42,     (U1)34U,    (U4)0x00000400U    },
     {    (U2)ALERT_CH_S_DMC_PD,             (U1)ALERT_REQ_S_DMC_PD_DMC_RESTRCT,     (U1)34U,    (U4)0x00020000U    },
     {    (U2)ALERT_CH_C_PKBWAR_PD,          (U1)ALERT_REQ_C_PKBWAR_PD_ON,           (U1)34U,    (U4)0x00080000U    },
     {    (U2)ALERT_CH_S_ACC_PD,             (U1)ALERT_REQ_S_ACC_PD_REQ_BRK2,        (U1)34U,    (U4)0x00100000U    },
@@ -695,9 +669,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_B_RSEREM_IGOFF,       (U1)ALERT_REQ_B_RSEREM_IGOFF_ALLCHK,    (U1)39U,    (U4)0x00000001U    },
     {    (U2)ALERT_CH_B_RSEREM_BAT,         (U1)ALERT_REQ_B_RSEREM_BAT_MUTE,        (U1)39U,    (U4)0x00000002U    },
     {    (U2)ALERT_CH_B_RSEREM_OFFTT,       (U1)ALERT_REQ_B_RSEREM_OFFTT_ALLCHK,    (U1)39U,    (U4)0x00000004U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_UNRELABLE,   (U1)39U,    (U4)0x00000008U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEF7,     (U1)39U,    (U4)0x00000008U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_IG,         (U1)ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW7,   (U1)39U,    (U4)0x00000008U    },
     {    (U2)ALERT_CH_O_EIGCON_POWSTS,      (U1)ALERT_REQ_O_EIGCON_POWSTS_POWER,    (U1)39U,    (U4)0x00000010U    },
     {    (U2)ALERT_CH_M_VCOPE,              (U1)ALERT_REQ_M_VCOPE_WAIT,             (U1)39U,    (U4)0x00000040U    },
     {    (U2)ALERT_CH_M_VCOPE,              (U1)ALERT_REQ_M_VCOPE_WT_STP,           (U1)39U,    (U4)0x00000040U    },
@@ -720,8 +691,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_H_NLOCK,              (U1)ALERT_REQ_H_NLOCK_NLOCK,            (U1)40U,    (U4)0x00000004U    },
     {    (U2)ALERT_CH_H_REGBRA,             (U1)ALERT_REQ_H_REGBRA_MALFUNC,         (U1)40U,    (U4)0x00000008U    },
     {    (U2)ALERT_CH_H_QUICHA_CHG,         (U1)ALERT_REQ_H_QUICHA_CHG_CMPLMT,      (U1)40U,    (U4)0x00000010U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_ADVICE1,    (U1)40U,    (U4)0x00000020U    },
-    {    (U2)ALERT_CH_C_EPB_WRN_BAT,        (U1)ALERT_REQ_C_EPB_WRN_BAT_ADVICE2,    (U1)40U,    (U4)0x00000040U    },
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_UNAVLBL1,     (U1)40U,    (U4)0x00000080U    },
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_UNAVLBL2,     (U1)40U,    (U4)0x00000100U    },
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_UNAVLBL3,     (U1)40U,    (U4)0x00000200U    },
@@ -761,15 +730,26 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  1.2.0    09/09/2020  TH       Setting for 800B CV-R.                                                                             */
 /*  1.3.0    01/06/2021  TH       Setting for 800B 1A.                                                                               */
 /*  1.4.0    06/04/2021  TH       Setting for 22-24FGM CV.                                                                           */
+/*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3-1 02/20/2024  GM       Change config for 19PFv3 CV                                                                        */
 /*  19PFv3-2 07/10/2024  YR       Added config for HCS                                                                               */
+/*  BEV-1    10/25/2024  RS       Change for BEV System_Consideration_1.(MET-H_DRIPOW-CSTD-1-00-A-C0)                                */
+/*  BEV-2    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
+/*  BEV-3    10/31/2024  KO       Change for BEV System_Consideration_1.(MET-C_TRCOFF-CSTD-1-00-A-C0)                                */
+/*  BEV-4    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
+/*  BEV-5    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
+/*  BEV-6     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-C_BRK-CSTD-2-00-A-C0)                                   */
+/*  BEV-7     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * GM   = Glen Monteposo, DTPH                                                                                                    */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

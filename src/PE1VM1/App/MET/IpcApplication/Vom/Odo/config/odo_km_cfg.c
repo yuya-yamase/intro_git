@@ -1,4 +1,4 @@
-/* 2.0.1 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ODO_KM_CFG_C_MAJOR                       (2)
-#define ODO_KM_CFG_C_MINOR                       (0)
-#define ODO_KM_CFG_C_PATCH                       (1)
+#define ODO_KM_CFG_C_MINOR                       (1)
+#define ODO_KM_CFG_C_PATCH                       (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -107,28 +107,11 @@ static void    vd_s_OdoComTxUpdtOm(const U4 u4_a_0P001KM);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  odo_nvmif_cfg_private.h                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_NVMIF_ODO_DTF_NUM_BLOCK              (20U)
+#define ODO_NVMIF_ODO_DTF_NUM_BLOCK              (3U)
 static const U2            u2_sp_ODO_NVMIF_ODO_DTF_BLOCK[ODO_NVMIF_ODO_DTF_NUM_BLOCK] = {
     (U2)NVMC_BLOCKID_DTF_ODO_00,
     (U2)NVMC_BLOCKID_DTF_ODO_01,
-    (U2)NVMC_BLOCKID_DTF_ODO_02,
-    (U2)NVMC_BLOCKID_DTF_ODO_03,
-    (U2)NVMC_BLOCKID_DTF_ODO_04,
-    (U2)NVMC_BLOCKID_DTF_ODO_05,
-    (U2)NVMC_BLOCKID_DTF_ODO_06,
-    (U2)NVMC_BLOCKID_DTF_ODO_07,
-    (U2)NVMC_BLOCKID_DTF_ODO_08,
-    (U2)NVMC_BLOCKID_DTF_ODO_09,
-    (U2)NVMC_BLOCKID_DTF_ODO_10,
-    (U2)NVMC_BLOCKID_DTF_ODO_11,
-    (U2)NVMC_BLOCKID_DTF_ODO_12,
-    (U2)NVMC_BLOCKID_DTF_ODO_13,
-    (U2)NVMC_BLOCKID_DTF_ODO_14,
-    (U2)NVMC_BLOCKID_DTF_ODO_15,
-    (U2)NVMC_BLOCKID_DTF_ODO_16,
-    (U2)NVMC_BLOCKID_DTF_ODO_17,
-    (U2)NVMC_BLOCKID_DTF_ODO_18,
-    (U2)NVMC_BLOCKID_DTF_ODO_19
+    (U2)NVMC_BLOCKID_DTF_ODO_02
 };
 
 const ST_ODO_NVMIF_REC_KM  st_g_ODO_NVMIF_REC_ODO_KM = {
@@ -165,7 +148,7 @@ const U2                   u2_g_ODO_NVMIF_NVMCID_TRIP_KM = (U2)NVMCID_APP_ODO_TR
 /*  odo_km_cfg_private.h                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U2                   u2_g_ODO_NVM_REQ_TOUT        = ((U2)50U * (U2)ODO_NVMIF_ODO_DTF_NUM_BLOCK) / (U2)ODO_MAIN_TICK;
-                                                                                                       /* 50 * 20 = 1000 = 1 second  */
+                                                                                                       /* 50 * 3 = 150 ms            */
 
 const U2                   u2_g_ODO_TRIP_RST_TOUT       = (U2)10000U / (U2)ODO_MAIN_TICK;              /* 10 seconds                 */
 const U1                   u1_g_ODO_TRIP_SYNC_RST_BY_CH = (((U1)0x01U << ODO_TRIP_CH_A) |
@@ -714,6 +697,7 @@ U1    u1_g_OdoCfgGetOmRstSts(void)
 /*                                vd_g_OdoNvmIfCfgOdoWriCmplt delete                                                                 */
 /*  1.3.2    08/18/2020  YN       odo_nvmif_km.c v1.3.1 -> v1.3.2                                                                    */
 /*  2.0.1    10/18/2021  TA(M)    odo_km.c v1.3.2 -> v2.0.1.                                                                         */
+/*  2.1.0    01/21/2025  RS       Change for BEV System_Consideration_1                                                              */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -726,5 +710,6 @@ U1    u1_g_OdoCfgGetOmRstSts(void)
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

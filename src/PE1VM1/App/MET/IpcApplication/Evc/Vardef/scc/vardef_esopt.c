@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_ESOPT_C_MAJOR                     (2)
-#define VARDEF_ESOPT_C_MINOR                     (4)
+#define VARDEF_ESOPT_C_MINOR                     (5)
 #define VARDEF_ESOPT_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -694,10 +694,12 @@ static U1      u1_s_VdfEsoGetRxevCnt(const U1 u1_a_INPUT_TYPE, const U2 u2_a_MSG
 /*  2.2.0     1/25/2021  SF       Bug Fix : Initial value of option availability was incorrect if NvM was unknown.                   */
 /*  2.3.0    11/15/2021  RO       Add Other judgement.                                                                               */
 /*  2.4.0     3/15/2022  RO       Add AVN judgement.                                                                                 */
+/*  2.5.0     11/25/2024 KO       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, Denso Techno                                                                                            */
 /*  * RO   = Reiya Okuda, KSE                                                                                                        */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

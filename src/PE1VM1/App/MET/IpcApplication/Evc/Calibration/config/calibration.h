@@ -1,4 +1,4 @@
-/* 1.0.0 */
+/* 1.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define CALIBRATION_H_MAJOR                        (1)
-#define CALIBRATION_H_MINOR                        (0)
+#define CALIBRATION_H_MINOR                        (1)
 #define CALIBRATION_H_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -740,6 +740,40 @@
 #define CALIB_SOUND_PRESS_RATE_MIN                  (0U)             /* Sound Pressure Rate MIN MCUID0027-0039,0067-0208,0744-0753   */
 #define CALIB_SOUND_PRESS_RATE_MAX                  (100U)           /* Sound Pressure Rate MAX MCUID0027-0039,0067-0208,0744-0753   */
 #define CALIB_SP_TOLER_CORPT_NUM                    (20U)            /* Num of Speed Toler Cor Points MCUID0757-0776,0777-0796       */
+#define CALIB_MCUID0809_MEXICO_LOW_MIN              (0U)             /* Mexico lows and regulations MIN                              */
+#define CALIB_MCUID0809_MEXICO_LOW_MAX              (1U)             /* Mexico lows and regulations MAX                              */
+#define CALIB_MCUID0810_KOREA_LOW_MIN               (0U)             /* Korea lows and regulations MIN                               */
+#define CALIB_MCUID0810_KOREA_LOW_MAX               (1U)             /* Korea lows and regulations MAX                               */
+#define CALIB_MCUID0028_SBW_SI_MID_MIN              (0U)             /* SBW reverse buzzer Single MID MIN                            */
+#define CALIB_MCUID0028_SBW_SI_MID_MAX              (100U)           /* SBW reverse buzzer Single MID MAX                            */
+#define CALIB_MCUID0745_SBW_SI_MAX_MIN              (0U)             /* SBW reverse buzzer Single MAX MIN                            */
+#define CALIB_MCUID0745_SBW_SI_MAX_MAX              (100U)           /* SBW reverse buzzer Single MAX MAX                            */
+#define CALIB_MCUID0238_XVMODE_MIN                  (0U)             /* XV Mode MIN                                                  */
+#define CALIB_MCUID0238_XVMODE_MAX                  (1U)             /* XV Mode MAX                                                  */
+#define CALIB_MCUID0240_FULMENP_MIN                 (0U)             /* FulMEnp MIN                                                  */
+#define CALIB_MCUID0240_FULMENP_MAX                 (U2_MAX)         /* FulMEnp MAX                                                  */
+#define CALIB_MCUID0338_EXDIMOUT_MIN                (0U)             /* external dimming output MIN                                  */
+#define CALIB_MCUID0338_EXDIMOUT_MAX                (1U)             /* external dimming output MAX                                  */
+#define CALIB_MCUID0339_EXDIMOUT_SPD_MIN            (0U)             /* external dimming output(vehicle speed linkage) MIN           */
+#define CALIB_MCUID0339_EXDIMOUT_SPD_MAX            (1U)             /* external dimming output(vehicle speed linkage) MAX           */
+#define CALIB_MCUID0608_OLPTLP_MIN                  (0U)             /* OLPtlP MIN                                                   */
+#define CALIB_MCUID0608_OLPTLP_MAX                  (U2_MAX)         /* OLPtlP MAX                                                   */
+#define CALIB_MCUID0622_OLTTLP_MIN                  (0U)             /* OLTtlP MIN                                                   */
+#define CALIB_MCUID0622_OLTTLP_MAX                  (U2_MAX)         /* OLTtlP MAX                                                   */
+#define CALIB_MCUID0630_TTLP_MIN                    (0U)             /* TtlP MIN                                                     */
+#define CALIB_MCUID0630_TTLP_MAX                    (U2_MAX)         /* TtlP MAX                                                     */
+#define CALIB_MCUID0644_RZ_RPM_MAX_MIN              (0U)             /* Red Zone RPM MAX MIN                                         */
+#define CALIB_MCUID0644_RZ_RPM_MAX_MAX              (U2_MAX)         /* Red Zone RPM MAX MAX                                         */
+#define CALIB_MCUID0645_RZ_RPM_MIN_MIN              (0U)             /* Red Zone RPM MIN MIN                                         */
+#define CALIB_MCUID0645_RZ_RPM_MIN_MAX              (U2_MAX)         /* Red Zone RPM MIN MAX                                         */
+#define CALIB_MCUID0646_TACHO_IND_MIN               (0U)             /* Tacho IND MIN                                                */
+#define CALIB_MCUID0646_TACHO_IND_MAX               (1U)             /* Tacho IND MAX                                                */
+#define CALIB_MCUID0722_LUD_MIN                     (0U)             /* LUD MIN                                                      */
+#define CALIB_MCUID0722_LUD_MAX                     (1U)             /* LUD MAX                                                      */
+#define CALIB_MCUID3000_RAIN_SEN_ADJ_MIN            (1U)             /* Raindrop Sensitivity Adjustment Steps MIN                    */
+#define CALIB_MCUID3000_RAIN_SEN_ADJ_MAX            (8U)             /* Raindrop Sensitivity Adjustment Steps MAX                    */
+#define CALIB_MCUID3001_INT_TIM_ADJ_MIN             (1U)             /* INT Time Adjustment Steps MIN                                */
+#define CALIB_MCUID3001_INT_TIM_ADJ_MAX             (8U)             /* INT Time Adjustment Steps MAX                                */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -779,6 +813,24 @@ extern volatile const U1 u1_CALIB_MCUID0023_DISPTYPE;      /* Display Type      
 extern volatile const U1 u1_CALIB_MCUID0024_BRAND;         /* Brand                                                                  */
 extern volatile const U1 u1_CALIB_MCUID0025_SPORTS;        /* Sports Switching                                                       */
 extern volatile const U1 u1_CALIB_MCUID0026_1MOTHV;        /* 1MOT HV Drive Wheel                                                    */
+extern volatile const U1 u1_CALIB_MCUID3002_ANUNC_MID;     /* Annunciation Sound MID                                                 */
+extern volatile const U1 u1_CALIB_MCUID3003_ANUNC_SP_MID;  /* Annunciation Sound(SP) MID                                             */
+extern volatile const U1 u1_CALIB_MCUID3004_RECEP_MID;     /* Reception Sound MID                                                    */
+extern volatile const U1 u1_CALIB_MCUID3005_REJECT_MID;    /* Reject Sound MID                                                       */
+extern volatile const U1 u1_CALIB_MCUID3006_URGEN_MIN_MID; /* Intermittent Sound(Degree of urgency MIN) MID                          */
+extern volatile const U1 u1_CALIB_MCUID3007_URGEN_MID_MID; /* Intermittent Sound(Degree of urgency MID) MID                          */
+extern volatile const U1 u1_CALIB_MCUID3008_URGEN_MAX_MID; /* Intermittent Sound(Degree of urgency MAX) MID                          */
+extern volatile const U1 u1_CALIB_MCUID3009_CONTIN_MID;    /* Continuous Sound MID                                                   */
+extern volatile const U1 u1_CALIB_MCUID3010_PREDOT_MID;    /* PreDOT Sound MID                                                       */
+extern volatile const U1 u1_CALIB_MCUID3011_ANUNC_MAX;     /* Annunciation Sound MAX                                                 */
+extern volatile const U1 u1_CALIB_MCUID3012_ANUNC_SP_MAX;  /* Annunciation Sound(SP) MAX                                             */
+extern volatile const U1 u1_CALIB_MCUID3013_RECEP_MAX;     /* Reception Sound MAX                                                    */
+extern volatile const U1 u1_CALIB_MCUID3014_REJECT_MAX;    /* Reject Sound MAX                                                       */
+extern volatile const U1 u1_CALIB_MCUID3015_URGEN_MIN_MAX; /* Intermittent Sound(Degree of urgency MIN) MAX                          */
+extern volatile const U1 u1_CALIB_MCUID3016_URGEN_MID_MAX; /* Intermittent Sound(Degree of urgency MID) MAX                          */
+extern volatile const U1 u1_CALIB_MCUID3017_URGEN_MAX_MAX; /* Intermittent Sound(Degree of urgency MAX) MAX                          */
+extern volatile const U1 u1_CALIB_MCUID3018_CONTIN_MAX;    /* Continuous Sound MAX                                                   */
+extern volatile const U1 u1_CALIB_MCUID3019_PREDOT_MAX;    /* PreDOT Sound MAX                                                       */
 extern volatile const U1 u1_CALIB_MCUID0027_ATR_MID;       /* AT reverse buzzer MID                                                  */
 extern volatile const U1 u1_CALIB_MCUID0744_ATR_MAX;       /* AT reverse buzzer MAX                                                  */
 extern volatile const U1 u1_CALIB_MCUID0028_SBW_SI_MID;    /* SBW reverse buzzer Single MID                                          */
@@ -1180,6 +1232,11 @@ extern volatile const U1 u1_CALIB_MCUID0740_OILLVL_DEF;    /* Oil Level ON/OFF D
 extern volatile const U1 u1_CALIB_MCUID0741_IL2OUTILLRUN;  /* IL2OUTILLRun                                                           */
 extern volatile const U2 u2_CALIB_MCUID0742_IOUTILLRUN;    /* IOUTILLRun                                                             */
 extern volatile const U2 u2_CALIB_MCUID0743_IOUTILLRUNMAX; /* IOUTILLRunmax                                                          */
+extern volatile const U1 u1_CALIB_MCUID0798_TRNLMPCLR;     /* Turn signal lamp color of your vehicle                                 */
+extern volatile const U1 u1_CALIB_MCUID0809_MEXICO_LOW;    /* Mexico lows and regulations                                            */
+extern volatile const U1 u1_CALIB_MCUID0810_KOREA_LOW;     /* Korea lows and regulations                                             */
+extern volatile const U1 u1_CALIB_MCUID3000_RAIN_SEN_ADJ;  /* Raindrop Sensitivity Adjustment Steps                                  */
+extern volatile const U1 u1_CALIB_MCUID3001_INT_TIM_ADJ;   /* INT Time Adjustment Steps                                              */
 extern volatile const U1 u1_CALIB_MCUID0797_CNST_WRITEFLG; /* Constant write flag                                                    */
 extern volatile const U1 u1_CALIB_MCUID0270_RHEO_PCT[CALIB_MCUID0270_RHEO_STEP];              /* MCUID0270 to MCUID0291              */
 extern volatile const U2 u2_CALIB_MCUID0292_TR2_PCT[CALIB_MCUID0292_TR2_STEP];                /* MCUID0292 to MCUID0313              */

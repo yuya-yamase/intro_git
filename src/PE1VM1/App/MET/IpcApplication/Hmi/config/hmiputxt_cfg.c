@@ -1,4 +1,4 @@
-/* 1.5.0 */
+/* 1.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_CFG_C_MAJOR                     (1)
-#define HMIPUTXT_CFG_C_MINOR                     (5)
+#define HMIPUTXT_CFG_C_MINOR                     (6)
 #define HMIPUTXT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -205,16 +205,9 @@ static void    vd_s_HmiPuTxtCfgIGOffInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 {
-    static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT[] = {
+    static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[] = {
         /*  u2_idx    u2_chid                      u1_req                                   u2_eso_ch             */
-        {   (U2)331U, (U2)ALERT_CH_S_ADAFRO_PD,    (U1)ALERT_REQ_S_ADAFRO_PD_MLFNC,         (U2)U2_MAX           }     /* WARNING_ID_331 */
-    };
-
-    static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[] = {
-        /*  u2_idx    u2_chid                      u1_req                                   u2_eso_ch             */
-        {   (U2)786U, (U2)ALERT_CH_B_LEDHEA,       (U1)ALERT_REQ_B_LEDHEA_MALFUNC,          (U2)U2_MAX           },    /* WARNING_ID_786 */
-        {   (U2)786U, (U2)ALERT_CH_S_HEALEV_PD,    (U1)ALERT_REQ_S_HEALEV_PD_MALFUNC,       (U2)U2_MAX           },    /* WARNING_ID_786 */
-        {   (U2)786U, (U2)ALERT_CH_S_MWL_PD,       (U1)ALERT_REQ_S_MWL_PD_MALFUNC,          (U2)VDF_ESO_CH_MWL   }     /* WARNING_ID_786 */
+        {   (U2)331U, (U2)ALERT_CH_B_LEDHEA,       (U1)ALERT_REQ_B_LEDHEA_MALFUNC,          (U2)U2_MAX           }     /* WARNING_ID_331 */
     };
 
     U2              u2_t_num_reqbit;
@@ -303,38 +296,19 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     /* Evmod */
     vd_s_HmiPuTxtCfgEvmReq(&u4_ap_req[0]);
 
-    u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT[0]);
-    for(u4_t_loop = (U4)0U; u4_t_loop < u4_t_num_tbl; u4_t_loop++){
-        u1_t_exist = (U1)TRUE;
-        if(st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_eso_ch < (U2)VDF_ESO_NUM_CH){
-            u1_t_exist = u1_g_VardefEsOptAvaByCh(st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_eso_ch);
-        }
-        if(u1_t_exist == (U1)TRUE){
-            u2_t_chid  = st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_chid;
-            u1_t_req    = u1_g_AlertReqByCh(u2_t_chid);
-            if(u1_t_req == st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u1_req){
-                u2_t_blkpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_idx >>     HMIPUTXT_IDX_SFT);
-                u2_t_bitpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT[u4_t_loop].u2_idx &  (U2)HMIPUTXT_REM_MSK);
-                if(u2_t_blkpos < (U2)HMIPUTXT_NWORD){
-                    u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-                }
-            }
-        }
-    }
-
-    /* WARNING_ID_786 */
-    u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[0]);
+    /* Head lamp */
+    u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[0]);
     for (u4_t_loop = (U4)0U; u4_t_loop < u4_t_num_tbl; u4_t_loop++) {
         u1_t_exist = (U1)TRUE;
-        if (st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_eso_ch < (U2)VDF_ESO_NUM_CH) {
-            u1_t_exist = u1_g_VardefEsOptAvaByCh(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_eso_ch);
+        if (st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_eso_ch < (U2)VDF_ESO_NUM_CH) {
+            u1_t_exist = u1_g_VardefEsOptAvaByCh(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_eso_ch);
         }
         if (u1_t_exist == (U1)TRUE) {
-            u2_t_chid = st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_chid;
+            u2_t_chid = st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_chid;
             u1_t_req = u1_g_AlertReqByCh(u2_t_chid);
-            if (u1_t_req == st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u1_req) {
-                u2_t_blkpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_idx >> HMIPUTXT_IDX_SFT);
-                u2_t_bitpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT_WNG0786[u4_t_loop].u2_idx & (U2)HMIPUTXT_REM_MSK);
+            if (u1_t_req == st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u1_req) {
+                u2_t_blkpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_idx >> HMIPUTXT_IDX_SFT);
+                u2_t_bitpos = (U2)(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[u4_t_loop].u2_idx & (U2)HMIPUTXT_REM_MSK);
                 if (u2_t_blkpos < (U2)HMIPUTXT_NWORD) {
                     u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
                 }
@@ -360,39 +334,21 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 
     switch (u1_t_sysmal_req) {
         case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT1:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT3:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_2BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT4:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT2:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_3BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT5:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT3:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_4BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_5BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT7:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT4:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_6BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT8:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT5:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_7BIT_SHIFT;
             break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT9:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_8BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT10:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_9BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT11:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_10BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT12:
-            u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_11BIT_SHIFT;
-            break;
-        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT13:
+        case (U1)ALERT_REQ_H_SYSMAL_PD1_MALPAT6:
             u2_t_reqpos = (U2)HMIPUTXT_REQBIT << HMIPUTXT_12BIT_SHIFT;
             break;
         default:
@@ -416,9 +372,6 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
 {
     static const ST_HMIPUTXT_ESOPT st_sp_HMIPUTXT_ESOPT[] = {
-        {    (U2)52U,     (U2)VDF_ESO_CH_EPB      },
-        {    (U2)70U,     (U2)VDF_ESO_CH_ECB      },
-        {    (U2)278U,    (U2)VDF_ESO_CH_SBW      },
         {    (U2)308U,    (U2)VDF_ESO_CH_DSC      },
         {    (U2)314U,    (U2)VDF_ESO_CH_AUTOP    },
         {    (U2)394U,    (U2)VDF_ESO_CH_OILMNT   },
@@ -433,7 +386,6 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
     static const U2 u2_s_HMIPUTXT_ID_T120 = (U2)306U;
     static const U2 u2_s_HMIPUTXT_ID_TMNT_15 = (U2)486U;
     static const U2 u2_s_HMIPUTXT_ID_TMNT_16 = (U2)386U;
-    static const U2 u2_s_HMIPUTXT_ID_PKBWAR = (U2)1107U;
 
     U1              u1_t_dest;
     U1              u1_t_bufpos;
@@ -453,14 +405,6 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
             u4_t_mask   = u4_s_HmiPuTxtIdx2Mask(st_sp_HMIPUTXT_ESOPT[u4_t_loop].u2_id , &u1_t_bufpos);
             u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
         }
-    }
-
-    /* PKBWAR */
-     u1_t_pkbwar = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_EPB);
-        if(u1_t_pkbwar == (U1)TRUE){
-        u1_t_bufpos = (U1)0U;
-        u4_t_mask   = u4_s_HmiPuTxtIdx2Mask(u2_s_HMIPUTXT_ID_PKBWAR, &u1_t_bufpos);
-        u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
     }
 
     /* T120 */
@@ -527,8 +471,6 @@ static void vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask) {
 #if (HMIPUTXT_SYSMAL_JDG == HMIPUTXT_JDG_ON)
     static const U2 u2_sp_HMIPUTXT_SYSMAL[] = {
         (U2)95U,
-        (U2)96U,
-        (U2)97U,
         (U2)101U,
         (U2)104U,
         (U2)105U,
@@ -901,6 +843,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  1.2.0    09/09/2020  TH       Setting for 800B CV-R.                                                                             */
 /*  1.3.0    01/06/2021  TH       Setting for 800B 1A.                                                                               */
 /*  1.4.0    06/04/2021  TH       Setting for 22-24FGM CV.                                                                           */
+/*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1                                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -912,6 +855,9 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  19PFv3-5 05/17/2024  PG       Deleted PROSRV process                                                                             */
 /*  19PFv3-6 06/21/2024  JMH      Added LBW Mask Function                                                                            */
 /*  19PFv3-7 07/04/2024  TN       Delete Calibration Guard Process.                                                                  */
+/*  BEV-1    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
+/*  BEV-2    12/23/2024  MN       Change for BEV System_Consideration_1.(MET-B_LEDHEA-CSTD-1-01-A-C0)                                */
+/*  BEV-3     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -922,5 +868,8 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * JMH  = James Michael D. Hilarion, DTPH                                                                                         */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
+/*  * MN   = Mikiya Negishi,  KSE                                                                                                    */
+/*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VPTRAN_SEL_CFG_C_MAJOR                  (2)
-#define VPTRAN_SEL_CFG_C_MINOR                  (3)
+#define VPTRAN_SEL_CFG_C_MINOR                  (4)
 #define VPTRAN_SEL_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -19,7 +19,6 @@
 #include "vptran_sel_cfg_private.h"
 #include "vptran_sel_typ.h"
 #include "vptran_byw.h"
-#include "vptran_cvt.h"
 #include "vardef_esopt.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -57,8 +56,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const   U1                                      u1_g_VPTRAN_NUM_TYPE                        = (U1)VPTRAN_NUM_TYPE;
 const   ST_VPTRAN_MTYPE_FUNCCFG                 st_gp_VPTRAN_MTYPE_FUNCCFG[VPTRAN_NUM_TYPE] = {
-    {   &vd_g_VptranBywInit,    &vd_g_VptranByw,        &u1_g_VptranBywGetSts               },  /* 00 VPTRAN_BYW                     */
-    {   &vd_g_VptranCvtInit,    &vd_g_VptranCvt,        &u1_g_VptranCvtGetSts               }   /* 01 VPTRAN_CVT                     */
+    {   &vd_g_VptranBywInit,    &vd_g_VptranByw,        &u1_g_VptranBywGetSts               }   /* 00 VPTRAN_BYW                     */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -82,18 +80,7 @@ void            vd_g_VptranInitCfg(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranTransMissionTypeCfg(void)
 {
-    U1  u1_t_sbw_sup; 
-    U1  u1_t_tm_type;
-
-    u1_t_sbw_sup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW);
-
-    if (u1_t_sbw_sup == (U1)TRUE) {
-        u1_t_tm_type = (U1)VPTRAN_BYW;
-    } else {
-        u1_t_tm_type = (U1)VPTRAN_CVT;
-    }
-
-    return (u1_t_tm_type);
+    return ((U1)VPTRAN_BYW);    /* BEV is SBW only */
 }
 
 /*===================================================================================================================================*/
@@ -111,6 +98,7 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  2.1.0    11/30/2021  TA(M)    vptran_sel.c v2.0.1 -> v2.1.0.                                                                     */
 /*  2.2.0    09/30/2022  TA(M)    vptran_sel.c v2.1.0 -> v2.2.0.                                                                     */
 /*  2.3.0    12/15/2023  GM       vptran_sel.c v2.3.0 -> v2.3.0.                                                                     */
+/*  2.4.0     2/10/2025  HF       vptran_sel.c v2.3.0 -> v2.4.0.                                                                     */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision    Date        Author   Change Description                                                                              */
@@ -120,6 +108,7 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  200D-2      10/31/2022  YK       Update Toyota Standard Application(lib_ipc_tycan_v210_r009)                                     */
 /*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
 /*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
+/*  BEV-1       02/10/2025  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                             */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
@@ -127,5 +116,6 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 /*  * TA(M)= Teruyuki Anjima,  NTT Data MSE                                                                                          */
 /*  * YK   = Yuki Kawai,       Denso Techno                                                                                          */
 /*  * GM   = Glen Monteposo,   DTPH                                                                                                  */
+/*  * HF   = Hinari Fukamachi, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

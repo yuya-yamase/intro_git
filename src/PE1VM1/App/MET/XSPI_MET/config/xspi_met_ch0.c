@@ -278,7 +278,7 @@
 #define XSPI_MCUID_MINMAXCHK_NUM            (5U)
 #define XSPI_EVSCHG_TMCHG_LINK_SIZE         (EVSCHG_TIMCHG_SCHDINFO_SIZE)
 
-#define XSPI_VDF_AREA_SIZE                  (7U)
+#define XSPI_VDF_AREA_SIZE                  (9U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -461,6 +461,9 @@ static inline void    vd_s_XSpiCfgTxPowerMd(       U4 * u4_ap_pdu_tx) {
 #if 0   /* BEV BSW provisionally */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF) << 5);      /* CAN_MOVE_FLAG                             */
 #endif
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdIgnpOn() << 7);                              /* IGP_ON                                    */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdPbaOn() << 8);                               /* BA ON                                     */
+    u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehspdGetStopFlg() << 9);                            /* STOP_JDG_FLAG                             */
 }
 
 static inline void    vd_s_XSpiCfgTxTripCnt(       U4 * u4_ap_pdu_tx) {} /* @@Stub */
@@ -563,6 +566,12 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     vd_s_XSpiCfgEsopt(&u4_ap_pdu_tx[4]);
 
+    u4_ap_pdu_tx[9] |= (U4)TRUE << 17;                                 /*  SYS_MOP                  */ /* BEV SV1 provisionally */
+
+    u4_ap_pdu_tx[11] |= (U4)TRUE << 7;                                 /*  SYS_PERSET               */ /* BEV SV1 provisionally */
+    u4_ap_pdu_tx[11] |= (U4)TRUE << 9;                                 /*  SYS_EPS_EPSSBW           */ /* BEV SV1 provisionally */
+    u4_ap_pdu_tx[12] |= (U4)TRUE;                                      /*  SYS_SW_OBBPBD            */ /* BEV SV1 provisionally */
+
     u1_t_var_ecojdg_type = u1_g_VardefEcoJudge();
     u4_ap_pdu_tx[13]  = ((U4)u1_t_var_ecojdg_type & (U4)0x01U) << 9;   /*  VAR_ECOJDG_TYPE                                      */
 
@@ -617,6 +626,8 @@ static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[4] = u4_tp_xspi_esopt[4];
     u4_ap_pdu_tx[5] = u4_tp_xspi_esopt[5];
     u4_ap_pdu_tx[6] = u4_tp_xspi_esopt[6];
+    u4_ap_pdu_tx[7] = u4_tp_xspi_esopt[7];
+    u4_ap_pdu_tx[8] = u4_tp_xspi_esopt[8];
 
 }
 
@@ -2972,6 +2983,8 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  19PFV3-24 07/11/2024 TN       Add Calibration Guard to Unify Vehicle Operation.                                                  */
 /*  19PFv3-24 07/10/2024 YR       Add HCS config                                                                                     */
 /*  19PFv3-25 07/15/2024 AA       Revised LcomIF used for HmiScreenPut                                                               */
+/*  BEV-1     02/10/2025 RO       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-)                                        */
+/*  BEV-2     02/10/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2985,5 +2998,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * TR   = Tebs Ramos, DTPH                                                                                                        */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
+/*  * RO   = Ryo Oohashi, KSE                                                                                                        */
+/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

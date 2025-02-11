@@ -35,19 +35,11 @@
 #define VDF_TSLOT_4                              (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV BSW provisionally */
 #define VDF_EOM_ACC_ON                           (0x0001U)
 #define VDF_EOM_IGR_ON                           (0x0002U)
 #define VDF_EOM_PBA_ON                           (0x0008U)
 #define VDF_EOM_IGP_ON                           (0x0010U)
 #define VDF_EOM_PB_ON                            (0x0080U)
-#else
-#define VDF_EOM_ACC_ON                           (0x00000010U)
-#define VDF_EOM_IGR_ON                           (0x00000040U)
-#define VDF_EOM_PBA_ON                           (0x00000400U)
-#define VDF_EOM_IGP_ON                           (0x00000200U)
-#define VDF_EOM_PB_ON                            (0x00000080U)
-#endif
 
 #define VDF_EOM_VOM_ON                           (0x00ffU)
 
@@ -62,11 +54,6 @@
 #define VDF_MMPROT_21CY_ETH_W_AR                 (3U)                /* 21CY : Ethernet with AR-HUD                                 */
 #define VDF_MMPROT_AUTO                          (255U)              /* Automatic Judgment                                           */
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_NUM_TRNSMSSN                         (3U)
-#define VDF_TRNSMSSN_MT                          (0U)
-#define VDF_TRNSMSSN_AT                          (1U)
-#define VDF_TRNSMSSN_MMT_SMT                     (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -85,7 +72,6 @@ void    vd_g_VardefRstwkInit(void);
 void    vd_g_VardefOpemdEvhk(void);
 void    vd_g_VardefMainTask(void);
 
-U1      u1_g_VardefTrnsmssn(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

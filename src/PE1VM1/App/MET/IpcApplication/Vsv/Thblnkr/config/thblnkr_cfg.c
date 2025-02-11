@@ -1,4 +1,4 @@
-/* 3.1.0 */
+/* 3.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define THBLNKR_CFG_C_MAJOR                      (3)
-#define THBLNKR_CFG_C_MINOR                      (1)
+#define THBLNKR_CFG_C_MINOR                      (2)
 #define THBLNKR_CFG_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -19,12 +19,7 @@
 #include "thblnkr_cfg_private.h"
 #include "vehspd_kmph.h"
 #include "vardef.h"
-#include "iohw_diflt.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "iohw_adc_channel_STUB.h"
-#include "iohw_diflt_sgnl_STUB.h"
-#endif
+#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -56,6 +51,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if (THBLNKR_UNKNOWN != COM_NO_RX)
+#error "thblnkr status bit and com status bit are inconsistent!"
+#endif
 /*===================================================================================================================================*/
 /*  U2    u2_g_ThblnkrVehSpdDsplyd(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -106,57 +104,27 @@ U1      u1_g_ThblnkrCfgSndPrs(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1             u1_g_ThblnkrCfgMTNL(void)                                                                                         */
+/*  U1             u1_g_ThblnkrCfgMTNL(U1 * u1p_a_mtnls_l)                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1             u1_g_ThblnkrCfgMTNL(void)
+U1             u1_g_ThblnkrCfgMTNLS_L(U1 * u1p_a_mtnls_l)
 {
-    U1                       u1_t_raw;
-    U1                       u1_t_mtnl;
-
-    u1_t_raw = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_TURN_L_IN);
-
-    if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_UNKNWN)
-    {
-        u1_t_mtnl = (U1)FALSE;
-    }
-    else if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_ACT) {
-        u1_t_mtnl = (U1)TRUE;
-    }
-    else {/* inact */
-        u1_t_mtnl = (U1)FALSE;
-    }
-
-    return(u1_t_mtnl);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_MTNLS_L, u1p_a_mtnls_l);
+    return((U1)Com_GetIPDUStatus(MSG_BDC1S23_RXCH0));
 }
 
 /*===================================================================================================================================*/
-/*  U1             u1_g_ThblnkrCfgMTNR(void)                                                                                 */
+/*  U1             u1_g_ThblnkrCfgMTNR(U1 * u1p_a_mtnls_r)                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1             u1_g_ThblnkrCfgMTNR(void)
+U1             u1_g_ThblnkrCfgMTNLS_R(U1 * u1p_a_mtnls_r)
 {
-    U1                       u1_t_raw;
-    U1                       u1_t_mtnr;
-
-    u1_t_raw = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_TURN_R_IN);
-
-    if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_UNKNWN)
-    {
-        u1_t_mtnr = (U1)FALSE;
-    }
-    else if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_ACT) {
-        u1_t_mtnr = (U1)TRUE;
-    }
-    else {/* inact */
-        u1_t_mtnr = (U1)FALSE;
-    }
-
-    return(u1_t_mtnr);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_MTNLS_R, u1p_a_mtnls_r);
+    return((U1)Com_GetIPDUStatus(MSG_BDC1S23_RXCH0));
 }
 
 /*===================================================================================================================================*/
@@ -179,6 +147,7 @@ U1             u1_g_ThblnkrCfgMTNR(void)
 /*  2.5.1    10/20/2022  YI       thblnkr.c v2.5.0 -> v2.5.1.                                                                        */
 /*  3.0.0    12/13/2023  KH       thblnkr.c v2.5.1 -> v3.0.0.                                                                        */
 /*  3.1.0    07/03/2024  AA       thblnkr.c v3.0.0 -> v3.1.0.                                                                        */
+/*  3.2.0    10/23/2024  RS       thblnkr.c v3.1.0 -> v3.2.0. (Change for BEV System_Consideration_1)                                */
 /*                                                                                                                                   */
 /*  Revision     Date         Author   Change Description                                                                            */
 /*  ------------ -----------  -------  --------------------------------------------------------------------------------------------- */
@@ -206,5 +175,6 @@ U1             u1_g_ThblnkrCfgMTNR(void)
 /*  * YK   = Yuki Kawai,      Denso Techno                                                                                           */
 /*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
 /*  * AA   = Anna Asuncion,   Denso Techno                                                                                           */
+/*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

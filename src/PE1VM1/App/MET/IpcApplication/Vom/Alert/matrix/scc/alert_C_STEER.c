@@ -1,4 +1,4 @@
-/* 5.2.0 */
+/* 5.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_STEER_C_MAJOR                      (5)
-#define ALERT_C_STEER_C_MINOR                      (2)
+#define ALERT_C_STEER_C_MINOR                      (3)
 #define ALERT_C_STEER_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -71,7 +71,7 @@ static void    vd_s_AlertC_steerRwrnRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U1  u1_sp_ALERT_C_STEER_TT_DST[ALERT_C_STEER_TT_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_C_STEER_TT_FLASH_2HZ,                                        /* 01 FLASH_2HZ                                       */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
     (U1)ALERT_REQ_C_STEER_TT_FLASH_4HZ,                                        /* 02 FLASH_4HZ                                       */
     (U1)ALERT_REQ_C_STEER_TT_ON_R,                                             /* 03 ON_R                                            */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
@@ -518,8 +518,10 @@ static void    vd_s_AlertC_steerRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*  5.1.0     4/ 1/2024  AA       Applied remote warning of EPSW                                                                     */
 /*  5.2.0    04/18/2024  JMH      Updated PTSYS judgement from dedicated to ON/OFF generic                                           */
 /*                                Removed Special processing                                                                         */
+/*  5.3.0    10/11/2024  KO       Change for BEV System_Consideration_1.                                                             */
 /*                                                                                                                                   */
 /*  * DR   = Dyan Reyes, Denso Techno Philippines Inc                                                                                */
 /*  * JMH  = James Michael Hilarion, Denso Techno Philippines Inc.                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

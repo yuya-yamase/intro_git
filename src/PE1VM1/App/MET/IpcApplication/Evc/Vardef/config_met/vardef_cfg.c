@@ -18,7 +18,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef_cfg_private.h"
 #include "vardef_dest_cfg_private.h"
-#include "vardef_ptsrx_cfg_private.h"
 #include "vardef_ptsrx_milreq_cfg_private.h"
 #include "vardef_ds2e.h"
 #include "vardef_mmmthd_cfg_private.h"
@@ -90,12 +89,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#ifdef VARDEF_PTS_RX_H
-const U2                u2_g_VDF_PTS_RX_RIM_U1       = (U2)RIMID_U1_VDF_PTSYS;
-
-const U1                u1_g_VDF_PTS_RX_RXC_INT  = (U1)OXCAN_RX_RXEV_CNT_UNK;
-const U1                u1_g_VDF_PTS_RX_RXC_MAX  = (U1)OXCAN_RX_RXEV_CNT_MAX;
-#endif /* #ifdef VARDEF_PTS_RX_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef VARDEF_PTS_RX_MILREQ_H
@@ -116,9 +109,6 @@ const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RX_RXEV_CNT_MAX;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                u2_g_VDF_MT_CH                  = (U2)VDF_ESO_CH_MT;
-const U2                u2_g_VDF_AT_CH                  = (U2)VDF_ESO_CH_AT;
-const U2                u2_g_VDF_MMT_SMT_CH             = (U2)VDF_ESO_CH_MMT_SMT;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -134,7 +124,6 @@ void    vd_g_VardefCfgBonInit(void)
     vd_g_VardefEsOptBonInit();
     vd_g_VardefDestBonInit();
 
-    vd_g_VardefPtsRxBonInit();
     vd_g_VardefPtsRxMilreqBonInit();
     vd_g_VardefDs2EInit();
     vd_g_VardefMmMthdBonInit();
@@ -152,7 +141,6 @@ void    vd_g_VardefCfgRstwkInit(void)
     vd_g_VardefEsOptRstwkInit();
     vd_g_VardefDestRstwkInit();
 
-    vd_g_VardefPtsRxRstwkInit();
     vd_g_VardefPtsRxMilreqRstwkInit();
     vd_g_VardefDs2EInit();
     vd_g_VardefMmMthdRstwkInit();
@@ -168,7 +156,6 @@ void    vd_g_VardefCfgRstwkInit(void)
 void    vd_g_VardefCfgOpemdEvhk(const U2 u2_a_EOM)
 {
     vd_g_VardefEsOptOpemdEvhk(u2_a_EOM);
-    vd_g_VardefPtsRxOpemdEvhk(u2_a_EOM);
     vd_g_VardefPtsRxMilreqOpemdEvhk(u2_a_EOM);
     vd_g_VardefHcsOpemdEvhk(u2_a_EOM);
 }
@@ -184,7 +171,6 @@ void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT)
 
     if(u1_a_TSLOT == (U1)VDF_TSLOT_2){
         vd_g_VardefDestMainTask();                    /* vd_g_VardefDestMainTask shall be invoked every 100 milliseconds        */
-        vd_g_VardefPtsRxMainTask(u2_a_EOM);           /* vd_g_VardefPtsRxMainTask shall be invoked every 100 milliseconds       */
         vd_g_VardefPtsRxMilreqMainTask(u2_a_EOM);     /* vd_g_VardefPtsRxMilreqMainTask shall be invoked every 100 milliseconds */
         vd_g_VardefNavSpdLmtMainTask(u2_a_EOM);       /* vd_g_VardefNavSpdLmtMainTask shall be invoked every 100 milliseconds   */
         vd_g_VardefHcsMainTask(u2_a_EOM);
@@ -229,30 +215,6 @@ U2      u2_g_VardefCfgEomchk(void)
 
     return(u2_t_eom);
 }
-
-#ifdef VARDEF_PTS_RX_H
-
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
-{
-#ifdef ComConf_ComSignal_PTSYS
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PTSYS, u1_ap_ptsys_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0));
-#else
-    (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_1F_NRX;
-    return((U1)OXCAN_RX_RXEV_CNT_UNK);
-#endif
-}
-/*===================================================================================================================================*/
-
-
-#endif /* #ifdef VARDEF_PTS_RX_H */
 
 #ifdef VARDEF_PTS_RX_MILREQ_H
 
@@ -418,6 +380,7 @@ U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 /*  19pfv3-5   5/02/2024 GM       Delete Database Field by PID items for 19pfv3                                                      */
 /*  19pfv3-6   5/28/2024 TN(DT)   Delete Grade module for 19pfv3                                                                     */
 /*  19PFv3-7   7/10/2024 YR       Added HCS for 19pfv3                                                                               */
+/*  BEV-1      2/06/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
@@ -433,5 +396,6 @@ U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 /*  * GM     = Glen Monteposo, DTPH                                                                                                  */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * YR     = Yhana Regalario, DTPH                                                                                                 */
+/*  * SF     = Shiro Furui, Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

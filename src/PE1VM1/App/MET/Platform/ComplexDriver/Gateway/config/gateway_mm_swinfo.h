@@ -1,4 +1,4 @@
-/* 1.5.0 */
+/* 1.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GATEWAY_MM_SWINFO_H_MAJOR             (1)
-#define GATEWAY_MM_SWINFO_H_MINOR             (5)
+#define GATEWAY_MM_SWINFO_H_MINOR             (6)
 #define GATEWAY_MM_SWINFO_H_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -22,16 +22,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GATEWAY_MM_DRVMD_NUM                        (7U)                     /*  Drive Mode Number        */
+#define GATEWAY_MM_DRVMD_NUM                        (6U)                     /*  Drive Mode Number        */
 
 /* Please refer to JSON file for order */
 #define GATEWAY_MM_BSMM_SW                          (0U)                     /*  BBMS SW                  */
 #define GATEWAY_MM_CSRM_SW                          (1U)                     /*  CSRM SW                  */
 #define GATEWAY_MM_ACINV_SW                         (2U)                     /*  ACINV SW                 */
-#define GATEWAY_MM_HOFDIOPE                         (3U)                     /*  HOFDIOPE                 */
-#define GATEWAY_MM_RG_MD_SW                         (4U)                     /*  RG_MD_SW                 */
-#define GATEWAY_MM_MRMRQSW                          (5U)                     /*  MRMRQSW                  */
-#define GATEWAY_MM_MRMRQBK                          (6U)                     /*  MRMRQBK                  */
+#define GATEWAY_MM_RG_MD_SW                         (3U)                     /*  RG_MD_SW                 */
+#define GATEWAY_MM_MRMRQSW                          (4U)                     /*  MRMRQSW                  */
+#define GATEWAY_MM_MRMRQBK                          (5U)                     /*  MRMRQBK                  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

@@ -123,38 +123,6 @@ void    vd_g_VardefMainTask(void)
     u1_s_vdf_tslot_cnt++;
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_VardefTrnsmssn(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefTrnsmssn(void)
-{
-    U1 u1_t_trnsmssn;
-    U1 u1_t_mt;
-    U1 u1_t_at;
-    U1 u1_t_mmt_smt;
-
-    u1_t_mt      = u1_g_VardefEsOptAvaByCh(u2_g_VDF_MT_CH);
-    u1_t_at      = u1_g_VardefEsOptAvaByCh(u2_g_VDF_AT_CH);
-    u1_t_mmt_smt = u1_g_VardefEsOptAvaByCh(u2_g_VDF_MMT_SMT_CH);
-
-    if(u1_t_mt           == (U1)TRUE){
-        u1_t_trnsmssn = (U1)VDF_TRNSMSSN_MT;
-    }
-    else if(u1_t_at      == (U1)TRUE){
-        u1_t_trnsmssn = (U1)VDF_TRNSMSSN_AT;
-    }
-    else if(u1_t_mmt_smt == (U1)TRUE){
-        u1_t_trnsmssn = (U1)VDF_TRNSMSSN_MMT_SMT;
-    }
-    else{
-        u1_t_trnsmssn = (U1)VDF_TRNSMSSN_MT;
-    }
-
-    return(u1_t_trnsmssn);
-}
-/*===================================================================================================================================*/
 /*  static void         vd_s_VardefSendMMProt(const U2 u2_a_EOM)                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -197,9 +165,12 @@ static void         vd_s_VardefSendMMProt(const U2 u2_a_EOM)
 /*  2.1.0     9/28/2020  SF       Add Send MmProtocol IF / Notify Transmission IF.                                                   */
 /*  2.2.0     1/25/2021  SF       MMT_SMT add to transmission IF.                                                                    */
 /*  2.3.0     5/02/2024  GM       Delete DbfByPid and Pid process.                                                                   */
+/*  2.3.0-BEV-1                                                                                                                      */
+/*            2/06/2025  SF       Setting for BEV System_Consideration_1.                                                            */
 /*                                                                                                                                   */
 /*  * TN = Takashi Nagai, DENSO                                                                                                      */
 /*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
 /*  * GM = Glen Monteposo, DTPH                                                                                                      */
+/*  * SF = Shiro Furui, DENSO TECHNO                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

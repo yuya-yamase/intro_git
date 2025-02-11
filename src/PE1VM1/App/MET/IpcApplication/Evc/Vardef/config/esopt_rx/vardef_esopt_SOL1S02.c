@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_ASC1S90_C_MAJOR             (2)
-#define VARDEF_ESOPT_ASC1S90_C_MINOR             (4)
-#define VARDEF_ESOPT_ASC1S90_C_PATCH             (0)
+#define VARDEF_ESOPT_SOL1S02_C_MAJOR             (2)
+#define VARDEF_ESOPT_SOL1S02_C_MINOR             (5)
+#define VARDEF_ESOPT_SOL1S02_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_ASC1S90_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_ASC1S90_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_ASC1S90_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_ASC1S90.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_SOL1S02_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_SOL1S02_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_SOL1S02_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_SOL1S02.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -49,46 +49,20 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_VHCL_HCTRL(void)                                                                                        */
+/*  U1      u1_g_VdfEsoRx_SOLCHG(void)                                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:        u1_t_ava_rx                                                                                                       */
+/*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_VHCL_HCTRL(void)
+U1      u1_g_VdfEsoRx_SOLCHG(void)
 {
-    static const U1 u1_s_VDF_ESO_SW_VHCL_HCTRL = (U1)1U;
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ASCSTPF1, &u1_t_rx);
-    if (u1_t_rx == u1_s_VDF_ESO_SW_VHCL_HCTRL) {
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else {
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_ACCESS_MODE(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:        u1_t_ava_rx                                                                                                       */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_ACCESS_MODE(void)
-{
-    static const U1 u1_s_VDF_ESO_SW_ACCESS_MODE = (U1)1U;
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ASCSTPF2, &u1_t_rx);
-    if(u1_t_rx == u1_s_VDF_ESO_SW_ACCESS_MODE){
+    (void)Com_ReceiveSignal(ComConf_ComSignal_SOL, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -106,20 +80,12 @@ U1      u1_g_VdfEsoRx_SW_ACCESS_MODE(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.0.0     3/ 2/2020  TN       NEW!                                                                                               */
-/*  2.1.0     9/28/2020  SF       vardef_esopt.c v2.0.0 -> v2.1.0                                                                    */
-/*  2.2.0     1/25/2021  SF       vardef_esopt.c v2.1.0 -> v2.2.0                                                                    */
-/*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
-/*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
+/*  2.5.0    1/10/2024   KO      Newly Created                                                                                       */
+/*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  19PFv3   07/08/2024  YR       Newly created                                                                                      */
+/*  BEV      1/10/2025   KO      Added function of H_SOLCHG for BEV                                                                  */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SF = Seiya Fukutome, DENSO TECHNO                                                                                              */
-/*  * AT = Ayano Tomimoto, KSE                                                                                                       */
-/*  * RO = Reiya Okuda, KSE                                                                                                          */
-/*  * YR = Yhana Regalario, DTPH                                                                                                     */
-/*                                                                                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*===================================================================================================================================*/

@@ -1,4 +1,4 @@
-/* 2.4.0 */
+/* 2.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_ESOPT_RX_H_MAJOR                  (2)
-#define VARDEF_ESOPT_RX_H_MINOR                  (4)
+#define VARDEF_ESOPT_RX_H_MINOR                  (5)
 #define VARDEF_ESOPT_RX_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -56,11 +56,6 @@ U1      u1_g_VdfEsoRx_P_DPTZ(void);
 U1      u1_g_VdfEsoRx_ADIEXIST(void);
 U1      u1_g_VdfEsoRx_SW_DM_CAMERA(void);
 U1      u1_g_VdfEsoRx_SW_WRN_SEN(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_ASC1S90.c */
-U1      u1_g_VdfEsoRx_SW_VHCL_HCTRL(void);
-U1      u1_g_VdfEsoRx_SW_ACCESS_MODE(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_AVN1S30.c */
@@ -194,22 +189,21 @@ U1      u1_g_VdfEsoRx_SW_ACINV_7200W(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_EHV1S99.c */
-U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQR(void);
-U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQA(void);
+U1      u1_g_VdfEsoRx_EVMIL_RED(void);
+U1      u1_g_VdfEsoRx_EVMIL_AMBER(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ENG1G13.c */
-U1      u1_g_VdfEsoRx_ECOFLAG(void);
-U1      u1_g_VdfEsoRx_DSC(void);
-U1      u1_g_VdfEsoRx_MT(void);
-U1      u1_g_VdfEsoRx_AT(void);
-U1      u1_g_VdfEsoRx_MMT_SMT(void);
 U1      u1_g_VdfEsoRx_PTS_MILREQ(void);
 U1      u1_g_VdfEsoRx_SGAUGE(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ENG1G97.c */
 U1      u1_g_VdfEsoRx_GPF(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_ENG1S60.c */
+U1      u1_g_VdfEsoRx_DSC(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_ENG1S98.c */
@@ -273,7 +267,6 @@ U1      u1_g_VdfEsoRx_SW_SHADING_AREA(void);
 U1      u1_g_VdfEsoRx_SW_LTA(void);
 U1      u1_g_VdfEsoRx_SW_LTA_HOFDI(void);
 U1      u1_g_VdfEsoRx_SW_LTA_NA(void);
-U1      u1_g_VdfEsoRx_HOF_EXT(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_FWD1S10.c */
@@ -330,12 +323,12 @@ U1      u1_g_VdfEsoRx_TPMS(void);
 U1      u1_g_VdfEsoRx_TPMSCHN(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_SBW1G01.c */
-U1      u1_g_VdfEsoRx_SBW(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_SCS1S90.c */
 U1      u1_g_VdfEsoRx_AVSEXT(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_SOL1S02.c */
+U1      u1_g_VdfEsoRx_SOLCHG(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_SW_BATCSW.c */
@@ -353,11 +346,38 @@ U1      u1_g_VdfEsoRx_SW_PNCCUS(void);
 /* vardef_esopt_VSC1S95.c */
 U1      u1_g_VdfEsoRx_VSC(void);
 U1      u1_g_VdfEsoRx_BRKHLD(void);
-U1      u1_g_VdfEsoRx_ECB(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_VSC1S96.c */
 U1      u1_g_VdfEsoRx_BRPADW(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_ZN11S19.c */
+U1      u1_g_VdfEsoRx_SW_OMRBB(void);
+U1      u1_g_VdfEsoRx_SW_OMRBB_MLRSEL(void);
+U1      u1_g_VdfEsoRx_SW_OMRBB_REVERSE(void);
+U1      u1_g_VdfEsoRx_SW_OMRBB_AUTO(void);
+U1      u1_g_VdfEsoRx_SW_OMRBB_NONAUTO(void);
+U1      u1_g_VdfEsoRx_SW_OBBPWL(void);
+U1      u1_g_VdfEsoRx_SW_SERVICE_POS(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_AUT(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_HED(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_TAL(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_TAL_DBL(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_DRLOFF(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_OFF(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_OFF_DBL(void);
+U1      u1_g_VdfEsoRx_SW_HEDLMP_DRL(void);
+U1      u1_g_VdfEsoRx_SW_FRONT_FOG(void);
+U1      u1_g_VdfEsoRx_SW_REAR_FOG(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* vardef_esopt_ZN11S26.c */
+U1      u1_g_VdfEsoRx_SW_RAINDROP_SENSOR(void);
+U1      u1_g_VdfEsoRx_SW_INTTIME_AJUST(void);
+U1      u1_g_VdfEsoRx_SW_REAR_WIPER(void);
+U1      u1_g_VdfEsoRx_SW_REAR_WIPER_INT(void);
+U1      u1_g_VdfEsoRx_SW_REAR_WASHER(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
