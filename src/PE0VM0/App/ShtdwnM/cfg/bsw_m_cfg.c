@@ -175,7 +175,7 @@ U1      u1_g_BswMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 }
 static U1             u1_s_BswMCfgIsShtdwnOk(void)
 {
-    return(u1_s_bsw_m_shtdwnok);
+    return((U1)TRUE);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
