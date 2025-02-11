@@ -40,7 +40,7 @@
 #pragma ghs section rodata  = ".app_product_const"
 const U1    u1_gp_PRDCT_REL_VN[PRDCT_REL_VN_NBYTE] = {
     (U1)0x00U,
-    (U1)0x0EU
+    (U1)0x0FU
 };
 #pragma ghs section rodata  = default
 
