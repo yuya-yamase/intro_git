@@ -34,6 +34,10 @@
 #include "odo_om_rst_if.h"
 #include "vptran_sel_typ.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 #include "vardef.h"
 #include "rim_ctl.h"
 #if 0   /* BEV BSW provisionally */
@@ -368,8 +372,6 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
 {
     static const ST_HMIPUTXT_ESOPT st_sp_HMIPUTXT_ESOPT[] = {
-        {    (U2)52U,     (U2)VDF_ESO_CH_EPB      },
-        {    (U2)70U,     (U2)VDF_ESO_CH_ECB      },
         {    (U2)308U,    (U2)VDF_ESO_CH_DSC      },
         {    (U2)314U,    (U2)VDF_ESO_CH_AUTOP    },
         {    (U2)394U,    (U2)VDF_ESO_CH_OILMNT   },
@@ -384,7 +386,6 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
     static const U2 u2_s_HMIPUTXT_ID_T120 = (U2)306U;
     static const U2 u2_s_HMIPUTXT_ID_TMNT_15 = (U2)486U;
     static const U2 u2_s_HMIPUTXT_ID_TMNT_16 = (U2)386U;
-    static const U2 u2_s_HMIPUTXT_ID_PKBWAR = (U2)1107U;
 
     U1              u1_t_dest;
     U1              u1_t_bufpos;
@@ -404,14 +405,6 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
             u4_t_mask   = u4_s_HmiPuTxtIdx2Mask(st_sp_HMIPUTXT_ESOPT[u4_t_loop].u2_id , &u1_t_bufpos);
             u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
         }
-    }
-
-    /* PKBWAR */
-     u1_t_pkbwar = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_EPB);
-        if(u1_t_pkbwar == (U1)TRUE){
-        u1_t_bufpos = (U1)0U;
-        u4_t_mask   = u4_s_HmiPuTxtIdx2Mask(u2_s_HMIPUTXT_ID_PKBWAR, &u1_t_bufpos);
-        u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
     }
 
     /* T120 */

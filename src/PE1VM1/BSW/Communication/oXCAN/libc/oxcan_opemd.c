@@ -103,15 +103,12 @@ U4      u4_g_oXCANOpemdSyschk(const U1 u1_a_TIE)
 
     U4           u4_t_sys_chk;
 
-/*    u2_t_sys_chk = (U2)OXCAN_SYS_BAT;*/
+    u4_t_sys_chk = (U4)0U;
     u4_t_mdbit   = u4_g_oXCANOpemdCfgMdfield();
-
-    u4_t_sys_chk = (U4)(u4_t_mdbit & (U4)0x00000001);
-
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_OPEMD_NUM_CHK; u4_t_lpcnt++){
 
-        u4_t_vom_chk = u4_t_mdbit & (U4)st_gp_OXCAN_OPEMD_CHK[u4_t_lpcnt].u2_vom_chk; 
-        u4_t_tim_run = (U4)st_gp_OXCAN_OPEMD_CHK[u4_t_lpcnt].u2_tim_run;
+        u4_t_vom_chk = u4_t_mdbit & st_gp_OXCAN_OPEMD_CHK[u4_t_lpcnt].u4_vom_chk; 
+        u4_t_tim_run = st_gp_OXCAN_OPEMD_CHK[u4_t_lpcnt].u4_tim_run;
         if(u4_t_vom_chk != u4_t_tim_run){
             u2_sp_oxcan_opemd_tim_elpsd[u4_t_lpcnt] = (U2)OXCAN_OPEMD_TIM_INA;
         }
@@ -128,7 +125,7 @@ U4      u4_g_oXCANOpemdSyschk(const U1 u1_a_TIE)
             else{
                 /* no processing */
             }
-            u4_t_sys_chk |= (U4)st_gp_OXCAN_OPEMD_CHK[u4_t_lpcnt].u2_sys_act;
+            u4_t_sys_chk |= st_gp_OXCAN_OPEMD_CHK[u4_t_lpcnt].u4_sys_act;
         }
     }
 

@@ -31,6 +31,10 @@
 #include "locale.h"
 #include "unitconvrt.h"
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 #include "ptsctmp_cel.h"
 #if 0   /* BEV BSW provisionally */
 #include "flid_open.h"

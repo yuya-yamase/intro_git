@@ -117,7 +117,7 @@ void    vd_g_FspomgrWkupInit(void)
 void    vd_g_FspoOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 {
     U4                      u4_t_ign_chk;
-
+#if 0   /* BEV BSW provisionally */
     u4_t_ign_chk = u4_a_EVBIT & ((U4)VEH_OPEMD_EVTBIT_IGN_TO_ON  |
                                  (U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF  );
 
@@ -130,6 +130,19 @@ void    vd_g_FspoOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
     else{
         /* Nothing */
     }
+#else
+    u4_t_ign_chk = u4_a_EVBIT & ((U4)0x00002020U);
+    
+    if(u4_t_ign_chk == (U4)0x00000020U){
+        vd_s_FspomgrIgon();
+    }
+    else if(u4_t_ign_chk == (U4)0x00002000U){
+        vd_s_FspomgrIgoff();
+    }
+    else{
+        /* Nothing */
+    }
+#endif
 }
 
 /*===================================================================================================================================*/

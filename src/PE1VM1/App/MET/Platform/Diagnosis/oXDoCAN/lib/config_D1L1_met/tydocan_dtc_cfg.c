@@ -49,6 +49,10 @@
 #include "tydocan_evlog_cfg_private.h"
 #endif /* #ifdef TYDOCAN_DTC_MA_CFG_H */
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

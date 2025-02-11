@@ -140,9 +140,9 @@
 #define AR_OS_NUM_ALARMS                                    ((uint16)0x0003U)
 #define AR_OS_NUM_OSAPPLICATIONS                            ((uint16)0x0000U)
 #define AR_OS_NUM_APPMODES                                  ((uint16)0x0001U)
-#define AR_OS_NUM_ISRS                                      ((uint16)0x0003U)
+#define AR_OS_NUM_ISRS                                      ((uint16)0x0002U)
 #define AR_OS_NUM_C1ISRS                                    ((uint16)0x0000U)
-#define AR_OS_NUM_C2ISRS                                    ((uint16)0x0003U)
+#define AR_OS_NUM_C2ISRS                                    ((uint16)0x0002U)
 #define AR_OS_NUM_IOC_COMMUNICATIONS                        ((uint16)0x0000U)
 #define AR_OS_NUM_IOC_RECEIVERS                             ((uint16)0x0000U)
 #define AR_OS_NUM_IOC_SENDERS                               ((uint16)0x0000U)
@@ -190,20 +190,19 @@
  * ISR ID
  */
 /* Category 2 ISRs */
-#define INTSDMAC0CH1_ISR                                    ((uint16)0x0000U)
-#define INTOSTM0_ISR                                        ((uint16)0x0001U)
-#define OS_SYSTEM_COUNTER_ISR0                              ((uint16)0x0002U)
+#define INTOSTM0_ISR                                        ((uint16)0x0000U)
+#define OS_SYSTEM_COUNTER_ISR0                              ((uint16)0x0001U)
 
 
 
 /* Highest Category 2 ISR Priority if any  */
-#define AR_HIGHEST_C2ISR_PRIORITY (-4)
+#define AR_HIGHEST_C2ISR_PRIORITY (-3)
 
 /* OS Execution Priority */
-#define AR_OS_EXEC_PRIORITY       (-4)
+#define AR_OS_EXEC_PRIORITY       (-3)
 
 /* Lowest Category 1 ISR Priority if any  */
-#define AR_LOWEST_C1ISR_PRIORITY  (-5)
+#define AR_LOWEST_C1ISR_PRIORITY  (-4)
 
 
 

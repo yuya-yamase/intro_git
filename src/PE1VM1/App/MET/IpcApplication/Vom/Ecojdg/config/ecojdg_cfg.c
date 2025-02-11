@@ -24,6 +24,10 @@
 #include "oxcan_channel_STUB.h"
 #endif
 #include "veh_opemd.h"
+#if 0   /* BEV BSW provisionally */
+#else
+#include "veh_opemd_xmode_STUB.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -108,7 +112,7 @@ U1          u1_g_EcoJdgCfgScrInst(U1 * u1p_a_id, U1 * u1p_a_scr, U1 * u1p_a_cnt)
 #if defined(OXCAN_PDU_RX_CAN_EHV1S23_RXCH0)
     u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0);
     u1_t_rx_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0,
-                                   (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),
+                                   (U2)(OXCAN_RX_SYS_NRX_PON | OXCAN_RX_SYS_TOE_PON),
                                    (U2)ECOJDG_EHV1S23_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_rx_cnt = (U1)OXCAN_RX_RXEV_CNT_UNK;

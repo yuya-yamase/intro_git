@@ -168,7 +168,7 @@ static U4      u4_s_AlertP_cirmodTtAlcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S98,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_P_CIRMOD_ALC_LSB_MSG);
 
@@ -201,7 +201,7 @@ static U4      u4_s_AlertP_cirmodTtCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_sgnl;
 
     u1_t_msgsts_ect1s80 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1S80_RXCH0,
-                                           (U2)OXCAN_RX_SYS_NRX_IGR,
+                                           (U2)OXCAN_RX_SYS_NRX_POE,
                                            (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk = ((U4)u1_t_msgsts_ect1s80 << u1_s_ALERT_P_CIRMOD_SLCT_MSG);
 
@@ -210,7 +210,7 @@ static U4      u4_s_AlertP_cirmodTtCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_P_CIRMOD_SLCT);
 
     u1_t_msgsts_eng1s99 = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S99_RXCH0,
-                                           (U2)OXCAN_RX_SYS_NRX_IGR,
+                                           (U2)OXCAN_RX_SYS_NRX_POE,
                                            (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  |= ((U4)u1_t_msgsts_eng1s99 << u1_s_ALERT_P_CIRMOD_BXCM_MSG);
 
@@ -237,7 +237,7 @@ static U4      u4_s_AlertP_cirmodPdCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S99_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_P_CIRMOD_PDCM_LSB_MSG);
 
@@ -262,7 +262,7 @@ static U4      u4_s_AlertP_cirmodPdFanSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S99_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_P_CIRMOD_FAN_LSB_MSG);
 

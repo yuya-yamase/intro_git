@@ -179,7 +179,7 @@ static U4      u4_s_AlertP_oillevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u1_t_msgsts   = (U1)COM_NO_RX;
     if((u1_t_ctrl_jdg & (U1)ALERT_ENGTYPE_CAN_VALID) != (U1)0U){
         u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G97,
-                                       (U2)OXCAN_RX_SYS_NRX_IGR,
+                                       (U2)OXCAN_RX_SYS_NRX_POE,
                                        (U2)U2_MAX) & (U1)COM_NO_RX;
 
         (void)Com_ReceiveSignal(ComConf_ComSignal_B_OILLV, &u1_t_sgnl);

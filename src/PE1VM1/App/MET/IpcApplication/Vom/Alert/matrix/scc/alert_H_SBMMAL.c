@@ -168,7 +168,7 @@ static U4      u4_s_AlertH_sbmmalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
 #if defined(OXCAN_PDU_RX_CAN_SBM1F01) /* _117D_CAN_ */
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBM1F01,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_SBMMAL_LSB_SBM1F01);
 #else
@@ -183,7 +183,7 @@ static U4      u4_s_AlertH_sbmmalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
 #if defined(OXCAN_PDU_RX_CAN_SBM1S02) /* _117D_CAN_ */
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBM1S02,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_SBMMAL_LSB_SBM1S02);
 #endif /* defined(OXCAN_PDU_RX_CAN_SBM1S02) */

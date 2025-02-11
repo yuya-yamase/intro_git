@@ -2321,10 +2321,10 @@ static void vd_s_GwcxCfgUpd_CXP_UERR(void)
     U1 u1_t_cxsws1s04_supd;           /*  CXSWS1S04 Variation Support   */
 
     u1_t_cxsws1s02_timeout = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_SWS1S02,
-                                                   (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                                   (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                                    u2_GATEWAY_RXTO_THRSH) & (U1)COM_TIMEOUT;
     u1_t_cxsws1s04_timeout = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_SWS1S04,
-                                                   (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                                   (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                                    u2_GATEWAY_RXTO_THRSH) & (U1)COM_TIMEOUT;
 
     u1_t_cxsws1s02_supd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_CXSWS1S02);
@@ -2352,7 +2352,7 @@ static void vd_s_GwcxCfgUpd_CXP_UERR(void)
     U1 u1_t_cxsws1s02_supd;           /*  CXSWS1S02 Variation Support   */
 
     u1_t_cxsws1s02_timeout = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_SWS1S02,
-                                                   (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                                   (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                                    u2_GATEWAY_RXTO_THRSH) & (U1)COM_TIMEOUT;
 
     u1_t_cxsws1s02_supd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_CXSWS1S02);
@@ -2378,7 +2378,7 @@ static void vd_s_GwcxCfgUpd_CXP_UERR(void)
     U1 u1_t_cxsws1s04_supd;           /*  CXSWS1S04 Variation Support   */
 
     u1_t_cxsws1s04_timeout = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_SWS1S04,
-                                                   (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                                   (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                                    u2_GATEWAY_RXTO_THRSH) & (U1)COM_TIMEOUT;
 
     u1_t_cxsws1s04_supd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_CXSWS1S04);
@@ -2418,7 +2418,7 @@ static void vd_s_GwcxCfgUpd_CXP_ERR(void)
     U1 u1_t_cxmps1s01_supd;           /*  CXMPS1S01 Variation Support   */
 
     u1_t_cxmps1s01_timeout = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_MPS1S01,
-                                                   (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+                                                   (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                                    u2_GATEWAY_RXTO_THRSH) & (U1)COM_TIMEOUT;
 
     u1_t_cxmps1s01_supd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_CXMPS1S01);
@@ -2459,7 +2459,7 @@ static void vd_s_GwcxCfgUpd_CXP_TERR(void)
     U1 u1_t_cxpterr_old;              /*  Signal old Value CXP_TERR     */
 
     u1_t_cxcmb1s05_timeout = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_CMB1S05,
-                                                   (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                                   (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                                    u2_GATEWAY_RXTO_THRSH) & (U1)COM_TIMEOUT;
 
     u1_t_cxcmb1s05_supd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_CXCMB1S05);
@@ -2509,7 +2509,7 @@ static void vd_s_GwcxCfgUpd_CXP_WERR(void)
     U1 u1_t_cxpwerr_old;              /*  Signal old Value CXP_WERR     */
 
     u1_t_cxcmb1s06_timeout = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_CMB1S06,
-                                                   (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                                   (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                                    u2_GATEWAY_RXTO_THRSH) & (U1)COM_TIMEOUT;
 
     u1_t_cxcmb1s06_supd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_CXCMB1S06);
@@ -2559,7 +2559,7 @@ static U1 u1_s_GwcxCfg_CXCMB1S05_Msgsts(void)
     U1 u1_t_msgsts;                     /*  Receive Status              */
 
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_CMB1S05,
-                                        (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                        (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                         u2_GATEWAY_RXTO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_msgsts);
@@ -2595,7 +2595,7 @@ static U1 u1_s_GwcxCfg_CXCMB1S06_Msgsts(void)
     U1 u1_t_msgsts;                     /*  Receive Status              */
 
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CXP_CMB1S06,
-                                        (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                        (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                         u2_GATEWAY_RXTO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_msgsts);
@@ -3433,7 +3433,7 @@ static U1 u1_s_GwcxCfg_BDB1S22_Msgsts(void)
     U1 u1_t_msgsts;                     /*  Receive Status              */
 
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S22,
-                                        (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                        (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                         u2_GATEWAY_BDB1S22_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_msgsts);
@@ -3469,7 +3469,7 @@ static U1 u1_s_GwcxCfg_WIP1S01_Msgsts(void)
     U1 u1_t_msgsts;                     /*  Receive Status              */
 
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_WIP1S01_RXCH0,
-                                        (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT,
+                                        (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
                                         u2_GATEWAY_WIP1S01_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_msgsts);

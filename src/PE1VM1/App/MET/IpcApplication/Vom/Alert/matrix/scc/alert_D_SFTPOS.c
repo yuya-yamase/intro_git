@@ -309,7 +309,7 @@ static U4      u4_s_AlertD_sftposBRjtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_SFTPOS_BC_LSB_ECT);
@@ -356,7 +356,7 @@ static U4      u4_s_AlertD_sftposBRcvtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_D_SFTPOS_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_SFTPOS_LSB_MSGSTS);
 
@@ -413,7 +413,7 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
                                      u2_s_ALERT_D_SFTPOS_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_SFTPOS_LSB_MSGSTS);
 
