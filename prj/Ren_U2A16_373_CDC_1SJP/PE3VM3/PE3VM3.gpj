@@ -19,6 +19,7 @@ primaryTarget=v800_standalone.tgt
 	:macro=IOHW_DIR=${ROOT_DIR}/BSW/IoHwAbstract
 	:macro=APP_DIR=${ROOT_DIR}/App
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
+    :macro=CMPSW_DIR=${PRJ_DIR}/../../CmpSW
 
     # Compile Switch
     # 1Sboard
@@ -27,7 +28,7 @@ primaryTarget=v800_standalone.tgt
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
     :optionsFile=${CMN_DIR}/IOHW.opt
-    :optionsFile=${PRJ_DIR}/PE3VM3_CmpSW.opt
+    :optionsFile=${CMPSW_DIR}/PE3VM3_CmpSW.opt
 
     -I${COMP_DIR}/include/v800
     -I${COMP_DIR}/ansi
