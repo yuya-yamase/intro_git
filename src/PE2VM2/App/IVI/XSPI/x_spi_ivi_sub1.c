@@ -94,7 +94,7 @@ void            vd_g_XspiIviSub1Init(void)
     vd_g_XspiIviSub1PowerInit();
     vd_g_XspiIviSub1SystemInit();
     vd_g_XspiIviSub1CameraInit();
-	vd_g_XspiIviSub1DiagInit();
+    vd_g_XspiIviSub1DiagInit();
 }
 
 /*===================================================================================================================================*/
@@ -232,6 +232,8 @@ static void            vd_s_XspiIviSub1SendCommandPeriCall(void)
     vd_g_XspiIviSub1CameraMainTask();
     vd_g_XspiIviSub1SystemMainTask();
 
+    /*デバイス初期化確認*/
+    vd_g_XspiIviSub1DevInitFinish();
 }
 
 /*===================================================================================================================================*/
@@ -273,7 +275,7 @@ static U1            u1_s_XspiIviSub1SendMISCData(U2 * u2_ap_data_len, U1 * u1_a
     }
     /* MISCメッセージデータの読出しと格納 */
     vd_g_XspiIviQueueGetMiscdata(&u1_ap_xspi_add[8], *u2_ap_data_len);
-	
+
     return (u1_t_data_num);
 
 }
