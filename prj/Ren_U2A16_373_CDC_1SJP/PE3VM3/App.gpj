@@ -3,7 +3,7 @@
     :sourceDir=${APP_DIR}
     :sourceDir=${APP_DIR}/Common/xspi
     :sourceDir=${APP_DIR}/Common/PwrCtrl
-    :sourceDir=${APP_DIR}/Product/config
+    :sourceDir=${APP_DIR}/Product/config_1SJP
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/src
     :sourceDir=${APP_DIR}/Central/LIB
     :sourceDir=${APP_DIR}/Central/Pmic/src
