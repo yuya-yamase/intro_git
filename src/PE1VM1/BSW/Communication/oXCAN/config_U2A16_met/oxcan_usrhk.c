@@ -31,6 +31,13 @@
 
 #include "oxcan_lib.h"
 
+#include "illumi_comtx.h"
+#include "drec_tx.h"
+#include "mulmed_mulfr.h"
+#include "mulmed_color.h"
+#include "datesi_tim.h"
+#include "fspomgr.h"
+#include "mmappctrl.h"
 #include "xspi_met_can.h"
 #if (OXCAN_IC_TJA1145_USE == 1U)
 #include "Cdd_Canic.h"
@@ -70,12 +77,20 @@ typedef struct{
     U2    u2_dio_ch;
 }ST_OXCAN_AUBCS_TRCV;
 
+#if 0   /* BEV BSW provisionally */
+typedef struct{
+    U2               u2_msg;
+    void (* const    fp_vd_HOOK)(const U2 u2_a_MSG);
+}ST_OXCAN_USRHK_MMAPP;
+#else
+#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_MSG);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -303,6 +318,9 @@ void    vd_g_oXCANUsrhkTxConfirm(const U2 u2_a_MSG, const U1 u1_a_CH, const U1 u
     /* -------------------------------------------------------------------------------------------------- */
 
     /* Users Configuration */
+    if(u2_a_MSG == (U2)MSG_MET1S33_TXCH0){
+        vd_g_DateSITimCanTxHk();
+    }
 
     /* Sample Code */
 /*  switch(u2_a_MSG)                        */
@@ -360,6 +378,18 @@ void    vd_g_oXCANUsrhkTxAck(const U2 u2_a_MSG)
 /*      default:                            */
 /*          break;                          */
 /*  }                                       */
+
+    switch (u2_a_MSG) {
+        case (U2)MSG_MET1S01_TXCH0:
+            vd_g_IllumiRheoTxAck();
+            break;
+        default:
+            /* Do nothing */
+            break;
+    }
+
+    vd_g_DrectxTxAck(u2_a_MSG);
+    vd_g_MulmedColorTxHk(u2_a_MSG);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANUsrhkRxMsg(const U2 u2_a_MSG)                                                                                  */
@@ -403,6 +433,39 @@ void    vd_g_oXCANUsrhkRxMsg(const U2 u2_a_MSG)
 /*          break;                                          */
 /*  }                                                       */
 
+    switch (u2_a_MSG) {
+#if 0   /* BEV BSW provisionally */
+        case (U2)MSG_AVN1S30_RXCH0:
+            vd_g_DateSITimCanRxHk();
+            break;
+#else
+#endif
+        case (U2)MSG_ENG1G17_RXCH0:
+            vd_g_FsposnsrCanRxEng1g17();
+            break;
+#if 0   /* BEV BSW provisionally */
+        case (U2)MSG_ENG1S98_RXCH0:
+            vd_g_FsposnsrCanRxEng1s98();
+            break;
+#else
+#endif
+        case (U2)MSG_VSC1G12_RXCH0:
+            vd_g_FsposnsrCanRxVsc1g12();
+            break;
+#if 0   /* BEV BSW provisionally */
+        case (U2)MSG_VSC1G30_RXCH0:
+            vd_g_FsposnsrCanRxVsc1g30();
+            break;
+#else
+#endif
+        default:
+            /* Do nothing */
+            break;
+    }
+    
+    vd_s_oXCANUsrhkMmappRxMsg(u2_a_MSG);
+    
+    vd_g_MulmedMulfrRxTxtHk(u2_a_MSG);
     vd_g_XSpiMETCANGWPushPDU(u2_a_MSG);
 }
 /*===================================================================================================================================*/
@@ -475,6 +538,32 @@ void    vd_g_oXCANUsrhkTxTOut(const U2 u2_a_MSG)
 /*===================================================================================================================================*/
 void    vd_g_oXCANUsrhkDetectBusoff(const U1 u1_a_NW)
 {
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_MSG)                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      --> u2_a_MSG : Message Handler                                                                                   */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_MSG)
+{
+#if 0   /* BEV BSW provisionally */
+    static const ST_OXCAN_USRHK_MMAPP st_sp_OXCAN_USRHK_MMAPP[] = {
+        {(U2)MSG_AVNMS72_RXCH1,    &vd_g_MMAppCtrlNotifyRcvTextMsg  }
+    };
+    static const U4 u4_s_OXCAN_USRHK_MMAPP = ((U4)sizeof(st_sp_OXCAN_USRHK_MMAPP) / (U4)sizeof(ST_OXCAN_USRHK_MMAPP));
+
+    U4 u4_t_lpcnt;
+
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u4_s_OXCAN_USRHK_MMAPP; u4_t_lpcnt++){
+        if(u2_a_MSG == st_sp_OXCAN_USRHK_MMAPP[u4_t_lpcnt].u2_msg){
+            if(st_sp_OXCAN_USRHK_MMAPP[u4_t_lpcnt].fp_vd_HOOK != vdp_PTR_NA){
+                st_sp_OXCAN_USRHK_MMAPP[u4_t_lpcnt].fp_vd_HOOK(u2_a_MSG);
+            }
+        }
+    }
+#else
+#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
