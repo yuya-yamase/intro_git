@@ -162,11 +162,7 @@ void        vd_g_AlertBcmTask(const U1 u1_a_VOM)
             u2_t_src_chk |= (U2)ALERT_BCM_SRC_RDY_ON;
         }
 
-#if 0   /* BEV BSW provisionally */
         u1_t_pts = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_ON);
-#else
-        u1_t_pts = (U1)FALSE;
-#endif
         if(u1_t_pts != (U1)TRUE){
             u2_t_bcm_act |= (U2)ALERT_BCM_PTS;
         }

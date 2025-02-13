@@ -224,11 +224,7 @@ U1      u1_g_MmlangCfgEsichk(void)
 /*===================================================================================================================================*/
 U1      u1_g_MmlangCfgPts(void)
 {
-#if 0   /* BEV BSW provisionally */
     return(u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_LAS));
-#else
-    return((U1)FALSE);
-#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_MmlangCfgLangDBType(void)                                                                                           */
