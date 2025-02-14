@@ -133,7 +133,7 @@ void    vd_g_GatewaymmMainTask(void)
         }
     }
 
-    u1_t_baon  = u1_g_VehopemdPbaOn();
+    u1_t_baon  = u1_g_VehopemdBaOn();
     u1_t_accon = u1_g_VehopemdAccOn();
     u1_t_igron = u1_g_VehopemdIgnOn();
     u1_t_igpon = u1_g_VehopemdIgnpOn();
