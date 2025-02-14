@@ -87,3 +87,4 @@ GyroDevCtl.c
 GNSSCtl.c
 USBCtl.c
 CarSpdPls.c
+PictMuteCtl.c
