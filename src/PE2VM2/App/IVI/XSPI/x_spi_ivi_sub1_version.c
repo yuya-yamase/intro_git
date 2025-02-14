@@ -44,9 +44,13 @@
 #define    XSPI_IVI_VERSION_RES   (0x02U)
 
 #define    XSPI_IVI_VERSION_SIZE  (34U)
+#define    XSPI_IVI_VERSION_DATA  (XSPI_IVI_VERSION_SIZE - 2U)
 #define    XSPI_IVI_VERSION_MAJOR (0x00U)
 #define    XSPI_IVI_VERSION_MINOR (0x01U)
 #define    XSPI_IVI_VERSION_GSEN  (0x10U)
+
+#define    XSPI_IVI_VERSION_MAJOR_DIG (0x04U)    /*メジャー品番桁数*/
+#define    XSPI_IVI_VERSION_MINOR_DIG (0x04U)    /*マイナー品番桁数*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -62,6 +66,7 @@ volatile U4 * const    u4p_s_VERSION_MIN = (volatile U4 *)0x007FFB00U;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void            vd_s_XspiIviSub1_VersionReq(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
 static void            vd_s_XspiIviSub1_VersionDataToQueue(const U1* u1_ap_XSPI_ADD, const U1 u1_a_SIZE);
+static void            vd_s_XspiIviSub1_VersionChangeASCII(U1* u1_ap_XSPI_ADD, const U4 u4_a_VERSION, const U4 u4_a_SIZE);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -126,8 +131,8 @@ void            vd_g_XspiIviSub1VersionAna(const U1 * u1_ap_XSPI_ADD, const U2 u
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviSub1_VersionReq(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE)
 {
-    U1     u1_s_MAJORVERSIZE = (U1)4U;
-    U1     u1_s_MINORVERSIZE = (U1)4U;
+    U1     u1_s_MAJORVERSIZE = (U1)6U;   /*サブタイプ+バージョン情報*/
+    U1     u1_s_MINORVERSIZE = (U1)6U;   /*サブタイプ+バージョン情報*/
     U1     u1_t_verison_type;
     U1     u1_tp_data[XSPI_IVI_VERSION_SIZE];
     U4     u4_t_version;
@@ -140,14 +145,12 @@ static void            vd_s_XspiIviSub1_VersionReq(const U1 * u1_ap_XSPI_ADD, co
     {
     case XSPI_IVI_VERSION_MAJOR:
         u4_t_version = *u4p_s_VERSION_MAJ;
-        u1_tp_data[2] = (U1)(u4_t_version & 0x000000FFU);
-        u1_tp_data[3] = (U1)((u4_t_version & 0x0000FF00U) >> XSPI_IVI_SFT_08);
+        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[2],u4_t_version,(U4)XSPI_IVI_VERSION_MAJOR_DIG);
         vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_MAJORVERSIZE);
         break;
     case XSPI_IVI_VERSION_MINOR:
         u4_t_version = *u4p_s_VERSION_MIN;
-        u1_tp_data[2] = (U1)(u4_t_version & 0x000000FFU);
-        u1_tp_data[3] = (U1)((u4_t_version & 0x0000FF00U) >> XSPI_IVI_SFT_08);
+        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[2],u4_t_version,(U4)XSPI_IVI_VERSION_MINOR_DIG);
         vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_MINORVERSIZE);
         break;
     case XSPI_IVI_VERSION_GSEN:
@@ -156,6 +159,85 @@ static void            vd_s_XspiIviSub1_VersionReq(const U1 * u1_ap_XSPI_ADD, co
     
     default:
         break;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  static void            vd_s_XspiIviSub1_VersionChangeASCII(U1* u1_ap_XSPI_ADD, const U4 u4_a_VERSION, const U4 u4_a_SIZE)        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
+/*                  u2_a_data_size : Data Size                                                                                       */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1_VersionChangeASCII(U1* u1_ap_XSPI_ADD, const U4 u4_a_VERSION, const U4 u4_a_SIZE)
+{
+    U1     u1_tp_data[XSPI_IVI_VERSION_DATA];
+    U4     u4_t_loop;
+    U1     u1_t_ascii_data;
+
+    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)XSPI_IVI_VERSION_DATA);
+    u1_tp_data[0] = (U1)((u4_a_VERSION & 0x000000F0U) >> XSPI_IVI_SFT_04);
+    u1_tp_data[1] = (U1)(u4_a_VERSION & 0x0000000FU);
+    u1_tp_data[2] = (U1)((u4_a_VERSION & 0x0000F000U) >> XSPI_IVI_SFT_12);
+    u1_tp_data[3] = (U1)((u4_a_VERSION & 0x00000F00U) >> XSPI_IVI_SFT_08);
+    u1_t_ascii_data = (U1)0U;
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < u4_a_SIZE; u4_t_loop++){
+        switch (u1_tp_data[u4_t_loop])
+        {
+        case 0x00:
+            u1_t_ascii_data = 0x30U;
+            break;
+        case 0x01:
+            u1_t_ascii_data = 0x31U;
+            break;
+        case 0x02:
+            u1_t_ascii_data = 0x32U;
+            break;
+        case 0x03:
+            u1_t_ascii_data = 0x33U;
+            break;
+        case 0x04:
+            u1_t_ascii_data = 0x34U;
+            break;
+        case 0x05:
+            u1_t_ascii_data = 0x35U;
+            break;
+        case 0x06:
+            u1_t_ascii_data = 0x36U;
+            break;
+        case 0x07:
+            u1_t_ascii_data = 0x37U;
+            break;
+        case 0x08:
+            u1_t_ascii_data = 0x38U;
+            break;
+        case 0x09:
+            u1_t_ascii_data = 0x39U;
+            break;
+        case 0x0A:
+            u1_t_ascii_data = 0x41U;
+            break;
+        case 0x0B:
+            u1_t_ascii_data = 0x42U;
+            break;
+        case 0x0C:
+            u1_t_ascii_data = 0x43U;
+            break;
+        case 0x0D:
+            u1_t_ascii_data = 0x44U;
+            break;
+        case 0x0E:
+            u1_t_ascii_data = 0x45U;
+            break;
+        case 0x0F:
+            u1_t_ascii_data = 0x46U;
+            break;
+        default:
+            break;
+        }
+        u1_ap_XSPI_ADD[u4_t_loop] = u1_t_ascii_data;
     }
 }
 
