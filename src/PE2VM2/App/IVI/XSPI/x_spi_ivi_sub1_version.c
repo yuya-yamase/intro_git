@@ -145,12 +145,12 @@ static void            vd_s_XspiIviSub1_VersionReq(const U1 * u1_ap_XSPI_ADD, co
     {
     case XSPI_IVI_VERSION_MAJOR:
         u4_t_version = *u4p_s_VERSION_MAJ;
-        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[2],u4_t_version,XSPI_IVI_VERSION_MAJOR_DIG);
+        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[2],u4_t_version,(U4)XSPI_IVI_VERSION_MAJOR_DIG);
         vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_MAJORVERSIZE);
         break;
     case XSPI_IVI_VERSION_MINOR:
         u4_t_version = *u4p_s_VERSION_MIN;
-        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[2],u4_t_version,XSPI_IVI_VERSION_MINOR_DIG);
+        vd_s_XspiIviSub1_VersionChangeASCII(&u1_tp_data[2],u4_t_version,(U4)XSPI_IVI_VERSION_MINOR_DIG);
         vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_MINORVERSIZE);
         break;
     case XSPI_IVI_VERSION_GSEN:
