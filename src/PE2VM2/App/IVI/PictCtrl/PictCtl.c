@@ -15,6 +15,7 @@
 #include "x_spi_ivi_sub1_camera.h"
 #include "pictic.h"
 #include "ML86294Ctl.h"
+#include "PictMuteCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -464,7 +465,6 @@ static void vd_s_PictCtl_CamKindNtyChk(void);
 static void vd_s_PictCtl_CamKindNtySnd(void);
 static void vd_s_PictCtl_CamOffMuteOff(void);
 /* 暫定対応 */
-static void fc_PictCtl_MuteMng(U1 u1_a_port);
 static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -1494,8 +1494,8 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
             u1_t_sts = u1_g_Pict_MlI2cMuteSet((U1)PICT_ML_I2C_MUTE_OFF);
             if(u1_t_sts == (U1)TRUE){
                 if(bfg_Ml_Ctl.u1_SyncChkRlt == (U1)PICT_CAM_SYNC_CHK_NG){
-                   /* カメラ切替のPM_BL_MUTE制御実施トリガ */
-                    fc_PictCtl_MuteMng((U1)FALSE);
+                   /* カメラ切替のPM-V-MUTE制御実施トリガ */
+                    vd_g_PictMute_CamMuteReq((U1)FALSE);
                     /* アイドルシーケンスへ遷移 */
                     vd_s_PictCtl_ClrMlSeqInf();
                 }
@@ -1541,8 +1541,8 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
                /* カメラバイパス経路中設定 */
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_BPASS;
             }     
-            /* カメラ切替のPM_BL_MUTE制御実施トリガ */
-            fc_PictCtl_MuteMng((U1)FALSE);
+            /* カメラ切替のPM-V-MUTE制御実施トリガ */
+            vd_g_PictMute_CamMuteReq((U1)FALSE);
 
             /* アイドルシーケンスへ遷移 */
             vd_s_PictCtl_ClrMlSeqInf();
@@ -1579,8 +1579,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             /* カメラ以外へ切替種別設定 */
             vd_s_PictCtl_CamChgOffTypeSet();
 
-            /* カメラ切替のPM_BL_MUTE制御実施トリガ */
-            fc_PictCtl_MuteMng((U1)TRUE);
+            /* タイムアウト判定以外のPM-V-MUTE制御はPictMuteCtlで実施 */
 
             /* 画質モード通知(カメラ)受け取ったフラグOFFにする */
             bfg_Pict_StsMng.u1_RcvCamQualModeFlg = (U1)FALSE;
@@ -1635,8 +1634,8 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
                     (bfg_Pict_StsMng.u1_RcvQualModeFlg == (U1)FALSE)) {
                     /* T_SIP_NOTIF_OUTタイムアウトの場合、 MUTE制御投入 */
                     if(bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_TOUT) {
-                        /* メインマイコン異常でのPM_BL_MUTE制御実施トリガ */
-                        fc_PictCtl_MuteMng((U1)TRUE);
+                        /* メインマイコン異常でのPM-V-MUTE制御実施トリガ */
+                        vd_g_PictMute_CamMuteReq((U1)TRUE);
                     }
                     bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMOFF_STEP3;
                 }
@@ -1744,8 +1743,8 @@ static void vd_s_PictCtl_CamOffMuteOff(void)
 {
     if((u1_s_pict_camoff_muteoff_flg == (U1)TRUE) &&
         (bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_END)){
-         /* PM_BL_MUTE制御実施トリガ */
-         fc_PictCtl_MuteMng((U1)FALSE);
+         /* PM-V-MUTE制御実施トリガ */
+         vd_g_PictMute_CamMuteReq((U1)FALSE);
             u1_s_pict_camoff_muteoff_flg = (U1)FALSE;
         }
 }
@@ -2628,6 +2627,10 @@ static void vd_s_PictCtl_SiPErrChk(void)
     if((u1_s_pict_siperr == (U1)PICT_SIP_ERR_ON) && (u1_s_pict_siperr_old == (U1)PICT_SIP_ERR_OFF)){
         u1_s_pict_siperrchk_step = PICT_SEQ_SIPERRCHK_STEP0;
     }
+    if(u1_s_pict_siperr == (U1)PICT_SIP_ERR_ON){
+        bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg = (U1)PICT_RCV_NOCAMQUAL_STOP;
+        vd_s_PictCtl_ClrTim((U1)PICT_TIMID_ML_T_SIP_NOTIF_OUT);
+    }
     switch (u1_s_pict_siperrchk_step)
     {
         case PICT_SEQ_SIPERRCHK_STEP0:
@@ -3508,12 +3511,6 @@ static void vd_s_PictCtl_CamKindNtySnd(void)
 
     /* カメラ種別判別通知定期送信タイマを再セット */
     vd_s_PictCtl_SetTim((U1)PICT_TIMID_CAMKIND_SENDCYC, (U2)PICT_TIMER_TABCMD_SENDCYC);
-}
-
-/* 映像MUTE対応までの暫定 */
-static void fc_PictCtl_MuteMng(U1 u1_a_port)
-{
-    Dio_WriteChannel((U1)PICT_PORT_PM_V_MUTE, (Dio_LevelType)u1_a_port);
 }
 
 
