@@ -10,6 +10,8 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_GvifSndr.h"
 
+#include "pictic.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -116,6 +118,7 @@ void    gvif3tx_Init( void )
     Mcu_OnStep_GVIF3TX_eDPSET   = (uint8)MCU_STEP_GVIF3TX_eDPSET_1;
     Mcu_OnStep_GVIF3TX_OUTSET   = (uint8)MCU_STEP_GVIF3TX_OUTSET_1;
     //Mcu_OnStep_GVIF3TX_HDCP     = (uint8)
+	Mcu_Gvif_LinkTimer          = (uint32)0U;
     Mcu_OnStep_GVIF3TX_AckTime  = (uint32)0U;
     Mcu_RegStep_GVIF3TX         = (uint16)0U;
 
@@ -235,11 +238,14 @@ static void    Mcu_Dev_Pwron_GvifTx_OverAll_Flow( void )
         break;
 
     case MCU_STEP_GVIF3TX_OVERALL_3:
-        /* 100-4-4.出力設定フロー */
-        mcu_rslt = Mcu_Dev_Pwron_GvifTx_OutSet();
+        /* 映像IC制御仕様の"別体センターディスプレイへの映像出力ON"完了まで待機 */
+        if(Mcu_OnStep_EIZOIC_OVRALL == MCU_STEP_EIZOIC_OVERALL_FIN){
+            /* 100-4-4.出力設定フロー */
+            mcu_rslt = Mcu_Dev_Pwron_GvifTx_OutSet();
 
-        if(mcu_rslt == (uint8)TRUE){
-            Mcu_OnStep_GVIF3TX_OVRALL = MCU_STEP_GVIF3TX_OVERALL_4;
+            if(mcu_rslt == (uint8)TRUE){
+                Mcu_OnStep_GVIF3TX_OVRALL = MCU_STEP_GVIF3TX_OVERALL_4;
+            }
         }
         break;
 
@@ -914,13 +920,11 @@ static uint8   Mcu_Dev_Pwron_GvifTx_OutSet( void )
         break;
     
     case MCU_STEP_GVIF3TX_OUTSET_2:
-        if(Mcu_Gvif_LinkTimer == (uint32)0U){
-            /* レジスタ書込み処理 */
-            /* ToDo：I2Cの説明次第で要変更 */
-            mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_GVIF_TX, &Mcu_RegStep_GVIF3TX, (uint16)MCU_WRINUM_GVIF3TX_OUTSET_1,
-                                                    (uint8)GP_I2C_MA_SLA_3_GVIF_TX, GVIFTX_OUTSET_1, &Mcu_OnStep_GVIF3TX_AckTime,
-                                                    st_sp_MCU_SYS_PWR_GVIFSNDR_OUTSET1, &Mcu_RegSet_BetWaitTime_Stub);
-        }
+        /* レジスタ書込み処理 */
+        /* ToDo：I2Cの説明次第で要変更 */
+        mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_GVIF_TX, &Mcu_RegStep_GVIF3TX, (uint16)MCU_WRINUM_GVIF3TX_OUTSET_1,
+                                                (uint8)GP_I2C_MA_SLA_3_GVIF_TX, GVIFTX_OUTSET_1, &Mcu_OnStep_GVIF3TX_AckTime,
+                                                st_sp_MCU_SYS_PWR_GVIFSNDR_OUTSET1, &Mcu_RegSet_BetWaitTime_Stub);
         if(mcu_sts == (uint8)TRUE){
             /* 全書込み完了したら次状態に遷移 */
             Mcu_OnStep_GVIF3TX_OUTSET = (uint8)MCU_STEP_GVIF3TX_OUTSET_3;
