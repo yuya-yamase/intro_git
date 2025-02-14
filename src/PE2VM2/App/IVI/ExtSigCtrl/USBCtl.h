@@ -28,6 +28,7 @@
 
 #define u1_USB_GET_V33_PERI_ON()                (Dio_ReadChannel(DIO_ID_PORT10_CH2))
 #define u1_USB_GET_ADP_DET(x)                   (u1_g_IoHwAdcRead(ADC_CH_USB_ADP, (x)))
+#define u1_USB_GET_CUR_DET(x)                   (u1_g_IoHwAdcRead(ADC_CH_USB_CUR, (x)))
 
 #define u1_USB_OSCMD_EXTSIG_USB(x)              (vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_USB, (x)))
 #define u1_USB_OSCMD_USB_PD(x)                  (vd_g_XspiIviSub1USBPowSupPut(x))
