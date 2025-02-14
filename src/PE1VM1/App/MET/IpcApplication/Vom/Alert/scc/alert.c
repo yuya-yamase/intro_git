@@ -441,11 +441,7 @@ static U1      u1_s_AlertVomchk(void)
             u1_t_pts_on = u1_g_AlertCfgEcomodeOn();
         }
         else{
-#if 0   /* BEV BSW provisionally */
             u1_t_pts_on = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF);
-#else
-            u1_t_pts_on = (U1)FALSE;
-#endif
         }
 
         if(u1_t_pts_on != (U1)TRUE){

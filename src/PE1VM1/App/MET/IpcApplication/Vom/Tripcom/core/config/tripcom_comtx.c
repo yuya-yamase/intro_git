@@ -396,11 +396,7 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
     }
     u1_t_igsts = u1_g_VehopemdIgnOn();
     if (u1_t_igsts == (U1)TRUE) {
-#if 0   /* BEV BSW provisionally */
         u1_t_ptssts = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF);
-#else
-        u1_t_ptssts = (U1)FALSE;
-#endif
         if (u1_t_ptssts == (U1)TRUE) {
             u1_s_tripcom_tx_drvcyc <<= TRIPCOM_COMTX_PREVSTS_SFT;
             u1_s_tripcom_tx_drvcyc |= (U1)TRUE;
