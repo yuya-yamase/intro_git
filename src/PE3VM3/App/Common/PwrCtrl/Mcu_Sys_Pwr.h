@@ -26,7 +26,7 @@
 /* PWM制御 */
 #define     MCU_SYS_PWM_PERIOD_OFF          (0U)
 /* 周波数：487.804878[kHz], デューティ：50[%], カウントクロック周波数：80[MHz] 分周なし */
-#define     MCU_SYS_PWM_PERIOD              (164U)		/* 80MHz, (1/487.805)*80000 = 163.99[counts] */
+#define     MCU_SYS_PWM_PERIOD              (163U)		/* 80MHz, (1/487.805)*80000 = 163.99[counts] */
 #define 	MCU_SYS_PWM_DUTYCYCLE(i)        ((uint16)(((uint32)(i) * (uint32)PWM_DRV_DUTY_MAX) / (uint32)10000U))
 
 /* SYS電源ON ウェイトタイム設定 */

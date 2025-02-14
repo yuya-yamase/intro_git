@@ -110,7 +110,7 @@ Std_ReturnType Ecu_Intg_mainFuncCddMidIn(void)
 Std_ReturnType Ecu_Intg_mainFuncApp(void)
 {
     vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req(); /* 暫定 */
-    vd_g_Mcu_PwrCtrl_Task1ms();
+    vd_g_Mcu_PwrCtrl_Task();
    /* 暫定：デバイスON制御 */
     Mcu_Dev_Pwron();
     
