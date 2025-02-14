@@ -9,6 +9,8 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_EizoIc.h"
 
+#include "gvif3tx.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -295,14 +297,17 @@ static void     Mcu_Dev_Pwron_EizoIc_SetReg( void )
     switch (Mcu_OnStep_EIZOIC_OVRALL)
     {
     case MCU_STEP_EIZOIC_OVERALL_1:
-        /* レジスタ書込み処理 */
-        mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_VIDEO_IC, &Mcu_RegStep_EIZOIC, (uint16)MCU_WRINUM_EIZOIC_INISET,
-                                                (uint8)GP_I2C_MA_SLA_1_VIDEO_IC, EIZOIC_INISET, &Mcu_OnStep_EIZOIC_AckTime,
-                                                st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT, &Mcu_RegSet_BetWaitTime_Stub);
+        /* GVIF3送信仕様の"eDP設定"完了まで待機 */
+        if(Mcu_OnStep_GVIF3TX_OVRALL == MCU_STEP_GVIF3TX_OVERALL_3){
+            /* レジスタ書込み処理 */
+            mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_VIDEO_IC, &Mcu_RegStep_EIZOIC, (uint16)MCU_WRINUM_EIZOIC_INISET,
+                                                    (uint8)GP_I2C_MA_SLA_1_VIDEO_IC, EIZOIC_INISET, &Mcu_OnStep_EIZOIC_AckTime,
+                                                    st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT, &Mcu_RegSet_BetWaitTime_Stub);
 
-        if(mcu_sts == (uint8)TRUE){
-            /* 全書込み完了 次状態に遷移 */
-            Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_2;
+            if(mcu_sts == (uint8)TRUE){
+                /* 全書込み完了 次状態に遷移 */
+                Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_2;
+            }
         }
         break;
     
