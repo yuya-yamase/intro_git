@@ -118,7 +118,7 @@ void    gvif3tx_Init( void )
     Mcu_OnStep_GVIF3TX_eDPSET   = (uint8)MCU_STEP_GVIF3TX_eDPSET_1;
     Mcu_OnStep_GVIF3TX_OUTSET   = (uint8)MCU_STEP_GVIF3TX_OUTSET_1;
     //Mcu_OnStep_GVIF3TX_HDCP     = (uint8)
-	Mcu_Gvif_LinkTimer          = (uint32)0U;
+    Mcu_Gvif_LinkTimer          = (uint32)0U;
     Mcu_OnStep_GVIF3TX_AckTime  = (uint32)0U;
     Mcu_RegStep_GVIF3TX         = (uint16)0U;
 
