@@ -34,6 +34,7 @@
 #define XSPI_IVI_SFT_02                     ( 2U)
 #define XSPI_IVI_SFT_04                     ( 4U)
 #define XSPI_IVI_SFT_08                     ( 8U)
+#define XSPI_IVI_SFT_12                     (12U)
 #define XSPI_IVI_SFT_16                     (16U)
 #define XSPI_IVI_SFT_24                     (24U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
