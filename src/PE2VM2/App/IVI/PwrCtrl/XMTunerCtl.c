@@ -1,102 +1,145 @@
 /* 0.0.0 */
 /*===================================================================================================================================*/
-/*  Copyright DENSO TECHNO Corporation                                                                                               */
+/*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  IVI PowerControl Main Function                                                                                                   */
+/*  CarSpdPls                                                                                                                        */
+/*                                                                                                                                   */
 /*===================================================================================================================================*/
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Version                                                                                                                          */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVI_PWRCTRL_MAIN_C_MAJOR                    (0)
-#define IVI_PWRCTRL_MAIN_C_MINOR                    (0)
-#define IVI_PWRCTRL_MAIN_C_PATCH                    (0)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include    "IVI_PwrCtrl_Main.h"
-
-#include    "IVI_PwrCtrl_DDFreq.h"
-#include    "GNSSCtl.h"
-#include    "XMTunerCtl.h"
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Version Check                                                                                                                    */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((IVI_PWRCTRL_MAIN_C_MAJOR != IVI_PWRCTRL_MAIN_H_MAJOR) || \
-     (IVI_PWRCTRL_MAIN_C_MINOR != IVI_PWRCTRL_MAIN_H_MINOR) || \
-     (IVI_PWRCTRL_MAIN_C_PATCH != IVI_PWRCTRL_MAIN_H_PATCH))
-#error "IVI_PwrCtrl_Main.c and IVI_PwrCtrl_Main.h : source and header files are inconsistent!"
-#endif
+#include "CarSpdPls.h"
+#include "Dio.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define XMTUNER_BUDET_OFF                   (0U)
+#define XMTUNER_BUDET_ON                    (1U)
+
+#define XMTUNER_BUDET_STEP0                 (0U)
+#define XMTUNER_BUDET_STEP1                 (1U)
+#define XMTUNER_BUDET_STEP2                 (2U)
+#define XMTUNER_BUDET_STEP_FIN              (3U)
+
+#define XMTUNER_WAIT_10MS                   (10U)
+#define XMTUNER_WAIT_5MS                    (5U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define XMTUNER_PORT_BU_DET                 (DIO_ID_PORT0_CH4)
+#define XMTUNER_PORT_PMIC_FAST_POFF_EN_N    (DIO_ID_PORT8_CH0)
+#define XMTUNER_PORT_XM_ON                  (DIO_ID_PORT4_CH10)
+#ifdef XMTUNER_XM_SHDN
+#define XMTUNER_PORT_XM_SHDN                (DIO_ID_PORT11_CH4)
+#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static  U1 u1_s_xmtuner_budetsts;
+static  U1 u1_s_xmtuner_budetflg;
+static  U1 u1_s_xmtuner_offstep;
+static  U1 u1_s_xmtuner_waitcnt;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void    vd_g_XMTuner_Pwroff(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void            vd_g_Ivi_PwrCtrl_Main_Bon_init(void)                                                                             */
+/*  void    vd_g_XMTuner_Init(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    初期化関数(B-ON)                                                                                                  */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_Ivi_PwrCtrl_Main_Bon_init(void)
+void    vd_g_XMTuner_Init(void)
 {
-    /* DDコン制御仕様 */
-    vd_g_Ivi_PwrCtrl_DDFreq_init();
-    vd_g_Gnss_Init();
-    vd_g_XMTuner_Init();
+    u1_s_xmtuner_budetsts = (U1)FALSE;
+    u1_s_xmtuner_budetflg = (U1)XMTUNER_BUDET_OFF;
+	u1_s_xmtuner_offstep = (U1)XMTUNER_BUDET_STEP0;
+	u1_s_xmtuner_waitcnt = (U1)0U;
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_Ivi_PwrCtrl_Main_Wkup_init(void)                                                                            */
+/*  void    vd_g_XMTuner_MainTask(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    初期化関数(WakeUp)                                                                                                */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_Ivi_PwrCtrl_Main_Wkup_init(void)
+void    vd_g_XMTuner_MainTask(void)
 {
-    /* DDコン制御仕様 */
-    vd_g_Ivi_PwrCtrl_DDFreq_init();
-    vd_g_Gnss_Init();
-    vd_g_XMTuner_Init();
+    U1 u1_t_port;
+    
+    u1_t_port = (U1)Dio_ReadChannel(XMTUNER_PORT_BU_DET);
+    if((u1_t_port == (U1)TRUE) && (u1_s_xmtuner_budetsts == (U1)FALSE)){
+        u1_s_xmtuner_budetflg = (U1)XMTUNER_BUDET_ON;
+        u1_s_xmtuner_offstep = (U1)XMTUNER_BUDET_STEP0;
+    }
+    
+    if(u1_s_xmtuner_budetflg == (U1)XMTUNER_BUDET_ON){
+        vd_g_XMTuner_Pwroff();
+    }
+    u1_s_xmtuner_budetsts = u1_t_port;
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_Ivi_PwrCtrl_Main(void)                                                                                      */
+/*  static void    vd_g_XMTuner_Pwroff(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    メインタスク                                                                                                      */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_Ivi_PwrCtrl_Main(void)
+static void    vd_g_XMTuner_Pwroff(void)
 {
-    /* DDコン制御仕様 */
-    vd_g_Ivi_PwrCtrl_DDFreq();
-	vd_g_Gnss_Routine();
-    vd_g_XMTuner_MainTask();
+    U1 u1_t_port;
+    
+    switch(u1_s_xmtuner_offstep)
+    {
+    case XMTUNER_BUDET_STEP0:
+        u1_t_port = (U1)Dio_ReadChannel(XMTUNER_PORT_PMIC_FAST_POFF_EN_N);
+        if(u1_t_port == (U1)FALSE){
+            u1_s_xmtuner_offstep = (U1)XMTUNER_BUDET_STEP1;
+        }
+        break;
+    
+    case XMTUNER_BUDET_STEP1:
+        if(u1_s_xmtuner_waitcnt != (U1)U1_MAX){
+            u1_s_xmtuner_waitcnt++;
+        }
+        if(u1_s_xmtuner_waitcnt >= (U1)XMTUNER_WAIT_10MS){
+#ifdef XMTUNER_XM_SHDN
+            Dio_WriteChannel(XMTUNER_PORT_XM_SHDN, (Dio_LevelType)FALSE);
+#endif
+            u1_s_xmtuner_offstep = (U1)XMTUNER_BUDET_STEP2;
+            u1_s_xmtuner_waitcnt = (U1)0U;
+        }
+        break;
+
+    case XMTUNER_BUDET_STEP2:
+        if(u1_s_xmtuner_waitcnt != (U1)U1_MAX){
+            u1_s_xmtuner_waitcnt++;
+        }
+        if(u1_s_xmtuner_waitcnt >= (U1)XMTUNER_WAIT_5MS){
+            Dio_WriteChannel(XMTUNER_PORT_XM_ON, (Dio_LevelType)FALSE);
+            u1_s_xmtuner_offstep = (U1)XMTUNER_BUDET_STEP_FIN;
+            u1_s_xmtuner_waitcnt = (U1)0U;
+            u1_s_xmtuner_budetflg = (U1)XMTUNER_BUDET_OFF;
+        }
+        break;
+
+    case XMTUNER_BUDET_STEP_FIN:
+    default:
+        u1_s_xmtuner_budetflg = (U1)XMTUNER_BUDET_OFF;
+        break;
+    }
 }
 
 /*===================================================================================================================================*/
@@ -107,12 +150,11 @@ void            vd_g_Ivi_PwrCtrl_Main(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  0.0.0    01/20/2024  TN       New.                                                                                               */
+/*  0.0.0    02/14/2025  TN       New.                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
+/*  * TN   = Tatsuya Niimi, KSE                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
