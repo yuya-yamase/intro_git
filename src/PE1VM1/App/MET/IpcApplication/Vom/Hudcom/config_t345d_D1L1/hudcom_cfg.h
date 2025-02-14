@@ -72,9 +72,8 @@
 #if 0   /* BEV BSW provisionally */
 #define u1_HCOM_GETIG()					((U1)((u4_g_VehopemdMdfield()&(U4)VEH_OPEMD_MDBIT_IGN)>>HCOM_VOM_SHIFT))           /* IG                             */ 
 #else
-#define u1_HCOM_GETIG()					((U1)((u4_g_VehopemdMdfield()&(U4)0x00000002U)>>HCOM_VOM_SHIFT))           /* IG                             */ 
+#define u1_HCOM_GETIG()					((U1)((u4_g_VehopemdConvertMdfield()&(U4)VEH_OPEMD_MDBIT_IGN)>>HCOM_VOM_SHIFT))           /* IG                             */ 
 #endif
-
 #define u1_HCOM_GETMSTWRN()				(u1_g_XSpiCfgRxMstTtSts())                          /* MTC Disp Req                 */
 #define u1_HCOM_GETCNTT()				(u1_g_XSpiGetDspSTM00Cntt())               /* DSP_STM00_CNTT       */
 #define vd_HCOM_CANSGNL_NAV_MASK(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MASK,  (x)))

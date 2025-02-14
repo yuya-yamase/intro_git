@@ -200,30 +200,17 @@ void    vd_g_AlertOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     U4                       u4_t_evt;
     U1                       u1_t_vom_chk;
 
-#if 0   /* BEV BSW provisionally */
     u4_t_mdbit   = u4_a_MDBIT & ((U4)VEH_OPEMD_MDBIT_ACC |
                                  (U4)VEH_OPEMD_MDBIT_IGN |
                                  (U4)VEH_OPEMD_MDBIT_STA);
-#else
-    u4_t_mdbit   = u4_a_MDBIT & ((U4)0x00000007U);
-#endif
 
     u1_t_vom_chk = u1_sp_ALERT_VOM_CHK[u4_t_mdbit];
-#if 0   /* BEV BSW provisionally */
     u4_t_evt     = u4_a_EVTBIT & ((U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF | (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON);
     if(u4_t_evt == (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON){
         u4_s_alert_ign_tm_elpsd  = (U4)U4_MAX;
         u1_t_vom_chk            |= (U1)ALERT_VOM_BAT_WT;
     }
     else if(u4_t_evt == (U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF){
-#else
-    u4_t_evt     = u4_a_EVTBIT & ((U4)0x00002000U | (U4)0x00000020U);
-    if(u4_t_evt == (U4)0x00000020U){
-        u4_s_alert_ign_tm_elpsd  = (U4)U4_MAX;
-        u1_t_vom_chk            |= (U1)ALERT_VOM_BAT_WT;
-    }
-    else if(u4_t_evt == (U4)0x00002000U){
-#endif
         u4_s_alert_ign_tm_elpsd  = (U4)U4_MAX;
         u4_s_alert_bslp_tm_elpsd = (U4)U4_MAX;
         u1_t_vom_chk            |= ((U1)ALERT_VOM_BAT_WT | (U1)ALERT_VOM_IGN_OFF_WT);
@@ -426,7 +413,9 @@ static U1      u1_s_AlertVomchk(void)
                                              (U4)VEH_OPEMD_MDBIT_IGN |
                                              (U4)VEH_OPEMD_MDBIT_STA);
 #else
-    u4_t_mdbit   = u4_g_VehopemdMdfield() & ((U4)0x00000007U);
+    u4_t_mdbit   = u4_g_VehopemdConvertMdfield() & ((U4)VEH_OPEMD_MDBIT_ACC |
+                                             (U4)VEH_OPEMD_MDBIT_IGN |
+                                             (U4)VEH_OPEMD_MDBIT_STA);
 #endif
 
     u1_t_vom_chk = u1_sp_ALERT_VOM_CHK[u4_t_mdbit];
