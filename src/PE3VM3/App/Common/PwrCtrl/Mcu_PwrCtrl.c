@@ -49,9 +49,6 @@
 #define MCU_PWRCTRL_DIO_READ_CHK_NG      (0xFF) /* 時間超過or異常応答 */
 
 #define MCU_PWRCTRL_BUSSLEEPTIME       (12000u) /* 60sec/5ms周期 */
-#define MCU_PWRCTRL_MM_OFF_REQ_CHKTIME  (4u)     /* 20ms/5ms周期 */
-#define MCU_PWRCTRL_MM_OFF_REQ_CHKTIME_INVALID (0xFFFFFFFFu)
-
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -74,8 +71,8 @@ static uint8 u1_s_Mcu_PwrCtrl_NonRednPwrSts;              /* 非冗長電源状態 */
 static uint8 u1_s_Mcu_PwrCtrl_SipPwrSts;                  /* SiP電源状態    */
 
 static uint8 u1_s_Mcu_PwrCtrl_ShtdwnOkFlag;
+static uint8 u1_s_Mcu_PwrCtrl_BusSleepFlag;
 static uint32 u4_s_Mcu_PwrCtrl_BusSleep_Time;
-static uint32 u4_s_Mcu_PwrCtrl_MM_OFF_REQ_Chk_Time;
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -107,7 +104,6 @@ void vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req(Ecu_Intg_BootCauseType u4BootCause)
     case ECU_INTG_u4BTCAUSE_PON:            /* +B ON */
 #endif
         u1_s_Mcu_PwrCtrl_ShtdwnOkFlag = (U1)MCU_SYS_PWR_OFF; /* 暫定 */
-        u4_s_Mcu_PwrCtrl_MM_OFF_REQ_Chk_Time = MCU_PWRCTRL_MM_OFF_REQ_CHKTIME_INVALID;
         Mcu_Main_Bon_Init();                /* SYS電源 非常長電源 +B初期化要求 */
         Mcu_Sip_Bon_Init();                 /* SiP電源状態+B初期化要求 */
         /* +B-ONシーケンス実施要求 */
@@ -163,26 +159,13 @@ void vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req(void)
         mcu_boot = Dio_ReadChannel(DIO_ID_PORT0_CH2);
 
         if(mcu_boot == STD_LOW){                                        /* BOOT=Loを検知 */
-            (void)Dio_WriteChannel(DIO_ID_PORT17_CH2, MCU_DIO_HIGH);
-            u4_s_Mcu_PwrCtrl_MM_OFF_REQ_Chk_Time = (U4)0u;
-#if 0
             /* ★要検討★処理実行中は要求を受け付けない */
-            if(u1_s_Mcu_PwrCtrl_Sts == MCU_PWRCTRL_NO_REQ){
+            if((u1_s_Mcu_PwrCtrl_Sts == MCU_PWRCTRL_NO_REQ)&&(u1_s_Mcu_PwrCtrl_BusSleepFlag == (U1)MCU_SYS_PWR_ON)){
                 u1_s_Mcu_PwrCtrl_Sts = MCU_PWRCTRL_SIPOFF_MCUSTANDBY_REQ;
                 vd_s_Mcu_PwrCtrl_Start_Set();
                 EthSW_PowerOff_Req(); /* 暫定_EtherSW終了要求 */
+                u1_s_Mcu_PwrCtrl_BusSleepFlag = (U1)MCU_SYS_PWR_OFF;
             }
-#endif
-        }
-    }
-
-    if(u4_s_Mcu_PwrCtrl_MM_OFF_REQ_Chk_Time != MCU_PWRCTRL_MM_OFF_REQ_CHKTIME_INVALID){
-        if(u4_s_Mcu_PwrCtrl_MM_OFF_REQ_Chk_Time > MCU_PWRCTRL_MM_OFF_REQ_CHKTIME){  /* MM_OFF_REQ=Lo→Hi後、20ms経過したか */
-            u1_s_Mcu_PwrCtrl_ShtdwnOkFlag = (U1)MCU_SYS_PWR_ON;
-            u4_s_Mcu_PwrCtrl_MM_OFF_REQ_Chk_Time = MCU_PWRCTRL_MM_OFF_REQ_CHKTIME_INVALID;
-        }
-        else{
-            u4_s_Mcu_PwrCtrl_MM_OFF_REQ_Chk_Time++;
         }
     }
 /* 暫定対応 end */
@@ -206,13 +189,13 @@ void vd_g_Mcu_PwrCtrl_Standby_Req(void)
 }
 
 /*****************************************************************************
-  Function      : vd_g_Mcu_PwrCtrl_Task1ms
+  Function      : vd_g_Mcu_PwrCtrl_Task
   Description   : 
   param[in/out] : none
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_g_Mcu_PwrCtrl_Task1ms( void )
+void vd_g_Mcu_PwrCtrl_Task( void )
 {
     
     switch (u1_s_Mcu_PwrCtrl_Sts)
@@ -334,6 +317,7 @@ static void vd_s_Mcu_PwrCtrl_Bon_Seq(void)
      && (u1_s_Mcu_PwrCtrl_NonRednPwrSts == MCU_PWRCTRL_NRD_STS_COMP)
      && (u1_s_Mcu_PwrCtrl_SipPwrSts     == MCU_PWRCTRL_SIP_STS_COMP)){
         u1_s_Mcu_PwrCtrl_Sts = MCU_PWRCTRL_NO_REQ;                          /* 処理完了 */
+        u1_s_Mcu_PwrCtrl_BusSleepFlag = (U1)MCU_SYS_PWR_ON;                 /* 暫定 */
 #if (MCU_ERR_CHK == 1U)
         u1_s_Mcu_Err_dbg_state = (uint8)MCU_ERR_NON;                           /* 異常系エラーなし */
 #endif
@@ -523,6 +507,7 @@ static void vd_s_Mcu_PwrCtrl_SipOff_McuStandby_Seq(void)
      && (u1_s_Mcu_PwrCtrl_NonRednPwrSts == MCU_PWRCTRL_NRD_STS_COMP)
      && (u1_s_Mcu_PwrCtrl_SipPwrSts     == MCU_PWRCTRL_SIP_STS_COMP) ){
         u1_s_Mcu_PwrCtrl_Sts = MCU_PWRCTRL_NO_REQ;              /* 処理完了 */
+        u1_s_Mcu_PwrCtrl_ShtdwnOkFlag = (U1)MCU_SYS_PWR_ON;        /* 暫定 */
 #if (MCU_ERR_CHK == 1U)
         u1_s_Mcu_Err_dbg_state = (uint8)MCU_ERR_NON;               /* 異常系エラーなし */
 #endif

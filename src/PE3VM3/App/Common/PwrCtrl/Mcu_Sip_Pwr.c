@@ -71,6 +71,7 @@
 #define     MCU_SIP_PWROFF_T_MM_SUSPEND_REQ_N       (1u)     /* tMM_SUSPEND_REQ_N:5ms     */
 #define     MCU_SIP_PWROFF_T_STR_WAKE               (1u)     /* tSTR_WAKE:5ms             */
 #define     MCU_SIP_PWROFF_T_MM_OFF_REQ_LO          (1u)     /* tMM_OFF_REQ_LO:5ms   */
+#define     MCU_SIP_PWROFF_T_MM_STBY_N_LO           (20000u)     /* 100*1000ms/5ms周期   */
 #define     MCU_SIP_PWROFF_TIME_INVALID             (0xFFFFFFFFu)
 
 #define     MCU_SIP_PWROFF_STEP1      (0x01)
@@ -79,6 +80,7 @@
 #define     MCU_SIP_PWROFF_STEP4      (0x04)
 #define     MCU_SIP_PWROFF_STEP5      (0x05)
 #define     MCU_SIP_PWROFF_STEP6      (0x06)
+#define     MCU_SIP_PWROFF_STEP7      (0x07)
 #define     MCU_SIP_PWROFF_STEP_CMPLT (0xFF)
 
 /* SIPスタンバイ用処理 */
@@ -713,6 +715,14 @@ static void Mcu_Sip_PwrOff_MainFunction( void )
 		if (Mcu_Sip_PwrOff_MM_STBY_N_Chk_Time == MCU_SIP_PWROFF_TIME_INVALID){
 			Mcu_Sip_PwrOff_Step = (uint8)MCU_SIP_PWROFF_STEP3;
 		}
+		else
+		{
+            if( Mcu_Sip_PwrOff_MM_STBY_N_Chk_Time >= MCU_SIP_PWROFF_T_MM_STBY_N_LO){
+                (void)Dio_WriteChannel(DIO_ID_PORT8_CH0, MCU_DIO_LOW);
+                Mcu_Sip_PwrOff_MM_STBY_N_Chk_Time = MCU_SIP_PWROFF_TIME_INVALID;
+                Mcu_Sip_PwrOff_Step = MCU_SIP_PWROFF_STEP7;
+            }
+        }
 	}
 
 /* PMA_PS_HOLD =Lo? */
@@ -768,10 +778,14 @@ static void Mcu_Sip_PwrOff_MainFunction( void )
 			Mcu_Sip_PwrOff_Step = (uint8)MCU_SIP_PWROFF_STEP_CMPLT;
 		}
 	}
-	
-	else{ /* SIP電源OFF制御が未完了の場合 */
-		  /* 何もしない */
-	}
+
+    if(Mcu_Sip_PwrOff_Step == MCU_SIP_PWROFF_STEP7){
+        Mcu_Sip_PwrOff_ValChk_POFF_COMPLETE_N();
+
+        if(Mcu_Sip_PwrOff_POFF_COMPLETE_N_Chk_Time == MCU_SIP_PWROFF_TIME_INVALID){
+            Mcu_Sip_PwrOff_Step = (uint8)MCU_SIP_PWROFF_STEP_CMPLT;
+        }
+    }
 
 	return;
 }
@@ -1530,6 +1544,10 @@ static void Mcu_Sip_PwrOff_ValChk_MM_STBY_N( void )
 		if( read_lv == (uint8)MCU_DIO_LOW){
 			Mcu_Sip_PwrOff_MM_STBY_N_Chk_Time = MCU_SIP_PWROFF_TIME_INVALID;
 		}
+		else
+		{
+            Mcu_Sip_PwrOff_MM_STBY_N_Chk_Time++;
+        }
 #if (MCU_ERR_CHK == 1U)
 		u1_s_Mcu_Err_dbg_state = MCU_ERR_SIPOFF_STEP2_1; /* TP */
 #endif

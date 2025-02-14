@@ -49,6 +49,7 @@
 #define MCU_STEP_P_IC_OVERALL_FIN       (9U)
 
 #define MCU_WAIT_POWERIC_60MS           (60U / MCU_SYS_TASK_TIME)
+#define MCU_WAIT_POWERIC_100MS          (100U   / MCU_SYS_TASK_TIME)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -172,7 +173,7 @@ static uint8   mcu_gvif_restart_sts;
 /* Power-IC制御仕様 */
 static uint8    Mcu_OnStep_PowerIc_OVRALL;      /* 4.制御フロー 4-1.通常起動 */
 static uint32   Mcu_PowerIc_LinkTimer;          /* Power-IC Wati処理用タイマ */
-
+static uint16   Mcu_PowerIc_OffTime;            /* Power-IC Off Wait処理用タイマ */
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -246,6 +247,7 @@ void Mcu_Sys_PwrOn_Init( void )
     Mcu_OnStep_Gyro_1_OVRALL    = (uint8)MCU_STEP_GYRO1_OVERALL_1;
     Mcu_OnStep_PowerIc_OVRALL   = (uint8)MCU_STEP_P_IC_OVERALL_1;
     Mcu_PowerIc_LinkTimer       = (uint32)0U;
+    Mcu_PowerIc_OffTime         = (uint16)0U;
 
     for(uint8 cnt = 0; cnt < MCU_PORT_NUM; cnt++){
         Mcu_Dio_Port_Level[cnt] = 0;
@@ -263,6 +265,10 @@ void Mcu_Sys_PwrOn_Init( void )
 *****************************************************************************/
 void Mcu_Sys_PwrOn_MainFunction( void )
 {
+    uint8   mcu_read_v33_peri;
+    
+    mcu_read_v33_peri   = (uint8)STD_HIGH;
+    
     /* CentralからのSYS起動電源ON要求あり */
     if(Mcu_PwrOn_Start == MCU_SYS_CENTRAL_ON){
         /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
@@ -370,17 +376,33 @@ void Mcu_Sys_PwrOn_MainFunction( void )
         switch (Mcu_PwrOff_Step)
         {
         case MCU_SYS_STEP1:
-        Mcu_Sys_PwrOff_flw();
+            Mcu_Sys_PwrOff_flw();
 
-        /* STEP1が完了していれば正常起動を設定 */
-        if(Mcu_Off_Time == (uint32)MCU_SYS_COUNTTIME_FIN){
-            Mcu_PwrOff_Step     =   (uint8)MCU_SYS_STEP_OK;
-            /* Centralからの要求を初期化 */
-            Mcu_PwrOff_Start    =   (uint8)MCU_SYS_CENTRAL_NON;
-        }
-        break;
+            /* STEP1が完了していれば正常起動を設定 */
+            if(Mcu_Off_Time == (uint32)MCU_SYS_COUNTTIME_FIN){
+                Mcu_PwrOff_Step     =   (uint8)MCU_SYS_STEP2;     /* 次状態に遷移 */
+            }
+            break;
 
         case MCU_SYS_STEP2:     /* fall through */
+            if(Mcu_PowerIc_OffTime != MCU_NOREDUN_WAIT_TIME_FIN){
+                Mcu_PowerIc_OffTime++;
+            }
+            
+            mcu_read_v33_peri = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_V33_PERI]); /* V33-PERI-ON読み出し */
+            if(mcu_read_v33_peri == (uint8)STD_HIGH){
+                Mcu_PowerIc_OffTime = (uint16)0U;       /* V33-PERI-ON=Highの場合次処理への遷移を抑制する */
+            }
+            
+            if(Mcu_PowerIc_OffTime >= MCU_WAIT_POWERIC_100MS){
+                Mcu_Dev_Pwron_SetPort(MCU_PORT_PIC_POFF , MCU_DIO_LOW);     /* P-IC電源制限 */
+                Mcu_PowerIc_OffTime = (uint16)0U;                           /* タイマクリア */
+                /* STEP2が完了していれば正常起動を設定 */
+                Mcu_PwrOff_Step     =   (uint8)MCU_SYS_STEP_OK;
+                /* Centralからの要求を初期化 */
+                Mcu_PwrOff_Start    =   (uint8)MCU_SYS_CENTRAL_NON;
+            }
+            break;
         case MCU_SYS_STEP3:     /* fall through */
         case MCU_SYS_STEP4:     /* fall through */
         case MCU_SYS_STEP_OK:
@@ -827,10 +849,6 @@ void Mcu_Dev_Pwron( void ){
 
         Mcu_Dev_Pwron_PowerIc();        /* Power-IC制御 */
         Mcu_Dev_Pwron_Gyro();           /* ジャイロ・加速度センサ(SMI230)制御 */
-
-        Mcu_Dev_Pwron_EizoIc_Init();    /* 映像IC 起動処理 */
-        Mcu_Dev_Pwron_GvifRcvr_Init();  /* GVIF受信機 起動処理 */
-        Mcu_Dev_Pwron_GvifSndr_Init();  /* GVIF送信機 起動処理 */
 
         Mcu_Dev_Pwron_WritePort();	    /* Port更新処理 */
     }
