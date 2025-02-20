@@ -85,3 +85,7 @@ ML86294Ctl.c
 CXD4937Ctl.c
 GyroDevCtl.c
 GNSSCtl.c
+XMTunerCtl.c
+USBCtl.c
+CarSpdPls.c
+PictMuteCtl.c

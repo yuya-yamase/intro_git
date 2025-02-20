@@ -30,7 +30,6 @@ config_U2A16_met/oxcan_nmwk_cfg.c
 config_U2A16_met/oxcan_opemd_cfg.c
 config_U2A16_met/oxcan_rx_cfg.c
 config_U2A16_met/oxcan_usrhk.c
-config_U2A16_met/l3r_test.c
 
 libc/oxcan.c
 libc/oxcan_nmwk.c
