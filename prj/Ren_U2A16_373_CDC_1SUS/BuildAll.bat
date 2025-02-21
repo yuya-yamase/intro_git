@@ -64,8 +64,8 @@ REM call build.bat %VM_BUILD_ARG%
 REM type build.log >> ..\all_build.log
 REM popd
 
-echo -- XCreate -- >> all_build.log
-call xCreate.bat >> all_build.log
+echo -- motCreate -- >> all_build.log
+call U2A_BevCreateMot.bat >> all_build.log
 
 echo ===============================
 echo Start Time: %start_time%
