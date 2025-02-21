@@ -240,10 +240,22 @@ const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_0_SET16[MCU_SYS_PWR_GVIF3RX_REG_TXDAT
     (U1)0x01U     /* Write Data */
 };
 
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET16[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x5DU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
 const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_2_SET16[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
     (U1)0x5DU,    /* Write Address */
     (U1)0x32U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET16[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x6FU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_UNLD_COMMON2[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
@@ -372,6 +384,60 @@ const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_RX1_SET9[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] =
     (U1)0xFBU     /* Write Data */
 };
 
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET2[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x4EU,    /* Write Address */
+    (U1)0x05U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET3[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x4FU,    /* Write Address */
+    (U1)0x1AU     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET6[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x52U,    /* Write Address */
+    (U1)0x1AU     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET5[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x51U,    /* Write Address */
+    (U1)0x08U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET10[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x56U,    /* Write Address */
+    (U1)0x04U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET7[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x53U,    /* Write Address */
+    (U1)0x06U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET8[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x54U,    /* Write Address */
+    (U1)0x17U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET11[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x57U,    /* Write Address */
+    (U1)0x1AU     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET14[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x5AU,    /* Write Address */
+    (U1)0x16U     /* Write Data */
+};
+
 const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_PLL1_SET4[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
     (U1)0x4AU,    /* Write Address */
@@ -478,6 +544,60 @@ const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_2_SET12[MCU_SYS_PWR_GVIF3RX_REG_TXDAT
     (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
     (U1)0x58U,    /* Write Address */
     (U1)0x1AU     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET2[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x60U,    /* Write Address */
+    (U1)0x07U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET3[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x61U,    /* Write Address */
+    (U1)0x25U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET6[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x64U,    /* Write Address */
+    (U1)0x25U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET5[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x63U,    /* Write Address */
+    (U1)0x0FU     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET10[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x68U,    /* Write Address */
+    (U1)0x06U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET7[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x65U,    /* Write Address */
+    (U1)0x08U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET8[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x66U,    /* Write Address */
+    (U1)0x21U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET11[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x69U,    /* Write Address */
+    (U1)0x25U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET14[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x6CU,    /* Write Address */
+    (U1)0x20U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_GVIF3RX_RX0_SET0[MCU_SYS_PWR_GVIF3RX_REG_TXDAT_NUM] = {
@@ -740,12 +860,24 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIF3RX_REG_INIT[MCU_SYS_PWR_GVIF3RX_RE
         (U4)0x20900003U
     },
     {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK2[0],
+        (U4)0x21C40003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET16[0],
+        (U4)0x21C80003U
+    },
+    {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK3[0],
         (U4)0x20940003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_2_SET16[0],
         (U4)0x20980003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET16[0],
+        (U4)0x21CC0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK0[0],
@@ -844,6 +976,42 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIF3RX_REG_INIT[MCU_SYS_PWR_GVIF3RX_RE
         (U4)0x20F80003U
     },
     {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET2[0],
+        (U4)0x21D00003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET3[0],
+        (U4)0x21D40003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET6[0],
+        (U4)0x21D80003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET5[0],
+        (U4)0x21DC0003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET10[0],
+        (U4)0x21E00003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET7[0],
+        (U4)0x21E40003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET8[0],
+        (U4)0x21E80003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET11[0],
+        (U4)0x21EC0003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX0_1_SET14[0],
+        (U4)0x21F00003U
+    },
+    {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK3[0],
         (U4)0x20FC0003U
     },
@@ -918,6 +1086,42 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIF3RX_REG_INIT[MCU_SYS_PWR_GVIF3RX_RE
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_2_SET12[0],
         (U4)0x21440003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET2[0],
+        (U4)0x21F40003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET3[0],
+        (U4)0x21F80003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET6[0],
+        (U4)0x21FC0003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET5[0],
+        (U4)0x22000003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET10[0],
+        (U4)0x22040003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET7[0],
+        (U4)0x22080003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET8[0],
+        (U4)0x220C0003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET11[0],
+        (U4)0x22100003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_MIPITX1_3_SET14[0],
+        (U4)0x22140003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIF3RX_BANK0[0],
