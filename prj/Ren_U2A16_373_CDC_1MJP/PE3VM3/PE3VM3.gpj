@@ -22,6 +22,8 @@ primaryTarget=v800_standalone.tgt
     :macro=CMPSW_DIR=${PRJ_DIR}/../../CmpSW
 
     # Compile Switch
+    # JP
+    :macro=COUNTRY_SW_JP=
 
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
