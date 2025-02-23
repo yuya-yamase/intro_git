@@ -18,6 +18,7 @@
 #include    "IVI_ExtSigCtrl_Main.h"
 
 #include    "USBCtl.h"
+#include    "MicDetect.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -62,6 +63,7 @@
 void            vd_g_Ivi_ExtSigCtrl_Main_Bon_init(void)
 {
     vd_g_Usb_Init();
+    vd_g_MicDetectInit();
 }
 
 /*===================================================================================================================================*/
@@ -74,6 +76,7 @@ void            vd_g_Ivi_ExtSigCtrl_Main_Bon_init(void)
 void            vd_g_Ivi_ExtSigCtrl_Main_Wkup_init(void)
 {
     vd_g_Usb_Init();
+    vd_g_MicDetectInit();
 }
 
 /*===================================================================================================================================*/
@@ -86,6 +89,7 @@ void            vd_g_Ivi_ExtSigCtrl_Main_Wkup_init(void)
 void            vd_g_Ivi_ExtSigCtrl_Main(void)
 {
     vd_g_Usb_Routine();
+    vd_g_MicDetectMainTask();
 }
 
 /*===================================================================================================================================*/

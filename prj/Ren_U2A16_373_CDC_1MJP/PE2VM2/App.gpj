@@ -7,6 +7,7 @@
     :sourceDir=${APP_DIR}/IVI/PwrCtrl
     :sourceDir=${APP_DIR}/IVI/PwrCtrl/DDFreq
     :sourceDir=${APP_DIR}/IVI/ExtSigCtrl
+    :sourceDir=${APP_DIR}/IVI/ExtSigCtrl/MicDetect
     :sourceDir=${APP_DIR}/IVI/PictCtrl
     :sourceDir=${APP_DIR}/IVI/PictCtrl/config
     :sourceDir=${APP_DIR}/IVI/GyrCtrl
@@ -39,6 +40,7 @@
     -I${APP_DIR}/IVI/PwrCtrl
     -I${APP_DIR}/IVI/PwrCtrl/DDFreq
     -I${APP_DIR}/IVI/ExtSigCtrl
+    -I${APP_DIR}/IVI/ExtSigCtrl/MicDetect
     -I${APP_DIR}/IVI/PictCtrl
     -I${APP_DIR}/IVI/PictCtrl/config
     -I${APP_DIR}/IVI/GyrCtrl
@@ -65,6 +67,8 @@ x_spi_ivi_queue.c
 IVI_PwrCtrl_Main.c
 IVI_PwrCtrl_DDFreq.c
 IVI_ExtSigCtrl_Main.c
+MicDetect.c
+MicDetect_cfg.c
 IVI_PictCtrl_Main.c
 IVI_GyrCtrl_Main.c
 IVI_DspCtrl_Main.c
