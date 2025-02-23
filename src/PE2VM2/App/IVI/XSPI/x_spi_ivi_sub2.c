@@ -334,7 +334,6 @@ static void            vd_s_XspiIviSub2GyroAna(const U1 * u1_ap_SUB2_ADD, const 
         u1_s_xspi_ivi_com_start_flg = (U1)TRUE;
     }else if((u1_t_subtype == (U1)u1_s_GYRO_SUBTYPE_INIT_DATA_REQ) &&  (u1_s_xspi_ivi_ini_send_flg == (U1)FALSE)){
         u1_s_xspi_ivi_ini_send_flg = (U1)TRUE;
-        u4_s_xspi_ivi_task_cnt_subframe2_ini_send_pre = u4_s_xspi_ivi_task_cnt;
     }else{
         /* Do Nothing */
     }
@@ -417,6 +416,10 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
         u2_s_xspi_ivi_transmission_cnt++;
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_LENGTH,(U2)0U);
         vd_g_MemcpyU1(&u1_ap_xspi_add[8], &u1_sp_xspi_ivi_gyro_data[0], (U4)XSPI_IVI_DATA_LENGTH);
+        u1_ap_xspi_add[8]  = (U1)0x05; /*SubType*/
+        u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[10] = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[11] = (U1)0x00; /*Reserve*/
         u4_s_xspi_ivi_task_cnt_subframe2_pre = u4_s_xspi_ivi_task_cnt;
 
     }else if((u1_s_xspi_ivi_ini_send_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_ini_send == (U1)FALSE)) {
