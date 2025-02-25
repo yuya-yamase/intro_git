@@ -94,7 +94,9 @@ static  U1                                      u1_s_tripcom_tx_ptson_elpsd;
 static  U1                                      u1_s_tripcom_tx_drvcyc;
 static  U1                                      u1_sp_tripcom_tx_unit[TRIPCOM_NUM_CANTXUNIT];
 static  U2                                      u2_sp_tripcom_tx_value[TRIPCOM_NUM_CNTTS];
+#if 0   /* BEV BSW provisionally */
 static  U1                                      u1_s_tripcom_tx_m1fc_timer;
+#endif
 static  U1                                      u1_s_tripcom_tx_m1ec_timer;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -310,7 +312,9 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
 
     u1_s_tripcom_tx_ptson_elpsd = (U1)U1_MAX;
     u1_s_tripcom_tx_drvcyc      = (U1)FALSE;
+#if 0   /* BEV BSW provisionally */
     u1_s_tripcom_tx_m1fc_timer  = (U1)U1_MAX;
+#endif
     u1_s_tripcom_tx_m1ec_timer  = (U1)U1_MAX;
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NUM_CANTXUNIT; u4_t_loop++) {
         u1_sp_tripcom_tx_unit[u4_t_loop] = (U1)0U;
@@ -460,6 +464,7 @@ static  void    vd_s_TripcomCfgCanTxTOFC(const U2 u2_a_VALUE)
 static  void    vd_s_TripcomCfgCanTxASFC(const U2 u2_a_VALUE)
 {
 
+#if 0   /* BEV BSW provisionally */
     U2          u2_t_presndval;
 
 
@@ -469,6 +474,7 @@ static  void    vd_s_TripcomCfgCanTxASFC(const U2 u2_a_VALUE)
         (void)Com_SendSignal(ComConf_ComSignal_AS_FC, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
     }
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -480,6 +486,7 @@ static  void    vd_s_TripcomCfgCanTxASFC(const U2 u2_a_VALUE)
 static  void    vd_s_TripcomCfgCanTxM1FC1(const U2 u2_a_VALUE)
 {
 
+#if 0   /* BEV BSW provisionally */
     U2          u2_t_prem1fc1;
     U1          u1_t_m1fcr;
     U1          u1_t_sndflg;
@@ -526,6 +533,7 @@ static  void    vd_s_TripcomCfgCanTxM1FC1(const U2 u2_a_VALUE)
     if (u1_t_sndflg == (U1)TRUE) {
         (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
     }
+#endif
 
 }
 
@@ -635,6 +643,7 @@ static  void    vd_s_TripcomCfgCanTxASEC(const U2 u2_a_VALUE)
 static  void    vd_s_TripcomCfgCanTxINFC(const U2 u2_a_VALUE)
 {
 
+#if 0   /* BEV BSW provisionally */
     static  const   U2                          u2_s_IN_FC_HIS          = (U2)1U;
     static  const   U2                          u2_s_TXMAX              = (U2)0xFFFCU;
     U2                                          u2_t_presndval;
@@ -667,6 +676,7 @@ static  void    vd_s_TripcomCfgCanTxINFC(const U2 u2_a_VALUE)
             (void)Com_TriggerIPDUSend(MSG_MET1S01_TXCH0);
         }
     }
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -677,6 +687,7 @@ static  void    vd_s_TripcomCfgCanTxINFC(const U2 u2_a_VALUE)
 /*===================================================================================================================================*/
 static  void    vd_s_TripcomCfgCanTxINFCC(const U2 u2_a_VALUE)
 {
+#if 0   /* BEV BSW provisionally */
 #if defined(ComConf_ComSignal_IN_FC_C)
     static  const   U2                          u2_s_IN_FC_C_HIS        = (U2)1U;
     static  const   U2                          u2_s_TXMAX              = (U2)0xFFFCU;
@@ -710,6 +721,7 @@ static  void    vd_s_TripcomCfgCanTxINFCC(const U2 u2_a_VALUE)
             (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
         }
     }
+#endif
 #endif
 }
 
@@ -897,6 +909,7 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
 static  void    vd_s_TripcomCfgCanTxFC_SCL(void)
 {
 
+#if 0   /* BEV BSW provisionally */
     U1          u1_t_sndval;
     U1          u1_t_presndval;
     U1          u1_t_ptsys;
@@ -931,6 +944,7 @@ static  void    vd_s_TripcomCfgCanTxFC_SCL(void)
         (void)Com_SendSignal(ComConf_ComSignal_FC_SCL, &u1_t_sndval);
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
     }
+#endif
 }
 
 /*===================================================================================================================================*/
