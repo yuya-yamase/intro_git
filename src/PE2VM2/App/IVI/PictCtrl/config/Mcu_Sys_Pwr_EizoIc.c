@@ -273,7 +273,7 @@ const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU41[MCU_SYS_PWR_EIZOIC_RWC_BYT
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU42[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x0FU,    /* Write Address */
-    (U1)0x80U     /* Write Data */
+    (U1)0xA0U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU43[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
@@ -2769,7 +2769,43 @@ const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU457[MCU_SYS_PWR_EIZOIC_RWC_BY
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU458[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x04U,    /* Write Address */
-    (U1)0x04U     /* Write Data */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU472[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x05U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU473[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x06U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU474[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x07U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU475[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x08U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU476[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x12U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU477[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
+    (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x16U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU459[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
@@ -2805,7 +2841,7 @@ const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU463[MCU_SYS_PWR_EIZOIC_RWC_BY
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU464[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x1EU,    /* Write Address */
-    (U1)0x04U     /* Write Data */
+    (U1)0x08U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU465[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
@@ -2829,13 +2865,13 @@ const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU467[MCU_SYS_PWR_EIZOIC_RWC_BY
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU468[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x46U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
+    (U1)0x02U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU469[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x47U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
+    (U1)0x01U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU470[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
@@ -6446,6 +6482,30 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT[MCU_SYS_PWR_EIZOIC
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU458[0],
         (U4)0x17280003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU472[0],
+        (U4)0x1BF80003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU473[0],
+        (U4)0x1BFC0003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU474[0],
+        (U4)0x1C000003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU475[0],
+        (U4)0x1C040003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU476[0],
+        (U4)0x1C080003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU477[0],
+        (U4)0x1C0C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU459[0],

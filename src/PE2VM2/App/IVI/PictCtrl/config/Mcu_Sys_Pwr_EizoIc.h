@@ -16,7 +16,7 @@
 #define MCU_SYS_PWR_EIZOIC_RWC_BYTE1                        (1U)
 #define MCU_SYS_PWR_EIZOIC_RWC_BYTE2                        (2U)
 #define MCU_SYS_PWR_EIZOIC_RWC_BYTE3                        (3U)
-#define MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_NUM                (471U)
+#define MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_NUM                (477U)
 #define MCU_SYS_PWR_EIZOIC_MlSETREG_SIP_NUM                 (4U)
 #define MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_NON_NUM         (143U)
 #define MCU_SYS_PWR_EIZOIC_MlSETREG_CAMAREA_1080_NUM        (143U)
