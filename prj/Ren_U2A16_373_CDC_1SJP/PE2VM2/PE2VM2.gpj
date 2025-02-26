@@ -22,9 +22,6 @@ primaryTarget=v800_standalone.tgt
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
     :macro=CMPSW_DIR=${PRJ_DIR}/../../CmpSW
 
-    # Compile Switch
-    # 1Sboard
-    :macro=BOARD_SW_1S=
     # JP
     :macro=COUNTRY_SW_JP=
 

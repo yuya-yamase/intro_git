@@ -20,12 +20,10 @@ primaryTarget=v800_standalone.tgt
 	:macro=IOHW_DIR=${ROOT_DIR}/BSW/IoHwAbstract
 	:macro=APP_DIR=${ROOT_DIR}/App
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
-    :macro=CMPSW_DIR=${PRJ_DIR}/../../CmpSW
 
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
     :optionsFile=${CMN_DIR}/IOHW.opt
-    :optionsFile=${CMPSW_DIR}/PE2VM2_CmpSW.opt
 
     -I${GPI2C_DIR}/config
     -I${GPI2C_DIR}/scc
