@@ -52,6 +52,13 @@ const ST_GPT_OST       st_gp_GPT_OST_CFG[GPT_OST_NUM_CH] = {
         (U4)U4_MAX,                                                 /* u4_select   */
         (U2)0x0000U,                                                /* u2_tmr_ctrl */
         (U2)199U                                                    /* u2_irq_ch   */
+    },
+    /* GPT_OST_CH_06_SCHDLR_TICK      */
+    {
+        (volatile U4 *)0xffbf0600U,                                 /* u4p_base    */
+        (U4)U4_MAX,                                                 /* u4_select   */
+        (U2)0x0081U,                                                /* u2_tmr_ctrl */
+        (U2)205U                                                    /* u2_irq_ch   */
     }
 };
 const U1               u1_g_GPT_OST_NUM_CH = (U1)GPT_OST_NUM_CH;

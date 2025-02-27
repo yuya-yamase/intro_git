@@ -46,7 +46,7 @@
 #if(OXDC_SID23_USE == OXDC_USE)
 #include "mem_section.h"
 #endif
-#include "Ecu_Intg_Callout.h"
+#include "rprg_if_request.h"
 
 
 /* #include "nvmc_mgr.h"             nvmc_mgr.h is included in oxdocan_cfg_private.h              */
@@ -524,9 +524,9 @@ void    vd_g_oXDoCANCfgRpgPrepToRun(const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgRpgSwReset(void)
 {
-/* リプロ遷移用リセット @@@ */
+/* リプ�搗J移用リセット @@@ */
     vd_s_oXdcPrepSwReset();
-    SS_CpuCore_requestReprog();
+    vd_g_RprgIfRequestReprog();
 }
 #endif
 /*===================================================================================================================================*/
@@ -604,7 +604,7 @@ U1      u1_g_oXDoCANCfgEomchk(void)
 
     return(u1_t_eom);
 #else  /* #ifdef ES_INSPECT_H */
-    return(u1_g_VehopemdPonEmr() | (U1)OXDC_EOM_RPG_EN);
+    return(u1_g_VehopemdIgnOn() | (U1)OXDC_EOM_RPG_EN);
 #endif /* #ifdef ES_INSPECT_H */
 }
 #ifdef OXDC_FUNC_DTC_EXTEND

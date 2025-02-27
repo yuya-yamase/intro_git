@@ -62,19 +62,19 @@ static void    vd_s_GpI2cMaCfgTRxAckCh1(const ST_GP_I2C_MA_REQ * st_ap_ACK);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const ST_GP_I2C_MA_PIN    st_s_GP_I2C_MA_PIN[GP_I2C_MA_NUM_CH] = {
     {
-        (U4)PORT_MODE_CFG_P10_1_25,                 /* u4_scl_act */
-        (U4)PORT_MODE_CFG_P10_0_24,                 /* u4_sda_act */
-        (U4)PORT_MODE_CFG_P10_1_29,                 /* u4_scl_ina */
-        (U4)PORT_MODE_CFG_P10_0_28,                 /* u4_sda_ina */
+        (U4)PORT_MODE_CFG_P10_1_RIIC0SCL,           /* u4_scl_act */
+        (U4)PORT_MODE_CFG_P10_0_RIIC0SDA,           /* u4_sda_act */
+        (U4)PORT_MODE_CFG_P10_1_DO_OD_HI,           /* u4_scl_ina */
+        (U4)PORT_MODE_CFG_P10_0_DO_OD_HI,           /* u4_sda_ina */
 
         (U2)PORT_ID_PORT10_PIN1,                    /* u2_scl_pin */
         (U2)PORT_ID_PORT10_PIN0,                    /* u2_sda_pin */
     },
     {
-        (U4)PORT_MODE_CFG_P22_4_27,                 /* u4_scl_act */
-        (U4)PORT_MODE_CFG_P22_3_26,                 /* u4_sda_act */
-        (U4)PORT_MODE_CFG_P22_4_31,                 /* u4_scl_ina */
-        (U4)PORT_MODE_CFG_P22_3_30,                 /* u4_sda_ina */
+        (U4)PORT_MODE_CFG_P22_4_RIIC1SCL,           /* u4_scl_act */
+        (U4)PORT_MODE_CFG_P22_3_RIIC1SDA,           /* u4_sda_act */
+        (U4)PORT_MODE_CFG_P22_4_DO_OD_HI,           /* u4_scl_ina */
+        (U4)PORT_MODE_CFG_P22_3_DO_OD_HI,           /* u4_sda_ina */
 
         (U2)PORT_ID_PORT22_PIN4,                    /* u2_scl_pin */
         (U2)PORT_ID_PORT22_PIN3,                    /* u2_sda_pin */

@@ -55,7 +55,7 @@ static U2      u2_s_oXCANNmwkArqst_0(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                    u2_g_OXCAN_NMWK_TIMOUT_OPEMD = (U2)13000U / (U2)OXCAN_MAIN_TICK; /* 13 seconds */
+const U2                    u2_g_OXCAN_NMWK_TIMOUT_SYSRUN = (U2)13000U / (U2)OXCAN_MAIN_TICK; /* 13 seconds */
 
 /* -------------------------------------------------------------------------------- */
 /* Attention :                                                                      */
@@ -63,7 +63,7 @@ const U2                    u2_g_OXCAN_NMWK_TIMOUT_OPEMD = (U2)13000U / (U2)OXCA
 /* cause by state mis-match between aubist network management control and           */
 /* application request monitor.                                                     */
 /* -------------------------------------------------------------------------------- */
-const U2                    u2_g_OXCAN_NMWK_TIMOUT_ARQWK = (U2)10000U / (U2)OXCAN_MAIN_TICK;
+const U2                    u2_g_OXCAN_NMWK_TIMOUT_ARQWK  = (U2)10000U / (U2)OXCAN_MAIN_TICK;
 
 /* -------------------------------------------------------------------------------- */
 const U1                    u1_gp_OXCAN_NMWK_CH_COM_TO_NM[BSW_COM_CFG_CHNUM] = {
@@ -78,7 +78,7 @@ const ST_OXCAN_NMWK_CHK     st_gp_OXCAN_NMWK_CHK[OXCAN_NMWK_NUM_CH] = {
         &u2_s_oXCANNmwkArqst_0,                                                    /* fp_u2_ARQST  */
         vdp_PTR_NA,                                                                /* fp_vd_WKRTO  */
 
-        (U2)800U  / (U2)OXCAN_MAIN_TICK,                                           /* u2_tout_evtx */
+        (U2)0U,                              /* (U2)800U  / (U2)OXCAN_MAIN_TICK */ /* u2_tout_evtx */
         (U2)5000U / (U2)OXCAN_MAIN_TICK,                                           /* u2_tout_awak */
         (U2)OXCAN_NMWK_NM_NET_ID_0,                                                /* u2_nm_netid  */
         (U2)OXCAN_NMWK_XRQBIT_NM_NET_0,                                            /* u2_xrqbit    */

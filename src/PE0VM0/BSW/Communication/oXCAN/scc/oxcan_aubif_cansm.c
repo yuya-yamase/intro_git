@@ -74,7 +74,7 @@ void    CanSM_CbkDetectBusoff( NetworkHandleType network )
 #endif
 
 #ifdef L3R_FAIL_H
-    L3R_Fail_BusoffNotify(CHM_ChCnvtr_Aub_To_LogCh[network]);
+    L3R_Fail_BusoffNotify(network);
 #endif /* #ifdef L3R_FAIL_H */
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -95,7 +95,7 @@ void    CanSM_CbkDetectBusoff( NetworkHandleType network )
 /*===================================================================================================================================*/
 void    CanSM_CbkDetectSendLock( NetworkHandleType network )
 {
-    L3R_Fail_SendLockNotify(CHM_ChCnvtr_Aub_To_LogCh[network]);
+    L3R_Fail_SendLockNotify(network);
 }
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -124,7 +124,7 @@ uint8   CanSM_CbkJudgeFail( NetworkHandleType network )
 {
     uint8 u1Ret;
 
-    if (CANMBQ_GetSendLockFlg(CHM_ChCnvtr_Aub_To_LogCh[network]) == (uint8)CANMBQ_SET) {
+    if (CANMBQ_GetSendLockFlg(network) == (uint8)CANMBQ_SET) {
         u1Ret = (uint8)CANSM_FAIL_USER;
     }
     else{

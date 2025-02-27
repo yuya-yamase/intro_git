@@ -52,15 +52,15 @@
 /* communication Activated System Status per channel */
 BswConst BswU4 bsw_comm_ctrl_u4SysStsPerCh[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNUM] = {
     {    /* ComMConf_ComMChannel_CANFD_G2M_1_BUS */
-        (BswU4)(ComMConf_SysStatusName_RID|ComMConf_SysStatusName_PON|ComMConf_SysStatusName_POE)
+        (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CANFD_G2M_2_BUS */
-        (BswU4)(ComMConf_SysStatusName_POE)
+        (BswU4)(ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CANFD_G5M_BUS */
-        (BswU4)(ComMConf_SysStatusName_RID|ComMConf_SysStatusName_PON|ComMConf_SysStatusName_POE)
+        (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_VCAN_VCC_1_BUS */
@@ -72,16 +72,15 @@ BswConst BswU4 bsw_comm_ctrl_u4SysStsPerCh[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
 /* Channel power per channel */
 BswConst BswU4 bsw_comm_ctrl_u4CHPowSupply[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNUM] = {
     {    /* ComMConf_ComMChannel_CANFD_G2M_1_BUS */
-        (BswU4)(ComMConf_SysStatusName_PAR|ComMConf_SysStatusName_RID|ComMConf_SysStatusName_PON|ComMConf_SysStatusName_POE|ComMConf_SysStatusName_PAR_HV|ComMConf_SysStatusName_PAR_HVHC|ComMConf_SysStatusName_CHK|ComMConf_SysStatusName_PDM \
-               |ComMConf_SysStatusName_OTA1|ComMConf_SysStatusName_OTA2|ComMConf_SysStatusName_OTA3|ComMConf_SysStatusName_OTA4|ComMConf_SysStatusName_WRP|ComMConf_SysStatusName_EDS)
+        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CANFD_G2M_2_BUS */
-        (BswU4)(ComMConf_SysStatusName_POE)
+        (BswU4)(ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CANFD_G5M_BUS */
-        (BswU4)(ComMConf_SysStatusName_RID|ComMConf_SysStatusName_PON|ComMConf_SysStatusName_POE)
+        (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_VCAN_VCC_1_BUS */

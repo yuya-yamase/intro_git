@@ -69,21 +69,11 @@ BswConst BswU1 bsw_com_data_u1MsgBufInit[BSW_COM_MSGBUF_SIZE] = {
 
 #if (BSW_COM_CFG_FAILSAFE_SIZE != 0U)
 BswConst BswU1 bsw_com_data_u1MsgBufFail[BSW_COM_FAILSAFE_SIZE] = {
-     (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U
-    ,(BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U
-    ,(BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U
-    ,(BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U  /* [0] MSG_BDC1S81_RXCH0 */
-    ,(BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U                                                                        /* Padding Area */
 };
 #endif /* (BSW_COM_CFG_FAILSAFE_SIZE != 0U) */
 
 #if (BSW_COM_CFG_FAILSAFE_SIZE != 0U)
 BswConst BswU1 bsw_com_data_u1FailMskTbl[BSW_COM_FAILSAFE_SIZE] = {
-     (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U
-    ,(BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U
-    ,(BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U
-    ,(BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U  /* [0] MSG_BDC1S81_RXCH0 */
-    ,(BswU1)0x00U, (BswU1)0x00U, (BswU1)0x00U                                                                        /* Padding Area */
 };
 #endif /* (BSW_COM_CFG_FAILSAFE_SIZE != 0U) */
 
@@ -98,7 +88,7 @@ BswConst Bsw_Com_DataInfoType bsw_com_stDataInfoTbl[BSW_COM_HANDLE_NUM] = {
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [7] ComConf_ComSignal_VPSINFO2 */
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [8] ComConf_ComSignal_VPSINFO1 */
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [9] ComConf_ComSignal_VPSINFOS */
-    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [10] ComConf_ComSignal_D00976 */
+    ,BSW_COM_u1EVCOND_NONE                                                                                       /* [10] ComConf_ComSignal_VPSCNG */
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [11] ComConf_ComSignal_VPSISOTA */
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [12] ComConf_ComSignal_APOFRQ */
     ,BSW_COM_u1EVCOND_NONE                                                                                       /* [13] ComConf_ComSignal_FV1E3_D */
@@ -116,7 +106,7 @@ BswConst PduIdType bsw_com_u2DataHdl2MsgHdl[BSW_COM_HANDLE_NUM] = {
     ,(BswU2)0U                                                                                                   /* [7] ComConf_ComSignal_VPSINFO2 */
     ,(BswU2)0U                                                                                                   /* [8] ComConf_ComSignal_VPSINFO1 */
     ,(BswU2)0U                                                                                                   /* [9] ComConf_ComSignal_VPSINFOS */
-    ,(BswU2)0U                                                                                                   /* [10] ComConf_ComSignal_D00976 */
+    ,(BswU2)0U                                                                                                   /* [10] ComConf_ComSignal_VPSCNG */
     ,(BswU2)0U                                                                                                   /* [11] ComConf_ComSignal_VPSISOTA */
     ,(BswU2)0U                                                                                                   /* [12] ComConf_ComSignal_APOFRQ */
     ,(BswU2)0U                                                                                                   /* [13] ComConf_ComSignal_FV1E3_D */
@@ -132,7 +122,7 @@ BswConst Bsw_Com_MsgInfoType bsw_com_stMsgInfoTbl[BSW_COM_MSG_NUM] = {
 BswConst BswU4 bsw_com_u4SysStatTbl[BSW_COM_MSG_NUM][BSW_COM_SYSSTATTBLNUM] =
 {
      {    /* [0] MSG_BDC1S81_RXCH0 */
-          ( ComConf_SysStatusName_PAR|ComConf_SysStatusName_RID|ComConf_SysStatusName_PON|ComConf_SysStatusName_POE|ComConf_SysStatusName_PAR_HV|ComConf_SysStatusName_PAR_HVHC|ComConf_SysStatusName_CHK )
+          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
 };

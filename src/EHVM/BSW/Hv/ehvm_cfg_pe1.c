@@ -29,7 +29,22 @@
 /****************************************************************************************/
 /* Hv4mVmConfig                                                                         */
 /****************************************************************************************/
-static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe1[4] = {
+static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe1[7] = {
+    {
+        63U,  /* intno */
+        PEID_1,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        64U,  /* intno */
+        PEID_1,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        65U,  /* intno */
+        PEID_1,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
     {
         105U,  /* intno */
         PEID_1,  /* Peid */
@@ -179,7 +194,7 @@ EhvmConst ehvm_cfg_tbl_t ehvm_cfg_tbl_pe1 =
 {
     0U,                             /* tptm_dividingratio */
     VM_NUM_PE1,                     /* vmnum */
-    4U,                            /* guest_int_num */
+    7U,                            /* guest_int_num */
     (ehvm_uint32_t)500U,           /* hv_cycle */
     MPU_MPCFG_HBE_PE1,                  /* mpu_mpcfg_hbe */
     MPU_NUM_OF_HOST_ENTRY_PE1,          /* mpu_num_of_host_entry */

@@ -45,9 +45,9 @@
 /*--------------------------------------------------------------------------*/
 /* CANプロトコル定義 */
 #define L3R_TCAN_IDSTART		(1U)
-#define L3R_TCAN_IDNUM			(487U)
+#define L3R_TCAN_IDNUM			(479U)
 
-#define L3R_TDIAG_IDSTART		(488U)
+#define L3R_TDIAG_IDSTART		(480U)
 #define L3R_TDIAG_IDNUM			(0U)
 
 /* 送信フレーム数 */
@@ -59,7 +59,7 @@
 #if (CANMBQ_QUE1_TXQUESIZE_0 < L3R_TCAN_CH0_PRIORITY_1_TXNUM)
 #error [QUE1_TXQUESIZE_0 Configuration Error!!]
 #endif
-#define L3R_TCAN_CH0_PRIORITY_2_TXNUM		(0U)
+#define L3R_TCAN_CH0_PRIORITY_2_TXNUM		(79U)
 #if (CANMBQ_QUE2_TXQUESIZE_0 < L3R_TCAN_CH0_PRIORITY_2_TXNUM)
 #error [QUE2_TXQUESIZE_0 Configuration Error!!]
 #endif
@@ -75,7 +75,7 @@
 #if (CANMBQ_QUE1_TXQUESIZE_1 < L3R_TCAN_CH1_PRIORITY_1_TXNUM)
 #error [QUE1_TXQUESIZE_1 Configuration Error!!]
 #endif
-#define L3R_TCAN_CH1_PRIORITY_2_TXNUM		(79U)
+#define L3R_TCAN_CH1_PRIORITY_2_TXNUM		(0U)
 #if (CANMBQ_QUE2_TXQUESIZE_1 < L3R_TCAN_CH1_PRIORITY_2_TXNUM)
 #error [QUE2_TXQUESIZE_1 Configuration Error!!]
 #endif
@@ -107,7 +107,7 @@
 #if (CANMBQ_QUE1_TXQUESIZE_3 < L3R_TCAN_CH3_PRIORITY_1_TXNUM)
 #error [QUE1_TXQUESIZE_3 Configuration Error!!]
 #endif
-#define L3R_TCAN_CH3_PRIORITY_2_TXNUM		(331U)
+#define L3R_TCAN_CH3_PRIORITY_2_TXNUM		(323U)
 #if (CANMBQ_QUE2_TXQUESIZE_3 < L3R_TCAN_CH3_PRIORITY_2_TXNUM)
 #error [QUE2_TXQUESIZE_3 Configuration Error!!]
 #endif

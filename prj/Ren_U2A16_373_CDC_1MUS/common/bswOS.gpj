@@ -37,11 +37,11 @@ mcos/config_data/autosar/v850/ar_data_v850.c
 mcos/config_data/autosar/ar_func_table.c
 mcos/config_data/mk/mcos_mk_data.c
 mcos/config_data/mk/mcos_mk_data_v850.c
-mcos/user_impl/sample_mcos_hook.c
-mcos/user_impl/sample_mcos_userhook.c
-mcos/user_impl/sample_mcos_refresh.c
-mcos/user_impl/sample_mcos_trace.c
-mcos/user_impl/sample_v850_exc_entry_ghs.850
-mcos/user_impl/sample_v850_nonos_exc_handler.c
+mcos/user_impl/mcos_hook.c
+mcos/user_impl/mcos_userhook.c
+mcos/user_impl/mcos_refresh.c
+mcos/user_impl/mcos_trace.c
+mcos/user_impl/v850_exc_entry_ghs.850
+mcos/user_impl/v850_nonos_exc_handler.c
 mcos/config_data/autosar/v850/ar_svc_if_v850_ghs.850
 

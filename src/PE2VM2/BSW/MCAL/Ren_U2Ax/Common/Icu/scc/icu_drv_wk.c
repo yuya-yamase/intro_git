@@ -100,41 +100,45 @@ void    vd_g_IcuWkInit(const U1 u1_a_CFGID)
     U4                       u4_t_clr;
     U4                       u4_t_ra;
     U4                       u4_t_lpcnt;
+    U4                       u4_t_coreid;
 
-    if(u1_a_CFGID < u1_g_ICU_WK_NUM_CFG){
+    u4_t_coreid = u4_g_GetCoreId();
+    if (u4_t_coreid == (U4)BSW_CORE_ID_CORE0) {           /* Mask register only shall be updated in PE0 */
+        if(u1_a_CFGID < u1_g_ICU_WK_NUM_CFG){
 
-        u4_tp_CFG = &(st_gp_ICU_WK_CFG[u1_a_CFGID].u4p_elc[0]);
-        u4_tp_CLR = &(st_gp_ICU_WK_CFG[u1_a_CFGID].u4p_clr[0]);
+            u4_tp_CFG = &(st_gp_ICU_WK_CFG[u1_a_CFGID].u4p_elc[0]);
+            u4_tp_CLR = &(st_gp_ICU_WK_CFG[u1_a_CFGID].u4p_clr[0]);
 
-        u4_tp_ini[ICU_WK_GR_A0] = u4_s_IcuWkElInit(&st_gp_ICU_WK_GR[ICU_WK_GR_A0],
-                                                          u4_tp_CFG,
-                                                          u4_tp_CLR[ICU_WK_GR_A0]);
-        u4_tp_ini[ICU_WK_GR_A1] = u4_s_IcuWkElInit(&st_gp_ICU_WK_GR[ICU_WK_GR_A1],
-                                                          u4_tp_CFG,
-                                                          u4_tp_CLR[ICU_WK_GR_A1]);
-        u4_tp_ini[ICU_WK_GR_A2] = u4_tp_CLR[ICU_WK_GR_A2];
+            u4_tp_ini[ICU_WK_GR_A0] = u4_s_IcuWkElInit(&st_gp_ICU_WK_GR[ICU_WK_GR_A0],
+                                                              u4_tp_CFG,
+                                                              u4_tp_CLR[ICU_WK_GR_A0]);
+            u4_tp_ini[ICU_WK_GR_A1] = u4_s_IcuWkElInit(&st_gp_ICU_WK_GR[ICU_WK_GR_A1],
+                                                              u4_tp_CFG,
+                                                              u4_tp_CLR[ICU_WK_GR_A1]);
+            u4_tp_ini[ICU_WK_GR_A2] = u4_tp_CLR[ICU_WK_GR_A2];
 
-        u4_tp_CFG = &(st_gp_ICU_WK_CFG[u1_a_CFGID].u4p_ena[0]);
-        for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)ICU_WK_NUM_GR; u4_t_lpcnt++){
+            u4_tp_CFG = &(st_gp_ICU_WK_CFG[u1_a_CFGID].u4p_ena[0]);
+            for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)ICU_WK_NUM_GR; u4_t_lpcnt++){
 
-            u4_t_mask  = (u4_tp_CFG[u4_t_lpcnt] & st_gp_ICU_WK_GR[u4_t_lpcnt].u4_wrqbit) ^ (U4)U4_MAX;
-            u4_t_clr   =  u4_tp_ini[u4_t_lpcnt] & st_gp_ICU_WK_GR[u4_t_lpcnt].u4_wrqbit;
+                u4_t_mask  = (u4_tp_CFG[u4_t_lpcnt] & st_gp_ICU_WK_GR[u4_t_lpcnt].u4_wrqbit) ^ (U4)U4_MAX;
+                u4_t_clr   =  u4_tp_ini[u4_t_lpcnt] & st_gp_ICU_WK_GR[u4_t_lpcnt].u4_wrqbit;
 
-            u4_t_ra    = (U4)st_gp_ICU_WK_GR[u4_t_lpcnt].u2_ro + (U4)ICU_WK_RA_BASE;
-            u4_tp_word = (volatile U4 *)u4_t_ra; 
-            vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_MAS], u4_t_mask);
-            vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_CLR], u4_t_clr );
+                u4_t_ra    = (U4)st_gp_ICU_WK_GR[u4_t_lpcnt].u2_ro + (U4)ICU_WK_RA_BASE;
+                u4_tp_word = (volatile U4 *)u4_t_ra; 
+                vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_MAS], u4_t_mask);
+                vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_CLR], u4_t_clr );
+                vd_s_RDBK_W(&u4_tp_word[ICU_WK_RO_REQ]);
+            }
+        }
+
+        for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)ICU_WK_NUM_INVLD_GR; u4_t_lpcnt++){
+            u4_tp_word = (volatile U4 *)st_gp_ICU_WK_INVLD_GR[u4_t_lpcnt].u4_raddr;
+            vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_MAS], (U4)U4_MAX                             );
+            vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_CLR], st_gp_ICU_WK_INVLD_GR[u4_t_lpcnt].u4_bit);
             vd_s_RDBK_W(&u4_tp_word[ICU_WK_RO_REQ]);
         }
+        vd_s_SYNCP();
     }
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)ICU_WK_NUM_INVLD_GR; u4_t_lpcnt++){
-        u4_tp_word = (volatile U4 *)st_gp_ICU_WK_INVLD_GR[u4_t_lpcnt].u4_raddr;
-        vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_MAS], (U4)U4_MAX                             );
-        vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_CLR], st_gp_ICU_WK_INVLD_GR[u4_t_lpcnt].u4_bit);
-        vd_s_RDBK_W(&u4_tp_word[ICU_WK_RO_REQ]);
-    }
-    vd_s_SYNCP();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_IcuWkSetCh(const U1 u1_a_CH, const U1 u1_a_CFGBIT)                                                               */
@@ -151,6 +155,7 @@ void    vd_g_IcuWkSetCh(const U1 u1_a_CH, const U1 u1_a_CFGBIT)
     U4                       u4_t_wrqbit;
     U4                       u4_t_mask;
     U4                       u4_t_ra;
+    U4                       u4_t_coreid;
 
     U2                       u2_t_irq_ch;
 
@@ -170,23 +175,27 @@ void    vd_g_IcuWkSetCh(const U1 u1_a_CH, const U1 u1_a_CFGBIT)
         u4_tp_word  = (volatile U4 *)u4_t_ra; 
 
         u1_t_ena    = u1_a_CFGBIT & (U1)ICU_WK_CFGBIT_WRQ_ENA;
-        /* ---------------------------------------------------------------------- */
-        /* Read/Modify/Write                                                      */
-        /* ---------------------------------------------------------------------- */
-        u4_t_gli = u4_g_IRQ_DI();
 
-        u4_t_mask = u4_REG_READ(u4_tp_word[ICU_WK_RO_MAS]);
-        if(u1_t_ena != (U1)0U){
-            u4_t_mask &= ((U4)U4_MAX ^ u4_t_wrqbit);
-        }
-        else{
-            u4_t_mask |= u4_t_wrqbit;
-        }
-        vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_MAS],   u4_t_mask);
-        vd_s_RDBK_W(&u4_tp_word[ICU_WK_RO_MAS]);
+        u4_t_coreid = u4_g_GetCoreId();
+        if (u4_t_coreid == (U4)BSW_CORE_ID_CORE0) {           /* Mask register only shall be updated in PE0 */
+            /* ---------------------------------------------------------------------- */
+            /* Read/Modify/Write                                                      */
+            /* ---------------------------------------------------------------------- */
+            u4_t_gli = u4_g_IRQ_DI();
 
-        vd_g_IRQ_EI(u4_t_gli);
-        /* ---------------------------------------------------------------------- */
+            u4_t_mask = u4_REG_READ(u4_tp_word[ICU_WK_RO_MAS]);
+            if(u1_t_ena != (U1)0U){
+                u4_t_mask &= ((U4)U4_MAX ^ u4_t_wrqbit);
+            }
+            else{
+                u4_t_mask |= u4_t_wrqbit;
+            }
+            vd_REG_U4_WRITE(u4_tp_word[ICU_WK_RO_MAS],   u4_t_mask);
+            vd_s_RDBK_W(&u4_tp_word[ICU_WK_RO_MAS]);
+
+            vd_g_IRQ_EI(u4_t_gli);
+            /* ---------------------------------------------------------------------- */
+        }
 
         u1_t_clr = u1_a_CFGBIT & (U1)ICU_WK_CFGBIT_WRQ_CLR;
         u1_t_el  = u1_gp_ICU_EL_BY_WK[u1_a_CH];

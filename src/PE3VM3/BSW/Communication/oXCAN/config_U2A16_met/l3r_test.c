@@ -37,12 +37,12 @@
 #define L3R_TEST_FRT_MAX                         (0x7fffffffU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define L3R_TEST_PDU_LOG_TX                      (MSG_CDC1S04_TXCH0)  /* CAN-ID 0x351                       */
+#define L3R_TEST_PDU_LOG_TX                      (U2_MAX)             /* CAN-ID 0x351                       */
 #define L3R_TEST_LOG_DLC_MAX                     (8U)                 /* data length of L3R_TEST_PDU_LOG_TX */
 #define L3R_TEST_LOG_RXC_MAX                     (3U)                 /* ( 8 byte - 2 byte) / 2 byte        */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define L3R_TEST_PDU_CYC_TX                      (MSG_CDC1S04_TXCH0)  /* CAN-ID 0x351                      */
+#define L3R_TEST_PDU_CYC_TX                      (U2_MAX)             /* CAN-ID 0x351                      */
 #define L3R_TEST_CYC_DLC_MAX                     (32U)                /* data length of L3R_TEST_PDU_CYC_TX */
 /* VM3から送信するメッセージが1メッセージになったため、上記2つは同じPDUIDを指定している。*/
 /* 下側は送信しないように変更                                           */
@@ -367,7 +367,7 @@ static void    vd_s_L3rTestLogTx(const U4 u4_a_RUN, const U1 u1_a_RXC_STA)
     }
 
     /* Com_WriteIPDU((PduIdType)L3R_TEST_PDU_LOG_TX, &u1_tp_byte_ltx[0]); */
-    Com_SendIPDU((PduIdType)L3R_TEST_PDU_LOG_TX, &u1_tp_byte_ltx[0]);
+    /*Com_SendIPDU((PduIdType)L3R_TEST_PDU_LOG_TX, &u1_tp_byte_ltx[0]);*/
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

@@ -25,7 +25,7 @@
 /******************************************/
 /******************************************/
 /* Send-Queue Number */
-#define BSW_CANIF_CFG_0_QUENUM_PDUR             (1U)
+#define BSW_CANIF_CFG_0_QUENUM_PDUR             (0U)
 #define BSW_CANIF_CFG_0_QUENUM_CANNM            (0U)
 #define BSW_CANIF_CFG_0_QUENUM_CANTP            (0U)
 #define BSW_CANIF_CFG_0_QUENUM_CDD1             (0U)
@@ -33,7 +33,7 @@
 #define BSW_CANIF_CFG_0_QUENUM_XCP              (0U)
 
 /* Send-Queue Offset */
-#define BSW_CANIF_CFG_0_QUEOFFSET_PDUR          (0U)
+#define BSW_CANIF_CFG_0_QUEOFFSET_PDUR          (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_0_QUEOFFSET_CANNM         (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_0_QUEOFFSET_CANTP         (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_0_QUEOFFSET_CDD1          (BSW_CANIF_NOUSE)
@@ -49,7 +49,7 @@
 /******************************************/
 /******************************************/
 /* Send-Queue Size */
-#define BSW_CANIF_CFG_0_SIZE_SNDQUE000          (160U)
+#define BSW_CANIF_CFG_0_SIZE_SNDQUE000          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE001          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE002          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE003          (0U)
@@ -301,7 +301,7 @@
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE249          (0U)
 
 /* Send-Queue HOH */
-#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (BSW_CANIF_HOH_VIRTUAL | 0x0002U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE001           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE002           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE003           (BSW_CANIF_HOH_NOUSE)
@@ -805,7 +805,7 @@
 #define BSW_CANIF_CFG_0_INTV_SNDQUE249          (0U)
 
 /* Send-Queue Completion Notification Timing  */
-#define BSW_CANIF_CFG_0_CALL_SNDQUE000          (BSW_CANIF_POLL)
+#define BSW_CANIF_CFG_0_CALL_SNDQUE000          (BSW_CANIF_INTR)
 #define BSW_CANIF_CFG_0_CALL_SNDQUE001          (BSW_CANIF_INTR)
 #define BSW_CANIF_CFG_0_CALL_SNDQUE002          (BSW_CANIF_INTR)
 #define BSW_CANIF_CFG_0_CALL_SNDQUE003          (BSW_CANIF_INTR)

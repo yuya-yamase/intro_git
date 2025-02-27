@@ -73,8 +73,8 @@ const uint8 MBQ_QueIdTbl[CANMBQ_QUE_NUM][CANMBQ_CHMAX] = {
 #include "GW_L3R_Memmap.h"
 
 /* äOïîïœêîíËã`(TxChannel) */
-Create_TxChannel(txChannel0, 0, G2M2_FD_BUS, Can_TxReq, TxChannel_SendReqCan, TxChannel_DrvTask_Tx_Can);
-Create_TxChannel(txChannel1, 1, G2M1_FD_BUS, Can_TxReq, TxChannel_SendReqCan, TxChannel_DrvTask_Tx_Can);
+Create_TxChannel(txChannel0, 0, G2M1_FD_BUS, Can_TxReq, TxChannel_SendReqCan, TxChannel_DrvTask_Tx_Can);
+Create_TxChannel(txChannel1, 1, G2M2_FD_BUS, Can_TxReq, TxChannel_SendReqCan, TxChannel_DrvTask_Tx_Can);
 Create_TxChannel(txChannel2, 2, G5M_FD_BUS, Can_TxReq, TxChannel_SendReqCan, TxChannel_DrvTask_Tx_Can);
 Create_TxChannel(txChannel3, 3, VCAN_BUS, VCan_TxReq, TxChannel_SendReqVCan, TxChannel_DrvTask_Tx_VCan);
 

@@ -28,13 +28,13 @@
 /*--------------------------------------------------------------------------*/
 /* Message Number */
 /* Upper Component */
-#define BSW_PDUR_CFG_MSGCOM_NUM            (100U)
+#define BSW_PDUR_CFG_MSGCOM_NUM            (96U)
 #define BSW_PDUR_CFG_MSGDCM_NUM            (0U)
 #define BSW_PDUR_CFG_MSGLDCOM_NUM          (0U)
 #define BSW_PDUR_CFG_MSGCDD1_NUM           (0U)
 #define BSW_PDUR_CFG_MSGCDD2_NUM           (0U)
 /* Lower Component */
-#define BSW_PDUR_CFG_MSGCANIF_NUM          (100U)
+#define BSW_PDUR_CFG_MSGCANIF_NUM          (96U)
 #define BSW_PDUR_CFG_MSGLINIF_NUM          (0U)
 #define BSW_PDUR_CFG_MSGSOADIF_NUM         (0U)
 #define BSW_PDUR_CFG_MSGDOIPIF_NUM         (0U)
