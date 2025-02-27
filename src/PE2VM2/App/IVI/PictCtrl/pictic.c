@@ -10,6 +10,7 @@
 #include "Mcu_Sys_Pwr_EizoIc.h"
 
 #include "gvif3tx.h"
+#include "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -346,6 +347,8 @@ static void     Mcu_Dev_Pwron_EizoIc_SetReg( void )
         if(mcu_sts == (uint8)TRUE){
             /* 全書込み完了 次状態に遷移 */
             Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_FIN;
+            /* 初期化完了通知 */
+            vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_EIZO_INI);
         }
         break;
 

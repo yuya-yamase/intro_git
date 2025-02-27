@@ -23,6 +23,7 @@
 #	{isdefined(COUNTRY_SW_US)}	-DSAMPLE
 # /------------------------------------------------------------/
     {isdefined(COUNTRY_SW_US)}	-DXMTUNER_XM_SHDN
+    {isdefined(COUNTRY_SW_US)}  -DANTCTL_XM_SHDN
 
 # /------------------------------------------------------------/
 
