@@ -11,6 +11,7 @@
 #include "Mcu_Sys_Pwr_GvifSndr.h"
 
 #include "pictic.h"
+#include "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -964,6 +965,8 @@ static uint8   Mcu_Dev_Pwron_GvifTx_OutSet( void )
                 (void)Dio_WriteChannel(MCU_PORT_GVIF_CDISP_RST , MCU_DIO_LOW);/* デバイスリセット */
                 /* ToDo：DTC記録 DISP(Center)通信途絶 コード：T.B.D */
                 Mcu_OnStep_GVIF3TX_OUTSET = (uint8)MCU_STEP_GVIF3TX_OUTSET_STP;
+                /* 初期化完了通知 */
+                vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFSEND_INI);
             }
             else{
                 /* A点へ戻る */
@@ -1021,6 +1024,8 @@ static uint8   Mcu_Dev_Pwron_GvifTx_HDCP( void )
     /* 起動条件：バックチャネルGPIO1確認 論理：High */
     mcu_return = (uint8)TRUE;
 
+    /* 初期化完了通知 */
+    vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFSEND_INI);
 
     return(mcu_return);
 }

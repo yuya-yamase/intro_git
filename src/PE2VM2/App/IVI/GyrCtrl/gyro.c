@@ -9,6 +9,7 @@
 #include "Dio_Symbols.h"
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_Gyr.h"
+#include "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -423,6 +424,8 @@ static void     Mcu_Dev_Pwron_Gyro_SetReg( void )
     case MCU_STEP_GYRO2_OVERALL_4:
         /* 1ms待機は本caseに到達した時点で満たしていると判断するためwait処理は実施しない */
         Mcu_OnStep_Gyro_2_OVRALL = (uint8)MCU_STEP_GYRO2_OVERALL_FIN;
+        /* 初期化完了通知 */
+        vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GYRO_INI);
         break;
 
     case MCU_STEP_GYRO2_OVERALL_FIN:

@@ -25,6 +25,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define    XSPI_IVI_POWER_DEV_INI_NUM           (5U)
+#define    XSPI_IVI_POWER_EIZO_INI              (0U)
+#define    XSPI_IVI_POWER_GVIFRECV_INI          (1U)
+#define    XSPI_IVI_POWER_GVIFSEND_INI          (2U)
+#define    XSPI_IVI_POWER_GYRO_INI              (3U)
+#define    XSPI_IVI_POWER_POWER_INI             (4U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -39,6 +45,7 @@ void            vd_g_XspiIviSub1PowerMainTask(void);
 void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size);
 void            vd_g_XspiIviSub1_PowerState1stSend(void);
 void            vd_g_XspiIviSub1DevInitFinish(void);
+void            vd_g_XspiIviSub1PowerDevInitCmpApp(const U1 u1_a_ID);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

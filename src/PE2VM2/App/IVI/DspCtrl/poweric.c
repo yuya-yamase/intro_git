@@ -8,6 +8,7 @@
 #include "Dio_Symbols.h"
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_PowerIc.h"
+#include "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -299,6 +300,8 @@ static void     Mcu_Dev_Pwron_PowerIc_SetReg( void )
             if(mcu_sts == (uint8)TRUE){
                 /* 全書込み完了 次状態に遷移 */
                 Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_ONSTEP_P_IC_OVERALL_FIN;
+                /* 初期化完了通知 */
+                vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_POWER_INI);
             }
             break;
 
