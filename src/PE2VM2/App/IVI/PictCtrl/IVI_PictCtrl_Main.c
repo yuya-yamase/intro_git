@@ -110,9 +110,9 @@ void            vd_g_Ivi_PictCtrl_Main_1ms(void)
 {
     vd_g_PictCtl_MainTask();
     vd_g_Gvif3RxMainTask();
-    /*vd_g_Pict_Ml86294_Routine();*/
+    vd_g_Pict_Ml86294_Routine();
     vd_g_Pict_GvifSndrRoutine();
-    vd_g_PictMute_Routine();
+    /* vd_g_PictMute_Routine(); */   /* 暫定 PM-V-MUTE端子制御処理をコメントアウト */
 }
 
 /*===================================================================================================================================*/

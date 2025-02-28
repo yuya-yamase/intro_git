@@ -97,11 +97,9 @@ void    vd_g_GagdstTempSegInit(void)
 void    vd_g_GagdstTempSegOpemdEvhk(const U4 u4_a_EVTBIT)
 {
     U4  u4_t_evtchk;
-#if 0   /* BEV BSW provisionally */
+
     u4_t_evtchk = u4_a_EVTBIT & (U4)(VEH_OPEMD_EVTBIT_IGN_TO_ON | VEH_OPEMD_EVTBIT_IGN_TO_OFF);
-#else
-    u4_t_evtchk = u4_a_EVTBIT & (U4)(0x00002020U);
-#endif
+
     if(u4_t_evtchk != (U4)0U){
         u1_s_gagdst_tempseg_num     = (U1)GAGDST_TEMPSEG_SEG_UNK;
         u2_s_gagdst_tempseg_bit     = (U2)0U;

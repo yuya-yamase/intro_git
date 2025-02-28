@@ -10,6 +10,7 @@
 #include "Mcu_Sys_Pwr_EizoIc.h"
 
 #include "gvif3tx.h"
+#include "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -21,7 +22,7 @@
 #define MCU_SYS_COUNTTIME_FIN           (0xFFFFFFFFU)
 
 /* 映像IC制御仕様 */
-#define MCU_WRINUM_EIZOIC_INISET        (69U)   /* 6.2 初期化処理 レジスタ書込み回数 */
+#define MCU_WRINUM_EIZOIC_INISET        (70U)   /* 6.2 初期化処理 レジスタ書込み回数 */
 #define MCU_WRINUM_EIZOIC_SIPSET        (4U)    /* 6.3 SiP映像表示に関する処理 レジスタ書込み回数 */
 #define MCU_WRINUM_EIZOIC_CAMSET        (28U)   /* 6.5.1.1 起動時のカメラ映像表示に関する設定 レジスタ書込み回数 */
 #define MCU_WRINUM_EIZOIC_CNTDSPSET     (4U)    /* 6.4.1 別体センターディスプレイへの映像出力ON ( eDP出力ON ) レジスタ書込み回数 */
@@ -234,7 +235,8 @@ static void     Mcu_Dev_Pwron_EizoIc_SetReg( void )
         {      444,         8,         0},
         {      452,         1,         0},
         {      453,        10,         0},
-        {      463,         8,         0}
+        {      463,        10,         0},
+        {      473,         4,         0}
     };
     /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
     static const ST_REG_WRI_REQ EIZOIC_SIPSET[MCU_WRINUM_EIZOIC_SIPSET] = {
@@ -345,6 +347,8 @@ static void     Mcu_Dev_Pwron_EizoIc_SetReg( void )
         if(mcu_sts == (uint8)TRUE){
             /* 全書込み完了 次状態に遷移 */
             Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_FIN;
+            /* 初期化完了通知 */
+            vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_EIZO_INI);
         }
         break;
 

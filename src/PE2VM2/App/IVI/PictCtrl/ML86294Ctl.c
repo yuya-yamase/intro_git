@@ -15962,8 +15962,8 @@ void    vd_g_Pict_Ml86294_Init(void)
     u1_s_pict_mlroute_drec_cnt = (U1)0U;
     u1_s_pict_mlmipircv_drec_cnt = (U1)0U;
     u1_s_pict_mldevrst_sts = (U1)ML86294_DEV_RST_STEP0;
-    U1 u2_s_pict_mlregget_timer = (U2)0U;
-    U1 u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_STOP;
+    u2_s_pict_mlregget_timer = (U2)0U;
+    u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_STOP;
     u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP0;
     u1_s_pict_mlregget_result = (U1)PICT_ML_MIPI_SYNC_OFF;
     u1_s_pict_mldevrst_notif = (U1)PICT_ML_DEVRST_NON;
@@ -16082,7 +16082,7 @@ void    vd_g_Pict_Ml86294_Routine(void)
 
             /* Cyc Check Start */
             u1_t_cycchk_func_sts = (U1)TRUE;
-
+#if 0   /* 暫定 I2Cアクセス競合が発生するためコメントアウト */
             /* Freeze Detection Intruput Check */
             if(u1_s_pict_ml_frzint_chk_flg == (U1)TRUE){
                 u1_t_dio_read_result = (U1)u1_PICT_ML_GET_V_IC_STATUS1();
@@ -16111,7 +16111,7 @@ void    vd_g_Pict_Ml86294_Routine(void)
             if(u1_t_cycchk_func_sts == (U1)TRUE){
                 u1_t_cycchk_func_sts = (U1)u1_s_Pict_MLIrqHpdCycChk();
             }
-
+#endif
             /* 暫定 カメラ同期検知 */
             if((u1_s_pict_mlregget_flag == (U1)ML86294_REGGET_FLAG_START)
             && (u1_t_cycchk_func_sts == (U1)TRUE)){
@@ -16253,9 +16253,9 @@ static U1    u1_s_Pict_MLCycChk(void)   /* 暫定 100ms定期 */
             break;
         case ML86294_CYCCHK_STEP5:                                       /* STEP5 */
             u1_t_reg_read_result = st_sp_ML86294_MLSYNCCYCCHK_RD_TBL[1].u1p_pdu[1];
-            u1_t_sip_sync_err = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_2;     /* Get Sip Error Result */
+            u1_t_sip_sync_err = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_1;     /* Get Sip Error Result */
             if((u1_t_sip_sync_err == (U1)PICT_ML_MLSYNCCYCCHK_SIP_ERR)              /* Sip Error */
-            && (u1_s_pict_mlsync_pre_sip_sync_err == (U1)PICT_REG_MASK_BIT_2)){     /* Previous State OK */
+            && (u1_s_pict_mlsync_pre_sip_sync_err == (U1)PICT_REG_MASK_BIT_1)){     /* Previous State OK */
                 if(u1_s_pict_mlsync_sip_drec_cnt < (U1)PICT_ML_MLSYNCCYCCHK_SIP_DREC_CNT_MAX){ /* Drec Counter < 3 */
                     /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlsync_sip_drec_cnt++;
@@ -17464,7 +17464,9 @@ U1    u1_s_Pict_MLMIPISyncCheck(void)
                 else{                                                       /* bit[3] = 0 */
                     u1_s_pict_mlregget_result = (U1)PICT_ML_MIPI_SYNC_OFF;
                 }
-                U1 u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_COMP;
+                u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_COMP;
+	            /* Process Reset */
+	            u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP0;
                 /* Function Completion */
                 u1_t_ret = (U1)TRUE;
             }
@@ -17495,9 +17497,8 @@ U1    u1_g_Pict_MlRegGet(U1 * u1_a_reg_read_result)
     }
     else{
         u1_t_ret = (U1)FALSE;
+        u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_START;        /* Register Read Start */
     }
-
-    u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_START;            /* Register Read Start */
 
     return(u1_t_ret);
 }

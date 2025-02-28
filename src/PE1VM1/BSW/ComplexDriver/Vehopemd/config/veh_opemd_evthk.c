@@ -19,7 +19,20 @@
 #include "veh_opemd_cfg_private.h"
 
 #include "iohw_diflt.h"
-/*#include "stub.h"*/
+
+#if 0   /* BEV BSW provisionally */
+#include "xpd_init.h"
+#else
+#endif
+
+#include "vehspd_kmph.h"
+#include "ptsctmp_cel.h"
+#include "alert.h"
+#include "gauge.h"
+
+#include "vardef.h"
+#include "fspomgr.h"
+
 /*#include "date_clk.h"*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,7 +55,7 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_NUM_EVTHK                      (0U)
+#define VEH_OPEMD_NUM_EVTHK                      (5U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macros                                                                                                                           */
@@ -70,7 +83,19 @@ void    vd_g_VehopemdCfgEvthk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
 {
 #if (VEH_OPEMD_NUM_EVTHK > 0)
     static const ST_VEH_OPEMD_EVTHK   st_sp_VEH_OPEMD_EVTHK[VEH_OPEMD_NUM_EVTHK] = {
-        {&vd_g_StubOpemdEvthk,          (U4)VEH_OPEMD_EVTBIT_FIELDS}
+        {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVTBIT_POE_TO_ON    },
+
+        {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVTBIT_POE_TO_ON  |
+                                         (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF) },
+
+        {&vd_g_AlertOpemdEvhk,          ((U4)VEH_OPEMD_EVTBIT_POE_TO_ON  |
+                                         (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF) },
+
+        {&vd_g_GaugeOpemdEvhk,          ((U4)VEH_OPEMD_EVTBIT_POE_TO_ON  |
+                                         (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF) },
+
+        {&vd_g_FspoOpemdEvhk,          ((U4)VEH_OPEMD_EVTBIT_POE_TO_ON  |
+                                         (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF) }
     };
 
     U4                                u4_t_cnt;
@@ -83,12 +108,20 @@ void    vd_g_VehopemdCfgEvthk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
 #ifdef OXCAN_H
     vd_g_oXCANOpemdEvhk();
 #endif
+    vd_g_VardefOpemdEvhk();
 
 #ifdef DATE_CLK_H
-    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF;
+    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF;
     if(u4_t_jdgbit != (U4)0U){
         vd_g_DateclkEtmStart((U1)DATE_CLK_ETM_CH_TMRWK, (U4)0U); /* zero start */
     }
+#endif
+#if 0   /* BEV BSW provisionally */
+    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON;
+    if(u4_t_jdgbit != (U4)0U){
+       (void)u1_g_XpdiAbocnt((U1)TRUE);
+    }
+#else
 #endif
 
 #if (VEH_OPEMD_NUM_EVTHK > 0)

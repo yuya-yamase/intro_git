@@ -8,6 +8,7 @@
 #include "Dio_Symbols.h"
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_Gvif3Rx.h"
+#include "x_spi_ivi_sub1_power.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -19,7 +20,7 @@
 #define MCU_SYS_COUNTTIME_FIN           (0xFFFFFFFFU)
 
 /* GVIF受信制御仕様 */
-#define MCU_WRINUM_GVIF3RX_INISET       (25U)   /* 6-2. 初期設定処理 初期設定 (7-1. 初期設定値 参照) レジスタ書込み回数 */
+#define MCU_WRINUM_GVIF3RX_INISET       (28U)   /* 6-2. 初期設定処理 初期設定 (7-1. 初期設定値 参照) レジスタ書込み回数 */
 #define MCU_WRINUM_GVIF3RX_TYPSET       (8U)    /* 6ｰ3. カメラシステム種別による設定 レジスタ書込み回数 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -175,19 +176,22 @@ static void     Mcu_Dev_Pwron_GvifRx_SetReg( void )
         {       36,         1,         0},
         {       37,         1,         0},
         {       38,         1,         0},
-        {       39,         1,         0},
-        {       40,         1,         0},
-        {       41,         9,         0},
-        {       50,        10,         0},
-        {       60,         1,         0},
-        {       61,         1,         0},
-        {       62,         1,         0},
-        {       63,         9,         0},
-        {       72,         9,         0},
-        {       81,         1,         0},
-        {       82,         2,         0},
-        {       84,         1,         0},
-        {       85,         1,         0}
+        {       39,         2,         0},
+        {       41,         1,         0},
+        {       42,         1,         0},
+        {       43,         1,         0},
+        {       44,         9,         0},
+        {       53,        10,         0},
+        {       63,         1,         0},
+        {       64,        10,         0},
+        {       74,         1,         0},
+        {       75,         9,         0},
+        {       84,         9,         0},
+        {       93,         9,         0},
+        {      102,         1,         0},
+        {      103,         2,         0},
+        {      105,         1,         0},
+        {      106,         1,         0}
     };
     /* 6ｰ3. カメラシステム種別による設定 6ｰ3-2-1. カメラシステム種別設定(カメラなし) */
     static const ST_REG_WRI_REQ GVIFRX_DOMCONSET[MCU_WRINUM_GVIF3RX_TYPSET] = {
@@ -234,6 +238,8 @@ static void     Mcu_Dev_Pwron_GvifRx_SetReg( void )
         if(mcu_sts == (uint8)TRUE){
             /* 全書込み完了 次状態に遷移 */
             Mcu_OnStep_GVIF3RX_OVRALL = (uint8)MCU_STEP_GVIF3RX_OVERALL_FIN;
+            /* 初期化完了通知 */
+            vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFRECV_INI);
         }
         break;
     

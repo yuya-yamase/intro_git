@@ -9,6 +9,7 @@
 # /------------------------------------------------------------/
 # PORTのConfig実施までの暫定措置
     {isdefined(COUNTRY_SW_JP)}	-DI2C_PIN_JP
+    {isdefined(COUNTRY_SW_JP)}	-DANTCTL_DTV
 
 # /------------------------------------------------------------/
 
@@ -16,6 +17,7 @@
 #	{isdefined(COUNTRY_SW_US)}	-DSAMPLE
 # /------------------------------------------------------------/
     {isdefined(COUNTRY_SW_US)}	-DXMTUNER_XM_SHDN
+    {isdefined(COUNTRY_SW_US)}  -DANTCTL_XM_SHDN
 
 # /------------------------------------------------------------/
 
@@ -24,5 +26,6 @@
 # OTH用の定義が有効の場合に使用するマクロ名を以下枠内に記述
 #	{isdefined(COUNTRY_SW_OTH)}	-DSAMPLE
 # /------------------------------------------------------------/
+    {isdefined(COUNTRY_SW_OTH)} -DANTCTL_DAB
 
 # /------------------------------------------------------------/

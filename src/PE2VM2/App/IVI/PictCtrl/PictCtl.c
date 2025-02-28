@@ -2698,7 +2698,9 @@ static U1 u1_s_PictCtl_SiPErrstsChk(void)
     if(u2_t_time == (U2)PICT_TIM_TOUT)
     {
         if((u1_t_pmapshold == (U1)FALSE) ||
-           ((u1_t_sailerr1 != (U1)TRUE) || (u1_t_sailerr2 != (U1)FALSE)) ||
+#if 0
+           ((u1_t_sailerr1 != (U1)TRUE) || (u1_t_sailerr2 != (U1)FALSE)) || /* ƒVƒXŒŸŽb’è‘Î‰ž */
+#endif
            ((u1_s_pict_pmpsailerrn == (U1)TRUE) && (u1_t_pmpsailerrn == (U1)FALSE))){
                 u1_t_sts = (U1)PICT_SIP_ERR_ON;
         }
