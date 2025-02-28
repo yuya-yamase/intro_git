@@ -30,7 +30,6 @@ primaryTarget=v800_standalone.tgt
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
     :optionsFile=${CMN_DIR}/IOHW.opt
-    :optionsFile=${CMPSW_DIR}/PE3VM3_CmpSW.opt
 
     -I${COMP_DIR}/include/v800
     -I${COMP_DIR}/ansi
