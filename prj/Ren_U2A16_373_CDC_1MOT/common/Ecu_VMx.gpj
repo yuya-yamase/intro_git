@@ -1,9 +1,6 @@
 #!gbuild
 [Subproject]
-    :sourceDir=${SS_DIR}
-
-    -I${SS_DIR}/SchdM
-    -I${SS_DIR}/SchdM/cfg
+    :sourceDir=${SS_DIR}/22SS/scc
 
     -I${CAN_DIR}/CS/inc
     -I${CAN_DIR}/Can/cfg/rscf4
@@ -114,11 +111,7 @@
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/scc
     -I${APP_DIR}/MET/Platform/Version/scc
 
-Ecu_CtgOs.c
 Ecu_Int.c
-Ecu_OsStub.c
-Ecu_Task.c
-Ecu_CtgOs_asm.850
 Ecu_Int_Vector_asm.850
 Ecu_Int_asm.850
 Ecu_Arb.c
@@ -129,5 +122,3 @@ Ecu_Intg.c
 Ecu_IntgHAL.c
 Ecu_IntgHAL_Callout.c
 
-SchdM/scheduler.c
-SchdM/cfg/scheduler_cfg.c

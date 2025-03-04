@@ -141,7 +141,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Tx VHOH(VHTH) Number */
-#define BSW_VCAN_CFG_VHTHNUM_0                  (42U)
+#define BSW_VCAN_CFG_VHTHNUM_0                  (41U)
 #define BSW_VCAN_CFG_VHTHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_3                  (0U)

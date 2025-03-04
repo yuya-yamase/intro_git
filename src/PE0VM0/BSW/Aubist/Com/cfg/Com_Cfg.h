@@ -20,7 +20,7 @@
 #define BSW_COM_CFG_HANDLE_NUM             (15U)
 #define BSW_COM_CFG_MSGBUF_SIZE            (35U)
 #define BSW_COM_CFG_TX_MSGBUF_SIZE         (0U)
-#define BSW_COM_CFG_FAILSAFE_SIZE          (BSW_COM_CFG_MSGBUF_SIZE)
+#define BSW_COM_CFG_FAILSAFE_SIZE          (0U)
 #define BSW_COM_CFG_PERIOD_MSG_NUM         (0U)
 #define BSW_COM_CFG_TX_ALVCNTMSG_NUM       (0U)
 #define BSW_COM_CFG_RX_ALVCNTMSG_NUM       (0U)
@@ -635,7 +635,7 @@
 #define DAT_OFS_VPSINFO2                        ((MSG_OFS_BDC1S81_RXCH0) + (3U))
 #define DAT_OFS_VPSINFO1                        ((MSG_OFS_BDC1S81_RXCH0) + (3U))
 #define DAT_OFS_VPSINFOS                        ((MSG_OFS_BDC1S81_RXCH0) + (4U))
-#define DAT_OFS_D00976                          ((MSG_OFS_BDC1S81_RXCH0) + (5U))
+#define DAT_OFS_VPSCNG                          ((MSG_OFS_BDC1S81_RXCH0) + (5U))
 #define DAT_OFS_VPSISOTA                        ((MSG_OFS_BDC1S81_RXCH0) + (6U))
 #define DAT_OFS_APOFRQ                          ((MSG_OFS_BDC1S81_RXCH0) + (8U))
 #define DAT_OFS_FV1E3_D                         ((MSG_OFS_BDC1S81_RXCH0) + (21U))
@@ -651,7 +651,7 @@
 #define ComConf_ComSignal_VPSINFO2              (7U)            /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:VPSINFO2, Sign:U, Len(bit):1, Pos:4.1, Ev:-, Endian:BIG */
 #define ComConf_ComSignal_VPSINFO1              (8U)            /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:VPSINFO1, Sign:U, Len(bit):1, Pos:4.0, Ev:-, Endian:BIG */
 #define ComConf_ComSignal_VPSINFOS              (9U)            /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:VPSINFOS, Sign:U, Len(bit):8, Pos:5.0, Ev:-, Endian:BIG */
-#define ComConf_ComSignal_D00976                (10U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:D00976,   Sign:U, Len(bit):8, Pos:6.0, Ev:-, Endian:BIG */
+#define ComConf_ComSignal_VPSCNG                (10U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:VPSCNG,   Sign:U, Len(bit):8, Pos:6.0, Ev:-, Endian:BIG */
 #define ComConf_ComSignal_VPSISOTA              (11U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:VPSISOTA, Sign:U, Len(bit):8, Pos:7.0, Ev:-, Endian:BIG */
 #define ComConf_ComSignal_APOFRQ                (12U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:APOFRQ,   Sign:U, Len(bit):1, Pos:9.0, Ev:-, Endian:BIG */
 #define ComConf_ComSignal_FV1E3_D               (13U)           /* Bus:CANFD_G2M_1_BUS(Ch:0), Msg:BDC1S81_RXCH0(Rx), Data:FV1E3_D,  Sign:U, Len(bit):56, Pos:22.0, Ev:-, Endian:- */
@@ -669,7 +669,7 @@
 #define bsw_com_UD_W_ComConf_ComSignal_VPSINFO2(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSINFO2), ((BswU2)DAT_OFS_VPSINFO2), (BswU1) 1U, (BswU1) 1U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_VPSINFO1(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSINFO1), ((BswU2)DAT_OFS_VPSINFO1), (BswU1) 1U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_VPSINFOS(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSINFOS), ((BswU2)DAT_OFS_VPSINFOS), (BswU1) 8U, (BswU1) 0U, (z))
-#define bsw_com_UD_W_ComConf_ComSignal_D00976(z)               Com_SendSignalB          (((BswU2)ComConf_ComSignal_D00976), ((BswU2)DAT_OFS_D00976), (BswU1) 8U, (BswU1) 0U, (z))
+#define bsw_com_UD_W_ComConf_ComSignal_VPSCNG(z)               Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSCNG), ((BswU2)DAT_OFS_VPSCNG), (BswU1) 8U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_VPSISOTA(z)             Com_SendSignalB          (((BswU2)ComConf_ComSignal_VPSISOTA), ((BswU2)DAT_OFS_VPSISOTA), (BswU1) 8U, (BswU1) 0U, (z))
 #define bsw_com_UD_W_ComConf_ComSignal_APOFRQ(z)               Com_SendSignalB          (((BswU2)ComConf_ComSignal_APOFRQ), ((BswU2)DAT_OFS_APOFRQ), (BswU1) 1U, (BswU1) 0U, (z))
 #define bsw_com_UD_WA_ComConf_ComSignal_FV1E3_D(z)             Com_SndSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E3_D), ((BswU2)DAT_OFS_FV1E3_D), (BswU2)   7U, (z))
@@ -688,7 +688,7 @@
 #define bsw_com_UD_R_ComConf_ComSignal_VPSINFO2(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSINFO2), ((BswU2)DAT_OFS_VPSINFO2), (BswU1) 1U, (BswU1) 1U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_VPSINFO1(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSINFO1), ((BswU2)DAT_OFS_VPSINFO1), (BswU1) 1U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_VPSINFOS(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSINFOS), ((BswU2)DAT_OFS_VPSINFOS), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
-#define bsw_com_UD_R_ComConf_ComSignal_D00976(z)               Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_D00976), ((BswU2)DAT_OFS_D00976), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
+#define bsw_com_UD_R_ComConf_ComSignal_VPSCNG(z)               Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSCNG), ((BswU2)DAT_OFS_VPSCNG), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_VPSISOTA(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_VPSISOTA), ((BswU2)DAT_OFS_VPSISOTA), (BswU1) 8U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_R_ComConf_ComSignal_APOFRQ(z)               Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_APOFRQ), ((BswU2)DAT_OFS_APOFRQ), (BswU1) 1U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 #define bsw_com_UD_RA_ComConf_ComSignal_FV1E3_D(z)             Com_RcvSgnlGrpArry       (((BswU2)ComConf_ComSignal_FV1E3_D), ((BswU2)DAT_OFS_FV1E3_D), (BswU2)   7U, (z))
@@ -696,21 +696,11 @@
 #define bsw_com_UD_R_ComConf_ComSignal_KZK1E3_D(z)             Com_ReceiveSignalB       (((BswU2)ComConf_ComSignal_KZK1E3_D), ((BswU2)DAT_OFS_KZK1E3_D), (BswU1)32U, (BswU1) 0U, (BswU1)BSW_COM_DATATYPE_U, (z))
 
 /* Symbolic Name Reference - SysStatus */
-#define ComConf_SysStatusName_PAR                           (BSW_COM_u4IPDUGROUP_BAT)
-#define ComConf_SysStatusName_RID                           (BSW_COM_u4IPDUGROUP_ACC)
-#define ComConf_SysStatusName_PON                           (BSW_COM_u4IPDUGROUP_IG)
-#define ComConf_SysStatusName_POE                           (BSW_COM_u4IPDUGROUP_USER1)
-#define ComConf_SysStatusName_PAR_HV                        (BSW_COM_u4IPDUGROUP_USER2)
-#define ComConf_SysStatusName_PAR_HVHC                      (BSW_COM_u4IPDUGROUP_USER3)
-#define ComConf_SysStatusName_CHK                           (BSW_COM_u4IPDUGROUP_USER4)
-#define ComConf_SysStatusName_PDM                           (BSW_COM_u4IPDUGROUP_USER5)
-#define ComConf_SysStatusName_OTA1                          (BSW_COM_u4IPDUGROUP_USER6)
-#define ComConf_SysStatusName_OTA2                          (BSW_COM_u4IPDUGROUP_USER7)
-#define ComConf_SysStatusName_OTA3                          (BSW_COM_u4IPDUGROUP_USER8)
-#define ComConf_SysStatusName_OTA4                          (BSW_COM_u4IPDUGROUP_USER9)
-#define ComConf_SysStatusName_WRP                           (BSW_COM_u4IPDUGROUP_USER10)
-#define ComConf_SysStatusName_EDS                           (BSW_COM_u4IPDUGROUP_USER11)
-#define ComConf_SysStatusName_PAO                           (BSW_COM_u4IPDUGROUP_USER12)
+#define ComConf_SysStatusName_BAT                           (BSW_COM_u4IPDUGROUP_BAT)
+#define ComConf_SysStatusName_ACC                           (BSW_COM_u4IPDUGROUP_ACC)
+#define ComConf_SysStatusName_IG                            (BSW_COM_u4IPDUGROUP_IG)
+#define ComConf_SysStatusName_PBA                           (BSW_COM_u4IPDUGROUP_USER1)
+#define ComConf_SysStatusName_IGR                           (BSW_COM_u4IPDUGROUP_USER2)
 #define ComConf_SysStatusName_VCAN                          (BSW_COM_u4IPDUGROUP_USER29)
 
 

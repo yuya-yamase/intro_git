@@ -1,0 +1,1978 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<AUTOSAR xmlns="http://autosar.org/schema/r4.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://autosar.org/schema/r4.0 AUTOSAR_00047.xsd">
+  <AR-PACKAGES>
+    <AR-PACKAGE UUID="026efee9-271a-4f58-8af8-207ba7dba011">
+      <SHORT-NAME>Mcu</SHORT-NAME>
+      <ELEMENTS>
+        <ECUC-MODULE-CONFIGURATION-VALUES>
+          <SHORT-NAME>Mcu</SHORT-NAME>
+          <DEFINITION-REF DEST="ECUC-MODULE-DEF">/Mcu/Mcu</DEFINITION-REF>
+          <CONTAINERS>
+            <ECUC-CONTAINER-VALUE>
+              <SHORT-NAME>NewMcuGeneralConfiguration0</SHORT-NAME>
+              <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuGeneralConfiguration</DEFINITION-REF>
+              <PARAMETER-VALUES>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuGeneralConfiguration/McuInitClock</DEFINITION-REF>
+                  <VALUE>true</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuGeneralConfiguration/McuNoPll</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuGeneralConfiguration/McuPerformResetApi</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuGeneralConfiguration/McuResetReason</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+                <ECUC-TEXTUAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuGeneralConfiguration/McuPackage</DEFINITION-REF>
+                  <VALUE>MCU_U2A16_373</VALUE>
+                </ECUC-TEXTUAL-PARAM-VALUE>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuGeneralConfiguration/McuRegisterCheck</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuGeneralConfiguration/McuRegisterRefresh</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
+              </PARAMETER-VALUES>
+            </ECUC-CONTAINER-VALUE>
+            <ECUC-CONTAINER-VALUE>
+              <SHORT-NAME>NewMcuModuleConfiguration0</SHORT-NAME>
+              <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration</DEFINITION-REF>
+              <SUB-CONTAINERS>
+                <ECUC-CONTAINER-VALUE>
+                  <SHORT-NAME>NewMcuClockSettingConfig0</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig</DEFINITION-REF>
+                  <SUB-CONTAINERS>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>NewMcuClockConf0</SHORT-NAME>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="kyoto_extensions">
+                            <SDG GID="params#14">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#15">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#16">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#17">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#18">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#19">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#20">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#21">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#22">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#23">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#24">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#25">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#26">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#27">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceRLIN</DEFINITION-REF>
+                          <VALUE>MCU_CLK_RLIN_MOSC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceRCAN</DEFINITION-REF>
+                          <VALUE>MCU_CLK_RCAN_MOSC_2</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceMSPI_A</DEFINITION-REF>
+                          <VALUE>MCU_CLK_MSPI_A_HSB_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceWDTBA_A</DEFINITION-REF>
+                          <VALUE>MCU_CLK_WDTBA_A_LSIOSC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceTAUJ_A</DEFINITION-REF>
+                          <VALUE>MCU_CLK_ATAUJC_A_MOSC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceRTCA_A</DEFINITION-REF>
+                          <VALUE>MCU_CLK_ARTCAC_A_LSIOSC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceFOUT0</DEFINITION-REF>
+                          <VALUE>MCU_CLK_FOUT0C_HSB_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockDividerFOUT0</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceWDTBn_A</DEFINITION-REF>
+                          <VALUE>MCU_CLK_WDTC_A_HSIOSC_640</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceADCJn</DEFINITION-REF>
+                          <VALUE>MCU_CLK_ADCJ_LSB_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceADCJ2_A</DEFINITION-REF>
+                          <VALUE>MCU_CLK_AADCC_A_LSB_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockDividerADCJ2</DEFINITION-REF>
+                          <VALUE>MCU_CLKD_AADCC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceFOUT1</DEFINITION-REF>
+                          <VALUE>MCU_CLK_FOUT1C_HSB_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockDividerFOUT1</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceModulationSSCG</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceModulationFrequencySSCG</DEFINITION-REF>
+                          <VALUE>MCU_CLK_SSCG_30</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceModulationDitheredRangeSSCG</DEFINITION-REF>
+                          <VALUE>MCU_CLK_SSCG_DITHERED_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceRLIN3</DEFINITION-REF>
+                          <VALUE>MCU_CLK_RLIN3_HSBC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceRLIN3_CH23</DEFINITION-REF>
+                          <VALUE>MCU_CLK_RLIN3_CH23_HBUSC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceCANFD_XIN</DEFINITION-REF>
+                          <VALUE>MCU_CLK_CANFD_XIN_MOSC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceCANFD_C</DEFINITION-REF>
+                          <VALUE>MCU_CLK_CANFD_C_HSBC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceMSPI_B</DEFINITION-REF>
+                          <VALUE>MCU_CLK_MSPI_B_MOSC_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceWDTBn_B</DEFINITION-REF>
+                          <VALUE>MCU_CLK_WDTC_B_HSIOSC_640</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceEXTCLK0</DEFINITION-REF>
+                          <VALUE>MCU_CLK_EXTCLK0C_HSB_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockDividerEXTCLK0</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceEXTCLK1</DEFINITION-REF>
+                          <VALUE>MCU_CLK_EXTCLK1C_HSB_1</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockDividerEXTCLK1</DEFINITION-REF>
+                          <VALUE>0</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-TEXTUAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceSWDT</DEFINITION-REF>
+                          <VALUE>MCU_CLK_SWDT_HSIOSC_20</VALUE>
+                        </ECUC-TEXTUAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuPerformClockMonitor</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>NewMcuModuleStandbyConf0</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf</DEFINITION-REF>
+                      <SUB-CONTAINERS>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyRSCFD0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSCFD</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSCFD/McuModuleStandbyRSCFD0</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSCFD/McuModuleStandbyRSCFD1</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyFLXA0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFLXA</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFLXA/McuModuleStandbyFLXA0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFLXA/McuModuleStandbyFLXA1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyETNB0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyETNB</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyETNB/McuModuleStandbyETNB0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyETNB/McuModuleStandbyETNB1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyRSENT0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#8">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#9">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#10">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#11">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#12">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#13">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#14">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#15">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#16">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#17">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#18">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#19">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#20">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#21">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#22">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#23">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#24">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#25">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#26">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#27">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#28">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#29">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT2</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT4</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT5</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT6</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT7</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT8</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT9</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT10</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT11</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT12</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT13</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT14</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT15</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT16</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT17</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT18</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT19</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT20</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT21</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT22</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT23</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT24</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT25</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT26</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT27</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT28</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRSENT/McuModuleStandbyRSENT29</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyMSPI0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#9">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI0</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI2</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI3</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI4</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI5</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI6</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI7</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI8</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMSPI/McuModuleStandbyMSPI9</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyRLIN30</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN30</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN31</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN32</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN33</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN34</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN35</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN36</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN37</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN38</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN39</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN310</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN311</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN312</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN313</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN314</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN315</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN316</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN317</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN318</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN319</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN320</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN321</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN322</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRLIN3/McuModuleStandbyRLIN323</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyRIIC0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRIIC</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRIIC/McuModuleStandbyRIIC0</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRIIC/McuModuleStandbyRIIC1</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyTAUD0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#3">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUD</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUD/McuModuleStandbyTAUD0</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUD/McuModuleStandbyTAUD1</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUD/McuModuleStandbyTAUD2</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUD/McuModuleStandbyTAUD3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyTAUJ_ISO0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUJ_ISO</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUJ_ISO/McuModuleStandbyTAUJ_ISO0</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUJ_ISO/McuModuleStandbyTAUJ_ISO1</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyTAUJ_AWO0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUJ_AWO</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUJ_AWO/McuModuleStandbyTAUJ_AWO2</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAUJ_AWO/McuModuleStandbyTAUJ_AWO3</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyOSTM0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM0</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM1</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM2</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM3</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM4</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM5</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM6</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM7</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM8</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyOSTM/McuModuleStandbyOSTM9</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyRTCA0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRTCA</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRTCA/McuModuleStandbyRTCA0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyGTM0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyGTM</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyGTM/McuModuleStandbyGTM0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyADCJ_ISO0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCJ_ISO</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCJ_ISO/McuModuleStandbyADCJ_ISO0</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCJ_ISO/McuModuleStandbyADCJ_ISO1</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyADCJ_AWO0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCJ_AWO</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCJ_AWO/McuModuleStandbyADCJ_AWO2</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyCXPI0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyCXPI</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyCXPI/McuModuleStandbyCXPI0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyCXPI/McuModuleStandbyCXPI1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyCXPI/McuModuleStandbyCXPI2</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyCXPI/McuModuleStandbyCXPI3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyMMCA0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMMCA</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyMMCA/McuModuleStandbyMMCA</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyENCA0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyENCA</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyENCA/McuModuleStandbyENCA0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyENCA/McuModuleStandbyENCA1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyPSI50</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#4">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5/McuModuleStandbyPSI50</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5/McuModuleStandbyPSI51</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5/McuModuleStandbyPSI52</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5/McuModuleStandbyPSI53</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5/McuModuleStandbyPSI55</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyPSI5S0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5S</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5S/McuModuleStandbyPSI5S0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPSI5S/McuModuleStandbyPSI5S1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyPWMD0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPWMD</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyPWMD/McuModuleStandbyPWMD</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyRHSIF0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#1">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRHSIF</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRHSIF/McuModuleStandbyRHSIF0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRHSIF/McuModuleStandbyRHSIF1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbySCI30</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbySCI3</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbySCI3/McuModuleStandbySCI30</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbySCI3/McuModuleStandbySCI31</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbySCI3/McuModuleStandbySCI32</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyTAPA0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#4">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#5">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAPA</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAPA/McuModuleStandbyTAPA0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAPA/McuModuleStandbyTAPA1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAPA/McuModuleStandbyTAPA2</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAPA/McuModuleStandbyTAPA3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAPA/McuModuleStandbyTAPA4</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTAPA/McuModuleStandbyTAPA5</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyTPBA0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTPBA</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTPBA/McuModuleStandbyTPBA0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTPBA/McuModuleStandbyTPBA1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyTSG30</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#2">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTSG3</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTSG3/McuModuleStandbyTSG30</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTSG3/McuModuleStandbyTSG31</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyTSG3/McuModuleStandbyTSG32</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbySFMA0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbySFMA</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbySFMA/McuModuleStandbySFMA0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyRHSB0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#1">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#2">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#3">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRHSB</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRHSB/McuModuleStandbyRHSB0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRHSB/McuModuleStandbyRHSB1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRHSB/McuModuleStandbyRHSB2</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRHSB/McuModuleStandbyRHSB3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyETN0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#1">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#2">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyETN</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyETN/McuModuleStandbyETN0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyETN/McuModuleStandbyETN1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyETN/McuModuleStandbyETN2</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyHRPWM0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyHRPWM</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyHRPWM/McuModuleStandbyHRPWM0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyADCK_ISO0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#1">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#2">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#3">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#4">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#5">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#6">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#7">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO/McuModuleStandbyADCK_ISO0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO/McuModuleStandbyADCK_ISO1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO/McuModuleStandbyADCK_ISO2</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO/McuModuleStandbyADCK_ISO3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO/McuModuleStandbyADCK_ISO4</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO/McuModuleStandbyADCK_ISO5</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO/McuModuleStandbyADCK_ISO6</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyADCK_ISO/McuModuleStandbyADCK_ISO7</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyDSADC_CADC0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#1">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#2">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#3">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyDSADC_CADC</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyDSADC_CADC/McuModuleStandbyDSADC_CADC0</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyDSADC_CADC/McuModuleStandbyDSADC_CADC1</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyDSADC_CADC/McuModuleStandbyDSADC_CADC2</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyDSADC_CADC/McuModuleStandbyDSADC_CADC3</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyDFE0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyDFE</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyDFE/McuModuleStandbyDFE0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyEMU0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#1">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyEMU</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyEMU/McuModuleStandbyEMU0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyEMU/McuModuleStandbyEMU1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyRDC0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#1">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#2">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#3">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRDC</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRDC/McuModuleStandbyRDC0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRDC/McuModuleStandbyRDC1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRDC/McuModuleStandbyRDC2</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyRDC/McuModuleStandbyRDC3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyFCOMP0</SHORT-NAME>
+                          <ADMIN-DATA>
+                            <SDGS>
+                              <SDG GID="kyoto_extensions">
+                                <SDG GID="params#0">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#1">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#2">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#3">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#4">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#5">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#6">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#7">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#8">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#9">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                                <SDG GID="params#10">
+                                  <SDG GID="eu.pinteam.config.disable">
+                                    <SD GID="Value">TRUE</SD>
+                                  </SDG>
+                                </SDG>
+                              </SDG>
+                            </SDGS>
+                          </ADMIN-DATA>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP0</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP1</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP2</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP4</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP5</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP6</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP7</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP8</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP9</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyFCOMP/McuModuleStandbyFCOMP10</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyByStandbyRSCFD0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyRSCFD</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyRSCFD/McuModuleStandbyByStandbyModeRSCFD</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyByStandbyRLIN30</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyRLIN3</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyRLIN3/McuModuleStandbyByStandbyModeRLIN3</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyByStandbyRTCA0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyRTCA</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyRTCA/McuModuleStandbyByStandbyModeRTCA</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyByStandbyTAUJ_AWO0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyTAUJ_AWO</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyTAUJ_AWO/McuModuleStandbyByStandbyModeTAUJ_AWO</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyByStandbyWDTB_AWO0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyWDTB_AWO</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyWDTB_AWO/McuModuleStandbyByStandbyModeWDTB_AWO</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyByStandbyADCJ_AWO0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyADCJ_AWO</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyADCJ_AWO/McuModuleStandbyByStandbyModeADCJ_AWO</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyByStandbyMOSC0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyMOSC</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyMOSC/McuModuleStandbyByStandbyModeMOSC</DEFINITION-REF>
+                              <VALUE>CLOCK_SUPPLIED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                        <ECUC-CONTAINER-VALUE>
+                          <SHORT-NAME>NewMcuModuleStandbyByStandbyHSIOSC0</SHORT-NAME>
+                          <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyHSIOSC</DEFINITION-REF>
+                          <PARAMETER-VALUES>
+                            <ECUC-TEXTUAL-PARAM-VALUE>
+                              <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuModuleStandbyConf/McuModuleStandbyByStandbyHSIOSC/McuModuleStandbyByStandbyModeHSIOSC</DEFINITION-REF>
+                              <VALUE>CLOCK_STOPPED</VALUE>
+                            </ECUC-TEXTUAL-PARAM-VALUE>
+                          </PARAMETER-VALUES>
+                        </ECUC-CONTAINER-VALUE>
+                      </SUB-CONTAINERS>
+                    </ECUC-CONTAINER-VALUE>
+                  </SUB-CONTAINERS>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE>
+                  <SHORT-NAME>NewMcuClockMoniterConfig0</SHORT-NAME>
+                  <ADMIN-DATA>
+                    <SDGS>
+                      <SDG GID="kyoto_extensions">
+                        <SDG GID="params#0">
+                          <SDG GID="eu.pinteam.config.disable">
+                            <SD GID="Value">TRUE</SD>
+                          </SDG>
+                        </SDG>
+                      </SDG>
+                    </SDGS>
+                  </ADMIN-DATA>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterBackupClock</DEFINITION-REF>
+                      <VALUE>false</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                  <SUB-CONTAINERS>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>NewMcuClockMoniterControlConf0</SHORT-NAME>
+                      <ADMIN-DATA>
+                        <SDGS>
+                          <SDG GID="kyoto_extensions">
+                            <SDG GID="params#9">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#10">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#11">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#12">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                            <SDG GID="params#13">
+                              <SDG GID="eu.pinteam.config.disable">
+                                <SD GID="Value">TRUE</SD>
+                              </SDG>
+                            </SDG>
+                          </SDG>
+                        </SDGS>
+                      </ADMIN-DATA>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl0</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl1</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl2</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl3</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl5</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl6</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl7</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl8</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl9</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl13</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl14</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl15</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl16</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterControlConf/McuClockMoniterControl17</DEFINITION-REF>
+                          <VALUE>false</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>NewMcuClockMoniterLowerLimitConf0</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit0</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit1</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit2</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit3</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit4</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit5</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit6</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit7</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit8</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit9</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit13</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit14</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit15</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit16</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit17</DEFINITION-REF>
+                          <VALUE>1</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                    </ECUC-CONTAINER-VALUE>
+                    <ECUC-CONTAINER-VALUE>
+                      <SHORT-NAME>NewMcuClockMoniterHigherLimitConf0</SHORT-NAME>
+                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf</DEFINITION-REF>
+                      <PARAMETER-VALUES>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit0</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit1</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit2</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit3</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit4</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit5</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit6</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit7</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit8</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit9</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit13</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit14</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit15</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit16</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                        <ECUC-NUMERICAL-PARAM-VALUE>
+                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit17</DEFINITION-REF>
+                          <VALUE>1023</VALUE>
+                        </ECUC-NUMERICAL-PARAM-VALUE>
+                      </PARAMETER-VALUES>
+                    </ECUC-CONTAINER-VALUE>
+                  </SUB-CONTAINERS>
+                </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE>
+                  <SHORT-NAME>NewMcuPowerSaveConfig0</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockSourceFOUT0</DEFINITION-REF>
+                      <VALUE>MCU_CLK_FOUT0C_MOSC_1</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockDividerFOUT0</DEFINITION-REF>
+                      <VALUE>0</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockSourceWDTBA_A</DEFINITION-REF>
+                      <VALUE>MCU_CLK_WDTBA_A_LSIOSC_1</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockSourceTAUJ_A</DEFINITION-REF>
+                      <VALUE>MCU_CLK_ATAUJC_A_MOSC_1</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockSourceARTCAC_A</DEFINITION-REF>
+                      <VALUE>MCU_CLK_ARTCAC_A_MOSC_16</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockSourceWDTC_A</DEFINITION-REF>
+                      <VALUE>MCU_CLK_WDTC_A_HSIOSC_640</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockSourceFOUT1</DEFINITION-REF>
+                      <VALUE>MCU_CLK_FOUT1C_MOSC_1</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockDividerFOUT1</DEFINITION-REF>
+                      <VALUE>0</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockSourceADCJ2</DEFINITION-REF>
+                      <VALUE>MCU_CLK_AADCC_A_MOSC_1</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuPowerSaveClockDividerADCJ2</DEFINITION-REF>
+                      <VALUE>MCU_CLKD_AADCC_1</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuStabilizationTimeISOVDD</DEFINITION-REF>
+                      <VALUE>4200</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                </ECUC-CONTAINER-VALUE>
+              </SUB-CONTAINERS>
+            </ECUC-CONTAINER-VALUE>
+            <ECUC-CONTAINER-VALUE>
+              <SHORT-NAME>NewMcuPublishedInformation0</SHORT-NAME>
+              <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuPublishedInformation</DEFINITION-REF>
+              <SUB-CONTAINERS>
+                <ECUC-CONTAINER-VALUE>
+                  <SHORT-NAME>NewMcuResetReasonConf0</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Mcu/Mcu/McuPublishedInformation/McuResetReasonConf</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuPublishedInformation/McuResetReasonConf/McuResetReason</DEFINITION-REF>
+                      <VALUE>MCU_SYSTEM_RESET_2</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                </ECUC-CONTAINER-VALUE>
+              </SUB-CONTAINERS>
+            </ECUC-CONTAINER-VALUE>
+          </CONTAINERS>
+        </ECUC-MODULE-CONFIGURATION-VALUES>
+      </ELEMENTS>
+    </AR-PACKAGE>
+  </AR-PACKAGES>
+</AUTOSAR>

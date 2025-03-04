@@ -1,6 +1,6 @@
 #!gbuild
 [Subproject]
-    :sourceDir=${SS_DIR}
+    :sourceDir=${SS_DIR}/22SS/scc
 
 SS_Boot.c
 

@@ -26,9 +26,14 @@ primaryTarget=v800_standalone.tgt
     -lLIBARCH.A
     
     -I${HV_DIR}
+    -I${HV_DIR}/callout
     -I${ROOT_DIR}/BSW/CmnHdr
-    -I${SS_DIR}
+    -I${SS_DIR}/22SS/scc
+    -I${SS_DIR}/22SS/config
+    -I${LIB_DIR}/Ren_G4MH/scc
+    -I${LIB_DIR}/Common/scc
 
+    -DECU_HOST
     -D__RELEASE_BUILD__
     -o host.elf
 
@@ -51,3 +56,4 @@ ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_DUMMY.gpj
 ${CMN_DIR}/LWH_project.gpj
 ${CMN_DIR}/LWH_integration.gpj
+${CMN_DIR}/LIB.gpj

@@ -20,6 +20,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
+#include "bswlib.h"
 
 #include "int_drv.h"
 #include "int_handler.h"

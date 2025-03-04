@@ -25,43 +25,25 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_NUM_CH                             (1U)
-
-#define OXCAN_CH_0_CAN                           (0U)
-#define OXCAN_CH_1_CAN                           (1U)
-#define OXCAN_CH_2_CAN                           (2U)
-
-#define OXCAN_COMCONT_NUM_CH                     (1U)
+#define OXCAN_CH_0_G2M_1                         (0U)  /* #define ComMConf_ComMChannel_CANFD_G2M_1_BUS                (0U) */
+/* #define OXCAN_CH_1_G2M_2                      (1U)     #define ComMConf_ComMChannel_CANFD_G2M_2_BUS                (1U) */
+/* #define OXCAN_CH_2_G5M                        (2U)     #define ComMConf_ComMChannel_CANFD_G5M_BUS                  (2U) */
+/* #define OXCAN_CH_3_VCAN                       (3U)     #define ComMConf_ComMChannel_VCAN_VCC_1_BUS                 (3U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_PDU_NUM_RX                         (1U)
+#define OXCAN_PDU_RX_CAN_BDC1S81_RXCH0           (0U)
 
-
-#define OXCAN_PDU_RX_CAN_BDC1S81_RXCH0            (0U)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_TXRX_NUM_ID                        (1U)
-#define OXCAN_TXRX_ID_DIAG                       (0U)
-/* #define OXCAN_TXRX_ID_APP                        (1U) */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_E2E_NUM_PROTECT_MSG                (0U)
-#define OXCAN_E2E_NUM_CHECK_MSG                  (0U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_AUB_CXPI_SUP                       (0U)                          /* 1 = Aubist/CXPI is supported, other = not          */
-#define OXCAN_AUB_E2E_SUP                        (0U)                          /* 1 = Aubist/E2E  is supported, other = not          */
-#define OXCAN_RX_STOP_EN                         (0U)                          /* 1 = Pdu receive stop is enabled, other = not       */
-#define OXCAN_NM_TX_STOP_EN                      (0U)                          /* 1 = NM transmission stop is enabled, other = not   */
-#define OXCAN_APP_SLPNG_TOE                      (1U)                          /* 1 = Apply SleepNG Timeout is enabled, other = not  */
 #define OXCAN_AUB_CSM_SUP                        (0U)                          /* 1 = Aubist/CSM is supported, other = not           */
 #define OXCAN_AUB_CRPT_SW_SUP                    (0U)                          /* 1 = Aubist/Crypto-sw is supported, other = not     */
 #define OXCAN_NMDIAG_GBL_SUP                     (0U)                          /* 1 = NM Diag (global-ecu) is supported, other = not */
 #define OXCAN_IC_TJA1145_USE                     (1U)                          /* 1 = TJA1145 is use, other = not                    */
 #define OXCAN_IC_TJA1145_REFRESH                 (0U)                          /* 1 = With Refresh , other = not                     */
 
-#define OXCAN_TX_STOP_SUP                        (0U)                          /* 1 = Supported , other = not                        */
-#define OXCAN_FILEVER_CHECK_SUP                  (0U)                          /* 1 = Supported , other = not                        */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

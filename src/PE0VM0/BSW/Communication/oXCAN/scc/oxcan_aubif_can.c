@@ -22,7 +22,6 @@
 #include "Can.h"
 #include "can_cv_cfg.h"
 
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -190,7 +189,6 @@ uint8   Can_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanM
     uint32         u4FdfFlg;
     uint8          u1t_result;
 
-
     u4FdfFlg = ptMsg->u4Id & (uint32)OXCAN_AUB_IF_BIT_FDF;
     if((u1Controller         <  CHM_PHY_IP0_CONTROLLER_NUM          ) &&
        ((u4FdfFlg != (U4)0U) || (ptMsg->u1Length <= L3R_CAN_DATAMAX))){
@@ -292,8 +290,6 @@ uint8   Can_IP0_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR 
 #if (defined(CHM_CHCNVTR_H) && defined(CID_SEARCH_H))
     uint8          u1t_result;
 
-    vd_g_L3rTestRelayCnt((U1)L3R_TEST_CHKPT_PCAN_RX);
-
     if(u1Controller < CHM_PHY_IP0_CONTROLLER_NUM){
         Cid_Search_ReceiveCanData(CHM_ChCnvtr_PhyIp0_To_Log[u1Controller], ptMsg);
         u1t_result = (uint8)CAN_PROC_OK;
@@ -317,8 +313,6 @@ uint8   Can_IP1_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR 
 {
 #if (defined(CHM_CHCNVTR_H) && defined(CID_SEARCH_H))
     uint8          u1t_result;
-
-    vd_g_L3rTestRelayCnt((U1)L3R_TEST_CHKPT_PCAN_RX);
 
     if(u1Controller < CHM_PHY_IP1_CONTROLLER_NUM){
         Cid_Search_ReceiveCanData(CHM_ChCnvtr_PhyIp1_To_Log[u1Controller], ptMsg);

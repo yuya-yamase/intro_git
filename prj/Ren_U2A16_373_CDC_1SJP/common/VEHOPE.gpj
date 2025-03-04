@@ -5,7 +5,7 @@
 #    -I${ROOT_DIR}/BSW/CmnHdr/CmnHdr/Platform
     -I${LIB_DIR}
 
-    -I${VEHOPE_DIR}/config
+    -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
 
     -I${OXCAN_DIR}/config_U2A16_met
@@ -23,8 +23,8 @@
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config
     -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_framework/config
 
-config/veh_opemd_evthk.c
-config/veh_opemd_tybev3.c
+config_tybev3/veh_opemd_evhk.c
+config_tybev3/veh_opemd_tybev3.c
 
 scc/veh_opemd.c
 scc/veh_opemd.h

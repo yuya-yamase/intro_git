@@ -1,4 +1,4 @@
-/* 2.0.0 */
+/* 1.0.7 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_RX_CFG_C_MAJOR                     (2U)
+#define OXCAN_RX_CFG_C_MAJOR                     (1U)
 #define OXCAN_RX_CFG_C_MINOR                     (0U)
-#define OXCAN_RX_CFG_C_PATCH                     (0U)
+#define OXCAN_RX_CFG_C_PATCH                     (7U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -51,39 +51,25 @@ U2                          u2_gp_oxcan_rx_toe_chk[OXCAN_NUM_CH];
 #ifdef CXPICDD_H
 static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH);
 #endif /* #ifdef CXPICDD_H */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U2                    u2_g_OXCAN_RX_POM_TOUT     = (U2)3000U / (U2)OXCAN_MAIN_TICK;    /* 3000 msec    */
-const U2                    u2_sp_OXCAN_RX_POM_CHK[OXCAN_RX_NUM_POM] = {
-	(U2)OXCAN_RX_SYS_TOE_PAR,                           /* OXCAN_RX_POM_PARKING             (0U)  */
-    (U2)OXCAN_RX_SYS_TOE_RID,                           /* OXCAN_RX_POM_RIDING              (1U)  */
-    (U2)OXCAN_RX_SYS_TOE_PON,                           /* OXCAN_RX_POM_POWONNORMAL         (2U)  */
-    (U2)OXCAN_RX_SYS_TOE_POE,                           /* OXCAN_RX_POM_POWONEMERGENCY      (3U)  */
-    (U2)OXCAN_RX_SYS_TOE_PAR_HV,                        /* OXCAN_RX_POM_PARK_HIGHVOLT       (4U)  */
-    (U2)OXCAN_RX_SYS_TOE_PAR_HVHC,                      /* OXCAN_RX_POM_ PARK_HIGHVOLT_HEAT (5U)  */
-    (U2)OXCAN_RX_SYS_TOE_CHK                            /* OXCAN_RX_POM_CHECKING            (6U)  */
+const U2                    u2_gp_OXCAN_RX_POM_CHK[OXCAN_RX_NUM_POM] = {
+    (U2)OXCAN_RX_SYS_TOE_ACC,                   /* OXCAN_RX_POM_ACC (0U) */
+    (U2)OXCAN_RX_SYS_TOE_IGP,                   /* OXCAN_RX_POM_IGP (1U) */
+    (U2)OXCAN_RX_SYS_TOE_PBA,                   /* OXCAN_RX_POM_PBA (2U) */
+    (U2)OXCAN_RX_SYS_TOE_IGR,                   /* OXCAN_RX_POM_IGR (3U) */
+    (U2)OXCAN_RX_SYS_TOE_VDC,                   /* OXCAN_RX_POM_VDC (4U) */
+    (U2)OXCAN_RX_SYS_TOE_PTC                    /* OXCAN_RX_POM_PTC (5U) */
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U1                    u1_gp_OXCAN_RX_SYS_BY_RX[OXCAN_PDU_NUM_RX] = {
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK ))
+     (U1)( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )              /* [4] MSG_BDC1S81_RXCH0 */
 };
 const U2                    u2_g_OXCAN_RX_NUM_RX       = (U2)OXCAN_PDU_NUM_RX;
 
-#define OXCAN_RX_CH_POWSUPPLY  (BswU4)(ComMConf_SysStatusName_PAR          | \
-                                       ComMConf_SysStatusName_RID          | \
-                                       ComMConf_SysStatusName_PON          | \
-                                       ComMConf_SysStatusName_POE          | \
-                                       ComMConf_SysStatusName_PAR_HV       | \
-                                       ComMConf_SysStatusName_PAR_HVHC     | \
-                                       ComMConf_SysStatusName_CHK          | \
-                                       ComMConf_SysStatusName_PDM          | \
-                                       ComMConf_SysStatusName_OTA1         | \
-                                       ComMConf_SysStatusName_OTA2         | \
-                                       ComMConf_SysStatusName_OTA3         | \
-                                       ComMConf_SysStatusName_OTA4         | \
-                                       ComMConf_SysStatusName_WRP          | \
-                                       ComMConf_SysStatusName_EDS          )
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2             u2_sp_OXCAN_RX_BY_RX_0[] = {
      (U2)OXCAN_PDU_RX_CAN_BDC1S81_RXCH0
@@ -96,7 +82,6 @@ static const U2             u2_sp_OXCAN_RX_BY_CH_0[] = {
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-
 const ST_OXCAN_RX_CH        st_gp_OXCAN_RX_BY_CH[OXCAN_NUM_CH] = {
     {
         &u1_g_oXCANNmwkRxeByCh,                              /* fp_u1_RX_EN   */
@@ -107,7 +92,7 @@ const ST_OXCAN_RX_CH        st_gp_OXCAN_RX_BY_CH[OXCAN_NUM_CH] = {
         (U2)MSG_BDC1S81_RXCH0,                               /* u2_msg_min    */
         (U2)MSG_BDC1S81_RXCH0,                               /* u2_msg_max    */
         (U2)(sizeof(u2_sp_OXCAN_RX_BY_CH_0) >> 1U),          /* u2_num_rx     */
-        (U2)OXCAN_RX_CH_POWSUPPLY                            /* u2_sys_en     */
+        (U2)OXCAN_SYS_BAT                                    /* u2_sys_en     */
     }
 };
 const U1                    u1_g_OXCAN_RX_NUM_CH = (U1)OXCAN_NUM_CH;
@@ -115,6 +100,16 @@ const U1                    u1_g_OXCAN_RX_NUM_CH = (U1)OXCAN_NUM_CH;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/*  U2      u2_g_oXCANRxCfgSysXgrOn(const U2 u2_a_SYS_CHK)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U2      u2_g_oXCANRxCfgSysXgrOn(const U2 u2_a_SYS_CHK)
+{
+    return((U2)0U);
+}
 #ifdef CXPICDD_H
 /*===================================================================================================================================*/
 /*  static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH)                                                                            */
@@ -152,7 +147,6 @@ static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH)
 /*  1.0.5     5/10/2023  HU       oxcan_rx v1.0.4 -> v1.0.5                                                                          */
 /*  1.0.6     1/31/2024  TI       oxcan_rx v1.0.5 -> v1.0.6                                                                          */
 /*  1.0.7     2/08/2024  AM       oxcan_rx v1.0.6 -> v1.0.7                                                                          */
-/*  2.0.0     2/ 3/2025  ST       Support BevStep3                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -161,6 +155,5 @@ static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH)
 /*  * TM   = Takanori Maruyama, DENSO                                                                                                */
 /*  * TI   = Tomoko Inuzuka, DENSO                                                                                                   */
 /*  * AM   = Atsushi Mizutani, DENSO                                                                                                 */
-/*  * ST   = Satoshi Tanaka, DENSO                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

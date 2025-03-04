@@ -24,8 +24,8 @@
     -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_framework/config
     -I${APP_DIR}/MET/IpcApplication/Vom/MM/scc
 
+    -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
-    -I${VEHOPE_DIR}/config
 
     -I${OXCAN_DIR}/config_U2A16_met
     -I${OXCAN_DIR}/libc
@@ -34,14 +34,13 @@
     -T ${MCAL_DIR}/section.ld
 
 config_U2A16_met/oxcan_cfg.c
-config_U2A16_met/oxcan_nmwk_cfg.c
-config_U2A16_met/oxcan_opemd_cfg.c
+config_U2A16_met/oxcan_e2e_cfg.c
+config_U2A16_met/oxcan_sysea_cfg.c
 config_U2A16_met/oxcan_rx_cfg.c
 config_U2A16_met/oxcan_usrhk.c
 
 libc/oxcan.c
-libc/oxcan_nmwk.c
-libc/oxcan_opemd.c
+libc/oxcan_sysea.c
 libc/oxcan_rx.c
 
 scc/oxcan_aubif.c

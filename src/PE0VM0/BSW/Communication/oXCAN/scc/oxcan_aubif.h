@@ -38,6 +38,12 @@ void    vd_g_oXCANAubIfInit(void);
 void    Aubist_UsrSetWakeupEvent(const uint32 u4_a_SRC);
 uint8   u1_g_oXCANAubIfGicUnk(void);
 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if ((OXCAN_E2E_NUM_TRA > 0U) || (OXCAN_E2E_NUM_REC > 0U))
+void    vd_g_oXCANAubIfE2eInit(void);
+#endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef CXPICDD_TYPES_H
 void    vd_g_oXCANAubIfCxpiRecAck(const uint8 u1_a_AUB_IDX);
 void    vd_g_oXCANAubIfCxpiTraAck(const uint8 u1_a_AUB_IDX);

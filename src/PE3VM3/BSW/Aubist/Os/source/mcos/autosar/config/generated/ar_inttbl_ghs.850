@@ -234,8 +234,8 @@ ar_inttbl_0:   /* Core 0 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 198 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 199 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 200 */
-    .word   ar_c2isr_OS_SYSTEM_COUNTER_ISR0  /* INTC2 : 201 */
-    .word   ar_c2isr_INTOSTM3_ISR  /* INTC2 : 202 */
+    .word   ar_c2isr_eMCOS_ISR_INTOSTM2TINT  /* INTC2 : 201 */
+    .word   ar_c2isr_eMCOS_ISR_INTOSTM3TINT  /* INTC2 : 202 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 203 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 204 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 205 */
@@ -581,7 +581,7 @@ ar_inttbl_0:   /* Core 0 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 545 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 546 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 547 */
-    .word   ar_c2isr_INTP4_ISR  /* INTC2 : 548 */
+    .word   ar_c2isr_eMCOS_ISR_INTP4  /* INTC2 : 548 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 549 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 550 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 551 */
@@ -835,32 +835,32 @@ _ar_v850_get_interrupt_base:
     .extern _mcos_v850_cat2isr_entry
     .extern _mcos_v850_cat1isr_entry
 
-    .type   ar_c2isr_INTOSTM3_ISR, $function
-    .global ar_c2isr_INTOSTM3_ISR
-    .extern _ar_isrcb_INTOSTM3_ISR
-ar_c2isr_INTOSTM3_ISR:
+    .type   ar_c2isr_eMCOS_ISR_INTOSTM3TINT, $function
+    .global ar_c2isr_eMCOS_ISR_INTOSTM3TINT
+    .extern _ar_isrcb_eMCOS_ISR_INTOSTM3TINT
+ar_c2isr_eMCOS_ISR_INTOSTM3TINT:
     pushsp  r1
-    mov     _ar_isrcb_INTOSTM3_ISR, r1
+    mov     _ar_isrcb_eMCOS_ISR_INTOSTM3TINT, r1
     jmp     _mcos_v850_cat2isr_entry[r0]
-    .size   ar_c2isr_INTOSTM3_ISR, .-ar_c2isr_INTOSTM3_ISR
+    .size   ar_c2isr_eMCOS_ISR_INTOSTM3TINT, .-ar_c2isr_eMCOS_ISR_INTOSTM3TINT
 
-    .type   ar_c2isr_INTP4_ISR, $function
-    .global ar_c2isr_INTP4_ISR
-    .extern _ar_isrcb_INTP4_ISR
-ar_c2isr_INTP4_ISR:
+    .type   ar_c2isr_eMCOS_ISR_INTP4, $function
+    .global ar_c2isr_eMCOS_ISR_INTP4
+    .extern _ar_isrcb_eMCOS_ISR_INTP4
+ar_c2isr_eMCOS_ISR_INTP4:
     pushsp  r1
-    mov     _ar_isrcb_INTP4_ISR, r1
+    mov     _ar_isrcb_eMCOS_ISR_INTP4, r1
     jmp     _mcos_v850_cat2isr_entry[r0]
-    .size   ar_c2isr_INTP4_ISR, .-ar_c2isr_INTP4_ISR
+    .size   ar_c2isr_eMCOS_ISR_INTP4, .-ar_c2isr_eMCOS_ISR_INTP4
 
-    .type   ar_c2isr_OS_SYSTEM_COUNTER_ISR0, $function
-    .global ar_c2isr_OS_SYSTEM_COUNTER_ISR0
-    .extern _ar_isrcb_OS_SYSTEM_COUNTER_ISR0
-ar_c2isr_OS_SYSTEM_COUNTER_ISR0:
+    .type   ar_c2isr_eMCOS_ISR_INTOSTM2TINT, $function
+    .global ar_c2isr_eMCOS_ISR_INTOSTM2TINT
+    .extern _ar_isrcb_eMCOS_ISR_INTOSTM2TINT
+ar_c2isr_eMCOS_ISR_INTOSTM2TINT:
     pushsp  r1
-    mov     _ar_isrcb_OS_SYSTEM_COUNTER_ISR0, r1
+    mov     _ar_isrcb_eMCOS_ISR_INTOSTM2TINT, r1
     jmp     _mcos_v850_cat2isr_entry[r0]
-    .size   ar_c2isr_OS_SYSTEM_COUNTER_ISR0, .-ar_c2isr_OS_SYSTEM_COUNTER_ISR0
+    .size   ar_c2isr_eMCOS_ISR_INTOSTM2TINT, .-ar_c2isr_eMCOS_ISR_INTOSTM2TINT
 
 
 #define OS_STOP_SEC_CODE_SHARED

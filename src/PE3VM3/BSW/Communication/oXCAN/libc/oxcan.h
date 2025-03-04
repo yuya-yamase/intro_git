@@ -66,19 +66,6 @@
 /* ./../config_XXX/oxcan_syspwr.h:#define OXCAN_RX_SYS_YYY_XGR */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 1st parameter "u1_a_CH" of vd_g_oXCANPdumsgStop/vd_g_oXCANPdumsgResume and vd_g_oXCANNmmsgStop/vd_g_oXCANNmmsgResume              */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* ./../config_XXX/oxcan_channel.h:#define OXCAN_COMCONT_NUM_CH */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 2nd parameter "u1_a_ID" of vd_g_oXCANPdumsgStop/vd_g_oXCANPdumsgResume and vd_g_oXCANNmmsgStop/vd_g_oXCANNmmsgResume              */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* ./../config_XXX/oxcan_channel.h:#define OXCAN_TXRX_ID_YYY */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* Return of u1_g_oXCANPdumsgStat                                                                                                    */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_PDUMSG_RESUME                      (0x00U)
-#define OXCAN_PDUMSG_STOP                        (0x01U)
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u2_OXCAN_RXTO_THRSH(MSEC)                ((U2)(((U4)(MSEC) + (U4)(OXCAN_MAIN_TICK - 1U)) / (U4)OXCAN_MAIN_TICK))
@@ -94,26 +81,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void    vd_g_oXCANRstInit(void);
 void    vd_g_oXCANWkupInit(void);
-void    vd_g_oXCANOpemdEvhk(void);
+void    vd_g_oXCANSysEvhk(void);
 void    vd_g_oXCANMainPreTask(void);
 void    vd_g_oXCANMainPostTask(void);
 void    vd_g_oXCANShutdown(void);
 U1      u1_g_oXCANEcuShtdwnOk(void);
-void    vd_g_oXCANPdumsgStop(const U1 u1_a_CH, const U1 u1_a_ID);
-void    vd_g_oXCANPdumsgResume(const U1 u1_a_CH, const U1 u1_a_ID);
-U1      u1_g_oXCANPdumsgStat(const U1 u1_a_CH);
-#if (OXCAN_NM_TX_STOP_EN == 1U)
-void    vd_g_oXCANNmmsgStop(const U1 u1_a_CH, const U1 u1_a_ID);
-void    vd_g_oXCANNmmsgResume(const U1 u1_a_CH, const U1 u1_a_ID);
-#endif /* #if (OXCAN_NM_TX_STOP_EN == 1U) */
 
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 U1      u1_g_oXCANRxEnabled(const U1 u1_a_CH);               /* Return : TRUE = Rx is enabled, FALSE = Rx is disabled                */
-
 U1      u1_g_oXCANRxStat(const U2 u2_a_PDU_RX, const U2 u2_a_SYS_CHK, const U2 u2_a_RXTO_THRSH);
                                                              /* Return : COM_NO_RX, COM_TIMEOUT defined in Com.h                     */
-
 U1      u1_g_oXCANRxEvcnt(const U2 u2_a_PDU_RX);
-
 U2      u2_g_oXCANRxToechk(const U1 u1_a_CH);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

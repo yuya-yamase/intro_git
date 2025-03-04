@@ -31,7 +31,13 @@ primaryTarget=v800_standalone.tgt
     -L${COMP_DIR}/lib/rh850
 
     -I${ROOT_DIR}/BSW/CmnHdr
-    -I${SS_DIR}
+    -I${SS_DIR}/22SS/scc
+    -I${SS_DIR}/22SS/config
+    -I${SS_DIR}/RunM/scc
+    -I${SS_DIR}/RunM/config
+    -I${SS_DIR}/SchdM/scc
+    -I${SS_DIR}/SchdM/config
+    -I${SS_DIR}/MCOS/config
     -I${OS_DIR}/include
     -I${OS_DIR}/include/ar_api
     -I${OS_DIR}/include/generated
@@ -39,9 +45,7 @@ primaryTarget=v800_standalone.tgt
     -I${OS_DIR}/config
     -I${EHVM_IF_DIR}/include/ehvm
 
-	-I${APP_DIR}
 	-I${APP_DIR}/Stub
-	-I${APP_DIR}/ShtdwnM
     -L${APP_DIR}/MET/lib/Platform/D1L1
     -llibcri_atom_rh850d1.a
     -llibcri_base_rh850d1.a
@@ -54,6 +58,7 @@ primaryTarget=v800_standalone.tgt
 
     -I${CAN_DIR}/inc
     -I${CAN_DIR}/Com/cfg
+    -I${CAN_DIR}/CS/inc
 
     -I${MS_DIR}/Rim/config
     -I${MS_DIR}/Rim/scc
@@ -65,6 +70,15 @@ primaryTarget=v800_standalone.tgt
     -I${MS_DIR}/Nvmc/core/scc/Ren_U2A
     -I${MS_DIR}/Nvmc/module/config_Ren_U2A
     -I${MS_DIR}/Nvmc/module/scc
+
+    -I${VEHOPE_DIR}/config_tybev3
+    -I${VEHOPE_DIR}/scc
+
+    -I${OXCAN_DIR}/config_U2A16_met
+    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/scc
+    -I${LIB_DIR}/Ren_G4MH/scc
+    -I${LIB_DIR}/Common/scc
 
     -T ${MCAL_SECTION_DIR}/memory_map_VM1.ld
     -T ${MCAL_SECTION_DIR}/section.ld
@@ -78,7 +92,7 @@ primaryTarget=v800_standalone.tgt
 ${PRJ_DIR}/bswCAN.gpj
 ${CMN_DIR}/bswOS.gpj
 ${CMN_DIR}/ehvm_if.gpj
-${PRJ_DIR}/22SS.gpj
+${CMN_DIR}/22SS.gpj
 ${CMN_DIR}/Ecu_VMx.gpj
 
 ${CMN_DIR}/MCAL_COMMON.gpj

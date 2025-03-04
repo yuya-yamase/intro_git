@@ -124,10 +124,11 @@ uint8   CanSM_CbkJudgeFail( NetworkHandleType network )
 {
     uint8 u1Ret;
 
-    u1Ret = (uint8)CANSM_FAIL_NONE;
-
     if (CANMBQ_GetSendLockFlg(network) == (uint8)CANMBQ_SET) {
         u1Ret = (uint8)CANSM_FAIL_USER;
+    }
+    else{
+        u1Ret = (uint8)CANSM_FAIL_NONE;
     }
 
     return u1Ret;

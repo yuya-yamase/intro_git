@@ -59,7 +59,7 @@
 /******************************************/
 /*   Continuous Tx Mode for User Tx       */
 /******************************************/
-#define BSW_VCAN_CFG_USER_CONTINUE_TX0          (BSW_USE)
+#define BSW_VCAN_CFG_USER_CONTINUE_TX0          (BSW_NOUSE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX1          (BSW_NOUSE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX2          (BSW_NOUSE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX3          (BSW_NOUSE)
@@ -141,7 +141,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Tx VHOH(VHTH) Number */
-#define BSW_VCAN_CFG_VHTHNUM_0                  (1U)
+#define BSW_VCAN_CFG_VHTHNUM_0                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHTHNUM_3                  (0U)

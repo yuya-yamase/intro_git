@@ -66,11 +66,9 @@ TaskType ar_thread2task_table[MCOS_CFG_THR_MAX*MP_CONTROL_CORE_COUNT];
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-static ar_tcb_t ar_tcb_Ecu_IdleTask;
-static ar_tcb_t ar_tcb_Ecu_InitTask;
-static ar_tcb_t ar_tcb_Task_MM_High;
-static ar_tcb_t ar_tcb_Task_MM_Low;
-static ar_tcb_t ar_tcb_Task_MM_Medium;
+static ar_tcb_t ar_tcb_eMCOS_TASK_High;
+static ar_tcb_t ar_tcb_eMCOS_TASK_Idle;
+static ar_tcb_t ar_tcb_eMCOS_TASK_Medium;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
@@ -85,17 +83,11 @@ static ar_tcb_t ar_tcb_Task_MM_Medium;
 #pragma ghs section bss=".osVar_stack_core0_pri1"
 static mcos_stack_t ar_stack_core0_pri1[MCOS_STACK_SIZE(1024U)];
 #pragma ghs section bss=default
-#pragma ghs section bss=".osVar_stack_core0_pri4"
-static mcos_stack_t ar_stack_core0_pri4[MCOS_STACK_SIZE(8192U)];
-#pragma ghs section bss=default
 #pragma ghs section bss=".osVar_stack_core0_pri8"
 static mcos_stack_t ar_stack_core0_pri8[MCOS_STACK_SIZE(8192U)];
 #pragma ghs section bss=default
 #pragma ghs section bss=".osVar_stack_core0_pri12"
 static mcos_stack_t ar_stack_core0_pri12[MCOS_STACK_SIZE(4096U)];
-#pragma ghs section bss=default
-#pragma ghs section bss=".osVar_stack_core0_pri20"
-static mcos_stack_t ar_stack_core0_pri20[MCOS_STACK_SIZE(1024U)];
 #pragma ghs section bss=default
 
 /*
@@ -109,27 +101,7 @@ static mcos_stack_t ar_stack_core0_pri20[MCOS_STACK_SIZE(1024U)];
 
 const ar_task_config_t ar_task_configs[AR_OS_NUM_TASKS] = {
     {
-        &GENNAME_TASK(Ecu_IdleTask),
-        MCOS_STACK_SIZE(1024U),
-        (uint8)AR_MCOS_TPRI(1),
-        (uint8)AR_MCOS_TPRI(1),
-        0U,
-        1U,
-        (void *)&ar_stack_core0_pri1,
-        (const ar_osap_config_t  *)NULL
-    },
-    {
-        &GENNAME_TASK(Ecu_InitTask),
-        MCOS_STACK_SIZE(1024U),
-        (uint8)AR_MCOS_TPRI(20),
-        (uint8)AR_MCOS_TPRI(20),
-        0U,
-        1U,
-        (void *)&ar_stack_core0_pri20,
-        (const ar_osap_config_t  *)NULL
-    },
-    {
-        &GENNAME_TASK(Task_MM_High),
+        &GENNAME_TASK(eMCOS_TASK_High),
         MCOS_STACK_SIZE(4096U),
         (uint8)AR_MCOS_TPRI(12),
         (uint8)AR_MCOS_TPRI(12),
@@ -139,17 +111,17 @@ const ar_task_config_t ar_task_configs[AR_OS_NUM_TASKS] = {
         (const ar_osap_config_t  *)NULL
     },
     {
-        &GENNAME_TASK(Task_MM_Low),
-        MCOS_STACK_SIZE(8192U),
-        (uint8)AR_MCOS_TPRI(4),
-        (uint8)AR_MCOS_TPRI(4),
-        1U,
+        &GENNAME_TASK(eMCOS_TASK_Idle),
+        MCOS_STACK_SIZE(1024U),
+        (uint8)AR_MCOS_TPRI(1),
+        (uint8)AR_MCOS_TPRI(1),
         0U,
-        (void *)&ar_stack_core0_pri4,
+        1U,
+        (void *)&ar_stack_core0_pri1,
         (const ar_osap_config_t  *)NULL
     },
     {
-        &GENNAME_TASK(Task_MM_Medium),
+        &GENNAME_TASK(eMCOS_TASK_Medium),
         MCOS_STACK_SIZE(8192U),
         (uint8)AR_MCOS_TPRI(8),
         (uint8)AR_MCOS_TPRI(8),
@@ -171,11 +143,9 @@ const ar_task_config_t ar_task_configs[AR_OS_NUM_TASKS] = {
 #include "Os_MemMap.h"
 
 ar_tcb_t * const ar_tcb_ptr_table[AR_OS_NUM_TASKS] ={
-    &ar_tcb_Ecu_IdleTask,
-    &ar_tcb_Ecu_InitTask,
-    &ar_tcb_Task_MM_High,
-    &ar_tcb_Task_MM_Low,
-    &ar_tcb_Task_MM_Medium
+    &ar_tcb_eMCOS_TASK_High,
+    &ar_tcb_eMCOS_TASK_Idle,
+    &ar_tcb_eMCOS_TASK_Medium
 };
 
 #define OS_STOP_SEC_CONST_32
@@ -183,165 +153,6 @@ ar_tcb_t * const ar_tcb_ptr_table[AR_OS_NUM_TASKS] ={
 
 
 
-/*
- * Counter control blocks
- */
-
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-static ar_countercb_t ar_countercb_OS_SYSTEM_COUNTER0;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-/*
- * Counter configurations
- *
- */
-
-#define OS_START_SEC_CONST_32
-#include "Os_MemMap.h"
-
-const ar_counter_config_t ar_counter_configs[AR_OS_NUM_COUNTERS] = {
-    {
-        1000000U,
-        1U,
-        1U,
-        {
-            1000000U,
-            2000001U
-        },
-        (const ar_osap_config_t  *)NULL    }
-};
-
-#define OS_STOP_SEC_CONST_32
-#include "Os_MemMap.h"
-
-/*
- * table of pointer to Counter control block
- */
-
-#define OS_START_SEC_CONST_32
-#include "Os_MemMap.h"
-
-ar_countercb_t * const ar_countercb_ptr_table[AR_OS_NUM_COUNTERS] = {
-    &ar_countercb_OS_SYSTEM_COUNTER0
-};
-
-#define OS_STOP_SEC_CONST_32
-#include "Os_MemMap.h"
-
-
-
-/*
- * Alarm action stub functions
- *
- */
-#define OS_START_SEC_CODE
-#include "Os_MemMap.h"
-static void ar_alarm_action_ECU_u2HIGHTASK_ALM(void);
-static void
-ar_alarm_action_ECU_u2HIGHTASK_ALM(void)
-{
-   (void)ar_act_activatetask(Task_MM_High, NULL);
-}
-static void ar_alarm_action_ECU_u2LOWTASK_ALM(void);
-static void
-ar_alarm_action_ECU_u2LOWTASK_ALM(void)
-{
-   (void)ar_act_activatetask(Task_MM_Low, NULL);
-}
-static void ar_alarm_action_ECU_u2MEDIUMTASK_ALM(void);
-static void
-ar_alarm_action_ECU_u2MEDIUMTASK_ALM(void)
-{
-   (void)ar_act_activatetask(Task_MM_Medium, NULL);
-}
-
-#define OS_STOP_SEC_CODE
-#include "Os_MemMap.h"
-
-/*
- * Alarm control blocks
- */
-
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-static ar_alarmcb_t ar_alarmcb_ECU_u2HIGHTASK_ALM;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-static ar_alarmcb_t ar_alarmcb_ECU_u2LOWTASK_ALM;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-static ar_alarmcb_t ar_alarmcb_ECU_u2MEDIUMTASK_ALM;
-
-#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
-#include "Os_MemMap.h"
-
-/*
- * Alarm configurations
- *
- */
-
-#define OS_START_SEC_CONST_32
-#include "Os_MemMap.h"
-
-const ar_alarm_config_t ar_alarm_configs[AR_OS_NUM_ALARMS] = {
-    {
-        &ar_countercb_OS_SYSTEM_COUNTER0,
-        0U,
-        (AR_ALARM_ACTIVATETASK | AR_ALARM_RELATIVE),
-        0U,
-        0U,
-        &ar_alarm_action_ECU_u2HIGHTASK_ALM,
-        77U,
-        (const ar_osap_config_t  *)NULL    },             {
-        &ar_countercb_OS_SYSTEM_COUNTER0,
-        0U,
-        (AR_ALARM_ACTIVATETASK | AR_ALARM_RELATIVE),
-        0U,
-        0U,
-        &ar_alarm_action_ECU_u2LOWTASK_ALM,
-        28U,
-        (const ar_osap_config_t  *)NULL    },             {
-        &ar_countercb_OS_SYSTEM_COUNTER0,
-        0U,
-        (AR_ALARM_ACTIVATETASK | AR_ALARM_RELATIVE),
-        0U,
-        0U,
-        &ar_alarm_action_ECU_u2MEDIUMTASK_ALM,
-        51U,
-        (const ar_osap_config_t  *)NULL    }
-};
-
-#define OS_STOP_SEC_CONST_32
-#include "Os_MemMap.h"
-
-/*
- * table of pointer to Alarm control block
- */
-
-#define OS_START_SEC_CONST_32
-#include "Os_MemMap.h"
-
-ar_alarmcb_t * const ar_alarmcb_ptr_table[AR_OS_NUM_ALARMS] = {
-    &ar_alarmcb_ECU_u2HIGHTASK_ALM,
-    &ar_alarmcb_ECU_u2LOWTASK_ALM,
-    &ar_alarmcb_ECU_u2MEDIUMTASK_ALM
-};
-
-#define OS_STOP_SEC_CONST_32
-#include "Os_MemMap.h"
 
 
 
@@ -353,77 +164,77 @@ ar_alarmcb_t * const ar_alarmcb_ptr_table[AR_OS_NUM_ALARMS] = {
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTOSTM1_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTOSTM1TINT;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTP38_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTP38;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_OS_SYSTEM_COUNTER_ISR0;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTOSTM8TINT;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTRIIC0EE_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC0EE;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTRIIC0RI_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC0RI;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTRIIC0TI_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC0TI;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTRIIC0TEI_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC0TEI;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTRIIC1EE_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC1EE;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTRIIC1RI_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC1RI;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTRIIC1TI_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC1TI;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
-ar_isrcb_t ar_isrcb_INTRIIC1TEI_ISR;
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC1TEI;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
@@ -496,17 +307,17 @@ const ar_isr_config_t ar_isr_configs[AR_OS_NUM_C2ISRS] = {
 #include "Os_MemMap.h"
 
 ar_isrcb_t * const ar_isrcb_ptr_table[AR_OS_NUM_C2ISRS] = {
-    &ar_isrcb_INTOSTM1_ISR,
-    &ar_isrcb_INTP38_ISR,
-    &ar_isrcb_OS_SYSTEM_COUNTER_ISR0,
-    &ar_isrcb_INTRIIC0EE_ISR,
-    &ar_isrcb_INTRIIC0RI_ISR,
-    &ar_isrcb_INTRIIC0TI_ISR,
-    &ar_isrcb_INTRIIC0TEI_ISR,
-    &ar_isrcb_INTRIIC1EE_ISR,
-    &ar_isrcb_INTRIIC1RI_ISR,
-    &ar_isrcb_INTRIIC1TI_ISR,
-    &ar_isrcb_INTRIIC1TEI_ISR
+    &ar_isrcb_eMCOS_ISR_INTOSTM1TINT,
+    &ar_isrcb_eMCOS_ISR_INTP38,
+    &ar_isrcb_eMCOS_ISR_INTOSTM8TINT,
+    &ar_isrcb_eMCOS_ISR_INTRIIC0EE,
+    &ar_isrcb_eMCOS_ISR_INTRIIC0RI,
+    &ar_isrcb_eMCOS_ISR_INTRIIC0TI,
+    &ar_isrcb_eMCOS_ISR_INTRIIC0TEI,
+    &ar_isrcb_eMCOS_ISR_INTRIIC1EE,
+    &ar_isrcb_eMCOS_ISR_INTRIIC1RI,
+    &ar_isrcb_eMCOS_ISR_INTRIIC1TI,
+    &ar_isrcb_eMCOS_ISR_INTRIIC1TEI
 };
 
 #define OS_STOP_SEC_CONST_32
@@ -525,67 +336,67 @@ const ar_int_config_t ar_int_configs[AR_OS_NUM_C2ISRS] = {
     /* for Category 2 ISR */
 
     {
-        &GENNAME_ISR(INTOSTM1_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTOSTM1TINT),
         HAL_V850_INTC2_OFFSET + 200U,  /* INTC2 : 200 */
         -3,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTP38_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTP38),
         HAL_V850_INTC2_OFFSET + 582U,  /* INTC2 : 582 */
         -5,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(OS_SYSTEM_COUNTER_ISR0),
+        &GENNAME_ISR(eMCOS_ISR_INTOSTM8TINT),
         HAL_V850_INTC2_OFFSET + 207U,  /* INTC2 : 207 */
         -2,
-        AR_ENABLE
+        AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTRIIC0EE_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTRIIC0EE),
         HAL_V850_INTC2_OFFSET + 685U,  /* INTC2 : 685 */
         -1,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTRIIC0RI_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTRIIC0RI),
         HAL_V850_INTC2_OFFSET + 686U,  /* INTC2 : 686 */
         -1,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTRIIC0TI_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTRIIC0TI),
         HAL_V850_INTC2_OFFSET + 687U,  /* INTC2 : 687 */
         -1,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTRIIC0TEI_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTRIIC0TEI),
         HAL_V850_INTC2_OFFSET + 688U,  /* INTC2 : 688 */
         -1,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTRIIC1EE_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTRIIC1EE),
         HAL_V850_INTC2_OFFSET + 689U,  /* INTC2 : 689 */
         -1,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTRIIC1RI_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTRIIC1RI),
         HAL_V850_INTC2_OFFSET + 690U,  /* INTC2 : 690 */
         -1,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTRIIC1TI_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTRIIC1TI),
         HAL_V850_INTC2_OFFSET + 691U,  /* INTC2 : 691 */
         -1,
         AR_DISABLE
     },
     {
-        &GENNAME_ISR(INTRIIC1TEI_ISR),
+        &GENNAME_ISR(eMCOS_ISR_INTRIIC1TEI),
         HAL_V850_INTC2_OFFSET + 692U,  /* INTC2 : 692 */
         -1,
         AR_DISABLE
