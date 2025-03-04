@@ -23,7 +23,10 @@
 #include "run_m.h"
 
 #include "oxcan.h"
+#warning "BEVCDCFD-822"
+#if 0 /* BEVCDCFD-822 */
 #include "l3r_test.h"
+#endif /* BEVCDCFD-822 */
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
@@ -69,7 +72,10 @@ TASK(eMCOS_TASK_Idle)
  *--------------------------------------------------------------------------*/
 TASK(eMCOS_TASK_High)
 {
+    #warning "BEVCDCFD-822"
+    #if 0 /* BEVCDCFD-822 */
     vd_g_L3rTestCycleHigh();
+    #endif /* BEVCDCFD-822 */
     BswM_CS_MainFunctionHigh();
 
     (void)TerminateTask();

@@ -459,8 +459,11 @@ static inline void    vd_s_XSpiCfgTxPowerMd(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdAccOn() << 3);                               /* ACC_ON                                    */
     u4_ap_pdu_tx[0]   |= (u4_t_dspactrans << 4);                                        /* ACTRANS_B_ON                              */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF) << 5);      /* CAN_MOVE_FLAG                             */
+    #warning "BEVCDCFD-822"
+    #if 0 /* BEVCDCFD-822 */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdIgnpOn() << 7);                              /* IGP_ON                                    */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehopemdBaOn() << 8);                               /* BA ON                                     */
+    #endif /* BEVCDCFD-822 */
     u4_ap_pdu_tx[0]   |= ((U4)u1_g_VehspdGetStopFlg() << 9);                            /* STOP_JDG_FLAG                             */
 }
 

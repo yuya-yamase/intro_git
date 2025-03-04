@@ -52,7 +52,8 @@ U4      u4_g_VehopemdConvertMdfield(void)
 
     u4_t_mdbit = u4_g_VehopemdMdfield();
     u4_t_convbit = (U4)VEH_OPEMD_MDBIT_BAOF;
-
+    #warning "BEVCDCFD-822"
+    #if 0 /* BEVCDCFD-822 */
     if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_RID) != (U4)0U){
         u4_t_convbit |= (U4)VEH_OPEMD_MDBIT_ACC;
     }
@@ -65,6 +66,7 @@ U4      u4_g_VehopemdConvertMdfield(void)
     if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_PON) != (U4)0U){
         u4_t_convbit |= (U4)VEH_OPEMD_MDBIT_IGNP;
     }
+    #endif /* BEVCDCFD-822 */
     
     return(u4_t_convbit);
 }

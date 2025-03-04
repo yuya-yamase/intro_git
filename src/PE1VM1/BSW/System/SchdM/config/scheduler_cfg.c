@@ -309,6 +309,8 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
+    #warning "BEVCDCFD-822"
+    #if 0 /* BEVCDCFD-822 */
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Pre Task                                                */
@@ -403,6 +405,7 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A_CAL  },
     {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
     {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    #endif /* BEVCDCFD-822 */
 
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
