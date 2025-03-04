@@ -129,12 +129,9 @@ static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         { (U2)188U, (U2)MSG_BDC1S60_RXCH0,     (U1)XSPI_MET_CAN_DLC_64,  (U2)39},/* Index 39 */
         { (U2)204U, (U2)MSG_BDC1S74_RXCH0,     (U1)XSPI_MET_CAN_DLC_08,  (U2)40},/* Index 40 */
         { (U2)206U, (U2)MSG_BDC1S81_RXCH0,     (U1)XSPI_MET_CAN_DLC_32,  (U2)41},/* Index 41 */
-        #warning "BEVCDCFD-822"
-        #if 0 /* BEVCDCFD-822 */
         { (U2)214U, (U2)MSG_BDC1SZ1_RXCH0,     (U1)XSPI_MET_CAN_DLC_32,  (U2)42},/* Index 42 */
         { (U2)222U, (U2)MSG_BDC1SZ3_RXCH0,     (U1)XSPI_MET_CAN_DLC_32,  (U2)43},/* Index 43 */
         { (U2)230U, (U2)MSG_BDC1SZ5_RXCH0,     (U1)XSPI_MET_CAN_DLC_32,  (U2)44},/* Index 44 */
-        #endif /* BEVCDCFD-822 */
         { (U2)238U, (U2)MSG_BKD1S01_RXCH0,     (U1)XSPI_MET_CAN_DLC_08,  (U2)45},/* Index 45 */
         { (U2)240U, (U2)MSG_BKD1S02_RXCH0,     (U1)XSPI_MET_CAN_DLC_08,  (U2)46},/* Index 46 */
         { (U2)242U, (U2)MSG_BSR1S01_RXCH0,     (U1)XSPI_MET_CAN_DLC_08,  (U2)47},/* Index 47 */
@@ -204,10 +201,7 @@ static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         { (U2)478U, (U2)MSG_PLG1G15_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)111},/* Index111 */
         { (U2)486U, (U2)MSG_PLG1G16_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)112},/* Index112 */
         { (U2)494U, (U2)MSG_PLG1S01_RXCH0,     (U1)XSPI_MET_CAN_DLC_08, (U2)113},/* Index113 */
-        #warning "BEVCDCFD-822"
-        #if 0 /* BEVCDCFD-822 */
         { (U2)496U, (U2)MSG_PLG1S05_RXCH0,     (U1)XSPI_MET_CAN_DLC_08, (U2)114},/* Index114 */
-        #endif /* BEVCDCFD-822 */
         { (U2)498U, (U2)MSG_PLG1S06_RXCH0,     (U1)XSPI_MET_CAN_DLC_08, (U2)115},/* Index115 */
         { (U2)500U, (U2)MSG_PLG1S20_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)116},/* Index116 */
         { (U2)508U, (U2)MSG_PLG1S21_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)117},/* Index117 */
@@ -243,10 +237,7 @@ static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         { (U2)640U, (U2)MSG_ZN11S26_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)147},/* Index147 */
         { (U2)648U, (U2)MSG_ZN11S38_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)148},/* Index148 */
         { (U2)656U, (U2)MSG_ZN11S60_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)149},/* Index149 */
-        #warning "BEVCDCFD-822"
-        #if 0 /* BEVCDCFD-822 */
         { (U2)664U, (U2)MSG_ZN11SC6_RXCH0,     (U1)XSPI_MET_CAN_DLC_08, (U2)150},/* Index150 */
-        #endif /* BEVCDCFD-822 */
         { (U2)666U, (U2)MSG_ZN21S05_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)151},/* Index151 */
         { (U2)674U, (U2)MSG_ZN21S13_RXCH0,     (U1)XSPI_MET_CAN_DLC_08, (U2)152},/* Index152 */
         { (U2)676U, (U2)MSG_ZN21S72_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)153} /* Index153 */

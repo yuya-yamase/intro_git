@@ -693,12 +693,7 @@ static U1 u1_s_HmiPuTxtCfgTimchgReq(void)
     U1 u1_t_timchg_pncdsp;   /* P_NCDSPVarlue  */
 
     u1_t_igon = u1_g_VehopemdIgnOn();
-    #warning "BEVCDCFD-822"
-    #if 0 /* BEVCDCFD-822 */
     u1_t_baon = u1_g_VehopemdBaOn();
-    #else /* BEVCDCFD-822 */
-    u1_t_baon = 0;
-    #endif /* BEVCDCFD-822 */
     u1_t_timchg_pncdsp = (U1)0U;
 
     u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_PLG1G10_RXCH0);

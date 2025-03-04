@@ -62,12 +62,7 @@ U1      u1_g_VdfEsoRx_CNTR_DISP(void)
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
-    #warning "BEVCDCFD-822"
-    #if 0 /* BEVCDCFD-822 */
     u1_t_rx  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S30, (U2)OXCAN_RX_SYS_TOE_PAR, u2_s_VDF_ESO_AVN_RXTO_MAX);
-    #else /* BEVCDCFD-822 */
-    u1_t_rx  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S30, (U2)0, u2_s_VDF_ESO_AVN_RXTO_MAX);
-    #endif /* BEVCDCFD-822 */
     u1_t_rx &= (U1)COM_TIMEOUT;
     if(u1_t_rx == (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
