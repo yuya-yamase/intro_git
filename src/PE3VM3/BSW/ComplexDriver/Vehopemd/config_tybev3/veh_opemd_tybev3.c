@@ -96,82 +96,6 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     return(u4_t_mdbit);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_VehopemdPtsOn(const U1 u1_a_INV)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VehopemdPtsOn(const U1 u1_a_INV)
-{
-    U1  u1_t_pts;
-
-    u1_t_pts = (U1)FALSE;
-    if((u1_s_veh_opemd_pts_chk & (U1)VEH_OPEMD_PTS_CHK_ON) != (U1)0U){
-        u1_t_pts = (U1)TRUE;
-    }
-    if((u1_s_veh_opemd_pts_chk & (U1)VEH_OPEMD_COMRX_INVALID) != (U1)0U){
-        if(u1_a_INV == (U1)VEH_OPEMD_PTS_INV_ON){
-            u1_t_pts = (U1)TRUE;
-        }
-        else if(u1_a_INV == (U1)VEH_OPEMD_PTS_INV_OFF){
-            u1_t_pts = (U1)FALSE;
-        }
-        else{
-            /* keep last */
-        }
-    }
-    return(u1_t_pts);
-}
-/*===================================================================================================================================*/
-/*  static void     vd_s_VehopemdPtschk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void     vd_s_VehopemdPtschk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
-{
-    U4                             u4_t_ignon;
-    U1                             u1_t_pts_chk;
-
-    u4_t_ignon    = u4_a_MDBIT & (U4)VEH_OPEMD_MDBIT_POE;
-    if(u4_t_ignon == (U1)0U){
-        u1_t_pts_chk = (U1)VEH_OPEMD_COMRX_UNKNOWN;
-    }
-    else{
-        u1_t_pts_chk = u1_s_VehopemdPtschk_RDYIND(u4_a_MDBIT, u4_a_EVTBIT);
-    }
-
-    u1_s_veh_opemd_pts_chk       = u1_t_pts_chk;
-
-}
-/*===================================================================================================================================*/
-/*  static U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
-{
-    U1                             u1_t_sgnl;
-    U1                             u1_t_pts_chk;
-
-    u1_t_sgnl = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RDYIND, &u1_t_sgnl);
-    u1_t_pts_chk = Com_GetIPDUStatus(MSG_ENG1G90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    if((u1_t_pts_chk == (U1)0U) &&
-       (u1_t_sgnl == (U1)TRUE)){
-        u1_t_pts_chk  = (U1)VEH_OPEMD_PTS_CHK_ON;
-    }
-    else if(u1_t_pts_chk == (U1)COM_TIMEOUT){
-        u1_t_pts_chk |= (u1_s_veh_opemd_pts_chk & (U1)VEH_OPEMD_PTS_CHK_ON);  /* keep last */
-    }
-    else{
-        /* Do Nothing */
-    }
-
-    return(u1_t_pts_chk);
-}
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -187,13 +111,8 @@ static U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EV
 /*  2.0.0     2/ 3/2025  ST       Supported vehicle power state.                                                                     */
 /*  2.1.0     2/ 7/2025  TN       BEVStep3 Vehicle Power State requirement was implemented.                                          */
 /*                                                                                                                                   */
-/*  Revision  Date        Author   Change Description                                                                                */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  BEV-1     2/12/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
-/*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * HU   = Hayato Usui, Denso Create                                                                                               */
 /*  * ST   = Satoshi Tanaka, Denso Create                                                                                            */
-/*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
