@@ -36,9 +36,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_g_Ivi_DspCtrl_Main_Bon_init(void);        /* 初期化関数(B-ON) */
-void            vd_g_Ivi_DspCtrl_Main_Wkup_init(void);       /* 初期化関数(WakeUp) */
-void            vd_g_Ivi_DspCtrl_Main(void);                 /* 定期タスク */
+void            vd_g_Ivi_DspCtrl_Main_Bon_init(void);       /* 初期化関数(B-ON) */
+void            vd_g_Ivi_DspCtrl_Main_Wkup_init(void);      /* 初期化関数(WakeUp) */
+void            vd_g_Ivi_DspCtrl_Main_Rst_init(void);       /* 初期化関数(Reset) */
+void            vd_g_Ivi_DspCtrl_Main(void);                /* 定期タスク */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
