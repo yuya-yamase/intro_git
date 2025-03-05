@@ -30,6 +30,8 @@
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
+#include "EthSW_Task.h"
+
 /*----------------------------------------------------------------------------
  *		ProtoTypes
  *--------------------------------------------------------------------------*/
@@ -77,6 +79,7 @@ TASK(eMCOS_TASK_High)
     vd_g_L3rTestCycleHigh();
     #endif /* BEVCDCFD-822 */
     BswM_CS_MainFunctionHigh();
+    EthSW_HighTask();
 
     (void)TerminateTask();
 }
@@ -103,6 +106,7 @@ TASK(eMCOS_TASK_Medium)
  *--------------------------------------------------------------------------*/
 TASK(eMCOS_TASK_Low)
 {
+    EthSW_LowTask();
     (void)TerminateTask();
 }
 
