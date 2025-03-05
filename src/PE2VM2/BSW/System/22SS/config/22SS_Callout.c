@@ -26,6 +26,14 @@
 #include "rim_ctl.h"
 /* #include "nvmc_mgr.h" */
 
+/* IVI */
+#include "x_spi_ivi.h"
+#include "IVI_PwrCtrl_Main.h"
+#include "IVI_ExtSigCtrl_Main.h"
+#include "IVI_PictCtrl_Main.h"
+#include "IVI_GyrCtrl_Main.h"
+#include "IVI_DspCtrl_Main.h"
+
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -73,7 +81,14 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
-    vd_g_StubBonInit();
+    /* IVI */
+    vd_g_XspiIviInit();
+    vd_g_Ivi_PwrCtrl_Main_Bon_init();
+    vd_g_Ivi_ExtSigCtrl_Main_Bon_init();
+    vd_g_Ivi_PictCtrl_Main_Bon_init();
+    vd_g_Ivi_GyrCtrl_Main_Bon_init();
+    vd_g_Ivi_DspCtrl_Main_Bon_init();
+
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -110,7 +125,14 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
-    vd_g_StubRstInit();
+    /* IVI */
+    vd_g_XspiIviInit();
+    vd_g_Ivi_PwrCtrl_Main_Rst_init();
+    vd_g_Ivi_ExtSigCtrl_Main_Rst_init();
+    vd_g_Ivi_PictCtrl_Main_Rst_init();
+    vd_g_Ivi_GyrCtrl_Main_Rst_init();
+    vd_g_Ivi_DspCtrl_Main_Rst_init();
+    
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -147,7 +169,14 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_VehopemdWkupInit();
 
     /* vv User Hook start vv */
-    vd_g_StubWkupInit();
+    /* IVI */
+    vd_g_XspiIviInit();
+    vd_g_Ivi_PwrCtrl_Main_Wkup_init();
+    vd_g_Ivi_ExtSigCtrl_Main_Wkup_init();
+    vd_g_Ivi_PictCtrl_Main_Wkup_init();
+    vd_g_Ivi_GyrCtrl_Main_Wkup_init();
+    vd_g_Ivi_DspCtrl_Main_Wkup_init();
+
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/

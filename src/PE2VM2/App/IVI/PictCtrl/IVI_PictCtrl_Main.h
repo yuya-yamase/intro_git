@@ -36,10 +36,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_g_Ivi_PictCtrl_Main_Bon_init(void);        /* 初期化関数(B-ON) */
-void            vd_g_Ivi_PictCtrl_Main_Wkup_init(void);       /* 初期化関数(WakeUp) */
-void            vd_g_Ivi_PictCtrl_Main_1ms(void);             /* 定期タスク(1ms) */
-void            vd_g_Ivi_PictCtrl_Main_5ms(void);             /* 定期タスク(5ms) */
+void            vd_g_Ivi_PictCtrl_Main_Bon_init(void);      /* 初期化関数(B-ON) */
+void            vd_g_Ivi_PictCtrl_Main_Wkup_init(void);     /* 初期化関数(WakeUp) */
+void            vd_g_Ivi_PictCtrl_Main_Rst_init(void);      /* 初期化関数(Rsest) */
+void            vd_g_Ivi_PictCtrl_Main_1ms(void);           /* 定期タスク(1ms) */
+void            vd_g_Ivi_PictCtrl_Main_5ms(void);           /* 定期タスク(5ms) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
