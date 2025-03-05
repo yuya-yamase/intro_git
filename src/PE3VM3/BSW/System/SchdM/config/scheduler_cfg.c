@@ -148,6 +148,16 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
+    /*   5ms Task                                                        */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req, (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_Mcu_PwrCtrl_Task,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&Mcu_Dev_Pwron,                    (U4)SCHDLR_TASKBIT___5MS    },
+    {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
     /*  10ms A Non-Platform Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
@@ -177,11 +187,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
     /*-------------------------------------------------------------------*/
-    {&vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req, (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_Mcu_PwrCtrl_Task,            (U4)SCHDLR_TASKBIT___5MS    },
-    {&Mcu_Dev_Pwron,                    (U4)SCHDLR_TASKBIT___5MS    },
-    {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
-
     {&vd_g_RunMMainTask,                (U4)SCHDLR_TASKBIT___5MS    },             /* vd_g_RunMMainTask shall be called at next  */
                                                                                    /* of SS_Mm_mainFunction                      */
     {&SS_Mm_mainFunction,               (U4)SCHDLR_TASKBIT___5MS    }              /* SS_Mm_mainFunction shall be called at end  */
