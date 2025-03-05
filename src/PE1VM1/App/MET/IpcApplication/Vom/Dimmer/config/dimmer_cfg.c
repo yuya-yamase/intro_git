@@ -165,7 +165,7 @@ U1      u1_g_DimCfgIFidx(void)
 /*===================================================================================================================================*/
 U1      u1_g_DimDaynightCfgRxEnabled(void)
 {
-    return(u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_CAN));
+    return(u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_VCAN));
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)                                                                        */

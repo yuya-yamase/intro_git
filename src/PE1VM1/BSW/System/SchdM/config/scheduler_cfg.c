@@ -309,15 +309,13 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
-    #warning "BEVCDCFD-822"
-    #if 0 /* BEVCDCFD-822 */
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Pre Task                                                */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_SoundCriMgrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_DioIfMainIn,                 (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_SoundCriMgrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_DioIfMainIn,                 (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -325,9 +323,9 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
-    {&vd_g_HudCaMainTask,               (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
-    {&vd_g_McstMainTask,                (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
+    {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
+    {&vd_g_HudCaMainTask,               (U4)SCHDLR_TASKBIT__20MS_B  },
+    {&vd_g_McstMainTask,                (U4)SCHDLR_TASKBIT__20MS_B  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -335,44 +333,44 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_MmLangCstmzTask,             (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_VardefMmUnitCstmzTask,       (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_LocaleMainTask,              (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
-    {&vd_g_VdsCIMainTask,               (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_EngspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_EngspdDetMainTask,           (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_PtsctmpMainTask,             (U4)SCHDLR_TASKBIT_100MS_A_CAL  },
-    {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_OdoMainTask,                 (U4)SCHDLR_TASKBIT__50MS_C_CAL  },
-    {&vd_g_EvschgMainTask,              (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
-    {&vd_g_Evschg10msTask,              (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_AlertMainTask,               (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_SbltwrnMainTask,             (U4)SCHDLR_TASKBIT__50MS_C_CAL  },
-    {&vd_g_TripsnsrSmplngTask,          (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_TripcomMainTask,             (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
-    {&vd_g_TripcomComTxTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_TripcomSmoothingTask,        (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_AmbtmpMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_MulmedColorMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_MulmedMulfrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B_CAL  },
-    {&vd_g_BattpowMainTask,             (U4)SCHDLR_TASKBIT_100MS_E_CAL  },
-    {&vd_g_DrvIndPwrMainTask,           (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_DrvIndEcoMainTask,           (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_DrvIndHvMainTask,            (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_OilmilMainTask,              (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
-    {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_Fsposnsr10msTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_FspomgrRoutine,              (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
-    {&vd_g_EcoJdgMainTask,              (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
-    {&vd_g_AttmpMainTask,               (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_MMVarTask,                   (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_MMAppCtrlTask,               (U4)SCHDLR_TASKBIT__50MS_E_CAL  },
-    {&vd_g_BatcareMainTask,             (U4)SCHDLR_TASKBIT__50MS_B_CAL  },
+    {&vd_g_MmLangCstmzTask,             (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_VardefMmUnitCstmzTask,       (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_LocaleMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
+    {&vd_g_VdsCIMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_EngspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_EngspdDetMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_PtsctmpMainTask,             (U4)SCHDLR_TASKBIT_100MS_A  },
+    {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_OdoMainTask,                 (U4)SCHDLR_TASKBIT__50MS_C  },
+    {&vd_g_EvschgMainTask,              (U4)SCHDLR_TASKBIT__50MS_E  },
+    {&vd_g_Evschg10msTask,              (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_AlertMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_SbltwrnMainTask,             (U4)SCHDLR_TASKBIT__50MS_C  },
+    {&vd_g_TripsnsrSmplngTask,          (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_TripcomMainTask,             (U4)SCHDLR_TASKBIT__50MS_E  },
+    {&vd_g_TripcomComTxTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_TripcomSmoothingTask,        (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_AmbtmpMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_MulmedColorMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_MulmedMulfrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
+    {&vd_g_BattpowMainTask,             (U4)SCHDLR_TASKBIT_100MS_E  },
+    {&vd_g_DrvIndPwrMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_DrvIndEcoMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_DrvIndHvMainTask,            (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_OilmilMainTask,              (U4)SCHDLR_TASKBIT__50MS_E  },
+    {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_Fsposnsr10msTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_FspomgrRoutine,              (U4)SCHDLR_TASKBIT__50MS_E  },
+    {&vd_g_EcoJdgMainTask,              (U4)SCHDLR_TASKBIT__50MS_E  },
+    {&vd_g_AttmpMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_MMVarTask,                   (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_MMAppCtrlTask,               (U4)SCHDLR_TASKBIT__50MS_E  },
+    {&vd_g_BatcareMainTask,             (U4)SCHDLR_TASKBIT__50MS_B  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -380,7 +378,7 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_HmiProxyMainTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_HmiProxyMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -388,24 +386,23 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_IllumiMainTask,              (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_GaugeMainTask,               (U4)SCHDLR_TASKBIT__20MS_A_CAL  },
-    {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_TelltaleMainTask,            (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_wChimeMainTask,              (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
+    {&vd_g_IllumiMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_GaugeMainTask,               (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_TelltaleMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_wChimeMainTask,              (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Post Task                                               */
     /*                                                                   */
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
     /*-------------------------------------------------------------------*/
-    {&vd_g_DioIfMainOut,                (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_NWCMMainTask,                (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A_CAL  },
-    {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A_CAL  },
-    #endif /* BEVCDCFD-822 */
+    {&vd_g_DioIfMainOut,                (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_NWCMMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
+    {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */

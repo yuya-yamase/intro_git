@@ -174,7 +174,7 @@ static void     vd_s_VehopemdPtschk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     U4                             u4_t_ignon;
     U1                             u1_t_pts_chk;
 
-    u4_t_ignon    = u4_a_MDBIT & (U4)VEH_OPEMD_MDBIT_POE;
+    u4_t_ignon    = u4_a_MDBIT & (U4)VEH_OPEMD_MDBIT_IG_R;
     if(u4_t_ignon == (U1)0U){
         u1_t_pts_chk = (U1)VEH_OPEMD_COMRX_UNKNOWN;
     }

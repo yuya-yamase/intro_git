@@ -107,7 +107,7 @@ U1              u1_g_PitchRollCfgGetMsgStsYawG(void)
     U1    u1_t_msgsts;
 #if defined(OXCAN_PDU_RX_CAN_VSC1G12_RXCH0)
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1G12_RXCH0,
-                                        ((U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE),
+                                        ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
                                         (U2)PITCHROLL_TO_VSC1G12) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts = (U1)COM_NO_RX;
@@ -126,7 +126,7 @@ U1              u1_g_PitchRollCfgGetMsgStsSp(void)
     U1    u1_t_msgsts;
 #if defined(OXCAN_PDU_RX_CAN_VSC1G13_RXCH0)
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1G13_RXCH0,
-                                        ((U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE),
+                                        ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
                                         (U2)PITCHROLL_TO_VSC1G13) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts = (U1)COM_NO_RX;
