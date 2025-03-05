@@ -104,23 +104,17 @@ static void EthSwt_SWIC_Org_Port_SetSpiPortMode( uint8 u1SetModeIndex )
 {
     /* SPI mode */
     if( u1SetModeIndex == ETHSWT_SWIC_PORT_MODE_SPI ){
-        #warning "BEVCDCFD-822"
-        #if 0 /* BEVCDCFD-822 */
-        Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_0 );
-        Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_1 );
-        Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_2 );
-        Port_SetPinMode( PORT_ID_PORT2_PIN14, PORT_MODE_CFG_P2_14_3 );
-        #endif /* BEVCDCFD-822 */
+        Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_MSPI0SI );
+        Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_MSPI0SC );
+        Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_MSPI0SO );
+        Port_SetPinMode( PORT_ID_PORT2_PIN14, PORT_MODE_CFG_P2_14_MSPI0CSS0 );
     }
     /* GPIO mode */
     else{
-        #warning "BEVCDCFD-822"
-        #if 0 /* BEVCDCFD-822 */
-        Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_33 );
-        Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_34 );
-        Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_35 );
-        Port_SetPinMode( PORT_ID_PORT2_PIN14, PORT_MODE_CFG_P2_14_36 );
-        #endif /* BEVCDCFD-822 */
+        Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_DI );
+        Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_DO_LO );
+        Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_DO_LO );
+        Port_SetPinMode( PORT_ID_PORT2_PIN14, PORT_MODE_CFG_P2_14_DO_LO );
     }
 }
 

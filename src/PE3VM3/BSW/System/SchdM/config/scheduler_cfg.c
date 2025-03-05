@@ -48,6 +48,10 @@
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
 
+#include "EthSW_Task.h"
+#include "Mcu_PwrCtrl.h"
+#include "Mcu_Sys_Pwr.h" /* Žb’è */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -141,6 +145,16 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
 //    {&vd_g_Nvmc_Task,                   (U4)SCHDLR_TASKBIT___5MS    },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*   5ms Task                                                        */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req, (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_Mcu_PwrCtrl_Task,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&Mcu_Dev_Pwron,                    (U4)SCHDLR_TASKBIT___5MS    },
+    {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

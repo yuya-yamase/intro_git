@@ -96,7 +96,7 @@ uint8 u1_g_Mcu_PwrCtrl_ShtdwnOk(void)
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req(Ecu_Intg_BootCauseType u4BootCause)
+void vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req(void)
 {
 #if 0
     switch(u4BootCause)

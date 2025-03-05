@@ -26,6 +26,9 @@
 #include "rim_ctl.h"
 /* #include "nvmc_mgr.h" */
 
+#include "EthSW_Task.h"
+#include "Mcu_PwrCtrl.h"
+
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -74,6 +77,8 @@ void vd_g_22SSCallout_StaBonInit(void)
 
     /* vv User Hook start vv */
     vd_g_StubBonInit();
+    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
+    EthSW_Sch_PowerOnInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -111,6 +116,8 @@ void vd_g_22SSCallout_StaRstInit(void)
 
     /* vv User Hook start vv */
     vd_g_StubRstInit();
+    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
+    EthSW_Sch_PowerOnInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -148,6 +155,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
 
     /* vv User Hook start vv */
     vd_g_StubWkupInit();
+    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
+    EthSW_Sch_PowerOnInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
