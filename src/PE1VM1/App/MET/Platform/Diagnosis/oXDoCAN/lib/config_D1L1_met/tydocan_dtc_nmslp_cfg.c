@@ -102,7 +102,7 @@ static U4           u4_s_tydc_ecuslp_wkf;
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef TYDOCAN_DTC_NMWK_CFG_H  /* tydocan_dtc_nmwk_cfg_private.h */
-const U1            u1_g_TYDC_NMWK_COM_CH          = (U1)OXCAN_CH_0_CAN;                /* NM channel in OXCAN_RX       */
+const U1            u1_g_TYDC_NMWK_COM_CH          = (U1)OXCAN_CH_0_VCAN;                /* NM channel in OXCAN_RX       */
 
 const U4            u4_g_TYDC_DTC_NMWK_WKM_TOUT    = (U4)3600000U;                      /* 60[min] -> [millisecond]     */
 const U4            u4_g_TYDC_DTC_NMWK_SLM_TOUT    = (U4)3600000U;                      /* 60[min] -> [millisecond]     */
@@ -129,7 +129,7 @@ const U1            u1_g_TYDC_DTC_ECUSLP_DCT_CH    = (U1)DATE_CLK_ETM_CH_DTC_NMG
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef TYDOCAN_DTC_NMGBL_CFG_H
-const U1            u1_g_TYDC_DTC_NMGBL_COM_CH     = (U1)OXCAN_CH_0_CAN;                /* NM channel in OXCAN_RX */
+const U1            u1_g_TYDC_DTC_NMGBL_COM_CH     = (U1)OXCAN_CH_0_VCAN;                /* NM channel in OXCAN_RX */
 const U1            u1_g_TYDC_DTC_NMGBL_CANIF_CH   = (U1)BSW_CANIF_CH0;                 /* NM channel in CANIF    */
 const U1            u1_g_TYDC_DTC_NMGBL_REC_CH_BIT = (U1)0x01U;                         /* NM channel bit written to snapshot record */
                                                                                         /*  ch1=bit0, ch2=bit1, ... ch8=bit7         */

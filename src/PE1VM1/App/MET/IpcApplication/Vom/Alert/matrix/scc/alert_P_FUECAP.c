@@ -156,11 +156,11 @@ static U4      u4_s_AlertP_fuecapTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
 #ifdef OXCAN_PDU_RX_CAN_ENG1G97
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G97,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_P_FUECAP_TT_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S97,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_P_FUECAP_TT_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #endif /* OXCAN_PDU_RX_CAN_ENG1G97 */
 
@@ -190,11 +190,11 @@ static U4      u4_s_AlertP_fuecapPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
 #ifdef OXCAN_PDU_RX_CAN_ENG1G97
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G97,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_P_FUECAP_PD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S97,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_P_FUECAP_PD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #endif /* OXCAN_PDU_RX_CAN_ENG1G97 */
 

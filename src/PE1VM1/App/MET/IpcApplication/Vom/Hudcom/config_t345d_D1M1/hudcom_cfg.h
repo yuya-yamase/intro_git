@@ -80,7 +80,7 @@
 #define u1_HCOM_GETCNTT()				(u1_g_DspmgrGetCntt((U1)HCOM_DSPSTM_00))               /* DSP_STM00_CNTT       */
 #define vd_HCOM_CANSGNL_NAV_MASK(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MASK,  (x)))
 #define u1_HCOM_GET_TBT_INT_SUP()		(u1_g_VardefEsOptAvaByCh(VDF_ESO_CH_MM_NAVI) & u1_g_McstBf(MCST_BFI_CROSS_ADV))
-#define u1_HCOM_CANMSGSTS_HUDSTS()		((U1)u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_HUD1S01,(U2)(OXCAN_RX_SYS_NRX_POE | OXCAN_RX_SYS_TOE_POE),(U2)HCOM_HUD1S01_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX))  /*  HUD1S01              */
+#define u1_HCOM_CANMSGSTS_HUDSTS()		((U1)u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_HUD1S01,(U2)(OXCAN_RX_SYS_NRX_IGR | OXCAN_RX_SYS_TOE_IGR),(U2)HCOM_HUD1S01_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX))  /*  HUD1S01              */
 #define vd_HCOMRX_GET_HUD_PWST(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_HUD_PWST,  (x)))
 #define vd_HCOMRX_GET_HUDSW_PS(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_HUDSW_PS,  (x)))
 #define vd_HCOMRX_GET_HUDSW_RT(x)		((void)Com_ReceiveSignal(ComConf_ComSignal_HUDSW_RT,  (x)))

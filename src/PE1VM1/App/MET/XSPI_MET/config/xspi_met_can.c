@@ -86,6 +86,7 @@ static const ST_XSPI_MET_CANGW_STA st_s_XSPI_MET_CANGW_RTE_BUF_STA[XSPIMETCANGW_
         {(U2)0U,    (U2)154U,   (U2)0U,     (U2)684U   } 
 };
 
+#if 0   /* BEV BSW provisionally */
 static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         {   (U2)0U, (U2)MSG_ABG1S01_RXCH0,     (U1)XSPI_MET_CAN_DLC_08,   (U2)0},/* Index  0 */
         {   (U2)2U, (U2)MSG_ACN1S04_RXCH0,     (U1)XSPI_MET_CAN_DLC_32,   (U2)1},/* Index  1 */
@@ -242,6 +243,7 @@ static const ST_XSPI_MET_MSG2POSLEN st_sp_XSPI_MET_MSG2POSLEN[] = {
         { (U2)674U, (U2)MSG_ZN21S13_RXCH0,     (U1)XSPI_MET_CAN_DLC_08, (U2)152},/* Index152 */
         { (U2)676U, (U2)MSG_ZN21S72_RXCH0,     (U1)XSPI_MET_CAN_DLC_32, (U2)153} /* Index153 */
 };
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -530,6 +532,7 @@ void    vd_g_XSpiMETCANGWPushPDU(const U2 u2_a_MSG)
     U1  u1_t_dlc;
     U1  u1_tp_sgnl[XSPI_MET_CAN_64];
     
+#if 0   /* BEV BSW provisionally */
     if((u2_a_MSG >= u2_s_XSPI_MET_CANGW_MIN) &&
        (u2_a_MSG <= u2_s_XSPI_MET_CANGW_MAX)    ){
         u2_t_idx = u2_sp_XSPI_MET_CANGW_OX2IDX[u2_a_MSG - u2_s_XSPI_MET_CANGW_MIN];
@@ -543,6 +546,7 @@ void    vd_g_XSpiMETCANGWPushPDU(const U2 u2_a_MSG)
             (*fp_sp_XSPI_MET_CANGW_PAD[u1_t_dlc])(&u1_tp_sgnl[0], &u4_s_xspi_rte_gw[u2_t_pos]);
         }
     }
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_XSpiMETPduTxCAN(U4 * u4_ap_TX_HEAD, const ST_XSPIMET_CAN_TXCFG stp_a_TX_CFG)                                        */
@@ -572,6 +576,7 @@ void    vd_g_XSpiMETPduTxCAN(U4 * u4_ap_TX_HEAD, const ST_XSPIMET_CAN_TXCFG * co
         }
 
         u4p_t_data = &u4_ap_TX_HEAD[0];
+#if 0   /* BEV BSW provisionally */
         stp_t_msg2poslen = &st_sp_XSPI_MET_MSG2POSLEN[st_s_XSPI_MET_CANGW_RTE_BUF_STA[XSPIMETCANGW_BLOCK].u2_idx];
         for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)st_s_XSPI_MET_CANGW_RTE_BUF_STA[XSPIMETCANGW_BLOCK].u2_num_idx; u4_t_loop++){
             u2_t_msgidx           = stp_t_msg2poslen->u2_msg;
@@ -581,6 +586,7 @@ void    vd_g_XSpiMETPduTxCAN(U4 * u4_ap_TX_HEAD, const ST_XSPIMET_CAN_TXCFG * co
             u4p_t_data[u2_t_idx] |= (U4)u1_t_pdusts  <<     (u2_t_bitsft << 1);
             stp_t_msg2poslen++;
         }
+#endif
 
         u4p_t_data = &u4_ap_TX_HEAD[stp_a_TX_CFG->u2_pdu_sta];
         u4p_t_src  = &u4_s_xspi_rte_gw[st_s_XSPI_MET_CANGW_RTE_BUF_STA[XSPIMETCANGW_BLOCK].u2_buf];

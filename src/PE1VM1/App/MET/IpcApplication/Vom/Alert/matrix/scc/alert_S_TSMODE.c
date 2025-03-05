@@ -97,7 +97,7 @@ static U4      u4_s_AlertS_tsmodeSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_FCM1S58_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_S_TSMODE_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_S_TSMODE_MSGSTS);

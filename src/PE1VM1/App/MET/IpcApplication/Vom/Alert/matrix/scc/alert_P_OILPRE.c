@@ -341,7 +341,7 @@ static U4      u4_s_AlertP_oilpreWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
         u4_t_src_chk  |= ((U4)u1_a_LAS & u4_s_ALERT_P_OILPRE_WRN_LAS_MSK);
 
         u1_t_msgstspdc = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PDC1G01_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_P_OILPRE_WRN_TSH_PD01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_msgstspdc == (U1)COM_NO_RX){
             u1_t_igp_pdc = (U1)0U;
@@ -356,11 +356,11 @@ static U4      u4_s_AlertP_oilpreWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
         u4_t_src_chk  |= ((U4)u1_t_igp_pdc  << u1_s_ALERT_P_OILPRE_WRN_LSB_IGP);
 #if defined(OXCAN_PDU_RX_CAN_ENG1G97)
         u1_t_msgsts    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G97,
-                                          (U2)OXCAN_RX_SYS_NRX_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #elif defined(OXCAN_PDU_RX_CAN_ENG1S92)
         u1_t_msgsts    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S92,
-                                          (U2)OXCAN_RX_SYS_NRX_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
         u1_t_msgsts    = (U1)COM_NO_RX;
@@ -442,7 +442,7 @@ static U4      u4_s_AlertP_oilpreBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
         }
 
         u1_t_msgstspdc = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PDC1G01_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_P_OILPRE_BC_THSH_PD01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_msgstspdc == (U1)COM_NO_RX){
             u1_t_igp_pdc  = (U1)0U;
@@ -457,11 +457,11 @@ static U4      u4_s_AlertP_oilpreBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
         u4_t_src_chk  |= ((U4)u1_t_igp_pdc << u1_s_ALERT_P_OILPRE_BC_LSB_IGP);
 #if defined(OXCAN_PDU_RX_CAN_ENG1G97)
         u1_t_msgsts    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G97,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_P_OILPRE_BC_THSH_G97) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #elif defined(OXCAN_PDU_RX_CAN_ENG1S92)
         u1_t_msgsts    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S92,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_P_OILPRE_BC_THSH_S92) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
         u1_t_msgsts    = (U1)COM_NO_RX;
@@ -492,8 +492,8 @@ static U1      u1_s_AlertP_oilpreRxJudgeSgnl(const U1 u1_a_RXID)
 {
 #if (defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0) && defined(ComConf_ComSignal_MOPSINH)) || (defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_OPLMPMSK))
     static const U2 u2_sp_ALERT_P_OILPRE_COMRX[ALERT_P_OILPRE_RXSTAT_NUM] = {
-        (U2)(OXCAN_RX_SYS_NRX_POE),
-        (U2)(OXCAN_RX_SYS_NRX_POE | OXCAN_RX_SYS_TOE_POE)
+        (U2)(OXCAN_RX_SYS_NRX_IGR),
+        (U2)(OXCAN_RX_SYS_NRX_IGR | OXCAN_RX_SYS_TOE_IGR)
     };
     static const U2 u2_sp_ALERT_P_OILPRE_THRSH[ALERT_P_OILPRE_RXSTAT_NUM] = {
         (U2)U2_MAX,

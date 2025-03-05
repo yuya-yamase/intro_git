@@ -143,7 +143,7 @@ static U4      u4_s_AlertC_brlv_2WrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 
 #if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BRLV)
     u1_t_msgsts       = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
-                                              (U2)OXCAN_RX_SYS_NRX_POE,
+                                              (U2)OXCAN_RX_SYS_NRX_IGR,
                                               (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl_brlv    = (U1)0U;
@@ -176,7 +176,7 @@ static U4      u4_s_AlertC_brlv_2BcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
 #if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BRLV)
     u1_t_msg        = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
-                                            (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                            (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                             u2_s_ALERT_BRLV_BC_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl_brlv  = (U1)0U;
