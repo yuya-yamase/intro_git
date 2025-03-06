@@ -191,12 +191,9 @@ void	xspi_Init(
 {
 	(VOID)ch;
 	/* SPIポート設定 */
-	#warning "BEVCDCFD-822"
-	#if 0 /* BEVCDCFD-822 */
 	Port_SetPinMode( XSPI_SCLK_PORT, XSPI_SCLK_MODE_CFG );
 	Port_SetPinMode( XSPI_TXD_PORT, XSPI_TXD_MODE_CFG );
 	Port_SetPinMode( XSPI_RXD_PORT, XSPI_RXD_MODE_CFG );
-	#endif /* BEVCDCFD-822 */
 
 	/* XSPI管理情報初期化 */
 	fc_drv_ClearXSpiMng();

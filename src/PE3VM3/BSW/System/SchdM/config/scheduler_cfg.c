@@ -29,6 +29,7 @@
 /* Application Header                                                        */
 /*---------------------------------------------------------------------------*/
 #include "stub.h"
+#include "xspi.h"
 
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
@@ -253,6 +254,10 @@ void    vd_g_SchdlrCfgIdleToRun(void)
     /* and launching the initial task.                                              */
     /*------------------------------------------------------------------------------*/
     vd_g_Gpt_OstStart((U1)GPT_OST_CH_02_SCHDLR_TICK, &u4_sp_SCHDLR_OST_START[0]);
+
+    SuspendAllInterrupts();
+    xspi_Init( XSPI_CH_03 );
+    ResumeAllInterrupts();
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_SchdlrCfgIdleChkptRchd(void)                                                                                 */
