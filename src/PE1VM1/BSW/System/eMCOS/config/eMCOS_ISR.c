@@ -22,6 +22,9 @@
 #include "scheduler.h"
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
+
+#include "xspi.h"
+
 /*----------------------------------------------------------------------------
  *		Defines
  *--------------------------------------------------------------------------*/
@@ -63,6 +66,7 @@ ISR(eMCOS_ISR_INTOSTM6TINT)
 ISR(eMCOS_ISR_INTOSTM0TINT)
 {
     /*    INTOSTM0_ISR;*/
+    xspi_Main( XSPI_CH_02 );
 }
 
 /**---------------------------------------------------------------------------

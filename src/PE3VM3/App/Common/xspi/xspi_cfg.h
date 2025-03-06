@@ -24,9 +24,9 @@
 #define XSPI_SCLK_PORT 			(PORT_ID_PORT21_PIN0)		/* SCLKポート（MCAL/PORT） */
 #define XSPI_TXD_PORT 			(PORT_ID_PORT21_PIN1) 		/* TXDポート（MCAL/PORT） */
 #define XSPI_RXD_PORT 			(PORT_ID_PORT21_PIN2)		/* RXDポート（MCAL/PORT） */
-#define XSPI_SCLK_MODE_CFG 		(PORT_MODE_CFG_P21_0_11)	/* SCLKポート設定値（MCAL/PORT） */
-#define XSPI_TXD_MODE_CFG 		(PORT_MODE_CFG_P21_1_12)	/* TXDポート設定値（MCAL/PORT） */
-#define XSPI_RXD_MODE_CFG 		(PORT_MODE_CFG_P21_2_13)	/* RXDポート設定値（MCAL/PORT） */
+#define XSPI_SCLK_MODE_CFG 		(PORT_MODE_CFG_P21_0_MSPI4SC)	/* SCLKポート設定値（MCAL/PORT） */
+#define XSPI_TXD_MODE_CFG 		(PORT_MODE_CFG_P21_1_MSPI4SI)	/* TXDポート設定値（MCAL/PORT） */
+#define XSPI_RXD_MODE_CFG 		(PORT_MODE_CFG_P21_2_MSPI4SO)	/* RXDポート設定値（MCAL/PORT） */
 #define XSPI_OST_CH				(GPT_OST_CH_03)				/* OSTMチャネル（MCAL/GPT） */
 
 /*------------------------------------------*/
