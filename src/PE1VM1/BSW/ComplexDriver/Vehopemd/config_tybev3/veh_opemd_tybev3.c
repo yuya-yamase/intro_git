@@ -93,34 +93,6 @@ void    vd_g_VehopemdCfgWkupInit(void)
 /*===================================================================================================================================*/
 U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
 {
-#warning "BEVCDCFD-822"
-#if 0 /* BEVCDCFD-822 */
-    U4                             u4_t_mdbit;
-    U4                             u4_t_bit;
-    U4                             u4_t_evt;
-
-    /*-------------------------------------------------------------------*/
-    /* Access to 4byte RAM is completed with one instruction.            */
-    /* There is no interrupt during access, SPINLOCK is not required.    */
-    /*-------------------------------------------------------------------*/
-    u4_t_mdbit = *u4_g_vehopemd_sysbit;
-    /*-------------------------------------------------------------------*/
-    
-    /*-------------------------------*/
-    /* u4_t_evt                      */
-    /* ON->OFF event :bit31-bit16    */
-    /* OFF->ON event :bit15-bit0     */
-    /*-------------------------------*/
-    u4_t_bit = u4_a_MDBIT ^ u4_t_mdbit;
-    u4_t_evt  =  ((u4_t_bit & u4_a_MDBIT) & (U4)VEH_OPEMD_MDBIT_FIELDS) << 16U;
-    u4_t_evt |= ((u4_t_bit & u4_t_mdbit) & (U4)VEH_OPEMD_MDBIT_FIELDS);
-
-    vd_s_VehopemdPtschk(u4_t_mdbit, u4_t_evt);
-
-    (*u4_ap_evtbit) = u4_t_evt;
-
-    return(u4_t_mdbit);
-#else if /* BEVCDCFD-822 */
     U4                                   u4_t_mdbit;
     U4                                   u4_t_evbit;
     U4                                   u4_t_ev_off;
@@ -132,9 +104,9 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     u4_t_ev_on  = ((u4_t_evbit & u4_t_mdbit) & (U4)VEH_OPEMD_MDBIT_FIELDS);
 
     (*u4_ap_evbit) = u4_t_ev_off | u4_t_ev_on;
+    vd_s_VehopemdPtschk(u4_t_mdbit, (*u4_ap_evbit));
 
     return(u4_t_mdbit);
-#endif /* BEVCDCFD-822 */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VehopemdPtsOn(const U1 u1_a_INV)                                                                                    */
