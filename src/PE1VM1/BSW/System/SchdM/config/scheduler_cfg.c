@@ -107,6 +107,7 @@
 #include "sound_cri_mgr.h"
 #include "gateway_cxpi.h"
 #include "gateway_mm.h"
+#include "xspi_met.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -277,6 +278,7 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Pre Task                                           */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_XSpiMETPduRx,                (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
@@ -338,10 +340,10 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_VardefMmUnitCstmzTask,       (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_LocaleMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_VdsCIMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_EngspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_EngspdDetMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
-    {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_PtsctmpMainTask,             (U4)SCHDLR_TASKBIT_100MS_A  },
     {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_OdoMainTask,                 (U4)SCHDLR_TASKBIT__50MS_C  },
@@ -404,6 +406,7 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
     {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_XSpiMETPduTx,                (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */

@@ -21,8 +21,6 @@
 #include "iohw_diflt.h"
 #include "oxcan.h"
 
-#warning "BEVCDCFD-822"
-#if 0 /* BEVCDCFD-822 */
 #if 0   /* BEV BSW provisionally */
 #include "xpd_init.h" 
 #else 
@@ -35,7 +33,6 @@
 
 #include "vardef.h" 
 #include "fspomgr.h" 
-#endif /* BEVCDCFD-822 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -49,12 +46,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#warning "BEVCDCFD-822"
-#if 0 /* BEVCDCFD-822 */
-#define VEH_OPEMD_NUM_EVTHK                      (5U)
-#else if /* BEVCDCFD-822 */
-#define VEH_OPEMD_NUM_EVHK                       (0U)
-#endif /* BEVCDCFD-822 */
+#define VEH_OPEMD_NUM_EVHK                      (5U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -87,39 +79,33 @@ typedef struct{
 /*===================================================================================================================================*/
 void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 {
-#warning "BEVCDCFD-822"
-#if 0 /* BEVCDCFD-822 */
-#if (VEH_OPEMD_NUM_EVTHK > 0)
-    static const ST_VEH_OPEMD_EVTHK   st_sp_VEH_OPEMD_EVTHK[VEH_OPEMD_NUM_EVTHK] = {
-        {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVTBIT_POE_TO_ON    },
+#if (VEH_OPEMD_NUM_EVHK > 0U)
+    static const ST_VEH_OPEMD_EVHK   st_sp_VEH_OPEMD_EVHK[VEH_OPEMD_NUM_EVHK] = {
+        {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON    },
 
-        {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVTBIT_POE_TO_ON  |
-                                         (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF) },
+        {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
+                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 
-        {&vd_g_AlertOpemdEvhk,          ((U4)VEH_OPEMD_EVTBIT_POE_TO_ON  |
-                                         (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF) },
+        {&vd_g_AlertOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
+                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 
-        {&vd_g_GaugeOpemdEvhk,          ((U4)VEH_OPEMD_EVTBIT_POE_TO_ON  |
-                                         (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF) },
+        {&vd_g_GaugeOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
+                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 
-        {&vd_g_FspoOpemdEvhk,          ((U4)VEH_OPEMD_EVTBIT_POE_TO_ON  |
-                                         (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF) }
+        {&vd_g_FspoOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
+                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) }
     };
 
     U4                                u4_t_cnt;
-    U4                                u4_t_jdgbit;
-#endif /* #if (VEH_OPEMD_NUM_EVTHK > 0) */
-
+    U4                                u4_t_bit;
 
     vd_g_IoHwDifltSgnlInit(); /* DO NOT REMOVED */
+    vd_g_oXCANSysEvhk();
 
-#ifdef OXCAN_H
-    vd_g_oXCANOpemdEvhk();
-#endif
     vd_g_VardefOpemdEvhk();
 
 #ifdef DATE_CLK_H
-    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_POE_TO_OFF;
+    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF;
     if(u4_t_jdgbit != (U4)0U){
         vd_g_DateclkEtmStart((U1)DATE_CLK_ETM_CH_TMRWK, (U4)0U); /* zero start */
     }
@@ -132,26 +118,6 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 #else
 #endif
 
-#if (VEH_OPEMD_NUM_EVTHK > 0)
-    for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)VEH_OPEMD_NUM_EVTHK; u4_t_cnt++){
-        u4_t_jdgbit = u4_a_EVTBIT & st_sp_VEH_OPEMD_EVTHK[u4_t_cnt].u4_evtbit;
-        if(u4_t_jdgbit != (U4)0U){
-            (st_sp_VEH_OPEMD_EVTHK[u4_t_cnt].fp_vd_HK)(u4_a_MDBIT, u4_a_EVTBIT);
-        }
-    }
-#endif /* #if (VEH_OPEMD_NUM_EVTHK > 0) */
-#else if /* BEVCDCFD-822 */
-#if (VEH_OPEMD_NUM_EVHK > 0U)
-    static const ST_VEH_OPEMD_EVHK   st_sp_VEH_OPEMD_EVHK[VEH_OPEMD_NUM_EVTHK] = {
-        {&vd_g_StubOpemdEvhk,         (U4)VEH_OPEMD_EVBIT_FIELDS}
-    };
-
-    U4                                u4_t_cnt;
-    U4                                u4_t_bit;
-
-    vd_g_IoHwDifltSgnlInit(); /* DO NOT REMOVED */
-    vd_g_oXCANSysEvhk();
-
     for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)VEH_OPEMD_NUM_EVHK; u4_t_cnt++){
         u4_t_bit = u4_a_EVBIT & st_sp_VEH_OPEMD_EVHK[u4_t_cnt].u4_evbit;
         if(u4_t_bit != (U4)0U){
@@ -162,7 +128,6 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
     vd_g_IoHwDifltSgnlInit(); /* DO NOT REMOVED */
     vd_g_oXCANSysEvhk();
 #endif /* #if (VEH_OPEMD_NUM_EVHK > 0) */
-#endif /* BEVCDCFD-822 */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
