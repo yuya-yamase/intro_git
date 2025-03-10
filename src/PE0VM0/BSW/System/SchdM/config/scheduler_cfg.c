@@ -50,6 +50,8 @@
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
 
+#include "ExtSigCtrl_Main.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -147,6 +149,14 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
 //    {&vd_g_Nvmc_Task,                   (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXDoCANMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
+
+    /*-------------------------------------------------------------------*/
+    /*                                                                   */
+    /*  5ms Non-Platform Task                                            */
+    /*                                                                   */
+    /*-------------------------------------------------------------------*/
+    {&ExtSigCtrl_MainFunction,          (U4)SCHDLR_TASKBIT___5MS    },
+    /* WARNING "DO NOT EXECUTE APPLICATION BEFORE THIS PLACE" */
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
