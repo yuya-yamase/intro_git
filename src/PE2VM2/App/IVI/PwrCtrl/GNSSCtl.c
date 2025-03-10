@@ -52,8 +52,9 @@ static U1 u1_s_Gnss_TimChk(const U2 u2_a_tim_cnt, const U2 u2_a_wait_tim);
 void    vd_g_Gnss_Init(void)
 {
     u1_s_gnss_state = (U1)GNSS_SEQ_IDLE;
-    u2_s_gnss_pmoni_inichk_timer = (U1)0;
-    u2_s_gnss_cycchk_timer = (U1)0;
+    u2_s_gnss_pmoni_inichk_timer = (U2)0;
+    u2_s_gnss_cycchk_timer = (U2)0;
+    u1_s_gnss_pre_rst_sts = (U1)GNSS_IO_STS_LOW;
     u1_s_gnss_gps_stop_flg = (U1)FALSE;
 }
 
@@ -65,7 +66,8 @@ void    vd_g_Gnss_Init(void)
 /*===================================================================================================================================*/
 void    vd_g_Gnss_Routine(void)
 {
-    static const U2 GNSS_CYCCHK_POLING = (U2)(10U / GNSS_TASK_TIME);            /* GPS-PMONI Poling Check Time *//* 暫定 xspiの定期に合わせる */
+    static const U2 GNSS_INIT_WAIT = (U2)(400U / GNSS_TASK_TIME);               /* GPS-PMONI Initial Check Wait Time t1:400ms */
+    static const U2 GNSS_CYCCHK_POLING = (U2)(10U / GNSS_TASK_TIME);            /* GPS-PMONI Poling Check Time */
 
     U1  u1_t_gnss_rst_sts;                                                      /* /GPS-RST Port Status */
     U1  u1_t_pmoni_sts;                                                         /* GPS-PMONI Port Status */
@@ -74,7 +76,7 @@ void    vd_g_Gnss_Routine(void)
     switch (u1_s_gnss_state){
         case GNSS_SEQ_IDLE:                                                     /* IDLE */
             /* Timer Clear */
-            u2_s_gnss_cycchk_timer = (U2)0;
+            u2_s_gnss_pmoni_inichk_timer = (U2)0;
 
             /* Poling Start Check */
             /* /GPS-RST = L -> H */
@@ -86,11 +88,18 @@ void    vd_g_Gnss_Routine(void)
                 /* Initial Check Timer Start */
                 u2_s_gnss_pmoni_inichk_timer++;
             }
+
+            u1_s_gnss_pre_rst_sts = u1_t_gnss_rst_sts;
             break;
         case GNSS_SEQ_INI:                                                      /* INI */
-            u1_t_cyc_time_chk_flg = u1_s_Gnss_TimChk(u2_s_gnss_pmoni_inichk_timer, GNSS_CYCCHK_POLING);
+            /* Timer Clear */
+            u2_s_gnss_cycchk_timer = (U2)0;
+
+            u1_t_cyc_time_chk_flg = u1_s_Gnss_TimChk(u2_s_gnss_pmoni_inichk_timer, GNSS_INIT_WAIT);
             if(u1_t_cyc_time_chk_flg == (U1)TRUE){
                 u1_t_pmoni_sts = u1_GNSS_GET_GPS_PMONI();
+                /* Timer Clear */
+                u2_s_gnss_pmoni_inichk_timer = (U2)0;
                 /* OS Command : GPS Status Notification */
                 if(u1_t_pmoni_sts == (U1)GNSS_IO_STS_LOW){
                     u1_GNSS_OSCMD_GPS_STS_NOTIF((U1)GNSS_OSCMD_NOTIF_STANDBY);  /* GPS Status Notification : Standby */
@@ -110,6 +119,7 @@ void    vd_g_Gnss_Routine(void)
         case GNSS_SEQ_CYC:                                                      /* CYCLIC */
             u1_t_cyc_time_chk_flg = u1_s_Gnss_TimChk(u2_s_gnss_cycchk_timer, GNSS_CYCCHK_POLING);
             if(u1_t_cyc_time_chk_flg == (U1)TRUE){
+                u1_t_pmoni_sts = u1_GNSS_GET_GPS_PMONI();
                 /* Timer Clear */
                 u2_s_gnss_cycchk_timer = (U2)0;
                 /* OS Command : GPS Status Notification */
@@ -156,7 +166,7 @@ static U1 u1_s_Gnss_TimChk(const U2 u2_a_tim_cnt, const U2 u2_a_wait_tim)
 /*===================================================================================================================================*/
 /*  void    vd_g_Gnss_GpsReq(void)                                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_gpsreq  :  GPS Device Restart(0) / GPS Device Stop(0)                                                       */
+/*  Arguments:      u1_a_gpsreq  :  GPS Device Restart(0) / GPS Device Stop(1)                                                       */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 void    vd_g_Gnss_GpsReq(U1 u1_a_gpsreq)
@@ -168,6 +178,8 @@ void    vd_g_Gnss_GpsReq(U1 u1_a_gpsreq)
         u1_GNSS_OSCMD_GPS_RES((U1)GNSS_OSCMD_RESET);                    /* GPS Respons : Reset */
         /* OS Command : GPS Status Notification */
         u1_GNSS_OSCMD_GPS_STS_NOTIF((U1)GNSS_OSCMD_NOTIF_STANDBY);      /* GPS Status Notification : Standby */
+
+        vd_g_Gnss_Init();
     }
     else if(u1_a_gpsreq == (U1)GNSS_OSCMD_STOP){                        /* GPS Request : Stop */
         u1_GNSS_SET_GPS_RST_L();                                        /* /GPS-RST = L */
