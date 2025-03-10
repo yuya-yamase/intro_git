@@ -594,6 +594,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[12] |= (U4)TRUE << 4;                                 /*  SYS_SW_OBBSAV            */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 5;                                 /*  SYS_DMEVRNGE             */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 6;                                 /*  SYS_DMTOEC               */ /* BEV SV1 provisionally */
+    u4_ap_pdu_tx[12] |= (U4)TRUE << 7;                                 /*  SYS_DMM1EC               */ /* BEV SV1 provisionally */
 
     u1_t_var_ecojdg_type = u1_g_VardefEcoJudge();
     u4_ap_pdu_tx[13]  = ((U4)u1_t_var_ecojdg_type & (U4)0x01U) << 9;   /*  VAR_ECOJDG_TYPE                                      */
