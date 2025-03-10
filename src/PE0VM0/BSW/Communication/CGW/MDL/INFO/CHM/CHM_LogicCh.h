@@ -28,8 +28,8 @@
 #define CHM_LOG_ALL_CH_NUM			(CHM_LOG_CAN_CH_NUM + CHM_LOG_ETH_CH_NUM)
 
 /* 論理チャネル番号 */
-#define CHM_LOG_CH_G2M2_FD_BUS			(0U)
-#define CHM_LOG_CH_G2M1_FD_BUS			(1U)
+#define CHM_LOG_CH_G2M1_FD_BUS			(0U)
+#define CHM_LOG_CH_G2M2_FD_BUS			(1U)
 #define CHM_LOG_CH_G5M_FD_BUS			(2U)
 #define CHM_LOG_CH_VCAN_BUS			(3U)
 #define CHM_LOG_CH_NON			(0xFFU)
@@ -38,8 +38,8 @@
 #define CHM_LOG_CH_USE_DIAG		(CHM_LOG_CH_NON)
 
 /* 論理チャネルBIT情報 (Ch番号0 を0x1 とした定義) */
-#define CHM_LOG_BIT_G2M2_FD_BUS		((uint32)(0x1U) << (uint32)(CHM_LOG_CH_G2M2_FD_BUS))
 #define CHM_LOG_BIT_G2M1_FD_BUS		((uint32)(0x1U) << (uint32)(CHM_LOG_CH_G2M1_FD_BUS))
+#define CHM_LOG_BIT_G2M2_FD_BUS		((uint32)(0x1U) << (uint32)(CHM_LOG_CH_G2M2_FD_BUS))
 #define CHM_LOG_BIT_G5M_FD_BUS		((uint32)(0x1U) << (uint32)(CHM_LOG_CH_G5M_FD_BUS))
 #define CHM_LOG_BIT_VCAN_BUS		((uint32)(0x1U) << (uint32)(CHM_LOG_CH_VCAN_BUS))
 #define CHM_LOG_BIT_NON			(0x0U)

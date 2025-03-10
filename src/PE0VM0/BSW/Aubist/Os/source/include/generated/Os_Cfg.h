@@ -109,11 +109,11 @@
 #define AR_OS_EXIST_NON_AUTOSAR_CORES   (STD_OFF)
 #define AR_OS_EXIST_TASK                (STD_ON)
 #define AR_OS_EXIST_EXTEND_TASK         (STD_OFF)
-#define AR_OS_EXIST_COUNTER             (STD_ON)
+#define AR_OS_EXIST_COUNTER             (STD_OFF)
 #define AR_OS_EXIST_C1ISR               (STD_OFF)
 #define AR_OS_EXIST_C2ISR               (STD_ON)
 #define AR_OS_EXIST_RESOURCE            (STD_OFF)
-#define AR_OS_EXIST_ALARM               (STD_ON)
+#define AR_OS_EXIST_ALARM               (STD_OFF)
 
 #define AR_OS_EXIST_SPINLOCK            (STD_OFF)
 #define AR_OS_EXIST_IOC                 (STD_OFF)
@@ -132,12 +132,12 @@
 #define OS_CORE_ID_0                    ((CoreIdType)0)
 
 
-#define AR_OS_NUM_TASKS                                     ((uint16)0x0005U)
+#define AR_OS_NUM_TASKS                                     ((uint16)0x0003U)
 #define AR_OS_NUM_EXTEND_TASKS                              ((uint16)0x0000U)
 #define AR_OS_NUM_RESOURCES                                 ((uint16)0x0000U)
 #define AR_OS_NUM_STANDARD_RESOURCES                        ((uint16)0x0000U)
-#define AR_OS_NUM_COUNTERS                                  ((uint16)0x0001U)
-#define AR_OS_NUM_ALARMS                                    ((uint16)0x0003U)
+#define AR_OS_NUM_COUNTERS                                  ((uint16)0x0000U)
+#define AR_OS_NUM_ALARMS                                    ((uint16)0x0000U)
 #define AR_OS_NUM_OSAPPLICATIONS                            ((uint16)0x0000U)
 #define AR_OS_NUM_APPMODES                                  ((uint16)0x0001U)
 #define AR_OS_NUM_ISRS                                      ((uint16)0x0006U)
@@ -152,33 +152,21 @@
 #define AR_OS_NUM_SPINLOCK_NESTCBS                          ((uint16)0x0000U)
 #define AR_OS_NUM_PERIPHERAL_AREAS                          ((uint16)0x0000U)
 
-#define AR_OS_NUM_TASKS_PER_CORE_MAX                        (5)
-#define AR_OS_ACT_COUNT_PER_CORE_MAX                        (8)
+#define AR_OS_NUM_TASKS_PER_CORE_MAX                        (3)
+#define AR_OS_ACT_COUNT_PER_CORE_MAX                        (5)
 
 /*
  * Task ID
  */
 /* Extend Tasks */
 /* Basic Tasks */
-#define Ecu_IdleTask                                        (AR_OS_NUM_EXTEND_TASKS + ((uint16)0x0000U))
-#define Ecu_InitTask                                        (AR_OS_NUM_EXTEND_TASKS + ((uint16)0x0001U))
-#define Task_MM_High                                        (AR_OS_NUM_EXTEND_TASKS + ((uint16)0x0002U))
-#define Task_MM_Low                                         (AR_OS_NUM_EXTEND_TASKS + ((uint16)0x0003U))
-#define Task_MM_Medium                                      (AR_OS_NUM_EXTEND_TASKS + ((uint16)0x0004U))
+#define eMCOS_TASK_High                                     (AR_OS_NUM_EXTEND_TASKS + ((uint16)0x0000U))
+#define eMCOS_TASK_Idle                                     (AR_OS_NUM_EXTEND_TASKS + ((uint16)0x0001U))
+#define eMCOS_TASK_Medium                                   (AR_OS_NUM_EXTEND_TASKS + ((uint16)0x0002U))
 
 
 
-/*
- * Counter ID
- */
-#define OS_SYSTEM_COUNTER0                                  ((uint16)0x0000U)
 
-/*
- * Alarm ID
- */
-#define ECU_u2HIGHTASK_ALM                                  ((uint16)0x0000U)
-#define ECU_u2LOWTASK_ALM                                   ((uint16)0x0001U)
-#define ECU_u2MEDIUMTASK_ALM                                ((uint16)0x0002U)
 
 
 /*
@@ -190,12 +178,12 @@
  * ISR ID
  */
 /* Category 2 ISRs */
-#define OS_SYSTEM_COUNTER_ISR0                              ((uint16)0x0000U)
-#define INTTAUD0CH14                                        ((uint16)0x0001U)
-#define INTRCAN5REC_ISR                                     ((uint16)0x0002U)
-#define INTRCAN5TRX_ISR                                     ((uint16)0x0003U)
-#define INTRCAN7REC_ISR                                     ((uint16)0x0004U)
-#define INTRCAN7TRX_ISR                                     ((uint16)0x0005U)
+#define eMCOS_ISR_INTOSTM5TINT                              ((uint16)0x0000U)
+#define eMCOS_ISR_INTTAUD0I14                               ((uint16)0x0001U)
+#define eMCOS_ISR_INTRCAN5REC                               ((uint16)0x0002U)
+#define eMCOS_ISR_INTRCAN5TRX                               ((uint16)0x0003U)
+#define eMCOS_ISR_INTRCAN7REC                               ((uint16)0x0004U)
+#define eMCOS_ISR_INTRCAN7TRX                               ((uint16)0x0005U)
 
 
 
@@ -210,16 +198,6 @@
 
 
 
-/*
- * Counter Constants and Macros
- */
-#define OSMAXALLOWEDVALUE_OS_SYSTEM_COUNTER0       (1000000U)
-#define OSTICKSPERBASE_OS_SYSTEM_COUNTER0          (1U)
-#define OSMINCYCLE_OS_SYSTEM_COUNTER0              (1U)
-#define OS_TICKS2NS_OS_SYSTEM_COUNTER0(tick)       ( (PhysicalTimeType)(0.001) * (PhysicalTimeType)(1000000000.0) * (PhysicalTimeType)(tick) )
-#define OS_TICKS2US_OS_SYSTEM_COUNTER0(tick)       ( (PhysicalTimeType)(0.001) * (PhysicalTimeType)(1000000.0) * (PhysicalTimeType)(tick) )
-#define OS_TICKS2MS_OS_SYSTEM_COUNTER0(tick)       ( (PhysicalTimeType)(0.001) * (PhysicalTimeType)(1000.0) * (PhysicalTimeType)(tick) )
-#define OS_TICKS2SEC_OS_SYSTEM_COUNTER0(tick)      ( (PhysicalTimeType)(0.001) * (PhysicalTimeType)(tick) )
 #endif /* OS_CFG_H */
 
 /****************************************************************************/

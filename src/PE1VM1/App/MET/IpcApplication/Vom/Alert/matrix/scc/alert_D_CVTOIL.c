@@ -128,11 +128,11 @@ static U4      u4_s_AlertD_cvtoilSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
 #ifdef OXCAN_PDU_RX_CAN_ECT1G92_RXCH0
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1S93_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #endif /* OXCAN_PDU_RX_CAN_ECT1G92_RXCH0 */
 

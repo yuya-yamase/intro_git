@@ -2,7 +2,7 @@
 #ifndef BSW_CFG_H
 #define BSW_CFG_H
 
-#include "SS_CpuCore.h"
+#include "bswlib.h"
 
 #define BSW_CFG_GETSPINLOCK_SPI()
 #define BSW_CFG_RELEASESPINLOCK_SPI()
@@ -36,7 +36,7 @@
 #define BSW_CFG_GETSPINLOCK_PIL_SPI()
 #define BSW_CFG_RELEASESPINLOCK_PIL_SPI()
 
-#define Bswlib_GetCoreId()	(U4)SS_CpuCore_getCoreID()
+#define Bswlib_GetCoreId()	(u4_g_GetCoreId())
 
 #endif /* BSW_CFG_H */
 

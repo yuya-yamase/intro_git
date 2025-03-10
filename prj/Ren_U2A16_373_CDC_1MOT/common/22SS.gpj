@@ -1,9 +1,6 @@
 #!gbuild
 [Subproject]
-    :sourceDir=${SS_DIR}
-
-    -I${SS_DIR}/SchdM
-    -I${SS_DIR}/SchdM/cfg
+    :sourceDir=${SS_DIR}/22SS/scc
 
 SS_Boot.c
 SS_Clock.c

@@ -359,7 +359,7 @@ static U4      u4_s_AlertH_quichaChgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_isenable;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1G10,
-                                     (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
+                                     (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
                                      u2_s_ALERT_H_QUICHA_CHG_TRSH_P10) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
 
@@ -377,7 +377,7 @@ static U4      u4_s_AlertH_quichaChgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= ((U4)u1_t_sgnl                        << u1_s_ALERT_H_QUICHA_CHG_LSB_PIDS);
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1G11,
-                                     (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
+                                     (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
                                      u2_s_ALERT_H_QUICHA_CHG_TRSH_P11) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_h_quicha_msgsts_lpg11, u1_t_msgsts);
 
@@ -411,7 +411,7 @@ static U4      u4_s_AlertH_quichaLidSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1G10,
-                                     (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
+                                     (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
                                      u2_s_ALERT_H_QUICHA_LID_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
@@ -451,7 +451,7 @@ static U4      u4_s_AlertH_quichaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1S01_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR,
+                                     (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
                                      u2_s_ALERT_H_QUICHA_TT_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_h_quicha_msgsts_tt, u1_t_msgsts);
@@ -502,7 +502,7 @@ static U4      u4_s_AlertH_quichaDchgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_isenable;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1G10,
-                                     (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_H_QUICHA_DCHG_TRSH_PL) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_QUICHA_DCHG_LSB_PLG);

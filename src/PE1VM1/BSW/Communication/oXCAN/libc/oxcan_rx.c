@@ -1,4 +1,4 @@
-/* 2.0.0 */
+/* 1.0.7 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_RX_C_MAJOR                         (2U)
+#define OXCAN_RX_C_MAJOR                         (1U)
 #define OXCAN_RX_C_MINOR                         (0U)
-#define OXCAN_RX_C_PATCH                         (0U)
+#define OXCAN_RX_C_PATCH                         (7U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -83,7 +83,7 @@ void    vd_g_oXCANRxInit(void)
         u2_gp_oxcan_rx_toe_chk[u4_t_lpcnt]   = (U2)0U;
     }
 
-    u2_s_oxcan_rx_sys_chk = (U2)OXCAN_RX_SYS_NRX_PAR | (U2)OXCAN_RX_SYS_TOE_PAR | (U2)OXCAN_RX_SYS_NRX_CHK | (U2)OXCAN_RX_SYS_TOE_CHK;
+    u2_s_oxcan_rx_sys_chk = (U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT;
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u2_g_OXCAN_RX_NUM_RX; u4_t_lpcnt++){
         st_gp_oxcan_rx_pdu_st[u4_t_lpcnt].u2_rxto_cnt = (U2)OXCAN_RX_RXTO_INI;
@@ -92,17 +92,17 @@ void    vd_g_oXCANRxInit(void)
     }    
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANRxOpemdEvthk(const U4 u1_a_SYSBIT)                                                                             */
+/*  void    vd_g_oXCANRxSysEvhk(const U4 u1_a_SYSBIT)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANRxOpemdEvthk(const U4 u4_a_SYSBIT)
+void    vd_g_oXCANRxSysEvhk(const U4 u4_a_SYSBIT)
 {
     U4                        u4_t_lpcnt;
     U2                        u2_t_sys_chk;
 
-    u2_t_sys_chk = (U2)u4_a_SYSBIT;
+    u2_t_sys_chk  = (u2_g_oXCANRxCfgSysXgrOn((U2)u4_a_SYSBIT) & (U2)OXCAN_RX_SYS_NRX_XGR) | (U2)u4_a_SYSBIT;
     u2_t_sys_chk |= (U2)(u2_t_sys_chk << OXCAN_RX_SYS_LSB_TOE);
     u2_s_oxcan_rx_sys_chk = u2_t_sys_chk;
 
@@ -178,7 +178,7 @@ void    vd_g_oXCANRxMainTask(const U4 u4_a_SYSBIT)
         /* -------------------------------------------------------------------------------------------------- */
         if((u2_gp_oxcan_rx_nwk_elpsd[u4_t_ch] <= (U2)OXCAN_RX_POM_MAX  ) &&
            (u2_gp_oxcan_rx_nwk_elpsd[u4_t_ch] >  u2_g_OXCAN_RX_POM_TOUT)){
-            u2_t_toe_by_ch = u2_t_toe_chk | (U2)OXCAN_RX_SYS_TOE_PAR;
+            u2_t_toe_by_ch = u2_t_toe_chk | (U2)OXCAN_RX_SYS_TOE_BAT;
         }
         else{
             u2_t_toe_by_ch = u2_t_toe_chk;
@@ -239,7 +239,7 @@ U1      u1_g_oXCANRxEnabled(const U1 u1_a_CH)
 {
     U1                        u1_t_rxe;
 
-    if((u1_a_CH                              <  u1_g_OXCAN_RX_NUM_CH) &&
+    if((u1_a_CH                           <  u1_g_OXCAN_RX_NUM_CH) &&
        (u2_gp_oxcan_rx_nwk_elpsd[u1_a_CH] <= (U2)OXCAN_RX_POM_MAX)){
         u1_t_rxe = (U1)TRUE;
     }
@@ -281,7 +281,7 @@ U1      u1_g_oXCANRxStat(const U2 u2_a_PDU_RX, const U2 u2_a_SYS_CHK, const U2 u
                 u1_t_rx_stat  = (U1)0x00U;
             }
             else if((u2_t_rxto_cnt <= (U2)OXCAN_RX_RXTO_MAX) &&
-                    (u2_t_rxto_cnt >= u2_a_RXTO_THRSH         )){
+                    (u2_t_rxto_cnt >= u2_a_RXTO_THRSH      )){
                 u1_t_rx_stat  = ((U1)COM_TIMEOUT | (U1)OXCAN_RX_RXST_TOE);
             }
             else{
@@ -339,34 +339,6 @@ U2      u2_g_oXCANRxToechk(const U1 u1_a_CH)
 
     return(u2_t_toe_chk);
 }
-#if (OXCAN_RX_STOP_EN == 1U)
-/*===================================================================================================================================*/
-/*  void vd_g_oXCANRxTimerInit(const U1 u1_a_CH)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void vd_g_oXCANRxTimerInit(const U1 u1_a_CH)
-{
-    const ST_OXCAN_RX_CH *st_tp_CH;
-    const U2 *u2_tp_PDU_BY_CH;
-    U4 u4_t_num_rx;
-    U4 u4_t_lpcnt;
-    U2 u2_t_pdu_rx;
-
-    st_tp_CH = &st_gp_OXCAN_RX_BY_CH[u1_a_CH];
-    u2_tp_PDU_BY_CH = st_tp_CH->u2p_PDU_BY_CH;
-    if(u2_tp_PDU_BY_CH != vdp_PTR_NA){
-        u4_t_num_rx = (U4)st_tp_CH->u2_num_rx;
-        for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u4_t_num_rx; u4_t_lpcnt++){
-            u2_t_pdu_rx = u2_tp_PDU_BY_CH[u4_t_lpcnt];
-            st_gp_oxcan_rx_pdu_st[u2_t_pdu_rx].u2_rxto_cnt = (U2)OXCAN_RX_RXTO_INI;
-            u2_t_pdu_rx += st_gp_OXCAN_RX_BY_CH[u1_a_CH].u2_msg_min;
-            Com_ClearTickTime(u2_t_pdu_rx);
-        }
-    }
-}
-#endif /* #if (OXCAN_RX_STOP_EN == 1U) */
 /*===================================================================================================================================*/
 /*  static U2      u2_s_oXCANRxToechk(const U4 u4_a_SYSBIT)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -382,13 +354,13 @@ static U2      u2_s_oXCANRxToechk(const U4 u4_a_SYSBIT)
     U2                        u2_t_toc_en;
     U2                        u2_t_toe_chk;
 
-    u2_t_sys_chk  = (U2)u4_a_SYSBIT;
+    u2_t_sys_chk  = (u2_g_oXCANRxCfgSysXgrOn((U2)u4_a_SYSBIT) & (U2)OXCAN_RX_SYS_NRX_XGR) | (U2)u4_a_SYSBIT;
     u2_t_sys_chk |= (U2)(u2_t_sys_chk << OXCAN_RX_SYS_LSB_TOE);
     u2_t_pom_chk  = u2_t_sys_chk & u2_s_oxcan_rx_sys_chk;
     u2_t_toe_chk  = (U2)0U;
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_RX_NUM_POM; u4_t_lpcnt++){
 
-        u2_t_toc_en = u2_t_pom_chk & u2_sp_OXCAN_RX_POM_CHK[u4_t_lpcnt];
+        u2_t_toc_en = u2_t_pom_chk & u2_gp_OXCAN_RX_POM_CHK[u4_t_lpcnt];
         if(u2_t_toc_en == (U2)0U){
             u4_sp_oxcan_rx_pom_elpsd[u4_t_lpcnt] = (U4)0U;
         }
@@ -435,7 +407,7 @@ static void    vd_s_oXCANRxBatInit(const ST_OXCAN_RX_CH * st_ap_CH)
     U2                        u2_t_bat_rx;
 
     u2_tp_PDU_BY_CH = st_ap_CH->u2p_PDU_BY_CH;
-    u2_t_bat_rx     = (st_ap_CH->u2_sys_en & ((U2)OXCAN_SYS_PAR | (U2)OXCAN_SYS_CHK));
+    u2_t_bat_rx     = st_ap_CH->u2_sys_en & (U2)OXCAN_SYS_BAT;
     if((u2_t_bat_rx     != (U2)0U    ) &&
        (u2_tp_PDU_BY_CH != vdp_PTR_NA)){
 
@@ -443,7 +415,7 @@ static void    vd_s_oXCANRxBatInit(const ST_OXCAN_RX_CH * st_ap_CH)
         for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u4_t_num_rx; u4_t_lpcnt++){
 
             u2_t_pdu_rx = u2_tp_PDU_BY_CH[u4_t_lpcnt];
-            u2_t_bat_rx = (U2)u1_gp_OXCAN_RX_SYS_BY_RX[u2_t_pdu_rx] & (U2)OXCAN_SYS_PAR;
+            u2_t_bat_rx = (U2)u1_gp_OXCAN_RX_SYS_BY_RX[u2_t_pdu_rx] & (U2)OXCAN_SYS_BAT;
             if(u2_t_bat_rx != (U2)0U){
                 st_gp_oxcan_rx_pdu_st[u2_t_pdu_rx].u2_rxto_cnt = (U2)OXCAN_RX_RXTO_INI;
                 st_gp_oxcan_rx_pdu_st[u2_t_pdu_rx].u1_log_rx   = (U1)0U;
@@ -460,150 +432,41 @@ static void    vd_s_oXCANRxBatInit(const ST_OXCAN_RX_CH * st_ap_CH)
 static void    vd_s_oXCANRxstUpdt(const ST_OXCAN_RX_CH * st_ap_CH, const U1 u1_a_SYS_CHK, const U2 u2_a_TOE_BY_CH)
 {
     static const U2           u2_sp_OXCAN_RX_TOE_BY_SYS[] = {
-        (U2)0x0000U,        /* 0,   0,   0,   0,   0,   0,   0   : None     */
-        (U2)0x0100U,        /* 0,   0,   0,   0,   0,   0,   1   : PONMASK  */
-        (U2)0x0200U,        /* 0,   0,   0,   0,   0,   1,   0   : PONMASK  */
-        (U2)0x0300U,        /* 0,   0,   0,   0,   0,   1,   1   : PONMASK  */
-        (U2)0x0400U,        /* 0,   0,   0,   0,   1,   0,   0   : PONMASK  */
-        (U2)0x0500U,        /* 0,   0,   0,   0,   1,   0,   1   : PONMASK  */
-        (U2)0x0600U,        /* 0,   0,   0,   0,   1,   1,   0   : PONMASK  */
-        (U2)0x0700U,        /* 0,   0,   0,   0,   1,   1,   1   : PONMASK  */
+        (U2)0x0000U,        /* 0,   0,   0,   0,   0   : None     */
+        (U2)0x0100U,        /* 0,   0,   0,   0,   1   : WKUPMASK */
+        (U2)0x0200U,        /* 0,   0,   0,   1,   0   : PONMASK  */
+        (U2)0x0100U,        /* 0,   0,   0,   1,   1   : WKUPMASK */
+        (U2)0x0400U,        /* 0,   0,   1,   0,   0   : PONMASK  */
+        (U2)0x0100U,        /* 0,   0,   1,   0,   1   : WKUPMASK */
+        (U2)0x0600U,        /* 0,   0,   1,   1,   0   : PONMASK  */
+        (U2)0x0100U,        /* 0,   0,   1,   1,   1   : WKUPMASK */
 
-        (U2)0x0800U,        /* 0,   0,   0,   1,   0,   0,   0   : PONMASK  */
-        (U2)0x0900U,        /* 0,   0,   0,   1,   0,   0,   1   : PONMASK  */
-        (U2)0x0a00U,        /* 0,   0,   0,   1,   0,   1,   0   : PONMASK  */
-        (U2)0x0b00U,        /* 0,   0,   0,   1,   0,   1,   1   : PONMASK  */
-        (U2)0x0c00U,        /* 0,   0,   0,   1,   1,   0,   0   : PONMASK  */
-        (U2)0x0d00U,        /* 0,   0,   0,   1,   1,   0,   1   : PONMASK  */
-        (U2)0x0e00U,        /* 0,   0,   0,   1,   1,   1,   0   : PONMASK  */
-        (U2)0x0f00U,        /* 0,   0,   0,   1,   1,   1,   1   : PONMASK  */
+        (U2)0x0800U,        /* 0,   1,   0,   0,   0   : PONMASK  */
+        (U2)0x0100U,        /* 0,   1,   0,   0,   1   : WKUPMASK */
+        (U2)0x0a00U,        /* 0,   1,   0,   1,   0   : PONMASK  */
+        (U2)0x0100U,        /* 0,   1,   0,   1,   1   : WKUPMASK */
+        (U2)0x0c00U,        /* 0,   1,   1,   0,   0   : PONMASK  */
+        (U2)0x0100U,        /* 0,   1,   1,   0,   1   : WKUPMASK */
+        (U2)0x0e00U,        /* 0,   1,   1,   1,   0   : PONMASK  */
+        (U2)0x0100U,        /* 0,   1,   1,   1,   1   : WKUPMASK */
 
-        (U2)0x1000U,        /* 0,   0,   1,   0,   0,   0,   0   : PONMASK  */
-        (U2)0x1100U,        /* 0,   0,   1,   0,   0,   0,   1   : PONMASK  */
-        (U2)0x1200U,        /* 0,   0,   1,   0,   0,   1,   0   : PONMASK  */
-        (U2)0x1300U,        /* 0,   0,   1,   0,   0,   1,   1   : PONMASK  */
-        (U2)0x1400U,        /* 0,   0,   1,   0,   1,   0,   0   : PONMASK  */
-        (U2)0x1500U,        /* 0,   0,   1,   0,   1,   0,   1   : PONMASK  */
-        (U2)0x1600U,        /* 0,   0,   1,   0,   1,   1,   0   : PONMASK  */
-        (U2)0x1700U,        /* 0,   0,   1,   0,   1,   1,   1   : PONMASK  */
+        (U2)0x1000U,        /* 1,   0,   0,   0,   0   : PONMASK  */
+        (U2)0x0100U,        /* 1,   0,   0,   0,   1   : WKUPMASK */
+        (U2)0x1200U,        /* 1,   0,   0,   1,   0   : PONMASK  */
+        (U2)0x0100U,        /* 1,   0,   0,   1,   1   : WKUPMASK */
+        (U2)0x1400U,        /* 1,   0,   1,   0,   0   : PONMASK  */
+        (U2)0x0100U,        /* 1,   0,   1,   0,   1   : WKUPMASK */
+        (U2)0x1600U,        /* 1,   0,   1,   1,   0   : PONMASK  */
+        (U2)0x0100U,        /* 1,   0,   1,   1,   1   : WKUPMASK */
 
-        (U2)0x1800U,        /* 0,   0,   1,   1,   0,   0,   0   : PONMASK  */
-        (U2)0x1900U,        /* 0,   0,   1,   1,   0,   0,   1   : PONMASK  */
-        (U2)0x1a00U,        /* 0,   0,   1,   1,   0,   1,   0   : PONMASK  */
-        (U2)0x1b00U,        /* 0,   0,   1,   1,   0,   1,   1   : PONMASK  */
-        (U2)0x1c00U,        /* 0,   0,   1,   1,   1,   0,   0   : PONMASK  */
-        (U2)0x1d00U,        /* 0,   0,   1,   1,   1,   0,   1   : PONMASK  */
-        (U2)0x1e00U,        /* 0,   0,   1,   1,   1,   1,   0   : PONMASK  */
-        (U2)0x1f00U,        /* 0,   0,   1,   1,   1,   1,   1   : PONMASK  */
-        
-        (U2)0x2000U,        /* 0,   1,   0,   0,   0,   0,   0   : PONMASK  */
-        (U2)0x2100U,        /* 0,   1,   0,   0,   0,   0,   1   : PONMASK  */
-        (U2)0x2200U,        /* 0,   1,   0,   0,   0,   1,   0   : PONMASK  */
-        (U2)0x2300U,        /* 0,   1,   0,   0,   0,   1,   1   : PONMASK  */
-        (U2)0x2400U,        /* 0,   1,   0,   0,   1,   0,   0   : PONMASK  */
-        (U2)0x2500U,        /* 0,   1,   0,   0,   1,   0,   1   : PONMASK  */
-        (U2)0x2600U,        /* 0,   1,   0,   0,   1,   1,   0   : PONMASK  */
-        (U2)0x2700U,        /* 0,   1,   0,   0,   1,   1,   1   : PONMASK  */
-
-        (U2)0x2800U,        /* 0,   1,   0,   1,   0,   0,   0   : PONMASK  */
-        (U2)0x2900U,        /* 0,   1,   0,   1,   0,   0,   1   : PONMASK  */
-        (U2)0x2a00U,        /* 0,   1,   0,   1,   0,   1,   0   : PONMASK  */
-        (U2)0x2b00U,        /* 0,   1,   0,   1,   0,   1,   1   : PONMASK  */
-        (U2)0x2c00U,        /* 0,   1,   0,   1,   1,   0,   0   : PONMASK  */
-        (U2)0x2d00U,        /* 0,   1,   0,   1,   1,   0,   1   : PONMASK  */
-        (U2)0x2e00U,        /* 0,   1,   0,   1,   1,   1,   0   : PONMASK  */
-        (U2)0x2f00U,        /* 0,   1,   0,   1,   1,   1,   1   : PONMASK  */
-
-        (U2)0x3000U,        /* 0,   1,   1,   0,   0,   0,   0   : PONMASK  */
-        (U2)0x3100U,        /* 0,   1,   1,   0,   0,   0,   1   : PONMASK  */
-        (U2)0x3200U,        /* 0,   1,   1,   0,   0,   1,   0   : PONMASK  */
-        (U2)0x3300U,        /* 0,   1,   1,   0,   0,   1,   1   : PONMASK  */
-        (U2)0x3400U,        /* 0,   1,   1,   0,   1,   0,   0   : PONMASK  */
-        (U2)0x3500U,        /* 0,   1,   1,   0,   1,   0,   1   : PONMASK  */
-        (U2)0x3600U,        /* 0,   1,   1,   0,   1,   1,   0   : PONMASK  */
-        (U2)0x3700U,        /* 0,   1,   1,   0,   1,   1,   1   : PONMASK  */
-
-        (U2)0x3800U,        /* 0,   1,   1,   1,   0,   0,   0   : PONMASK  */
-        (U2)0x3900U,        /* 0,   1,   1,   1,   0,   0,   1   : PONMASK  */
-        (U2)0x3a00U,        /* 0,   1,   1,   1,   0,   1,   0   : PONMASK  */
-        (U2)0x3b00U,        /* 0,   1,   1,   1,   0,   1,   1   : PONMASK  */
-        (U2)0x3c00U,        /* 0,   1,   1,   1,   1,   0,   0   : PONMASK  */
-        (U2)0x3d00U,        /* 0,   1,   1,   1,   1,   0,   1   : PONMASK  */
-        (U2)0x3e00U,        /* 0,   1,   1,   1,   1,   1,   0   : PONMASK  */
-        (U2)0x3f00U,        /* 0,   1,   1,   1,   1,   1,   1   : PONMASK  */
-
-        (U2)0x4000U,        /* 1,   0,   0,   0,   0,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   0,   0,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   0,   0,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   0,   0,   1,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   0,   1,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   0,   1,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   0,   1,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   0,   1,   1,   1   : WKUPMASK */
-
-        (U2)0x4000U,        /* 1,   0,   0,   1,   0,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   1,   0,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   1,   0,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   1,   0,   1,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   1,   1,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   1,   1,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   1,   1,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   0,   1,   1,   1,   1   : WKUPMASK */
-
-        (U2)0x4000U,        /* 1,   0,   1,   0,   0,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   0,   0,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   0,   0,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   0,   0,   1,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   0,   1,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   0,   1,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   0,   1,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   0,   1,   1,   1   : WKUPMASK */
-
-        (U2)0x4000U,        /* 1,   0,   1,   1,   0,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   1,   0,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   1,   0,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   1,   0,   1,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   1,   1,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   1,   1,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   1,   1,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   0,   1,   1,   1,   1,   1   : WKUPMASK */
-        
-        (U2)0x4000U,        /* 1,   1,   0,   0,   0,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   0,   0,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   0,   0,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   0,   0,   1,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   0,   1,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   0,   1,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   0,   1,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   0,   1,   1,   1   : WKUPMASK */
-
-        (U2)0x4000U,        /* 1,   1,   0,   1,   0,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   1,   0,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   1,   0,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   1,   0,   1,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   1,   1,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   1,   1,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   1,   1,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   0,   1,   1,   1,   1   : WKUPMASK */
-
-        (U2)0x4000U,        /* 1,   1,   1,   0,   0,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   0,   0,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   0,   0,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   0,   0,   1,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   0,   1,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   0,   1,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   0,   1,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   0,   1,   1,   1   : WKUPMASK */
-
-        (U2)0x4000U,        /* 1,   1,   1,   1,   0,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   1,   0,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   1,   0,   1,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   1,   0,   1,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   1,   1,   0,   0   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   1,   1,   0,   1   : WKUPMASK */
-        (U2)0x4000U,        /* 1,   1,   1,   1,   1,   1,   0   : WKUPMASK */
-        (U2)0x4000U         /* 1,   1,   1,   1,   1,   1,   1   : WKUPMASK */
-
+        (U2)0x1800U,        /* 1,   1,   0,   0,   0   : PONMASK  */
+        (U2)0x0100U,        /* 1,   1,   0,   0,   1   : WKUPMASK */
+        (U2)0x1a00U,        /* 1,   1,   0,   1,   0   : PONMASK  */
+        (U2)0x0100U,        /* 1,   1,   0,   1,   1   : WKUPMASK */
+        (U2)0x1c00U,        /* 1,   1,   1,   0,   0   : PONMASK  */
+        (U2)0x0100U,        /* 1,   1,   1,   0,   1   : WKUPMASK */
+        (U2)0x1e00U,        /* 1,   1,   1,   1,   0   : PONMASK  */
+        (U2)0x0100U         /* 1,   1,   1,   1,   1   : WKUPMASK */
     };
 
     const U2 *                u2_tp_PDU_BY_CH;
@@ -659,8 +522,8 @@ static inline U2      u2_s_oXCANRxPomchk(const U2 u2_a_SYS_CHK, const U4 u4_a_PO
     U4                        u4_t_lpcnt;
     U2                        u2_t_pom_chk;
 
-    u2_t_pom_chk = (U2)OXCAN_RX_SYS_TOE_PAR | (U2)OXCAN_RX_SYS_TOE_CHK;
-    if(u2_a_SYS_CHK > (U2)OXCAN_RX_SYS_TOE_PAR){
+    u2_t_pom_chk = (U2)OXCAN_RX_SYS_TOE_BAT;
+    if(u2_a_SYS_CHK > (U2)OXCAN_RX_SYS_TOE_BAT){
 
         for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_RX_NUM_POM; u4_t_lpcnt++){
 
@@ -673,7 +536,7 @@ static inline U2      u2_s_oXCANRxPomchk(const U2 u2_a_SYS_CHK, const U4 u4_a_PO
             /* In Aubist/CS, ACC-ON/OFF and IG-ON/OFF detection delays 10 milliseconds                            */
             /* -------------------------------------------------------------------------------------------------- */
             if(u4_sp_oxcan_rx_pom_elpsd[u4_t_lpcnt] > u4_a_POM_TOUT){
-                u2_t_pom_chk |= u2_sp_OXCAN_RX_POM_CHK[u4_t_lpcnt];
+                u2_t_pom_chk |= u2_gp_OXCAN_RX_POM_CHK[u4_t_lpcnt];
             }
         }
     }
@@ -698,12 +561,10 @@ static inline U2      u2_s_oXCANRxPomchk(const U2 u2_a_SYS_CHK, const U4 u4_a_PO
 /*  1.0.5     5/10/2023  HU       OXCAN_TXRXCTRL_RX_STOP -> OXCAN_RX_STOP_EN                                                         */
 /*  1.0.6     1/31/2024  TI       Changed oxcan_usrhk.h include order.                                                               */
 /*  1.0.7     2/08/2024  AM       Minor bug fixes.                                                                                   */
-/*  2.0.0     2/ 3/2025  ST       Support BevStep3                                                                                   */
 /*                                                                                                                                   */
 /*  * HU   = Hayato Usui, DENSO                                                                                                      */
 /*  * TM   = Takanori Maruyama, DENSO                                                                                                */
 /*  * TI   = Tomoko Inuzuka, DENSO                                                                                                   */
 /*  * AM   = Atsushi Mizutani, DENSO                                                                                                 */
-/*  * ST   = Satoshi Tanaka, DENSO                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

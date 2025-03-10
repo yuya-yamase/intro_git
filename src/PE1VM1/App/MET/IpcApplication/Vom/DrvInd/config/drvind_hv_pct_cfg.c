@@ -84,10 +84,10 @@ U1      u1_g_DrvIndHvCfgComRxIECOHVCR(S2 * const s2p_a_pct)
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_IECOHVCR, s2p_a_pct);
     u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0,
-                                    ((U2)OXCAN_RX_SYS_NRX_PON |
-                                     (U2)OXCAN_RX_SYS_NRX_POE |
-                                     (U2)OXCAN_RX_SYS_TOE_PON |
-                                     (U2)OXCAN_RX_SYS_TOE_POE),
+                                    ((U2)OXCAN_RX_SYS_NRX_IGP |
+                                     (U2)OXCAN_RX_SYS_NRX_IGR |
+                                     (U2)OXCAN_RX_SYS_TOE_IGP |
+                                     (U2)OXCAN_RX_SYS_TOE_IGR),
                                      u2_OXCAN_RXTO_THRSH(3600U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if(*s2p_a_pct == (S2)DRVIND_HV_PCT_INIT){

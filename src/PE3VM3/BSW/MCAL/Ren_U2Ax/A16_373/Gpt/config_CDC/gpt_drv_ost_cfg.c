@@ -46,6 +46,13 @@
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_GPT_OST       st_gp_GPT_OST_CFG[GPT_OST_NUM_CH] = {
+    /* GPT_OST_CH_02_SCHDLR_TICK      */
+    {
+        (volatile U4 *)0xffbf0200U,                                 /* u4p_base    */
+        (U4)U4_MAX,                                                 /* u4_select   */
+        (U2)0x0081U,                                                /* u2_tmr_ctrl */
+        (U2)201U                                                    /* u2_irq_ch   */
+    },
     /* GPT_OST_CH_03                  */
     {
         (volatile U4 *)0xffbf0300U,                                 /* u4p_base    */

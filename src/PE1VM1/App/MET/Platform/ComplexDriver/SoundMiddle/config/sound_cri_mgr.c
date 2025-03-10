@@ -439,8 +439,10 @@ void    vd_g_SoundCriMgrInitialize(void)
 
     u4_s_sound_ow_unlock    = (U4)0U;
     u1_s_sound_ow_reqid     = (U1)U1_MAX;
+#if 0   /* BEV BSW provisionally */
     Port_SetPinMode((U2)PORT_ID_PORT20_PIN1,   (U4)PORT_MODE_CFG_P20_1_9); 
     Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_10);
+#endif
 }
 
 /*===================================================================================================================================*/

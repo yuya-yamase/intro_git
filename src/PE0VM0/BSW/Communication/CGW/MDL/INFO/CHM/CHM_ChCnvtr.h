@@ -50,9 +50,6 @@ extern const uint8 CHM_ChCnvtr_Eth_To_Log[CHM_ETH_CONTROLLER_NUM];
 extern const CHM_PHY_RESOURCE_INFO CHM_ChConv_Log_To_Phy[CHM_LOG_CAN_CH_NUM];
 extern const uint8 CHM_ChCnvtr_Log_To_NwType[CHM_LOG_CAN_CH_NUM];
 
-extern const uint8 CHM_ChCnvtr_Log_To_AubCh[CHM_LOG_CAN_CH_NUM];
-extern const uint8 CHM_ChCnvtr_Aub_To_LogCh[CHM_LOG_CAN_CH_NUM];
-
 #define GW_CHM_STOP_SEC_CONST
 #include "GW_CHM_Memmap.h"
 

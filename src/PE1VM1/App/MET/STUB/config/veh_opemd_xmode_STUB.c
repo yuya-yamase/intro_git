@@ -53,16 +53,16 @@ U4      u4_g_VehopemdConvertMdfield(void)
     u4_t_mdbit = u4_g_VehopemdMdfield();
     u4_t_convbit = (U4)VEH_OPEMD_MDBIT_BAOF;
 
-    if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_RID) != (U4)0U){
-        u4_t_convbit |= (U4)VEH_OPEMD_MDBIT_ACC;
+    if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_ACC) != (U4)0U){
+        u4_t_convbit |= (U4)VEH_OPEMD_MDBIT_STUB_ACC;
     }
-    if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_POE) != (U4)0U){
+    if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_IG_R) != (U4)0U){
         u4_t_convbit |= (U4)VEH_OPEMD_MDBIT_IGN;
     }
-    if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_PAR) != (U4)0U){
+    if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_PBA) != (U4)0U){
         u4_t_convbit |= (U4)VEH_OPEMD_MDBIT_BA;
     }
-    if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_PON) != (U4)0U){
+    if ((u4_t_mdbit & (U4)VEH_OPEMD_MDBIT_IG_P) != (U4)0U){
         u4_t_convbit |= (U4)VEH_OPEMD_MDBIT_IGNP;
     }
     

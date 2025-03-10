@@ -62,7 +62,7 @@
  */
 #define HAL_V850_PRIORITY_MAX      (63U)
 
-#define HAL_V850_CPULOCK_MASK      (0x3CU)
+#define HAL_V850_CPULOCK_MASK      (0x3BU)
 
 #endif /* #ifndef HAL_V850_CFG_H */
 /****************************************************************************/

@@ -1,4 +1,4 @@
-/* 2.0.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_C_MAJOR                            (2U)
-#define OXCAN_C_MINOR                            (0U)
+#define OXCAN_C_MAJOR                            (1U)
+#define OXCAN_C_MINOR                            (4U)
 #define OXCAN_C_PATCH                            (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -27,8 +27,6 @@
                                   /* BSW_COM_TX_MSG_NUM is defined in bsw_com_config.h            */
 
 #include "bsw_com_st.h"           /* bsw_com_u4SysStatTbl[][] is defined in bsw_com_st.h          */
-
-#include "bsw_cannm_ch_config.h"  /* BSW_CANNM_NM_TYPE_USE(x) is defined in bsw_cannm_ch_config.h */
 #include "bsw_bswm_cs_status.h"   /* bsw_bswm_cs_st_u2CSStatus is defined in bsw_bswm_cs_status.h */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -38,11 +36,15 @@
 #include "Crypto_83_icus.h"
 #include "SchM_Csm.h"
 #include "SchM_Crypto_83_icus.h"
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if OXCAN_AUB_CRPT_SW_SUP
 #include "Crypto_83_sw.h"
 #include "SchM_Crypto_83_sw.h"
 #endif /* OXCAN_AUB_CRPT_SW_SUP */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #endif /* OXCAN_AUB_CSM_SUP */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)     ) && \
      (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
      (BSW_BSWM_CS_CFG_FUNC_CS    == BSW_USE) && \
@@ -54,13 +56,7 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxcan_aubif.h"
-/*#include "ox25epf_can.h"*/
-
 #include "int_drv.h"
-
-#if (OXCAN_AUB_E2E_SUP == 1U)
-#include "E2E.h"
-#endif /* #if (OXCAN_AUB_E2E_SUP == 1U) */
 
 #if (OXCAN_IC_TJA1145_USE == 1U)
 #include "Cdd_Canic.h"
@@ -75,11 +71,6 @@
 #error "oxcan.c and oxcan_cfg_private.h : source and header files are inconsistent!"
 #endif
 
-#if OXCAN_FILEVER_CHECK_SUP
-#if (OXCAN_C_MAJOR != OX25EPF_CAN_VER_MAJOR)
-#error "oxcan.c and ox25epf_can.h : source and header files are inconsistent!"
-#endif
-#endif /* OXCAN_FILEVER_CHECK_SUP */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -90,18 +81,9 @@
                                                                             /* BSWM_CAN_BACKUPDATASIZE is defined in BswM_Can.h  */
                                                                             /* BswM_Can.h is included in CS_Can.h                */
 
-#if (OXCAN_NM_TX_STOP_EN == 1U)
-#define OXCAN_NMMSG_RESUME                (0x00U)
-#define OXCAN_NMMSG_STOP                  (0x01U)
-#endif /* #if (OXCAN_NM_TX_STOP_EN == 1U) */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (OXCAN_AUB_E2E_SUP == 1U)
-#define OXCAN_E2E_OFFSET                         (0U)
-#define OXCAN_E2E_MAXDELTACNT                    (3U)
-#endif /* #if (OXCAN_AUB_E2E_SUP == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -110,7 +92,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if (OXCAN_BACK_NWORD > 0U)
 static U4               u4_sp_oxcan_back[OXCAN_BACK_NWORD]  __attribute__((section(".bss_BACK_BSW")));
-static volatile U1      u1_s_oxcan_br_chk                          __attribute__((section(".bss_BACK_BSW")));
+static volatile U1      u1_s_oxcan_br_chk                   __attribute__((section(".bss_BACK_BSW")));
 #endif /* #if (OXCAN_BACK_NWORD > 0U) */
 
 static U4               u4_s_oxcan_sysbit;
@@ -118,14 +100,6 @@ static U4               u4_s_oxcan_sysbit;
 #if OXCAN_AUB_CSM_SUP
 static U1               u1_s_oxcan_sht_ma;
 #endif /* #if OXCAN_AUB_CSM_SUP */
-
-#if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_CHECK_MSG != 0U))
-static E2E_P05CheckStateType        st_s_oxcan_aubif_e2e_chkstat[OXCAN_E2E_NUM_CHECK_MSG];
-#endif /* #if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_CHECK_MSG != 0U)) */
-
-#if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_PROTECT_MSG != 0U))
-static E2E_P05ProtectStateType      st_s_oxcan_aubif_e2e_protstat[OXCAN_E2E_NUM_PROTECT_MSG];
-#endif /* #if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_PROTECT_MSG != 0U)) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -168,14 +142,16 @@ void    vd_g_oXCANWkupInit(void)
     vd_g_oXCANCfgWkupInit();
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANOpemdEvhk(void)                                                                                                */
+/*  void    vd_g_oXCANSysEvhk(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANOpemdEvhk(void)
+void    vd_g_oXCANSysEvhk(void)
 {
-/*    U4                  u4_t_cpu_md;*/
+#if (OXCAN_CPU_PRI_EN == 1U)
+    U4                  u4_t_cpu_md;
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
 
     U4                  u4_t_lpcnt;
     U4                  u4_t_sysbit_next;
@@ -183,11 +159,17 @@ void    vd_g_oXCANOpemdEvhk(void)
     U4                  u4_t_prev;
     U4                  u4_t_next;
 
-/*    u4_t_cpu_md = u4_g_CPUM_PRIV();  *//* CPU mode = privilege   */
+#if (OXCAN_CPU_PRI_EN == 1U)
+    u4_t_cpu_md = u4_g_CPUM_PRIV();  /* CPU mode = privilege   */
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
 
     u4_t_sysbit_prev = u4_s_oxcan_sysbit;
+    u4_t_sysbit_next = u4_g_oXCANCfgSyschk();
 
-    u4_t_sysbit_next = u4_g_oXCANOpemdSyschk((U1)FALSE); /* Timer Increment Disabled */
+#ifdef OXCAN_SYSEA_H
+    vd_g_oXCANSysEaTimElpsd(u4_t_sysbit_next, (U1)FALSE);  /* u1_a_TIE = FALSE : Timer Increment Disabled */
+#endif /* #ifdef OXCAN_SYSEA_H */
+
     BswM_CS_SetSystemStatus(u4_g_OXCAN_SYS_POWER, u4_s_oxcan_sysbit);
 
     /* ----------------------------------------------------------------------------------------------------- */
@@ -216,11 +198,12 @@ void    vd_g_oXCANOpemdEvhk(void)
         }
     }
 
-    vd_g_oXCANRxOpemdEvthk(u4_t_sysbit_next);
+    vd_g_oXCANRxSysEvhk(u4_t_sysbit_next);
+    vd_g_oXCANCfgSysEvhk(u4_t_sysbit_prev, u4_t_sysbit_next);
 
-    vd_g_oXCANCfgOpemdEvthk(u4_t_sysbit_prev, u4_t_sysbit_next);
-
-/*    vd_g_CPUM_RSTR(u4_t_cpu_md);   */  /* CPU mode = u4_t_cpu_md */
+#if (OXCAN_CPU_PRI_EN == 1U)
+    vd_g_CPUM_RSTR(u4_t_cpu_md);     /* CPU mode = u4_t_cpu_md */
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANMainPreTask(void)                                                                                              */
@@ -230,11 +213,17 @@ void    vd_g_oXCANOpemdEvhk(void)
 /*===================================================================================================================================*/
 void    vd_g_oXCANMainPreTask(void)
 {
-/*    U4                  u4_t_cpu_md;*/
+#if (OXCAN_CPU_PRI_EN == 1U)
+    U4                  u4_t_cpu_md;
 
-/*    u4_t_cpu_md = u4_g_CPUM_PRIV();  *//* CPU mode = privilege   */
+    u4_t_cpu_md = u4_g_CPUM_PRIV();  /* CPU mode = privilege   */
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
 
-    u4_s_oxcan_sysbit = u4_g_oXCANOpemdSyschk((U1)TRUE);  /* Timer Increment Enabled */
+    u4_s_oxcan_sysbit = u4_g_oXCANCfgSyschk();
+
+#ifdef OXCAN_SYSEA_H
+    vd_g_oXCANSysEaTimElpsd(u4_s_oxcan_sysbit, (U1)TRUE);  /* u1_a_TIE = TRUE : Timer Increment Disabled */
+#endif /* #ifdef OXCAN_SYSEA_H */
 
     BswM_CS_SetSystemStatus(u4_g_OXCAN_SYS_POWER, u4_s_oxcan_sysbit);
 
@@ -251,7 +240,9 @@ void    vd_g_oXCANMainPreTask(void)
     vd_g_oXCANRxMainTask(u4_s_oxcan_sysbit);
     vd_g_oXCANCfgPreTask(u4_s_oxcan_sysbit);
 
-/*    vd_g_CPUM_RSTR(u4_t_cpu_md);    */ /* CPU mode = u4_t_cpu_md */
+#if (OXCAN_CPU_PRI_EN == 1U)
+    vd_g_CPUM_RSTR(u4_t_cpu_md);     /* CPU mode = u4_t_cpu_md */
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANMainPostTask(void)                                                                                             */
@@ -261,23 +252,19 @@ void    vd_g_oXCANMainPreTask(void)
 /*===================================================================================================================================*/
 void    vd_g_oXCANMainPostTask(void)
 {
-/*    U4                  u4_t_cpu_md;*/
+#if (OXCAN_CPU_PRI_EN == 1U)
+    U4                  u4_t_cpu_md;
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
+    
     U2                  u2_t_fatal;
-#if (OXCAN_RX_STOP_EN == 1U)
-    U4                  u4_t_ch;
-#endif /* #if (OXCAN_RX_STOP_EN == 1U) */
 
-/*    u4_t_cpu_md = u4_g_CPUM_PRIV();  *//* CPU mode = privilege   */
+#if (OXCAN_CPU_PRI_EN == 1U)
+    u4_t_cpu_md = u4_g_CPUM_PRIV();  /* CPU mode = privilege   */
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
 
-    vd_g_oXCANOpemdEvTx();
-
-#if (OXCAN_RX_STOP_EN == 1U)
-    for(u4_t_ch = (U4)0U; u4_t_ch < (U4)u1_g_OXCAN_TXRX_NUM_CH; u4_t_ch++){
-        if(u1_g_oXCANPdumsgStat((U1)u4_t_ch) == (U1)OXCAN_PDUMSG_STOP){
-            vd_g_oXCANRxTimerInit((U1)u4_t_ch);
-        }
-    }
-#endif /* #if (OXCAN_RX_STOP_EN == 1U) */
+#ifdef OXCAN_SYSEA_H
+    vd_g_oXCANSysEaEvTx();
+#endif /* #ifdef OXCAN_SYSEA_H */
 
 #ifdef CXPICDD_H
     vd_g_TyCANCxptxMainTask(u4_s_oxcan_sysbit);
@@ -290,13 +277,14 @@ void    vd_g_oXCANMainPostTask(void)
     u2_t_fatal |= u2_s_oXCANCanFatal();
 
 #if OXCAN_AUB_CSM_SUP
-
     u2_t_fatal |= u2_s_oXCANSecurityFatal();
 #endif /* #if OXCAN_AUB_CSM_SUP */
 
     vd_g_oXCANCfgPostTask(u4_s_oxcan_sysbit, u2_t_fatal);
 
-/*    vd_g_CPUM_RSTR(u4_t_cpu_md);    */ /* CPU mode = u4_t_cpu_md */
+#if (OXCAN_CPU_PRI_EN == 1U)
+    vd_g_CPUM_RSTR(u4_t_cpu_md);     /* CPU mode = u4_t_cpu_md */
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANShutdown(void)                                                                                                 */
@@ -350,7 +338,6 @@ void    vd_g_oXCANShutdown(void)
 
     SecOC_DeInit();
 #endif
-
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_oXCANEcuShtdwnOk(void)                                                                                              */
@@ -360,11 +347,16 @@ void    vd_g_oXCANShutdown(void)
 /*===================================================================================================================================*/
 U1      u1_g_oXCANEcuShtdwnOk(void)
 {
+#if (OXCAN_CPU_PRI_EN == 1U)
     U4                  u4_t_cpu_md;
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
+
     U1                  u1_t_sht_ok;
     U1                  u1_t_awk;
 
+#if (OXCAN_CPU_PRI_EN == 1U)
     u4_t_cpu_md = u4_g_CPUM_PRIV();  /* CPU mode = privilege   */
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
 
     u1_t_awk = BswM_CS_CheckAwake();
     if(u1_t_awk == (U1)BSWM_CS_AWAKE_EXIST){
@@ -381,11 +373,12 @@ U1      u1_g_oXCANEcuShtdwnOk(void)
     }
 
 #if OXCAN_AUB_CSM_SUP
-
     u1_t_sht_ok &= u1_s_oxcan_sht_ma;
 #endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS   )) && \ ... */
 
+#if (OXCAN_CPU_PRI_EN == 1U)
     vd_g_CPUM_RSTR(u4_t_cpu_md);     /* CPU mode = u4_t_cpu_md */
+#endif /* #if (OXCAN_CPU_PRI_EN == 1U) */
 
     return(u1_t_sht_ok);
 }
@@ -402,237 +395,15 @@ U1      u1_g_oXCANMsgOnline(const U2 u2_a_MSG)
 
     u1_t_online = (U1)FALSE;
     if(u2_a_MSG < (U2)BSW_COM_MSG_NUM){
-#if (OXCAN_RX_STOP_EN == 1U)
-        if(u1_g_oXCANPdumsgStat(bsw_com_stMsgInfoTbl[u2_a_MSG].u1Network) != (U1)OXCAN_PDUMSG_STOP){
-            u4_t_sysbit = u4_s_oxcan_sysbit & bsw_com_u4SysStatTbl[u2_a_MSG][0];
-            if(u4_t_sysbit != (U4)0U){
-                u1_t_online = (U1)TRUE;
-            }
-        }
-#else
+
         u4_t_sysbit = u4_s_oxcan_sysbit & bsw_com_u4SysStatTbl[u2_a_MSG][0];
         if(u4_t_sysbit != (U4)0U){
             u1_t_online = (U1)TRUE;
         }
-#endif /* #if (OXCAN_RX_STOP_EN == 1U) */
     }
 
     return (u1_t_online);
 }
-/*===================================================================================================================================*/
-/*  void    vd_g_oXCANPdumsgStop(const U1 u1_a_CH, const U1 u1_a_ID)                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_oXCANPdumsgStop(const U1 u1_a_CH, const U1 u1_a_ID)
-{
-#if OXCAN_TX_STOP_SUP
-    if((u1_a_CH < u1_g_OXCAN_TXRX_NUM_CH) && (u1_a_ID < u1_g_OXCAN_TXRX_NUM_ID)){
-        vd_g_Rim_WriteU1(u2_gp_OXCAN_PDU_REQ_BY_ID_RIMID[u1_a_CH][u1_a_ID], (U1)OXCAN_PDUMSG_STOP);
-        vd_g_Rim_WriteU1(u2_gp_OXCAN_PDU_STAT_BY_CH_RIMID[u1_a_CH], (U1)OXCAN_PDUMSG_STOP);
-
-        (void)BswM_CS_StopTxPdu((NetworkHandleType)u1_a_CH);
-    }
-#endif /* OXCAN_TX_STOP_SUP */
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_oXCANPdumsgResume(const U1 u1_a_CH, const U1 u1_a_ID)                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_oXCANPdumsgResume(const U1 u1_a_CH, const U1 u1_a_ID)
-{
-#if OXCAN_TX_STOP_SUP
-    U4                  u4_t_lpcnt;
-    U1                  u1_t_rim_ret;
-    U1                  u1_t_id_req;
-    U1                  u1_t_ch_req;
-
-    if((u1_a_CH < u1_g_OXCAN_TXRX_NUM_CH) && (u1_a_ID < u1_g_OXCAN_TXRX_NUM_ID)){
-        u1_t_ch_req = (U1)OXCAN_PDUMSG_RESUME;
-        vd_g_Rim_WriteU1(u2_gp_OXCAN_PDU_REQ_BY_ID_RIMID[u1_a_CH][u1_a_ID], (U1)OXCAN_PDUMSG_RESUME);
-        for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_OXCAN_TXRX_NUM_ID; u4_t_lpcnt++){
-            u1_t_rim_ret = u1_g_Rim_ReadU1withStatus(u2_gp_OXCAN_PDU_REQ_BY_ID_RIMID[u1_a_CH][u4_t_lpcnt], &u1_t_id_req);
-            if((u1_t_rim_ret != (U1)RIM_RESULT_OK) && (u1_t_rim_ret != (U1)RIM_RESULT_OK_REPAIRED)){
-                u1_t_id_req = (U1)OXCAN_PDUMSG_RESUME;
-                vd_g_Rim_WriteU1(u2_gp_OXCAN_PDU_REQ_BY_ID_RIMID[u1_a_CH][u4_t_lpcnt], u1_t_id_req);
-            }
-            u1_t_ch_req |= u1_t_id_req;
-        }
-
-        if(u1_t_ch_req == (U1)OXCAN_PDUMSG_RESUME){
-            vd_g_Rim_WriteU1(u2_gp_OXCAN_PDU_STAT_BY_CH_RIMID[u1_a_CH], (U1)OXCAN_PDUMSG_RESUME);
-
-            (void)BswM_CS_ResumeTxPdu((NetworkHandleType)u1_a_CH);
-        }
-    }
-#endif /* OXCAN_TX_STOP_SUP */
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_oXCANPdumsgStat(const U1 u1_a_CH)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_oXCANPdumsgStat(const U1 u1_a_CH)
-{
-#if OXCAN_TX_STOP_SUP
-    U1                  u1_t_rim_ret;
-    U1                  u1_t_pdusts;
-
-    u1_t_pdusts = (U1)OXCAN_PDUMSG_RESUME;
-
-    if(u1_a_CH < u1_g_OXCAN_TXRX_NUM_CH){
-        u1_t_rim_ret = u1_g_Rim_ReadU1withStatus(u2_gp_OXCAN_PDU_STAT_BY_CH_RIMID[u1_a_CH], &u1_t_pdusts);
-        if((u1_t_rim_ret != (U1)RIM_RESULT_OK) && (u1_t_rim_ret != (U1)RIM_RESULT_OK_REPAIRED)){
-            u1_t_pdusts = (U1)OXCAN_PDUMSG_RESUME;
-            vd_g_Rim_WriteU1(u2_gp_OXCAN_PDU_STAT_BY_CH_RIMID[u1_a_CH], u1_t_pdusts);
-        }
-    }
-
-    return(u1_t_pdusts);
-#else
-    return((U1)OXCAN_PDUMSG_RESUME);
-#endif /* OXCAN_TX_STOP_SUP */
-}
-
-#if (OXCAN_NM_TX_STOP_EN == 1U)
-/*===================================================================================================================================*/
-/*  void    vd_g_oXCANNmmsgStop(const U1 u1_a_CH, const U1 u1_a_ID)                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_oXCANNmmsgStop(const U1 u1_a_CH, const U1 u1_a_ID)
-{
-#if OXCAN_TX_STOP_SUP
-    if((u1_a_CH < u1_g_OXCAN_TXRX_NUM_CH) && (u1_a_ID < u1_g_OXCAN_TXRX_NUM_ID)){
-        vd_g_Rim_WriteU1(u2_gp_OXCAN_NM_REQ_BY_ID_RIMID[u1_a_CH][u1_a_ID], (U1)OXCAN_NMMSG_STOP);
-        (void)Nm_DisableCommunication((NetworkHandleType)u1_a_CH);
-    }
-#endif /* OXCAN_TX_STOP_SUP */
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_oXCANNmmsgResume(const U1 u1_a_CH, const U1 u1_a_ID)                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_oXCANNmmsgResume(const U1 u1_a_CH, const U1 u1_a_ID)
-{
-#if OXCAN_TX_STOP_SUP
-    U4                  u4_t_lpcnt;
-    U1                  u1_t_rim_ret;
-    U1                  u1_t_id_req;
-    U1                  u1_t_ch_req;
-
-    if((u1_a_CH < u1_g_OXCAN_TXRX_NUM_CH) && (u1_a_ID < u1_g_OXCAN_TXRX_NUM_ID)){
-        u1_t_ch_req = (U1)OXCAN_NMMSG_RESUME;
-        vd_g_Rim_WriteU1(u2_gp_OXCAN_NM_REQ_BY_ID_RIMID[u1_a_CH][u1_a_ID], (U1)OXCAN_NMMSG_RESUME);
-        for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_OXCAN_TXRX_NUM_ID; u4_t_lpcnt++){
-            u1_t_rim_ret = u1_g_Rim_ReadU1withStatus(u2_gp_OXCAN_NM_REQ_BY_ID_RIMID[u1_a_CH][u4_t_lpcnt], &u1_t_id_req);
-            if((u1_t_rim_ret != (U1)RIM_RESULT_OK) && (u1_t_rim_ret != (U1)RIM_RESULT_OK_REPAIRED)){
-                u1_t_id_req = (U1)OXCAN_NMMSG_RESUME;
-                vd_g_Rim_WriteU1(u2_gp_OXCAN_NM_REQ_BY_ID_RIMID[u1_a_CH][u4_t_lpcnt], u1_t_id_req);
-            }
-            u1_t_ch_req |= u1_t_id_req;
-        }
-        if(u1_t_ch_req == (U1)OXCAN_NMMSG_RESUME){
-            (void)Nm_EnableCommunication((NetworkHandleType)u1_a_CH);
-        }
-    }
-#endif /* OXCAN_TX_STOP_SUP */
-}
-#endif /* #if (OXCAN_NM_TX_STOP_EN == 1U) */
-
-#if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_CHECK_MSG != 0U))
-/*===================================================================================================================================*/
-/*  U1      u1_g_oXCANE2ECheckData(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_oXCANE2ECheckData(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)
-{
-    E2E_P05ConfigType   st_t_oxcan_aubif_e2e_data;
-    U4                  u4_t_lpcnt;
-    U2                  u2_t_length;
-    U2                  u2_t_msg_num;
-    U1                  u1_t_e2e;
-    U1                  u1_t_permission;
-    U1                  u1_t_ret_e2e;
-
-    u1_t_permission = (U1)FALSE;
-    u1_t_e2e = (U1)FALSE;
-    u2_t_msg_num = (U2)0U;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u4_g_OXCAN_E2E_NUM_CHECK_MSG; u4_t_lpcnt++){
-        if(PduId == u2_gp_OXCAN_E2E_CHECK_MSG[u4_t_lpcnt]){
-            u1_t_e2e = (U1)TRUE;
-            u2_t_msg_num = (U2)u4_t_lpcnt;
-            break;
-        }
-    }
-
-    if(u1_t_e2e == (U1)TRUE){
-        u2_t_length = PduInfoPtr->SduLength;
-        st_t_oxcan_aubif_e2e_data.Offset          = (U2)OXCAN_E2E_OFFSET;
-        st_t_oxcan_aubif_e2e_data.DataLength      = u2_t_length * (U2)8U;
-        st_t_oxcan_aubif_e2e_data.DataID          = (U2)Com_GetFrameID(PduId);
-        st_t_oxcan_aubif_e2e_data.MaxDeltaCounter = (U1)OXCAN_E2E_MAXDELTACNT;
-        u1_t_ret_e2e = E2E_P05Check(&st_t_oxcan_aubif_e2e_data, &st_s_oxcan_aubif_e2e_chkstat[u2_t_msg_num], PduInfoPtr->SduDataPtr, u2_t_length);
-        if(u1_t_ret_e2e == E2E_E_OK){
-            if((st_s_oxcan_aubif_e2e_chkstat[u2_t_msg_num].Status == E2E_P05STATUS_OK) || (st_s_oxcan_aubif_e2e_chkstat[u2_t_msg_num].Status == E2E_P05STATUS_OKSOMELOST)){
-                u1_t_permission = (U1)TRUE;
-            }
-        }
-    } else {
-        u1_t_permission = (U1)TRUE;
-    }
-    
-    return (u1_t_permission);
-}
-#endif /* #if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_CHECK_MSG != 0U)) */
-#if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_PROTECT_MSG != 0U))
-/*===================================================================================================================================*/
-/*  void      vd_g_oXCANE2EProtectData(PduIdType PduId, PduInfoType* PduInfoPtr)                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void      vd_g_oXCANE2EProtectData(PduIdType PduId, PduInfoType* PduInfoPtr)
-{
-    E2E_P05ConfigType   st_t_oxcan_aubif_e2e_data;
-    U4                  u4_t_lpcnt;
-    U2                  u2_t_length;
-    U2                  u2_t_msg_num;
-    U1                  u1_t_e2e;
-
-    u1_t_e2e = (U1)FALSE;
-    u2_t_msg_num = (U2)0U;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u4_g_OXCAN_E2E_NUM_PROTECT_MSG; u4_t_lpcnt++){
-        if(PduId == u2_gp_OXCAN_E2E_PROTECT_MSG[u4_t_lpcnt]){
-            u1_t_e2e = (U1)TRUE;
-            u2_t_msg_num = (U2)u4_t_lpcnt;
-            break;
-        }
-    }
- 
-    if(u1_t_e2e == (U1)TRUE){
-        u2_t_length = PduInfoPtr->SduLength;
-        st_t_oxcan_aubif_e2e_data.Offset          = (U2)OXCAN_E2E_OFFSET;
-        st_t_oxcan_aubif_e2e_data.DataLength      = u2_t_length * (U2)8U;
-        st_t_oxcan_aubif_e2e_data.DataID          = (U2)Com_GetFrameID(PduId);
-        st_t_oxcan_aubif_e2e_data.MaxDeltaCounter = (U1)OXCAN_E2E_MAXDELTACNT;
-        (void)E2E_P05Protect(&st_t_oxcan_aubif_e2e_data, &st_s_oxcan_aubif_e2e_protstat[u2_t_msg_num], PduInfoPtr->SduDataPtr, u2_t_length);
-    }
-
-}
-#endif /* #if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_PROTECT_MSG != 0U)) */
-
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXCANInit(const U1 u1_a_WKU_INIT)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -641,19 +412,16 @@ void      vd_g_oXCANE2EProtectData(PduIdType PduId, PduInfoType* PduInfoPtr)
 /*===================================================================================================================================*/
 static void    vd_s_oXCANInit(const U1 u1_a_WKU_INIT)
 {
-#if OXCAN_TX_STOP_SUP
-    U4                  u4_t_ch;
-    U4                  u4_t_id;
-#endif /* OXCAN_TX_STOP_SUP */
-#if (OXCAN_AUB_E2E_SUP == 1U)
-    U4                  u4_t_msg_cnt;
-#endif /* #if (OXCAN_AUB_E2E_SUP == 1U) */
 #if (OXCAN_BACK_NWORD > 0U)
     U4                  u4_t_lpcnt;
     U1                  u1_t_br_chk;
 #endif /* #if (OXCAN_BACK_NWORD > 0U) */
 
-    u4_s_oxcan_sysbit = (U4)OXCAN_SYS_PAR;
+    u4_s_oxcan_sysbit = (U4)OXCAN_SYS_BAT;
+
+#ifdef OXCAN_SYSEA_H
+    vd_g_oXCANSysEaInit();
+#endif /* #ifdef OXCAN_SYSEA_H */
 
     vd_g_oXCANAubIfInit();
 
@@ -661,12 +429,14 @@ static void    vd_s_oXCANInit(const U1 u1_a_WKU_INIT)
     u1_s_oxcan_sht_ma = (U1)TRUE;
     vd_s_oXCANSecurityInit();
 #endif /* #if OXCAN_AUB_CSM_SUP */
+
 #if (OXCAN_IC_TJA1145_USE == 1U)
     Cdd_Canic_Init();
 #endif /* #if (OXCAN_IC_TJA1145_USE == 1U) */
+
 #if (OXCAN_BACK_NWORD > 0U)
     u1_t_br_chk = u1_s_oxcan_br_chk;
-    if((u1_a_WKU_INIT == (U1)TRUE                ) &&
+    if((u1_a_WKU_INIT == (U1)TRUE         ) &&
        (u1_t_br_chk   == (U1)OXCAN_BACK_EN)){
 
         BswM_Can_SetBackupData((U1 *)&u4_sp_oxcan_back[0]);
@@ -689,18 +459,6 @@ static void    vd_s_oXCANInit(const U1 u1_a_WKU_INIT)
     BswM_CS_Init();
 #endif /* #if (OXCAN_BACK_NWORD > 0U) */
 
-#if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_CHECK_MSG != 0U))
-    for(u4_t_msg_cnt = (U4)0U;u4_t_msg_cnt < (U4)OXCAN_E2E_NUM_CHECK_MSG;u4_t_msg_cnt++){
-        (void)E2E_P05CheckInit(&st_s_oxcan_aubif_e2e_chkstat[u4_t_msg_cnt]);
-    }
-#endif /* #if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_CHECK_MSG != 0U)) */
-
-#if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_PROTECT_MSG != 0U))
-    for(u4_t_msg_cnt = (U4)0U;u4_t_msg_cnt < (U4)OXCAN_E2E_NUM_PROTECT_MSG;u4_t_msg_cnt++){
-        (void)E2E_P05ProtectInit(&st_s_oxcan_aubif_e2e_protstat[u4_t_msg_cnt]);
-    }
-#endif /* #if ((OXCAN_AUB_E2E_SUP == 1U) && (OXCAN_E2E_NUM_PROTECT_MSG != 0U)) */
-
 #ifdef CXPICDD_H
     vd_g_TyCANCxptxInit(u1_a_WKU_INIT);
 #endif /* #ifdef CXPICDD_H */
@@ -709,19 +467,7 @@ static void    vd_s_oXCANInit(const U1 u1_a_WKU_INIT)
     vd_g_oXCANNmwkInit();
 #endif
 
-    vd_g_oXCANOpemdInit();
     vd_g_oXCANRxInit();
-#if OXCAN_TX_STOP_SUP
-    for(u4_t_ch = (U4)0U; u4_t_ch < (U4)u1_g_OXCAN_TXRX_NUM_CH; u4_t_ch++){
-        vd_g_Rim_WriteU1(u2_gp_OXCAN_PDU_STAT_BY_CH_RIMID[u4_t_ch], (U1)OXCAN_PDUMSG_RESUME);
-        for(u4_t_id = (U4)0U; u4_t_id < (U4)u1_g_OXCAN_TXRX_NUM_ID; u4_t_id++){
-            vd_g_Rim_WriteU1(u2_gp_OXCAN_PDU_REQ_BY_ID_RIMID[u4_t_ch][u4_t_id], (U1)OXCAN_PDUMSG_RESUME);
-#if (OXCAN_NM_TX_STOP_EN == 1U)
-            vd_g_Rim_WriteU1(u2_gp_OXCAN_NM_REQ_BY_ID_RIMID[u4_t_ch][u4_t_id], (U1)OXCAN_NMMSG_RESUME);
-#endif /* #if (OXCAN_NM_TX_STOP_EN == 1U) */
-        }
-    }
-#endif /* OXCAN_TX_STOP_SUP */
 }
 /*===================================================================================================================================*/
 /*  static U2      u2_s_oXCANCanFatal(void)                                                                                          */
@@ -792,11 +538,14 @@ static U2      u2_s_oXCANCanFatal(void)
 static void    vd_s_oXCANSecurityInit(void)
 {
     Crypto_83_icus_Init(NULL_PTR);
+
 #if OXCAN_AUB_CRPT_SW_SUP
     Crypto_83_sw_Init(NULL_PTR);
 #endif /* #if OXCAN_AUB_CRPT_SW_SUP */
+
     CryIf_Init(NULL_PTR);
     Csm_Init(NULL_PTR);
+
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)     ) && \
      (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
      (BSW_BSWM_CS_CFG_FUNC_CS    == BSW_USE) && \
@@ -843,17 +592,21 @@ static U2      u2_s_oXCANSecurityFatal(void)
     /* ----------------------------------------------------------------------------------------------------- */
 
     Crypto_83_icus_Ab_MainFunctionOut();
+
 #if OXCAN_AUB_CRPT_SW_SUP
     Crypto_83_sw_Ab_MainFunctionOut();
 #endif /* #if OXCAN_AUB_CRPT_SW_SUP */
+
     Csm_MainFunction();
     Crypto_83_icus_Ab_MainFunctionIn();
+
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS   )) && \
      (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)) && \
      (BSW_BSWM_CS_CFG_FUNC_CS   ==BSW_USE) && \
      (BSW_BSWM_CS_CFG_FUNC_SECOC==BSW_USE))
     IdsM_MainFunction();
 #endif  /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && ... */
+
 #if OXCAN_AUB_CRPT_SW_SUP
     Crypto_83_sw_Ab_MainFunctionIn();
 #endif /* #if OXCAN_AUB_CRPT_SW_SUP */
@@ -1001,13 +754,11 @@ static void    vd_s_oXCANSecurityDeInit(void)
 /*  1.2.1     1/31/2024  TI       Changed oxcan_usrhk.h include order.                                                               */
 /*  1.3.0     2/22/2024  MI       Support GetErrorStatus for Aubist/SEC(Icus/Csm/Crypto-sw).                                         */
 /*  1.4.0     5/23/2024  HU       Bug Fix : CXPI Tranciever IC was stopped in vd_g_oXCANShutdown if CXPI was supported.              */
-/*  2.0.0     2/ 3/2025  ST       Support BevStep3                                                                                   */
 /*                                                                                                                                   */
 /*  * HU   = Hayato Usui, DENSO                                                                                                      */
 /*  * TM   = Takanori Maruyama, DENSO                                                                                                */
 /*  * SY   = Satoshi Yamada, DENSO                                                                                                   */
 /*  * TI   = Tomoko Inuzuka, DENSO                                                                                                   */
 /*  * MI   = Masahiko Izumi, DENSO                                                                                                   */
-/*  * ST   = Satoshi Tanaka, DENSO                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

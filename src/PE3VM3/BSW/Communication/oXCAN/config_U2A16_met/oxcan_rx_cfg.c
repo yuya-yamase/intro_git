@@ -1,4 +1,4 @@
-/* 2.0.0 */
+/* 1.0.7 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_RX_CFG_C_MAJOR                     (2U)
+#define OXCAN_RX_CFG_C_MAJOR                     (1U)
 #define OXCAN_RX_CFG_C_MINOR                     (0U)
-#define OXCAN_RX_CFG_C_PATCH                     (0U)
+#define OXCAN_RX_CFG_C_PATCH                     (7U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -19,6 +19,7 @@
 #include "oxcan_rx_cfg_private.h"
 
 #include "iohw_diflt.h"
+#include "veh_opemd.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -48,133 +49,125 @@ U2                          u2_gp_oxcan_rx_toe_chk[OXCAN_NUM_CH];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1      u1_s_oXCANRxeByCh(const U1 u1_a_CH);
 #ifdef CXPICDD_H
 static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH);
 #endif /* #ifdef CXPICDD_H */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U2                    u2_g_OXCAN_RX_POM_TOUT     = (U2)3000U / (U2)OXCAN_MAIN_TICK;    /* 3000 msec    */
-const U2                    u2_sp_OXCAN_RX_POM_CHK[OXCAN_RX_NUM_POM] = {
-	(U2)OXCAN_RX_SYS_TOE_PAR,                           /* OXCAN_RX_POM_PARKING             (0U)  */
-    (U2)OXCAN_RX_SYS_TOE_RID,                           /* OXCAN_RX_POM_RIDING              (1U)  */
-    (U2)OXCAN_RX_SYS_TOE_PON,                           /* OXCAN_RX_POM_POWONNORMAL         (2U)  */
-    (U2)OXCAN_RX_SYS_TOE_POE,                           /* OXCAN_RX_POM_POWONEMERGENCY      (3U)  */
-    (U2)OXCAN_RX_SYS_TOE_PAR_HV,                        /* OXCAN_RX_POM_PARK_HIGHVOLT       (4U)  */
-    (U2)OXCAN_RX_SYS_TOE_PAR_HVHC,                      /* OXCAN_RX_POM_ PARK_HIGHVOLT_HEAT (5U)  */
-    (U2)OXCAN_RX_SYS_TOE_CHK                            /* OXCAN_RX_POM_CHECKING            (6U)  */
+const U2                    u2_gp_OXCAN_RX_POM_CHK[OXCAN_RX_NUM_POM] = {
+    (U2)OXCAN_RX_SYS_TOE_ACC,                   /* OXCAN_RX_POM_ACC (0U) */
+    (U2)OXCAN_RX_SYS_TOE_IGP,                   /* OXCAN_RX_POM_IGP (1U) */
+    (U2)OXCAN_RX_SYS_TOE_PBA,                   /* OXCAN_RX_POM_PBA (2U) */
+    (U2)OXCAN_RX_SYS_TOE_IGR,                   /* OXCAN_RX_POM_IGR (3U) */
+    (U2)OXCAN_RX_SYS_TOE_VDC,                   /* OXCAN_RX_POM_VDC (4U) */
+    (U2)OXCAN_RX_SYS_TOE_PTC                    /* OXCAN_RX_POM_PTC (5U) */
 };
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U1                    u1_gp_OXCAN_RX_SYS_BY_RX[OXCAN_PDU_NUM_RX] = {
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)( OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK )),
-    ((U1)(OXCAN_SYS_PAR|OXCAN_SYS_RID|OXCAN_SYS_PON|OXCAN_SYS_POE|OXCAN_SYS_PAR_HV|OXCAN_SYS_PAR_HVHC|OXCAN_SYS_CHK ))
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [0] MSG_ABG1D50_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [1] MSG_ABG1D51_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [2] MSG_ABG1S09_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [3] MSG_ACN1D50_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [4] MSG_ACN1S03_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [5] MSG_ACN1S15_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [6] MSG_ACN1S25_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [7] MSG_ACN1S29_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [8] MSG_ADC1S27_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [9] MSG_ADC1S30_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [10] MSG_ADC1S31_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [11] MSG_ADU1S03_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [12] MSG_ADU1S05_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [13] MSG_ADU1S06_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [14] MSG_AVN1S95_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [15] MSG_BAT1E45_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [16] MSG_BAT1ED1_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [17] MSG_BAT1ED4_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [18] MSG_BAT1ED5_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [19] MSG_BAT1EDA_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [20] MSG_BAT1EDB_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [21] MSG_BAT1S08_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [22] MSG_BAT2ED2_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [23] MSG_BDB1F03_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [24] MSG_BDB1S10_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [25] MSG_BDC1S41_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [26] MSG_BDC1S81_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [27] MSG_BDC1S82_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [28] MSG_BDC1SH8_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [29] MSG_BDF3S01_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [30] MSG_BDF3S02_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [31] MSG_BDR3S02_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [32] MSG_CDC1S04_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [33] MSG_CMB1S03_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [34] MSG_CMB1S04_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [35] MSG_DCM1S08_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [36] MSG_DDM1S00_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [37] MSG_DDM1S09_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [38] MSG_DDM1S16_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [39] MSG_DDM1S35_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [40] MSG_DDM1SFG_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [41] MSG_DDM1SFH_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [42] MSG_DKY1S26_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [43] MSG_DS11S27_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [44] MSG_EBU1D01_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [45] MSG_ECT1S93_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [46] MSG_EHV1E96_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [47] MSG_EHV1F02_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [48] MSG_EHV1S23_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [49] MSG_EHV2G10_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [50] MSG_EHV2G20_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [51] MSG_EIM1S01_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [52] MSG_ENG1C01_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [53] MSG_ENG1C02_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [54] MSG_ENG1D51_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [55] MSG_ENG1D52_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [56] MSG_ENG1D53_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [57] MSG_ENG1D55_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [58] MSG_ENG1D56_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [59] MSG_ENG1D59_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [60] MSG_ENG1D60_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP )),                                                            /* [61] MSG_ENG1S51_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [62] MSG_EPS1D50_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [63] MSG_FCM1C01_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [64] MSG_FCM1S49_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [65] MSG_FCM1S76_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [66] MSG_FCM1S79_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [67] MSG_FCM1S90_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [68] MSG_FCM1S95_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [69] MSG_IDT1S07_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [70] MSG_IDT1S15_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [71] MSG_MET1S02_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [72] MSG_MGC1F13_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [73] MSG_PDC1G01_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [74] MSG_PWC1S41_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [75] MSG_RCP1S03_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [76] MSG_RSE1G20_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [77] MSG_RSE1G24_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [78] MSG_RSE1G25_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [79] MSG_RSE1G26_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [80] MSG_RSE1G29_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [81] MSG_RSE1S02_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [82] MSG_SCS1S10_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [83] MSG_VGR1D50_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [84] MSG_VSC1D51_RXCH0 */
+    (U1)(( OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                              /* [85] MSG_VSC1G13_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [86] MSG_WIP1S01_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [87] MSG_ZN11S08_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [88] MSG_ZN11S32_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [89] MSG_ZN11S63_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [90] MSG_ZN11S64_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [91] MSG_ZN11S65_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [92] MSG_ZN11S66_RXCH0 */
+    (U1)(( OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_IGR )),                                /* [93] MSG_ZN11S67_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR )),    /* [94] MSG_ZN11SF6_RXCH0 */
+    (U1)(( OXCAN_SYS_BAT|OXCAN_SYS_ACC|OXCAN_SYS_IGP|OXCAN_SYS_PBA|OXCAN_SYS_IGR ))     /* [95] MSG_ZN11SF7_RXCH0 */
 };
 const U2                    u2_g_OXCAN_RX_NUM_RX       = (U2)OXCAN_PDU_NUM_RX;
 
-#define OXCAN_RX_CH_POWSUPPLY  (BswU4)(ComMConf_SysStatusName_PAR          | \
-                                       ComMConf_SysStatusName_RID          | \
-                                       ComMConf_SysStatusName_PON          | \
-                                       ComMConf_SysStatusName_POE          | \
-                                       ComMConf_SysStatusName_PAR_HV       | \
-                                       ComMConf_SysStatusName_PAR_HVHC     | \
-                                       ComMConf_SysStatusName_CHK          )
+#define OXCAN_RX_CH_POWSUPPLY  (BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR|ComMConf_SysStatusName_Special)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2             u2_sp_OXCAN_RX_BY_RX_0[] = {
     (U2)OXCAN_PDU_RX_CAN_ABG1D50_RXCH0,
@@ -191,6 +184,7 @@ static const U2             u2_sp_OXCAN_RX_BY_RX_0[] = {
     (U2)OXCAN_PDU_RX_CAN_ADU1S03_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_ADU1S05_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_ADU1S06_RXCH0,
+    (U2)OXCAN_PDU_RX_CAN_AVN1S95_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BAT1E45_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BAT1ED1_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BAT1ED4_RXCH0,
@@ -201,13 +195,14 @@ static const U2             u2_sp_OXCAN_RX_BY_RX_0[] = {
     (U2)OXCAN_PDU_RX_CAN_BAT2ED2_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDB1F03_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDB1S10_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_BDC1S22_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDC1S41_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDC1S81_RXCH0,
+    (U2)OXCAN_PDU_RX_CAN_BDC1S82_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDC1SH8_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDF3S01_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDF3S02_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDR3S02_RXCH0,
+    (U2)OXCAN_PDU_RX_CAN_CDC1S04_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_CMB1S03_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_CMB1S04_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_DCM1S08_RXCH0,
@@ -246,16 +241,11 @@ static const U2             u2_sp_OXCAN_RX_BY_RX_0[] = {
     (U2)OXCAN_PDU_RX_CAN_FCM1S95_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_IDT1S07_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_IDT1S15_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_LRS1S01_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_LRS1S03_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_LRS1S04_RXCH0,
+    (U2)OXCAN_PDU_RX_CAN_MET1S02_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_MGC1F13_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_PDC1G01_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_PWC1S41_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_RCP1S03_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_RRS1S01_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_RRS1S03_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_RRS1S04_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_RSE1G20_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_RSE1G24_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_RSE1G25_RXCH0,
@@ -293,6 +283,7 @@ static const U2             u2_sp_OXCAN_RX_BY_CH_0[] = {
     (U2)OXCAN_PDU_RX_CAN_ADU1S03_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_ADU1S05_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_ADU1S06_RXCH0,
+    (U2)OXCAN_PDU_RX_CAN_AVN1S95_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BAT1E45_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BAT1ED1_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BAT1ED4_RXCH0,
@@ -303,13 +294,14 @@ static const U2             u2_sp_OXCAN_RX_BY_CH_0[] = {
     (U2)OXCAN_PDU_RX_CAN_BAT2ED2_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDB1F03_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDB1S10_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_BDC1S22_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDC1S41_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDC1S81_RXCH0,
+    (U2)OXCAN_PDU_RX_CAN_BDC1S82_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDC1SH8_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDF3S01_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDF3S02_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_BDR3S02_RXCH0,
+    (U2)OXCAN_PDU_RX_CAN_CDC1S04_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_CMB1S03_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_CMB1S04_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_DCM1S08_RXCH0,
@@ -348,16 +340,11 @@ static const U2             u2_sp_OXCAN_RX_BY_CH_0[] = {
     (U2)OXCAN_PDU_RX_CAN_FCM1S95_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_IDT1S07_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_IDT1S15_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_LRS1S01_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_LRS1S03_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_LRS1S04_RXCH0,
+    (U2)OXCAN_PDU_RX_CAN_MET1S02_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_MGC1F13_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_PDC1G01_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_PWC1S41_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_RCP1S03_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_RRS1S01_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_RRS1S03_RXCH0,
-    (U2)OXCAN_PDU_RX_CAN_RRS1S04_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_RSE1G20_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_RSE1G24_RXCH0,
     (U2)OXCAN_PDU_RX_CAN_RSE1G25_RXCH0,
@@ -384,7 +371,7 @@ static const U2             u2_sp_OXCAN_RX_BY_CH_0[] = {
 
 const ST_OXCAN_RX_CH        st_gp_OXCAN_RX_BY_CH[OXCAN_NUM_CH] = {
     {
-        &u1_g_oXCANNmwkRxeByCh,                              /* fp_u1_RX_EN   */
+        &u1_s_oXCANRxeByCh,                                  /* fp_u1_RX_EN   */
 
         &u2_sp_OXCAN_RX_BY_RX_0[0],                          /* u2p_PDU_BY_RX */
         &u2_sp_OXCAN_RX_BY_CH_0[0],                          /* u2p_PDU_BY_CH */
@@ -392,7 +379,7 @@ const ST_OXCAN_RX_CH        st_gp_OXCAN_RX_BY_CH[OXCAN_NUM_CH] = {
         (U2)MSG_ABG1D50_RXCH0,                               /* u2_msg_min    */
         (U2)MSG_ZN11SF7_RXCH0,                               /* u2_msg_max    */
         (U2)(sizeof(u2_sp_OXCAN_RX_BY_CH_0) >> 1U),          /* u2_num_rx     */
-        (U2)OXCAN_RX_CH_POWSUPPLY                            /* u2_sys_en     */
+        (U2)OXCAN_SYS_BAT                                    /* u2_sys_en     */
     }
 };
 const U1                    u1_g_OXCAN_RX_NUM_CH = (U1)OXCAN_NUM_CH;
@@ -400,7 +387,30 @@ const U1                    u1_g_OXCAN_RX_NUM_CH = (U1)OXCAN_NUM_CH;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/*  U2      u2_g_oXCANRxCfgSysXgrOn(const U2 u2_a_SYS_CHK)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U2      u2_g_oXCANRxCfgSysXgrOn(const U2 u2_a_SYS_CHK)
+{
+    return((U2)0U);
+}
+/*===================================================================================================================================*/
+/*  static U1      u1_s_oXCANRxeByCh(const U1 u1_a_CH)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1      u1_s_oXCANRxeByCh(const U1 u1_a_CH)
+{
+    return(u1_g_VehopemdNmAwk());
+}
+/*===================================================================================================================================*/
+
 #ifdef CXPICDD_H
+
 /*===================================================================================================================================*/
 /*  static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -437,7 +447,6 @@ static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH)
 /*  1.0.5     5/10/2023  HU       oxcan_rx v1.0.4 -> v1.0.5                                                                          */
 /*  1.0.6     1/31/2024  TI       oxcan_rx v1.0.5 -> v1.0.6                                                                          */
 /*  1.0.7     2/08/2024  AM       oxcan_rx v1.0.6 -> v1.0.7                                                                          */
-/*  2.0.0     2/ 3/2025  ST       Support BevStep3                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -446,6 +455,5 @@ static U1      u1_s_oXCANCxpRxeByCh(const U1 u1_a_CH)
 /*  * TM   = Takanori Maruyama, DENSO                                                                                                */
 /*  * TI   = Tomoko Inuzuka, DENSO                                                                                                   */
 /*  * AM   = Atsushi Mizutani, DENSO                                                                                                 */
-/*  * ST   = Satoshi Tanaka, DENSO                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

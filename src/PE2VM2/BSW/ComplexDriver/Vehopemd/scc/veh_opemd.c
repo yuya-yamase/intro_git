@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_C_MAJOR                        (1)
-#define VEH_OPEMD_C_MINOR                        (3)
+#define VEH_OPEMD_C_MAJOR                        (2)
+#define VEH_OPEMD_C_MINOR                        (1)
 #define VEH_OPEMD_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -63,7 +63,7 @@ static U4      u4_s_veh_opemd_mdbit;
 /*===================================================================================================================================*/
 void    vd_g_VehopemdRstInit(void)
 {
-    u4_s_veh_opemd_mdbit = (U4)VEH_OPEMD_MDBIT_CHK;
+    u4_s_veh_opemd_mdbit = (U4)VEH_OPEMD_MDBIT_UNK;
     vd_g_VehopemdCfgRstInit();
 }
 /*===================================================================================================================================*/
@@ -74,7 +74,7 @@ void    vd_g_VehopemdRstInit(void)
 /*===================================================================================================================================*/
 void    vd_g_VehopemdWkupInit(void)
 {
-    u4_s_veh_opemd_mdbit = (U4)VEH_OPEMD_MDBIT_CHK;
+    u4_s_veh_opemd_mdbit = (U4)VEH_OPEMD_MDBIT_LPM;
     vd_g_VehopemdCfgWkupInit();
 }
 /*===================================================================================================================================*/
@@ -85,13 +85,13 @@ void    vd_g_VehopemdWkupInit(void)
 /*===================================================================================================================================*/
 void    vd_g_VehopemdMainTask(void)
 {
-    U4        u4_t_evtbit;
+    U4        u4_t_evbit;
 
-    u4_t_evtbit = (U4)0U;
-    u4_s_veh_opemd_mdbit = u4_g_VehopemdCfgMdupdt(u4_s_veh_opemd_mdbit, &u4_t_evtbit);
+    u4_t_evbit           = (U4)0U;
+    u4_s_veh_opemd_mdbit = u4_g_VehopemdCfgMdupdt(u4_s_veh_opemd_mdbit, &u4_t_evbit);
 
-    if(u4_t_evtbit != (U4)0U){
-        vd_g_VehopemdCfgEvthk(u4_s_veh_opemd_mdbit, u4_t_evtbit);
+    if(u4_t_evbit != (U4)0U){
+        vd_g_VehopemdCfgEvhk(u4_s_veh_opemd_mdbit, u4_t_evbit);
     }
 }
 /*===================================================================================================================================*/
@@ -112,16 +112,18 @@ U4      u4_g_VehopemdMdfield(void)
 /*===================================================================================================================================*/
 U1      u1_g_VehopemdMdchk(const U4 u4_a_MASK, const U4 u4_a_CRIT)
 {
-    U4        u4_t_jdgbit;
-    U1        u1_t_rslt;
+    U4        u4_t_bit;
+    U1        u1_t_chk;
 
-    u1_t_rslt = (U1)FALSE;
-    u4_t_jdgbit = u4_s_veh_opemd_mdbit & u4_a_MASK;
-    if(u4_t_jdgbit == u4_a_CRIT){
-        u1_t_rslt = (U1)TRUE;
+    u4_t_bit = u4_s_veh_opemd_mdbit & u4_a_MASK;
+    if(u4_t_bit == u4_a_CRIT){
+        u1_t_chk = (U1)TRUE;
+    }
+    else{
+        u1_t_chk = (U1)FALSE;
     }
 
-    return(u1_t_rslt);
+    return(u1_t_chk);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -136,6 +138,8 @@ U1      u1_g_VehopemdMdchk(const U4 u4_a_MASK, const U4 u4_a_CRIT)
 /*  1.2.0    11/ 2/2017  TN       Design Change : vd_s_VehopemdTmUpdt was moved from veh_opemd.c to veh_opemd_tycan.c.               */
 /*  1.2.1     6/23/2020  HU       QAC warnings were fixed.                                                                           */
 /*  1.3.0    12/ 7/2020  ST       AUBIST/CAN, COM v1.0.6 -> v1.1.5                                                                   */
+/*  2.0.0     2/ 3/2025  ST       Supported vehicle power state.                                                                     */
+/*  2.1.0     2/ 7/2025  TN       BEVStep3 Vehicle Power State specification was supported.                                          */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * HU   = Hayato Usui, Denso Create                                                                                               */

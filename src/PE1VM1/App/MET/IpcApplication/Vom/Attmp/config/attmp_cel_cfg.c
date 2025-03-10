@@ -86,7 +86,7 @@ U1      u1_g_AttmpCfgB_THOCL(U2 * u2p_a_b_thocl, U1 * u1_a_rxcnt)
 
     *u1_a_rxcnt    = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0);
     u1_t_rxstat    = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
-                                           (U2)(OXCAN_RX_SYS_NRX_POE | OXCAN_RX_SYS_TOE_POE),
+                                           (U2)(OXCAN_RX_SYS_NRX_IGR | OXCAN_RX_SYS_TOE_IGR),
                                            (U2)ATTMP_ECT1G92_TO_THRSH) & (U1)(COM_TIMEOUT | COM_NO_RX);
     if((U2)ATTMP_B_THOCL_MAX < u2_t_b_thocl){
         u1_t_rxstat |= (U1)ATTMP_STSBIT_RNGOVR;

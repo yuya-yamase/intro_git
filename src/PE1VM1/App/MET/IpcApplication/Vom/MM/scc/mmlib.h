@@ -31,7 +31,7 @@
 /*  Macros                                                                                                                           */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* GetMsgStatus */
-#define u1_g_MMLibGetMsgStatus(Data)                 ((U1)u1_g_oXCANRxStat((U2)(Data), (U2)OXCAN_RX_SYS_NRX_RID | (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_RID, u2_OXCAN_RXTO_THRSH(MMAPL_FAILTIME_30S)))
+#define u1_g_MMLibGetMsgStatus(Data)                 ((U1)u1_g_oXCANRxStat((U2)(Data), (U2)OXCAN_RX_SYS_NRX_ACC | (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_ACC, u2_OXCAN_RXTO_THRSH(MMAPL_FAILTIME_30S)))
 
 /* RefRead */
 #define MMLIB_INVALID_DATA (0)

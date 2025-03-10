@@ -129,6 +129,9 @@ void    vd_g_oXCANAubIfInit(void)
     u2_s_oxcan_aubif_gli_cnt = (U2)0U;
 #endif /* #ifdef CXPICDD_H */
 
+#if ((OXCAN_E2E_NUM_TRA > 0U) || (OXCAN_E2E_NUM_REC > 0U))
+    vd_g_oXCANAubIfE2eInit();
+#endif /* #if ((OXCAN_E2E_NUM_REC > 0U) || (OXCAN_E2E_NUM_REC > 0U)) */
 }
 /*===================================================================================================================================*/
 /*  BswU4   bsw_cs_system_DI(void)                                                                                                   */

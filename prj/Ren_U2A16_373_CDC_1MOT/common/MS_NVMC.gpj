@@ -3,8 +3,8 @@
     :sourceDir=${MS_DIR}/Nvmc
 
     -I${LIB_DIR}
+    -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
-    -I${VEHOPE_DIR}/config
     -I${CAN_DIR}/inc
 
     -I${MS_DIR}/Nvmc/core/config/Common

@@ -200,9 +200,15 @@ void    vd_g_AlertOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     U4                       u4_t_evt;
     U1                       u1_t_vom_chk;
 
+#if 0   /* BEV BSW provisionally */
     u4_t_mdbit   = u4_a_MDBIT & ((U4)VEH_OPEMD_MDBIT_ACC |
                                  (U4)VEH_OPEMD_MDBIT_IGN |
                                  (U4)VEH_OPEMD_MDBIT_STA);
+#else
+    u4_t_mdbit   = u4_a_MDBIT & ((U4)VEH_OPEMD_MDBIT_STUB_ACC |
+                                 (U4)VEH_OPEMD_MDBIT_IGN |
+                                 (U4)VEH_OPEMD_MDBIT_STA);
+#endif
 
     u1_t_vom_chk = u1_sp_ALERT_VOM_CHK[u4_t_mdbit];
     u4_t_evt     = u4_a_EVTBIT & ((U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF | (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON);
@@ -413,7 +419,7 @@ static U1      u1_s_AlertVomchk(void)
                                              (U4)VEH_OPEMD_MDBIT_IGN |
                                              (U4)VEH_OPEMD_MDBIT_STA);
 #else
-    u4_t_mdbit   = u4_g_VehopemdConvertMdfield() & ((U4)VEH_OPEMD_MDBIT_ACC |
+    u4_t_mdbit   = u4_g_VehopemdConvertMdfield() & ((U4)VEH_OPEMD_MDBIT_STUB_ACC |
                                              (U4)VEH_OPEMD_MDBIT_IGN |
                                              (U4)VEH_OPEMD_MDBIT_STA);
 #endif

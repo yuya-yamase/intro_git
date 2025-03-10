@@ -20,13 +20,11 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-
 #include "oxcan.h"                /* BSW_COM_CFG_CHNUM is defined in Com_Cfg.h                    */
                                   /* Com_Cfg.h is included in CS_Can_Cfg.h                        */
                                   /* BSW_BSWM_CS_CFG_FUNC_DCM is defined in BswM_CS_Cfg.h         */
                                   /* BswM_CS_Cfg.h is included in CS_Can_Cfg.h                    */
                                   /* CS_Can_Cfg.h is included in oxcan.h                          */
-
 #include "oxcan_lib.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -75,7 +73,7 @@ extern ST_OXCAN_NMWK               st_gp_oxcan_nmwk[];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2                    u2_g_OXCAN_NMWK_TIMOUT_OPEMD;
+extern const U2                    u2_g_OXCAN_NMWK_TIMOUT_SYSRUN;
 extern const U2                    u2_g_OXCAN_NMWK_TIMOUT_ARQWK;
 
 extern const U1                    u1_gp_OXCAN_NMWK_CH_COM_TO_NM[BSW_COM_CFG_CHNUM];

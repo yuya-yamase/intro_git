@@ -18,6 +18,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxcan_nmwk_cfg_private.h"
 
+#include "bsw_cannm_ch_config.h"  /* BSW_CANNM_NM_TYPE_USE(x) is defined in bsw_cannm_ch_config.h */
+#include "oxcan_sysea.h"
+
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_DCM)) && (BSW_BSWM_CS_CFG_FUNC_DCM == BSW_USE))
 #include "Dcm.h"
 #endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_DCM)) && (BSW_BSWM_CS_CFG_FUNC_DCM == BSW_USE)) */
@@ -125,7 +128,7 @@ void    vd_g_oXCANNmwkMainTask(void)
     U1                 u1_t_nm_awk;
 
     u2_t_xrqbit_sys = (U2)0U;
-    u1_t_nm_awk     = u1_g_oXCANOpemdNmAwkTout(u2_g_OXCAN_NMWK_TIMOUT_OPEMD);
+    u1_t_nm_awk     = u1_g_oXCANSysEaNmAwkTout(u2_g_OXCAN_NMWK_TIMOUT_SYSRUN);
     if(u1_t_nm_awk != (U1)TRUE){
         u2_t_xrqbit_sys = (U2)OXCAN_NMWK_XRQBIT_SYS_IN_RUN;
     }
@@ -367,11 +370,9 @@ static U1      u1_s_oXCANNmwkApplEvtchk(const ST_OXCAN_NMWK_CHK * st_ap_CHK, ST_
         u1_t_evtbit |= (U1)OXCAN_NMWK_AEVTBIT_TO_RQWK;
     }
 
-#if (OXCAN_APP_SLPNG_TOE == 1U)
     if(st_ap_nmwk->u2_tm_appl >= st_ap_CHK->u2_tout_awak){
         u1_t_evtbit |= (U1)OXCAN_NMWK_AEVTBIT_TO_AWAK;
     }
-#endif /* #if (OXCAN_APP_SLPNG_TOE == 1U) */
 
     if(st_ap_CHK->fp_u2_ARQST != vdp_PTR_NA){
         u2_t_applrqst = (st_ap_CHK->fp_u2_ARQST)();

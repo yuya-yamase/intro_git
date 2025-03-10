@@ -114,19 +114,12 @@ const uint8 CHM_ChCnvtr_Log_To_NwType[CHM_LOG_CAN_CH_NUM] = {
 	CHM_NWTYPE_NONE
 };
 
-const uint8 CHM_ChCnvtr_Log_To_AubCh[CHM_LOG_CAN_CH_NUM] = {
-    ComMConf_ComMChannel_CANFD_G2M_2_BUS, /* #define CHM_LOG_CH_G2M2_FD_BUS (0U) */
-    ComMConf_ComMChannel_CANFD_G2M_1_BUS, /* #define CHM_LOG_CH_G2M1_FD_BUS (1U) */
-    ComMConf_ComMChannel_CANFD_G5M_BUS,   /* #define CHM_LOG_CH_G5M_FD_BUS  (2U) */
-    ComMConf_ComMChannel_VCAN_VCC_1_BUS   /* #define CHM_LOG_CH_VCAN_BUS	(3U) */
-};
-
-const uint8 CHM_ChCnvtr_Aub_To_LogCh[CHM_LOG_CAN_CH_NUM] = {
-    CHM_LOG_CH_G2M1_FD_BUS, /* #define ComMConf_ComMChannel_CANFD_G2M_1_BUS (0U) */
-    CHM_LOG_CH_G2M2_FD_BUS, /* #define ComMConf_ComMChannel_CANFD_G2M_2_BUS (1U) */
-    CHM_LOG_CH_G5M_FD_BUS,  /* #define ComMConf_ComMChannel_CANFD_G5M_BUS   (2U) */
-    CHM_LOG_CH_VCAN_BUS     /* #define ComMConf_ComMChannel_VCAN_VCC_1_BUS  (3U) */
-};
+#if ((CHM_LOG_CH_G2M1_FD_BUS != ComMConf_ComMChannel_CANFD_G2M_1_BUS) || \
+     (CHM_LOG_CH_G2M2_FD_BUS != ComMConf_ComMChannel_CANFD_G2M_2_BUS) || \
+     (CHM_LOG_CH_G5M_FD_BUS  != ComMConf_ComMChannel_CANFD_G5M_BUS  ) || \
+     (CHM_LOG_CH_VCAN_BUS    != ComMConf_ComMChannel_VCAN_VCC_1_BUS ))
+#error "CHM_LogicCh.h : CHM_LOG_CH_XXX shall be equal to ComMConf_ComMChannel_XXX."
+#endif
 
 #define GW_CHM_STOP_SEC_CONST
 #include "GW_CHM_Memmap.h"

@@ -77,7 +77,7 @@
 
 #define u1_VMMUNIT_ACCISON()             (u1_g_VehopemdAccOn())
 
-#define u1_VMMUNIT_GETMSGSTS_AVN1S21()  (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S21, (U2)OXCAN_RX_SYS_NRX_RID | (U2)OXCAN_RX_SYS_TOE_RID, (U2)VMMUNIT_AVN1S21_TOUT))
+#define u1_VMMUNIT_GETMSGSTS_AVN1S21()  (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S21, (U2)OXCAN_RX_SYS_NRX_ACC | (U2)OXCAN_RX_SYS_TOE_ACC, (U2)VMMUNIT_AVN1S21_TOUT))
 #define vd_VMMUNIT_RXMSG_A_CSPCHG(x)    ((void)Com_ReceiveSignal(ComConf_ComSignal_A_CSPCHG,(x)))
 #define vd_VMMUNIT_RXMSG_A_UNTCSP(x)    ((void)Com_ReceiveSignal(ComConf_ComSignal_A_UNTCSP,(x)))
 

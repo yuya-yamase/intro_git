@@ -189,7 +189,7 @@ static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
 #if defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0)
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S90_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;
@@ -202,7 +202,7 @@ static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_PEXI_TT_LSB_EHV1S94);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_SOCLOWID) */
@@ -234,7 +234,7 @@ static U4      u4_s_AlertH_pexiWarnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
 #if defined(OXCAN_PDU_RX_CAN_EHV1S90_RXCH0)
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S90_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_POE | (U2)OXCAN_RX_SYS_TOE_POE,
+                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_H_PEXI_WARN_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;

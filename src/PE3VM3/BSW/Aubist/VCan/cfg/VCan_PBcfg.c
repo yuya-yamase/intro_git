@@ -64,7 +64,6 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
      ( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [0] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [1] */
   /*--- VM Transmission(VHTH) -----------------------------*/
-    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [2] */
 };
 
 /************************************************/
@@ -210,7 +209,6 @@ BswConst Bsw_VCan_RxNodeTblType bsw_vcan_stRxNodeTbl_VControl15[ BSW_VCAN_CFG_RX
 BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl0[ BSW_VCAN_TX_VMBOXNUM_0 ] =
 {
     /* Virtual MBOX Setting (Timing|TxKind) */
-    (BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [0] */
 };
 
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_0 != 0U ) */
