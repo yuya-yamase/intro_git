@@ -728,7 +728,7 @@ static void    vd_s_IllumiPosTx(const U2 * u2_ap_DIM_LVL)
 
     if(u1_t_tx != u1_s_illumi_rheo_tx_pos){
         (void)Com_SendSignal(ComConf_ComSignal_RHEO_POS, &u1_t_tx);
-        (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S39_TXCH0);
+        (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S38_TXCH0);
     }
     u1_s_illumi_rheo_tx_pos = u1_t_tx;
 }
