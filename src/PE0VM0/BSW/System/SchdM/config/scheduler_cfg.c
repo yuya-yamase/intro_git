@@ -156,7 +156,6 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&ExtSigCtrl_MainFunction,          (U4)SCHDLR_TASKBIT___5MS    },
-    /* WARNING "DO NOT EXECUTE APPLICATION BEFORE THIS PLACE" */
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

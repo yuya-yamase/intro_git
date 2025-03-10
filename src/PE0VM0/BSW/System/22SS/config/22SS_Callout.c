@@ -79,7 +79,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 
     /* vv User Hook start vv */
     ExtSigCtrl_Init();
-    /* WARNING "DO NOT EXECUTE APPLICATION BEFORE THIS PLACE" */
+
     vd_g_StubBonInit();
     /* ^^ User Hook end   ^^ */
 
@@ -120,7 +120,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 
     /* vv User Hook start vv */
     ExtSigCtrl_Init();
-    /* WARNING "DO NOT EXECUTE APPLICATION BEFORE THIS PLACE" */
+
     vd_g_StubRstInit();
     /* ^^ User Hook end   ^^ */
 
@@ -161,7 +161,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
 
     /* vv User Hook start vv */
     ExtSigCtrl_Init();
-    /* WARNING "DO NOT EXECUTE APPLICATION BEFORE THIS PLACE" */
+
     vd_g_StubWkupInit();
     /* ^^ User Hook end   ^^ */
 
