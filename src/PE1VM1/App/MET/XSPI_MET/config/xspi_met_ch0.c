@@ -571,6 +571,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[9] |= (U4)TRUE << 17;                                 /*  SYS_MOP                  */ /* BEV SV1 provisionally */
 
+    u4_ap_pdu_tx[11] |= (U4)TRUE << 2;                                 /*  SYS_DMTODT               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 7;                                 /*  SYS_PERSET               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 8;                                 /*  SYS_SW_TITE              */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 9;                                 /*  SYS_EPS_EPSSBW           */ /* BEV SV1 provisionally */
