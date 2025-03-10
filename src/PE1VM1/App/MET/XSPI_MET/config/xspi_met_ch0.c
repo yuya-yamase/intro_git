@@ -261,6 +261,9 @@
 #define XSPI_NICKNAME_TXTNUM                (10U)
 
 #define XSPI_UNIT_MPGIMP                    (4U)
+#define XSPI_UNIT_VAL_ELECO_KMPKWH          (0U)   /* Electricity cost    : km/kWh                 */
+#define XSPI_UNIT_VAL_ELECO_KWHP100KM       (1U)   /* Electricity cost    : kWh/100km              */
+#define XSPI_UNIT_VAL_ELECO_MILEPKWH        (2U)   /* Electricity cost    : miles/kWh              */
 
 #define XSPI_DESIGN_CLASSIC_SUP             (0x40U)
 #define XSPI_DESIGN_METALIC_SUP             (0x80U)
@@ -639,6 +642,7 @@ static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
 
     U1    u1_t_unitslct;
     U1    u1_t_convert;
+    U1    u1_t_convert_eleco;
 
     u4_ap_pdu_tx[0]  = (U4)u1_g_Language((U1)TRUE);                                 /* LANG         */
 
@@ -653,8 +657,25 @@ static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
         u1_t_convert  = (U1)XSPI_UNIT_MPGIMP;
     }
 
+    u1_t_convert_eleco = u1_g_Unit((U1)UNIT_IDX_ELECO);
+    
+    switch(u1_t_convert_eleco){
+        case UNIT_VAL_ELECO_KMPKWH:
+            u1_t_convert_eleco = (U1)XSPI_UNIT_VAL_ELECO_KMPKWH;
+            break;
+        case UNIT_VAL_ELECO_KWHP100KM:
+            u1_t_convert_eleco = (U1)XSPI_UNIT_VAL_ELECO_KWHP100KM;
+            break;
+        case UNIT_VAL_ELECO_MILEPKWH:
+            u1_t_convert_eleco = (U1)XSPI_UNIT_VAL_ELECO_MILEPKWH;
+            break;
+        default:
+            u1_t_convert_eleco = (U1)XSPI_UNIT_VAL_ELECO_KWHP100KM;
+            break;
+    }
+
     u4_ap_pdu_tx[1]  |= (((U4)u1_t_convert & (U4)0x07U)  << 4 );                    /* FUELECO      */
-    u4_ap_pdu_tx[1]  |= (((U4)u1_g_Unit((U1)UNIT_IDX_ELECO)  & (U4)0x0FU)  << 8 );  /* ELE          */
+    u4_ap_pdu_tx[1]  |= (((U4)u1_t_convert_eleco             & (U4)0x0FU)  << 8 );  /* ELE          */
     u4_ap_pdu_tx[1]  |= (((U4)u1_g_Unit((U1)UNIT_IDX_AMBTMP) & (U4)0x03U)  << 12);  /* AMBTMP       */
     u4_ap_pdu_tx[1]  |= ((U4)u1_g_TimeFormat12H24H()                       << 14);  /* TMFMT_12H24H */
 }
@@ -2983,6 +3004,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  19PFv3-25 07/15/2024 AA       Revised LcomIF used for HmiScreenPut                                                               */
 /*  BEV-1     02/10/2025 RO       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-)                                        */
 /*  BEV-2     02/10/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
+/*  BEV-3     02/26/2025 RS       Change for BEV System_Consideration_1.(Requests from the SOC team for electricity cost units)      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2998,5 +3020,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
