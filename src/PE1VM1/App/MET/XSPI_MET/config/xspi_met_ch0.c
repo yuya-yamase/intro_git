@@ -500,6 +500,8 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     U1  u1_t_hvsysind;
     U1  u1_t_sys_hcs;                                                  /*  SYS_HCS                                              */
 
+    u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();               /*  DESTINATION                                          */
+
     /* Change for 970B/850B */
     u4_ap_pdu_tx[1] = ((U4)u1_g_VardefTtTrcoff() & (U4)0x01U);         /*  VAR_TT_TRCOFF                                        */
 
@@ -3005,6 +3007,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-1     02/10/2025 RO       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-)                                        */
 /*  BEV-2     02/10/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*  BEV-3     02/26/2025 RS       Change for BEV System_Consideration_1.(Requests from the SOC team for electricity cost units)      */
+/*  BEV-4     03/06/2025 SF       Change for BEV System_Consideration_1.(Requests from the SOC team)                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
