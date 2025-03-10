@@ -394,7 +394,6 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
     U4              u4_t_num;
     U1              u1_t_exist;
     U1              u1_t_tmnt;
-    U1              u1_t_pkbwar;
 
     /* Esopt*/  
     u4_t_num = (U4)(sizeof(st_sp_HMIPUTXT_ESOPT) / sizeof(st_sp_HMIPUTXT_ESOPT[0]));
