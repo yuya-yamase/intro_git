@@ -232,6 +232,9 @@ void    vd_g_SchdlrCfgMainTick(const U4 u4_a_TRGBIT)
 
         vd_g_IoHwAdcCvstFinish();
     }
+    else{
+        /* do nothing */
+    }
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_SchdlrCfgIdleToRun(void)                                                                                            */

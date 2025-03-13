@@ -301,6 +301,9 @@ void    vd_g_SchdlrCfgMainTick(const U4 u4_a_TRGBIT)
 
         (void)ActivateTask(eMCOS_TASK_Medium);
     }
+    else{
+        /* do nothing */
+    }
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_SchdlrCfgIdleToRun(void)                                                                                            */
