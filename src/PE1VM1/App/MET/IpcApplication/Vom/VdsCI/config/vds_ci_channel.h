@@ -22,7 +22,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDS_CI_NUM_CH         (155U)
+#define VDS_CI_NUM_CH         (165U)
 
 #define VDS_CI_SW_ASD_CONT    ( 0U)
 #define VDS_CI_SW_ASD_CANC    ( 1U)
@@ -179,6 +179,16 @@
 #define VDS_CI_SW_LSW_BB      (152U)
 #define VDS_CI_SW_FOG_BB      (153U)
 #define VDS_CI_SW_RFG_BB      (154U)
+#define VDS_CI_SW_WDI_BB      (155U)
+#define VDS_CI_SW_TITE_BB     (156U)
+#define VDS_CI_SW_MW_BB       (157U)
+#define VDS_CI_SW_AECOSWBB    (158U)
+#define VDS_CI_SW_METMDSEL    (159U)
+#define VDS_CI_SW_ACCDSTSW    (160U)
+#define VDS_CI_SW_HCSUPEN     (161U)
+#define VDS_CI_SW_HCSDWEN     (162U)
+#define VDS_CI_SW_HCSMNSW     (163U)
+#define VDS_CI_SW_HCSSTPOP    (164U)
 
 #define VDS_CI_LCASGAPR_MAX   ( 2U)
 #define VDS_CI_M_COP_S_MAX    ( 3U)
@@ -243,6 +253,10 @@
 #define VDS_CI_ART_BB_MAX     ( 3U)
 #define VDS_CI_TRNBBSW_MAX    ( 7U)
 #define VDS_CI_LSW_BB_MAX     ( 7U)
+#define VDS_CI_WDI_BB_MAX     ( 3U)
+#define VDS_CI_TITE_BB_MAX    (15U)
+#define VDS_CI_METMDSEL_MAX   ( 3U)
+#define VDS_CI_ACCDSTSW_MAX   ( 4U)
 
 /* SETDCLVI */
 #define VDS_CI_SETDCLVI_INIT  ( 0U)
