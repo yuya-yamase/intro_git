@@ -396,7 +396,6 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
-        (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
     }
     u1_t_igsts = u1_g_VehopemdIgnOn();
     if (u1_t_igsts == (U1)TRUE) {
@@ -553,7 +552,7 @@ static  void    vd_s_TripcomCfgCanTxTOEC(const U2 u2_a_VALUE)
     (void)Com_ReceiveSignal(ComConf_ComSignal_TO_EC, &u2_t_presndval);
     if (u2_t_presndval != u2_a_VALUE) {
         (void)Com_SendSignal(ComConf_ComSignal_TO_EC, &u2_a_VALUE);
-        (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
+        (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
     }
 }
 

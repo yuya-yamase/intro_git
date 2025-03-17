@@ -245,10 +245,10 @@ App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_MM2C107N.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_MM2C112N.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_PDS1S01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_PLG1S21.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SCS1S90.c
+App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SCS1S14.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SW_BATCSW.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_TPM1S02.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_VSC1S95.c
+App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_DDM1S17.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_VSC1S96.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SOL1S02.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ZN11S19.c

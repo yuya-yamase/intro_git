@@ -151,17 +151,17 @@ const ST_ALERT_MTRX st_gp_ALERT_C_SLIP_MTRX[1] = {
 static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
     static const U2 u2_s_ALERT_C_SLIP_TO_THRESH   = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_C_SLIP_LSB_VSC1S95 = (U1)3U;
+    static const U1 u1_s_ALERT_C_SLIP_LSB_DDM1S17 = (U1)3U;
     static const U1 u1_s_ALERT_C_SLIP_LSB_DDRTWV  = (U1)5U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S95,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
                                           (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                           u2_s_ALERT_C_SLIP_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
-    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_SLIP_LSB_VSC1S95);
+    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_C_SLIP_LSB_DDM1S17);
 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_SLP_WL, &u1_t_sgnl);
