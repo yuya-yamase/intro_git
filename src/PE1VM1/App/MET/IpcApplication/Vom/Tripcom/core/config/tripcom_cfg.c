@@ -82,7 +82,7 @@
 
 #define TRIPCOM_NUM_PTSYS                       (16U)
 
-#define TRIPCOM_EHV1S93_FAILTIM                 (5000U/OXCAN_MAIN_TICK)
+#define TRIPCOM_EHV1S94_FAILTIM                 (5000U/OXCAN_MAIN_TICK)
 
 #define TRIPCOM_CFG_EVDTE_VAL100                (100U)
 
@@ -486,9 +486,9 @@ U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts)
     if((u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU)
     || (u1_t_ptsys == (U1)VDF_PTS_RX_05_ELE_BAT)){
 #ifdef ComConf_ComSignal_PIEVSTS
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S93,
+        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
                                        (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),
-                                       (U2)TRIPCOM_EHV1S93_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+                                       (U2)TRIPCOM_EHV1S94_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         (void)Com_ReceiveSignal(ComConf_ComSignal_PIEVSTS, u1p_a_pievsts);
 #endif /* ComConf_ComSignal_PIEVSTS */
     }

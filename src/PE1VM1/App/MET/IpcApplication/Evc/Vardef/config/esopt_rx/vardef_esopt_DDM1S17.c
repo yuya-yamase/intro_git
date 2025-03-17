@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_VSC1S95_C_MAJOR             (2)
-#define VARDEF_ESOPT_VSC1S95_C_MINOR             (5)
-#define VARDEF_ESOPT_VSC1S95_C_PATCH             (0)
+#define VARDEF_ESOPT_DDM1S17_C_MAJOR             (2)
+#define VARDEF_ESOPT_DDM1S17_C_MINOR             (5)
+#define VARDEF_ESOPT_DDM1S17_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_VSC1S95_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_VSC1S95_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_VSC1S95_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_VSC1S95.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_DDM1S17_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_DDM1S17_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_DDM1S17_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_DDM1S17.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
