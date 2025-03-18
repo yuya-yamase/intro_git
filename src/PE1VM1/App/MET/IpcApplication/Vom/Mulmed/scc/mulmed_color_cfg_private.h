@@ -43,7 +43,9 @@ void vd_g_MulmedColorCfgSendM_CLRCHG(const U1 u1_a_M_CLRCHG);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 extern const U2 u2_g_MULMED_COLOR_MSGID_MET1S19;
+#endif
 
 #endif      /* MULMED_COLOR_CFG_H */
 

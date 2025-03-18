@@ -313,6 +313,7 @@ void    vd_g_DrectxMainTask(void)
 /*===================================================================================================================================*/
 void    vd_g_DrectxTxAck(const U2 u2_a_MSG)
 {
+#if 0   /* BEV BSW provisionally */
     if(u2_a_MSG == (U2)MSG_MET1D50_TXCH0){
         u2_s_drec_tx_evt |= (U2)DREC_TX_FNC_BIT_MET1D50;
     }
@@ -323,6 +324,7 @@ void    vd_g_DrectxTxAck(const U2 u2_a_MSG)
     else{
         /* Do Nothing */
     }
+#endif
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_DrectxMsg_MET1D50(const U1 * u1_ap_FNC)                                                                      */

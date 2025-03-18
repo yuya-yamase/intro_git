@@ -132,9 +132,11 @@ void    vd_g_MulmedColorPut(const U1 u1_a_COLOR)
 /*===================================================================================================================================*/
 void    vd_g_MulmedColorTxHk(const U2 u2_a_MSG)
 {
+#if 0   /* BEV BSW provisionally */
     if(u2_a_MSG == (U2)u2_g_MULMED_COLOR_MSGID_MET1S19){
         u1_s_mulmed_tx_flg |= (U1)MULMED_COLOR_COM_TXFIN;
     }
+#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

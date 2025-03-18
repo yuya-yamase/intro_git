@@ -741,13 +741,15 @@ static void             vd_s_EvschgCfgSendM_SETSTM(const U2 u2_a_RXDATA)
     }
 
     u2_t_pre_tx = (U2)EVSCHG_M_SETSTM_INIT;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_M_SETSTM, &u2_t_pre_tx);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_M_SETSTM, &u2_t_pre_tx);
     (void)Com_SendSignal(ComConf_ComSignal_M_SETSTM, &u2_t_tx);    /* COM Tx STUB delete */
 #endif
 
     if(u2_t_pre_tx != u2_t_tx){
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S61_TXCH0);
+#endif
     }
 }
 
@@ -771,13 +773,15 @@ static void             vd_s_EvschgCfgSendM_SETFTM(const U2 u2_a_RXDATA)
     }
 
     u2_t_pre_tx = (U2)EVSCHG_M_SETFTM_INIT;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_M_SETFTM, &u2_t_pre_tx);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_M_SETFTM, &u2_t_pre_tx);
     (void)Com_SendSignal(ComConf_ComSignal_M_SETFTM, &u2_t_tx);    /* COM Tx STUB delete */
 #endif
 
     if(u2_t_pre_tx != u2_t_tx){
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S61_TXCH0);
+#endif
     }
 }
 

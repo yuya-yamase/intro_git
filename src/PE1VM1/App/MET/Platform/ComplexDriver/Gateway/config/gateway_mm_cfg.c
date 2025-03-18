@@ -861,7 +861,9 @@ void vd_g_GwmmCfgSend_MMCKPT(const U1 u1_a_pwrsts)
 #endif
     u1_t_varsup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISMM);
     u1_t_pwrsts_jdg = u1_a_pwrsts & (U1)GWMM_PWRSTS_IGR;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_MMCKPT, &u1_t_rcvsig);
+#endif
     
     if((u1_t_pwrsts_jdg != (U1)0U) &&
        (u1_t_varsup <= (U1)GWMMCFG_MMCKPT_SIGMAX) &&
@@ -889,8 +891,10 @@ void vd_g_GwmmCfgSend_L_TBC_FUNC(const U1 u1_a_pwrsts)
 #endif
     u1_t_varsup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SW_TBC);
     u1_t_pwrsts_jdg = u1_a_pwrsts & (U1)GWMM_PWRSTS_IGR;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_L_TBC_FUNC, &u1_t_rcvsig);
-    
+#endif
+
     if((u1_t_pwrsts_jdg != (U1)0U) &&
        (u1_t_varsup <= (U1)GWMMCFG_L_TBC_FUNC_SIGMAX) &&
        (u1_t_varsup != u1_t_rcvsig)){
@@ -2556,7 +2560,9 @@ static U1 u1_s_GwmmCfgRead_SSMMODE(void)
     U1  u1_t_sig;
     u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_SSMMODE
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SSMMODE, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_SSMMODE */
     return(u1_t_sig);
 }
@@ -2675,7 +2681,9 @@ static U1 u1_s_GwmmCfgRead_MRMRQSW(void)
     U1  u1_t_sig;
     u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_MRMRQSW
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_MRMRQSW, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_MRMRQSW */
     return(u1_t_sig);
 }/*===================================================================================================================================*/
@@ -2689,7 +2697,9 @@ static U1 u1_s_GwmmCfgRead_MRMRQBK(void)
     U1  u1_t_sig;
     u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_MRMRQBK
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_MRMRQBK, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_MRMRQBK */
     return(u1_t_sig);
 }
@@ -3844,7 +3854,9 @@ static U1 u1_s_GwmmCfgRead_HOFCUS(void)
     U1  u1_t_sig;
     u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_HOFCUS
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOFCUS, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_HOFCUS */
     return(u1_t_sig);
 }
@@ -3859,7 +3871,9 @@ static U1 u1_s_GwmmCfgRead_DRECSW(void)
     U1  u1_t_sig;
     u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_DRECSW
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_DRECSW, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_DRECSW */
     return(u1_t_sig);
 }
@@ -4237,7 +4251,9 @@ static U1 u1_s_GwmmCfgRead_L_TBCAK_ID(void)
     U1  u1_t_sig;
     u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_L_TBCAK_ID
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_L_TBCAK_ID, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_L_TBCAK_ID */
     return(u1_t_sig);
 }
@@ -4252,7 +4268,9 @@ static U1 u1_s_GwmmCfgRead_L_TBCAK_TY(void)
     U1  u1_t_sig;
     u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_L_TBCAK_TY
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_L_TBCAK_TY, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_L_TBCAK_TY */
     return(u1_t_sig);
 }
@@ -4267,7 +4285,9 @@ static U1 u1_s_GwmmCfgRead_L_TBC_SF(void)
     U1  u1_t_sig;
     u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_L_TBC_SF
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_L_TBC_SF, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_L_TBC_SF */
     return(u1_t_sig);
 }

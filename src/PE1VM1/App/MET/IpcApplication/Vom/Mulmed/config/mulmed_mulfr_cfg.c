@@ -326,6 +326,7 @@ void            vd_g_MulmedMulfrCfgRxTxtHk(const U2 u2_a_MSG)
 /*===================================================================================================================================*/
 void            vd_g_MulmedMulfrCfgTxSyncID(const U4 u4_a_MSGIDX, const U1 u1_a_VALUE)
 {
+#if 0   /* BEV BSW provisionally */
     static  const   ST_MULMED_MULFR_TX          st_sp_TX_MSGS[MULMED_MULFR_NUM_FR]                      = {
         {   (U2)MSG_METMS02_TXCH1,         (U1)TRUE,          &u1_s_MulmedMulfrCfgGPCHGM                          },  /* MSG_AVNMS01_RXCH1 */
         {   (U2)MSG_METMS02_TXCH1,         (U1)TRUE,          &u1_s_MulmedMulfrCfgCTSTCHGM                        },  /* MSG_AVNMS02_RXCH1 */
@@ -359,6 +360,7 @@ void            vd_g_MulmedMulfrCfgTxSyncID(const U4 u4_a_MSGIDX, const U1 u1_a_
     if ((u1_t_presndval != u1_a_VALUE) && (st_sp_TX_MSGS[u4_a_MSGIDX].u1_txflag ==(U1)TRUE)) {
         Com_TriggerIPDUSend((PduIdType)(st_sp_TX_MSGS[u4_a_MSGIDX].u2_msg));
     }
+#endif
 }
 
 
@@ -661,8 +663,8 @@ static  U1      u1_s_MulmedMulfrCfgGPCHGM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_GP_CHG_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_GP_CHG_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_GP_CHG_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -679,8 +681,8 @@ static  U1      u1_s_MulmedMulfrCfgCTSTCHGM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CTST_CHG_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CTST_CHG_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_CTST_CHG_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -697,8 +699,8 @@ static  U1      u1_s_MulmedMulfrCfgNXSTCHGM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_NXST_CHG_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_NXST_CHG_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_NXST_CHG_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -715,8 +717,8 @@ static  U1      u1_s_MulmedMulfrCfgNM1CHGM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_NM1_CHG_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_NM1_CHG_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_NM1_CHG_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -733,8 +735,8 @@ static  U1      u1_s_MulmedMulfrCfgNM2CHGM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_NM2_CHG_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_NM2_CHG_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_NM2_CHG_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -751,8 +753,8 @@ static  U1      u1_s_MulmedMulfrCfgTTLCHGADOM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_TTL_CHG_ADO_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_TTL_CHG_ADO_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_TTL_CHG_ADO_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -769,8 +771,8 @@ static  U1      u1_s_MulmedMulfrCfgSTA1CHGAUDIOM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_STA1_CHG_AUDIO_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_STA1_CHG_AUDIO_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_STA1_CHG_AUDIO_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -787,8 +789,8 @@ static  U1      u1_s_MulmedMulfrCfgSTA2CHGAUDIOM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_STA2_CHG_AUDIO_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_STA2_CHG_AUDIO_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_STA2_CHG_AUDIO_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -805,8 +807,8 @@ static  U1      u1_s_MulmedMulfrCfgSTA3CHGAUDIOM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_STA3_CHG_AUDIO_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_STA3_CHG_AUDIO_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_STA3_CHG_AUDIO_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);
@@ -1089,8 +1091,8 @@ static  U1      u1_s_MulmedMulfrCfgDISTCHGM(const U1 u1_a_VALUE)
 
 
     u1_t_presndval = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_DIST_CHG_M, &u1_t_presndval);
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_DIST_CHG_M, &u1_t_presndval);
     (void)Com_SendSignal(   ComConf_ComSignal_DIST_CHG_M, &u1_a_VALUE);    /* COM Tx STUB delete */
 #endif
     return (u1_t_presndval);

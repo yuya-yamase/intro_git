@@ -407,7 +407,9 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
         (void)Com_TriggerIPDUSend(MSG_MET1S01_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S03_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif
         (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
     }
@@ -446,7 +448,9 @@ static  void    vd_s_TripcomCfgCanTxUNIT6(const U1 u1_a_UNIT)
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_6, &u1_t_preunit);
     if (u1_t_preunit != u1_a_UNIT) {
         (void)Com_SendSignal(ComConf_ComSignal_UNIT_6, &u1_a_UNIT);
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif
     }
 }
 
@@ -461,12 +465,14 @@ static  void    vd_s_TripcomCfgCanTxTOFC(const U2 u2_a_VALUE)
     U2          u2_t_presndval;
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TO_FC, &u2_t_presndval);
+#endif
     if (u2_t_presndval != u2_a_VALUE) {
 #if 0   /* BEV BSW provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TO_FC, &u2_a_VALUE);    /* COM Tx STUB delete */
-#endif
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif
     }
 }
 
@@ -645,7 +651,9 @@ static  void    vd_s_TripcomCfgCanTxASEC(const U2 u2_a_VALUE)
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_EC, &u2_t_presndval);
     if (u2_t_presndval != u2_a_VALUE) {
         (void)Com_SendSignal(ComConf_ComSignal_AS_EC, &u2_a_VALUE);
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
+#endif
     }
 }
 
@@ -797,7 +805,9 @@ static  void    vd_s_TripcomCfgCanTxRANGE(const U2 u2_a_VALUE)
     (void)Com_ReceiveSignal(ComConf_ComSignal_RANGE, &u2_t_presndval);
     if (u2_t_presndval != u2_a_VALUE) {
         (void)Com_SendSignal(ComConf_ComSignal_RANGE, &u2_a_VALUE);
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif
     }
 }
 
@@ -816,7 +826,9 @@ static  void    vd_s_TripcomCfgCanTxEVRANGE(const U2 u2_a_VALUE)
     (void)Com_ReceiveSignal(ComConf_ComSignal_EV_RANGE, &u2_t_presndval);
     if (u2_t_presndval != u2_a_VALUE) {
         (void)Com_SendSignal(ComConf_ComSignal_EV_RANGE, &u2_a_VALUE);
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
+#endif
     }
 }
 
@@ -836,7 +848,9 @@ static  void    vd_s_TripcomCfgCanTxASSP(const U2 u2_a_VALUE)
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_SP, &u2_t_presndval);
     if (u2_t_presndval != u2_a_VALUE) {
         (void)Com_SendSignal(ComConf_ComSignal_AS_SP, &u2_a_VALUE);
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif
     }
 }
 
