@@ -326,11 +326,17 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
 
     /* to avoid event-tx when initial value of bit-assignment table is inconsistent with tripcom spec */
     /* only for +B-on message                                                                         */
-    (void)Com_SendSignal(ComConf_ComSignal_TO_FC,   &u2_sp_tripcom_tx_value[0]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_TO_FC,   &u2_sp_tripcom_tx_value[0]);    /* COM Tx STUB delete */
+#endif
 
-    (void)Com_SendSignal(ComConf_ComSignal_AS_FC,   &u2_sp_tripcom_tx_value[1]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_AS_FC,   &u2_sp_tripcom_tx_value[1]);    /* COM Tx STUB delete */
+#endif
 
-    (void)Com_SendSignal(ComConf_ComSignal_M1_FC1,  &u2_sp_tripcom_tx_value[3]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M1_FC1,  &u2_sp_tripcom_tx_value[3]);    /* COM Tx STUB delete */
+#endif
 
     (void)Com_SendSignal(ComConf_ComSignal_TO_EC,    &u2_sp_tripcom_tx_value[7]);
 
@@ -338,9 +344,13 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
 
     (void)Com_SendSignal(ComConf_ComSignal_AS_EC,   &u2_sp_tripcom_tx_value[8]);
 
-    (void)Com_SendSignal(ComConf_ComSignal_IN_FC,   &u2_sp_tripcom_tx_value[11]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_IN_FC,   &u2_sp_tripcom_tx_value[11]);    /* COM Tx STUB delete */
+#endif
 #if defined(ComConf_ComSignal_IN_FC_C)
-    (void)Com_SendSignal(ComConf_ComSignal_IN_FC_C, &u2_sp_tripcom_tx_value[12]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_IN_FC_C, &u2_sp_tripcom_tx_value[12]);    /* COM Tx STUB delete */
+#endif
 #endif
     (void)Com_SendSignal(ComConf_ComSignal_IN_EC,    &u2_sp_tripcom_tx_value[14]);
 
@@ -357,7 +367,9 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_6,  &u1_sp_tripcom_tx_unit[TRIPCOM_CANTXUNIT_XECON]);
 
     u1_t_sndval = (U1)0U;
-    (void)Com_SendSignal(ComConf_ComSignal_M1_FC_R, &u1_t_sndval);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M1_FC_R, &u1_t_sndval);    /* COM Tx STUB delete */
+#endif
 
     u1_t_sndval = (U1)0U;
     (void)Com_SendSignal(ComConf_ComSignal_M1_EC_R, &u1_t_sndval);
@@ -366,7 +378,9 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
     (void)Com_SendSignal(ComConf_ComSignal_EC_SCL, &u1_t_sndval);
 
     u1_t_sndval = (U1)TRIPCOM_COMTX_FC_SCL_000_UNDEF;
-    (void)Com_SendSignal(ComConf_ComSignal_FC_SCL, &u1_t_sndval);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_FC_SCL, &u1_t_sndval);    /* COM Tx STUB delete */
+#endif
 
     u1_t_sndval = (U1)TRIPCOM_COMTX_NFCS_TYPE_A;
     (void)Com_SendSignal(ComConf_ComSignal_NFCS, &u1_t_sndval);
@@ -449,7 +463,9 @@ static  void    vd_s_TripcomCfgCanTxTOFC(const U2 u2_a_VALUE)
     u2_t_presndval = (U2)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_TO_FC, &u2_t_presndval);
     if (u2_t_presndval != u2_a_VALUE) {
-        (void)Com_SendSignal(ComConf_ComSignal_TO_FC, &u2_a_VALUE);
+#if 0   /* BEV BSW provisionally */
+        (void)Com_SendSignal(ComConf_ComSignal_TO_FC, &u2_a_VALUE);    /* COM Tx STUB delete */
+#endif
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
     }
 }
@@ -977,7 +993,9 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
             u1_t_lnfc = (U1)((u4_t_kmpl + u4_s_RESOFST) / u4_s_RESCONV);
         }
     }
-    (void)Com_SendSignal(ComConf_ComSignal_LN_FC, &u1_t_lnfc);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_LN_FC, &u1_t_lnfc);    /* COM Tx STUB delete */
+#endif
 
     u1_t_rffc   = u1_s_TXINIT;
     u1_t_status = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_RF, &u4_t_kmpl);
@@ -987,7 +1005,9 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
             u1_t_rffc = (U1)((u4_t_kmpl + u4_s_RESOFST) / u4_s_RESCONV);
         }
     }
-    (void)Com_SendSignal(ComConf_ComSignal_RF_FC, &u1_t_rffc);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_RF_FC, &u1_t_rffc);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

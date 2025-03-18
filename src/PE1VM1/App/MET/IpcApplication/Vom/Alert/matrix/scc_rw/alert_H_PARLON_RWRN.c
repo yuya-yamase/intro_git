@@ -216,8 +216,10 @@ static void    vd_s_AlertH_parlon_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_
         u1_t_sgnl_fcw2 = (U1)ALERT_RW_SGNL_OFF;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_FCW1, &u1_t_sgnl_fcw1);
-    (void)Com_SendSignal(ComConf_ComSignal_FCW2, &u1_t_sgnl_fcw2);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_FCW1, &u1_t_sgnl_fcw1);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_FCW2, &u1_t_sgnl_fcw2);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

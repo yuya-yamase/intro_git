@@ -88,9 +88,11 @@ void    vd_g_wChimeCfgMMInfoTx(void)
     /* Multimedia */
     vd_g_wChimeMetBuzzInfo(&u1_t_level, &u1_t_length, &u1_t_emergency);
 
-    (void)Com_SendSignal(ComConf_ComSignal_EMERGENCY_ON, &u1_t_emergency);
-    (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LV, &u1_t_level);
-    (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LEN, &u1_t_length);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_EMERGENCY_ON, &u1_t_emergency);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LV, &u1_t_level);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LEN, &u1_t_length);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgRsaPermaReq(void)                                                                                          */

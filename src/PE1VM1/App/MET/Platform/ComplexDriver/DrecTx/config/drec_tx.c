@@ -147,18 +147,24 @@ void    vd_g_DrectxBonInit(void)
     }
 
     u1_t_tx = (U1)0U;
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)FALSE;
-    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)U1_MAX;
-    (void)Com_SendSignal(ComConf_ComSignal_IG_VOL,   &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_DISP_TMP, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_IG_VOL,   &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_DISP_TMP, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_DrectxRstInit(void)                                                                                                 */
@@ -186,24 +192,36 @@ void    vd_g_DrectxRstInit(void)
     (void)u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_DREC_TX, &u2_t_br);
 
     u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D50);
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_fnc);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_fnc);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)TRUE;
-    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)FALSE;
-    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
     u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D51);
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, &u1_t_fnc);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, &u1_t_fnc);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)0U;
-    (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)U1_MAX;
-    (void)Com_SendSignal(ComConf_ComSignal_IG_VOL,   &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_DISP_TMP, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_IG_VOL,   &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_DISP_TMP, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_DrecTxWkupInit(void)                                                                                                */
@@ -231,22 +249,32 @@ void    vd_g_DrectxWkupInit(void)
     (void)u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_DREC_TX, &u2_t_br);
 
     u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D50);
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_fnc);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, &u1_t_fnc);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)FALSE;
-    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
     u1_t_fnc = (U1)(u2_t_br >> DREC_TX_FNC_LSB_MET1D51);
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, &u1_t_fnc);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, &u1_t_fnc);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)0U;
-    (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)U1_MAX;
-    (void)Com_SendSignal(ComConf_ComSignal_IG_VOL,   &u1_t_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_DISP_TMP, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_IG_VOL,   &u1_t_tx);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_DISP_TMP, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_DrectxMainTask(void)                                                                                                */
@@ -308,13 +336,17 @@ static void    vd_s_DrectxMsg_MET1D50(const U1 * u1_ap_FNC)
 
     U1                  u1_t_tx;
 
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, u1_ap_FNC);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DATA_NUM, u1_ap_FNC);    /* COM Tx STUB delete */
+#endif
     
  /* (void)Com_SendSignal(ComConf_ComSignal_RNW_COND, &u1_t_tx); */ /* written by fuelvol */
  /* (void)Com_SendSignal(ComConf_ComSignal_STOP_JG,  &u1_t_tx); */ /* written by fuelvol */
 
     u1_t_tx = u1_g_GaugeOwActSts((U1)GAUGE_CH_FUELSEG);
-    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_ACTV_TST, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
  /* (void)Com_SendSignal(ComConf_ComSignal_IGON_SIG, &u1_t_tx); */ /* written by fuelvol */
  /* (void)Com_SendSignal(ComConf_ComSignal_STON_SIG, &u1_t_tx); */ /* written by fuelvol */
@@ -324,14 +356,18 @@ static void    vd_s_DrectxMsg_MET1D50(const U1 * u1_ap_FNC)
     else{
         u1_t_tx = (U1)FALSE;
     }
-    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_MET_REST, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
 #if 0   /* BEV BSW provisionally */
     u1_t_tx = u1_g_FuelvolTauLwAct();
 #else
     u1_t_tx = (U1)FALSE;
 #endif
-    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_FLWNG_ON, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
  /* (void)Com_SendSignal(ComConf_ComSignal_FL_DISP,  &u1_t_tx); */ /* written by fuelvol */
  /* (void)Com_SendSignal(ComConf_ComSignal_FL_COMP,  &u1_t_tx); */ /* written by fuelvol */
@@ -356,14 +392,18 @@ static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC)
     U4                  u4_t_igvol;
     U1                  u1_t_tx;
 
-    (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, u1_ap_FNC);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DATA_NM2, u1_ap_FNC);    /* COM Tx STUB delete */
+#endif
 
  /* (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);   */ /* written by dimmer */
  /* (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN,  &u1_t_tx);   */ /* written by illumi */
  /* (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT,  &u1_t_tx);   */ /* written by illumi */
 
     u1_s_drec_tx_bpe_evt |= u1_s_DrectxSwInfchk();
-    (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_s_drec_tx_bpe_evt);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_s_drec_tx_bpe_evt);    /* COM Tx STUB delete */
+#endif
 
     u4_t_igvol = (U4)u2_g_IoHwAdcLv((U1)ADC_CH_IG_MON);
     if(u4_t_igvol > (U4)u2_s_DREC_TX_IG_MAX){
@@ -379,10 +419,14 @@ static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC)
         u4_t_igvol =  u4_t_igvol / (U4)u2_s_DREC_TX_IG_DIV;
         u1_t_tx    = (U1)u4_t_igvol;
     }
-    (void)Com_SendSignal(ComConf_ComSignal_IG_VOL, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_IG_VOL, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 
     u1_t_tx = (U1)U1_MAX;
-    (void)Com_SendSignal(ComConf_ComSignal_DISP_TMP, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DISP_TMP, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
  /* (void)Com_SendSignal(ComConf_ComSignal_LN_FC,    &u1_t_tx);   */ /* written by tripcom */
  /* (void)Com_SendSignal(ComConf_ComSignal_RF_FC,    &u1_t_tx);   */ /* written by tripcom */
 }

@@ -81,7 +81,11 @@
 #define vd_VMMUNIT_RXMSG_A_CSPCHG(x)    ((void)Com_ReceiveSignal(ComConf_ComSignal_A_CSPCHG,(x)))
 #define vd_VMMUNIT_RXMSG_A_UNTCSP(x)    ((void)Com_ReceiveSignal(ComConf_ComSignal_A_UNTCSP,(x)))
 
-#define vd_VMMUNIT_WRITE_M_UNTDB1(x)    ((void)Com_SendSignal(ComConf_ComSignal_M_UNTDB1,(x)))
+#if 0   /* BEV BSW provisionally */
+#define vd_VMMUNIT_WRITE_M_UNTDB1(x)    ((void)Com_SendSignal(ComConf_ComSignal_M_UNTDB1,(x)))    /* COM Tx STUB delete */
+#else
+#define vd_VMMUNIT_WRITE_M_UNTDB1(x)    (vdp_PTR_NA)
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Variable Definitions                                                                                                    */

@@ -307,10 +307,14 @@ static void    vd_s_AlertC_tpmsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 #endif /* defined(ComConf_ComSignal_TIPW) */ /*840B_CAN CV-R*/
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_TIRW, &u1_t_tirw);
-    (void)Com_SendSignal(ComConf_ComSignal_TILW, &u1_t_tilw);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_TIRW, &u1_t_tirw);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_TILW, &u1_t_tilw);    /* COM Tx STUB delete */
+#endif
 #if defined(ComConf_ComSignal_TIPW) /*840B_CAN CV-R*/
-    (void)Com_SendSignal(ComConf_ComSignal_TIPW, &u1_t_tipw);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_TIPW, &u1_t_tipw);    /* COM Tx STUB delete */
+#endif
 #endif /* defined(ComConf_ComSignal_TIPW) */ /*840B_CAN CV-R*/
 }
 

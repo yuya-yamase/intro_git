@@ -242,9 +242,11 @@ static void    vd_s_AlertH_batinsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
         }
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_BAT1, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT1]);
-    (void)Com_SendSignal(ComConf_ComSignal_BAT2, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT2]);
-    (void)Com_SendSignal(ComConf_ComSignal_BAT3, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT3]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_BAT1, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT1]);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_BAT2, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT2]);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_BAT3, &u1_tp_sgnl[ALERT_H_BATINS_RWSGNL_BAT3]);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

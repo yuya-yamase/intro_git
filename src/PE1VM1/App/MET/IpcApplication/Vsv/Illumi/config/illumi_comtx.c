@@ -186,10 +186,14 @@ void    vd_g_IllumiComTxInit(void)
     u1_s_illumi_rheo_tx_pos    = (U1)ILLUMI_RHEOPOS_TX_DEF;
 
 #ifdef ComConf_ComSignal_ILL_OUT
-    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 #endif /* #ifdef ComConf_ComSignal_ILL_OUT */
 #ifdef ComConf_ComSignal_RHEO_IN
-    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 #endif /* #ifdef ComConf_ComSignal_RHEO_IN */
     (void)Com_SendSignal(ComConf_ComSignal_RHEOSTAT, &u1_s_illumi_rheo_tx_pct);
     (void)Com_SendSignal(ComConf_ComSignal_TR2_DUTY, &u2_s_illumi_rheo_tx_tr);
@@ -680,7 +684,9 @@ static void    vd_s_IllumiRheoTxAct(const U2 u2_a_ACT, const U1 u1_a_RHEOPCT, co
     }
 
 #ifdef ComConf_ComSignal_RHEO_IN
-    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_a_RHEODRTX);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_RHEO_IN, &u1_a_RHEODRTX);    /* COM Tx STUB delete */
+#endif
 #endif
 }
 /*===================================================================================================================================*/
@@ -764,7 +770,9 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
         }
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 #endif
 }
 /*===================================================================================================================================*/

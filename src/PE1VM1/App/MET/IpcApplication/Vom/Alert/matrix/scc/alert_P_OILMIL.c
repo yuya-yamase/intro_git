@@ -236,8 +236,10 @@ static void    vd_s_AlertP_oilmilRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
         }
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_OMDW, &u1_t_omdw);
-    (void)Com_SendSignal(ComConf_ComSignal_OMPW, &u1_t_ompw);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_OMDW, &u1_t_omdw);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_OMPW, &u1_t_ompw);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

@@ -485,7 +485,9 @@ static void vd_s_GwcxCfg_Init_AUD_MUTE(void)
 
     u1_t_tx_AudMute = (U1)GWCXCFG_AUDMUTE_OFF;
 
-    (void)Com_SendSignal(ComConf_ComSignal_AUD_MUTE, (&u1_t_tx_AudMute));
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_AUD_MUTE, (&u1_t_tx_AudMute));    /* COM Tx STUB delete */
+#endif
 }
 #else
 /*===================================================================================================================================*/

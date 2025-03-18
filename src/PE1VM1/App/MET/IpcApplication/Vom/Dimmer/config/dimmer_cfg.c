@@ -139,7 +139,9 @@ void    vd_g_DimCfgInit(void)
     U1                      u1_t_tx;
 
     u1_t_tx = (U1)0U;
-    (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 #endif
 
     vd_g_DimDaynightInit();
@@ -231,7 +233,9 @@ void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGH
         u1_t_tx = (U1)DIM_DAYNIGHT_ADIM_NIGHT;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 #endif
 }
 /*===================================================================================================================================*/

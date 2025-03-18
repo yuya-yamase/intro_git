@@ -866,7 +866,9 @@ void vd_g_GwmmCfgSend_MMCKPT(const U1 u1_a_pwrsts)
     if((u1_t_pwrsts_jdg != (U1)0U) &&
        (u1_t_varsup <= (U1)GWMMCFG_MMCKPT_SIGMAX) &&
        (u1_t_varsup != u1_t_rcvsig)){
-        (void)Com_SendSignal(ComConf_ComSignal_MMCKPT, &u1_t_varsup);
+#if 0   /* BEV BSW provisionally */
+        (void)Com_SendSignal(ComConf_ComSignal_MMCKPT, &u1_t_varsup);    /* COM Tx STUB delete */
+#endif
     }
 }
 /*===================================================================================================================================*/
@@ -892,7 +894,9 @@ void vd_g_GwmmCfgSend_L_TBC_FUNC(const U1 u1_a_pwrsts)
     if((u1_t_pwrsts_jdg != (U1)0U) &&
        (u1_t_varsup <= (U1)GWMMCFG_L_TBC_FUNC_SIGMAX) &&
        (u1_t_varsup != u1_t_rcvsig)){
-        (void)Com_SendSignal(ComConf_ComSignal_L_TBC_FUNC, &u1_t_varsup);
+#if 0   /* BEV BSW provisionally */
+        (void)Com_SendSignal(ComConf_ComSignal_L_TBC_FUNC, &u1_t_varsup);    /* COM Tx STUB delete */
+#endif
     }
 }
 /*===================================================================================================================================*/
@@ -950,7 +954,9 @@ static void vd_s_GwmmCfgSend_SSMMODE(const U1 u1_a_SIG)
 #ifdef ComConf_ComSignal_SSMMODE
     U1    u1_t_sig;
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_SSMMODE, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SSMMODE, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
 #endif /* ComConf_ComSignal_SSMMODE */
 }
 /*===================================================================================================================================*/
@@ -1064,7 +1070,9 @@ static void vd_s_GwmmCfgSend_MRMRQSW(const U1 u1_a_SIG)
 #ifdef ComConf_ComSignal_MRMRQSW
     U1    u1_t_sig;
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_MRMRQSW, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_MRMRQSW, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
     (void)Com_TriggerIPDUSend(MSG_MET1S62_TXCH0);
 #endif /* ComConf_ComSignal_MRMRQSW */
 }
@@ -1079,7 +1087,9 @@ static void vd_s_GwmmCfgSend_MRMRQBK(const U1 u1_a_SIG)
 #ifdef ComConf_ComSignal_MRMRQBK
     U1    u1_t_sig;
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_MRMRQBK, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_MRMRQBK, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
     (void)Com_TriggerIPDUSend(MSG_MET1S62_TXCH0);
 #endif /* ComConf_ComSignal_MRMRQBK */
 }
@@ -2163,7 +2173,9 @@ static void vd_s_GwmmCfgSend_HOFCUS(const U1 u1_a_SIG)
 #ifdef ComConf_ComSignal_HOFCUS
     U1    u1_t_sig;
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_HOFCUS, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_HOFCUS, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
 #endif /* ComConf_ComSignal_HOFCUS */
 }
 /*===================================================================================================================================*/
@@ -2177,7 +2189,9 @@ static void vd_s_GwmmCfgSend_DRECSW(const U1 u1_a_SIG)
 #ifdef ComConf_ComSignal_DRECSW
     U1    u1_t_sig;
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_DRECSW, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_DRECSW, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
 #endif /* ComConf_ComSignal_DRECSW */
 }
 /*===================================================================================================================================*/
@@ -4175,7 +4189,9 @@ static void vd_s_GwmmCfgSend_L_TBCAK_ID(const U1 u1_a_SIG)
 #ifdef ComConf_ComSignal_L_TBCAK_ID
     U1    u1_t_sig;
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_L_TBCAK_ID, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_L_TBCAK_ID, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
 #endif /* ComConf_ComSignal_L_TBCAK_ID */
 }
 /*===================================================================================================================================*/
@@ -4189,7 +4205,9 @@ static void vd_s_GwmmCfgSend_L_TBCAK_TY(const U1 u1_a_SIG)
 #ifdef ComConf_ComSignal_L_TBCAK_TY
     U1    u1_t_sig;
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_L_TBCAK_TY, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_L_TBCAK_TY, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
 #endif /* ComConf_ComSignal_L_TBCAK_TY */
 }
 /*===================================================================================================================================*/
@@ -4203,7 +4221,9 @@ static void vd_s_GwmmCfgSend_L_TBC_SF(const U1 u1_a_SIG)
 #ifdef ComConf_ComSignal_L_TBC_SF
     U1    u1_t_sig;
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_L_TBC_SF, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_L_TBC_SF, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
 #endif /* ComConf_ComSignal_L_TBC_SF */
 }
 /*===================================================================================================================================*/

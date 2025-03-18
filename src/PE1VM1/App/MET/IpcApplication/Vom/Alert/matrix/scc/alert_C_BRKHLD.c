@@ -390,7 +390,9 @@ static void    vd_s_AlertC_brkhldRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
         }
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_AHSW, &u1_t_sgnl);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_AHSW, &u1_t_sgnl);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

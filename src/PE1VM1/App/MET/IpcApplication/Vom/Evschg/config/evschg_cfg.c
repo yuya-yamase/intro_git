@@ -282,42 +282,66 @@ void                    vd_g_EvschgCfgBonTxInit(void)
 
     /* M_SETSTS */
     u1_t_snddata = (U1)EVSCHG_M_SETSTS_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETSTS, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETSTS, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* M_SETID */
     u1_t_snddata = (U1)EVSCHG_M_SETID_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETID, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETID, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* M_SETTYP */
     u1_t_snddata = (U1)EVSCHG_M_SETTYP_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETTYP, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETTYP, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* M_SETWKD */
     u1_t_snddata = (U1)EVSCHG_M_SETWKD_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETWKD, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETWKD, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* M_SETSTM */
     u2_t_snddata = (U2)EVSCHG_M_SETSTM_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETSTM, &u2_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETSTM, &u2_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* M_SETFTM */
     u2_t_snddata = (U2)EVSCHG_M_SETFTM_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETFTM, &u2_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETFTM, &u2_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* M_SETNXT */
     u1_t_snddata = (U1)EVSCHG_M_SETNXT_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETNXT, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETNXT, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
 
     /* M_CUR200 */
     u1_t_snddata = (U1)EVSCHG_M_CUR200_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_CUR200, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_CUR200, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* CLOCK_SU */
     u1_t_snddata = (U1)EVSCHG_CLOCK_SU_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_CLOCK_SU, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_CLOCK_SU, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* M_LMTREQ */
     u1_t_snddata = (U1)EVSCHG_M_LMTREQ_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_LMTREQ, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LMTREQ, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
     /* M_DPWREQ */
     u1_t_snddata = (U1)EVSCHG_M_DPWREQ_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_DPWREQ, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_DPWREQ, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
 
     /* M_PNCSW */
     u1_t_snddata = (U1)EVSCHG_M_PNCSW_INIT;
-    (void)Com_SendSignal(ComConf_ComSignal_M_PNCSW, &u1_t_snddata);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_PNCSW, &u1_t_snddata);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -718,7 +742,9 @@ static void             vd_s_EvschgCfgSendM_SETSTM(const U2 u2_a_RXDATA)
 
     u2_t_pre_tx = (U2)EVSCHG_M_SETSTM_INIT;
     (void)Com_ReceiveSignal(ComConf_ComSignal_M_SETSTM, &u2_t_pre_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETSTM, &u2_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETSTM, &u2_t_tx);    /* COM Tx STUB delete */
+#endif
 
     if(u2_t_pre_tx != u2_t_tx){
         (void)Com_TriggerIPDUSend(MSG_MET1S61_TXCH0);
@@ -746,7 +772,9 @@ static void             vd_s_EvschgCfgSendM_SETFTM(const U2 u2_a_RXDATA)
 
     u2_t_pre_tx = (U2)EVSCHG_M_SETFTM_INIT;
     (void)Com_ReceiveSignal(ComConf_ComSignal_M_SETFTM, &u2_t_pre_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_M_SETFTM, &u2_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_SETFTM, &u2_t_tx);    /* COM Tx STUB delete */
+#endif
 
     if(u2_t_pre_tx != u2_t_tx){
         (void)Com_TriggerIPDUSend(MSG_MET1S61_TXCH0);

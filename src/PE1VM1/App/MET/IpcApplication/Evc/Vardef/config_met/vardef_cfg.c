@@ -305,7 +305,9 @@ void    vd_g_VardefCfgSendMmcProt(const U1 u1_a_SIG)
     U1  u1_t_sig;
 
     u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_MMC_PROT, &u1_t_sig);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_MMC_PROT, &u1_t_sig);    /* COM Tx STUB delete */
+#endif
 }
 
 

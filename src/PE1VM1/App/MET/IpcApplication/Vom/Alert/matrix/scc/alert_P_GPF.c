@@ -351,9 +351,13 @@ static void    vd_s_AlertP_gpfWrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     }
 #endif /* ComConf_ComSignal_GPMW */
 
-    (void)Com_SendSignal(ComConf_ComSignal_GPFW, &u1_t_sgnl_gpfw);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_GPFW, &u1_t_sgnl_gpfw);    /* COM Tx STUB delete */
+#endif
 #ifdef ComConf_ComSignal_GPMW /* 460B_CAN */
-    (void)Com_SendSignal(ComConf_ComSignal_GPMW, &u1_t_sgnl_gpmw);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_GPMW, &u1_t_sgnl_gpmw);    /* COM Tx STUB delete */
+#endif
 #endif /* ComConf_ComSignal_GPMW */
 }
 

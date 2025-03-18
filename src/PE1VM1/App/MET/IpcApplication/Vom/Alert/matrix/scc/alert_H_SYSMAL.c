@@ -545,13 +545,19 @@ static void    vd_s_AlertH_sysmalRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
         }
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_HVSW, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_HVSW]);
-    (void)Com_SendSignal(ComConf_ComSignal_HVSW2, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_HVSW2]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_HVSW, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_HVSW]);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_HVSW2, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_HVSW2]);    /* COM Tx STUB delete */
+#endif
 #if defined(ComConf_ComSignal_EVSW)
-    (void)Com_SendSignal(ComConf_ComSignal_EVSW, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_EVSW]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_EVSW, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_EVSW]);    /* COM Tx STUB delete */
+#endif
 #endif /* defined(ComConf_ComSignal_EVSW)  */
 #if defined(ComConf_ComSignal_EVSW2)
-    (void)Com_SendSignal(ComConf_ComSignal_EVSW2, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_EVSW2]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_EVSW2, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_EVSW2]);    /* COM Tx STUB delete */
+#endif
 #endif /* defined(ComConf_ComSignal_EVSW2)  */
 }
 

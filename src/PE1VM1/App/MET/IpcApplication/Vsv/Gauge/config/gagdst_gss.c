@@ -105,7 +105,9 @@ void    vd_g_GagdstGssBonInit(void)
     vd_g_Rim_WriteU1((U2)RIMID_U1_FUEL_GSS, u1_t_sts);
 
     u1_t_tx  = (U1)GAGDST_GSS_RQ_GSSRC_UNKNOWN;
-    (void)Com_SendSignal(ComConf_ComSignal_RQ_GSSRC, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_RQ_GSSRC, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GagdstGssRstwkInit(void)                                                                                            */
@@ -118,7 +120,9 @@ void    vd_g_GagdstGssRstwkInit(void)
     U1                       u1_t_tx;                                           /* Transmission data                                 */
 
     u1_t_tx  = (U1)GAGDST_GSS_RQ_GSSRC_UNKNOWN;
-    (void)Com_SendSignal(ComConf_ComSignal_RQ_GSSRC, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_RQ_GSSRC, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GagdstGssFinhk(const U2 u2_a_SRC_CHK)                                                                               */
@@ -182,7 +186,9 @@ void    vd_g_GagdstGssFinhk(const U2 u2_a_SRC_CHK)
 
     vd_g_Rim_WriteU1((U2)RIMID_U1_FUEL_GSS, u1_t_data);
 
-    (void)Com_SendSignal(ComConf_ComSignal_RQ_GSSRC, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_RQ_GSSRC, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  static U1     u1_s_GagdstGssEvt(const U2 u2_a_SRC_CHK)                                                                           */
