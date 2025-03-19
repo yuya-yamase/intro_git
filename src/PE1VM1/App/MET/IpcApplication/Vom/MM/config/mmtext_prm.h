@@ -82,13 +82,19 @@ enum {
 
 
 /* CCOMへのデータ書き込み */
+#if 0   /* BEV BSW provisionally */
 #define vd_s_MMTEXT_WRITE_STA_CHG_UNAME_M(u1dat)        (vd_g_MMLibWriteTX1(STA_CHG_UNAME_M,&(u1dat)))
 #define vd_s_MMTEXT_WRITE_UNAME_REQ(u1dat)              (vd_g_MMLibWriteTX1(UNAME_REQ,&(u1dat)))
+#else
+#define vd_s_MMTEXT_WRITE_STA_CHG_UNAME_M(u1dat)        (vdp_PTR_NA)
+#define vd_s_MMTEXT_WRITE_UNAME_REQ(u1dat)              (vdp_PTR_NA)
+#endif
 
 /* CCOMへのデータ書き込み（無効値） */
 #define vd_g_MMTextWriteImmTX1(DataName)                (vd_g_MMLibWriteImmTX1(DataName, (const void*)vdp_PTR_NA))
 #define vd_g_MMTextWriteImmTX1SpfOnly(DataName)         (vd_g_MMLibWriteImmTX1SpfOnly(DataName, (const void*)vdp_PTR_NA))
 
+#if 0   /* BEV BSW provisionally */
 #define vd_MMTEXT_WRITE_INVALID_STA4_CHG_AUDIO_M()      (vd_g_MMTextWriteImmTX1(STA4_CHG_AUDIO_M))
 #define vd_MMTEXT_WRITE_INVALID_LST_CHG_CMN_M()         (vd_g_MMTextWriteImmTX1(LST_CHG_CMN_M))
 #define vd_MMTEXT_WRITE_INVALID_FAV_CHG_M()             (vd_g_MMTextWriteImmTX1(FAV_CHG_M))
@@ -97,8 +103,19 @@ enum {
 #define vd_MMTEXT_WRITE_INVALID_CT_CHG_VR_M()           (vd_g_MMTextWriteImmTX1(CT_CHG_VR_M))
 #define vd_MMTEXT_WRITE_INVALID_RT_CHG_VR_M()           (vd_g_MMTextWriteImmTX1(RT_CHG_VR_M))
 #define vd_MMTEXT_WRITE_INVALID_GT_CHG_VR_M()           (vd_g_MMTextWriteImmTX1(GT_CHG_VR_M))
+#else
+#define vd_MMTEXT_WRITE_INVALID_STA4_CHG_AUDIO_M()      (vdp_PTR_NA)
+#define vd_MMTEXT_WRITE_INVALID_LST_CHG_CMN_M()         (vdp_PTR_NA)
+#define vd_MMTEXT_WRITE_INVALID_FAV_CHG_M()             (vdp_PTR_NA)
+#define vd_MMTEXT_WRITE_INVALID_HST_CHG_M()             (vdp_PTR_NA)
+#define vd_MMTEXT_WRITE_INVALID_CD_CHG_M()              (vdp_PTR_NA)
+#define vd_MMTEXT_WRITE_INVALID_CT_CHG_VR_M()           (vdp_PTR_NA)
+#define vd_MMTEXT_WRITE_INVALID_RT_CHG_VR_M()           (vdp_PTR_NA)
+#define vd_MMTEXT_WRITE_INVALID_GT_CHG_VR_M()           (vdp_PTR_NA)
+#endif
 
 /* CCOMへの初期値書き込み */
+#if 0   /* BEV BSW provisionally */
 #define vd_g_MMTEXT_SET_INIT_MSG_METMS02()              (vd_g_MMLibSetInitMsg(METMS02))
 #define vd_g_MMTEXT_SET_INIT_MSG_METMS03()              (vd_g_MMLibSetInitMsg(METMS03))
 #define vd_g_MMTEXT_SET_INIT_MSG_METMS04()              (vd_g_MMLibSetInitMsg(METMS04))
@@ -107,6 +124,7 @@ enum {
 #define vd_g_MMTEXT_SET_INIT_MSG_METMS10()              (vd_g_MMLibSetInitMsg(METMS10))
 #define vd_g_MMTEXT_SET_INIT_MSG_METMS11()              (vd_g_MMLibSetInitMsg(METMS11))
 #define vd_g_MMTEXT_SET_INIT_MSG_METMS13()              (vd_g_MMLibSetInitMsg(METMS13))
+#endif
 
 
 #define u1_MMTEXT_CHECKMODESTATE(u1_mode)               (u1_g_MMVar_CheckModeState(u1_mode))

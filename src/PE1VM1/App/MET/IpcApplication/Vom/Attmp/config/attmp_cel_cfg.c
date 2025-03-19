@@ -81,7 +81,9 @@ U1      u1_g_AttmpCfgB_THOCL(U2 * u2p_a_b_thocl, U1 * u1_a_rxcnt)
     U1              u1_t_rxstat;
 
     u2_t_b_thocl   = (U2)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_THOCL, &u2_t_b_thocl);
+#endif
     *u2p_a_b_thocl = u2_t_b_thocl;
 
     *u1_a_rxcnt    = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0);

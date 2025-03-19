@@ -162,7 +162,9 @@ static void    vd_s_AlertC_drsRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, cons
     }
 
 #if defined(ComConf_ComSignal_FWSW) /* _300D_CAN_ */
-    (void)Com_SendSignal(ComConf_ComSignal_FWSW, &u1_t_sgnl);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_FWSW, &u1_t_sgnl);    /* COM Tx STUB delete */
+#endif
 #endif                              /* _300D_CAN_ */
 }
 

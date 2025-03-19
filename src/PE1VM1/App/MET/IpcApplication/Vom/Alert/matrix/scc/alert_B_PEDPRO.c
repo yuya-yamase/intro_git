@@ -169,10 +169,14 @@ static void    vd_s_AlertB_pedproRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 #endif /* defined(ComConf_ComSignal_PEDW) */
 
 #if defined(ComConf_ComSignal_PUHW) /* _300D_CAN_ */
-    (void)Com_SendSignal(ComConf_ComSignal_PUHW, &u1_t_sgnl_PUHW);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_PUHW, &u1_t_sgnl_PUHW);    /* COM Tx STUB delete */
+#endif
 #endif                              /* _300D_CAN_ */
 #if defined(ComConf_ComSignal_PEDW)
-    (void)Com_SendSignal(ComConf_ComSignal_PEDW, &u1_t_sgnl_PEDW);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_PEDW, &u1_t_sgnl_PEDW);    /* COM Tx STUB delete */
+#endif
 #endif /* defined(ComConf_ComSignal_PEDW) */
 }
 

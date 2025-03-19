@@ -1791,11 +1791,15 @@ void    vd_g_McstCfgSR_DNAMESend(void)
             u1_t_sr_dname |= (U1)(u1_t_data << u4_t_loop);
         }
     }
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SR_DNAME, &u1_t_pre_tx);
-    (void)Com_SendSignal(ComConf_ComSignal_SR_DNAME,  &u1_t_sr_dname);
+    (void)Com_SendSignal(ComConf_ComSignal_SR_DNAME,  &u1_t_sr_dname);    /* COM Tx STUB delete */
+#endif
 
     if(u1_t_sr_dname != u1_t_pre_tx){
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S50_TXCH0);
+#endif
     }
 #endif
 }

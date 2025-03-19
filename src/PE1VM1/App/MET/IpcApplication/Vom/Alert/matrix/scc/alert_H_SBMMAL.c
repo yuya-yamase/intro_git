@@ -222,7 +222,9 @@ static void    vd_s_AlertH_sbmmalRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
         u1_t_sbmw = (U1)ALERT_RW_SGNL_ON;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_SBMW, &u1_t_sbmw);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SBMW, &u1_t_sbmw);    /* COM Tx STUB delete */
+#endif
 #endif /* defined(ComConf_ComSignal_SBMW) */
 }
 

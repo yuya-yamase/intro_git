@@ -181,9 +181,11 @@ static void    vd_s_AlertD_tmwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
         }
     }
  
-    (void)Com_SendSignal(ComConf_ComSignal_TMW1, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW1]);
-    (void)Com_SendSignal(ComConf_ComSignal_TMW2, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW2]);
-    (void)Com_SendSignal(ComConf_ComSignal_TMW3, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW3]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_TMW1, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW1]);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_TMW2, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW2]);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_TMW3, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW3]);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

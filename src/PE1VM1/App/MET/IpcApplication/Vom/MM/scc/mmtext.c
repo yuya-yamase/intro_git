@@ -699,6 +699,7 @@ static void vd_s_MMText_InitSendMessage(void)
 /*===================================================================================================================================*/
 static void vd_s_MMText_InitSetMessage(void)
 {
+#if 0   /* BEV BSW provisionally */
     /* 送信メッセージの初期値書き込み */
     vd_g_MMTEXT_SET_INIT_MSG_METMS02();
     vd_g_MMTEXT_SET_INIT_MSG_METMS03();
@@ -710,6 +711,7 @@ static void vd_s_MMText_InitSetMessage(void)
     vd_g_MMTEXT_SET_INIT_MSG_METMS10();
     vd_g_MMTEXT_SET_INIT_MSG_METMS11();
     vd_g_MMTEXT_SET_INIT_MSG_METMS13();
+#endif
 }
 
 /*===================================================================================================================================*/

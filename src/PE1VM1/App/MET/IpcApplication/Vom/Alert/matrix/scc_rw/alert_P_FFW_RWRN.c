@@ -138,8 +138,10 @@ static void    vd_s_AlertP_ffw_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
         u1_t_sgnl_ffew = (U1)ALERT_RW_SGNL_OFF;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_SEDW, &u1_t_sgnl_sedw);
-    (void)Com_SendSignal(ComConf_ComSignal_FFEW, &u1_t_sgnl_ffew);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SEDW, &u1_t_sgnl_sedw);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_FFEW, &u1_t_sgnl_ffew);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

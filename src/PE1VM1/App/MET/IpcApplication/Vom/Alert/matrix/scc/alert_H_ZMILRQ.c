@@ -156,7 +156,9 @@ static void    vd_s_AlertH_zmilrqRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_T
         u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_ZESW, &u1_t_sgnl);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_ZESW, &u1_t_sgnl);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

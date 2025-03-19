@@ -493,8 +493,10 @@ static void    vd_s_OdoComTxInit(const U4 u4_a_0P001KM)
     (void)Com_SendSignal(ComConf_ComSignal_ODO_UNI2, &u1_t_odo_unit_tx);                        /* MET1S52 */
     (void)Com_SendSignal(ComConf_ComSignal_ODO_01,   &u4_sp_odo_dist_tx[ODO_DIST_TX_ODO_01]);   /* MET1S52 */
 
-    (void)Com_SendSignal(ComConf_ComSignal_OM_MLG,   &u1_t_om_mlg);                             /* MET1S10 */
-    (void)Com_SendSignal(ComConf_ComSignal_PR_OM_FL, &u1_s_odo_pr_om_fl);                       /* MET1S10 */
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_OM_MLG,   &u1_t_om_mlg);                             /* MET1S10 */    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_PR_OM_FL, &u1_s_odo_pr_om_fl);                       /* MET1S10 */    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_OdoComTxUpdtOdo(const U4 u4_a_0P001KM)                                                                       */
@@ -660,10 +662,14 @@ static void    vd_s_OdoComTxUpdtOm(const U4 u4_a_0P001KM)
         }
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_OM_MLG, &u1_t_om_mlg);                                 /* MET1S10 */
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_OM_MLG, &u1_t_om_mlg);                                 /* MET1S10 */    /* COM Tx STUB delete */
+#endif
     if(u1_t_pr_om_fl  != u1_s_odo_pr_om_fl){
-        (void)Com_SendSignal(ComConf_ComSignal_PR_OM_FL, &u1_t_pr_om_fl);                         /* MET1S10 */
+#if 0   /* BEV BSW provisionally */
+        (void)Com_SendSignal(ComConf_ComSignal_PR_OM_FL, &u1_t_pr_om_fl);                         /* MET1S10 */    /* COM Tx STUB delete */
         (void)Com_TriggerIPDUSend(MSG_MET1S10_TXCH0);
+#endif
     }
     u1_s_odo_pr_om_fl = u1_t_pr_om_fl;
 }

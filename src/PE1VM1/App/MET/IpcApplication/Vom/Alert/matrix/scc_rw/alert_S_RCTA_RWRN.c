@@ -134,7 +134,9 @@ static void    vd_s_AlertS_rcta_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     else{
         u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
     }
-    (void)Com_SendSignal(ComConf_ComSignal_RCTW, &u1_t_sgnl);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_RCTW, &u1_t_sgnl);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/

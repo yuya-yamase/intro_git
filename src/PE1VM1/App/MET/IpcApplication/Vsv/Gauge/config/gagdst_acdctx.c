@@ -77,7 +77,9 @@ void    vd_g_GagdstAcdcTxInit(void)
     U1                                  u1_t_tx;                                /* Transmission data                                 */
 
     u1_t_tx = (U1)GAGDST_ACDC_TX_FUELWRNG_UNK;
-    (void)Com_SendSignal(ComConf_ComSignal_FUELWRNG, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_FUELWRNG, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GagdstAcdcTxFinhk(void)                                                                                             */
@@ -99,7 +101,9 @@ void    vd_g_GagdstAcdcTxFinhk(void)
         u1_t_tx = (U1)GAGDST_ACDC_TX_FUELWRNG_OFF;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_FUELWRNG, &u1_t_tx);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_FUELWRNG, &u1_t_tx);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

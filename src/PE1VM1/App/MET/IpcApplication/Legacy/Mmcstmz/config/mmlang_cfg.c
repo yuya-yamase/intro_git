@@ -402,7 +402,9 @@ U1              u1_g_MmlangCfgGetA_LNGDB7(void)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LNG_ST(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LNG_ST, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LNG_ST, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgTxM_LANG(const U1 u1_a_SIG)                                                                         */
@@ -412,7 +414,9 @@ void            vd_g_MmlangCfgTxM_LNG_ST(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LANG(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LANG, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LANG, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgTxM_LNGDB1(const U1 u1_a_SIG)                                                                       */
@@ -422,7 +426,9 @@ void            vd_g_MmlangCfgTxM_LANG(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LNGDB1(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB1, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB1, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgTxM_LNGDB2(const U1 u1_a_SIG)                                                                       */
@@ -432,7 +438,9 @@ void            vd_g_MmlangCfgTxM_LNGDB1(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LNGDB2(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB2, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB2, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgTxM_LNGDB3(const U1 u1_a_SIG)                                                                       */
@@ -442,7 +450,9 @@ void            vd_g_MmlangCfgTxM_LNGDB2(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LNGDB3(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB3, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB3, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgTxM_LNGDB4(const U1 u1_a_SIG)                                                                       */
@@ -452,7 +462,9 @@ void            vd_g_MmlangCfgTxM_LNGDB3(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LNGDB4(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB4, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB4, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgTxM_LNGDB5(const U1 u1_a_SIG)                                                                       */
@@ -462,7 +474,9 @@ void            vd_g_MmlangCfgTxM_LNGDB4(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LNGDB5(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB5, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB5, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgTxM_LNGDB6(const U1 u1_a_SIG)                                                                       */
@@ -472,7 +486,9 @@ void            vd_g_MmlangCfgTxM_LNGDB5(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LNGDB6(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB6, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB6, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgTxM_LNGDB7(const U1 u1_a_SIG)                                                                       */
@@ -482,7 +498,9 @@ void            vd_g_MmlangCfgTxM_LNGDB6(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgTxM_LNGDB7(const U1 u1_a_SIG)
 {
-    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB7, &u1_a_SIG);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_M_LNGDB7, &u1_a_SIG);    /* COM Tx STUB delete */
+#endif
 }
 /*===================================================================================================================================*/
 /* void            vd_g_MmlangCfgMLangEvtTx(void)                                                                                    */
@@ -492,7 +510,9 @@ void            vd_g_MmlangCfgTxM_LNGDB7(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void            vd_g_MmlangCfgMLangEvtTx(void)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_TriggerIPDUSend(MSG_MET1S18_TXCH0);
+#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

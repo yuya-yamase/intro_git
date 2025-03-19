@@ -1477,7 +1477,9 @@ static void    vd_s_AlertD_sbwPdActfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
         u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_SBW4, &u1_t_sgnl);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SBW4, &u1_t_sgnl);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -1498,7 +1500,9 @@ static void    vd_s_AlertD_sbwPdPswfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
         u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_SBW6, &u1_t_sgnl);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SBW6, &u1_t_sgnl);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -1521,7 +1525,9 @@ static void    vd_s_AlertD_sbwPdSbwfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
         u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_SBW5, &u1_t_sgnl);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SBW5, &u1_t_sgnl);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -1558,9 +1564,11 @@ static void    vd_s_AlertD_sbwPdChkRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
             u1_tp_sgnl[u4_t_idx] = (U1)ALERT_RW_SGNL_OFF;
         }
     }
-    (void)Com_SendSignal(ComConf_ComSignal_SBW3 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW3]);
-    (void)Com_SendSignal(ComConf_ComSignal_SBW8 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW8]);
-    (void)Com_SendSignal(ComConf_ComSignal_SBW9 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW9]);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SBW3 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW3]);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_SBW8 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW8]);    /* COM Tx STUB delete */
+    (void)Com_SendSignal(ComConf_ComSignal_SBW9 , &u1_tp_sgnl[ALERT_D_SBW_RWSGNL_SBW9]);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -1581,7 +1589,9 @@ static void    vd_s_AlertD_sbwPdSftfRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
         u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
     }
 
-    (void)Com_SendSignal(ComConf_ComSignal_SBW2, &u1_t_sgnl);
+#if 0   /* BEV BSW provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_SBW2, &u1_t_sgnl);    /* COM Tx STUB delete */
+#endif
 }
 
 /*===================================================================================================================================*/
