@@ -88,10 +88,10 @@ void   vd_g_OilmilTxRstSig(const U1 u1_a_OMRS2, const U1 u1_a_SNDINT)
     u1_t_sig = u1_a_OMRS2;
 #if 0   /* BEV BSW provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_OMRS_2, &u1_t_sig);    /* COM Tx STUB delete */
-#endif
     if(u1_a_SNDINT == (U1)TRUE){
         (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
     }
+#endif
 }
 
 /*===================================================================================================================================*/

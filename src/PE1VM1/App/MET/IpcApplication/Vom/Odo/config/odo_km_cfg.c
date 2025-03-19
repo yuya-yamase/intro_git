@@ -668,8 +668,8 @@ static void    vd_s_OdoComTxUpdtOm(const U4 u4_a_0P001KM)
     if(u1_t_pr_om_fl  != u1_s_odo_pr_om_fl){
 #if 0   /* BEV BSW provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_PR_OM_FL, &u1_t_pr_om_fl);                         /* MET1S10 */    /* COM Tx STUB delete */
-#endif
         (void)Com_TriggerIPDUSend(MSG_MET1S10_TXCH0);
+#endif
     }
     u1_s_odo_pr_om_fl = u1_t_pr_om_fl;
 }

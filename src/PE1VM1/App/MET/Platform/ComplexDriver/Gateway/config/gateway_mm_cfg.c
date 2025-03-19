@@ -1076,8 +1076,9 @@ static void vd_s_GwmmCfgSend_MRMRQSW(const U1 u1_a_SIG)
     u1_t_sig = u1_a_SIG;
 #if 0   /* BEV BSW provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_MRMRQSW, &u1_t_sig);    /* COM Tx STUB delete */
-#endif
     (void)Com_TriggerIPDUSend(MSG_MET1S62_TXCH0);
+
+#endif
 #endif /* ComConf_ComSignal_MRMRQSW */
 }
 /*===================================================================================================================================*/
@@ -1093,8 +1094,8 @@ static void vd_s_GwmmCfgSend_MRMRQBK(const U1 u1_a_SIG)
     u1_t_sig = u1_a_SIG;
 #if 0   /* BEV BSW provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_MRMRQBK, &u1_t_sig);    /* COM Tx STUB delete */
-#endif
     (void)Com_TriggerIPDUSend(MSG_MET1S62_TXCH0);
+#endif
 #endif /* ComConf_ComSignal_MRMRQBK */
 }
 /*===================================================================================================================================*/
