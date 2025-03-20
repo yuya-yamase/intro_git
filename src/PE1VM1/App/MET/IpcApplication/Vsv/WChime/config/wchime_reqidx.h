@@ -417,6 +417,22 @@
 #define WCHIME_VOL_2400HZ_63DB                   (174U)                /* 2400Hz 63dB                                                */
 #define WCHIME_VOL_2400HZ_67DB                   (175U)                /* 2400Hz 67dB                                                */
 #define WCHIME_VOL_2400HZ_73DB                   (176U)                /* 2400Hz 73dB                                                */
+#define WCHIME_VOL_BASE_NOTICE1_MID              (177U)                /* For notification sound MID                                 */
+#define WCHIME_VOL_BASE_NOTICE1_MAX              (178U)                /* For notification sound MAX                                 */
+#define WCHIME_VOL_BASE_NOTICE2_MID              (179U)                /* For special notification sound MID                         */
+#define WCHIME_VOL_BASE_NOTICE2_MAX              (180U)                /* For special notification sound MAX                         */
+#define WCHIME_VOL_BASE_ACCEPT_MID               (181U)                /* For accept sound MID                                       */
+#define WCHIME_VOL_BASE_ACCEPT_MAX               (182U)                /* For accept sound MAX                                       */
+#define WCHIME_VOL_BASE_REJECT_MID               (183U)                /* For reject sound MID                                       */
+#define WCHIME_VOL_BASE_REJECT_MAX               (184U)                /* For reject sound MAX                                       */
+#define WCHIME_VOL_BASE_INTWARNL_MID             (185U)                /* For intermittent sound (low urgency) MID                   */
+#define WCHIME_VOL_BASE_INTWARNL_MAX             (186U)                /* For intermittent sound (low urgency) MAX                   */
+#define WCHIME_VOL_BASE_INTWARNM_MID             (187U)                /* For intermittent sound (moderate urgency) MID              */
+#define WCHIME_VOL_BASE_INTWARNM_MAX             (188U)                /* For intermittent sound (moderate urgency) MAX              */
+#define WCHIME_VOL_BASE_INTWARNH_MID             (189U)                /* For intermittent sound (high urgency) MID                  */
+#define WCHIME_VOL_BASE_INTWARNH_MAX             (190U)                /* For intermittent sound (high urgency) MAX                  */
+#define WCHIME_VOL_BASE_CONTWARN_MID             (191U)                /* For continuous sound MID                                   */
+#define WCHIME_VOL_BASE_CONTWARN_MAX             (192U)                /* For continuous sound MAX                                   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

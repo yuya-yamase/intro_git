@@ -127,8 +127,9 @@
     -I${APP_DIR}/MET/Platform/ComplexDriver/NWCM/config
     -I${APP_DIR}/MET/Platform/ComplexDriver/NWCM/libc
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/config
-    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data
-    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/include/D1L1
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_TYT
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/data_LEX
+    -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/include/U2Ax
     -I${APP_DIR}/MET/Platform/ComplexDriver/SoundMiddle/scc
     -I${APP_DIR}/MET/Platform/Version/scc
     

@@ -44,10 +44,10 @@ primaryTarget=v800_standalone.tgt
     -I${EHVM_IF_DIR}/include/ehvm
 
 	-I${APP_DIR}/Stub
-    -L${APP_DIR}/MET/lib/Platform/D1L1
-    -llibcri_atom_rh850d1.a
-    -llibcri_base_rh850d1.a
-    -llibcri_damp_rh850d1.a
+    -L${APP_DIR}/MET/lib/Platform/U2Ax
+    -llibcri_atom_rh850u2a.a
+    -llibcri_base_rh850u2a.a
+    -llibcri_damp_rh850u2a.a
 	
 	-I${APP_DIR}/MET/STUB/config
 

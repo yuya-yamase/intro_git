@@ -63,6 +63,18 @@ const ST_PWM           st_gp_PWM_DRV_CFG[PWM_DRV_NUM_CH] = {
         (U2)PWM_DRV_GPT_D16,                    /* u2_gpt     */
         (U1)GPT_D16_UN_1_CH_10_DD_PWM_M,        /* u1_peri_ch */
         (U1)GPT_D16_UN_1_CH_11_DD_PWM_S         /* u1_duty_ch */
+    },
+    /* PWM_CH_03 */
+    {
+        (U2)PWM_DRV_GPT_D16,                    /* u2_gpt     */
+        (U1)GPT_D16_UN_1_CH_0_DD_PWM_M,        /* u1_peri_ch */
+        (U1)GPT_D16_UN_1_CH_1_DD_PWM_S         /* u1_duty_ch */
+    },
+    /* PWM_CH_04 */
+    {
+        (U2)PWM_DRV_GPT_D16,                    /* u2_gpt     */
+        (U1)GPT_D16_UN_1_CH_0_DD_PWM_M,        /* u1_peri_ch */
+        (U1)GPT_D16_UN_1_CH_2_DD_PWM_S         /* u1_duty_ch */
     }
 };
 const U1               u1_g_PWM_DRV_NUM_CH = (U1)PWM_DRV_NUM_CH;

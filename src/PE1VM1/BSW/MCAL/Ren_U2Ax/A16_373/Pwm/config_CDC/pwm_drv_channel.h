@@ -27,13 +27,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define PWM_DRV_NUM_CH                           (3U)
+#define PWM_DRV_NUM_CH                           (5U)
 
 #define PWM_CH_00_DDC_FREQ                       (0U)   /* DD-FREQ              */
 #define PWM_CH_01_DDC_SIP_FREQ                   (1U)   /* VB33-SIP-FREQ        */
 #define PWM_CH_02_DDC_ASIL_FREQ                  (2U)   /* Bu-BOOST-ASIL-FREQ   */
-/* #define PWM_CH_03                             (3U) */
-/* #define PWM_CH_04                             (4U) */
+#define PWM_CH_03                                (3U)   /* MET PWM_P */
+#define PWM_CH_04                                (4U)   /* MET PWM_N */
 /* #define PWM_CH_05                             (5U) */
 /* #define PWM_CH_06                             (6U) */
 /* #define PWM_CH_07                             (7U) */

@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,8 +11,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define SOUND_CRI_DRV_H_MAJOR                        (1)
-#define SOUND_CRI_DRV_H_MINOR                        (3)
+#define SOUND_CRI_DRV_H_MAJOR                        (2)
+#define SOUND_CRI_DRV_H_MINOR                        (0)
 #define SOUND_CRI_DRV_H_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -23,7 +23,7 @@
 
 /* CRI header file */
 #include "cri_xpt.h"
-#include "cri_atom_rh850d1.h"
+#include "cri_atom_rh850u2a.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -48,19 +48,14 @@ void vd_g_SoundCriDrvInitialize(void);
 void vd_g_SoundCriDrvTimerInitialize(void);
 void vd_g_SoundCriDrvTimerFinalize(void);
 CriUint32 u4_g_SoundCriDrvTimerGetCount(void);
-void vd_g_SoundCriDrvDmacInitialize(const CriUint32 u4_a_READ_HEAD, const CriUint32 u4_a_READ_SIZE);
-void vd_g_SoundCriDrvDmacFinalize(void);
-void vd_g_SoundCriDrvDmacStart(const CriUint32 u4_a_DSA, const CriUint32 u4_a_DDA, const CriUint32 u4_a_DTC, const CriUint32 u4_a_DTCT,
-                               const CriUint32 u4_a_DRSA, const CriUint32 u4_a_DRDA, const CriUint32 u4_a_DRTC, const CriUint32 u4_a_DTCC, const CriUint32 u4_a_DTFR);
+void vd_g_SoundCriDrvDmacStart(const CriUint32 src_addr_tbl[CRISFRDRVDMACH_NUM], const CriSfrDrvDescriptorId descriptor_id_tbl[CRISFRDRVDMACH_NUM], CriUint32 transfer_count);
 void vd_g_SoundCriDrvDmacInterrupt(void);
-void vd_g_SoundCriDrvDmacIntr(const CriUint32 u4_a_DRSA, const CriUint32 u4_a_DRDA, const CriUint32 u4_a_DRTC);
+void vd_g_SoundCriDrvDmacIntr(const CriUint32 reload_src_addr_tbl[CRISFRDRVDMACH_NUM], const CriSfrDrvDescriptorId descriptor_id_tbl[CRISFRDRVDMACH_NUM], CriUint32 transfer_count);
 void vd_g_SoundCriDrvDmacStop(void);
-void vd_g_SoundCriDrvPcmpInitialize(const CriUint32 u4_a_TPWM, const CriUint32 u4_a_CKSEL, const CriUint32 u4_a_OFFS);
-void vd_g_SoundCriDrvPcmpFinalize(void);
-void vd_g_SoundCriDrvPcmpStart(const CriUint32 u4_a_AUSA, const CriUint32 u4_a_CTRL);
-void vd_g_SoundCriDrvPcmpStop(void);
-void vd_g_SoundCriDrvIntrDisable(void);
-void vd_g_SoundCriDrvIntrEnable(void);
+void vd_g_SoundCriDrvDmaDisableIntr(void);
+void vd_g_SoundCriDrvDmaEnableIntr(void);
+void vd_g_SoundCriDrvTaudStart(CriUint16 master_CDR, CriUint16 slave_CDR);
+void vd_g_SoundCriDrvTaudStop(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
