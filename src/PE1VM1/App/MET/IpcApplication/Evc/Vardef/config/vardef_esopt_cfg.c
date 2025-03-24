@@ -425,11 +425,7 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
         &u1_g_VdfEsoRx_BRKHLD,                  /* fp_u1_AVA_RX        */
         (U2)VDF_ESO_CH_BRKHLD,                  /* u2_eso_ch           */
         (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
-#if 0   /* BEV BSW provisionally */
-        (U2)OXCAN_PDU_RX_CAN_VSC1S95,           /* u2_msg_rx           */
-#else
-        (U2)U2_MAX,                             /* u2_msg_rx           */
-#endif
+        (U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,     /* u2_msg_rx           */
         (U2)0x0002U,                            /* u2_vom_act          */
         ((U2)700U / (U2)VDF_MAIN_TICK),         /* u2_rxc_peri         */
         {
