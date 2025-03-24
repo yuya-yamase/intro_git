@@ -23,7 +23,27 @@
 #define ML86294_SEQ_IDLE        (0U)
 #define ML86294_SEQ_CYC         (1U)
 #define ML86294_SEQ_DEV_RST     (2U)
-#define ML86294_SEQ_FRZ_INT     (3U)
+
+#define ML86294_PROC_NON            (0x00000000U)
+
+#define ML86294_PROC_NUM            (16U)
+#define ML86294_PROC_CYCCHK         (0x00000001U)
+#define ML86294_PROC_FRYZDAT_CYCCHK (0x00000002U)
+#define ML86294_PROC_IRQHPD_CYCCHK  (0x00000004U)
+#define ML86294_PROC_CAMAREA_SET    (0x00000008U)
+#define ML86294_PROC_MIPI_ON        (0x00000010U)
+#define ML86294_PROC_MIPI_OFF       (0x00000020U)
+#define ML86294_PROC_FRZCHG_ON      (0x00000040U)
+#define ML86294_PROC_FRZCHG_OFF     (0x00000080U)
+#define ML86294_PROC_CAMPATH_NORMAL (0x00000100U)
+#define ML86294_PROC_CAMPATH_BYPASS (0x00000200U)
+#define ML86294_PROC_MIPISYNCCHK    (0x00000400U)
+#define ML86294_PROC_FRZINT         (0x00000800U)
+#define ML86294_PROC_I2C_MUTE_ON    (0x00001000U)
+#define ML86294_PROC_I2C_MUTE_OFF   (0x00002000U)
+#define ML86294_PROC_NOAIS_MUTE_ON  (0x00004000U)
+#define ML86294_PROC_NOAIS_MUTE_OFF (0x00008000U)
+#define ML86294_PROC_RESERVE        (0xFFFF0000U)
 
 #define ML86294_BANKSET_WRINUM  (1U)
 
@@ -99,13 +119,14 @@
 
 #define ML86294_CAMAREA_SET_WRINUM    (24U)
 
-#define ML86294_MIPI_SET_WRINUM    (2U)
+#define ML86294_MIPI_SET_WRINUM_ON   (2U)
+#define ML86294_MIPI_SET_WRINUM_OFF  (2U)
 
 #define ML86294_FRZCHG_SET_ON_WRINUM    (10U)
 #define ML86294_FRZCHG_SET_OFF_WRINUM   (10U)
 
-#define ML86294_CAMPATH_SET_WRINUM    (4U)
-
+#define ML86294_CAMPATH_SET_NML_WRINUM  (4U)
+#define ML86294_CAMPATH_SET_BYP_WRINUM  (4U)
 
 #define ML86294_RCVVICSTATUS_STEP0    (0U)
 #define ML86294_RCVVICSTATUS_STEP1    (1U)
@@ -116,8 +137,10 @@
 #define ML86294_FRZCHG_ON_SET_WRINUM    (10U)
 #define ML86294_FRZCHG_OFF_SET_WRINUM   (10U)
 
-#define ML86294_I2CMUTE_SET_WRINUM    (2U)
-#define ML86294_NOAISMUTE_SET_WRINUM    (2U)
+#define ML86294_I2CMUTE_ON_SET_WRINUM   (2U)
+#define ML86294_I2CMUTE_OFF_SET_WRINUM  (2U)
+#define ML86294_NOAISMUTE_ON_SET_WRINUM (2U)
+#define ML86294_NOAISMUTE_OFF_SET_WRINUM (2U)
 
 #define ML86294_REGGET_STEP0            (0U)
 #define ML86294_REGGET_STEP1            (1U)
@@ -137,6 +160,24 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1 u1_s_pict_ml_state;                   /* ML86294 Sequence State */
+
+static U4 u4_s_pict_ml_proc_cond_met_flg;       /* ML86294 Process Condition Met Flag */
+static U4 u4_sp_pict_ml_proc_que[ML86294_PROC_NUM]; /* ML86294 Process Queue */
+static U1 u1_s_pict_ml_proc_que_cnt;            /* ML86294 Process Queue Counter */
+static U1 u1_s_pict_ml_proc_exe_cnt;            /* ML86294 Process Execution Counter */
+
+static U1 u1_s_pict_mlcamarearegset_flg;        /* u1_s_Pict_MlCamAreaRegSet() Excuted Flag */
+static U1 u1_s_pict_mlmipiregset_on_flg;        /* u1_s_Pict_MlMipiRegSetOn() Excuted Flag */
+static U1 u1_s_pict_mlmipiregset_off_flg;       /* u1_s_Pict_MlMipiRegSetOff() Excuted Flag */
+static U1 u1_s_pict_mlfrzchgregset_on_flg;      /* u1_s_Pict_MlFrzChgRegSetOn() Excuted Flag */
+static U1 u1_s_pict_mlfrzchgregset_off_flg;     /* u1_s_Pict_MlFrzChgRegSetOff() Excuted Flag */
+static U1 u1_s_pict_mlfrzcampathregset_nml_flg; /* u1_s_Pict_MlCamPathRegSetNml() Excuted Flag */
+static U1 u1_s_pict_mlfrzcampathregset_byp_flg; /* u1_s_Pict_MlCamPathRegSetByp() Excuted Flag */
+static U1 u1_s_pict_mlmipisynccheck_flg;        /* u1_s_Pict_MLMIPISyncCheck() Excuted Flag */
+static U1 u1_s_pict_mli2cmuteregset_on_flg;     /* u1_s_Pict_MlI2cMuteRegSetOn() Excuted Flag */
+static U1 u1_s_pict_mli2cmuteregset_off_flg;    /* u1_s_Pict_MlI2cMuteRegSetOff() Excuted Flag */
+static U1 u1_s_pict_mlnoaismuteregset_on_flg;   /* u1_s_Pict_MlNoAisMuteRegSetOn() Excuted Flag */
+static U1 u1_s_pict_mlnoaismuteregset_off_flg;  /* u1_s_Pict_MlNoAisMuteRegSetOn() Excuted Flag */
 
 static U2 u2_s_pict_ml_regstep;                 /* ML86294 Register Request Step */
 static U4 u4_s_pict_ml_i2c_ack_wait_time;       /* ML86294 I2C Request Ack Wait Timer */
@@ -169,6 +210,8 @@ static U1 u1_s_pict_mlirqhpdcyc_assert_drec_cnt; /* IRQ_HPD Cycle Assert Drec Co
 static U1 u1_s_pict_mlcamarea_set_sts;          /* Camera Area Set Function Status */
 
 static U1 u1_s_pict_mlrcvvicstatus_sts;         /* V-IC-STATUS1 Interrupt Function Status */
+static U1 u1_s_pict_mlrcvvicstatus_flg;         /* V-IC-STATUS1 Interrupt Flag */
+static U2 u2_s_pict_mlrcvvicstatus_timer;       /* V-IC-STATUS1 Interrupt Wait Timer */
 
 static U1 u1_s_pict_mlfrz_drec_cnt;             /* Freeze Detection Drec Counter */
 static U1 u1_s_pict_mlfail_drec_cnt;            /* Device Error Drec Counter */
@@ -181,8 +224,6 @@ static U1 u1_s_pict_mlroute_drec_cnt;           /* Route Change Drec Counter */
 static U1 u1_s_pict_mlmipircv_drec_cnt;         /* Receiver Error Drec Counter */
 static U1 u1_s_pict_mldevrst_sts;               /* Device Restart Status */
 
-static U2 u2_s_pict_mlregget_timer;             /* MIPI Synchronize Function Poling Timer */
-static U1 u1_s_pict_mlregget_flag;              /* MIPI Synchronize Function Start Flag */
 static U1 u1_s_pict_mlregget_sts;               /* MIPI Synchronize Function Status */
 static U1 u1_s_pict_mlregget_result;            /* MIPI Synchronize Read Result */
 
@@ -191,12 +232,25 @@ static U1 u1_s_pict_mldevrst_notif;             /* Device Restart Notification *
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1 u1_s_Pict_MLCycChk(void);
-static U1 u1_s_Pict_Ml86294_TimChk(const U2 u2_a_tim_cnt, const U2 u2_a_wait_tim);
-static U1 u1_s_Pict_MLFrzDatCycChk(void);
-static U1 u1_s_Pict_MLIrqHpdCycChk(void);
-static U1 u1_s_Pict_MlRcvVIcStatusNty(void);
-static U1 u1_s_Pict_MLMIPISyncCheck(void);
+static void vd_s_Pict_ProcessInit(void);
+static void vd_s_Pict_ProcessMng(const U4 u4_a_proc_que);
+static U1   u1_s_Pict_Ml86294_TimChk(const U2 u2_a_tim_cnt, const U2 u2_a_wait_tim);
+static U1   u1_s_Pict_MLCycChk(void);
+static U1   u1_s_Pict_MLFrzDatCycChk(void);
+static U1   u1_s_Pict_MLIrqHpdCycChk(void);
+static U1   u1_s_Pict_MlCamAreaRegSet(void);
+static U1   u1_s_Pict_MlMipiRegSetOn(void);
+static U1   u1_s_Pict_MlMipiRegSetOff(void);
+static U1   u1_s_Pict_MlFrzChgRegSetOn(void);
+static U1   u1_s_Pict_MlFrzChgRegSetOff(void);
+static U1   u1_s_Pict_MlCamPathRegSetNml(void);
+static U1   u1_s_Pict_MlCamPathRegSetByp(void);
+static U1   u1_s_Pict_MLMIPISyncCheck(void);
+static U1   u1_s_Pict_MlRcvVIcStatusNty(void);
+static U1   u1_s_Pict_MlI2cMuteRegSetOn(void);
+static U1   u1_s_Pict_MlI2cMuteRegSetOff(void);
+static U1   u1_s_Pict_MlNoAisMuteRegSetOn(void);
+static U1   u1_s_Pict_MlNoAisMuteRegSetOff(void);
 static void vd_s_Pict_MLDevRst(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -15921,6 +15975,21 @@ void    vd_g_Pict_Ml86294_Init(void)
 {
     u1_s_pict_ml_state = (U1)ML86294_SEQ_IDLE;
 
+    vd_s_Pict_ProcessInit();
+
+    u1_s_pict_mlcamarearegset_flg = (U1)FALSE;
+    u1_s_pict_mlmipiregset_on_flg = (U1)FALSE;
+    u1_s_pict_mlmipiregset_off_flg = (U1)FALSE;
+    u1_s_pict_mlfrzchgregset_on_flg = (U1)FALSE;
+    u1_s_pict_mlfrzchgregset_off_flg = (U1)FALSE;
+    u1_s_pict_mlfrzcampathregset_nml_flg = (U1)FALSE;
+    u1_s_pict_mlfrzcampathregset_byp_flg = (U1)FALSE;
+    u1_s_pict_mlmipisynccheck_flg = (U1)FALSE;
+    u1_s_pict_mli2cmuteregset_on_flg = (U1)FALSE;
+    u1_s_pict_mli2cmuteregset_off_flg = (U1)FALSE;
+    u1_s_pict_mlnoaismuteregset_on_flg = (U1)FALSE;
+    u1_s_pict_mlnoaismuteregset_off_flg = (U1)FALSE;
+
     u2_s_pict_ml_regstep = (U2)0U;
     u4_s_pict_ml_i2c_ack_wait_time = (U4)0U;
     u2_s_pict_ml_reg_btwn_time = (U2)0xFFFFU;
@@ -15951,6 +16020,8 @@ void    vd_g_Pict_Ml86294_Init(void)
     u1_s_pict_mlcamarea_set_sts = (U1)ML86294_CAMAREA_SET_STEP0;
 
     u1_s_pict_mlrcvvicstatus_sts = (U1)ML86294_RCVVICSTATUS_STEP0;
+    u1_s_pict_mlrcvvicstatus_flg = (U1)FALSE;
+    u2_s_pict_mlrcvvicstatus_timer = (U2)0U;
 
     u1_s_pict_mlfrz_drec_cnt = (U1)0U;
     u1_s_pict_mlfail_drec_cnt = (U1)0U;
@@ -15962,8 +16033,6 @@ void    vd_g_Pict_Ml86294_Init(void)
     u1_s_pict_mlroute_drec_cnt = (U1)0U;
     u1_s_pict_mlmipircv_drec_cnt = (U1)0U;
     u1_s_pict_mldevrst_sts = (U1)ML86294_DEV_RST_STEP0;
-    u2_s_pict_mlregget_timer = (U2)0U;
-    u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_STOP;
     u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP0;
     u1_s_pict_mlregget_result = (U1)PICT_ML_MIPI_SYNC_OFF;
     u1_s_pict_mldevrst_notif = (U1)PICT_ML_DEVRST_NON;
@@ -16028,6 +16097,24 @@ void    vd_g_Pict_Ml86294_Init(void)
 }
 
 /*===================================================================================================================================*/
+/*  void    vd_s_Pict_ProcessInit(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Pict_ProcessInit(void)
+{
+    U1 u1_t_cnt;
+
+    u4_s_pict_ml_proc_cond_met_flg = (U4)ML86294_PROC_NON;
+    for(u1_t_cnt =0; u1_t_cnt < (U1)ML86294_PROC_NUM; u1_t_cnt++){
+        u4_sp_pict_ml_proc_que[u1_t_cnt] = (U4)0U;
+    }
+    u1_s_pict_ml_proc_que_cnt = (U1)0;
+    u1_s_pict_ml_proc_exe_cnt = (U1)0;
+}
+
+/*===================================================================================================================================*/
 /*  void    vd_g_Pict_Ml86294_Routine(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -16035,9 +16122,16 @@ void    vd_g_Pict_Ml86294_Init(void)
 /*===================================================================================================================================*/
 void    vd_g_Pict_Ml86294_Routine(void)
 {
-    U1      u1_t_ml_pwron_sts;
+    static const U2 ML86294_FRZDEC_INT_WAIT = (U2)(40U / ML86294_TASK_TIME);        /* t5 min:40ms */
+    static const U2 ML86294_CYCCHK_POLING = (U2)(100U / ML86294_TASK_TIME);         /* t20 min:100ms */
+    static const U2 ML86294_FRZDAT_CYCCHK_POLING = (U2)(20U / ML86294_TASK_TIME);   /* t21 min:20ms */
+    static const U2 ML86294_IRQHPC_CYCCHK_POLING = (U2)(20U / ML86294_TASK_TIME);   /* t22 min:20ms */
+
+    U1      u1_t_func_sts;                                          /* Function Status */
     U1      u1_t_dio_read_result;                                   /* I/O Port Read Result */
-    U1      u1_t_cycchk_func_sts;
+    U1      u1_t_time_chk_flg;                                      /* Poling Time Check Flag */
+    U4      u4_t_cond_met_flg_tmp;
+    U4      u4_t_proc_que_tmp;
 
     switch (u1_s_pict_ml_state){
         case ML86294_SEQ_IDLE:                                             /* IDLE */
@@ -16080,58 +16174,241 @@ void    vd_g_Pict_Ml86294_Routine(void)
                 u4_s_pict_ml_i2c_ack_wait_time++;
             }
 
-            /* Cyc Check Start */
-            u1_t_cycchk_func_sts = (U1)TRUE;
-#if 0   /* 暫定 I2Cアクセス競合が発生するためコメントアウト */
+            /* Function incomplete */
+            u1_t_func_sts = (U1)FALSE;
+
             /* Freeze Detection Intruput Check */
             if(u1_s_pict_ml_frzint_chk_flg == (U1)TRUE){
                 u1_t_dio_read_result = (U1)u1_PICT_ML_GET_V_IC_STATUS1();
                 if((u1_t_dio_read_result == (U1)PICT_ML_IO_STS_HIGH)
                 && (u1_s_pict_ml_pre_v_ic_sts1_sts == (U1)PICT_ML_IO_STS_LOW)){     /* V-IC-STATUS1 = L -> H */
-                    /* Freeze Detection Intruput */
-                    u1_s_pict_ml_state = (U1)ML86294_SEQ_FRZ_INT;
-                    /* Cyc Check Stop */
-                    u1_t_cycchk_func_sts = (U1)FALSE;
+                    u1_s_pict_mlrcvvicstatus_flg = (U1)TRUE;
                 }
                 /* Previous State Update */
                 u1_s_pict_ml_pre_v_ic_sts1_sts = u1_t_dio_read_result;
             }
 
-            /* ML86294 Cyc Check */
-            if(u1_t_cycchk_func_sts == (U1)TRUE){
-                u1_t_cycchk_func_sts = (U1)u1_s_Pict_MLCycChk();
+            /* Freeze Detection Intruput Wait Time Check */
+            if(u1_s_pict_mlrcvvicstatus_flg == (U1)TRUE){
+                u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_mlrcvvicstatus_timer, ML86294_FRZDEC_INT_WAIT);
+                if(u1_t_time_chk_flg == (U1)TRUE){
+                    vd_s_Pict_ProcessMng((U4)ML86294_PROC_FRZINT);
+                }
+                else{
+                    u2_s_pict_mlrcvvicstatus_timer++;
+                }
+            }
+            else{
+                u2_s_pict_mlrcvvicstatus_timer = (U1)0;
             }
 
-            /* Freeze Cycle Cyc Check */
-            if(u1_t_cycchk_func_sts == (U1)TRUE){
-                u1_t_cycchk_func_sts = (U1)u1_s_Pict_MLFrzDatCycChk();
+            /* ML86294 Cycle Check Poling Check */
+            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_cycchk_timer, ML86294_CYCCHK_POLING);
+            if(u1_t_time_chk_flg == (U1)TRUE){
+                vd_s_Pict_ProcessMng((U4)ML86294_PROC_CYCCHK);
+            }
+            else{
+                u2_s_pict_ml_cycchk_timer++;
             }
 
-            /* IRQ_HPD Cycle Cyc Check */
-            if(u1_t_cycchk_func_sts == (U1)TRUE){
-                u1_t_cycchk_func_sts = (U1)u1_s_Pict_MLIrqHpdCycChk();
+            /* Freeze Cycle Check Poling Check */
+            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_frzdat_cycchk_timer, ML86294_FRZDAT_CYCCHK_POLING);
+            if(u1_t_time_chk_flg == (U1)TRUE){
+                vd_s_Pict_ProcessMng((U4)ML86294_PROC_FRYZDAT_CYCCHK);
             }
-#endif
-            /* 暫定 カメラ同期検知 */
-            if((u1_s_pict_mlregget_flag == (U1)ML86294_REGGET_FLAG_START)
-            && (u1_t_cycchk_func_sts == (U1)TRUE)){
-                u1_t_cycchk_func_sts = u1_s_Pict_MLMIPISyncCheck();
+            else{
+                u2_s_pict_ml_frzdat_cycchk_timer++;
+            }
+
+            /* IRQ_HPD Cycle Check Poling Check */
+            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_irqhpd_cycchk_timer, ML86294_IRQHPC_CYCCHK_POLING);
+            if(u1_t_time_chk_flg == (U1)TRUE){
+                vd_s_Pict_ProcessMng((U4)ML86294_PROC_IRQHPD_CYCCHK);
+            }
+            else{
+                u2_s_pict_ml_irqhpd_cycchk_timer++;
+            }
+
+            /* Process Condition Met Flag Fail Check */
+            u4_t_cond_met_flg_tmp = u4_s_pict_ml_proc_cond_met_flg & (U4)ML86294_PROC_RESERVE;
+
+            if((u1_s_pict_ml_proc_exe_cnt < (U1)ML86294_PROC_NUM)
+            && (u4_s_pict_ml_proc_cond_met_flg != (U4)ML86294_PROC_NON)
+            && (u4_t_cond_met_flg_tmp == (U4)0)){
+                switch (u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt]){
+                    case ML86294_PROC_CYCCHK:                                   /* ML86294 Cycle Check */
+                        u1_t_func_sts = (U1)u1_s_Pict_MLCycChk();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Poling Timer Clear */
+                            u2_s_pict_ml_cycchk_timer = (U1)0U;
+                        }
+                        break;
+                    case ML86294_PROC_FRYZDAT_CYCCHK:                           /* Freeze Cycle Check */
+                        u1_t_func_sts = (U1)u1_s_Pict_MLFrzDatCycChk();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Poling Timer Clear */
+                            u2_s_pict_ml_frzdat_cycchk_timer = (U1)0U;
+                        }
+                        break;
+                    case ML86294_PROC_IRQHPD_CYCCHK:                            /* IRQ_HPD Cycle Check */
+                        u1_t_func_sts = (U1)u1_s_Pict_MLIrqHpdCycChk();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Poling Timer Clear */
+                            u2_s_pict_ml_irqhpd_cycchk_timer = (U1)0U;
+                        }
+                        break;
+                    case ML86294_PROC_CAMAREA_SET:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlCamAreaRegSet();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlcamarearegset_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_MIPI_ON:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlMipiRegSetOn();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlmipiregset_on_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_MIPI_OFF:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlMipiRegSetOff();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlmipiregset_off_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_FRZCHG_ON:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlFrzChgRegSetOn();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlfrzchgregset_on_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_FRZCHG_OFF:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlFrzChgRegSetOff();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlfrzchgregset_off_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_CAMPATH_NORMAL:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlCamPathRegSetNml();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlfrzcampathregset_nml_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_CAMPATH_BYPASS:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlCamPathRegSetByp();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlfrzcampathregset_byp_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_MIPISYNCCHK:
+                        u1_t_func_sts = (U1)u1_s_Pict_MLMIPISyncCheck();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlmipisynccheck_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_FRZINT:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlRcvVIcStatusNty();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* V-IC-STATUS1 Interrupt Flag Clear */
+                            u1_s_pict_mlrcvvicstatus_flg = (U1)FALSE;
+                            /* V-IC-STATUS1 Interrupt Wait Timer Clear */
+                            u2_s_pict_mlrcvvicstatus_timer = (U2)0U;
+                        }
+                        break;
+                    case ML86294_PROC_I2C_MUTE_ON:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlI2cMuteRegSetOn();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mli2cmuteregset_on_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_I2C_MUTE_OFF:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlI2cMuteRegSetOff();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mli2cmuteregset_off_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_NOAIS_MUTE_ON:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlNoAisMuteRegSetOn();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlnoaismuteregset_on_flg = (U1)TRUE;
+                        }
+                        break;
+                    case ML86294_PROC_NOAIS_MUTE_OFF:
+                        u1_t_func_sts = (U1)u1_s_Pict_MlNoAisMuteRegSetOff();
+                        if(u1_t_func_sts == (U1)TRUE){
+                            /* Excuted Flag ON */
+                            u1_s_pict_mlnoaismuteregset_off_flg = (U1)TRUE;
+                        }
+                        break;
+                    default:
+                        vd_s_Pict_ProcessInit();
+                        break;
+                }
+
+                if(u1_t_func_sts == (U1)TRUE){
+                    /* Process Condition Met Flag Clear */
+                    u4_t_proc_que_tmp = u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt];
+                    u4_s_pict_ml_proc_cond_met_flg &= ~u4_t_proc_que_tmp;
+                    /* Process Queue Clear */
+                    u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt] = (U4)0U;
+                    /* Counter Update */
+                    if(u1_s_pict_ml_proc_exe_cnt == (U1)((U1)ML86294_PROC_NUM - (U1)1U)){
+                        u1_s_pict_ml_proc_exe_cnt = (U1)0;
+                    }
+                    else{
+                        u1_s_pict_ml_proc_exe_cnt++;
+                    }
+                }
+            }
+            else{
+                vd_s_Pict_ProcessInit();
             }
             break;
         case ML86294_SEQ_DEV_RST:                                       /* DEV_RST */
             vd_s_Pict_MLDevRst();
             break;
-        case ML86294_SEQ_FRZ_INT:                                       /* FRZ_INT */
-            u1_t_cycchk_func_sts = (U1)u1_s_Pict_MlRcvVIcStatusNty();
-            if(u1_t_cycchk_func_sts == (U1)TRUE){
-                /* Cyc Check */
-                u1_s_pict_ml_state = (U1)ML86294_SEQ_CYC;
-            }
-            break;
         default:                                                        /* FAIL */
             /* State Reset */
             u1_s_pict_ml_state = (U1)ML86294_SEQ_IDLE;
             break;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  U1    vd_s_Pict_ProcessMng(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u4_a_proc_que                                                                                                    */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Pict_ProcessMng(const U4 u4_a_proc_que)
+{
+    U4  u4_t_que_chk;
+
+    u4_t_que_chk = u4_s_pict_ml_proc_cond_met_flg & u4_a_proc_que;
+    if(u4_t_que_chk == (U4)0){
+        u4_s_pict_ml_proc_cond_met_flg |= u4_a_proc_que;
+        if(u1_s_pict_ml_proc_que_cnt < (U1)ML86294_PROC_NUM){
+            u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_que_cnt] = u4_a_proc_que;
+            if(u1_s_pict_ml_proc_que_cnt == (U1)((U1)ML86294_PROC_NUM - (U1)1U)){
+                u1_s_pict_ml_proc_que_cnt = (U1)0;
+            }
+            else{
+                u1_s_pict_ml_proc_que_cnt++;
+            }
+        }
+        else{
+            vd_s_Pict_ProcessInit();
+        }
     }
 }
 
@@ -16159,12 +16436,9 @@ static U1 u1_s_Pict_Ml86294_TimChk(const U2 u2_a_tim_cnt, const U2 u2_a_wait_tim
 /*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-static U1    u1_s_Pict_MLCycChk(void)   /* 暫定 100ms定期 */
+static U1    u1_s_Pict_MLCycChk(void)
 {   /* 暫定　I/Fメモ 6.10.1 定期処理 */
-    static const U2 ML86294_CYCCHK_POLING = (U2)(500U / ML86294_TASK_TIME);   /* t20 min:100ms */
-
     U1      u1_t_ret;                                               /* Function Completion Status  */
-    U1      u1_t_time_chk_flg;
     U1      u1_t_reg_req_sts;
     U1      u1_t_reg_read_result;                                   /* Register Read Result */
     U1      u1_t_dio_read_result;                                   /* I/O Port Read Result */
@@ -16176,23 +16450,6 @@ static U1    u1_s_Pict_MLCycChk(void)   /* 暫定 100ms定期 */
 
     switch (u1_s_pict_mlcycchk_sts){
         case ML86294_CYCCHK_STEP0:                                       /* STEP0 */
-            /* Poling Check */
-            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_cycchk_timer, ML86294_CYCCHK_POLING);
-
-            if(u1_t_time_chk_flg == (U1)TRUE){
-                /* Poling Timer Clear */
-                u2_s_pict_ml_cycchk_timer = (U2)0;
-
-                /* Next Process */
-                u1_s_pict_mlcycchk_sts = (U1)ML86294_CYCCHK_STEP1;
-            }
-            else{
-                /* Function Completion */
-                u1_t_ret = (U1)TRUE;
-
-                u2_s_pict_ml_cycchk_timer++;
-            }
-            break;
         case ML86294_CYCCHK_STEP1:                                       /* STEP1 */
         /* ----------6.10.1 定期処理 デバイス異常検知開始---------- */
             /* Set Register */
@@ -16225,7 +16482,7 @@ static U1    u1_s_Pict_MLCycChk(void)   /* 暫定 100ms定期 */
                 }
 #if 0           /* 暫定 符号なし変数と0を比較する処理となり、ビルドエラーとなるためコメントアウト */
                 if(u1_s_pict_mlcyc_dev_reset_cnt < (U1)PICT_ML_MLFAILCYCCHK_DEV_RESET_CNT_MAX){ /* Device Reset Counter < 0 */
-                    vd_PICT_MLFAILCYCCHK_V_IC_RST_L();                                  /* V-IC-RST = L *//* 暫定 ポート設定I/F展開後に見直し */
+                    vd_PICT_MLFAILCYCCHK_V_IC_RST_L();                                  /* V-IC-RST = L */
                 }
                 else {
 #endif
@@ -16351,12 +16608,9 @@ static U1    u1_s_Pict_MLCycChk(void)   /* 暫定 100ms定期 */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
+static U1    u1_s_Pict_MLFrzDatCycChk(void)
 {   /* 暫定　I/Fメモ 6.10.2 固着検知ビット監視 */
-    static const U2 ML86294_FRZDAT_CYCCHK_POLING = (U2)(20U / ML86294_TASK_TIME);   /* t21 min:20ms */
-
     U1      u1_t_ret;                                               /* Function Completion Status  */
-    U1      u1_t_time_chk_flg;
     U1      u1_t_reg_req_sts;
     U1      u1_t_reg_read_result;                                   /* Register Read Result */
     U1      u1_t_dio_read_result;                                   /* I/O Port Read Result */
@@ -16373,23 +16627,6 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
 
     switch (u1_s_pict_mlfrzdatcycchk_sts){
         case ML86294_FRZDAT_CYCCHK_STEP0:                                       /* STEP0 */
-            /* Poling Check */
-            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_frzdat_cycchk_timer, ML86294_FRZDAT_CYCCHK_POLING);
-
-            if(u1_t_time_chk_flg == (U1)TRUE){
-                /* Poling Timer Clear */
-                u2_s_pict_ml_frzdat_cycchk_timer = (U2)0;
-
-                /* Next Process */
-                u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP1;
-            }
-            else{
-                /* Function Completion */
-                u1_t_ret = (U1)TRUE;
-
-                u2_s_pict_ml_frzdat_cycchk_timer++;
-            }
-            break;
         case ML86294_FRZDAT_CYCCHK_STEP1:                                       /* STEP1 */
             u1_s_pict_mlfrzdatcyc_gpio0_sts = u1_PICT_MLFLZDATCYCCHK_GET_DISP_REQ_GPIO0(); /* Get DISP-REQ-GPIO0 Status */
             u1_t_cam_sts = u1_PICT_MLFLZDATCYCCHK_GET_CAM_STS();                        /* Get Camera Mode Status */
@@ -16469,7 +16706,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
             break;
         case ML86294_FRZDAT_CYCCHK_STEP6:                                       /* STEP6 */
             /* Freeze Check ON */
-            u1_t_func_result = u1_g_Pict_MlFrzChgSet((U1)PICT_ML_FRZ_ON);
+            u1_t_func_result = u1_s_Pict_MlFrzChgRegSetOn();
             if(u1_t_func_result == (U1)TRUE){
                 /* Next Process */
                 u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP7;
@@ -16547,9 +16784,10 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
                 /* Next Process */
                 u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP13;
             }
+            break;
         case ML86294_FRZDAT_CYCCHK_STEP12:                                      /* STEP12 */
             /* Freeze Check ON */
-            u1_t_func_result = u1_g_Pict_MlFrzChgSet((U1)PICT_ML_FRZ_OFF);
+            u1_t_func_result = u1_s_Pict_MlFrzChgRegSetOff();
             if(u1_t_func_result == (U1)TRUE){
                 /* Next Process */
                 u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP13;
@@ -16564,6 +16802,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
                 /* Next Process */
                 u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP18;
             }
+            break;
         case ML86294_FRZDAT_CYCCHK_STEP14:                                      /* STEP14 */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_BANKSET_WRINUM,
@@ -16600,7 +16839,7 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
             break;
         case ML86294_FRZDAT_CYCCHK_STEP17:                                      /* STEP17 */
             /* Route Change SiP */
-            u1_t_func_result = u1_g_Pict_MlCamPathSet((U1)PICT_ML_CAMPATH_NORMAL);
+            u1_t_func_result = u1_s_Pict_MlCamPathRegSetNml();
             if(u1_t_func_result == (U1)TRUE){
                 /* Next Process */
                 u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP18;
@@ -16631,10 +16870,8 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)   /* 暫定 20ms定期 */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-static U1    u1_s_Pict_MLIrqHpdCycChk(void)   /* 暫定 20ms定期 */
+static U1    u1_s_Pict_MLIrqHpdCycChk(void)
 {   /* 暫定　I/Fメモ 6.10.3 IRQ_HPDの監視 */
-    static const U2 ML86294_IRQHPC_CYCCHK_POLING = (U2)(50U / ML86294_TASK_TIME);   /* t22 min:20ms */
-
     static const ST_REG_WRI_REQ ML86294_IRQHPD_DPCD_SET1[ML86294_IRQHPD_DPCD_SET1_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         3,         0}
@@ -16680,7 +16917,6 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)   /* 暫定 20ms定期 */
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */
-    U1      u1_t_time_chk_flg;
     U1      u1_t_reg_req_sts;
     U1      u1_t_reg_read_result;                                   /* Register Read Result */
     U1      u1_t_dio_read_result;                                   /* I/O Port Read Result */
@@ -16695,23 +16931,6 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)   /* 暫定 20ms定期 */
 
     switch (u1_s_pict_mlirqhpdcycchk_sts){
         case ML86294_IRQHPD_CYCCHK_STEP0:                                       /* STEP0 */
-            /* Poling Check */
-            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_ml_irqhpd_cycchk_timer, ML86294_IRQHPC_CYCCHK_POLING);
-
-            if(u1_t_time_chk_flg == (U1)TRUE){
-                /* Poling Timer Clear */
-                u2_s_pict_ml_irqhpd_cycchk_timer = (U2)0;
-
-                /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP1;
-            }
-            else{
-                /* Function Completion */
-                u1_t_ret = (U1)TRUE;
-
-                u2_s_pict_ml_irqhpd_cycchk_timer++;
-            }
-            break;
         case ML86294_IRQHPD_CYCCHK_STEP1:                                       /* STEP1 */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_BANKSET_WRINUM,
@@ -16872,7 +17091,7 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)   /* 暫定 20ms定期 */
             break;
         default:                                                                /* FAIL */
             /* Process Reset */
-            u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP0;
+            u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP0;
             break;
     }
 
@@ -16880,12 +17099,12 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)   /* 暫定 20ms定期 */
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_g_Pict_MlCamAreaSet(void)                                                                                               */
+/*  U1    u1_s_Pict_MlCamAreaRegSet(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_g_Pict_MlCamAreaSet(void)
+static U1   u1_s_Pict_MlCamAreaRegSet(void)
 {   /* 暫定　I/Fメモ 6.5.1.2 起動後のカメラ映像表示に関する設定フロー */
     static const ST_REG_WRI_REQ ML86294_CAMAREA_SET[ML86294_CAMAREA_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
@@ -16916,6 +17135,7 @@ U1    u1_g_Pict_MlCamAreaSet(void)
     };
 
     static const U1  u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP[PICT_ML_CAN_CAM_SIZE_MAX] = { /* 暫定 カメラサイズI/F展開後に見直す */
+        0xFFU,                              /* NONE *//* Not Use */
         ML86294_CAMAREA_SET_STEP1,          /* 1920x1080 */
         ML86294_CAMAREA_SET_STEP2,          /* 1920x954 */
         ML86294_CAMAREA_SET_STEP3,          /* 1920x900 */
@@ -16936,15 +17156,11 @@ U1    u1_g_Pict_MlCamAreaSet(void)
 
     switch (u1_s_pict_mlcamarea_set_sts){
         case ML86294_CAMAREA_SET_STEP0:                                       /* STEP0 */
-            /* Init Camera Kind */
-            u1_t_camarea_camkind = (U1)PICT_ML_GVIFIF_NONE;                         /* 暫定 提供元I/Fで不定値提供されないなら不要 */
-            u1_t_camarea_camkind = vd_PICT_MLCAMAREASET_GET_CAMAREA_KIND();         /* 暫定 提供元I/F作成後に置き換え */
-
+            u1_t_camarea_camkind = vd_PICT_MLCAMAREASET_GET_CAMAREA_KIND();
             if(u1_t_camarea_camkind == (U1)PICT_ML_GVIFIF_ADC_ECU){                  /* Camera Kind:ADC_ECU */
-                /* Init Camera Size */
-                u1_t_camarea_camsize = (U1)PICT_ML_CAN_CAM_SIZE_NONE;           /* 暫定 提供元I/Fで不定値提供されないなら不要 */
-                u1_t_camarea_camsize = vd_PICT_MLCAMAREASET_GET_CAMAREA_SIZE(); /* 暫定 提供元I/F作成後に置き換え */
-                if(u1_t_camarea_camsize <= (U1)PICT_ML_CAN_CAM_SIZE_MAX){       /* 暫定 定義はカメラ制御仕様対応後に確定 */
+                u1_t_camarea_camsize = vd_PICT_MLCAMAREASET_GET_CAMAREA_SIZE(); 
+                if((u1_t_camarea_camsize <= (U1)PICT_ML_CAN_CAM_SIZE_MAX)
+                && (u1_t_camarea_camsize != (U1)PICT_ML_CAN_CAM_SIZE_NONE)){
                     /* Next Process */
                     u1_s_pict_mlcamarea_set_sts = (U1)u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP[u1_t_camarea_camsize];
                 }
@@ -16959,7 +17175,7 @@ U1    u1_g_Pict_MlCamAreaSet(void)
                     /* Next Process */
                     u1_s_pict_mlcamarea_set_sts = ML86294_CAMAREA_SET_STEP10;
             }
-            else{                                                                   /* Camera Kind:Other */
+            else{                                                                    /* Camera Kind:Other */
                 /* Function Completion */
                 u1_t_ret = (U1)TRUE;
                 /* Process Reset */
@@ -17096,14 +17312,46 @@ U1    u1_g_Pict_MlCamAreaSet(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_g_Pict_MlMipiSet(const U1 u1_a_req_sts)                                                                                 */
+/*  U1    u1_g_Pict_MlCamAreaSet(void)                                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_req_sts  :  Request Status(ON/OFF)                                                                          */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         0 (Process Ready) / 1 (Processing) / 2 (Process Completed)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlCamAreaSet(void)
+{
+    U1      u1_t_ret;                                                       /* Request Status */
+
+    if(u1_s_pict_mlcamarearegset_flg == (U1)TRUE){
+        u1_t_ret = (U1)PICT_ML_CAMAREASET_COMPLETED;                        /* Process Completed */
+        u1_s_pict_mlcamarearegset_flg = (U1)FALSE;                          /* Flag Clear */
+    }
+    else{
+        if(u1_s_pict_ml_proc_exe_cnt < (U1)ML86294_PROC_NUM){               /* Array Bounds Check */
+            if(u4_sp_pict_ml_proc_que[u1_s_pict_ml_proc_exe_cnt] == (U4)ML86294_PROC_CAMAREA_SET){  /* ML86294_PROC_CAMAREA_SET Processing */
+                u1_t_ret = (U1)PICT_ML_CAMAREASET_PROCESSING;               /* Processing */
+            }
+            else{
+                vd_s_Pict_ProcessMng((U4)ML86294_PROC_CAMAREA_SET);
+                u1_t_ret = (U1)PICT_ML_CAMAREASET_READY;                    /* Process Ready */
+            }
+        }
+        else{
+            u1_t_ret = (U1)PICT_ML_CAMAREASET_READY;                        /* Process Ready */
+        }
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MlMipiRegSetOn(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_g_Pict_MlMipiSet(const U1 u1_a_req_sts)
-{   /* 暫定　I/Fメモ 6.6.1/6.6.2 Sipへのカメラ映像出力ON/OFF */
-    static const ST_REG_WRI_REQ ML86294_MIPI_SET[ML86294_MIPI_SET_WRINUM] = {
+static U1   u1_s_Pict_MlMipiRegSetOn(void)
+{   /* 暫定　I/Fメモ 6.6.1 Sipへのカメラ映像出力ON */
+    static const ST_REG_WRI_REQ ML86294_MIPI_SET_ON[ML86294_MIPI_SET_WRINUM_ON] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
         {        0,         1,         0}
@@ -17114,38 +17362,101 @@ U1    u1_g_Pict_MlMipiSet(const U1 u1_a_req_sts)
 
     u1_t_ret = (U1)FALSE;
 
-    if(u1_a_req_sts == (U1)PICT_ML_MIPI_ON){                                    /* ON Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_MIPI_SET_WRINUM,
-                                                      ML86294_MIPI_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                      st_sp_ML86294_MlMIPIREG_ON_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
-    }
-    else {                                                                      /* OFF Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_MIPI_SET_WRINUM,
-                                                      ML86294_MIPI_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                      st_sp_ML86294_MlMIPIREG_OFF_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_MIPI_SET_WRINUM_ON,
+                                                    ML86294_MIPI_SET_ON, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlMIPIREG_ON_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
     }
 
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_g_Pict_MlFrzChgSet(const U1 u1_a_req_sts)                                                                               */
+/*  U1    u1_g_Pict_MlMipiSetOn(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlMipiSetOn(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mlmipiregset_on_flg == (U1)TRUE){                      /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mlmipiregset_on_flg = (U1)FALSE;                      /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_MIPI_ON);
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MlMipiRegSetOff(void)                                                                                            */
+/* --------------------------------------------------------------- ----------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+static U1   u1_s_Pict_MlMipiRegSetOff(void)
+{   /* 暫定　I/Fメモ 6.6.2 Sipへのカメラ映像出力OFF */
+    static const ST_REG_WRI_REQ ML86294_MIPI_SET_OFF[ML86294_MIPI_SET_WRINUM_OFF] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},  /* Bank0 */
+        {        0,         1,         0}
+    };
+
+    U1      u1_t_ret;                                               /* Function Completion Status  */
+    U1      u1_t_reg_req_sts;
+
+    u1_t_ret = (U1)FALSE;
+
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_MIPI_SET_WRINUM_OFF,
+                                                    ML86294_MIPI_SET_OFF, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlMIPIREG_OFF_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_Pict_MlMipiSetOff(void)                                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlMipiSetOff(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mlmipiregset_off_flg == (U1)TRUE){                     /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mlmipiregset_off_flg = (U1)FALSE;                     /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_MIPI_OFF);
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MlFrzChgRegSetOn(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      u1_a_req_sts  :  Request Status(ON/OFF)                                                                          */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_g_Pict_MlFrzChgSet(const U1 u1_a_req_sts)
-{   /* 暫定　I/Fメモ 6.7.1.1/6.7.2.1 固着検知の有効化/無効化設定 */
+static U1   u1_s_Pict_MlFrzChgRegSetOn(void)
+{   /* 暫定　I/Fメモ 6.7.1.1 固着検知の有効化設定 */
     static const ST_REG_WRI_REQ ML86294_FRZCHG_ON_SET[ML86294_FRZCHG_ON_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
@@ -17160,6 +17471,59 @@ U1    u1_g_Pict_MlFrzChgSet(const U1 u1_a_req_sts)
         {       12,         2,         0}
     };
 
+    U1      u1_t_ret;                                               /* Function Completion Status  */
+    U1      u1_t_reg_req_sts;
+
+    u1_t_ret = (U1)FALSE;
+
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_FRZCHG_ON_SET_WRINUM,
+                                                    ML86294_FRZCHG_ON_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlFRZCHGREG_ON_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* V-IC-STATUS Interrupt Enable */
+        u1_s_pict_ml_frzint_chk_flg = (U1)TRUE;
+
+        /* Drec Count Clear */
+        u1_s_pict_mlfrz_drec_cnt = (U1)0;
+
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_Pict_MlFrzChgSetOn(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlFrzChgSetOn(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mlfrzchgregset_on_flg == (U1)TRUE){                     /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mlfrzchgregset_on_flg = (U1)FALSE;                     /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_FRZCHG_ON);
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MlFrzChgRegSetOff(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_req_sts  :  Request Status(ON/OFF)                                                                          */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+static U1   u1_s_Pict_MlFrzChgRegSetOff(void)
+{   /* 暫定　I/Fメモ 6.7.2.1 固着検知の無効化設定 */
     static const ST_REG_WRI_REQ ML86294_FRZCHG_OFF_SET[ML86294_FRZCHG_OFF_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
@@ -17179,48 +17543,52 @@ U1    u1_g_Pict_MlFrzChgSet(const U1 u1_a_req_sts)
 
     u1_t_ret = (U1)FALSE;
 
-    if(u1_a_req_sts == (U1)PICT_ML_FRZ_ON){                                     /* ON Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_FRZCHG_ON_SET_WRINUM,
-                                                        ML86294_FRZCHG_ON_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                        st_sp_ML86294_MlFRZCHGREG_ON_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* V-IC-STATUS Interrupt Enable */
-            u1_s_pict_ml_frzint_chk_flg = (U1)TRUE;
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_FRZCHG_OFF_SET_WRINUM,
+                                                    ML86294_FRZCHG_OFF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlFRZCHGREG_OFF_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* V-IC-STATUS Interrupt Disable */
+        u1_s_pict_ml_frzint_chk_flg = (U1)FALSE;
 
-            /* Drec Count Clear */
-            u1_s_pict_mlfrz_drec_cnt = (U1)0;
-
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
-    }
-    else {                                                                      /* OFF Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_FRZCHG_OFF_SET_WRINUM,
-                                                        ML86294_FRZCHG_OFF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                        st_sp_ML86294_MlFRZCHGREG_OFF_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* V-IC-STATUS Interrupt Disable */
-            u1_s_pict_ml_frzint_chk_flg = (U1)FALSE;
-
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
     }
 
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_g_Pict_MlCamPathSet(const U1 u1_a_req_path)                                                                             */
+/*  U1    u1_g_Pict_MlFrzChgSetOff(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_req_path  :  Request Camera Path(Normal/Bypass)                                                             */
+/*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_g_Pict_MlCamPathSet(const U1 u1_a_req_path)
-{   /* 暫定　I/Fメモ 6.7.1.2/6.7.2.2 カメラバイパス/Sip映像経路切替 */
-    static const ST_REG_WRI_REQ ML86294_CAMPATH_SET[ML86294_CAMPATH_SET_WRINUM] = {
+U1    u1_g_Pict_MlFrzChgSetOff(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mlfrzchgregset_off_flg == (U1)TRUE){                   /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mlfrzchgregset_off_flg = (U1)FALSE;                   /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_FRZCHG_OFF);
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MlCamPathRegSetNml(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+static U1   u1_s_Pict_MlCamPathRegSetNml(void)
+{   /* 暫定　I/Fメモ 6.7.2.2 Sip映像経路切替 */
+    static const ST_REG_WRI_REQ ML86294_CAMPATH_SET_NML[ML86294_CAMPATH_SET_NML_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
         {        1,         1,         0},
@@ -17233,25 +17601,168 @@ U1    u1_g_Pict_MlCamPathSet(const U1 u1_a_req_path)
 
     u1_t_ret = (U1)FALSE;
 
-    if(u1_a_req_path == (U1)PICT_ML_CAMPATH_NORMAL){                            /* Normal Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_CAMPATH_SET_WRINUM,
-                                                        ML86294_CAMPATH_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                        st_sp_ML86294_MlCAMPATHREG_NORMAL_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_CAMPATH_SET_NML_WRINUM,
+                                                    ML86294_CAMPATH_SET_NML, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlCAMPATHREG_NORMAL_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
     }
-    else {                                                                      /* Bypass Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_CAMPATH_SET_WRINUM,
-                                                        ML86294_CAMPATH_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                        st_sp_ML86294_MlFRZCHGREG_BYPASS_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_Pict_MlCamPathSetNml(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlCamPathSetNml(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mlfrzcampathregset_nml_flg == (U1)TRUE){               /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mlfrzcampathregset_nml_flg = (U1)FALSE;               /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_CAMPATH_NORMAL);
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MlCamPathRegSetByp(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+static U1   u1_s_Pict_MlCamPathRegSetByp(void)
+{   /* 暫定　I/Fメモ 6.7.1.2 カメラバイパス経路切替 */
+    static const ST_REG_WRI_REQ ML86294_CAMPATH_SET_BYP[ML86294_CAMPATH_SET_BYP_WRINUM] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},  /* Bank0 */
+        {        1,         1,         0},
+        {        2,         1,         0},  /* Bank2 */
+        {        3,         4,         0}
+    };
+
+    U1      u1_t_ret;                                               /* Function Completion Status  */
+    U1      u1_t_reg_req_sts;
+
+    u1_t_ret = (U1)FALSE;
+
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_CAMPATH_SET_BYP_WRINUM,
+                                                    ML86294_CAMPATH_SET_BYP, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlFRZCHGREG_BYPASS_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_Pict_MlCamPathSetByp(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlCamPathSetByp(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mlfrzcampathregset_byp_flg == (U1)TRUE){               /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mlfrzcampathregset_byp_flg = (U1)FALSE;               /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_CAMPATH_BYPASS);
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MLMIPISyncCheck(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_s_Pict_MLMIPISyncCheck(void)
+{   /* 暫定　I/Fメモ 6.7.3 カメラ映像入力の同期検出 */
+    U1      u1_t_ret;                                               /* Function Completion Status  */
+    U1      u1_t_reg_req_sts;
+    U1      u1_t_reg_read_result;                                   /* Register Read Result */
+    U1      u1_t_mipi_sync_sts;                                     /* MIPI Synchronize Status */
+
+    u1_t_ret = (U1)FALSE;
+
+    switch (u1_s_pict_mlregget_sts){
+        case ML86294_REGGET_STEP0:                          /* STEP0 */
+        case ML86294_REGGET_STEP1:                          /* STEP1 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_BANKSET_WRINUM,
+                                                          ML86294_BANKSET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                          st_sp_ML86294_SET_BANK0_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP2;
+            }
+            break;
+        case ML86294_REGGET_STEP2:                          /* STEP2 */
+            /* Read Register */
+            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                            st_sp_ML86294_MIPISYNCSTATUS_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                u1_t_reg_read_result = st_sp_ML86294_MIPISYNCSTATUS_RD_TBL[1].u1p_pdu[1];
+                u1_t_mipi_sync_sts = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_3;
+                if(u1_t_mipi_sync_sts == (U1)PICT_REG_MASK_BIT_3){          /* bit[3] = 1 */
+                    u1_s_pict_mlregget_result = (U1)PICT_ML_MIPI_SYNC_ON;
+                }
+                else{                                                       /* bit[3] = 0 */
+                    u1_s_pict_mlregget_result = (U1)PICT_ML_MIPI_SYNC_OFF;
+                }
+                /* Process Reset */
+                u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP0;
+                /* Function Completion */
+                u1_t_ret = (U1)TRUE;
+            }
+            break;
+        default:                                                                /* FAIL */
+            /* Process Reset */
+            u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP0;
+            break;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_Pict_MlRegGet(U1 * u1_a_reg_read_result)                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_reg_read_result  :  Register Read Result                                                                    */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlRegGet(U1 * u1_a_reg_read_result)
+{   /* 暫定 外部提供I/Fでのレジスタアクセス手法については要検討 */
+    U1      u1_t_ret;                                               /* Function Completion Status  */
+
+    if(u1_s_pict_mlmipisynccheck_flg == (U1)TRUE){                  /* Register Read Complete */
+        u1_t_ret = (U1)TRUE;
+        (*u1_a_reg_read_result) = u1_s_pict_mlregget_result;
+        u1_s_pict_mlmipisynccheck_flg = (U1)FALSE;                  /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_MIPISYNCCHK);
     }
 
     return(u1_t_ret);
@@ -17299,7 +17810,7 @@ static U1    u1_s_Pict_MlRcvVIcStatusNty(void)
                 }
 
                 /* Next Process */
-                u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_RCVVICSTATUS_STEP2;
+                u1_s_pict_mlrcvvicstatus_sts = (U1)ML86294_RCVVICSTATUS_STEP2;
             }
             break;
         case ML86294_RCVVICSTATUS_STEP2:                          /* STEP2 */
@@ -17308,12 +17819,15 @@ static U1    u1_s_Pict_MlRcvVIcStatusNty(void)
                                                           ML86294_RCVVICSTATUS_CLEAR_SET, &u4_s_pict_ml_i2c_ack_wait_time,
                                                           st_sp_ML86294_MlRCVVICSTATUS_CLEAR_TBL, &u2_s_pict_ml_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Process Reset */
+                u1_s_pict_mlrcvvicstatus_sts = (U1)ML86294_RCVVICSTATUS_STEP0;
                 /* Function Completion */
                 u1_t_ret = (U1)TRUE;
             }
+            break;
         default:                                                                /* FAIL */
             /* Process Reset */
-            u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_RCVVICSTATUS_STEP0;
+            u1_s_pict_mlrcvvicstatus_sts = (U1)ML86294_RCVVICSTATUS_STEP0;
             break;
     }
 
@@ -17321,14 +17835,14 @@ static U1    u1_s_Pict_MlRcvVIcStatusNty(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_g_Pict_MlI2cMuteSet(const U1 u1_a_req_sts)                                                                              */
+/*  U1    u1_s_Pict_MlI2cMuteRegSetOn(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_req_sts  :  Request Status(ON/OFF)                                                                          */
+/*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_g_Pict_MlI2cMuteSet(const U1 u1_a_req_sts)
+static U1   u1_s_Pict_MlI2cMuteRegSetOn(void)
 {   /* 暫定　I/Fメモ 6.9.1 I2C全画面MUTE */
-    static const ST_REG_WRI_REQ ML86294_I2CMUTE_SET[ML86294_I2CMUTE_SET_WRINUM] = {
+    static const ST_REG_WRI_REQ ML86294_I2CMUTE_ON_SET[ML86294_I2CMUTE_ON_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank2 */
         {        1,         1,         0}
@@ -17339,39 +17853,102 @@ U1    u1_g_Pict_MlI2cMuteSet(const U1 u1_a_req_sts)
 
     u1_t_ret = (U1)FALSE;
 
-    if(u1_a_req_sts == (U1)PICT_ML_I2C_MUTE_ON){                                 /* ON Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_I2CMUTE_SET_WRINUM,
-                                                      ML86294_I2CMUTE_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                      st_sp_ML86294_MlI2CMUTEREG_ON_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
-    }
-    else {                                                                       /* OFF Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_I2CMUTE_SET_WRINUM,
-                                                      ML86294_I2CMUTE_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                      st_sp_ML86294_MlI2CMUTEREG_OFF_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_I2CMUTE_ON_SET_WRINUM,
+                                                    ML86294_I2CMUTE_ON_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlI2CMUTEREG_ON_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
     }
 
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_g_Pict_MlNoAisMuteSet(const U1 u1_a_req_sts)                                                                            */
+/*  U1    u1_g_Pict_MlI2cMuteSetOn(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_req_sts  :  Request Status(ON/OFF)                                                                          */
+/*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_g_Pict_MlNoAisMuteSet(const U1 u1_a_req_sts)
+U1    u1_g_Pict_MlI2cMuteSetOn(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mli2cmuteregset_on_flg == (U1)TRUE){               /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mli2cmuteregset_on_flg = (U1)FALSE;               /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_I2C_MUTE_ON);
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MlI2cMuteRegSetOff(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+static U1   u1_s_Pict_MlI2cMuteRegSetOff(void)
+{   /* 暫定　I/Fメモ 6.9.1 I2C全画面MUTE */
+    static const ST_REG_WRI_REQ ML86294_I2CMUTE_OFF_SET[ML86294_I2CMUTE_OFF_SET_WRINUM] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},  /* Bank2 */
+        {        1,         1,         0}
+    };
+
+    U1      u1_t_ret;                                               /* Function Completion Status  */
+    U1      u1_t_reg_req_sts;
+
+    u1_t_ret = (U1)FALSE;
+
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_I2CMUTE_OFF_SET_WRINUM,
+                                                    ML86294_I2CMUTE_OFF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlI2CMUTEREG_OFF_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_Pict_MlI2cMuteSetOff(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlI2cMuteSetOff(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mli2cmuteregset_off_flg == (U1)TRUE){                  /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mli2cmuteregset_off_flg = (U1)FALSE;                  /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_I2C_MUTE_OFF);
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_s_Pict_MlNoAisMuteRegSetOn(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+static U1   u1_s_Pict_MlNoAisMuteRegSetOn(void)
 {   /* 暫定　I/Fメモ 6.9.2 I2Cヒーコン部以外MUTE */
-    static const ST_REG_WRI_REQ ML86294_NOAISMUTE_SET[ML86294_NOAISMUTE_SET_WRINUM] = {
+    static const ST_REG_WRI_REQ ML86294_NOAISMUTE_ON_SET[ML86294_NOAISMUTE_ON_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank11 */
         {        1,         1,         0}
@@ -17382,122 +17959,88 @@ U1    u1_g_Pict_MlNoAisMuteSet(const U1 u1_a_req_sts)
 
     u1_t_ret = (U1)FALSE;
 
-    if(u1_a_req_sts == (U1)PICT_ML_NOAIS_MUTE_ON){                                /* ON Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_NOAISMUTE_SET_WRINUM,
-                                                      ML86294_NOAISMUTE_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                      st_sp_ML86294_MlNOAISMUTEREG_ON_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
-    }
-    else {                                                                       /* OFF Request */
-        /* Set Register */
-        u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_NOAISMUTE_SET_WRINUM,
-                                                      ML86294_NOAISMUTE_SET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                      st_sp_ML86294_MlNOAISMUTEREG_OFF_TBL, &u2_s_pict_ml_reg_btwn_time);
-        if(u1_t_reg_req_sts == (U1)TRUE){
-            /* Function Completion */
-            u1_t_ret = (U1)TRUE;
-        }
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_NOAISMUTE_ON_SET_WRINUM,
+                                                    ML86294_NOAISMUTE_ON_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlNOAISMUTEREG_ON_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* Function Completion */
+        u1_t_ret = (U1)TRUE;
     }
 
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_s_Pict_MLMIPISyncCheck(void)                                                                                            */
+/*  U1    u1_g_Pict_MlNoAisMuteSetOn(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_s_Pict_MLMIPISyncCheck(void)
-{   /* 暫定　I/Fメモ 6.7.3 カメラ映像入力の同期検出 */
-    /* 暫定 カメラ同期検知でのレジスタ連続アクセス防止のためのポーリングタイマ20ms */
-    static const U2 ML86294_MIPISYNCCHK_WAIT_POLING = (U2)(20U / ML86294_TASK_TIME);
+U1    u1_g_Pict_MlNoAisMuteSetOn(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
 
-    U1      u1_t_ret;                                               /* Function Completion Status  */
-    U1      u1_t_time_chk_flg;
-    U1      u1_t_reg_req_sts;
-    U1      u1_t_reg_read_result;                                   /* Register Read Result */
-    U1      u1_t_mipi_sync_sts;                                     /* MIPI Synchronize Status */
-
-    u1_t_ret = (U1)FALSE;
-
-    switch (u1_s_pict_mlregget_sts){
-        case ML86294_REGGET_STEP0:                          /* STEP0 */
-            u1_t_time_chk_flg = u1_s_Pict_Ml86294_TimChk((U2)u2_s_pict_mlregget_timer, ML86294_MIPISYNCCHK_WAIT_POLING);
-            if(u1_t_time_chk_flg == (U1)TRUE){
-                /* Next Process */
-                u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP1;
-                /* Poling Timer Clear */
-                u2_s_pict_mlregget_timer = (U2)0;
-            }
-            else{
-                /* Function Completion */
-                u1_t_ret = (U1)TRUE;
-
-                u2_s_pict_mlregget_timer++;
-            }
-            break;
-        case ML86294_REGGET_STEP1:                          /* STEP1 */
-            /* Set Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_BANKSET_WRINUM,
-                                                          ML86294_BANKSET, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                          st_sp_ML86294_SET_BANK0_TBL, &u2_s_pict_ml_reg_btwn_time);
-            if(u1_t_reg_req_sts == (U1)TRUE){
-                /* Next Process */
-                u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP2;
-            }
-            break;
-        case ML86294_REGGET_STEP2:                          /* STEP2 */
-            /* Read Register */
-            u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGREAD(&u2_s_pict_ml_regstep, &u4_s_pict_ml_i2c_ack_wait_time,
-                                                            st_sp_ML86294_MIPISYNCSTATUS_RD_TBL, &u2_s_pict_ml_reg_btwn_time);
-            if(u1_t_reg_req_sts == (U1)TRUE){
-                u1_t_reg_read_result = st_sp_ML86294_MIPISYNCSTATUS_RD_TBL[1].u1p_pdu[1];
-                u1_t_mipi_sync_sts = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_3;
-                if(u1_t_mipi_sync_sts == (U1)PICT_REG_MASK_BIT_3){          /* bit[3] = 1 */
-                    u1_s_pict_mlregget_result = (U1)PICT_ML_MIPI_SYNC_ON;
-                }
-                else{                                                       /* bit[3] = 0 */
-                    u1_s_pict_mlregget_result = (U1)PICT_ML_MIPI_SYNC_OFF;
-                }
-                u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_COMP;
-	            /* Process Reset */
-	            u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP0;
-                /* Function Completion */
-                u1_t_ret = (U1)TRUE;
-            }
-            break;
-        default:                                                                /* FAIL */
-            /* Process Reset */
-            u1_s_pict_mlregget_sts = (U1)ML86294_REGGET_STEP0;
-            break;
+    if(u1_s_pict_mlnoaismuteregset_on_flg == (U1)TRUE){                 /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mlnoaismuteregset_on_flg = (U1)FALSE;                 /* Flag Clear */
+    }
+    else{
+        u1_t_ret = (U1)FALSE;
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_NOAIS_MUTE_ON);
     }
 
     return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_g_Pict_MlRegGet(U1 * u1_a_reg_read_result)                                                                              */
+/*  U1    u1_s_Pict_MlNoAisMuteRegSetOff(void)                                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_reg_read_result  :  Register Read Result                                                                    */
+/*  Arguments:      -                                                                                                                */
 /*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
 /*===================================================================================================================================*/
-U1    u1_g_Pict_MlRegGet(U1 * u1_a_reg_read_result)
-{   /* 暫定 外部提供I/Fでのレジスタアクセス手法については要検討 */
-    U1      u1_t_ret;                                               /* Function Completion Status  */
+static U1   u1_s_Pict_MlNoAisMuteRegSetOff(void)
+{   /* 暫定　I/Fメモ 6.9.2 I2Cヒーコン部以外MUTE */
+    static const ST_REG_WRI_REQ ML86294_NOAISMUTE_OFF_SET[ML86294_NOAISMUTE_OFF_SET_WRINUM] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},  /* Bank11 */
+        {        1,         1,         0}
+    };
 
-    if(u1_s_pict_mlregget_flag == (U1)ML86294_REGGET_FLAG_COMP){        /* Register Read Complete */
+    U1      u1_t_ret;                                               /* Function Completion Status  */
+    U1      u1_t_reg_req_sts;
+
+    u1_t_ret = (U1)FALSE;
+
+    /* Set Register */
+    u1_t_reg_req_sts = u1_PICT_ML_I2C_CTRL_REGSET(&u2_s_pict_ml_regstep, (U2)ML86294_NOAISMUTE_OFF_SET_WRINUM,
+                                                    ML86294_NOAISMUTE_OFF_SET, &u4_s_pict_ml_i2c_ack_wait_time,
+                                                    st_sp_ML86294_MlNOAISMUTEREG_OFF_TBL, &u2_s_pict_ml_reg_btwn_time);
+    if(u1_t_reg_req_sts == (U1)TRUE){
+        /* Function Completion */
         u1_t_ret = (U1)TRUE;
-        (*u1_a_reg_read_result) = u1_s_pict_mlregget_result;
-        u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_STOP;         /* Register Read Stop */
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_Pict_MlNoAisMuteSetOff(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         TRUE (Function Completion) / FALSE (Function Incompletion)                                                       */
+/*===================================================================================================================================*/
+U1    u1_g_Pict_MlNoAisMuteSetOff(void)
+{
+    U1      u1_t_ret;                                                   /* Function Completion Status  */
+
+    if(u1_s_pict_mlnoaismuteregset_off_flg == (U1)TRUE){                /* Register Set Complete */
+        u1_t_ret = (U1)TRUE;
+        u1_s_pict_mlnoaismuteregset_off_flg = (U1)FALSE;                /* Flag Clear */
     }
     else{
         u1_t_ret = (U1)FALSE;
-        u1_s_pict_mlregget_flag = (U1)ML86294_REGGET_FLAG_START;        /* Register Read Start */
+        vd_s_Pict_ProcessMng((U4)ML86294_PROC_NOAIS_MUTE_OFF);
     }
 
     return(u1_t_ret);

@@ -51,20 +51,9 @@
 #define PICT_ML_MLIRQHPD_DPCD_AUXSND_REGDATA2   (0x03U)
 #define PICT_ML_MLIRQHPD_DPCD_AUXCOM_OK         (0x77U)
 
-#define PICT_ML_MIPI_OFF                        (0U)
-#define PICT_ML_MIPI_ON                         (1U)
-
-#define PICT_ML_FRZ_OFF                         (0U)
-#define PICT_ML_FRZ_ON                          (1U)
-
-#define PICT_ML_CAMPATH_NORMAL                  (0U)
-#define PICT_ML_CAMPATH_BYPASS                  (1U)
-
-#define PICT_ML_I2C_MUTE_OFF                    (0U)
-#define PICT_ML_I2C_MUTE_ON                     (1U)
-
-#define PICT_ML_NOAIS_MUTE_OFF                  (0U)
-#define PICT_ML_NOAIS_MUTE_ON                   (1U)
+#define PICT_ML_CAMAREASET_READY                (0U)
+#define PICT_ML_CAMAREASET_PROCESSING           (1U)
+#define PICT_ML_CAMAREASET_COMPLETED            (2U)
 
 #define PICT_ML_MIPI_SYNC_OFF                   (0U)
 #define PICT_ML_MIPI_SYNC_ON                    (1U)
@@ -107,7 +96,7 @@
 #define PICT_ML_GVIFIF_ADC_ECU                  (PICT_GVIFIF_ADAS)
 
 #define PICT_ML_CAN_CAM_SIZE_NONE               (PICT_CAN_CAM_SIZE_NONE)
-#define PICT_ML_CAN_CAM_SIZE_MAX                (PICT_CAN_CAM_SIZE_1104X621)
+#define PICT_ML_CAN_CAM_SIZE_MAX                (PICT_CAN_CAM_SIZE_1104X621 + 1)
 
 #define u1_PICT_ML_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_VIDEO_IC, (u), (v), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (w), (x), (y), (z)))
 #define u1_PICT_ML_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_VIDEO_IC, (w), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (x), (y), (z)))
@@ -144,12 +133,17 @@
 void  vd_g_Pict_Ml86294_Init(void);
 void  vd_g_Pict_Ml86294_Routine(void);
 U1    u1_g_Pict_MlCamAreaSet(void);
-U1    u1_g_Pict_MlMipiSet(const U1 u1_a_req_sts);
-U1    u1_g_Pict_MlFrzChgSet(const U1 u1_a_req_sts);
-U1    u1_g_Pict_MlCamPathSet(const U1 u1_a_req_path);
-U1    u1_g_Pict_MlI2cMuteSet(const U1 u1_a_req_sts);
-U1    u1_g_Pict_MlNoAisMuteSet(const U1 u1_a_req_sts);
+U1    u1_g_Pict_MlMipiSetOn(void);
+U1    u1_g_Pict_MlMipiSetOff(void);
+U1    u1_g_Pict_MlFrzChgSetOn(void);
+U1    u1_g_Pict_MlFrzChgSetOff(void);
+U1    u1_g_Pict_MlCamPathSetNml(void);
+U1    u1_g_Pict_MlCamPathSetByp(void);
 U1    u1_g_Pict_MlRegGet(U1 * u1_a_reg_read_result);
+U1    u1_g_Pict_MlI2cMuteSetOn(void);
+U1    u1_g_Pict_MlI2cMuteSetOff(void);
+U1    u1_g_Pict_MlNoAisMuteSetOn(void);
+U1    u1_g_Pict_MlNoAisMuteSetOff(void);
 U1    u1_g_Pict_MlDevRstGet(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
