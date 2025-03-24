@@ -41,15 +41,29 @@
 /* NvmcId */
 /* SAMPLE */
 /* START : ##TOOL_OUT#NVMC_NVMCID## */
-#define NVMCID_U1_SAMPLE_U1                      (0x0000U)
-#define NVMCID_U2_SAMPLE_U2                      (0x0001U)
-#define NVMCID_U4_SAMPLE_U4                      (0x0002U)
-#define NVMCID_OTR_SAMPLE_OTR32                  (0x0003U)
-#define NVMCID_OTR_SAMPLE_OTR32CS                (0x0004U)
-#define NVMCID_APP_SAMPLE_AP                     (0x0005U)
+#define NVMCID_APP_ODO                           (0x0000U)
+#define NVMCID_APP_ODO_TRIP                      (0x0001U)
+#define NVMCID_U4_VDF_ESO_W0                     (0x0002U)
+#define NVMCID_U4_VDF_ESO_W1                     (0x0003U)
+#define NVMCID_U4_VDF_ESO_W2                     (0x0004U)
+#define NVMCID_U4_VDF_ESO_W3                     (0x0005U)
+#define NVMCID_U4_VDF_ESO_W4                     (0x0006U)
+#define NVMCID_U4_VDF_ESO_W5                     (0x0007U)
+#define NVMCID_U4_VDF_ESO_W6                     (0x0008U)
+#define NVMCID_U4_VDF_ESO_W7                     (0x0009U)
+#define NVMCID_U4_VDF_ESO_W8                     (0x000AU)
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */
+#define NVMC_BLOCKID_DTF_ODO_00                  (2U)
+#define NVMC_BLOCKID_DTF_ODO_01                  (3U)
+#define NVMC_BLOCKID_DTF_ODO_02                  (4U)
+#define NVMC_BLOCKID_DTF_TRIP_0_0                (5U)
+#define NVMC_BLOCKID_DTF_TRIP_0_1                (6U)
+#define NVMC_BLOCKID_DTF_TRIP_1_0                (7U)
+#define NVMC_BLOCKID_DTF_TRIP_1_1                (8U)
+#define NVMC_BLOCKID_DTF_TRIP_2_0                (9U)
+#define NVMC_BLOCKID_DTF_TRIP_2_1                (10U)
 /* END : ##TOOL_OUT#NVMC_BLOCKID## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

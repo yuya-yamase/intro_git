@@ -42,7 +42,8 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_RAMBLOCK## */
-U1    u1_gp_nvmc_dtf_default[32U]           __attribute__((section(".bss_nvmc_ramblk")));
+U1    u1_gp_nvmc_dtf_odo[12U]           __attribute__((section(".bss_nvmc_ramblk")));
+U1    u1_gp_nvmc_dtf_default[4U]           __attribute__((section(".bss_nvmc_ramblk")));
 /* END : ##TOOL_OUT#NVMC_RAMBLOCK## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

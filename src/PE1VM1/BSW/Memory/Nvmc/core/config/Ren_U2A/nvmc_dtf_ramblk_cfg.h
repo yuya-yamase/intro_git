@@ -34,7 +34,8 @@
 /*  Constant Variable Externs                                                                                                        */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_EXTERN_RAMBLOCK## */
-extern  U1    u1_gp_nvmc_dtf_default[32U];
+extern  U1    u1_gp_nvmc_dtf_odo[12U];
+extern  U1    u1_gp_nvmc_dtf_default[4U];
 /* END : ##TOOL_OUT#NVMC_EXTERN_RAMBLOCK## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
