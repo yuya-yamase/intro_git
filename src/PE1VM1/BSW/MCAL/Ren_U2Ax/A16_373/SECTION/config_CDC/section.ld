@@ -286,6 +286,7 @@ SECTIONS {
 
 //Rim
     .MEM_SEC_STA_BACK_APPL       ALIGN(8)                             : > .
+    .bss_BACK_ODO_0              ALIGN(8)                             : > .
     .bss_BACK_KEYWORD0           ALIGN(8)                             : > .
     .bss_BACK                    ALIGN(8)                             : > .
     .bss_BACK_KEYWORD1           ALIGN(8)                             : > .
@@ -293,6 +294,7 @@ SECTIONS {
     .bss_BACK_RIM2               ALIGN(8)                             : > .
     .bss_BACK_RIM3               ALIGN(8)                             : > .
     .bss_BACK_KEYWORD2           ALIGN(8)                             : > .
+    .bss_BACK_ODO_1              ALIGN(8)                             : > .
     .MEM_SEC_END_BACK_APPL       ALIGN(8)                             : > .
     .MEM_SEC_END_BACK_USD        ALIGN(8)                             : > .
     _BSS_BACK_SIZE = . - ADDR(.MEM_SEC_STA_BACK_APPL);

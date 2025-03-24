@@ -59,8 +59,13 @@
 #include "nvmc_dtf_inactdummy.h"
 
 /* START : ##TOOL_OUT#NVMC_APP_FUNC_INCLUDE_HEADER## */
-#include "stub.h"
+#include "odo_nvmif.h"
 /* END : ##TOOL_OUT#NVMC_APP_FUNC_INCLUDE_HEADER## */
+
+#if 0   /* BEV BSW provisionally */
+#else
+#include "stub.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -84,7 +89,7 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_APP_ACS_NUM## */
-#define NVMC_APP_ACS_NUM                         (2U)
+#define NVMC_APP_ACS_NUM                         (3U)
 /* END : ##TOOL_OUT#NVMC_APP_ACS_NUM## */
 
 #define NVMC_READ_BUF_SIZE                       (NVMC_DTF_READ_BUFFER_SIZE + NVMC_EEP_READ_BUFFER_SIZE)
@@ -220,19 +225,16 @@ const ST_NVMC_DEVICE_CFG    st_dp_NVMC_DEVICE_CFG[NVMC_DEVICE_TYPE_NUM] = {
 
 const ST_NVMC_MODULE_CFG    st_dp_NVMC_MODULE_CFG[NVMC_MODULE_NUM] = {
 /* START : ##TOOL_OUT#NVMC_MODULE_CFG## */
-/*    Read IF                                   PreRead IF                    Write IF                                 Size                 blocknum blocksize wordbuf_num rdnnum  attr     */
-    {&u1_d_NvmcMod_U4R3Al_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U4R3Al_WrData,             (U1)NVMC_SIZE_4BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
-    {&u1_d_NvmcMod_U2R3Lo_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U2R3Lo_WrData,             (U1)NVMC_SIZE_2BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
-    {&u1_d_NvmcMod_U1R3P1_RdnData,             &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U1R3P1_WrData,             (U1)NVMC_SIZE_1BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}, 
-    {&u1_d_NvmcMod_ovr4bBlk32bDbl_RdnD,        &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlkDbl_WrD,           (U1)32U,             (U1)1U,  (U1)32U,  (U1)8U,     (U1)2U, (U1)0x01U}, 
-    {&u1_d_NvmcMod_ovr4bBlk28bSumDblSmll_RdnD, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_ovr4bBlk28bSumDblSmll_WrD, (U1)28U,             (U1)1U,  (U1)32U,  (U1)8U,     (U1)2U, (U1)0x01U}  
+/*    Read IF                       PreRead IF                    Write IF                     Size                 blocknum blocksize wordbuf_num rdnnum  attr     */
+    {&u1_d_NvmcMod_U4R3Al_RdnData, &u1_d_NvmcMod_Lib_PreRdnData, &vd_d_NvmcMod_U4R3Al_WrData, (U1)NVMC_SIZE_4BYTE, (U1)1U,  (U1)4U,   (U1)1U,     (U1)3U, (U1)0x01U}  
 /* END : ##TOOL_OUT#NVMC_MODULE_CFG## */
 };
 
 const ST_NVMC_APP_FUNC st_NVMC_APP_FUNC_TABLE[NVMC_APP_ACS_NUM] = {
 /* START : ##TOOL_OUT#NVMC_APP_FUNC_TABLE## */
-    {&vd_g_StubNvmcFuncHook,  &vd_g_StubNvmcEndHook},
-    {&vd_d_Nvmc_Recovery_DTF, vdp_PTR_NA           } 
+    {&vd_g_OdoNvmIfOdoRWTask,  &vd_g_OdoNvmIfOdoRWFinhk },
+    {&vd_g_OdoNvmIfTripRWTask, &vd_g_OdoNvmIfTripRWFinhk},
+    {&vd_d_Nvmc_Recovery_DTF,  vdp_PTR_NA               } 
 /* END : ##TOOL_OUT#NVMC_APP_FUNC_TABLE## */
 };
 

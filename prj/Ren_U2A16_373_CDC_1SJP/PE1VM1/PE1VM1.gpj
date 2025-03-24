@@ -50,6 +50,7 @@ primaryTarget=v800_standalone.tgt
     -llibcri_damp_rh850u2a.a
 	
 	-I${APP_DIR}/MET/STUB/config
+	-I${APP_DIR}/MET/IpcApplication\Vom\Odo\scc
 
     -L${ROOT_DIR}/BSW/Aubist/Os/os_lib/release
     -lsc1.sc.notrace.rh850u2a.a
