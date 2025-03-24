@@ -198,7 +198,7 @@
 #define ALERT_H_NLOCK_CH_NUM                     (1U)
 #define ALERT_S_AHSS_CH_NUM                      (1U)
 #define ALERT_C_AVSWAR_CH_NUM                    (1U)
-#define ALERT_D_SFTPOS_CH_NUM                    (3U)
+#define ALERT_D_SFTPOS_CH_NUM                    (2U)
 #define ALERT_P_OILLVG_CH_NUM                    (1U)
 #define ALERT_B_FMSEAT_CH_NUM                    (1U)
 #define ALERT_D_ASLR_CH_NUM                      (1U)
@@ -290,7 +290,6 @@
 #define ALERT_UNIT_VAL_DIST_MILE                 (UNIT_VAL_DIST_MILE)
 #define ALERT_UNIT_IDX_DIST                      (UNIT_IDX_DIST)
 #define ALERT_PTS_INV_ON                         (VEH_OPEMD_PTS_INV_ON)
-#define ALERT_PTS_INV_LAS                        (VEH_OPEMD_PTS_INV_LAS)
 #define ALERT_PTSCTMP_STSBIT_VALID               (PTSCTMP_STSBIT_VALID)
 #define ALERT_PTSCTMP_STSBIT_UNKNOWN             (PTSCTMP_STSBIT_UNKNOWN)
 #define ALERT_PTSCTMP_STSBIT_INVALID             (PTSCTMP_STSBIT_INVALID)
@@ -310,7 +309,6 @@
 #define ALERT_ENGTYPE_CAN_VALID                  (0x01U)
 #define ALERT_ENGTYPE_IOHW_VALID                 (0x02U)
 #define ALERT_ENGTYPE_CAN_IOHW_VALID             (0x03U)
-#define ALERT_SHIFT_BZ_REV_DEST_JPN              (VDF_BZ_REV_JPN)
 #define ALERT_SHIFT_BZ_REV_SOUNDTYPE_IN          (VDF_DS_2E_SBWC2_IN)
 #define ALERT_PARLON_VD_PTSYS_FCV                (VDF_PTS_RX_07_ELE_HYD)
 
@@ -327,7 +325,6 @@
 #endif
 #define u4_g_AlertUnitconvtrKmtoMi(x)                               (u4_g_UnitconvtrKmtoMi(x))
 #define u1_g_AlertUnit(u1_a_IDX)                                    (u1_g_Unit(u1_a_IDX))
-#define u1_g_AlertPtsOn(u1_a_INV)                                   (u1_g_VehopemdPtsOn(u1_a_INV))
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
 #define u1_g_AlertEsOptAvailable(u2_a_CH)                           (u1_g_VardefEsOptAvaByCh(u2_a_CH))
 #if 0   /* BEV BSW provisionally */
@@ -338,7 +335,6 @@
 #define u1_g_AlertOillvSw()                                         ((U1)FALSE)
 #define u1_g_AlertShiftSbwFunc()                                    (u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW))
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))
-#define u1_g_AlertRevBzrDest()                                      (u1_g_VardefBzRevDstByPid())
 #define u1_g_AlertHcsAscext()                                       (u1_g_VardefHcsRxAscext())
 
 #define u1_g_AlertCfgP_tmntOdoTripKm(u4p)                           (u1_g_OdoTripKm((U1)ODO_TRIP_CH_OM, (u4p)))
@@ -398,7 +394,6 @@ void    vd_g_AlertH_tevrnInit(void);
 void    vd_g_AlertM_bglfspdInit(void);
 void    vd_g_AlertP_oillevInit(void);
 void    vd_g_AlertC_brk_0Init(void);
-void    vd_g_AlertD_sftposInit(void);
 void    vd_g_AlertB_fmseatInit(void);
 void    vd_g_AlertB_pbdksInit(void);
 void    vd_g_AlertB_tffogInit(void);

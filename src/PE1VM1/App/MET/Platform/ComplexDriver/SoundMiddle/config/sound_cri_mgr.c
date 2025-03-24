@@ -298,15 +298,15 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_TYT[CRI_CUESHEET_0_TYT_CUENUM] = {
     (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRF_24_00            */
     (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00          */
     (U2)120U,              /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01            */
-    (U2)13U,               /* CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00           */
+    (U2)26U,               /* CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00           */
     (U2)U2_MAX,            /* CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00          */
     (U2)90U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00           */
     (U2)20U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00            */
     (U2)100U,              /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_REVERSE_INT_24_01           */
     (U2)40U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV2_24_01            */
     (U2)120U,              /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_SEAREM_LV1_24_01            */
-    (U2)35U,               /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01         */
-    (U2)35U,               /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01         */
+    (U2)5U,                /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01         */
+    (U2)5U,                /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01         */
     (U2)120U,              /* CRI_CUESHEET_0_TYT_DAN_800_1P2_NONE_0P8                    */
     (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_800_0P7_NONE_0P8                    */
     (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_800_0P5_NONE_0P8                    */
@@ -349,16 +349,16 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM] = {
     (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRF_24_02_A          */
     (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02_A          */
     (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00          */
-    (U2)120U,              /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02_A          */
-    (U2)13U,               /* CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00           */
+    (U2)200U,              /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02_A          */
+    (U2)26U,               /* CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00           */
     (U2)U2_MAX,            /* CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00          */
     (U2)90U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00           */
     (U2)20U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00            */
     (U2)100U,              /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_REVERSE_INT_24_01_A         */
-    (U2)40U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV2_24_02_A          */
-    (U2)120U,              /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_SEAREM_LV1_24_02_A          */
-    (U2)35U,               /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B       */
-    (U2)35U,               /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B       */
+    (U2)144U,              /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV2_24_02_A          */
+    (U2)200U,              /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_SEAREM_LV1_24_02_A          */
+    (U2)32U,               /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B       */
+    (U2)32U,               /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B       */
     (U2)120U,              /* CRI_CUESHEET_0_LEX_DAN_800_1P2_NONE_0P8                    */
     (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_800_0P7_NONE_0P8                    */
     (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_800_0P5_NONE_0P8                    */
@@ -2007,7 +2007,6 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
     static volatile const U1 u1_s_VOL_CSR_RTCA_5           = (U1)15U;
     static volatile const U1 u1_s_VOL_CSR_RTCA_6           = (U1)19U;
     static volatile const U1 u1_s_VOL_CSR_RTCA_7           = (U1)24U;
-    static volatile const U1 u1_s_VOL_RSA                  = (U1)12U;
     static volatile const U1 u1_s_VOL_800HZ_57DB           = (U1)2U;
     static volatile const U1 u1_s_VOL_800HZ_61DB           = (U1)2U;
     static volatile const U1 u1_s_VOL_800HZ_63DB           = (U1)3U;
@@ -2188,7 +2187,6 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
         &u1_s_VOL_CSR_RTCA_5,                               /* WCHIME_VOL_CSR_RCTA_5                                                 */
         &u1_s_VOL_CSR_RTCA_6,                               /* WCHIME_VOL_CSR_RCTA_6                                                 */
         &u1_s_VOL_CSR_RTCA_7,                               /* WCHIME_VOL_CSR_RCTA_7                                                 */
-        &u1_s_VOL_RSA,                                      /* 19pfv3 no sound file */ /* WCHIME_VOL_RSA                             */
         &u1_s_VOL_800HZ_57DB,                               /* WCHIME_VOL__800HZ_57DB                                                */
         &u1_s_VOL_800HZ_61DB,                               /* WCHIME_VOL__800HZ_61DB                                                */
         &u1_s_VOL_800HZ_63DB,                               /* WCHIME_VOL__800HZ_63DB                                                */
@@ -2216,7 +2214,13 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
         &u1_CALIB_MCUID3008_URGEN_MAX_MID,                  /* WCHIME_VOL_BASE_INTWARNH_MID                                          */
         &u1_CALIB_MCUID3017_URGEN_MAX_MAX,                  /* WCHIME_VOL_BASE_INTWARNH_MAX                                          */
         &u1_CALIB_MCUID3009_CONTIN_MID,                     /* WCHIME_VOL_BASE_CONTWARN_MID                                          */
-        &u1_CALIB_MCUID3018_CONTIN_MAX                      /* WCHIME_VOL_BASE_CONTWARN_MAX                                          */
+        &u1_CALIB_MCUID3018_CONTIN_MAX,                     /* WCHIME_VOL_BASE_CONTWARN_MAX                                          */
+        &u1_CALIB_MCUID3010_PREDOT_MID,                     /* WCHIME_VOL_AD_DOT_MID                                                 */
+        &u1_CALIB_MCUID3019_PREDOT_MAX,                     /* WCHIME_VOL_AD_DOT_MAX                                                 */
+        &u1_CALIB_MCUID0039_ADAS_MID,                       /* WCHIME_VOL_ADAS_MID                                                   */
+        &u1_CALIB_MCUID0753_ADAS_MAX,                       /* WCHIME_VOL_ADAS_MAX                                                   */
+        &u1_CALIB_MCUID0027_ATR_MID,                        /* WCHIME_VOL_AT_MID                                                     */
+        &u1_CALIB_MCUID0744_ATR_MAX                         /* WCHIME_VOL_AT_MAX                                                     */
     };
 
     static volatile const U1 * u1p_sp_MULTI_CH_PLAY_RATE[SOUND_GROUP_NUM] = {
@@ -2437,6 +2441,7 @@ static  U1  u1_s_SoundDiagnosis(void)
 /*  19PFv3-12 7/10/2024  TR       Add SBRDMB buzzer request                                                                          */
 /*                                                                                                                                   */
 /*  BEV-1     3/19/2025  SU                                                                                                          */
+/*  BEV-1     3/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */  
 /*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */
@@ -2453,5 +2458,6 @@ static  U1  u1_s_SoundDiagnosis(void)
 /*  * SN       = Shimon Nambu, Denso Techno                                                                                          */
 /*  * TR       = Tebs Ramos, DTPH                                                                                                    */
 /*  * SU       = Shin Uchida, Denso Techno                                                                                           */
+/*  * RO       = Ryo Oohashi, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
