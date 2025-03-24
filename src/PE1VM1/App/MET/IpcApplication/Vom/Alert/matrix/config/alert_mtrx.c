@@ -460,7 +460,6 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertM_bglfspdInit,
         &vd_g_AlertP_oillevInit,
         &vd_g_AlertC_brk_0Init,
-        &vd_g_AlertD_sftposInit,
         &vd_g_AlertB_fmseatInit,
         &vd_g_AlertB_pbdksInit,
         &vd_g_AlertB_tffogInit,

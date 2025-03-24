@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SOUND_CRI_MGR_C_MAJOR                        (1)
-#define SOUND_CRI_MGR_C_MINOR                        (6)
+#define SOUND_CRI_MGR_C_MINOR                        (7)
 #define SOUND_CRI_MGR_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -24,9 +24,8 @@
 
 /* CRI header file */
 #include "cri_xpt.h"
-#include "cri_atom_at.h"
-#include "cri_atom_rh850d1.h"
-#include "ADXAT_Data.h"
+#include "cri_atom_at_def.h"
+#include "cri_sfr_config_rh850u2a.h"
 
 /* CRI driver header file */
 #include "sound_cri_drv.h"
@@ -36,6 +35,7 @@
 #include "reg_dma.h"
 
 #include "Port.h"
+#include "Dio.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,7 +50,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define SOUND_CRI_TIMER_FREQUENCY              (80U * 1000U * 1000U)       /* TAUJ 80Mhz                                             */
 #define SOUND_CRI_CLKFIX_CLK                   (80U * 1000U * 1000U)       /* CLKFIX 80Mhz                                           */
-#define SOUND_CRI_INIT_WORK_SIZE               (49308U)                    /* Size of work-space for library initialization          */
+#define SOUND_CRI_INIT_WORK_SIZE               (16028U)                    /* Size of work-space for library initialization          */
 #define SOUND_CRI_MAX_VIRTUAL_VOICES           (15)                        /* Number of Max virtual voices                           */
 #define SOUND_CRI_MAX_TRACKS                   (8U)                        /* Number of Max playing tracks                           */
 #define SOUND_CRI_MAX_TRACK_ITEMS              (10U)                       /* Number of Max playing track items                      */
@@ -58,7 +58,7 @@
 
 #define SOUND_ACFDATA_SIZE                     (84U)                       /* Size of work-space for on-memory ACF data registration */
 #define SOUND_AWBDATA_SIZE                     (32U)                       /* Size of work-space for on-memory AWB handle creation   */
-#define SOUND_ACBDATA_SIZE                     (1672U)                     /* Size of work-space for on-memory ACB data loading      */
+#define SOUND_ACBDATA_SIZE                     (1216U)                     /* Size of work-space for on-memory ACB data loading      */
 #define SOUND_OVERLAP_SG_NUM                   (1)                         /* Number of play voices at the same time in SG           */
 #define SOUND_OVERLAP_ADX_NUM                  (5)                         /* Number of play voices at the same time in ADX          */
 #define SOUND_VOICEPOOLSGDATA_SIZE             (2112U)                     /* Size of work-space for SG voice-pool creation          */
@@ -100,6 +100,21 @@
 #define SOUND_VOL_MULTI_CH_PLAY_RATE_1         (100U)                      /* Single channel playing(Fixed at 100%)                  */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define SOUND_INITIAL_MODESET_END_TIM          (2U)
+
+#define SOUND_INITIAL_WAIT_TIM                 (SOUND_INITIAL_MODESET_END_TIM+23U)
+#define SOUND_INITIAL_FLTBCHK_WAIT_TIM         (50U)
+
+
+#define SOUND_INITIAL_WAIT                     (0U)
+#define SOUND_INITIAL_WAIT_END                 (1U)
+
+#define SOUND_FLTBCHECK_WAIT_TIM               (10U)
+#define SOUND_IC_ERROR_COUNT                   (2U)
+#define SOUND_IC_ERROR                         (1U)
+#define SOUND_IC_NORMAL                        (0U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* For measuring the memory size used by CRI library     TRUE : At measurement / FALSE : Other cases */
@@ -115,6 +130,9 @@
 #ifndef vd_s_SoundCriMgrUnusedParam
 #define vd_s_SoundCriMgrUnusedParam(prm)       { if (&(prm) == &(prm)) {} }
 #endif
+
+/* vehicle type switching */
+#define SOUND_VEHICLE_TYPE_TYT                 (FALSE)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -187,6 +205,12 @@ static U1                   u1_s_sound_ow_reqid;                                
 static ST_SOUND_OW_CTRL     st_sp_sound_ow_ctrl[SOUND_GROUP_NUM];                          /* Active test control data                                   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1                   u1_s_sound_initialwait;
+static U1                   u1_s_sound_fltbcheck_cycle;
+static U1                   u1_s_sound_err_count;
+       U1                   u1_s_sound_ic_error;
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static        U1      u1_s_SoundCriMgrWavNext(void);
@@ -208,96 +232,158 @@ static        void    vd_s_SoundCriMgrErrorCallback(const CriChar8 * s1p_a_ERRID
 static inline U1      u1_s_SoundCriMgrCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static        void    vd_s_SoundCriMgrInitialize(void);
+static        U1      u1_s_SoundDiagnosis(void);
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
+#include "ADXAT_Data_TYT.h"
 /* ACF data table */
 static const CriUint32 u4_sp_SOUND_ACF_DATA[] = {
-    #include "ADXAT_Data_acf.h"
+    #include "ADXAT_Data_acf_TYT.h"
 };
 static const CriSint32 s4_s_SOUND_ACF_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACF_DATA);
 
 /* AWB data table */
 static const CriUint32 u4_sp_SOUND_AWB_DATA[] = {
-    #include "ADXAT_Data_awb.h"
+    #include "ADXAT_Data_awb_TYT.h"
 };
 static const CriSint32 s4_s_SOUND_AWB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_AWB_DATA);
 
 /* ACB data table */
 static const CriUint32 u4_sp_SOUND_ACB_DATA[] = {
-    #include "ADXAT_Data_c_acb.h"
+    #include "ADXAT_Data_c_acb_TYT.h"
 };
 static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACB_DATA);
 
-/* Table of sound cycle every timbre */
-static const U2 u2_sp_SOUND_WAV_CYCLETIME[CRI_CUESHEET_0_CUENUM] = {
-    (U2)120U,              /* CRI_CUESHEET_0_DAN_800_1P2_NONE_0P8              */
-    (U2)70U,               /* CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8              */
-    (U2)50U,               /* CRI_CUESHEET_0_DAN_800_0P5_NONE_0P8              */
-    (U2)40U,               /* CRI_CUESHEET_0_DAN_800_0P4_NONE_0P8              */
-    (U2)90U,               /* CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8              */
-    (U2)40U,               /* CRI_CUESHEET_0_2REN_800_0P2_50_NONE              */
-    (U2)U2_MAX,            /* CRI_CUESHEET_0_REN_800_NONE_NONE_NONE            */
-    (U2)120U,              /* CRI_CUESHEET_0_DAN_800_1P2_50_NONE               */
-    (U2)70U,               /* CRI_CUESHEET_0_DAN_800_0P7_50_NONE               */
-    (U2)50U,               /* CRI_CUESHEET_0_DAN_800_0P5_50_NONE               */
-    (U2)40U,               /* CRI_CUESHEET_0_DAN_800_0P4_50_NONE               */
-    (U2)90U,               /* CRI_CUESHEET_0_TAN_800_0P9_NONE_NONE             */
-    (U2)120U,              /* CRI_CUESHEET_0_DAN_1600_1P2_50_NONE              */
-    (U2)70U,               /* CRI_CUESHEET_0_DAN_1600_0P7_50_NONE              */
-    (U2)50U,               /* CRI_CUESHEET_0_DAN_1600_0P5_50_NONE              */
-    (U2)40U,               /* CRI_CUESHEET_0_DAN_1600_0P4_50_NONE              */
-    (U2)90U,               /* CRI_CUESHEET_0_TAN_1600_0P9_NONE_NONE            */
-    (U2)40U,               /* CRI_CUESHEET_0_2REN_1600_0P2_50_NONE             */
-    (U2)U2_MAX,            /* CRI_CUESHEET_0_REN_1600_NONE_NONE_NONE           */
-    (U2)120U,              /* CRI_CUESHEET_0_DAN_2400_1P2_50_NONE              */
-    (U2)70U,               /* CRI_CUESHEET_0_DAN_2400_0P7_50_NONE              */
-    (U2)50U,               /* CRI_CUESHEET_0_DAN_2400_0P5_50_NONE              */
-    (U2)40U,               /* CRI_CUESHEET_0_DAN_2400_0P4_50_NONE              */
-    (U2)90U,               /* CRI_CUESHEET_0_TAN_2400_0P9_NONE_NONE            */
-    (U2)40U,               /* CRI_CUESHEET_0_2REN_2400_0P2_50_NONE             */
-    (U2)U2_MAX,            /* CRI_CUESHEET_0_REN_2400_NONE_NONE_NONE           */
-    (U2)10U,               /* CRI_CUESHEET_0_DAN_1600_0P1_50_NONE              */
-    (U2)14U,               /* CRI_CUESHEET_0_DAN_1600_0P14_50_NONE             */
-    (U2)60U,               /* CRI_CUESHEET_0_DAN_1600_0P6_NONE_0P8             */
-    (U2)50U,               /* CRI_CUESHEET_0_DAN_1600_0P5_NONE_0P8             */
-    (U2)100U,              /* CRI_CUESHEET_0_DAN_1600_1_NONE_0P8               */
-    (U2)20U,               /* CRI_CUESHEET_0_DAN_1600_0P2_50_NONE              */
-    (U2)7U,                /* CRI_CUESHEET_0_TAN_1600_0P065_NONE_NONE          */
-    (U2)26U,               /* CRI_CUESHEET_0_2REN_1600_0P13_50_NONE            */
-    (U2)20U,               /* CRI_CUESHEET_0_TAN_800_0P2_NONE_NONE             */
-    (U2)U2_MAX,            /* CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00      */
-    (U2)20U,               /* CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRM_24_00      */
-    (U2)20U,               /* CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRM_24_00      */
-    (U2)40U,               /* CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8             */
-    (U2)20U,               /* CRI_CUESHEET_0_DAN_800_0P2_50_NONE               */
-    (U2)50U,               /* CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRL_24_00_CH3  */
-    (U2)50U,               /* CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRL_24_00      */
-    (U2)50U,               /* CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRL_24_00_CH1  */
-    (U2)70U,               /* CRI_CUESHEET_0_DAN_1600_0P7_NONE_0P8             */
-    (U2)70U,               /* CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRF_24_00      */
-    (U2)70U,               /* CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRF_24_00      */
-    (U2)120U,              /* CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV1_24_00      */
-    (U2)120U,              /* CRI_CUESHEET_0_3REN_1600_0P4_50_NONE             */
-    (U2)80U,               /* CRI_CUESHEET_0_2REN_1600_0P4_50_NONE             */
-    (U2)10U,               /* CRI_CUESHEET_0_TAN_1600_0P1_NONE_NONE            */
-    (U2)100U,              /* CRI_CUESHEET_0_TAN_1600_1_NONE_0P8               */
-    (U2)20U,               /* CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE            */
-    (U2)80U,               /* CRI_CUESHEET_0_DAN_1600_0P8_NONE_0P5             */
-    (U2)100U,              /* CRI_CUESHEET_0_DAN_MET_TBZ_REVERSE_INT_24_00     */
-    (U2)100U,              /* CRI_CUESHEET_0_TAN_MET_TBZ_REVERSE_INT_24_00     */
-    (U2)40U,               /* CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV2_24_00      */
-    (U2)360U,              /* CRI_CUESHEET_0_4REN_800_0P9_50_NONE              */
-    (U2)90U,               /* CRI_CUESHEET_0_TAN_1600_0P9_NONE_0P8             */
-    (U2)120U,              /* CRI_CUESHEET_0_DAN_1600_1P2_NONE_0P8             */
-    (U2)70U,               /* CRI_CUESHEET_0_TAN_1600_0P7_NONE_0P8             */
-    (U2)120U,              /* CRI_CUESHEET_0_TAN_MET_TBZ_SEAREM_LV1_24_00      */
-    (U2)13U,               /* CRI_CUESHEET_0_TAN_1600_0P13_NONE_NONE           */
-    (U2)300U,              /* CRI_CUESHEET_0_3REN_1600_1_50_NONE               */
-    (U2)35U,               /* CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00   */
-    (U2)35U,               /* CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00   */
-    (U2)70U,               /* CRI_CUESHEET_0_DAN_1600_0P14_50_NONE_BR1         */
-    (U2)42U                /* CRI_CUESHEET_0_DAN_1600_0P14_50_NONE_BR2         */
+#else
+#include "ADXAT_Data_LEX.h"
+/* ACF data table */
+static const CriUint32 u4_sp_SOUND_ACF_DATA[] = {
+    #include "ADXAT_Data_acf_LEX.h"
 };
+static const CriSint32 s4_s_SOUND_ACF_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACF_DATA);
+
+/* AWB data table */
+static const CriUint32 u4_sp_SOUND_AWB_DATA[] = {
+    #include "ADXAT_Data_awb_LEX.h"
+};
+static const CriSint32 s4_s_SOUND_AWB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_AWB_DATA);
+
+/* ACB data table */
+static const CriUint32 u4_sp_SOUND_ACB_DATA[] = {
+    #include "ADXAT_Data_c_acb_LEX.h"
+};
+static const CriSint32 s4_s_SOUND_ACB_DATA_SIZE = s4_s_SoundCriMgrArraySize(u4_sp_SOUND_ACB_DATA);
+#endif
+
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
+/* Table of sound cycle every timbre */
+static const U2 u2_sp_SOUND_WAV_CYCLETIME_TYT[CRI_CUESHEET_0_TYT_CUENUM] = {
+    (U2)U2_MAX,            /* CRI_CUESHEET_0_TYT_REN_1600_NONE_NONE_NONE                 */
+    (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_1600_0P5_NONE_0P8                   */
+    (U2)100U,              /* CRI_CUESHEET_0_TYT_DAN_1600_1_NONE_0P8                     */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_DAN_1600_0P4_NONE_0P8                   */
+    (U2)14U,               /* CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00          */
+    (U2)20U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE2_0_00           */
+    (U2)U2_MAX,            /* CRI_CUESHEET_0_TYT_REN_MET_TBZ_CLESON_FRS_24_01            */
+    (U2)20U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRM_24_01            */
+    (U2)20U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRM_24_00            */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00          */
+    (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRL_24_01            */
+    (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRL_24_00            */
+    (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRF_24_01            */
+    (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRF_24_00            */
+    (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00          */
+    (U2)120U,              /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01            */
+    (U2)26U,               /* CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00           */
+    (U2)U2_MAX,            /* CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00          */
+    (U2)90U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00           */
+    (U2)20U,               /* CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00            */
+    (U2)100U,              /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_REVERSE_INT_24_01           */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV2_24_01            */
+    (U2)120U,              /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_SEAREM_LV1_24_01            */
+    (U2)5U,                /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01         */
+    (U2)5U,                /* CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01         */
+    (U2)120U,              /* CRI_CUESHEET_0_TYT_DAN_800_1P2_NONE_0P8                    */
+    (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_800_0P7_NONE_0P8                    */
+    (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_800_0P5_NONE_0P8                    */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_DAN_800_0P4_NONE_0P8                    */
+    (U2)90U,               /* CRI_CUESHEET_0_TYT_TAN_800_0P9_NONE_0P8                    */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_2REN_800_0P2_50_NONE                    */
+    (U2)120U,              /* CRI_CUESHEET_0_TYT_DAN_800_1P2_50_NONE                     */
+    (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_800_0P7_50_NONE                     */
+    (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_800_0P5_50_NONE                     */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_DAN_800_0P4_50_NONE                     */
+    (U2)120U,              /* CRI_CUESHEET_0_TYT_DAN_1600_1P2_50_NONE                    */
+    (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_1600_0P7_50_NONE                    */
+    (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_1600_0P5_50_NONE                    */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_DAN_1600_0P4_50_NONE                    */
+    (U2)90U,               /* CRI_CUESHEET_0_TYT_TAN_1600_0P9_NONE_NONE                  */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_2REN_1600_0P2_50_NONE                   */
+    (U2)120U,              /* CRI_CUESHEET_0_TYT_DAN_2400_1P2_50_NONE                    */
+    (U2)70U,               /* CRI_CUESHEET_0_TYT_DAN_2400_0P7_50_NONE                    */
+    (U2)50U,               /* CRI_CUESHEET_0_TYT_DAN_2400_0P5_50_NONE                    */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_DAN_2400_0P4_50_NONE                    */
+    (U2)90U,               /* CRI_CUESHEET_0_TYT_TAN_2400_0P9_NONE_NONE                  */
+    (U2)40U,               /* CRI_CUESHEET_0_TYT_2REN_2400_0P2_50_NONE                   */
+    (U2)U2_MAX             /* CRI_CUESHEET_0_TYT_REN_2400_NONE_NONE_NONE                 */
+};
+#else
+/* Table of sound cycle every timbre */
+static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM] = {
+    (U2)U2_MAX,            /* CRI_CUESHEET_0_LEX_REN_1600_NONE_NONE_NONE                 */
+    (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_1600_0P5_NONE_0P8                   */
+    (U2)100U,              /* CRI_CUESHEET_0_LEX_DAN_1600_1_NONE_0P8                     */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_DAN_1600_0P4_NONE_0P8                   */
+    (U2)14U,               /* CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00          */
+    (U2)20U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE2_0_00           */
+    (U2)U2_MAX,            /* CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_01            */
+    (U2)20U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRM_24_01_A          */
+    (U2)20U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRM_24_01_A          */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00          */
+    (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRL_24_01_A          */
+    (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRL_24_01_A          */
+    (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRF_24_02_A          */
+    (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02_A          */
+    (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00          */
+    (U2)200U,              /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02_A          */
+    (U2)26U,               /* CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00           */
+    (U2)U2_MAX,            /* CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00          */
+    (U2)90U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00           */
+    (U2)20U,               /* CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00            */
+    (U2)100U,              /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_REVERSE_INT_24_01_A         */
+    (U2)144U,              /* CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV2_24_02_A          */
+    (U2)200U,              /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_SEAREM_LV1_24_02_A          */
+    (U2)32U,               /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B       */
+    (U2)32U,               /* CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B       */
+    (U2)120U,              /* CRI_CUESHEET_0_LEX_DAN_800_1P2_NONE_0P8                    */
+    (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_800_0P7_NONE_0P8                    */
+    (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_800_0P5_NONE_0P8                    */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_DAN_800_0P4_NONE_0P8                    */
+    (U2)90U,               /* CRI_CUESHEET_0_LEX_TAN_800_0P9_NONE_0P8                    */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_2REN_800_0P2_50_NONE                    */
+    (U2)120U,              /* CRI_CUESHEET_0_LEX_DAN_800_1P2_50_NONE                     */
+    (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_800_0P7_50_NONE                     */
+    (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_800_0P5_50_NONE                     */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_DAN_800_0P4_50_NONE                     */
+    (U2)120U,              /* CRI_CUESHEET_0_LEX_DAN_1600_1P2_50_NONE                    */
+    (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_1600_0P7_50_NONE                    */
+    (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_1600_0P5_50_NONE                    */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_DAN_1600_0P4_50_NONE                    */
+    (U2)90U,               /* CRI_CUESHEET_0_LEX_TAN_1600_0P9_NONE_NONE                  */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_2REN_1600_0P2_50_NONE                   */
+    (U2)120U,              /* CRI_CUESHEET_0_LEX_DAN_2400_1P2_50_NONE                    */
+    (U2)70U,               /* CRI_CUESHEET_0_LEX_DAN_2400_0P7_50_NONE                    */
+    (U2)50U,               /* CRI_CUESHEET_0_LEX_DAN_2400_0P5_50_NONE                    */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_DAN_2400_0P4_50_NONE                    */
+    (U2)90U,               /* CRI_CUESHEET_0_LEX_TAN_2400_0P9_NONE_NONE                  */
+    (U2)40U,               /* CRI_CUESHEET_0_LEX_2REN_2400_0P2_50_NONE                   */
+    (U2)U2_MAX             /* CRI_CUESHEET_0_LEX_REN_2400_NONE_NONE_NONE                 */
+};
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -310,79 +396,100 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME[CRI_CUESHEET_0_CUENUM] = {
 /*===================================================================================================================================*/
 void    vd_g_SoundCriMgrInitialize(void)
 {
-    CriAtomExConfig_Rh850d1                 st_t_config_rh850d1;              /* Configuration structure for library initialization  */
+    u1_s_sound_initialwait     = (U1)0U;
+    u1_s_sound_fltbcheck_cycle = (U1)0U;
+    u1_s_sound_err_count       = (U1)0U;
+    u1_s_sound_ic_error        = (U1)SOUND_IC_NORMAL;
+
+    Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_HIGH);
+    Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_HIGH);
+    Dio_WriteChannel((U1)DIO_ID_PORT0_CH5, (U1)STD_HIGH);
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_s_SoundCriMgrInitialize(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_SoundCriMgrInitialize(void)
+{
+    CriAtomExConfig_Rh850u2a                st_t_config_rh850u2a;             /* Configuration structure for library initialization  */
     CriAtomExSoundGeneratorVoicePoolConfig  st_t_sound_voice_pool_config_sg;  /* Configuration structure for SG voice-pool creation  */
     CriAtomExAdxVoicePoolConfig             st_t_sound_voice_pool_config_adx; /* Configuration structure for ADX voice-pool creation */
     CriAtomExPlayerConfig                   st_t_sound_player_config;         /* Configuration structure for AtomEx player creation  */
     U1                                      u1_t_grp_no;                      /* Sound group number                                  */
 
+    criAtomEx_PreInitialize_Rh850u2a();
+
     vd_g_SoundCriDrvInitialize();
+
+    __DI();
+    Dma_SetInterrupt( (U1)DMA_CH_DATA_ID_7, (U1)OFF, (U1)ON );
+    Port_SetPinMode((U2)PORT_ID_PORT20_PIN1,   (U4)PORT_MODE_CFG_P20_1_TAUD1O1); 
+    Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_TAUD1O2);
+    __EI();
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
     criErr_SetCallback(vd_s_SoundCriMgrErrorCallback);
 #endif /* SOUND_CRI_DEBUGMODE */
 
     /* Set configuration structure for library initialization in default value */
-    criAtomEx_SetDefaultConfig_Rh850d1(&st_t_config_rh850d1);
+    criAtomEx_SetDefaultConfig_Rh850u2a(&st_t_config_rh850u2a);
 
-    st_t_config_rh850d1.drv.timer_initialize_func           = vd_g_SoundCriDrvTimerInitialize;
-    st_t_config_rh850d1.drv.timer_finalize_func             = vd_g_SoundCriDrvTimerFinalize;
-    st_t_config_rh850d1.drv.timer_get_count_func            = u4_g_SoundCriDrvTimerGetCount;
-    st_t_config_rh850d1.drv.timer_frequency                 = (CriUint32)SOUND_CRI_TIMER_FREQUENCY;
+    st_t_config_rh850u2a.drv.timer_start_func                = vd_g_SoundCriDrvTimerInitialize;
+    st_t_config_rh850u2a.drv.timer_stop_func                 = vd_g_SoundCriDrvTimerFinalize;
+    st_t_config_rh850u2a.drv.timer_get_count_func            = u4_g_SoundCriDrvTimerGetCount;
+    st_t_config_rh850u2a.drv.timer_frequency                 = (CriUint32)SOUND_CRI_TIMER_FREQUENCY;
 
-    st_t_config_rh850d1.sfr_config.clkfix_clk               = (CriUint32)SOUND_CRI_CLKFIX_CLK;
-    st_t_config_rh850d1.sfr_config.drv.dmac_initialize_func = vd_g_SoundCriDrvDmacInitialize;
-    st_t_config_rh850d1.sfr_config.drv.dmac_finalize_func   = vd_g_SoundCriDrvDmacFinalize;
-    st_t_config_rh850d1.sfr_config.drv.dmac_start_func      = vd_g_SoundCriDrvDmacStart;
-    st_t_config_rh850d1.sfr_config.drv.dmac_intr_func       = vd_g_SoundCriDrvDmacIntr;
-    st_t_config_rh850d1.sfr_config.drv.dmac_stop_func       = vd_g_SoundCriDrvDmacStop;
-    st_t_config_rh850d1.sfr_config.drv.pcmp_initialize_func = vd_g_SoundCriDrvPcmpInitialize;
-    st_t_config_rh850d1.sfr_config.drv.pcmp_finalize_func   = vd_g_SoundCriDrvPcmpFinalize;
-    st_t_config_rh850d1.sfr_config.drv.pcmp_start_func      = vd_g_SoundCriDrvPcmpStart;
-    st_t_config_rh850d1.sfr_config.drv.pcmp_stop_func       = vd_g_SoundCriDrvPcmpStop;
-    st_t_config_rh850d1.sfr_config.drv.intr_disable_func    = vd_g_SoundCriDrvIntrDisable;
-    st_t_config_rh850d1.sfr_config.drv.intr_enable_func     = vd_g_SoundCriDrvIntrEnable;
-    st_t_config_rh850d1.sfr_config.pwm_method               = CRISFRCONFIG_PWM_METHOD_HIGH_PRECISION;
+    st_t_config_rh850u2a.sfr_config.taud_clk                 = (CriUint32)SOUND_CRI_CLKFIX_CLK;
+    st_t_config_rh850u2a.sfr_config.drv.dmac_start_func        = vd_g_SoundCriDrvDmacStart;
+    st_t_config_rh850u2a.sfr_config.drv.dmac_intr_func         = vd_g_SoundCriDrvDmacIntr;
+    st_t_config_rh850u2a.sfr_config.drv.dmac_stop_func         = vd_g_SoundCriDrvDmacStop;
+    st_t_config_rh850u2a.sfr_config.drv.dmac_disable_intr_func = vd_g_SoundCriDrvDmaDisableIntr;
+    st_t_config_rh850u2a.sfr_config.drv.dmac_enable_intr_func  = vd_g_SoundCriDrvDmaEnableIntr;
+    st_t_config_rh850u2a.sfr_config.drv.taud_start_func        = vd_g_SoundCriDrvTaudStart;
+    st_t_config_rh850u2a.sfr_config.drv.taud_stop_func         = vd_g_SoundCriDrvTaudStop;
 
-    st_t_config_rh850d1.atom_ex.max_virtual_voices          = (CriSint32)SOUND_CRI_MAX_VIRTUAL_VOICES;
-    st_t_config_rh850d1.atom_ex.max_tracks                  = (CriUint32)SOUND_CRI_MAX_TRACKS;
-    st_t_config_rh850d1.atom_ex.max_track_items             = (CriUint32)SOUND_CRI_MAX_TRACK_ITEMS;
-    st_t_config_rh850d1.atom_ex.max_sequences               = (CriSint32)SOUND_CRI_MAX_SEQUENCES;
+    st_t_config_rh850u2a.atom_ex.max_virtual_voices          = (CriSint32)SOUND_CRI_MAX_VIRTUAL_VOICES;
+    st_t_config_rh850u2a.atom_ex.max_tracks                  = (CriUint32)SOUND_CRI_MAX_TRACKS;
+    st_t_config_rh850u2a.atom_ex.max_track_items             = (CriUint32)SOUND_CRI_MAX_TRACK_ITEMS;
+    st_t_config_rh850u2a.atom_ex.max_sequences               = (CriSint32)SOUND_CRI_MAX_SEQUENCES;
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_initialize_size = (CriSint32)criAtomEx_CalculateWorkSize_Rh850d1(&st_t_config_rh850d1);
+    s4_s_initialize_size = (CriSint32)criAtomEx_CalculateWorkSize_Rh850u2a(&st_t_config_rh850u2a);
     s4_s_initialize_size = s4_s_initialize_size;                          /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
 
     /* Library initialization */
-    criAtomEx_Initialize_Rh850d1(&st_t_config_rh850d1, s1_sp_sound_cri_init_work, (CriSint32)SOUND_CRI_INIT_WORK_SIZE);
+    criAtomEx_Initialize_Rh850u2a(&st_t_config_rh850u2a, s1_sp_sound_cri_init_work, (CriSint32)SOUND_CRI_INIT_WORK_SIZE);
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_acfdata_size = (CriSint32)criAtomEx_CalculateWorkSizeForRegisterAcfData((void *)u4_sp_SOUND_ACF_DATA, s4_s_SOUND_ACF_DATA_SIZE);
+    s4_s_acfdata_size = (CriSint32)criAtomEx_CalculateWorkSizeForRegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA, s4_s_SOUND_ACF_DATA_SIZE);
     s4_s_acfdata_size = s4_s_acfdata_size;                                /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory ACF data registration */
-    criAtomEx_RegisterAcfData((void *)u4_sp_SOUND_ACF_DATA,
+    criAtomEx_RegisterAcfDataAt((void *)u4_sp_SOUND_ACF_DATA,
                               s4_s_SOUND_ACF_DATA_SIZE,
                               u1_sp_sound_acfdata_alloc,
                               (CriSint32)SOUND_ACFDATA_SIZE);
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_awbdata_size = (CriSint32)CRIATOMAWB_WORKSIZE_FOR_LOADFROMMEMORY;
+    s4_s_awbdata_size = (CriSint32)CRIATOMAWB_WORKSIZE_FOR_LOADFROMMEMORYAT;
     s4_s_awbdata_size = s4_s_awbdata_size;                                /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory AWB handle creation */
-    stp_s_sound_awb_hn = criAtomAwb_LoadFromMemory_Rh850d1(u4_sp_SOUND_AWB_DATA,
-                                                           s4_s_SOUND_AWB_DATA_SIZE,
-                                                           u1_sp_sound_awbdata_alloc,
-                                                           (CriSint32)SOUND_AWBDATA_SIZE);
+    stp_s_sound_awb_hn = criAtomAwb_LoadFromMemoryAt(u4_sp_SOUND_AWB_DATA,
+                                                     s4_s_SOUND_AWB_DATA_SIZE,
+                                                     u1_sp_sound_awbdata_alloc,
+                                                     (CriSint32)SOUND_AWBDATA_SIZE);
 
 #if (SOUND_CRI_DEBUGMODE == TRUE)
-    s4_s_acbdata_size = (CriSint32)criAtomExAcb_CalculateWorkSizeForLoadAcbDataWithAwbHn((void *)u4_sp_SOUND_ACB_DATA, s4_s_SOUND_ACB_DATA_SIZE, stp_s_sound_awb_hn);
+    s4_s_acbdata_size = (CriSint32)criAtomExAcb_CalculateWorkSizeForLoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA, s4_s_SOUND_ACB_DATA_SIZE, stp_s_sound_awb_hn);
     s4_s_acbdata_size = s4_s_acbdata_size;                                /* QAC countermeasure */
 #endif /* SOUND_CRI_DEBUGMODE */
     /* On-memory ACB data loading */
-    stp_s_sound_acb_hn = criAtomExAcb_LoadAcbDataWithAwbHn((void *)u4_sp_SOUND_ACB_DATA,
+    stp_s_sound_acb_hn = criAtomExAcb_LoadAcbDataWithAwbHnAt((void *)u4_sp_SOUND_ACB_DATA,
                                                            s4_s_SOUND_ACB_DATA_SIZE,
                                                            stp_s_sound_awb_hn,
                                                            u1_sp_sound_acbdata_alloc,
@@ -439,10 +546,6 @@ void    vd_g_SoundCriMgrInitialize(void)
 
     u4_s_sound_ow_unlock    = (U4)0U;
     u1_s_sound_ow_reqid     = (U1)U1_MAX;
-#if 0   /* BEV BSW provisionally */
-    Port_SetPinMode((U2)PORT_ID_PORT20_PIN1,   (U4)PORT_MODE_CFG_P20_1_9); 
-    Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_10);
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -464,7 +567,7 @@ void    vd_g_SoundCriMgrFinalize(void)
     criAtomExAcb_Release(stp_s_sound_acb_hn);
     criAtomAwb_Release(stp_s_sound_awb_hn);
     criAtomEx_UnregisterAcf();
-    criAtomEx_Finalize_Rh850d1();
+    criAtomEx_Finalize_Rh850u2a();
 }
 
 /*===================================================================================================================================*/
@@ -477,19 +580,25 @@ void    vd_g_SoundCriMgrMainTask(void)
 {
     U1          u1_t_playnum;                                                               /* Number of playing sound groups        */
     U1          u1_t_errsts;
+    U1          u1_t_initial;
 
+    u1_t_initial = u1_s_SoundDiagnosis();
+
+    if (u1_t_initial != (U1)SOUND_INITIAL_WAIT) {
 #if 0   /* BEV BSW provisionally */
-    u1_t_errsts = (U1)Dma_CheckDmaError((U1)SOUND_CRI_DRV_DMA_CH) & (U1)DMA_DTSER_DTSER;
+        u1_t_errsts = (U1)Dma_CheckDmaError((U1)SOUND_CRI_DRV_DMA_CH) & (U1)DMA_DTSER_DTSER;
 #else
-    u1_t_errsts = (U1)0U;
+        u1_t_errsts = (U1)0U;
 #endif
-    if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
-        vd_g_SoundCriMgrFinalize();
-        vd_g_SoundCriMgrInitialize();
+        if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
+            vd_g_SoundCriMgrFinalize();
+            vd_g_SoundCriMgrInitialize();
+        }
+
+        u1_t_playnum = u1_s_SoundCriMgrWavNext();                                           /* Control buzzer sounding every CH      */
+        vd_s_SoundCriMgrUpdtLib(u1_t_playnum);                                              /* Library periodic process              */
     }
 
-    u1_t_playnum = u1_s_SoundCriMgrWavNext();                                               /* Control buzzer sounding every CH      */
-    vd_s_SoundCriMgrUpdtLib(u1_t_playnum);                                                  /* Library periodic process              */
 }
 
 /*===================================================================================================================================*/
@@ -500,210 +609,320 @@ void    vd_g_SoundCriMgrMainTask(void)
 /*===================================================================================================================================*/
 static  U1      u1_s_SoundCriMgrWavNext(void)
 {
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
     /* Table to convert the requested buzzer ID to the cue ID */
-    static const U2 u2_sp_SOUND_REQ_TO_WAV[WCHIME_NUM_REQ] = {
-        (U2)CRI_CUESHEET_0_REN_1600_NONE_NONE_NONE,                                        /* WCHIME_REQ_CO_PCS_TSTMD1              */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P1_50_NONE,                                           /* WCHIME_REQ_IN_PCS_TSTMD2              */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P14_50_NONE,                                          /* WCHIME_REQ_IN_PCS_TSTMD3              */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P6_NONE_0P8,                                          /* WCHIME_REQ_IN_PCS_TSTMD4              */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P5_NONE_0P8,                                          /* WCHIME_REQ_IN_PCS_TSTMD5              */
-        (U2)CRI_CUESHEET_0_DAN_1600_1_NONE_0P8,                                            /* WCHIME_REQ_IN_PCS_TSTMD6              */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P2_50_NONE,                                           /* WCHIME_REQ_IN_BRK_TST_LRN             */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P065_NONE_NONE,                                       /* WCHIME_REQ_SI_BRK_TST_STRT            */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_BRK_TST_FIN             */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_FRRADA_CMP              */
-        (U2)CRI_CUESHEET_0_DAN_2400_0P4_50_NONE,                                           /* WCHIME_REQ_IN_FRRADA_ERR              */ /* 19Pfv3 no sound file */
-        (U2)CRI_CUESHEET_0_TAN_800_0P2_NONE_NONE,                                          /* WCHIME_REQ_SI_PTS_RDY                 */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P14_50_NONE,                                          /* WCHIME_REQ_IN_PCS                     */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P14_50_NONE,                                          /* WCHIME_REQ_IN_ACC                     */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P14_50_NONE,                                          /* WCHIME_REQ_IN_STEER_UNDRIVE           */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P14_50_NONE,                                          /* WCHIME_REQ_IN_LCS_APR                 */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P14_50_NONE,                                          /* WCHIME_REQ_IN_DOA                     */
-        (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,                                   /* WCHIME_REQ_CO_CSR_FR_SD               */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRM_24_00,                                   /* WCHIME_REQ_IN_CSR_FR_MD               */
-        (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,                                   /* WCHIME_REQ_CO_CSR_RR_SD               */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRM_24_00,                                   /* WCHIME_REQ_IN_CSR_RR_MD               */
-        (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,                                   /* WCHIME_REQ_CO_CSR_FRRR_SD             */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRM_24_00,                                   /* WCHIME_REQ_IN_CSR_FRRR_MD             */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P14_50_NONE_BR2,                                      /* WCHIME_REQ_IN_CSR_RCTA                */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_PCS_PED                 */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_FCTA_STEP_STOP          */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P14_50_NONE,                                          /* WCHIME_REQ_IN_EDSS_R04                */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRL_24_00_CH3,                               /* WCHIME_REQ_IN_CSR_FR_LD               */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRL_24_00,                                   /* WCHIME_REQ_IN_CSR_RR_LD               */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRL_24_00_CH3,                               /* WCHIME_REQ_IN_CSR_FRRR_LD             */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_DA                      */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_TCHAR_CYCL2             */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_EDSS_R03                */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_ADTJA_PTN6              */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_EIGCON_EG_PWROFF        */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_SCB                     */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_BSM                     */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_LDA                     */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_INFRA_INT               */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_SMASTA_INT3             */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_OAA_HFCT                */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_FCTA                    */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRF_24_00,                                   /* WCHIME_REQ_IN_CSR_FR_FD               */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRF_24_00,                                   /* WCHIME_REQ_IN_CSR_RR_FD               */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRF_24_00,                                   /* WCHIME_REQ_IN_CSR_FRRR_FD             */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_TCHAR_CYCL1             */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_BRK_FLDLEAK             */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_STEER_STP               */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV1_24_00,                                   /* WCHIME_REQ_IN_SBLT_FMV                */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_ROLAWA_ENST_VRUN        */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_SBW_RJCT                */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_NACCON                  */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_PEXI_HV_NDBW            */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_COOTEM                  */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_ACCHOL                  */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_SBW_AUTOP               */
-        (U2)CRI_CUESHEET_0_3REN_1600_0P4_50_NONE,                                          /* WCHIME_REQ_SI_RSA_SIGN_CAUTION2       */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P4_50_NONE,                                          /* WCHIME_REQ_SI_ESWUOC_REL              */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_ADTJA_PTN5              */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_PMAR                    */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_PKBWAR                  */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_SOCLOW_HV               */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P1_NONE_NONE,                                         /* WCHIME_REQ_SI_APP_NONOPE_REQ2         */
-        (U2)CRI_CUESHEET_0_TAN_1600_1_NONE_0P8,                                            /* WCHIME_REQ_SI_APP_NONOPE_REQ4         */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_OILPRE                  */
-        (U2)CRI_CUESHEET_0_REN_1600_NONE_NONE_NONE,                                        /* WCHIME_REQ_CO_SYSMAL_RNG_P            */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_CHAMAL_BAT_FAIL         */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P2_50_NONE,                                           /* WCHIME_REQ_IN_SYSMAL_REMDST_0M        */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_SYSMAL_REQSTP           */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_ADTJA_PTN3              */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_EPB                     */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_EIGCON_IGOFF            */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_SPDL_DISACT             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_SFTPOS_NML              */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_ACC_LSPDCNSL            */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_BEVR_DOUBLE             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_LTA_CNCL                */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_SPDL_REJECT             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_LCS_CNCL                */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_APP_DIS_ASSIST          */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_APP_CMPLT               */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_DCLDSP_OPERJCT          */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_LCS_ACK                 */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_XMDRJT                  */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_XMGRIP_DOUBLE           */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_X_MODE_DEACTIVATE       */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_X_MODE_REJECT           */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_BSTMOD_REJ              */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_DOA_RJCT                */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM        */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_ROLAWA_ENST_VSTP        */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_SBW_SPL_STATE           */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_DMC_LV2                 */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_REVERSE_INT_24_00,                                  /* WCHIME_REQ_IN_SFTPOS_REV              */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_SMASTA_INT2             */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_SMASTA_CON              */
-        (U2)CRI_CUESHEET_0_DAN_800_0P5_NONE_0P8,                                           /* WCHIME_REQ_IN_SOCLOW_NPOS             */
-        (U2)CRI_CUESHEET_0_REN_1600_NONE_NONE_NONE,                                        /* WCHIME_REQ_CO_STOSTA                  */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_ACC_BRKREQ              */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV2_24_00,                                   /* WCHIME_REQ_IN_SBLT_LV2                */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_ACC_OVERSPD             */
-        (U2)CRI_CUESHEET_0_4REN_800_0P9_50_NONE,                                           /* WCHIME_REQ_SI_ACC_SHIFTREQ            */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_TPMS_CYCL               */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_SWS                     */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P7_NONE_0P8,                                          /* WCHIME_REQ_IN_MINDSPWR_LV2            */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P7_NONE_0P8,                                          /* WCHIME_REQ_IN_BGLFSPD                 */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P7_NONE_0P8,                                          /* WCHIME_REQ_IN_DR_OPN                  */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_BRK_SYS_MAL             */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P2_50_NONE,                                           /* WCHIME_REQ_IN_BRK_SYS_NOOPE2          */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_BRK_SYS_NOOPE1          */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_STEER_LMT               */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_HYB_HT                  */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P9_NONE_0P8,                                          /* WCHIME_REQ_SI_SBW_MAL                 */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_SBW_MAL                 */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P7_NONE_0P8,                                          /* WCHIME_REQ_IN_SYSMAL_REMDST_500M      */
-        (U2)CRI_CUESHEET_0_DAN_1600_1P2_NONE_0P8,                                          /* WCHIME_REQ_IN_SYSMAL_REMDST_1KM       */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_LTA_PTN2                */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_LTA_PTN3                */
-        (U2)CRI_CUESHEET_0_DAN_800_1P2_NONE_0P8,                                           /* WCHIME_REQ_IN_ADTJA_PTN4              */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_ADTJA_PTN7              */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P7_NONE_0P8,                                          /* WCHIME_REQ_SI_MINDSPWR_LV1            */
-        (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV1_24_00,                                   /* WCHIME_REQ_IN_SBLT_LV1                */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_SEAREM_LV1_24_00,                                   /* WCHIME_REQ_SI_SBLT                    */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_GPF                     */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_RSA_SIGN_CTN1_OTH       */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_RSA_SIGN_CTN1_LX        */ /* 19pfv3 no sound file */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_CHKENG                  */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_DMC_LV1                 */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_ADTJA_PTN2              */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P9_NONE_0P8,                                          /* WCHIME_REQ_SI_SYSMAL_FAIL             */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_LTA_PTN1                */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_INFRA_SNGL              */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_MLT_MSG                 */
-        (U2)CRI_CUESHEET_0_DAN_800_1P2_NONE_0P8,                                           /* WCHIME_REQ_IN_BKEY                    */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_LIGHT                   */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_REVERSE_INT_24_00,                                  /* WCHIME_REQ_SI_ACC_AUTOSTART           */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P9_NONE_0P8,                                          /* WCHIME_REQ_SI_SBW_RCPT                */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P13_NONE_NONE,                                        /* WCHIME_REQ_SI_BEVR_SINGLE             */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_XMGRIP_SINGLE           */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_X_MODE_ON               */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_DMODE_CHANGE            */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_LDA_HFCT                */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_BATINS                  */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_TPMS_SINGLE             */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_TCHAR_SNGL              */
-        (U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,                                           /* WCHIME_REQ_IN_LDA_WARN                */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_SMASTA_SNGL             */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_TOWWAR                  */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_BATCOO                  */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_REVERSE_INT_24_00,                                  /* WCHIME_REQ_SI_TMN_LVN                 */
-        (U2)CRI_CUESHEET_0_DAN_800_1P2_NONE_0P8,                                           /* WCHIME_REQ_IN_SMASTA_INT1             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_BRK_APP3                */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P4_NONE_0P8,                                          /* WCHIME_REQ_IN_BRK_APP1                */
-        (U2)CRI_CUESHEET_0_DAN_1600_0P2_50_NONE,                                           /* WCHIME_REQ_IN_BRK_APP2                */
-        (U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,                                           /* WCHIME_REQ_SI_ADTJA_PTN1              */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_BKHLD_NOTACT_R16        */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_BKHLD_NOTREL            */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_BKHLD_NOTACT_R07        */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_BKHLD_NOTACT_R08        */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_BKHLD_NOTACT_R17        */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_BKHLD_REL_R10           */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_BKHLD_REL_R11           */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_BKHLD_NOTACT_R13        */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P9_NONE_0P8,                                          /* WCHIME_REQ_SI_ACC_APPRVLSTART         */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_PERSET_SUC              */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,                                          /* WCHIME_REQ_SI_PERSET_FAIL             */
-        (U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_PERSET_DET              */
-        (U2)CRI_CUESHEET_0_TAN_800_0P2_NONE_NONE,                                          /* WCHIME_REQ_SI_RSA_CHG_SPLDLMT         */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_FMSEAT_MEM_SCS          */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_FMSEAT_MEM_REJ          */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_FMSEAT_ERS_INFO         */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_FMSEAT_MEM_CALL         */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P4_50_NONE,                                          /* WCHIME_REQ_SI_ESWUOC_RJCT             */
-        (U2)CRI_CUESHEET_0_TAN_1600_0P2_NONE_NONE,                                         /* WCHIME_REQ_SI_SMASTA_SNGL2            */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_RJCT_HEAT            */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_RJCT_BAT             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_RJCT_SPD             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_RJCT_ACC             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_RJCT_OTH             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_DCTV_LWBAT           */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_DCTV_SPD             */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_DCTV_ACCL            */
-        (U2)CRI_CUESHEET_0_2REN_1600_0P13_50_NONE,                                         /* WCHIME_REQ_SI_EV_DCTV                 */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_LC_LS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_LC_MS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_LC_HS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_MC_LS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_MC_MS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_MC_HS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_HC_LS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_HC_MS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,                                /* WCHIME_REQ_SI_TURHAZ_STA_HC_HS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,                                /* WCHIME_REQ_SI_TURHAZ_FIN_LC_LS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,                                /* WCHIME_REQ_SI_TURHAZ_FIN_LC_MS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,                                /* WCHIME_REQ_SI_TURHAZ_FIN_LC_HS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,                                /* WCHIME_REQ_SI_TURHAZ_FIN_MC_LS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,                                /* WCHIME_REQ_SI_TURHAZ_FIN_MC_MS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,                                /* WCHIME_REQ_SI_TURHAZ_FIN_MC_HS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,                                /* WCHIME_REQ_SI_TURHAZ_FIN_HC_LS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,                                /* WCHIME_REQ_SI_TURHAZ_FIN_HC_MS        */
-        (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00                                 /* WCHIME_REQ_SI_TURHAZ_FIN_HC_HS        */
+    static const U2 u2_sp_SOUND_REQ_TO_WAV_TYT[WCHIME_NUM_REQ] = {
+        (U2)CRI_CUESHEET_0_TYT_REN_1600_NONE_NONE_NONE,                                       /* WCHIME_REQ_CO_PCS_TSTMD1              */
+        (U2)CRI_CUESHEET_0_TYT_DAN_1600_0P5_NONE_0P8,                                         /* WCHIME_REQ_IN_PCS_TSTMD5              */
+        (U2)CRI_CUESHEET_0_TYT_DAN_1600_1_NONE_0P8,                                           /* WCHIME_REQ_IN_PCS_TSTMD6              */
+        (U2)CRI_CUESHEET_0_TYT_DAN_1600_0P4_NONE_0P8,                                         /* WCHIME_REQ_IN_FRRADA_CMP              */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_FRRADA_ERR              */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE2_0_00,                                 /* WCHIME_REQ_SI_PTS_RDY                 */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_PCS                     */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_ACC                     */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_STEER_UNDRIVE           */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_LCS_APR                 */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_DOA                     */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_TBZ_CLESON_FRS_24_01,                                  /* WCHIME_REQ_CO_CSR_FR_SD               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRM_24_01,                                  /* WCHIME_REQ_IN_CSR_FR_MD               */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_TBZ_CLESON_FRS_24_01,                                  /* WCHIME_REQ_CO_CSR_RR_SD               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRM_24_00,                                  /* WCHIME_REQ_IN_CSR_RR_MD               */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_TBZ_CLESON_FRS_24_01,                                  /* WCHIME_REQ_CO_CSR_FRRR_SD             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRM_24_01,                                  /* WCHIME_REQ_IN_CSR_FRRR_MD             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_CSR_RCTA                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_SYSMAL_REMDST_0M        */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_PCS_PED                 */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_FCTA_STEP_STOP          */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                /* WCHIME_REQ_IN_EDSS_R04                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRL_24_01,                                  /* WCHIME_REQ_IN_CSR_FR_LD               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRL_24_00,                                  /* WCHIME_REQ_IN_CSR_RR_LD               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRL_24_01,                                  /* WCHIME_REQ_IN_CSR_FRRR_LD             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_DA                      */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_TCHAR_CYCL2             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_EDSS_R03                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_EIGCON_EG_PWROFF        */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_SCB                     */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BSM                     */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_LDA                     */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_INFRA_INT               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_SMASTA_INT3             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRF_24_01,                                  /* WCHIME_REQ_IN_CSR_FR_FD               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRF_24_00,                                  /* WCHIME_REQ_IN_CSR_RR_FD               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRF_24_01,                                  /* WCHIME_REQ_IN_CSR_FRRR_FD             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_TCHAR_CYCL1             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BRK_FLDLEAK             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_STEER_STP               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_IN_SBLT_FMV                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_ACC_BRKREQ              */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BRK_TST_FIN             */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_SBW_RJCT                */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_NACCON                  */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_PEXI_HV_NDBW            */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_ACCHOL                  */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_SBW_AUTOP               */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_RSA_SIGN_CAUTION2       */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_ESWUOC_REL              */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_PMAR                    */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_APP_NONOPE_REQ2         */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_APP_NONOPE_REQ4         */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_SYSMAL_RNG_P            */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_CHAMAL_BAT_FAIL         */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_SYSMAL_REQSTP           */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BRK_TST_LRN             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_EPB                     */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_EIGCON_IGOFF            */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_SFTPOS_NML              */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_ACC_LSPDCNSL            */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_LTA_CNCL                */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_LCS_CNCL                */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_APP_DIS_ASSIST          */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_APP_CMPLT               */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_DCLDSP_OPERJCT          */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_LCS_ACK                 */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_DOA_RJCT                */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_SBW_SPL_STATE           */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_DMC_LV2                 */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_REVERSE_INT_24_01,                                 /* WCHIME_REQ_IN_SFTPOS_REV              */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_SMASTA_INT2             */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_SMASTA_CON              */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV2_24_01,                                  /* WCHIME_REQ_IN_SBLT_LV2                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_ACC_OVERSPD             */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_ACC_SHIFTREQ            */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_TPMS_CYCL               */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_SWS                     */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_MINDSPWR_LV2            */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_BGLFSPD                 */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_DR_OPN                  */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BRK_SYS_MAL             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BRK_SYS_NOOPE2          */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_BRK_SYS_NOOPE1          */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_STEER_LMT               */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_SBW_MAL                 */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_SBW_MAL                 */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_SYSMAL_REMDST_500M      */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_SYSMAL_REMDST_1KM       */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_LTA_PTN2                */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_LTA_PTN3                */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_MINDSPWR_LV1            */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_IN_SBLT_LV1                */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_SI_SBLT                    */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_RSA_SIGN_CTN1_OTH       */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_DMC_LV1                 */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_SYSMAL_FAIL             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_LTA_PTN1                */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_INFRA_SNGL              */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_MLT_MSG                 */
+        (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_LIGHT                   */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_ACC_AUTOSTART           */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_SBW_RCPT                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_LDA_HFCT                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_BATINS                  */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_TPMS_SINGLE             */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_TCHAR_SNGL              */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_LDA_WARN                */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_SMASTA_SNGL             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_TOWWAR                  */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_TMN_LVN                 */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_SMASTA_INT1             */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BRK_APP3                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BRK_APP1                */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BRK_APP2                */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_NOTACT_R16        */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_NOTREL            */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_NOTACT_R07        */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_NOTACT_R08        */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_NOTACT_R17        */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_REL_R10           */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_REL_R11           */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_NOTACT_R13        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_BRK_TST_STRT            */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_ACC_APPRVLSTART         */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_PERSET_SUC              */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_PERSET_FAIL             */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE2_0_00,                                 /* WCHIME_REQ_SI_RSA_CHG_SPLDLMT         */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_FMSEAT_MEM_SCS          */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_FMSEAT_MEM_REJ          */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_FMSEAT_ERS_INFO         */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_FMSEAT_MEM_CALL         */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_ESWUOC_RJCT             */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_SMASTA_SNGL2            */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_LC_LS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_LC_MS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_LC_HS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_MC_LS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_MC_MS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_MC_HS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_HC_LS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_HC_MS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01,                               /* WCHIME_REQ_SI_TURHAZ_STA_HC_HS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01,                               /* WCHIME_REQ_SI_TURHAZ_FIN_LC_LS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01,                               /* WCHIME_REQ_SI_TURHAZ_FIN_LC_MS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01,                               /* WCHIME_REQ_SI_TURHAZ_FIN_LC_HS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01,                               /* WCHIME_REQ_SI_TURHAZ_FIN_MC_LS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01,                               /* WCHIME_REQ_SI_TURHAZ_FIN_MC_MS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01,                               /* WCHIME_REQ_SI_TURHAZ_FIN_MC_HS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01,                               /* WCHIME_REQ_SI_TURHAZ_FIN_HC_LS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01,                               /* WCHIME_REQ_SI_TURHAZ_FIN_HC_MS        */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01                                /* WCHIME_REQ_SI_TURHAZ_FIN_HC_HS        */
     };
+#else
+    static const U2 u2_sp_SOUND_REQ_TO_WAV_LEX[WCHIME_NUM_REQ] = {
+        (U2)CRI_CUESHEET_0_LEX_REN_1600_NONE_NONE_NONE,                                         /* WCHIME_REQ_CO_PCS_TSTMD1              */
+        (U2)CRI_CUESHEET_0_LEX_DAN_1600_0P5_NONE_0P8,                                           /* WCHIME_REQ_IN_PCS_TSTMD5              */
+        (U2)CRI_CUESHEET_0_LEX_DAN_1600_1_NONE_0P8,                                             /* WCHIME_REQ_IN_PCS_TSTMD6              */
+        (U2)CRI_CUESHEET_0_LEX_DAN_1600_0P4_NONE_0P8,                                           /* WCHIME_REQ_IN_FRRADA_CMP              */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_FRRADA_ERR              */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE2_0_00,                                   /* WCHIME_REQ_SI_PTS_RDY                 */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_PCS                     */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_ACC                     */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_STEER_UNDRIVE           */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_LCS_APR                 */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_DOA                     */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_01,                                    /* WCHIME_REQ_CO_CSR_FR_SD               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRM_24_01_A,                                  /* WCHIME_REQ_IN_CSR_FR_MD               */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_01,                                    /* WCHIME_REQ_CO_CSR_RR_SD               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRM_24_01_A,                                  /* WCHIME_REQ_IN_CSR_RR_MD               */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_01,                                    /* WCHIME_REQ_CO_CSR_FRRR_SD             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRM_24_01_A,                                  /* WCHIME_REQ_IN_CSR_FRRR_MD             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_CSR_RCTA                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_SYSMAL_REMDST_0M        */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_PCS_PED                 */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_FCTA_STEP_STOP          */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNH_0_00,                                  /* WCHIME_REQ_IN_EDSS_R04                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRL_24_01_A,                                  /* WCHIME_REQ_IN_CSR_FR_LD               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRL_24_01_A,                                  /* WCHIME_REQ_IN_CSR_RR_LD               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRL_24_01_A,                                  /* WCHIME_REQ_IN_CSR_FRRR_LD             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_DA                      */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_TCHAR_CYCL2             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_EDSS_R03                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_EIGCON_EG_PWROFF        */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_SCB                     */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BSM                     */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_LDA                     */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_INFRA_INT               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_SMASTA_INT3             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRF_24_02_A,                                  /* WCHIME_REQ_IN_CSR_FR_FD               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02_A,                                  /* WCHIME_REQ_IN_CSR_RR_FD               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRF_24_02_A,                                  /* WCHIME_REQ_IN_CSR_FRRR_FD             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_TCHAR_CYCL1             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BRK_FLDLEAK             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_STEER_STP               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02_A,                                  /* WCHIME_REQ_IN_SBLT_FMV                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_ACC_BRKREQ              */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BRK_TST_FIN             */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_SBW_RJCT                */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_NACCON                  */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_PEXI_HV_NDBW            */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_ACCHOL                  */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_SBW_AUTOP               */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_RSA_SIGN_CAUTION2       */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_ESWUOC_REL              */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_PMAR                    */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_APP_NONOPE_REQ2         */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_APP_NONOPE_REQ4         */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_SYSMAL_RNG_P            */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_CHAMAL_BAT_FAIL         */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_SYSMAL_REQSTP           */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BRK_TST_LRN             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_EPB                     */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_EIGCON_IGOFF            */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_SFTPOS_NML              */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_ACC_LSPDCNSL            */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_LTA_CNCL                */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_LCS_CNCL                */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_APP_DIS_ASSIST          */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_APP_CMPLT               */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_DCLDSP_OPERJCT          */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_LCS_ACK                 */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_DOA_RJCT                */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_MET_WRN_VOL_CSTM        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_SBW_SPL_STATE           */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_DMC_LV2                 */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_REVERSE_INT_24_01_A,                                 /* WCHIME_REQ_IN_SFTPOS_REV              */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_SMASTA_INT2             */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_SMASTA_CON              */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV2_24_02_A,                                  /* WCHIME_REQ_IN_SBLT_LV2                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_ACC_OVERSPD             */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_ACC_SHIFTREQ            */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_TPMS_CYCL               */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_SWS                     */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_MINDSPWR_LV2            */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_BGLFSPD                 */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_DR_OPN                  */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BRK_SYS_MAL             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BRK_SYS_NOOPE2          */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_BRK_SYS_NOOPE1          */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_STEER_LMT               */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_SBW_MAL                 */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_SBW_MAL                 */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_SYSMAL_REMDST_500M      */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_SYSMAL_REMDST_1KM       */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_LTA_PTN2                */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_LTA_PTN3                */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_MINDSPWR_LV1            */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02_A,                                  /* WCHIME_REQ_IN_SBLT_LV1                */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_SEAREM_LV1_24_02_A,                                  /* WCHIME_REQ_SI_SBLT                    */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_RSA_SIGN_CTN1_OTH       */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_DMC_LV1                 */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_SYSMAL_FAIL             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_LTA_PTN1                */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_INFRA_SNGL              */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_MLT_MSG                 */
+        (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_LIGHT                   */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_ACC_AUTOSTART           */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_SBW_RCPT                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_LDA_HFCT                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_BATINS                  */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_TPMS_SINGLE             */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_TCHAR_SNGL              */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_LDA_WARN                */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_SMASTA_SNGL             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_TOWWAR                  */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_TMN_LVN                 */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_SMASTA_INT1             */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BRK_APP3                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BRK_APP1                */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BRK_APP2                */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_NOTACT_R16        */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_NOTREL            */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_NOTACT_R07        */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_NOTACT_R08        */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_NOTACT_R17        */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_REL_R10           */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_REL_R11           */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_NOTACT_R13        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_BRK_TST_STRT            */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_ACC_APPRVLSTART         */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_PERSET_SUC              */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_PERSET_FAIL             */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE2_0_00,                                   /* WCHIME_REQ_SI_RSA_CHG_SPLDLMT         */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_FMSEAT_MEM_SCS          */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_FMSEAT_MEM_REJ          */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_FMSEAT_ERS_INFO         */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_FMSEAT_MEM_CALL         */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_ESWUOC_RJCT             */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_SMASTA_SNGL2            */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_LC_LS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_LC_MS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_LC_HS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_MC_LS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_MC_MS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_MC_HS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_HC_LS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_HC_MS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_STA_HC_HS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_FIN_LC_LS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_FIN_LC_MS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_FIN_LC_HS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_FIN_MC_LS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_FIN_MC_MS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_FIN_MC_HS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_FIN_HC_LS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B,                               /* WCHIME_REQ_SI_TURHAZ_FIN_HC_MS        */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B                                /* WCHIME_REQ_SI_TURHAZ_FIN_HC_HS        */
+    };
+#endif
 
     U2          u2_t_curcueid;                                                             /* Current sounding timbre cue ID        */
     U1          u1_t_playnum;                                                              /* Number of playing sound groups        */
@@ -739,14 +958,24 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
             u1_t_reqidx = u1_s_SoundCriMgrUpdtNext(u1_t_grp_no, u1_t_reqidx, &u1_t_reqvol);
 
             if(u1_t_reqidx < (U1)WCHIME_NUM_REQ){
-                u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV[u1_t_reqidx];
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
+                u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_TYT[u1_t_reqidx];
+#else
+                u2_t_curcueid = u2_sp_SOUND_REQ_TO_WAV_LEX[u1_t_reqidx];
+#endif
             }
         }
-
-        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_CUENUM){
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
+        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_TYT_CUENUM){
+#else
+        if(u2_t_curcueid < (U2)CRI_CUESHEET_0_LEX_CUENUM){
+#endif
             u1_t_playnum++;
-            u2_sp_sound_cur_cycletim[u1_t_grp_no] = u2_sp_SOUND_WAV_CYCLETIME[u2_t_curcueid];
-
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
+            u2_sp_sound_cur_cycletim[u1_t_grp_no] = u2_sp_SOUND_WAV_CYCLETIME_TYT[u2_t_curcueid];
+#else
+            u2_sp_sound_cur_cycletim[u1_t_grp_no] = u2_sp_SOUND_WAV_CYCLETIME_LEX[u2_t_curcueid];
+#endif
             /* Check clear counter of sound cycle */
             if((u1_t_reqidx  != u1_sp_sound_pre_reqidx[u1_t_grp_no]) ||
                (u1_t_reqvol  != u1_sp_sound_pre_reqvol[u1_t_grp_no]) ||
@@ -1008,622 +1237,644 @@ void    vd_g_SoundCriMgrOwDeAct(const U1 u1_a_SO_MDL_CH)
 /*===================================================================================================================================*/
 static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCHK, U2 * u2p_a_cueid, U1 * u1p_a_cuevol)
 {
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
     /* Table to control the active test */
-    static const ST_SOUND_OW_BUZ_INFO st_sp_SOUND_OW_BUZ_INFO[SOUND_OW_WAV_IDX_NUM] = {
+    static const ST_SOUND_OW_BUZ_INFO st_sp_SOUND_OW_BUZ_INFO_TYT[SOUND_OW_WAV_IDX_NUM] = {
         {   /* SOUND_AT_0P8_LRG_0P8_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_800_1P2_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_1P2_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P7_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P5_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P5_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P4_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P4_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_SI */
-            {(U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_800_0P9_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_TW */
-            {(U2)CRI_CUESHEET_0_2REN_800_0P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_2REN_800_0P2_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_LRG_0P8_CO */
-            {(U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_CONTWARN */
+            {(U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,  (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_CONTWARN_MID,                       (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_800_1P2_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_1P2_50_NONE,             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P7_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P7_50_NONE,             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P5_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P5_50_NONE,             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P4_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P4_50_NONE,             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_LRG_NONE_SI */
-            {(U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_NONE,            (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_NOTICE1 */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,   (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_NOTICE1_MID,                        (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_TW */
-            {(U2)CRI_CUESHEET_0_2REN_800_0P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_2REN_800_0P2_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_LRG_NONE_CO */
-            {(U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_CONTWARN */
+            {(U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,  (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_CONTWARN_MID,                       (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_800_1P2_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_1P2_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P7_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P5_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P5_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P4_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P4_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_SI */
-            {(U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_800_0P9_NONE_0P8,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_TW */
-            {(U2)CRI_CUESHEET_0_2REN_800_0P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_2REN_800_0P2_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_SML_0P8_CO */
-            {(U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_CONTWARN */
+            {(U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,  (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_CONTWARN_MID,                       (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_800_1P2_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_1P2_50_NONE,             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P7_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P7_50_NONE,             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P5_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P5_50_NONE,             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P4_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_800_0P4_50_NONE,             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_SML_NONE_SI */
-            {(U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_NONE,            (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_NOTICE1 */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,   (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_NOTICE1_MID,                        (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_TW */
-            {(U2)CRI_CUESHEET_0_2REN_800_0P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_2REN_800_0P2_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_SML_NONE_CO */
-            {(U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_CONTWARN */
+            {(U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,  (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_CONTWARN_MID,                       (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_1600_1P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_1600_1P2_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_1600_0P7_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_1600_0P7_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_1600_0P5_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_1600_0P5_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_1600_0P4_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_1600_0P4_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_SI */
-            {(U2)CRI_CUESHEET_0_TAN_1600_0P9_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_1600_0P9_NONE_NONE,          (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_TW */
-            {(U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,            (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_2REN_1600_0P2_50_NONE,           (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_CO */
-            {(U2)CRI_CUESHEET_0_REN_1600_NONE_NONE_NONE,          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_REN_1600_NONE_NONE_NONE,         (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_2400_1P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_2400_1P2_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_2400_0P7_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_2400_0P7_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_2400_0P5_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_2400_0P5_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_2400_0P4_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_DAN_2400_0P4_50_NONE,            (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_SI */
-            {(U2)CRI_CUESHEET_0_TAN_2400_0P9_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_2400_0P9_NONE_NONE,          (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_TW */
-            {(U2)CRI_CUESHEET_0_2REN_2400_0P2_50_NONE,            (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_2REN_2400_0P2_50_NONE,           (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_CO */
-            {(U2)CRI_CUESHEET_0_REN_2400_NONE_NONE_NONE,          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_REN_2400_NONE_NONE_NONE,         (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRS */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_SD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_REN_MET_TBZ_CLESON_FRS_24_01,    (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_SD_3,                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRM */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRM_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_MD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRM_24_01,    (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_MD_3,                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRL */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRL_24_00_CH3, (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_LD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRL_24_01,    (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_LD_3,                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRF */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRF_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_FD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRF_24_01,    (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_FD_3,                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_RRS */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_SD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_REN_MET_TBZ_CLESON_FRS_24_01,    (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_SD_3,                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_RRM */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRM_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_RR_MD_3                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRM_24_00   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_RR_MD_3                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_RRL */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRL_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_RR_LD_3                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRL_24_00   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_RR_LD_3                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_RRF */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRF_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_RR_FD_3                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRF_24_00   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_RR_FD_3                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
-        {   /* SOUND_AT_CLESON_FRRRS */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_SD_3,                        (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_CLESON_FRS */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_REN_MET_TBZ_CLESON_FRS_24_01,    (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_SD_3,                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRRRM */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRM_24_00,     (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRM_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_MD_FR_3,                     (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_MD_RR_3                    }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRM_24_01,    (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRM_24_00   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_MD_3,                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_RR_MD_3                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRRRL */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRL_24_00_CH3, (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRL_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_LD_FR_3,                     (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_LD_RR_3                    }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRL_24_01,    (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRL_24_00   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_LD_3,                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_RR_LD_3                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRRRF */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRF_24_00,     (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRF_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_FD_FR_3,                     (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_FD_RR_3                    }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_FRF_24_01,    (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_CLESON_RRF_24_00   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_FR_FD_3,                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_CSR_RR_FD_3                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
+        },
+        {   /* SOUND_AT_AT_REVERSE_IN */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_SBW_REVERSE_IN */
-            {(U2)CRI_CUESHEET_0_DAN_MET_TBZ_REVERSE_INT_24_00,    (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_SBW_REVERSE_IN_MID,                   (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_REVERSE_INT_24_01,   (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_SBW_REVERSE_IN_MID,                      (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_SEAREM_FMV */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV1_24_00,     (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_SEAREM_FMV_MID,                       (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,    (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_SEAREM_FMV_MID,                          (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_SEAREM_LV2 */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV2_24_00,     (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_SEAREM_LV2_MID,                       (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV2_24_01,    (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_SEAREM_LV2_MID,                          (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_SEAREM_LV1 */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV1_24_00,     (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_SEAREM_LV1_MID,                       (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,    (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_SEAREM_LV1_MID,                          (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                    /* TYPE    */
         },
         {   /* SOUND_AT_SEAREM_SI */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_TAN_MET_TBZ_SEAREM_LV1_24_00,     (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_SEAREM_SI_MID,                        (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_SEAREM_LV1_24_01,    (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)WCHIME_VOL_SEAREM_SI_MID,                           (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
+        },
+        {   /* SOUND_AT_MET_CBZ_BASE_NOTICE1 */
+            {(U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,   (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_MC_MID,                                  (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_MMTURHAZ_STA */
-            {(U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,  (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)WCHIME_VOL_TURHAZ_STA_MCSTM_MSPD,                (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA1_24_01, (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)WCHIME_VOL_TURHAZ_STA_MCSTM_HSPD,                   (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         },
         {   /* SOUND_AT_MMTURHAZ_FIN */
-            {(U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,  (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)WCHIME_VOL_TURHAZ_FIN_MCSTM_MSPD,                (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)U2_MAX,                                             (U2)CRI_CUESHEET_0_TYT_TAN_MET_TBZ_MMTURHAZ_FLA2_24_01, (U2)U2_MAX,                                             (U2)U2_MAX,                                             (U2)U2_MAX                                            }, /* CUE_ID  */
+            {(U1)U1_MAX,                                             (U1)WCHIME_VOL_TURHAZ_FIN_MCSTM_HSPD,                   (U1)U1_MAX,                                             (U1)U1_MAX,                                             (U1)U1_MAX                                            }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                   /* TYPE    */
         }
     };
-
-    static const ST_SOUND_OW_BUZ_INFO st_sp_SOUND_OW_BUZ_INFO_LEXUS[SOUND_OW_WAV_IDX_NUM] = {
+#else
+    static const ST_SOUND_OW_BUZ_INFO st_sp_SOUND_OW_BUZ_INFO_LEX[SOUND_OW_WAV_IDX_NUM] = {
         {   /* SOUND_AT_0P8_LRG_0P8_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_800_1P2_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_1P2_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P7_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P5_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P5_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P4_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P4_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_SI */
-            {(U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_TAN_800_0P9_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_0P8_TW */
-            {(U2)CRI_CUESHEET_0_2REN_800_0P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_2REN_800_0P2_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_LRG_0P8_CO */
-            {(U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_CONTWARN */
+            {(U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,    (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_CONTWARN_MID,                         (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_800_1P2_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_1P2_50_NONE,               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P7_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P7_50_NONE,               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P5_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P5_50_NONE,               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P4_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P4_50_NONE,               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_LRG_NONE_SI */
-            {(U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_NONE,            (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_NOTICE1 */
+            {(U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,     (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_NOTICE1_MID,                          (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_0P8_LRG_NONE_TW */
-            {(U2)CRI_CUESHEET_0_2REN_800_0P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_2REN_800_0P2_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_LRG_NONE_CO */
-            {(U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_CONTWARN */
+            {(U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,    (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_CONTWARN_MID,                         (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_800_1P2_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_1P2_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P7_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P7_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P5_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P5_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P4_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P4_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_SI */
-            {(U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_0P8,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_TAN_800_0P9_NONE_0P8,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_0P8_TW */
-            {(U2)CRI_CUESHEET_0_2REN_800_0P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_2REN_800_0P2_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_SML_0P8_CO */
-            {(U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_CONTWARN */
+            {(U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,    (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_CONTWARN_MID,                         (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_800_1P2_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_1P2_50_NONE,               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P7_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P7_50_NONE,               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P5_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P5_50_NONE,               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_800_0P4_50_NONE,              (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_800_0P4_50_NONE,               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_SML_NONE_SI */
-            {(U2)CRI_CUESHEET_0_TAN_800_0P9_NONE_NONE,            (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_NOTICE1 */
+            {(U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,     (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_NOTICE1_MID,                          (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_0P8_SML_NONE_TW */
-            {(U2)CRI_CUESHEET_0_2REN_800_0P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_2REN_800_0P2_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL__800HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
-        {   /* SOUND_AT_0P8_SML_NONE_CO */
-            {(U2)CRI_CUESHEET_0_REN_800_NONE_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL__800HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_MET_CBZ_BASE_CONTWARN */
+            {(U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,    (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_BASE_CONTWARN_MID,                         (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_1600_1P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_1600_1P2_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_1600_0P7_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_1600_0P7_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_1600_0P5_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_1600_0P5_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_1600_0P4_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_1600_0P4_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_SI */
-            {(U2)CRI_CUESHEET_0_TAN_1600_0P9_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_TAN_1600_0P9_NONE_NONE,            (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_TW */
-            {(U2)CRI_CUESHEET_0_2REN_1600_0P2_50_NONE,            (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_2REN_1600_0P2_50_NONE,             (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_1P6_SML_NONE_CO */
-            {(U2)CRI_CUESHEET_0_REN_1600_NONE_NONE_NONE,          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_1600HZ_63DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_REN_1600_NONE_NONE_NONE,           (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_1600HZ_63DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_IN_1P2 */
-            {(U2)CRI_CUESHEET_0_DAN_2400_1P2_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_2400_1P2_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_IN_0P7 */
-            {(U2)CRI_CUESHEET_0_DAN_2400_0P7_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_2400_0P7_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_IN_0P5 */
-            {(U2)CRI_CUESHEET_0_DAN_2400_0P5_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_2400_0P5_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_IN_0P4 */
-            {(U2)CRI_CUESHEET_0_DAN_2400_0P4_50_NONE,             (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_2400_0P4_50_NONE,              (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_SI */
-            {(U2)CRI_CUESHEET_0_TAN_2400_0P9_NONE_NONE,           (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_TAN_2400_0P9_NONE_NONE,            (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_TW */
-            {(U2)CRI_CUESHEET_0_2REN_2400_0P2_50_NONE,            (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_2REN_2400_0P2_50_NONE,             (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_2P4_LRG_NONE_CO */
-            {(U2)CRI_CUESHEET_0_REN_2400_NONE_NONE_NONE,          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_2400HZ_73DB,                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_REN_2400_NONE_NONE_NONE,           (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_2400HZ_73DB,                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRS */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_SD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_01,      (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_SD_3,                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRM */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRM_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_MD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRM_24_01_A,    (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_MD_3,                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRL */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRL_24_00_CH3, (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_LD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRL_24_01_A,    (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_LD_3,                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRF */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRF_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_FD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRF_24_02_A,    (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_FD_3,                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_RRS */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FR_SD_3,                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_01,      (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_SD_3,                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_RRM */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRM_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_RR_MD_3                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRM_24_01_A   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_RR_MD_3                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_RRL */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRL_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_RR_LD_3                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRL_24_01_A   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_RR_LD_3                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_RRF */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRF_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_RR_FD_3                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02_A   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_RR_FD_3                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
-        {   /* SOUND_AT_CLESON_FRRRS */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_REN_MET_TBZ_CLESON_FRS_24_00,     (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_SD_3,                        (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+        {   /* SOUND_AT_CLESON_FRS */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_REN_MET_LBZ_CLESON_FRS_24_01,      (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_SD_3,                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRRRM */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRM_24_00,     (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRM_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_MD_FR_3,                     (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_MD_RR_3                    }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRM_24_01_A,    (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRM_24_01_A   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_MD_3,                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_RR_MD_3                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRRRL */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRL_24_00_CH3, (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRL_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_LD_FR_3,                     (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_LD_RR_3                    }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRL_24_01_A,    (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRL_24_01_A   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_LD_3,                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_RR_LD_3                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_CLESON_FRRRF */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_FRF_24_00,     (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_CLESON_RRF_24_00    }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_FD_FR_3,                     (U1)U1_MAX,                                          (U1)WCHIME_VOL_CSR_FRRR_FD_RR_3                    }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_FRF_24_02_A,    (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_CLESON_RRF_24_02_A   }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_FR_FD_3,                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_CSR_RR_FD_3                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
+        },
+        {   /* SOUND_AT_AT_REVERSE_IN */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_SBW_REVERSE_IN */
-            {(U2)CRI_CUESHEET_0_DAN_MET_TBZ_REVERSE_INT_24_00,    (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)WCHIME_VOL_SBW_REVERSE_IN_MID,                   (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_REVERSE_INT_24_01_A,   (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_SBW_REVERSE_IN_MID,                        (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_SEAREM_FMV */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV1_24_00,     (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_SEAREM_FMV_MID,                       (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02_A,    (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_SEAREM_FMV_MID,                            (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_SEAREM_LV2 */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV2_24_00,     (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_SEAREM_LV2_MID,                       (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV2_24_02_A,    (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_SEAREM_LV2_MID,                            (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_SEAREM_LV1 */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_DAN_MET_TBZ_SEAREM_LV1_24_00,     (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_SEAREM_LV1_MID,                       (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                     /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02_A,    (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_SEAREM_LV1_MID,                            (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_CONT                                                                                                                                                                                                                                                                              /* TYPE    */
         },
         {   /* SOUND_AT_SEAREM_SI */
-            {(U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_TAN_MET_TBZ_SEAREM_LV1_24_00,     (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)WCHIME_VOL_SEAREM_SI_MID,                        (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_SEAREM_LV1_24_02_A,    (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)WCHIME_VOL_SEAREM_SI_MID,                             (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
+        },
+        {   /* SOUND_AT_MET_CBZ_BASE_NOTICE1 */
+            {(U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,     (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)WCHIME_VOL_MC_MID,                                    (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_MMTURHAZ_STA */
-            {(U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA1_24_00,  (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)WCHIME_VOL_TURHAZ_STA_MCSTM_HSPD,                (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA1_24_02_B, (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)WCHIME_VOL_TURHAZ_STA_MCSTM_HSPD,                     (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         },
         {   /* SOUND_AT_MMTURHAZ_FIN */
-            {(U2)U2_MAX,                                          (U2)CRI_CUESHEET_0_TAN_MET_TBZ_MMTURHAZ_FLA2_24_00,  (U2)U2_MAX,                                          (U2)U2_MAX,                                          (U2)U2_MAX                                         }, /* CUE_ID  */
-            {(U1)U1_MAX,                                          (U1)WCHIME_VOL_TURHAZ_FIN_MCSTM_HSPD,                (U1)U1_MAX,                                          (U1)U1_MAX,                                          (U1)U1_MAX                                         }, /* CUE_VOL */
-            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                    /* TYPE    */
+            {(U2)U2_MAX,                                               (U2)CRI_CUESHEET_0_LEX_TAN_MET_LBZ_MMTURHAZ_FLA2_24_02_B, (U2)U2_MAX,                                               (U2)U2_MAX,                                               (U2)U2_MAX                                              }, /* CUE_ID  */
+            {(U1)U1_MAX,                                               (U1)WCHIME_VOL_TURHAZ_FIN_MCSTM_HSPD,                     (U1)U1_MAX,                                               (U1)U1_MAX,                                               (U1)U1_MAX                                              }, /* CUE_VOL */
+            (U1)SOUND_OW_TYPE_EVENT                                                                                                                                                                                                                                                                             /* TYPE    */
         }
     };
+#endif
 
     const ST_SOUND_OW_BUZ_INFO * stp_t_OW_BUZ_INFO;
     ST_SOUND_OW_CTRL           * stp_t_ow_ctrl;
@@ -1638,14 +1889,26 @@ static  U1      u1_s_SoundCriMgrOwChk(const U1 u1_a_GRP_NO, const U1 u1_a_CYCLCH
     if(u1_a_GRP_NO < (U1)SOUND_GROUP_NUM){
         stp_t_ow_ctrl        = &st_sp_sound_ow_ctrl[u1_a_GRP_NO];
         if(u1_s_sound_ow_reqid < (U1)SOUND_OW_WAV_IDX_NUM){
+#if 0   /* BEV BSW provisionally */
             if(u1_t_brand == (U1)CALIB_MCUID0024_LEXUS){
-                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_LEXUS[u1_s_sound_ow_reqid];
+                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_LEX[u1_s_sound_ow_reqid];
             }
             else{
-                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO[u1_s_sound_ow_reqid];
+                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_TYT[u1_s_sound_ow_reqid];
             }
+#else
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
+                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_TYT[u1_s_sound_ow_reqid];
+#else
+                stp_t_OW_BUZ_INFO = &st_sp_SOUND_OW_BUZ_INFO_LEX[u1_s_sound_ow_reqid];
+#endif
+#endif
             u2_t_cueid        = stp_t_OW_BUZ_INFO->u2_cueid[u1_a_GRP_NO];
-            if(u2_t_cueid < (U2)CRI_CUESHEET_0_CUENUM){
+#if (SOUND_VEHICLE_TYPE_TYT == TRUE)
+            if(u2_t_cueid < (U2)CRI_CUESHEET_0_TYT_CUENUM){
+#else
+            if(u2_t_cueid < (U2)CRI_CUESHEET_0_LEX_CUENUM){
+#endif
                 u1_t_ow_sts = u1_s_SoundCriMgrOwStsChk(u1_a_CYCLCHK, stp_t_OW_BUZ_INFO->u1_type, stp_t_ow_ctrl);
                 if((u1_t_ow_sts == (U1)SOUND_OW_CTRL_RUN) ||
                 (u1_t_ow_sts == (U1)SOUND_OW_CTRL_STA)) {
@@ -1744,7 +2007,6 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
     static volatile const U1 u1_s_VOL_CSR_RTCA_5           = (U1)15U;
     static volatile const U1 u1_s_VOL_CSR_RTCA_6           = (U1)19U;
     static volatile const U1 u1_s_VOL_CSR_RTCA_7           = (U1)24U;
-    static volatile const U1 u1_s_VOL_RSA                  = (U1)12U;
     static volatile const U1 u1_s_VOL_800HZ_57DB           = (U1)2U;
     static volatile const U1 u1_s_VOL_800HZ_61DB           = (U1)2U;
     static volatile const U1 u1_s_VOL_800HZ_63DB           = (U1)3U;
@@ -1925,7 +2187,6 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
         &u1_s_VOL_CSR_RTCA_5,                               /* WCHIME_VOL_CSR_RCTA_5                                                 */
         &u1_s_VOL_CSR_RTCA_6,                               /* WCHIME_VOL_CSR_RCTA_6                                                 */
         &u1_s_VOL_CSR_RTCA_7,                               /* WCHIME_VOL_CSR_RCTA_7                                                 */
-        &u1_s_VOL_RSA,                                      /* 19pfv3 no sound file */ /* WCHIME_VOL_RSA                             */
         &u1_s_VOL_800HZ_57DB,                               /* WCHIME_VOL__800HZ_57DB                                                */
         &u1_s_VOL_800HZ_61DB,                               /* WCHIME_VOL__800HZ_61DB                                                */
         &u1_s_VOL_800HZ_63DB,                               /* WCHIME_VOL__800HZ_63DB                                                */
@@ -1937,7 +2198,29 @@ static  void    vd_s_SoundCriMgrSetVolume(const U1 u1_a_GRP_NO, const U1 u1_a_RE
         &u1_s_VOL_1600HZ_77DB,                              /* WCHIME_VOL_1600HZ_77DB                                                */
         &u1_s_VOL_2400HZ_63DB,                              /* WCHIME_VOL_2400HZ_63DB                                                */
         &u1_s_VOL_2400HZ_67DB,                              /* WCHIME_VOL_2400HZ_67DB                                                */
-        &u1_s_VOL_2400HZ_73DB                               /* WCHIME_VOL_2400HZ_73DB                                                */
+        &u1_s_VOL_2400HZ_73DB,                              /* WCHIME_VOL_2400HZ_73DB                                                */
+        &u1_CALIB_MCUID3002_ANUNC_MID,                      /* WCHIME_VOL_BASE_NOTICE1_MID                                           */
+        &u1_CALIB_MCUID3011_ANUNC_MAX,                      /* WCHIME_VOL_BASE_NOTICE1_MAX                                           */
+        &u1_CALIB_MCUID3003_ANUNC_SP_MID,                   /* WCHIME_VOL_BASE_NOTICE2_MID                                           */
+        &u1_CALIB_MCUID3012_ANUNC_SP_MAX,                   /* WCHIME_VOL_BASE_NOTICE2_MAX                                           */
+        &u1_CALIB_MCUID3004_RECEP_MID,                      /* WCHIME_VOL_BASE_ACCEPT_MID                                            */
+        &u1_CALIB_MCUID3013_RECEP_MAX,                      /* WCHIME_VOL_BASE_ACCEPT_MAX                                            */
+        &u1_CALIB_MCUID3005_REJECT_MID,                     /* WCHIME_VOL_BASE_REJECT_MID                                            */
+        &u1_CALIB_MCUID3014_REJECT_MAX,                     /* WCHIME_VOL_BASE_REJECT_MAX                                            */
+        &u1_CALIB_MCUID3006_URGEN_MIN_MID,                  /* WCHIME_VOL_BASE_INTWARNL_MID                                          */
+        &u1_CALIB_MCUID3015_URGEN_MIN_MAX,                  /* WCHIME_VOL_BASE_INTWARNL_MAX                                          */
+        &u1_CALIB_MCUID3007_URGEN_MID_MID,                  /* WCHIME_VOL_BASE_INTWARNM_MID                                          */
+        &u1_CALIB_MCUID3016_URGEN_MID_MAX,                  /* WCHIME_VOL_BASE_INTWARNM_MAX                                          */
+        &u1_CALIB_MCUID3008_URGEN_MAX_MID,                  /* WCHIME_VOL_BASE_INTWARNH_MID                                          */
+        &u1_CALIB_MCUID3017_URGEN_MAX_MAX,                  /* WCHIME_VOL_BASE_INTWARNH_MAX                                          */
+        &u1_CALIB_MCUID3009_CONTIN_MID,                     /* WCHIME_VOL_BASE_CONTWARN_MID                                          */
+        &u1_CALIB_MCUID3018_CONTIN_MAX,                     /* WCHIME_VOL_BASE_CONTWARN_MAX                                          */
+        &u1_CALIB_MCUID3010_PREDOT_MID,                     /* WCHIME_VOL_AD_DOT_MID                                                 */
+        &u1_CALIB_MCUID3019_PREDOT_MAX,                     /* WCHIME_VOL_AD_DOT_MAX                                                 */
+        &u1_CALIB_MCUID0039_ADAS_MID,                       /* WCHIME_VOL_ADAS_MID                                                   */
+        &u1_CALIB_MCUID0753_ADAS_MAX,                       /* WCHIME_VOL_ADAS_MAX                                                   */
+        &u1_CALIB_MCUID0027_ATR_MID,                        /* WCHIME_VOL_AT_MID                                                     */
+        &u1_CALIB_MCUID0744_ATR_MAX                         /* WCHIME_VOL_AT_MAX                                                     */
     };
 
     static volatile const U1 * u1p_sp_MULTI_CH_PLAY_RATE[SOUND_GROUP_NUM] = {
@@ -2048,6 +2331,55 @@ static inline U1    u1_s_SoundCriMgrCalibU1NumChk(const U1 u1_a_CALIBID, const U
 }
 
 /*===================================================================================================================================*/
+/*  static  U1  u1_s_SoundDiagnosis(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ret                                                                                                      */
+/*===================================================================================================================================*/
+static  U1  u1_s_SoundDiagnosis(void)
+{
+    U1 u1_t_fltb;
+    U1 u1_t_ret;
+
+    u1_t_ret = (U1)SOUND_INITIAL_WAIT;
+
+    u1_s_sound_initialwait++;
+    if (u1_s_sound_initialwait <= (U1)SOUND_INITIAL_WAIT_TIM) {
+        if (u1_s_sound_initialwait >= (U1)SOUND_INITIAL_MODESET_END_TIM) {
+            Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_LOW);
+            Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_LOW);
+            if (u1_s_sound_initialwait == (U1)SOUND_INITIAL_WAIT_TIM) {
+                vd_s_SoundCriMgrInitialize();
+            }
+        }
+    }
+    else if (u1_s_sound_initialwait >= (U1)SOUND_INITIAL_FLTBCHK_WAIT_TIM){
+        u1_s_sound_fltbcheck_cycle++;
+        if (u1_s_sound_fltbcheck_cycle > (U1)SOUND_FLTBCHECK_WAIT_TIM) {
+            u1_t_fltb = Dio_ReadChannel((U1)DIO_ID_PORT20_CH10);
+            if (u1_t_fltb == (U1)STD_LOW) {
+                u1_s_sound_err_count++;
+                if (u1_s_sound_err_count > (U1)SOUND_IC_ERROR_COUNT) {
+                    u1_s_sound_ic_error  = (U1)SOUND_IC_ERROR;
+                    u1_s_sound_err_count = (U1)SOUND_IC_ERROR_COUNT;
+                }
+            }
+            else {
+                u1_s_sound_err_count = (U1)0U;
+            }
+            u1_s_sound_fltbcheck_cycle = (U1)0U;
+        }
+        u1_t_ret = (U1)SOUND_INITIAL_WAIT_END;
+        u1_s_sound_initialwait    = (U1)SOUND_INITIAL_FLTBCHK_WAIT_TIM;
+    }
+    else {
+        u1_t_ret = (U1)SOUND_INITIAL_WAIT_END;
+    }
+
+    return(u1_t_ret);
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -2108,6 +2440,9 @@ static inline U1    u1_s_SoundCriMgrCalibU1NumChk(const U1 u1_a_CALIBID, const U
 /*  19PFv3-11 7/12/2024  T.Nakano Add Calibration Guard to Unify Vehicle Operation.                                                  */
 /*  19PFv3-12 7/10/2024  TR       Add SBRDMB buzzer request                                                                          */
 /*                                                                                                                                   */
+/*  BEV-1     3/19/2025  SU                                                                                                          */
+/*  BEV-1     3/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */  
+/*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */
 /*  * SK       = Sakae Kitamura, Denso Techno                                                                                        */
@@ -2122,5 +2457,7 @@ static inline U1    u1_s_SoundCriMgrCalibU1NumChk(const U1 u1_a_CALIBID, const U
 /*  * DR       = Dyan Reyes, DTPH                                                                                                    */
 /*  * SN       = Shimon Nambu, Denso Techno                                                                                          */
 /*  * TR       = Tebs Ramos, DTPH                                                                                                    */
+/*  * SU       = Shin Uchida, Denso Techno                                                                                           */
+/*  * RO       = Ryo Oohashi, Denso Techno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
