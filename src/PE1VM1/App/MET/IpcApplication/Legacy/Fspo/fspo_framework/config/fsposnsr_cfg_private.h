@@ -68,7 +68,11 @@
 #define vd_FSPOSNSR_RXMSG_VSC_GXIV(sgnl)         ((void)Com_ReceiveSignal(ComConf_ComSignal_VSC_GXIV, (sgnl)))
 #define vd_FSPOSNSR_RXMSG_VSC_GYIV(sgnl)         ((void)Com_ReceiveSignal(ComConf_ComSignal_VSC_GYIV, (sgnl)))
 
+#if 0   /* BEV BSW provisionally */
 #define u1_FSPOSNSR_RXMSG_VSC1G30STS()           ((U1)Com_GetIPDUStatus(MSG_VSC1G30_RXCH0))
+#else
+#define u1_FSPOSNSR_RXMSG_VSC1G30STS()           ((U1)COM_NO_RX)
+#endif
 #define vd_FSPOSNSR_RXMSG_FBKDRSYS(sgnl)         ((void)Com_ReceiveSignal(ComConf_ComSignal_FBKDRSYS, (sgnl)))
 #define vd_FSPOSNSR_RXMSG_FBKDR_AX(sgnl)         ((void)Com_ReceiveSignal(ComConf_ComSignal_FBKDR_AX, (sgnl)))
 

@@ -769,8 +769,12 @@ static void vd_s_HdimillmnCnlghtUpdt(void)
     U2  u2_t_lxdata;
     U2  u2_t_nlx_id;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_rec = Com_GetIPDUStatus((PduIdType)MSG_BDB1S19_RXCH0);
     u1_t_rec &= (U1)(COM_TIMEOUT | COM_NO_RX);
+#else
+    u1_t_rec = (U1)COM_NO_RX;
+#endif
 
     if(u1_t_rec == (U1)0){
         u2_t_lxdata = u2_s_HdimillmnCnlghtGet_N_LX();

@@ -752,11 +752,13 @@ static U1 u1_s_MMText_GetKind(U2 u2_a_msg_label)
     /* メッセージラベル情報テーブルからテキスト種別を取得 */
     for(u1_t_index = (U1)0; (U1)MMTEXT_KIND_MAX > u1_t_index; u1_t_index++)
     {
+#if 0   /* BEV BSW provisionally */
         if(u2_tbl_msg_label_info[u1_t_index] == u2_a_msg_label)
         {
             u1_t_kind = u1_t_index;
             break;
         }
+#endif
     }
 
     return(u1_t_kind);

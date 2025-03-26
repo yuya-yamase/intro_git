@@ -129,8 +129,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS79(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 const   U2                                      u2_g_MULMED_MULFR_AUB_MAX       = (U2)MSG_AVNMS79_RXCH1;
 const   U2                                      u2_g_MULMED_MULFR_AUB_MIN       = (U2)MSG_AVNMS01_RXCH1;
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -164,6 +166,7 @@ void            vd_g_MulmedMulfrCfgInit(void)
 /*===================================================================================================================================*/
 U1              u1_g_MulmedMulfrCfgRxTxtSts(const U4 u4_a_MSGIDX, U1 * u1p_a_modeid)
 {
+#if 0   /* BEV BSW provisionally */
     static  const   ST_MULMED_MULFR_RX_TXTSTS   st_sp_RX_MSGS[MULMED_MULFR_NUM_FR]                      = {
         /*      u2_txtsts_frame                      fp_vd_SGNLFUNC                 u1_modeid_max   */
         {   (U2)MSG_AVNMS38_RXCH1,         &vd_s_MulmedMulfrCfgSgnlAVNMS01,        (U1)0x03U   },  /* MSG_AVNMS01_RXCH1 */
@@ -191,12 +194,45 @@ U1              u1_g_MulmedMulfrCfgRxTxtSts(const U4 u4_a_MSGIDX, U1 * u1p_a_mod
         {   (U2)MSG_AVNMS44_RXCH1,         &vd_s_MulmedMulfrCfgSgnlAVNMS27,        (U1)0x03U   },  /* MSG_AVNMS27_RXCH1 */
         {   (U2)MSG_AVNMS74_RXCH1,         &vd_s_MulmedMulfrCfgSgnlAVNMS79,        (U1)0x03U   }   /* MSG_AVNMS79_RXCH1 */
     };
+#else
+    static  const   ST_MULMED_MULFR_RX_TXTSTS   st_sp_RX_MSGS[MULMED_MULFR_NUM_FR]                      = {
+        /*      u2_txtsts_frame                      fp_vd_SGNLFUNC                 u1_modeid_max   */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS01,        (U1)0x03U   },  /* MSG_AVNMS01_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS02,        (U1)0x03U   },  /* MSG_AVNMS02_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS03,        (U1)0x03U   },  /* MSG_AVNMS03_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS04,        (U1)0x0BU   },  /* MSG_AVNMS04_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS05,        (U1)0x0BU   },  /* MSG_AVNMS05_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS06,        (U1)0x52U   },  /* MSG_AVNMS06_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS07,        (U1)0x52U   },  /* MSG_AVNMS07_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS08,        (U1)0x52U   },  /* MSG_AVNMS08_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS09,        (U1)0x52U   },  /* MSG_AVNMS09_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS10,        (U1)0x52U   },  /* MSG_AVNMS10_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS13,        (U1)0x52U   },  /* MSG_AVNMS13_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS14,        (U1)0x52U   },  /* MSG_AVNMS14_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS15,        (U1)0x52U   },  /* MSG_AVNMS15_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS16,        (U1)0x52U   },  /* MSG_AVNMS16_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS18,        (U1)0x52U   },  /* MSG_AVNMS18_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS19,        (U1)0x52U   },  /* MSG_AVNMS19_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS20,        (U1)0x52U   },  /* MSG_AVNMS20_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS21,        (U1)0x0BU   },  /* MSG_AVNMS21_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS22,        (U1)0x0BU   },  /* MSG_AVNMS22_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS23,        (U1)0x0BU   },  /* MSG_AVNMS23_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS25,        (U1)0x03U   },  /* MSG_AVNMS25_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS26,        (U1)0x03U   },  /* MSG_AVNMS26_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS27,        (U1)0x03U   },  /* MSG_AVNMS27_RXCH1 */
+        {   (U2)U2_MAX,                    &vd_s_MulmedMulfrCfgSgnlAVNMS79,        (U1)0x03U   }   /* MSG_AVNMS79_RXCH1 */
+    };
+#endif
     U1                                          u1_t_status;
     U1                                          u1_t_modeid;
     U1                                          u1_t_syncid;
 
 
+#if 0   /* BEV BSW provisionally */
     u1_t_status = (U1)Com_GetIPDUStatus((PduIdType)(st_sp_RX_MSGS[u4_a_MSGIDX].u2_txtsts_frame)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_status = (U1)COM_NO_RX;
+#endif
     if (u1_t_status == (U1)0U) {
         st_sp_RX_MSGS[u4_a_MSGIDX].fp_vd_SGNLFUNC(&u1_t_modeid, &u1_t_syncid);
         if ((u1_t_modeid <= st_sp_RX_MSGS[u4_a_MSGIDX].u1_modeid_max) &&
@@ -241,6 +277,7 @@ void            vd_g_MulmedMulfrCfgGetTxtDat(const U4 u4_a_MSGIDX, U1 * u1_ap_by
 /*===================================================================================================================================*/
 void            vd_g_MulmedMulfrCfgRxTxtHk(const U2 u2_a_MSG)
 {
+#if 0   /* BEV BSW provisionally */
     static const U1     u1_tp_TXT_IND[MULMED_MULFR_CFG_TXTINDNUM]       = {
         (U1)0U,                                                              /* MSG_AVNMS01_RXCH1 */
         (U1)1U,                                                              /* MSG_AVNMS02_RXCH1 */
@@ -316,6 +353,7 @@ void            vd_g_MulmedMulfrCfgRxTxtHk(const U2 u2_a_MSG)
             stp_t_txtdat->u1_rxcnt++;
         }
     }
+#endif
 }
 
 /*===================================================================================================================================*/

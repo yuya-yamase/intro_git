@@ -240,7 +240,11 @@ U1              u1_g_DateSITimCfgRxMsgSts(void)
 {
     U1  u1_t_status;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_status = (U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_status = (U1)COM_NO_RX;
+#endif
 
     return(u1_t_status);
 }
@@ -262,7 +266,11 @@ U1              u1_g_DateSITimCfgCanRx(ST_DATESI_TIM_RX * stp_a_rx)
     (void)Com_ReceiveSignal(ComConf_ComSignal_GPS_ST,   &(stp_a_rx->u1_valid));
     (void)Com_ReceiveSignal(ComConf_ComSignal_GPS_CRCT, &(stp_a_rx->u1_act));
 
+#if 0   /* BEV BSW provisionally */
     u1_t_status = (U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_status = (U1)COM_NO_RX;
+#endif
 
     return(u1_t_status);
 }
@@ -708,7 +716,11 @@ void            vd_g_DateSITimCfgOfstDelHook(void)
 U1      u1_g_TimeZoneCfgRxTZ(U1 * u1p_a_rx)
 {
     (void)Com_ReceiveSignal(ComConf_ComSignal_TZ, u1p_a_rx);
+#if 0   /* BEV BSW provisionally */
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)                                                                                 */
@@ -718,9 +730,13 @@ U1      u1_g_TimeZoneCfgRxTZ(U1 * u1p_a_rx)
 /*===================================================================================================================================*/
 U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)
 {
+#if 0   /* BEV BSW provisionally */
 #ifdef MSG_AVN1S30_RXCH0
     (void)Com_ReceiveSignal(ComConf_ComSignal_TZ_SIGN, u1p_a_rx);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return((U1)(COM_TIMEOUT | COM_NO_RX));
+#endif
 #else
     return((U1)(COM_TIMEOUT | COM_NO_RX));
 #endif
@@ -733,9 +749,13 @@ U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)
 /*===================================================================================================================================*/
 U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)
 {
+#if 0   /* BEV BSW provisionally */
 #ifdef MSG_AVN1S30_RXCH0
     (void)Com_ReceiveSignal(ComConf_ComSignal_DST_S30, u1p_a_rx);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return((U1)(COM_TIMEOUT | COM_NO_RX));
+#endif
 #else
     return((U1)(COM_TIMEOUT | COM_NO_RX));
 #endif

@@ -125,7 +125,11 @@ U1              u1_g_DateSICalCfgCanRx(ST_DATESI_CAL_RX * stp_a_rx)
     else{
         stp_a_rx->u1_act = (U1)FALSE;
     }
+#if 0   /* BEV BSW provisionally */
     u1_t_status = (U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_status = (U1)COM_NO_RX;
+#endif
 
     return(u1_t_status);
 }
