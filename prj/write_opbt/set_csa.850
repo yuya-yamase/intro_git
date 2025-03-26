@@ -15,10 +15,10 @@
 	.dw	0x3FF20010			-- Option byte  0 (OPBT0)     Shipping : 0x3FF30010 [Modified]
 	.dw	0xFFFB0000			-- Option byte  1 (OPBT1)     Shipping : 0xF0FB0000 [Modified]
 	.dw	0x7FFFFFFF			-- Option byte  2 (OPBT2)     Shipping : 0x7FFFFFFF
-	.dw	0xF1FFFEFD			-- Option byte  3 (OPBT3)     Shipping : 0xF1FFFEFE [Modified]
+	.dw	0xF1FFF4FD			-- Option byte  3 (OPBT3)     Shipping : 0xF1FFFEFE [Modified]
 	.dw	0x0C0C0C0F			-- Option byte  4 (OPBT4)     Shipping : 0x0C0C0C0F
 	.dw	0xFFFFFFFF			-- Reserved                   Shipping : 0xFFFFFFFF
-	.dw	0xFFFF0FC3			-- Option byte  6 (OPBT6)     Shipping : 0xFFFF0FC3
+	.dw	0xFFFF0FC0			-- Option byte  6 (OPBT6)     Shipping : 0xFFFF0FC3 [Modified]
 	.dw	0xFFC3FFFF			-- Option byte  7 (OPBT7)     Shipping : 0xFFFFFFFF [Modified]
 	.dw	0xFFFFFFFE			-- Option byte  8 (OPBT8)     Shipping : 0xFFFFFFFE
 	.dw	0xFFF1FFFF			-- Option byte  9 (OPBT9)     Shipping : 0xFFF1FFFF
