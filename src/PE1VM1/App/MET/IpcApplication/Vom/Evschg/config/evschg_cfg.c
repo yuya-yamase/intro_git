@@ -405,8 +405,13 @@ static void             vd_s_EvschgCfgTimchg(ST_EVSCHG_SGNL * st_ap_sig)
     U1                          u1_t_sts_plg1g13;
     U1                          u1_t_sts_scn1s02;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_sts_plg1g11 = (U1)Com_GetIPDUStatus(MSG_PLG1G11_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sts_plg1g13 = (U1)Com_GetIPDUStatus(MSG_PLG1G13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_sts_plg1g11 = (U1)COM_NO_RX;
+    u1_t_sts_plg1g13 = (U1)COM_NO_RX;
+#endif
     u1_t_sts_scn1s02 = (U1)Com_GetIPDUStatus(MSG_SCN1S02_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     /* P_NCTYP */
@@ -506,7 +511,11 @@ static void             vd_s_EvschgCfgTimchgSchd(ST_EVSCHG_SGNL * st_ap_schd_sig
     U2                          u2_t_sig;
     U1                          u1_t_sts_plg1g12;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_sts_plg1g12 = (U1)Com_GetIPDUStatus(MSG_PLG1G12_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_sts_plg1g12 = (U1)COM_NO_RX;
+#endif
 
     /* P_SETID */
     st_ap_schd_sig[EVSCHG_ID_P_SETID].u1_sts = u1_t_sts_plg1g12;
@@ -566,9 +575,15 @@ static void             vd_s_EvschgCfgSwquichg(ST_EVSCHG_SGNL * st_ap_sig)
     U1                          u1_t_sts_plg1g17;
 
     u1_t_sts_plg1s01 = (U1)Com_GetIPDUStatus(MSG_PLG1S01_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#if 0   /* BEV BSW provisionally */
     u1_t_sts_plg1g10 = (U1)Com_GetIPDUStatus(MSG_PLG1G10_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sts_plg1g14 = (U1)Com_GetIPDUStatus(MSG_PLG1G14_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_sts_plg1g17 = (U1)Com_GetIPDUStatus(MSG_PLG1G17_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_sts_plg1g10 = (U1)COM_NO_RX;
+    u1_t_sts_plg1g14 = (U1)COM_NO_RX;
+    u1_t_sts_plg1g17 = (U1)COM_NO_RX;
+#endif
 
     /* P_CUR200 */
     st_ap_sig[EVSCHG_ID_P_CUR200].u1_sts = u1_t_sts_plg1s01;

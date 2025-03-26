@@ -74,7 +74,7 @@
 /*===================================================================================================================================*/
 U1      u1_g_DrvIndEcoCfgComRxBIECOCR(U1 * const u1p_a_pct)
 {
-#if (defined(MSG_ENG1G17_02_RXCH0) && defined(ComConf_ComSignal_B_IECOCR))
+#if (defined(MSG_ENG1G17_RXCH0) && defined(ComConf_ComSignal_B_IECOCR))
     U1                  u1_t_sts;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_IECOCR, u1p_a_pct);

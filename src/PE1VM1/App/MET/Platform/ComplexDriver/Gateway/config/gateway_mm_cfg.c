@@ -698,7 +698,7 @@ const U1 u1_gp_GWMM_DRVMDPWCONF[GATEWAY_MM_DRVMD_NUM] = {
     (U1)GWMM_PWRSTS_IGR,                                                        /*  MRMRQSW                  */
     (U1)GWMM_PWRSTS_IGR                                                         /*  MRMRQBK                  */
 };
-
+#if 0   /* BEV BSW provisionally */
 static const U2 u2_sp_GWMMCFG_CANRXMSG[GWMMCFG_MSG_MM_NUM] = {
     (U2)MSG_AVNMC01_RXCH1,                       /*  AVNMC01                  */
     (U2)MSG_AVNMC02_RXCH1,                       /*  AVNMC02                  */
@@ -718,6 +718,7 @@ static const U2 u2_sp_GWMMCFG_CANRXMSG[GWMMCFG_MSG_MM_NUM] = {
     (U2)MSG_AVNMC16_RXCH1,                       /*  AVNMC16                  */
     (U2)MSG_AVNMC17_RXCH1                        /*  AVNMC17                  */
 };
+#endif
 
 const ST_GWMM_MSGCOMVERT st_gp_GWMM_TMM_MSGCOMVERT[GWMMCFG_TMM_SIG_NUM] = {
 /*  u1_idx         u1_bit        u4_mask                                   */
@@ -767,16 +768,18 @@ void vd_g_GwmmCfgPreTask(void)
     U4 u4_t_data;                               /* Can Receive Data   */
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)GWMMCFG_MSG_MM_NUM; u4_t_lpcnt++){
-        u2_t_msgid = u2_sp_GWMMCFG_CANRXMSG[u4_t_lpcnt];
 #if 0   /* BEV BSW provisionally */
+        u2_t_msgid = u2_sp_GWMMCFG_CANRXMSG[u4_t_lpcnt];
         u1_t_msgsts  = (U1)Com_GetIPDUStatus((PduIdType)u2_t_msgid);
         u1_t_msgsts &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
-        u1_t_msgsts = ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+        u1_t_msgsts = (U1)COM_NO_RX;
 #endif
         if(u1_t_msgsts == (U1)0U){
             u1_t_bufidx = (U1)(u4_t_lpcnt * (U4)GWMMCFG_MSGBUF_LSB);
+#if 0   /* BEV BSW provisionally */
             (void)Com_ReadIPDU((PduIdType)u2_t_msgid, &u1_tp_msgbuf[0]);
+#endif
             u4_t_data = u4_s_GwmmCfgGetBufData(&u1_tp_msgbuf[0]);
             vd_g_GatewaymmDataPut(u1_t_bufidx, u4_t_data);                                 /* Send receive data(1-4byte)       */
             u4_t_data = u4_s_GwmmCfgGetBufData(&u1_tp_msgbuf[GWMMCFG_MSGBUF_DATASIZE]);
@@ -4303,8 +4306,12 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
     U1  u1_t_msgsts;                            /* Can Message Stats  */
     U1  u1_t_sig;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_msgsts  = (U1)Com_GetIPDUStatus(MSG_AVNMC03_RXCH1);
     u1_t_msgsts &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_msgsts  = (U1)COM_NO_RX;
+#endif
     if(u1_t_msgsts == (U1)0U){
         u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_L_TMNSSW

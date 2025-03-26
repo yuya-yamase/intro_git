@@ -124,7 +124,11 @@
 #define GMNTR_PKHLD_TIM                          (GMNTR_PKHLD_TIM_MS / GMNTR_UPDTTIM_MS)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #define u1_GMNTR_RXMSG_STR1S01STS()              ((U1)Com_GetIPDUStatus(MSG_STR1S01_RXCH0))
+#else
+#define u1_GMNTR_RXMSG_STR1S01STS()              ((U1)COM_NO_RX)
+#endif
 #define vd_GMNTR_RXMSG_STS1(sgnl)                ((void)Com_ReceiveSignal(ComConf_ComSignal_STS1, (sgnl)))
 #define vd_GMNTR_RXMSG_SSA(sgnl)                 ((void)Com_ReceiveSignal(ComConf_ComSignal_SSA,  (sgnl)))
 #define u1_GMNTR_RXMSG_EPS1S11STS()              ((U1)Com_GetIPDUStatus(MSG_EPS1S11_RXCH0))
