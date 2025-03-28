@@ -2619,8 +2619,13 @@ static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX) {
     if(u1_t_odtrp_dsp != (U1)7U){
         vd_g_HmiRimPut((U1)HMIRIM_ODOTRIPCNTTS , (U4)u1_t_odtrp_dsp);
     }
+#if 0   /* BEV BSW provisionally */
     u4_t_trip_a    = u4_ap_PDU_RX[0];                                        /* TRIP_A                               */
     u4_t_trip_b    = u4_ap_PDU_RX[2];                                        /* TRIP_B                               */
+#else
+    u4_t_trip_a    = (U4)U4_MAX;                                             /* TRIP_A                               */
+    u4_t_trip_b    = (U4)U4_MAX;                                             /* TRIP_B                               */
+#endif
 
     vd_g_HmiOdoPut(u4_t_trip_a , u4_t_trip_b);
 }
