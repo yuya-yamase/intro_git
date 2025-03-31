@@ -4315,7 +4315,9 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
     if(u1_t_msgsts == (U1)0U){
         u1_t_sig = (U1)0U;
 #ifdef ComConf_ComSignal_L_TMNSSW
+#if 0   /* BEV BSW provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_L_TMNSSW, &u1_t_sig);
+#endif
 #endif /* ComConf_ComSignal_L_TMNSSW */
         u1_g_gwmm_tmnssw_sigbak = u1_t_sig;
     }

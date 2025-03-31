@@ -106,12 +106,14 @@ U1              u1_g_DateSICalCfgCanRx(ST_DATESI_CAL_RX * stp_a_rx)
     u1_t_gpsst   = (U1)FALSE;
     u1_t_gpscrst = (U1)FALSE;
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CLK_DAY,  &(stp_a_rx->u1p_date[YYMMDD_DATE_DA]));
     (void)Com_ReceiveSignal(ComConf_ComSignal_CLK_MONT, &(stp_a_rx->u1p_date[YYMMDD_DATE_MO]));
     (void)Com_ReceiveSignal(ComConf_ComSignal_CLK_YEAR, &(stp_a_rx->u1p_date[YYMMDD_DATE_YR]));
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_GPS_ST,   &u1_t_gpsst);
     (void)Com_ReceiveSignal(ComConf_ComSignal_GPS_CRCT, &u1_t_gpscrst);
+#endif
 
     if(u1_t_gpsst == (U1)TRUE){
         stp_a_rx->u1_valid = (U1)TRUE;

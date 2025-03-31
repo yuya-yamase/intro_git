@@ -77,7 +77,9 @@ U1      u1_g_DrvIndEcoCfgComRxBIECOCR(U1 * const u1p_a_pct)
 #if (defined(MSG_ENG1G17_RXCH0) && defined(ComConf_ComSignal_B_IECOCR))
     U1                  u1_t_sts;
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_IECOCR, u1p_a_pct);
+#endif
     u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G17_02,
                                     ((U2)OXCAN_RX_SYS_NRX_IGP |
                                      (U2)OXCAN_RX_SYS_NRX_IGR |

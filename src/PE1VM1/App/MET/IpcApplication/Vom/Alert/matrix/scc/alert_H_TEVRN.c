@@ -164,7 +164,9 @@ static U4      u4_s_AlertH_tevrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
         u4_t_src_chk    = ((U4)u1_t_msgsts     << u1_s_ALERT_H_TEVRN_LSB_MSG_STS);
 
         u1_t_sgnl       = (U1)0U;
+#if 0   /* BEV BSW provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_MODID_FS, &u1_t_sgnl);
+#endif
         u4_t_src_chk   |= (U4)u1_t_sgnl;
 
         u1_t_spdrng     = u1_s_AlertH_tevrnSpdrng();

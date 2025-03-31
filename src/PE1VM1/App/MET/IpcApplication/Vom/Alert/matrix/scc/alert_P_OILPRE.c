@@ -351,7 +351,9 @@ static U4      u4_s_AlertP_oilpreWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
         }
         else{
             u1_t_igp_pdc = (U1)0U;
+#if 0   /* BEV BSW provisionally */
             (void)Com_ReceiveSignal(ComConf_ComSignal_IGP_PDC, &u1_t_igp_pdc);
+#endif
         }
         u4_t_src_chk  |= ((U4)u1_t_igp_pdc  << u1_s_ALERT_P_OILPRE_WRN_LSB_IGP);
 #if defined(OXCAN_PDU_RX_CAN_ENG1G97)
@@ -368,7 +370,9 @@ static U4      u4_s_AlertP_oilpreWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
         if(u1_t_msgsts == (U1)0U){
 #ifdef ComConf_ComSignal_B_OILPL
             u1_t_sgnl_b_oilpl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
             (void)Com_ReceiveSignal(ComConf_ComSignal_B_OILPL, &u1_t_sgnl_b_oilpl);
+#endif
             u4_t_src_chk     |= ((U4)u1_t_sgnl_b_oilpl << u1_s_ALERT_P_OILPRE_WRN_LSB_SGN);
 #endif /* ComConf_ComSignal_B_OILPL */
         }
@@ -452,7 +456,9 @@ static U4      u4_s_AlertP_oilpreBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
         }
         else{
             u1_t_igp_pdc  = (U1)0U;
+#if 0   /* BEV BSW provisionally */
             (void)Com_ReceiveSignal(ComConf_ComSignal_IGP_PDC, &u1_t_igp_pdc);
+#endif
         }
         u4_t_src_chk  |= ((U4)u1_t_igp_pdc << u1_s_ALERT_P_OILPRE_BC_LSB_IGP);
 #if defined(OXCAN_PDU_RX_CAN_ENG1G97)
@@ -469,7 +475,9 @@ static U4      u4_s_AlertP_oilpreBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
         if(u1_t_msgsts == (U1)0U){
 #ifdef ComConf_ComSignal_B_OILPL
             u1_t_sgnl_b_oilpl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
             (void)Com_ReceiveSignal(ComConf_ComSignal_B_OILPL, &u1_t_sgnl_b_oilpl);
+#endif
             u4_t_src_chk     |= ((U4)u1_t_sgnl_b_oilpl << u1_s_ALERT_P_OILPRE_BC_LSB_SGN);
 #endif /* ComConf_ComSignal_B_OILPL */
         }
@@ -526,7 +534,9 @@ static U1      u1_s_AlertP_oilpreRxJudgeSgnl(const U1 u1_a_RXID)
                                                u2_sp_ALERT_P_OILPRE_COMRX[u1_a_RXID],
                                                u2_sp_ALERT_P_OILPRE_THRSH[u1_a_RXID]) & u1_sp_ALERT_P_OILPRE_COMOPT[u1_a_RXID];
     u1_t_sgnl          = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_MOPSINH, &u1_t_sgnl);
+#endif
     u1_t_msg_jdg       = u1_t_sgnl | (U1)(u1_t_msgsts << u1_s_P_OILPRE_LSB_MSGSTS);
     u1_t_sgnl_mopsinh  = u1_sp_ALERT_P_OILPRE_JDG[u1_t_msg_jdg];
 #else
@@ -538,7 +548,9 @@ static U1      u1_s_AlertP_oilpreRxJudgeSgnl(const U1 u1_a_RXID)
                                                u2_sp_ALERT_P_OILPRE_COMRX[u1_a_RXID],
                                                u2_sp_ALERT_P_OILPRE_THRSH[u1_a_RXID]) & u1_sp_ALERT_P_OILPRE_COMOPT[u1_a_RXID];
     u1_t_sgnl          = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_OPLMPMSK, &u1_t_sgnl);
+#endif
     u1_t_msg_jdg       = u1_t_sgnl | (U1)(u1_t_msgsts << u1_s_P_OILPRE_LSB_MSGSTS);
     u1_t_sgnl_oplmpmsk = u1_sp_ALERT_P_OILPRE_JDG[u1_t_msg_jdg];
 #else

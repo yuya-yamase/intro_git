@@ -126,17 +126,28 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV BSW provisionally */
 #define u1_GMNTR_RXMSG_STR1S01STS()              ((U1)Com_GetIPDUStatus(MSG_STR1S01_RXCH0))
-#else
-#define u1_GMNTR_RXMSG_STR1S01STS()              ((U1)COM_NO_RX)
-#endif
 #define vd_GMNTR_RXMSG_STS1(sgnl)                ((void)Com_ReceiveSignal(ComConf_ComSignal_STS1, (sgnl)))
 #define vd_GMNTR_RXMSG_SSA(sgnl)                 ((void)Com_ReceiveSignal(ComConf_ComSignal_SSA,  (sgnl)))
+#else
+#define u1_GMNTR_RXMSG_STR1S01STS()              ((U1)COM_NO_RX)
+#define vd_GMNTR_RXMSG_STS1(sgnl)                (vdp_PTR_NA)
+#define vd_GMNTR_RXMSG_SSA(sgnl)                 (vdp_PTR_NA)
+#endif
 #define u1_GMNTR_RXMSG_EPS1S11STS()              ((U1)Com_GetIPDUStatus(MSG_EPS1S11_RXCH0))
+#if 0   /* BEV BSW provisionally */
 #define vd_GMNTR_RXMSG_EPSTS1(sgnl)              ((void)Com_ReceiveSignal(ComConf_ComSignal_EPSTS1, (sgnl)))
 #define vd_GMNTR_RXMSG_EPSSA(sgnl)               ((void)Com_ReceiveSignal(ComConf_ComSignal_EPSSA,  (sgnl)))
+#else
+#define vd_GMNTR_RXMSG_EPSTS1(sgnl)              (vdp_PTR_NA)
+#define vd_GMNTR_RXMSG_EPSSA(sgnl)               (vdp_PTR_NA)
+#endif
 
 #define u1_GMNTR_RXMSG_ENG1G03STS()              ((U1)Com_GetIPDUStatus(MSG_ENG1G03_RXCH0))
+#if 0   /* BEV BSW provisionally */
 #define vd_GMNTR_RXMSG_EACCP_D(sgnl)             ((void)Com_ReceiveSignal(ComConf_ComSignal_EACCP_D, (sgnl)))
+#else
+#define vd_GMNTR_RXMSG_EACCP_D(sgnl)             (vdp_PTR_NA)
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u1_GMNTR_IG_ISON()                       (u1_g_VehopemdIgnOn())

@@ -642,61 +642,81 @@ static void             vd_s_EvschgCfgSwquichg(ST_EVSCHG_SGNL * st_ap_sig)
     /* P_DPWSL0 */
     st_ap_sig[EVSCHG_ID_P_DPWSL0].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL0_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL0, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL0].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL1 */
     st_ap_sig[EVSCHG_ID_P_DPWSL1].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL1_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL1, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL1].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL2 */
     st_ap_sig[EVSCHG_ID_P_DPWSL2].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL2_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL2, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL2].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL3 */
     st_ap_sig[EVSCHG_ID_P_DPWSL3].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL3_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL3, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL3].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL4 */
     st_ap_sig[EVSCHG_ID_P_DPWSL4].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL4_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL4, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL4].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL5 */
     st_ap_sig[EVSCHG_ID_P_DPWSL5].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL5_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL5, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL5].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL6 */
     st_ap_sig[EVSCHG_ID_P_DPWSL6].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL6_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL6, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL6].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL7 */
     st_ap_sig[EVSCHG_ID_P_DPWSL7].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL7_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL7, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL7].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL8 */
     st_ap_sig[EVSCHG_ID_P_DPWSL8].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL8_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL8, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL8].u2_sig = (U2)u1_t_sig;
 
     /* P_DPWSL9 */
     st_ap_sig[EVSCHG_ID_P_DPWSL9].u1_sts = u1_t_sts_plg1g14;
     u1_t_sig = (U1)EVSCHG_P_DPWSL9_INIT;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_P_DPWSL9, &u1_t_sig);
+#endif
     st_ap_sig[EVSCHG_ID_P_DPWSL9].u2_sig = (U2)u1_t_sig;
 
     /* P_TMRAVA */

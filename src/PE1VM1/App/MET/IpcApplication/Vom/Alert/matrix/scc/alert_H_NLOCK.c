@@ -113,7 +113,9 @@ static U4      u4_s_AlertH_nlockSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_NLOCK_LSB_ENG1S60);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SFTWNG, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);

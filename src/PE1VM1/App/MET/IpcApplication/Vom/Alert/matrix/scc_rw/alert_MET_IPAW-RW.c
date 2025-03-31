@@ -104,7 +104,9 @@ static U4      u4_s_AlertMet_ipawSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl    = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_IPAINFO2, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_MET_IPAW_RW_LSB_STS);

@@ -603,7 +603,9 @@ static U4      u4_s_AlertS_adtjaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
                                      u2_s_ALERT_S_ADTJA_TT_ADI_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TJAINDI, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ADTJA_TT_ADI_LSB_STS);
@@ -656,7 +658,9 @@ static U4      u4_s_AlertS_adtjaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
                                      u2_s_ALERT_S_ADTJA_BC_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_BZR, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ADTJA_BC_LSB_STS);
@@ -682,7 +686,9 @@ static U4      u4_s_AlertS_adtjaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
                                      u2_s_u2_s_ALERT_CH_S_ADTJA_PD_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_PROP, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_ADTJA_PD_LSB_STS);
@@ -709,7 +715,9 @@ static U4      u4_s_AlertS_adtjaPdRqhnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                      u2_s_ALERT_CH_S_ADTJA_PD_RQHN_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_REQ, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_ADTJA_PD_RQHN_LSB_STS);
@@ -736,7 +744,9 @@ static U4      u4_s_AlertS_adtjaPdEdhfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                      u2_s_ALERT_CH_S_ADTJA_PD_EDHF_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_END, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_ADTJA_PD_EDHF_LSB_STS);
@@ -763,7 +773,9 @@ static U4      u4_s_AlertS_adtjaPdHfmlSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                      u2_s_ALERT_CH_S_ADTJA_PD_HFML_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_MSG, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_ADTJA_PD_HFML_LSB_STS);
@@ -790,7 +802,9 @@ static U4      u4_s_AlertS_adtjaPdSthfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                      u2_s_u2_s_ALERT_CH_S_ADTJA_PD_STHF_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_STAT, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_ADTJA_PD_STHF_LSB_STS);
@@ -817,7 +831,9 @@ static U4      u4_s_AlertS_adtjaPdDmcrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                      u2_s_u2_s_ALERT_CH_S_ADTJA_PD_DMCR_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOFDIREQ, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_ADTJA_PD_DMCR_LSB_STS);
@@ -844,7 +860,9 @@ static U4      u4_s_AlertS_adtjaPdHfnlSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                      u2_s_ALERT_CH_S_ADTJA_PD_HFNL_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_NSG, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_ADTJA_PD_HFNL_LSB_STS);

@@ -181,7 +181,9 @@ static U4      u4_s_AlertB_bkeySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 
     u1_t_sgnl     = (U1)0U;
 #if defined(ComConf_ComSignal_SKSW)
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SKSW, &u1_t_sgnl);
+#endif
 #endif /* defined(ComConf_ComSignal_SKSW) */
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_B_BKEY_LSB_SKSW);
 

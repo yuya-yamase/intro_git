@@ -154,7 +154,9 @@ static U4      u4_s_AlertP_cheengWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #endif /* OXCAN_PDU_RX_CAN_ENG1G97 */
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_ENGMSG, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_CHEENG_WRN_LSB_ENG1);
@@ -191,7 +193,9 @@ static U4      u4_s_AlertP_cheengBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_ENGBZ, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_CHEENG_BC_LSB_MSTS);

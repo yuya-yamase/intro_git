@@ -108,7 +108,9 @@ static U4      u4_s_AlertP_tengwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_P_TENGW_LSB_ENG1S99);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_STAINH, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);

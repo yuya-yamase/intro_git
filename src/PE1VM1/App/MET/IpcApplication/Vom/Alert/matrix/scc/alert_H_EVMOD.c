@@ -212,9 +212,11 @@ static U4      u4_s_AlertH_evmodTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_EVM_MSG, &u1_t_sgnl);
 
     u4_t_src_chk |= (U4)u1_t_sgnl;
+#endif
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_HEVMODETT_LSB_EHV1F04_MSGSTS);
 
     return(u4_t_src_chk);
@@ -242,9 +244,11 @@ static U4      u4_s_AlertH_evmodPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_EVM_MSG, &u1_t_sgnl);
 
     u4_t_src_chk |= (U4)u1_t_sgnl;
+#endif
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_HEVMODEPD_LSB_EHV1F04_MSGSTS);
 
     return(u4_t_src_chk);
@@ -272,9 +276,11 @@ static U4      u4_s_AlertH_evmodBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_EVM_MSG, &u1_t_sgnl);
 
     u4_t_src_chk |= (U4)u1_t_sgnl;
+#endif
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_HEVMODEBC_LSB_EHV1F04_MSGSTS);
 
     return(u4_t_src_chk);

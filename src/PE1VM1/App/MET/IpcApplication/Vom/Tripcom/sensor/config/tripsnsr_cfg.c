@@ -189,10 +189,10 @@ U1              u1_g_TripsnsrCfgGetBFC(U4 * u4p_a_fuel_inst)
 
 
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_FC, &u2_t_bfc);
 #else
     u2_t_bfc = (U2)0U;
 #endif
-    (void)Com_ReceiveSignal(ComConf_ComSignal_B_FC, &u2_t_bfc);
     (*u4p_a_fuel_inst) = (U4)u2_t_bfc;
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S28,
                                         (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),

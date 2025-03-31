@@ -169,7 +169,9 @@ static U4      u4_s_AlertD_atmalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
     u1_t_sgnl     = (U1)0U;
 #if defined(ComConf_ComSignal_TMSYS_WM)
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TMSYS_WM, &u1_t_sgnl);
+#endif
 #endif /* defined(ComConf_ComSignal_TMSYS_WM) */
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
@@ -182,7 +184,9 @@ static U4      u4_s_AlertD_atmalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
     u1_t_sgnl     = (U1)0U;
 #if defined(ComConf_ComSignal_TMFL_IND)
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TMFL_IND, &u1_t_sgnl);
+#endif
 #endif /* defined(ComConf_ComSignal_TMFL_IND) */
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_D_ATMAL_LSB_TMFL_IND);
 

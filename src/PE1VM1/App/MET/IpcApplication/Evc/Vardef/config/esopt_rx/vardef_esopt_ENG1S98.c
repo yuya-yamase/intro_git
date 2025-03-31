@@ -62,7 +62,9 @@ U1      u1_g_VdfEsoRx_NE_MET(void)
     U1                 u1_t_ava_rx;
 
     s2_t_rx = (S2)0;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_NE_MET, &s2_t_rx);
+#endif
     if(s2_t_rx != s2_s_VDF_ESO_NE_MET_INACT){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
