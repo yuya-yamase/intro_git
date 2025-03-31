@@ -246,13 +246,17 @@ static U4      u4_s_AlertP_gpfWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
 #ifdef ComConf_ComSignal_B_GPFMID
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_GPFMID, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_P_GPFWRN_LSB_B_GPFMID);
 #endif /* ComConf_ComSignal_B_GPFMID */
 
 #ifdef ComConf_ComSignal_B_GPFTT
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_GPFTT, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= (U4)u1_t_sgnl;
 #endif /* ComConf_ComSignal_B_GPFTT */
 
@@ -289,7 +293,9 @@ static U4      u4_s_AlertP_gpfBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_P_GPFBC_LSB_MSGSTS);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_GPFBZR, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);

@@ -128,7 +128,9 @@ static U4      u4_s_AlertP_oillvgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_EOILVL, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_OILLVG_LSB_MSGSTS);

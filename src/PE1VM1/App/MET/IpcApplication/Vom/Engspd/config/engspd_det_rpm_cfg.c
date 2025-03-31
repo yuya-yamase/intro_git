@@ -173,7 +173,9 @@ static U1      u1_s_EngspdDetRpmCanNeMetComRx(U2 * u2p_a_ne, U1 * u1p_a_stsbit)
     (*u1p_a_stsbit) &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((*u1p_a_stsbit) == (U1)0U){
+#if 0   /* BEV BSW provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_NE_MET, &s2_t_ne);
+#endif
 
         if((U2)s2_t_ne != (U2)ENGSPD_NE_MET_INVALID){ /* NE_MET signal validity check */
 
@@ -273,7 +275,9 @@ static U1      u1_s_EngspdDetRpmCanNe1ComRx(U2 * u2p_a_ne, U1 * u1p_a_stsbit)
     (*u1p_a_stsbit) &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((*u1p_a_stsbit) == (U1)0U){
+#if 0   /* BEV BSW provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_NE1, &s2_t_ne);
+#endif
 
         if(s2_t_ne > (S2)0){
             u4_t_inst = (U4)s2_t_ne;

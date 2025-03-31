@@ -104,7 +104,9 @@ static U4      u4_s_AlertH_onaccpSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
     u1_t_sgnl     = (U1)0U;
 #if defined(ComConf_ComSignal_PACCON) /* _840B_CAN_ */
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_PACCON, &u1_t_sgnl);
+#endif
 #endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 

@@ -117,8 +117,13 @@ typedef struct {
 #endif
 
 #if (__EVCOM_EXTERNAL_SUPPLY_SUP__ == 1)
+#if 0   /* BEV BSW provisionally */
 #define vd_EVCOM_GET_PWSPLAVA(x)			((void)Com_ReceiveSignal(ComConf_ComSignal_PWSPLAVA,(x)))	/* Get Rx Data : PWSPLAVA	 */
 #define vd_EVCOM_GET_PWSPPURQ(x)			((void)Com_ReceiveSignal(ComConf_ComSignal_PWSPPURQ,(x)))	/* Get Rx Data : PWSPPURQ	 */
+#else
+#define vd_EVCOM_GET_PWSPLAVA(x)            (vdp_PTR_NA)
+#define vd_EVCOM_GET_PWSPPURQ(x)            (vdp_PTR_NA)
+#endif
 #define vd_EVCOM_GET_EV_SLCT(x)				((void)Com_ReceiveSignal(ComConf_ComSignal_EV_SLCT,(x)))	/* Get Rx Data : EV_SLCT	 */
 #define vd_EVCOM_GET_HV_SLCT(x)				((void)Com_ReceiveSignal(ComConf_ComSignal_HV_SLCT,(x)))	/* Get Rx Data : HV_SLCT	 */
 #else

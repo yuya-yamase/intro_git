@@ -162,10 +162,10 @@ static  U1      u1_s_PtsctmpCanGATHWComRx(U2 * u2p_a_0p01cel)
 
 #if 0   /* BEV BSW provisionally */
     u1_t_stsbit = (U1)Com_GetIPDUStatus(MSG_ENG1G97_RXCH0) & (U1)(COM_TIMEOUT | COM_NO_RX);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_GATHW, &u2_t_0p5cel);
 #else
     u1_t_stsbit = (U1)COM_NO_RX;
 #endif
-    (void)Com_ReceiveSignal(ComConf_ComSignal_GATHW, &u2_t_0p5cel);
     if ((u1_t_stsbit & (U1)COM_TIMEOUT) != (U1)0U) {
         u2_t_0p5cel = (U2)PTSCTMP_GATHW_SENSORFAIL;
     }

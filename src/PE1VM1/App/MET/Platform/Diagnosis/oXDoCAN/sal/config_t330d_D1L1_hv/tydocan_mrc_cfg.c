@@ -105,7 +105,9 @@ U1      u1_g_TyDoCANMrcCfgVomSta(void)
 
     u1_t_b_st  = (U1)0U;
     u1_t_rx_chk = Com_GetIPDUStatus(MSG_ENG1G92_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_ST, &u1_t_b_st);
+#endif
     if((u1_t_rx_chk == (U1)0U) &&
        (u1_t_b_st   != (U1)0U)){
 

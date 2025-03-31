@@ -82,7 +82,9 @@ U1      u1_g_DrvIndHvCfgComRxIECOHVCR(S2 * const s2p_a_pct)
 {
     U1                  u1_t_sts;
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_IECOHVCR, s2p_a_pct);
+#endif
     u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1F04_RXCH0,
                                     ((U2)OXCAN_RX_SYS_NRX_IGP |
                                      (U2)OXCAN_RX_SYS_NRX_IGR |

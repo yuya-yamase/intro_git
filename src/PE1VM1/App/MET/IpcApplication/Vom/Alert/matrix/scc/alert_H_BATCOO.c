@@ -139,13 +139,17 @@ static U4      u4_s_AlertH_batcooTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 
     u1_t_sgnl     = (U1)0U;
 #if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_B_HVID1)
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_HVID1, &u1_t_sgnl);
+#endif
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_B_HVID1) */
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
 #if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_HVBCSM)
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVBCSM, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_H_BATCOO_LSB_HVBCSM);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) && defined(ComConf_ComSignal_HVBCSM) */
     
@@ -177,7 +181,9 @@ static U4      u4_s_AlertH_batcooBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) */
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HVBCSMB, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_BATCOO_BC_LSB_STS);

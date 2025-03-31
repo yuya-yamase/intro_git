@@ -410,8 +410,10 @@ void            vd_g_MulmedMulfrCfgTxSyncID(const U4 u4_a_MSGIDX, const U1 u1_a_
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS01(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_GP_CHG, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -422,8 +424,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS01(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS02(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_CTST_CHG, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -434,8 +438,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS02(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS03(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_NXST_CHG, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -446,8 +452,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS03(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS04(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TEL_MODE1, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_NM1_CHG, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -458,8 +466,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS04(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS05(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TEL_MODE1, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_NM2_CHG, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -470,8 +480,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS05(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS06(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE1, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_TTL_CHG_ADO, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -482,8 +494,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS06(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS07(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_STA1_CHG_AUDIO, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -494,8 +508,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS07(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS08(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_STA2_CHG_AUDIO, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -506,8 +522,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS08(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS09(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_STA3_CHG_AUDIO, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -518,8 +536,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS09(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS10(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_STA4_CHG_AUDIO, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -530,8 +550,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS10(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS13(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE3, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_LST_CHG_RDOUS1, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -542,8 +564,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS13(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS14(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE4, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_LST_CHG_RDOUS2, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -554,8 +578,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS14(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS15(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE4, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_LST_CHG_RDOUS3, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -566,8 +592,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS15(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS16(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE4, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_LST_CHG_RDOUS4, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -578,8 +606,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS16(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS18(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE4, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_LST_CHG_RDOUS5, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -590,8 +620,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS18(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS19(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE4, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_LST_CHG_RDOUS6, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -602,8 +634,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS19(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS20(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AUDIO_MODE_CMN, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_LST_CHG_CMN, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -614,8 +648,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS20(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS21(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TEL_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_FAV_CHG, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -626,8 +662,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS21(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS22(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TEL_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_HST_CHG, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -638,8 +676,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS22(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS23(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TEL_MODE2, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_CD_CHG, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -650,8 +690,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS23(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS25(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_VR_DISP_STAT, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_RT_CHG_VR, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -662,8 +704,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS25(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS26(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_VR_DISP_STAT, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_GT_CHG_VR, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -674,8 +718,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS26(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS27(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_VR_DISP_STAT, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_CT_CHG_VR, u1p_a_syncid);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -686,8 +732,10 @@ static  void    vd_s_MulmedMulfrCfgSgnlAVNMS27(U1 * u1p_a_modeid, U1 * u1p_a_syn
 /*===================================================================================================================================*/
 static  void    vd_s_MulmedMulfrCfgSgnlAVNMS79(U1 * u1p_a_modeid, U1 * u1p_a_syncid)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_NAV_MODE12, u1p_a_modeid);
     (void)Com_ReceiveSignal(ComConf_ComSignal_DIST_CHG, u1p_a_syncid);
+#endif
 }
 /*===================================================================================================================================*/
 /* static  U1      u1_s_MulmedMulfrCfgGPCHGM(const U1 u1_a_VALUE)                                                                    */

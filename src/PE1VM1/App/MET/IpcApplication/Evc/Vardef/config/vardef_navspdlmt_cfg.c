@@ -66,7 +66,9 @@ const U1                u1_g_VDF_NAVSPDLMT_RXC_MAX  = (U1)OXCAN_RX_RXEV_CNT_MAX;
 /*===================================================================================================================================*/
 U1      u1_g_VardefNavSpdLmtCfgMSig(U1 * u1_ap_ctyinf_rx)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CTY_INF, u1_ap_ctyinf_rx);
+#endif
     return(u1_g_oXCANRxEvcnt((U2)U2_MAX)); /*@@@ 19pvf CANFDItem OXCAN_PDU_RX_CAN_AVNMS43 @@@*/
 }
 /*===================================================================================================================================*/

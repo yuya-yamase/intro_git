@@ -159,7 +159,9 @@ static U4      u4_s_AlertH_soclowTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SOCLOWID, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_SOCLOWID_TT_LSB_MSGST);
@@ -190,7 +192,9 @@ static U4      u4_s_AlertH_soclowBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
                                           u2_s_ALERT_EHV1S94_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SOCLOWID, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_SOCLOWID_BC_LSB_MSGST);

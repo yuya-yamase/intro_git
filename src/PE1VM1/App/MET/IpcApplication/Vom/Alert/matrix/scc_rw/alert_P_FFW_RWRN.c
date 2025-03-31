@@ -103,7 +103,9 @@ static U4      u4_s_AlertP_ffw_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
                                      (U2)OXCAN_RX_SYS_NRX_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_FFW, &u1_t_sgnl);
+#endif
 
     u4_t_src_chk = (U4)u1_t_sgnl;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_FFW_RW_LSB_STS);

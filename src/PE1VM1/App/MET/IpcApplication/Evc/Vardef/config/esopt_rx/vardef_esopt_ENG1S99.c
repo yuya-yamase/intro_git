@@ -62,7 +62,9 @@ U1      u1_g_VdfEsoRx_OILMNT(void)
     U1                 u1_t_ava_rx;
 
     s2_t_rx = (S2)0;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_OILMNTMI, &s2_t_rx);
+#endif
     if(s2_t_rx != s2_s_VDF_ESO_SW_OILMNT_INACT){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -84,7 +86,9 @@ U1      u1_g_VdfEsoRx_OILLVG(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_EOILVL, &u1_t_rx);
+#endif
     if (u1_t_rx > (U1)0U) {
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }

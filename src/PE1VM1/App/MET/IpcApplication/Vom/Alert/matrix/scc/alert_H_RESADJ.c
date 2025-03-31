@@ -135,7 +135,9 @@ static U4      u4_s_AlertH_resadjSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
     u1_t_sgnl     = (U1)0U;
 #ifdef ComConf_ComSignal_RESDISP
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RESDISP, &u1_t_sgnl);
+#endif
 #endif /* ComConf_ComSignal_RESDISP */ /* 840B_CAN */
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
