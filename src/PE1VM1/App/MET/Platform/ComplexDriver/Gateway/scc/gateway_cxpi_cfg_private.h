@@ -23,7 +23,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "veh_opemd.h"
