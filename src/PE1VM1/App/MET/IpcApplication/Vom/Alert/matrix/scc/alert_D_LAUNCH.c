@@ -126,9 +126,7 @@ static U4      u4_s_AlertD_launchSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
                                     u2_s_ALERT_LAUNCH_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if (u1_t_msgsts == (U1)0U){
-#if 0   /* BEV BSW provisionally */
-        (void)Com_ReceiveSignal(ComConf_ComSignal_STSLNCH_0, &u1_t_sgnl);
-#endif
+        (void)Com_ReceiveSignal(ComConf_ComSignal_STSLNCH, &u1_t_sgnl);
     }
 
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_D_LAUNCH_LSB_MSGSTS);
