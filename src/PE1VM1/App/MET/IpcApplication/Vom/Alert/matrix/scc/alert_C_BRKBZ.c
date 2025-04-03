@@ -60,9 +60,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BUZZER)
+#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BUZZER)
 static U1      u1_s_alert_c_brkbz_b_buzze_last;
-#endif /* defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BUZZER) */
+#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BUZZER) */
 #if defined(OXCAN_PDU_RX_CAN_VSC1S97) && defined(ComConf_ComSignal_B_BUZZE2)
 static U1      u1_s_alert_c_brkbz_b_buzze2_last;
 #endif /* defined(OXCAN_PDU_RX_CAN_VSC1S97) && defined(ComConf_ComSignal_B_BUZZE2) */
@@ -162,9 +162,9 @@ const ST_ALERT_MTRX st_gp_ALERT_C_BRKBZ_MTRX[1] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertC_brkbzInit(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BUZZER)
+#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BUZZER)
     u1_s_alert_c_brkbz_b_buzze_last  = (U1)0x00U;
-#endif /* defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BUZZER) */
+#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BUZZER) */
 #if defined(OXCAN_PDU_RX_CAN_VSC1S97) && defined(ComConf_ComSignal_B_BUZZE2)
     u1_s_alert_c_brkbz_b_buzze2_last = (U1)0x00U;
 #endif /* defined(OXCAN_PDU_RX_CAN_VSC1S97) && defined(ComConf_ComSignal_B_BUZZE2) */
@@ -252,11 +252,11 @@ static U4      u4_s_AlertC_brkbzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1                        u1_t_sgnl_b_buzze2;
 #endif /* defined(OXCAN_PDU_RX_CAN_VSC1S97) && defined(ComConf_ComSignal_B_BUZZE2) */
 
-#if defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BUZZER)
+#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BUZZER)
     static const U2           u2_s_ALERT_C_BRKBZ_TO_THRESH95 = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     U1                        u1_t_msg_vsc95;
     U1                        u1_t_sgnl_b_buzze;
-#endif /* defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BUZZER) */
+#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BUZZER) */
     U4                        u4_t_src_chk;
     U4                        u4_t_src_chk_b_buzze;
     U4                        u4_t_src_chk_b_buzze2;
@@ -288,8 +288,8 @@ static U4      u4_s_AlertC_brkbzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk_b_buzze2            = (U4)ALERT_C_BRKBZ_BZJDG_UNKNOWN;
 #endif /* defined(OXCAN_PDU_RX_CAN_VSC1S97) && defined(ComConf_ComSignal_B_BUZZE2) */
 
-#if defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BUZZER)
-    u1_t_msg_vsc95                   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1S95,
+#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BUZZER)
+    u1_t_msg_vsc95                   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
                                                              (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                                              u2_s_ALERT_C_BRKBZ_TO_THRESH95) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -313,7 +313,7 @@ static U4      u4_s_AlertC_brkbzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 #else
     u4_t_src_chk_b_buzze             = (U4)ALERT_C_BRKBZ_BZJDG_UNKNOWN;
-#endif /* defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_BUZZER) */
+#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_BUZZER) */
 
     u4_t_src_chk                     = u4_t_src_chk_b_buzze2;
     u4_t_src_chk                    |= (u4_t_src_chk_b_buzze << u1_s_ALERT_C_BRKBZ_LSB_BZR_REQ);
