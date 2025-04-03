@@ -206,7 +206,7 @@ static U4      u4_s_AlertH_myroomPdMsgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                      (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_H_MYROOM_MSG_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
-    u1_t_msgsts   = (U1)COM_TIMEOUT | (U1)COM_NO_RX;
+    u1_t_msgsts   = (U1)COM_NO_RX;
 #endif
     u1_t_sgnl     = (U1)0U;
 #if 0   /* BEV BSW provisionally */
@@ -239,7 +239,7 @@ static U4      u4_s_AlertH_myroomPdPuSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
                                      (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_H_MYROOM_PDPU_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
-    u1_t_msgsts   = (U1)COM_TIMEOUT | (U1)COM_NO_RX;
+    u1_t_msgsts   = (U1)COM_NO_RX;
 #endif
     u1_t_sgnl     = (U1)0U;
 #if 0   /* BEV BSW provisionally */
