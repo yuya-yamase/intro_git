@@ -198,10 +198,10 @@ static void    vd_s_XSpiMETComvertU1(U1* u1_ap_data,U4* u4_ap_data_rec)
     U4 u4_t_lpcnt;
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_PDU_NWORD; u4_t_lpcnt++){
-        u4_ap_data_rec[u4_t_lpcnt] = (U4)((u1_ap_data[u4_t_lpcnt * 4]) & (U4)0x000000FFU);
-        u4_ap_data_rec[u4_t_lpcnt] |= (U1)((u1_ap_data[(u4_t_lpcnt * 4) + 1] << 8U) & (U4)0x0000FF00U);
-        u4_ap_data_rec[u4_t_lpcnt] |= (U1)((u1_ap_data[(u4_t_lpcnt * 4) + 2] << 16U) & (U4)0x00FF0000U);
-        u4_ap_data_rec[u4_t_lpcnt] |= (U1)((u1_ap_data[(u4_t_lpcnt * 4) + 3] << 24U) & (U4)0xFF000000U);
+        u4_ap_data_rec[u4_t_lpcnt]  = (((U4)u1_ap_data[(u4_t_lpcnt * 4)    ]       ) & (U4)0x000000FFU);
+        u4_ap_data_rec[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 1] <<  8U) & (U4)0x0000FF00U);
+        u4_ap_data_rec[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 2] << 16U) & (U4)0x00FF0000U);
+        u4_ap_data_rec[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 3] << 24U) & (U4)0xFF000000U);
     }
 
 /* BEV Sample Code */
