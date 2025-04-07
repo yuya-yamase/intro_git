@@ -585,7 +585,7 @@ U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL)
         (U1)0x00U,  /* WCHIME_REQ_IN_BRK_TST_LRN        */
         (U1)0x00U,  /* WCHIME_REQ_IN_EPB                */
         (U1)0x00U,  /* WCHIME_REQ_CO_EIGCON_IGOFF       */
-        (U1)0x03U,  /* WCHIME_REQ_SI_SFTPOS_NML         */
+        (U1)0x13U,  /* WCHIME_REQ_SI_SFTPOS_NML         */
         (U1)0x03U,  /* WCHIME_REQ_SI_ACC_LSPDCNSL       */
         (U1)0x03U,  /* WCHIME_REQ_SI_LTA_CNCL           */
         (U1)0x03U,  /* WCHIME_REQ_SI_LCS_CNCL           */
@@ -1177,6 +1177,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  19PFv3-8  5/13/2024  YR       Change FCTA priority                                                                               */
 /*  19PFv3-9  7/10/2024  TR       Add SBRDMB buzzer req                                                                              */
 /*  BEV-1    03/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */
+/*  BEV-2    04/03/2025  RO       Change for BEV System_Consideration_2.(MET-D_SFTPOS-CSTD-1-00-A-C0)                                */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
