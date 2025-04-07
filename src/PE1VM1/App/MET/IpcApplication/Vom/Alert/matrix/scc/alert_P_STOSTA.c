@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -250,7 +249,9 @@ static U4      u4_s_AlertP_stostaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SSLMP, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_STOSTA_TT_LSB_STS);
@@ -281,7 +282,9 @@ static U4      u4_s_AlertP_stostaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 									 u2_s_ALERT_P_STOSTA_BC_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ECOBZR, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_STOSTA_BC_LSB_STS);
@@ -311,7 +314,9 @@ static U4      u4_s_AlertP_stostaPdFalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 									 (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_INFSSFAL, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_STOSTA_FAL_LSB_STS);
@@ -343,11 +348,15 @@ static U4      u4_s_AlertP_stostaPdCoaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 									 u2_s_ALERT_P_STOSTA_COA_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_INFSSADV, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_INFSSCOP, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_P_STOSTA_COA_LSB_COP);
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_STOSTA_COA_LSB_STS);
@@ -378,7 +387,9 @@ static U4      u4_s_AlertP_stostaPdInhSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
                                      u2_s_ALERT_P_STOSTA_INH_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_INFSSINH, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_STOSTA_INH_LSB_STS);

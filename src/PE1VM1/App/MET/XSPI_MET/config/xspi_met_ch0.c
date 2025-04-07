@@ -33,7 +33,6 @@
 #if 0   /* BEV BSW provisionally */
 #else
 #include "oxcan_channel_STUB.h"
-#include "Com_Cfg_STUB.h"
 #endif
 #include "iohw_diflt.h"
 #include "iohw_adc.h"

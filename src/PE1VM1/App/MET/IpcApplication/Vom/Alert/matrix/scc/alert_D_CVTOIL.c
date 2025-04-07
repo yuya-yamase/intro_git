@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -138,13 +137,17 @@ static U4      u4_s_AlertD_cvtoilSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
     u1_t_sgnl     = (U1)0U;
 #ifdef ComConf_ComSignal_B_OILWMI
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_OILWMI, &u1_t_sgnl);
+#endif
 #endif /* ComConf_ComSignal_B_OILWMI */
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
 #ifdef ComConf_ComSignal_B_OILWTT
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_OILWTT, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_D_CVTOIL_LSB_B_OILWTT);
 #endif /* ComConf_ComSignal_B_OILWTT */
 

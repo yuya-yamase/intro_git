@@ -23,7 +23,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -272,7 +271,9 @@ static U4      u4_s_AlertO_eigconPowstsSrcchk(const U1 u1_a_VOM, const U4 u4_a_I
     vd_g_AlertBRxTrnsSts(&u1_s_alert_o_eigcon_pow_msg_pdc, u1_t_msgsts);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACC_PDC, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= ((U4)u1_t_sgnl                       << u1_s_ALERT_O_EIGCON_POW_LSB_ACC);
     u4_t_src_chk |= ((U4)u1_s_alert_o_eigcon_pow_msg_pdc << u1_s_ALERT_O_EIGCON_POW_LSB_PDC);
 
