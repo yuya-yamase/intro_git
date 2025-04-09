@@ -2,8 +2,10 @@
 [Subproject]
     :optionsFile=${CMN_DIR}/IOHW.opt
     :sourceDir=${ROOT_DIR}
+    :sourceDir=${APP_DIR}/Common/ExtSigCtrl
 
     -I${CAN_DIR}/inc
+    -I${APP_DIR}/Common
 
     -I${CAN_DIR}/CS/inc
     -I${CAN_DIR}/Com/inc
@@ -47,6 +49,10 @@
     -I${CGW_L3R_DIR}/MDL/INFO/UTIL/inc
 
     -I${LIB_DIR}
+    
+    -I${MCAL_DIR}/GPT
+
+    -I${APP_DIR}/Common/ExtSigCtrl
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
@@ -58,3 +64,5 @@ ${SS_DIR}/RprgIf/config/rprg_if_request.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
 ${APP_DIR}/Stub/stub_u2a.c
+
+ExtSigCtrl.c
