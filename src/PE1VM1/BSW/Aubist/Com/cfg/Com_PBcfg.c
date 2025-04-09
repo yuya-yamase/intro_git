@@ -10291,7 +10291,7 @@ BswConst BswU4 bsw_com_u4SysStatTbl[BSW_COM_MSG_NUM][BSW_COM_SYSSTATTBLNUM] =
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [109] MSG_DDM1S17_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [110] MSG_DDM1S32_RXCH0 */
@@ -10627,7 +10627,7 @@ BswConst BswU4 bsw_com_u4SysStatTbl[BSW_COM_MSG_NUM][BSW_COM_SYSSTATTBLNUM] =
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [193] MSG_PCN1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [194] MSG_PDC1G01_RXCH0 */
@@ -10727,7 +10727,7 @@ BswConst BswU4 bsw_com_u4SysStatTbl[BSW_COM_MSG_NUM][BSW_COM_SYSSTATTBLNUM] =
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [218] MSG_SCS1S11_RXCH0 */
-          ( BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_IGR )
+          ( BSW_COM_u4IPDUGROUP_BAT|BSW_COM_u4IPDUGROUP_ACC|BSW_COM_u4IPDUGROUP_IG|ComConf_SysStatusName_PBA|ComConf_SysStatusName_IGR )
          ,( BSW_COM_u4IPDUGROUP_NONE )
      }
     ,{    /* [219] MSG_SCS1S14_RXCH0 */
