@@ -1,0 +1,21 @@
+#!gbuild
+[Subproject]
+
+$TOP_DIR/bsw/SVL/BswM/env/Multi/BswM.gpj					[Relocatable Object]
+$TOP_DIR/bsw/SVL/CanSM/env/Multi/CanSM.gpj					[Relocatable Object]
+$TOP_DIR/bsw/SVL/ComM/env/Multi/ComM.gpj					[Relocatable Object]
+$TOP_DIR/bsw/SVL/EcuM/env/Multi/EcuM.gpj					[Relocatable Object]
+$TOP_DIR/bsw/SVL/GDN/env/Multi/GDN.gpj						[Relocatable Object]
+$TOP_DIR/bsw/SVL/MemErrM/env/Multi/MemErrM.gpj				[Relocatable Object]
+$TOP_DIR/bsw/SVL/MemM/env/Multi/MemM.gpj					[Relocatable Object]
+$TOP_DIR/bsw/SVL/PduR/env/Multi/PduR.gpj					[Relocatable Object]
+$TOP_DIR/bsw/SVL/SchM/env/Multi/SchM.gpj					[Relocatable Object]
+$TOP_DIR/bsw/SVL/Shutdown/env/Multi/Shutdown.gpj			[Relocatable Object]
+$TOP_DIR/bsw/SVL/Startup/env/Multi/Startup.gpj				[Relocatable Object]
+$TOP_DIR/bsw/SVL/Sys/env/Multi/Sys.gpj						[Relocatable Object]
+$TOP_DIR/bsw/SVL/Tm/env/Multi/Tm.gpj						[Relocatable Object]
+$TOP_DIR/bsw/SVL/WdgM/env/Multi/WdgM.gpj					[Relocatable Object]
+
+# usr
+$TOP_DIR/bsw/SVL/Shutdown/env/Multi/Shutdown_usr.gpj		[Relocatable Object]
+$TOP_DIR/bsw/SVL/Startup/env/Multi/Startup_usr.gpj			[Relocatable Object]

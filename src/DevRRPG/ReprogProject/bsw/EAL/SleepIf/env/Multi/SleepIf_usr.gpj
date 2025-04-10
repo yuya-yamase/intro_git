@@ -1,0 +1,9 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/SleepIf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/SleepIf/obj/SleepIf_usr.rel.o
+
+../../usr/SleepIf.c

@@ -1,0 +1,12 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/MemM/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/MemM/obj/MemM.rel.o
+
+../../src/MemM.c
+../../cfg/MemM_Cfg.c
+../../cfg/MemM_Ucfg.c

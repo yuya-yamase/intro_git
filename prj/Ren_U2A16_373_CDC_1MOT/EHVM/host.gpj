@@ -1,0 +1,59 @@
+#!gbuild
+gbuildDir=C:\GHS\RH850_V.R9144\comp_201715
+primaryTarget=v800_standalone.tgt
+[Program]
+    :macro=COMP_DIR=c:/GHS/RH850_V.R9144/comp_201715
+	:macro=PRJ_DIR=${%expand_path(../)}
+    :macro=CMN_DIR=${PRJ_DIR}/common
+    :macro=ROOT_DIR=${%expand_path(${PRJ_DIR}/../../src/EHVM)}
+    :macro=OBJ_DIR=obj
+    :macro=OUT_DIR=dst
+    :macro=MCAL_DIR=${ROOT_DIR}/BSW/MCAL
+    :macro=SS_DIR=${ROOT_DIR}/BSW/System
+#    :macro=LWH_DIR=${ROOT_DIR}/LWH_project
+#    :macro=LWH_INTEG_DIR=${ROOT_DIR}/LWH_integration
+    :macro=HV_DIR=${ROOT_DIR}/BSW/Hv
+	:macro=LIB_DIR=${ROOT_DIR}/LIB
+
+    :optionsFile=${CMN_DIR}/common.opt
+    :optionsFile=${CMN_DIR}/Hv.opt
+    :optionsFile=${CMN_DIR}/MCAL.opt
+    
+    -I${COMP_DIR}/include/v800
+    -I${COMP_DIR}/ansi
+    -L${COMP_DIR}/lib/rh850
+    
+    -lLIBARCH.A
+    
+    -I${HV_DIR}
+    -I${HV_DIR}/callout
+    -I${ROOT_DIR}/BSW/CmnHdr
+    -I${SS_DIR}/22SS/scc
+    -I${SS_DIR}/22SS/config
+    -I${LIB_DIR}/Ren_G4MH/scc
+    -I${LIB_DIR}/Common/scc
+
+    -DECU_HOST
+    -D__RELEASE_BUILD__
+    -o host.elf
+
+    -T ${MCAL_SECTION_DIR}/memory_map_HOST.ld
+    -T ${MCAL_SECTION_DIR}/section.ld
+
+boot.gpj
+#${CMN_DIR}/MCAL_ADC.gpj
+${CMN_DIR}/MCAL_COMMON.gpj
+${CMN_DIR}/MCAL_DIO.gpj
+${CMN_DIR}/MCAL_DMA.gpj
+#${CMN_DIR}/MCAL_GPT.gpj
+${CMN_DIR}/MCAL_ICU.gpj
+${CMN_DIR}/MCAL_MCU.gpj
+${CMN_DIR}/MCAL_PORT.gpj
+#${CMN_DIR}/MCAL_PWM.gpj
+${CMN_DIR}/MCAL_SPI.gpj
+#${CMN_DIR}/MCAL_WDG.gpj
+${CMN_DIR}/MCAL_Intc.gpj
+${CMN_DIR}/MCAL_DUMMY.gpj
+${CMN_DIR}/LWH_project.gpj
+${CMN_DIR}/LWH_integration.gpj
+${CMN_DIR}/LIB.gpj

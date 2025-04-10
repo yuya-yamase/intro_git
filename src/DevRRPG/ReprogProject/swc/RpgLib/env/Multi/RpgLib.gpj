@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/RpgLib/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/RpgLib/obj/RpgLib.rel.o
+
+../../src/RpgLib.c
+../../cfg/RpgLib_Cfg.c

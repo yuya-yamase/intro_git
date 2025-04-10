@@ -1,0 +1,261 @@
+Index: CAPL/Reprog_CAPL.can
+===================================================================
+--- CAPL/Reprog_CAPL.can	(リビジョン 28469)
++++ CAPL/Reprog_CAPL.can	(作業コピー)
+@@ -7,6 +7,7 @@
+ {
+   /* 共通の各種定義、グローバルデータ等はこちらに記載 */
+   #include "Reprog_CAPL.cin"
++  #include "Reprog_Test_Common.cin"
+ 
+   /* SID 0x10 DiagnosticSessionControlに関連する処理 */
+   #include "Service_0x10.cin"
+@@ -708,194 +709,6 @@
+   return;
+ }
+ 
+-
+-/// <on_system_evnet>
+-/* *********************************************************** */
+-/* Function                                                    */
+-/*  on preStart                                                */
+-/* Discription                                                 */
+-/*  CANoeのStart(開始)押下時に起動するイベントハンドラ         */
+-/* IN :                                                        */
+-/*  None                                                       */
+-/* OUT:                                                        */
+-/*  None                                                       */
+-/* RET:                                                        */
+-/*  None                                                       */
+-/* *********************************************************** */
+-on preStart
+-{
+-  /* CanoeをStart押下時に起動するイベントハンドラ */
+-
+-  /* 動作中のCANoeシナリオのコンフィグレーションファイルが格納されているディレクトリのフルパスを取得 */
+-  getAbsFilePath("", CANoe_Senario_Filepath, elcount(CANoe_Senario_Filepath));
+-
+-  /* グローバル変数の一括初期化 */
+-  variable_initialize();
+-
+-  /* デバッグ表示 */
+-  write("Reprog_CAPL Initialize Complete");
+-
+-  return;
+-}
+-
+-
+-/// <on_system_evnet>
+-/* *********************************************************** */
+-/* Function                                                    */
+-/*  on start                                                   */
+-/* Discription                                                 */
+-/*  PreStartイベントの後に起動するイベントハンドラ             */
+-/* IN :                                                        */
+-/*  None                                                       */
+-/* OUT:                                                        */
+-/*  None                                                       */
+-/* RET:                                                        */
+-/*  None                                                       */
+-/* NOTE:                                                       */
+-/*  トレースウィンドウ上に実装済みのKeyEventの説明を出力する   */
+-/* *********************************************************** */
+-on start
+-{
+-  /* PreStartイベントの後に起動するイベントハンドラ */
+-
+-  long pos;
+-  char debug_filepath[E_Configuration_path_size];
+-  char msg_buff[128]="********************** Start CANoe **********************\n";
+-
+-  /* デバッグログファイルの出力パスを指定 */
+-  /* CANoeのコンフィグレーションファイルのあるパスの絶対パスを取得 */
+-  pos = strlen(CANoe_Senario_Filepath);
+-  substr_cpy(debug_filepath, CANoe_Senario_Filepath, 0, pos, elcount(debug_filepath));
+-  /* CANoeのコンフィグレーションファイルのあるパスからの相対パス指定を追加する */
+-  strncat(debug_filepath, "Log", elcount(debug_filepath));
+-  /* デバッグログの書込み先のファイルパスを設定 */
+-  setWritePath(debug_filepath);
+-
+-  /* 書込みモード(追記モード)でデバッグログファイルをオープンする */
+-  G_debug_log_file_handle = OpenFileWrite("CANoe_debug.log", 2);
+-  if ( G_debug_log_file_handle != 0 )
+-  {
+-    /* 仕切り用のメッセージを出力しておく */
+-    filePutString (msg_buff, elcount(msg_buff), G_debug_log_file_handle);
+-  }
+-  else
+-  {
+-    /* オープン失敗時は出力windowへエラー通知 */
+-    write ("CANoe_debug.log Open Error, OpenFileWrite.");
+-  }
+-
+-  /* CAPL Key Event Guide */
+-  write("************************************************");
+-  write(" Press 's' to Start Reprog CANoe Senario");
+-  write(" Press 'z' to APL Start Request");
+-  write(" Press ',' to Stay In Boot Request");
+-  write("************************************************");
+-
+-  return;
+-}
+-
+-
+-/// <on_system_evnet>
+-/* *********************************************************** */
+-/* Function                                                    */
+-/*  on stopMeasurement                                         */
+-/* Discription                                                 */
+-/*  CANoeの測定停止時に呼び出されるイベントハンドラ            */
+-/* IN :                                                        */
+-/*  None                                                       */
+-/* OUT:                                                        */
+-/*  None                                                       */
+-/* RET:                                                        */
+-/*  None                                                       */
+-/* NOTE:                                                       */
+-/*  終了処理を行う                                             */
+-/* *********************************************************** */
+-on stopMeasurement
+-{
+-  /* 終了時に時間測定結果をデバッグログファイルに出力する */
+-  Timespec_Log_output();
+-
+-  /* デバッグログファイルをクローズする */
+-  fileClose(G_debug_log_file_handle);
+-
+-  /* ハンドラには無効値を設定しておく */
+-  G_debug_log_file_handle = 0;
+-
+-  return;
+-}
+-
+-
+-
+-/* *********************************************************** */
+-/* Function                                                    */
+-/*  on timer APL_Start_Request_Timer                           */
+-/* Discription                                                 */
+-/*  APL要求起動の実処理                                        */
+-/* IN :                                                        */
+-/*  None                                                       */
+-/* OUT:                                                        */
+-/*  None                                                       */
+-/* RET:                                                        */
+-/*  None                                                       */
+-/* NOTE:                                                       */
+-/*  APL要求起動の判定の為にのみ使用する。                      */
+-/*  CANの受信ハンドラ内で本関数内の処理を実行すると、          */
+-/*  diagResponseのハンドラ受信前にdiagRequestを行うので、      */
+-/*  APL要求起動で使用したSID 0x10のポジティブレスポンスが      */
+-/*  diagResponseの受信ハンドラで起動してしまう為、遅延実行している */
+-/* *********************************************************** */
+-on timer APL_Start_Request_Timer
+-{
+-  /* APL起動要求によりCANoeシーケンスの実行開始 */
+-  Debug_Log_output("APL Start:Reprogramming Seqence Start");
+-
+-  /* 自動実行を有効化する */
+-  G_Reprog_General_Data.G_Info.enable_autorun = E_Flag_ON;
+-
+-  /* APL要求起動の有効フラグはもう不要なのでフラグを落とす */
+-  G_Reprog_General_Data.G_Info.enable_aplstart = E_Flag_OFF;
+-
+-  /* CANoeシナリオの開始直前の時間測定 */
+-  G_Timespec_Array[E_Timespec_Seqence_Start] = timeNowInt64();
+-
+-  /* APL要求起動時はSID 0x10[DiagnosticSessionControl]のProgrammingSessionのポジティブレスポンス受信以降から再開となる */
+-  CANoe_Seqence_Direct_Update(E_PP1_SID_0x27_seed_req);
+-
+-  /* SID 0x27 SecurityAccess(requestSeed)がCANoeシナリオ停止機能の対象となっている可能性があるのでここでも判定 */
+-  CANoe_Seqence_Stop_Check();
+-
+-  /* APL起動要求待ち中にSID 0x10 [DiagnosticSessionControl]のProgrammingSessionのポジティブレスポンスを受信したので、 */
+-  /* CANoeシナリオの起点となるリクエストの送信を実施 */
+-  Request_sender();
+-
+-  return;
+-}
+-
+-
+-
+-/* *********************************************************** */
+-/* Function                                                    */
+-/*  on timer TwaitTimer                                        */
+-/* Discription                                                 */
+-/*  SID0x10(PrgSession) 応答受けてから、SID 0x27(Seed) 出す    */
+-/*  までの Wait タイマ                                         */
+-/* IN :                                                        */
+-/*  None                                                       */
+-/* OUT:                                                        */
+-/*  None                                                       */
+-/* RET:                                                        */
+-/*  None                                                       */
+-/* NOTE:                                                       */
+-/*  None                                                       */
+-/* *********************************************************** */
+-on timer TwaitTimer
+-{
+-  /* 次のリクエストの送信を実施 */
+-  Request_sender();
+-
+-  return;
+-}
+-
+ /* ************************************************************** */
+ /*                            CAN                                 */
+ /* ************************************************************** */
+@@ -938,14 +751,6 @@
+       /* 2バイト目を読み出し(エラーチェックはこの後の読み出し値のチェックで代用するので不要)*/
+       /* TBD:SID 0x37のレスポンス受信時にWarningが出るが処理に影響はないので低優先対応する */
+       second_byte = this.BYTE(2);
+-
+-      /* SID 0x10 (ProgrammingSession)のポジティブレスポンスであるか判定 */
+-      if( first_byte == 0x50 && second_byte == 0x02 )
+-      {
+-        /* APL要求起動受信時の遅延起動用タイマを設定 */
+-        /* 現在の動作しているCANの受信ハンドラは一度終了させる必要がある */
+-        setTimer(APL_Start_Request_Timer , G_Reprog_General_Data.G_Info.aplstart_wait);
+-      }
+     }
+     else
+     {
+@@ -3320,8 +3125,6 @@
+ 
+         /* SID 0x10 (ProgrammingSession)のポジティブレスポンスであるか判定 */
+         /* このルートでは既にCANoeシナリオ実行中であり、APL要求起動のメッセージは無視したい */
+-        if( first_byte != 0x50 || second_byte != 0x02 ||
+-             G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x10_prog_posres)
+         {
+           /* ポジティブレスポンス受信ルート */
+           /* デバッグ表示(性能に影響するのでデバッグ時のみ有効にすること) */
+@@ -3344,15 +3147,8 @@
+           CANoe_Seqence_Stop_Check();
+ 
+           /* Phase6 の場合はSID 0x27(Seed) 前に、Wait 入れる */
+-          if( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_SID_0x27_seed_req )
+-          {
+-            setTimer(TwaitTimer, 1 * 1000); // 1 秒待ち
+-          }
+-          else
+-          {
+             /* 次のリクエストの送信を実施 */
+             Request_sender();
+-          }
+         }
+       }
+       else
+@@ -3381,8 +3177,11 @@
+     else
+     {
+       /* 「初期化済み かつ 自動実行の有効フラグがON」でない */
+-      /* このような場合は特に何もせず受信データを読み捨て */
+-
++      //自動化シナリオでポジレスが返ってくるのに時間がかかるサービスでの待ち合わせに使用している。
++      if (res_msg.IsPositiveResponse() == 1)
++      {
++          posresWait = 1;
++      }
+       /* デバッグ表示(性能に影響するのでデバッグ時のみ有効にすること) */
+       /* Debug_Log_output("Not Initialize. Discard Receive Data"); */
+     }

@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	{streq(PLATFORM_NAME, RH850)} -sda=0
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/parts/Csm/CryIf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/parts/Csm/CryIf/obj/CryIf.rel.o
+
+../../src/CryIf.c
+../../src/CryIf_KeyManagement.c
+

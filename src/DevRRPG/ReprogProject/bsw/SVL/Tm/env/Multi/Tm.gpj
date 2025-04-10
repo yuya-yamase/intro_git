@@ -1,0 +1,8 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/Tm/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/Tm/obj/Tm.rel.o
+
+../../src/Tm.c

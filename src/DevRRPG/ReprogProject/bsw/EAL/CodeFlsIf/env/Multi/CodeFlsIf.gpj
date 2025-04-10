@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/CodeFlsIf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/CodeFlsIf/obj/CodeFlsIf.rel.o
+
+../../src/CodeFlsIf.c
+../../cfg/CodeFlsIf_Cfg.c

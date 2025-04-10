@@ -1,0 +1,68 @@
+/*****************************************************************************
+ *	Copyright DENSO Corporation. All rights reserved.
+ ****************************************************************************/
+/*****************************************************************************
+ * [File Name]		SS_CpuCore_asm.850
+ * [Module]			CpuCore
+ * [Function]		CpuCore
+ * [Notes]			None
+ ****************************************************************************/
+
+/*----------------------------------------------------------------------------
+ *		Headers
+ *--------------------------------------------------------------------------*/
+#include <SS_Internal.h>
+
+/*----------------------------------------------------------------------------
+ *		Symbols
+ *--------------------------------------------------------------------------*/
+#define REG_u4PEID_regID (0ul)
+#define REG_u4PEID_selID (2ul)
+#define MSK_u4PEID (0x0000001Ful)
+
+
+
+/*----------------------------------------------------------------------------
+ *		Globals
+ *--------------------------------------------------------------------------*/
+#if (SS_USE_LWH == SS_LWH_NONE)
+	.globl	_SS_CpuCore_syncp
+#endif /* SS_USE_LWH == SS_LWH_NONE */
+#if (SS_USE_CORE_COUNT >= 2u)
+	.globl  _SS_CpuCore_getCoreID
+#endif /* SS_USE_CORE_COUNT >= 2u */
+	
+/*----------------------------------------------------------------------------
+ *		Codes
+ *--------------------------------------------------------------------------*/
+	.section	".ss_code", "ax"
+	.align		4
+
+/**---------------------------------------------------------------------------
+ * [Format]		void SS_CpuCore_syncp(void)
+ * [Function]	syncp
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		None
+ *--------------------------------------------------------------------------*/
+#if (SS_USE_LWH == SS_LWH_NONE)
+_SS_CpuCore_syncp:
+	syncp
+	jmp		[lp]
+#endif /* SS_USE_LWH == SS_LWH_NONE */
+
+/**---------------------------------------------------------------------------
+ * [Format]		SS_CoreIdType SS_CpuCore_getCoreID(void)
+ * [Function]	getcoreid
+ * [Arguments]	None
+ * [Return]		SS_CoreIdType(r10)
+ * [Notes]		None
+ *--------------------------------------------------------------------------*/
+#if (SS_USE_CORE_COUNT >= 2u)
+_SS_CpuCore_getCoreID:
+    stsr    REG_u4PEID_regID, r10, REG_u4PEID_selID
+    mov     MSK_u4PEID, r11
+    and     r11, r10
+	jmp		[lp]
+
+#endif /* SS_USE_CORE_COUNT >= 2u */

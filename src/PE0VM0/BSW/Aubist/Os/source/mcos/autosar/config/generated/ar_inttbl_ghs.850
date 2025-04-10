@@ -1,0 +1,900 @@
+/****************************************************************************
+ * Protected                                                                *
+ * Copyright AUBASS CO., LTD.                                               *
+ ****************************************************************************
+
+    Copyright (C) 2022 eSOL Co.,Ltd. Tokyo, Japan
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+/****************************************************************************
+ [ ar_inttbl_ghs.850 ] - Generated interrupt table for eMCOS AUTOSAR
+****************************************************************************/
+
+#define _in_asm_source_
+#include "hal/cpu/v850/v850_cpp_impl.h"
+
+#define OS_START_SEC_CONST_UNSPECIFIED
+#include "Os_MemMap.h"
+
+    .extern _mcos_v850_undefint_entry
+    .align  512
+    .type       ar_inttbl_0, $object
+    .global     ar_inttbl_0
+ar_inttbl_0:   /* Core 0 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 0 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 1 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 2 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 3 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 4 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 5 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 6 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 7 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 8 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 9 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 10 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 11 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 12 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 13 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 14 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 15 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 16 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 17 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 18 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 19 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 20 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 21 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 22 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 23 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 24 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 25 */
+    .word   ar_c2isr_eMCOS_ISR_INTTAUD0I14  /* INTC1 : 26 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 27 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 28 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 29 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 30 */
+    .word   _mcos_v850_undefint_entry  /* INTC1 : 31 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 32 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 33 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 34 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 35 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 36 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 37 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 38 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 39 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 40 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 41 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 42 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 43 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 44 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 45 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 46 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 47 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 48 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 49 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 50 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 51 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 52 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 53 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 54 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 55 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 56 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 57 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 58 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 59 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 60 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 61 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 62 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 63 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 64 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 65 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 66 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 67 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 68 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 69 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 70 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 71 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 72 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 73 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 74 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 75 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 76 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 77 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 78 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 79 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 80 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 81 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 82 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 83 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 84 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 85 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 86 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 87 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 88 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 89 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 90 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 91 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 92 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 93 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 94 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 95 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 96 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 97 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 98 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 99 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 100 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 101 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 102 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 103 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 104 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 105 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 106 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 107 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 108 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 109 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 110 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 111 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 112 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 113 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 114 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 115 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 116 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 117 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 118 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 119 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 120 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 121 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 122 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 123 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 124 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 125 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 126 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 127 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 128 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 129 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 130 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 131 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 132 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 133 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 134 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 135 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 136 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 137 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 138 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 139 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 140 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 141 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 142 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 143 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 144 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 145 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 146 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 147 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 148 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 149 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 150 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 151 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 152 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 153 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 154 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 155 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 156 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 157 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 158 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 159 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 160 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 161 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 162 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 163 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 164 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 165 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 166 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 167 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 168 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 169 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 170 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 171 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 172 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 173 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 174 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 175 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 176 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 177 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 178 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 179 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 180 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 181 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 182 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 183 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 184 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 185 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 186 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 187 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 188 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 189 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 190 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 191 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 192 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 193 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 194 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 195 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 196 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 197 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 198 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 199 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 200 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 201 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 202 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 203 */
+    .word   ar_c2isr_eMCOS_ISR_INTOSTM5TINT  /* INTC2 : 204 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 205 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 206 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 207 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 208 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 209 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 210 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 211 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 212 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 213 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 214 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 215 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 216 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 217 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 218 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 219 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 220 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 221 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 222 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 223 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 224 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 225 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 226 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 227 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 228 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 229 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 230 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 231 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 232 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 233 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 234 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 235 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 236 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 237 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 238 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 239 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 240 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 241 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 242 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 243 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 244 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 245 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 246 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 247 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 248 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 249 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 250 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 251 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 252 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 253 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 254 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 255 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 256 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 257 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 258 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 259 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 260 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 261 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 262 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 263 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 264 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 265 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 266 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 267 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 268 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 269 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 270 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 271 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 272 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 273 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 274 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 275 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 276 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 277 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 278 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 279 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 280 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 281 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 282 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 283 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 284 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 285 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 286 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 287 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 288 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 289 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 290 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 291 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 292 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 293 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 294 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 295 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 296 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 297 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 298 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 299 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 300 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 301 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 302 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 303 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 304 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 305 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 306 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 307 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 308 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 309 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 310 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 311 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 312 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 313 */
+    .word   ar_c2isr_eMCOS_ISR_INTRCAN5REC  /* INTC2 : 314 */
+    .word   ar_c2isr_eMCOS_ISR_INTRCAN5TRX  /* INTC2 : 315 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 316 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 317 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 318 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 319 */
+    .word   ar_c2isr_eMCOS_ISR_INTRCAN7REC  /* INTC2 : 320 */
+    .word   ar_c2isr_eMCOS_ISR_INTRCAN7TRX  /* INTC2 : 321 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 322 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 323 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 324 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 325 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 326 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 327 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 328 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 329 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 330 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 331 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 332 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 333 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 334 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 335 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 336 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 337 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 338 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 339 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 340 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 341 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 342 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 343 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 344 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 345 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 346 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 347 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 348 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 349 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 350 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 351 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 352 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 353 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 354 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 355 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 356 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 357 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 358 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 359 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 360 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 361 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 362 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 363 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 364 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 365 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 366 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 367 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 368 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 369 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 370 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 371 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 372 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 373 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 374 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 375 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 376 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 377 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 378 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 379 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 380 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 381 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 382 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 383 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 384 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 385 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 386 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 387 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 388 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 389 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 390 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 391 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 392 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 393 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 394 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 395 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 396 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 397 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 398 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 399 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 400 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 401 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 402 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 403 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 404 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 405 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 406 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 407 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 408 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 409 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 410 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 411 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 412 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 413 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 414 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 415 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 416 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 417 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 418 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 419 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 420 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 421 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 422 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 423 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 424 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 425 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 426 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 427 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 428 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 429 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 430 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 431 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 432 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 433 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 434 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 435 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 436 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 437 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 438 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 439 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 440 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 441 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 442 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 443 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 444 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 445 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 446 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 447 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 448 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 449 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 450 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 451 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 452 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 453 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 454 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 455 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 456 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 457 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 458 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 459 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 460 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 461 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 462 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 463 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 464 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 465 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 466 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 467 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 468 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 469 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 470 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 471 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 472 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 473 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 474 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 475 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 476 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 477 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 478 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 479 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 480 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 481 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 482 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 483 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 484 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 485 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 486 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 487 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 488 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 489 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 490 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 491 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 492 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 493 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 494 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 495 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 496 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 497 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 498 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 499 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 500 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 501 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 502 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 503 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 504 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 505 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 506 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 507 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 508 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 509 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 510 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 511 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 512 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 513 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 514 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 515 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 516 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 517 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 518 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 519 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 520 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 521 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 522 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 523 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 524 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 525 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 526 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 527 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 528 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 529 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 530 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 531 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 532 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 533 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 534 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 535 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 536 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 537 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 538 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 539 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 540 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 541 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 542 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 543 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 544 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 545 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 546 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 547 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 548 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 549 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 550 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 551 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 552 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 553 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 554 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 555 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 556 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 557 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 558 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 559 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 560 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 561 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 562 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 563 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 564 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 565 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 566 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 567 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 568 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 569 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 570 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 571 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 572 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 573 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 574 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 575 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 576 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 577 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 578 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 579 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 580 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 581 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 582 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 583 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 584 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 585 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 586 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 587 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 588 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 589 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 590 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 591 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 592 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 593 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 594 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 595 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 596 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 597 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 598 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 599 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 600 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 601 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 602 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 603 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 604 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 605 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 606 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 607 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 608 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 609 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 610 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 611 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 612 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 613 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 614 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 615 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 616 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 617 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 618 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 619 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 620 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 621 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 622 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 623 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 624 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 625 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 626 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 627 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 628 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 629 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 630 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 631 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 632 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 633 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 634 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 635 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 636 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 637 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 638 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 639 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 640 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 641 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 642 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 643 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 644 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 645 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 646 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 647 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 648 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 649 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 650 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 651 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 652 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 653 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 654 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 655 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 656 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 657 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 658 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 659 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 660 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 661 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 662 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 663 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 664 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 665 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 666 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 667 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 668 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 669 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 670 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 671 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 672 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 673 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 674 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 675 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 676 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 677 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 678 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 679 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 680 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 681 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 682 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 683 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 684 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 685 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 686 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 687 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 688 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 689 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 690 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 691 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 692 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 693 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 694 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 695 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 696 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 697 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 698 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 699 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 700 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 701 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 702 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 703 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 704 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 705 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 706 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 707 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 708 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 709 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 710 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 711 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 712 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 713 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 714 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 715 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 716 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 717 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 718 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 719 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 720 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 721 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 722 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 723 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 724 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 725 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 726 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 727 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 728 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 729 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 730 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 731 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 732 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 733 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 734 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 735 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 736 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 737 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 738 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 739 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 740 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 741 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 742 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 743 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 744 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 745 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 746 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 747 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 748 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 749 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 750 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 751 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 752 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 753 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 754 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 755 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 756 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 757 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 758 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 759 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 760 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 761 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 762 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 763 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 764 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 765 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 766 */
+    .word   _mcos_v850_undefint_entry  /* INTC2 : 767 */
+
+    .size   ar_inttbl_0, .-ar_inttbl_0
+
+
+
+#define OS_STOP_SEC_CONST_UNSPECIFIED
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CODE
+#include "Os_MemMap.h"
+
+/*
+ * initialize interrupt base address
+ *
+ * Input     :   none
+ * Output    :   none
+ * Return    :   none
+ * Destroyed :   r10
+ */
+    .type   _ar_v850_get_interrupt_base, $function
+    .global _ar_v850_get_interrupt_base
+_ar_v850_get_interrupt_base:
+    mov     ar_inttbl_0, r10
+    jmp     lp
+    .size   _ar_v850_get_interrupt_base, .-_ar_v850_get_interrupt_base
+
+#define OS_STOP_SEC_CODE
+#include "Os_MemMap.h"
+
+#define OS_START_SEC_CODE_SHARED
+#include "Os_MemMap.h"
+    .extern _mcos_v850_cat2isr_entry
+    .extern _mcos_v850_cat1isr_entry
+
+    .type   ar_c2isr_eMCOS_ISR_INTOSTM5TINT, $function
+    .global ar_c2isr_eMCOS_ISR_INTOSTM5TINT
+    .extern _ar_isrcb_eMCOS_ISR_INTOSTM5TINT
+ar_c2isr_eMCOS_ISR_INTOSTM5TINT:
+    pushsp  r1
+    mov     _ar_isrcb_eMCOS_ISR_INTOSTM5TINT, r1
+    jmp     _mcos_v850_cat2isr_entry[r0]
+    .size   ar_c2isr_eMCOS_ISR_INTOSTM5TINT, .-ar_c2isr_eMCOS_ISR_INTOSTM5TINT
+
+    .type   ar_c2isr_eMCOS_ISR_INTTAUD0I14, $function
+    .global ar_c2isr_eMCOS_ISR_INTTAUD0I14
+    .extern _ar_isrcb_eMCOS_ISR_INTTAUD0I14
+ar_c2isr_eMCOS_ISR_INTTAUD0I14:
+    pushsp  r1
+    mov     _ar_isrcb_eMCOS_ISR_INTTAUD0I14, r1
+    jmp     _mcos_v850_cat2isr_entry[r0]
+    .size   ar_c2isr_eMCOS_ISR_INTTAUD0I14, .-ar_c2isr_eMCOS_ISR_INTTAUD0I14
+
+    .type   ar_c2isr_eMCOS_ISR_INTRCAN5REC, $function
+    .global ar_c2isr_eMCOS_ISR_INTRCAN5REC
+    .extern _ar_isrcb_eMCOS_ISR_INTRCAN5REC
+ar_c2isr_eMCOS_ISR_INTRCAN5REC:
+    pushsp  r1
+    mov     _ar_isrcb_eMCOS_ISR_INTRCAN5REC, r1
+    jmp     _mcos_v850_cat2isr_entry[r0]
+    .size   ar_c2isr_eMCOS_ISR_INTRCAN5REC, .-ar_c2isr_eMCOS_ISR_INTRCAN5REC
+
+    .type   ar_c2isr_eMCOS_ISR_INTRCAN5TRX, $function
+    .global ar_c2isr_eMCOS_ISR_INTRCAN5TRX
+    .extern _ar_isrcb_eMCOS_ISR_INTRCAN5TRX
+ar_c2isr_eMCOS_ISR_INTRCAN5TRX:
+    pushsp  r1
+    mov     _ar_isrcb_eMCOS_ISR_INTRCAN5TRX, r1
+    jmp     _mcos_v850_cat2isr_entry[r0]
+    .size   ar_c2isr_eMCOS_ISR_INTRCAN5TRX, .-ar_c2isr_eMCOS_ISR_INTRCAN5TRX
+
+    .type   ar_c2isr_eMCOS_ISR_INTRCAN7REC, $function
+    .global ar_c2isr_eMCOS_ISR_INTRCAN7REC
+    .extern _ar_isrcb_eMCOS_ISR_INTRCAN7REC
+ar_c2isr_eMCOS_ISR_INTRCAN7REC:
+    pushsp  r1
+    mov     _ar_isrcb_eMCOS_ISR_INTRCAN7REC, r1
+    jmp     _mcos_v850_cat2isr_entry[r0]
+    .size   ar_c2isr_eMCOS_ISR_INTRCAN7REC, .-ar_c2isr_eMCOS_ISR_INTRCAN7REC
+
+    .type   ar_c2isr_eMCOS_ISR_INTRCAN7TRX, $function
+    .global ar_c2isr_eMCOS_ISR_INTRCAN7TRX
+    .extern _ar_isrcb_eMCOS_ISR_INTRCAN7TRX
+ar_c2isr_eMCOS_ISR_INTRCAN7TRX:
+    pushsp  r1
+    mov     _ar_isrcb_eMCOS_ISR_INTRCAN7TRX, r1
+    jmp     _mcos_v850_cat2isr_entry[r0]
+    .size   ar_c2isr_eMCOS_ISR_INTRCAN7TRX, .-ar_c2isr_eMCOS_ISR_INTRCAN7TRX
+
+
+#define OS_STOP_SEC_CODE_SHARED
+#include "Os_MemMap.h"
+
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-0-2                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/

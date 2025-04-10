@@ -1,0 +1,107 @@
+/*
+    Copyright (C) 2022 eSOL Co.,Ltd. All rights reserved.
+
+    This software is protected by the law and the agreement concerning
+    a Japanese country copyright method, an international agreement,
+    and other intellectual property right and may be used and copied
+    only in accordance with the terms of such license and with the inclusion
+    of the above copyright notice.
+
+    This software or any other copies thereof may not be provided
+    or otherwise made available to any other person.  No title to
+    and ownership of the software is hereby transferred.
+
+    The information in this software is subject to change without
+    notice and should not be construed as a commitment by eSOL Co.,Ltd.
+*/
+
+/****************************************************************************
+[ehvm_Vcc_ghs.850] - EHVM assembly implements for v850
+****************************************************************************/
+    .file "ehvm_Vcc_ghs.850"
+
+#define VCC_TRANSMIT_FUNC 0
+#define VCC_RECEIVE_FUNC  1
+#define VCC_RINGBUFFER_CLEAR_FUNC 7
+#define VCC_DETECT_OVERWRITE_FUNC 8
+#define VCC_CLEAR_CHANNEL_FUNC    17
+
+    .global _ehvm_Vcc_Transmit_hvc
+    .type   _ehvm_Vcc_Transmit_hvc, @function
+_ehvm_Vcc_Transmit_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r15
+    pushsp r1 - r1
+    mov VCC_TRANSMIT_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set vccid */
+    mov r7, r14  /* set databuffer */
+    mov r8, r15  /* set lenbytes */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r15
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_Vcc_Receive_hvc
+    .type   _ehvm_Vcc_Receive_hvc, @function
+_ehvm_Vcc_Receive_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r16
+    pushsp r1 - r1
+    mov VCC_RECEIVE_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set vccid */
+    mov r7, r14  /* set buf */
+    mov r8, r15  /* set lenbytes */
+    mov r9, r16  /* set databytes */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r16
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_Vcc_Clear_hvc
+    .type   _ehvm_Vcc_Clear_hvc, @function
+_ehvm_Vcc_Clear_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r12
+    pushsp r1 - r1
+    mov VCC_RINGBUFFER_CLEAR_FUNC, r12  /* set functionID */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r12
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_Vcc_Clear_Channel_hvc
+    .type   _ehvm_Vcc_Clear_Channel_hvc, @function
+_ehvm_Vcc_Clear_Channel_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r13
+    pushsp r1 - r1
+    mov VCC_CLEAR_CHANNEL_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set vccid */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r13
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+
+    .global _ehvm_Vcc_Get_Overwrite_Status_hvc
+    .type   _ehvm_Vcc_Get_Overwrite_Status_hvc, @function
+_ehvm_Vcc_Get_Overwrite_Status_hvc:
+    pushsp lp - lp                              /* lp */
+    pushsp r12 - r13
+    pushsp r1 - r1
+    mov VCC_DETECT_OVERWRITE_FUNC, r12  /* set functionID */
+    mov r6, r13  /* set vccid */
+    hvtrap 0x00  /* exec Hyper Visor Call */
+    mov r1, r10  /* set return value */
+    popsp  r1 - r1
+    popsp  r12 - r13
+    popsp  lp - lp                              /* lp */
+    jmp    lp
+

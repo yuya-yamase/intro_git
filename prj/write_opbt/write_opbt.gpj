@@ -1,0 +1,82 @@
+#!gbuild
+gbuildDir=C:\GHS\RH850_V.R9144\comp_201715
+primaryTarget=v800_standalone.tgt
+[Program]
+
+    -DEHVM_CORE_NUM_2=2U
+    -DEHVM_CORE_NUM_4=4U
+    {isdefined(EHVM_TARGET_U2A)} :macro=EHVM_INCLUDE_DEP=rh850u2a
+    {isdefined(EHVM_TARGET_U2A)} -DEHVM_CORE_NUM=4U -DEHVM_TARGET_U2A
+    {isdefined(EHVM_TARGET_S4)} :macro=EHVM_INCLUDE_DEP=rcar4
+    {isdefined(EHVM_TARGET_S4)} -DEHVM_CORE_NUM=2U -DEHVM_TARGET_S4
+
+    -e=0
+    -map=out/write_opbt.map
+    --no_slash_comment
+    -nostdlib
+
+#    -c
+    -asm=-permissive_sysregs
+    -nopic
+    -nopid
+    -cpu=rh850g4mh
+    -rh850_4bytewordoffset
+    -sda=0
+    -notda
+    -no_callt
+    -prepare_dispose
+    -allocate_ep
+    --long_long
+    -Xv800_no_ldst_compaction
+    -Onotailrecursion
+    -Xv800_no_jumptable_tablification
+    -no_codefactor
+    -Onoipa
+    --no_inline_tiny_functions
+    --no_commons
+    -nofarcallpatch
+    --no_keep_static_symbols
+    --diag_warning 450
+    -reserve_r2
+    --asm_warnings
+    --no_alternative_tokens
+    --prototype_errors
+    -nostdinc
+    -gnu99
+    -g
+    --xref=full
+    -precise_signed_zero_compare
+    --unsigned_fields
+    -allow_1bit_volatile_any_basetype
+    --unsigned_chars
+    -no_smaller_bitops
+    -dual_debug
+    -asm3g
+    -inline_prologue
+    -rh850_abi=ghs2014
+    -Onoprintfuncs
+    -ffunctions
+    -Oinline_constant_math
+    -fno_NaN_cmp_unordered
+    -no_precise_signed_zero
+    -no_fused_madd
+    -no_float_associativity
+    -half_precision_type
+    --no_vla
+    {isundefined(RELEASE)} -Omoredebug
+    {isundefined(RELEASE)} -D__DEBUG_BUILD__
+    {isdefined(RELEASE)}   -Osize
+    {isdefined(RELEASE)}   -D__RELEASE_BUILD__W
+
+	-srec=out/write_opbt.mot
+
+    -Osize
+    -D__RELEASE_BUILD__
+    -DECU_SAMPLE_ON
+    -object_dir=out
+    -o write_opbt.out
+    --preprocess_linker_directive_full
+    :binDir=out
+
+./section.ld
+./set_csa.850

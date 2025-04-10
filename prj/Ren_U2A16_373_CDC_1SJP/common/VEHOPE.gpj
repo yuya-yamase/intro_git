@@ -1,0 +1,30 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${VEHOPE_DIR}
+
+#    -I${ROOT_DIR}/BSW/CmnHdr/CmnHdr/Platform
+    -I${LIB_DIR}
+
+    -I${VEHOPE_DIR}/config_tybev3
+    -I${VEHOPE_DIR}/scc
+
+    -I${OXCAN_DIR}/config_U2A16_met
+    -I${OXCAN_DIR}/libc
+    -I${CAN_DIR}/CS/inc
+    
+    -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Ptsctmp/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Alert/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Alert/matrix/config
+    -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/scc
+    -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/config
+    -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/scc
+    -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config_met_common
+    -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config
+    -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_framework/config
+
+config_tybev3/veh_opemd_evhk.c
+config_tybev3/veh_opemd_tybev3.c
+
+scc/veh_opemd.c
+scc/veh_opemd.h

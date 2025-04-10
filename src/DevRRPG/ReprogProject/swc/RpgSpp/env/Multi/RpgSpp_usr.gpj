@@ -1,0 +1,8 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/RpgSpp/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/RpgSpp/obj/RpgSpp_usr.rel.o
+
+../../usr/RpgSpp.c

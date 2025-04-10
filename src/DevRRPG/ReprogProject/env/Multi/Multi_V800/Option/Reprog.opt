@@ -1,0 +1,150 @@
+#	-c
+	-nopic
+	-nopid
+	{streq(MICON_NAME, RH850F1KM, RH850F1K, RH850F1L)} -cpu=rh850g3k
+	{streq(MICON_NAME, RH850D1X, RH850E1MS2, RH850E2M, RH850F1H, RH850P1ME)} -cpu=rh850g3m
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -cpu=rh850g4mh
+	-rh850_4bytewordoffset
+	-Osize
+	-sda=all
+	-notda
+	-no_callt
+	-prepare_dispose
+	-allocate_ep
+	--long_long
+	-Xv800_no_ldst_compaction
+	{!streq(MICON_NAME, RH850U2A, RH850U2B)} -G
+	-Onotailrecursion
+	-Xv800_no_jumptable_tablification
+	-no_codefactor
+	-Onoipa
+	--no_inline_tiny_functions
+	--no_commons
+	-nofarcallpatch
+	--no_keep_static_symbols
+	--diag_warning 450
+	-reserve_r2
+	--asm_warnings
+	{!streq(MICON_NAME, RH850U2A, RH850U2B)} --no_slash_comment
+	--no_alternative_tokens
+	--prototype_errors
+	-nostdinc
+	{!streq(MICON_NAME, RH850U2A, RH850U2B)} -ansi
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -gnu99
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -g
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} --xref=full
+	-precise_signed_zero_compare
+	--unsigned_fields
+	-allow_1bit_volatile_any_basetype
+	--unsigned_chars
+	-no_smaller_bitops
+	-dual_debug
+	-asm3g
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -inline_prologue
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -rh850_abi=ghs2014
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -Onoprintfuncs
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -ffunctions
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -Oinline_constant_math
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -fno_NaN_cmp_unordered
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -no_precise_signed_zero
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -no_fused_madd
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -no_float_associativity
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -half_precision_type
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} --no_vla
+	{streq(MICON_NAME, RH850U2A, RH850U2B)} -asm=-permissive_sysregs
+
+	-list
+#	--diag_error 39,549,940,1056,1780,1999
+#	--diag_warning 47,193,1705,1706,1709,1710,1718,1721,1729,1735,1777,1826,1835,2017
+
+	-I$TOP_DIR/env/Multi/Multi_V800/Option
+	-I$TOP_DIR/env/Multi/Section/Comstack_$COMSTACK_NAME/$MICON_NAME
+	-I$TOP_DIR/swc/inc
+	-I$TOP_DIR/swc/inc/Compiler/Multi
+	-I$TOP_DIR/swc/inc/Compiler/Multi/Multi_V800
+	-I$TOP_DIR/swc/inc/Compiler/Multi/Multi_V800/MemMap
+	-I$TOP_DIR/bsw/inc
+	-I$TOP_DIR/bsw/inc/Compiler/Multi
+	-I$TOP_DIR/bsw/inc/Compiler/Multi/Multi_V800
+	-I$TOP_DIR/bsw/inc/Compiler/Multi/Multi_V800/MemMap
+	-I$TOP_DIR/bsw/inc/Platform/$PLATFORM_NAME
+	-I$TOP_DIR/bsw/inc/Platform/$PLATFORM_NAME/$MICON_NAME
+	-I$TOP_DIR/bsw/SVL/GDN/inc
+	-I$TOP_DIR/bsw/SVL/GDN/inc/CanTp
+	-I$TOP_DIR/bsw/SVL/GDN/inc/Dcm
+	-I$TOP_DIR/bsw/SVL/GDN/inc/Dcm/Dcp
+	-I$TOP_DIR/bsw/SVL/GDN/inc/Dcm/Dsp
+	-I$TOP_DIR/bsw/SVL/GDN/inc/GdnWrapper
+	-I$TOP_DIR/bsw/SVL/GDN/inc/PduR
+	-I$TOP_DIR/bsw/SVL/GDN/cfg
+	-I$TOP_DIR/bsw/SVL/GDN/cfg/CanTp
+	-I$TOP_DIR/bsw/SVL/GDN/cfg/Dcm
+	-I$TOP_DIR/bsw/SVL/GDN/cfg/Dcm/Dcp
+	-I$TOP_DIR/bsw/SVL/GDN/cfg/Dcm/Dsp
+	-I$TOP_DIR/bsw/SVL/GDN/cfg/GdnWrapper
+	-I$TOP_DIR/bsw/SVL/GDN/cfg/PduR
+
+	-I$TOP_DIR/parts/inc
+	-I$TOP_DIR/parts/inc/Compiler/Multi/Multi_V800
+	-I$TOP_DIR/parts/inc/Compiler/Multi/Multi_V800/MemMap
+
+	-DREPROG_CFG_SUBMICON_NOUSE=0U
+	-DREPROG_CFG_SUBMICON_USE_MAIN=0U
+	-DREPROG_CFG_SUBMICONEVENT_TXCONFIRMATION_USE=0U
+	-DREPROG_CFG_SUBMICON_USE_SUB=0U
+	-DREPROG_CFG_CAN_DISABLE=0U
+	-DREPROG_CFG_CXPI_USE=0U
+	-DREPROG_CFG_ETH_USE=0U
+	-DREPROG_CFG_ETH_DOIP_USE=0U
+	-DREPROG_CFG_SMALL_RAM_USE=0U
+	-DREPROG_CFG_SBL_TYPE_DOWNLOAD=0U
+	-DREPROG_CFG_SBL_TYPE_WITHIN=0U
+	-DREPROG_CFG_POSRES_AFTER_RESET=0U
+	-DREPROG_CFG_STAYINBOOT_ENABLE=0U
+	-DREPROG_CFG_DOUBLE_MAP_USE=0U
+	-DREPROG_CFG_DOUBLE_MAP_REWRITE_VALID=0U
+	-DREPROG_CFG_PARALLEL_ENABLE=0U
+	-DREPROG_CFG_DECOMPRESS_ENABLE=0U
+
+	-DREPROG_CFG_PDULENGTHTYPE_16=1U
+	-DREPROG_CFG_GETBLOCKINFO_USE=1U
+
+    -DREPROG_CFG_REPROG_RICOVERY_ONLY=0U
+
+	# SubMicon type
+	#  The value of SubMicon type is one of the following
+	#   * REPROG_CFG_SUBMICON_NOUSE
+	#   * REPROG_CFG_SUBMICON_USE_MAIN
+	#   * REPROG_CFG_SUBMICON_USE_SUB
+	{streq(SUBMICON_TYPE, OFF)} -DREPROG_CFG_SUBMICON_NOUSE=1U
+	{streq(SUBMICON_TYPE, MAIN)} -DREPROG_CFG_SUBMICON_USE_MAIN=1U -DREPROG_CFG_SUBMICONEVENT_TXCONFIRMATION_USE=1U
+	{streq(SUBMICON_TYPE, SUB)} -DREPROG_CFG_SUBMICON_USE_SUB=1U
+
+	# CAN disable?
+	{streq(CAN_DISABLE, ON)} -DREPROG_CFG_CAN_DISABLE=1U
+
+	# RAM small?
+	{streq(SMALL_RAM, ON)} -DREPROG_CFG_SMALL_RAM_USE=1U
+
+	# SBL type
+	#  The value of SBL type is one of the following
+	#   * REPROG_CFG_SBL_TYPE_DOWNLOAD
+	#   * REPROG_CFG_SBL_TYPE_WITHIN
+	{streq(SBL_TYPE, DOWNLOAD)} -DREPROG_CFG_SBL_TYPE_DOWNLOAD=1U
+	{streq(SBL_TYPE, WITHIN)} -DREPROG_CFG_SBL_TYPE_WITHIN=1U
+
+	# Double Map Mode?
+	{streq(DOUBLE_MAP, ON_VALID, ON_INVALID)} -DREPROG_CFG_DOUBLE_MAP_USE=1U
+	{streq(DOUBLE_MAP, ON_VALID)} -DREPROG_CFG_DOUBLE_MAP_REWRITE_VALID=1U
+
+	# Stay In Boot use?
+	{isdefined(STAYINBOOT_TIME) && STAYINBOOT_TIME > 0} -DREPROG_CFG_STAYINBOOT_ENABLE=1U -DREPROG_CFG_STAYINBOOT_TIME=$STAYINBOOT_TIME
+
+	# Parallerization enable?
+	{streq(PARALLEL, ON)} -DREPROG_CFG_PARALLEL_ENABLE=1U
+
+	# Decompress?
+	{streq(DECOMPRESS, ON)} -DREPROG_CFG_DECOMPRESS_ENABLE=1U
+
+    # The reprog operation is only for recovery
+    {streq(REPROG_RICOVERY_ONLY, ON)} -DREPROG_CFG_REPROG_RICOVERY_ONLY=1U

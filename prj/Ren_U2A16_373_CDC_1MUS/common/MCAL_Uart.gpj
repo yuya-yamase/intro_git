@@ -1,0 +1,12 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/MCAL.opt
+
+    :sourceDir=${MCAL_UART_SCC_DIR}
+    :sourceDir=${MCAL_UART_CFG_DIR}
+    
+    -I${LIB_DIR}
+
+spi_uart.c
+spi_uart_cfg.c
+

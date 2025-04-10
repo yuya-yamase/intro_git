@@ -1,0 +1,14 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../inc/Sid
+	-I../../cfg
+	-I../../cfg/Sid
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/swc/Diag/DiagSrv/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/swc/Diag/DiagSrv/obj/DiagSrv_usr.rel.o
+
+../../usr/Sid/DiagSrv_0x22_Usr.c
+../../usr/Sid/DiagSrv_0x31_Usr.c
+

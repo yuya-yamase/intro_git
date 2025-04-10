@@ -1,0 +1,121 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+
+/// <Authentication>
+/* ************************************************************ */
+/* Function                                                     */
+/*  Authentication_request_01_send                              */
+/* Discription                                                  */
+/*  Send Request Sid0x29 [Authentication]                       */
+/* IN :                                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)       */
+/* OUT:                                                         */
+/*  None                                                        */
+/* RET:                                                         */
+/*  diagSendRequest()の処理結果 または                          */
+/*  E_Return_SPRMIB_Set_NG                                      */
+/* NOTE:                                                        */
+/*  現時点ではsprmibは見ない                                    */
+/* ************************************************************ */
+long Authentication_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  diagRequest * diagReq;
+  byte bytReqData[2];
+  
+  bytReqData[0] = 0x29; /* SID0x29(Authentication) */
+  bytReqData[1] = 0x08; /* authenticationTask(authenticationConfiguration) */
+  
+  diagResize(diagReq, elcount(bytReqData));
+  
+  DiagSetPrimitiveData(diagReq, bytReqData, elcount(bytReqData));
+  
+  /* リクエスト送信 */
+  ret = diagSendRequest(diagReq);
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <Authentication>
+/* ******************************************************** */
+/* Function                                                 */
+/*  Authentication_req_distribution                         */
+/* Discription                                              */
+/*  Sid0x29 [Authentication] request distribution           */
+/* IN :                                                     */
+/*  type   : 未使用                                         */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果                             */
+/* NOTE:                                                    */
+/*  現時点ではtypeは見ない                                  */
+/* ******************************************************** */
+long Authentication_req_distribution( dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* リクエスト送信実施(Authentication) */
+  ret = Authentication_request_01_send( sprmib );
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <Authenticationt>
+/* ************************************************************** */
+/* Function                                                       */
+/*  Authentication_res_distribution                               */
+/* Discription                                                    */
+/*  Sid0x29 [Authentication]  response distribution               */
+/* IN :                                                           */
+/*  res_msg   : diagResponse型のPosRspメッセージ                  */
+/* OUT:                                                           */
+/*  None                                                          */
+/* RET:                                                           */
+/*  E_Return_OK                                                   */
+/* NOTE:                                                          */
+/*  maxNumberOfBlockLengthは2バイト(値域が0~65535)である前提      */
+/* ************************************************************** */
+long Authentication_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* Authenticationのポジティブレスポンス受信時は処理無し */
+  ret = E_Return_OK;
+  
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}

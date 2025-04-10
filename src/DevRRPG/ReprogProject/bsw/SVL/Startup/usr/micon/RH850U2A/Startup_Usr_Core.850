@@ -1,0 +1,181 @@
+/* Startup_Usr_Core_850_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | Startup/Usr/Core/CODE                                       */
+/******************************************************************************/
+/*----------------------------------------------------------------------------*/
+/* Include Files                                                              */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Macros                                                                     */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Types                                                                      */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Function Prototypes                                                        */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Data                                                                       */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Constants                                                                  */
+/*----------------------------------------------------------------------------*/
+
+
+/******************************************************************************/
+/* External Functions                                                         */
+/******************************************************************************/
+
+/******************************************************************************/
+/* Function Name | Startup_Usr_PreStart                                       */
+/* Description   | PreStart function before boot process for user custom      */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | - This function can use stack area with limitations        */
+/*               |   specified by Startup unit's configuration.               */
+/*               |   The configuration parameters are as follows.             */
+/*               |    - STARTUP_UCFG_APCHECK_SP_ADDR                          */
+/*               |    - STARTUP_UCFG_APCHECK_SP_SIZE                          */
+/*               | - Code before this function call has already consumed a    */
+/*               |   few bytes in the stack.                                  */
+/*               | - All RAM data except for stack area specified by Startup  */
+/*               |   unit's configuration is not initialized.                 */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_Usr_PreStart
+_Startup_Usr_PreStart:
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Startup_Usr_PreAp                                          */
+/* Description   | Notify user of starting Ap                                 */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Jump address of Ap                               */
+/* Return Value  | None                                                       */
+/* Notes         | - This function can use stack area with limitations        */
+/*               |   specified by Startup unit's configuration.               */
+/*               |   The configuration parameters are as follows.             */
+/*               |    - STARTUP_UCFG_APCHECK_SP_ADDR                          */
+/*               |    - STARTUP_UCFG_APCHECK_SP_SIZE                          */
+/*               | - Code before this function call has already consumed a    */
+/*               |   few bytes in the stack.                                  */
+/*               | - All RAM data except for stack area specified by Startup  */
+/*               |   unit's configuration is not initialized.                 */
+/*               | - Caller function should set Ap jump address of main core  */
+/*               |   as argument when MCU is a multi-core architecture.       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_Usr_PreAp
+_Startup_Usr_PreAp:
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Startup_Usr_PreReprog                                      */
+/* Description   | Notify user of starting Reprog                             */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | - This function can use stack area with limitations        */
+/*               |   specified by Startup unit's configuration.               */
+/*               |   The configuration parameters are as follows.             */
+/*               |    - STARTUP_UCFG_APCHECK_SP_ADDR                          */
+/*               |    - STARTUP_UCFG_APCHECK_SP_SIZE                          */
+/*               | - Code before this function call has already consumed a    */
+/*               |   few bytes in the stack.                                  */
+/*               | - All RAM data except for stack area specified by Startup  */
+/*               |   unit's configuration is not initialized.                 */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_Usr_PreReprog
+_Startup_Usr_PreReprog:
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Startup_Usr_VerifyAp                                       */
+/* Description   | User Hook Function for verifying Ap                        */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | Result of verifying Ap                                     */
+/*               |  zero      :Ap verify OK                                   */
+/*               |  none-zero :Ap verify NG                                   */
+/* Notes         | - This function can use stack area with limitations        */
+/*               |   specified by Startup unit's configuration.               */
+/*               |   The configuration parameters are as follows.             */
+/*               |    - STARTUP_UCFG_APCHECK_SP_ADDR                          */
+/*               |    - STARTUP_UCFG_APCHECK_SP_SIZE                          */
+/*               | - Code before this function call has already consumed a    */
+/*               |   few bytes in the stack.                                  */
+/*               | - All RAM data except for stack area specified by Startup  */
+/*               |   unit's configuration is not initialized.                 */
+/*               | - Reprog software starts when return value is non-zero.    */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_Usr_VerifyAp
+_Startup_Usr_VerifyAp:
+/*===== Sample ===============================================================*/
+    mov     zero, r10
+/*===== Sample ===============================================================*/
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Startup_Usr_SubCore                                        */
+/* Description   | User Hook Function for SubCore                             */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | Caller function should call this function for each sub     */
+/*               | core.                                                      */
+/******************************************************************************/
+    .section ".P_ROM_BOOT1", "ax"
+    .align 2
+    .globl _Startup_Usr_SubCore
+_Startup_Usr_SubCore:
+/*===== Sample ===============================================================*/
+    di
+
+HALT_LOOP:
+    halt
+    br      HALT_LOOP
+/*===== Sample ===============================================================*/
+
+
+/******************************************************************************/
+/* Internal Functions                                                         */
+/******************************************************************************/
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2021/03/09 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

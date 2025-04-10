@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	{streq(PLATFORM_NAME, RH850)} -sda=0
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/parts/Crc/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/parts/Crc/obj/Crc.rel.o
+
+../../cfg/Crc_Cfg.c

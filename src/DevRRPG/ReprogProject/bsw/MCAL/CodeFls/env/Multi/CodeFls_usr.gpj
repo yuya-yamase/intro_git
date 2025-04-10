@@ -1,0 +1,9 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/MCAL/CodeFls/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/MCAL/CodeFls/obj/CodeFls_usr.rel.o
+
+../../usr/micon/$MICON_NAME/CodeFls_Usr.c
+

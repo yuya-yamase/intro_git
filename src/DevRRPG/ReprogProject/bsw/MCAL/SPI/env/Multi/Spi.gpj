@@ -1,0 +1,12 @@
+#!gbuild
+[Relocatable Object]
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/MCAL/Spi/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/MCAL/Spi/obj/Spi.rel.o
+
+../../Spi.c
+../../Spi_Ucfg.c
+../../Reg_Mspi.c
+../../pil_spi.c
+../../pil_spi_Ucfg.c

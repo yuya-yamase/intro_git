@@ -1,0 +1,3 @@
+// MBS_OPT="early"
+addhook -after connect { reset }
+addhook -after download { reset }

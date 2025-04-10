@@ -1,0 +1,53 @@
+#!gbuild
+
+#
+# Build Parameter
+#
+
+# Base Parameter
+macro COMSTACK_NAME=Can
+macro PLATFORM_NAME=RH850
+macro MICON_NAME=RH850U2A
+macro SBL_TYPE=DOWNLOAD
+
+# Option Parameter
+macro SUBMICON_TYPE=OFF
+macro CAN_DISABLE=OFF
+macro SMALL_RAM=OFF
+macro DOUBLE_MAP=ON_VALID
+macro STAYINBOOT_TIME=0
+macro PARALLEL=ON
+macro DECOMPRESS=OFF
+
+#macro REPROG_RICOVERY_ONLY=ON	/* ^^^ */
+macro REPROG_RICOVERY_ONLY=OFF
+
+# Reprog Address
+macro ENTRY_ADR=_Startup_PreStart
+macro SBL_TOP_ADR=0xFE000000
+macro SBL_END_ADR=0xFE000FFF
+macro ROM1_TOP_ADR=0x00000000
+macro ROM1_END_ADR=0x00003FFF
+macro ROM2_TOP_ADR=0x0000C000
+macro ROM2_END_ADR=0x0001FFFF
+macro ROM3_TOP_ADR=0x08000000
+macro ROM3_END_ADR=0x0800FFFF
+macro DOUBLE_MAP_B_ROM_ADR=0x02000000
+
+macro TOP_DIR=%expand_path(../../..)
+
+primaryTarget=v800_standalone.tgt
+
+[Project]
+	:sourceDir=$TOP_DIR
+	:optionsFile=Option/Reprog.opt
+	{streq(MICON_NAME, RH850E2M)} -Yl,C:/GHS/RH850_V.R9144/comp_201715
+
+$TOP_DIR/env/Multi/Reprog_parts.gpj			[Subproject]
+$TOP_DIR/env/Multi/Reprog_swc.gpj			[Subproject]
+$TOP_DIR/env/Multi/Reprog_bsw_RTE.gpj		[Subproject]
+$TOP_DIR/env/Multi/Reprog_bsw_SVL.gpj		[Subproject]
+$TOP_DIR/env/Multi/Reprog_bsw_EAL.gpj		[Subproject]
+$TOP_DIR/env/Multi/Reprog_bsw_MCAL.gpj		[Subproject]
+
+$TOP_DIR/env/Multi/Multi_V800/Reprog.gpj	[Program]

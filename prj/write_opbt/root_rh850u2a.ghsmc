@@ -1,0 +1,8 @@
+version = 1
+title = "title"
+core {
+    0 {
+        download = { "./out/write_opbt.out" }
+        symbol = { "./out/write_opbt.out" }
+    }
+}

@@ -1,0 +1,10 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/EAL/UsrSoftIf/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/EAL/UsrSoftIf/obj/UsrSoftIf_usr.rel.o
+
+../../usr/UsrSoftIf.c
+../../usr/UsrSoftIf_EntryParam.c

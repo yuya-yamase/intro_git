@@ -1,0 +1,67 @@
+/* PrgChk_MemMap_h_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | PrgChk/MemMap/HEADER                                        */
+/******************************************************************************/
+
+#ifdef PRGCHK_START_SEC_CODE
+ #if (REPROG_CFG_SMALL_RAM_USE == STD_ON)
+ #pragma ghs section text = ".P_ROM_PRGCHK"
+ #else
+ #pragma ghs section text = ".P_RAM_PRGCHK"
+ #endif
+#undef PRGCHK_START_SEC_CODE
+#endif
+
+#ifdef PRGCHK_STOP_SEC_CODE
+#pragma ghs section text = default
+#undef PRGCHK_STOP_SEC_CODE
+#endif
+
+#ifdef PRGCHK_START_SEC_VAR
+#pragma ghs startsda
+#pragma ghs section sbss = ".B_RAM_PRGCHK"
+#undef PRGCHK_START_SEC_VAR
+#endif
+
+#ifdef PRGCHK_STOP_SEC_VAR
+#pragma ghs section sbss = default
+#pragma ghs endsda
+#undef PRGCHK_STOP_SEC_VAR
+#endif
+
+#ifdef PRGCHK_START_SEC_CST
+ #if (REPROG_CFG_SMALL_RAM_USE == STD_ON)
+ #pragma ghs startdata
+ #pragma ghs section rodata = ".C_ROM_PRGCHK"
+ #else
+ #pragma ghs startsda
+ #pragma ghs section rosdata = ".C_RAM_PRGCHK"
+ #endif
+#undef PRGCHK_START_SEC_CST
+#endif
+
+#ifdef PRGCHK_STOP_SEC_CST
+ #if (REPROG_CFG_SMALL_RAM_USE == STD_ON)
+ #pragma ghs section rodata = default
+ #pragma ghs enddata
+ #else
+ #pragma ghs section rosdata = default
+ #pragma ghs endsda
+ #endif
+#undef PRGCHK_STOP_SEC_CST
+#endif
+
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2019/12/03 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

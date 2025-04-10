@@ -1,0 +1,13 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-I../../cfg
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/SVL/SchM/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/SVL/SchM/obj/SchM.rel.o
+
+../../src/SchM.c
+../../src/SchM_BswM.c
+../../src/SchM_Dcm.c
+../../cfg/SchM_Cfg.c

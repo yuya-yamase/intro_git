@@ -1,0 +1,443 @@
+/* Startup_Core_850_Revision(v1.00) */
+/******************************************************************************/
+/* Protected                                                                  */
+/* Copyright AUBASS CO., LTD.                                                 */
+/******************************************************************************/
+/******************************************************************************/
+/* Object Name  | Startup/Core/CODE                                           */
+/******************************************************************************/
+/*----------------------------------------------------------------------------*/
+/* Include Files                                                              */
+/*----------------------------------------------------------------------------*/
+#include "Startup_Reg.h"
+
+
+/*----------------------------------------------------------------------------*/
+/* Macros                                                                     */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Types                                                                      */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Function Prototypes                                                        */
+/*----------------------------------------------------------------------------*/
+    .extern _Startup_Usr_SubCore
+    .extern _Startup_Usr_PreStart
+    .extern _Startup_JudgeApStart
+    .extern _Startup_PreGearUp
+    .extern _Startup_SetGearUp
+    .extern _Startup_ReprogStart
+    .extern _EcuM_Init
+
+
+/*----------------------------------------------------------------------------*/
+/* Data                                                                       */
+/*----------------------------------------------------------------------------*/
+
+
+/*----------------------------------------------------------------------------*/
+/* Constants                                                                  */
+/*----------------------------------------------------------------------------*/
+    .extern _Startup_Cfg_Data
+    .extern _Section_StackData
+
+
+/******************************************************************************/
+/* External Functions                                                         */
+/******************************************************************************/
+
+/******************************************************************************/
+/* Function Name | Startup_PreStart                                           */
+/* Description   | Startup Unit Entry Point from reset vector                 */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_PreStart
+_Startup_PreStart:
+    /* Initialize general purpose register */
+    mov     zero, r1
+    mov     zero, r2
+    mov     zero, r3
+    mov     zero, r4
+    mov     zero, r5
+    mov     zero, r6
+    mov     zero, r7
+    mov     zero, r8
+    mov     zero, r9
+    mov     zero, r10
+    mov     zero, r11
+    mov     zero, r12
+    mov     zero, r13
+    mov     zero, r14
+    mov     zero, r15
+    mov     zero, r16
+    mov     zero, r17
+    mov     zero, r18
+    mov     zero, r19
+    mov     zero, r20
+    mov     zero, r21
+    mov     zero, r22
+    mov     zero, r23
+    mov     zero, r24
+    mov     zero, r25
+    mov     zero, r26
+    mov     zero, r27
+    mov     zero, r28
+    mov     zero, r29
+    mov     zero, r30
+    mov     zero, r31
+
+    /* If main core, boot normally */
+    stsr    0, r6, 2                /* stsr    PEID, r6 */
+    cmp     r6, zero
+    be      CORE0_START
+
+    /* If not, jump into user subcore hook function(no return) */
+    jr32    _Startup_Usr_SubCore
+
+CORE0_START:
+    /* Disable HVCFG.HVE and IHVCFG.IHVE */
+    ldsr    zero, sr16, 1           /* ldsr    zero, HVCFG */
+    movhi   hi(STARTUP_REG_INTC1_PE0_IHVCFG), zero, r6
+    st.w    zero, lo(STARTUP_REG_INTC1_PE0_IHVCFG)[r6]
+    ld.w    lo(STARTUP_REG_INTC1_PE0_IHVCFG)[r6], r6
+    syncp
+
+    /* Initialize basic system register */
+    ldsr    zero, 0, 0              /* ldsr    zero, EIPC */
+    ldsr    zero, 2, 0              /* ldsr    zero, FEPC */
+    ldsr    zero, 16, 0             /* ldsr    zero, CTPC */
+    ldsr    zero, 28, 0             /* ldsr    zero, EIWR */
+    ldsr    zero, 29, 0             /* ldsr    zero, FEWR */
+    ldsr    zero, 3, 1              /* ldsr    zero, EBASE */
+    ldsr    zero, 4, 1              /* ldsr    zero, INTBP */
+    ldsr    zero, 6, 2              /* ldsr    zero, MEA */
+    ldsr    zero, 8, 2              /* ldsr    zero, MEI */
+    ldsr    zero, 18, 2             /* ldsr    zero, RBIP */
+
+    /* The following registers are not initialized, */
+    /* because FPU/MPU is invalid.                  */
+    /*  - FPU system register                       */
+    /*     FPSR, FPEPC, FPST, FPCC                  */
+    /*  - MPU function register                     */
+    /*     MCA, MCS, MCR, MPLA, MPUA, MPAT,         */
+    /*     MPIDn, MCI                               */
+
+    /* Initialize cache operation function register */
+    ldsr    zero, 16, 4             /* ldsr    zero, ICTAGL */
+    ldsr    zero, 17, 4             /* ldsr    zero, ICTAGH */
+    ldsr    zero, 18, 4             /* ldsr    zero, ICDATL */
+    ldsr    zero, 19, 4             /* ldsr    zero, ICDATH */
+    ldsr    zero, 28, 4             /* ldsr    zero, ICERR */
+
+    /* The following registers are not initialized,       */
+    /* because HVCFG.HVE is disabled.                     */
+    /*  - Virtualization support function system register */
+    /*     HVSB                                           */
+    /*  - Guest context register                          */
+    /*     GMEIPC, GMFEPC, GMEBASE, GMINTBP, GMEIWR,      */
+    /*     GMFEWR, GMMEA, GMMEI                           */
+
+    /* Disable instruction cache */
+    mov     STARTUP_VAL_ICCTRL_OFF, r12
+    ldsr    r12, 24, 4              /* ldsr    r12, ICCTRL */
+    synci
+
+    /* Clear instruction cache */
+    mov     STARTUP_VAL_ICCTRL_CLEAR, r12
+    ldsr    r12, 24, 4              /* ldsr    r12, ICCTRL */
+    synci
+
+    /* Clear data buffer */
+    mov     STARTUP_VAL_RDBCR_CLEAR, r12
+    ldsr    r12, 24, 13             /* ldsr    r12, RDBCR */
+
+    /* Disable interrupt */
+    di
+
+    mov     __gp, gp
+    mov     __tp, tp
+    mov     __ep, ep
+
+    /* Initialize stack pointer and stack area                     */
+    /*  r6 : Startup_Cfg_Data.ApCheckSpDataPtr->ApCheckSpAddress + */
+    /*       Startup_Cfg_Data.ApCheckSpDataPtr->ApCheckSpSize      */
+    /*  r7 : Startup_Cfg_Data.ApCheckSpDataPtr->ApCheckSpAddress   */
+    mov     _Startup_Cfg_Data, r12
+    ld.w    0[r12], r12
+    ld.w    0[r12], r7
+    ld.w    4[r12], r6
+    add     r7, r6
+    jarl    _Startup_InitStackCore, lp
+
+    jarl    _Startup_Usr_PreStart, lp
+
+    /* Jump into function for judging Ap startup(no return) */
+    jr      _Startup_JudgeAp
+
+/******************************************************************************/
+/* Function Name | Startup_InitHwCore                                         */
+/* Description   | Disable MPU and mask interrupts for all interrupt          */
+/*               | priorities                                                 */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_InitHwCore
+_Startup_InitHwCore:
+    /* Disable MPU function */
+    ldsr    zero, 0, 5              /* ldsr    zero, MPM */
+    synci
+
+    /* Disable all interrupt priorities */
+    ldsr    zero, 14, 2             /* ldsr    zero, PLMR */
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Startup_JumpApCore                                         */
+/* Description   | Jump Ap                                                    */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Jump address of Ap                               */
+/* Return Value  | None                                                       */
+/* Notes         | This function will never return.                           */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_JumpApCore
+_Startup_JumpApCore:
+    /* Prepare for later Ap jump */
+    mov     r6, r25
+
+    /* Initialize stack pointer and stack area                     */
+    /*  r6 : Startup_Cfg_Data.ApCheckSpDataPtr->ApCheckSpAddress + */
+    /*       Startup_Cfg_Data.ApCheckSpDataPtr->ApCheckSpSize      */
+    /*  r7 : Startup_Cfg_Data.ApCheckSpDataPtr->ApCheckSpAddress   */
+    mov     _Startup_Cfg_Data, r12
+    ld.w    0[r12], r12
+    ld.w    0[r12], r7
+    ld.w    4[r12], r6
+    add     r7, r6
+    jarl    _Startup_InitStackCore, lp
+
+    /* Restore Ap jump address */
+    mov     r25, r6
+
+    /* Set instruction cache registers to reset value */
+    mov     STARTUP_VAL_ICCTRL_RESET, r12
+    ldsr    r12, 24, 4              /* ldsr    r12, ICCTRL */
+    synci
+
+    /* Clear data buffer */
+    mov     STARTUP_VAL_RDBCR_CLEAR, r12
+    ldsr    r12, 24, 13             /* ldsr    r12, RDBCR */
+
+    /* Set reset value to IHVCFG.IHVE and HVCFG.HVE */
+    movhi   hi(STARTUP_REG_CSAF_OPBT9), zero, r12
+    ld.w    lo(STARTUP_REG_CSAF_OPBT9)[r12], r13
+    mov     STARTUP_MASK_CSAF_OPBT9_PE0_HVE, r12
+    and     r12, r13
+    setf    nz, r12                 /* r12 = 0 or 1 */
+
+    /* IHVCFG.IHVE */
+    movhi   hi(STARTUP_REG_INTC1_PE0_IHVCFG), zero, r13
+    st.w    r12, lo(STARTUP_REG_INTC1_PE0_IHVCFG)[r13]
+    ld.w    lo(STARTUP_REG_INTC1_PE0_IHVCFG)[r13], r13
+    syncp
+
+    /* HVCFG.HVE */
+    ldsr    r12, sr16, 1            /* ldsr    r12, HVCFG */
+
+    /* Reset value */
+    mov     STARTUP_VAL_PSW_RESET, r12
+    ldsr    r12, 5, 0               /* ldsr    r12, PSW */
+
+    /* Jump into Ap start address(no return) */
+    jmp     [r6]
+
+/******************************************************************************/
+/* Function Name | Startup_MemBarrier32                                       */
+/* Description   | Memory barrier                                             */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Dummy read address                               */
+/* Return Value  | None                                                       */
+/* Notes         | It is necessary for Dummy read address to be 32 bit align. */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_MemBarrier32
+_Startup_MemBarrier32:
+    /* Dummy read */
+    ld.w    0[r6], r6
+
+    /* Sync */
+    synci
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Startup_SyncBarrier                                        */
+/* Description   | Sync Barrier                                               */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_SyncBarrier
+_Startup_SyncBarrier:
+    /* Sync */
+    synci
+
+    /* Return to caller */
+    jmp     [lp]
+
+
+/******************************************************************************/
+/* Internal Functions                                                         */
+/******************************************************************************/
+
+/******************************************************************************/
+/* Function Name | Startup_InitStackCore                                      */
+/* Description   | Initialize stack pointer and stack area                    */
+/*               |            <lower address>                                 */
+/*               |                  |              |                          */
+/*               |                  |              |                          */
+/*               |                  |--------------|                          */
+/*               |            r7 ==>| Stack area   |                          */
+/*               |                  | (0 Clear)    |                          */
+/*               |                  |              |                          */
+/*               |                  |              |                          */
+/*               |                  |              |                          */
+/*               |                  |              |                          */
+/*               |                  |--------------|                          */
+/*               |       SP = r6 ==>|              |                          */
+/*               |                  |              |                          */
+/*               |            <higher address>                                */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Start address of initialization(higher address)  */
+/*               | [IN] r7 : End address of initialization(lower address)     */
+/* Return Value  | None                                                       */
+/* Notes         | None                                                       */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_InitStackCore
+_Startup_InitStackCore:
+    /* Initialize stack pointer */
+    mov     r6, sp
+
+STACK_LOOP_START:
+    /* Initialize 4-byte data in stack area */
+    st.w    zero, -4[r6]
+
+    /* Shift address for next initialization */
+    add     -4, r6
+
+    /* Check if address reach to end   */
+    /* If not, initialize next address */
+    cmp     r7, r6
+    bh      STACK_LOOP_START
+
+    /* Return to caller */
+    jmp     [lp]
+
+/******************************************************************************/
+/* Function Name | Startup_JudgeAp                                            */
+/* Description   | Judge starting Ap or starting reprog, then jump to gearup  */
+/* Preconditions |                                                            */
+/* Parameters    | None                                                       */
+/* Return Value  | None                                                       */
+/* Notes         | Call this function by jr instruction.                      */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_JudgeAp
+_Startup_JudgeAp:
+    /* Call judge AP start function and get boot kind(r10) */
+    jarl    _Startup_JudgeApStart, lp
+
+    /* Set boot kind for gear up function(r6) */
+    mov     r10, r6
+
+    /* Jump into gear up function(no return) */
+    jr      _Startup_GearUp
+
+/******************************************************************************/
+/* Function Name | Startup_GearUp                                             */
+/* Description   | Initialize stack, gearup by MCAL and jump to reprog        */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Reprog start mode                                */
+/* Return Value  | None                                                       */
+/* Notes         | Call this function by jr instruction.                      */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_GearUp
+_Startup_GearUp:
+    /* Backup  the argument(r6) */
+    mov     r6, r25
+
+    /* Initialize stack pointer and stack area                  */
+    /*  r6 : Section_StackData.Addr                             */
+    /*  r7 : Section_StackData.Addr - Section_StackData.MinSize */
+    mov     _Section_StackData, r13
+    ld.w    0[r13], r6
+    ld.w    4[r13], r7
+    subr    r6, r7
+    jarl    _Startup_InitStackCore, lp
+
+    jarl    _Startup_PreGearUp, lp
+
+    /* call for gearup */
+    jarl    _Startup_SetGearUp, lp
+
+    /* Restore the argument(r6) and jump for starting reprog */
+    mov     r25, r6
+    jr      _Startup_Reprog
+
+/******************************************************************************/
+/* Function Name | Startup_Reprog                                             */
+/* Description   | Prepare for reprog, and jump to EcuM                       */
+/* Preconditions |                                                            */
+/* Parameters    | [IN] r6 : Reprog start mode                                */
+/* Return Value  | None                                                       */
+/* Notes         | Call this function by jr instruction.                      */
+/******************************************************************************/
+    .section ".P_ROM_BOOT", "ax"
+    .align 2
+    .globl _Startup_Reprog
+_Startup_Reprog:
+    /* Start reprog */
+    jarl    _Startup_ReprogStart, lp
+
+    /* Enable interrupt */
+    ei
+
+    /* Initialize EcuM for starting reprog(no return) */
+    jr32    _EcuM_Init
+
+
+/*----------------------------------------------------------------------------*/
+/* Revision History                                                           */
+/*  Revision    :Date       :Description                                      */
+/*  v1.00       :2021/09/14 :New                                   rel.AUBASS */
+/*----------------------------------------------------------------------------*/
+/* Notes        |                                                             */
+/*----------------------------------------------------------------------------*/
+/**** End of File *************************************************************/
+

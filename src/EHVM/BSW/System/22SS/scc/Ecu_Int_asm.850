@@ -1,0 +1,639 @@
+/*****************************************************************************
+ *	Copyright DENSO Corporation. All rights reserved.
+ ****************************************************************************/
+/*****************************************************************************
+ * [File Name]		Ecu_Int_asm.850
+ * [Module]			Ecu_Int
+ * [Function]		Ecu_Int
+ * [Notes]			None
+ ****************************************************************************/
+
+/*----------------------------------------------------------------------------
+ *		Headers
+ *--------------------------------------------------------------------------*/
+#include <SS_Internal.h>
+#include <Ecu_Internal.h>
+#include <Ecu_Memmap.h>
+
+/*----------------------------------------------------------------------------
+ *		Symbols
+ *--------------------------------------------------------------------------*/
+#define VAL_u4EBASE_DV     (0x00000002UL)
+#define VAL_u4PSW_EBV      (0x00008000UL) /* PSW.EBV = 1 */
+#define MSK_u4PSW_EBV_RSVD (0xBC08FF00UL) /* RSVD + EBV = 1 */
+#define REG_u4PSW_regID    (5UL)
+#define REG_u4PSW_selID    (0UL)
+#define REG_u4EBASE_regID  (3UL)
+#define REG_u4EBASE_selID  (1UL)
+
+/*レジスタ代入値*/
+#define VAL_u4KCPROT_UNLOCK (0xA5A5A501UL)
+#define VAL_u4LDSTCLR       (0x00000001UL)
+#define VAL_u4LOVFCLR_01    (0x00000003UL)
+#define VAL_u4ECCCTL_SECDED (0x00000000UL)
+#define VAL_u4CFCECCCTL_B_AP_SECDED (0x00000000UL)
+#define VAL_u4CF_ERRINT_OV_AF_DE    (0x00000086UL)
+#define VAL_u4ECCCTL_AF_SECDED    (0x00000000UL)
+#define REG_ptECCCNT_LR_PE (0xFFC49800UL)
+#define VAL_u4LR0_ERRINT_OV_AF_DE (0x0000008AUL)
+#define VAL_u4ECCCTL_AF_ECC   (0x00000000UL)
+#define VAL_u4IT_ERRINT_AF_DE (0x0000000AUL)
+#define VAL_u4CR_ERRINT_OV_AF_DE (0x0000008AUL)
+#define VAL_u4ECCKCPROT_LOCK      (0xA5A5A500UL)
+#define VAL_u4FEINTMSK_ENABLE_ECM (0x00000003UL)
+#define VAL_u4ID_ERRINT_AF_DE (0x0000000AUL)
+
+/*ECM内部リセット有効化暫定対応*/
+/*IRCFG0～IRCFG7は予約設計*/
+#define VAL_u4IRCFG0  (0x00000000UL)
+#define VAL_u4IRCFG1  (0x00000000UL)
+#define VAL_u4IRCFG2  (0x00000000UL)
+#define VAL_u4IRCFG3  (0x00000000UL)
+#define VAL_u4IRCFG4  (0x00000000UL)
+#define VAL_u4IRCFG5  (0x00000000UL)
+#define VAL_u4IRCFG6  (0x00000000UL)
+#define VAL_u4IRCFG7  (0x00000010UL) /*WDTB0内部リセット有効*/
+#define VAL_u4IRCFG8  (0x00000010UL) /*WDTB1内部リセット有効*/
+#define VAL_u4IRCFG9  (0x00000010UL) /*WDTB2内部リセット有効*/
+#define VAL_u4IRCFG10 (0x00000010UL) /*WDTB3内部リセット有効*/
+/*ECM内部リセット有効化暫定対応*/
+
+
+/*レジスタアドレス*/
+#define REG_u4ECCKCPROT     (0xFFFB2800UL)
+#define REG_ptMECCCAP_CFL   (0xFFC52400UL)
+#define REG_u4CFPECCCTL     (0xFFC48000UL)
+#define REG_u4CFCECCCTL0    (0xFFC48800UL)
+#define REG_u4CFCECCCTL1    (0xFFC48880UL)
+#define REG_u4CFSECCCTL     (0xFFC48A00UL)
+#define REG_ptMECCCAP_LR0   (0xFFC50000UL)
+#define REG_ptMECCCAP_IT    (0xFFC51000UL)
+#define REG_u4ITECCCTL      (0xFFC49000UL)
+#define REG_ptMECCCAP_CRAM  (0xFFC52000UL)
+#define REG_u4CRAECCCTL     (0xFFC49E00UL)
+#define REG_ptECCCNT_CRCCL  (0xFFC49C00UL)
+#define BA_u4ECM            (0xFFD38000UL)
+#define REG_u4ECMKCPROT     (BA_u4ECM + 0x4B4UL)
+#define REG_u4ECMESSTCj     (BA_u4ECM + 0x478UL)
+#define REG_u4ECMISCFGj     (BA_u4ECM + 4UL)
+#define REG_u4ECMINCFGi_j   (BA_u4ECM + 0x40UL)
+
+/*ECM内部リセット有効化暫定対応*/
+/*IRCFG0～IRCFG7は予約設計*/
+#define REG_u4ECMIRCFG0     (BA_u4ECM + 0x220UL)
+#define REG_u4ECMIRCFG1     (BA_u4ECM + 0x224UL)
+#define REG_u4ECMIRCFG2     (BA_u4ECM + 0x228UL)
+#define REG_u4ECMIRCFG3     (BA_u4ECM + 0x22CUL)
+#define REG_u4ECMIRCFG4     (BA_u4ECM + 0x230UL)
+#define REG_u4ECMIRCFG5     (BA_u4ECM + 0x234UL)
+#define REG_u4ECMIRCFG6     (BA_u4ECM + 0x238UL)
+#define REG_u4ECMIRCFG7     (BA_u4ECM + 0x23CUL)
+#define REG_u4ECMIRCFG8     (BA_u4ECM + 0x240UL)
+#define REG_u4ECMIRCFG9     (BA_u4ECM + 0x244UL)
+#define REG_u4ECMIRCFG10    (BA_u4ECM + 0x248UL)
+/*ECM内部リセット有効化暫定対応*/
+
+#define REG_u4FEINTMSK      (0xFF9A3B04UL)
+#define REG_ptMECCCAP_ID    (0xFFC51800UL)
+#define REG_u4IDECCCTL      (0xFFC49400UL)
+
+/*関数引数使用定数*/
+#define VAL_u4div_offset_80     ((80UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_80         (80UL % 32UL)
+#define VAL_u4div_offset_81     ((81UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_81         (81UL % 32UL)
+#define VAL_u4div_offset_83     ((83UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_83         (83UL % 32UL)
+#define VAL_u4div_offset_160    ((160UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_160        (160UL % 32UL)
+#define VAL_u4div_offset_161    ((161UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_161        (161UL % 32UL)
+#define VAL_u4div_offset_38     ((38UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_38         (38UL % 32UL)
+#define VAL_u4div_offset_43     ((43UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_43         (43UL % 32UL)
+#define VAL_u4div_offset_104    ((104UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_104        (104UL % 32UL)
+#define VAL_u4div_offset_105    ((105UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_105        (105UL % 32UL)
+#define VAL_u4div_offset_106    ((106UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_106        (106UL % 32UL)
+#define VAL_u4div_offset_232    ((232UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_232        (232UL % 32UL)
+#define VAL_u4div_offset_234    ((234UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_234        (234UL % 32UL)
+#define VAL_u4div_offset_236    ((236UL / 32UL) * 4UL)
+#define VAL_u4Bitpos_236        (236UL % 32UL)
+/*----------------------------------------------------------------------------
+ *		Globals
+ *--------------------------------------------------------------------------*/
+	.globl _Ecu_Int_syncp
+    .globl _Ecu_Int_init
+    .globl _Ecu_Int_destroyRamEcc
+    .globl _Ecu_Int_enableEcc
+    .globl _Ecu_Int_initPeri
+/*----------------------------------------------------------------------------
+ *		Macros
+ *--------------------------------------------------------------------------*/
+
+.macro  _Ecu_Int_macro_setReg u4_J, u4BitPos
+    mov     u4_J, r12
+    mov     (1UL << u4BitPos), r13
+
+    /*REG_u4ECMESSTCj(u4_J) = 1UL << u4BitPos*/
+    mov     REG_u4ECMESSTCj, r6
+    add     r12, r6
+    add     r14, r6                 /*off set add*/
+    st.w    r13, 0[r6]
+
+    /*REG_u4ECMISCFGj(u4_J) = 1UL << u4BitPos*/
+    mov     REG_u4ECMISCFGj, r6
+    add     r12, r6
+    add     r14, r6                 /*off set add*/
+    ld.w    0[r6], r19
+    or      r19,r13
+    st.w    r13, 0[r6]
+
+    /*REG_u4ECMINCFGi_j(u4PE, u4_J) = 1UL << u4BitPos*/
+    mov     REG_u4ECMINCFGi_j, r6
+    add     r12, r6
+    add     r14, r6                 /*off set add*/
+    add     r15, r6                 /*off set add*/
+    ld.w    0[r6], r19
+    or      r19,r13
+    st.w    r13, 0[r6]
+
+.endm
+
+/*----------------------------------------------------------------------------
+ *		Codes
+ *--------------------------------------------------------------------------*/
+    .section    ECU_SAMPLE_SECTION_TEXT, "ax"
+    .align      4
+
+
+/**---------------------------------------------------------------------------
+ * [Format]		void Ecu_Int_syncp(void)
+ * [Function]	syncp
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		None
+ *--------------------------------------------------------------------------*/
+_Ecu_Int_syncp:
+	syncp
+	jmp		[lp]
+
+/**---------------------------------------------------------------------------
+ * [Format]		void Ecu_Int_initPEx(void)
+ * [Function]	FPU initialize
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		None
+ *--------------------------------------------------------------------------*/
+
+_Ecu_Int_init:
+
+    /* EBV=0, ID=1 */
+	stsr	REG_u4PSW_regID, r12, REG_u4PSW_selID
+	mov 	~MSK_u4PSW_EBV_RSVD, r13
+	and 	r12, r13
+	andi	~VAL_u4PSW_EBV, r13, r12
+    ldsr    r12, REG_u4PSW_regID, REG_u4PSW_selID
+    synci
+
+    /* DV=1, RINT=0 */
+	mov 	___ghsbegin_vectortable_fe0, r11
+	ori 	VAL_u4EBASE_DV ,r11, r10
+	ldsr	r10, REG_u4EBASE_regID, REG_u4EBASE_selID
+    synci
+
+    /* EBV=1, ID=1 */
+	ori     VAL_u4PSW_EBV, r13, r12
+    ldsr    r12, REG_u4PSW_regID, REG_u4PSW_selID
+    synci
+
+    jmp    [lp]
+
+/**---------------------------------------------------------------------------
+ * [Format]		void Ecu_Int_destroyRamEcc(void)
+ * [Function]	
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		None
+ *--------------------------------------------------------------------------*/
+
+_Ecu_Int_destroyRamEcc:
+
+    jmp    [lp]
+
+/**---------------------------------------------------------------------------
+ * [Format]		void Ecu_Int_enableEcc(void)
+ * [Function]	
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		None
+ *--------------------------------------------------------------------------*/
+
+_Ecu_Int_enableEcc:
+
+    /* Unlock registers */ 
+    mov     VAL_u4KCPROT_UNLOCK, r7
+    mov     REG_u4ECCKCPROT, r6
+    st.w    r7, 0[r6]
+ 
+    /* 
+    * Code Flash 
+    */ 
+
+    /* clear error status */ 
+    mov     VAL_u4LDSTCLR, r7
+    mov     REG_ptMECCCAP_CFL, r6
+    st.w    r7, 20[r6]
+
+    mov     VAL_u4LOVFCLR_01, r7
+    st.w    r7, 24[r6]
+
+    /* Enable ECC Enc/Dec, parity Check */ 
+    mov     SS_USE_CORE_COUNT, r7
+    mov     1UL, r16
+Ecu_Int_set_Enable_Ecc:
+    mov     VAL_u4ECCCTL_SECDED, r8 
+    mov     REG_u4CFPECCCTL, r6
+    st.w    r8, 0[r6]
+    add     0x80UL, r6
+    sub     r16,  r7
+    bh      Ecu_Int_set_Enable_Ecc
+
+    mov     VAL_u4CFCECCCTL_B_AP_SECDED, r7 
+    mov     REG_u4CFCECCCTL0, r6
+    st.w    r7, 0[r6]
+    mov     REG_u4CFCECCCTL1, r6
+    st.w    r7, 0[r6]
+    mov     VAL_u4ECCCTL_SECDED, r7
+    mov     REG_u4CFSECCCTL, r6
+    st.w    r7, 0[r6]
+
+    /* Enable ECC Err and parity Err Reporitng */ 
+    mov     VAL_u4CF_ERRINT_OV_AF_DE, r7
+    mov     REG_ptMECCCAP_CFL, r6
+    st.w    r7, 0[r6]
+
+    /*
+     * Local RAM
+     */
+    mov     SS_USE_CORE_COUNT, r7
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    mov     1UL, r16
+Ecu_Int_set_Local_Ram:
+    /* clear error status */ 
+    mov     VAL_u4LDSTCLR, r8
+    mov     REG_ptMECCCAP_LR0, r6
+    add     r14, r6
+    st.w    r8, 20[r6]
+    mov     VAL_u4LOVFCLR_01, r8
+    st.w    r8, 24[r6]
+    /* Enable ECC Enc/Dec, parity Check */ 
+    mov     VAL_u4ECCCTL_AF_SECDED, r8
+    mov     REG_ptECCCNT_LR_PE, r6
+    add     r15, r6
+    st.w    r8, 0[r6]
+    /* disable test mode */ 
+    mov     0UL, r8
+    st.w    r8, 16[r6]
+    /* Enable ECC Err and parity Err Reporitng */
+    mov     REG_ptMECCCAP_LR0, r6
+    add     r14, r6
+    mov     VAL_u4LR0_ERRINT_OV_AF_DE, r8
+    st.w    r8, 0[r6]
+    add     0x100UL, r14            /*off set add*/
+    add     0x80UL, r15             /*off set add*/
+    sub     r16,  r7
+    bh      Ecu_Int_set_Local_Ram
+
+    /*
+     * ICache TAG
+     */
+    mov     SS_USE_CORE_COUNT, r7
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    mov     1UL, r16
+Ecu_Int_set_Icache_Tag:
+    /* clear error status */ 
+    mov     VAL_u4LDSTCLR, r8
+    mov     REG_ptMECCCAP_IT, r6
+    add     r14, r6
+    st.w    r8, 20[r6]
+    mov     VAL_u4LOVFCLR_01, r8
+    st.w    r8, 24[r6]
+    /* Enable ECC Enc/Dec, parity Check */ 
+    mov     VAL_u4ECCCTL_AF_ECC, r8
+    mov     REG_u4ITECCCTL, r6
+    add     r15, r6
+    st.w    r8, 0[r6]
+    /* Enable ECC Err and parity Err Reporitng */
+    mov     VAL_u4IT_ERRINT_AF_DE, r8
+    mov     REG_ptMECCCAP_IT, r6
+    add     r14, r6
+    st.w    r8, 0[r6]
+    add     0x100UL, r14            /*off set add*/
+    add     0x80UL, r15             /*off set add*/
+    sub     r16,  r7
+    bh      Ecu_Int_set_Icache_Tag
+
+
+    /*
+     * ICache DATA
+     */
+    mov     SS_USE_CORE_COUNT, r7
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    mov     1UL, r16
+Ecu_Int_set_Icache_Data:
+    /* clear error status */    
+    mov     VAL_u4LDSTCLR, r8
+    mov     REG_ptMECCCAP_ID, r6
+    add     r14, r6
+    st.w    r8, 20[r6]
+    mov     VAL_u4LOVFCLR_01, r8
+    st.w    r8, 24[r6]
+    /* Enable ECC Enc/Dec, parity Check */
+    mov     VAL_u4ECCCTL_AF_ECC, r8
+    mov     REG_u4IDECCCTL, r6
+    add     r15, r6
+    st.w    r8, 0[r6]
+    /* Enable ECC Err and parity Err Reporitng */
+    mov     VAL_u4ID_ERRINT_AF_DE, r8
+    mov     REG_ptMECCCAP_ID, r6
+    add     r14, r6
+    st.w    r8, 0[r6]
+    add     0x100UL, r14            /*off set add*/
+    add     0x80UL, r15             /*off set add*/
+    sub     r16,  r7
+    bh      Ecu_Int_set_Icache_Data
+
+
+    /* 
+     * ClusterRAM 
+     */ 
+    /* clear error status */ 
+    mov     VAL_u4LDSTCLR, r7
+    mov     REG_ptMECCCAP_CRAM, r6
+    st.w    r7, 20[r6]
+    mov     VAL_u4LOVFCLR_01, r7
+    st.w    r7, 24[r6]
+
+    /* Enable ECC Enc/Dec, parity Check */ 
+    mov     VAL_u4ECCCTL_SECDED, r7
+    mov     REG_u4CRAECCCTL, r6
+    st.w    r7, 0[r6]
+
+    /* enable AF & disable test mode */ 
+    mov     0UL, r7
+    mov     REG_ptECCCNT_CRCCL, r6
+    st.w    r7, 0[r6]
+    st.w    r7, 16[r6]
+    mov     REG_ptECCCNT_CRCCL + (0x80UL * 3UL), r6
+    st.w    r7, 0[r6]
+    st.w    r7, 16[r6]
+#if (ECU_TARGETDEVICE == ECU_U2A16)
+    mov     REG_ptECCCNT_CRCCL + (0x80UL * 1UL), r6
+    st.w    r7, 0[r6]
+    st.w    r7, 16[r6]
+#endif
+#if ((ECU_TARGETDEVICE == ECU_U2A16) || (ECU_TARGETDEVICE == ECU_U2A8))
+    mov     REG_ptECCCNT_CRCCL + (0x80UL * 2UL), r6
+    st.w    r7, 0[r6]
+    st.w    r7, 16[r6]
+#endif
+
+    /* Enable ECC Err and parity Err Reporitng */
+    mov     VAL_u4CR_ERRINT_OV_AF_DE, r7
+    mov     REG_ptMECCCAP_CRAM, r6
+    st.w    r7, 0[r6]
+
+    /* Lock Registers */
+    mov     VAL_u4ECCKCPROT_LOCK, r7
+    mov     REG_u4ECCKCPROT, r6
+    st.w    r7, 0[r6]
+
+    /* synchronization for P-Bus Group0 */
+    ld.w    0[r6], r8
+
+    jmp       [lp]
+
+/**---------------------------------------------------------------------------
+* [Format]		void Ecu_Int_initPeri(void)
+* [Function]	
+* [Arguments]	None
+* [Return]		None
+* [Notes]		None
+*--------------------------------------------------------------------------*/
+_Ecu_Int_initPeri:
+    /*
+        ■1bitエラー以外をPE0でキャッチ
+        80: Code Flash - Address parity error
+        81: Code Flash - Data ECC 2-bit error
+        82: Code Flash - Data ECC 1-bit error
+        83: Code Flash - ECC overflow error
+        160: Data transfer path - Address EDC error
+        161: Data transfer path - Data ECC 2 - bit error
+        162: Data transfer path - Data  ECC 1-bit  error
+
+        ■PE毎に処理するので、キャッチしない。
+        96: Local RAM - Data ECC 2-bit error
+        97: Local RAM - Data ECC 1-bit error
+        98: Local RAM - ECC overflow error
+
+        38: BUS Bridge compare error
+        43: CRAM Bus routing error
+        104 Cluster RAM - Address feedback
+            compare error - Data ECC 2-bit error
+        105 Cluster RAM - Data ECC 1-bit error
+        106 Cluster RAM- ECC overflow error
+
+        ■1bitエラー以外をPE0でキャッチ
+        232: Local RAM (PE0) - Address  feedback
+             compare error - Data ECC 2-bit error
+        233: Local RAM (PE0) - Data ECC 1-bit error
+        234: Local RAM (PE0) - ECC overflow error
+        236: Instruction cache RAM(PE0) - Address  feedback
+             compare error - Data EDC error
+
+        ■1bitエラー以外をPE1でキャッチ
+        264: Local RAM (PE1) - Address  feedback
+             compare error - Data ECC 2-bit error
+        265: Local RAM (PE1) - Data ECC 1-bit error
+        266: Local RAM (PE1) - ECC overflow error
+        268: Instruction cache RAM(PE1) - Address  feedback
+             compare error - Data EDC error
+
+        ■1bitエラー以外をPE2でキャッチ
+        296: Local RAM (PE2) - Address  feedback
+             compare error - Data ECC 2-bit error
+        297: Local RAM (PE2) - Data ECC 1-bit error
+        298: Local RAM (PE2) - ECC overflow error
+        330: Instruction cache RAM(PE2) - Address  feedback
+             compare error - Data EDC error
+
+        ■1bitエラー以外をPE3でキャッチ
+        328: Local RAM (PE3) - Address  feedback
+             compare error - Data ECC 2-bit error
+        329: Local RAM (PE3) - Data ECC 1-bit error
+        330: Local RAM (PE3) - ECC overflow error
+        332: Instruction cache RAM(PE3) - Address  feedback
+             compare error - Data EDC error
+
+        ■ECM内部リセット有効化暫定対応
+        228:Watchdog timer error (PE0)
+        260:Watchdog timer error (PE1)
+        292:Watchdog timer error (PE2)
+        324:Watchdog timer error (PE3)
+           
+    */
+
+    /* Unlock Registers */ 
+    mov     VAL_u4KCPROT_UNLOCK, r7
+    mov     REG_u4ECMKCPROT, r6
+    st.w    r7, 0[r6]
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 80UL);*/
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_80, VAL_u4Bitpos_80
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 81UL);*/
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_81, VAL_u4Bitpos_81
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 83UL);*/
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_83, VAL_u4Bitpos_83
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 160UL);*/
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_160, VAL_u4Bitpos_160
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 161UL);*/
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_161, VAL_u4Bitpos_161
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 38UL);*/
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_38, VAL_u4Bitpos_38
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 43UL);*/
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_43, VAL_u4Bitpos_43
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 104UL); */
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_104, VAL_u4Bitpos_104
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 105UL); */
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_105, VAL_u4Bitpos_105
+
+    /*Ecu_Int_activateECMchAsFEINT(0UL, 106UL);*/
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_106, VAL_u4Bitpos_106
+
+
+    mov     SS_USE_CORE_COUNT, r7
+    mov     0UL, r14                /*off set init*/
+    mov     0UL, r15                /*off set init*/
+    mov     1UL, r16
+Ecu_Int_set_Core_ActivateECMchAsFEINT:  
+    /*Ecu_Int_activateECMchAsFEINT(u4PE, 232UL + (u4PE * 32UL))*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_232, VAL_u4Bitpos_232
+
+    /*Ecu_Int_activateECMchAsFEINT(u4PE, 234UL + (u4PE * 32UL))*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_234, VAL_u4Bitpos_234
+
+    /*Ecu_Int_activateECMchAsFEINT(u4PE, 236UL + (u4PE * 32UL))*/
+    _Ecu_Int_macro_setReg VAL_u4div_offset_236, VAL_u4Bitpos_236
+
+    add     4UL, r14                /*off set add*/
+    add     0x3CUL, r15             /*off set add*/
+    sub     r16,  r7
+    bh      Ecu_Int_set_Core_ActivateECMchAsFEINT 
+
+    /*ECM内部リセット有効化暫定対応*/
+    /*IRCFG0～IRCFG7は予約設計*/
+    /*ECMIRCFGj - ECM Internal Reset Configuration*/
+    mov     VAL_u4IRCFG0, r7
+    mov     REG_u4ECMIRCFG0, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG1, r7
+    mov     REG_u4ECMIRCFG1, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG2, r7
+    mov     REG_u4ECMIRCFG2, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG3, r7
+    mov     REG_u4ECMIRCFG3, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG4, r7
+    mov     REG_u4ECMIRCFG4, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG5, r7
+    mov     REG_u4ECMIRCFG5, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG6, r7
+    mov     REG_u4ECMIRCFG6, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG7, r7
+    mov     REG_u4ECMIRCFG7, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG8, r7
+    mov     REG_u4ECMIRCFG8, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG9, r7
+    mov     REG_u4ECMIRCFG9, r6
+    st.w    r7, 0[r6]
+
+    mov     VAL_u4IRCFG10, r7
+    mov     REG_u4ECMIRCFG10, r6
+    st.w    r7, 0[r6]
+    /*ECM内部リセット有効化暫定対応*/
+
+    /* Lock Registers */
+    mov     VAL_u4ECCKCPROT_LOCK, r7
+    mov     REG_u4ECMKCPROT, r6
+    st.w    r7, 0[r6]
+
+    /* synchronization for P-Bus Group3 */
+    ld.w    0[r6], r8
+    
+    mov     SS_USE_CORE_COUNT, r7
+    mov     1UL, r16
+Ecu_Int_set_Core_Feintmask:
+    mov     VAL_u4FEINTMSK_ENABLE_ECM, r8
+    mov     REG_u4FEINTMSK, r6
+    st.w    r8, 0[r6]
+    add     0x100UL, r6
+    sub     r16,  r7
+    bh      Ecu_Int_set_Core_Feintmask
+
+    /* synchronization for P-Bus Group 2L */
+    ld.w    0[r6], r7
+
+    jmp       [lp]

@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	-I../../inc
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/bsw/MCAL/Wdg/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/bsw/MCAL/Wdg/obj/Wdg_cfg.rel.o
+
+{streq(PLATFORM_NAME, RH850, TraveoII)} ../../cfg/micon/$MICON_NAME/Wdg_Cfg.c
+
+{streq(PLATFORM_NAME, TC3XX)} ../../cfg/micon/$PLATFORM_NAME/Wdg_Cfg.c

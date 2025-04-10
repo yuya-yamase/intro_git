@@ -1,0 +1,648 @@
+/*@!Encoding:932*/
+
+/* ************************************************************** */
+/*                      includes                                  */
+/* ************************************************************** */
+includes
+{
+}
+
+/* ************************************************************** */
+/*                      variables                                 */
+/* ************************************************************** */
+variables
+{
+}
+
+
+/* ************************************************************** */
+/*                           system                               */
+/* ************************************************************** */
+
+
+
+/* ************************************************************** */
+/*                        Functions                               */
+/* ************************************************************** */
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_Nonce_request_01_send              */
+/* Discription                                              */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]             */
+/* IN :                                                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_Nonce_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_09);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_Fingerprint_request_01_send        */
+/* Discription                                              */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]             */
+/* IN :                                                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_Fingerprint_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_02);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_Fingerprint_request_02_send        */
+/* Discription                                              */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]             */
+/* IN :                                                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_Fingerprint_request_02_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_03);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_Fingerprint_request_03_send        */
+/* Discription                                              */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]             */
+/* IN :                                                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_Fingerprint_request_03_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_04);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_Fingerprint_request_04_send        */
+/* Discription                                              */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]             */
+/* IN :                                                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_Fingerprint_request_04_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_05);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_Fingerprint_request_05_send        */
+/* Discription                                              */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]             */
+/* IN :                                                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_Fingerprint_request_05_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_06);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_Fingerprint_request_06_send        */
+/* Discription                                              */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]             */
+/* IN :                                                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_Fingerprint_request_06_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_07);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_Fingerprint_request_07_send        */
+/* Discription                                              */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]             */
+/* IN :                                                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG                                  */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_Fingerprint_request_07_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_08);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+/// <ReadDataByIdentifier>
+/* ******************************************************* */
+/* Function                                                */
+/*  ReadDataByIdentifier_diagnosticSession_request_01_send */
+/* Discription                                             */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]            */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  None                                                   */
+/* ******************************************************* */
+long ReadDataByIdentifier_diagnosticSession_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_01);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+/// <ReadDataByIdentifier>
+/* ******************************************************* */
+/* Function                                                */
+/*  ReadDataByIdentifier_HWIdentification_request_01_send */
+/* Discription                                             */
+/*  Send Request Sid0x22 [ReadDataByIdentifier]            */
+/* IN :                                                    */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)  */
+/* OUT:                                                    */
+/*  None                                                   */
+/* RET:                                                    */
+/*  diagSendRequest()の処理結果 または                     */
+/*  E_Return_SPRMIB_Set_NG                                 */
+/* NOTE:                                                   */
+/*  None                                                   */
+/* ******************************************************* */
+long ReadDataByIdentifier_HWIdentification_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_0A);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+long ReadDataByIdentifier_SWIdentification_request_01_send( long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+
+  /* 読み出し結果がレスポンスとして返ってくる以上、SPRMIBを設定するケースは存在しないはず */
+  if( sprmib == E_Flag_OFF )
+  {
+    /* リクエスト送信 */
+    ret = diagSendRequest(G_ReadDataByIdentifier_req_0C);
+  }
+  else
+  {
+    /* SPRMIBの設定失敗 */
+    ret = E_Return_SPRMIB_Set_NG;
+  }
+  
+  /* リクエスト送信の戻り値を返す */
+  return ret;   
+}
+
+
+
+/// <ReadDataByIdentifier>
+/* ******************************************************** */
+/* Function                                                 */
+/*  ReadDataByIdentifier_req_distribution                   */
+/* Discription                                              */
+/*  Sid 0x22 [ReadDataByIdentifier] request distribution    */
+/* IN :                                                     */
+/*  type   : dataIdentifierに相当する値                     */
+/*  sprmib : SPRMIB有効フラグ(E_FLAG_ON=ならSPRMIBを付与)   */
+/* OUT:                                                     */
+/*  None                                                    */
+/* RET:                                                     */
+/*  diagSendRequest()の処理結果 または                      */
+/*  E_Return_SPRMIB_Set_NG または E_Return_PRAMETER_NG      */
+/* NOTE:                                                    */
+/*  None                                                    */
+/* ******************************************************** */
+long ReadDataByIdentifier_req_distribution( dword type ,long sprmib )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* dataIdentifierの指定によってリクエスト送信処理を振り分ける */
+  if ( type == E_dataIdentifier_ActiveDiagnosticSession )
+  {
+    /* リクエスト送信実施(現在のdiagnosticSession) */
+    ret = ReadDataByIdentifier_diagnosticSession_request_01_send( sprmib );    
+  }
+  else if ( type == E_dataIdentifier_HWIdentification )
+  {
+    /* リクエスト送信実施(HWIdentification) */
+    ret = ReadDataByIdentifier_HWIdentification_request_01_send( sprmib );
+  }
+  else if ( type == E_dataIdentifier_SWIdentification )
+  {
+    /* リクエスト送信実施(HWIdentification) */
+    ret = ReadDataByIdentifier_SWIdentification_request_01_send( sprmib );
+  }
+  else if ( type == E_dataIdentifier_Nonce_00 )
+  {
+    /* リクエスト送信実施(Nonce) */
+    ret = ReadDataByIdentifier_Nonce_request_01_send( sprmib );
+  }
+  else if ( type == E_dataIdentifier_asfp_00 )
+  {
+    /* リクエスト送信実施(Fingerprint #0) */
+    ret = ReadDataByIdentifier_Fingerprint_request_01_send( sprmib );
+  }
+  else if ( type >= E_dataIdentifier_asfp_01 && type <= E_dataIdentifier_asfp_06 )
+  {
+    /* リクエスト送信実施(Fingerprint #1～#6) */
+    ret = ReadDataByIdentifier_Fingerprint_request_02_send( sprmib );
+  }
+  else if ( type >= E_dataIdentifier_asfp_07 && type <= E_dataIdentifier_asfp_12 )
+  {
+    /* リクエスト送信実施(Fingerprint #7～#12) */
+    ret = ReadDataByIdentifier_Fingerprint_request_03_send( sprmib );
+  }
+  else if ( type >= E_dataIdentifier_asfp_13 && type <= E_dataIdentifier_asfp_18 )
+  {
+    /* リクエスト送信実施(Fingerprint #13～#18) */
+    ret = ReadDataByIdentifier_Fingerprint_request_04_send( sprmib );
+  }
+  else if ( type >= E_dataIdentifier_asfp_19 && type <= E_dataIdentifier_asfp_24 )
+  {
+    /* リクエスト送信実施(Fingerprint #19～#24) */
+    ret = ReadDataByIdentifier_Fingerprint_request_05_send( sprmib );
+  }
+  else if ( type >= E_dataIdentifier_asfp_25 && type <= E_dataIdentifier_asfp_30 )
+  {
+    /* リクエスト送信実施(Fingerprint #25～#30) */
+    ret = ReadDataByIdentifier_Fingerprint_request_06_send( sprmib );
+  }
+  else if ( type == E_dataIdentifier_asfp_31 )
+  {
+    /* リクエスト送信実施(Fingerprint #31) */
+    ret = ReadDataByIdentifier_Fingerprint_request_07_send( sprmib );
+  }
+  else
+  {
+    /* パラメータエラー */
+    ret = E_Return_PRAMETER_NG;    
+  }
+
+  /* 戻り値の判断は上位関数で実施 */
+  return ret;
+}
+
+
+/// <ReadDataByIdentifier>
+/* ******************************************************************** */
+/* Function                                                             */
+/*  ReadDataByIdentifier_res_distribution                               */
+/* Discription                                                          */
+/*  Sid 0x22 [ReadDataByIdentifier] response distribution               */
+/* IN :                                                                 */
+/*  res_msg   : diagResponse型のPosRspメッセージ                        */
+/* OUT:                                                                 */
+/*  None                                                                */
+/* RET:                                                                 */
+/*  TBD                                                                 */
+/* NOTE:                                                                */
+/*  1回のリクエストに対して、異なるdataIdentifierを設定する可能性がある */
+/* ******************************************************************** */
+long ReadDataByIdentifier_res_distribution( diagResponse * res_msg )
+{
+  /* 戻り値 */
+  int ret;
+  
+  /* ローカル変数 */
+  long response_length;
+  long diagsession_cnt;
+  long asfp_cnt;
+  
+  /* PosRspの格納用バッファ */
+  /* 最大で「ReadDataByIdentifier Response SID」の1バイト + */ 
+  /* Fingerprintフォーマット(24バイト+2バイト) * 1回のリクエストの最大数(6) = 156バイト  */
+  byte res_buff[156];
+  byte dataIdentifier[E_dataIdentifier_Datasize_dataIdentifier];
+  byte dataRecord[E_dataIdentifier_Datasize_applicationSoftwareFingerprint];
+  
+  dword read_dword;
+  char parameterName[256];
+  long res_buff_index;
+  
+  /* オブジェクト全体サイズを取得 */
+  response_length = DiagGetPrimitiveSize(res_msg);
+  response_length = response_length - 1;
+  
+  /* 変数初期化 */
+  diagsession_cnt= 0;
+  asfp_cnt = 0;
+
+  /* ユースケース上は1回のリクエストでdataIdentifierの全パターン設定される可能性があるので、データサイズからどのdataIdentifierなのか判別する */
+  /* 1回のリクエストで指定可能なdataIdentifierの最大数(m)が5以上になると計算不能となるので注意 */
+  /* 総データサイズから各フォーマットのサイズを減算していく方式でデータ数を特定する */
+  
+  /* Fingerprintフォーマットの数を計算 */
+  do
+  {
+    /* データサイズがFingerprintフォーマットのサイズ(24)未満ならば処理終了 */
+    if( response_length < ( E_dataIdentifier_Datasize_applicationSoftwareFingerprint + E_dataIdentifier_Datasize_dataIdentifier ) )
+    {
+      break;
+    }
+    else
+    {
+      /* 総データサイズをFingerprintフォーマットのサイズ(24)分減算し、カウンタをカウントアップ */
+      response_length = response_length - ( E_dataIdentifier_Datasize_applicationSoftwareFingerprint + E_dataIdentifier_Datasize_dataIdentifier );
+      asfp_cnt = asfp_cnt + 1;
+    }
+  }while(1);
+
+  /* ActiveDiagnosticSessionフォーマットの数を計算 */
+  /* 現在のdiagnosticSessionを複数取得する意味は無いはずだが念のため複数取得に対応できるようにする */
+  do
+  {
+    /* データサイズがdiagnosticSessionフォーマットのサイズ(1)未満ならば処理終了 */
+    if( response_length < ( E_dataIdentifier_Datasize_ActiveDiagnosticSession + E_dataIdentifier_Datasize_dataIdentifier ) )
+    {
+      break;
+    }
+    else
+    {
+      /* 総データサイズをdiagnosticSessionフォーマットのサイズ(1)分減算し、カウンタをカウントアップ */
+      response_length = response_length - ( E_dataIdentifier_Datasize_ActiveDiagnosticSession + E_dataIdentifier_Datasize_dataIdentifier );
+      diagsession_cnt = diagsession_cnt + 1;
+    }
+  }while(1);
+  
+  /* 各dataIdentifierのパターン数が1回のリクエストで指定可能なdataIdentifierの最大数(m)を超えていないかチェック */
+  if( asfp_cnt > ReadDataByIdentifier_request_data_num ||
+      diagsession_cnt > ReadDataByIdentifier_request_data_num )
+  {
+    /* エラーの場合はどうすればいいんだろうね？ */
+    Error_Log_output("ReadDataByIdentifier_res_distribution: ReadDataByIdentifier_request_data_num over.");
+  }
+  /* 各dataIdentifierのパターン数の合計が1回のリクエストで指定可能なdataIdentifierの最大数(m)を超えていないかチェック */
+  else if( ( asfp_cnt + diagsession_cnt) > ReadDataByIdentifier_request_data_num )
+  {
+    /* エラーの場合はどうすればいいんだろうね？ */
+    Error_Log_output("ReadDataByIdentifier_res_distribution: ReadDataByIdentifier_request_data_num over.");
+  }
+  else
+  {
+    /* 上記チェックで問題なければ正常系として処理を継続 */
+    /* dataIdentifierとdataRecordの値を取り出す */
+    res_msg.GetPrimitiveData(res_buff, elcount(res_buff)); 
+
+    /* dataIdentifier毎に処理振り分け */
+    /* TBD 意図が分かり次第処理を追記する */
+    /* そもそも読み出した後にこのデータを使ってないのでは？ */
+    
+    ret = E_Return_OK;  
+  }
+  return ret;
+}
+
+
+/// <ReadDataByIdentifier>
+/* ************************************************************************************** */
+/* Function                                                                               */
+/*  ReadDataByIdentifier_init                                                             */
+/* Discription                                                                            */
+/*  外部設定情報ファイルを読み出してSID 0x22の実行制御(スキップする/しない)を設定する                   */
+/* IN :                                                                                   */
+/*  filename : 外部設定情報ファイル名                                                         */
+/* OUT:                                                                                   */
+/*  None                                                                                  */
+/* RET:                                                                                   */
+/*  None                                                                                  */
+/* NOTE:                                                                                  */
+/*  デフォルトは0x1(スキップしない)                                                              */
+/* ************************************************************************************** */
+void ReadDataByIdentifier_init( char filename[] )
+{
+  long enable;
+  
+  /* 外部設定情報ファイルからextendedDiagnosticSession送信時のSPRMIB設定を読み出し */
+  /* 読み出しNG時はデフォルト値である0x1(スキップしない)を使用 */
+  enable = getProfileInt("ReadDataByIdentifier", "enable", 0x1, filename); 
+  G_Reprog_General_Data.RDBI_Info.ReadDataByIdentifier_enable = (enable & 0x1);
+  
+  return;
+}
+
+
