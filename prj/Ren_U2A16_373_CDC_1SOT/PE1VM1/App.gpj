@@ -24,9 +24,6 @@
     -I${VEHOPE_DIR}/scc
     -I${LIB_DIR}
 
-    -I${SS_DIR}/SchdM
-    -I${SS_DIR}/SchdM/cfg
-
     -I${APP_DIR}/MET/STUB/config
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config

@@ -1,7 +1,6 @@
 #!gbuild
 [Subproject]
     :sourceDir=${ROOT_DIR}
-    :sourceDir=${APP_DIR}
     :sourceDir=${APP_DIR}/Common/xspi
     :sourceDir=${APP_DIR}/MET/XSPI_MET/config
     :sourceDir=${APP_DIR}/MET/XSPI_MET/scc
