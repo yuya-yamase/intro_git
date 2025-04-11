@@ -1037,7 +1037,7 @@ static U1     u1_s_Gvif3DevErrChk(void)
 
     u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_DEVERROR, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_DEVERROR, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1152,7 +1152,7 @@ static U1     u1_s_Gvif3LinkChk(void)
     {
         case GVIF3RX_LINK_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_LINKCHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_LINKCHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* ëSèëçûÇ›äÆóπ éüèÛë‘Ç…ëJà⁄ */
                 u1_s_gvif3link_step = (U1)GVIF3RX_LINK_STEP2;
@@ -1221,7 +1221,7 @@ static U1     u1_s_Gvif3Error1Chk(void)
     {
         case GVIF3RX_ERROR1_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR1CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR1CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* ëSèëçûÇ›äÆóπ éüèÛë‘Ç…ëJà⁄ */
                 u1_s_gvif3error1_step = (U1)GVIF3RX_ERROR1_STEP2;
@@ -1267,7 +1267,7 @@ static U1     u1_s_Gvif3Error2Chk(void)
     {
         case GVIF3RX_ERROR2_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR2CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR2CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* ëSèëçûÇ›äÆóπ éüèÛë‘Ç…ëJà⁄ */
                 u1_s_gvif3error2_step = (U1)GVIF3RX_ERROR2_STEP2;
@@ -1313,7 +1313,7 @@ static U1     u1_s_Gvif3Error3Chk(void)
     {
         case GVIF3RX_ERROR3_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR3CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR3CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* ëSèëçûÇ›äÆóπ éüèÛë‘Ç…ëJà⁄ */
                 u1_s_gvif3error3_step = (U1)GVIF3RX_ERROR3_STEP2;
@@ -1359,7 +1359,7 @@ static U1     u1_s_Gvif3Error4Chk(void)
     {
         case GVIF3RX_ERROR4_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR4CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR4CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* ëSèëçûÇ›äÆóπ éüèÛë‘Ç…ëJà⁄ */
                 u1_s_gvif3error4_step = (U1)GVIF3RX_ERROR4_STEP2;
@@ -1397,7 +1397,7 @@ static U1     u1_s_Gvif3Error5Chk(void)
     U1 u1_t_sts;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR5CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR5CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1416,7 +1416,7 @@ static U1     u1_s_Gvif3Error6Chk(void)
     U1 u1_t_sts;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR6CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR6CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1435,7 +1435,7 @@ static U1     u1_s_Gvif3Error7Chk(void)
     U1 u1_t_sts;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR7CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR7CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1454,7 +1454,7 @@ static U1     u1_s_Gvif3Error8Chk(void)
     U1 u1_t_sts;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR8CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR8CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1473,7 +1473,7 @@ static U1     u1_s_Gvif3Error9Chk(void)
     U1 u1_t_sts;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR9CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR9CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1492,7 +1492,7 @@ static U1     u1_s_Gvif3Error10Chk(void)
     U1 u1_t_sts;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR10CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR10CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }

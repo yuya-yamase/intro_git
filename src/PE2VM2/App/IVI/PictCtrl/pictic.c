@@ -64,7 +64,8 @@ void    pictic_Init( void )
 {
     Mcu_Polling_VIcRst          = (uint32)0U;
 
-    Mcu_OnStep_EIZOIC_OVRALL    = (uint8)MCU_STEP_EIZOIC_OVERALL_1;
+    Mcu_OnStep_EIZOIC_OVRALL    = (uint8)MCU_STEP_EIZOIC_OVERALL_0;
+    //Mcu_OnStep_EIZOIC_OVRALL    = (uint8)MCU_STEP_EIZOIC_OVERALL_1;
     Mcu_OnStep_EIZOIC_AckTime   = (uint32)0U;
     Mcu_RegStep_EIZOIC          = (uint16)0U;
 
@@ -103,7 +104,8 @@ static void     Mcu_Dev_Pwron_EizoIc_Polling_VIcRst( void )
 
     if(mcu_dio_ret  ==  (uint8)STD_LOW){
         Mcu_Polling_VIcRst          = (uint32)0U;
-        Mcu_OnStep_EIZOIC_OVRALL    = (uint8)MCU_STEP_EIZOIC_OVERALL_1;
+        Mcu_OnStep_EIZOIC_OVRALL    = (uint8)MCU_STEP_EIZOIC_OVERALL_0;
+        //Mcu_OnStep_EIZOIC_OVRALL    = (uint8)MCU_STEP_EIZOIC_OVERALL_1;
         Mcu_OnStep_EIZOIC_AckTime   = (uint32)0U;
         Mcu_RegStep_EIZOIC          = (uint16)0U;
     }
@@ -377,18 +379,22 @@ static void     Mcu_Dev_Pwron_EizoIc_SetReg( void )
 
     switch (Mcu_OnStep_EIZOIC_OVRALL)
     {
-    case MCU_STEP_EIZOIC_OVERALL_1:
-        /* GVIF3送信仕様の"eDP設定"完了まで待機 */
-        if(Mcu_OnStep_GVIF3TX_OVRALL == MCU_STEP_GVIF3TX_OVERALL_3){
-            /* レジスタ書込み処理 */
-            mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_VIDEO_IC, &Mcu_RegStep_EIZOIC, (uint16)MCU_WRINUM_EIZOIC_INISET,
-                                                    (uint8)GP_I2C_MA_SLA_1_VIDEO_IC, EIZOIC_INISET, &Mcu_OnStep_EIZOIC_AckTime,
-                                                    st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT, &Mcu_RegSet_BetWaitTime_Stub);
+    case MCU_STEP_EIZOIC_OVERALL_0:
+        /* リンクトレーニングエラー回避用：eDP用レジスタ設定 Hot Plug Detect が実施されるまで待機 */
+        if((Mcu_OnStep_GVIF3TX_HDCP == (U2)17U) || (Mcu_OnStep_GVIF3TX_HDCP == (U2)27U)){
+            Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_1;
+        }
+        break;
 
-            if(mcu_sts == (uint8)TRUE){
-                /* 全書込み完了 次状態に遷移 */
-                Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_2;
-            }
+    case MCU_STEP_EIZOIC_OVERALL_1:
+        /* レジスタ書込み処理 */
+        mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_VIDEO_IC, &Mcu_RegStep_EIZOIC, (uint16)MCU_WRINUM_EIZOIC_INISET,
+                                                (uint8)GP_I2C_MA_SLA_1_VIDEO_IC, EIZOIC_INISET, &Mcu_OnStep_EIZOIC_AckTime,
+                                                st_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT, &Mcu_RegSet_BetWaitTime_Stub);
+
+        if(mcu_sts == (uint8)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_2;
         }
         break;
     
@@ -436,7 +442,8 @@ static void     Mcu_Dev_Pwron_EizoIc_SetReg( void )
     
     default:
         /* 異常時はフローをはじめからやり直す */
-        Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_1;
+        Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_0;
+        //Mcu_OnStep_EIZOIC_OVRALL = (uint8)MCU_STEP_EIZOIC_OVERALL_1;
         break;
     }
 }

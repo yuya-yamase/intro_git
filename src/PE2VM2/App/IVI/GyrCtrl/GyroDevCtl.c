@@ -553,8 +553,8 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                                                                 st_sp_GYRODEV_GSENSDATA_RD_TBL2, &u2_s_gyrodev_reg_btwn_time);
             
             if(u1_t_reg_req_sts == (U1)TRUE){
-                u1_t_gsens_temp_msb_data = st_sp_GYRODEV_GSENSDATA_RD_TBL[1].u1p_pdu[1];
-                u1_t_gsens_temp_lsb_data = st_sp_GYRODEV_GSENSDATA_RD_TBL[1].u1p_pdu[2];
+                u1_t_gsens_temp_msb_data = st_sp_GYRODEV_GSENSDATA_RD_TBL2[1].u1p_pdu[1];
+                u1_t_gsens_temp_lsb_data = st_sp_GYRODEV_GSENSDATA_RD_TBL2[1].u1p_pdu[2];
 
                 /* G-Sensor Read Data Create */
                 st_gyrodev_readdata.u2_accl_x_data = (U2)(((U2)u1_t_gsens_x_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gsens_x_lsb_data);
@@ -576,7 +576,7 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                 st_gyrodev_readdata.u1_accl_temp_data_sts = (U1)GYRODEV_READ_DATA_OK;
 
                 /* Next Process */
-                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP5;
+                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP6;
             }
             break;
         case GYRODEV_CYCCHK_STEP6:                                       /* STEP6 */

@@ -54,7 +54,7 @@
 #define PICT_CXD_PWRON_COMP                     (MCU_STEP_GVIF3TX_OVERALL_FIN)
 
 #define u1_PICT_CXD_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GVIF_TX, (u), (v), (U1)GP_I2C_MA_SLA_3_GVIF_TX, (w), (x), (y), (z)))
-#define u1_PICT_CXD_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_GVIF_TX, (w), (U1)GP_I2C_MA_SLA_3_GVIF_TX, (x), (y), (z)))
+#define u1_PICT_CXD_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_GVIF_TX, (w), (U1)GP_I2C_MA_SLA_3_GVIF_TX, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
 
 #define vd_PICT_CXD_GVIF_TX_RST_L()             (Dio_WriteChannel(DIO_ID_PORT17_CH4, (Dio_LevelType)PICT_CXD_IO_STS_LOW))
 #define vd_PICT_CXD_GVIF_TX_RST_H()             (Dio_WriteChannel(DIO_ID_PORT17_CH4, (Dio_LevelType)PICT_CXD_IO_STS_HIGH)) 

@@ -2577,60 +2577,6 @@ const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET2_PDU1[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3]
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET3_PDU1[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET3_PDU2[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xB6U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET3_PDU3[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0xFFU,    /* Write Address */
-    (U1)0x04U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU1[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x40U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU2[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x41U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU3[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x42U,    /* Write Address */
-    (U1)0x02U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU4[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x43U,    /* Write Address */
-    (U1)0x51U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU5[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x45U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
-};
-
-const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU6[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
-    (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x45U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
-};
-
 const U1 u1_sp_MCU_SYS_PWR_GVIFSNDR_OUTSET3_PDU1[MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_GVIFSNDR_SLAVEADR_WR,    /* Slave Address */
     (U1)0xFFU,    /* Write Address */
@@ -4150,48 +4096,6 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET2[MCU_SYS_PWR_GVIFSNDR_E
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET2_PDU1[0],
         (U4)0x34D00003U
-    }
-};
-
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET3[MCU_SYS_PWR_GVIFSNDR_EDPSET3_NUM] = {
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET3_PDU1[0],
-        (U4)0x3DA40003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET3_PDU2[0],
-        (U4)0x3DA80003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET3_PDU3[0],
-        (U4)0x3DAC0003U
-    }
-};
-
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD[MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_NUM] = {
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU1[0],
-        (U4)0x3DB00003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU2[0],
-        (U4)0x3DB40003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU3[0],
-        (U4)0x3DB80003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU4[0],
-        (U4)0x3DBC0003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU5[0],
-        (U4)0x3DC00003U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD_PDU6[0],
-        (U4)0x3DC40003U
     }
 };
 
