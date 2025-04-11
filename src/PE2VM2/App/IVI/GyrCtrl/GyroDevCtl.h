@@ -25,6 +25,7 @@
 #define GYRODEV_I2C_RWC_BYTE1                       (1U)
 #define GYRODEV_I2C_RWC_BYTE2                       (2U)
 #define GYRODEV_I2C_RWC_BYTE3                       (3U)
+#define GYRODEV_I2C_RWC_BYTE7                       (7U)
 #define GYRODEV_I2C_RWC_BYTE9                       (9U)
 #define GYRODEV_I2C_RWC_BYTE10                      (10U)
 

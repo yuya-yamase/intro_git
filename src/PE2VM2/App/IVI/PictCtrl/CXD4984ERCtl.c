@@ -111,7 +111,7 @@
 #define GVIF3RX_SLAVEADR_WR                     (0x46U)
 #define GVIF3RX_SLAVEADR_RD                     (0x47U)
 #define GVIF3RX_OUTSET_WRINUM                   (1U)
-#define GVIF3RX_CANKINDSET_WRINUM               (8U)
+#define GVIF3RX_CANKINDSET_WRINUM               (9U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -931,7 +931,8 @@ static U1     u1_s_Gvif3RxCamKindDatSet(void)
         {        6,         1,         0},
         {        7,         2,         0},
         {        9,         1,         0},
-        {       10,         3,         0}
+        {       10,         2,         0},
+        {       12,         1,         0}
     };
     
     U1 u1_t_return;

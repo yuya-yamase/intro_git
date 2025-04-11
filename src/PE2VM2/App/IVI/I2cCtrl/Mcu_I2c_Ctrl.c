@@ -257,9 +257,9 @@ uint8 Mcu_Dev_I2c_Ctrl_RegRead(uint8 mcu_ack, uint16 * mcu_regstep, const uint8 
                                 uint32 * mcu_timeout_cnt, const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt)
 {
     static const ST_REG_WRI_REQ I2C_READ[MCU_WRINUM_I2C_READ] = {
-        /*  開始位置,   書込み個数 */
-        {        0,         1},
-        {        1,         1}
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},
+        {        1,         1,         0}
     };
     uint8   mcu_sts;        /* 書込み状況 */
     uint8   mcu_return;     /* 戻り値：フロー完了通知 */

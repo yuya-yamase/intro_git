@@ -162,49 +162,49 @@ const ST_GP_I2C_MA_SLA           st_gp_GP_I2C_MA_SLA[GP_I2C_MA_NUM_SLA]  = {
         &vd_s_GpI2cMaCfgTRxAckCh0_Pmic,            /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)9U                                     /* u2_rwc_max */
     },
     {   /* Video-IC : W 0x72, R 0x73 */
         &vd_s_GpI2cMaCfgTRxAckCh0_VIc,             /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)12U                                    /* u2_rwc_max */
     },
     {   /* GVIF-Rx  : W 0x46, R 0x47 */
         &vd_s_GpI2cMaCfgTRxAckCh0_GvifRx,          /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)6U                                     /* u2_rwc_max */
     },
     {   /* GVIF-Tx  : W 0x48, R 0x49 */
         &vd_s_GpI2cMaCfgTRxAckCh0_GvifTx,          /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_0],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_0],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)12U                                    /* u2_rwc_max */
     },
     {   /* P-IC     : W 0xDE, R 0xDF */
         &vd_s_GpI2cMaCfgTRxAckCh1_PIc,             /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)10U                                    /* u2_rwc_max */
     },
     {   /* RTC-IC   : W 0x64, R 0x65 */
         &vd_s_GpI2cMaCfgTRxAckCh1_Rtc,             /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)10U                                    /* u2_rwc_max */
     },
     {   /* Gryo     : W 0xD2, R 0xD3 */
         &vd_s_GpI2cMaCfgTRxAckCh1_Gyro,            /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)10U                                     /* u2_rwc_max */
     },
     {   /* Gmoni    : W 0x32, R 0x33 */
         &vd_s_GpI2cMaCfgTRxAckCh1_Gmoni,           /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)10U                                    /* u2_rwc_max */
     }
 };
 const U1                         u1_g_GP_I2C_MA_NUM_SLA = (U1)GP_I2C_MA_NUM_SLA;

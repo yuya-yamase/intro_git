@@ -17,6 +17,7 @@
 #define MCU_SYS_PWR_GVIFSNDR_RWC_BYTE2                        (2U)
 #define MCU_SYS_PWR_GVIFSNDR_RWC_BYTE3                        (3U)
 #define MCU_SYS_PWR_GVIFSNDR_RWC_BYTE6                        (6U)
+#define MCU_SYS_PWR_GVIFSNDR_RWC_BYTE8                        (8U)
 #define MCU_SYS_PWR_GVIFSNDR_SETREG_INIT_NUM                  (22U)
 #define MCU_SYS_PWR_GVIFSNDR_EDPSET1_NUM                      (3U)
 #define MCU_SYS_PWR_GVIFSNDR_EDPSET_REC_NUM                   (690U)
@@ -28,25 +29,21 @@
 #define MCU_SYS_PWR_GVIFSNDR_OUTSET1_NUM                      (1U)
 #define MCU_SYS_PWR_GVIFSNDR_OUTSET_GVIF3TX0_ACTIVATED_RD_NUM (2U)
 #define MCU_SYS_PWR_GVIFSNDR_OUTSET2_NUM                      (5U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCP1_NUM                        (5U)
+#define MCU_SYS_PWR_GVIFSNDR_HDCP1_NUM                        (9U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCP2_NUM                        (1U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCP3_NUM                        (1U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCP4_NUM                        (1U)
+#define MCU_SYS_PWR_GVIFSNDR_HDCP4_NUM                        (4U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCP5_NUM                        (1U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCP6_NUM                        (1U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCPTX_STATUS_RD_NUM             (2U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCPTX_EVENT_RD_NUM              (2U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCP7_NUM                        (1U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCPTX_MAX_DEVS_RD_NUM           (2U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCPTX_MAX_CASCADE_RD_NUM        (2U)
+#define MCU_SYS_PWR_GVIFSNDR_HDCP7_NUM                        (3U)
+#define MCU_SYS_PWR_GVIFSNDR_HDCPTX_DEVS_CASCADE_RD_NUM       (2U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCPTX_DEV_ID_RD_NUM             (10U)
 #define MCU_SYS_PWR_GVIFSNDR_ENCRYPT_NUM                      (1U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCP8_NUM                        (1U)
 #define MCU_SYS_PWR_GVIFSNDR_HDCPTX_ENC_RD_NUM                (2U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCP9_NUM                        (1U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCPSTOP1_NUM                    (2U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCPSTOP2_NUM                    (1U)
-#define MCU_SYS_PWR_GVIFSNDR_HDCP10_NUM                       (1U)
+#define MCU_SYS_PWR_GVIFSNDR_HDCPSTOP_NUM                     (4U)
 #define MCU_SYS_PWR_GVIFSNDR_GVIF3TX0_ACT_RD_NUM              (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -79,25 +76,20 @@ extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_OUTSET_GVIF3TX0_ACT
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_OUTSET2[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP1[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP2[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP3[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP4[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP5[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP6[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPTX_STATUS_RD[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPTX_EVENT_RD[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP7[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPTX_MAX_DEVS_RD[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPTX_MAX_CASCADE_RD[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP3[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPTX_DEVS_CASCADE_RD[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPTX_DEV_ID_RD[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_ENCRYPT[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP8[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP4[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP_HPD[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPTX_ENC_RD[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP9[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPSTOP1[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPSTOP2[];
-extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP10[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP5[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCPSTOP[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP6[];
 extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_GVIF3TX0_ACT_RD[];
-
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP7[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_PWR_GVIFSNDR_HDCP8[];
 
 #endif      /* MCU_SYS_PWR_GVIFSNDR_H */
 /*===================================================================================================================================*/

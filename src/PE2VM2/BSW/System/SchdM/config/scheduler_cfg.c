@@ -141,7 +141,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
 //    {&vd_g_EsmMStkmMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
 
 //    {&vd_g_FFLvCaptMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
-    {&vd_g_GpI2cMaMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -159,6 +158,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  1ms Platform Pre Task                                            */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_GpI2cMaMainTask,             (U4)SCHDLR_TASKBIT___1MS    },
     {&vd_g_XspiIviMain1st,              (U4)SCHDLR_TASKBIT___1MS    },
 
     /*-------------------------------------------------------------------*/
