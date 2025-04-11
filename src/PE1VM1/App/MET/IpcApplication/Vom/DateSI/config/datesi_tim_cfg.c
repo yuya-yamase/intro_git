@@ -21,7 +21,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "vardef.h"
@@ -240,7 +239,11 @@ U1              u1_g_DateSITimCfgRxMsgSts(void)
 {
     U1  u1_t_status;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_status = (U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_status = (U1)COM_NO_RX;
+#endif
 
     return(u1_t_status);
 }
@@ -255,6 +258,7 @@ U1              u1_g_DateSITimCfgCanRx(ST_DATESI_TIM_RX * stp_a_rx)
 {
     U1  u1_t_status;
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CLK_SEC,  &(stp_a_rx->u1p_time[HHMMSS_24H_TIME_SE]));
     (void)Com_ReceiveSignal(ComConf_ComSignal_CLK_MIN,  &(stp_a_rx->u1p_time[HHMMSS_24H_TIME_MI]));
     (void)Com_ReceiveSignal(ComConf_ComSignal_CLK_HOUR, &(stp_a_rx->u1p_time[HHMMSS_24H_TIME_HR]));
@@ -263,6 +267,9 @@ U1              u1_g_DateSITimCfgCanRx(ST_DATESI_TIM_RX * stp_a_rx)
     (void)Com_ReceiveSignal(ComConf_ComSignal_GPS_CRCT, &(stp_a_rx->u1_act));
 
     u1_t_status = (U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_status = (U1)COM_NO_RX;
+#endif
 
     return(u1_t_status);
 }
@@ -512,6 +519,7 @@ U1              u1_g_DateSITimCfgCanRxHk(void)
     u1_t_sw    = (U1)0U;
 
     /* SW Input Infomation */
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOUR_USW, &u1_t_sw);
     u1_t_swinf  = (U1)(u1_t_sw << DATESI_TIM_SHIFT_HRUP);
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOUR_DSW, &u1_t_sw);
@@ -528,6 +536,7 @@ U1              u1_g_DateSITimCfgCanRxHk(void)
     u1_t_swinf |= (U1)(u1_t_sw << DATESI_TIM_SHIFT_OFFSETUP);
     (void)Com_ReceiveSignal(ComConf_ComSignal_OSET_DSW, &u1_t_sw);
     u1_t_swinf |= (U1)(u1_t_sw << DATESI_TIM_SHIFT_OFFSETDW);
+#endif
 
     return(u1_t_swinf);
 }
@@ -707,8 +716,12 @@ void            vd_g_DateSITimCfgOfstDelHook(void)
 /*===================================================================================================================================*/
 U1      u1_g_TimeZoneCfgRxTZ(U1 * u1p_a_rx)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TZ, u1p_a_rx);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)                                                                                 */
@@ -718,9 +731,13 @@ U1      u1_g_TimeZoneCfgRxTZ(U1 * u1p_a_rx)
 /*===================================================================================================================================*/
 U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)
 {
+#if 0   /* BEV BSW provisionally */
 #ifdef MSG_AVN1S30_RXCH0
     (void)Com_ReceiveSignal(ComConf_ComSignal_TZ_SIGN, u1p_a_rx);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return((U1)(COM_TIMEOUT | COM_NO_RX));
+#endif
 #else
     return((U1)(COM_TIMEOUT | COM_NO_RX));
 #endif
@@ -733,9 +750,13 @@ U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)
 /*===================================================================================================================================*/
 U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)
 {
+#if 0   /* BEV BSW provisionally */
 #ifdef MSG_AVN1S30_RXCH0
     (void)Com_ReceiveSignal(ComConf_ComSignal_DST_S30, u1p_a_rx);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S30_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return((U1)(COM_TIMEOUT | COM_NO_RX));
+#endif
 #else
     return((U1)(COM_TIMEOUT | COM_NO_RX));
 #endif

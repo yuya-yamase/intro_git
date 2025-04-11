@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -74,9 +73,17 @@ typedef struct {
 #define u1_EVCOM_MSGSTS_PLG1G13()			((U1)Com_GetIPDUStatus(MSG_PLG1S08_13_RXCH0))	/* Message Status : PLG1S08 SubID:13 */
 #else
 #define u1_EVCOM_MSGSTS_PLG1G10()			(COM_NO_RX)/*((U1)Com_GetIPDUStatus(MSG_PLG1G10_RXCH0))*/		/* Message Status : PLG1G10			 */
+#if 0   /* BEV BSW provisionally */
 #define u1_EVCOM_MSGSTS_PLG1G11()			((U1)Com_GetIPDUStatus(MSG_PLG1G11_RXCH0))		/* Message Status : PLG1G11			 */
+#else
+#define u1_EVCOM_MSGSTS_PLG1G11()			(COM_NO_RX)
+#endif
 #define u1_EVCOM_MSGSTS_PLG1G12()			(COM_NO_RX)/*((U1)Com_GetIPDUStatus(MSG_PLG1G12_RXCH0))*/		/* Message Status : PLG1G12			 */
+#if 0   /* BEV BSW provisionally */
 #define u1_EVCOM_MSGSTS_PLG1G13()			((U1)Com_GetIPDUStatus(MSG_PLG1G13_RXCH0))		/* Message Status : PLG1G13			 */
+#else
+#define u1_EVCOM_MSGSTS_PLG1G13()			(COM_NO_RX)
+#endif
 #endif
 
 #define EVCOM_ST_TIMEOUT					(COM_TIMEOUT)									/* Time out								 */
@@ -109,8 +116,13 @@ typedef struct {
 #endif
 
 #if (__EVCOM_EXTERNAL_SUPPLY_SUP__ == 1)
+#if 0   /* BEV BSW provisionally */
 #define vd_EVCOM_GET_PWSPLAVA(x)			((void)Com_ReceiveSignal(ComConf_ComSignal_PWSPLAVA,(x)))	/* Get Rx Data : PWSPLAVA	 */
 #define vd_EVCOM_GET_PWSPPURQ(x)			((void)Com_ReceiveSignal(ComConf_ComSignal_PWSPPURQ,(x)))	/* Get Rx Data : PWSPPURQ	 */
+#else
+#define vd_EVCOM_GET_PWSPLAVA(x)            (vdp_PTR_NA)
+#define vd_EVCOM_GET_PWSPPURQ(x)            (vdp_PTR_NA)
+#endif
 #define vd_EVCOM_GET_EV_SLCT(x)				((void)Com_ReceiveSignal(ComConf_ComSignal_EV_SLCT,(x)))	/* Get Rx Data : EV_SLCT	 */
 #define vd_EVCOM_GET_HV_SLCT(x)				((void)Com_ReceiveSignal(ComConf_ComSignal_HV_SLCT,(x)))	/* Get Rx Data : HV_SLCT	 */
 #else

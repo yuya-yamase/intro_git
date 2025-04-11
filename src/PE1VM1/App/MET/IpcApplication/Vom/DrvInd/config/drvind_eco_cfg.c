@@ -21,7 +21,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -74,11 +73,13 @@
 /*===================================================================================================================================*/
 U1      u1_g_DrvIndEcoCfgComRxBIECOCR(U1 * const u1p_a_pct)
 {
-#if (defined(MSG_ENG1G17_02_RXCH0) && defined(ComConf_ComSignal_B_IECOCR))
+#if (defined(MSG_ENG1G17_RXCH0) && defined(ComConf_ComSignal_B_IECOCR))
     U1                  u1_t_sts;
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_IECOCR, u1p_a_pct);
-    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G17_02,
+#endif
+    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G17_RXCH0,
                                     ((U2)OXCAN_RX_SYS_NRX_IGP |
                                      (U2)OXCAN_RX_SYS_NRX_IGR |
                                      (U2)OXCAN_RX_SYS_TOE_IGP |

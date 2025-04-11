@@ -26,7 +26,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "rim_ctl.h"
@@ -200,13 +199,17 @@ U1    u1_g_AlertCfgS_cvrsAdds(U1 * u1p_a_rprt, U1 * u1p_a_sfty)
 
     u1_t_sgnl   = (U1)0U;
 #if defined(ComConf_ComSignal_L_ADDSTRI1_REPORT)
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_L_ADDSTRI1_REPORT, &u1_t_sgnl);
+#endif
 #endif /* defined(ComConf_ComSignal_L_ADDSTRI1_REPORT) */
     *u1p_a_rprt = u1_t_sgnl;
 
     u1_t_sgnl   = (U1)0U;
 #if defined(ComConf_ComSignal_L_ADDSTRI1_SAFETY_CON)
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_L_ADDSTRI1_SAFETY_CON, &u1_t_sgnl);
+#endif
 #endif /* defined(ComConf_ComSignal_L_ADDSTRI1_SAFETY_CON) */
     *u1p_a_sfty = u1_t_sgnl;
 
@@ -267,7 +270,9 @@ U2 u2_g_AlertCfgC_brk_0EngineRPMVal(void)
                                      (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_C_BRK_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_NE1, &s2_t_ne);
+#endif
 
     if(u1_t_stsbit == (U1)COM_NO_RX){
         u4_t_egrt_val = (U4)0U;
@@ -419,7 +424,9 @@ U1    u1_g_AlertCfgEcomodeOn(void)
 
     if(u1_t_msgsts == (U1)0U){
         u1_t_sgnl   = (U1)0U;
+#if 0   /* BEV BSW provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_ECOMODE3, &u1_t_sgnl);
+#endif
         u1_t_sgnl  &= u1_s_ALERT_ECOMODE3_SGNL_MSK;
         u1_t_pts_on = u1_s_ALERT_ECOMODE3_JUDG_TBL[u1_t_sgnl];
     }

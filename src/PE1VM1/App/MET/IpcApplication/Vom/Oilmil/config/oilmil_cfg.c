@@ -19,7 +19,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -70,7 +69,9 @@
 /*===================================================================================================================================*/
 U1      u1_g_OilmilRxRstSig(U1 * u1p_a_omwi2)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_OMWI2, u1p_a_omwi2);
+#endif
     return((U1)Com_GetIPDUStatus(MSG_ENG1S99_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
@@ -104,9 +105,11 @@ void   vd_g_OilmilTxRstSig(const U1 u1_a_OMRS2, const U1 u1_a_SNDINT)
 /*===================================================================================================================================*/
 U1  u1_g_OilmilRxDspSig(U1 * u1p_a_unit, S2 * s2p_a_val, U1 * u1p_a_inv)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_MIL, u1p_a_unit);
     (void)Com_ReceiveSignal(ComConf_ComSignal_OILMNTMI, s2p_a_val);
     (void)Com_ReceiveSignal(ComConf_ComSignal_OILM_INV, u1p_a_inv);
+#endif
     return((U1)Com_GetIPDUStatus(MSG_ENG1S99_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 

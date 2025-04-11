@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -166,7 +165,9 @@ static U4      u4_s_AlertP_fuecapTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
     u1_t_sgnl     = (U1)0U;
 #ifdef ComConf_ComSignal_FCAPTT
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_FCAPTT, &u1_t_sgnl);
+#endif
 #endif /* ComConf_ComSignal_FCAPTT */ /* 235D_CAN */
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
@@ -200,7 +201,9 @@ static U4      u4_s_AlertP_fuecapPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
     u1_t_sgnl     = (U1)0U;
 #ifdef ComConf_ComSignal_FCAPMID
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_FCAPMID, &u1_t_sgnl);
+#endif
 #endif /* ComConf_ComSignal_FCAPMID */ /* 235D_CAN */
 
     u4_t_src_chk  = (U4)u1_t_sgnl;

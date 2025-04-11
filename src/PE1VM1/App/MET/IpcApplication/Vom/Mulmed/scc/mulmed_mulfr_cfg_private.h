@@ -63,8 +63,10 @@ void            vd_g_MulmedMulfrCfgTxSyncID(const U4 u4_a_MSGIDX, const U1 u1_a_
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 extern  const   U2                              u2_g_MULMED_MULFR_AUB_MAX;
 extern  const   U2                              u2_g_MULMED_MULFR_AUB_MIN;
+#endif
 
 #endif      /* MULMED_MULFR_CFG_H */
 

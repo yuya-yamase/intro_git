@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "alert.h"
@@ -695,8 +694,12 @@ static U1 u1_s_HmiPuTxtCfgTimchgReq(void)
     u1_t_baon = u1_g_VehopemdBaOn();
     u1_t_timchg_pncdsp = (U1)0U;
 
+#if 0   /* BEV BSW provisionally */
     u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_PLG1G10_RXCH0);
     u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
+#else
+    u1_t_msgsts = (U1)COM_NO_RX;
+#endif
     u1_t_signal = (U1)0U;
     if(u1_t_msgsts == (U1)0x00U){
         (void)Com_ReceiveSignal(ComConf_ComSignal_PSDSPRQ, &u1_t_signal);

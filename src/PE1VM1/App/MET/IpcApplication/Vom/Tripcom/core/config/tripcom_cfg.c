@@ -40,7 +40,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "vardef.h"
@@ -338,8 +337,12 @@ U1              u1_g_TripcomCfgFuelVol(U2 * u2p_a_val)
 /*===================================================================================================================================*/
 U1              u1_g_TripcomCfgGetTOFCRST(U1 * u1p_a_rst)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TOFC_RST, u1p_a_rst);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return ((U1)COM_NO_RX);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -363,8 +366,12 @@ U1              u1_g_TripcomCfgGetTOFCRT2(U1 * u1p_a_rst)
 /*===================================================================================================================================*/
 U1              u1_g_TripcomCfgGetM1FCRST(U1 * u1p_a_rst)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_M1FC_RST, u1p_a_rst);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return ((U1)COM_NO_RX);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -375,8 +382,12 @@ U1              u1_g_TripcomCfgGetM1FCRST(U1 * u1p_a_rst)
 /*===================================================================================================================================*/
 U1              u1_g_TripcomCfgGetTOECRST(U1 * u1p_a_rst)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TOEC_RST, u1p_a_rst);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return ((U1)COM_NO_RX);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -387,8 +398,12 @@ U1              u1_g_TripcomCfgGetTOECRST(U1 * u1p_a_rst)
 /*===================================================================================================================================*/
 U1              u1_g_TripcomCfgGetM1ECRST(U1 * u1p_a_rst)
 {
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_M1EC_RST, u1p_a_rst);
     return ((U1)Com_GetIPDUStatus(MSG_AVN1S07_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    return ((U1)COM_NO_RX);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -404,7 +419,11 @@ U1              u1_g_TripcomCfgGetNe1Sts(void)
 
 
     u1_t_ret    = (U1)TRIPCOM_EVRATIO_VALID;
+#if 0   /* BEV BSW provisionally */
     u1_t_msgsts = (U1)Com_GetIPDUStatus((PduIdType)MSG_ENG1G02_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+    u1_t_msgsts = (U1)COM_NO_RX;
+#endif
     if ((u1_t_msgsts & (U1)COM_TIMEOUT) != (U1)0U) {
         u1_t_ret = (U1)TRIPCOM_EVRATIO_INVALID;
     }
@@ -451,7 +470,9 @@ U1              u1_g_TripcomCfgGetPHVMDIND(U1 * u1p_a_phvmdind)
     if(u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU){
 #ifdef ComConf_ComSignal_PHVMDIND
         u1_t_msgsts = ((U1)Com_GetIPDUStatus((PduIdType)MSG_EHV1S31_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#if 0   /* BEV BSW provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_PHVMDIND, u1p_a_phvmdind);
+#endif
 #endif /* ComConf_ComSignal_PHVMDIND */
     }
 
@@ -513,7 +534,9 @@ U1              u1_g_TripcomCfgGetEMGF(U1 * u1p_a_emgf)
     if(u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU){
 #ifdef ComConf_ComSignal_EMGF
         u1_t_msgsts = ((U1)Com_GetIPDUStatus((PduIdType)MSG_EHV1S94_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#if 0   /* BEV BSW provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_EMGF, u1p_a_emgf);
+#endif
 #endif /* ComConf_ComSignal_EMGF */
     }
 

@@ -31,7 +31,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "memcpy_u2.h"
@@ -44,7 +43,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #define MMVAR_AVNMS72_MSG                 (MSG_AVNMS72_RXCH1)
+#endif
 
 /* MMTIMID */
 #define MMVAR_TIMERID_UNAME_ACCON           (MMTIM_TIMERID_UNAME_ACCON)
