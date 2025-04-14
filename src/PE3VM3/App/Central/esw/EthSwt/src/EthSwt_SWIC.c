@@ -1,18 +1,28 @@
 #include <Std_Types.h>
 #include <EthSwt_SWIC.h>
 #include <EthSwt.h>
-#include "EthSwt_SWIC_Def.h"
-#include "EthSwt_SWIC_Reg.h"
-#include "EthSwt_SWIC_Org.h"
+// #include "EthSwt_SWIC_Def.h"
+// #include "EthSwt_SWIC_Reg.h"
+// #include "EthSwt_SWIC_Org.h"
+#include "EthSwt_SWIC_Pwr.h"
+
 
 #define	ETHSWT_START_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 {
 	(void)CfgPtr;
-	EthSwt_SWIC_Reg_Init();		/* 初期化を始めるので最後 */
+
+	// EthSwt_SWIC_Reg_Init();		/* 初期化を始めるので最後 */
+	EthSwt_SWIC_Pwr_Init();
 }
-#if 0    /* VN-HILSとしては不要なため無効化 */
+
+void EthSwt_SWIC_MainFunction(void)
+{
+	EthSwt_SWIC_Pwr_HiProc();
+}
+
+#if 0    /* 未対応 */
 Std_ReturnType EthSwt_SWIC_GetLinkState(uint8 SwitchIdx, uint8 SwitchPortIdx, EthTrcv_LinkStateType* LinkStatePtr)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
@@ -38,6 +48,6 @@ Std_ReturnType EthSwt_SWIC_GetIDS_FiltFrmInfo(const uint8 SwitchIdx, const uint8
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
 	return EthSwt_SWIC_Reg_GetIDS_FiltFrmInfo(SwitchPortIdx, IDSInfo);
 }
-#endif    /* VN-HILSとしては不要なため無効化 */
+#endif    /*未対応 */
 #define	ETHSWT_STOP_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>

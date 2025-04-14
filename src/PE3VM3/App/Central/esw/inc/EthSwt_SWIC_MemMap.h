@@ -1,4 +1,3 @@
-#if 0
 #define MEMMAP_ERROR
 #if defined ETHSWT_START_SEC_CODE
 #undef ETHSWT_START_SEC_CODE
@@ -49,5 +48,4 @@
 #pragma ghs section data=default
 #undef MEMMAP_ERROR
 
-#endif
 #endif

@@ -2,34 +2,18 @@
 #define ETHSWT_H
 #include <Std_Types.h>
 
+
 typedef void	EthSwt_ConfigType;
-typedef struct {					/* フレーム情報 */
-	uint32	EgressQueueDiscard;		/* 出力Queueにおける破棄フレーム数 */
-	uint32	IngressNormaly;			/* 正常受信フレーム数 */
-	uint32	EgressNormaly;			/* 正常送信フレーム数 */
-	uint32	FcsErrorFrame;			/* FCSエラーフレーム数 */
-}	EthSwt_FrameInfoType;
 
 /********************************************************************************/
 /* Structure definitions														*/
 /********************************************************************************/
 #include "EthSwt_SWIC.h"
 
+
 /*SwitchIdx*/
-#define EthSwtConf_EthSwtPort_EthSwtPort_0		((uint8)0)
-#define EthSwtConf_EthSwtPort_EthSwtPort_1		((uint8)1)
-#define EthSwtConf_EthSwtPort_EthSwtPort_2		((uint8)2)
-#define EthSwtConf_EthSwtPort_EthSwtPort_3		((uint8)3)
-#define EthSwtConf_EthSwtPort_EthSwtPort_4		((uint8)4)
-#define EthSwtConf_EthSwtPort_EthSwtPort_5		((uint8)5)
-#define EthSwtConf_EthSwtPort_EthSwtPort_6		((uint8)6)
-#define EthSwtConf_EthSwtPort_EthSwtPort_7		((uint8)7)
-#define EthSwtConf_EthSwtPort_EthSwtPort_8		((uint8)8)
-#define EthSwtConf_EthSwtPort_EthSwtPort_9		((uint8)9)
-#define EthSwtConf_EthSwtConfig_EthSwtConfig_0	((uint8)0)
-#define EthSwtConf_EthSwtConfig_EthSwtConfig_1	((uint8)1)
-#define ETHSWT_SWIC_IDX							(EthSwtConf_EthSwtConfig_EthSwtConfig_0)
-#define ETHSWT_RSW2_IDX							(EthSwtConf_EthSwtConfig_EthSwtConfig_1)
+#define ETHSWT_SWIC_IDX							((uint8)0)
+#define ETHSWT_RSW2_IDX							((uint8)1)
 
 #define EthSwt_Init								EthSwt_SWIC_Init
 #define EthSwt_DeInit							EthSwt_SWIC_DeInit
@@ -82,7 +66,6 @@ typedef struct {					/* フレーム情報 */
 #define EthSwt_GetRxMgmtObject					EthSwt_SWIC_GetRxMgmtObject
 #define EthSwt_GetTxMgmtObject					EthSwt_SWIC_GetTxMgmtObject
 #define EthSwt_MainFunction						EthSwt_SWIC_MainFunction
-#define EthSwt_MainFunctionMid					EthSwt_SWIC_MainFunctionMid
 #define EthSwt_BackgroundTask					EthSwt_SWIC_BackgroundTask
 
 #endif /*ETHSWT_H*/
