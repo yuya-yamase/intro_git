@@ -8,9 +8,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define MCU_PICTIC_TASK_TIME            (5U)    /* 周期の時間指定(LSB:1ms) */
+#define MCU_PICTIC_TASK_TIME            (1U)    /* 周期の時間指定(LSB:1ms) */
 
 /* フロー */
+#define MCU_STEP_EIZOIC_OVERALL_0       (0U)    /* GVIF3TX処理待ち */
 #define MCU_STEP_EIZOIC_OVERALL_1       (1U)    /* 6.2 初期化処理 */
 #define MCU_STEP_EIZOIC_OVERALL_2       (2U)    /* 6.3 SiP映像表示に関する処理 */
 #define MCU_STEP_EIZOIC_OVERALL_3       (3U)    /* 6.5.1.1 起動時のカメラ映像表示に関する設定 */

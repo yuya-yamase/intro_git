@@ -40,6 +40,9 @@
 #define MCU_I2C_ACK_GYRO                        (4U)
 #define MCU_I2C_ACK_G_MONI                      (5U)
 
+/* 書き込み時Waitモード */
+#define MCU_I2C_WAIT_NON                        (0U)    /* Waitなし */
+#define MCU_I2C_WAIT_B89                        (1U)    /* GVIF送信 Bank8,9アクセス時 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -68,7 +71,7 @@ uint8 Mcu_Dev_I2c_Ctrl_RegSet(uint8 mcu_ack, uint16 * mcu_regstep, const uint16 
 
 /* I2C読出し用IF */
 uint8 Mcu_Dev_I2c_Ctrl_RegRead(uint8 mcu_ack, uint16 * mcu_regstep, const uint8 mcu_i2c_sla,
-                                uint32 * mcu_timeout_cnt, const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt);
+                                uint32 * mcu_timeout_cnt, const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt, const uint8 mcu_waitmode);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
