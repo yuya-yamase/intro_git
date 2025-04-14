@@ -21,8 +21,8 @@ primaryTarget=v800_standalone.tgt
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
     :macro=CMPSW_DIR=${PRJ_DIR}/../../CmpSW
 
-    # US
-    :macro=COUNTRY_SW_US=
+    # OTH
+    :macro=COUNTRY_SW_OTH=
 
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
