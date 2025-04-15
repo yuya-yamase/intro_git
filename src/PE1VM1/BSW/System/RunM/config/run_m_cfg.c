@@ -22,13 +22,32 @@
 
 /* Communication         */
 #include "oxcan.h"
+
+/* Diag */
+#if 0   /* BEV BSW provisionally */
+#include "oxdocan.h"
+#else
+#endif
+
 /* Complex Device Driver */
+#ifdef DATE_CLK_H
+#include "date_clk.h"
+#endif
+#if 0   /* BEV BSW provisionally */
+#include "xpd_init.h"
+#else
+#endif
+#include "sound_cri_mgr.h"
 /* MCAL                  */
 /* Memory                */
 #include "nvmc_mgr.h"
 
 /* Application           */
 
+#include "alert.h"
+#include "illumi.h"
+#include "hmiproxy.h"
+#include "vardef.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -48,16 +67,23 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define     RUN_M_SLPNG_CHK_SMTBZ_ON     (0x00000001U)
+#define     RUN_M_SLPNG_CHK_THEAD_ON     (0x00000002U)
+#define     RUN_M_SLPNG_CHK_TTAIL_ON     (0x00000004U)
+#define     RUN_M_SLPNG_CHK_TYCAN        (0x80000000U)
+#define     RUN_M_SLPNG_TYCAN_TOUT       ((U4)1440000U/(U4)5U)      /* 1,440,000 msec = ((25 -1)* 60 * 1,000)    */
+                                                                    /* 1 = u2_g_RUN_M_TIMOUT_TO_SHTDWN           */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U4             u4_s_run_m_forceslp_tout;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2              u2_g_RUN_M_TIMOUT_TO_SHTDWN = (U2)3000U / (U2)5U;   /* 3 seconds */
+const U2              u2_g_RUN_M_TIMOUT_TO_SHTDWN = (U2)60000U / (U2)5U;   /* 60 seconds */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -70,6 +96,7 @@ const U2              u2_g_RUN_M_TIMOUT_TO_SHTDWN = (U2)3000U / (U2)5U;   /* 3 s
 /*===================================================================================================================================*/
 void    vd_g_RunMCfgInit(void)
 {
+    u4_s_run_m_forceslp_tout = (U4)0U;
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_RunMCfghkShtdwnchk1st(void)                                                                                         */
@@ -82,12 +109,57 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 #if (__RUN_M_CHK_1ST__ == 1)
     static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
         &u1_g_oXCANEcuShtdwnOk,
-        &u1_g_Nvmc_IsShtdwnOk
+#if 0   /* BEV BSW provisionally */
+        &u1_g_oXDoCANShtdwnOk,
+#else
+#endif
+        &u1_g_Nvmc_IsShtdwnOk,
+        &u1_g_SoundCriMgrShtdwnOk,
+        &u1_g_IllumiShtdwnOk,
+        &u1_g_HmiProxyShtdwnOK
     };
-
+    static const ST_ALERT_REQBIT   st_sp_REQBIT[] = {
+        /*  u2_src_ch                       u1_src_act                          u1_dst_idx  u4_dst_bit                            */
+        {  (U2)ALERT_CH_B_SMASTA_BCI1,      (U1)ALERT_REQ_B_SMASTA_BCI1_ON,     (U1)0U,     (U4)RUN_M_SLPNG_CHK_SMTBZ_ON       },
+        {  (U2)ALERT_CH_B_THEAD,            (U1)ALERT_REQ_B_THEAD_ON,           (U1)0U,     (U4)RUN_M_SLPNG_CHK_THEAD_ON       },
+        {  (U2)ALERT_CH_B_TTAIL,            (U1)ALERT_REQ_B_TTAIL_ON,           (U1)0U,     (U4)RUN_M_SLPNG_CHK_TTAIL_ON       }
+    };
     U1                        u1_t_1st;
+    U1                        u1_t_dest;
+    U2                        u2_t_num_reqbit;
+    U4                        u4_t_req;
+    U1                        u1_t_tycan_ok;
+
+    u4_t_req      = (U4)0U;
+    u1_t_tycan_ok = u1_g_oXCANEcuShtdwnOk();
+    if(u1_t_tycan_ok == (U1)TRUE){
+        if(u4_s_run_m_forceslp_tout < (U4)RUN_M_SLPNG_TYCAN_TOUT){
+            u4_t_req = (U4)RUN_M_SLPNG_CHK_TYCAN;
+        }
+        if(u4_s_run_m_forceslp_tout < (U4)U4_MAX){
+            u4_s_run_m_forceslp_tout++;
+        }
+    }
+    else{
+        u4_s_run_m_forceslp_tout = (U4)0U;
+    }
+
+    u2_t_num_reqbit = (U2)(sizeof(st_sp_REQBIT) / sizeof(st_sp_REQBIT[0]));
+    vd_g_AlertReqToBit( st_sp_REQBIT, u2_t_num_reqbit, &u4_t_req, (U1)1);
+
+    u1_t_dest       = u1_g_VardefTtTailHead();
+    if(u1_t_dest == (U1)VDF_TTTAILHEAD_NO12){
+        u4_t_req &= ((U4)U4_MAX ^ (U4)RUN_M_SLPNG_CHK_TTAIL_ON);
+    }
+    else{
+        u4_t_req &= ((U4)U4_MAX ^ (U4)RUN_M_SLPNG_CHK_THEAD_ON);
+    }
 
     u1_t_1st  = u1_g_Fpcall_u1_And(&fp_sp_u1_RUN_M_SHTDWN_CHK[0], u2_NC_U1_AND(fp_sp_u1_RUN_M_SHTDWN_CHK));
+
+    if(u4_t_req == (U4)0U){
+        u1_t_1st = (U1)TRUE;
+    }
 
     return(u1_t_1st);
 #else
@@ -159,7 +231,25 @@ void    vd_g_RunMCfgWksrcCfgRefresh(void)
 /*===================================================================================================================================*/
 U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 {
+#if 0   /* BEV BSW provisionally */
+    U1                        u1_t_2nd;
+    u1_t_2nd  = u1_g_XpdiShtdwnOk(u1_a_1ST);
+
+#ifdef DATE_CLK_H
+    /* ----------------------------------------------------------------------------------- */
+    /* WARNING :                                                                           */
+    /* ----------------------------------------------------------------------------------- */
+    /* u1_g_DateclkShtdwnOk shall be invoked at end of u1_g_BswMCfghkShtdwnchk2nd.         */
+    /* Otherwise, ECU might not be able to go shutdown.                                    */
+    /* ----------------------------------------------------------------------------------- */
+    u1_t_2nd &= u1_g_DateclkShtdwnOk();
+#endif
+
+    return(u1_t_2nd);
+	
+#else
     return(u1_a_1ST);
+#endif
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
