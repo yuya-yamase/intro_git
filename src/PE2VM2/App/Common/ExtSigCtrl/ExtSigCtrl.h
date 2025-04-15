@@ -19,11 +19,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 端子状態判定 */
-#define U1_EXTSIGCTRL_TMNL_STS_UNKNOWN		(U1)0x00U		/* 端子状態_未確定	*/
-#define U1_EXTSIGCTRL_TMNL_STS_OFF			(U1)0x01U		/* 端子状態_OFF		*/
-#define U1_EXTSIGCTRL_TMNL_STS_ON			(U1)0x02U		/* 端子状態_ON		*/
+/* 関数戻り値（共通） */
 #define U1_EXTSIGCTRL_INVALID_PARAM			(U1)0xFFU		/* 引数異常 		*/
+
+/* 信号状態判定 */
+#define U1_EXTSIGCTRL_SIG_STS_UNKNOWN		(U1)0x00U		/* 信号状態_未確定	*/
+#define U1_EXTSIGCTRL_SIG_STS_OFF			(U1)0x01U		/* 信号状態_OFF		*/
+#define U1_EXTSIGCTRL_SIG_STS_ON			(U1)0x02U		/* 信号状態_ON		*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -33,7 +35,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* 車両信号定義 */
 typedef enum {
-	EXTSIGCTRL_KIND_TEST,		/* TEST			*/
+	EXTSIGCTRL_KIND_TEST = 0,	/* TEST			*/
 	EXTSIGCTRL_KIND_BOOT,		/* BOOT			*/
 	EXTSIGCTRL_KIND_EXT_PWR_SW,	/* EXT-PWR-SW	*/
 	EXTSIGCTRL_KIND_NUM			/* 信号種別数	*/
