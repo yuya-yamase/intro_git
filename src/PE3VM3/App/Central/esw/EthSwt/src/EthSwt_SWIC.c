@@ -1,11 +1,8 @@
 #include <Std_Types.h>
 #include <EthSwt_SWIC.h>
 #include <EthSwt.h>
-// #include "EthSwt_SWIC_Def.h"
-// #include "EthSwt_SWIC_Reg.h"
-// #include "EthSwt_SWIC_Org.h"
+#include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_Pwr.h"
-
 
 #define	ETHSWT_START_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>
@@ -13,13 +10,15 @@ void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 {
 	(void)CfgPtr;
 
-	// EthSwt_SWIC_Reg_Init();		/* èâä˙âªÇénÇﬂÇÈÇÃÇ≈ç≈å„ */
 	EthSwt_SWIC_Pwr_Init();
+	EthSwt_SWIC_Reg_Init();		/* èâä˙âªÇénÇﬂÇÈÇÃÇ≈ç≈å„ */
+	
 }
 
 void EthSwt_SWIC_MainFunction(void)
 {
 	EthSwt_SWIC_Pwr_HiProc();
+	EthSwt_SWIC_MainFunction1MS();
 }
 
 #if 0    /* ñ¢ëŒâû */
