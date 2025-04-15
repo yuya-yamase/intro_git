@@ -432,7 +432,6 @@ void EthSwt_SWIC_MainFunction(void)
 }
 #endif
 
-#if 0 /* For BSW */
 Std_ReturnType EthSwt_SWIC_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode)
 {	/* 1msタスク */
 	if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{ return E_NOT_OK; }
@@ -441,6 +440,7 @@ Std_ReturnType EthSwt_SWIC_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, cons
 	swic_Reg_Mode[SwitchPortIdx].req_mode	= STD_ON;	/* 処理前に複数呼ばれた場合は最新が有効 */
 	return E_OK;
 }
+#if 0 /* For BSW */
 Std_ReturnType EthSwt_SWIC_Reg_GetSwitchPortMode(const uint8 SwitchPortIdx, Eth_ModeType *const SwitchModePtr)
 {	/* 1msタスク */
 	if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{ return E_NOT_OK; }
@@ -449,6 +449,7 @@ Std_ReturnType EthSwt_SWIC_Reg_GetSwitchPortMode(const uint8 SwitchPortIdx, Eth_
 	*SwitchModePtr = swic_Reg_Mode[SwitchPortIdx].mode;	/* 変数に記憶するので[SWS_EthSwt_00400]は不要 */
 	return E_OK;
 }
+#endif
 Std_ReturnType EthSwt_SWIC_Reg_GetLinkState(const uint8 SwitchPortIdx, EthTrcv_LinkStateType * const LinkStatePtr)
 {	/* 1msタスク */
 	if (swic_Reg_Inf.sts != ETHSWT_SWIC_STATE_ACTIVE)	{ return E_NOT_OK; }	/* 初期化中は異常 */
@@ -457,7 +458,7 @@ Std_ReturnType EthSwt_SWIC_Reg_GetLinkState(const uint8 SwitchPortIdx, EthTrcv_L
 	*LinkStatePtr = swic_Reg_Mode[SwitchPortIdx].lnk_sts;
 	return swic_Reg_Mode[SwitchPortIdx].lnk_err;
 }
-#endif
+
 
 #if 0 /* For HND PhyReset*/
 Std_ReturnType EthSwt_SWIC_Reg_PortPhyResetRequest(const uint8 SwitchPortIdx)

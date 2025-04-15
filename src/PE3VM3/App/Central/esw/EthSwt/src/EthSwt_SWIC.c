@@ -21,12 +21,18 @@ void EthSwt_SWIC_MainFunction(void)
 	EthSwt_SWIC_MainFunction1MS();
 }
 
-#if 0    /* –¢‘Î‰ž */
+Std_ReturnType EthSwt_SWIC_SetSwitchPortMode(uint8 SwitchIdx, uint8 SwitchPortIdx, Eth_ModeType PortMode)
+{
+	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
+	return EthSwt_SWIC_Reg_SetSwitchPortMode(SwitchPortIdx, PortMode);
+}
+
 Std_ReturnType EthSwt_SWIC_GetLinkState(uint8 SwitchIdx, uint8 SwitchPortIdx, EthTrcv_LinkStateType* LinkStatePtr)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
 	return EthSwt_SWIC_Reg_GetLinkState(SwitchPortIdx, LinkStatePtr);
 }
+#if 0    /* –¢‘Î‰ž */
 Std_ReturnType EthSwt_SWIC_ClearFrameInfo(const uint8 SwitchIdx, const uint8 SwitchPortIdx)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
