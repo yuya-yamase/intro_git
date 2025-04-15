@@ -78,7 +78,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     /* vv User Hook start vv */
     vd_g_StubBonInit();
     vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
-    EthSW_Sch_PowerOnInit();
+    EthSW_StaBonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -117,7 +117,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     /* vv User Hook start vv */
     vd_g_StubRstInit();
     vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
-    EthSW_Sch_PowerOnInit();
+    EthSW_StaRstInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -156,7 +156,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     /* vv User Hook start vv */
     vd_g_StubWkupInit();
     vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
-    EthSW_Sch_PowerOnInit();
+    EthSW_StaWkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/

@@ -35,7 +35,7 @@ void EthSW_MediumTask (void)
 /* -------------------------------------------------------------------------- */
 void EthSW_HighTask (void)
 {
-	EthSwt_MainFunction;
+	EthSwt_MainFunction();
 
 	return;
 }

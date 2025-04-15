@@ -5,9 +5,9 @@
     :sourceDir=${APP_DIR}/Common/PwrCtrl
     :sourceDir=${APP_DIR}/Product/config_1MJP
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/src
+    :sourceDir=${APP_DIR}/Central/esw/EthSW_Task
     :sourceDir=${APP_DIR}/Central/LIB
     :sourceDir=${APP_DIR}/Central/Pmic/src
-    :sourceDir=${APP_DIR}/Central/EthSW_Task
 
 
     -I${APP_DIR}/Common/xspi
@@ -52,9 +52,7 @@ Mcu_Sip_Pwr.c
 Mcu_Sys_Pwr.c
 product_cfg.c
 EthSwt_SWIC.c
-EthSwt_SWIC_Org.c
-EthSwt_SWIC_Reg.c
-EthSwt_SWIC_SpiS1.c
+EthSwt_SWIC_Pwr.c
 LIB_interrupt.c
 LIB_memset.c
 Pmic_Pwr.c

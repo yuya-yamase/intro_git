@@ -1,18 +1,21 @@
+/* -------------------------------------------------------------------------- */
+/* file name  :  EthSwt_SWIC_Pwr.c                                            */
+/* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 #include "EthSwt_SWIC_Pwr.h"
-
+/* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_PWR_ST_WAIT               (0U)
 #define D_ETHSWT_SWIC_PWR_ST_TURNING_ON         (1U)
 #define D_ETHSWT_SWIC_PWR_ST_AVAILABLE          (2U)
 #define D_ETHSWT_SWIC_PWR_ST_NUM                (3U)
-
+/* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_PWR_EV_SAIL_ON            (0U)
 #define D_ETHSWT_SWIC_PWR_EV_SAIL_OFF           (1U)
 #define D_ETHSWT_SWIC_PWR_EV_NUM                (2U)
-
-uint32 swicStatus;
+/* -------------------------------------------------------------------------- */
+uint32 swicState;
 uint32 timerForSWIC;
-
+/* -------------------------------------------------------------------------- */
 static void ethswt_swic_pwr_drive_stm(uint32 event);
 static uint32 ethswt_swic_pwr_act_pminOn(void);
 static uint32 ethswt_swic_pwr_act_timerCount(void);
@@ -22,16 +25,15 @@ static uint32 ethswt_swic_pwr_act_stop(void);
 static uint32 ethswt_swic_pwr_act_None(void);
 static void ethswt_swic_pwr_spiMode(void);
 static void ethswt_swic_pwr_gpioMode(void);
-
-
+/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Pwr_Init(void)
 {
-    swicStatus = D_ETHSWT_SWIC_PWR_ST_WAIT;
+    swicState = D_ETHSWT_SWIC_PWR_ST_WAIT;
     timerForSWIC = 0;
 
     return;
 }
-
+/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Pwr_HiProc(void)
 {
     uint8 sail_resout_n;
@@ -45,28 +47,28 @@ void EthSwt_SWIC_Pwr_HiProc(void)
 
     return;
 }
-
+/* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Pwr_GetSWICState(void)
 {
-    Std_ReturnType swicState;
+    Std_ReturnType ret;
     
-    switch (swicStatus) {
+    switch (swicState) {
     case D_ETHSWT_SWIC_PWR_ST_WAIT:
     case D_ETHSWT_SWIC_PWR_ST_TURNING_ON:
-        swicState = STD_OFF;
+        ret = STD_OFF;
         break;
     case D_ETHSWT_SWIC_PWR_ST_AVAILABLE:
-        swicState = STD_ON;
+        ret = STD_ON;
         break;
     default:
         break;
     }
 
-    return swicState;
+    return ret;
 }
-
+/* -------------------------------------------------------------------------- */
 typedef uint32 (*PWR_ACT)(void);
-
+/* -------------------------------------------------------------------------- */
 static void ethswt_swic_pwr_drive_stm(uint32 event)
 {
     static const PWR_ACT   action_tbl[D_ETHSWT_SWIC_PWR_EV_NUM][D_ETHSWT_SWIC_PWR_ST_NUM] =
@@ -75,11 +77,11 @@ static void ethswt_swic_pwr_drive_stm(uint32 event)
     /* EV_SAIL_OFF          */  , { ethswt_swic_pwr_act_None        , ethswt_swic_pwr_act_pmicOff       , ethswt_swic_pwr_act_stop          }
                                 };
 
-    swicStatus = action_tbl[event][swicStatus];
+    swicState = action_tbl[event][swicState]();
 
     return;
 }
-
+/* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_pwr_act_pminOn(void)
 {
     ETHSWT_SWIC_PWR_ETHER_PWR_EN_HIGH;
@@ -88,7 +90,7 @@ static uint32 ethswt_swic_pwr_act_pminOn(void)
 
     return D_ETHSWT_SWIC_PWR_ST_TURNING_ON;
 }
-
+/* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_pwr_act_timerCount(void)
 {
     uint32 next = D_ETHSWT_SWIC_PWR_ST_TURNING_ON;
@@ -100,14 +102,14 @@ static uint32 ethswt_swic_pwr_act_timerCount(void)
 
     return next;
 }
-
+/* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_pwr_act_spiModeOn(void)
 {
     ethswt_swic_pwr_spiMode();
 
     return D_ETHSWT_SWIC_PWR_ST_AVAILABLE;
 }
-
+/* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_pwr_act_pmicOff(void)
 {
     ETHSWT_SWIC_PWR_ETH_U2A_RESET_N_LOW;
@@ -115,7 +117,7 @@ static uint32 ethswt_swic_pwr_act_pmicOff(void)
 
     return D_ETHSWT_SWIC_PWR_ST_WAIT;
 }
-
+/* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_pwr_act_stop(void)
 {
     ethswt_swic_pwr_gpioMode();
@@ -124,16 +126,14 @@ static uint32 ethswt_swic_pwr_act_stop(void)
 
     return D_ETHSWT_SWIC_PWR_ST_WAIT;
 }
-
+/* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_pwr_act_None(void)
 {
     /* do nothing */
 
-    return swicStatus;
+    return swicState;
 }
-
-
-
+/* -------------------------------------------------------------------------- */
 static void ethswt_swic_pwr_spiMode(void)
 {
     ETHSWT_SWIC_PWR_ETHERSW_TXD_SPI;
@@ -143,7 +143,7 @@ static void ethswt_swic_pwr_spiMode(void)
 
     return;
 }
-
+/* -------------------------------------------------------------------------- */
 static void ethswt_swic_pwr_gpioMode(void)
 {
     ETHSWT_SWIC_PWR_ETHERSW_TXD_GPIO;
