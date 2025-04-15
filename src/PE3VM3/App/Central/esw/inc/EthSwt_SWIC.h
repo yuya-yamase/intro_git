@@ -17,7 +17,7 @@ Std_ReturnType EthSwt_SWIC_SetMgmtInfo(uint8 CtrlIdx, Eth_BufIdxType BufIdx, con
 Std_ReturnType EthSwt_SWIC_GetRxMgmtObject(uint8 CtrlIdx, const Eth_DataType *DataPtr, EthSwt_MgmtObjectType* *MgmtObjectPtr);
 Std_ReturnType EthSwt_SWIC_GetTxMgmtObject(uint8 CtrlIdx, Eth_BufIdxType BufIdx, EthSwt_MgmtObjectType* *MgmtObjectPtr);
 void EthSwt_SWIC_MainFunction(void);
-// void EthSwt_SWIC_MainFunction1MS(void);
+void EthSwt_SWIC_MainFunction1MS(void);
 // void EthSwt_SWIC_MainFunction5MSpre(void);
 void EthSwt_SWIC_BackgroundTask(void);
 // void EthSwt_SWIC_ClearDTC(void);

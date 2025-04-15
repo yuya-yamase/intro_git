@@ -53,6 +53,9 @@ Mcu_Sys_Pwr.c
 product_cfg.c
 EthSwt_SWIC.c
 EthSwt_SWIC_Pwr.c
+EthSwt_SWIC_Org.c
+EthSwt_SWIC_Reg.c
+EthSwt_SWIC_SpiS1.c
 LIB_interrupt.c
 LIB_memset.c
 Pmic_Pwr.c

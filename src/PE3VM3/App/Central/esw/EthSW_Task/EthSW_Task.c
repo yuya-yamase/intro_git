@@ -42,6 +42,6 @@ void EthSW_HighTask (void)
 /* -------------------------------------------------------------------------- */
 void EthSW_LowTask (void)
 {
-	
+	EthSwt_SWIC_BackgroundTask();
 	return;
 }
