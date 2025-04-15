@@ -108,7 +108,7 @@ void ExtSigCtrl_Init(void)
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlPreCnc = U1_EXTSIGCTRL_PORT_LEVEL_INIT;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts = U1_EXTSIGCTRL_POLL_STS_STOP;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTimCnt = (U1)0U;
-		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = U1_EXTSIGCTRL_TMNL_STS_NON;
+		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlSts = U1_EXTSIGCTRL_TMNL_STS_UNKNOWN;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSameCnt = U1_EXTSIGCTRL_SAME_CNT_INIT;
 		stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTrgTimCnt = stsa_ExtSigCtrl_Sts[u1t_Kind].u1t_StrTim;
 	}
@@ -181,4 +181,16 @@ static void ExtSigCtrl_Cyc(const U1 u1t_Kind)
 	stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollTmnlPreCnc = u1t_NowCnc;
 
 	return;
+}
+
+U1 ExtSigCtrl_GetSigSts(const E_EXTSIGCTRL_KIND e_Kind)
+{
+	U1 u1t_Sts;
+	u1t_Sts = U1_EXTSIGCTRL_INVALID_PARAM;
+
+	if (e_Kind < EXTSIGCTRL_KIND_NUM) {
+		u1t_Sts =  stsa_ExtSigCtrl_PollSts[e_Kind].u1t_PollTmnlSts;
+	}
+
+	return u1t_Sts;
 }
