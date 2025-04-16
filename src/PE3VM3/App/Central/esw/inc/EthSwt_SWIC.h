@@ -16,11 +16,7 @@ Std_ReturnType EthSwt_SWIC_PortEnableTimeStamp(uint8 CtrlIdx, Eth_BufIdxType Buf
 Std_ReturnType EthSwt_SWIC_SetMgmtInfo(uint8 CtrlIdx, Eth_BufIdxType BufIdx, const EthSwt_MgmtInfoType *MgmtInfoPtr);
 Std_ReturnType EthSwt_SWIC_GetRxMgmtObject(uint8 CtrlIdx, const Eth_DataType *DataPtr, EthSwt_MgmtObjectType* *MgmtObjectPtr);
 Std_ReturnType EthSwt_SWIC_GetTxMgmtObject(uint8 CtrlIdx, Eth_BufIdxType BufIdx, EthSwt_MgmtObjectType* *MgmtObjectPtr);
-<<<<<<< HEAD
-void EthSwt_SWIC_MainFunction(void);
-=======
 // void EthSwt_SWIC_MainFunction(void);
->>>>>>> esw/feature/sys#2/add_EthSwt_PMIC
 void EthSwt_SWIC_MainFunction1MS(void);
 // void EthSwt_SWIC_MainFunction5MSpre(void);
 void EthSwt_SWIC_BackgroundTask(void);
