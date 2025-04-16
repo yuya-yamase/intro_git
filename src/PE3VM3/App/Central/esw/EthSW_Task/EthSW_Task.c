@@ -5,6 +5,7 @@
 #include <EthSwt.h>
 #include <EthSW_Task.h>
 #include <EthSwt_SWIC.h>
+#include "EthSwt_SWIC_Pwr.h"
 /* -------------------------------------------------------------------------- */
 void EthSW_StaBonInit(void)
 {
@@ -35,13 +36,14 @@ void EthSW_MediumTask (void)
 /* -------------------------------------------------------------------------- */
 void EthSW_HighTask (void)
 {
-	EthSwt_MainFunction();
+	EthSwt_SWIC_Pwr_HiProc();
+	EthSwt_SWIC_MainFunction1MS();
 
 	return;
 }
 /* -------------------------------------------------------------------------- */
 void EthSW_LowTask (void)
 {
-	
+	EthSwt_SWIC_BackgroundTask();
 	return;
 }
