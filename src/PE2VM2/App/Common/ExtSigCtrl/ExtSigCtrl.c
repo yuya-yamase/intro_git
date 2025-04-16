@@ -117,13 +117,13 @@ void ExtSigCtrl_Init(void)
 void ExtSigCtrl_MainFunction(void)
 {
 	U1 u1t_Kind;
-	Dio_LevelType u1t_V33PeriOn;
+	Dio_LevelType v33PeriOn;
 
 	for (u1t_Kind = (U1)0U; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
 		switch (u1t_Kind) {
 			case EXTSIGCTRL_KIND_TEST:
-				u1t_V33PeriOn = Dio_ReadChannel(DIO_ID_PORT10_CH2);
-				if (u1t_V33PeriOn != STD_HIGH) {
+				v33PeriOn = Dio_ReadChannel(DIO_ID_PORT10_CH2);
+				if (v33PeriOn != STD_HIGH) {
 					ExtSigCtrl_InitSigSts(u1t_Kind);
 				}
 				break;
