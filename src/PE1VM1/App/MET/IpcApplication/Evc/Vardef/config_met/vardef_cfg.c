@@ -319,11 +319,7 @@ void    vd_g_VardefCfgSendMmcProt(const U1 u1_a_SIG)
 U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 {
     (void)Com_ReceiveSignal(ComConf_ComSignal_ASCEXT, u1_ap_ascext_rx);
-#if 0   /* BEV BSW provisionally */
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ASC1S90));
-#else
-    return((U1)OXCAN_RX_RXEV_CNT_UNK);
-#endif
+    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_SCS1S11_RXCH0));
 }
 
 /*===================================================================================================================================*/
@@ -390,6 +386,7 @@ U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 /*  19pfv3-6   5/28/2024 TN(DT)   Delete Grade module for 19pfv3                                                                     */
 /*  19PFv3-7   7/10/2024 YR       Added HCS for 19pfv3                                                                               */
 /*  BEV-1      2/06/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
+/*  BEV-2      4/04/2025 KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-00-A-C0)                                   */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
@@ -406,5 +403,6 @@ U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
 /*  * YR     = Yhana Regalario, DTPH                                                                                                 */
 /*  * SF     = Shiro Furui, Denso Techno                                                                                             */
+/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
