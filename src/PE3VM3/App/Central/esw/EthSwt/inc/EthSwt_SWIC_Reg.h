@@ -5,5 +5,5 @@
 
 void EthSwt_SWIC_Reg_Init(void);
 Std_ReturnType EthSwt_SWIC_Reg_GetLinkState(const uint8 SwitchPortIdx, EthTrcv_LinkStateType * const LinkStatePtr);
-
+Std_ReturnType EthSwt_SWIC_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode);
 #endif /* ETHSWT_SWIC_REG_H */

@@ -461,7 +461,7 @@ void EthSwt_SWIC_MainFunction(void)
 }
 #endif
 
-#if 0 /* For BSW */
+
 Std_ReturnType EthSwt_SWIC_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode)
 {	/* 1msタスク */
 	if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{ return E_NOT_OK; }
@@ -470,6 +470,7 @@ Std_ReturnType EthSwt_SWIC_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, cons
 	swic_Reg_Mode[SwitchPortIdx].req_mode	= STD_ON;	/* 処理前に複数呼ばれた場合は最新が有効 */
 	return E_OK;
 }
+#if 0 /* For BSW */
 Std_ReturnType EthSwt_SWIC_Reg_GetSwitchPortMode(const uint8 SwitchPortIdx, Eth_ModeType *const SwitchModePtr)
 {	/* 1msタスク */
 	if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{ return E_NOT_OK; }
@@ -871,7 +872,7 @@ static Std_ReturnType swic_Reg_SetSwitchPortModeACTIVE(const uint8 SwitchPortIdx
 	  , {NULL_PTR,					0u}												/* P3：未使用                  */
 	  , {NULL_PTR,					0u}												/* P4：未使用                  */
 	  , {NULL_PTR,					0u}												/* P5：SIP SAILSS_RGMII0 RGMII */
-	  , {NULL_PTR,					0u}												/* P6：DLC 100BASE-TX          */
+	  , {g_regListSeqP6PhyOn,			SWIC_TBL_NUM(g_regListSeqP6PhyOn)}			/* P6：DLC 100BASE-TX          */
 	  , {NULL_PTR,					0u}												/* P7：SIP SGMII0 SGMII        */
 	  , {NULL_PTR,					0u}												/* P8：SIP SGMII1 SGMII        */
 	  };

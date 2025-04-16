@@ -209,9 +209,7 @@ static uint8 ethdlc_dlc_action_Init (void)
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_action_DLCOn (void)
 {
-#if 0 /* ‚Ü‚¾EthSwt‚ªŠ®¬‚µ‚Ä‚¢‚È‚¢ */
 	ETHDLC_DLC_PORT_ON;
-#endif
 
 	return D_ETHDLC_ST_LINK_WAIT;
 }
@@ -227,9 +225,7 @@ static uint8 ethdlc_dlc_action_LinkUp (void)
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_action_DLCOff (void)
 {
-#if 0 /* ‚Ü‚¾EthSwt‚ªŠ®¬‚µ‚Ä‚¢‚È‚¢ */
 	ETHDLC_DLC_PORT_OFF;
-#endif
 
 	return D_ETHDLC_ST_LINK_DOWN;
 }
