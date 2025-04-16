@@ -10,7 +10,7 @@
 #include <Port_Cfg.h>
 #include <Port.h>
 /* -------------------------------------------------------------------------- */
-#define ETHSWT_SWIC_PWR_GET_SAIL_RESOUT_N       (uint8)Dio_ReadChannel(DIO_ID_PORT8_CH8)
+#define ETHSWT_SWIC_PWR_GET_SAIL_RESOUT_N       Dio_ReadChannel(DIO_ID_PORT8_CH8)
 
 #define ETHSWT_SWIC_PWR_ETHER_PWR_EN_HIGH       Dio_WriteChannel(DIO_ID_APORT4_CH11, STD_HIGH)
 #define ETHSWT_SWIC_PWR_ETHER_PWR_EN_LOW        Dio_WriteChannel(DIO_ID_APORT4_CH11, STD_LOW)

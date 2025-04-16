@@ -18,6 +18,9 @@
 #include "EthSwt_SWIC_Spi.h"
 #include "EthSwt_SWIC_Org.h"
 #include "EthSwt_SWIC_Pwr.h"
+#if 1 /* NCOS Soft */
+#include "EthSwt_SWIC_Log.h"
+#endif
 
 #if 0 /* For HND */
 #include "EthSwt_SWIC_DTC.h"
@@ -319,6 +322,10 @@ void EthSwt_SWIC_Reg_Init(void)
 
 	EthSwt_SWIC_Spi_Init();
 
+#if 0 /* NCOS Soft */
+	EthSwt_SWIC_Org_Init();
+#endif
+
 	swic_Reg_Inf.sts	= ETHSWT_SWIC_STATE_UNINIT;	/* 確認用 */
 	swic_Reg_Inf.err	= E_OK;
 	swic_Reg_Inf.tim	= 0u;
@@ -414,6 +421,28 @@ void EthSwt_SWIC_MainFunction1MS(void)
 	}
 }
 
+#if 0 /* NCOS Soft */
+void EthSwt_SWIC_MainFunction5MS(void)
+{
+	EthSwt_SWIC_Org_MainFunction();
+}
+
+void EthSwt_SWIC_RESET_N_Lo(void)
+{
+    EthSwt_SWIC_Org_ResetSig_Lo();
+    return;
+}
+void EthSwt_SWIC_RESET_N_Hi(void)
+{
+    EthSwt_SWIC_Org_ResetSig_Hi();
+    return;
+}
+void EthSwt_SWIC_DeInit(void){
+    EthSwt_SWIC_Org_DeInit();
+    return;
+}
+#endif
+
 #if 0 /* For HND DTC */
 	EthSwt_SWIC_DTC_MainFunction1MS();
 #endif
@@ -432,6 +461,7 @@ void EthSwt_SWIC_MainFunction(void)
 }
 #endif
 
+#if 0 /* For BSW */
 Std_ReturnType EthSwt_SWIC_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode)
 {	/* 1msタスク */
 	if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{ return E_NOT_OK; }
@@ -440,7 +470,6 @@ Std_ReturnType EthSwt_SWIC_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, cons
 	swic_Reg_Mode[SwitchPortIdx].req_mode	= STD_ON;	/* 処理前に複数呼ばれた場合は最新が有効 */
 	return E_OK;
 }
-#if 0 /* For BSW */
 Std_ReturnType EthSwt_SWIC_Reg_GetSwitchPortMode(const uint8 SwitchPortIdx, Eth_ModeType *const SwitchModePtr)
 {	/* 1msタスク */
 	if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{ return E_NOT_OK; }
@@ -458,7 +487,6 @@ Std_ReturnType EthSwt_SWIC_Reg_GetLinkState(const uint8 SwitchPortIdx, EthTrcv_L
 	*LinkStatePtr = swic_Reg_Mode[SwitchPortIdx].lnk_sts;
 	return swic_Reg_Mode[SwitchPortIdx].lnk_err;
 }
-
 
 #if 0 /* For HND PhyReset*/
 Std_ReturnType EthSwt_SWIC_Reg_PortPhyResetRequest(const uint8 SwitchPortIdx)
@@ -1570,12 +1598,6 @@ void EthSwt_SWIC_BackgroundTask(void)
 	Std_ReturnType	err;
     Std_ReturnType  swicState;
     swicState = EthSwt_SWIC_Pwr_GetSWICState();
-    if (swicState == STD_OFF)
-    {
-        swic_Reg_SetState(ETHSWT_SWIC_STATE_PMIC);
-        return;
-    }
-
 #if 0 /* For HND DeInit */
 	swic_Reg_ProcDeInit();
 #endif
@@ -1586,12 +1608,21 @@ void EthSwt_SWIC_BackgroundTask(void)
 /*koko*/if (EthDbg_GetMibOFF() != E_OK) { break; }
 /*koko*/#endif										/* EthDbg_GetMibOFF */
 #endif
+        if (swicState == STD_OFF)
+        {
+            swic_Reg_SetState(ETHSWT_SWIC_STATE_PMIC);
+            return;
+        }
 		err = swic_Reg_SwitchActive1MS();
 		if (err == E_OK)	{ break; }
 		swic_Reg_CycLnkChk();						/* 何も処理してないとき実施 */
 		break;
 	case ETHSWT_SWIC_STATE_INIT:
-
+        if (swicState == STD_OFF)
+        {
+            swic_Reg_SetState(ETHSWT_SWIC_STATE_PMIC);
+            return;
+        }
 		swic_Reg_SwitchInit();
 #if 0 /* For HND GSS(竹版PreRun解除のため) */
 		EthSwt_SWIC_Org_Run();
@@ -1610,8 +1641,15 @@ void EthSwt_SWIC_BackgroundTask(void)
 		EthSwt_SWIC_Org_PmicON();					/* Ether PMIC無→EthSwt_SWIC_Org_Reset() */
 #endif
 
-		swic_Reg_Inf.sts = ETHSWT_SWIC_STATE_INIT;	/* レジスタ設定 */
-        
+#if 0 /* NCOS Soft */
+		EthSwt_SWIC_Org_WaitSPI();					/* T8 Wait */
+#endif
+        if (swicState == STD_ON)
+        {
+            swic_Reg_Inf.sts = ETHSWT_SWIC_STATE_INIT;	/* レジスタ設定 */
+            return;
+        }
+		
 		break;
 	case ETHSWT_SWIC_STATE_UNINIT:
 	default:	/* default */
