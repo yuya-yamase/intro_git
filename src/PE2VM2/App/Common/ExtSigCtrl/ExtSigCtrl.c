@@ -147,6 +147,7 @@ U1 ExtSigCtrl_GetSigSts(const E_EXTSIGCTRL_KIND e_Kind)
 {
 	U1 u1t_Sts = U1_EXTSIGCTRL_INVALID_PARAM;
 
+	/* コンパイルエラーとなるため、if文の条件式から e_Kind >= EXTSIGCTRL_KIND_TEST を意図的に外しています */
 	if (e_Kind < EXTSIGCTRL_KIND_NUM) {
 		u1t_Sts =  stsa_ExtSigCtrl_PollSts[e_Kind].u1t_PollSigSts;
 	}
