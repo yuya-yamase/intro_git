@@ -10,8 +10,8 @@
 /* -------------------------------------------------------------------------- */
 #define ETHDLC_GET_ACTL_SIGNAL  Dio_ReadChannel(DIO_ID_PORT10_CH14)
 
-#define D_ACTL_ON_FILTER		(15U)       /* CPUクロック誤差考慮前 */
-#define D_ACTL_OFF_FILTER		(205U)      /* CPUクロック誤差考慮前 */
+#define D_ACTL_ON_FILTER		(15U)
+#define D_ACTL_OFF_FILTER		(210U)
 
 void EthDLC_ACTL_Init(void);
 void EthDLC_ACTL_Observe(void);
