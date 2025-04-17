@@ -16,10 +16,16 @@ void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 	
 }
 
-// void EthSwt_SWIC_MainFunction(void)
-// {
-// 	EthSwt_SWIC_Pwr_HiProc();
-// }
+void EthSwt_SWIC_MainFunction(void)
+{
+	EthSwt_SWIC_Pwr_HiProc();
+	EthSwt_SWIC_Reg_MainFunction1MS();
+}
+
+void EthSwt_SWIC_BackgroundTask(void)
+{
+	EthSwt_SWIC_Reg_BackgroundTask();
+}
 
 Std_ReturnType EthSwt_SWIC_GetLinkState(uint8 SwitchIdx, uint8 SwitchPortIdx, EthTrcv_LinkStateType* LinkStatePtr)
 {
