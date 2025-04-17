@@ -1,6 +1,21 @@
 #!gbuild
 [Subproject]
     :sourceDir=${ROOT_DIR}
+    :sourceDir=${APP_DIR}/Common/xspi
+    :sourceDir=${APP_DIR}/IVI/XSPI
+    :sourceDir=${APP_DIR}/IVI/I2cCtrl
+    :sourceDir=${APP_DIR}/IVI/PwrCtrl
+    :sourceDir=${APP_DIR}/IVI/PwrCtrl/DDFreq
+    :sourceDir=${APP_DIR}/IVI/ExtSigCtrl
+    :sourceDir=${APP_DIR}/IVI/ExtSigCtrl/MicDetect
+    :sourceDir=${APP_DIR}/IVI/PictCtrl
+    :sourceDir=${APP_DIR}/IVI/PictCtrl/config
+    :sourceDir=${APP_DIR}/IVI/GyrCtrl
+    :sourceDir=${APP_DIR}/IVI/GyrCtrl/config
+    :sourceDir=${APP_DIR}/IVI/DspCtrl
+    :sourceDir=${APP_DIR}/IVI/DspCtrl/config
+
+    -I${APP_DIR}/Common/xspi
 
     -I${CAN_DIR}/inc
 
@@ -16,6 +31,22 @@
     -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
     -I${LIB_DIR}
+    
+    -I${MCAL_PWM_SCC_DIR}
+
+    -I${APP_DIR}/IVI
+    -I${APP_DIR}/IVI/XSPI
+    -I${APP_DIR}/IVI/I2cCtrl
+    -I${APP_DIR}/IVI/PwrCtrl
+    -I${APP_DIR}/IVI/PwrCtrl/DDFreq
+    -I${APP_DIR}/IVI/ExtSigCtrl
+    -I${APP_DIR}/IVI/ExtSigCtrl/MicDetect
+    -I${APP_DIR}/IVI/PictCtrl
+    -I${APP_DIR}/IVI/PictCtrl/config
+    -I${APP_DIR}/IVI/GyrCtrl
+    -I${APP_DIR}/IVI/GyrCtrl/config
+    -I${APP_DIR}/IVI/DspCtrl
+    -I${APP_DIR}/IVI/DspCtrl/config
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
@@ -26,3 +57,47 @@ ${SS_DIR}/SchdM/config/scheduler_cfg.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
 ${APP_DIR}/Stub/stub_u2a.c
+
+xspi.c
+xspi_sub.c
+x_spi_ivi.c
+x_spi_ivi_sub4.c
+x_spi_ivi_sub2.c
+x_spi_ivi_sub1.c
+x_spi_ivi_sub1_camera.c
+x_spi_ivi_sub1_control.c
+x_spi_ivi_sub1_power.c
+x_spi_ivi_sub1_system.c
+x_spi_ivi_sub1_diag.c
+x_spi_ivi_sub1_version.c
+x_spi_ivi_queue.c
+IVI_PwrCtrl_Main.c
+IVI_PwrCtrl_DDFreq.c
+IVI_ExtSigCtrl_Main.c
+MicDetect.c
+MicDetect_cfg.c
+IVI_PictCtrl_Main.c
+IVI_GyrCtrl_Main.c
+IVI_DspCtrl_Main.c
+PictCtl.c
+Mcu_Sys_Pwr_EizoIc.c
+Mcu_Sys_Pwr_Gvif3Rx.c
+Mcu_Sys_Pwr_GvifSndr.c
+Mcu_Sys_Pwr_Gyr.c
+Mcu_Sys_Pwr_PowerIc.c
+Mcu_I2c_Ctrl.c
+gvif3tx.c
+gvif3rx.c
+pictic.c
+gyro.c
+poweric.c
+CXD4984ERCtl.c
+ML86294Ctl.c
+CXD4937Ctl.c
+GyroDevCtl.c
+GNSSCtl.c
+XMTunerCtl.c
+USBCtl.c
+CarSpdPls.c
+PictMuteCtl.c
+AntCtl.c

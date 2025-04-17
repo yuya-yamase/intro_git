@@ -102,7 +102,7 @@
 #define ML86294_IRQHPD_DPCD_REGNUM_SET_WRINUM    (1U)
 #define ML86294_IRQHPD_DPCD_AUXSND_READSET_SET_WRINUM    (1U)
 #define ML86294_IRQHPD_DPCD_SET2_WRINUM    (1U)
-#define ML86294_IRQHPD_DPCD_SET3_WRINUM    (15U)
+#define ML86294_IRQHPD_DPCD_SET3_WRINUM    (19U)
 
 
 #define ML86294_CAMAREA_SET_STEP0    (0U)
@@ -117,7 +117,7 @@
 #define ML86294_CAMAREA_SET_STEP9    (9U)
 #define ML86294_CAMAREA_SET_STEP10   (10U)
 
-#define ML86294_CAMAREA_SET_WRINUM    (24U)
+#define ML86294_CAMAREA_SET_WRINUM    (43U)
 
 #define ML86294_MIPI_SET_WRINUM_ON   (2U)
 #define ML86294_MIPI_SET_WRINUM_OFF  (2U)
@@ -16904,10 +16904,14 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
         {        2,         1,         0},  /* Bank8 */
         {        3,         4,         0},
         {        7,         1,         0},  /* Bank9 */
-        {        8,         5,         0},
+        {        8,         4,         0},
+        {       12,         1,         0},
         {       13,         1,         0},  /* Bank10 */
-        {       14,        10,         0},
-        {       24,        10,         0},
+        {       14,         4,         0},
+        {       18,         4,         0},
+        {       22,         4,         0},
+        {       26,         4,         0},
+        {       30,         4,         0},
         {       34,         1,         0},  /* Bank8 */
         {       35,         3,         0},
         {       38,         1,         0},  /* Bank9 */
@@ -17109,29 +17113,48 @@ static U1   u1_s_Pict_MlCamAreaRegSet(void)
     static const ST_REG_WRI_REQ ML86294_CAMAREA_SET[ML86294_CAMAREA_SET_WRINUM] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
-        {        1,         7,         0},
-        {        8,         7,         0},
+        {        1,         4,         0},
+        {        5,         4,         0},
+        {        9,         4,         0},
+        {       13,         2,         0},
         {       15,         1,         0},  /* Bank1 */
-        {       16,         8,         0},
-        {       24,         8,         0},
+        {       16,         4,         0},
+        {       20,         4,         0},
+        {       24,         4,         0},
+        {       28,         4,         0},
         {       32,         1,         0},  /* Bank11 */
-        {       33,         8,         0},
+        {       33,         4,         0},
+        {       37,         4,         0},
         {       41,         1,         0},  /* Bank12 */
-        {       42,        10,         0},
-        {       52,        10,         0},
-        {       62,        10,         0},
-        {       72,        10,         0},
-        {       82,        10,         0},
-        {       92,        10,         0},
-        {      102,        10,         0},
+        {       42,         4,         0},
+        {       46,         4,         0},
+        {       50,         4,         0},
+        {       54,         4,         0},
+        {       58,         4,         0},
+        {       62,         4,         0},
+        {       66,         4,         0},
+        {       70,         4,         0},
+        {       74,         4,         0},
+        {       78,         4,         0},
+        {       82,         4,         0},
+        {       86,         4,         0},
+        {       90,         4,         0},
+        {       94,         4,         0},
+        {       98,         4,         0},
+        {      102,         4,         0},
+        {      106,         4,         0},
+        {      110,         2,         0},
         {      112,         1,         0},  /* Bank15 */
         {      113,         2,         0},
         {      115,         1,         0},  /* Bank22 */
         {      116,         4,         0},
         {      120,         1,         0},  /* Bank25 */
-        {      121,         8,         0},
-        {      129,         7,         0},
-        {      136,         7,         0}
+        {      121,         4,         0},
+        {      125,         4,         0},
+        {      129,         4,         0},
+        {      133,         4,         0},
+        {      137,         4,         0},
+        {      141,         2,         0}
     };
 
     static const U1  u1_sp_ML86294_CAMAREA_SIZE_FUNC_STEP[PICT_ML_CAN_CAM_SIZE_MAX] = { /* 暫定 カメラサイズI/F展開後に見直す */

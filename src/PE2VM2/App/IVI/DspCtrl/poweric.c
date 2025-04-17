@@ -23,7 +23,7 @@
 /* 通常起動フロー */
 #define MCU_WAIT_POWERIC_60MS           (60U / MCU_POWERIC_TASK_TIME)
 
-#define MCU_WRINUM_POWERIC_INISET       (1U)    /* 初期設定 「5-1.初期設定」 レジスタ書込み回数 */
+#define MCU_WRINUM_POWERIC_INISET       (3U)    /* 初期設定 「5-1.初期設定」 レジスタ書込み回数 */
 #define MCU_WRINUM_POWERIC_AMPON        (1U)    /* Amp On設定 レジスタ書込み回数 */
 #define MCU_WRINUM_POWERIC_DIAGACT      (1U)    /* Diag有効設定 レジスタ書込み回数 */
 #define MCU_WRINUM_POWERIC_MUTEOFF      (1U)    /* MUTE解除設定 レジスタ書込み回数 */
@@ -220,7 +220,9 @@ static void     Mcu_Dev_Pwron_PowerIc_SetReg( void )
 {
     static const ST_REG_WRI_REQ POWERIC_INISET[MCU_WRINUM_POWERIC_INISET] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
-        {        0,         8,         0}
+        {        0,         3,         0},
+        {        3,         3,         0},
+        {        6,         2,         0}
     };
     static const ST_REG_WRI_REQ POWERIC_AMPON[MCU_WRINUM_POWERIC_AMPON] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
