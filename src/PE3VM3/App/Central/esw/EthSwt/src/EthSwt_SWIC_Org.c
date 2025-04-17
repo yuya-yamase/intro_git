@@ -18,9 +18,7 @@
 #define ETHSWT_SWIC_PORT_MODE_SPI                (0U)
 #define ETHSWT_SWIC_PORT_MODE_GPO                (1U)
 
-// static U1 u1_s_Port_TaskCounter;
 static U1 u1_s_Port_SpiSts;
-// static void EthSwt_SWIC_Org_Port_SetSpiPortMode( uint8 u1SetModeIndex );
 
 #define	ETHSWT_START_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>
@@ -64,59 +62,6 @@ Std_ReturnType EthSwt_SWIC_Org_INTN(void)
 	u1Level=Dio_ReadChannel(DIO_ID_APORT4_CH0);
 	return (u1Level == STD_LOW) ? E_NOT_OK : E_OK;
 }
-// void EthSwt_SWIC_Org_ResetSig_Hi(void)
-// {
-//     ETHSWT_SWIC_RST_OFF;
-//     return;
-// }
-// void EthSwt_SWIC_Org_ResetSig_Lo(void)
-// {
-//     ETHSWT_SWIC_RST_ON;
-//     return;
-// }
-// void EthSwt_SWIC_Org_Init(void){
-// 	u1_s_Port_TaskCounter = (uint8)ETHSWT_SWIC_PORT_DAT_0;
-// 	EthSwt_SWIC_Org_Port_SetSpiPortMode( (uint8)ETHSWT_SWIC_PORT_MODE_GPO );
-// 	u1_s_Port_SpiSts     = (uint8)ETHSWT_SWIC_PORT_SPISTATE_NOTAVAILABLE;
-// 	return;
-// }
-// void EthSwt_SWIC_Org_DeInit(void){
-// 	EthSwt_SWIC_Org_Port_SetSpiPortMode( (uint8)ETHSWT_SWIC_PORT_MODE_GPO );
-// 	u1_s_Port_SpiSts     = (uint8)ETHSWT_SWIC_PORT_SPISTATE_NOTAVAILABLE;
-// 	return;
-// }
-// void EthSwt_SWIC_Org_MainFunction(void)  /* 5ms’èŠú */
-// {
-//     if ( u1_s_Port_TaskCounter == (uint8)ETHSWT_SWIC_PORT_T8_T9_TIME )
-//     {
-//         (void)EthSwt_SWIC_Org_Port_SetSpiPortMode( (uint8)ETHSWT_SWIC_PORT_MODE_SPI );
-//         u1_s_Port_SpiSts = (uint8)ETHSWT_SWIC_PORT_SPISTATE_AVAILABLE;
-//     }
-
-//     if ( u1_s_Port_TaskCounter < (uint8)ETHSWT_SWIC_PORT_DAT_MAX )
-//     {
-//         u1_s_Port_TaskCounter++;
-//     }
-
-//     return;
-// }
-// static void EthSwt_SWIC_Org_Port_SetSpiPortMode( uint8 u1SetModeIndex )
-// {
-//     /* SPI mode */
-//     if( u1SetModeIndex == ETHSWT_SWIC_PORT_MODE_SPI ){
-//         Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_MSPI0SI );
-//         Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_MSPI0SC );
-//         Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_MSPI0SO );
-//         Port_SetPinMode( PORT_ID_PORT2_PIN14, PORT_MODE_CFG_P2_14_MSPI0CSS0 );
-//     }
-//     /* GPIO mode */
-//     else{
-//         Port_SetPinMode( PORT_ID_PORT2_PIN11, PORT_MODE_CFG_P2_11_DI );
-//         Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_DO_LO );
-//         Port_SetPinMode( PORT_ID_PORT2_PIN13, PORT_MODE_CFG_P2_13_DO_LO );
-//         Port_SetPinMode( PORT_ID_PORT2_PIN14, PORT_MODE_CFG_P2_14_DO_LO );
-//     }
-// }
 
 #define	ETHSWT_STOP_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>

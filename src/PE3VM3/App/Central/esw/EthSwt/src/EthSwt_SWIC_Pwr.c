@@ -53,14 +53,13 @@ Std_ReturnType EthSwt_SWIC_Pwr_GetSWICState(void)
     Std_ReturnType ret;
     
     switch (swicState) {
-    case D_ETHSWT_SWIC_PWR_ST_WAIT:
-    case D_ETHSWT_SWIC_PWR_ST_TURNING_ON:
-        ret = STD_OFF;
-        break;
     case D_ETHSWT_SWIC_PWR_ST_AVAILABLE:
         ret = STD_ON;
         break;
+    case D_ETHSWT_SWIC_PWR_ST_WAIT:
+    case D_ETHSWT_SWIC_PWR_ST_TURNING_ON:
     default:
+        ret = STD_OFF;
         break;
     }
 
@@ -96,7 +95,7 @@ static uint32 ethswt_swic_pwr_act_timerCount(void)
     uint32 next = D_ETHSWT_SWIC_PWR_ST_TURNING_ON;
 
     timerForSWIC += D_ETHSWT_SWIC_PWR_TICK_TIME;
-    if (timerForSWIC >= D_ETHSWT_SWIC_PWR_WAITE_SPI) {
+    if (timerForSWIC >= D_ETHSWT_SWIC_PWR_WAIT_SPI) {
         next = ethswt_swic_pwr_act_spiModeOn();
     }
 

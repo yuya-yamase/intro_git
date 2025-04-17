@@ -27,7 +27,7 @@
 #define ETHSWT_SWIC_PWR_ETHERSW_CLK_GPIO        Port_SetPinMode( PORT_ID_PORT2_PIN12, PORT_MODE_CFG_P2_12_DO_LO )
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_PWR_TICK_TIME             (1U)    /* periodic time[ms]	*/
-#define D_ETHSWT_SWIC_PWR_WAITE_SPI             (65U)   /* T7(30ms)+T8(35ms) = 65ms */          //★ 誤差をまだ考慮してない
+#define D_ETHSWT_SWIC_PWR_WAIT_SPI              (96U)   /* EthernetSW制御仕様書(26CDC)より、T8(35ms)+T9(60ms) = 95ms -> クロック誤差考慮して 96 */
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Pwr_Init(void);
 void EthSwt_SWIC_Pwr_HiProc(void);
