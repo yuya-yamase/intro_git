@@ -6,11 +6,11 @@
 #include "EthSwt_SWIC_Def.h"
 #include "EthSwt_SWIC_Spi.h"
 
-#define	swic_Spi_Crc8Cmd(a,b)	swic_Spi_Crc8(a,b,0u)
+#define	swic_SpiS1_Crc8Cmd(a,b)	swic_SpiS1_Crc8(a,b,0u)
 
 #define ETHSWT_START_SEC_CONFIG_DATA_PREBUILD
 #include <EthSwt_SWIC_MemMap.h>
-static const uint8	swic_Spi_CrcOK[]	/* swic_Spi_Crc8({0xFF}, 1, crc)のテーブル:~swic_Spi_Crc[]と同じ */
+static const uint8	swic_SpiS1_CrcOK[]	/* swic_SpiS1_Crc8({0xFF}, 1, crc)のテーブル:~swic_SpiS1_Crc[]と同じ */
 =	{ 0xFFu, 0xA1u, 0x43u, 0x1Du, 0x9Eu, 0xC0u, 0x22u, 0x7Cu, 0x3Du, 0x63u, 0x81u, 0xDFu, 0x5Cu, 0x02u, 0xE0u, 0xBEu
 	, 0x62u, 0x3Cu, 0xDEu, 0x80u, 0x03u, 0x5Du, 0xBFu, 0xE1u, 0xA0u, 0xFEu, 0x1Cu, 0x42u, 0xC1u, 0x9Fu, 0x7Du, 0x23u
 	, 0xDCu, 0x82u, 0x60u, 0x3Eu, 0xBDu, 0xE3u, 0x01u, 0x5Fu, 0x1Eu, 0x40u, 0xA2u, 0xFCu, 0x7Fu, 0x21u, 0xC3u, 0x9Du
@@ -37,43 +37,132 @@ static struct {								/* アクセス異常記憶用 */
 	const swic_reg_data_t *volatile	tbl;	/* 異常テーブル */
 	volatile uint32					idx;	/* 異常位置 */
 	volatile Std_ReturnType			err;	/* E_OK:CRC異常, E_NOT_OK:Spi異常 */
-}	swic_Spi_Err;
+}	swic_SpiS1_Err;
 static struct {
-	const swic_reg_data_t	*tbl;	/* cmdに登録しているtbl */
-	uint32					idx;	/* cmdに登録しているidx */
-	uint8					wri;	/* cmdに登録している件数 */
-	uint8					rcv;	/* datに登録している件数 */
-	Spi_DataBufferType		cmd[768];/* SPI送信コマンド(3+(3*16)バイト):QAC対策で255件分 */
-	Spi_DataBufferType		dat[768];/*SPI受信データ  (3*16バイト):QAC対策で255件分 */
-}	swic_Spi_Cmd;
+	uint8				Paddr;				/* cmdに登録しているPaddr */
+	uint8				Raddr;				/* cmdに登録しているRaddr */
+	uint8				wri;				/* cmdに登録している件数 */
+	uint8				rcv;				/* datに登録している件数 */
+	Spi_DataBufferType	cmd[64];			/* SPI送信コマンド(3+(3*16)+1バイト) */
+	Spi_DataBufferType	rea[64];			/* SPI受信コマンド(3+(3*16)+1バイト) */
+	Spi_DataBufferType	dat[64];			/* SPI受信データ  (3+(3*16)+1バイト) */
+}	swic_SpiS1_Cmd;
+static volatile uint8 swic_SpiS1_RegErr;
+/* ★Debug_Start-------------------------------------------------------------- */
+#ifdef EthswtDebugMode1
+
+#define DBGSPI_NUM (100)   /* 保存数 */
+/* SPI書き込み処理 格納先 */
+struct {
+    Spi_DataBufferType snd_data[64];  /* SPI送信データ */
+    Spi_DataBufferType rcv_data;      /* CRC応答値 */
+    uint8              crc_info;      /* 比較CRC値 */
+    Std_ReturnType     spi_ret;       /* BSW_SPI戻り値 */
+}debug_SpiWrite[DBGSPI_NUM];
+/* SPI読み出し処理 格納先 */
+struct {
+    Spi_DataBufferType snd_data[6];  /* SPI送信データ */
+    Spi_DataBufferType rcv_data[6];  /* SPI受信データ */
+    uint8              crc_info;     /* 比較CRC値 */
+    Std_ReturnType     spi_ret;      /* BSW_SPI戻り値 */
+}debug_SpiRead[DBGSPI_NUM];
+
+uint8 debug_Spi_W_count;
+uint8 debug_Spi_R_count;
+#endif /* EthswtDebugMode1 */
+/* ★Debug_End---------------------------------------------------------------- */
 
 #define	ETHSWT_STOP_SEC_VAR_CLEARED
 #include <EthSwt_SWIC_MemMap.h>
 
 #define	ETHSWT_START_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>
+/* ★Debug_Start-------------------------------------------------------------- */
+#ifdef EthswtDebugMode1
+/* SPI読み書き処理 初期化 */
+static void debugSpi_init(void){
+	uint8 i;
+	uint8 j;
+	
+	debug_Spi_W_count=(uint8)0;
+	debug_Spi_R_count=(uint8)0;
+	
+	for(i=0;i<(uint8)DBGSPI_NUM;i++){
+	    for(j=0;j<(uint8)64;j++){
+	        debug_SpiWrite[i].snd_data[j] = (Spi_DataBufferType)0;
+	        debug_SpiRead[i].snd_data[j]  = (Spi_DataBufferType)0;
+	    }
+	    for(j=0;j<(uint8)6;j++){
+		    debug_SpiRead[i].rcv_data[j] = (Spi_DataBufferType)0;
+	    }
+	    debug_SpiWrite[i].rcv_data = (Spi_DataBufferType)0;
+	    debug_SpiWrite[i].crc_info = (uint8)0;
+	    debug_SpiWrite[i].spi_ret  = (Std_ReturnType)0;
+	    
+	    debug_SpiRead[i].crc_info  = (uint8)0;
+		debug_SpiRead[i].spi_ret   = (Std_ReturnType)0;
+	}
+}
+/* SPI書き込み処理 情報取得 */
+static void debugSpi_W_Check(Spi_DataBufferType* snd_data,uint8 snd_length,Spi_DataBufferType rcv_data, uint8 crc_info, Std_ReturnType spi_ret){
+	uint8 i;
+	for(i=0;i<snd_length;i++){
+	    debug_SpiWrite[debug_Spi_W_count].snd_data[i] = snd_data[i]; /* 送信データ */
+	}
+	debug_SpiWrite[debug_Spi_W_count].rcv_data = rcv_data;           /* 受信データ(CRCのみ) */
+	debug_SpiWrite[debug_Spi_W_count].crc_info = crc_info;           /* CRC        */
+	debug_SpiWrite[debug_Spi_W_count].spi_ret  = spi_ret;            /* 戻り値     */
+	debug_Spi_W_count++;
+	if (debug_Spi_W_count >= (uint8)DBGSPI_NUM) {
+		debug_Spi_W_count = (uint8)0;
+	}
+}
+/* SPI読み出し処理 情報取得 */
+static void debugSpi_R_Check(Spi_DataBufferType* snd_data,uint8 snd_length,Spi_DataBufferType* rcv_data, uint8 crc_info, Std_ReturnType spi_ret){
+	uint8 i;
+	for(i=0;i<snd_length;i++){
+	    debug_SpiRead[debug_Spi_R_count].snd_data[i] = snd_data[i]; /* 送信データ */
+	}
+	for(i=0;i<6;i++){
+		debug_SpiRead[debug_Spi_R_count].rcv_data[i] = rcv_data[i]; /* 受信データ */
+	}
+	debug_SpiRead[debug_Spi_R_count].crc_info = crc_info;           /* CRC        */
+	debug_SpiRead[debug_Spi_R_count].spi_ret  = spi_ret;            /* 戻り値     */
+	debug_Spi_R_count++;
+	if (debug_Spi_R_count >= (uint8)DBGSPI_NUM) {
+		debug_Spi_R_count = (uint8)0;
+	}
+
+}
+#endif /* EthswtDebugMode1 */
+/* ★Debug_End---------------------------------------------------------------- */
 void EthSwt_SWIC_Spi_Init(void)
 {
-	swic_Spi_Err.tbl	= NULL_PTR;
-	swic_Spi_Err.idx	= 0u;
-	swic_Spi_Err.err	= E_OK;
-	swic_Spi_Cmd.tbl	= NULL_PTR;
-	swic_Spi_Cmd.idx	= 0u;
-	swic_Spi_Cmd.wri	= 0u;
-	swic_Spi_Cmd.rcv	= 0u;
+	swic_SpiS1_Err.tbl	= NULL_PTR;
+	swic_SpiS1_Err.idx	= 0u;
+	swic_SpiS1_Err.err	= E_OK;
+	swic_SpiS1_Cmd.Paddr= 0u;
+	swic_SpiS1_Cmd.Raddr= 0u;
+	swic_SpiS1_Cmd.wri	= 0u;
+	swic_SpiS1_Cmd.rcv	= 0u;
+	LIB_memset(swic_SpiS1_Cmd.rea, 0u, sizeof(swic_SpiS1_Cmd.rea));	/* データ部分を0クリアしておく */
+	swic_SpiS1_RegErr	= STD_OFF;
+/* ★Debug_Start-------------------------------------------------------------- */
+#ifdef EthswtDebugMode1
+    debugSpi_init();
+#endif /* EthswtDebugMode1 */
+/* ★Debug_End---------------------------------------------------------------- */
 }
-
-static Std_ReturnType swic_Spi_SetTblErr(const swic_reg_data_t tbl[], const uint32 idx, const Std_ReturnType err)
+static Std_ReturnType swic_SpiS1_SetTblErr(const swic_reg_data_t tbl[], const uint32 idx, const Std_ReturnType err)
 {
-	swic_Spi_Err.tbl	= tbl;
-	swic_Spi_Err.idx	= idx;
-	swic_Spi_Err.err	= err;
+	swic_SpiS1_Err.tbl	= tbl;
+	swic_SpiS1_Err.idx	= idx;
+	swic_SpiS1_Err.err	= err;
 	return E_NOT_OK;
 }
-
-static uint8 swic_Spi_Crc8(const uint8 msg[], const uint32 len, const uint8 val)
+static uint8 swic_SpiS1_Crc8(const uint8 msg[], const uint32 len, const uint8 val)
 {
-	static const uint8	swic_Spi_Crc[]
+	static const uint8	swic_SpiS1_Crc[]
 	=	{ 0x00u, 0x5Eu, 0xBCu, 0xE2u, 0x61u, 0x3Fu, 0xDDu, 0x83u, 0xC2u, 0x9Cu, 0x7Eu, 0x20u, 0xA3u, 0xFDu, 0x1Fu, 0x41u
 		, 0x9Du, 0xC3u, 0x21u, 0x7Fu, 0xFCu, 0xA2u, 0x40u, 0x1Eu, 0x5Fu, 0x01u, 0xE3u, 0xBDu, 0x3Eu, 0x60u, 0x82u, 0xDCu
 		, 0x23u, 0x7Du, 0x9Fu, 0xC1u, 0x42u, 0x1Cu, 0xFEu, 0xA0u, 0xE1u, 0xBFu, 0x5Du, 0x03u, 0x80u, 0xDEu, 0x3Cu, 0x62u
@@ -94,18 +183,18 @@ static uint8 swic_Spi_Crc8(const uint8 msg[], const uint32 len, const uint8 val)
     uint8	crc = ~val;
 	uint32	i;
 	for (i=0u ; i<len ; i++) {
-		crc = swic_Spi_Crc[crc ^ msg[i]];
+		crc = swic_SpiS1_Crc[crc ^ msg[i]];
 	}
 	return ~crc;
 }
 void EthSwt_SWIC_Spi_ReqInit(void)
 {
-	swic_Spi_Cmd.tbl	= NULL_PTR;
-	swic_Spi_Cmd.idx	= 0u;
-	swic_Spi_Cmd.wri	= 0u;
-	swic_Spi_Cmd.rcv	= 0u;
+	swic_SpiS1_Cmd.Paddr= 0u;
+	swic_SpiS1_Cmd.Raddr= 0u;
+	swic_SpiS1_Cmd.wri	= 0u;
+	swic_SpiS1_Cmd.rcv	= 0u;
 }
-static Std_ReturnType swic_Spi_ReqWR(const Spi_DataBufferType *const cmd, const Spi_NumberOfDataType len, Spi_DataBufferType *const dat, const Spi_NumberOfDataType siz)
+static Std_ReturnType swic_SpiS1_Req1(const Spi_DataBufferType *const cmd, Spi_DataBufferType *const dat, const Spi_NumberOfDataType len)
 {
 	Std_ReturnType		err;
 	Spi_SeqResultType	rslt;
@@ -118,148 +207,140 @@ static Std_ReturnType swic_Spi_ReqWR(const Spi_DataBufferType *const cmd, const 
 }
 Std_ReturnType EthSwt_SWIC_Spi_WriteSPI(const swic_reg_data_t tbl[], const uint32 idx, const uint16 SndData)
 {
-	const uint32		devAddr = tbl[idx].devAddr;
-	const uint32		regAddr = tbl[idx].regAddr;
-	Std_ReturnType		err;
-	uint8				crc;
-	Spi_DataBufferType	dat = 0u;
-	swic_Spi_Cmd.wri	= 0u;
-	swic_Spi_Cmd.rcv	= 0u;
-	swic_Spi_Cmd.cmd[0]	= (uint8)0xB0u;	/* W:1,M:0,L:1,S:1,MC:x */
-	swic_Spi_Cmd.cmd[1]	= (uint8)((devAddr >> 3) & 0x03u);
-	swic_Spi_Cmd.cmd[2]	= (uint8)((devAddr << 5) | (regAddr & 0x1Fu));
-	swic_Spi_Cmd.cmd[3]	= (uint8)(SndData >> 8);
-	swic_Spi_Cmd.cmd[4]	= (uint8)(SndData);
-	crc = swic_Spi_Crc8Cmd(swic_Spi_Cmd.cmd, 5u);
-	swic_Spi_Cmd.cmd[5]	= crc;
-	err = swic_Spi_ReqWR(swic_Spi_Cmd.cmd, 6u, &dat, 1u);
+	const uint8		Paddr = tbl[idx].devAddr;
+	const uint8		Raddr = tbl[idx].regAddr;
+	Std_ReturnType	err;
+	uint8			crc;
+	swic_SpiS1_Cmd.wri		= 0u;
+	swic_SpiS1_Cmd.rcv		= 0u;
+	swic_SpiS1_Cmd.cmd[0]	= (uint8)0xB0u;	/* W:1,M:0,L:1,S:1,MC:x */
+	swic_SpiS1_Cmd.cmd[1]	= (uint8)((Paddr >> 3) & 0x03u);
+	swic_SpiS1_Cmd.cmd[2]	= (uint8)((Paddr << 5) | (Raddr & 0x1Fu));
+	swic_SpiS1_Cmd.cmd[3]	= (uint8)(SndData >> 8);
+	swic_SpiS1_Cmd.cmd[4]	= (uint8)(SndData);
+	crc = swic_SpiS1_Crc8Cmd(swic_SpiS1_Cmd.cmd, 5u);
+	swic_SpiS1_Cmd.cmd[5]	= crc;
+	swic_SpiS1_Cmd.cmd[6]	= 0x00u;
+	err = swic_SpiS1_Req1(swic_SpiS1_Cmd.cmd, swic_SpiS1_Cmd.dat, 7);
 	if (err == E_OK) {
-		if (dat == swic_Spi_CrcOK[crc])	{ return err; }
+		if (swic_SpiS1_Cmd.dat[6] == swic_SpiS1_CrcOK[crc])	{ return err; }
 	}
-	return swic_Spi_SetTblErr(tbl, idx, err);
+/* ★Debug_Start-------------------------------------------------------------- */
+#ifdef EthswtDebugMode1
+    debugSpi_W_Check(&swic_SpiS1_Cmd.cmd[0],7,swic_SpiS1_Cmd.dat[6], swic_SpiS1_CrcOK[crc], err);
+#endif /* EthswtDebugMode1 */
+/* ★Debug_End---------------------------------------------------------------- */
+	return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
-static Std_ReturnType swic_Spi_Write(const swic_reg_data_t tbl[], const uint8 wri, const uint32 idx)
+static uint8 swic_SpiS1_WriteCnt(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
 {
-	const uint32			devAddr = tbl[idx].devAddr;
-	const uint32			regAddr = tbl[idx].regAddr;
-	Std_ReturnType			err;
-	uint8					i;
-	Spi_NumberOfDataType	len;
-	uint8					crc;
-	Spi_DataBufferType		dat = 0u;
-	swic_Spi_Cmd.wri	= 0u;
-	swic_Spi_Cmd.rcv	= 0u;
-	swic_Spi_Cmd.cmd[0]	= (uint8)(0xF0u | wri);	/* W:1,M:x,L:1,S:1,MC:x [残りbitは1にするのでwriはそのまま]*/
-	swic_Spi_Cmd.cmd[1]	= (uint8)((devAddr >> 3) & 0x03u);
-	swic_Spi_Cmd.cmd[2]	= (uint8)((devAddr << 5) | (regAddr & 0x1Fu));
-	crc = swic_Spi_Crc8Cmd(swic_Spi_Cmd.cmd, 3u);
-	len = 3u;
-	for (i=0u ; i<wri ; i++) {
-		const uint16	SndData = tbl[(sint32)idx + (sint32)i].value;	/* [QAC対策](sint32) */
-		swic_Spi_Cmd.cmd[len]							= (uint8)(SndData >> 8);
-		swic_Spi_Cmd.cmd[len + (Spi_NumberOfDataType)1]	= (uint8)(SndData);
-		crc = swic_Spi_Crc8(&swic_Spi_Cmd.cmd[len], 2u, crc);
-		swic_Spi_Cmd.cmd[len + (Spi_NumberOfDataType)2]	= crc;
-		len = len + (Spi_NumberOfDataType)3;
-	}
-	err = swic_Spi_ReqWR(swic_Spi_Cmd.cmd, len, &dat, 1u);
-	if (err == E_OK) {
-		if (dat == swic_Spi_CrcOK[crc])	{
-			swic_Spi_Cmd.tbl	= tbl;
-			swic_Spi_Cmd.idx	= idx;
-			swic_Spi_Cmd.wri	= wri;
-			return err;
-		}
-	}
-	return swic_Spi_SetTblErr(tbl, idx, err);
-}
-static uint8 swic_Spi_WriteCnt(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
-{
-	const uint8	devAddr = tbl[idx].devAddr;
-	const uint8	regAddr = tbl[idx].regAddr;
+	const uint8	Paddr = tbl[idx].devAddr;
+	const uint8	Raddr = tbl[idx].regAddr;
 	uint8		wri = 0u;
 	uint32		off;
 	for (off=idx ; off < cnt ; off++) {					/* 件数取得 */
-		if (tbl[off].devAddr != devAddr)				{ break; }
-		if (tbl[off].regAddr != (regAddr + wri))		{ break; }
+		if (tbl[off].devAddr != Paddr)					{ break; }
+		if (tbl[off].regAddr != (Raddr + wri))			{ break; }
 		if (tbl[off].regCtrl != REG_CTRL_WRITE)			{ break; }
-/*		if (tbl[off].surveillance != SURVEILLANCE_OFF)	{ break; }	リードバックしないので同じ動作 */
+		if (tbl[off].surveillance != SURVEILLANCE_OFF)	{ break; }
 		wri = wri + (uint8)1;
 		if (wri >= (uint8)16)							{ break; }
 	}
 	return wri;
 }
-Std_ReturnType EthSwt_SWIC_Spi_Write(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
+static Std_ReturnType swic_SpiS1_WriteDat(const uint8 Paddr, const uint8 Raddr)
 {
 	uint8	wri;
-	if (tbl == swic_Spi_Cmd.tbl) {
-		if (idx > swic_Spi_Cmd.idx) {	/* 同じ要求は再書き込みする */
-			const sint32	pos = (sint32)idx - (sint32)swic_Spi_Cmd.idx;
-			if (pos < (sint32)swic_Spi_Cmd.wri) { return E_OK; }
+	if (swic_SpiS1_Cmd.Paddr != Paddr)	{ return E_NOT_OK; }
+	if (swic_SpiS1_Cmd.Raddr >= Raddr)	{ return E_NOT_OK; }	/* 同じ要求は再書き込みする */
+	wri = Raddr - swic_SpiS1_Cmd.Raddr;
+	if (swic_SpiS1_Cmd.wri <= wri)		{ return E_NOT_OK; }
+	return E_OK;
+}
+Std_ReturnType EthSwt_SWIC_Spi_Write(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
+{
+	const uint8				Paddr = tbl[idx].devAddr;
+	const uint8				Raddr = tbl[idx].regAddr;
+	Std_ReturnType			err;
+	uint8					wri, i;
+	Spi_NumberOfDataType	len;
+	uint8					crc;
+	err = swic_SpiS1_WriteDat(Paddr, Raddr);
+	if (err == E_OK)	{ return err; }
+	wri = swic_SpiS1_WriteCnt(tbl, cnt, idx);
+	if (wri < 2u)		{ return EthSwt_SWIC_Spi_WriteSPI(tbl, idx, tbl[idx].value); }
+	swic_SpiS1_Cmd.wri		= 0u;
+	swic_SpiS1_Cmd.rcv		= 0u;
+	swic_SpiS1_Cmd.cmd[0]	= (uint8)(0xF0u | (wri & 0x0Fu));	/* W:1,M:x,L:1,S:1,MC:x */
+	swic_SpiS1_Cmd.cmd[1]	= (uint8)((Paddr >> 3) & 0x03u);
+	swic_SpiS1_Cmd.cmd[2]	= (uint8)((Paddr << 5) | (Raddr & 0x1Fu));
+	crc = swic_SpiS1_Crc8Cmd(swic_SpiS1_Cmd.cmd, 3u);
+	len = 3u;
+	for (i=0u ; i<wri ; i++) {
+		const uint16	SndData = tbl[(sint32)idx + (sint32)i].value;	/* [QAC対策](sint32) */
+		swic_SpiS1_Cmd.cmd[len]								= (uint8)(SndData >> 8);
+		swic_SpiS1_Cmd.cmd[len + (Spi_NumberOfDataType)1]	= (uint8)(SndData);
+		crc = swic_SpiS1_Crc8(&swic_SpiS1_Cmd.cmd[len], 2u, crc);
+		swic_SpiS1_Cmd.cmd[len + (Spi_NumberOfDataType)2]	= crc;
+		len = len + (Spi_NumberOfDataType)3;
+	}
+	swic_SpiS1_Cmd.cmd[len] = 0x00u;
+	err = swic_SpiS1_Req1(swic_SpiS1_Cmd.cmd, swic_SpiS1_Cmd.dat, len + (Spi_NumberOfDataType)1);
+	if (err == E_OK) {
+		if (swic_SpiS1_Cmd.dat[len] == swic_SpiS1_CrcOK[crc]) {
+			swic_SpiS1_Cmd.Paddr= Paddr;
+			swic_SpiS1_Cmd.Raddr= Raddr;
+			swic_SpiS1_Cmd.wri	= wri;
+			return err;
 		}
 	}
-	wri = swic_Spi_WriteCnt(tbl, cnt, idx);
-	if (wri < 2u) { return EthSwt_SWIC_Spi_WriteSPI(tbl, idx, tbl[idx].value); }
-	return swic_Spi_Write(tbl, wri, idx);
+/* ★Debug_Start-------------------------------------------------------------- */
+#ifdef EthswtDebugMode1
+    debugSpi_W_Check(&swic_SpiS1_Cmd.cmd[0],len,swic_SpiS1_Cmd.dat[len], swic_SpiS1_CrcOK[crc], err);
+#endif /* EthswtDebugMode1 */
+/* ★Debug_End---------------------------------------------------------------- */
+	return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
 Std_ReturnType EthSwt_SWIC_Spi_ReadSPI(const swic_reg_data_t tbl[], const uint32 idx, uint16 *const RcvData)
 {
-	const uint32		devAddr = tbl[idx].devAddr;
-	const uint32		regAddr = tbl[idx].regAddr;
-	Spi_DataBufferType	cmd[4];
+	const uint8			Paddr = tbl[idx].devAddr;
+	const uint8			Raddr = tbl[idx].regAddr;
+	Spi_DataBufferType	cmd[8];
 	Std_ReturnType		err;
 	uint8				crc;
-	swic_Spi_Cmd.wri	= 0u;
-	swic_Spi_Cmd.rcv	= 0u;
+	swic_SpiS1_Cmd.wri	= 0u;
+	swic_SpiS1_Cmd.rcv	= 0u;
 	cmd[0]				= 0x30u;				/* W:0,M:0,L:1,S:1,MC:0 */
-	cmd[1]				= (uint8)((devAddr >> 3) & 0x03u);
-	cmd[2]				= (uint8)((devAddr << 5) | (regAddr & 0x1Fu));
-	err = swic_Spi_ReqWR(cmd, 3u, swic_Spi_Cmd.dat, 3u);
+	cmd[1]				= (uint8)((Paddr >> 3) & 0x03u);
+	cmd[2]				= (uint8)((Paddr << 5) | (Raddr & 0x1Fu));
+	cmd[3]				= 0x00u;
+	cmd[4]				= 0x00u;
+	cmd[5]				= 0x00u;
+	err = swic_SpiS1_Req1(cmd, swic_SpiS1_Cmd.dat, 6u);
 	if (err == E_OK) {
-		crc = swic_Spi_Crc8Cmd(cmd, 3u);
-		crc = swic_Spi_Crc8(swic_Spi_Cmd.dat, 2u, crc);
-		if (swic_Spi_Cmd.dat[2] == crc) {
-			*RcvData = (uint16)(((uint32)swic_Spi_Cmd.dat[0] << 8) | (uint32)swic_Spi_Cmd.dat[1]);
+		crc = swic_SpiS1_Crc8Cmd(cmd, 3u);
+		crc = swic_SpiS1_Crc8(&swic_SpiS1_Cmd.dat[3], 2u, crc);
+		if (swic_SpiS1_Cmd.dat[5] == crc) {
+			*RcvData = (uint16)(((uint32)swic_SpiS1_Cmd.dat[3] << 8) | (uint32)swic_SpiS1_Cmd.dat[4]);
 			return err;
 		}
 	}
-	return swic_Spi_SetTblErr(tbl, idx, err);
+/* ★Debug_Start-------------------------------------------------------------- */
+#ifdef EthswtDebugMode1
+    debugSpi_R_Check(&cmd[0],6,&swic_SpiS1_Cmd.dat[0], crc, err);
+#endif /* EthswtDebugMode1 */
+/* ★Debug_End---------------------------------------------------------------- */
+	return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
-static Std_ReturnType swic_Spi_Read(const swic_reg_data_t tbl[], const uint8 rcv, const uint32 idx, uint16 *const RcvData)
+static uint8 swic_SpiS1_ReadCnt(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
 {
-	const uint32		devAddr = tbl[idx].devAddr;
-	const uint32		regAddr = tbl[idx].regAddr;
-	Spi_DataBufferType	cmd[4];
-	Std_ReturnType		err;
-	uint8				crc;
-	swic_Spi_Cmd.wri	= 0u;
-	swic_Spi_Cmd.rcv	= 0u;
-	cmd[0]				= (uint8)(0x70u | (rcv & 0x0Fu));	/* W:0,M:x,L:1,S:1,MC:x */
-	cmd[1]				= (uint8)((devAddr >> 3) & 0x03u);
-	cmd[2]				= (uint8)((devAddr << 5) | (regAddr & 0x1Fu));
-	err = swic_Spi_ReqWR(cmd, 3u, swic_Spi_Cmd.dat, rcv * (uint16)3);
-	if (err == E_OK) {
-		swic_Spi_Cmd.tbl	= tbl;
-		swic_Spi_Cmd.idx	= idx;
-		swic_Spi_Cmd.rcv	= rcv;
-		crc = swic_Spi_Crc8Cmd(cmd, 3u);
-		crc = swic_Spi_Crc8(swic_Spi_Cmd.dat, 2u, crc);
-		if (swic_Spi_Cmd.dat[2] == crc) {
-			*RcvData = (uint16)(((uint32)swic_Spi_Cmd.dat[0] << 8) | (uint32)swic_Spi_Cmd.dat[1]);
-			return err;
-		}
-	}
-	return swic_Spi_SetTblErr(tbl, idx, err);
-}
-static uint8 swic_Spi_ReadCnt(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
-{
-	const uint8	devAddr = tbl[idx].devAddr;
-	const uint8	regAddr = tbl[idx].regAddr;
+	const uint8	Paddr = tbl[idx].devAddr;
+	const uint8	Raddr = tbl[idx].regAddr;
 	uint8		rcv = 0u;
 	uint32		off;
 	for (off=idx ; off < cnt ; off++) {					/* 件数取得 */
-		if (tbl[off].devAddr != devAddr)				{ break; }
-		if (tbl[off].regAddr != (regAddr + rcv))		{ break; }
+		if (tbl[off].devAddr != Paddr)					{ break; }
+		if (tbl[off].regAddr != (Raddr + rcv))			{ break; }
 		if (tbl[off].regCtrl != REG_CTRL_READ)			{ break; }
 		if (tbl[off].surveillance != SURVEILLANCE_OFF)	{ break; }
 		rcv = rcv + (uint8)1;
@@ -267,26 +348,71 @@ static uint8 swic_Spi_ReadCnt(const swic_reg_data_t tbl[], const uint32 cnt, con
 	}
 	return rcv;
 }
-Std_ReturnType EthSwt_SWIC_Spi_Read(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint16 *const RcvData)
+static Std_ReturnType swic_Spi_ReadDat(const uint8 Paddr, const uint8 Raddr, uint16 *const RcvData)
 {
 	uint8	rcv;
-	if (tbl == swic_Spi_Cmd.tbl) {
-		if (idx > swic_Spi_Cmd.idx) {	/* 同じ要求は再読み込みする */
-			const sint32	pos = (sint32)idx - (sint32)swic_Spi_Cmd.idx;
-			if (pos < (sint32)swic_Spi_Cmd.rcv) {
-				const sint32	off = (sint32)(uint8)pos * 3L;
-				uint8			crc;
-				crc = swic_Spi_Crc8(&swic_Spi_Cmd.dat[off], 2u, swic_Spi_Cmd.dat[off - 1L]);	/* 2個目以降のみ */
-				if (swic_Spi_Cmd.dat[off + 2L] == crc) {
-					*RcvData = (uint16)(((uint32)swic_Spi_Cmd.dat[off] << 8) | (uint32)swic_Spi_Cmd.dat[off + 1L]);
-					return E_OK;
-				}
-			}
+	sint32	off;
+	uint8	crc;
+	if (swic_SpiS1_Cmd.Paddr != Paddr)		{ return E_NOT_OK; }
+	if (swic_SpiS1_Cmd.Raddr >= Raddr)		{ return E_NOT_OK; }	/* 同じ要求は再読み込みする */
+	rcv = Raddr - swic_SpiS1_Cmd.Raddr;
+	if (swic_SpiS1_Cmd.rcv <= rcv)			{ return E_NOT_OK; }
+	off = ((sint32)rcv * 3L) + 3L;
+	crc = swic_SpiS1_Crc8(&swic_SpiS1_Cmd.dat[off], 2u, swic_SpiS1_Cmd.dat[off - 1L]);	/* 2個目以降のみ */
+	if (swic_SpiS1_Cmd.dat[off + 2L] != crc){ return E_NOT_OK; }
+	if (RcvData != NULL_PTR) {
+		*RcvData = (uint16)(((uint32)swic_SpiS1_Cmd.dat[off] << 8) | (uint32)swic_SpiS1_Cmd.dat[off + 1L]);
+	}
+	return E_OK;
+}
+Std_ReturnType EthSwt_SWIC_Spi_Read(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint16 *const RcvData)
+{
+	const uint8		Paddr = tbl[idx].devAddr;
+	const uint8		Raddr = tbl[idx].regAddr;
+	Std_ReturnType	err;
+	uint8			rcv;
+	uint8			crc;
+	err = swic_Spi_ReadDat(Paddr, Raddr, RcvData);
+	if (err == E_OK)	{ return err; }
+	rcv = swic_SpiS1_ReadCnt(tbl, cnt, idx);
+	if (rcv < 2u)		{ return EthSwt_SWIC_Spi_ReadSPI(tbl, idx, RcvData); }	/* 値待ちを考慮しバッファしない */
+	swic_SpiS1_Cmd.wri		= 0u;
+	swic_SpiS1_Cmd.rcv		= 0u;
+	swic_SpiS1_Cmd.rea[0]	= (uint8)(0x70u | (rcv & 0x0Fu));	/* W:0,M:x,L:1,S:1,MC:x */
+	swic_SpiS1_Cmd.rea[1]	= (uint8)((Paddr >> 3) & 0x03u);
+	swic_SpiS1_Cmd.rea[2]	= (uint8)((Paddr << 5) | (Raddr & 0x1Fu));
+	err = swic_SpiS1_Req1(swic_SpiS1_Cmd.rea, swic_SpiS1_Cmd.dat, (rcv * (uint16)3) + (uint16)3);
+	if (err == E_OK) {
+		swic_SpiS1_Cmd.Paddr= Paddr;
+		swic_SpiS1_Cmd.Raddr= Raddr;
+		swic_SpiS1_Cmd.rcv	= rcv;
+		crc = swic_SpiS1_Crc8Cmd(swic_SpiS1_Cmd.rea, 3u);
+		crc = swic_SpiS1_Crc8(&swic_SpiS1_Cmd.dat[3], 2u, crc);
+		if (swic_SpiS1_Cmd.dat[5] == crc) {
+			*RcvData = (uint16)(((uint32)swic_SpiS1_Cmd.dat[3] << 8) | (uint32)swic_SpiS1_Cmd.dat[4]);
+			return err;
 		}
 	}
-	rcv = swic_Spi_ReadCnt(tbl, cnt, idx);
-	if (rcv < 2u) { return EthSwt_SWIC_Spi_ReadSPI(tbl, idx, RcvData); }	/* 値待ちを考慮しバッファしない */
-	return swic_Spi_Read(tbl, rcv, idx, RcvData);
+/* ★Debug_Start-------------------------------------------------------------- */
+#ifdef EthswtDebugMode1
+    debugSpi_R_Check(&swic_SpiS1_Cmd.rea[0],6,&swic_SpiS1_Cmd.dat[0], crc, err);
+#endif /* EthswtDebugMode1 */
+/* ★Debug_End---------------------------------------------------------------- */
+	return swic_SpiS1_SetTblErr(tbl, idx, err);
+}
+void EthSwt_SWIC_SpiRegChkNotify(uint32 status)
+{
+	(void)status;
+	
+	swic_SpiS1_RegErr = STD_ON;
+	
+	return;
+}
+uint8 EthSwt_SWIC_Spi_GetSpiRegErr(void)
+{
+	uint8 ret = swic_SpiS1_RegErr;
+	swic_SpiS1_RegErr = STD_OFF;
+	return ret;
 }
 #define	ETHSWT_STOP_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>

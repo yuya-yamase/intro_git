@@ -1,7 +1,9 @@
 #include <Std_Types.h>
 #include <EthSwt_SWIC.h>
 #include <EthSwt.h>
+// #include "EthSwt_SWIC_Def.h"
 #include "EthSwt_SWIC_Reg.h"
+// #include "EthSwt_SWIC_Org.h"
 #include "EthSwt_SWIC_Pwr.h"
 
 #define	ETHSWT_START_SEC_CODE
@@ -9,24 +11,27 @@
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 {
 	(void)CfgPtr;
-
 	EthSwt_SWIC_Pwr_Init();
 	EthSwt_SWIC_Reg_Init();		/* èâä˙âªÇénÇﬂÇÈÇÃÇ≈ç≈å„ */
 	
 }
 
-void EthSwt_SWIC_MainFunction(void)
-{
-	EthSwt_SWIC_Pwr_HiProc();
-	EthSwt_SWIC_MainFunction1MS();
-}
+// void EthSwt_SWIC_MainFunction(void)
+// {
+// 	EthSwt_SWIC_Pwr_HiProc();
+// }
 
-#if 0    /* ñ¢ëŒâû */
 Std_ReturnType EthSwt_SWIC_GetLinkState(uint8 SwitchIdx, uint8 SwitchPortIdx, EthTrcv_LinkStateType* LinkStatePtr)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
 	return EthSwt_SWIC_Reg_GetLinkState(SwitchPortIdx, LinkStatePtr);
 }
+Std_ReturnType EthSwt_SWIC_SetSwitchPortMode(uint8 SwitchIdx, uint8 SwitchPortIdx, Eth_ModeType PortMode)
+{
+	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
+	return EthSwt_SWIC_Reg_SetSwitchPortMode(SwitchPortIdx, PortMode);
+}
+#if 0    /* ñ¢ëŒâû */
 Std_ReturnType EthSwt_SWIC_ClearFrameInfo(const uint8 SwitchIdx, const uint8 SwitchPortIdx)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
