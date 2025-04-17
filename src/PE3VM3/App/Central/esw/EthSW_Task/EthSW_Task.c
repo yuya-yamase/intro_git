@@ -41,8 +41,7 @@ void EthSW_MediumTask (void)
 /* -------------------------------------------------------------------------- */
 void EthSW_HighTask (void)
 {
-	EthSwt_SWIC_Pwr_HiProc();
-	EthSwt_SWIC_MainFunction1MS();
+	EthSwt_SWIC_MainFunction();
 
 	return;
 }

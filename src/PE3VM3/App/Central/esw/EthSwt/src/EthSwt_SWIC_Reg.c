@@ -397,7 +397,7 @@ static void swic_Reg_TimUpd(struct swic_Reg_Timer *const tim, const sint32 tmo)
 		tim->tim = cnt;
 	}
 }
-void EthSwt_SWIC_MainFunction1MS(void)
+void EthSwt_SWIC_Reg_MainFunction1MS(void)
 {	/* 1msŽüŠúƒ^ƒXƒN */
 	swic_Reg_Inf.tim = swic_Reg_Inf.tim + (uint16)SWIC_ETH_PERIOD;
 	if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_ACTIVE) {
@@ -1594,7 +1594,7 @@ static void swic_Reg_ProcDeInit(void)
 }
 #endif
 
-void EthSwt_SWIC_BackgroundTask(void)
+void EthSwt_SWIC_Reg_BackgroundTask(void)
 {
 	Std_ReturnType	err;
     Std_ReturnType  swicState;
