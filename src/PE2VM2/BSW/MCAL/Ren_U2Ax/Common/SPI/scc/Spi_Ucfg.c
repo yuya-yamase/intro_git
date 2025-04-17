@@ -12,8 +12,7 @@
 /*	include files																				*/
 /*==============================================================================================*/
 #include	"Std_Types.h"
-#include	"Bsw_cfg.h"
-#include	"Rte_BswUcfg.h"
+#include	"Spi_Ucfg.h"
 
 #include	"pil_spi.h"
 #include	"Dma.h"
@@ -267,8 +266,6 @@
 /*==============================================================================================*/
 /*	variables																					*/
 /*==============================================================================================*/
-// #define SEL_RAMSEC	(SPI_CFG_SEC_RAM0)
-// #include "Bsw_Seccfg_Rams.h"
 #pragma ghs section bss=".SPI_BSS_VAR_NO_INIT"
 
 #if (SPI_CFG_MODEC_USE == ON)
@@ -287,15 +284,11 @@
 #endif
 #endif
 
-// #include "Bsw_Seccfg_Rame.h"
-// #undef SEL_RAMSEC
 #pragma ghs section bss=default
 
 /*==============================================================================================*/
 /*	constants																					*/
 /*==============================================================================================*/
-// #define SEL_ROMSEC	(BSW_SEC_C_LROM0_CPU0_ASIL_CFG_SDA)
-// #include "Bsw_Seccfg_Roms.h"
 #pragma ghs section rodata=".SPI_RODATA_CONST"
 
 /*	Spi SpinLockID	*/
@@ -471,8 +464,6 @@ const	Spi_ModeC_UserConfigType	cstSpi_UcfgModeCData =
 };
 #endif
 
-// #include "Bsw_Seccfg_Rome.h"
-// #undef SEL_ROMSEC
 #pragma ghs section rodata=default
 
 #ifdef	JGXSTACK

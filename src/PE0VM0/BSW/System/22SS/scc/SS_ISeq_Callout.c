@@ -22,7 +22,6 @@
 #include "gpt_drv_ost.h"
 #include "gpt_drv_j32.h"
 #include "gpt_drv_d16.h"
-#include "gpt_drv_frt.h"
 #include "Spi.h"
 #include "Dma.h"
 #include "Adc.h"
@@ -179,6 +178,8 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
     (void)SS_Memory_copy(__ghsbegin_app_n_nvarCR1_withval, __ghsbegin_app_n_nvarCR1_ival, (uintptr_t)APP_N_NVARCR1_WITHVAL_SIZE);
     (void)SS_Memory_set(__ghsbegin_ecu_n_nvarCR1_top, 0UL, (uintptr_t)ECU_N_NVAR_CR1_SIZE);
 
+    (void)SS_Memory_set(__ghsbegin_iohw_ram_top, 0UL, (uintptr_t)IOHW_RAM_SIZE);
+
     (void)SS_Memory_set(__ghsbegin_cdd_ram_top, 0UL, (uintptr_t)CDD_RAM_SIZE);
 
     if (u4_BootSource == SS_PM_BOOT_SUP)
@@ -196,7 +197,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 /*       vd_g_IcuWkInit((U1)ICU_WK_CFG_MCU_STA_BY_WK); */
 /*  } */
 
-    vd_g_Gpt_FrtInit();
+/*    vd_g_Gpt_FrtInit(); */    /* call in Host side */
     vd_g_Gpt_OstInit();         /* call in each VM that use OSTM */
     vd_g_Gpt_J32Init();
     vd_g_Gpt_D16Init();

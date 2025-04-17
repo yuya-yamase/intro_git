@@ -17,6 +17,7 @@
 #include <SS.h>
 
 /* MCAL */
+#include "gpt_drv_frt.h"
 #include "Port.h"
 #include "Port_PIC.h"
 #include "Port_Ext.h"
@@ -24,6 +25,7 @@
 #include "Dma.h"
 #include "Dio.h"
 #include "icu_drv_wk.h"
+#include "ErrH.h"
 
 /* vv include start vv */
 #include <Ecu_Memmap_SdaDisableB_env.h>
@@ -151,6 +153,8 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 
     if (u4_CoreId == SS_CPUCORE_u4MASTERCORE)
     {
+        vd_g_Gpt_FrtInit();     /* The GptFrt/LSTC timer is a global resource accessible to all PEs, so it should start immediatly post clock-up */
+
         (void)SS_Memory_set(__ghsbegin_ecu_nvar_top, 0UL, (uint32)ECU_NVAR_SIZE);
         (void)SS_Memory_set(__ghsbegin_ecu_nvar_global_top, 0UL, (uint32)ECU_NVAR_GLOBAL_SIZE);
         (void)SS_Memory_copy(__ghsbegin_data, __ghsbegin_romdata, (uint32)DATA_SIZE);
@@ -209,6 +213,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 
         Dma_Init();
 
+        ErrH_Init_1();
     }
 #if (SS_USE_CORE_COUNT >= 2u)
     else if (u4_CoreId == SS_CPUCORE_u4SLAVECORE1)

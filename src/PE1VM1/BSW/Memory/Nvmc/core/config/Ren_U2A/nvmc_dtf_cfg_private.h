@@ -26,7 +26,7 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_DTF_ID_NUM## */
-#define NVMC_DTF_INAPP_NUM                       (2U)
+#define NVMC_DTF_INAPP_NUM                       (1U)
 #define NVMC_DTF_INNVM_NUM                       (5U)
 /* END : ##TOOL_OUT#NVMC_DTF_ID_NUM## */
 
@@ -38,7 +38,7 @@
 /* END : ##TOOL_OUT#NVMC_DTF_READ_BUFFER_SIZE## */
 
 /* START : ##TOOL_OUT#NVMC_RECOVERY_DTF_ID## */
-#define NVMC_RECOVERY_DTF_ID                     (6U)
+#define NVMC_RECOVERY_DTF_ID                     (5U)
 /* END : ##TOOL_OUT#NVMC_RECOVERY_DTF_ID## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

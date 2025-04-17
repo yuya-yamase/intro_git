@@ -13,7 +13,7 @@
 /*==============================================================================================*/
 /*	include files																				*/
 /*==============================================================================================*/
-#include "Bsw_cfg.h"
+#include "Spi_Ucfg.h"
 
 #include "pil_spi.h"
 
@@ -290,9 +290,6 @@ void Spi_ReceiveInterrupt( const S4* t_pcs4Param );
 /*==============================================================================================*/
 /* constants																					*/
 /*==============================================================================================*/
-// #define SEL_ROMSEC	(BSW_SEC_C_LROM0_CPU0_ASIL_CFG_SDA)
-// #include "Bsw_Seccfg_Roms.h"
-#pragma ghs section rodata=".SPI_RODATA_CONST"
 extern	const	Spi_UserConfigType			cstSpi_UcfgData;
 #if ( SPI_CFG_MODEA_USE == ON )
 extern	const	Spi_ModeA_UserConfigType	cstSpi_UcfgModeAData;
@@ -303,16 +300,10 @@ extern	const	Spi_ModeB_UserConfigType	cstSpi_UcfgModeBData;
 #if ( SPI_CFG_MODEC_USE == ON )
 extern	const	Spi_ModeC_UserConfigType	cstSpi_UcfgModeCData;
 #endif /* ( SPI_CFG_MODEC_USE == ON ) */
-// #include "Bsw_Seccfg_Rome.h"
-// #undef SEL_ROMSEC
-#pragma ghs section rodata=default
 
 /*==============================================================================================*/
 /* variables																					*/
 /*==============================================================================================*/
-// #define SEL_RAMSEC	(SPI_CFG_SEC_RAM0)
-// #include "Bsw_Seccfg_Rams.h"
-#pragma ghs section bss=".SPI_BSS_VAR_NO_INIT"
 #if ( SPI_CFG_MODEC_USE == ON )
 extern	Spi_ModeC_ChannelDataType			stSpi_ModeC_ChannelData[];
 #endif
@@ -321,9 +312,6 @@ extern	Spi_ModeC_ChannelDataType			stSpi_ModeC_ChannelData[];
 extern	Spi_ModeA_ChannelDataType			stSpi_ModeA_ChannelData[];
 #endif
 
-// #include "Bsw_Seccfg_Rame.h"
-// #undef SEL_RAMSEC
-#pragma ghs section bss=default
 
 #endif /* SPI_H */
 /*-- End Of File -------------------------------------------------------------------------------*/

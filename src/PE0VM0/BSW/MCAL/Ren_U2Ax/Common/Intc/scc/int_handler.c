@@ -1,8 +1,8 @@
-/* 1.0.1 */
+/* 1.0.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Renesas RH850/F1KM : Interrupt Handler                                                                                           */
+/*  Renesas RH850/U2A : Interrupt Handler                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define INT_HNDLR_C_MAJOR                        (1)
 #define INT_HNDLR_C_MINOR                        (0)
-#define INT_HNDLR_C_PATCH                        (1)
+#define INT_HNDLR_C_PATCH                        (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -40,14 +40,17 @@
 #define INT_HNDLR_EICX_BIT_EICT                  (0x8000U)
 #define INT_HNDLR_EICX_BIT_EIRF                  (0x1000U)
 #define INT_HNDLR_EICX_BIT_EIMK                  (0x0080U)
-#define INT_HNDLR_EICX_BIT_EITB                  (0x0040U)
+#define INT_HNDLR_EICX_BIT_EITB                  (0x0040U) /* fixed = 1 */
 
+#define INT_HNDLR_EICX_LSB_EICT                  (15U)
 #define INT_HNDLR_EICX_LSB_EIRF                  (12U)
 #define INT_HNDLR_EICX_LSB_EIMK                  (7U)
 
-/* EEICn Higher half-word, haigher byte */
+/* EEICn Higher half-word, higher byte */
 #define INT_HNDLR_EICX_BYTE_BIT_EICT             (0x80U)
 #define INT_HNDLR_EICX_BYTE_BIT_EIRF             (0x10U)
+
+#define INT_HNDLR_EICX_BYTE_LSB_EICT             (7U)
 
 /* EEICn Lower half-word */
 /* #define INT_HNDLR_EICX_BIT_EIOV               (0x8000U) */   /* not access */
@@ -73,11 +76,11 @@
 #include "rh850_g4mh.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_s_IntHndlrIRQCUpdt__D(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK);
-static void    vd_s_IntHndlrIRQCUpdt__E(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK);
-static void    vd_s_IntHndlrIRQCUpdt_CD(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK);
-static void    vd_s_IntHndlrIRQCUpdt_CE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK);
-static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK);
+static void    vd_s_IntHndlrIRQCUpdt__D(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED); /* u2_a_EIC_FIXED: EEIC.EICT and EEIC.EITB */
+static void    vd_s_IntHndlrIRQCUpdt__E(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED); /* u2_a_EIC_FIXED: EEIC.EICT and EEIC.EITB */
+static void    vd_s_IntHndlrIRQCUpdt_CD(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED); /* u2_a_EIC_FIXED: EEIC.EICT and EEIC.EITB */
+static void    vd_s_IntHndlrIRQCUpdt_CE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED); /* u2_a_EIC_FIXED: EEIC.EICT and EEIC.EITB */
+static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED); /* u2_a_EIC_FIXED: EEIC.EICT and EEIC.EITB */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -85,7 +88,6 @@ static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U
 /*===================================================================================================================================*/
 /*===================================================================================================================================*/
 
-#pragma ghs section rodata=default
 
 /*===================================================================================================================================*/
 #define INT_HNDLR_INTC_1                         (0U)
@@ -98,14 +100,22 @@ static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U
 
 #define INT_HNDLR_EIC_BYTE_LO                    (0U)
 #define INT_HNDLR_EIC_BYTE_HI                    (1U)
+
+#pragma ghs section rodata=".INTC_RODATA_CONST"
+
 static volatile U4 * const u4p_sp_INT_HNDLR_RADDR_EEIC[] = {
     (volatile U4 *)0xfffc0200U,  /* INTC1 SELF : 00 -  31 ch. */
     (volatile U4 *)0xfff84000U   /* INTC2      : 32 - 767 ch. */
 };
 
+#pragma ghs section rodata=default
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#pragma ghs section text=".INTC_TEXT_CODE"
+#pragma ghs section rodata=".INTC_RODATA_CONST"
+
 /*===================================================================================================================================*/
 /*  void    vd_g_IntHndlrIRQCtrlCh(const U2 u2_a_IRQ_CH, const U1 u1_a_CTRL)                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -114,7 +124,7 @@ static volatile U4 * const u4p_sp_INT_HNDLR_RADDR_EEIC[] = {
 /*===================================================================================================================================*/
 void    vd_g_IntHndlrIRQCtrlCh(const U2 u2_a_IRQ_CH, const U1 u1_a_CTRL)
 {
-    static void ( * const       fp_sp_vd_INT_HNDLR_IRQC_UPDT[])(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK) = {
+    static void ( * const       fp_sp_vd_INT_HNDLR_IRQC_UPDT[])(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED) = {   /* u2_a_EIC_FIXED: EEIC.EICT and EEIC.EITB */
         &vd_s_IntHndlrIRQCUpdt__D, /* 000b */
         &vd_s_IntHndlrIRQCUpdt__E, /* 001b */
         &vd_s_IntHndlrIRQCUpdt_CD, /* 010b */
@@ -128,7 +138,7 @@ void    vd_g_IntHndlrIRQCtrlCh(const U2 u2_a_IRQ_CH, const U1 u1_a_CTRL)
     volatile U4 *               u4_tp_eic_word;
     volatile U2 *               u2_tp_eic_ch;
 
-    U2                          u2_t_back;
+    U2                          u2_t_eic_fixed;    /* EEIC.EICT and EEIC.EITB */
     U1                          u1_t_ctrl;
 
     if(u2_a_IRQ_CH < (U2)INT_HNDLR_INTC_1_NUM_CH){
@@ -146,16 +156,16 @@ void    vd_g_IntHndlrIRQCtrlCh(const U2 u2_a_IRQ_CH, const U1 u1_a_CTRL)
         /*----------------------------------------------------------*/
         /* Note:                                                    */
         /*                                                          */
-        /* Write back the previous value of EEIC.EICT/EITB,         */
+        /* EEIC.EITB will be always set to 1                        */
         /* because constant values are written in the interrupt     */
         /* initialization by the RTOS.                              */
         /*----------------------------------------------------------*/
-        u2_tp_eic_ch = (volatile U2 *)(&u4_tp_eic_word[u2_a_IRQ_CH]);
-        u2_t_back    = u2_REG_READ(u2_tp_eic_ch[INT_HNDLR_EIC_HALF_HI]);
-        u1_t_ctrl    = u1_a_CTRL & ((U1)INT_HNDLR_IRQ_CTRL_CH_ENA |
-                                    (U1)INT_HNDLR_IRQ_CTRL_RQ_CLR |
-                                    (U1)INT_HNDLR_IRQ_CTRL_RQ_SET);
-        (*fp_sp_vd_INT_HNDLR_IRQC_UPDT[u1_t_ctrl])(&u2_tp_eic_ch[INT_HNDLR_EIC_HALF_HI], u2_t_back);
+        u2_tp_eic_ch   = (volatile U2 *)(&u4_tp_eic_word[u2_a_IRQ_CH]);
+        u2_t_eic_fixed = (U2)(u1_g_INT_HNDLR_INTC_EICT[u2_a_IRQ_CH] << INT_HNDLR_EICX_LSB_EICT) | (U2)INT_HNDLR_EICX_BIT_EITB;
+        u1_t_ctrl      = u1_a_CTRL & ((U1)INT_HNDLR_IRQ_CTRL_CH_ENA |
+                                      (U1)INT_HNDLR_IRQ_CTRL_RQ_CLR |
+                                      (U1)INT_HNDLR_IRQ_CTRL_RQ_SET);
+        (*fp_sp_vd_INT_HNDLR_IRQC_UPDT[u1_t_ctrl])(&u2_tp_eic_ch[INT_HNDLR_EIC_HALF_HI], u2_t_eic_fixed);
         vd_s_SYNCP_W(&u4_tp_eic_word[u2_a_IRQ_CH]);
     }
 }
@@ -183,13 +193,7 @@ U1      u1_g_IntHndlrIRQst(const U2 u2_a_IRQ_CH, const U1 u1_a_W_CLR)
            (u2_t_irqst != (U2)0U  )){
 
             u1_tp_eic_byte = (volatile U1 *)&u2_tp_eic_ch[INT_HNDLR_EIC_HALF_HI];
-            /*----------------------------------------------------------*/
-            /* Note:                                                    */
-            /*                                                          */
-            /* Write back previous value of EEIC.EICT,                  */
-            /* because initial values need to be written after reset.   */
-            /*----------------------------------------------------------*/
-            u1_t_eict = u1_REG_READ(u1_tp_eic_byte[INT_HNDLR_EIC_BYTE_HI]) & (U1)INT_HNDLR_EICX_BYTE_BIT_EICT;
+            u1_t_eict      = (U1)(u1_g_INT_HNDLR_INTC_EICT[u2_a_IRQ_CH] << INT_HNDLR_EICX_BYTE_LSB_EICT);
             vd_REG_U1_WRITE(u1_tp_eic_byte[INT_HNDLR_EIC_BYTE_HI], u1_t_eict); /* EICx.EIRF is cleared */
             vd_s_SYNCP_W(&u4_tp_eic_word[u2_a_IRQ_CH]);
         }
@@ -198,20 +202,13 @@ U1      u1_g_IntHndlrIRQst(const U2 u2_a_IRQ_CH, const U1 u1_a_W_CLR)
     else if(u2_a_IRQ_CH < (U2)INT_HNDLR_INTC_2_NUM_CH){
 
         u4_tp_eic_word = u4p_sp_INT_HNDLR_RADDR_EEIC[INT_HNDLR_INTC_2];
-        u2_tp_eic_ch = (volatile U2 *)(&u4_tp_eic_word[u2_a_IRQ_CH]);
+        u2_tp_eic_ch   = (volatile U2 *)(&u4_tp_eic_word[u2_a_IRQ_CH]);
         u2_t_irqst     = u2_REG_READ(u2_tp_eic_ch[INT_HNDLR_EIC_HALF_HI]) & (U2)INT_HNDLR_EICX_BIT_EIRF;
         if((u1_a_W_CLR == (U1)TRUE) &&
            (u2_t_irqst != (U2)0U  )){
 
             u1_tp_eic_byte = (volatile U1 *)&u2_tp_eic_ch[INT_HNDLR_EIC_HALF_HI];
-
-            /*----------------------------------------------------------*/
-            /* Note:                                                    */
-            /*                                                          */
-            /* Write back previous value of EEIC.EICT,                  */
-            /* because initial values need to be written after reset.   */
-            /*----------------------------------------------------------*/
-            u1_t_eict = u1_REG_READ(u1_tp_eic_byte[INT_HNDLR_EIC_BYTE_HI]) & (U1)INT_HNDLR_EICX_BYTE_BIT_EICT;
+            u1_t_eict      = (U1)(u1_g_INT_HNDLR_INTC_EICT[u2_a_IRQ_CH] << INT_HNDLR_EICX_BYTE_LSB_EICT);
             vd_REG_U1_WRITE(u1_tp_eic_byte[INT_HNDLR_EIC_BYTE_HI], u1_t_eict); /* EICx.EIRF is cleared */
             vd_s_SYNCP_W(&u4_tp_eic_word[u2_a_IRQ_CH]);
         }
@@ -256,74 +253,65 @@ U1      u1_g_IntHndlrIRQenabled(const U2 u2_a_IRQ_CH)
     return((U1)u2_t_ei);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_IntHndlrIRQCUpdt__D(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)                                 */
+/*  static void    vd_s_IntHndlrIRQCUpdt__D(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_IntHndlrIRQCUpdt__D(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)
+static void    vd_s_IntHndlrIRQCUpdt__D(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)
 {
     volatile U1 *               u1_tp_eic_byte;
-    U1                          u1_t_eic_lo;
 
     u1_tp_eic_byte = (volatile U1 *)u2_ap_eic_half_ch;
-    u1_t_eic_lo    = ((U1)u2_a_EIC_BACK & (U1)INT_HNDLR_EICX_BIT_EITB) | (U1)INT_HNDLR_EICX_BIT_EIMK;
-    vd_REG_U1_WRITE(u1_tp_eic_byte[INT_HNDLR_EIC_BYTE_LO], u1_t_eic_lo);
+    vd_REG_U1_WRITE(u1_tp_eic_byte[INT_HNDLR_EIC_BYTE_LO], (U1)u2_a_EIC_FIXED | (U1)INT_HNDLR_EICX_BIT_EIMK);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_IntHndlrIRQCUpdt__E(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)                                 */
+/*  static void    vd_s_IntHndlrIRQCUpdt__E(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_IntHndlrIRQCUpdt__E(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)
+static void    vd_s_IntHndlrIRQCUpdt__E(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)
 {
     volatile U1 *               u1_tp_eic_byte;
-    U1                          u1_t_eic_lo;
 
     u1_tp_eic_byte = (volatile U1 *)u2_ap_eic_half_ch;
-    u1_t_eic_lo    = (U1)u2_a_EIC_BACK & (U1)INT_HNDLR_EICX_BIT_EITB;
-    vd_REG_U1_WRITE(u1_tp_eic_byte[INT_HNDLR_EIC_BYTE_LO], u1_t_eic_lo);
+    vd_REG_U1_WRITE(u1_tp_eic_byte[INT_HNDLR_EIC_BYTE_LO], (U1)u2_a_EIC_FIXED);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_IntHndlrIRQCUpdt_CD(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)                                 */
+/*  static void    vd_s_IntHndlrIRQCUpdt_CD(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_IntHndlrIRQCUpdt_CD(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)
+static void    vd_s_IntHndlrIRQCUpdt_CD(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)
 {
-    U2                          u2_t_eic;
-
-    u2_t_eic = (u2_a_EIC_BACK & (U2)(INT_HNDLR_EICX_BIT_EICT | INT_HNDLR_EICX_BIT_EITB)) | (U2)INT_HNDLR_EICX_BIT_EIMK;
-    vd_REG_U2_WRITE((*u2_ap_eic_half_ch), u2_t_eic);
+    vd_REG_U2_WRITE((*u2_ap_eic_half_ch), u2_a_EIC_FIXED | (U2)INT_HNDLR_EICX_BIT_EIMK);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_IntHndlrIRQCUpdt_CE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)                                 */
+/*  static void    vd_s_IntHndlrIRQCUpdt_CE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_IntHndlrIRQCUpdt_CE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)
+static void    vd_s_IntHndlrIRQCUpdt_CE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)
 {
-    U2                          u2_t_eic;
-
-    u2_t_eic = u2_a_EIC_BACK & (U2)(INT_HNDLR_EICX_BIT_EICT | INT_HNDLR_EICX_BIT_EITB);
-    vd_REG_U2_WRITE((*u2_ap_eic_half_ch), u2_t_eic);
+    vd_REG_U2_WRITE((*u2_ap_eic_half_ch), u2_a_EIC_FIXED);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)                                 */
+/*  static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_BACK)
+static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U2 u2_a_EIC_FIXED)
 {
-    U2                          u2_t_eic;
-
-    u2_t_eic = (u2_a_EIC_BACK & (U2)(INT_HNDLR_EICX_BIT_EICT | INT_HNDLR_EICX_BIT_EITB)) | (U2)INT_HNDLR_EICX_BIT_EIRF;
-    vd_REG_U2_WRITE((*u2_ap_eic_half_ch), u2_t_eic);
+    vd_REG_U2_WRITE((*u2_ap_eic_half_ch), u2_a_EIC_FIXED | (U2)INT_HNDLR_EICX_BIT_EIRF);
 }
+
+#pragma ghs section rodata=default
+#pragma ghs section text=default
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -334,8 +322,10 @@ static void    vd_s_IntHndlrIRQCUpdt_SE(volatile U2 * u2_ap_eic_half_ch, const U
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    12/20/2021  TN       New.                                                                                               */
 /*  1.0.1     9/28/2023  YI       Bug Fix :  Unexpected access to reserved channels in vd_g_IntHndlrIRQInit/vd_g_IntHndlrIRQDeInit.  */
+/*  1.0.2     4/09/2025  ZY       Add EICT table and EITB(fixed to 1) to avoid Read-modify-write in multicore/hypervisor usecase.    */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * YI   = Yusuke Ichikawa, Denso Create                                                                                           */
+/*  * ZY   = Zhenming Yuan, Denso                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -20,7 +20,6 @@ primaryTarget=v800_standalone.tgt
     :macro=MCAL_DIR=${ROOT_DIR}/BSW/MCAL
 	:macro=MS_DIR=${ROOT_DIR}/BSW/Memory
 	:macro=IOHW_DIR=${ROOT_DIR}/BSW/IoHwAbstract
-	:macro=APP_DIR=${ROOT_DIR}/App
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
 
     :optionsFile=${CMN_DIR}/common.opt
@@ -46,8 +45,6 @@ primaryTarget=v800_standalone.tgt
 	-I${OS_DIR}/include/ar_sys
     -I${OS_DIR}/config
     -I${EHVM_IF_DIR}/include/ehvm
-
-	-I${APP_DIR}/Stub
 
     -L${ROOT_DIR}/BSW/Aubist/Os/os_lib/release
     -lsc1.sc.notrace.rh850u2a.a
@@ -105,6 +102,7 @@ ${CMN_DIR}/MCAL_Icu.gpj
 ${CMN_DIR}/MCAL_Wdg.gpj
 ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_DUMMY.gpj
+${CMN_DIR}/MCAL_ErrH.gpj
 
 #${CMN_DIR}/bswMS.gpj
 ${CMN_DIR}/MS_Rim.gpj

@@ -11,7 +11,9 @@
 /*	include files																				*/
 /*==============================================================================================*/
 #include	"Std_Types.h"
-#include	"Bsw_cfg.h"
+#include	"Mcal_SpalCmn.h"
+
+#include	"Spi_Ucfg.h"
 
 #include	"pil_spi.h"
 
@@ -56,8 +58,6 @@ extern void Esr_Ap_Pil_Spi_SyncReceiveWait_TimeOutError( void );
 /*==============================================================================================*/
 /* functions																					*/
 /*==============================================================================================*/
-// #define SEL_PRGSEC	(BSW_SEC_P_LROM0_CPU0_ASIL)
-// #include "Bsw_Seccfg_Prgs.h"
 #pragma ghs section text=".SPI_TEXT_CODE"
 
 /*----------------------------------------------------------------------------------------------*/
@@ -481,7 +481,5 @@ ZORN	Pil_Spi_GetOvrunErrStatus( U1 t_u1HwChannelID )
 }
 #endif
 
-// #include "Bsw_Seccfg_Prge.h"
-// #undef SEL_PRGSEC
 #pragma ghs section text=default
 /*-- End Of File -------------------------------------------------------------------------------*/

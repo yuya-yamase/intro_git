@@ -22,8 +22,34 @@
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-/* Nothing */
+#ifndef HI	/* 2èdíËã`ñhé~ÇÃÇΩÇﬂ */
+#define		HI						(1U)
+#endif
+#ifndef LO	/* 2èdíËã`ñhé~ÇÃÇΩÇﬂ */
+#define		LO						(0U)
+#endif
 
+#ifndef ON	/* 2èdíËã`ñhé~ÇÃÇΩÇﬂ */
+#define		ON						(HI)
+#endif
+#ifndef OFF	/* 2èdíËã`ñhé~ÇÃÇΩÇﬂ */
+#define		OFF						(LO)
+#endif
+
+#ifndef OK	/* 2èdíËã`ñhé~ÇÃÇΩÇﬂ */
+#define		OK						(0U)
+#endif
+#ifndef NG	/* 2èdíËã`ñhé~ÇÃÇΩÇﬂ */
+#define		NG						(1U)
+#endif
+
+#ifndef UNFIX	/* 2èdíËã`ñhé~ÇÃÇΩÇﬂ */
+#define		UNFIX					(3U)
+#endif
+
+#ifndef NULL_POINTER	/* 2èdíËã`ñhé~ÇÃÇΩÇﬂ */
+#define		NULL_POINTER			((void*)0)
+#endif
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */

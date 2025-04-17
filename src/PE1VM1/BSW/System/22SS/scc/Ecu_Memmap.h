@@ -95,6 +95,10 @@ extern uint32 __ghsbegin_ecu_n_bvar_top[];
 extern uint32 __ghsbegin_bsw_ecu_n_bvar_bottom[];
 extern uint32 ECU_N_BVAR_SIZE[];
 
+extern uint32 __ghsbegin_iohw_ram_top[];
+extern uint32 __ghsbegin_iohw_ram_bottom[];
+extern uint32 IOHW_RAM_SIZE[];
+
 extern uint32 __ghsbegin_MEM_SEC_STA_BACK_BSW[];
 extern uint32 __ghsbegin_MEM_SEC_END_BACK_BSW[];
 extern uint32 BSS_BACK_BSW_SIZE[];
