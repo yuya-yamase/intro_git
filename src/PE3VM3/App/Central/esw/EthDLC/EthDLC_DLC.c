@@ -122,8 +122,9 @@ static uint8 ethdlc_dlc_get_dlc_event (void)
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType ethdlc_dlc_checkPwrState(void)
 {
-    /* VISから車両電源基本ステートを取得して判断する*/
-    return STD_ON; //★ 暫定でONにしておく
+    /* VISから車両電源基本ステートを取得して判断する	*/
+	/* 暫定でONを返す								*/
+    return STD_ON;
 }
 /* -------------------------------------------------------------------------- */
 /* tag         : <ESW-ethdlc_dlc_get_linkup_event>                            */
