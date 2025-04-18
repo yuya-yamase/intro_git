@@ -32,6 +32,11 @@
 #define U1_EXTSIGCTRL_POLLTRGTIMCNT_MIN		(U1)1U			/* ポーリング開始トリガタイマカウンタ最小値 */
 #define U1_EXTSIGCTRL_POLLTIMCNT_MIN		(U1)1U			/* ポーリングタイマカウンタ最小値 */
 
+/* メイン処理実施可否判定用 */
+#define U1_EXTSIGCTRL_PROCSTATRG_NON		(U1)0U			/* メイン処理実施可否判定待ち */
+#define U1_EXTSIGCTRL_PROCSTATRG_ON			(U1)1U			/* メイン処理実施可能 */
+#define U1_EXTSIGCTRL_PROCSTATRG_OFF		(U1)2U			/* メイン処理実施不可 */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -40,7 +45,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* 外部信号ステータステーブル */
 typedef	struct	{
-	Dio_ChannelType	DioChannelId;	/* DIOチャネルID */
+	Dio_ChannelType	DioChannelId;		/* DIOチャネルID */
 	U1	u1t_CycTim;						/* 定周期時間 */
 	U1	u1t_SameCntNum;					/* 同一論理判定確定回数 */
 	U1	u1t_StrTim;						/* ポーリング開始待ち時間 */
@@ -48,7 +53,7 @@ typedef	struct	{
 
 /* ポーリングステータス */
 typedef struct {
-	Dio_LevelType	PollTmnlPreCnc;	/* ポーリング端子前回レベル */
+	Dio_LevelType	PollTmnlPreCnc;		/* ポーリング端子前回レベル */
 	U1				u1t_PollSts;		/* ポーリング状態 */
 	U1				u1t_PollTimCnt;		/* ポーリングタイマカウンタ */
 	U1				u1t_PollSigSts;		/* ポーリング信号状態 */
@@ -117,26 +122,43 @@ void ExtSigCtrl_Init(void)
 void ExtSigCtrl_MainFunction(void)
 {
 	U1 u1t_Kind;
+	U1 u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_NON;
 	Dio_LevelType v33PeriOn;
 
 	for (u1t_Kind = (U1)0U; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
 		switch (u1t_Kind) {
-			case EXTSIGCTRL_KIND_TEST:
+			case (U1)EXTSIGCTRL_KIND_TEST:
 				v33PeriOn = Dio_ReadChannel(DIO_ID_PORT10_CH2);
 				if (v33PeriOn != STD_HIGH) {
-					ExtSigCtrl_InitSigSts(u1t_Kind);
+					u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_OFF;
+				} else {
+					u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_ON;
 				}
+				break;
+			case (U1)EXTSIGCTRL_KIND_BOOT:
+			case (U1)EXTSIGCTRL_KIND_EXT_PWR_SW:
+				u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_ON;
 				break;
 			default:
 				break;
 		}
 
-		if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts == U1_EXTSIGCTRL_POLL_STS_CYC) {
-			/* ポーリング処理 */
-			ExtSigCtrl_Poll(u1t_Kind);
-		} else {
-			/* 回路安定待ち処理  */
-			ExtSigCtrl_TrgTimCtrl(u1t_Kind);
+		switch (u1t_ProcCase) {
+			case U1_EXTSIGCTRL_PROCSTATRG_ON:
+				if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts == U1_EXTSIGCTRL_POLL_STS_CYC) {
+					/* ポーリング処理 */
+					ExtSigCtrl_Poll(u1t_Kind);
+				} else {
+					/* 回路安定待ち処理  */
+					ExtSigCtrl_TrgTimCtrl(u1t_Kind);
+				}
+				break;
+			case U1_EXTSIGCTRL_PROCSTATRG_OFF:
+				ExtSigCtrl_InitSigSts(u1t_Kind);
+				break;
+			case U1_EXTSIGCTRL_PROCSTATRG_NON:
+			default:
+				break;
 		}
 	}
 
