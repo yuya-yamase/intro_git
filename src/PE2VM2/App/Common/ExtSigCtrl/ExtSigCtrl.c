@@ -33,9 +33,8 @@
 #define U1_EXTSIGCTRL_POLLTIMCNT_MIN		(U1)1U			/* ポーリングタイマカウンタ最小値 */
 
 /* メイン処理実施可否判定用 */
-#define U1_EXTSIGCTRL_PROCSTATRG_NON		(U1)0U			/* メイン処理実施可否判定待ち */
+#define U1_EXTSIGCTRL_PROCSTATRG_OFF		(U1)0U			/* メイン処理実施不可 */
 #define U1_EXTSIGCTRL_PROCSTATRG_ON			(U1)1U			/* メイン処理実施可能 */
-#define U1_EXTSIGCTRL_PROCSTATRG_OFF		(U1)2U			/* メイン処理実施不可 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -122,44 +121,35 @@ void ExtSigCtrl_Init(void)
 void ExtSigCtrl_MainFunction(void)
 {
 	U1 u1t_Kind;
-	U1 u1t_ProcCase;
+	U1 u1t_ProcStaTrg;
 	Dio_LevelType v33PeriOn;
 
 	for (u1t_Kind = (U1)0U; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
-		u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_NON;
+		u1t_ProcStaTrg = U1_EXTSIGCTRL_PROCSTATRG_OFF;
 		switch (u1t_Kind) {
 			case (U1)EXTSIGCTRL_KIND_TEST:
 				v33PeriOn = Dio_ReadChannel(DIO_ID_PORT10_CH2);
 				if (v33PeriOn != STD_HIGH) {
-					u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_OFF;
+					u1t_ProcStaTrg = U1_EXTSIGCTRL_PROCSTATRG_OFF;
 				} else {
-					u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_ON;
+					u1t_ProcStaTrg = U1_EXTSIGCTRL_PROCSTATRG_ON;
 				}
 				break;
-			case (U1)EXTSIGCTRL_KIND_BOOT:
-			case (U1)EXTSIGCTRL_KIND_EXT_PWR_SW:
-				u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_ON;
-				break;
 			default:
+				u1t_ProcStaTrg = U1_EXTSIGCTRL_PROCSTATRG_ON;
 				break;
 		}
 
-		switch (u1t_ProcCase) {
-			case U1_EXTSIGCTRL_PROCSTATRG_ON:
-				if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts == U1_EXTSIGCTRL_POLL_STS_CYC) {
-					/* ポーリング処理 */
-					ExtSigCtrl_Poll(u1t_Kind);
-				} else {
-					/* 回路安定待ち処理  */
-					ExtSigCtrl_TrgTimCtrl(u1t_Kind);
-				}
-				break;
-			case U1_EXTSIGCTRL_PROCSTATRG_OFF:
-				ExtSigCtrl_InitSigSts(u1t_Kind);
-				break;
-			case U1_EXTSIGCTRL_PROCSTATRG_NON:
-			default:
-				break;
+		if (u1t_ProcStaTrg == U1_EXTSIGCTRL_PROCSTATRG_ON) {
+			if (stsa_ExtSigCtrl_PollSts[u1t_Kind].u1t_PollSts == U1_EXTSIGCTRL_POLL_STS_CYC) {
+				/* ポーリング処理 */
+				ExtSigCtrl_Poll(u1t_Kind);
+			} else {
+				/* 回路安定待ち処理  */
+				ExtSigCtrl_TrgTimCtrl(u1t_Kind);
+			}
+		} else {
+			ExtSigCtrl_InitSigSts(u1t_Kind);
 		}
 	}
 
