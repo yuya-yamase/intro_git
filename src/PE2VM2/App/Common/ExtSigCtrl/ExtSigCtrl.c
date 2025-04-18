@@ -122,10 +122,11 @@ void ExtSigCtrl_Init(void)
 void ExtSigCtrl_MainFunction(void)
 {
 	U1 u1t_Kind;
-	U1 u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_NON;
+	U1 u1t_ProcCase;
 	Dio_LevelType v33PeriOn;
 
 	for (u1t_Kind = (U1)0U; u1t_Kind < (U1)EXTSIGCTRL_KIND_NUM; u1t_Kind++) {
+		u1t_ProcCase = U1_EXTSIGCTRL_PROCSTATRG_NON;
 		switch (u1t_Kind) {
 			case (U1)EXTSIGCTRL_KIND_TEST:
 				v33PeriOn = Dio_ReadChannel(DIO_ID_PORT10_CH2);
