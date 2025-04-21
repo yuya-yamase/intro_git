@@ -26,6 +26,8 @@
 #include "rim_ctl.h"
 /* #include "nvmc_mgr.h" */
 
+#include "ExtSigCtrl_Main.h"
+
 /* IVI */
 #include "x_spi_ivi.h"
 #include "IVI_PwrCtrl_Main.h"
@@ -81,6 +83,8 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
+    ExtSigCtrl_Init();
+
     /* IVI */
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Bon_init();
@@ -125,6 +129,8 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
+    ExtSigCtrl_Init();
+
     /* IVI */
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Rst_init();
@@ -169,6 +175,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_VehopemdWkupInit();
 
     /* vv User Hook start vv */
+    ExtSigCtrl_Init();
+
     /* IVI */
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Wkup_init();

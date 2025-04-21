@@ -1,6 +1,7 @@
 #!gbuild
 [Subproject]
     :sourceDir=${ROOT_DIR}
+    :sourceDir=${APP_DIR}/Common/ExtSigCtrl
     :sourceDir=${APP_DIR}/Common/xspi
     :sourceDir=${APP_DIR}/IVI/XSPI
     :sourceDir=${APP_DIR}/IVI/I2cCtrl
@@ -15,6 +16,7 @@
     :sourceDir=${APP_DIR}/IVI/DspCtrl
     :sourceDir=${APP_DIR}/IVI/DspCtrl/config
 
+    -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
 
     -I${CAN_DIR}/inc
@@ -58,6 +60,7 @@ ${SS_DIR}/SchdM/config/scheduler_cfg.c
 ${SS_DIR}/22SS/config/22SS_Callout.c
 ${APP_DIR}/Stub/stub_u2a.c
 
+ExtSigCtrl.c
 xspi.c
 xspi_sub.c
 x_spi_ivi.c
