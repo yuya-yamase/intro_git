@@ -179,7 +179,6 @@ static U4 u4_s_xspi_ivi_pulse_count_tmp;
 
 static U2 u2_s_xspi_ivi_total_pulse_num;
 
-static U2 u2_s_xspi_ivi_transmission_cnt;                     /*SubFlame Transmission Count*/
 static U1 u2_s_xspi_ivi_ini_buf_cnt;                          /*SubFrame Num*/
 static U1 u1_s_xspi_ivi_tmp_gyro_ini_cnt;                     /*tmp_gyro ini buf num*/
 static U1 u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf;                     /*tmp_gyro ini buf num*/
@@ -270,7 +269,6 @@ void            vd_g_XspiIviSub2Init(void)
     u1_s_xspi_ivi_clock_freq_tmp = (U1)0U;
     u4_s_xspi_ivi_pulse_count_tmp = (U4)0U;
 
-    u2_s_xspi_ivi_transmission_cnt = (U2)0U;                    /*サブフレームの送信回数初期化*/
 	u1_s_xspi_ivi_com_start_flg  = (U1)FALSE;                   /*通信開始フラグ初期化*/
     u1_s_xspi_ivi_ini_send_flg   = (U1)FALSE;                   /*初回送信開始フラグ初期化*/
     u1_s_xspi_ivi_comp_com_start = (U1)FALSE;                   /*通信開始応答完了フラグ初期化*/
@@ -372,7 +370,6 @@ void            vd_g_XspiIviSub2Send(U1 * u1_ap_xspi_add)
     if((u1_s_xspi_ivi_com_start_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_com_start == (U1)FALSE)) {
         /* 通信開始応答 */
         vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
-        u2_s_xspi_ivi_transmission_cnt++;
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_COM_START_RES_LENGTH,(U2)0U);
         u1_ap_xspi_add[8] = (U1)0x02;
         u1_ap_xspi_add[9] = (U1)0x00;
@@ -413,7 +410,6 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
         /*定期送信処理*/
         vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
 
-        u2_s_xspi_ivi_transmission_cnt++;
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_LENGTH,(U2)0U);
         vd_g_MemcpyU1(&u1_ap_xspi_add[8], &u1_sp_xspi_ivi_gyro_data[0], (U4)XSPI_IVI_DATA_LENGTH);
         u1_ap_xspi_add[8]  = (U1)0x05; /*SubType*/
@@ -428,7 +424,6 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
             /*初回送信*/
             vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
 
-            u2_s_xspi_ivi_transmission_cnt++;
             u2_t_buf_cnt = u2_s_xspi_ivi_ini_buf_cnt * (U2)1016U;
 
             vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_INIT_DATA_LENGTH,u2_s_xspi_ivi_ini_buf_cnt);
@@ -476,10 +471,8 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
 static void              vd_s_XspiIviSub2FrameHeader(U1 * u1_ap_buf,const U2 u2_a_DTLEN,const U2 u2_a_CNT)
 {
     U1          u1_tp_subframe2_header[XSPI_IVI_HEADER];    /* Sub Frame2 Header Field */
-    U2          u2_t_subframe2_num;
     U2          u2_t_subframe2_dtlen;
 
-    u2_t_subframe2_num = ((u2_a_DTLEN + (U2)XSPI_IVI_HEADER) / (U2)XSPI_IVI_SUBFRAME2_DATA_LENGTH) + (U2)1U;
     if(u2_a_DTLEN > (U2)XSPI_IVI_SUBFRAME2_DATA_LENGTH) {
         u2_t_subframe2_dtlen = (u2_a_DTLEN - (u2_a_CNT * ((U2)XSPI_IVI_SUBFRAME2_DATA_LENGTH - (U2)XSPI_IVI_HEADER)));
         if(u2_t_subframe2_dtlen > (U2)XSPI_IVI_SUBFRAME2_VARDT_LENGTH){
@@ -496,10 +489,10 @@ static void              vd_s_XspiIviSub2FrameHeader(U1 * u1_ap_buf,const U2 u2_
     }
 
     /* SubFrame2 Header Field */
-    u1_tp_subframe2_header[0] = (U1)((u2_s_xspi_ivi_transmission_cnt & 0xFF00U) >> XSPI_IVI_SFT_08);
-    u1_tp_subframe2_header[1] = (U1)(u2_s_xspi_ivi_transmission_cnt & 0x00FFU);
-    u1_tp_subframe2_header[2] = (U1)((u2_t_subframe2_num & 0xFF00U) >> XSPI_IVI_SFT_08);
-    u1_tp_subframe2_header[3] = (U1)(u2_t_subframe2_num & 0x00FFU);
+    u1_tp_subframe2_header[0] = (U1)0x00U;
+    u1_tp_subframe2_header[1] = (U1)0x01U;
+    u1_tp_subframe2_header[2] = (U1)0x00U;
+    u1_tp_subframe2_header[3] = (U1)0x01U;
     u1_tp_subframe2_header[4] = (U1)((u2_t_subframe2_dtlen & 0xFF00U) >> XSPI_IVI_SFT_08);
     u1_tp_subframe2_header[5] = (U1)(u2_t_subframe2_dtlen & 0x00FFU);
     u1_tp_subframe2_header[6] = (U1)0x04;
