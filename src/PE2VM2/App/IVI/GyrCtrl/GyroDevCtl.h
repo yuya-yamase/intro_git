@@ -26,8 +26,7 @@
 #define GYRODEV_I2C_RWC_BYTE2                       (2U)
 #define GYRODEV_I2C_RWC_BYTE3                       (3U)
 #define GYRODEV_I2C_RWC_BYTE7                       (7U)
-#define GYRODEV_I2C_RWC_BYTE9                       (9U)
-#define GYRODEV_I2C_RWC_BYTE10                      (10U)
+#define GYRODEV_I2C_RWC_BYTE8                       (8U)
 
 /* Register Bit Mask */
 #define GYRODEV_REG_MASK_BIT_0                      (0x01U)
@@ -80,7 +79,7 @@
 #define u1_GYRODEV_SET_SENSOR_ON_L()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_LOW))
 #define u1_GYRODEV_SET_SENSOR_ON_H()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_HIGH))
 #define u1_GYRODEV_GET_APP_ON()                     (u1_g_PictCtl_StartSts())
-#define u1_GYRODEV_OSCMD_GYRO_DATA_NOTIF(x)         (vd_g_XspiIviSub2GyroDataPut(x))
+#define vd_GYRODEV_OSCMD_GYRO_DATA_NOTIF(x)         (vd_g_XspiIviSub2GyroDataPut(x))
 #define u1_GYRODEV_GET_LAST_PLS()                   (u2_g_CarSpdPls_LastPlsGet())
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

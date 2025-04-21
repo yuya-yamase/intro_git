@@ -50,6 +50,7 @@
 #define GYRODEV_GSENS_TEMP_RESO             (125U)      /* G-Sensor Device Temperature Resolution 0.125[°C/LSB] */
 #define GYRODEV_GSENS_XYZ_CENTER            (0U)        /* G-Sensor Device XYZ Center Value [0g] */
 #define GYRODEV_GSENS_TEMP_CENTER           (23U)       /* G-Sensor Device Temperature Center Value [23°C] */
+#define GYRODEV_GSENS_TEMP_INVALID          (0x80U)     /* G-Sensor Device Temperature MSB Invalid Value */
 
 #define GYRODEV_INTAPI_NOTIFCOND_SET_WRINUM (1U)
 
@@ -90,8 +91,8 @@ static U1 u1_s_gyrodev_oscmd_outctl_flag;                       /* "[API]G-Senso
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1 u1_s_GyroDev_TimChk(const U2 u2_a_tim_cnt, const U2 u2_a_wait_tim);
 static void vd_s_vd_g_GyroDev_CycChk(void);
-static void vd_s_GyroDev_GyroDtcChk(void);
-static void vd_s_GyroDev_GSensDtcChk(void);
+static void vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_data, const U2 u2_a_z_data);
+static void vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_data, const U2 u2_a_z_data);
 static void vd_s_GyroDev_Memset(void * vdp_a_dst, const U1 u1_a_data, U4 u4_a_size);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -132,7 +133,7 @@ U1 u1_sp_GYRODEV_GSENSDATA_RD_PDU2[GYRODEV_I2C_RWC_BYTE7];
 
 const U1 u1_sp_GYRODEV_GSENSDATA_RD2_PDU1[GYRODEV_I2C_RWC_BYTE2] = {
     (U1)GYRODEV_GSENS_I2C_SLAVEADR_WR,    /* Slave Address */
-    (U1)0x21U     /* Read Address 1 */
+    (U1)0x22U     /* Read Address 1 */
 
 };
 
@@ -262,7 +263,7 @@ void    vd_g_GyroDev_BonInit(void)
 
     /*  データリード用テーブル(BurstRead)初期化 */
     u1_sp_GYRODEV_GYRODATA_RD_PDU2[0] = (U1)GYRODEV_GYRO_I2C_SLAVEADR_RD;    /* Slave Address */
-    for(u2_t_cnt = (U2)1U; u2_t_cnt < (U2)GYRODEV_I2C_RWC_BYTE9; u2_t_cnt++) {
+    for(u2_t_cnt = (U2)1U; u2_t_cnt < (U2)GYRODEV_I2C_RWC_BYTE8; u2_t_cnt++) {
         u1_sp_GYRODEV_GYRODATA_RD_PDU2[u2_t_cnt] = (U1)0U;    /* 読出しデータ初期値 */
     }
 
@@ -326,8 +327,8 @@ void    vd_g_GyroDev_WkupInit(void)
     u1_s_gyrodev_oscmd_outctl_flag = (U1)FALSE;
 
     /*  データリード用テーブル(BurstRead)初期化 */
-    u1_sp_GYRODEV_GYRODATA_RD_PDU2[0] = (U1)GYRODEV_GSENS_I2C_SLAVEADR_RD;    /* Slave Address */
-    for(u2_t_cnt = (U2)1U; u2_t_cnt < (U2)GYRODEV_I2C_RWC_BYTE9; u2_t_cnt++) {
+    u1_sp_GYRODEV_GYRODATA_RD_PDU2[0] = (U1)GYRODEV_GYRO_I2C_SLAVEADR_RD;    /* Slave Address */
+    for(u2_t_cnt = (U2)1U; u2_t_cnt < (U2)GYRODEV_I2C_RWC_BYTE8; u2_t_cnt++) {
         u1_sp_GYRODEV_GYRODATA_RD_PDU2[u2_t_cnt] = (U1)0U;    /* 読出しデータ初期値 */
     }
 
@@ -443,7 +444,9 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
     U1      u1_t_gyro_y_msb_data;                                   /* Gyro Register Y_MSB Data */
     U1      u1_t_gyro_z_lsb_data;                                   /* Gyro Register Z_LSB Data */
     U1      u1_t_gyro_z_msb_data;                                   /* Gyro Register Z_MSB Data */
-    U1      u1_t_gyro_temp_data;                                    /* Gyro Register Temperature Data */
+    U2      u2_t_gyro_x_data;                                       /* Gyro Register X_Data */
+    U2      u2_t_gyro_y_data;                                       /* Gyro Register Y_Data */
+    U2      u2_t_gyro_z_data;                                       /* Gyro Register Z_Data */
     U1      u1_t_gyro_xyz_range_data;                               /* Gyro Register XYZ Range Data */
     U1      u1_t_gsens_x_lsb_data;                                  /* G-Sensor Register X_LSB Data */
     U1      u1_t_gsens_x_msb_data;                                  /* G-Sensor Register X_MSB Data */
@@ -451,8 +454,10 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
     U1      u1_t_gsens_y_msb_data;                                  /* G-Sensor Register Y_MSB Data */
     U1      u1_t_gsens_z_lsb_data;                                  /* G-Sensor Register Z_LSB Data */
     U1      u1_t_gsens_z_msb_data;                                  /* G-Sensor Register Z_MSB Data */
-    U1      u1_t_gsens_temp_lsb_data;                               /* G-Sensor Register Temperature LSB Data */
     U1      u1_t_gsens_temp_msb_data;                               /* G-Sensor Register Temperature MSB Data */
+    U2      u2_t_gsens_x_data;                                      /* G-Sensor Register X Data */
+    U2      u2_t_gsens_y_data;                                      /* G-Sensor Register Y Data */
+    U2      u2_t_gsens_z_data;                                      /* G-Sensor Register Z Data */
     U1      u1_t_gsens_xyz_range_data;                              /* G-Sensor Register XYZ Range Data */
 
     switch (u1_s_gyrodev_cycchk_sts){
@@ -501,13 +506,16 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                 u1_t_gyro_y_msb_data = st_sp_GYRODEV_GYRODATA_RD_TBL[1].u1p_pdu[4];
                 u1_t_gyro_z_lsb_data = st_sp_GYRODEV_GYRODATA_RD_TBL[1].u1p_pdu[5];
                 u1_t_gyro_z_msb_data = st_sp_GYRODEV_GYRODATA_RD_TBL[1].u1p_pdu[6];
-                u1_t_gyro_temp_data = st_sp_GYRODEV_GYRODATA_RD_TBL[1].u1p_pdu[7];
 
                 /* Gyro Read Data Create */
-                st_gyrodev_readdata.u2_gyro_x_data = (U2)(((U2)u1_t_gyro_x_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gyro_x_lsb_data);
-                st_gyrodev_readdata.u2_gyro_y_data = (U2)(((U2)u1_t_gyro_y_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gyro_y_lsb_data);
-                st_gyrodev_readdata.u2_gyro_z_data = (U2)(((U2)u1_t_gyro_z_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gyro_z_lsb_data);
-                st_gyrodev_readdata.u1_gyro_temp_data = u1_t_gyro_temp_data;
+                st_gyrodev_readdata.u1_gyro_x_data_down = u1_t_gyro_x_lsb_data;
+                st_gyrodev_readdata.u1_gyro_x_data_up = u1_t_gyro_x_msb_data;
+                st_gyrodev_readdata.u1_gyro_y_data_down = u1_t_gyro_y_lsb_data;
+                st_gyrodev_readdata.u1_gyro_y_data_up = u1_t_gyro_y_msb_data;
+                st_gyrodev_readdata.u1_gyro_z_data_down = u1_t_gyro_z_lsb_data;
+                st_gyrodev_readdata.u1_gyro_z_data_up = u1_t_gyro_z_msb_data;
+                st_gyrodev_readdata.u1_gyro_temp_data = st_sp_GYRODEV_GYRODATA_RD_TBL[1].u1p_pdu[7];
+
                 u1_t_gyro_xyz_range_data = (U1)GYRODEV_GYRO_RANGE_DATA;
                 if(u1_t_gyro_xyz_range_data < (U1)GYRODEV_GYRO_RANGE_NUM){
                     st_gyrodev_readdata.st_gyro_reso.u2_gyro_xyz_reso = (U2)u2_sp_GYRODEV_GYRO_RANGE_RESO_CONV_TBL[u1_t_gyro_xyz_range_data];
@@ -522,16 +530,18 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                 st_gyrodev_readdata.u1_gyro_z_data_sts = (U1)GYRODEV_READ_DATA_OK;
                 st_gyrodev_readdata.u1_gyro_temp_data_sts = (U1)GYRODEV_READ_DATA_OK;
 
+                /* Gyro Fail Check */
+                u2_t_gyro_x_data = (U2)(((U2)u1_t_gyro_x_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gyro_x_lsb_data);
+                u2_t_gyro_y_data = (U2)(((U2)u1_t_gyro_y_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gyro_y_lsb_data);
+                u2_t_gyro_z_data = (U2)(((U2)u1_t_gyro_z_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gyro_z_lsb_data);
+
+                vd_s_GyroDev_GyroDtcChk(u2_t_gyro_x_data, u2_t_gyro_y_data, u2_t_gyro_z_data);
+
                 /* Next Process */
                 u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP3;
             }
             break;
-        case GYRODEV_CYCCHK_STEP3:                                       /* STEP3 */
-            vd_s_GyroDev_GyroDtcChk();
-            /* Next Process */
-            u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP4;
-            break;
-        case GYRODEV_CYCCHK_STEP4:                                       /* STEP4 */
+        case GYRODEV_CYCCHK_STEP3:                                      /* STEP3 */
             /* Read Register G-Sensor */
             u1_t_reg_req_sts = u1_GYRODEV_GSENS_I2C_CTRL_REGREAD(&u2_s_gyrodev_regstep, &u4_s_gyrodev_i2c_ack_wait_time,
                                                                  st_sp_GYRODEV_GSENSDATA_RD_TBL, &u2_s_gyrodev_reg_btwn_time);
@@ -543,24 +553,37 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                 u1_t_gsens_z_lsb_data = st_sp_GYRODEV_GSENSDATA_RD_TBL[1].u1p_pdu[5];
                 u1_t_gsens_z_msb_data = st_sp_GYRODEV_GSENSDATA_RD_TBL[1].u1p_pdu[6];
 
+                /* G-Sensor Read Data Create */
+                st_gyrodev_readdata.u1_accl_x_data_down = u1_t_gsens_x_lsb_data;
+                st_gyrodev_readdata.u1_accl_x_data_up = u1_t_gsens_x_msb_data;
+                st_gyrodev_readdata.u1_accl_y_data_down = u1_t_gsens_y_lsb_data;
+                st_gyrodev_readdata.u1_accl_y_data_up = u1_t_gsens_y_msb_data;
+                st_gyrodev_readdata.u1_accl_z_data_down = u1_t_gsens_z_lsb_data;
+                st_gyrodev_readdata.u1_accl_z_data_up = u1_t_gsens_z_msb_data;
+
+                /* G-Sensor Fail Check */
+                u2_t_gsens_x_data = (U2)(((U2)u1_t_gsens_x_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gsens_x_lsb_data);
+                u2_t_gsens_y_data = (U2)(((U2)u1_t_gsens_y_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gsens_y_lsb_data);
+                u2_t_gsens_z_data = (U2)(((U2)u1_t_gsens_z_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gsens_z_lsb_data);
+
+                vd_s_GyroDev_GSensDtcChk(u2_t_gsens_x_data, u2_t_gsens_y_data, u2_t_gsens_z_data);
+
                 /* Next Process */
-                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP5;
+                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP4;
             }
             break;
-        case GYRODEV_CYCCHK_STEP5:                                       /* STEP5 */
+        case GYRODEV_CYCCHK_STEP4:                                       /* STEP4 */
             /* Read Register G-Sensor */
             u1_t_reg_req_sts = u1_GYRODEV_GSENS_I2C_CTRL_REGREAD(&u2_s_gyrodev_regstep, &u4_s_gyrodev_i2c_ack_wait_time,
                                                                 st_sp_GYRODEV_GSENSDATA_RD_TBL2, &u2_s_gyrodev_reg_btwn_time);
             
             if(u1_t_reg_req_sts == (U1)TRUE){
                 u1_t_gsens_temp_msb_data = st_sp_GYRODEV_GSENSDATA_RD_TBL2[1].u1p_pdu[1];
-                u1_t_gsens_temp_lsb_data = st_sp_GYRODEV_GSENSDATA_RD_TBL2[1].u1p_pdu[2];
 
                 /* G-Sensor Read Data Create */
-                st_gyrodev_readdata.u2_accl_x_data = (U2)(((U2)u1_t_gsens_x_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gsens_x_lsb_data);
-                st_gyrodev_readdata.u2_accl_y_data = (U2)(((U2)u1_t_gsens_y_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gsens_y_lsb_data);
-                st_gyrodev_readdata.u2_accl_z_data = (U2)(((U2)u1_t_gsens_z_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gsens_z_lsb_data);
-                st_gyrodev_readdata.u1_accl_temp_data_sts = (U2)((((U2)u1_t_gsens_temp_msb_data << (U2)GYRODEV_REG_BIT_SHIFT_8) | (U2)u1_t_gsens_temp_lsb_data) >> GYRODEV_REG_BIT_SHIFT_5);
+                st_gyrodev_readdata.u1_accl_temp_data_down = st_sp_GYRODEV_GSENSDATA_RD_TBL2[1].u1p_pdu[2];
+                st_gyrodev_readdata.u1_accl_temp_data_up = u1_t_gsens_temp_msb_data;
+
                 u1_t_gsens_xyz_range_data = (U1)GYRODEV_GSENS_RANGE_DATA;
                 if(u1_t_gsens_xyz_range_data < (U1)GYRODEV_GSENS_RANGE_NUM){
                     st_gyrodev_readdata.st_gyro_reso.u2_accel_xyz_reso = (U2)u2_sp_GYRODEV_GSENS_RANGE_RESO_CONV_TBL[u1_t_gyro_xyz_range_data];
@@ -569,27 +592,43 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                 st_gyrodev_readdata.st_gyro_reso.u1_accel_xyz_center = (U1)GYRODEV_GSENS_XYZ_CENTER;
                 st_gyrodev_readdata.st_gyro_reso.u1_accel_temp_center = (U1)GYRODEV_GSENS_TEMP_CENTER;
 
-                /* Gyro Read Data OK */
+                /* G-Sensor Read Data OK */
                 st_gyrodev_readdata.u1_accl_x_data_sts = (U1)GYRODEV_READ_DATA_OK;
                 st_gyrodev_readdata.u1_accl_y_data_sts = (U1)GYRODEV_READ_DATA_OK;
                 st_gyrodev_readdata.u1_accl_z_data_sts = (U1)GYRODEV_READ_DATA_OK;
-                st_gyrodev_readdata.u1_accl_temp_data_sts = (U1)GYRODEV_READ_DATA_OK;
+                if(u1_t_gsens_temp_msb_data != (U1)GYRODEV_GSENS_TEMP_INVALID){
+                    st_gyrodev_readdata.u1_accl_temp_data_sts = (U1)GYRODEV_READ_DATA_OK;
+                }
 
+                /* Read Data Notificaiton */
+                vd_GYRODEV_OSCMD_GYRO_DATA_NOTIF(st_gyrodev_readdata);
+
+                /* Next Process */
+                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP5;
+            }
+            break;
+        case GYRODEV_CYCCHK_STEP5:                                       /* STEP5 */
+            if(u1_s_gyrodev_oscmd_notifcond_flag == (U1)TRUE){
+                /* Flag Clear */
+                u1_s_gyrodev_oscmd_notifcond_flag = (U1)FALSE;
                 /* Next Process */
                 u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP6;
             }
+            else{
+                /* Next Process */
+                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP7;
+            }
             break;
         case GYRODEV_CYCCHK_STEP6:                                       /* STEP6 */
-            vd_s_GyroDev_GSensDtcChk();
-
-            u1_GYRODEV_OSCMD_GYRO_DATA_NOTIF(st_gyrodev_readdata);      /* Read Data Notificaiton */
+            /* 暫定 シス検では「[API]GセンサINT信号通知条件」のOS間通信コマンド未対応のため処理未実装 */
+            /* ----------「[API]GセンサINT信号通知条件」通知あり時の処理---------- */
             /* Next Process */
             u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP7;
             break;
         case GYRODEV_CYCCHK_STEP7:                                       /* STEP7 */
-            if(u1_s_gyrodev_oscmd_notifcond_flag == (U1)TRUE){
+            if(u1_s_gyrodev_oscmd_outctl_flag == (U1)TRUE){
                 /* Flag Clear */
-                u1_s_gyrodev_oscmd_notifcond_flag = (U1)FALSE;
+                u1_s_gyrodev_oscmd_outctl_flag = (U1)FALSE;
                 /* Next Process */
                 u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP8;
             }
@@ -599,40 +638,22 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
             }
             break;
         case GYRODEV_CYCCHK_STEP8:                                       /* STEP8 */
-            /* 暫定 シス検では「[API]GセンサINT信号通知条件」のOS間通信コマンド未対応のため処理未実装 */
-            /* ----------「[API]GセンサINT信号通知条件」通知あり時の処理---------- */
-            /* Next Process */
-            u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP9;
-            break;
-        case GYRODEV_CYCCHK_STEP9:                                       /* STEP9 */
-            if(u1_s_gyrodev_oscmd_outctl_flag == (U1)TRUE){
-                /* Flag Clear */
-                u1_s_gyrodev_oscmd_outctl_flag = (U1)FALSE;
-                /* Next Process */
-                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP10;
-            }
-            else{
-                /* Next Process */
-                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP11;
-            }
-            break;
-        case GYRODEV_CYCCHK_STEP10:                                       /* STEP10 */
             /* 暫定 シス検では「[API]GセンサINT信号出力制御」のOS間通信コマンド未対応のため処理未実装 */
             /* ----------「[API]GセンサINT信号出力制御」通知あり時の処理---------- */
             /* Next Process */
             u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP9;
             break;
-        case GYRODEV_CYCCHK_STEP11:                                       /* STEP11 */
+        case GYRODEV_CYCCHK_STEP9:                                       /* STEP9 */
             u1_t_appon_sts = u1_GYRODEV_GET_APP_ON();
             if((u1_t_appon_sts == (U1)GYRODEV_APPOFF)
             && (u1_s_gyrodev_pre_appon_sts == (U1)GYRODEV_APPON)){
                 if(u1_s_gyrodev_inputprm_retain_flag == (U1)TRUE){
                     /* Next Process */
-                    u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP12;
+                    u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP10;
                 }
                 else{
                     /* Next Process */
-                    u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP13;
+                    u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP11;
                 }
             }
             else{
@@ -642,13 +663,13 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
             /* Previous State Update */
             u1_s_gyrodev_pre_appon_sts = u1_t_appon_sts;
             break;
-        case GYRODEV_CYCCHK_STEP12:                                       /* STEP12 */
+        case GYRODEV_CYCCHK_STEP10:                                       /* STEP10 */
             /* 暫定 シス検では「[API]設定」のOS間通信コマンド未対応のため「入力パラメータ保持」されないため処理未実装 */
             /* ----------「入力パラメータ保持」時のレジスタ設定処理---------- */
             /* Process Reset */
             u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP0;
             break;
-        case GYRODEV_CYCCHK_STEP13:                                       /* STEP13 */
+        case GYRODEV_CYCCHK_STEP11:                                       /* STEP11 */
             /* Read Register */
             u1_t_reg_req_sts = u1_GYRODEV_GSENS_I2C_CTRL_REGREAD(&u2_s_gyrodev_regstep, &u4_s_gyrodev_i2c_ack_wait_time,
                                                                  st_sp_GYRODEV_INTAPI_NOTIFCOND_RD_TBL, &u2_s_gyrodev_reg_btwn_time);
@@ -657,20 +678,20 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
                 u1_t_reg_read_result = u1_t_reg_read_result | (U1)GYRODEV_REG_MASK_BIT_1;   /* bit[1] = 1 */
                 st_sp_GYRODEV_INTAPI_NOTIFCOND_RD_TBL[0].u1p_pdu[2] = u1_t_reg_read_result;   /* Register Write Data Set */
                 /* Next Process */
-                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP14;
+                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP12;
             }
             break;
-        case GYRODEV_CYCCHK_STEP14:                                       /* STEP14 */
+        case GYRODEV_CYCCHK_STEP12:                                       /* STEP12 */
             /* Set Register */
             u1_t_reg_req_sts = u1_GYRODEV_GSENS_I2C_CTRL_REGSET(&u2_s_gyrodev_regstep, (U2)GYRODEV_INTAPI_NOTIFCOND_SET_WRINUM,
                                                                 GYRODEV_INTAPI_NOTIFCOND_SET, &u4_s_gyrodev_i2c_ack_wait_time,
                                                                 st_sp_GYRODEV_INTAPI_NOTIFCOND_SET_TBL, &u2_s_gyrodev_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP15;
+                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP13;
             }
             break;
-        case GYRODEV_CYCCHK_STEP15:                                       /* STEP15 */
+        case GYRODEV_CYCCHK_STEP13:                                       /* STEP13 */
             /* Read Register */
             u1_t_reg_req_sts = u1_GYRODEV_GSENS_I2C_CTRL_REGREAD(&u2_s_gyrodev_regstep, &u4_s_gyrodev_i2c_ack_wait_time,
                                                                  st_sp_GYRODEV_INTAPI_OUTPUTRST_RD_TBL, &u2_s_gyrodev_reg_btwn_time);
@@ -689,12 +710,12 @@ static void vd_s_vd_g_GyroDev_CycChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_s_GyroDev_GyroDtcChk(void)                                                                                           */
+/*  void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_data, const U2 u2_a_z_data)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_GyroDev_GyroDtcChk()
+static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_data, const U2 u2_a_z_data)
 {
     U1      u1_t_error_flag;                                         /* Register Read Data Error Flag */
     U1      u1_t_last_pls;                                          /* Register Read/Write Request Status */
@@ -705,18 +726,18 @@ static void    vd_s_GyroDev_GyroDtcChk()
     if((u1_t_last_pls == (U1)GYRODEV_LAST_PLS_STOP)
     || (u1_t_last_pls > (U1)GYRODEV_LAST_PLS_8KM)){
         /* MAX Freeze Chek */
-        if((st_gyrodev_readdata.u2_gyro_x_data == (U2)GYRODEV_GYRODTC_XYZ_MAX)
-        || (st_gyrodev_readdata.u2_gyro_y_data == (U2)GYRODEV_GYRODTC_XYZ_MAX)
-        || (st_gyrodev_readdata.u2_gyro_z_data == (U2)GYRODEV_GYRODTC_XYZ_MAX)){        /* MAX Freeze */
+        if((u2_a_x_data == (U2)GYRODEV_GYRODTC_XYZ_MAX)
+        || (u2_a_y_data == (U2)GYRODEV_GYRODTC_XYZ_MAX)
+        || (u2_a_z_data == (U2)GYRODEV_GYRODTC_XYZ_MAX)){        /* MAX Freeze */
             u1_t_error_flag = (U1)TRUE;
             if(u2_s_gyrodev_gyro_max_err_cnt <= (U2)GYRODEV_GYRODTC_XYZ_MAX_ERRCNT_MAX){    /* Error Count <= n(6_1) */
                 u2_s_gyrodev_gyro_max_err_cnt++;
             }
         }
         /* MIN Freeze Chek */
-        if((st_gyrodev_readdata.u2_gyro_x_data == (U2)GYRODEV_GYRODTC_XYZ_MIN)
-        || (st_gyrodev_readdata.u2_gyro_y_data == (U2)GYRODEV_GYRODTC_XYZ_MIN)
-        || (st_gyrodev_readdata.u2_gyro_z_data == (U2)GYRODEV_GYRODTC_XYZ_MIN)){        /* MIN Freeze */
+        if((u2_a_x_data == (U2)GYRODEV_GYRODTC_XYZ_MIN)
+        || (u2_a_y_data == (U2)GYRODEV_GYRODTC_XYZ_MIN)
+        || (u2_a_z_data == (U2)GYRODEV_GYRODTC_XYZ_MIN)){        /* MIN Freeze */
             u1_t_error_flag = (U1)TRUE;
             if(u2_s_gyrodev_gyro_min_err_cnt <= (U2)GYRODEV_GYRODTC_XYZ_MIN_ERRCNT_MAX){    /* Error Count <= n(6_2) */
                 u2_s_gyrodev_gyro_min_err_cnt++;
@@ -783,30 +804,30 @@ static void    vd_s_GyroDev_GyroDtcChk()
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_s_GyroDev_GSensDtcChk(void)                                                                                           */
+/*  void    vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_data, const U2 u2_a_z_data)                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_GyroDev_GSensDtcChk()
+static void    vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_data, const U2 u2_a_z_data)
 {
     U1      u1_t_error_flag;                                         /* Register Read Data Error Flag */
 
     u1_t_error_flag = (U1)FALSE;
 
     /* MAX Freeze Chek */
-    if((st_gyrodev_readdata.u2_accl_x_data == (U2)GYRODEV_GSENSDTC_XYZ_MAX)
-    || (st_gyrodev_readdata.u2_accl_y_data == (U2)GYRODEV_GSENSDTC_XYZ_MAX)
-    || (st_gyrodev_readdata.u2_accl_z_data == (U2)GYRODEV_GSENSDTC_XYZ_MAX)){        /* MAX Freeze */
+    if((u2_a_x_data == (U2)GYRODEV_GSENSDTC_XYZ_MAX)
+    || (u2_a_y_data == (U2)GYRODEV_GSENSDTC_XYZ_MAX)
+    || (u2_a_z_data == (U2)GYRODEV_GSENSDTC_XYZ_MAX)){        /* MAX Freeze */
         u1_t_error_flag = (U1)TRUE;
         if(u2_s_gyrodev_gsens_max_err_cnt <= (U2)GYRODEV_GSENSDTC_XYZ_MAX_ERRCNT_MAX){    /* Error Count <= n(6_1) */
             u2_s_gyrodev_gsens_max_err_cnt++;
         }
     }
     /* MIN Freeze Chek */
-    if((st_gyrodev_readdata.u2_accl_x_data == (U2)GYRODEV_GSENSDTC_XYZ_MIN)
-    || (st_gyrodev_readdata.u2_accl_y_data == (U2)GYRODEV_GSENSDTC_XYZ_MIN)
-    || (st_gyrodev_readdata.u2_accl_z_data == (U2)GYRODEV_GSENSDTC_XYZ_MIN)){        /* MIN Freeze */
+    if((u2_a_x_data == (U2)GYRODEV_GSENSDTC_XYZ_MIN)
+    || (u2_a_y_data == (U2)GYRODEV_GSENSDTC_XYZ_MIN)
+    || (u2_a_z_data == (U2)GYRODEV_GSENSDTC_XYZ_MIN)){        /* MIN Freeze */
         u1_t_error_flag = (U1)TRUE;
         if(u2_s_gyrodev_gsens_min_err_cnt <= (U2)GYRODEV_GSENSDTC_XYZ_MIN_ERRCNT_MAX){    /* Error Count <= n(6_2) */
             u2_s_gyrodev_gsens_min_err_cnt++;
