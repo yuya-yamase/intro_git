@@ -41,7 +41,7 @@
 /* NvmcId */
 /* SAMPLE */
 /* START : ##TOOL_OUT#NVMC_NVMCID## */
-#warming "BEVCDCFD-845"
+#warning "BEVCDCFD-845"
 #if 0 /* BEVCDCFD-845 */
 #define NVMCID_APP_ODO                           (0x0000U)
 #define NVMCID_APP_ODO_TRIP                      (0x0001U)

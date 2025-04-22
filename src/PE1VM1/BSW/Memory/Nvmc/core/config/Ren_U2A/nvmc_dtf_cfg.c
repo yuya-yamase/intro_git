@@ -73,7 +73,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U2 u2_dp_NVMC_DTF_ID_CONV_TBL[NVMC_DTF_ID_NUM] = {
 /* START : ##TOOL_OUT#NVMC_DTF_ID_CONV_TBL## */
-#warming "BEVCDCFD-845"
+#warning "BEVCDCFD-845"
 #if 0 /* BEVCDCFD-845 */
     ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)0U),  /* ODO        */
     ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)1U),  /* ODO_TRIP   */

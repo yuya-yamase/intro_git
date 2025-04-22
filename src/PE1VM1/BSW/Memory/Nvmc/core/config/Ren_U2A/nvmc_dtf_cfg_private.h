@@ -26,7 +26,7 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_DTF_ID_NUM## */
-#warming "BEVCDCFD-845"
+#warning "BEVCDCFD-845"
 #if 0 /* BEVCDCFD-845 */
 #define NVMC_DTF_INAPP_NUM                       (3U)
 #define NVMC_DTF_INNVM_NUM                       (9U)
@@ -44,7 +44,7 @@
 /* END : ##TOOL_OUT#NVMC_DTF_READ_BUFFER_SIZE## */
 
 /* START : ##TOOL_OUT#NVMC_RECOVERY_DTF_ID## */
-#warming "BEVCDCFD-845"
+#warning "BEVCDCFD-845"
 #if 0 /* BEVCDCFD-845 */
 #define NVMC_RECOVERY_DTF_ID                     (11U)
 #else

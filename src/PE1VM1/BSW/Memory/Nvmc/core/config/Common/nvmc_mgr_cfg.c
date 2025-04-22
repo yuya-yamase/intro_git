@@ -84,7 +84,7 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_APP_ACS_NUM## */
-#warming "BEVCDCFD-845"
+#warning "BEVCDCFD-845"
 #if 0 /* BEVCDCFD-845 */
 #define NVMC_APP_ACS_NUM                         (3U)
 #else
@@ -232,7 +232,7 @@ const ST_NVMC_MODULE_CFG    st_dp_NVMC_MODULE_CFG[NVMC_MODULE_NUM] = {
 
 const ST_NVMC_APP_FUNC st_NVMC_APP_FUNC_TABLE[NVMC_APP_ACS_NUM] = {
 /* START : ##TOOL_OUT#NVMC_APP_FUNC_TABLE## */
-#warming "BEVCDCFD-845"
+#warning "BEVCDCFD-845"
 #if 0 /* BEVCDCFD-845 */
     {&vd_g_OdoNvmIfOdoRWTask,  &vd_g_OdoNvmIfOdoRWFinhk },
     {&vd_g_OdoNvmIfTripRWTask, &vd_g_OdoNvmIfTripRWFinhk},
