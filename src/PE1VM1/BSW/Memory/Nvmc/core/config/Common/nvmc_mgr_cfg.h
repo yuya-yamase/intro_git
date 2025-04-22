@@ -41,6 +41,8 @@
 /* NvmcId */
 /* SAMPLE */
 /* START : ##TOOL_OUT#NVMC_NVMCID## */
+#warming "BEVCDCFD-845"
+#if 0 /* BEVCDCFD-845 */
 #define NVMCID_APP_ODO                           (0x0000U)
 #define NVMCID_APP_ODO_TRIP                      (0x0001U)
 #define NVMCID_U4_VDF_ESO_W0                     (0x0002U)
@@ -52,6 +54,13 @@
 #define NVMCID_U4_VDF_ESO_W6                     (0x0008U)
 #define NVMCID_U4_VDF_ESO_W7                     (0x0009U)
 #define NVMCID_U4_VDF_ESO_W8                     (0x000AU)
+#else
+#define NVMCID_U1_SAMPLE_U1                      (0x0000U)
+#define NVMCID_U2_SAMPLE_U2                      (0x0001U)
+#define NVMCID_U4_SAMPLE_U4                      (0x0002U)
+#define NVMCID_OTR_SAMPLE_OTR32                  (0x0003U)
+#define NVMCID_OTR_SAMPLE_OTR32CS                (0x0004U)
+#endif
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */

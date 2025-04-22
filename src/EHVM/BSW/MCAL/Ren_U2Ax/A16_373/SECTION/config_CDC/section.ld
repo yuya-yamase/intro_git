@@ -85,25 +85,27 @@ SECTIONS {
     .ADC_TEXT_CODE_FAST     align(4)                        : > .
     .DIO_TEXT_CODE          align(4)                        : > .
     .DMA_TEXT_CODE          align(4)                        : > .
+    .ERRH_TEXT_CODE         align(4)                        : > .
     .GPT_TEXT_CODE          align(4)                        : > .
     .GPT_TEXT_CODE_FAST     align(4)                        : > .
     .ICU_TEXT_CODE          align(4)                        : > .
     .ICU_TEXT_CODE_FAST     align(4)                        : > .
+    .INTC_TEXT_CODE         align(4)                        : > .
     .MCALCOMMON_TEXT_CODE   align(4)                        : > .
     .MCU_TEXT_CODE          align(4)                        : > .
     .PORT_TEXT_CODE         align(4)                        : > .
     .PWM_TEXT_CODE          align(4)                        : > .
     .PWM_TEXT_CODE_FAST     align(4)                        : > .
     .SPI_TEXT_CODE          align(4)                        : > .
-    .SPI_TEXT_CODE_FAST     align(4)                        : > .
     .WDG_TEXT_CODE          align(4)                        : > .
-    .WDG_TEXT_CODE_FAST     align(4)                        : > .
     .ADCDIAG_RODATA_CONST   align(4)                        : > .
     .ADC_RODATA_CONST       align(4)                        : > .
     .DIO_RODATA_CONST       align(4)                        : > .
     .DMA_RODATA_CONST       align(4)                        : > .
+    .ERRH_RODATA_CONST      align(4)                        : > .
     .GPT_RODATA_CONST       align(4)                        : > .
     .ICU_RODATA_CONST       align(4)                        : > .
+    .INTC_RODATA_CONST      align(4)                        : > .
     .MCU_RODATA_CONST       align(4)                        : > .
     .PORT_RODATA_CONST      align(4)                        : > .
     .PWM_RODATA_CONST       align(4)                        : > .
@@ -164,11 +166,12 @@ SECTIONS {
 // TopAddress
     .ram_local0_top                                         : > ram_memory_core0
 
-// MCAL
+// MCAL Data
     .mcal_ram_top                align(4)                   : > .
     .ADCDIAG_BSS_VAR_NO_INIT     align(4)                   : > .
     .ADC_BSS_VAR_NO_INIT         align(4)                   : > .
     .DMA_BSS_VAR_NO_INIT         align(4)                   : > .
+    .ERRH_BSS_VAR_NO_INIT        align(4)                   : > .
     .GPT_BSS_VAR_NO_INIT         align(4)                   : > .
     .ICU_BSS_VAR_NO_INIT         align(4)                   : > .
     .MCALCOMMON_BSS_VAR_NO_INIT  align(4)                   : > .

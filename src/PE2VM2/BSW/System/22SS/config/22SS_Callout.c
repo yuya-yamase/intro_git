@@ -18,7 +18,6 @@
 #include <Ecu_Memmap.h>
 #include <22SS_Callout.h>
 
-#include "stub.h"
 #include "veh_opemd.h"
 #include "oxcan.h"
 

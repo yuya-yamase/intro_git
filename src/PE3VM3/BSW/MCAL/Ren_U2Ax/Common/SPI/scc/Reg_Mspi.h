@@ -10,7 +10,6 @@
 #ifndef REG_MSPI_H
 #define REG_MSPI_H
 
-#include "Pf_Types.h"
 #include "Mcal_CmnCfg.h"
 
 /*==============================================================================================*/
@@ -1216,14 +1215,8 @@ typedef	struct {
 #define		REG_MSPI9INTF	(*(volatile Reg_Mspi_IntfType *)(0xFFC7D040U))
 #define		REG_MSPITG		(*(volatile Reg_Mspi_TgType   *)(0xFFC75D00U))
 
-// #define SEL_ROMSEC	(BSW_SEC_C_LROM0_CPU0_ASIL_SDA)
-// #include "Bsw_Seccfg_Roms.h"
-#pragma ghs section rodata=".SPI_RODATA_CONST"
 extern volatile Reg_Mspi_UnitType* const cpstReg_Mspi[MSPI_UNIT_NUM];
 extern volatile Reg_Mspi_IntfType* const cpstReg_MspiIntf[MSPI_UNIT_NUM];
-// #include "Bsw_Seccfg_Rome.h"
-// #undef SEL_ROMSEC
-#pragma ghs section rodata=default
 
 #endif /* REG_MSPI_H */
 /*-- End Of File -------------------------------------------------------------------------------*/

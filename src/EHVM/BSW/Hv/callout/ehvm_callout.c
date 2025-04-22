@@ -19,6 +19,7 @@
 #include "Ecu_Int.h"
 #include "Port.h"
 #include "Mcu.h"
+#include "ErrH.h"
 
 #pragma ghs section text = ".text.ehvm.usr"
 
@@ -426,6 +427,7 @@ void ehvm_user_deep_stop_hook_call_3(void)
 void ehvm_intm_ecm_error(
     void)
 {
+    ErrH_AlarmInterrupt();
 
     Ecu_Int_performReset();
 

@@ -64,17 +64,37 @@ SECTIONS {
     .mcal_rom_top           align(4)                        : > .
     .DIO_TEXT_CODE          align(4)                        : > .
     .DMA_TEXT_CODE          align(4)                        : > .
+    .GPT_TEXT_CODE          align(4)                        : > .
+    .ICU_TEXT_CODE          align(4)                        : > .
+    .INTC_TEXT_CODE         align(4)                        : > .
+    .I2C_TEXT_CODE          align(4)                        : > .
     .MCALCOMMON_TEXT_CODE   align(4)                        : > .
     .PORT_TEXT_CODE         align(4)                        : > .
+    .PWM_TEXT_CODE          align(4)                        : > .
     .SPI_TEXT_CODE          align(4)                        : > .
-    .SPI_TEXT_CODE_FAST     align(4)                        : > .
+    .WDG_TEXT_CODE          align(4)                        : > .
     .ADC_RODATA_CONST       align(4)                        : > .
     .DIO_RODATA_CONST       align(4)                        : > .
     .DMA_RODATA_CONST       align(4)                        : > .
+    .GPT_RODATA_CONST       align(4)                        : > .
+    .ICU_RODATA_CONST       align(4)                        : > .
+    .INTC_RODATA_CONST      align(4)                        : > .
+    .I2C_RODATA_CONST       align(4)                        : > .
     .PORT_RODATA_CONST      align(4)                        : > .
+    .PWM_RODATA_CONST       align(4)                        : > .
     .SPI_RODATA_CONST       align(4)                        : > .
+    .WDG_RODATA_CONST       align(4)                        : > .
     .mcal_rom_bottom        align(4)                        : > .
     _MCAL_ROM_SIZE = . - ADDR(.mcal_rom_top);
+
+// IOHW
+    .iohw_rom_top           align(4)                        : > .
+    .IOHW_ADC_TEXT_CODE     align(4)                        : > .
+    .IOHW_DIFLT_TEXT_CODE   align(4)                        : > .
+    .IOHW_ADC_RODATA_CONST  align(4)                        : > .
+    .IOHW_DIFLT_RODATA_CONST align(4)                       : > .
+    .iohw_rom_bottom        align(4)                        : > .
+    _IOHW_ROM_SIZE = . - ADDR(.iohw_rom_top);
 
 // APP
     .app_n_nvarLR_ival      align(4)  ROM(.app_n_nvarLR_withval)  : > .
@@ -161,6 +181,13 @@ SECTIONS {
 
 // MCAL Data
     .DMA_BSS_VAR_NO_INIT         align(4)                  : > .
+
+// IOHW Data
+    .iohw_ram_top                align(4)                  : > .
+    .IOHW_ADC_BSS_VAR_NO_INIT    align(4)                  : > .
+    .IOHW_DIFLT_BSS_VAR_NO_INIT  align(4)                  : > .
+    .iohw_ram_bottom             align(4)                  : > .
+    _IOHW_RAM_SIZE = . - ADDR(.iohw_ram_top);
 
 // EndAddress
     .cluster0_ramend                                        : > ram_end_cluster0

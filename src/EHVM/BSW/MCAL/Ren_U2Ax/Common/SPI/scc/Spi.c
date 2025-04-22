@@ -11,7 +11,7 @@
 /*	include files																				*/
 /*==============================================================================================*/
 #include	"Std_Types.h"
-#include	"Bsw_cfg.h"
+#include	"Spi_Ucfg.h"
 
 #include	"Dma.h"
 
@@ -67,8 +67,6 @@ void SYNC_stack_s_cstSpi_UcfgModeCChannelData_u4NotifId( const S4* t_pcs4Param )
 /*==============================================================================================*/
 /* functions																					*/
 /*==============================================================================================*/
-// #define SEL_PRGSEC	(BSW_SEC_P_LROM0_CPU0_ASIL)
-// #include "Bsw_Seccfg_Prgs.h"
 #pragma ghs section text=".SPI_TEXT_CODE"
 /*----------------------------------------------------------------------------------------------*/
 /* API Functions																				*/
@@ -834,7 +832,6 @@ void	Spi_Refresh( void )
 }
 
 #if ( SPI_CFG_MODEC_USE == ON )
-#pragma ghs section text=".SPI_TEXT_CODE_FAST"
 /*----------------------------------------------------------------------------------------------*/
 /*	Interrupt Function																			*/
 /*	return		: none																			*/
@@ -864,7 +861,5 @@ void Spi_ReceiveInterrupt( const S4* t_pcs4Param )
 /* Local Functions																				*/
 /*----------------------------------------------------------------------------------------------*/
 
-// #include "Bsw_Seccfg_Prge.h"
-// #undef SEL_PRGSEC
 #pragma ghs section text=default
 /*-- End Of File -------------------------------------------------------------------------------*/

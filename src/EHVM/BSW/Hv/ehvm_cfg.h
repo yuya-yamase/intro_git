@@ -36,7 +36,7 @@
 
 /* VCC */
 /* Number of VccId */
-#define VCC_NUM_OF_VCCID                  (0x0008U)
+#define VCC_NUM_OF_VCCID                  (0x000CU)
 
 /* Number of VccIds associated with SPID */
 #define SPID0_NUM_OF_RECEIVED_VCCID       (0x01U)
@@ -51,9 +51,9 @@
 #define SPID9_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID10_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID11_NUM_OF_RECEIVED_VCCID       (0x01U)
-#define SPID12_NUM_OF_RECEIVED_VCCID       (0x04U)
+#define SPID12_NUM_OF_RECEIVED_VCCID       (0x06U)
 #define SPID13_NUM_OF_RECEIVED_VCCID       (0x01U)
-#define SPID14_NUM_OF_RECEIVED_VCCID       (0x04U)
+#define SPID14_NUM_OF_RECEIVED_VCCID       (0x06U)
 #define SPID15_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID16_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID17_NUM_OF_RECEIVED_VCCID       (0x01U)
@@ -98,27 +98,51 @@
 
 /* VCCID:4 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH4     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH4         (0x5AU)                         /* = 90 dec */
+#define VCC_NUM_OF_RING_ELEMENT_CH4         (0x5AU)
 #define VCC_SIZE_OF_PACKET_CH4              (0x00000048U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH4      (VCC_SIZE_OF_PACKET_CH4 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:5 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH5     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH5         (0x1EU)                         /* = 30 dec */
+#define VCC_NUM_OF_RING_ELEMENT_CH5         (0x1EU)
 #define VCC_SIZE_OF_PACKET_CH5              (0x00000048U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH5      (VCC_SIZE_OF_PACKET_CH5 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:6 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH6     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH6         (0x1EU)                         /* = 30 dec */
+#define VCC_NUM_OF_RING_ELEMENT_CH6         (0x1EU)
 #define VCC_SIZE_OF_PACKET_CH6              (0x00000048U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH6      (VCC_SIZE_OF_PACKET_CH6 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:7 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH7     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH7         (0x1EU)                         /* = 30 dec */
+#define VCC_NUM_OF_RING_ELEMENT_CH7         (0x1EU)
 #define VCC_SIZE_OF_PACKET_CH7              (0x00000048U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH7      (VCC_SIZE_OF_PACKET_CH7 / VCC_MESSAGE_ALIGN)
+
+/* VCCID:8 */
+#define VCC_NUM_OF_RECEIVER_CHANNEL_CH8     (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH8         (0x01U)
+#define VCC_SIZE_OF_PACKET_CH8              (0x00000004U)
+#define VCC_SIZE_OF_MESSAGE_BUFFER_CH8      (VCC_SIZE_OF_PACKET_CH8 / VCC_MESSAGE_ALIGN)
+
+/* VCCID:9 */
+#define VCC_NUM_OF_RECEIVER_CHANNEL_CH9     (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH9         (0x01U)
+#define VCC_SIZE_OF_PACKET_CH9              (0x00000004U)
+#define VCC_SIZE_OF_MESSAGE_BUFFER_CH9      (VCC_SIZE_OF_PACKET_CH9 / VCC_MESSAGE_ALIGN)
+
+/* VCCID:10 */
+#define VCC_NUM_OF_RECEIVER_CHANNEL_CH10     (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH10         (0x01U)
+#define VCC_SIZE_OF_PACKET_CH10              (0x00000004U)
+#define VCC_SIZE_OF_MESSAGE_BUFFER_CH10      (VCC_SIZE_OF_PACKET_CH10 / VCC_MESSAGE_ALIGN)
+
+/* VCCID:11 */
+#define VCC_NUM_OF_RECEIVER_CHANNEL_CH11     (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH11         (0x01U)
+#define VCC_SIZE_OF_PACKET_CH11              (0x00000004U)
+#define VCC_SIZE_OF_MESSAGE_BUFFER_CH11      (VCC_SIZE_OF_PACKET_CH11 / VCC_MESSAGE_ALIGN)
 
 
 /* EM */

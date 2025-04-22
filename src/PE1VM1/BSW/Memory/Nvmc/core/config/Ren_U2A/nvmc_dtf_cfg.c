@@ -73,6 +73,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U2 u2_dp_NVMC_DTF_ID_CONV_TBL[NVMC_DTF_ID_NUM] = {
 /* START : ##TOOL_OUT#NVMC_DTF_ID_CONV_TBL## */
+#warming "BEVCDCFD-845"
+#if 0 /* BEVCDCFD-845 */
     ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)0U),  /* ODO        */
     ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)1U),  /* ODO_TRIP   */
     ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)0U),  /* VDF_ESO_W0 */
@@ -85,6 +87,14 @@ const U2 u2_dp_NVMC_DTF_ID_CONV_TBL[NVMC_DTF_ID_NUM] = {
     ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)7U),  /* VDF_ESO_W7 */
     ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)8U),  /* VDF_ESO_W8 */
     ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)2U)   /* Recovery   */
+#else
+    ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)0U),  /* SAMPLE_U1      */
+    ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)1U),  /* SAMPLE_U2      */
+    ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)2U),  /* SAMPLE_U4      */
+    ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)3U),  /* SAMPLE_OTR32   */
+    ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)4U),  /* SAMPLE_OTR32CS */
+    ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)0U)   /* Recovery       */
+#endif
 /* END : ##TOOL_OUT#NVMC_DTF_ID_CONV_TBL## */
 };
 

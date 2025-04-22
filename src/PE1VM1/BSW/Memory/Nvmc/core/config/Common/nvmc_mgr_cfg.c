@@ -62,11 +62,6 @@
 #include "odo_nvmif.h"
 /* END : ##TOOL_OUT#NVMC_APP_FUNC_INCLUDE_HEADER## */
 
-#if 0   /* BEV BSW provisionally */
-#else
-#include "stub.h"
-#endif
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -89,7 +84,12 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_APP_ACS_NUM## */
+#warming "BEVCDCFD-845"
+#if 0 /* BEVCDCFD-845 */
 #define NVMC_APP_ACS_NUM                         (3U)
+#else
+#define NVMC_APP_ACS_NUM                         (1U)
+#endif
 /* END : ##TOOL_OUT#NVMC_APP_ACS_NUM## */
 
 #define NVMC_READ_BUF_SIZE                       (NVMC_DTF_READ_BUFFER_SIZE + NVMC_EEP_READ_BUFFER_SIZE)
@@ -232,9 +232,14 @@ const ST_NVMC_MODULE_CFG    st_dp_NVMC_MODULE_CFG[NVMC_MODULE_NUM] = {
 
 const ST_NVMC_APP_FUNC st_NVMC_APP_FUNC_TABLE[NVMC_APP_ACS_NUM] = {
 /* START : ##TOOL_OUT#NVMC_APP_FUNC_TABLE## */
+#warming "BEVCDCFD-845"
+#if 0 /* BEVCDCFD-845 */
     {&vd_g_OdoNvmIfOdoRWTask,  &vd_g_OdoNvmIfOdoRWFinhk },
     {&vd_g_OdoNvmIfTripRWTask, &vd_g_OdoNvmIfTripRWFinhk},
     {&vd_d_Nvmc_Recovery_DTF,  vdp_PTR_NA               } 
+#else
+    {&vd_d_Nvmc_Recovery_DTF, vdp_PTR_NA} 
+#endif
 /* END : ##TOOL_OUT#NVMC_APP_FUNC_TABLE## */
 };
 
@@ -331,13 +336,15 @@ void    vd_d_Nvmc_CfgAcsFinish(void)
 U1      u1_d_Nvmc_IsRecoveryEnable(void)
 {
     U1  u1_t_ret;
-    U1  u1_t_insp;
+/* @todo Z.Yuan start: 250320 application need to consider how to integration */
+/*  U1  u1_t_insp; */
 
     u1_t_ret = (U1)TRUE;
-    u1_t_insp = u1_g_InspectModeIsAct();
-    if(u1_t_insp == (U1)TRUE){
-        u1_t_ret = (U1)FALSE;
-    }
+/*  u1_t_insp = u1_g_InspectModeIsAct(); */
+/*  if(u1_t_insp == (U1)TRUE){ */
+/*      u1_t_ret = (U1)FALSE; */
+/*  } */
+/* @todo Z.Yuan end: 250320 application need to consider how to integration */
     return(u1_t_ret);
 }
 

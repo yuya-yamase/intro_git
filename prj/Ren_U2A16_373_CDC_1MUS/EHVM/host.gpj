@@ -46,6 +46,7 @@ ${CMN_DIR}/MCAL_COMMON.gpj
 ${CMN_DIR}/MCAL_DIO.gpj
 ${CMN_DIR}/MCAL_DMA.gpj
 #${CMN_DIR}/MCAL_GPT.gpj
+MCAL_GPT_Frt.gpj
 ${CMN_DIR}/MCAL_ICU.gpj
 ${CMN_DIR}/MCAL_MCU.gpj
 ${CMN_DIR}/MCAL_PORT.gpj
@@ -54,6 +55,7 @@ ${CMN_DIR}/MCAL_SPI.gpj
 #${CMN_DIR}/MCAL_WDG.gpj
 ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_DUMMY.gpj
+${CMN_DIR}/MCAL_ErrH.gpj
 ${CMN_DIR}/LWH_project.gpj
 ${CMN_DIR}/LWH_integration.gpj
 ${CMN_DIR}/LIB.gpj

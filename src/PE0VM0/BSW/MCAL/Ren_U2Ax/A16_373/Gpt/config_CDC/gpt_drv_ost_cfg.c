@@ -45,28 +45,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#pragma ghs section rodata=".GPT_RODATA_CONST"
+
 const ST_GPT_OST       st_gp_GPT_OST_CFG[GPT_OST_NUM_CH] = {
-    /* GPT_OST_CH_00                  */
-    {
-        (volatile U4 *)0xffbf0000U,                                 /* u4p_base    */
-        (U4)U4_MAX,                                                 /* u4_select   */
-        (U2)0x0000U,                                                /* u2_tmr_ctrl */
-        (U2)199U                                                    /* u2_irq_ch   */
-    },
-    /* GPT_OST_CH_01                  */
-    {
-        (volatile U4 *)0xffbf0100U,                                 /* u4p_base    */
-        (U4)U4_MAX,                                                 /* u4_select   */
-        (U2)0x0000U,                                                /* u2_tmr_ctrl */
-        (U2)200U                                                    /* u2_irq_ch   */
-    },
-    /* GPT_OST_CH_03                  */
-    {
-        (volatile U4 *)0xffbf0300U,                                 /* u4p_base    */
-        (U4)U4_MAX,                                                 /* u4_select   */
-        (U2)0x0000U,                                                /* u2_tmr_ctrl */
-        (U2)202U                                                    /* u2_irq_ch   */
-    },
     /* GPT_OST_CH_05_SCHDLR_TICK      */
     {
         (volatile U4 *)0xffbf0500U,                                 /* u4p_base    */
@@ -76,6 +57,8 @@ const ST_GPT_OST       st_gp_GPT_OST_CFG[GPT_OST_NUM_CH] = {
     }
 };
 const U1               u1_g_GPT_OST_NUM_CH = (U1)GPT_OST_NUM_CH;
+
+#pragma ghs section rodata=default
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
