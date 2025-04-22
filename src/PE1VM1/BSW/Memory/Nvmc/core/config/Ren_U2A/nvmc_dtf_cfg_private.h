@@ -30,10 +30,10 @@
 #if 0 /* BEVCDCFD-845 */
 #define NVMC_DTF_INAPP_NUM                       (3U)
 #define NVMC_DTF_INNVM_NUM                       (9U)
-#else
+#else /* BEVCDCFD-845 */
 #define NVMC_DTF_INAPP_NUM                       (1U)
 #define NVMC_DTF_INNVM_NUM                       (5U)
-#endif
+#endif /* BEVCDCFD-845 */
 /* END : ##TOOL_OUT#NVMC_DTF_ID_NUM## */
 
 #define NVMC_DTF_ID_NUM                          (NVMC_DTF_INAPP_NUM + NVMC_DTF_INNVM_NUM)
@@ -47,9 +47,9 @@
 #warning "BEVCDCFD-845"
 #if 0 /* BEVCDCFD-845 */
 #define NVMC_RECOVERY_DTF_ID                     (11U)
-#else
+#else /* BEVCDCFD-845 */
 #define NVMC_RECOVERY_DTF_ID                     (5U)
-#endif
+#endif /* BEVCDCFD-845 */
 /* END : ##TOOL_OUT#NVMC_RECOVERY_DTF_ID## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

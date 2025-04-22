@@ -87,9 +87,9 @@
 #warning "BEVCDCFD-845"
 #if 0 /* BEVCDCFD-845 */
 #define NVMC_APP_ACS_NUM                         (3U)
-#else
+#else /* BEVCDCFD-845 */
 #define NVMC_APP_ACS_NUM                         (1U)
-#endif
+#endif /* BEVCDCFD-845 */
 /* END : ##TOOL_OUT#NVMC_APP_ACS_NUM## */
 
 #define NVMC_READ_BUF_SIZE                       (NVMC_DTF_READ_BUFFER_SIZE + NVMC_EEP_READ_BUFFER_SIZE)
@@ -237,9 +237,9 @@ const ST_NVMC_APP_FUNC st_NVMC_APP_FUNC_TABLE[NVMC_APP_ACS_NUM] = {
     {&vd_g_OdoNvmIfOdoRWTask,  &vd_g_OdoNvmIfOdoRWFinhk },
     {&vd_g_OdoNvmIfTripRWTask, &vd_g_OdoNvmIfTripRWFinhk},
     {&vd_d_Nvmc_Recovery_DTF,  vdp_PTR_NA               } 
-#else
+#else /* BEVCDCFD-845 */
     {&vd_d_Nvmc_Recovery_DTF, vdp_PTR_NA} 
-#endif
+#endif /* BEVCDCFD-845 */
 /* END : ##TOOL_OUT#NVMC_APP_FUNC_TABLE## */
 };
 
