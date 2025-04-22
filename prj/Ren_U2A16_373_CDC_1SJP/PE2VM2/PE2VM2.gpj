@@ -18,6 +18,7 @@ primaryTarget=v800_standalone.tgt
     :macro=MCAL_DIR=${ROOT_DIR}/BSW/MCAL
 	:macro=MS_DIR=${ROOT_DIR}/BSW/Memory
 	:macro=IOHW_DIR=${ROOT_DIR}/BSW/IoHwAbstract
+	:macro=APP_DIR=${ROOT_DIR}/App
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
     :macro=CMPSW_DIR=${PRJ_DIR}/../../CmpSW
 

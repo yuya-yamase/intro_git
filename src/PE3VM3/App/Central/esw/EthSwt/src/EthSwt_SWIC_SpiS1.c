@@ -1,6 +1,9 @@
 #include <Std_Types.h>
 #include <EthSwt_SWIC.h>
+#warning "BEVCDCFD-845"
+#if 0 /* BEVCDCFD-845 */
 #include <Rte_BswUcfg.h>
+#endif /* BEVCDCFD-845 */
 #include <Spi.h>
 #include <LIB.h>
 #include "EthSwt_SWIC_Def.h"
