@@ -37,6 +37,11 @@ Std_ReturnType EthSwt_SWIC_SetSwitchPortMode(uint8 SwitchIdx, uint8 SwitchPortId
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
 	return EthSwt_SWIC_Reg_SetSwitchPortMode(SwitchPortIdx, PortMode);
 }
+Std_ReturnType EthSwt_SWIC_GetLoggingFilteringValue(uint8 SwitchIdx, uint8 SwitchPortIdx, uint32 *const LoggingFilteringValue)
+{
+	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
+	return EthSwt_SWIC_Reg_GetLoggingFilteringValue(SwitchPortIdx, LoggingFilteringValue);
+}
 #if 0    /* –¢‘Î‰ž */
 Std_ReturnType EthSwt_SWIC_ClearFrameInfo(const uint8 SwitchIdx, const uint8 SwitchPortIdx)
 {
