@@ -17,12 +17,7 @@
 //#include	"Dioh.h"			/* 使用ユニットのヘッダファイル */
 #include	"Pf_Types.h"
 //#include	"Dio.h"				/* 使用ユニットのヘッダファイル */
-#warning "BEVCDCFD-845"
-#if 0 /* BEVCDCFD-845 */
 #include	"Rte_BswUcfg.h"		/* 関連ユニットのコンフィグファイル */
-#else /* BEVCDCFD-845 */
-#include	"Spi.h.h"
-#endif /* BEVCDCFD-845 */
 
 /*==============================================================================================*/
 /* defines / data types / structs / unions	/ macros											*/
