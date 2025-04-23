@@ -58,6 +58,7 @@ EthSwt_SWIC_Pwr.c
 EthSwt_SWIC_Org.c
 EthSwt_SWIC_Reg.c
 EthSwt_SWIC_SpiS1.c
+EthSwt_Data.c
 EthDLC_ctrl.c
 EthDLC_ACTL.c
 EthDLC_DLC.c
