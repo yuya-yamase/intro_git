@@ -26,6 +26,7 @@
 #define MCU_STEP_GYRO1_OVERALL_11       (11U)   /* Mode Change (Gyro) OFF normal mode ⇒ suspend mode */
 #define MCU_STEP_GYRO1_OVERALL_FIN      (12U)   
 
+#define MCU_STEP_GYRO2_OVERALL_0        (0U)    /* 起動フロー(1)完了まで待機 */
 #define MCU_STEP_GYRO2_OVERALL_1        (1U)    /* V33-Peri-ON監視 */
 #define MCU_STEP_GYRO2_OVERALL_2        (2U)    /* Gセンサ 0x40に0xA8をWrite */
 #define MCU_STEP_GYRO2_OVERALL_3        (3U)    /* Mode Change (Gyro) ON suspend mode ⇒ normal mode */
