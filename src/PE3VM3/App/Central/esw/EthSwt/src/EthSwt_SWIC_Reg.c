@@ -74,6 +74,8 @@ typedef enum										/* EthSwt_SWIC初期化状態 */
 
 #define	SWIC_REG_TBL(a)		{(a), SWIC_TBL_NUM(a)}	/* swic_reg_tbl設定用 */
 #define	SWIC_REG_BIT(a)		(1uL << (a))			/* ビット */
+#define	SWIC_REG_ADD_VAL(num, val)	((num) = (((~0uL) - (num)) >= (val)) ? (num) + (val) : ~0uL)
+
 struct swic_reg_tbl {								/* レジスタテーブル */
 	const swic_reg_data_t	*tbl;
 	const uint32			num;
@@ -90,8 +92,11 @@ static const uint16	swic_Reg_IdsPort[] = SWIC_REG_IDSPORT;	/* StreamFilterテーブ
 
 static const struct {
 	Eth_ModeType	mode;		/* 初期化時のポートモード[ETH_MODE_ACTIVE]リンク済/[ETH_MODE_DOWN]リンク無 */
+#if 0 /* 未対応 IDS, SQI */
 	sint32			tmo_IDS;	/* IDS取得周期[T12][T13](0:対象外) */	/* EthIDSの取得周期(60s)で割り切れる値 */
 	sint32			tmo_SQI;	/* SQI取得周期(0:対象外) */
+#endif
+	sint32			tmo_LogFlt;	/* ロギングフィルタリング取得周期(0:対象外) */
 }	swic_Reg_PortDef[]
 #if 0 /* For HND ポート設定*/
 =	{ {ETH_MODE_ACTIVE,  0,    0}	/* P8 */
@@ -125,26 +130,26 @@ static const struct {
 #endif
 =	{
 	#ifdef	g_regListSeqSetP9ActDis
-	  {ETH_MODE_DOWN,    0,    0}	/* P9無 */
+	  {ETH_MODE_DOWN,    0}	/* P9無 */
 	#else
 	  {ETH_MODE_ACTIVE, 20, 1000}	/* P9有 */
 	#endif
-	, {ETH_MODE_ACTIVE,  0,    0}	/* P1 */
-	, {ETH_MODE_ACTIVE,  0,    0}	/* P2 */
+	, {ETH_MODE_ACTIVE,  0}	/* P1 */
+	, {ETH_MODE_ACTIVE,  0}	/* P2 */
 	#ifdef	g_regListSeqSetP3ActDis
-	, {ETH_MODE_DOWN,    0,    0}	/* P3無 */
+	, {ETH_MODE_DOWN,    0}	/* P3無 */
 	#else
 	, {ETH_MODE_ACTIVE, 20, 1000}	/* P3有 */
 	#endif								/* g_regListSeqSetP3ActDis */
 	#ifdef	g_regListSeqSetP4ActDis
-	, {ETH_MODE_DOWN,    0,    0}	/* P4無 */
+	, {ETH_MODE_DOWN,    0}	/* P4無 */
 	#else
 	, {ETH_MODE_ACTIVE, 20, 1000}	/* P4有 */
 	#endif								/* g_regListSeqSetP4ActDis */
-	, {ETH_MODE_ACTIVE,  0,    0}	/* P5 */
-	, {ETH_MODE_DOWN,  0,    0}		/* P6 */
-	, {ETH_MODE_ACTIVE,  0,    0}	/* P7 */
-	, {ETH_MODE_ACTIVE,  0,    0}	/* P8 */
+	, {ETH_MODE_ACTIVE,  0}	/* P5 */
+	, {ETH_MODE_DOWN,	 100}	/* P6 */
+	, {ETH_MODE_ACTIVE,  0}	/* P7 */
+	, {ETH_MODE_ACTIVE,  0}	/* P8 */
 	};
 
 #if 0 /* 未対応　SQI */
@@ -205,6 +210,8 @@ static struct {									/* EthSwt_SetSwitchPortMode */
 #if 0 /* 未対応 SQI */
 	struct swic_Reg_Timer			sqi;
 #endif
+	uint32							logfltnum;
+	struct swic_Reg_Timer			logflt;
 }	swic_Reg_Mode[SWIC_TBL_NUM(swic_Reg_PortDef)];	/* 0～8 : 0=Port9 */
 
 #if 0 /* For HND DeInit */
@@ -283,12 +290,11 @@ static void swic_Reg_TimClrDTC(void)
 	}
 }
 #endif
-
 static void swic_Reg_TimClr(void)
 {	/* 全周期タイマ初期化：1ms|ETHSWT_SWIC_STATE_ACTIVE以外 */
-#if 0 /* 未対応 SQI*/
+
 	uint8	idx;
-#endif
+
 #if 0 /* 未対応 SWICリセット(異常)検出 */
 	swic_Reg_Inf.timrst.tim = 0;
 	swic_Reg_Inf.timrst.req = STD_OFF;
@@ -300,12 +306,16 @@ static void swic_Reg_TimClr(void)
 	swic_Reg_Inf.timlnk.tim = 0;
 	swic_Reg_Inf.timlnk.req = STD_ON;
 
-#if 0 /* 未対応 SQI*/
+
 	for (idx=0U ; idx<SWIC_TBL_NUM(swic_Reg_Mode) ; idx++) {
+#if 0 /* 未対応 SQI*/
 		swic_Reg_Mode[idx].sqi.tim = SWIC_PHY_INISQI;
 		swic_Reg_Mode[idx].sqi.req = STD_OFF;
-	}
 #endif
+		swic_Reg_Mode[idx].logflt.tim = 0;
+		swic_Reg_Mode[idx].logflt.req = STD_OFF;
+	}
+
 
 #if 0 /* For HND DTC*/
 	swic_Reg_TimClrDTC();
@@ -362,6 +372,9 @@ void EthSwt_SWIC_Reg_Init(void)
 		swic_Reg_Mode[i].sqi.tim				= SWIC_PHY_INISQI;
 		swic_Reg_Mode[i].sqi.req				= STD_OFF;
 #endif
+		swic_Reg_Mode[i].logfltnum				= 0;
+		swic_Reg_Mode[i].logflt.tim				= 0;
+		swic_Reg_Mode[i].logflt.req				= STD_OFF;
 		if (swic_Reg_PortDef[i].mode == ETH_MODE_ACTIVE) {
 			swic_Reg_LinkTimSet(i, ETHTRCV_LINK_STATE_ACTIVE, SWIC_REG_TMOLNK);
 		}
@@ -416,6 +429,7 @@ void EthSwt_SWIC_Reg_MainFunction1MS(void)
 #if 0 /* 未対応 SQI */
 			swic_Reg_TimUpd(&swic_Reg_Mode[i].sqi, swic_Reg_PortDef[i].tmo_SQI);
 #endif
+			swic_Reg_TimUpd(&swic_Reg_Mode[i].logflt, swic_Reg_PortDef[i].tmo_LogFlt);
 		}
 
 	}
@@ -521,6 +535,15 @@ Std_ReturnType EthSwt_SWIC_Reg_GetSqiValue(const uint8 SwitchPortIdx, uint8 *con
 	return swic_Reg_Mode[SwitchPortIdx].sqi_err;
 }
 #endif
+
+Std_ReturnType EthSwt_SWIC_Reg_GetLoggingFilteringValue(const uint8 SwitchPortIdx, uint32 *const LoggingFilteringValue)
+{
+	if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{return E_NOT_OK; }
+	if (SwitchPortIdx >= SWIC_TBL_NUM(swic_Reg_Mode))	{return E_NOT_OK; }
+	if (LoggingFilteringValue == NULL_PTR)				{return E_NOT_OK; }
+	*LoggingFilteringValue = swic_Reg_Mode[SwitchPortIdx].logfltnum;
+	return E_OK; /* 暫定でE_OK返す */
+}
 
 #if 0 /* For HND DTC */
 #ifdef	SWIC_OPT_DTC	/* DTC有 */
@@ -972,8 +995,6 @@ static Std_ReturnType swic_Reg_GetLink(const uint8 SwitchPortIdx, EthTrcv_LinkSt
 	return err;
 }
 
-#if 0 /* 未対応 IDS, 帯域制限 */
-#ifdef	SWIC_REG_IDSPORT			/* IDS対象 */
 static void swic_Reg_AddVal(uint32 *const num, const swic_reg_data_t tbl[], const uint32 cnt)
 {
 	Std_ReturnType	err;
@@ -985,6 +1006,8 @@ static void swic_Reg_AddVal(uint32 *const num, const swic_reg_data_t tbl[], cons
 	*num = (((~0uL) - *num) >= val) ? *num + val : ~0uL;
 	LIB_EI();
 }
+#if 0 /* 未対応 IDS, 帯域制限 */
+#ifdef	SWIC_REG_IDSPORT			/* IDS対象 */
 void EthSwt_SWIC_Reg_UpdStreamFilterCounter(const uint8 SwitchPortIdx, uint32 *const num)
 {
 	static const swic_reg_data_t	reg_bsy = {0x1cu,0x16u,0x01u,0x01u,0x8000u,0x0000u};	/* バージョンにより先頭2行が入れ替わるので暫くローカルで持つ */
@@ -1032,6 +1055,34 @@ void EthSwt_SWIC_Reg_UpdSQI(const uint8 SwitchPortIdx)
 	swic_Reg_Mode[SwitchPortIdx].sqi_err = err;	/* 現在値が欲しいのでアクセス失敗時も更新 */
 }
 #endif
+static Std_ReturnType swic_Reg_MibSelectCLR(const uint8 SwitchPortIdx)
+{
+	static const struct swic_reg_tbl tbl[]
+	=	{ {&g_regListSeqSelectPort[16],	2u}	/* P9 */
+		, {&g_regListSeqSelectPort[ 0],	2u}	/* P1 */
+		, {&g_regListSeqSelectPort[ 2],	2u}	/* P2 */
+		, {&g_regListSeqSelectPort[ 4],	2u}	/* P3 */
+		, {&g_regListSeqSelectPort[ 6],	2u}	/* P4 */
+		, {&g_regListSeqSelectPort[ 8],	2u}	/* P5 */
+		, {&g_regListSeqSelectPort[10],	2u}	/* P6 */
+		, {&g_regListSeqSelectPort[12],	2u}	/* P7 */
+		, {&g_regListSeqSelectPort[14],	2u}	/* P8 */
+		};
+	return swic_Reg_TblReg(SwitchPortIdx, tbl, SWIC_TBL_NUM(tbl));
+}
+
+void EthSwt_SWIC_Reg_UpdLogFlt(const uint8 SwitchPortIdx, uint32 *const num)
+{
+	Std_ReturnType err;
+	uint32 tcam0 = 0u;
+	if (SwitchPortIdx != 6) { return; }
+	err = swic_Reg_MibSelectCLR(SwitchPortIdx);
+	if (err != E_OK) { return; }
+	swic_Reg_AddVal(&tcam0, g_regListSeqMibTcamCnt0, SWIC_TBL_NUM(g_regListSeqMibTcamCnt0));
+	SWIC_REG_ADD_VAL(swic_Reg_Mode[SwitchPortIdx].logfltnum, tcam0);
+
+	return;
+}
 
 #if 0 /* For HND PhyReset */
 static Std_ReturnType swic_Reg_PortPhyReset(const uint8 SwitchPortIdx)
@@ -1136,9 +1187,7 @@ static void swic_Reg_SwitchInit(void)
 		, {SWIC_REG_TBL(g_regListVlan)					, STD_OFF}	/* VLAN設定 */
 		, {SWIC_REG_TBL(g_regListL2)					, STD_OFF}	/* L2設定 */
 		, {SWIC_REG_TBL(g_regListQos)					, STD_OFF}	/* QoS設定 */
-#if 0 /* 未対応　ACT定義 */
 		, {SWIC_REG_TBL(g_regListAcl)					, STD_OFF}	/* ACL設定 */
-#endif
 		#ifndef	g_regListArp
 		, {SWIC_REG_TBL(g_regListArp)					, STD_OFF}	/* ARP設定 */
 		#endif														/* g_regListArp */
@@ -1511,6 +1560,19 @@ static Std_ReturnType swic_Reg_SwitchActiveSQI(void)
 	return ret;
 }
 #endif
+static Std_ReturnType swic_Reg_SwitchActiveLogFlt(void)
+{
+	Std_ReturnType	ret = E_NOT_OK;
+	uint8			idx;
+	for (idx=0u ; idx<SWIC_TBL_NUM(swic_Reg_Mode) ; idx++) {
+		if (swic_Reg_Mode[idx].logflt.req != STD_ON) {continue; }
+		swic_Reg_Mode[idx].logflt.req =STD_OFF;
+		EthSwt_SWIC_Reg_UpdLogFlt(idx, &swic_Reg_Mode[idx].logfltnum);
+		ret = E_OK;
+	}
+	return ret;
+}
+
 
 static Std_ReturnType swic_Reg_SwitchActive(void)
 {	/* EthSwt_SWIC_BackgroundTask()が0ms周期専用 */
@@ -1556,6 +1618,8 @@ static Std_ReturnType swic_Reg_SwitchActive(void)
 	err = swic_Reg_SwitchActiveSQI();	/* 現在値を覗くだけなので後 */
 	if (err == E_OK) { return E_OK; }
 #endif
+	err = swic_Reg_SwitchActiveLogFlt();
+	if (err == E_OK) {return E_OK; }
 	return ret;							/* swic_Reg_SwitchActiveMode結果 */
 }
 static Std_ReturnType swic_Reg_SwitchActive1MS(void)
