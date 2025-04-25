@@ -49,7 +49,7 @@
 #define    XSPI_IVI_POWER_STATE_TRANS_SEND      (0x04U)
 
 
-#define    XSPI_IVI_POWER_TASK                  (2000U / 5U)
+#define    XSPI_IVI_POWER_TASK                  (2000U / XSPI_IVI_TASK_TIME)
 #define    XSPI_IVI_POWER_STATE_SIZE            (5U)
 #define    XSPI_IVI_POWER_TRANS_SIZE            (6U)
 
@@ -71,7 +71,7 @@
 #define    XSPI_IVI_POWER_DEV_INI_COMP_GYRO     (0x0008U)
 #define    XSPI_IVI_POWER_DEV_INI_COMP_POWER    (0x0010U)
 /*GPS-RST端子 Lo→Hiからのカウント*/
-#define    XSPI_IVI_POWER_GPSRST_INI_TASK       (400U / 1U)
+#define    XSPI_IVI_POWER_GPSRST_INI_TASK       (400U / XSPI_IVI_TASK_TIME)
 
 
 /*デバイス初期化確認Pin*/
@@ -162,8 +162,6 @@ static U1 u1_s_xspi_ivi_power_state_pre[4];
 /*状態移行格納*/
 static ST_XSPI_IVI_POWER_STATE_TRANS st_s_xspi_ivi_state_trans; 
 
-static U4 u4_s_xspi_ivi_task_cnt_subframe1_power_pre;
-
 /*SPI通信許可状態*/
 static U1 u1_s_xspi_ivi_power_start_flg;
 /*状態移行指示有無*/
@@ -172,7 +170,6 @@ static U1 u1_s_xspi_ivi_power_state_trans_flg;
 static U1 u1_s_xspi_ivi_power_device_init_fin_flg;
 /*アプリからのデバイス初期化状態格納*/
 static U2 u2_s_xspi_ivi_power_device_init_app;
-static U4 u4_s_xspi_ivi_power_gpsrst_task_pre;
 static U1 u1_s_xspi_ivi_power_gpsrst_sts_pre;
 static U1 u1_s_xspi_ivi_power_gpsrst_init_fin_flg;
 static U1 u1_s_xspi_ivi_power_gpsrst_sts_chk;
@@ -264,9 +261,7 @@ void            vd_g_XspiIviSub1PowerInit(void)
     st_s_xspi_ivi_state_trans.u1_ota_state = (U1)U1_MAX;
     st_s_xspi_ivi_state_trans.u1_appearance_state = (U1)U1_MAX;
 
-    u4_s_xspi_ivi_task_cnt_subframe1_power_pre = (U4)0U;
     u2_s_xspi_ivi_power_device_init_app = (U2)0U;
-    u4_s_xspi_ivi_power_gpsrst_task_pre = (U4)0U;
     u1_s_xspi_ivi_power_gpsrst_sts_pre = (U1)STD_LOW;
     u1_s_xspi_ivi_power_gpsrst_init_fin_flg = (U1)FALSE;
     u1_s_xspi_ivi_power_gpsrst_sts_chk = (U1)FALSE;
@@ -350,7 +345,7 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
     }
     /* シス検暫定ここまで */
 
-    u4_t_power_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_task_cnt_subframe1_power_pre;
+    u4_t_power_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_STS];
     u1_t_power_ivent_jdg = (U1)FALSE;
     u1_t_power_ivent_jdg = u1_s_XspiIviSub1PowerDataEventJdg(&u1_s_xspi_ivi_power_state[0],&u1_s_xspi_ivi_power_state_pre[0],(U1)4U);
 
@@ -362,7 +357,7 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
             u1_tp_data[0] = (U1)XSPI_IVI_POWER_STATE_SEND;
             vd_g_MemcpyU1(&u1_tp_data[1],&u1_s_xspi_ivi_power_state[0],(U1)4U);
             vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_STATE_SIZE,u1_tp_data);
-            u4_s_xspi_ivi_task_cnt_subframe1_power_pre = u4_s_xspi_ivi_task_cnt;
+            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_STS] = (U4)0U;
         }else{
             /*Do Nothing*/
         }
@@ -400,7 +395,7 @@ void            vd_g_XspiIviSub1_PowerState1stSend(void)
     vd_g_MemcpyU1(&u1_tp_data[1],&u1_s_xspi_ivi_power_state[0],(U1)4U);
     vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_STATE_SIZE,u1_tp_data);
     u1_s_xspi_ivi_power_start_flg = (U1)TRUE;
-    u4_s_xspi_ivi_task_cnt_subframe1_power_pre = u4_s_xspi_ivi_task_cnt;
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_STS] = (U4)0U;
 }
 
 /*===================================================================================================================================*/
@@ -472,11 +467,11 @@ void            vd_g_XspiIviSub1DevInitFinish(void)
             u1_t_gpsrst_pin = Dio_ReadChannel(Mcu_Dio_PortId[u4_t_loop]);
             if((u1_t_gpsrst_pin == (U1)STD_HIGH) &&
               (u1_t_gpsrst_pin != u1_s_xspi_ivi_power_gpsrst_sts_pre)) {
-                u4_s_xspi_ivi_power_gpsrst_task_pre = u4_s_xspi_ivi_task_cnt;
+                u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_GPSRST] = (U4)0U;
                 u1_s_xspi_ivi_power_gpsrst_sts_chk = (U1)TRUE;
             }
 
-            u4_t_task_cnt = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_power_gpsrst_task_pre;
+            u4_t_task_cnt = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_GPSRST];
             if((u1_s_xspi_ivi_power_gpsrst_sts_chk == (U1)TRUE) &&
                (u4_t_task_cnt >= (U4)XSPI_IVI_POWER_GPSRST_INI_TASK)){
                 u1_s_xspi_ivi_power_gpsrst_init_fin_flg = (U1)TRUE;
