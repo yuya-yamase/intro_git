@@ -1,86 +1,63 @@
-/* 0.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  MCU IVI I2C Read/Write                                                                                                           */
-/*===================================================================================================================================*/
-
-#ifndef MCU_IVI_I2C_CTRL_PRIVATE_H
-#define MCU_IVI_I2C_CTRL_PRIVATE_H
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Version                                                                                                                          */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define MCU_IVI_I2C_CTRL_PRIVATE_H_MAJOR        (0)
-#define MCU_IVI_I2C_CTRL_PRIVATE_H_MINOR        (0)
-#define MCU_IVI_I2C_CTRL_PRIVATE_H_PATCH        (0)
-
+#ifndef MCU_SYS_MET_CRTIC_H
+#define MCU_SYS_MET_CRTIC_H
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
 #include "gpi2c_ma.h"
-
-#include "Mcu_I2c_Ctrl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* レジスタ読出し/書込み */
-#define MCU_REGWRI_RTRN_NONACT                  (0U)    /* レジスタ書込み処理 要求なし */
-#define MCU_REGWRI_RTRN_ACT                     (1U)    /* レジスタ書込み処理 書込み開始要求 */
-#define MCU_REGWRI_RTRN_FIN                     (0xFFU) /* レジスタ書込み処理 全データ書込み完了通知 */
+#define MCU_SYS_MET_RTCIC_SLAVEADR_WR                       (0x64)
+#define MCU_SYS_MET_RTCIC_SLAVEADR_RD                       (0x65)
 
-/* Ack管理 */
-#define MCU_I2C_ACK_NUM                         (7U)    /* Ack監視RAM 総数 */
-#define MCU_I2C_ACK_VIDEO_IC                    (0U)
-#define MCU_I2C_ACK_GVIF_RX                     (1U)
-#define MCU_I2C_ACK_GVIF_TX                     (2U)
-#define MCU_I2C_ACK_POWER                       (3U)
-#define MCU_I2C_ACK_RTC                         (4U)
-#define MCU_I2C_ACK_GYRO                        (5U)
-#define MCU_I2C_ACK_G_MONI                      (6U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE1                         (1U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE2                         (2U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE3                         (3U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE4                         (4U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE5                         (5U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE6                         (6U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE7                         (7U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE8                         (8U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE9                         (9U)
+#define MCU_SYS_MET_RTCIC_RWC_BYTE17                       (17U)
 
-/* 書き込み時Waitモード */
-#define MCU_I2C_WAIT_NON                        (0U)    /* Waitなし */
-#define MCU_I2C_WAIT_B89                        (1U)    /* GVIF送信 Bank8,9アクセス時 */
+#define MCU_SYS_MET_RTCIC_SETREG_CLK_NUM                    (4U)
+#define MCU_SYS_MET_RTCIC_SETREG_VLF_RD_NUM                 (2U)
+#define MCU_SYS_MET_RTCIC_SETREG_CLK_RD_NUM                 (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    U2              u2_strt;        /* レジスタ配列の書込み開始位置 */
-    U2              u2_num;         /* 連続書込み個数 */
-    U2              u2_wait;        /* レジスタアクセス間Wait時間 */
-}ST_REG_WRI_REQ;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern U1 u1_sp_MCU_SYS_MET_RTCIC_SETREG_VLF_RD_PDU2[];
+extern U1 u1_sp_MCU_SYS_MET_RTCIC_SETREG_CLK_RD_PDU2[];
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 初期化 */
-static void Mcu_Dev_I2c_Ctrl_Cfg_Init();
-
-/* I2C書込み用IF */
-uint8 Mcu_Dev_I2c_Ctrl_RegSet(uint8 mcu_ack, uint16 * mcu_regstep, const uint16 mcu_wri_max,
-                                const uint8 mcu_i2c_sla, const ST_REG_WRI_REQ * I2C_WR_REGSET, uint32 * mcu_timeout_cnt,
-                                const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt);
-
-/* I2C読出し用IF */
-uint8 Mcu_Dev_I2c_Ctrl_RegRead(uint8 mcu_ack, uint16 * mcu_regstep, const uint8 mcu_i2c_sla,
-                                uint32 * mcu_timeout_cnt, const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt, const uint8 mcu_waitmode);
+void Mcu_Sys_Met_RtcIc_Clk_Init(const U4 u4_a_settime);
+void Mcu_Sys_Met_RtcIc_Vlf_Rd_Init(void);
+void Mcu_Sys_Met_RtcIc_Clk_Rd_Init(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_MET_RTCIC_SETREG_CLK[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_MET_RTCIC_SETREG_VLF_RD[];
+extern const ST_GP_I2C_MA_REQ     st_sp_MCU_SYS_MET_RTCIC_SETREG_CLK_RD[];
 
-#endif /* MCU_IVI_I2C_CTRL_H */
+#endif      /* MCU_SYS_MET_CRTIC_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  Mcu_I2c_Ctrl.c                                                                                                 */
+/*  Change History  :  Mcu_Sys_Met_CrtIc.c                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

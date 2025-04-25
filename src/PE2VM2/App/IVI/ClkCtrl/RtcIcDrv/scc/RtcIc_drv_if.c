@@ -1,39 +1,36 @@
-/* 1.11.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  RUN Mode Manager :                                                                                                               */
-/*                                                                                                                                   */
+/*  Rtc Ic (Epson RA8900) Driver : I/F                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define RUN_M_CFG_C_MAJOR                        (1)
-#define RUN_M_CFG_C_MINOR                        (11)
-#define RUN_M_CFG_C_PATCH                        (0)
+#define RTCIC_DRV_IF_C_MAJOR                     (1U)
+#define RTCIC_DRV_IF_C_MINOR                     (0U)
+#define RTCIC_DRV_IF_C_PATCH                     (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "run_m_cfg_private.h"
-#include "fpcall_u1_and.h"
-
-/* Communication         */
-#include "oxcan.h"
-#include "date_clk.h"
-/* Complex Device Driver */
-/* MCAL                  */
-/* Memory                */
-/* Application           */
+#include "RtcIc_drv_if_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((RUN_M_CFG_C_MAJOR != RUN_M_CFG_H_MAJOR) || \
-     (RUN_M_CFG_C_MINOR != RUN_M_CFG_H_MINOR))
-#error "run_m_cfg.c and run_m_cfg_private.h : source and config files are inconsistent!"
+#if ((RTCIC_DRV_IF_C_MAJOR != RTCIC_DRV_IF_H_MAJOR) || \
+     (RTCIC_DRV_IF_C_MINOR != RTCIC_DRV_IF_H_MINOR) || \
+     (RTCIC_DRV_IF_C_PATCH != RTCIC_DRV_IF_H_PATCH))
+#error "RtcIc_drv_if.c and RtcIc_drv_if.h : source and header files are inconsistent!"
+#endif
+
+#if ((RTCIC_DRV_IF_C_MAJOR != RTCIC_DRV_IF_CFG_H_MAJOR) || \
+     (RTCIC_DRV_IF_C_MINOR != RTCIC_DRV_IF_CFG_H_MINOR) || \
+     (RTCIC_DRV_IF_C_PATCH != RTCIC_DRV_IF_CFG_H_PATCH))
+#error "RtcIc_drv_if.c and RtcIc_drv_if_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,8 +39,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define __RUN_M_CHK_1ST__                       (1)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -56,112 +51,122 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2              u2_g_RUN_M_TIMOUT_TO_SHTDWN = (U2)3000U / (U2)5U;   /* 3 seconds */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_RunMCfgInit(void)                                                                                                   */
+/*  U1      u1_g_RtclkStart(const U4 u4_a_HHMMSS_24H, const S2 s2_a_CAL_SUBSE, const U1 u1_a_IRQ_ENA)                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_RunMCfgInit(void)
+U1      u1_g_RtclkStart(const U4 u4_a_HHMMSS_24H, const S2 s2_a_CAL_SUBSE, const U1 u1_a_IRQ_ENA)
 {
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_RunMCfghkShtdwnchk1st(void)                                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_RunMCfghkShtdwnchk1st(void)
-{
-#if (__RUN_M_CHK_1ST__ == 1)
-    static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
-        &u1_g_oXCANEcuShtdwnOk
-    };
+    U4                 u4_t_bcd;
 
-    U1                        u1_t_1st;
+    U1                 u1_t_stsbit;
+    U1                 u1_t_frmt;
+    U1                 u1_tp_time[HHMMSS_24H_TIME_SIZE];
 
-    u1_t_1st  = u1_g_Fpcall_u1_And(&fp_sp_u1_RUN_M_SHTDWN_CHK[0], u2_NC_U1_AND(fp_sp_u1_RUN_M_SHTDWN_CHK));
+    volatile U1        u1_t_rdbk;
 
-    return(u1_t_1st);
-#else
-    return((U1)TRUE);
-#endif /* #if (__RUN_M_CHK_1ST__ != 1) */
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_RunMCfgWksrcIrqchk(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_RunMCfgWksrcIrqchk(void)
-{
-#if 0    
-    static const U4           u4_s_RUN_M_WKSRC_EIRQBIT = ((U4)ICU_WK_WRQ_CAN_VEH |
-                                                          (U4)ICU_WK_WRQ_HWI_WK);
+    u1_t_stsbit = (U1)0U;
 
-    static const U4           u4_s_RUN_M_WKSRC_ECLRBIT = (U4)ICU_WK_WRQ_HWI_WK;
-
-    U4                        u4_t_irqst;
-    U1                        u1_t_shtdwn;
-
-    u4_t_irqst  = u4_g_IcuWkRQst((U1)ICU_WK_GR_A0, (U4)u4_s_RUN_M_WKSRC_EIRQBIT, (U1)FALSE);
-    /* ----------------------------------------------------------------------------------- */
-    /* Attention :                                                                         */
-    /* ----------------------------------------------------------------------------------- */
-    /* u4_g_IcuWkRQst is being called twice in order to clear IGN and HAR irqsts.          */
-    /* By doing above, the time slit is being eliminated in which WkEvts are lost and      */
-    /* discarded by clearing them.                                                         */
-    /* ----------------------------------------------------------------------------------- */
-    u4_t_irqst |= u4_g_IcuWkRQst((U1)ICU_WK_GR_A0, u4_s_RUN_M_WKSRC_ECLRBIT, (U1)TRUE);
-    if(u4_t_irqst == (U4)0U){
-        u1_t_shtdwn = (U1)TRUE;
+    u1_t_frmt = u1_g_HhmmssFrmtIs24h(u4_a_HHMMSS_24H, &u1_tp_time[0]);
+    if(u1_t_frmt != (U1)TRUE){
+        u1_t_stsbit = (U1)RTCLK_STSBIT_HHMMSS_INVLD;
     }
-    else{
-        u1_t_shtdwn = (U1)FALSE;
+    else {
+        u4_t_bcd  = u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_HR])  << RTCLK_HHMMSS_LSB_HR;
+        u4_t_bcd |= (u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_MI]) << RTCLK_HHMMSS_LSB_MI);
+        u4_t_bcd |= u4_g_IntToBcd((U4)u1_tp_time[HHMMSS_24H_TIME_SE]);
+
+         vd_g_RtcIc_RtclkRtartReq(u4_t_bcd);
     }
 
-    return(u1_t_shtdwn);
-#endif
-    return((U1)TRUE);
+    return(u1_t_stsbit);
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_RunMCfgWksrcCfgRefresh(void)                                                                                        */
+/*  U1      u1_g_RtclkRead(const S2 s2_a_CAL_SUBSE, U4 * u4_ap_hhmmss_24h)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_RunMCfgWksrcCfgRefresh(void)
+U1      u1_g_RtclkRead(const S2 s2_a_CAL_SUBSE, U4 * u4_ap_hhmmss_24h)
 {
-    /* ----------------------------------------------------------------------------------- */
-    /* Warning :                                                                           */
-    /* ----------------------------------------------------------------------------------- */
-    /* DO NOT CALL vd_g_IcuWkSetCh with the parameter "ICU_WK_CFGBIT_WRQ_CLR".             */
-    /* If vd_g_IcuWkSetCh is called with the parameter "ICU_WK_CFGBIT_WRQ_CLR",            */
-    /* wakeup sources could be lost and discarded.                                         */
-    /* ----------------------------------------------------------------------------------- */
-#if 0
-    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP_5,  (U1)ICU_WK_CFGBIT_ELC_HI | (U1)ICU_WK_CFGBIT_WRQ_ENA);
-    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP_15, (U1)ICU_WK_CFGBIT_ELC_HI | (U1)ICU_WK_CFGBIT_WRQ_ENA);
-#endif
+
+    U4                 u4_t_hhmmss_rtclk;
+    U4                 u4_t_se;
+    U4                 u4_t_mi;
+    U4                 u4_t_hr;
+    U4                 u4_t_hhmmss_24h;
+
+    U1                 u1_t_stsbit;
+    U1                 u1_t_state;
+
+    u1_t_stsbit = (U1)0U;
+
+    u1_t_state = u1_g_RtcIc_RtclkStaProv();
+
+    if (u1_t_state == (U1)RTCIC_I2C_ERROR) {
+        u1_t_stsbit = (U1)RTCLK_STSBIT_I2C_ERROR;
+
+    }
+    else if (u1_t_state == (U1)RTCIC_RTC_INITIAL) {
+        u1_t_stsbit = (U1)RTCLK_STSBIT_INITIAL;
+    }
+    else {
+        vd_g_RtcIc_RtclkProv(&u4_t_hhmmss_rtclk);
+
+        u4_t_se =  u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_SE;
+        u4_t_mi = (u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_MI) >> RTCLK_HHMMSS_LSB_MI;
+        u4_t_hr = (u4_t_hhmmss_rtclk & (U4)RTCLK_HHMMSS_BIT_HR) >> RTCLK_HHMMSS_LSB_HR;
+
+        u4_t_se = u4_g_BcdToInt(u4_t_se);
+        u4_t_mi = u4_g_BcdToInt(u4_t_mi);
+        u4_t_hr = u4_g_BcdToInt(u4_t_hr);
+
+        if((u4_t_se <= (U4)HHMMSS_SE_MAX    ) &&
+           (u4_t_mi <= (U4)HHMMSS_MI_MAX    ) &&
+           (u4_t_hr <= (U4)HHMMSS_24H_HR_MAX)){
+
+            u4_t_hhmmss_24h  = (u4_t_hr << HHMMSS_LSB_HR);
+            u4_t_hhmmss_24h |= (u4_t_mi << HHMMSS_LSB_MI);
+            u4_t_hhmmss_24h |= u4_t_se;
+            (*u4_ap_hhmmss_24h) = u4_t_hhmmss_24h;
+        }
+        else{
+            u1_t_stsbit = (U1)RTCLK_STSBIT_HHMMSS_INVLD;
+        }
+    }
+
+    return(u1_t_stsbit);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)                                                    */
+/*  U1      u1_g_RtclkSts(void)                                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
+U1      u1_g_RtclkSts(void)
 {
-    U1        u1_t_2nd;
+    U1                 u1_t_state;
+    U1                 u1_t_stsbit;
 
-    u1_t_2nd = u1_g_DateclkShtdwnOk();
+    u1_t_state = u1_g_RtcIc_RtclkStaProv();
 
-    return(u1_a_1ST);
+    if (u1_t_state == (U1)RTCIC_I2C_ERROR) {
+        u1_t_stsbit = (U1)RTCLK_STSBIT_I2C_ERROR;
+
+    }
+    else if (u1_t_state == (U1)RTCIC_RTC_INITIAL) {
+        u1_t_stsbit = (U1)RTCLK_STSBIT_INITIAL;
+    }
+    else {
+        u1_t_stsbit = (U1)RTCLK_STSBIT_TMCNT_RUN;
+    }
+
+    return(u1_t_stsbit);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -171,23 +176,10 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    12/ 4/2012  TN       New.                                                                                               */
-/*  1.1.0     3/ 5/2015  TN       bsw_m.c was optimized.                                                                             */
-/*  1.2.0     3/18/2015  TN       u1_g_BswMCfghkXXX -> u1_g_BswMCfghk                                                                */
-/*  1.3.0     6/ 5/2015  TN       bsw_m.c v1.2.0 -> v1.3.0.                                                                          */
-/*  1.4.0     7/ 6/2015  TN       bsw_m.c v1.3.0 -> v1.4.0.                                                                          */
-/*            8/ 6/2015  TN       Bug Fix : u1_t_irqst -> u4_t_irqst in u1_g_BswMCfgWksrcIrqchk.                                     */
-/*  1.5.0    10/12/2015  TN       vd_g_BswMCfgWksrcIrqInit was implemented.                                                          */
-/*  1.6.0    12/ 7/2015  TN       vd_g_BswMCfgWksrcIrqInit -> vd_g_BswMCfgWksrcCfgRefresh.                                           */
-/*  1.7.0     1/19/2016  TN       bsw_m.c v1.6.0 -> v1.7.0.                                                                          */
-/*  1.8.0     2/19/2016  TN       bsw_m.c v1.7.0 -> v1.8.0.                                                                          */
-/*  1.9.0     4/ 7/2016  TN       Improvement : vd_g_BswMCfgInit was implemented.                                                    */
-/*  1.10.0   11/ 7/2016  TN       bsw_m.c v1.9.0 -> v1.10.0.                                                                         */
-/*  1.11.0    3/ 4/2019  TN       bsw_m.c v1.10.0 -> v1.11.0.                                                                        */
-/*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
+/*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  1.0.0    14/ 2/2025  SU       Rtc_Drv.c -> RtcIc_drv_if.c                                                                        */
 /*                                                                                                                                   */
-/*  * TN   = Takashi Nagai, Denso                                                                                                    */
+/*  * SU = Shin Uchida    , Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

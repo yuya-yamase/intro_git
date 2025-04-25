@@ -15,6 +15,11 @@
     :sourceDir=${APP_DIR}/IVI/GyrCtrl/config
     :sourceDir=${APP_DIR}/IVI/DspCtrl
     :sourceDir=${APP_DIR}/IVI/DspCtrl/config
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/Dateclk/scc
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/Dateclk/config
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/Common/scc
 
     -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
@@ -49,6 +54,12 @@
     -I${APP_DIR}/IVI/GyrCtrl/config
     -I${APP_DIR}/IVI/DspCtrl
     -I${APP_DIR}/IVI/DspCtrl/config
+
+    -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
+    -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
+    -I${APP_DIR}/IVI/ClkCtrl/Dateclk/scc
+    -I${APP_DIR}/IVI/ClkCtrl/Dateclk/config
+    -I${APP_DIR}/IVI/ClkCtrl/Common/scc
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
@@ -104,3 +115,12 @@ USBCtl.c
 CarSpdPls.c
 PictMuteCtl.c
 AntCtl.c
+
+Mcu_Sys_Met_RtcIc.c
+RtcIc_drv.c
+RtcIc_drv_if.c
+bcd.c
+rtime.c
+date.c
+date_clk.c
+date_clk_cfg.c

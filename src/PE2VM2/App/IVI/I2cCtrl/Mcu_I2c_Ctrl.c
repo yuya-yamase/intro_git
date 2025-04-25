@@ -59,6 +59,7 @@ static uint8    Mcu_I2c_Ack_Eizoic;             /* Video-IC : W 0x72, R 0x73 */
 static uint8    Mcu_I2c_Ack_Gvif_Rx;            /* GVIF-Rx  : W 0x46, R 0x47 */
 static uint8    Mcu_I2c_Ack_Gvif_Tx;            /* GVIF-Tx  : W 0x48, R 0x49 */
 static uint8    Mcu_I2c_Ack_Power;              /* P-IC     : W 0xDE, R 0xDF */
+static uint8    Mcu_I2c_Ack_Rtc;                /* RTC-IC   : W 0x64, R 0x65 */
 static uint8    Mcu_I2c_Ack_Gyro;               /* Gryo     : W 0xD2, R 0xD3 */
 static uint8    Mcu_I2c_Ack_G_Moni;             /* Gmoni    : W 0x32, R 0x33 */
 
@@ -67,6 +68,7 @@ static uint8 *  Mcu_I2c_Ack[MCU_I2C_ACK_NUM] = {
     &Mcu_I2c_Ack_Gvif_Rx,
     &Mcu_I2c_Ack_Gvif_Tx,
     &Mcu_I2c_Ack_Power,
+    &Mcu_I2c_Ack_Rtc,
     &Mcu_I2c_Ack_Gyro,
     &Mcu_I2c_Ack_G_Moni
 };
@@ -97,6 +99,7 @@ void Mcu_Dev_I2c_Ctrl_Init(void)
     Mcu_I2c_Ack_Gvif_Rx     = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Gvif_Tx     = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Power       = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_Rtc         = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Gyro        = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_G_Moni      = (uint8)MCU_REGWRI_ACK_INI;
 }
@@ -345,6 +348,18 @@ void Mcu_Dev_I2c_Ctrl_Ack_GvifTx(const uint8 mcu_ack)
 void Mcu_Dev_I2c_Ctrl_Ack_Power(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_Power       |=  mcu_ack;
+}
+
+/*****************************************************************************
+  Function      : Mcu_Dev_I2c_Ctrl_Ack_Rtc
+  Description   : 
+  param[in/out] : [i ]mcu_ack           : Ack受信結果
+  return        : -
+  Note          : RTC-IC Ack取得処理
+*****************************************************************************/
+void Mcu_Dev_I2c_Ctrl_Ack_Rtc(const uint8 mcu_ack)
+{
+    Mcu_I2c_Ack_Rtc         |=  mcu_ack;
 }
 
 /*****************************************************************************

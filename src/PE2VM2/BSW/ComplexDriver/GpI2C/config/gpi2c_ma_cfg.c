@@ -171,7 +171,7 @@ const ST_GP_I2C_MA_SLA           st_gp_GP_I2C_MA_SLA[GP_I2C_MA_NUM_SLA]  = {
         &vd_s_GpI2cMaCfgTRxAckCh1_Rtc,             /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
-        (U2)10U                                    /* u2_rwc_max */
+        (U2)32U                                    /* u2_rwc_max */
     },
     {   /* Gryo     : W 0xD2, R 0xD3 */
         &vd_s_GpI2cMaCfgTRxAckCh1_Gyro,            /* fp_vd_ACK  */
@@ -354,6 +354,17 @@ static void    vd_s_GpI2cMaCfgTRxAckCh1_Rtc(const ST_GP_I2C_MA_REQ * st_ap_ACK)
     /* ----------------------------------------------------------------------------------- */
     /* vd_s_GpI2cMaCfgTRxAckCh1_Rtc is being invaked at vd_g_GpI2cMaMainTask().            */
     /* ----------------------------------------------------------------------------------- */
+    U1  u1_t_err;
+    U1  u1_t_ret;
+
+    u1_t_err    = (U1)(((st_ap_ACK->u4_cbf) & GP_I2C_MA_CBF_BIT_ERR) >> GP_I2C_MA_CBF_LSB_ERR);
+    u1_t_ret    = (U1)MCU_REGWRI_ACK_ERR;
+
+    if(u1_t_err == (U1)0U) {
+        u1_t_ret    = (U1)MCU_REGWRI_ACK_RCV;
+    }
+
+    Mcu_Dev_I2c_Ctrl_Ack_Rtc(u1_t_ret);
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_GpI2cMaCfgTRxAckCh1_PIc(const ST_GP_I2C_MA_REQ * st_ap_ACK)                                                  */
