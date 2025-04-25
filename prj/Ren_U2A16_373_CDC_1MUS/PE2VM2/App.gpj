@@ -19,7 +19,10 @@
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/Dateclk/scc
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/Dateclk/config
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/DateSI/scc
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/DateSI/config
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/Common/scc
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/STUB/config
 
     -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
@@ -59,7 +62,10 @@
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
     -I${APP_DIR}/IVI/ClkCtrl/Dateclk/scc
     -I${APP_DIR}/IVI/ClkCtrl/Dateclk/config
+    -I${APP_DIR}/IVI/ClkCtrl/DateSI/scc
+    -I${APP_DIR}/IVI/ClkCtrl/DateSI/config
     -I${APP_DIR}/IVI/ClkCtrl/Common/scc
+    -I${APP_DIR}/IVI/ClkCtrl/STUB/config
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
@@ -122,5 +128,15 @@ RtcIc_drv_if.c
 bcd.c
 rtime.c
 date.c
+veh_opemd_xmode_STUB.c
 date_clk.c
 date_clk_cfg.c
+datesi_cal_cfg.c
+datesi_cfg.c
+datesi_tim_cfg.c
+datesi_cal.c
+datesi_tim_avn.c
+datesi_tim.c
+datesi_time_zone.c
+datesi_com.c
+datesi.c

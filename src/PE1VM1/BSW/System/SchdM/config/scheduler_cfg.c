@@ -68,7 +68,9 @@
 #include "tripcom.h"
 #include "tripcom_comtx.h"
 #include "ambtmp.h"
+#if 0   /* BEV provisionally */
 #include "datesi.h"
+#endif
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
 #include "rcmmui.h"
@@ -356,7 +358,9 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_TripcomComTxTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_TripcomSmoothingTask,        (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_AmbtmpMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+#if 0   /* BEV provisionally */
     {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+#endif
     {&vd_g_MulmedColorMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MulmedMulfrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },

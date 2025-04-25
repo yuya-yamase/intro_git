@@ -34,7 +34,9 @@
 #include "es_inspect_STUB.h"
 #endif
 #include "dimmer.h"
+#if 0   /* BEV provisionally */
 #include "datesi_tim.h"
+#endif
 #include "hmimcst.h"
 #include "hmirim.h"
 #include "engspd_varrz.h"
@@ -1730,7 +1732,9 @@ U4    u4_g_McstCfgInit(const U1 u1_a_BFI){
 void    vd_g_McstCfgUserChgHook(void){
 
     vd_g_DimMcstReadHook();
+#if 0   /* BEV provisionally */
     vd_g_DateSITimMcstReadHook();
+#endif
     vd_g_HmiMcstRefHook();
 
 }
@@ -1744,7 +1748,9 @@ void    vd_g_McstCfgUserChgHook(void){
 void    vd_g_McstCfgUserCstmInitHook(void){
 
     vd_g_DimMcstDataResetHook();
+#if 0   /* BEV provisionally */
     vd_g_DateSITimMcstDelHook();
+#endif
     vd_g_HmiMcstRefHook();
 
 }

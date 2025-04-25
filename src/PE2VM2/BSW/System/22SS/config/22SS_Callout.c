@@ -39,6 +39,7 @@
 /* ClkCtrl */
 #include "RtcIc_drv.h"
 #include "Date_clk.h"
+#include "datesi.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -100,6 +101,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();
     vd_g_DateclkBonInit();
+    vd_g_DateSIBonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -149,6 +151,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();
     vd_g_DateclkRstwkInit();
+    vd_g_DateSIRstWkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -198,6 +201,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();
     vd_g_DateclkRstwkInit();
+    vd_g_DateSIRstWkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
