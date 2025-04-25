@@ -18,7 +18,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
 #include "hmidate.h"
+#if 0   /* BEV provisionally */
 #include "datesi_cal.h"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -143,47 +145,65 @@ void    vd_g_HmiDateMainTask(void)
 
         if((u1_s_hmidate_start_pre     != u1_t_hmidate_start)     &&
            (u1_t_hmidate_start         == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustStart();
+#endif
         }
 
         if((u1_s_hmidate_update_pre    != u1_t_himidate_update)   &&
            (u1_t_himidate_update       == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustUpdate();
+#endif
         }
 
         if((u1_s_hmidate_end_pre       != u1_t_hmidate_end)       &&
            (u1_t_hmidate_end           == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustEnd();
+#endif
         }
 
         if((u1_s_hmidate_yearup_pre    != u1_t_hmidate_yearup)    &&
            (u1_t_hmidate_yearup        == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustReq((U1)DATESI_CAL_RNK_YEAE, (U1)HMIDATE_VAL,(U1)DATESI_CAL_ADJ_PLUS);
+#endif
         }
 
         if((u1_s_hmidate_yeardown_pre  != u1_t_hmidate_yeardown)  &&
            (u1_t_hmidate_yeardown      == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustReq((U1)DATESI_CAL_RNK_YEAE, (U1)HMIDATE_VAL,(U1)DATESI_CAL_ADJ_MINUS);
+#endif
         }
 
         if((u1_s_hmidate_monthup_pre   != u1_t_hmidate_monthup)   &&
            (u1_t_hmidate_monthup       == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustReq((U1)DATESI_CAL_RNK_MONTH, (U1)HMIDATE_VAL,(U1)DATESI_CAL_ADJ_PLUS);
+#endif
         }
 
         if((u1_s_hmidate_monthdown_pre != u1_t_hmidate_monthdown) &&
            (u1_t_hmidate_monthdown     == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustReq((U1)DATESI_CAL_RNK_MONTH, (U1)HMIDATE_VAL,(U1)DATESI_CAL_ADJ_MINUS);
+#endif
         }
 
         if((u1_s_hmidate_dayup_pre     != u1_t_hmidate_dayup)     &&
            (u1_t_hmidate_dayup         == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustReq((U1)DATESI_CAL_RNK_DAY, (U1)HMIDATE_VAL,(U1)DATESI_CAL_ADJ_PLUS);
+#endif
         }
 
         if((u1_s_hmidate_daydown_pre   != u1_t_hmidate_daydown)   &&
            (u1_t_hmidate_daydown       == (U1)HMIDATE_REQ     )) {
+#if 0   /* BEV provisionally */
             vd_g_DateSICalAdjustReq((U1)DATESI_CAL_RNK_DAY, (U1)HMIDATE_VAL,(U1)DATESI_CAL_ADJ_MINUS);
+#endif
         }
 
     }

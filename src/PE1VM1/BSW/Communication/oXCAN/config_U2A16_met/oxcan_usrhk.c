@@ -35,7 +35,9 @@
 #include "drec_tx.h"
 #include "mulmed_mulfr.h"
 #include "mulmed_color.h"
+#if 0   /* BEV provisionally */
 #include "datesi_tim.h"
+#endif
 #include "fspomgr.h"
 #include "mmappctrl.h"
 #include "xspi_met_can.h"
@@ -318,9 +320,11 @@ void    vd_g_oXCANUsrhkTxConfirm(const U2 u2_a_MSG, const U1 u1_a_CH, const U1 u
     /* -------------------------------------------------------------------------------------------------- */
 
     /* Users Configuration */
+#if 0   /* BEV provisionally */
     if(u2_a_MSG == (U2)MSG_MET1S33_TXCH0){
         vd_g_DateSITimCanTxHk();
     }
+#endif
 
     /* Sample Code */
 /*  switch(u2_a_MSG)                        */

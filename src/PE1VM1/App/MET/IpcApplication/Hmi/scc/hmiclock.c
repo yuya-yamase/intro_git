@@ -18,7 +18,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
 #include "hmiclock.h"
+#if 0   /* BEV provisionally */
 #include "datesi_tim.h"
+#endif
 
 #include "rim_ctl.h"
 #if 0   /* BEV BSW provisionally */
@@ -145,19 +147,25 @@ void    vd_g_HmiClockMainTask(void)
 
         if((u1_s_hmiclock_start_pre != u1_t_hmiclock_start) &&
            (u1_t_hmiclock_start     == (U1)HMICLOCK_REQ   ))   {
+#if 0   /* BEV provisionally */
             vd_g_DateSITimAdjustStart();
+#endif
             u1_s_hmiclock_cstmflag = (U1)TRUE;
         }
 
         if((u1_s_hmiclock_end_pre != u1_t_hmiclock_end  ) &&
            (u1_t_hmiclock_end     == (U1)HMICLOCK_REQ   ))   {
+#if 0   /* BEV provisionally */
             vd_g_DateSITimAdjustEnd();
+#endif
             u1_s_hmiclock_cstmflag = (U1)FALSE;
         }
 
         if((u1_s_hmiclock_timzero_pre != u1_t_hmiclock_timzero) &&
            (u1_t_hmiclock_timzero     == (U1)HMICLOCK_REQ     ))   {
+#if 0   /* BEV provisionally */
             vd_g_DateSITimZeroRstReq();
+#endif
             u1_t_sts  = u1_g_Rim_ReadU2withStatus(u2_s_HMICLOCK_ID_CLOCK , &u2_t_swcnt);
             u1_t_kind = u1_t_sts & (U1)RIM_RESULT_KIND_MASK;
             if ((u1_t_kind == (U1)RIM_RESULT_KIND_OK) &&
@@ -171,20 +179,28 @@ void    vd_g_HmiClockMainTask(void)
 
             if((u1_s_hmiclock_hourup_pre != (U1)u1_t_hmiclock_hourup) &&
                (u1_t_hmiclock_hourup     == (U1)HMICLOCK_REQ        ))   {
+#if 0   /* BEV provisionally */
                 vd_g_DateSITimAdjustReq((U1)DATESI_TIM_RNK_HUR, (U1)HMICLOCK_VAL, (U1)DATESI_TIM_ADJ_PLUS);
                 vd_g_DateSITimAdjustUpdate();
+#endif
             }else if((u1_s_hmiclock_hourdown_pre != u1_t_hmiclock_hourdown) &&
                (u1_t_hmiclock_hourdown     == (U1)HMICLOCK_REQ            ))   {
+#if 0   /* BEV provisionally */
                 vd_g_DateSITimAdjustReq((U1)DATESI_TIM_RNK_HUR, (U1)HMICLOCK_VAL, (U1)DATESI_TIM_ADJ_MINUS);
                 vd_g_DateSITimAdjustUpdate();
+#endif
             }else if((u1_s_hmiclock_minup_pre != u1_t_hmiclock_minup) &&
                (u1_t_hmiclock_minup     == (U1)HMICLOCK_REQ         ))   {
+#if 0   /* BEV provisionally */
                 vd_g_DateSITimAdjustReq((U1)DATESI_TIM_RNK_MIN, (U1)HMICLOCK_VAL, (U1)DATESI_TIM_ADJ_PLUS);
                 vd_g_DateSITimAdjustUpdate();
+#endif
             }else if((u1_s_hmiclock_mindown_pre != u1_t_hmiclock_mindown) &&
                (u1_t_hmiclock_mindown     == (U1)HMICLOCK_REQ           ))   {
+#if 0   /* BEV provisionally */
                 vd_g_DateSITimAdjustReq((U1)DATESI_TIM_RNK_MIN, (U1)HMICLOCK_VAL, (U1)DATESI_TIM_ADJ_MINUS);
                 vd_g_DateSITimAdjustUpdate();
+#endif
             }else{
                 /* Do Nothing */
             }
