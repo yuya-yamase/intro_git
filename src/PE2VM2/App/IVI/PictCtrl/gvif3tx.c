@@ -12,6 +12,7 @@
 
 #include "pictic.h"
 #include "x_spi_ivi_sub1_power.h"
+#include "x_spi_ivi_sub1_hdmi.h"
 #include "memcpy_u1.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -102,7 +103,7 @@
 #define MCU_DIO_LOW                     (0U)
 #define MCU_DIO_HIGH                    (1U)
 
-#define MCU_MISC_HDCP_ACT               (165U)  /* Misc Type 39h：HDMI 05h：C-Disp_HDCP認証応答 */
+#define MCU_MISC_HDCP_ACT               (166U)  /* Misc Type 39h：HDMI 05h：C-Disp_HDCP認証応答 */
 #define MCU_HDCP_SUBTYPE                (0U)    /* Misc Type 39h：HDMI 05h：C-Disp_HDCP認証応答 SubType */
 #define MCU_HDCP_RSLT                   (1U)    /* Misc Type 39h：HDMI 05h：C-Disp_HDCP認証応答 認証結果 */
 #define MCU_HDCP_MAX_DEVS_EXCEEDED      (2U)    /* Misc Type 39h：HDMI 05h：C-Disp_HDCP認証応答 HDCPTX_MAX_DEVS_EXCEEDED */
@@ -916,9 +917,6 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
     switch (Mcu_OnStep_GVIF3TX_HDCP)
     {
     case MCU_STEP_GVIF3TX_HDCP_01:
-        /* ToDo：GPIO1論理はSiP-MCU間で情報を通知 IF未定のため暫定として常に成立 */
-        /* 起動条件：バックチャネルGPIO1確認 論理：High */
-        u1_g_HDCP_Act_Hook    = (U1)TRUE;
         if(u1_g_HDCP_Act_Hook == (U1)TRUE) {
             Mcu_OnStep_GVIF3TX_HDCP = (U2)MCU_STEP_GVIF3TX_HDCP_05;
         }
@@ -1191,8 +1189,7 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
             /* ToDo：出力映像に合わせてSiP側で映像MUTE */
             /* HDCP認証応答 */
             u1_gp_HDCP_Act[MCU_HDCP_RSLT]       = (U1)0x00U;    /* 00h：認証成功 */
-            /* ToDo：XSPI提供のHDCP認証応答IFを刺す */
-            //vd_g_XspiIviSub1Hghg(xxx, u1_gp_HDCP_Act);
+            vd_g_XspiIviSub1Hdcp(u1_gp_HDCP_Act);
             /* 初期化完了通知 */
             vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFSEND_INI);
             /* 次状態に遷移 */
@@ -1258,8 +1255,7 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
             /* ToDo：ダイレコ保存処理 */
             /* HDCP認証応答 */
             u1_gp_HDCP_Act[MCU_HDCP_RSLT]       = (U1)0x01U;    /* 01h：認証失敗 */
-            /* ToDo：XSPI提供のHDCP認証応答IFを刺す */
-            //vd_g_XspiIviSub1Hghg(xxx, u1_gp_HDCP_Act);
+            vd_g_XspiIviSub1Hdcp(u1_gp_HDCP_Act);
             /* 初期化完了通知 */
             vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFSEND_INI);
             /* 次状態へ遷移 */

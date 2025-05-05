@@ -2,63 +2,61 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
-/*  Transmission and reception processing of XSPI communication data in IVI.                                                         */
+/*  Transmission and reception processing of subframe 1 in XSPI communication.                                                       */
+/*  Handled data: MISC (HDMI) Data                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_C_MAJOR                        (0)
-#define XSPI_IVI_C_MINOR                        (0)
-#define XSPI_IVI_C_PATCH                        (0)
+#define XSPI_IVI_SUB1_HDMI_C_MAJOR                   (0)
+#define XSPI_IVI_SUB1_HDMI_C_MINOR                   (0)
+#define XSPI_IVI_SUB1_HDMI_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include    "x_spi_ivi_private.h"
 #include    "x_spi_ivi_sub1_private.h"
-#include    "x_spi_ivi_sub2_private.h"
+#include    "x_spi_ivi_sub1_hdmi.h"
+#include    "gvif3tx.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((XSPI_IVI_C_MAJOR != XSPI_IVI_H_MAJOR) || \
-     (XSPI_IVI_C_MINOR != XSPI_IVI_H_MINOR) || \
-     (XSPI_IVI_C_PATCH != XSPI_IVI_H_PATCH))
-#error "x_spi_ivi.c and x_spi_ivi.h : source and header files are inconsistent!"
+#if ((XSPI_IVI_SUB1_HDMI_C_MAJOR != XSPI_IVI_SUB1_HDMI_H_MAJOR) || \
+     (XSPI_IVI_SUB1_HDMI_C_MINOR != XSPI_IVI_SUB1_HDMI_H_MINOR) || \
+     (XSPI_IVI_SUB1_HDMI_C_PATCH != XSPI_IVI_SUB1_HDMI_H_PATCH))
+#error "x_spi_ivi_sub1_hdmi.c and x_spi_ivi_sub1.h : source and header files are inconsistent!"
 #endif
-
-#if ((XSPI_IVI_C_MAJOR != XSPI_IVI_PRIVATE_H_MAJOR) || \
-     (XSPI_IVI_C_MINOR != XSPI_IVI_PRIVATE_H_MINOR) || \
-     (XSPI_IVI_C_PATCH != XSPI_IVI_PRIVATE_H_PATCH))
-#error "x_spi_ivi.c and x_spi_ivi_private.h : source and header files are inconsistent!"
+#if ((XSPI_IVI_SUB1_HDMI_C_MAJOR != XSPI_IVI_SUB1_PRIVATE_H_MAJOR) || \
+     (XSPI_IVI_SUB1_HDMI_C_MINOR != XSPI_IVI_SUB1_PRIVATE_H_MINOR) || \
+     (XSPI_IVI_SUB1_HDMI_C_PATCH != XSPI_IVI_SUB1_PRIVATE_H_PATCH))
+#error "x_spi_ivi_sub1_hdmi.c and x_spi_ivi_sub1_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define    XSPI_IVI_HDMI_TYPE_ID        (0x39U)
+#define    XSPI_IVI_HDMI_HDCP_REQ       (0x04U)
+#define    XSPI_IVI_HDMI_HDCP_SEND      (0x05U)
+
+#define    XSPI_IVI_HDMI_HDCP_SIZE      (166U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1              u1_g_XspiIviRcv[XSPI_RCV_FRM_MAX];      /* XSPIデータ受信用バッファ */
 
-U1              u1_g_XspiIviSnd_flg;                    /* 次回送信データ作成可否 */
-U1              u1_g_XspiIviSnd[XSPI_RCV_FRM_MAX];      /* XSPI 次回送信データバッファ */
-
-U4              u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_NUM];                 /* 送信周期用 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void     vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add);
-static void     vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add);
-static void     vd_s_XspiIviTaskCnt(void);
-
+void            vd_s_XspiIviSub1HdmiDataToQueue(const U2 u2_a_SIZE,const U1* u1_ap_XSPI_ADD);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -66,161 +64,92 @@ static void     vd_s_XspiIviTaskCnt(void);
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviInit(void)                                                                                           */
+/*  void            vd_g_XspiIviSub1HdmiInit(void)                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    初期化処理                                                                                                        */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviInit(void)
+void            vd_g_XspiIviSub1HdmiInit(void)
 {
-    /* 送受信バッファ,フラグ初期化 */
-    vd_g_MemfillU1(&u1_g_XspiIviRcv[0], (U1)0x00, (U4)XSPI_RCV_FRM_MAX);
 
-    u1_g_XspiIviSnd_flg = (U1)TRUE;
-    vd_g_MemfillU1(&u1_g_XspiIviSnd[0], (U1)0x00, (U4)XSPI_RCV_FRM_MAX);
-
-    /* 初期化処理 */
-    vd_g_XspiIviQueueInit();
-    vd_g_XspiIviSub4Init();
-    vd_g_XspiIviSub2Init();
-    vd_g_XspiIviSub1Init();
-    vd_g_MemfillU4(&u4_s_xspi_ivi_task_cnt[0], (U4)0U, (U4)XSPI_TASK_CNT_NUM);
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviMain1st(void)                                                                                        */
+/*  void            vd_g_XspiIviSub1HdmiMainTask(void)                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信受信処理                                                                                                  */
+/*  Description:    初期化処理                                                                                                        */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviMain1st(void)
+void            vd_g_XspiIviSub1HdmiMainTask(void)
 {
-    U1          u1_t_buf_rslt;
-
-    u1_t_buf_rslt   = (U1)XSPI_NG;
-
-    /* データ取得処理 */
-    u1_t_buf_rslt = xspi_Read((U1)XSPI_CH_01, &u1_g_XspiIviRcv[0], XSPI_RCV_FRM_MAX);
-
-    if (u1_t_buf_rslt == (U1)XSPI_OK) {
-        vd_s_XspiIviAnaRcv(&u1_g_XspiIviRcv[0]);
-    }
-    else {
-        /* 受信データの取得失敗 */
-        /* do nothing */
-    }
+    /*定期送信などのデータ作成をここで行う*/
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviMain2nd(void)                                                                                        */
+/*  void            vd_g_XspiIviSub1HdmiAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE)                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信送信処理                                                                                                  */
-/*  Arguments:      -                                                                                                                */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
+/*                  u2_a_DATA_SIZE : Data Size                                                                                       */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviMain2nd(void)
+void            vd_g_XspiIviSub1HdmiAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE)
 {
-    U1          u1_t_drvr_cond;
-    U1          u1_t_buf_rslt;
+    U1 u1_t_subtype;
 
-    u1_t_buf_rslt   = (U1)XSPI_NG;
+    u1_t_subtype = u1_ap_XSPI_ADD[0];
+
+    switch (u1_t_subtype)
+    {
+    case XSPI_IVI_HDMI_HDCP_REQ:
+        vd_g_GvifTx_HADC_Act_Hook();
+        break;
     
-    /* 次回送信データ作成処理 */
-    if(u1_g_XspiIviSnd_flg == (U1)TRUE) {
-        vd_s_XspiIviMakeSend(&u1_g_XspiIviSnd[0]);
-        u1_g_XspiIviSnd_flg = (U1)FALSE;
+    default:
+        break;
     }
-
-    /* XSPI通信ドライバ状態取得処理 */
-    u1_t_drvr_cond = xspi_GetCondition((U1)XSPI_CH_01);
-
-    if ((u1_t_drvr_cond == (U1)XSPI_DCOND_IDLE) || (u1_t_drvr_cond == (U1)XSPI_DCOND_TRANSMIT)) {
-        /* 送信バッファアドレス取得処理 */
-        u1_t_buf_rslt = xspi_Write((U1)XSPI_CH_01, &u1_g_XspiIviSnd[0], XSPI_SND_FRM_MAX);
-    }
-    else {
-        /* ドライバ状態が初期化前(XSPI_DCOND_INIT) or 通信無効(XSPI_DCOND_INVALID)なのでデータ送信スキップ */
-        /* do nothing */
-    }
-
-    if (u1_t_buf_rslt == (U1)XSPI_OK) {
-        /* 送信データ受け渡し完了 次回タスクで送信データの再作成 */
-        u1_g_XspiIviSnd_flg = (U1)TRUE;
-    }
-    else {
-        /* 送信データ受け渡し失敗 次回タスクで同じデータを再送するためフラグ更新はしない */
-    }
-    vd_s_XspiIviTaskCnt();
 }
 
 /*===================================================================================================================================*/
-/*  static void            vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add)                                                                   */
+/*  void            vd_g_XspiIviSub1Hdcp(const U1 * u1_ap_DATA)                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信受信データのサブフレーム分割/解析処理                                                                       */
-/*  Arguments:      u1_ap_xspi_add : XSPIバッファへのポインタ                                                                          */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_DATA : HDCP Data                                                                                           */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void            vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add)
+void            vd_g_XspiIviSub1Hdcp(const U1 * u1_ap_DATA)
 {
-    /* サブフレーム0(DiagCAN)データ解析処理 */
-    /* skip */
+    U1    u1_tp_data[XSPI_IVI_HDMI_HDCP_SIZE];
 
-    /* サブフレーム1(Misc通信)データ解析処理 */
-    vd_g_XspiIviSub1Ana(&u1_ap_xspi_add[272]);
+    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)XSPI_IVI_HDMI_HDCP_SIZE);
+    vd_g_MemcpyU1(&u1_tp_data[0], &u1_ap_DATA[0], (U4)XSPI_IVI_HDMI_HDCP_SIZE);
+    u1_tp_data[0] = (U1)XSPI_IVI_HDMI_HDCP_SEND;
 
-    /* サブフレーム2(Gyro)データ解析処理 */
-    vd_g_XspiIviSub2Ana(&u1_ap_xspi_add[536]);
-
-    /* サブフレーム4(CAN Data/Repro/LCAN Data)データ解析処理 */
-    vd_g_XspiIviSub4Ana(&u1_ap_xspi_add[2040]);
+    vd_s_XspiIviSub1HdmiDataToQueue((U2)XSPI_IVI_HDMI_HDCP_SIZE,u1_tp_data);
 }
 
 /*===================================================================================================================================*/
-/*  static void            vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add)                                                                 */
+/*  void            vd_s_XspiIviSub1HdmiDataToQueue(const U2 u2_a_SIZE,const U1* u1_ap_XSPI_ADD)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信送信データの作成処理                                                                                       */
-/*  Arguments:      u1_ap_xspi_add : XSPIバッファへのポインタ                                                                          */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
+/*                  u2_a_SIZE : Data Size                                                                                            */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void            vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add)
+void            vd_s_XspiIviSub1HdmiDataToQueue(const U2 u2_a_SIZE,const U1* u1_ap_XSPI_ADD)
 {
-    static const U1     u1_sp_XSPI_FRAME_HEADER[XSPI_IVI_HEADER] = {(U1)0x00U, (U1)0x22U, (U1)0x43U, (U1)0xC4U, (U1)0xFFU, (U1)0x00U, (U1)0x00U, (U1)0x00U};
+    U1     u1_tp_data[XSPI_IVI_HDMI_HDCP_SIZE];
+    U1     u1_t_id;
 
-    /* FrameHeaderの付与 */
-    vd_g_MemcpyU1(&u1_ap_xspi_add[0], &u1_sp_XSPI_FRAME_HEADER[0], (U4)XSPI_IVI_HEADER);
+    u1_t_id = (U1)XSPI_IVI_HDMI_TYPE_ID;
 
-    /* サブフレーム0(DiagCAN)用送信データ作成処理 */
-    /* skip */
+    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)XSPI_IVI_HDMI_HDCP_SIZE);
+    vd_g_MemcpyU1(&u1_tp_data[0], &u1_ap_XSPI_ADD[0], (U4)u2_a_SIZE);
 
-    /* サブフレーム1(Misc通信)用送信データ作成処理 */
-    vd_g_XspiIviSub1Send(&u1_ap_xspi_add[272]);
-
-    /* サブフレーム2(Gyro)用送信データ作成処理 */
-    vd_g_XspiIviSub2Send(&u1_ap_xspi_add[536]);
-
-    /* サブフレーム4(CAN Data/Repro/LCAN Data)用送信データ作成処理 */
-    vd_g_XspiIviSub4Send(&u1_ap_xspi_add[2040]);
-}
-
-/*===================================================================================================================================*/
-/*  static void            vd_s_XspiIviTaskCnt(void)                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    定期送信処理のタスクカウント                                                                                        */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void           vd_s_XspiIviTaskCnt(void){
-    U4    u4_t_lpcnt;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_TASK_CNT_NUM; u4_t_lpcnt++) {
-        if(u4_s_xspi_ivi_task_cnt[u4_t_lpcnt] < (U4)U4_MAX) {
-            u4_s_xspi_ivi_task_cnt[u4_t_lpcnt]++;
-        } else {
-            u4_s_xspi_ivi_task_cnt[u4_t_lpcnt] = (U4)0U;
-        }
-    }
+    /*キューの関数呼び出し*/
+    vd_g_XspiIviSub1MISCStuckBuff(u1_t_id,u2_a_SIZE,u1_tp_data);
 }
 
 /*===================================================================================================================================*/
@@ -231,12 +160,12 @@ static void           vd_s_XspiIviTaskCnt(void){
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  0.0.0    11/11/2024  TN       New.                                                                                               */
+/*  0.0.0    04/25/2025  KT       New.                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
-/*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
+/*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
