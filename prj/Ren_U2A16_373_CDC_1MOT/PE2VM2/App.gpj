@@ -85,6 +85,7 @@ x_spi_ivi_sub4.c
 x_spi_ivi_sub2.c
 x_spi_ivi_sub1.c
 x_spi_ivi_sub1_camera.c
+x_spi_ivi_sub1_clock.c
 x_spi_ivi_sub1_control.c
 x_spi_ivi_sub1_power.c
 x_spi_ivi_sub1_system.c

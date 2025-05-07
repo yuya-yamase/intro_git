@@ -23,6 +23,7 @@
 #include    "x_spi_ivi_sub1_camera.h"
 #include    "x_spi_ivi_sub1_version.h"
 #include    "x_spi_ivi_sub1_diag.h"
+#include    "x_spi_ivi_sub1_clock.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -95,6 +96,7 @@ void            vd_g_XspiIviSub1Init(void)
     vd_g_XspiIviSub1SystemInit();
     vd_g_XspiIviSub1CameraInit();
     vd_g_XspiIviSub1DiagInit();
+    vd_g_XspiIviSub1ClockInit();
 }
 
 /*===================================================================================================================================*/
@@ -166,7 +168,7 @@ static void            vd_s_XspiIviSub1MiscAna(const U1 * u1_ap_SUB1_ADD, const 
                 vd_g_XspiIviSub1CameraAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             case XSPI_IVI_MISC_CLOCK:
-            /*シス検 skip*/
+                vd_g_XspiIviSub1ClockAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             case XSPI_IVI_MISC_DISPLAY:
             /*SOCで完結 skip*/
@@ -231,6 +233,7 @@ static void            vd_s_XspiIviSub1SendCommandPeriCall(void)
     vd_g_XspiIviSub1PowerMainTask();
     vd_g_XspiIviSub1CameraMainTask();
     vd_g_XspiIviSub1SystemMainTask();
+    vd_g_XspiIviSub1ClcokMainTask();
 
     /*デバイス初期化確認*/
     vd_g_XspiIviSub1DevInitFinish();
