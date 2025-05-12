@@ -11,10 +11,7 @@
 #include "Dma.h"
 #include "Dio.h"
 #include "Spi.h"
-#warning "BEVCDCFD-845"
-#if 0 /* BEVCDCFD-845 */
-#include "Rte_BswUcfg.h"
-#endif /* BEVCDCFD-845 */
+#include "Spi_Ucfg.h"
 #include "gpt_drv_ost.h"
 
 #include "xspi.h"
