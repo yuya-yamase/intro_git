@@ -254,6 +254,10 @@
 #define PICT_PORT_PM_V_MUTE                             (DIO_ID_PORT24_CH9)
 #define PICT_PORT_V_IC_STATUS                           (DIO_ID_PORT3_CH2)
 
+
+/* カメラ有効領域 */
+#define PICT_CD_SIZE_INVALID                            (0x00U) /* 無効値 */
+#define PICT_CD_SIZE_1920X1080_140IN                    (0x01U) /* 1920 x 1080 14in */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -400,6 +404,7 @@ static U1    u1_s_pict_icreset_sts;
 static U1    u1_s_pict_camsyncinfo;
 static U1    u1_s_pict_regwrite_req;
 static U1    u1_s_pict_regwrite_sts;
+static U1    u1_s_pict_cd_size;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -475,6 +480,7 @@ static void vd_s_PictCtl_CamOffMuteOff(void);
 static void vd_s_PictCtl_CamAreaChk(void);
 /* 暫定対応 */
 static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void);
+static void vd_s_PictCtl_CdsizeChk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -655,6 +661,7 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_camsyncinfo = (U1)PICT_ML_MIPI_SYNC_OFF;
     u1_s_pict_regwrite_req = (U1)FALSE;
     u1_s_pict_regwrite_sts = (U1)PICT_ML_CAMAREASET_COMPLETED;
+    u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
     
     st_sp_send.u1_CamKind = st_sp_Pict_BackUpInf.u1_CamKind;
     st_sp_send.u1_CenterCamSiz = st_sp_Pict_BackUpInf.u1_CenterCamSiz;
@@ -728,6 +735,7 @@ void vd_g_PictCtl_MainTask(void)
     vd_s_PictCtl_CamKindNtyChk();
     vd_s_PictCtl_CamSyncPathInfoNtyChk();
     vd_s_PictCtl_CamAreaChk();
+    vd_s_PictCtl_CdsizeChk();
 }
 
 /*===================================================================================================================================*/
@@ -3344,6 +3352,7 @@ static U1 u1_s_PictCtl_CenterCamSizjdg(void)
                 st_sp_Pict_BackUpInf.u1_CenterCamSiz = u1_t_centercamsiz;
                 /*  センターカメラサイズ変更フラグ：ON */
                 u1_t_chgflg = (U1)TRUE;
+                vd_s_PictCtl_CdsizeChk();
             }
             bfg_Pict_StsMng.st_CamDisc.u1_CenterCamSizCnt = (U1)PICT_SAMECNT_INI;
         }
@@ -3636,6 +3645,40 @@ void vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE)
     }
 }
 
+/*===================================================================================================================================*/
+/*  static void    vd_s_PictCtl_CdsizeChk(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_CdsizeChk(void)
+{
+    U1  u1_t_pre_cdsize;
+    
+    if(st_sp_Pict_BackUpInf.u1_CenterCamSiz == (U1)PICT_CAN_CAM_SIZE_1920X1080){
+        u1_s_pict_cd_size = (U1)PICT_CD_SIZE_1920X1080_140IN;
+    }
+    else{
+        u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
+    }
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE , &u1_t_pre_cdsize);
+    if(u1_t_pre_cdsize != u1_s_pict_cd_size){
+        (void)Com_SendSignal(ComConf_ComSignal_CD_SIZE , &u1_s_pict_cd_size);
+        Com_TriggerIPDUSend((PduIdType)MSG_AVN1S97_TXCH0);
+    }
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_PictCtl_CdsizeSnd(void)                                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1 u1_g_PictCtl_CdsizeSnd(void)
+{
+	return(u1_s_pict_cd_size);
+}
 
 /* 見た目オン起動処理暫定対応 */
 static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void)
