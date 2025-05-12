@@ -34,13 +34,17 @@
 #define MCU_STEP_GVIF3TX_eDPSET_2       (2U)    /* 100-4-3.eDP設定フロー eDP用レジスタ設定 10-5-3 レシーバ */
 #define MCU_STEP_GVIF3TX_eDPSET_3       (3U)    /* 100-4-3.eDP設定フロー eDP用レジスタ設定 10-5-3 DPCD */
 #define MCU_STEP_GVIF3TX_eDPSET_4       (4U)    /* 100-4-3.eDP設定フロー EDID選択設定 */
-#define MCU_STEP_GVIF3TX_eDPSET_FIN     (5U)
+#define MCU_STEP_GVIF3TX_eDPSET_5       (5U)    /* 100-4-3.eDP設定フロー Bank切り替え（Bank0）~Bank切り替え（Bank4） */
+#define MCU_STEP_GVIF3TX_eDPSET_6       (6U)    /* 100-4-3.eDP設定フロー eDP用レジスタ設定 10-5-5 Hot Plug Detect */
+#define MCU_STEP_GVIF3TX_eDPSET_FIN     (7U)
 
 #define MCU_WRINUM_GVIF3TX_INISET       (11U)   /* 100-4-2.初期設定フロー レジスタ書込み回数 */
 #define MCU_WRINUM_GVIF3TX_eDPSET_1     (2U)    /* 100-4-3.eDP設定フロー START～eDPポート設定 レジスタ書込み回数 */
 #define MCU_WRINUM_GVIF3TX_eDPSET_2     (115U)  /* 100-4-3.eDP設定フロー eDP用レジスタ設定 10-5-3 レシーバ レジスタ書込み回数 */
 #define MCU_WRINUM_GVIF3TX_eDPSET_3     (26U)   /* 100-4-3.eDP設定フロー eDP用レジスタ設定 10-5-3 DPCD レジスタ書込み回数 */
 #define MCU_WRINUM_GVIF3TX_eDPSET_4     (1U)    /* 100-4-3.eDP設定フロー EDID選択設定 レジスタ書込み回数 */
+#define MCU_WRINUM_GVIF3TX_eDPSET_5     (3U)    /* 100-4-3.eDP設定フロー Bank切り替え（Bank0）~Bank切り替え（Bank4） レジスタ書込み回数 */
+#define MCU_WRINUM_GVIF3TX_eDPSET_6     (3U)    /* 100-4-3.eDP設定フロー eDP用レジスタ設定 10-5-5 Hot Plug Detect レジスタ書込み回数 */
 
 #define MCU_STEP_GVIF3TX_OUTSET_1       (1U)    /* 100-4-4.出力設定フロー Bank切り替え（Bank0） */
 #define MCU_STEP_GVIF3TX_OUTSET_2       (2U)    /* 100-4-4.出力設定フロー A点～GVIF3出力ON設定 */
@@ -128,7 +132,7 @@ static uint32   Mcu_Polling_GvifTxRst;
        uint8    Mcu_OnStep_GVIF3TX_OVRALL;      /* 100-4-1.(C-Disp) 全体フロー 仮置き中はexternするためstaticなし */
 static uint8    Mcu_OnStep_GVIF3TX_eDPSET;      /* 100-4-3.eDP設定フロー */
 static uint8    Mcu_OnStep_GVIF3TX_OUTSET;      /* 100-4-4.出力設定フロー */
-       U2       Mcu_OnStep_GVIF3TX_HDCP;        /* 100-4-5.HDCP認証フロー */
+static U2       Mcu_OnStep_GVIF3TX_HDCP;        /* 100-4-5.HDCP認証フロー */
 static uint32   Mcu_OnStep_GVIF3TX_AckTime;     /* GVIF3TX 書込み/読込みから応答までの時間計測 */
 static U4       u4_g_Gvif_LinkTimer;            /* GVIF3TX Wati処理用タイマ */
 
@@ -344,11 +348,14 @@ static void    Mcu_Dev_Pwron_GvifTx_OverAll_Flow( void )
         break;
 
     case MCU_STEP_GVIF3TX_OVERALL_3:
-        /* 100-4-4.出力設定フロー */
-        mcu_rslt = Mcu_Dev_Pwron_GvifTx_OutSet();
+        /* 映像IC制御仕様の"別体センターディスプレイへの映像出力ON"完了まで待機 */
+        if(Mcu_OnStep_EIZOIC_OVRALL == MCU_STEP_EIZOIC_OVERALL_FIN){
+            /* 100-4-4.出力設定フロー */
+            mcu_rslt = Mcu_Dev_Pwron_GvifTx_OutSet();
 
-        if(mcu_rslt == (uint8)TRUE){
-            Mcu_OnStep_GVIF3TX_OVRALL = MCU_STEP_GVIF3TX_OVERALL_4;
+            if(mcu_rslt == (uint8)TRUE){
+                Mcu_OnStep_GVIF3TX_OVRALL = MCU_STEP_GVIF3TX_OVERALL_4;
+            }
         }
         break;
 
@@ -575,6 +582,20 @@ static uint8   Mcu_Dev_Pwron_GvifTx_eDPSet( void )
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0}
     };
+    /* 100-4-3.eDP設定フロー Bank切り替え（Bank0）~Bank切り替え（Bank4） */
+    static const ST_REG_WRI_REQ GVIFTX_eDFSET_5[MCU_WRINUM_GVIF3TX_eDPSET_5] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},
+        {        1,         1,         0},
+        {        2,         1,         0}
+    };
+    /* 100-4-3.eDP設定フロー eDP用レジスタ設定 10-5-5 Hot Plug Detect */
+    static const ST_REG_WRI_REQ GVIFTX_eDFSET_6[MCU_WRINUM_GVIF3TX_eDPSET_6] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         4,         0},
+        {        4,         1,         0},
+        {        5,         1,         0}
+    };
 
     uint8   mcu_sts;        /* 書込み状況 */
     uint8   mcu_return;     /* 戻り値：フロー完了通知 */
@@ -625,6 +646,30 @@ static uint8   Mcu_Dev_Pwron_GvifTx_eDPSet( void )
         mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_GVIF_TX, &Mcu_RegStep_GVIF3TX, (uint16)MCU_WRINUM_GVIF3TX_eDPSET_4,
                                                 (uint8)GP_I2C_MA_SLA_3_GVIF_TX, GVIFTX_eDFSET_4, &Mcu_OnStep_GVIF3TX_AckTime,
                                                 st_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET2, &Mcu_RegSet_BetWaitTime);
+
+        if(mcu_sts == (uint8)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_GVIF3TX_eDPSET = (uint8)MCU_STEP_GVIF3TX_eDPSET_5;
+        }
+        break;
+
+    case MCU_STEP_GVIF3TX_eDPSET_5:
+        /* レジスタ書込み処理 */
+        mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_GVIF_TX, &Mcu_RegStep_GVIF3TX, (uint16)MCU_WRINUM_GVIF3TX_eDPSET_5,
+                                                (uint8)GP_I2C_MA_SLA_3_GVIF_TX, GVIFTX_eDFSET_5, &Mcu_OnStep_GVIF3TX_AckTime,
+                                                st_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET3, &Mcu_RegSet_BetWaitTime);
+
+        if(mcu_sts == (uint8)TRUE){
+            /* 全書込み完了 次状態に遷移 */
+            Mcu_OnStep_GVIF3TX_eDPSET = (uint8)MCU_STEP_GVIF3TX_eDPSET_6;
+        }
+        break;
+    
+    case MCU_STEP_GVIF3TX_eDPSET_6:
+        /* レジスタ書込み処理 */
+        mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet((uint8)MCU_I2C_ACK_GVIF_TX, &Mcu_RegStep_GVIF3TX, (uint16)MCU_WRINUM_GVIF3TX_eDPSET_6,
+                                                (uint8)GP_I2C_MA_SLA_3_GVIF_TX, GVIFTX_eDFSET_6, &Mcu_OnStep_GVIF3TX_AckTime,
+                                                st_sp_MCU_SYS_PWR_GVIFSNDR_EDPSET_HPD, &Mcu_RegSet_BetWaitTime);
 
         if(mcu_sts == (uint8)TRUE){
             /* 全書込み完了 次状態に遷移 */
@@ -1140,10 +1185,10 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
 
         if(u1_t_sts == (U1)TRUE){
             /* 全書込み完了 次状態に遷移 */
-            Mcu_OnStep_GVIF3TX_HDCP   = (U2)MCU_STEP_GVIF3TX_HDCP_16;
+            Mcu_OnStep_GVIF3TX_HDCP   = (U2)MCU_STEP_GVIF3TX_HDCP_17;
         }
         break;
-
+#if 0
     case MCU_STEP_GVIF3TX_HDCP_16:
         /* レジスタ書込み処理 */
         u1_t_sts = Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GVIF_TX, &Mcu_RegStep_GVIF3TX, (U2)MCU_WRINUM_GVIF3TX_HDCP_HPD,
@@ -1155,10 +1200,10 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
             Mcu_OnStep_GVIF3TX_HDCP   = (U2)MCU_STEP_GVIF3TX_HDCP_17;
         }
         break;
-
+#endif
     case MCU_STEP_GVIF3TX_HDCP_17:
         u1_t_timchk = Mcu_Dev_Pwron_TimChk(u4_g_Gvif_LinkTimer, u4_s_HDCP_WAITTIME_T7);
-        if(u1_t_timchk == (U1)TRUE && (Mcu_OnStep_EIZOIC_OVRALL == MCU_STEP_EIZOIC_OVERALL_FIN)){
+        if(u1_t_timchk == (U1)TRUE){
             /* Wati t7完了 次状態に遷移 */
             Mcu_OnStep_GVIF3TX_HDCP = (U2)MCU_STEP_GVIF3TX_HDCP_18;
             u4_g_Gvif_LinkTimer     = (U4)0U;
