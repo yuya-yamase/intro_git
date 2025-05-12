@@ -279,8 +279,6 @@ App/MET/IpcApplication/Hmi/config/hmiputxt_cfg.c
 App/MET/IpcApplication/Hmi/config/hmiputxt_if_cfg.c
 App/MET/IpcApplication/Hmi/config/hmitt_cfg.c
 App/MET/IpcApplication/Hmi/config/hmitt_if_cfg.c
-App/MET/IpcApplication/Hmi/scc/hmiclock.c
-App/MET/IpcApplication/Hmi/scc/hmidate.c
 App/MET/IpcApplication/Hmi/scc/hmidiag.c
 App/MET/IpcApplication/Hmi/scc/hmifuel.c
 App/MET/IpcApplication/Hmi/scc/hmigateway.c

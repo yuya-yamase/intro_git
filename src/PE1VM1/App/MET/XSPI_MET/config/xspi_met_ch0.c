@@ -83,10 +83,6 @@
 #if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
 #endif
-#if 0   /* BEV provisionally */
-#include "datesi_tim.h"
-#include "datesi_cal.h"
-#endif
 #include "vds_ci.h"
 #include "oilmil.h"
 #include "ecojdg.h"
@@ -111,8 +107,6 @@
 #include "hmitt.h"
 #include "hmiwchime.h"
 #include "hmitripcom.h"
-#include "hmiclock.h"
-#include "hmidate.h"
 #include "hmimcst.h"
 #include "hmifuel.h"
 #include "hmiscreen.h"
@@ -1610,14 +1604,8 @@ static inline void    vd_s_XSpiCfgTxMetcstm(    U4 * u4_ap_pdu_tx) {
         u4_ap_pdu_tx[u4_t_loop] = (U4)0U;
     }
 
-#if 0   /* BEV provisionally */
-    u4_ap_pdu_tx[0]  = ((u4_g_DateSITimGetAdjDispClk() & (U4)XSPI_MSK_CSTMCLK) >> 4);          /* Clock                          */
     u4_ap_pdu_tx[3]  = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
-    u4_ap_pdu_tx[4]  = ((u4_g_DateSICalGetAdjDispDate() & (U4)XSPI_MSK_CSTMDAT) << 4);         /* Customize Calendar             */
-    u4_ap_pdu_tx[4] |= ((u1_g_DateSICalSetImpossible()  & (U4)XSPI_MSK_01BIT  ) << 6);         /* Calender State                 */
-    u4_ap_pdu_tx[5]  = ((u1_g_DateSICalLimJdgYear()     & (U4)XSPI_MSK_02BIT  ) << 3);         /* Calender Year Limit            */
     u4_ap_pdu_tx[5] |= ((u4_g_HmiRim((U1)HMIRIM_INTERRUPT_CSTM) & (U4)XSPI_MSK_08BIT) << 8);   /* Interrupt Customize            */
-#endif
 
 }
 
@@ -2484,11 +2472,6 @@ static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
     /* Customize */
     vd_g_HmiCstmPut(&u4_ap_PDU_RX[0]);
 
-    /* Clock */
-    vd_g_HmiClockPut(&u4_ap_PDU_RX[0]);
-
-    /*Calendar*/
-    vd_g_HmiDatePut(&u4_ap_PDU_RX[4]);
     /* Interrupt Customize */
     u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[5], (U1)0U, (U1)8U);
     if(u1_t_rxdata != (U1)XSPI_UNKNOWN){
