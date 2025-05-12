@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 1.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPROXY_CFG_C_MAJOR                     (1)
-#define HMIPROXY_CFG_C_MINOR                     (3)
+#define HMIPROXY_CFG_C_MINOR                     (4)
 #define HMIPROXY_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -37,12 +37,10 @@
 #include "hmitt.h"
 #include "hmiwchime.h"
 #include "hmitripcom.h"
-#include "hmiclock.h"
 #include "hmimcst.h"
 #include "hmifuel.h"
 #include "hmiscreen.h"
 #include "hmitaste.h"
-#include "hmidate.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -97,12 +95,10 @@ void ( * const              fp_gp_vd_HMIPROXY_BON_INIT[HMIPROXY_INIT_NUM])(void)
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiClockInit,
      &vd_g_HmiMcstInit,
      &vd_g_HmiFuelInit,
      &vd_g_HmiScreenInit,
-     &vd_g_HmiTasteInit,
-     &vd_g_HmiDateInit
+     &vd_g_HmiTasteInit
 };
 
 void ( * const              fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void) = {
@@ -125,12 +121,10 @@ void ( * const              fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void)
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiClockInit,
      &vd_g_HmiMcstInit,
      &vd_g_HmiFuelInit,
      &vd_g_HmiScreenInit,
-     &vd_g_HmiTasteInit,
-     &vd_g_HmiDateInit
+     &vd_g_HmiTasteInit
 };
 
 void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void) = {
@@ -153,12 +147,10 @@ void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiClockInit,
      &vd_g_HmiMcstInit,
      &vd_g_HmiFuelInit,
      &vd_g_HmiScreenInit,
-     &vd_g_HmiTasteInit,
-     &vd_g_HmiDateInit
+     &vd_g_HmiTasteInit
 };
 
 U1   ( * const              fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(void) = {
@@ -185,12 +177,10 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
      {&vd_g_HmiTtMainTask,       (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiWchimeMainTask,   (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiTripcomMainTask,  (U4)SCHDLR_TASKBIT__50MS_E  },
-     {&vd_g_HmiClockMainTask,    (U4)SCHDLR_TASKBIT__20MS_A  },
      {&vd_g_HmiMcstMainTask,     (U4)SCHDLR_TASKBIT__20MS_B  },
      {&vd_g_HmiFuelMainTask,     (U4)SCHDLR_TASKBIT_100MS_E  },
      {&vd_g_HmiScreenMainTask,   (U4)SCHDLR_TASKBIT__50MS_A  },
      {&vd_g_HmiTasteMainTask,    (U4)SCHDLR_TASKBIT__50MS_E  },
-     {&vd_g_HmiDateMainTask,     (U4)SCHDLR_TASKBIT__20MS_A  },
      {vdp_PTR_NA,                (U4)SCHDLR_TASKBIT_RGLR     }   /* <- Terminator. Do Not Delete! */
 };
 
@@ -215,17 +205,20 @@ const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
 /*  1.1.0    03/20/2020  TH       Setting for 800B CV.                                                                               */
 /*  1.2.0    10/07/2020  TH       Setting for 800B CV-R.                                                                             */
 /*  1.3.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
+/*  1.4.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /* 19PFv3-1  10/31/2023  SH       Add HmiDate IF                                                                                     */
 /* 19PFv3-2  04/04/2024  KH       Delete VRCTRL function                                                                             */
 /* 19PFv3-3  05/17/2024  PG       Delete hmircmmui                                                                                   */
+/* BEV-1     05/08/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-) Delete hmidate and hmiclock          */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
 /*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
