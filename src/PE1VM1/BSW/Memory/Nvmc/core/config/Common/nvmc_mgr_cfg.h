@@ -1,5 +1,3 @@
-#warning "BEVCDCFD-845"
-#if 1 /* BEVCDCFD-845 */ /* NVMCのサンプルデータのコンフィグ変更に伴い、一部のサンプルコンフィグを残すよう暫定処置しています。必要に応じて再度コンフィグしてください */
 /* 1.7.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
@@ -43,8 +41,6 @@
 /* NvmcId */
 /* SAMPLE */
 /* START : ##TOOL_OUT#NVMC_NVMCID## */
-#warning "BEVCDCFD-845"
-#if 1 /* BEVCDCFD-845 */
 #define NVMCID_APP_ODO                           (0x0000U)
 #define NVMCID_APP_ODO_TRIP                      (0x0001U)
 #define NVMCID_U4_VDF_ESO_W0                     (0x0002U)
@@ -56,13 +52,6 @@
 #define NVMCID_U4_VDF_ESO_W6                     (0x0008U)
 #define NVMCID_U4_VDF_ESO_W7                     (0x0009U)
 #define NVMCID_U4_VDF_ESO_W8                     (0x000AU)
-#else /* BEVCDCFD-845 */
-#define NVMCID_U1_SAMPLE_U1                      (0x0000U)
-#define NVMCID_U2_SAMPLE_U2                      (0x0001U)
-#define NVMCID_U4_SAMPLE_U4                      (0x0002U)
-#define NVMCID_OTR_SAMPLE_OTR32                  (0x0003U)
-#define NVMCID_OTR_SAMPLE_OTR32CS                (0x0004U)
-#endif /* BEVCDCFD-845 */
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */
@@ -97,4 +86,3 @@
 /*  Change History  :  see nvmc_mgr.c                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
-#endif /* BEVCDCFD-845 */

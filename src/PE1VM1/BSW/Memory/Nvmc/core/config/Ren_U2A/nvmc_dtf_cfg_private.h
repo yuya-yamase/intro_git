@@ -1,5 +1,3 @@
-#warning "BEVCDCFD-845"
-#if 1 /* BEVCDCFD-845 */ /* NVMCのサンプルデータのコンフィグ変更に伴い、一部のサンプルコンフィグを残すよう暫定処置しています。必要に応じて再度コンフィグしてください */
 /* 1.4.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
@@ -28,14 +26,8 @@
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* START : ##TOOL_OUT#NVMC_DTF_ID_NUM## */
-#warning "BEVCDCFD-845"
-#if 0 /* BEVCDCFD-845 */
 #define NVMC_DTF_INAPP_NUM                       (3U)
 #define NVMC_DTF_INNVM_NUM                       (9U)
-#else /* BEVCDCFD-845 */
-#define NVMC_DTF_INAPP_NUM                       (1U)
-#define NVMC_DTF_INNVM_NUM                       (5U)
-#endif /* BEVCDCFD-845 */
 /* END : ##TOOL_OUT#NVMC_DTF_ID_NUM## */
 
 #define NVMC_DTF_ID_NUM                          (NVMC_DTF_INAPP_NUM + NVMC_DTF_INNVM_NUM)
@@ -46,12 +38,7 @@
 /* END : ##TOOL_OUT#NVMC_DTF_READ_BUFFER_SIZE## */
 
 /* START : ##TOOL_OUT#NVMC_RECOVERY_DTF_ID## */
-#warning "BEVCDCFD-845"
-#if 0 /* BEVCDCFD-845 */
 #define NVMC_RECOVERY_DTF_ID                     (11U)
-#else /* BEVCDCFD-845 */
-#define NVMC_RECOVERY_DTF_ID                     (5U)
-#endif /* BEVCDCFD-845 */
 /* END : ##TOOL_OUT#NVMC_RECOVERY_DTF_ID## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -84,4 +71,3 @@ extern const U1                 u1_d_NVMC_DTF_DEVICE_TYPE;
 /*  Change History  :  see nvmc_dtf.c                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
-#endif /* BEVCDCFD-845 */
