@@ -2,26 +2,23 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
-/*  Transmission and reception processing of subframe 4 in XSPI communication.                                                       */
-/*  Handled data: CAN Data/Repro/LCAN Data                                                                                           */
+/*  Transmission and reception processing of subframe 1 in XSPI communication.                                                       */
+/*  Handled data: MISC Data                                                                                                          */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_IVI_UB2_H
-#define XSPI_IVI_UB2_H
+#ifndef XSPI_IVI_SUB1_CLOCK_H
+#define XSPI_IVI_SUB1_CLOCK_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_SUB2_H_MAJOR           (0)
-#define XSPI_IVI_SUB2_H_MINOR           (0)
-#define XSPI_IVI_SUB2_H_PATCH           (0)
+#define XSPI_IVI_SUB1_CLOCK_H_MAJOR           (0)
+#define XSPI_IVI_SUB1_CLOCK_H_MINOR           (0)
+#define XSPI_IVI_SUB1_CLOCK_H_PATCH           (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include    <Std_Types.h>
-#include    "aip_common.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -31,87 +28,52 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    /*分解能*/
-    U2                          u2_gyro_xyz_reso;
-    U2                          u2_gyro_temp_reso;
-    U2                          u2_accel_xyz_reso;
-    U2                          u2_accel_temp_reso;
-    /*中央値*/
-    U1                          u1_gyro_xyz_center;
-    U1                          u1_gyro_temp_center;
-    U1                          u1_accel_xyz_center;
-    U1                          u1_accel_temp_center;
-}ST_XSPI_IVI_GYRO_RESO_DATA;
 
 typedef struct{
-    /*中央値・分解能*/
-    ST_XSPI_IVI_GYRO_RESO_DATA st_gyro_reso;
-    /*Gyro Data*/
-    U1                          u1_gyro_x_data_down;
-    U1                          u1_gyro_x_data_up;
-    U1                          u1_gyro_y_data_down;
-    U1                          u1_gyro_y_data_up;
-    U1                          u1_gyro_z_data_down;
-    U1                          u1_gyro_z_data_up;
-    U1                          u1_gyro_temp_data;
-    U1                          u1_gyro_x_data_sts;
-    U1                          u1_gyro_y_data_sts;
-    U1                          u1_gyro_z_data_sts;
-    U1                          u1_gyro_temp_data_sts;
+    /*Display Clock*/
+    U1                          u1_year_disp;
+    U1                          u1_month_disp;
+    U1                          u1_day_disp;
+    U1                          u1_dow_disp;
+    U1                          u1_hour_disp;
+    U1                          u1_minute_disp;
+    U1                          u1_second_disp;
+    U1                          u1_hour_offset_disp;
+    U1                          u1_minute_offset_disp;
+    U1                          u1_sign_offset_disp;
+    U1                          u1_ampm_disp;
+    U1                          u1_1224format_disp;
+}ST_XSPI_IVI_CLOCK_DISP_DATA;
 
-    /*Accel Data*/
-    U1                          u1_accl_x_data_down;
-    U1                          u1_accl_x_data_up;
-    U1                          u1_accl_y_data_down;
-    U1                          u1_accl_y_data_up;
-    U1                          u1_accl_z_data_down;
-    U1                          u1_accl_z_data_up;
-    U1                          u1_accl_temp_data_down;
-    U1                          u1_accl_temp_data_up;
-    U1                          u1_accl_x_data_sts;
-    U1                          u1_accl_y_data_sts;
-    U1                          u1_accl_z_data_sts;
-    U1                          u1_accl_temp_data_sts;
-}ST_XSPI_IVI_GYRO_SENSOR_DATA;
-
-/*パルス数 */
 typedef struct{
-    /*Pulse Width Data*/
-    U4                          u4_pulse_width[32];   /*パルス幅*/
-    U1                          u1_clock_freq;    /*クロック周波数*/
-    U4                          u4_pulse_count;   /*パルスカウント*/   
-}ST_XSPI_IVI_PULSE_WID_DATA;
-
-/*GセンサINT信号通知*/
-typedef struct{
-    U1                          u1_result;
-    U1                          u1_threshold;
-    U1                          u1_gyro_int_x;
-    U1                          u1_gyro_int_y;
-    U1                          u1_gyro_int_z;
-    U1                          u1_gyro_int_active;
-}ST_XSPI_IVI_GYRO_INT_DATA;
-
+    /*RTC*/
+    U1                          u1_year_rtc;
+    U1                          u1_month_rtc;
+    U1                          u1_day_rtc;
+    U1                          u1_hour_rtc;
+    U1                          u1_minute_rtc;
+    U1                          u1_second_rtc;
+    U1                          u1_dow_rtc;
+    U1                          u1_clock_set_sts_rtc;
+}ST_XSPI_IVI_CLOCK_RTC_DATA;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-void            vd_g_XspiIviSub2GyroDataPut(const ST_XSPI_IVI_GYRO_SENSOR_DATA st_a_GYRO_DATA);
-void            vd_g_XspiIviSub2PulseNumDataPut(const U2 u2_a_PULSE_NUM);
-void            vd_g_XspiIviSub2PulseWidDataPut(const ST_XSPI_IVI_PULSE_WID_DATA st_a_PULSE_WID);
-void            vd_g_XspiIviSub2GyroIntSetSend(const U1 u1_a_DATA);
-void            vd_g_XspiIviSub2GyroIntGetSend(const ST_XSPI_IVI_GYRO_INT_DATA st_a_DATA);
-void            vd_g_XspiIviSub2GyroIntOutSend(const U1 u1_a_DATA);
+void            vd_g_XspiIviSub1ClockInit(void);
+void            vd_g_XspiIviSub1ClcokMainTask(void);
+void            vd_g_XspiIviSub1ClockAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
+void            vd_g_XspiIviSub1ClockSettingSend(const U1 u1_a_DATA);
+void            vd_g_XspiIviSub1ClockRTCSend(const ST_XSPI_IVI_CLOCK_RTC_DATA st_a_DATA);
+void            vd_g_XspiIviSub1ClockDispSend(const ST_XSPI_IVI_CLOCK_DISP_DATA st_a_DATA);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#endif /* XSPI_IVI_UB2_PRIVATE_H */
+#endif /* XSPI_IVI_SUB1_CLOCK_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  x_spi_ivi_sub2.c                                                                                              */
+/*  Change History  :  x_spi_ivi_sub1_clock.c                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

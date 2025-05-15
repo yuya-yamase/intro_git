@@ -17377,7 +17377,7 @@ static U1   u1_s_Pict_MlMipiRegSetOn(void)
     static const ST_REG_WRI_REQ ML86294_MIPI_SET_ON[ML86294_MIPI_SET_WRINUM_ON] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
-        {        0,         1,         0}
+        {        1,         1,         0}
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */
@@ -17430,7 +17430,7 @@ static U1   u1_s_Pict_MlMipiRegSetOff(void)
     static const ST_REG_WRI_REQ ML86294_MIPI_SET_OFF[ML86294_MIPI_SET_WRINUM_OFF] = {
         /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
         {        0,         1,         0},  /* Bank0 */
-        {        0,         1,         0}
+        {        1,         1,         0}
     };
 
     U1      u1_t_ret;                                               /* Function Completion Status  */

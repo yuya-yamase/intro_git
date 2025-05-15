@@ -25,9 +25,9 @@
 #define GYRODEV_I2C_RWC_BYTE1                       (1U)
 #define GYRODEV_I2C_RWC_BYTE2                       (2U)
 #define GYRODEV_I2C_RWC_BYTE3                       (3U)
+#define GYRODEV_I2C_RWC_BYTE4                       (4U)
 #define GYRODEV_I2C_RWC_BYTE7                       (7U)
-#define GYRODEV_I2C_RWC_BYTE9                       (9U)
-#define GYRODEV_I2C_RWC_BYTE10                      (10U)
+#define GYRODEV_I2C_RWC_BYTE8                       (8U)
 
 /* Register Bit Mask */
 #define GYRODEV_REG_MASK_BIT_0                      (0x01U)
@@ -40,7 +40,6 @@
 #define GYRODEV_REG_MASK_BIT_7                      (0x80U)
 
 /* Register Bit Shift Data */
-#define GYRODEV_REG_BIT_SHIFT_5                     (5U)
 #define GYRODEV_REG_BIT_SHIFT_8                     (8U)
 
 #define GYRODEV_GYRODTC_XYZ_MAX                     (0x7FFFU)
@@ -80,12 +79,27 @@
 #define u1_GYRODEV_SET_SENSOR_ON_L()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_LOW))
 #define u1_GYRODEV_SET_SENSOR_ON_H()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_HIGH))
 #define u1_GYRODEV_GET_APP_ON()                     (u1_g_PictCtl_StartSts())
-#define u1_GYRODEV_OSCMD_GYRO_DATA_NOTIF(x)         (vd_g_XspiIviSub2GyroDataPut(x))
+#define vd_GYRODEV_OSCMD_GYRO_DATA_NOTIF(x)         (vd_g_XspiIviSub2GyroDataPut(x))
 #define u1_GYRODEV_GET_LAST_PLS()                   (u2_g_CarSpdPls_LastPlsGet())
+#define vd_GYRODEV_NOTIFCONDSET_RESULT(x)           (vd_g_XspiIviSub2GyroIntSetSend(x))
+#define vd_GYRODEV_NOTIFCONDREAD_RESULT(x)          (vd_g_XspiIviSub2GyroIntGetSend(x))
+#define vd_GYRODEV_CTRLOUTSETSET_RESULT(x)          (vd_g_XspiIviSub2GyroIntOutSend(x))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct{
+    U1                          u1_threshold;
+    U1                          u1_axis_x;
+    U1                          u1_axis_y;
+    U1                          u1_axis_z;
+    U1                          u1_active;
+}ST_GYRODEV_NOTIFCOND_SETDATA;
+
+typedef struct{
+    U1                          u1_type;
+    U1                          u1_type_standby;
+}ST_GYRODEV_CTRLOUT_SETDATA;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
@@ -97,8 +111,9 @@
 void    vd_g_GyroDev_BonInit(void);
 void    vd_g_GyroDev_WkupInit(void);
 void    vd_g_GyroDev_Routine(void);
-void    vd_g_GyroDev_NotifCond_Req(void);    /* 暫定 通知内容未定のため引数void */
-void    vd_g_GyroDev_OutCtl_Req(void);    /* 暫定 通知内容未定のため引数void */
+void    vd_g_GyroDev_NotifCond_SetReq(ST_GYRODEV_NOTIFCOND_SETDATA st_a_oscmd_data);
+void    vd_g_GyroDev_NotifCond_ReadReq(void);
+void    vd_g_GyroDev_OutCtl_SetReq(ST_GYRODEV_CTRLOUT_SETDATA st_a_oscmd_data);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

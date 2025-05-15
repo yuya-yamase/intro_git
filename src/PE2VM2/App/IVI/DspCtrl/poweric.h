@@ -14,20 +14,23 @@
 /* P-IC破壊ログあり？判定：別プロセスで実施 */
 /* P-IC電源制御解除 PIC-POFF=H：別プロセスで実施 */
 /* [P-IC起動状態](3章参照)をSiPに通知しているか？ ~ スタンバイ解除 P-ON=H：別プロセスで実施 */
-#define MCU_ONSTEP_P_IC_OVERALL_1       (1U)    /* 初期設定 「5-1.初期設定」 */
-#define MCU_ONSTEP_P_IC_OVERALL_2       (2U)    /* Amp On設定 */
-#define MCU_ONSTEP_P_IC_OVERALL_3       (3U)    /* wait 60ms */
-#define MCU_ONSTEP_P_IC_OVERALL_4       (4U)    /* Diag有効設定 */
-#define MCU_ONSTEP_P_IC_OVERALL_5       (5U)    /* MUTE解除設定 */
-#define MCU_ONSTEP_P_IC_OVERALL_FIN     (6U)
+#define POWERIC_ONSTEP_OVERALL_1        (1U)    /* 初期設定 「5-1.初期設定」 */
+#define POWERIC_ONSTEP_OVERALL_2        (2U)    /* Amp On設定 */
+#define POWERIC_ONSTEP_OVERALL_3        (3U)    /* wait 60ms */
+#define POWERIC_ONSTEP_OVERALL_4        (4U)    /* Diag有効設定 */
+#define POWERIC_ONSTEP_OVERALL_5        (5U)    /* MUTE解除設定 */
+#define POWERIC_ONSTEP_OVERALL_FIN      (6U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    poweric_Init( void );
-void    poweric_main( void );
+void    vd_g_PowerIcInit(void);
+void    vd_g_PowerIcMainTask(void);
+void    vd_g_PowerIcMuteHook(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define MCU_ONSTEP_P_IC_OVERALL_FIN     (POWERIC_ONSTEP_OVERALL_FIN)
+#define Mcu_OnStep_PowerIc_OVRALL       (u1_s_PowerIc_OnStep_OverAll)
 extern uint8    Mcu_OnStep_PowerIc_OVRALL;  /* 全体フロー */
