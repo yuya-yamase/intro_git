@@ -22,17 +22,17 @@
 #include "oxcan.h"
 
 #if 0   /* BEV BSW provisionally */
-#include "xpd_init.h" 
-#else 
-#endif 
+#include "xpd_init.h"
+#else
+#endif
 
-#include "vehspd_kmph.h" 
-#include "ptsctmp_cel.h" 
-#include "alert.h" 
-#include "gauge.h" 
+#include "vehspd_kmph.h"
+#include "ptsctmp_cel.h"
+#include "alert.h"
+#include "gauge.h"
 
-#include "vardef.h" 
-#include "fspomgr.h" 
+#include "vardef.h"
+#include "fspomgr.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

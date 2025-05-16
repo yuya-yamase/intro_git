@@ -18,7 +18,6 @@
 #include <Ecu_Memmap.h>
 #include <22SS_Callout.h>
 
-#include "stub.h"
 #include "veh_opemd.h"
 #include "oxcan.h"
 
@@ -186,7 +185,6 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_NWCMBonInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_BON_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_BON_INIT));
     vd_g_XSpiMETInit();
-    vd_g_StubBonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -277,7 +275,6 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_NWCMWkupInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_RST_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_RST_INIT));
     vd_g_XSpiMETInit();
-    vd_g_StubRstInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -368,7 +365,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_NWCMWkupInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_WKUP_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_WKUP_INIT));
     vd_g_XSpiMETInit();
-    vd_g_StubWkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/

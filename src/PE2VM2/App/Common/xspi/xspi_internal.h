@@ -11,7 +11,7 @@
 #include "Dma.h"
 #include "Dio.h"
 #include "Spi.h"
-#include "Rte_BswUcfg.h"
+#include "Spi_Ucfg.h"
 #include "gpt_drv_ost.h"
 
 #include "xspi.h"

@@ -47,8 +47,6 @@ primaryTarget=v800_standalone.tgt
     -I${OS_DIR}/config
     -I${EHVM_IF_DIR}/include/ehvm
 
-	-I${APP_DIR}/Stub
-
     -L${ROOT_DIR}/BSW/Aubist/Os/os_lib/release
     -lsc1.sc.notrace.rh850u2a.a
 
@@ -105,6 +103,7 @@ ${CMN_DIR}/MCAL_Icu.gpj
 ${CMN_DIR}/MCAL_Wdg.gpj
 ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_DUMMY.gpj
+${CMN_DIR}/MCAL_ErrH.gpj
 
 #${CMN_DIR}/bswMS.gpj
 ${CMN_DIR}/MS_Rim.gpj

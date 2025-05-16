@@ -57,4 +57,3 @@ ${SS_DIR}/SchdM/config/scheduler_cfg.c
 ${SS_DIR}/RprgIf/config/rprg_if_request.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
-${APP_DIR}/Stub/stub_u2a.c

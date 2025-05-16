@@ -48,8 +48,6 @@ primaryTarget=v800_standalone.tgt
     -I${OS_DIR}/config
     -I${EHVM_IF_DIR}/include/ehvm
 
-	-I${APP_DIR}/Stub
-
     -L${ROOT_DIR}/BSW/Aubist/Os/os_lib/release
     -lsc1.sc.notrace.rh850u2a.a
 

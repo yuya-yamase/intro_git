@@ -46,7 +46,6 @@
 #define NVMCID_U4_SAMPLE_U4                      (0x0002U)
 #define NVMCID_OTR_SAMPLE_OTR32                  (0x0003U)
 #define NVMCID_OTR_SAMPLE_OTR32CS                (0x0004U)
-#define NVMCID_APP_SAMPLE_AP                     (0x0005U)
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */

@@ -78,8 +78,7 @@ const U2 u2_dp_NVMC_DTF_ID_CONV_TBL[NVMC_DTF_ID_NUM] = {
     ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)2U),  /* SAMPLE_U4      */
     ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)3U),  /* SAMPLE_OTR32   */
     ((U2)NVMC_ACCSS_TYPE_INNVM | (U2)4U),  /* SAMPLE_OTR32CS */
-    ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)0U),  /* SAMPLE_AP      */
-    ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)1U)   /* Recovery       */
+    ((U2)NVMC_ACCSS_TYPE_INAPP | (U2)0U)   /* Recovery       */
 /* END : ##TOOL_OUT#NVMC_DTF_ID_CONV_TBL## */
 };
 

@@ -18354,7 +18354,7 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortEnableDigitalNoiseFilter</DEFINITION-REF>
-                      <VALUE>true</VALUE>
+                      <VALUE>false</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortNoiseFilterBypassMode</DEFINITION-REF>
@@ -18366,11 +18366,11 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortNumberOfSamples</DEFINITION-REF>
-                      <VALUE>5</VALUE>
+                      <VALUE>2</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortSamplingClockFrequency</DEFINITION-REF>
-                      <VALUE>SUPPLY_DEVIDED_BY_128</VALUE>
+                      <VALUE>SUPPLY_DEVIDED_BY_1</VALUE>
                     </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                 </ECUC-CONTAINER-VALUE>
@@ -18388,7 +18388,7 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortEnableDigitalNoiseFilter</DEFINITION-REF>
-                      <VALUE>true</VALUE>
+                      <VALUE>false</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortNoiseFilterBypassMode</DEFINITION-REF>
@@ -18400,11 +18400,11 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortNumberOfSamples</DEFINITION-REF>
-                      <VALUE>5</VALUE>
+                      <VALUE>2</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortSamplingClockFrequency</DEFINITION-REF>
-                      <VALUE>SUPPLY_DEVIDED_BY_128</VALUE>
+                      <VALUE>SUPPLY_DEVIDED_BY_1</VALUE>
                     </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                 </ECUC-CONTAINER-VALUE>
@@ -41322,7 +41322,7 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortEnableDigitalNoiseFilter</DEFINITION-REF>
-                      <VALUE>true</VALUE>
+                      <VALUE>false</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortNoiseFilterBypassMode</DEFINITION-REF>
@@ -41334,11 +41334,11 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortNumberOfSamples</DEFINITION-REF>
-                      <VALUE>5</VALUE>
+                      <VALUE>2</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortSamplingClockFrequency</DEFINITION-REF>
-                      <VALUE>SUPPLY_DEVIDED_BY_128</VALUE>
+                      <VALUE>SUPPLY_DEVIDED_BY_1</VALUE>
                     </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                 </ECUC-CONTAINER-VALUE>
@@ -41356,7 +41356,7 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortEnableDigitalNoiseFilter</DEFINITION-REF>
-                      <VALUE>true</VALUE>
+                      <VALUE>false</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortNoiseFilterBypassMode</DEFINITION-REF>
@@ -41368,11 +41368,11 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                     <ECUC-NUMERICAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortNumberOfSamples</DEFINITION-REF>
-                      <VALUE>5</VALUE>
+                      <VALUE>2</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
                     <ECUC-TEXTUAL-PARAM-VALUE>
                       <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Port/Port/PortConfigSet/PortNoiseFilter/PortSamplingClockFrequency</DEFINITION-REF>
-                      <VALUE>SUPPLY_DEVIDED_BY_128</VALUE>
+                      <VALUE>SUPPLY_DEVIDED_BY_1</VALUE>
                     </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                 </ECUC-CONTAINER-VALUE>
