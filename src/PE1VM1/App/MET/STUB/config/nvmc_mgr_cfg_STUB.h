@@ -53,7 +53,6 @@
 #define NVMCID_OTR_MCST_IDX_GUEST_3              (U2_MAX)
 #define NVMCID_OTR_MCST_IDX_GUEST_4              (U2_MAX)
 #define NVMCID_U2_CLOCK_RATE_ADJ                 (U2_MAX)
-#define NVMCID_U2_DATESI_CALENDAR                (U2_MAX)
 #define NVMCID_U2_DSP_NML_ODOSTS                 (U2_MAX)
 #define NVMCID_U1_DSP_FURWT_ODOSTS               (U2_MAX)
 #define NVMCID_U2_DRVPS_MRRPOS01                 (U2_MAX)

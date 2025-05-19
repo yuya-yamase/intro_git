@@ -45,15 +45,15 @@
 
 #define FEE_SCTR_NUM_A000                   (3U)
 
-#define FEE_MAX_RCRD_NUM_A000               (157U)
+#define FEE_MAX_RCRD_NUM_A000               (160U)
 
-#define FEE_RCRD_SRCH_NUM_A000              (157U)
+#define FEE_RCRD_SRCH_NUM_A000              (160U)
 
 #define FEE_RCRD_WRITE_RETRY_NUM_A000       (1U)
 
 #define FEE_INTENT_RBLD_BLOCK_ID_A000       (FEE_INTENT_RBLD_BLOCK_ID_NONE)
 
-#define FEE_BLOCK_NUM_A000_LV1              (36U)
+#define FEE_BLOCK_NUM_A000_LV1              (45U)
 
 #define FEE_BLOCK_NUM_A000_LV2              (0U)
 
