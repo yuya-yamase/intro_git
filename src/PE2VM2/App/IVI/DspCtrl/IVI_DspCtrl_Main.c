@@ -18,6 +18,7 @@
 #include    "IVI_DspCtrl_Main.h"
 
 #include    "poweric.h"
+#include    "PowerIcCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -62,6 +63,7 @@
 void            vd_g_Ivi_DspCtrl_Main_Bon_init(void)
 {
     vd_g_PowerIcInit();
+    vd_g_PowerIc_BonInit();
 }
 
 /*===================================================================================================================================*/
@@ -74,6 +76,7 @@ void            vd_g_Ivi_DspCtrl_Main_Bon_init(void)
 void            vd_g_Ivi_DspCtrl_Main_Wkup_init(void)
 {
     vd_g_PowerIcInit();
+    vd_g_PowerIc_WkupInit();
 }
 
 /*===================================================================================================================================*/
@@ -86,6 +89,7 @@ void            vd_g_Ivi_DspCtrl_Main_Wkup_init(void)
 void            vd_g_Ivi_DspCtrl_Main_Rst_init(void)
 {
     vd_g_PowerIcInit();
+    vd_g_PowerIc_BonInit();
 }
 
 /*===================================================================================================================================*/
@@ -98,6 +102,7 @@ void            vd_g_Ivi_DspCtrl_Main_Rst_init(void)
 void            vd_g_Ivi_DspCtrl_Main(void)
 {
     vd_g_PowerIcMainTask();
+    vd_g_PowerIc_Routine();
 }
 
 /*===================================================================================================================================*/
