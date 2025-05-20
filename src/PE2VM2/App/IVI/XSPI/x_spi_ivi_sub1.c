@@ -24,6 +24,8 @@
 #include    "x_spi_ivi_sub1_version.h"
 #include    "x_spi_ivi_sub1_diag.h"
 #include    "x_spi_ivi_sub1_clock.h"
+#include    "x_spi_ivi_sub1_hdmi.h"
+#include    "x_spi_ivi_sub1_audio.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -54,6 +56,7 @@
 #define XSPI_IVI_MISC_DISPLAY               (0x36U)
 #define XSPI_IVI_MISC_REPRO                 (0x38U)
 #define XSPI_IVI_MISC_HDMI                  (0x39U)
+#define XSPI_IVI_MISC_AUDIO                 (0x42U)
 
 #define XSPI_IVI_MISC_DATA_SIZE_MAX         (256U)
 #define XSPI_IVI_MISC_DATA_SIZE_OFFSET      (1U)
@@ -177,7 +180,10 @@ static void            vd_s_XspiIviSub1MiscAna(const U1 * u1_ap_SUB1_ADD, const 
             /*シス検 skip*/
             break;
             case XSPI_IVI_MISC_HDMI:
-            /*シス検 skip*/
+                vd_g_XspiIviSub1HdmiAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
+            break;
+            case XSPI_IVI_MISC_AUDIO:
+                vd_g_XspiIviSub1AudioAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             default:
             break;

@@ -53,6 +53,8 @@ typedef struct{
 static U4      u4_s_veh_opemd_vmshared     __attribute__((section(".bss_SHARE_COMPLEX_VEHOPEMD_SYSSTS")));
 static U2      u2_s_veh_opemd_unk_tocnt;
 
+static U1      u1_s_veh_opemd_diag_trxen;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -74,6 +76,8 @@ void    vd_g_VehopemdCfgRstInit(void)
 {
     u4_s_veh_opemd_vmshared  = (U4)VEH_OPEMD_MDBIT_UNK;
     u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
+
+    u1_s_veh_opemd_diag_trxen = (U1)TRUE; 
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VehopemdCfgWkupInit(void)                                                                                           */
@@ -85,6 +89,8 @@ void    vd_g_VehopemdCfgWkupInit(void)
 {
     u4_s_veh_opemd_vmshared  = (U4)VEH_OPEMD_MDBIT_PBA;
     u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
+
+    u1_s_veh_opemd_diag_trxen = (U1)TRUE; 
 }
 /*===================================================================================================================================*/
 /*  U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)                                                            */
@@ -109,6 +115,7 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     U4                                   u4_t_evbit;
     U4                                   u4_t_ev_off;
     U4                                   u4_t_ev_on;
+    U4                                   u4_t_nm_0;
 
     U2                                   u2_t_vps_chk;
     U1                                   u1_t_vps_rx;
@@ -168,7 +175,8 @@ U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)
     /* Access to 4byte RAM is completed with one instruction.            */
     /* There is no interrupt during access, SPINLOCK is not required.    */
     /*-------------------------------------------------------------------*/
-    u4_t_mdbit |= ((U4)u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_G2M_1) << VEH_OPEMD_MDLSB_NM_0);
+    u4_t_nm_0   = (U4)u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_G2M_1) & (U4)u1_s_veh_opemd_diag_trxen;
+    u4_t_mdbit |= (u4_t_nm_0 << VEH_OPEMD_MDLSB_NM_0);
     u4_s_veh_opemd_vmshared = u4_t_mdbit;
     /*-------------------------------------------------------------------*/
 
@@ -194,6 +202,16 @@ static inline U2      u2_s_VehopemdVpschk(const U2 u2_a_RX, const ST_VEH_OPEMD_V
     }
 
     return(u2_t_chk);
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_VehopemdDiagSid28(const U1 u1_a_ENA)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_VehopemdDiagSid28(const U1 u1_a_ENA)
+{
+    u1_s_veh_opemd_diag_trxen = u1_a_ENA; 
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

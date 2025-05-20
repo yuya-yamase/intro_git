@@ -84,9 +84,11 @@ x_spi_ivi.c
 x_spi_ivi_sub4.c
 x_spi_ivi_sub2.c
 x_spi_ivi_sub1.c
+x_spi_ivi_sub1_audio.c
 x_spi_ivi_sub1_camera.c
 x_spi_ivi_sub1_clock.c
 x_spi_ivi_sub1_control.c
+x_spi_ivi_sub1_hdmi.c
 x_spi_ivi_sub1_power.c
 x_spi_ivi_sub1_system.c
 x_spi_ivi_sub1_diag.c
@@ -141,3 +143,4 @@ datesi_tim.c
 datesi_time_zone.c
 datesi_com.c
 datesi.c
+PowerIcCtl.c

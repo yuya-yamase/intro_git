@@ -48,9 +48,12 @@ typedef struct{
     /*中央値・分解能*/
     ST_XSPI_IVI_GYRO_RESO_DATA st_gyro_reso;
     /*Gyro Data*/
-    U2                          u2_gyro_x_data;
-    U2                          u2_gyro_y_data;
-    U2                          u2_gyro_z_data;
+    U1                          u1_gyro_x_data_down;
+    U1                          u1_gyro_x_data_up;
+    U1                          u1_gyro_y_data_down;
+    U1                          u1_gyro_y_data_up;
+    U1                          u1_gyro_z_data_down;
+    U1                          u1_gyro_z_data_up;
     U1                          u1_gyro_temp_data;
     U1                          u1_gyro_x_data_sts;
     U1                          u1_gyro_y_data_sts;
@@ -58,10 +61,14 @@ typedef struct{
     U1                          u1_gyro_temp_data_sts;
 
     /*Accel Data*/
-    U2                          u2_accl_x_data;
-    U2                          u2_accl_y_data;
-    U2                          u2_accl_z_data;
-    U2                          u2_accl_temp_data;
+    U1                          u1_accl_x_data_down;
+    U1                          u1_accl_x_data_up;
+    U1                          u1_accl_y_data_down;
+    U1                          u1_accl_y_data_up;
+    U1                          u1_accl_z_data_down;
+    U1                          u1_accl_z_data_up;
+    U1                          u1_accl_temp_data_down;
+    U1                          u1_accl_temp_data_up;
     U1                          u1_accl_x_data_sts;
     U1                          u1_accl_y_data_sts;
     U1                          u1_accl_z_data_sts;
@@ -76,6 +83,16 @@ typedef struct{
     U4                          u4_pulse_count;   /*パルスカウント*/   
 }ST_XSPI_IVI_PULSE_WID_DATA;
 
+/*GセンサINT信号通知*/
+typedef struct{
+    U1                          u1_result;
+    U1                          u1_threshold;
+    U1                          u1_gyro_int_x;
+    U1                          u1_gyro_int_y;
+    U1                          u1_gyro_int_z;
+    U1                          u1_gyro_int_active;
+}ST_XSPI_IVI_GYRO_INT_DATA;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -86,6 +103,9 @@ typedef struct{
 void            vd_g_XspiIviSub2GyroDataPut(const ST_XSPI_IVI_GYRO_SENSOR_DATA st_a_GYRO_DATA);
 void            vd_g_XspiIviSub2PulseNumDataPut(const U2 u2_a_PULSE_NUM);
 void            vd_g_XspiIviSub2PulseWidDataPut(const ST_XSPI_IVI_PULSE_WID_DATA st_a_PULSE_WID);
+void            vd_g_XspiIviSub2GyroIntSetSend(const U1 u1_a_DATA);
+void            vd_g_XspiIviSub2GyroIntGetSend(const ST_XSPI_IVI_GYRO_INT_DATA st_a_DATA);
+void            vd_g_XspiIviSub2GyroIntOutSend(const U1 u1_a_DATA);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

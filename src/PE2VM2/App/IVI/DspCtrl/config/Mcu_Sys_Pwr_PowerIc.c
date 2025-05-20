@@ -45,7 +45,7 @@ const U1 u1_sp_MCU_SYS_PWR_POWERIC_SETREG_INIT_PDU3[MCU_SYS_PWR_POWERIC_RWC_BYTE
 const U1 u1_sp_MCU_SYS_PWR_POWERIC_SETREG_INIT_PDU4[MCU_SYS_PWR_POWERIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_POWERIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x83U,    /* Write Address */
-    (U1)0x93U     /* Write Data */
+    (U1)0x83U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_POWERIC_SETREG_INIT_PDU5[MCU_SYS_PWR_POWERIC_RWC_BYTE3] = {
@@ -63,19 +63,19 @@ const U1 u1_sp_MCU_SYS_PWR_POWERIC_SETREG_INIT_PDU6[MCU_SYS_PWR_POWERIC_RWC_BYTE
 const U1 u1_sp_MCU_SYS_PWR_POWERIC_SETREG_INIT_PDU7[MCU_SYS_PWR_POWERIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_POWERIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x86U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
+    (U1)0x60U     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_POWERIC_SETREG_INIT_PDU8[MCU_SYS_PWR_POWERIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_POWERIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x87U,    /* Write Address */
-    (U1)0x00U     /* Write Data */
+    (U1)0x1EU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_POWERIC_SETREG_AMP_ON_PDU1[MCU_SYS_PWR_POWERIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_POWERIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x87U,    /* Write Address */
-    (U1)0x01U     /* Write Data */
+    (U1)0x1FU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_POWERIC_SETREG_DIAG_ON_PDU1[MCU_SYS_PWR_POWERIC_RWC_BYTE3] = {

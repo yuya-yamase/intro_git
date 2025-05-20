@@ -56,7 +56,6 @@
 
 #define VEH_OPEMD_EVBIT_FIELDS                   (0x007e007eU)
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_PTS_INV_OFF                    (0U)
 #define VEH_OPEMD_PTS_INV_ON                     (1U)
 #define VEH_OPEMD_PTS_INV_LAS                    (2U)

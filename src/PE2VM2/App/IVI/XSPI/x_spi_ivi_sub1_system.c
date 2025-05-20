@@ -73,11 +73,11 @@
 #define    XSPI_IVI_SYSTEM_GPS_STBY        (0x00U)
 #define    XSPI_IVI_SYSTEM_GPS_NORMAL      (0x01U)
 
-#define    XSPI_IIV_SYSTEM_GPS_STS_TASK    (10000U / 5U)
-#define    XSPI_IIV_SYSTEM_EXTSIG_STS_TASK (3000U / 5U)
-#define    XSPI_IIV_SYSTEM_TEST_SAMPL_TASK (100U / 5U)
-#define    XSPI_IIV_SYSTEM_VEHSPDCNT_TASK  (240U / 5U)
-#define    XSPI_IIV_SYSTEM_USBPOWSUP_TASK  (500U / 5U)
+#define    XSPI_IIV_SYSTEM_GPS_STS_TASK    (10000U / XSPI_IVI_TASK_TIME)
+#define    XSPI_IIV_SYSTEM_EXTSIG_STS_TASK (3000U / XSPI_IVI_TASK_TIME)
+#define    XSPI_IIV_SYSTEM_TEST_SAMPL_TASK (100U / XSPI_IVI_TASK_TIME)
+#define    XSPI_IIV_SYSTEM_VEHSPDCNT_TASK  (240U / XSPI_IVI_TASK_TIME)
+#define    XSPI_IIV_SYSTEM_USBPOWSUP_TASK  (500U / XSPI_IVI_TASK_TIME)
 
 #define    XSPI_IVI_TESTTERM_UNKNOWN       (0U)
 #define    XSPI_IVI_TESTTERM_OFF           (1U)
@@ -104,11 +104,6 @@ static U1              u1_s_xspi_ivi_system_perion_flg;
 static U1              u1_s_xspi_ivi_system_vehspd_cnt_send_flg;
 static U1              u1_s_xspi_ivi_system_usbpowsup_send_flg;
 
-static U4              u4_s_xspi_ivi_system_gps_sts_cnt_pre;
-static U4              u4_s_xspi_ivi_system_extsig_cnt_pre;
-static U4              u4_s_xspi_ivi_system_testterm_sample_cnt_pre;
-static U4              u4_s_xspi_ivi_system_vehspdcnt_cnt_pre;
-static U4              u4_s_xspi_ivi_system_usbpowsup_cnt_pre;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -141,17 +136,11 @@ void            vd_g_XspiIviSub1SystemInit(void)
     u1_s_xspi_ivi_system_extsig_1stsend_flg = (U1)FALSE;
     u1_s_xspi_ivi_system_perion_flg = (U1)FALSE;
 
-    u4_s_xspi_ivi_system_gps_sts_cnt_pre = (U4)0U;
-    u4_s_xspi_ivi_system_extsig_cnt_pre = (U4)0U;
-    u4_s_xspi_ivi_system_testterm_sample_cnt_pre = (U4)0U;
-
     u1_s_xspi_ivi_system_clkfreq = (U1)0U;
     u4_s_xspi_ivi_system_vehspd_cnt = (U4)0U;
-    u4_s_xspi_ivi_system_vehspdcnt_cnt_pre = (U4)0U;
     u1_s_xspi_ivi_system_vehspd_cnt_send_flg = (U1)FALSE;
 
     u2_s_xspi_ivi_system_usbpowsup = (U2)0U;
-    u4_s_xspi_ivi_system_usbpowsup_cnt_pre = (U4)0U;
     u1_s_xspi_ivi_system_usbpowsup_send_flg = (U1)FALSE;
 }
 
@@ -174,13 +163,13 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
     /* TEST端子入力値取得処理 */
     u1_t_event_jdg = (U1)FALSE;
 
-    u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_testterm_sample_cnt_pre;
+    u4_t_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TEST];
 
     u1_t_perion = Dio_ReadChannel(DIO_ID_PORT10_CH2);
     if((u1_t_perion == (U1)STD_HIGH) &&
        (u1_s_xspi_ivi_system_perion_flg == (U1)FALSE)){
         u1_s_xspi_ivi_system_perion_flg = (U1)TRUE;
-        u4_s_xspi_ivi_system_testterm_sample_cnt_pre = u4_s_xspi_ivi_task_cnt;
+        u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TEST] = (U4)0U;
     } else if(u1_t_perion == (U1)STD_LOW) {
         u1_s_xspi_ivi_system_perion_flg = (U1)FALSE;
     } else {
@@ -206,13 +195,13 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
             } else {
                 /*Do Nothing*/
             }
-            u4_s_xspi_ivi_system_testterm_sample_cnt_pre = u4_s_xspi_ivi_task_cnt;
+            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TEST] = (U4)0U;
         }
     }
 
     /*外部信号状態の定期送信orイベント送信*/
     if(u1_s_xspi_ivi_system_extsig_1stsend_flg == (U1)TRUE){
-        u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_extsig_cnt_pre;
+        u4_t_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_EXTSIG];
         u1_t_event_jdg = (U1)u1_s_XspiIviSub1SystemDataEventJdg(&u1_sp_xspi_ivi_system_extsig_data[0],&u1_sp_xspi_ivi_system_extsig_data_pre[0],(U1)XSPI_IVI_EXTSIG_NUM);
         if((u4_t_task >= (U4)XSPI_IIV_SYSTEM_EXTSIG_STS_TASK) ||
            (u1_t_event_jdg == (U1)TRUE)) {
@@ -222,7 +211,7 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
 
     /*GPSステータスの定期送信orイベント送信*/
     if(u1_s_xspi_ivi_system_gps_sts_1stsend_flg == (U1)TRUE) {
-        u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_gps_sts_cnt_pre;
+        u4_t_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_GPS];
         if((u4_t_task >= (U4)XSPI_IIV_SYSTEM_GPS_STS_TASK) ||
            (u1_s_xspi_ivi_system_gps_sts != u1_s_xspi_ivi_system_gps_sts_pre)){
             vd_g_XspiIviSub1GpsStsSend();
@@ -231,7 +220,7 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
 
     /*車速カウンタ値の定期送信*/
     if(u1_s_xspi_ivi_system_vehspd_cnt_send_flg == (U1)TRUE) {
-        u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_vehspdcnt_cnt_pre;
+        u4_t_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_VEHSPD];
         if(u4_t_task >= (U4)XSPI_IIV_SYSTEM_VEHSPDCNT_TASK) {
             vd_g_XspiIviSub1VehspdCntSend();
         }
@@ -239,7 +228,7 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
 
     /*USB給電量の定期送信*/
     if(u1_s_xspi_ivi_system_usbpowsup_send_flg == (U1)TRUE) {
-        u4_t_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_system_usbpowsup_cnt_pre;
+        u4_t_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_USB];
         if(u4_t_task >= (U4)XSPI_IIV_SYSTEM_USBPOWSUP_TASK) {
             vd_s_XspiIviSub1USBPowSupSend();
         }
@@ -312,7 +301,7 @@ void            vd_g_XspiIviSub1GpsStsSend(void)
     if(u1_s_xspi_ivi_system_gps_sts_1stsend_flg == (U1)FALSE) {
         u1_s_xspi_ivi_system_gps_sts_1stsend_flg = (U1)TRUE;
     }
-    u4_s_xspi_ivi_system_gps_sts_cnt_pre = u4_s_xspi_ivi_task_cnt;
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_GPS] = (U4)0U;
     u1_s_xspi_ivi_system_gps_sts_pre = u1_s_xspi_ivi_system_gps_sts;
 }
 
@@ -406,7 +395,7 @@ void            vd_g_XspiIviSub1ExtSiGSend(void)
     if(u1_s_xspi_ivi_system_extsig_1stsend_flg == (U1)FALSE) {
         u1_s_xspi_ivi_system_extsig_1stsend_flg = (U1)TRUE;
     }
-    u4_s_xspi_ivi_system_extsig_cnt_pre = u4_s_xspi_ivi_task_cnt;
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_EXTSIG] = (U4)0U;
     vd_g_MemcpyU1(&u1_sp_xspi_ivi_system_extsig_data_pre[0], &u1_sp_xspi_ivi_system_extsig_data[0], (U4)XSPI_IVI_EXTSIG_NUM);
 }
 
@@ -446,7 +435,7 @@ void            vd_g_XspiIviSub1VehspdCntSend(void)
     if(u1_s_xspi_ivi_system_vehspd_cnt_send_flg == (U1)FALSE) {
         u1_s_xspi_ivi_system_vehspd_cnt_send_flg = (U1)TRUE;
     }
-    u4_s_xspi_ivi_system_vehspdcnt_cnt_pre = u4_s_xspi_ivi_task_cnt;
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_VEHSPD] = (U4)0U;
 }
 
 /*===================================================================================================================================*/
@@ -482,7 +471,7 @@ static void            vd_s_XspiIviSub1USBPowSupSend(void)
     if(u1_s_xspi_ivi_system_usbpowsup_send_flg == (U1)FALSE) {
         u1_s_xspi_ivi_system_usbpowsup_send_flg = (U1)TRUE;
     }
-    u4_s_xspi_ivi_system_usbpowsup_cnt_pre = u4_s_xspi_ivi_task_cnt;
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_USB] = (U4)0U;
 }
 
 /*===================================================================================================================================*/

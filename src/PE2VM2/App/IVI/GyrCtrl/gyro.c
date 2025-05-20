@@ -90,7 +90,7 @@ void    gyro_Init( void )
     Mcu_Polling_SendorOn        = (uint32)0U;
 
     Mcu_OnStep_Gyro_1_OVRALL    = (uint8)MCU_STEP_GYRO1_OVERALL_1;
-    Mcu_OnStep_Gyro_2_OVRALL    = (uint8)MCU_STEP_GYRO2_OVERALL_FIN;    /* 起動フロー(1)完了まで実施しない */
+    Mcu_OnStep_Gyro_2_OVRALL    = (uint8)MCU_STEP_GYRO2_OVERALL_0;  /* 起動フロー(1)完了まで実施しない */
     Mcu_Gyro_LinkTimer          = (uint32)0U;
     Mcu_OnStep_Gyro_AckTime     = (uint32)0U;
     Mcu_RegStep_Gyro            = (uint16)0U;
@@ -130,7 +130,7 @@ static void     Mcu_Dev_Pwron_Gyro_Polling_SendorOn( void )
     if(mcu_dio_ret  ==  (uint8)STD_LOW){
         Mcu_Polling_SendorOn        = (uint32)0U;
         Mcu_OnStep_Gyro_1_OVRALL    = (uint8)MCU_STEP_GYRO1_OVERALL_1;
-        Mcu_OnStep_Gyro_2_OVRALL    = (uint8)MCU_STEP_GYRO2_OVERALL_FIN;    /* 起動フロー(1)完了まで実施しない */
+        Mcu_OnStep_Gyro_2_OVRALL    = (uint8)MCU_STEP_GYRO2_OVERALL_0;  /* 起動フロー(1)完了まで実施しない */
         Mcu_Gyro_LinkTimer          = (uint32)0U;
         Mcu_OnStep_Gyro_AckTime     = (uint32)0U;
         Mcu_RegStep_Gyro            = (uint16)0U;
@@ -380,13 +380,17 @@ static void     Mcu_Dev_Pwron_Gyro_SetReg( void )
     default:
         /* 異常時はフローをはじめからやり直す */
         Mcu_OnStep_Gyro_1_OVRALL = (uint8)MCU_STEP_GYRO1_OVERALL_1;
-        Mcu_OnStep_Gyro_2_OVRALL = (uint8)MCU_STEP_GYRO2_OVERALL_FIN;
+        Mcu_OnStep_Gyro_2_OVRALL = (uint8)MCU_STEP_GYRO2_OVERALL_0;
         break;
     }
 
     /* 5.2.2 起動フロー(2) GyroをNormal modeに設定する */
     switch (Mcu_OnStep_Gyro_2_OVRALL)
     {
+    case MCU_STEP_GYRO2_OVERALL_0:
+        /* 起動フロー(1)終了まで待機 */
+        break;
+
     case MCU_STEP_GYRO2_OVERALL_1:
         mcu_dio_ret =   Dio_ReadChannel(MCU_PORT_V33_PERI);
 
