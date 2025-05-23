@@ -1289,12 +1289,13 @@ static inline void    vd_s_XSpiCanTx_ICSMSW(const U4 * u4_ap_pck_rx)
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCanTx_TRLC_YN(const U4* u4_ap_pck_rx)
 {
+    static const U1 u1_s_XSPI_MET_TRLC_YN_MAX = (U1)0x04U;
     U1 u1_t_rxdata;
 
     u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)4U, (U1)3U);
 
     if (u1_t_rxdata != u1_s_pretrlc_yn) {
-        if (u1_t_rxdata <= (U1)2U) {
+        if (u1_t_rxdata <= u1_s_XSPI_MET_TRLC_YN_MAX) {
             vd_g_VdsCIReqTx((U1)VDS_CI_SW_TRLC_YN, u1_t_rxdata);
         }
     }
@@ -3217,6 +3218,7 @@ static inline void    vd_s_XSpiCanTx_TITE_BB(const U4 * u4_ap_pck_rx)
 /*           03/06/2025  HT       Change for BEV System_Consideration_1.(MET-B_MWBB-CSTD-0-00-A-C0)                                  */
 /*           03/06/2025  HT       Change for BEV System_Consideration_1.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*           03/06/2025  HT       Change for BEV System_Consideration_1.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
+/*           05/14/2025  RO       Change for BEV EMC R.(MET-S_ADMID-CSTD-0-02-A-C0)                                                  */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
