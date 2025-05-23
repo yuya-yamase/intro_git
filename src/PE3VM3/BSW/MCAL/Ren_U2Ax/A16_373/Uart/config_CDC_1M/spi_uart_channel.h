@@ -40,7 +40,7 @@
 #define SPI_UART_CH_08                           (8U)
 #define SPI_UART_CH_09                           (9U)
 #define SPI_UART_CH_10                           (10U)
-#define SPI_UART_CH_11                           (11U)
+#define SPI_UART_CH_11_SAIL                      (11U)
 #define SPI_UART_CH_12                           (12U)
 #define SPI_UART_CH_13                           (13U)
 #define SPI_UART_CH_14                           (14U)

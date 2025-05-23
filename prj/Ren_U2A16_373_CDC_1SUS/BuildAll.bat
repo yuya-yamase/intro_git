@@ -72,6 +72,21 @@ echo Start Time: %start_time%
 echo End Time  : %time%
 
 @echo OFF
+echo -- Step: Calculate ROM/RAM  --
+set "current=%cd%"
+
+REM 上位フォルダ名を取得
+for %%a in ("%current%") do set "foldername=%%~nxa"
+
+REM 最後の8文字を取得
+set "last8=%foldername:~-8%"
+echo selected_variation: %last8%
+
+pushd ..\..\tool\MemAnalysis
+python SectionAnalysis.py %last8%
+move "*.xlsx" "%current%"
+popd
+
 echo -- Step: ReprogAPL build --
 pushd ..\..\src\DevRRPG\ReprogAPL_Info\env\Multi_V800
 call build.bat
