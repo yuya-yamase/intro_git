@@ -36,11 +36,17 @@
 #define POWERIC_REG_MASK_BIT_6                      (0x40U)
 #define POWERIC_REG_MASK_BIT_7                      (0x80U)
 
+#define POWERIC_I2C_PID_MASK                        (0x0FFC0000U)
+#define POWERIC_I2C_PID_INVALID                     (0x10000000U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define POWERIC_IO_STS_LOW                          (0U)
 #define POWERIC_IO_STS_HIGH                         (1U)
+
+#define POWERIC_SOFTMUTE_STS_OFF                    (0U)
+#define POWERIC_SOFTMUTE_STS_ON                     (1U)
 
 #define POWERIC_POWER_STATE_APP_OFF                 (PICT_NOREDUN_STATE_APPOFF)
 #define POWERIC_POWER_STATE_APP_ON                  (PICT_NOREDUN_STATE_APPON)
@@ -85,6 +91,7 @@ void    vd_g_PowerIc_BonInit(void);
 void    vd_g_PowerIc_WkupInit(void);
 void    vd_g_PowerIc_Routine(void);
 void    vd_g_PowerIc_TrunOnDiag_Req(void);
+void    vd_g_PowerIc_SoftMuteSet(const U1 u1_a_softmute_sts);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
