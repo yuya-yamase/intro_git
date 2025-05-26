@@ -53,6 +53,7 @@
 #define    XSPI_IVI_SYSTEM_GPS_OPE_RESPON  (0x22U)
 #define    XSPI_IVI_SYSTEM_VEHSPD_CNT      (0x30U)
 #define    XSPI_IVI_SYSTEM_EXTSIG_SEND     (0x40U)
+#define    XSPI_IVI_SYSTEM_TMUTE           (0x50U)
 
 #define    XSPI_IVI_EXTSIG_ID_TEST         (0x01U)
 #define    XSPI_IVI_EXTSIG_ID_USB          (0x10U)
@@ -97,12 +98,14 @@ static U1              u1_s_xspi_ivi_system_extsig_testterm_data[3];  /*TESTç«¯å
 static U1              u1_s_xspi_ivi_system_clkfreq;
 static U4              u4_s_xspi_ivi_system_vehspd_cnt;
 static U2              u2_s_xspi_ivi_system_usbpowsup;
+static U1              u1_s_xspi_ivi_system_tmute_data;
 
 static U1              u1_s_xspi_ivi_system_gps_sts_1stsend_flg;
 static U1              u1_s_xspi_ivi_system_extsig_1stsend_flg;
 static U1              u1_s_xspi_ivi_system_perion_flg;
 static U1              u1_s_xspi_ivi_system_vehspd_cnt_send_flg;
 static U1              u1_s_xspi_ivi_system_usbpowsup_send_flg;
+static U1              u1_s_xspi_ivi_system_tmute_1stsend_flg;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -142,6 +145,9 @@ void            vd_g_XspiIviSub1SystemInit(void)
 
     u2_s_xspi_ivi_system_usbpowsup = (U2)0U;
     u1_s_xspi_ivi_system_usbpowsup_send_flg = (U1)FALSE;
+
+    u1_s_xspi_ivi_system_tmute_data = (U1)XSPI_IVI_TMUTE_UNDEF;
+    u1_s_xspi_ivi_system_tmute_1stsend_flg = (U1)FALSE;
 }
 
 /*===================================================================================================================================*/
@@ -505,6 +511,43 @@ void            vd_g_XspiIviSub1GpsOpeResPut(const U1 u1_a_DATA)
     u1_tp_data[0] = (U1)XSPI_IVI_SYSTEM_GPS_OPE_RESPON;
     u1_tp_data[1] = u1_a_DATA;
     vd_s_XspiIviSub1SystemDataToQueue(u2_s_SYSTEM_GPSOPERES_SIZE,u1_tp_data);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1TmuteSend(void)                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1TmuteSend(void)
+{
+    U2     u2_s_SYSTEM_TMUTE_SIZE = (U2)2U;
+    U1     u1_tp_data[2];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_SYSTEM_TMUTE;
+    u1_tp_data[1] = u1_s_xspi_ivi_system_tmute_data;
+    vd_s_XspiIviSub1SystemDataToQueue(u2_s_SYSTEM_TMUTE_SIZE,u1_tp_data);
+
+    if(u1_s_xspi_ivi_system_tmute_1stsend_flg == (U1)FALSE) {
+        u1_s_xspi_ivi_system_tmute_1stsend_flg = (U1)TRUE;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1TmuteDataPut(U1 u1_a_DATA)                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_a_DATA : T-MUTE Data                                                                                          */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1TmuteDataPut(const U1 u1_a_DATA)
+{
+    u1_s_xspi_ivi_system_tmute_data = u1_a_DATA;
+    
+    if(u1_s_xspi_ivi_system_tmute_1stsend_flg == (U1)TRUE) {
+        vd_g_XspiIviSub1TmuteSend();
+    }
 }
 
 /*===================================================================================================================================*/
