@@ -42,6 +42,10 @@
 #define XSPI_IVI_EXTSIG_DAB                  (13U)
 #define XSPI_IVI_EXTSIG_DAB2                 (14U)
 
+#define XSPI_IVI_TMUTE_UNDEF                 (0U)
+#define XSPI_IVI_TMUTE_MUTE                  (1U)
+#define XSPI_IVI_TMUTE_UNMUTE                (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -69,6 +73,8 @@ void            vd_g_XspiIviSub1GpsOpeResPut(const U1 u1_a_DATA);
 void            vd_g_XspiIviSub1VehspdCntSend(void);
 void            vd_g_XspiIviSub1SpCntPut(const ST_XSPI_IVI_SP_CNT_DATA st_a_DATA);
 void            vd_g_XspiIviSub1USBPowSupPut(const U2 u2_a_DATA);
+void            vd_g_XspiIviSub1TmuteSend(void);
+void            vd_g_XspiIviSub1TmuteDataPut(const U1 u1_a_DATA);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

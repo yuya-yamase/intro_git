@@ -19,6 +19,7 @@
 #include    "x_spi_ivi_sub1_private.h"
 #include    "x_spi_ivi_sub1_clock.h"
 /*#include    "datesi_com.h"*/
+#include    "x_spi_ivi_sub4.h"
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -203,6 +204,8 @@ void            vd_g_XspiIviSub1ClockRTCSend(const ST_XSPI_IVI_CLOCK_RTC_DATA st
     u1_sp_xspi_ivi_clock_rtc_data[5]  = st_a_DATA.u1_second_rtc;
     u1_sp_xspi_ivi_clock_rtc_data[6]  = st_a_DATA.u1_dow_rtc;
     u1_sp_xspi_ivi_clock_rtc_data[7]  = st_a_DATA.u1_clock_set_sts_rtc;
+
+    vd_g_XspiIviClockUTCPut(&u1_sp_xspi_ivi_clock_rtc_data[0]);
 }
 
 /*===================================================================================================================================*/

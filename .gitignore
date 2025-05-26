@@ -16,6 +16,7 @@
 *.x
 *.out
 *.bin
+Section_Size*.xlsx
 #RRPG
 APL.txt
 Reprog_SBL.txt

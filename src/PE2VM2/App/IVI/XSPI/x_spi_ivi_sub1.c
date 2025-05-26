@@ -100,6 +100,7 @@ void            vd_g_XspiIviSub1Init(void)
     vd_g_XspiIviSub1CameraInit();
     vd_g_XspiIviSub1DiagInit();
     vd_g_XspiIviSub1ClockInit();
+	vd_g_XspiIviSub1VersionInit();
 }
 
 /*===================================================================================================================================*/

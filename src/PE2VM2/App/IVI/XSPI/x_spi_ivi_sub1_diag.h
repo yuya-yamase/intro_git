@@ -37,6 +37,8 @@
 void            vd_g_XspiIviSub1DiagInit(void);
 void            vd_g_XspiIviSub1DiagMainTask(void);
 void            vd_g_XspiIviSub1DiagAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
+void            vd_g_XspiIviSub1_DiagDtcrecSend(const U1 u1_a_CODE, const U1 u1_a_DIAGCODE, const U1 u1_a_STS);
+void            vd_g_XspiIviSub1_DiagRobrecSend(const U1 u1_a_CODE, const U1 u1_a_DIAGCODE);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
