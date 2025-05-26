@@ -279,47 +279,6 @@ U1              u1_g_DateSICalCfgEsichk(void)
 }
 
 /*===================================================================================================================================*/
-/* void            vd_g_DateSICalCfgSetAdjusted(const U1 u1_a_CALSTS)                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_DateSICalCfgSetAdjusted(const U1 u1_a_CALSTS)
-{
-#if 0   /* BEV provisionally */
-    vd_g_Rim_WriteU1((U2)RIMID_U1_DATESI_DATE_ADJUSTED, u1_a_CALSTS);
-#endif
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_DateSICalCfgGetAdiusted(void)                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_DateSICalCfgGetAdiusted(void)
-{
-#if 0   /* BEV provisionally */
-    U1 u1_t_rim_sts;
-    U1 u1_t_calsts;
-#endif
-    U1 u1_t_return;
-
-#if 0   /* BEV provisionally */
-    u1_t_calsts = (U1)0U;
-#endif
-    u1_t_return = (U1)0U;
-#if 0   /* BEV provisionally */
-    u1_t_rim_sts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_DATESI_DATE_ADJUSTED, &u1_t_calsts);
-    if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-        u1_t_return = u1_t_calsts;
-    }
-#endif
-    
-    return(u1_t_return);
-}
-
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */

@@ -74,8 +74,6 @@ void            vd_g_DateSICalClockUpdate(void);
 U1              u1_g_DateSICalCfgCanRx(ST_DATESI_CAL_RX * stp_a_rx);
 void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVENT_EI);
 U1              u1_g_DateSICalCfgEsichk(void);
-void            vd_g_DateSICalCfgSetAdjusted(const U1 u1_a_CALSTS);
-U1              u1_g_DateSICalCfgGetAdiusted(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
