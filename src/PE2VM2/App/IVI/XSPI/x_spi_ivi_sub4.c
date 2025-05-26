@@ -35,6 +35,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define XSPI_IVI_SFT_04                     ( 4U)
 #define XSPI_IVI_SFT_08                     ( 8U)
 #define XSPI_IVI_SFT_16                     (16U)
 #define XSPI_IVI_SFT_24                     (24U)
@@ -68,6 +69,8 @@
 #define XSPI_IVI_CLOCKUTC_DATA_SIZE         (9U)
 #define XSPI_IVI_WEEK_SUNDAY_RTC            (7U)
 #define XSPI_IVI_WEEK_SUNDAY_UTC            (0U)
+
+#define XSPI_IVI_MASK_04                    (0x0FU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -222,6 +225,7 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
     U2          u2_t_datatype;                          /* CAN Command データタイプ*/
     U2          u2_t_cancommandbuf;                     /* CAN Command データバッファ*/
     U2          u2_t_cancommandsize;                    /* CAN Command データサイズ*/
+    U1          u1_t_cd_size;
 
     /* CAN Command Header Field 解析処理 */
     //u4_t_com_ID     = (U4)((u1_ap_SUB4_ADD[0] << XSPI_IVI_SFT_24) | (u1_ap_SUB4_ADD[1] << XSPI_IVI_SFT_16) | (u1_ap_SUB4_ADD[2] << XSPI_IVI_SFT_08) | u1_ap_SUB4_ADD[3]);
@@ -279,6 +283,11 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         
         if(u4_t_msg_aubistid != (U4)0xFFFFFFFFU){
         /* フレーム送信処理 */
+            if(u4_t_msg_aubistid ==(U4)MSG_AVN1S97_TXCH0){
+                u1_t_cd_size = u1_g_PictCtl_CdsizeSnd();
+                u1_tp_can_data[6] = u1_tp_can_data[6] & (U1)XSPI_IVI_MASK_04;
+                u1_tp_can_data[6] |= (U1)(u1_t_cd_size << XSPI_IVI_SFT_04);
+            }
             (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
         }
 
