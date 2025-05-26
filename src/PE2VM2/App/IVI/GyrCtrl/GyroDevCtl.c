@@ -156,7 +156,6 @@ static ST_XSPI_IVI_GYRO_SENSOR_DATA st_gyrodev_readdata;        /* Gyro Device R
 static U1 u1_s_gyrodev_pre_appon_sts;                           /* Previous APP-ON Status */
 
 static U1 u1_s_gyrodev_dtcrec_a_flag;                           /* Gyro Device Read Data Check DTC Record(A) Flag */
-static U1 u1_s_gyrodev_dtcrec_b_flag;                           /* Gyro Device Read Data Check DTC Record(B) Flag */
 
 static U1 u1_s_gyrodev_notifcondset_sts;                        /* "[API]G-Sensor INT Signal Notification Condition" Function Status */
 static U1 u1_s_gyrodev_oscmd_notifcond_set_flag;                /* "[API]G-Sensor INT Signal Notification Condition" Setting Request Receive Flag */
@@ -499,7 +498,6 @@ void    vd_g_GyroDev_BonInit(void)
     u1_s_gyrodev_pre_appon_sts = (U1)GYRODEV_APPOFF;
 
     u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
-    u1_s_gyrodev_dtcrec_b_flag = (U1)FALSE;
 
     u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP0;
     u1_s_gyrodev_oscmd_notifcond_set_flag = (U1)GYRODEV_GSENS_NOTIFCOND_UNRCV;
@@ -586,7 +584,6 @@ void    vd_g_GyroDev_WkupInit(void)
     u1_s_gyrodev_pre_appon_sts = (U1)GYRODEV_APPOFF;
 
     u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
-    u1_s_gyrodev_dtcrec_b_flag = (U1)FALSE;
 
     u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP0;
     u1_s_gyrodev_oscmd_notifcond_set_flag = (U1)GYRODEV_GSENS_NOTIFCOND_UNRCV;
@@ -1015,7 +1012,8 @@ static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_dat
 
                 vd_GYRODEV_DREC_REQ((U1)SYSECDRC_DREC_ID_4, (U1)0x00U, (U1)0x00U);
 
-                /* DTC "B15AD96"記録(異常) *//* 暫定 DTC記憶はシス検では未対応 */
+                /* Gyro Fail DTC Record */
+                vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GYR_ERR, (U1)GYRODEV_DTC_STS_FAIL);
                 u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
 
                 if(u1_s_gyrodev_gyro_rst_cnt >= (U2)GYRODEV_GYRODTC_RSTCNT_MAX){    /* Reset Count >= n(6_3) */
@@ -1043,8 +1041,9 @@ static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_dat
 
             /* DTC Record Check */
             if(u1_s_gyrodev_dtcrec_a_flag == (U1)FALSE){                       /* Initial Record or Error -> Normal */
+                /* Gyro Normal DTC Record */
+                vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GYR_ERR, (U1)GYRODEV_DTC_STS_NORMAL);
                 u1_s_gyrodev_dtcrec_a_flag = (U1)TRUE;
-                /* DTC "B15AD96"記録(正常) *//* 暫定 DTC記憶はシス検では未対応 */
             }
         }
     }
@@ -1053,12 +1052,6 @@ static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_dat
         u2_s_gyrodev_gyro_max_err_cnt = (U2)0;
         u2_s_gyrodev_gyro_min_err_cnt = (U2)0;
         u1_s_gyrodev_gyro_rst_cnt = (U1)0;
-
-        /* DTC Record Check */
-        if(u1_s_gyrodev_dtcrec_b_flag == (U1)FALSE){                       /* Initial Record */
-            u1_s_gyrodev_dtcrec_b_flag = (U1)TRUE;
-            /* DTC "B15AD96"記録(不定) *//* 暫定 DTC記憶はシス検では未対応 */
-        }
     }
 }
 
@@ -1105,7 +1098,8 @@ static void    vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_da
 
             vd_GYRODEV_DREC_REQ((U1)SYSECDRC_DREC_ID_5, (U1)0x00U, (U1)0x00U);
 
-            /* DTC "B15AD96"記録(異常) *//* 暫定 DTC記憶はシス検では未対応 */
+            /* G Sonsor Fail DTC Record */
+            vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GSNS_ERR, (U1)GYRODEV_DTC_STS_FAIL);
             u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
 
             if(u1_s_gyrodev_gsens_rst_cnt >= (U2)GYRODEV_GSENSDTC_RSTCNT_MAX){    /* Reset Count >= n(6_3) */
@@ -1133,8 +1127,9 @@ static void    vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_da
 
         /* DTC Record Check */
         if(u1_s_gyrodev_dtcrec_a_flag == (U1)FALSE){                       /* Initial Record or Error -> Normal */
+            /* G Sonsor Normal DTC Record */
+            vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GSNS_ERR, (U1)GYRODEV_DTC_STS_NORMAL);
             u1_s_gyrodev_dtcrec_a_flag = (U1)TRUE;
-            /* DTC "B15AD96"記録(正常) *//* 暫定 DTC記憶はシス検では未対応 */
         }
     }
 }

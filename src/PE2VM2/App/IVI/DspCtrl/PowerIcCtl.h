@@ -13,6 +13,7 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "PictCtl.h"
 #include "SysEcDrc.h"
+#include "DtcCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -55,10 +56,14 @@
 #define POWERIC_SPEAKER_TYPE_2SPK                   (0U)    /* 暫定 車パラI/F展開後に見直し */
 #define POWERIC_SPEAKER_TYPE_4SPK                   (1U)    /* 暫定 車パラI/F展開後に見直し */
 
+#define POWERIC_DTC_STS_FAIL                        (0U)
+#define POWERIC_DTC_STS_NORMAL                      (1U)
+
 #define u1_POWERIC_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_POWER, (u), (v), (U1)GP_I2C_MA_SLA_4_POWER, (w), (x), (y), (z)))
 #define u1_POWERIC_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_POWER, (w), (U1)GP_I2C_MA_SLA_4_POWER, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
 
 #define vd_POWERIC_DREC_REQ(x, y, z)                (vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_POWERIC, (x), (y), (z)))
+#define vd_POWERIC_DTC_REQ(x, y)                    (vd_g_DtcCtl_SetDtcId((x), (y)))
 
 #define u1_POWERIC_GET_POWER_STATE()                (u1_g_PictCtl_StartSts())
 #define u1_POWERIC_GET_V33_PERI_ON()                (Dio_ReadChannel(DIO_ID_PORT10_CH2))
