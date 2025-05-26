@@ -685,6 +685,7 @@ void    vd_g_Gvif3RxMainTask(void)
         case GVIF3RX_MAINTASK_STEP3:
             if(u1_s_gvif3rxchk_cnt >= (U1)GVIF3RX_CHKTIME){
                 u1_s_gvif3rxchkflg = (U1)TRUE;
+                u1_s_gvif3rxchk_cnt = (U1)GVIF3RX_CNT_CLR;
             }
             break;
     
