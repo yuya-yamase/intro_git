@@ -2,6 +2,7 @@ import os
 import json
 import tkinter as tk
 import subprocess
+import sys
 
 def find_files_and_folders(base_path, extensions, include_pattern, exclude_pattern):
     path_list = []
@@ -65,9 +66,13 @@ def analysis_file(base_path, existing_json_file, include_pattern, options, VM_ke
         json.dump(existing_data, f, indent=4)
     f.close()
 
+
+args = sys.argv
+
 ## GUI 選択ターブル
 options = ["CDC_1SUS", "CDC_1SJP", "CDC_1SOT", "CDC_1MUS", "CDC_1MJP", "CDC_1MOT"]
 
+"""
 root = tk.Tk()
 root.title("仕向け選択")
 
@@ -82,6 +87,8 @@ button = tk.Button(root, text="決定", command=save_selection)
 button.pack()
 
 root.mainloop()
+"""
+selected_variation = args[1]
 print(f"選択されたオプション: {selected_variation}")
 include_pattern = [selected_variation[:-2],selected_variation]
 options.remove(selected_variation)
@@ -108,4 +115,7 @@ for path,json_file,VM_keyword in zip(base_paths, existing_json_files,VM_keywords
     analysis_file(path, json_file, include_pattern, options, VM_keyword)
 
 
-subprocess.run(['python', "Sub.py" , selected_variation])
+result = subprocess.run(['python', "Sub.py" , selected_variation])
+
+if result.returncode == 0:
+    print("SectionAnalysis Success")
