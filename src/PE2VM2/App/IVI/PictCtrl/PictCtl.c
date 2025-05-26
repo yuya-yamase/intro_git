@@ -328,7 +328,6 @@ typedef struct {
     U1  u1_SyncChkLoopCnt;          /* 同期異常判定のループ回数                 */
     U1  u1_SyncChkSyncCnt;         /* 同期異常判定の同期信号あり回数           */
     U1  u1_SyncChkRlt;              /* 同期異常判定の結果(正常・異常)           */
-    U1  u1_SyncChkStaToutFlg;       /* 同期異常判定開始待ちタイマアウトフラグ   */
 } ST_ML_CTL; 
 
 
@@ -576,7 +575,6 @@ void vd_g_PictCtl_Init(void)
     bfg_Ml_Ctl.u1_SyncChkLoopCnt = (U1)PICT_CNT_INI;
     bfg_Ml_Ctl.u1_SyncChkSyncCnt = (U1)PICT_CNT_INI;
     bfg_Ml_Ctl.u1_SyncChkRlt = (U1)PICT_CAM_SYNC_CHK_UNJDG;
-    bfg_Ml_Ctl.u1_SyncChkStaToutFlg = (U1)FALSE;
 
     st_sp_Pict_BackUpInf.u1_CamKind = (U1)0U;      /* DTFバックアップ値を設定(暫定) */
     st_sp_Pict_BackUpInf.u1_CenterCamSiz= (U1)0U;  /* DTFバックアップ値を設定(暫定) */
@@ -1053,7 +1051,6 @@ static void vd_s_PictCtl_IgStsChk(void)
         if((u2_t_time == (U2)PICT_TIM_STOP) && (u1_s_pict_syncstarteflg == (U1)FALSE)){
             /* カメラ同期検知開始待ちタイマ起動(1500+1ms) */
             vd_s_PictCtl_SetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA, (U2)PICT_TIMER_ML_CAMSYNC_CHKSTA_WAIT);
-            u1_s_pict_syncstarteflg = (U1)TRUE;
         }
         vd_s_PictCtl_SetTim((U1)PICT_TIMID_CAM_KIND_DISC_STA_WAIT, (U2)PICT_TIMER_CAM_KIND_DISC_STA);
         u1_s_pict_apponflg = (U1)TRUE;
@@ -2382,9 +2379,6 @@ static void vd_s_PictCtl_CamSyncChkStaTout(void)
 {
     /* カメラ同期検知開始処理 */
     vd_s_PictCtl_CamSyncChkSta();
-
-    /* カメラ同期検知開始待ちタイマタイムアウトフラグON設定 */
-    bfg_Ml_Ctl.u1_SyncChkStaToutFlg = (U1)TRUE;
 }
 
 /*============================================================================
@@ -2405,6 +2399,7 @@ static void vd_s_PictCtl_CamSyncChkSta(void)
 {
     U2  u2_t_time;
 
+    u1_s_pict_syncstarteflg = (U1)TRUE;
     u2_t_time = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKCYC);
     if(u2_t_time == (U2)PICT_TIM_STOP)
     {
@@ -2435,6 +2430,9 @@ static void vd_s_PictCtl_CamSyncChkSta(void)
 static void vd_s_PictCtl_CamSyncChkStop(void)
 {
     vd_s_PictCtl_ClrTim((U1)PICT_TIMID_ML_CAMSYNC_CHKCYC);
+    u1_s_pict_syncstarteflg = FALSE;
+    u1_s_pict_camsynccyc_flg = FALSE;
+    u1_s_pict_camsynccyc_step = PICT_SEQ_CAMSYNCCHK_STEP0;
 }
 
 /*============================================================================
@@ -2806,32 +2804,26 @@ U1 u1_g_PictCtl_CamSyncSts(void)
     return(bfg_Ml_Ctl.u1_SyncChkRlt);
 }
 
-/*============================================================================
- * MLデバイス周期チェック開始処理
- *----------------------------------------------------------------------------
- * モジュール名 : fc_Pict_MLCycChkStart
- * 機能         :
- * 処理内容     :
- * 入力（引数） : 無し
- * 出力（戻値） : 無し
- * 制限事項     :
- * 作成者       : NOAH)王 巧燕
- * ---------------------------------------------------------------------------
- * 変更履歴     : 2022.12.12 新規作成
-                 2023.3.30 NOAH)王 巧燕
-                 固着検知ビット監視とメインマイコンのCAMERA-MODE1=Hi検知異常
-                 のフェールセーフ対応
- ===========================================================================*/
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_CycChkStart(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 static void vd_s_PictCtl_CycChkStart(void)
 {
-    U1 u2_t_Tim;
-    
-    if(bfg_Ml_Ctl.u1_SyncChkStaToutFlg == (U1)TRUE){
-        u2_t_Tim = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA);
-        if(u2_t_Tim == (U2)PICT_TIM_STOP) {
-            if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
-                vd_s_PictCtl_CamSyncChkSta();
-            }
+    U2 u2_t_tim;
+
+    u2_t_tim = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA);
+    if(u1_s_pict_syncstarteflg == (U1)FALSE){
+        if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
+            vd_s_PictCtl_CamSyncChkSta();
+        }
+        else if((bfg_Pict_StsMng.u1_stasts == (U1)PICT_NOREDUN_STATE_APPON) && (u2_t_tim == (U2)PICT_TIM_STOP)){
+            vd_s_PictCtl_SetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA, (U2)PICT_TIMER_ML_CAMSYNC_CHKSTA_WAIT);
+        }
+        else{
+            /* do nothing */
         }
     }
 }
