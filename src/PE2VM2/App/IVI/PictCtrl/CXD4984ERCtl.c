@@ -16,6 +16,8 @@
 #include "Mcu_Sys_Pwr_Gvif3Rx.h"
 #include "gvif3rx.h"
 #include "pictic.h"
+#include "SysEcDrc.h"
+#include "RobCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -80,6 +82,8 @@
 
 /* デバイス異常検知 */
 #define GVIF3RX_GETREG_DEV_NORMAL               (0x20U)
+#define GVIF3RX_DEVERR_FLGON                    (1U)
+#define GVIF3RX_DEVERR_FLGOFF                   (0U)
 
 /* 再起動フラグ */
 #define GVIF3RX_RESTART_FLGON                   (1U)
@@ -132,6 +136,7 @@ static U1    u1_s_gvif3rxsipfailflg;
 static U1    u1_s_gvif3rxchkflg;
 static U1    u1_s_gvif3rxchk_cnt;
 static U1    u1_s_gvif3rxrestartcnt;
+static U1    u1_s_gvif3rxdeverrflg;
 static U1    u1_s_gvif3rx0unconflg;
 static U1    u1_s_gvif3rx1unconflg;
 static U1    u1_s_gvif3rxrestartflg;
@@ -159,6 +164,7 @@ static U1    u1_s_gvif3rxsiperr_date;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void   vd_s_Gvif3RxReset(void);
 static void   vd_s_Gvif3RxReadDateInit(void);
 static U1     u1_s_Gvif3RxCamKindDatSet(void);
 static void   vd_s_Gvif3RxCycChk(void);
@@ -558,20 +564,32 @@ void    vd_g_Gvif3RxInit(void)
     u1_s_gvif3rxstby3sts = (U1)FALSE;
     u1_s_gvif3rxcamkind_now = (U1)GVIF3RX_KIND_CAM_NONE; /* DTF読み出し値(暫定) */
     u1_s_gvifcamKind_last = (U1)GVIF3RX_KIND_CAM_NONE;   /* DTF読み出し値(暫定) */
-    u1_s_gvif3rxstartflg = (U1)FALSE;
-    u1_s_gvif3rxsipfailflg = (U1)FALSE;
-    u1_s_gvif3rxchkflg = (U1)FALSE;
     u1_s_gvif3rxchk_cnt = (U1)GVIF3RX_CNT_CLR;
-    u1_s_gvif3rxrestartcnt = (U1)GVIF3RX_CNT_CLR;
+    u1_s_gvif3rxdeverrflg = (U1)GVIF3RX_DEVERR_FLGOFF;
     u1_s_gvif3rx0unconflg = (U1)GVIF3RX_UNCON_FLGOFF;
-    u1_s_gvif3rx0unconcnt = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3rx1unconflg = (U1)GVIF3RX_UNCON_FLGOFF;
-    u1_s_gvif3rx1unconcnt = (U1)GVIF3RX_CNT_CLR;
-    u1_s_gvif3rxrestartflg = (U1)GVIF3RX_RESTART_FLGOFF;
     u1_s_gvif3rxerror1chkcnt = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3rxerror2chkcnt = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3rxerror3chkcnt = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3rxerror4chkcnt = (U1)GVIF3RX_CNT_CLR;
+    vd_s_Gvif3RxReset();
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_Gvif3RxReset(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_Gvif3RxReset(void)
+{
+    u1_s_gvif3rxstartflg = (U1)FALSE;
+    u1_s_gvif3rxsipfailflg = (U1)FALSE;
+    u1_s_gvif3rxchkflg = (U1)FALSE;
+    u1_s_gvif3rxrestartcnt = (U1)GVIF3RX_CNT_CLR;
+    u1_s_gvif3rx0unconcnt = (U1)GVIF3RX_CNT_CLR;
+    u1_s_gvif3rx1unconcnt = (U1)GVIF3RX_CNT_CLR;
+    u1_s_gvif3rxrestartflg = (U1)GVIF3RX_RESTART_FLGOFF;
     u4_s_gcif3acktime = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3maintask_step = (U1)GVIF3RX_MAINTASK_STEP1;
     u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP1;
@@ -766,7 +784,11 @@ static void    vd_s_Gvif3RxCycChk(void)
         case GVIF3RX_PERIMONI_STEP5:
             u1_t_date = (U1)st_sp_GVIF3RX_REG_DEVERROR[1].u1p_pdu[1];
             if(u1_t_date != (U1)GVIF3RX_GETREG_DEV_NORMAL){
-                /* ダイレコ 再起動要求(暫定) */
+                if(u1_s_gvif3rxdeverrflg == (U1)GVIF3RX_DEVERR_FLGOFF){
+                    /* ダイレコ 再起動要求 */
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX, (U1)SYSECDRC_DREC_ID_1, (U1)0x00U, (U1)0x00U);
+                    u1_s_gvif3rxdeverrflg = (U1)GVIF3RX_DEVERR_FLGON;
+                }
                 u1_s_gvif3rxrestartflg = (U1)GVIF3RX_RESTART_FLGON;
                 u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP_FIN; /* 定期終了 */
             }
@@ -1166,7 +1188,7 @@ static void     vd_s_Gvif3Restart(void)
         }
         if(u1_s_gvif3rxrestartcnt >= (U1)GVIF3RX_RESTART_WAIT){
             Dio_WriteChannel(GVIF3RX_PORT_CAM_RST, (Dio_LevelType)TRUE);
-            vd_g_Gvif3RxInit();
+            vd_s_Gvif3RxReset();
         }
     }
 }
@@ -1207,7 +1229,9 @@ static U1     u1_s_Gvif3LinkChk(void)
                 }
                 if(u1_s_gvif3rx0unconcnt >= (U1)GVIF3RX_UNCON_CNT_CNF){
                     if(u1_s_gvif3rx0unconflg == (U1)GVIF3RX_UNCON_FLGOFF){
-                        /* ダイレコ Rob①(暫定) */
+                        /* ダイレコ Rob① */
+                        vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX, (U1)SYSECDRC_DREC_ID_2, (U1)0x00U, (U1)0x00U);
+                        vd_g_RobCtl_SetRobId((U1)ROBCTL_ROBID_GVIFRX0_ERR);
                         u1_s_gvif3rx0unconflg = (U1)GVIF3RX_UNCON_FLGON;
                     }
                 }
@@ -1222,7 +1246,9 @@ static U1     u1_s_Gvif3LinkChk(void)
                 }
                 if(u1_s_gvif3rx1unconcnt >= (U1)GVIF3RX_UNCON_CNT_CNF){
                     if(u1_s_gvif3rx1unconflg == (U1)GVIF3RX_UNCON_FLGOFF){
-                        /* ダイレコ Rob②(暫定) */
+                        /* ダイレコ Rob② */
+                        vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX, (U1)SYSECDRC_DREC_ID_3, (U1)0x00U, (U1)0x00U);
+                        vd_g_RobCtl_SetRobId((U1)ROBCTL_ROBID_GVIFRX1_ERR);
                         u1_s_gvif3rx1unconflg = (U1)GVIF3RX_UNCON_FLGON;
                     }
                 }
@@ -1274,6 +1300,10 @@ static U1     u1_s_Gvif3Error1Chk(void)
                 if(u1_s_gvif3rxerror1chkcnt < (U1)GVIF3RX_ERROR_MAXLOGCNT){
                     /* ダイレコ */
                     u1_s_gvif3rxerror1chkcnt++;
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX,
+                                       (U1)SYSECDRC_DREC_ID_4,
+                                       (U1)u1_s_gvif3rxerror1chkcnt,
+                                       (U1)st_sp_GVIF3RX_REG_EERROR1CHK[1].u1p_pdu[1]);
                 }
             }
             u1_t_return = (U1)TRUE;
@@ -1320,6 +1350,10 @@ static U1     u1_s_Gvif3Error2Chk(void)
                 if(u1_s_gvif3rxerror2chkcnt < (U1)GVIF3RX_ERROR_MAXLOGCNT){
                     /* ダイレコ */
                     u1_s_gvif3rxerror2chkcnt++;
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX,
+                                       (U1)SYSECDRC_DREC_ID_5,
+                                       u1_s_gvif3rxerror2chkcnt,
+                                       (U1)st_sp_GVIF3RX_REG_EERROR2CHK[1].u1p_pdu[1]);
                 }
             }
             u1_t_return = (U1)TRUE;
@@ -1366,6 +1400,10 @@ static U1     u1_s_Gvif3Error3Chk(void)
                 if(u1_s_gvif3rxerror3chkcnt < (U1)GVIF3RX_ERROR_MAXLOGCNT){
                     /* ダイレコ */
                     u1_s_gvif3rxerror3chkcnt++;
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX,
+                                       (U1)SYSECDRC_DREC_ID_6,
+                                       u1_s_gvif3rxerror3chkcnt,
+                                       (U1)st_sp_GVIF3RX_REG_EERROR3CHK[1].u1p_pdu[1]);
                 }
             }
             u1_t_return = (U1)TRUE;
@@ -1412,6 +1450,10 @@ static U1     u1_s_Gvif3Error4Chk(void)
                 if(u1_s_gvif3rxerror4chkcnt < (U1)GVIF3RX_ERROR_MAXLOGCNT){
                     /* ダイレコ */
                     u1_s_gvif3rxerror4chkcnt++;
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX,
+                                       (U1)SYSECDRC_DREC_ID_7,
+                                       u1_s_gvif3rxerror4chkcnt,
+                                       (U1)st_sp_GVIF3RX_REG_EERROR4CHK[1].u1p_pdu[1]);
                 }
             }
             u1_t_return = (U1)TRUE;

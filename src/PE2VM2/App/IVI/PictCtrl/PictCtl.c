@@ -16,6 +16,7 @@
 #include "pictic.h"
 #include "ML86294Ctl.h"
 #include "PictMuteCtl.h"
+#include "SysEcDrc.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -237,6 +238,10 @@
 #define PICT_TOUT_MUTEON                                (1U)
 #define PICT_TOUT_MUTEOFF_WAIT                          (2U)
 
+#define PICT_TOUT_LOG_NORMAL                            (1U)
+#define PICT_TOUT_LOG_BPASS                             (2U)
+#define PICT_TOUT_LOG_SYNCNG                            (3U)
+
 #define PICT_PORT_AUDIO_ON                              (DIO_ID_APORT5_CH0)
 #define PICT_PORT_LOW_POWER_ON                          (DIO_ID_PORT10_CH5)
 #define PICT_PORT_MM_STBY_N                             (DIO_ID_PORT10_CH11)
@@ -405,6 +410,7 @@ static U1    u1_s_pict_camsyncinfo;
 static U1    u1_s_pict_regwrite_req;
 static U1    u1_s_pict_regwrite_sts;
 static U1    u1_s_pict_cd_size;
+static U1    u1_s_pict_cammodelog_flg;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -662,6 +668,7 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_regwrite_req = (U1)FALSE;
     u1_s_pict_regwrite_sts = (U1)PICT_ML_CAMAREASET_COMPLETED;
     u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
+    u1_s_pict_cammodelog_flg = (U1)FALSE;
     
     st_sp_send.u1_CamKind = st_sp_Pict_BackUpInf.u1_CamKind;
     st_sp_send.u1_CenterCamSiz = st_sp_Pict_BackUpInf.u1_CenterCamSiz;
@@ -1423,6 +1430,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
     switch (bfg_Pict_SeqMlMng.u1_PrcNo)
     {
         case PICT_SEQ_ML_CAMON_STEP0:
+            u1_s_pict_cammodelog_flg = (U1)TRUE;
             if(u1_s_pict_syncstarteflg == (U1)FALSE){
                 /* カメラ同期検知開始処理 */
                 vd_s_PictCtl_CamSyncChkSta();
@@ -1494,6 +1502,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
             if(u1_t_sts == (U1)TRUE){
                 /* カメラへ切替時MUTE解除処理待ち (min20ms) */
                 vd_s_PictCtl_SetTim((U1)PICT_TIMID_ML_PRC_T2, (U2)PICT_TIMER_ML_CAMCHG_MUTE_OFF_WAIT);
+                vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_1, (U1)0x00U, (U1)0x00U);
                 bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMON_STEP5;
             }
             break;
@@ -1694,6 +1703,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             /* カメラ通常経路から */
             else if(bfg_Pict_StsMng.u1_CamChgOffType == (U1)PICT_CAMOFF_FORM_NORMAL){
                 if(u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEON){
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_2, (U1)PICT_TOUT_LOG_NORMAL, (U1)0x00U);
                     u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
                 }
                 /* カメラ以外状態設定 */
@@ -1717,6 +1727,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             u1_t_sts = u1_g_Pict_MlNoAisMuteSetOff();
             if(u1_t_sts == (U1)TRUE){
                 if(u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEON){
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_2, (U1)PICT_TOUT_LOG_SYNCNG, (U1)0x00U);
                     u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
                 }
                 /* カメラ以外状態設定 */
@@ -1730,6 +1741,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
                 /* I2C MUTE OFF設定 */
             u1_t_sts = u1_g_Pict_MlI2cMuteSetOff();
             if(u1_t_sts == (U1)TRUE){
+                vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_2, (U1)PICT_TOUT_LOG_BPASS, (U1)0x00U);
                 u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_OFF;
                 /* アイドルシーケンスへ遷移 */
@@ -2940,7 +2952,12 @@ static void vd_s_PictCtl_CamModeHMainChkErrCycChk(void)
             if(bfg_Pict_StsMng.u1_RcvCamQualModeFlg == (U1)FALSE){
                 /* 管理するカメラのパス設定は、カメラ通常経路を保持し強制的にカメラバイパス切替を行う */
                 u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_CAMMODEFAIL;
-            }           /* N1=0 */
+            }
+            if(u1_s_pict_cammodelog_flg == (U1)TRUE){
+                vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_3, (U1)0x00U, (U1)0x00U);
+                u1_s_pict_cammodelog_flg = (U1)FALSE;
+            }
+            /* N1=0 */
             bfg_Ml_Ctl.u1_CamModeHMainChkErrCnt_N1 = (U1)PICT_CNT_INI;  
         }
      }else{
