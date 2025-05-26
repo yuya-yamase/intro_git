@@ -48,15 +48,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U4              u4_g_DateSICal(void);
 void            vd_g_DateSICalAdjustStart(void);
 void            vd_g_DateSICalAdjustReq(const U1 u1_a_RNK, const U1 u1_a_VAL, const U1 u1_a_SIGN);
 void            vd_g_DateSICalAdjustUpdate(void);
 void            vd_g_DateSICalAdjustEnd(void);
-U1              u1_g_DateSICalGpsCorIsOn(void);
-U1              u1_g_DateSICalGpsIsValid(void);
 U4              u4_g_DateSICalGetAdjDispDate(void);
-U1              u1_g_DateSICalGetDateAdiusted(void);
 U1              u1_g_DateSICalSetImpossible(void);
 U1              u1_g_DateSICalLimJdgYear(void);
 

@@ -79,8 +79,6 @@ static  U4                                      u4_s_datesi_cal_daycnt_last;
 static  U1                                      u1_s_datesi_cal_timsync_act;
 static  U1                                      u1_s_datesi_cal_adj_sts;
 static  U4                                      u4_s_datesi_cal_adj_date;
-static  U1                                      u1_s_datesi_cal_gps_on;
-static  U1                                      u1_s_datesi_cal_gps_valid;
 static  U2                                      u2_s_datesi_cal_year_min;
 static  U4                                      u4_s_datesi_cal_daycnt_min;
 static  U4                                      u4_s_datesi_cal_daycnt_absmin;
@@ -121,7 +119,6 @@ void            vd_g_DateSICalBonInit(void)
 
     u4_t_yymmddwk_update = u4_g_DaycntToYymmddwk(u4_s_datesi_cal_daycnt_last);
     (void)u1_s_DateSICalAdjustOwnClk(u4_t_yymmddwk_update);
-    vd_g_DateSICalCfgSetAdjusted((U1)FALSE);
 }
 
 /*===================================================================================================================================*/
@@ -178,8 +175,6 @@ static void     vd_s_DateSICalInit(void)
     u4_s_datesi_cal_adj_date      = (U4)YYMMDDWK_UNKNWN;
     u1_s_datesi_cal_timsync_act   = (U1)FALSE;
     u1_s_datesi_cal_adj_sts       = (U1)DATESI_CAL_ADJ_NON;
-    u1_s_datesi_cal_gps_on        = (U1)FALSE;
-    u1_s_datesi_cal_gps_valid     = (U1)FALSE;
 
     u4_t_def_yymmdd             = (U4)DATESI_CAL_DEF_MM_DD;
     u4_t_def_yymmdd            |= ((U4)u2_t_cal_default << YYMMDDWK_LSB_YR);
@@ -224,9 +219,7 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     U4                u4_t_now;
     U4                u4_t_adj;
     U4                u4_t_yymmdd;
-    U1                u1_t_rxsts;
     U1                u1_t_calsync_act;
-    U1                u1_t_result;
     ST_DATESI_CAL_RX  st_t_cal_rx;
 
     u4_t_yymmdd                          = (U4)YYMMDDWK_UNKNWN;
@@ -235,17 +228,8 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     st_t_cal_rx.u1p_date[YYMMDD_DATE_DA] = (U1)U1_MAX;
     st_t_cal_rx.u1p_date[YYMMDD_DATE_MO] = (U1)U1_MAX;
     st_t_cal_rx.u1p_date[YYMMDD_DATE_YR] = (U1)U1_MAX;
-    u1_t_rxsts                           = u1_g_DateSICalCfgCanRx(&st_t_cal_rx);
+    (void)u1_g_DateSICalCfgCanRx(&st_t_cal_rx);
     u1_t_calsync_act                     = u1_s_DateSICalDateSyncChk(st_t_cal_rx, &u4_t_yymmdd);
- 
-    if(u1_t_rxsts == (U1)DATESI_CAL_STSBIT_VALID){
-        u1_s_datesi_cal_gps_valid = st_t_cal_rx.u1_valid;
-        u1_s_datesi_cal_gps_on    = st_t_cal_rx.u1_act;
-    }
-    else{
-        u1_s_datesi_cal_gps_valid = (U1)FALSE;
-        u1_s_datesi_cal_gps_on    = (U1)FALSE;
-    }
 
     if((u1_s_datesi_cal_timsync_act == (U1)TRUE) &&
        (u1_t_calsync_act            == (U1)TRUE)){
@@ -260,24 +244,10 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     (*u4p_a_offstd_now) = u4_s_DateSICalToUpdtDate(u4_t_now, (U1)DATESI_CAL_DISP_DATE);
 
     if(u4_t_adj != (U4)YYMMDDWK_UNKNWN){
-        u1_t_result = u1_s_DateSICalAdjustOwnClk(u4_t_adj);
-        if(u1_t_result == (U1)TRUE){
-            vd_g_DateSICalCfgSetAdjusted((U1)TRUE);
-        }
+        (void)u1_s_DateSICalAdjustOwnClk(u4_t_adj);
     }
 
     u1_s_datesi_cal_timsync_act = (U1)FALSE;
-}
-
-/*===================================================================================================================================*/
-/* U4              u4_g_DateSICal(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U4              u4_g_DateSICal(void)
-{
-    return(u4_s_datesi_cal_now);
 }
 
 /*===================================================================================================================================*/
@@ -727,7 +697,6 @@ static U4       u4_g_DateSICalMakeYYMMDD(const U2 u2_a_YEAR, const U1 u1_a_MON, 
 void            vd_g_DateSICalAdjustUpdate(void)
 {
     U4  u4_t_abs_yymmdd;
-    U1  u1_t_result;
     U1  u1_t_sts;
 
     u1_t_sts        = u1_g_DateSICalSetImpossible();
@@ -735,13 +704,9 @@ void            vd_g_DateSICalAdjustUpdate(void)
     if((u1_s_datesi_cal_adj_sts == (U1)DATESI_CAL_ADJ_ACT) &&
        (u1_t_sts                == (U1)FALSE             )){
         u4_t_abs_yymmdd     = u4_s_DateSICalToUpdtDate(u4_s_datesi_cal_adj_date, (U1)DATESI_CAL_ABS_DATE);
-        u1_t_result         = u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+        (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
         u4_t_abs_yymmdd     = u4_g_DateclkYymmddwk();
         u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
-
-        if(u1_t_result == (U1)TRUE){
-            vd_g_DateSICalCfgSetAdjusted((U1)TRUE);
-        }
     }
 }
 
@@ -757,28 +722,6 @@ void            vd_g_DateSICalAdjustEnd(void)
 }
 
 /*===================================================================================================================================*/
-/* U1              u1_g_DateSICalGpsCorIsOn(void)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_DateSICalGpsCorIsOn(void)
-{
-    return(u1_s_datesi_cal_gps_on);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_DateSICalGpsIsValid(void)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_DateSICalGpsIsValid(void)
-{
-    return(u1_s_datesi_cal_gps_valid);
-}
-
-/*===================================================================================================================================*/
 /* U4              u4_g_DateSICalGetAdjDispDate(void)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -787,21 +730,6 @@ U1              u1_g_DateSICalGpsIsValid(void)
 U4              u4_g_DateSICalGetAdjDispDate(void)
 {
     return(u4_s_datesi_cal_adj_date);
-}
-
-/*===================================================================================================================================*/
-/* U1              u1_g_DateSICalGetDateAdiusted(void)                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1              u1_g_DateSICalGetDateAdiusted(void)
-{
-    U1  u1_t_return;
-    
-    u1_t_return = u1_g_DateSICalCfgGetAdiusted();
-    
-    return(u1_t_return);
 }
 
 /*===================================================================================================================================*/
