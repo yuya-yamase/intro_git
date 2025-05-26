@@ -67,6 +67,11 @@ REM popd
 echo -- motCreate -- >> all_build.log
 call U2A_BevCreateMot.bat >> all_build.log
 
+@echo OFF
+echo -- SectionAnalysis Start--
+call SectionAnalysis.bat
+echo -- SectionAnalysis End--
+
 echo ===============================
 echo Start Time: %start_time%
 echo End Time  : %time%
