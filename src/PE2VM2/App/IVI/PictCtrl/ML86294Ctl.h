@@ -40,7 +40,8 @@
 
 #define PICT_ML_MLFLZDATCYCCHK_L1               (18U)
 #define PICT_ML_MLFLZDATCYCCHK_L2               (6U)
-#define PICT_ML_MLFLZDATCYCCHK_FRZ_DREC_CNT_MAX (3U)
+#define PICT_ML_MLFLZDATCYCCHK_FRZ_DREC_OFF_CNT_MAX (3U)
+#define PICT_ML_MLFLZDATCYCCHK_FRZ_DREC_ON_CNT_MAX (3U)
 #define PICT_ML_MLFLZDATCYCCHK_ROUTE_DREC_CNT_MAX (3U)
 #define PICT_ML_MLFLZDATCYCCHK_ROUTE_BYPASS     (0x00U)
 
@@ -97,6 +98,9 @@
 
 #define PICT_ML_CAN_CAM_SIZE_NONE               (PICT_CAN_CAM_SIZE_NONE)
 #define PICT_ML_CAN_CAM_SIZE_MAX                (PICT_CAN_CAM_SIZE_1104X621 + 1)
+#define PICT_ML_CID_TYPE_MAX                    (2U)    /* 暫定 車パラI/F展開後に見直し */
+#define PICT_ML_CID_TYPE_NML                    (0U)    /* 暫定 車パラI/F展開後に見直し */
+#define PICT_ML_CID_TYPE_INTEG                  (1U)    /* 暫定 車パラI/F展開後に見直し */
 
 #define u1_PICT_ML_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_VIDEO_IC, (u), (v), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (w), (x), (y), (z)))
 #define u1_PICT_ML_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_VIDEO_IC, (w), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
@@ -112,8 +116,9 @@
 
 #define u1_PICT_MLROUTECYCCHK_GET_V_IC_STATUS2()        (Dio_ReadChannel(DIO_ID_PORT3_CH2))
 
-#define vd_PICT_MLCAMAREASET_GET_CAMAREA_KIND()        	(u1_g_PictCtl_CamKindSts())
-#define vd_PICT_MLCAMAREASET_GET_CAMAREA_SIZE()        	(u1_g_PictCtl_CamSizeSts())
+#define vd_PICT_MLCAMAREASET_GET_CAMAREA_KIND()         (u1_g_PictCtl_CamKindSts())
+#define vd_PICT_MLCAMAREASET_GET_CAMAREA_SIZE()         (u1_g_PictCtl_CamSizeSts())
+//#define vd_PICT_MLCAMAREASET_GET_CID_TYPE()             (u1_g_PictCtl_CidType())    /* 暫定 車パラI/F展開後に見直し */
 
 #define vd_PICT_MLFAILCYCCHK_V_IC_RST_L()               (Dio_WriteChannel(DIO_ID_PORT3_CH3, (Dio_LevelType)PICT_ML_IO_STS_LOW))
 #define vd_PICT_MLFAILCYCCHK_V_IC_RST_H()               (Dio_WriteChannel(DIO_ID_PORT3_CH3, (Dio_LevelType)PICT_ML_IO_STS_HIGH))
