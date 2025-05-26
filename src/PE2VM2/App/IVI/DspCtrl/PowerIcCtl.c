@@ -51,6 +51,12 @@
 
 #define POWERIC_TURNONDIAG_MUTE_MASK        (0x18U)         /* Power-IC IB2 Register MUTE Setting Bit MasK */
 #define POWERIC_TURNONDIAG_INVALID_CNT      (3U)            /* Power-IC Turn On Diag DB0[0x90].D6 Invaild Count */
+#define POWERIC_TURNONDIAG_DREC_OFFSET      (1U)            /* Power-IC Turn On Diag Drec Factor Speaker Output Offset Fail */
+#define POWERIC_TURNONDIAG_DREC_OPEN_FL     (2U)            /* Power-IC Turn On Diag Drec Factor FL Speaker Open */
+#define POWERIC_TURNONDIAG_DREC_OPEN_FR     (3U)            /* Power-IC Turn On Diag Drec Factor FR Speaker Open */
+#define POWERIC_TURNONDIAG_DREC_OPEN_RL     (4U)            /* Power-IC Turn On Diag Drec Factor RL Speaker Open */
+#define POWERIC_TURNONDIAG_DREC_OPEN_RR     (5U)            /* Power-IC Turn On Diag Drec Factor RR Speaker Open */
+#define POWERIC_TURNONDIAG_DREC_SHORT       (6U)            /* Power-IC Turn On Diag Drec Factor Speaker Short */
 
 #define POWERIC_DIAGCYC_STSCONF_CNT         (5U)            /* Power-IC Diag Cycle Diag State Confirmation Count */
 
@@ -940,6 +946,7 @@ static void vd_s_PowerIc_TurnOnDiagFunc(void)
                 if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                     /* 暫定 SPK出力オフセット異常DTCを残す */
                     /* 暫定 SPK出力オフセット異常ログを残す */
+                    vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OFFSET, (U1)0x00U);
                 }
 
                 /* Open Sts Judge */
@@ -947,22 +954,26 @@ static void vd_s_PowerIc_TurnOnDiagFunc(void)
                 if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                     /* 暫定 SPK FLオープン異常DTCを残す*/
                     /* 暫定 SPK FLオープン異常ログを残す */
+                    vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OPEN_FL, (U1)0x00U);
                 }
                 u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);      /* FR */
                 if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                     /* 暫定 SPK FRオープン異常DTCを残す */
                     /* 暫定 SPK FRオープン異常ログを残す */
+                    vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OPEN_FR, (U1)0x00U);
                 }
                 if(u1_t_speaker_type == (U1)POWERIC_SPEAKER_TYPE_4SPK){
                     u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);      /* RL */
                     if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                         /* 暫定 SPK RLオープン異常DTCを残す */
                         /* 暫定 SPK RLオープン異常ログを残す */
+                        vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OPEN_RL, (U1)0x00U);
                     }
                     u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);      /* RR */
                     if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                         /* 暫定 SPK RRオープン異常DTCを残す */
                         /* 暫定 SPK RRオープン異常ログを残す */
+                        vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OPEN_RR, (U1)0x00U);
                     }
                 }
 
@@ -980,6 +991,7 @@ static void vd_s_PowerIc_TurnOnDiagFunc(void)
                 if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                     /* 暫定 SPK短絡異常DTCを残す */
                     /* 暫定 SPK短絡異常ログを残す */
+                    vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_SHORT, (U1)0x00U);
                 }
 
                 /* Next Process */
@@ -1294,7 +1306,7 @@ static void vd_s_PowerIc_FailSafeFunc(void)
                 u1_POWERIC_SET_PIC_POFF_L();
                 if(u1_s_poweric_fail_safe_fact == (U1)POWERIC_FAILSAFE_FACT_OVERCUR){
                     /* 暫定 P-IC破壊ログを残す(DTF記憶) */
-                    /* 暫定 ダイレコ */
+                    vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_1, (U1)0x00U, (U1)0x00U);
                 }
                 else if(u1_s_poweric_fail_safe_fact == (U1)POWERIC_FAILSAFE_FACT_DIAG_OFFSET){
                     /* 暫定 SPK出力オフセット異常DTCを残す */
@@ -1304,6 +1316,7 @@ static void vd_s_PowerIc_FailSafeFunc(void)
                 }
                 else if(u1_s_poweric_fail_safe_fact == (U1)POWERIC_FAILSAFE_FACT_I2CFAIL){
                     /* 暫定 P-IC異常ログを残す */
+                    vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_2, (U1)0x00U, (U1)0x00U);
                     if(u1_s_poweric_i2c_error_cnt < (U1)POWERIC_I2CFAIL_DEVICESTOP_CNT){
                 /* --------------- P-IC Hard Mute Off --------------- */
                         u1_POWERIC_SET_PM_SYS_MUTE_L();

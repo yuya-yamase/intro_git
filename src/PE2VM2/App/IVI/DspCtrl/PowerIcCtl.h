@@ -12,6 +12,7 @@
 #include "Iohw_adc.h"
 #include "Mcu_I2c_Ctrl_private.h"
 #include "PictCtl.h"
+#include "SysEcDrc.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -56,6 +57,8 @@
 
 #define u1_POWERIC_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_POWER, (u), (v), (U1)GP_I2C_MA_SLA_4_POWER, (w), (x), (y), (z)))
 #define u1_POWERIC_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_POWER, (w), (U1)GP_I2C_MA_SLA_4_POWER, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
+
+#define vd_POWERIC_DREC_REQ(x, y, z)                (vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_POWERIC, (x), (y), (z)))
 
 #define u1_POWERIC_GET_POWER_STATE()                (u1_g_PictCtl_StartSts())
 #define u1_POWERIC_GET_V33_PERI_ON()                (Dio_ReadChannel(DIO_ID_PORT10_CH2))

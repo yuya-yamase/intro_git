@@ -1013,7 +1013,7 @@ static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_dat
                 /* SENSOR-ON = L */
                 u1_GYRODEV_SET_SENSOR_ON_L();
 
-                /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
+                vd_GYRODEV_DREC_REQ((U1)SYSECDRC_DREC_ID_4, (U1)0x00U, (U1)0x00U);
 
                 /* DTC "B15AD96"記録(異常) *//* 暫定 DTC記憶はシス検では未対応 */
                 u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
@@ -1103,7 +1103,7 @@ static void    vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_da
             /* SENSOR-ON = L */
             u1_GYRODEV_SET_SENSOR_ON_L();
 
-            /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
+            vd_GYRODEV_DREC_REQ((U1)SYSECDRC_DREC_ID_5, (U1)0x00U, (U1)0x00U);
 
             /* DTC "B15AD96"記録(異常) *//* 暫定 DTC記憶はシス検では未対応 */
             u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
