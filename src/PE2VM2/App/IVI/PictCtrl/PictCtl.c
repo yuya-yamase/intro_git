@@ -1401,8 +1401,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
     switch (bfg_Pict_SeqMlMng.u1_PrcNo)
     {
         case PICT_SEQ_ML_CAMON_STEP0:
-            u1_t_mode = u1_g_PictCtl_GetCamDiagMode();
-            if(u1_t_mode == (U1)FALSE){
+            if(u1_s_pict_syncstarteflg == (U1)FALSE){
                 /* カメラ同期検知開始処理 */
                 vd_s_PictCtl_CamSyncChkSta();
             }
@@ -2580,31 +2579,15 @@ U1 u1_g_PictCtl_CamStsGet(void)
     return(u1_t_CamSts);
 }
 
-/*============================================================================
- * カメラダイアグモード取得処理
- *----------------------------------------------------------------------------
- * モジュール名 : u1_g_PictCtl_GetCamDiagMode
- * 機能         : カメラダイアグモード取得処理
- * 処理内容     : カメラダイアグモードの条件を確認し、ON/OFFを返す
- * 入力（引数） : 無し
- * 出力（戻値） : BYTE bySts : カメラダイアグモード状態
- *              :               ON : カメラダイアグモード、OFF : その他モード
- * 制限事項     : 無し
- * 作成者       : NOAH)王
- * ---------------------------------------------------------------------------
- * 変更履歴     : 2023.04.10 新規作成
- * 変更者       : NOAH)王 巧燕
- ===========================================================================*/
+/*===================================================================================================================================*/
+/*  U1 u1_g_PictCtl_GetCamDiagMode(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 U1 u1_g_PictCtl_GetCamDiagMode(void)
 {
-    U1 u1_t_CamSts;
-    
-    u1_t_CamSts = (U1)FALSE;
-    if(bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_CAMON) {
-        u1_t_CamSts = (U1)TRUE;
-    }
-    
-    return(u1_t_CamSts);
+    return(bfg_Pict_StsMng.u1_DiagMode);
 }
 
 /*===================================================================================================================================*/
@@ -3529,6 +3512,82 @@ static void vd_s_PictCtl_CamKindNtySnd(void)
 
     /* カメラ種別判別通知定期送信タイマを再セット */
     vd_s_PictCtl_SetTim((U1)PICT_TIMID_CAMKIND_SENDCYC, (U2)PICT_TIMER_TABCMD_SENDCYC);
+}
+
+/*===================================================================================================================================*/
+/*  void vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE)                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE)
+{
+    U1 u1_t_act_flg;
+    U1 u1_t_cam_mode;
+
+    u1_t_act_flg = (U1)TRUE;
+
+    /* パラメータチェック */
+    if(u1_a_MODE > PICT_DIAG_MOD_CAMON){
+        u1_t_act_flg = (U1)FALSE;
+    }
+
+    /* ダイアグモード差分チェック */
+    if(bfg_Pict_StsMng.u1_DiagMode == u1_a_MODE){
+        u1_t_act_flg = (U1)FALSE;
+    }
+
+    u1_t_cam_mode = u1_g_PictCtl_CamStsGet();
+    if((u1_t_cam_mode == (U1)TRUE)&&(u1_a_MODE == PICT_DIAG_MOD_CAMON)){
+        /* カメラダイアグモード⇔カメラモード間の遷移は顧客仕様にて禁止されている */
+        u1_t_act_flg = (U1)FALSE;
+    }
+
+    if(u1_t_act_flg == (U1)TRUE){
+        /* カメラダイアグモードON */
+        if((bfg_Pict_StsMng.u1_DiagMode != (U1)PICT_DIAG_MOD_CAMON) &&(u1_a_MODE == (U1)PICT_DIAG_MOD_CAMON)){
+            /* カメラダイアグモード⇔カメラモード間の遷移が禁止されている */
+            if(u1_t_cam_mode == (U1)FALSE){
+                /* 画質モード通知(カメラ以外)受信停止 */
+                bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg = (U1)PICT_RCV_NOCAMQUAL_STOP;
+                /*  T_SIP_NOTIF_OUT待ちタイマ停止 */
+                vd_s_PictCtl_ClrTim((U1)PICT_TIMID_ML_T_SIP_NOTIF_OUT);
+                /* カメラへ切替シーケンス要求 */
+                vd_s_PictCtl_SetMlSeqReq((U1)PICT_SEQ_ML_CAMONCHG);
+            }
+        }
+        /* カメラダイアグモードOFF(カメラダイアグモードON→ダイアグモードON) */
+        else if((bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_CAMON) && (u1_a_MODE == (U1)PICT_DIAG_MOD_ON)){
+            /* カメラON⇒カメラOFFの処理 */
+            vd_s_PictCtl_CamChgOn2Off();
+        }
+        /* カメラダイアグモードOFF(カメラダイアグモードON→ダイアグモードOFF) */
+        else if((bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_CAMON) && (u1_a_MODE == (U1)PICT_DIAG_MOD_OFF)){
+            /* DISP-REQ-GPIO0=Hiの場合、カメラ以外へ切替シーケンス要求 */
+            if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
+                /* カメラへ切替シーケンス要求 */
+                vd_s_PictCtl_SetMlSeqReq((U1)PICT_SEQ_ML_CAMONCHG);
+            }
+            else{
+                /* カメラON⇒カメラOFFの処理 */
+                vd_s_PictCtl_CamChgOn2Off();
+            }
+        }
+        /* ダイアグモードOFF(ダイアグモードON→ダイアグモードOFF) */
+        else if((bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_ON) && (u1_a_MODE == (U1)PICT_DIAG_MOD_OFF)){
+            /* DISP-REQ-GPIO0=Hiの場合、カメラ以外へ切替シーケンス要求 */
+            if (bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
+                /* カメラへ切替シーケンス要求 */
+                vd_s_PictCtl_SetMlSeqReq((U1)PICT_SEQ_ML_CAMONCHG);
+            }
+        }
+        /* その他 */
+        else{
+            /* 何にもしない */
+        }
+        /* ダイアグモード更新 */
+        bfg_Pict_StsMng.u1_DiagMode = u1_a_MODE;
+    }
 }
 
 
