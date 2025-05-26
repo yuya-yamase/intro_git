@@ -26,7 +26,7 @@
 /* MCAL                  */
 /* Memory                */
 /* Application           */
-#include "Mcu_PwrCtrl.h"
+#include "PwrCtrl_Main.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -81,7 +81,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 #if (__RUN_M_CHK_1ST__ == 1)
     static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
         &u1_g_oXCANEcuShtdwnOk,
-        &u1_g_Mcu_PwrCtrl_ShtdwnOk
+        &u1_g_PwrCtrlMainShtdwnOk
     };
 
     U1                        u1_t_1st;
