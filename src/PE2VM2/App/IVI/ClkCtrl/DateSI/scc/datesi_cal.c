@@ -219,7 +219,6 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     U4                u4_t_now;
     U4                u4_t_adj;
     U4                u4_t_yymmdd;
-    U1                u1_t_rxsts;
     U1                u1_t_calsync_act;
     ST_DATESI_CAL_RX  st_t_cal_rx;
 
