@@ -18,6 +18,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "x_spi_ivi_sub1_private.h"
 #include    "x_spi_ivi_sub1_diag.h"
+#include    "SysEcDrc.h"
+#include    "PictCtl.h"
+#include    "DtcCtl.h"
+#include    "RobCtl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,6 +49,11 @@
 #define    XSPI_IVI_DIAG_DATA_RQST          (0x12U)
 #define    XSPI_IVI_DIAG_DATA_RES           (0x13U)
 #define    XSPI_IVI_DIAG_REC_NOTIFY         (0x14U)
+#define    XSPI_IVI_DIAG_MODE               (0x30U)
+#define    XSPI_IVI_DIAG_DTCREC_SEND        (0x41U)
+#define    XSPI_IVI_DIAG_DTCREC_RECV        (0x42U)
+#define    XSPI_IVI_DIAG_ROBREC_SEND        (0x43U)
+#define    XSPI_IVI_DIAG_ROBREC_RECV        (0x44U)
 
 #define    XSPI_IVI_DIAG_SIZE               (248U)
 #define    XSPI_IVI_DIAG_LOG_SIZE           (5U)
@@ -53,6 +62,12 @@
 #define    XSPI_IVI_DIAG_READ_REQ_CANCEL    (1U)
 #define    XSPI_IVI_DIAG_READ_RECNOTIF_VALI (0U)
 #define    XSPI_IVI_DIAG_READ_RECNOTIF_FAIL (0xFFU)
+
+#define    XSPI_IVI_DIAG_DTCREC_SEND_SIZE   (4U)
+#define    XSPI_IVI_DIAG_ROBREC_SEND_SIZE   (3U)
+
+
+#define    XSPI_IVI_DIAG_LOGDATA_MAXSIZE    (1080U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -61,7 +76,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4              u4_s_xspi_ivi_diagdatasize;     /*ダイレコログサイズ格納用*/
 static U2              u2_s_xspi_ivi_diagdatanum;      /*ダイレコログ分割数*/
-static U1              u1_sp_xspi_ivi_diagdata[1000];   /*暫定で1000byte分のダイレコログデータ格納できるように準備*/
+static U1              u1_sp_xspi_ivi_diagdata[XSPI_IVI_DIAG_LOGDATA_MAXSIZE];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -88,7 +103,7 @@ void            vd_g_XspiIviSub1DiagInit(void)
 {
     u4_s_xspi_ivi_diagdatasize = (U4)0U;
     u2_s_xspi_ivi_diagdatanum = (U2)0U;
-    vd_g_MemfillU1(&u1_sp_xspi_ivi_diagdata[0], (U1)0U, (U4)1000U); /*暫定サイズ*/
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_diagdata[0], (U1)0U, (U4)XSPI_IVI_DIAG_LOGDATA_MAXSIZE); /*暫定サイズ*/
 }
 
 /*===================================================================================================================================*/
@@ -128,6 +143,15 @@ void            vd_g_XspiIviSub1DiagAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a
     case XSPI_IVI_DIAG_REC_NOTIFY:
         vd_s_XspiIviSub1_DiagLogRecieveNotify(u1_ap_XSPI_ADD,u2_a_DATA_SIZE);
         break;
+    case XSPI_IVI_DIAG_MODE:
+        vd_g_PictCtl_RcvDiagModInd(u1_ap_XSPI_ADD[1]);
+        break;
+    case XSPI_IVI_DIAG_DTCREC_RECV:
+        vd_g_DtcCtl_RecDtc(u1_ap_XSPI_ADD[1],u1_ap_XSPI_ADD[2],u1_ap_XSPI_ADD[3]);
+        break;
+    case XSPI_IVI_DIAG_ROBREC_RECV:
+        vd_g_RobCtl_RecRob(u1_ap_XSPI_ADD[1],u1_ap_XSPI_ADD[2]);
+        break;
     
     default:
         break;
@@ -160,8 +184,7 @@ static void            vd_s_XspiIviSub1_DiagSizeRespons(void)
     U1     u1_tp_data[XSPI_IVI_DIAG_LOG_SIZE];
 
     /*ダイレコログサイズを取得*/
-    /*サイズ取得のタイミングでダイレコログデータも取得*/
-    /*シス検は0固定のためskip*/
+    vd_g_SysEcDrc_SendDateSet(&u4_s_xspi_ivi_diagdatasize, &u1_sp_xspi_ivi_diagdata[0], (U4)XSPI_IVI_DIAG_LOGDATA_MAXSIZE);
 
     u2_s_xspi_ivi_diagdatanum = (U2)((u4_s_xspi_ivi_diagdatasize + (U4)242U) / (U4)XSPI_IVI_DIAG_LOGDATA_SIZE);
 
@@ -278,6 +301,48 @@ static void            vd_s_XspiIviSub1_DiagLogDataRespons(U2 u2_a_OFFSET_DATA)
     vd_g_MemcpyU1(&u1_tp_data[5], &u1_sp_xspi_ivi_diagdata[u4_t_data_buf], (U4)u1_t_data_size);
 
     vd_s_XspiIviSub1_DiagDataToQueue(&u1_tp_data[0],(U1)XSPI_IVI_DIAG_SIZE);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1_DiagDtcrecSend(const U1 u1_a_CODE, const U1 u1_a_DIAGCODE, const U1 u1_a_STS)                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_a_CODE       :  区分コード                                                                                     */
+/*                  u1_a_DIAGCODE   :  開発ダイアグコード                                                                              */
+/*                  u1_a_STS        :  ステータス                                                                                     */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1_DiagDtcrecSend(const U1 u1_a_CODE, const U1 u1_a_DIAGCODE, const U1 u1_a_STS)
+{
+    U1     u1_s_DTCSIZE = (U1)XSPI_IVI_DIAG_DTCREC_SEND_SIZE;
+    U1     u1_tp_data[XSPI_IVI_DIAG_DTCREC_SEND_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_DIAG_DTCREC_SEND;
+    u1_tp_data[1] = u1_a_CODE;
+    u1_tp_data[2] = u1_a_DIAGCODE;
+    u1_tp_data[3] = u1_a_STS;
+
+    vd_s_XspiIviSub1_DiagDataToQueue(&u1_tp_data[0],u1_s_DTCSIZE);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1_DiagRobrecSend(const U1 u1_a_CODE, const U1 u1_a_DIAGCODE)                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_a_CODE       :  区分コード                                                                                     */
+/*                  u1_a_DIAGCODE   :  開発ダイアグコード                                                                              */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1_DiagRobrecSend(const U1 u1_a_CODE, const U1 u1_a_DIAGCODE)
+{
+    U1     u1_s_ROBSIZE = (U1)XSPI_IVI_DIAG_ROBREC_SEND_SIZE;
+    U1     u1_tp_data[XSPI_IVI_DIAG_ROBREC_SEND_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_DIAG_ROBREC_SEND;
+    u1_tp_data[1] = u1_a_CODE;
+    u1_tp_data[2] = u1_a_DIAGCODE;
+
+    vd_s_XspiIviSub1_DiagDataToQueue(&u1_tp_data[0],u1_s_ROBSIZE);
 }
 
 /*===================================================================================================================================*/

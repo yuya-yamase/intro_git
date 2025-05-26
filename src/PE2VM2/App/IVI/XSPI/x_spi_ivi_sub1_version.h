@@ -37,6 +37,7 @@
 void            vd_g_XspiIviSub1VersionInit(void);
 void            vd_g_XspiIviSub1VersionMainTask(void);
 void            vd_g_XspiIviSub1VersionAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE);
+void            vd_g_XspiIviSub1VersionGsenPut(const U1 * u1_ap_DATA);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
