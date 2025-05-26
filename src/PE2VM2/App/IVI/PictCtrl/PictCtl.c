@@ -230,6 +230,10 @@
 #define PICT_CAM_DET_OFF                                (0x01U) /* OFF          */
 #define PICT_CAM_DET_ON                                 (0x02U) /* ON           */
 
+#define PICT_TOUT_MUTEOFF                               (0U)
+#define PICT_TOUT_MUTEON                                (1U)
+#define PICT_TOUT_MUTEOFF_WAIT                          (2U)
+
 #define PICT_PORT_V33_PERI                              (DIO_ID_PORT10_CH2)
 #define PICT_PORT_LOW_POWER_ON                          (DIO_ID_PORT10_CH5)
 #define PICT_PORT_MM_STBY_N                             (DIO_ID_PORT10_CH11)
@@ -629,7 +633,7 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_mliniflg = (U1)FALSE;
     u1_s_pict_mlcmp_old = (U1)FALSE;
     u1_s_pict_vicstasts = (U1)FALSE;
-    u1_s_pict_camoff_muteoff_flg = (U1)FALSE;
+    u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF;
     u1_s_pict_camsynccyc_flg = (U1)FALSE;
     u1_s_pict_camsynccyc_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP0;
     u1_s_pict_camsyncng_step  = (U1)PICT_SEQ_CAMONSYNCNG_STEP0;
@@ -1498,6 +1502,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
                 if(bfg_Ml_Ctl.u1_SyncChkRlt == (U1)PICT_CAM_SYNC_CHK_NG){
                    /* カメラ切替のPM-V-MUTE制御実施トリガ */
                     vd_g_PictMute_CamMuteReq((U1)FALSE);
+                    u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF;
                     /* アイドルシーケンスへ遷移 */
                     vd_s_PictCtl_ClrMlSeqInf();
                 }
@@ -1545,6 +1550,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
             }     
             /* カメラ切替のPM-V-MUTE制御実施トリガ */
             vd_g_PictMute_CamMuteReq((U1)FALSE);
+            u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF;
 
             /* アイドルシーケンスへ遷移 */
             vd_s_PictCtl_ClrMlSeqInf();
@@ -1638,6 +1644,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
                     if(bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_TOUT) {
                         /* メインマイコン異常でのPM-V-MUTE制御実施トリガ */
                         vd_g_PictMute_CamMuteReq((U1)TRUE);
+                        u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEON;
                     }
                     bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMOFF_STEP3;
                 }
@@ -1670,7 +1677,9 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             }
             /* カメラ通常経路から */
             else if(bfg_Pict_StsMng.u1_CamChgOffType == (U1)PICT_CAMOFF_FORM_NORMAL){
-
+                if(u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEON){
+                    u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
+                }
                 /* カメラ以外状態設定 */
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_OFF;
 
@@ -1679,7 +1688,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             }
             /* カメラバイパス経路から */
             else {
-                if(bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_TOUT) {
+                if(u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEON) {
                     bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMOFF_STEP7;
                 } else {
                     bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMOFF_STEP8;
@@ -1691,6 +1700,9 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             /* 映像IC ヒーコン部以外のMUTE OFF */
             u1_t_sts = u1_g_Pict_MlNoAisMuteSetOff();
             if(u1_t_sts == (U1)TRUE){
+                if(u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEON){
+                    u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
+                }
                 /* カメラ以外状態設定 */
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_OFF;
                 /* アイドルシーケンスへ遷移 */
@@ -1702,7 +1714,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
                 /* I2C MUTE OFF設定 */
             u1_t_sts = u1_g_Pict_MlI2cMuteSetOff();
             if(u1_t_sts == (U1)TRUE){
-                u1_s_pict_camoff_muteoff_flg = (U1)TRUE;
+                u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_OFF;
                 /* アイドルシーケンスへ遷移 */
                 vd_s_PictCtl_ClrMlSeqInf();
@@ -1743,11 +1755,11 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
 /*===================================================================================================================================*/
 static void vd_s_PictCtl_CamOffMuteOff(void)
 {
-    if((u1_s_pict_camoff_muteoff_flg == (U1)TRUE) &&
-        (bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_END)){
+    if((u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEOFF_WAIT) &&
+       (bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_END)){
          /* PM-V-MUTE制御実施トリガ */
          vd_g_PictMute_CamMuteReq((U1)FALSE);
-            u1_s_pict_camoff_muteoff_flg = (U1)FALSE;
+         u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF;
         }
 }
 
