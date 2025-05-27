@@ -40,6 +40,7 @@
 #include "IVI_PictCtrl_Main.h"
 #include "IVI_GyrCtrl_Main.h"
 #include "IVI_DspCtrl_Main.h"
+#include "IVI_DrcCtrl_Main.h"
 
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
@@ -192,6 +193,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Non-Platform Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_Ivi_DrcCtrl_Main,            (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

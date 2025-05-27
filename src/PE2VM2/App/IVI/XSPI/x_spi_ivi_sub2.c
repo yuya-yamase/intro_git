@@ -442,12 +442,12 @@ void            vd_g_XspiIviSub2Send(U1 * u1_ap_xspi_add)
         u1_s_xspi_ivi_pulsenum_receive_finish_flg = (U1)FALSE;
         u1_s_xspi_ivi_pulsewid_receive_finish_flg = (U1)FALSE;
     }
-    
-    
+
+    vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
+
     /*通信開始応答かそうじゃないか*/
     if((u1_s_xspi_ivi_com_start_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_com_start == (U1)FALSE)) {
         /* 通信開始応答 */
-        vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_COM_START_RES_LENGTH,(U2)0U);
         u1_ap_xspi_add[8] = (U1)0x02;
         u1_ap_xspi_add[9] = (U1)0x00;
@@ -486,8 +486,6 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
     /*定期送信処理と初回送信処理の切り分け*/
     if(u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO] >= u4_s_XSPI_IVI_TASK_SEND_CNT){
         /*定期送信処理*/
-        vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
-
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_LENGTH,(U2)0U);
         vd_g_MemcpyU1(&u1_ap_xspi_add[8], &u1_sp_xspi_ivi_gyro_data[0], (U4)XSPI_IVI_DATA_LENGTH);
         u1_ap_xspi_add[8]  = (U1)0x05; /*SubType*/
@@ -500,8 +498,6 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
         /*20msごとに*/
         if(u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO_INI] >= u4_s_XSPI_IVI_TASK_INIT_SEND_CNT) {
             /*初回送信*/
-            vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
-
             u2_t_buf_cnt = u2_s_xspi_ivi_ini_buf_cnt * (U2)1016U;
 
             vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_INIT_DATA_LENGTH,u2_s_xspi_ivi_ini_buf_cnt);
@@ -535,7 +531,6 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
         }
         /*Gyroセンサデータ取得処理*/
     }else if(u1_s_xspi_ivi_gyroint_set_response_flg == (U1)TRUE){
-        vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_INT_SET_LENGTH,(U2)0U);
         u1_ap_xspi_add[8]  = (U1)XSPI_IVI_GYRO_INT_SET_RES; /*SubType*/
         u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
@@ -545,7 +540,6 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
         u1_s_xspi_ivi_gyroint_set_response_flg = (U1)FALSE;
 
     }else if(u1_s_xspi_ivi_gyroint_get_response_flg == (U1)TRUE){
-        vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_INT_GET_LENGTH,(U2)0U);
         u1_ap_xspi_add[8]  = (U1)XSPI_IVI_GYRO_INT_GET_RES; /*SubType*/
         u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
@@ -555,7 +549,6 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
         u1_s_xspi_ivi_gyroint_get_response_flg = (U1)FALSE;
 
     }else if(u1_s_xspi_ivi_gyroint_output_response_flg == (U1)TRUE){
-        vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_INT_OUT_LENGTH,(U2)0U);
         u1_ap_xspi_add[8]  = (U1)XSPI_IVI_GYRO_INT_OUT_RES; /*SubType*/
         u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/

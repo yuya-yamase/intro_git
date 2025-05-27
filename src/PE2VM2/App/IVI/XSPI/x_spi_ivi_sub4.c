@@ -35,6 +35,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define XSPI_IVI_SFT_04                     ( 4U)
 #define XSPI_IVI_SFT_08                     ( 8U)
 #define XSPI_IVI_SFT_16                     (16U)
 #define XSPI_IVI_SFT_24                     (24U)
@@ -55,11 +56,21 @@
 #define XSPI_IVI_CANCOMMAND_ID              (0x434E4454U)
 #define XSPI_IVI_CANCOMMAND_BUS_REQ         (0x03U)
 #define XSPI_IVI_CANCOMMAND_SEND            (0x04U)
+#define XSPI_IVI_CANCOMMAND_UTC_SEND        (0x21U)
 
 #define XSPI_IVI_CAN_COMMNDDATA_SIZE        (24U)
 #define XSPI_IVI_CAN_BUSSTS_SIZE            (9U)
 #define XSPI_IVI_CAN_COMMAND_BUF_MAX        (128U)
 #define XSPI_IVI_CAN_COMMAND_SIZE_MAX       (256U)
+
+/*UTC*/
+#define XSPI_IVI_CLOCKUTC_SEND_TASK         (1000U / XSPI_IVI_TASK_TIME)
+#define XSPI_IVI_CLOCKUTC_COMMAND_SIZE      (14U)
+#define XSPI_IVI_CLOCKUTC_DATA_SIZE         (9U)
+#define XSPI_IVI_WEEK_SUNDAY_RTC            (7U)
+#define XSPI_IVI_WEEK_SUNDAY_UTC            (0U)
+
+#define XSPI_IVI_MASK_04                    (0x0FU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -86,6 +97,10 @@ static U1       u1_sp_Xspi_Ivi_CanBusSts2M[4];
 static U1       u1_sp_Xspi_Ivi_CanBusSts5M[4];
 static U1       u1_sp_Xspi_Ivi_CanBusSts2M_pre[4];
 static U1       u1_sp_Xspi_Ivi_CanBusSts5M_pre[4];
+
+static U1       u1_s_Xspi_Ivi_ClockUtc_recflg;
+static U1       u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CLOCKUTC_DATA_SIZE];
+static U1       u1_sp_Xspi_Ivi_ClockUtcdata_pre[XSPI_IVI_CLOCKUTC_DATA_SIZE];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -95,6 +110,8 @@ static U2       u2_s_XspiIviSub4SendCanMsg(U1 * u1_ap_buf, const U2 u2_a_COM_LEN
 static void     vd_s_XspiIviCANGWStuckBuff(const U4 u4_a_TIME, const U4 u4_a_MSG, const U1 u1_a_DLC, const U1 * u1_a_SRC);
 static U4       u4_s_XspiIviBinarySearch(U4 canid);
 static void     vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
+static U1       u1_s_XspiIviClockUTCDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
+static void     vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -132,6 +149,10 @@ void            vd_g_XspiIviSub4Init(void)
     u1_sp_Xspi_Ivi_CanBusSts5M_pre[1] = (U1)0U;   /*正常*/
     u1_sp_Xspi_Ivi_CanBusSts5M_pre[2] = (U1)0U;   /*正常*/
     u1_sp_Xspi_Ivi_CanBusSts5M_pre[3] = (U1)3U;   /*通常動作状態*/
+
+    u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)FALSE;
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_ClockUtcdata[0], (U1)0U, (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_ClockUtcdata_pre[0], (U1)0U, (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
 }
 
 /*===================================================================================================================================*/
@@ -204,6 +225,7 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
     U2          u2_t_datatype;                          /* CAN Command データタイプ*/
     U2          u2_t_cancommandbuf;                     /* CAN Command データバッファ*/
     U2          u2_t_cancommandsize;                    /* CAN Command データサイズ*/
+    U1          u1_t_cd_size;
 
     /* CAN Command Header Field 解析処理 */
     //u4_t_com_ID     = (U4)((u1_ap_SUB4_ADD[0] << XSPI_IVI_SFT_24) | (u1_ap_SUB4_ADD[1] << XSPI_IVI_SFT_16) | (u1_ap_SUB4_ADD[2] << XSPI_IVI_SFT_08) | u1_ap_SUB4_ADD[3]);
@@ -261,6 +283,11 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         
         if(u4_t_msg_aubistid != (U4)0xFFFFFFFFU){
         /* フレーム送信処理 */
+            if(u4_t_msg_aubistid ==(U4)MSG_AVN1S97_TXCH0){
+                u1_t_cd_size = u1_g_PictCtl_CdsizeSnd();
+                u1_tp_can_data[6] = u1_tp_can_data[6] & (U1)XSPI_IVI_MASK_04;
+                u1_tp_can_data[6] |= (U1)(u1_t_cd_size << XSPI_IVI_SFT_04);
+            }
             (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
         }
 
@@ -476,10 +503,27 @@ static U2              u2_s_XspiIviSub4SendCanCmd(U1 * u1_ap_buf)
     U1          u1_t_data_size_ref;
     U1          u1_t_data_size;
     U1          u1_t_rslt;
+    U1          u1_t_clock_event_jdg;
 
     u2_t_com_num = (U2)0x0000U;
     u2_t_com_len = (U2)0x0000U;
     u1_t_data_size = (U2)0U;
+
+    if(u1_s_Xspi_Ivi_ClockUtc_recflg == (U1)FALSE) {
+        if(u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_CLOCK_UTC] >= (U4)XSPI_IVI_CLOCKUTC_SEND_TASK) {
+            /*時計情報取得前*/
+            vd_s_XspiIviClockUTCStuckBuff((U1)XSPI_IVI_CANCOMMAND_UTC_SEND,(U2)XSPI_IVI_CLOCKUTC_COMMAND_SIZE);
+            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_CLOCK_UTC] = (U4)0U;
+        }
+    } else {
+        /*時計情報変化時*/
+        u1_t_clock_event_jdg = u1_s_XspiIviClockUTCDataEventJdg(&u1_sp_Xspi_Ivi_ClockUtcdata[0],&u1_sp_Xspi_Ivi_ClockUtcdata_pre[0],(U1)XSPI_IVI_CLOCKUTC_DATA_SIZE);
+        if(u1_t_clock_event_jdg == (U1)TRUE) {
+            vd_s_XspiIviClockUTCStuckBuff((U1)XSPI_IVI_CANCOMMAND_UTC_SEND,(U2)XSPI_IVI_CLOCKUTC_COMMAND_SIZE);
+            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_CLOCK_UTC] = (U4)0U;
+        }
+        vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_ClockUtcdata_pre[0], &u1_sp_Xspi_Ivi_ClockUtcdata[0], (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
+    }
 
     /* CAN Commandデータ格納処理 */
     /* skip */
@@ -1126,6 +1170,149 @@ static void            vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2
         vd_g_XspiIviQueueWriCanCommandData(u1_tp_cancomamand_data,(U2)u1_t_cancommand_data_size);
         /*CANコマンドデータサイズをキューに格納*/
         u1_g_XspiIviQueueWriCanCommandSize(&u1_t_cancommand_data_size);
+    }
+    else{
+        /*キューに空き容量がないため読み飛ばし*/
+        /* do nothing */
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub4ClockUTCPut(const U1* u1_ap_DATA)                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    UTC時刻情報取得                                                                                                   */
+/*  Arguments:      u1_ap_DATA : UTC時刻情報                                                                                          */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviClockUTCPut(const U1* u1_ap_DATA)
+{
+    U1 u1_t_year_hi;
+    U1 u1_t_year_lo;
+    U1 u1_t_week;
+
+    /*BCDデータで格納*/
+    /*second*/
+    u1_sp_Xspi_Ivi_ClockUtcdata[0] = (u1_ap_DATA[5] % (U1)10U) & 0x0FU;
+    u1_sp_Xspi_Ivi_ClockUtcdata[0] |= ((u1_ap_DATA[5] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    /*minute*/
+    u1_sp_Xspi_Ivi_ClockUtcdata[1] = (u1_ap_DATA[4] % (U1)10U) & 0x0FU;
+    u1_sp_Xspi_Ivi_ClockUtcdata[1] |= ((u1_ap_DATA[4] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    /*hour*/
+    u1_sp_Xspi_Ivi_ClockUtcdata[2] = (u1_ap_DATA[3] % (U1)10U) & 0x0FU;
+    u1_sp_Xspi_Ivi_ClockUtcdata[2] |= ((u1_ap_DATA[3] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    /*day*/
+    u1_sp_Xspi_Ivi_ClockUtcdata[3] = (u1_ap_DATA[2] % (U1)10U) & 0x0FU;
+    u1_sp_Xspi_Ivi_ClockUtcdata[3] |= ((u1_ap_DATA[2] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    /*month*/
+    u1_sp_Xspi_Ivi_ClockUtcdata[4] = (u1_ap_DATA[1] % (U1)10U) & 0x0FU;
+    u1_sp_Xspi_Ivi_ClockUtcdata[4] |= ((u1_ap_DATA[1] / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    /*year*/
+    u1_t_year_hi = u1_ap_DATA[0] / (U1)100U;
+    u1_t_year_lo = u1_ap_DATA[0] % (U1)100U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[5] = (u1_t_year_hi % (U1)10U) & 0x0FU;
+    u1_sp_Xspi_Ivi_ClockUtcdata[5] |= ((u1_t_year_hi / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    u1_sp_Xspi_Ivi_ClockUtcdata[6] = (u1_t_year_lo % (U1)10U) & 0x0FU;
+    u1_sp_Xspi_Ivi_ClockUtcdata[6] |= ((u1_t_year_lo / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    /*week*/
+    u1_t_week = u1_ap_DATA[6];
+    if(u1_t_week == (U1)XSPI_IVI_WEEK_SUNDAY_RTC) {
+        u1_t_week = (U1)XSPI_IVI_WEEK_SUNDAY_UTC;
+    }
+    u1_sp_Xspi_Ivi_ClockUtcdata[7] = (u1_t_week % (U1)10U) & 0x0FU;
+    u1_sp_Xspi_Ivi_ClockUtcdata[7] |= ((u1_t_week / (U1)10U) << XSPI_IVI_SFT_04) & 0xF0U;
+    /*sts*/
+    u1_sp_Xspi_Ivi_ClockUtcdata[8] = u1_ap_DATA[7];
+
+    if(u1_sp_Xspi_Ivi_ClockUtcdata[8] == (U1)1U) {
+        u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)TRUE;
+    } else {
+        u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)FALSE;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  U1          u1_s_XspiIviClockUTCDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE)                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    時刻情報のイベント判定                                                                                             */
+/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
+/*                  u2_a_data_size : Data Size                                                                                       */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1            u1_s_XspiIviClockUTCDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE)
+{
+    U1     u1_t_judge;
+    U4     u4_t_loop;
+
+    u1_t_judge = (U1)FALSE;
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)u1_a_SIZE; u4_t_loop++){
+        if(u1_ap_DATA[u4_t_loop] != u1_ap_DATA_PRE[u4_t_loop]){
+            u1_t_judge = (U1)TRUE;
+        }
+    }
+
+    return(u1_t_judge);
+}
+
+/*===================================================================================================================================*/
+/*  void         vd_s_XspiIviClockUTCStuckBuff(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    UTC時計情報をバッファにスタックしていく処理                                                                          */
+/*  Arguments:      u2_a_TYPE : Command Data Type                                                                                    */
+/*                  u2_a_SIZE : Command Data Length                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE)
+{
+    U1          u1_tp_utc_data[XSPI_IVI_CAN_COMMNDDATA_SIZE];
+    U1          u1_t_utc_data_size;
+    U1          u1_t_jdg;
+    U4          u4_t_time;
+
+    u1_t_jdg = (U1)FALSE;
+    vd_g_MemfillU1(&u1_tp_utc_data[0], (U1)0U, (U4)XSPI_IVI_CAN_COMMNDDATA_SIZE);
+
+    /*8byteアライメント*/
+    if((u2_a_SIZE > (U2)8U) && (u2_a_SIZE <= (U2)16U)) {
+        u1_t_utc_data_size = (U1)XSPI_IVI_HEADER + (U1)16U;
+    } else if(u2_a_SIZE <= (U2)8U){
+        u1_t_utc_data_size = (U1)XSPI_IVI_HEADER + (U1)8U;
+    } else {
+
+    }
+    u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_utc_data_size);
+
+    if(u1_t_jdg == (U1)TRUE)
+    {
+        /*FRT*/
+        u4_t_time = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
+        u4_t_time = (U4)(u4_t_time / MCU_FRT_1MS);
+
+        /*キューに空き容量があるためデータ格納*/
+        /*識別値*/
+        u1_tp_utc_data[0] = (U1)0x43U;
+        u1_tp_utc_data[1] = (U1)0x4EU;
+        u1_tp_utc_data[2] = (U1)0x44U;
+        u1_tp_utc_data[3] = (U1)0x54U;
+        /*データ長*/
+        u1_tp_utc_data[4] = 0U;        /*データタイプがU1に収まるためByte4は0固定*/
+        u1_tp_utc_data[5] = (U1)u1_t_utc_data_size - (U2)XSPI_IVI_HEADER;
+        /*データサイズ*/
+        u1_tp_utc_data[6] = (U1)u1_a_ID;
+        u1_tp_utc_data[7] = (U1)0U;
+        u1_tp_utc_data[8] = (U1)u1_a_ID;
+
+        /*tickTime*/
+        u1_tp_utc_data[9] = (U1)((u4_t_time >> XSPI_IVI_SFT_24) & 0x000000FFU);
+        u1_tp_utc_data[10] = (U1)((u4_t_time >> XSPI_IVI_SFT_16) & 0x000000FFU);
+        u1_tp_utc_data[11] = (U1)((u4_t_time >> XSPI_IVI_SFT_08) & 0x000000FFU);
+        u1_tp_utc_data[12] = (U1)(u4_t_time & 0x000000FFU);
+        /*UTC data*/
+        vd_g_MemcpyU1(&u1_tp_utc_data[13], &u1_sp_Xspi_Ivi_ClockUtcdata[0], (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
+
+        /*CANコマンドデータをキューに格納*/
+        vd_g_XspiIviQueueWriCanCommandData(u1_tp_utc_data,(U2)u1_t_utc_data_size);
+        /*CANコマンドデータサイズをキューに格納*/
+        u1_g_XspiIviQueueWriCanCommandSize(&u1_t_utc_data_size);
     }
     else{
         /*キューに空き容量がないため読み飛ばし*/

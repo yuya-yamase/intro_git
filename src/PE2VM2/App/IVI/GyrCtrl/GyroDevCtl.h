@@ -13,6 +13,8 @@
 #include "x_spi_ivi_sub2.h"
 #include "CarSpdPls.h"
 #include "PictCtl.h"
+#include "SysEcDrc.h"
+#include "DtcCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -70,10 +72,16 @@
 #define GYRODEV_LAST_PLS_STOP                       (CARSPDPLS_PLS_STP_CYC)
 #define GYRODEV_LAST_PLS_8KM                        (CARSPDPLS_PLS_8KM_CYC)
 
+#define GYRODEV_DTC_STS_FAIL                        (0U)
+#define GYRODEV_DTC_STS_NORMAL                      (1U)
+
 #define u1_GYRODEV_GYRO_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GYRO, (u), (v), (U1)GP_I2C_MA_SLA_6_GYRO, (w), (x), (y), (z)))
 #define u1_GYRODEV_GYRO_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_GYRO, (w), (U1)GP_I2C_MA_SLA_6_GYRO, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
 #define u1_GYRODEV_GSENS_I2C_CTRL_REGSET(u, v, w, x, y, z)   (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_G_MONI, (u), (v), (U1)GP_I2C_MA_SLA_7_G_MONI, (w), (x), (y), (z)))
 #define u1_GYRODEV_GSENS_I2C_CTRL_REGREAD(w, x, y, z)        (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_G_MONI, (w), (U1)GP_I2C_MA_SLA_7_G_MONI, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
+
+#define vd_GYRODEV_DREC_REQ(x, y, z)                (vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GYROACC, (x), (y), (z)))
+#define vd_GYRODEV_DTC_REQ(x, y)                    (vd_g_DtcCtl_SetDtcId((x), (y)))
 
 #define u1_GYRODEV_GET_V33_PERI_ON()                (Dio_ReadChannel(DIO_ID_PORT10_CH2))
 #define u1_GYRODEV_SET_SENSOR_ON_L()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_LOW))
