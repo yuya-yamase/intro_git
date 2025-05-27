@@ -1,13 +1,13 @@
 /* -------------------------------------------------------------------------- */
-/* file name   : EthDLC.h                                                     */
+/* file name   : EthDLC_PortState.h                                           */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHDLC_H
-#define ETHDLC_H
+#ifndef ETHDLC_PORTSTATE_H
+#define ETHDLC_PORTSTATE_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-void			EthDLC_Init(void);
-void			EthDLC_LoProc(void);
-Std_ReturnType	EthDLC_GetACTLState(void);
+Std_ReturnType EthDLC_Port_GetState(void);
+void EthDLC_Port_SetActive(void);
+void EthDLC_Port_SetInactive(void);
 /* -------------------------------------------------------------------------- */
-#endif/* ETHDLC_H */
+#endif/* ETHDLC_PORTSTATE_H */

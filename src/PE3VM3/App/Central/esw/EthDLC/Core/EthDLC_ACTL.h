@@ -1,20 +1,13 @@
 /* -------------------------------------------------------------------------- */
 /* file name   : EthDLC_ACTL.h                                                */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHDLC_ACTL_CFG_H_
-#define ETHDLC_ACTL_CFG_H_
+#ifndef ETHDLC_ACTL_H
+#define ETHDLC_ACTL_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-#include <Dio_Symbols.h>
-#include <Dio.h>
 /* -------------------------------------------------------------------------- */
-#define ETHDLC_GET_ACTL_SIGNAL  Dio_ReadChannel(DIO_ID_PORT10_CH14)
-
-#define D_ACTL_ON_FILTER		(15U)
-#define D_ACTL_OFF_FILTER		(210U)
-
-void EthDLC_ACTL_Init(void);
-void EthDLC_ACTL_Observe(void);
-Std_ReturnType EthDLC_ACTL_GetPortSatus(void);
+void			EthDLC_ACTL_Init(void);
+void			EthDLC_ACTL_Observe(void);
+Std_ReturnType	EthDLC_ACTL_GetState(void);
 /* -------------------------------------------------------------------------- */
-#endif/*ETHDLC_ACTL_CFG_H_*/
+#endif/* ETHDLC_ACTL_H */
