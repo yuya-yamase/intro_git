@@ -16,11 +16,11 @@
 /* Macros                                                                                    */
 /*-------------------------------------------------------------------------------------------*/
 /* 電源制御状態 */
-#define PWRCTRL_MAIN_BON_REQ               (0x00U) /* +B起動シーケンス要求                    */
-#define PWRCTRL_MAIN_WAKEUP_REQ            (0x01U) /* ウェイクアップシーケンス要求            */
-#define PWRCTRL_MAIN_SIPOFF_MCUSTANDBY_REQ (0x02U) /* SIP電源OFF&MCUスタンバイシーケンス要求  */
-#define PWRCTRL_MAIN_STANDBY_REQ           (0x03U) /* スタンバイシーケンス要求                */
-#define PWRCTRL_MAIN_NO_REQ                (0xFFU) /* 要求無し(処理完了)                      */
+#define PWRCTRL_MAIN_BON_REQ               (0x00U) /* +B起動シーケンス要求                   */
+#define PWRCTRL_MAIN_WAKEUP_REQ            (0x01U) /* ウェイクアップシーケンス要求           */
+#define PWRCTRL_MAIN_SIPOFF_MCUSTANDBY_REQ (0x02U) /* SIP電源OFF&MCUスタンバイシーケンス要求 */
+#define PWRCTRL_MAIN_STANDBY_REQ           (0x03U) /* スタンバイシーケンス要求               */
+#define PWRCTRL_MAIN_NO_REQ                (0xFFU) /* 要求無し(処理完了)                     */
 /*-------------------------------------------------------------------------------------------*/
 /* Function Prototypes                                                                       */
 /*-------------------------------------------------------------------------------------------*/

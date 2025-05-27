@@ -270,7 +270,7 @@ void vd_g_PwrCtrlSysInit( void )
     }
 
     /* ON/OFFシーケンス起動要求の初期化 */
-    u1_s_PwrCtrl_Sys_Pwr_Sts         = (U1)PWRCTRL_SYS_NON;
+    u1_s_PwrCtrl_Sys_Pwr_Sts             = (U1)PWRCTRL_SYS_NON;
 
     /* 現在起動ステップの初期化 */
     u1_s_PwrCtrl_PwrOn_Step              = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
@@ -541,7 +541,7 @@ static void vd_s_PwrCtrlSysPwrOnBuDdMode( void )
 static void vd_s_PwrCtrlSysPwrOnDisCharge( void )
 {
     if(u4_s_PwrCtrl_DisCharge_Time == (U4)PWRCTRL_SYS_WAIT_DISCHARGE_TIME){ /* 放電待ち時間を経過したか */
-        u4_s_PwrCtrl_DisCharge_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN; /* 経過していれば計測完了を設定 */
+        u4_s_PwrCtrl_DisCharge_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;        /* 経過していれば計測完了を設定 */
     }
     
     if(u4_s_PwrCtrl_DisCharge_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){

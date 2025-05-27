@@ -31,12 +31,12 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 /* 周期の時間指定(LSB:5ms) */
-#define PWRCTRL_CFG_TASK_TIME   (5U)
+#define PWRCTRL_CFG_TASK_TIME               (5U)
 
 /* 異常系チェック実行可否定義 */
-#define PWRCTRL_CFG__PRIVATE_ERR_CHK             (PWRCTRL_CFG__PRIVATE_ERR_CHK_ENABLE)
-#define PWRCTRL_CFG__PRIVATE_ERR_CHK_DISABLE     (0U)
-#define PWRCTRL_CFG__PRIVATE_ERR_CHK_ENABLE      (1U)
+#define PWRCTRL_CFG_PRIVATE_ERR_CHK         (PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
+#define PWRCTRL_CFG_PRIVATE_ERR_CHK_DISABLE (0U)
+#define PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE  (1U)
 
 #include "PwrCtrl_Common.h"
 #include "PwrCtrl_Main.h"

@@ -18,8 +18,8 @@
 #define PWRCTRL_COMMON_SYS_PWR_OFF        (0U)
 #define PWRCTRL_COMMON_SYS_PWR_ON         (1U)
 
-#define MCU_DIO_LOW                (0U)
-#define MCU_DIO_HIGH               (1U)
+#define MCU_DIO_LOW                       (0U)
+#define MCU_DIO_HIGH                      (1U)
 
 #define PWRCTRL_COMMON_PROCESS_STEP1      (0x01)
 #define PWRCTRL_COMMON_PROCESS_STEP2      (0x02)
@@ -33,7 +33,7 @@
 #define PWRCTRL_COMMON_PROCESS_STEP_CMPLT (0xFF)
 
 
-#if (PWRCTRL_CFG__PRIVATE_ERR_CHK == PWRCTRL_CFG__PRIVATE_ERR_CHK_ENABLE)
+#if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
 /* 異常系チェック用STB定義 */
 extern U1 u1_s_pwrctrl_common_err_dbg_state;
 
@@ -58,7 +58,7 @@ extern U1 u1_s_pwrctrl_common_err_dbg_state;
 #define PWRCTRL_COMMON_ERR_STANDBY_AOSS   (18U) /* スタンバイシーケンス AOSS_SLEEP_ENTRY_EXIT Hi待ち異常 */
 
 /* 異常系チェック用STB定義 */
-#endif /* PWRCTRL_CFG__PRIVATE_ERR_CHK == PWRCTRL_CFG__PRIVATE_ERR_CHK_ENABLE */
+#endif /* PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE */
 
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
