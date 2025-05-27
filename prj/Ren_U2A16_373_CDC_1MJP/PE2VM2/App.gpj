@@ -14,6 +14,7 @@
     :sourceDir=${APP_DIR}/IVI/GyrCtrl
     :sourceDir=${APP_DIR}/IVI/GyrCtrl/config
     :sourceDir=${APP_DIR}/IVI/DspCtrl
+    :sourceDir=${APP_DIR}/IVI/DspCtrl/VolumeMute
     :sourceDir=${APP_DIR}/IVI/DspCtrl/config
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
@@ -23,6 +24,7 @@
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/DateSI/config
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/Common/scc
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/STUB/config
+    :sourceDir=${APP_DIR}/IVI/DrcCtrl
 
     -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
@@ -56,7 +58,9 @@
     -I${APP_DIR}/IVI/GyrCtrl
     -I${APP_DIR}/IVI/GyrCtrl/config
     -I${APP_DIR}/IVI/DspCtrl
+    -I${APP_DIR}/IVI/DspCtrl/VolumeMute
     -I${APP_DIR}/IVI/DspCtrl/config
+    -I${APP_DIR}/IVI/DrcCtrl
 
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
@@ -144,3 +148,9 @@ datesi_com.c
 datesi.c
 PowerIcCtl.c
 
+volmute.c
+volmute_cfg.c
+IVI_DrcCtrl_Main.c
+SysEcDrc.c
+DtcCtl.c
+RobCtl.c

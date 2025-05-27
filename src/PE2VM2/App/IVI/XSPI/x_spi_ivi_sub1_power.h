@@ -46,6 +46,7 @@ void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_
 void            vd_g_XspiIviSub1_PowerState1stSend(void);
 void            vd_g_XspiIviSub1DevInitFinish(void);
 void            vd_g_XspiIviSub1PowerDevInitCmpApp(const U1 u1_a_ID);
+void            vd_g_XspiIviSub1PowerBmoniVolSend(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

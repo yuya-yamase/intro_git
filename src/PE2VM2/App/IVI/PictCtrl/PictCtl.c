@@ -16,6 +16,7 @@
 #include "pictic.h"
 #include "ML86294Ctl.h"
 #include "PictMuteCtl.h"
+#include "SysEcDrc.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -81,7 +82,9 @@
 /* Sip異常時シーケンスStep定義 */
 #define PICT_SEQ_SIPERRCHK_STEP0                        (0U)
 #define PICT_SEQ_SIPERRCHK_STEP1                        (1U)
-#define PICT_SEQ_SIPERRCHK_STEP_FIN                     (2U)
+#define PICT_SEQ_SIPERRCHK_STEP2                        (2U)
+#define PICT_SEQ_SIPERRCHK_STEP3                        (3U)
+#define PICT_SEQ_SIPERRCHK_STEP_FIN                     (4U)
 
 /*--- ポーリング管理 ---*/
 #define PICT_POLLPORT_NONDECI                           (0xFFU)     /* ポーリング未確定 */
@@ -98,7 +101,7 @@
 
 /* トリガータイプ */            
 #define PICT_POLLTRG_OFF                                (0x00U)     /* OFF */
-#define PICT_POLLTRG_V33PERION                          (0x01U)     /* BIT0: V33-PERI-ON */
+#define PICT_POLLTRG_AUDIOON                            (0x01U)     /* BIT0: AUDIO-ON */
 #define PICT_POLLTRG_MMSTBY                             (0x02U)     /* BIT1: /MM-STBY */
 
 /* ポーリング番号 */        
@@ -190,6 +193,7 @@
 /* カメラ切替経路 */
 #define PICT_CAM_PATH_NORM                              (0U)    /* カメラ通常経路 */
 #define PICT_CAM_PATH_BPASS                             (1U)    /* カメラバイパス経路 */
+#define PICT_CAM_PATH_CAMMODEFAIL                       (2U)    /* カメラバイパス経路(カメラモード検知異常時) */
 #define PICT_CAM_PATH_NOCHG                             (0xFF)  /* 変更経路無し */
 
 /* カメラ同期判定用 */
@@ -230,7 +234,15 @@
 #define PICT_CAM_DET_OFF                                (0x01U) /* OFF          */
 #define PICT_CAM_DET_ON                                 (0x02U) /* ON           */
 
-#define PICT_PORT_V33_PERI                              (DIO_ID_PORT10_CH2)
+#define PICT_TOUT_MUTEOFF                               (0U)
+#define PICT_TOUT_MUTEON                                (1U)
+#define PICT_TOUT_MUTEOFF_WAIT                          (2U)
+
+#define PICT_TOUT_LOG_NORMAL                            (1U)
+#define PICT_TOUT_LOG_BPASS                             (2U)
+#define PICT_TOUT_LOG_SYNCNG                            (3U)
+
+#define PICT_PORT_AUDIO_ON                              (DIO_ID_APORT5_CH0)
 #define PICT_PORT_LOW_POWER_ON                          (DIO_ID_PORT10_CH5)
 #define PICT_PORT_MM_STBY_N                             (DIO_ID_PORT10_CH11)
 #define PICT_PORT_DISP_REQ_GPIO0                        (DIO_ID_PORT2_CH2)
@@ -247,6 +259,10 @@
 #define PICT_PORT_PM_V_MUTE                             (DIO_ID_PORT24_CH9)
 #define PICT_PORT_V_IC_STATUS                           (DIO_ID_PORT3_CH2)
 
+
+/* カメラ有効領域 */
+#define PICT_CD_SIZE_INVALID                            (0x00U) /* 無効値 */
+#define PICT_CD_SIZE_1920X1080_140IN                    (0x01U) /* 1920 x 1080 14in */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -328,7 +344,6 @@ typedef struct {
     U1  u1_SyncChkLoopCnt;          /* 同期異常判定のループ回数                 */
     U1  u1_SyncChkSyncCnt;         /* 同期異常判定の同期信号あり回数           */
     U1  u1_SyncChkRlt;              /* 同期異常判定の結果(正常・異常)           */
-    U1  u1_SyncChkStaToutFlg;       /* 同期異常判定開始待ちタイマアウトフラグ   */
 } ST_ML_CTL; 
 
 
@@ -378,7 +393,7 @@ static U1    u1_s_pict_vicrset;
 static U1    u1_s_pict_pmpsailerrn;
 static U1    u1_s_pict_apponflg;
 static U1    u1_s_pict_syncstarteflg;
-static U1    u1_s_pict_v33feri_flg;
+static U1    u1_s_pict_audioon_flg;
 static U1    u1_s_pict_mmstby_flg;
 static U1    u1_s_pict_mliniflg;
 static U1    u1_s_pict_mlcmp_old;
@@ -394,6 +409,8 @@ static U1    u1_s_pict_icreset_sts;
 static U1    u1_s_pict_camsyncinfo;
 static U1    u1_s_pict_regwrite_req;
 static U1    u1_s_pict_regwrite_sts;
+static U1    u1_s_pict_cd_size;
+static U1    u1_s_pict_cammodelog_flg;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -469,6 +486,7 @@ static void vd_s_PictCtl_CamOffMuteOff(void);
 static void vd_s_PictCtl_CamAreaChk(void);
 /* 暫定対応 */
 static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void);
+static void vd_s_PictCtl_CdsizeChk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -503,16 +521,16 @@ static const ST_PICT_TIMENT tbl_Pict_TimInf[] = {
 static const ST_PICT_POLLMNG tb_Pict_PollMng[PICT_POLLNO_MAX]
 = {
     /*-- No.00 -------------------------------------------------------------*/
-    /*  DISP-REQ-GPIO0  V33-PERI-ON Hから150msで開始, 1ms周期, 連続5回  */
+    /*  DISP-REQ-GPIO0          AUDIO-ON Hから40msで開始, 1ms周期, 連続5回  */
     /*----------------------------------------------------------------------*/
     {
         u1_s_PictCtl_DispReqGpio0Chk,       /* チェック関数アドレス         */
         vd_s_PictCtl_DispReqGpio0Chg,       /* 結果送信関数アドレス         */
-        (U2)150U,                           /* 開始時間(ms)                 */
+        (U2)40U,                            /* 開始時間(ms)                 */
         (U1)1U,                             /* 定周期時間:検知間隔(ms)      */
         (U1)5U,                             /* 判定確定回数                 */
         (U1)PICT_POLLPORT_HIACTIVE,         /* 種別 (正論理 or 負論理)      */
-        (U1)PICT_POLLTRG_V33PERION,         /* ポーリング開始終了トリガー   */
+        (U1)PICT_POLLTRG_AUDIOON,           /* ポーリング開始終了トリガー   */
     },
     /*-- No.01 -------------------------------------------------------------*/
     /*  MIPI(BEYE)キャプチャ準備    /MM-STBY Hから0msで開始, 1ms周期, 連続1回  */
@@ -555,6 +573,12 @@ static const ST_PICT_POLLMNG tb_Pict_PollMng[PICT_POLLNO_MAX]
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/*  void vd_g_PictCtl_Init(void)                                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 void vd_g_PictCtl_Init(void)
 {
     U1 u1_t_trg;
@@ -576,7 +600,6 @@ void vd_g_PictCtl_Init(void)
     bfg_Ml_Ctl.u1_SyncChkLoopCnt = (U1)PICT_CNT_INI;
     bfg_Ml_Ctl.u1_SyncChkSyncCnt = (U1)PICT_CNT_INI;
     bfg_Ml_Ctl.u1_SyncChkRlt = (U1)PICT_CAM_SYNC_CHK_UNJDG;
-    bfg_Ml_Ctl.u1_SyncChkStaToutFlg = (U1)FALSE;
 
     st_sp_Pict_BackUpInf.u1_CamKind = (U1)0U;      /* DTFバックアップ値を設定(暫定) */
     st_sp_Pict_BackUpInf.u1_CenterCamSiz= (U1)0U;  /* DTFバックアップ値を設定(暫定) */
@@ -601,6 +624,8 @@ void vd_g_PictCtl_Init(void)
     bfg_Pict_StsMng.u1_CamChgOnType = (U1)PICT_CAMON_TO_NORMAL;
     bfg_Pict_StsMng.u1_CamChgOffType = (U1)PICT_CAMOFF_FORM_NORMAL;
     bfg_Pict_StsMng.u1_DiagMode = (U1)PICT_DIAG_MOD_OFF;
+    bfg_Pict_StsMng.u1_CamKindConverd = (U1)PICT_GVIFIF_NONE;
+    bfg_Pict_StsMng.u1_GvifCamKindConverd = (U1)PICT_KIND_CAM_NONE;
     vd_s_PictCtl_CamKindConverdUpDate();
     vd_s_PictCtl_GvifCamKindConverdUpDate();
     bfg_Pict_StsMng.u1_CamSyncOKSeqRunFlg = (U1)FALSE;
@@ -616,7 +641,7 @@ void vd_g_PictCtl_Init(void)
         bfg_Pict_TimMng[u1_t_cnt] = (U2)PICT_TIM_STOP;
     }
     
-    u1_t_trg = (U1)PICT_POLLTRG_V33PERION | (U1)PICT_POLLTRG_MMSTBY;
+    u1_t_trg = (U1)PICT_POLLTRG_AUDIOON | (U1)PICT_POLLTRG_MMSTBY;
     vd_s_PictCtl_PollMngStop(u1_t_trg);
     
     u1_s_pict_siperr = (U1)PICT_SIP_ERR_OFF;
@@ -626,12 +651,12 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_pmpsailerrn = (U1)FALSE;
     u1_s_pict_apponflg = (U1)FALSE;
     u1_s_pict_syncstarteflg = (U1)FALSE;
-    u1_s_pict_v33feri_flg = (U1)FALSE;
+    u1_s_pict_audioon_flg = (U1)FALSE;
     u1_s_pict_mmstby_flg = (U1)FALSE;
     u1_s_pict_mliniflg = (U1)FALSE;
     u1_s_pict_mlcmp_old = (U1)FALSE;
     u1_s_pict_vicstasts = (U1)FALSE;
-    u1_s_pict_camoff_muteoff_flg = (U1)FALSE;
+    u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF;
     u1_s_pict_camsynccyc_flg = (U1)FALSE;
     u1_s_pict_camsynccyc_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP0;
     u1_s_pict_camsyncng_step  = (U1)PICT_SEQ_CAMONSYNCNG_STEP0;
@@ -641,7 +666,9 @@ void vd_g_PictCtl_Init(void)
     u1_s_pict_icreset_sts = (U1)FALSE;
     u1_s_pict_camsyncinfo = (U1)PICT_ML_MIPI_SYNC_OFF;
     u1_s_pict_regwrite_req = (U1)FALSE;
-	u1_s_pict_regwrite_sts = (U1)PICT_ML_CAMAREASET_COMPLETED;
+    u1_s_pict_regwrite_sts = (U1)PICT_ML_CAMAREASET_COMPLETED;
+    u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
+    u1_s_pict_cammodelog_flg = (U1)FALSE;
     
     st_sp_send.u1_CamKind = st_sp_Pict_BackUpInf.u1_CamKind;
     st_sp_send.u1_CenterCamSiz = st_sp_Pict_BackUpInf.u1_CenterCamSiz;
@@ -715,8 +742,15 @@ void vd_g_PictCtl_MainTask(void)
     vd_s_PictCtl_CamKindNtyChk();
     vd_s_PictCtl_CamSyncPathInfoNtyChk();
     vd_s_PictCtl_CamAreaChk();
+    vd_s_PictCtl_CdsizeChk();
 }
 
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_SeqMng(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 static void vd_s_PictCtl_SeqMng(void)
 {
     U1 u1_t_cnt;
@@ -967,15 +1001,14 @@ static void vd_s_PictCtl_ClrTim(U1 u1_a_Id)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_StsMng(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static void vd_s_PictCtl_StsMng(void)
 {
-    U1 u1_t_v33ferri;
-    U1 u1_t_pmspshold;
+    U1 u1_t_audio_on;
     U1 u1_t_mmstby_n;
     
     /* 見た目オン起動状態チェック(暫定) */
@@ -999,28 +1032,11 @@ static void vd_s_PictCtl_StsMng(void)
     
     vd_s_PictCtl_VIcRstChk();
 
-    u1_t_v33ferri= (U1)Dio_ReadChannel(PICT_PORT_V33_PERI);
-    u1_t_pmspshold = (U1)Dio_ReadChannel(PICT_PORT_PMA_PS_HOLD);
+    u1_t_audio_on= (U1)Dio_ReadChannel(PICT_PORT_AUDIO_ON);
     
-    if((u1_t_v33ferri == (U1)TRUE) && (u1_s_pict_v33feri_flg == (U1)FALSE)){
-        vd_s_PictCtl_PollMngStart(PICT_POLLTRG_V33PERION);
-        u1_s_pict_v33feri_flg = (U1)TRUE;
-        if((bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON) &&
-            ((u1_t_pmspshold == (U1)TRUE) &&
-            (u1_s_pict_siperr == (U1)PICT_SIP_ERR_OFF))){
-            /* CAMERA-MODE1 = H */
-            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)TRUE);
-        } 
-        else{
-            /* CAMERA-MODE1 = L */
-            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
-        }
-    }
-    if((u1_t_v33ferri == (U1)FALSE) && (u1_s_pict_v33feri_flg == (U1)TRUE)){
-        vd_s_PictCtl_PollMngStop(PICT_POLLTRG_V33PERION);
-        bfg_Pict_StsMng.u1_DispReqGpio0rawSts = (U1)PICT_POLLPORT_UNFIX;
-        Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);;
-        u1_s_pict_v33feri_flg = (U1)FALSE;
+    if((u1_t_audio_on == (U1)TRUE) && (u1_s_pict_audioon_flg == (U1)FALSE)){
+        vd_s_PictCtl_PollMngStart(PICT_POLLTRG_AUDIOON);
+        u1_s_pict_audioon_flg = (U1)TRUE;
     }
     
     u1_t_mmstby_n = (U1)Dio_ReadChannel(PICT_PORT_MM_STBY_N);
@@ -1035,7 +1051,7 @@ static void vd_s_PictCtl_StsMng(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_IgStsChk(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1044,16 +1060,19 @@ static void vd_s_PictCtl_IgStsChk(void)
 {
     U1 u1_t_stasts;
     U2 u2_t_time;
+    U1 u1_t_vicrset;
     
     u1_t_stasts = u1_s_NoRedun_PwrCtrl_Nxtsts(); /* 見た目オン起動状態(暫定) */
     
     if((u1_t_stasts == (U1)PICT_NOREDUN_STATE_APPON) &&
        (bfg_Pict_StsMng.u1_stasts != (U1)PICT_NOREDUN_STATE_APPON)){
         u2_t_time = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA);
-        if((u2_t_time == (U2)PICT_TIM_STOP) && (u1_s_pict_syncstarteflg == (U1)FALSE)){
+        u1_t_vicrset = (U1)Dio_ReadChannel(PICT_PORT_V_IC_RST);
+        if(((u2_t_time == (U2)PICT_TIM_STOP) &&
+            (u1_s_pict_syncstarteflg == (U1)FALSE)) &&
+            (u1_t_vicrset == (U1)TRUE)){
             /* カメラ同期検知開始待ちタイマ起動(1500+1ms) */
             vd_s_PictCtl_SetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA, (U2)PICT_TIMER_ML_CAMSYNC_CHKSTA_WAIT);
-            u1_s_pict_syncstarteflg = (U1)TRUE;
         }
         vd_s_PictCtl_SetTim((U1)PICT_TIMID_CAM_KIND_DISC_STA_WAIT, (U2)PICT_TIMER_CAM_KIND_DISC_STA);
         u1_s_pict_apponflg = (U1)TRUE;
@@ -1071,7 +1090,7 @@ static void vd_s_PictCtl_IgStsChk(void)
 
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void  vd_s_PictCtl_CamCapStbyStsChk(void)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1116,7 +1135,7 @@ static void vd_s_PictCtl_MipiChg(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void  vd_s_PictCtl_CamCapStby2StsChk(void)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1136,7 +1155,7 @@ static void  vd_s_PictCtl_CamCapStby2StsChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void  vd_s_PictCtl_CamCapStby3StsChk(void)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1152,7 +1171,7 @@ static void  vd_s_PictCtl_CamCapStby3StsChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void  vd_s_PictCtl_DispReqGpio0StsChk(void)                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1171,7 +1190,7 @@ static void  vd_s_PictCtl_DispReqGpio0StsChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_CamPathUpDate(void)                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1182,8 +1201,7 @@ static void vd_s_PictCtl_CamPathUpDate(void)
     if((bfg_Pict_StsMng.u1_CamChgSts == (U1)PICT_CAMCHG_STS_BPASS) || (bfg_Pict_StsMng.u1_CamChgSts == (U1)PICT_CAMCHG_STS_BPASS_GO))
     {
         /* /CAMERA-CAP-STBY2=Hの場合 */
-        if((bfg_Pict_StsMng.u1_CamCapStby2Sts == (U1)PICT_POLLPORT_ON) && (u1_s_pict_siperr == (U1)PICT_SIP_ERR_OFF))
-        {
+        if(bfg_Pict_StsMng.u1_CamCapStby2Sts == (U1)PICT_POLLPORT_ON){
             u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_NORM;
         }
     }
@@ -1202,7 +1220,7 @@ static void vd_s_PictCtl_CamPathUpDate(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCamKindDatSet(void)                                                                                   */
+/*  static void vd_s_PictCtl_CamPathChg(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1215,22 +1233,33 @@ static void vd_s_PictCtl_CamPathChg(void)
     if(u1_s_pict_campass_chg_flg == (U1)PICT_CAM_PATH_BPASS){
         /* カメラバイパス経路切替要求設定 */
         u1_t_sts = u1_g_Pict_MlCamPathSetByp();
+        if(u1_t_sts == (U1)TRUE){
+            bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_BPASS;
+            u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_NOCHG;
+        }
     }
     else if(u1_s_pict_campass_chg_flg == (U1)PICT_CAM_PATH_NORM){
         /* カメラ通常経路切替要求設定 */
         u1_t_sts = u1_g_Pict_MlCamPathSetNml();
+        if(u1_t_sts == (U1)TRUE){
+            bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_NORMAL;
+            u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_NOCHG;
+        }
+    }
+    else if(u1_s_pict_campass_chg_flg == (U1)PICT_CAM_PATH_CAMMODEFAIL){
+        /* カメラバイパス経路切替要求設定 */
+        u1_t_sts = u1_g_Pict_MlCamPathSetByp();
+        if(u1_t_sts == (U1)TRUE){
+            u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_NOCHG;
+        }
     }
     else{
         /* 何もしない */
     }
-    
-    if(u1_t_sts == (U1)TRUE){
-        u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_NOCHG;
-    }
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_CamChgUpDate(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1242,17 +1271,14 @@ static void vd_s_PictCtl_CamChgUpDate(void)
     u1_t_pmspshold = (U1)Dio_ReadChannel(PICT_PORT_PMA_PS_HOLD);
     /* DISP-REQ-GPIO0 = Hの場合 */
     if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
-        /* SiP正常時にPMA_PS_HOLD状態に従って、CAMERA-MODE1を制御 */
-        if(u1_s_pict_siperr == (U1)PICT_SIP_ERR_ON){
-            /* CAMERA-MODE1 = L */
-            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
-        } 
-        else if(u1_t_pmspshold == (U1)TRUE){
+        /* PMA_PS_HOLD状態に従って、CAMERA-MODE1を制御 */
+        if(u1_t_pmspshold == (U1)TRUE){
             /* CAMERA-MODE1 = H */
             Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)TRUE);
         }
         else{
-        /* 何もしない(暫定) */
+            /* CAMERA-MODE1 = L */
+            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
         }
 
         /* カメラ切替制御 */
@@ -1305,7 +1331,7 @@ static void vd_s_PictCtl_CamChgUpDate(void)
     }
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_CamChgOn2Off(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1386,7 +1412,7 @@ static void vd_s_PictCtl_MainMipiSetEndStsUpDate(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_MlSeqCamOnChg(void)                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1404,8 +1430,8 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
     switch (bfg_Pict_SeqMlMng.u1_PrcNo)
     {
         case PICT_SEQ_ML_CAMON_STEP0:
-            u1_t_mode = u1_g_PictCtl_GetCamDiagMode();
-            if(u1_t_mode == (U1)FALSE){
+            u1_s_pict_cammodelog_flg = (U1)TRUE;
+            if(u1_s_pict_syncstarteflg == (U1)FALSE){
                 /* カメラ同期検知開始処理 */
                 vd_s_PictCtl_CamSyncChkSta();
             }
@@ -1476,6 +1502,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
             if(u1_t_sts == (U1)TRUE){
                 /* カメラへ切替時MUTE解除処理待ち (min20ms) */
                 vd_s_PictCtl_SetTim((U1)PICT_TIMID_ML_PRC_T2, (U2)PICT_TIMER_ML_CAMCHG_MUTE_OFF_WAIT);
+                vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_1, (U1)0x00U, (U1)0x00U);
                 bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMON_STEP5;
             }
             break;
@@ -1502,6 +1529,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
                 if(bfg_Ml_Ctl.u1_SyncChkRlt == (U1)PICT_CAM_SYNC_CHK_NG){
                    /* カメラ切替のPM-V-MUTE制御実施トリガ */
                     vd_g_PictMute_CamMuteReq((U1)FALSE);
+                    u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF;
                     /* アイドルシーケンスへ遷移 */
                     vd_s_PictCtl_ClrMlSeqInf();
                 }
@@ -1517,7 +1545,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
             u2_t_time = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_PRC_T1);
             if(u2_t_time == (U2)PICT_TIM_TOUT) {
                 /* 固着有効化設定 */
-                /* ダイアグカメラモード中、或いはカメラ同期正常以外設定しない */
+                /* カメラモード中、或いはカメラ同期正常以外設定しない */
                 u1_t_mode = u1_g_PictCtl_CamStsGet();
                 if((u1_t_mode == (U1)TRUE) &&
                    (bfg_Ml_Ctl.u1_SyncChkRlt == (U1)PICT_CAM_SYNC_CHK_OK)){
@@ -1549,6 +1577,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
             }     
             /* カメラ切替のPM-V-MUTE制御実施トリガ */
             vd_g_PictMute_CamMuteReq((U1)FALSE);
+            u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF;
 
             /* アイドルシーケンスへ遷移 */
             vd_s_PictCtl_ClrMlSeqInf();
@@ -1563,7 +1592,7 @@ static void vd_s_PictCtl_MlSeqCamOnChg(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_MlSeqCamOffChg(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1584,8 +1613,6 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
 
             /* カメラ以外へ切替種別設定 */
             vd_s_PictCtl_CamChgOffTypeSet();
-
-            /* タイムアウト判定以外のPM-V-MUTE制御はPictMuteCtlで実施 */
 
             /* 画質モード通知(カメラ)受け取ったフラグOFFにする */
             bfg_Pict_StsMng.u1_RcvCamQualModeFlg = (U1)FALSE;
@@ -1642,6 +1669,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
                     if(bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_TOUT) {
                         /* メインマイコン異常でのPM-V-MUTE制御実施トリガ */
                         vd_g_PictMute_CamMuteReq((U1)TRUE);
+                        u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEON;
                     }
                     bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMOFF_STEP3;
                 }
@@ -1674,7 +1702,10 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             }
             /* カメラ通常経路から */
             else if(bfg_Pict_StsMng.u1_CamChgOffType == (U1)PICT_CAMOFF_FORM_NORMAL){
-
+                if(u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEON){
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_2, (U1)PICT_TOUT_LOG_NORMAL, (U1)0x00U);
+                    u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
+                }
                 /* カメラ以外状態設定 */
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_OFF;
 
@@ -1683,7 +1714,7 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             }
             /* カメラバイパス経路から */
             else {
-                if(bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_TOUT) {
+                if(u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEON) {
                     bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMOFF_STEP7;
                 } else {
                     bfg_Pict_SeqMlMng.u1_PrcNo = (U1)PICT_SEQ_ML_CAMOFF_STEP8;
@@ -1695,6 +1726,10 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
             /* 映像IC ヒーコン部以外のMUTE OFF */
             u1_t_sts = u1_g_Pict_MlNoAisMuteSetOff();
             if(u1_t_sts == (U1)TRUE){
+                if(u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEON){
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_2, (U1)PICT_TOUT_LOG_SYNCNG, (U1)0x00U);
+                    u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
+                }
                 /* カメラ以外状態設定 */
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_OFF;
                 /* アイドルシーケンスへ遷移 */
@@ -1706,7 +1741,8 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
                 /* I2C MUTE OFF設定 */
             u1_t_sts = u1_g_Pict_MlI2cMuteSetOff();
             if(u1_t_sts == (U1)TRUE){
-                u1_s_pict_camoff_muteoff_flg = (U1)TRUE;
+                vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_2, (U1)PICT_TOUT_LOG_BPASS, (U1)0x00U);
+                u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF_WAIT;
                 bfg_Pict_StsMng.u1_CamChgSts = (U1)PICT_CAMCHG_STS_OFF;
                 /* アイドルシーケンスへ遷移 */
                 vd_s_PictCtl_ClrMlSeqInf();
@@ -1747,17 +1783,17 @@ static void vd_s_PictCtl_MlSeqCamOffChg(void)
 /*===================================================================================================================================*/
 static void vd_s_PictCtl_CamOffMuteOff(void)
 {
-    if((u1_s_pict_camoff_muteoff_flg == (U1)TRUE) &&
-        (bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_END)){
+    if((u1_s_pict_camoff_muteoff_flg == (U1)PICT_TOUT_MUTEOFF_WAIT) &&
+       (bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg == (U1)PICT_RCV_NOCAMQUAL_END)){
          /* PM-V-MUTE制御実施トリガ */
          vd_g_PictMute_CamMuteReq((U1)FALSE);
-            u1_s_pict_camoff_muteoff_flg = (U1)FALSE;
+         u1_s_pict_camoff_muteoff_flg = (U1)PICT_TOUT_MUTEOFF;
         }
 }
 
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static U1 u1_s_PictCtl_MlSeqCamSyncNg(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1775,7 +1811,6 @@ static U1 u1_s_PictCtl_MlSeqCamSyncNg(void)
         case PICT_SEQ_CAMONSYNCNG_STEP0:
             /* 固着検知の無効化設定 */
             u1_t_sts = u1_g_Pict_MlFrzChgSetOff();
-            u1_t_sts = (U1)TRUE; /* 暫定 */
             if(u1_t_sts == (U1)TRUE){
                 u1_s_pict_camsyncng_step = (U1)PICT_SEQ_CAMONSYNCNG_STEP1;
             }
@@ -1806,7 +1841,7 @@ static U1 u1_s_PictCtl_MlSeqCamSyncNg(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_MlSeqCamSyncNg(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1835,7 +1870,7 @@ static void vd_s_PictCtl_MlSeqCamSyncNg(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_MlSeqCamSyncOk(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -2099,7 +2134,7 @@ static void vd_s_PictCtl_PollMngStop(U1 u1_a_TrgFlg)
     }
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_PollMng(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -2118,7 +2153,7 @@ static void vd_s_PictCtl_PollMng(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_PollPort(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -2233,14 +2268,16 @@ static void vd_s_PictCtl_DispReqGpio0Chg(U1 u1_a_Sts)
 static void vd_s_PictCtl_DispReqGpio0AppChk(void)
 {
     if((u1_s_pict_apponflg == (U1)TRUE) &&
-       ((u1_s_pict_v33feri_flg == (U1)TRUE) &&
-        (bfg_Pict_StsMng.u1_DispReqGpio0rawSts != (U1)PICT_POLLPORT_UNFIX))){
+       (bfg_Pict_StsMng.u1_DispReqGpio0rawSts != (U1)PICT_POLLPORT_UNFIX)){
         bfg_Pict_StsMng.u1_DispReqGpio0Sts = bfg_Pict_StsMng.u1_DispReqGpio0rawSts;
     }
 }
-/*============================================================================
- * DISP-REQ-GPIO0 ポートデータ取得
- ===========================================================================*/
+/*===================================================================================================================================*/
+/*  static U1 u1_s_PictCtl_DispReqGpio0Chk(void)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 static U1 u1_s_PictCtl_DispReqGpio0Chk(void)
 {
     U1 u1_t_port;
@@ -2268,9 +2305,12 @@ static void vd_s_PictCtl_CamCapStbyChg(U1 u1_a_Sts)
     bfg_Pict_StsMng.u1_CamCapStbySts = u1_a_Sts;
 }
 
-/*============================================================================
- * /CAMERA-CAP-STBY ポートデータ取得
- ===========================================================================*/
+/*===================================================================================================================================*/
+/*  static U1 u1_s_PictCtl_CamCapStbyChk(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 static U1 u1_s_PictCtl_CamCapStbyChk(void)
 {
     U1 u1_t_port;
@@ -2299,9 +2339,12 @@ static void vd_s_PictCtl_CamCapStby2Chg(U1 u1_a_Sts)
     
 }
 
-/*============================================================================
- * /CAMERA-CAP-STBY2 ポートデータ取得
- ===========================================================================*/
+/*===================================================================================================================================*/
+/*  static U1 u1_s_PictCtl_CamCapStby2Chk(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 static U1 u1_s_PictCtl_CamCapStby2Chk(void)
 {
     U1 u1_t_port;
@@ -2330,9 +2373,12 @@ static void vd_s_PictCtl_CamCapStby3Chg(U1 u1_a_Sts)
     bfg_Pict_StsMng.u1_CamCapStby3Sts = u1_a_Sts;
 }
 
-/*============================================================================
- * /CAMERA-CAP-STBY3 ポートデータ取得
- ===========================================================================*/
+/*===================================================================================================================================*/
+/*  static U1 u1_s_PictCtl_CamCapStby3Chk(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 static U1 u1_s_PictCtl_CamCapStby3Chk(void)
 {
     U1 u1_t_port;
@@ -2382,9 +2428,6 @@ static void vd_s_PictCtl_CamSyncChkStaTout(void)
 {
     /* カメラ同期検知開始処理 */
     vd_s_PictCtl_CamSyncChkSta();
-
-    /* カメラ同期検知開始待ちタイマタイムアウトフラグON設定 */
-    bfg_Ml_Ctl.u1_SyncChkStaToutFlg = (U1)TRUE;
 }
 
 /*============================================================================
@@ -2405,6 +2448,7 @@ static void vd_s_PictCtl_CamSyncChkSta(void)
 {
     U2  u2_t_time;
 
+    u1_s_pict_syncstarteflg = (U1)TRUE;
     u2_t_time = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKCYC);
     if(u2_t_time == (U2)PICT_TIM_STOP)
     {
@@ -2435,6 +2479,9 @@ static void vd_s_PictCtl_CamSyncChkSta(void)
 static void vd_s_PictCtl_CamSyncChkStop(void)
 {
     vd_s_PictCtl_ClrTim((U1)PICT_TIMID_ML_CAMSYNC_CHKCYC);
+    u1_s_pict_syncstarteflg = FALSE;
+    u1_s_pict_camsynccyc_flg = FALSE;
+    u1_s_pict_camsynccyc_step = PICT_SEQ_CAMSYNCCHK_STEP0;
 }
 
 /*============================================================================
@@ -2460,7 +2507,7 @@ static void vd_s_PictCtl_CamSyncCycChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void vd_s_PictCtl_CamSyncJdg(void)                                                                                         */
+/*  static void vd_s_PictCtl_CamSyncJdg(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -2479,12 +2526,12 @@ static void vd_s_PictCtl_CamSyncJdg(void)
         switch (u1_s_pict_camsynccyc_step)
         {
             case PICT_SEQ_CAMSYNCCHK_STEP0:
-				if(u1_s_pict_syncstarteflg == (U1)TRUE){   /* 暫定 同期検知開始フラグONなら */
+                if(u1_s_pict_syncstarteflg == (U1)TRUE){
                     u1_t_sts = u1_g_Pict_MlRegGet(&u1_s_pict_camsyncinfo);
                     if(u1_t_sts == (U1)TRUE){
                         u1_s_pict_camsynccyc_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP1;
                     }
-				}
+                }
                     break;
 
                 case PICT_SEQ_CAMSYNCCHK_STEP1:
@@ -2582,35 +2629,19 @@ U1 u1_g_PictCtl_CamStsGet(void)
     return(u1_t_CamSts);
 }
 
-/*============================================================================
- * カメラダイアグモード取得処理
- *----------------------------------------------------------------------------
- * モジュール名 : u1_g_PictCtl_GetCamDiagMode
- * 機能         : カメラダイアグモード取得処理
- * 処理内容     : カメラダイアグモードの条件を確認し、ON/OFFを返す
- * 入力（引数） : 無し
- * 出力（戻値） : BYTE bySts : カメラダイアグモード状態
- *              :               ON : カメラダイアグモード、OFF : その他モード
- * 制限事項     : 無し
- * 作成者       : NOAH)王
- * ---------------------------------------------------------------------------
- * 変更履歴     : 2023.04.10 新規作成
- * 変更者       : NOAH)王 巧燕
- ===========================================================================*/
+/*===================================================================================================================================*/
+/*  U1 u1_g_PictCtl_GetCamDiagMode(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 U1 u1_g_PictCtl_GetCamDiagMode(void)
 {
-    U1 u1_t_CamSts;
-    
-    u1_t_CamSts = (U1)FALSE;
-    if(bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_CAMON) {
-        u1_t_CamSts = (U1)TRUE;
-    }
-    
-    return(u1_t_CamSts);
+    return(bfg_Pict_StsMng.u1_DiagMode);
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_SiPErrChk(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -2621,6 +2652,7 @@ static void vd_s_PictCtl_SiPErrChk(void)
     U1 u1_t_vicrset;
     U1 u1_t_port;
     U1 u1_t_sts;
+    U1 u1_t_gvif;
 
     u1_t_mode = u1_g_PictCtl_CamStsGet();
     u1_t_vicrset = (U1)Dio_ReadChannel((U1)PICT_PORT_V_IC_RST);
@@ -2652,35 +2684,45 @@ static void vd_s_PictCtl_SiPErrChk(void)
             }
             break;
 
-            case PICT_SEQ_SIPERRCHK_STEP1:
-                if(u1_t_vicrset == (U1)TRUE){
-                    /* MIPI MUTE端子 Hi設定 */
-                    Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)TRUE);
-                }
-                else{
-                    /* MIPI MUTE端子 Lo設定 */
-                    Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)FALSE);
-                }
-                /* MIPI出力ポートOFF設定 */
-                vd_g_Gvif3SipFail();
-                
-                /* CAMERA-MODE1 = L */
-                Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
-                u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP_FIN;
-                break;
+        case PICT_SEQ_SIPERRCHK_STEP1:
+            if(u1_t_vicrset == (U1)TRUE){
+                /* MIPI MUTE端子 Hi設定 */
+                Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)TRUE);
+            }
+            else{
+                /* MIPI MUTE端子 Lo設定 */
+                Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)FALSE);
+            }
+            /* MIPI出力ポートOFF設定 */
+            vd_g_Gvif3SipFail();
+            u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP2;
+            break;
 
-            case PICT_SEQ_SIPERRCHK_STEP_FIN:
-                /* 何もしない */
-                break;
+        case PICT_SEQ_SIPERRCHK_STEP2:
+                u1_t_gvif = u1_g_Gvif3SipErrorFlgChk();
+                if(u1_t_gvif == (U1)FALSE){
+                    u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP3;
+                }
+            break;
 
-            default:
-                u1_s_pict_siperrchk_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP0;
-                break;
+        case PICT_SEQ_SIPERRCHK_STEP3:
+            /* CAMERA-MODE1 = L */
+            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
+            u1_s_pict_siperrchk_step = (U1)PICT_SEQ_SIPERRCHK_STEP_FIN;
+            break;
+
+        case PICT_SEQ_SIPERRCHK_STEP_FIN:
+            /* 何もしない */
+            break;
+
+        default:
+            u1_s_pict_siperrchk_step = (U1)PICT_SEQ_CAMSYNCCHK_STEP0;
+            break;
     }
     u1_s_pict_siperr_old = u1_s_pict_siperr;
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static U1 u1_s_PictCtl_SiPErrstsChk(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -2718,7 +2760,7 @@ static U1 u1_s_PictCtl_SiPErrstsChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1    u1_s_PictCtl_SiPErrstsChk(void)                                                                                            */
+/*  U1 u1_s_PictCtl_SiPErrstsInfo(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -2729,35 +2771,46 @@ U1 u1_s_PictCtl_SiPErrstsInfo(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_PmsPsHoldChk(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static void vd_s_PictCtl_PmsPsHoldChk(void)
 {
+    U1 u1_t_vicrset;
     U1 u1_t_pmspshold;
     
+    u1_t_vicrset = (U1)Dio_ReadChannel(PICT_PORT_V_IC_RST);
     u1_t_pmspshold = (U1)Dio_ReadChannel(PICT_PORT_PMA_PS_HOLD);
     
-    if((u1_t_pmspshold == (U1)TRUE) && (u1_s_pict_pmspsh == (U1)FALSE)){
-        if((bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON) &&
-            (u1_s_pict_siperr == (U1)PICT_SIP_ERR_OFF)){
-            /* CAMERA-MODE1 = H */
-            Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)TRUE);
-        } 
+    if(u1_t_pmspshold != u1_s_pict_pmspsh){
+        if(u1_t_pmspshold == (U1)TRUE){
+            if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
+                /* CAMERA-MODE1 = H */
+                Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)TRUE);
+            } 
+            else{
+                /* CAMERA-MODE1 = L */
+                Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
+            }
+            /* MIPI MUTE端子 Lo設定 */
+            Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)FALSE);
+        }
         else{
             /* CAMERA-MODE1 = L */
             Dio_WriteChannel(PICT_PORT_CAMERA_MODE1, (Dio_LevelType)FALSE);
+            if(u1_t_vicrset == (U1)TRUE){
+                /* MIPI MUTE端子 Hi設定 */
+                Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)TRUE);
+            }
         }
-        /* MIPI MUTE端子 Lo設定 (暫定) */
-        Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)FALSE);
     }
     u1_s_pict_pmspsh = u1_t_pmspshold;
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void vd_s_PictCtl_VIcRstChk(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -2773,21 +2826,14 @@ static void vd_s_PictCtl_VIcRstChk(void)
     if(u1_t_vicrset != u1_s_pict_vicrset){
         if(u1_t_vicrset == (U1)TRUE){
             vd_s_PictCtl_CycChkStart();
-            if(u1_s_pict_siperr == (U1)PICT_SIP_ERR_ON){
-                /* MIPI MUTE端子 Hi設定 (暫定) */
+            if(u1_t_pmspshold == (U1)FALSE){
+                /* MIPI MUTE端子 Hi設定 */
                 Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)TRUE);
-            }
-            else if(u1_t_pmspshold == (U1)FALSE){ /* PMA_PS_HOLD端子によるLo出力の優先順位は要確認(暫定) */
-                /* MIPI MUTE端子 Lo設定 (暫定) */
-                Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)FALSE);
-            }
-            else{
-                /* 何もしない(暫定) */
             }
         }
         else{
             vd_s_PictCtl_CamSyncChkStop(); /* 同期判定停止 */
-            /* MIPI MUTE端子 Lo設定 (暫定) */
+            /* MIPI MUTE端子 Lo設定 */
             Dio_WriteChannel(PICT_PORT_MIPI_MUTE, (Dio_LevelType)FALSE);
         }
     }
@@ -2806,35 +2852,30 @@ U1 u1_g_PictCtl_CamSyncSts(void)
     return(bfg_Ml_Ctl.u1_SyncChkRlt);
 }
 
-/*============================================================================
- * MLデバイス周期チェック開始処理
- *----------------------------------------------------------------------------
- * モジュール名 : fc_Pict_MLCycChkStart
- * 機能         :
- * 処理内容     :
- * 入力（引数） : 無し
- * 出力（戻値） : 無し
- * 制限事項     :
- * 作成者       : NOAH)王 巧燕
- * ---------------------------------------------------------------------------
- * 変更履歴     : 2022.12.12 新規作成
-                 2023.3.30 NOAH)王 巧燕
-                 固着検知ビット監視とメインマイコンのCAMERA-MODE1=Hi検知異常
-                 のフェールセーフ対応
- ===========================================================================*/
+/*===================================================================================================================================*/
+/*  static void vd_s_PictCtl_CycChkStart(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
 static void vd_s_PictCtl_CycChkStart(void)
 {
-    U1 u2_t_Tim;
-    
-    if(bfg_Ml_Ctl.u1_SyncChkStaToutFlg == (U1)TRUE){
-        u2_t_Tim = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA);
-        if(u2_t_Tim == (U2)PICT_TIM_STOP) {
-            if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
-                vd_s_PictCtl_CamSyncChkSta();
-            }
+    U2 u2_t_tim;
+
+    u2_t_tim = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA);
+    if(u1_s_pict_syncstarteflg == (U1)FALSE){
+        if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
+            vd_s_PictCtl_CamSyncChkSta();
+        }
+        else if((bfg_Pict_StsMng.u1_stasts == (U1)PICT_NOREDUN_STATE_APPON) && (u2_t_tim == (U2)PICT_TIM_STOP)){
+            vd_s_PictCtl_SetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA, (U2)PICT_TIMER_ML_CAMSYNC_CHKSTA_WAIT);
+        }
+        else{
+            /* do nothing */
         }
     }
 }
+
 /*============================================================================
  * 映像IC起動処理完了チェック処理
  *----------------------------------------------------------------------------
@@ -2910,8 +2951,13 @@ static void vd_s_PictCtl_CamModeHMainChkErrCycChk(void)
             /* 画質モード(カメラ)通知がない */
             if(bfg_Pict_StsMng.u1_RcvCamQualModeFlg == (U1)FALSE){
                 /* 管理するカメラのパス設定は、カメラ通常経路を保持し強制的にカメラバイパス切替を行う */
-                u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_BPASS;
-            }           /* N1=0 */
+                u1_s_pict_campass_chg_flg = (U1)PICT_CAM_PATH_CAMMODEFAIL;
+            }
+            if(u1_s_pict_cammodelog_flg == (U1)TRUE){
+                vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_CAMCTL, (U1)SYSECDRC_DREC_ID_3, (U1)0x00U, (U1)0x00U);
+                u1_s_pict_cammodelog_flg = (U1)FALSE;
+            }
+            /* N1=0 */
             bfg_Ml_Ctl.u1_CamModeHMainChkErrCnt_N1 = (U1)PICT_CNT_INI;  
         }
      }else{
@@ -3019,7 +3065,7 @@ static void vd_s_PictCtl_CamSyncPathInfoNtySnd(void)
         st_t_send.u1_camera_vic_sts = u1_s_pict_vicstasts;
 
     /*************************************************/
-    /*                 送信(暫定                      */
+    /*                 送信                          */
     /*************************************************/
     vd_g_XspiIviSub1CameraSyncPassDataSend(st_t_send);
 
@@ -3121,7 +3167,7 @@ void vd_g_PictCtl_RcvBCC1S05(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static U1 u1_s_PictCtl_CamKindjdg(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -3285,7 +3331,7 @@ static void vd_s_PictCtl_GvifCamKindConverdUpDate(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static U1 u1_s_PictCtl_CenterCamSizjdg(void)                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -3323,6 +3369,7 @@ static U1 u1_s_PictCtl_CenterCamSizjdg(void)
                 st_sp_Pict_BackUpInf.u1_CenterCamSiz = u1_t_centercamsiz;
                 /*  センターカメラサイズ変更フラグ：ON */
                 u1_t_chgflg = (U1)TRUE;
+                vd_s_PictCtl_CdsizeChk();
             }
             bfg_Pict_StsMng.st_CamDisc.u1_CenterCamSizCnt = (U1)PICT_SAMECNT_INI;
         }
@@ -3399,7 +3446,7 @@ static void vd_s_PictCtl_Bkup_Write(void)
 }
 
 /*===================================================================================================================================*/
-/*  vd_s_PictCtl_CamAreaChk                                                                                                          */
+/*  static void vd_s_PictCtl_CamAreaChk(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -3415,7 +3462,7 @@ static void vd_s_PictCtl_CamAreaChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  U1 u1_g_PictCtl_CamSizeSts(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -3437,7 +3484,7 @@ U1 u1_g_PictCtl_CamKindSts(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1 u1_g_PictCtl_RcvQualModeFlgSts(void)                                                                                          */
+/*  U1 u1_g_PictCtl_RcvQualModeRevFlgSts(void)                                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -3448,7 +3495,7 @@ U1 u1_g_PictCtl_RcvQualModeRevFlgSts(void)
 }
 
 /*===================================================================================================================================*/
-/*  U1 u1_g_PictCtl_CamKindSts(void)                                                                                                 */
+/*  U1 u1_g_PictCtl_RcvQualModeRevDate(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -3531,7 +3578,7 @@ static void vd_s_PictCtl_CamKindNtySnd(void)
     st_t_send.u1_met_gpio1 = (U1)PICT_CAM_DET_UNFIX;
 
     /*************************************************/
-    /*                 送信(暫定)                     */
+    /*                 送信                          */
     /*************************************************/
     vd_g_XspiIviSub1CameraDataSend(st_t_send);
 
@@ -3539,6 +3586,116 @@ static void vd_s_PictCtl_CamKindNtySnd(void)
     vd_s_PictCtl_SetTim((U1)PICT_TIMID_CAMKIND_SENDCYC, (U2)PICT_TIMER_TABCMD_SENDCYC);
 }
 
+/*===================================================================================================================================*/
+/*  void vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE)                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE)
+{
+    U1 u1_t_act_flg;
+    U1 u1_t_cam_mode;
+
+    u1_t_act_flg = (U1)TRUE;
+
+    /* パラメータチェック */
+    if(u1_a_MODE > PICT_DIAG_MOD_CAMON){
+        u1_t_act_flg = (U1)FALSE;
+    }
+
+    /* ダイアグモード差分チェック */
+    if(bfg_Pict_StsMng.u1_DiagMode == u1_a_MODE){
+        u1_t_act_flg = (U1)FALSE;
+    }
+
+    u1_t_cam_mode = u1_g_PictCtl_CamStsGet();
+    if((u1_t_cam_mode == (U1)TRUE)&&(u1_a_MODE == PICT_DIAG_MOD_CAMON)){
+        /* カメラダイアグモード⇔カメラモード間の遷移は顧客仕様にて禁止されている */
+        u1_t_act_flg = (U1)FALSE;
+    }
+
+    if(u1_t_act_flg == (U1)TRUE){
+        /* カメラダイアグモードON */
+        if((bfg_Pict_StsMng.u1_DiagMode != (U1)PICT_DIAG_MOD_CAMON) &&(u1_a_MODE == (U1)PICT_DIAG_MOD_CAMON)){
+            /* カメラダイアグモード⇔カメラモード間の遷移が禁止されている */
+            if(u1_t_cam_mode == (U1)FALSE){
+                /* 画質モード通知(カメラ以外)受信停止 */
+                bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg = (U1)PICT_RCV_NOCAMQUAL_STOP;
+                /*  T_SIP_NOTIF_OUT待ちタイマ停止 */
+                vd_s_PictCtl_ClrTim((U1)PICT_TIMID_ML_T_SIP_NOTIF_OUT);
+                /* カメラへ切替シーケンス要求 */
+                vd_s_PictCtl_SetMlSeqReq((U1)PICT_SEQ_ML_CAMONCHG);
+            }
+        }
+        /* カメラダイアグモードOFF(カメラダイアグモードON→ダイアグモードON) */
+        else if((bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_CAMON) && (u1_a_MODE == (U1)PICT_DIAG_MOD_ON)){
+            /* カメラON⇒カメラOFFの処理 */
+            vd_s_PictCtl_CamChgOn2Off();
+        }
+        /* カメラダイアグモードOFF(カメラダイアグモードON→ダイアグモードOFF) */
+        else if((bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_CAMON) && (u1_a_MODE == (U1)PICT_DIAG_MOD_OFF)){
+            /* DISP-REQ-GPIO0=Hiの場合、カメラ以外へ切替シーケンス要求 */
+            if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
+                /* カメラへ切替シーケンス要求 */
+                vd_s_PictCtl_SetMlSeqReq((U1)PICT_SEQ_ML_CAMONCHG);
+            }
+            else{
+                /* カメラON⇒カメラOFFの処理 */
+                vd_s_PictCtl_CamChgOn2Off();
+            }
+        }
+        /* ダイアグモードOFF(ダイアグモードON→ダイアグモードOFF) */
+        else if((bfg_Pict_StsMng.u1_DiagMode == (U1)PICT_DIAG_MOD_ON) && (u1_a_MODE == (U1)PICT_DIAG_MOD_OFF)){
+            /* DISP-REQ-GPIO0=Hiの場合、カメラ以外へ切替シーケンス要求 */
+            if (bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
+                /* カメラへ切替シーケンス要求 */
+                vd_s_PictCtl_SetMlSeqReq((U1)PICT_SEQ_ML_CAMONCHG);
+            }
+        }
+        /* その他 */
+        else{
+            /* 何にもしない */
+        }
+        /* ダイアグモード更新 */
+        bfg_Pict_StsMng.u1_DiagMode = u1_a_MODE;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_PictCtl_CdsizeChk(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_PictCtl_CdsizeChk(void)
+{
+    U1  u1_t_pre_cdsize;
+    
+    if(st_sp_Pict_BackUpInf.u1_CenterCamSiz == (U1)PICT_CAN_CAM_SIZE_1920X1080){
+        u1_s_pict_cd_size = (U1)PICT_CD_SIZE_1920X1080_140IN;
+    }
+    else{
+        u1_s_pict_cd_size = (U1)PICT_CD_SIZE_INVALID;
+    }
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CD_SIZE , &u1_t_pre_cdsize);
+    if(u1_t_pre_cdsize != u1_s_pict_cd_size){
+        (void)Com_SendSignal(ComConf_ComSignal_CD_SIZE , &u1_s_pict_cd_size);
+        Com_TriggerIPDUSend((PduIdType)MSG_AVN1S97_TXCH0);
+    }
+}
+
+/*===================================================================================================================================*/
+/*  U1    u1_g_PictCtl_CdsizeSnd(void)                                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1 u1_g_PictCtl_CdsizeSnd(void)
+{
+	return(u1_s_pict_cd_size);
+}
 
 /* 見た目オン起動処理暫定対応 */
 static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void)

@@ -111,13 +111,13 @@ const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU14[MCU_SYS_PWR_EIZOIC_RWC_BYT
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU15[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x90U,    /* Write Address */
-    (U1)0x23U     /* Write Data */
+    (U1)0x2BU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU16[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
     (U1)MCU_SYS_PWR_EIZOIC_SLAVEADR_WR,    /* Slave Address */
     (U1)0x91U,    /* Write Address */
-    (U1)0x3FU     /* Write Data */
+    (U1)0x3BU     /* Write Data */
 };
 
 const U1 u1_sp_MCU_SYS_PWR_EIZOIC_MlSETREG_INIT_PDU17[MCU_SYS_PWR_EIZOIC_RWC_BYTE3] = {
