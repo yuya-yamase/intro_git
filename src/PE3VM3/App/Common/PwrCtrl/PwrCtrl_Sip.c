@@ -70,8 +70,8 @@
 /* SIPスタンバイ用処理 */
 #define PWRCTRL_SIP_STBY_T_MM_SUSPEND_REQ  (0U)                              /* tMM_SUSPEND_REQ_N:0ms                                                */
 #define PWRCTRL_SIP_STBY_T_STR_WAKE        (0U)                              /* tSTR_WAKE:0ms                                                        */
-#define PWRCTRL_SIP_STBY_T_MM_STBY         (0u)                              /* MM_STBY_N:0ms                                                        */
-#define PWRCTRL_SIP_STBY_T_AOSS            (0u)                              /* AOSS_SLEEP_ENTRY_EXIT:0ms                                            */
+#define PWRCTRL_SIP_STBY_T_MM_STBY         (0U)                              /* MM_STBY_N:0ms                                                        */
+#define PWRCTRL_SIP_STBY_T_AOSS            (0U)                              /* AOSS_SLEEP_ENTRY_EXIT:0ms                                            */
 #define PWRCTRL_SIP_STBY_T_VB33_SIP_FREQ   (0U)                              /* tVB33-SIP-FREQ:0ms                                                   */
 #define PWRCTRL_SIP_STBY_T_LOW_POWER_ON    (     5U / PWRCTRL_CFG_TASK_TIME) /* tLOW-POWER-ON:5ms                                                    */
 
@@ -90,7 +90,6 @@
 static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4* u4_a_counter , const U1 u1_a_ontime ,const Dio_ChannelType u2_a_ChannelId , const Dio_LevelType u1_a_Level);
 static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , const U1 u1_a_ontime ,const U1 u1_a_PinID , const Dio_LevelType u1_a_Level);
 static void vd_s_PwrCtrl_Sip_DioFreqAct(U4* u4_a_counter , const U1 u1_a_ontime ,const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY);
-
 
 /* ON/OFFシーケンス起動要求 */
 static U1 u1_s_PwrCtrl_Sip_Pwr_Sts;
@@ -485,28 +484,28 @@ void vd_g_PwrCtrlSipMainFunc( void )
     /* 理由：同時に各制御を実行することはないため */
     switch ( u1_s_PwrCtrl_Sip_Pwr_Sts )
     {
-        case PWRCTRL_SIP_STS_PWRON:        /* SIP通常起動制御 */
+        case (U1)PWRCTRL_SIP_STS_PWRON:        /* SIP通常起動制御 */
             vd_s_PwrCtrlSipOnMainFunc();
             break;
 
-        case PWRCTRL_SIP_STS_RESUME:       /* SIPレジューム制御 */
+        case (U1)PWRCTRL_SIP_STS_RESUME:       /* SIPレジューム制御 */
             vd_s_PwrCtrlSipRsmMainFunc();
             break;
 
-        case PWRCTRL_SIP_STS_PWROFF:       /* SIP電源OFF制御 */
+        case (U1)PWRCTRL_SIP_STS_PWROFF:       /* SIP電源OFF制御 */
             vd_s_PwrCtrlSipOffMainFunc();
             break;
 
-        case PWRCTRL_SIP_STS_STANDBY:      /* スタンバイシーケンス */
+        case (U1)PWRCTRL_SIP_STS_STANDBY:      /* スタンバイシーケンス */
             vd_s_PwrCtrlSipStbyMainFunc();
             break;
 
-        case PWRCTRL_SIP_STS_BUDET:        /* BU-DET処理 */
-
+        case (U1)PWRCTRL_SIP_STS_BUDET:        /* BU-DET処理 */
+            /* 【todo】6-5.BU-DET処理 */
             break;
 
-        case PWRCTRL_SIP_STS_FORCEDOFF:    /* SIP電源強制OFFシーケンス */
-
+        case (U1)PWRCTRL_SIP_STS_FORCEDOFF:    /* SIP電源強制OFFシーケンス */
+            /* 【todo】5-6.SIP電源強制OFFシーケンス */
             break;
 
         default:
@@ -575,7 +574,6 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_BON_STEP2_3; /* TP */
 #endif
-
         
         /* STEP2-1が完了していれば次の処理に進める */
         if(u4_s_PwrCtrl_Sip_On_LOW_POWER_ON_Step2_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
@@ -661,14 +659,14 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
         vd_s_PwrCtrlSipOnValChkSOCRSOUT();        /* STEP6-1 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
-                u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_BON_STEP6_1; /* TP */
+        u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_BON_STEP6_1; /* TP */
 #endif
 
         /* POFF_COMPLETE_N変化(Hi)後にSAIL_RESOUT_N変化(Hi)チェック */
         vd_s_PwrCtrlSipOnValChkSAILRSOUT();       /* STEP6-2 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
-                u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_BON_STEP6_2; /* TP */
+        u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_BON_STEP6_2; /* TP */
 #endif
 
         /* SAIL_RESOUT_N変化(Hi)チェックが完了したらEtherSW起動要求を通知 */
@@ -693,7 +691,7 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
         vd_s_PwrCtrlSipOnValChkPSHOLD();     /* STEP7-1 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
-                u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_BON_STEP7_1; /* TP */
+        u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_BON_STEP7_1; /* TP */
 #endif
 
         /* STEP7-1が完了、かつSTEP3-1から50ms経過していれば次の処理に進める */
@@ -944,7 +942,6 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_STANDBY_MMSTBY; /* TP */
 #endif
 
-        
         /* STEP2-1が完了していれば次の処理に進める */
         if(u4_s_PwrCtrl_Sip_Stby_MM_STBY_N_Chk_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             u1_s_PwrCtrl_Sip_Stby_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
@@ -963,7 +960,6 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_STANDBY_AOSS; /* TP */
 #endif
 
-            
         /* STEP3-1が完了していれば次の処理に進める */
         if(u4_s_PwrCtrl_Sip_Stby_AOSS_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             u1_s_PwrCtrl_Sip_Stby_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
@@ -1009,17 +1005,17 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
 static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4* u4_a_counter , const U1 u1_a_ontime ,
         const Dio_ChannelType u2_a_ChannelId , const Dio_LevelType u1_a_Level)
 {
-        if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
-                if(*u4_a_counter >= u1_a_ontime){                                      /* u1_a_ontime時間が経過したか */
-                   (void)Dio_WriteChannel(Mcu_Dio_PortId[u2_a_ChannelId], u1_a_Level); /* 経過していればDIOのWRITE関数をコール */
-                   *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;                       /* 待ち時間の測定結果に完了を通知 */
-                }
-                else{
-                   (*u4_a_counter)++;                                                  /* 待ち時間のしきい値に達していない場合はカウントをインクリメント */
-                }
-        }
-        
-        return;
+    if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
+        if(*u4_a_counter >= u1_a_ontime){                                       /* u1_a_ontime時間が経過したか */
+            (void)Dio_WriteChannel(Mcu_Dio_PortId[u2_a_ChannelId], u1_a_Level); /* 経過していればDIOのWRITE関数をコール */
+            *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;                       /* 待ち時間の測定結果に完了を通知 */
+         }
+         else{
+            (*u4_a_counter)++;                                                  /* 待ち時間のしきい値に達していない場合はカウントをインクリメント */
+         }
+    }
+    
+    return;
 }
 
 /*****************************************************************************
@@ -1035,21 +1031,21 @@ static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4* u4_a_counter , const U1 u1_a_onti
 static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , const U1 u1_a_ontime ,
         const U1 u1_a_PinID , const Dio_LevelType u1_a_Level)
 {
-        U1 u1_t_read_lv;
+    U1 u1_t_read_lv;
 
-        if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
-                if(*u4_a_counter >= u1_a_ontime){                              /* u1_a_ontime時間が経過したか */
-                   u1_t_read_lv = Dio_ReadChannel(Mcu_Dio_PortId[u1_a_PinID]); /* 経過していればDIOのREAD関数をコール */
-                   if( u1_t_read_lv == u1_a_Level){                            /* READ関数で読みだした結果が期待値と一致するか */
-                      *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;            /* 一致すれば待ち時間の測定結果に完了を通知 */
-                   }
-                }
-                else{
-                   (*u4_a_counter)++;                                          /* 待ち時間のしきい値に達していない場合はカウントをインクリメント */
-                }
+    if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
+        if(*u4_a_counter >= u1_a_ontime){                               /* u1_a_ontime時間が経過したか */
+            u1_t_read_lv = Dio_ReadChannel(Mcu_Dio_PortId[u1_a_PinID]); /* 経過していればDIOのREAD関数をコール */
+            if( u1_t_read_lv == u1_a_Level){                            /* READ関数で読みだした結果が期待値と一致するか */
+                *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;           /* 一致すれば待ち時間の測定結果に完了を通知 */
+            }
         }
-        
-        return;
+        else{
+           (*u4_a_counter)++;                                           /* 待ち時間のしきい値に達していない場合はカウントをインクリメント */
+        }
+    }
+    
+    return;
 }
 
 /*****************************************************************************
@@ -1066,17 +1062,17 @@ static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , const U1 u1_a_ontim
 static void vd_s_PwrCtrl_Sip_DioFreqAct(U4* u4_a_counter , const U1 u1_a_ontime ,
               const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY)
 {
-        if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
-                if(*u4_a_counter >= u1_a_ontime){                                   /* u1_a_ontime時間が経過したか */
-                   vd_g_Pwm_SetPeriodAndDuty(u1_a_PWM_CH, u2_a_PERIOD, u2_a_DUTY);
-                   *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;                    /* 一致すれば待ち時間の測定結果に完了を通知 */
-                }
-                else{
-                   (*u4_a_counter)++;                                               /* 待ち時間のしきい値に達していない場合はカウントをインクリメント */
-                }
+    if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
+        if(*u4_a_counter >= u1_a_ontime){                                    /* u1_a_ontime時間が経過したか */
+            vd_g_Pwm_SetPeriodAndDuty(u1_a_PWM_CH, u2_a_PERIOD, u2_a_DUTY);
+            *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;                    /* 一致すれば待ち時間の測定結果に完了を通知 */
         }
-        
-        return;
+        else{
+            (*u4_a_counter)++;                                               /* 待ち時間のしきい値に達していない場合はカウントをインクリメント */
+        }
+    }
+    
+    return;
 }
 
 /*#define ***_STOP_SEC_CODE

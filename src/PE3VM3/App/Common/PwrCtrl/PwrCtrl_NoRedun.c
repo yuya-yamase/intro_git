@@ -452,46 +452,46 @@ static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
         /* 次回状態判定 電源ステートはONOFF仕様 図5-3 参照 */
         switch ( u1_t_mcu_VPSINFO )
         {
-            case  PWRCTRL_NOREDUN_CHKSTS_APPON_UNCON:               /* 見た目：オン ステート：状態未定 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_UNCON:           /* 見た目：オン ステート：状態未定 */
                 u1_t_mcu_return = u1_s_PwrCtrl_NoRedun_Sts;         /* 前回状態保持 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPON_PARK:                /* 見た目：オン ステート：駐車中 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_PARK:            /* 見た目：オン ステート：駐車中 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPON_RIDE:                /* 見た目：オン ステート：乗車中 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_RIDE:            /* 見た目：オン ステート：乗車中 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPON_PONEMG:              /* 見た目：オン ステート：PowerON緊急停止 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_PONEMG:          /* 見た目：オン ステート：PowerON緊急停止 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPON_PON:                 /* 見た目：オン ステート：PowerON通常 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_PON:             /* 見た目：オン ステート：PowerON通常 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPON_HVOL:                /* 見た目：オン ステート：駐車中 高圧起動 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_HVOL:            /* 見た目：オン ステート：駐車中 高圧起動 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPON_HVOLHCOND:           /* 見た目：オン ステート：駐車中 高圧・温調起動 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_HVOLHCOND:       /* 見た目：オン ステート：駐車中 高圧・温調起動 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPOFF_UNCON:              /* 見た目：オフ ステート：状態未定 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_UNCON:          /* 見た目：オフ ステート：状態未定 */
                 u1_t_mcu_return = (U1)u1_s_PwrCtrl_NoRedun_Sts;     /* 前回状態保持 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPOFF_PARK:               /* 見た目：オフ ステート：駐車中 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_PARK:           /* 見た目：オフ ステート：駐車中 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPOFF_RIDE:               /* 見た目：オフ ステート：乗車中 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_RIDE:           /* 見た目：オフ ステート：乗車中 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPOFF; /* 見た目オフ起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPOFF_PONEMG:             /* 見た目：オフ ステート：PowerON緊急停止 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_PONEMG:         /* 見た目：オフ ステート：PowerON緊急停止 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPOFF_PON:                /* 見た目：オフ ステート：PowerON通常 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_PON:            /* 見た目：オフ ステート：PowerON通常 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPOFF_HVOL:               /* 見た目：オフ ステート：駐車中 高圧起動 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_HVOL:           /* 見た目：オフ ステート：駐車中 高圧起動 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
                 break;
-            case  PWRCTRL_NOREDUN_CHKSTS_APPOFF_HVOLHCOND:          /* 見た目：オフ ステート：駐車中 高圧・温調起動 */
+            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_HVOLHCOND:      /* 見た目：オフ ステート：駐車中 高圧・温調起動 */
                 u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
                 break;
             default:
@@ -539,7 +539,7 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
 
         switch ( u1_s_PwrCtrl_NoRedun_MetBB_OnStep )
         {
-            case PWRCTRL_COMMON_PROCESS_STEP1:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 /* 実行中のONシーケンスをMeter+BBに設定 */
                 u1_s_PwrCtrl_NoRedun_OnSequence = (U1)PWRCTRL_NOREDUN_ONSEQ_METBB;
 
@@ -552,7 +552,7 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
                 }
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP2:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
                 vd_s_PwrCtrlNoRedunWkGvifTxMetBB();
 
                 if ( u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
@@ -564,7 +564,7 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
                 u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
                 /* 正常起動時は何もしない */
                 break;
 
@@ -583,7 +583,7 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
 
         switch ( u1_s_PwrCtrl_NoRedun_MetBB_OffStep )
         {
-            case PWRCTRL_COMMON_PROCESS_STEP1:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 vd_s_PwrCtrlNoRedunWkOffGvifTxMetBB();
 
                 if ( u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
@@ -593,7 +593,7 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
                 }
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP2:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
                 vd_s_PwrCtrlNoRedunPwrOffMbPwr();
 
                 if ( u2_s_PwrCtrl_NoRedun_MBoff_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN )
@@ -603,7 +603,7 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
                 }
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
                 /* 正常終了時は何もしない */
                 break;
 
@@ -739,7 +739,7 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
 
        switch (u1_s_PwrCtrl_NoRedun_Disp_OnStep)
        {
-       case PWRCTRL_COMMON_PROCESS_STEP1:
+       case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
             /* 実行中のONシーケンスをCenterDsipに設定 */
             u1_s_PwrCtrl_NoRedun_OnSequence = (U2)PWRCTRL_NOREDUN_ONSEQ_CNTDSP;
 
@@ -751,7 +751,7 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
             }
             break;
 
-       case PWRCTRL_COMMON_PROCESS_STEP2:
+       case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
             vd_s_PwrCtrlNoRedunWkGvifTxDisp();
 
             if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
@@ -762,7 +762,7 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
             u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
             break;
 
-       case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+       case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
             /* 正常起動時は何もしない */
             break;
     
@@ -780,7 +780,7 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
 
          switch (u1_s_PwrCtrl_NoRedun_Disp_OffStep)
          {
-         case PWRCTRL_COMMON_PROCESS_STEP1:
+         case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
               vd_s_PwrCtrlNoRedunWkOffGvifTxDisp();
 
               if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
@@ -789,7 +789,7 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
               }
               break;
 
-         case PWRCTRL_COMMON_PROCESS_STEP2:
+         case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
               vd_s_PwrCtrlNoRedunPwrOffDsp();
 
               if(u2_s_PwrCtrl_NoRedun_Dspoff_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
@@ -798,7 +798,7 @@ static void vd_s_PwrCtrlNoRedunDisp( void )
               }
               break;
 
-          case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+          case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
                /* 正常終了時は何もしない */
                break;
     
@@ -925,7 +925,7 @@ static void vd_s_PwrCtrlNoRedunHub( void )
 
     switch (u1_s_PwrCtrl_NoRedun_Hub_OnStep)
     {
-    case PWRCTRL_COMMON_PROCESS_STEP1:
+    case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
       /* 実行中のONシーケンスをDSRC(HUB)に設定 */
       u1_s_PwrCtrl_NoRedun_OnSequence = (U1)PWRCTRL_NOREDUN_ONSEQ_DSRC;
 
@@ -937,7 +937,7 @@ static void vd_s_PwrCtrlNoRedunHub( void )
       }
       break;
 
-    case PWRCTRL_COMMON_PROCESS_STEP2:
+    case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
       vd_s_PwrCtrlNoRedunWkHub();
 
       if(u2_s_PwrCtrl_NoRedun_Hubwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
@@ -948,7 +948,7 @@ static void vd_s_PwrCtrlNoRedunHub( void )
       u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
       break;
 
-    case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+    case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
       /* 正常起動時は何もしない */
       break;
     
@@ -964,7 +964,7 @@ static void vd_s_PwrCtrlNoRedunHub( void )
     u2_s_PwrCtrl_NoRedun_Hubwk_Time    = (U2)0U;
     switch (u1_s_PwrCtrl_NoRedun_Hub_OffStep)
     {
-    case PWRCTRL_COMMON_PROCESS_STEP1:
+    case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
       vd_s_PwrCtrlNoRedunWkOffHub();
 
       if(u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
@@ -973,7 +973,7 @@ static void vd_s_PwrCtrlNoRedunHub( void )
       }
       break;
 
-    case PWRCTRL_COMMON_PROCESS_STEP2:
+    case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
       vd_s_PwrCtrlNoRedunPwrOffHub();
 
       if(u2_s_PwrCtrl_NoRedun_Huboff_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
@@ -982,7 +982,7 @@ static void vd_s_PwrCtrlNoRedunHub( void )
       }
       break;
 
-    case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+    case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
       /* 正常終了時は何もしない */
       break;
     
@@ -1112,7 +1112,6 @@ static void vd_s_PwrCtrlNoRedunBetWait( void )
     
   return;
 }
-
 
 /*****************************************************************************
   Function      : Mcu_Dev_Pwroff

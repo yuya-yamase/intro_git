@@ -32,7 +32,6 @@
 #define PWRCTRL_COMMON_PROCESS_STEP9      (0x09U)
 #define PWRCTRL_COMMON_PROCESS_STEP_CMPLT (0xFFU)
 
-
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
 /* 異常系チェック用STB定義 */
 extern U1 u1_s_pwrctrl_common_err_dbg_state;

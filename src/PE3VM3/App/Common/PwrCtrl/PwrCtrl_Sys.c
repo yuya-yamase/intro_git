@@ -340,7 +340,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
 
         switch ( u1_s_PwrCtrl_PwrOn_Step )
         {
-            case PWRCTRL_COMMON_PROCESS_STEP1:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 vd_s_PwrCtrlSysPwrOnBuDdMode(); /* STEP1-2 */
                 vd_s_PwrCtrlSysPwrOnDisCharge();  /* STEP1-1 */
 
@@ -352,7 +352,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 }
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP2:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
                 vd_s_PwrCtrlSysPwrOnBoostDcdc();      /* STEP2-1 */
                 vd_s_PwrCtrlSysPwrOnBoostAsilDcdc();  /* STEP2-2 */
 
@@ -364,7 +364,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 }
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP3:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP3:
                 vd_s_PwrCtrlSysPwrOnDdFreq();        /* STEP3-1 */
                 vd_s_PwrCtrlSysPwrOnBoostAsilFreq(); /* STEP3-2 */
                 vd_s_PwrCtrlSysPwrOnV33Peri();       /* STEP3-3 */
@@ -380,7 +380,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 }
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP4:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP4:
                 vd_s_PwrCtrlSysPwrOnV18();     /* STEP4-1 */
                 vd_s_PwrCtrlSysPwrOnV18Asil(); /* STEP4-2 */
                 vd_s_PwrCtrlSysPwrOnAudio();   /* STEP4-3 */
@@ -401,7 +401,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 }
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
                 /* ê≥èÌãNìÆéûÇÕâΩÇ‡ÇµÇ»Ç¢ */
                 break;
 
@@ -463,7 +463,7 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
 
         switch ( u1_s_PwrCtrl_PwrOff_Step )
         {
-            case PWRCTRL_COMMON_PROCESS_STEP1:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 vd_s_PwrCtrlSysPwrOffflw();
 
                 /* STEP1Ç™äÆóπÇµÇƒÇ¢ÇÍÇŒê≥èÌãNìÆÇê›íË */
@@ -473,7 +473,7 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
                 }
                 break;
 
-            case PWRCTRL_COMMON_PROCESS_STEP2:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
                 if ( Mcu_PowerIc_OffTime != PWRCTRL_NOREDUN_WAIT_TIME_FIN )
                 {
                     Mcu_PowerIc_OffTime++;
@@ -495,7 +495,7 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
                     u1_s_PwrCtrl_Sys_Pwr_Sts = (U1)PWRCTRL_SYS_NON;
                 }
                 break;
-            case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
                 /* ê≥èÌèIóπéûÇÕâΩÇ‡ÇµÇ»Ç¢ */
                 break;
             default:

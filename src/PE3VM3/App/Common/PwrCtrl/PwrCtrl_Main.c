@@ -293,7 +293,7 @@ static void vd_s_PwrCtrlMainStartSet( void )
     
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
     /* 異常系確認用RAMの初期化 */
-    u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_NON;       /* TP */
+    u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_NON;   /* TP */
     /* 異常系確認用RAMの初期化 */
 #endif
     return;
@@ -359,7 +359,6 @@ static void vd_s_PwrCtrlMainBonSeq( void )
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_BON_MMSTBY; /* TP */
 #endif
     }
-
 
 /* 終了処理 */
     /* ★要検討★：全部が完了したら、要求を落として処理完了状態にする */
