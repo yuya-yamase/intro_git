@@ -96,7 +96,17 @@ void EthSwt_SWIC_PWR_ResetReq(void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-uint8 EthSwt_SWIC_PWR_GetState(void);
+uint8 EthSwt_SWIC_PWR_GetSWICPower(void)
+{
+    uint8 state = STD_OFF;
+
+    if (G_SWIC_PWR_Status == D_ETHSWT_SWIC_PWR_ST_ON && G_SWIC_PWR_ResetReq)
+    {
+        state = STD_ON;
+    }
+
+    return state;
+}
 
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_pwr_waitOnProc (void)
@@ -210,7 +220,7 @@ static uint32 ethswt_swic_pwr_act_resume (void)
 {
     G_SWIC_PWR_ResetAssertCount = 0;
     G_SWIC_PWR_ResetDeassertCount = 0;
-    
+
     return D_ETHSWT_SWIC_PWR_ST_ON;
 }
 

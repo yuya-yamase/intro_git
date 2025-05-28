@@ -61,6 +61,10 @@ product_cfg.c
 EthSwt_SWIC.c
 EthSwt_SWIC_PWR.c
 EthSwt_SWIC_Core_Cfg.c
+EthSwt_SWIC_STM.c
+EthSwt_SWIC_Init.c
+EthSwt_SWIC_Reg.c
+EthSwt_SWIC_Spi.c
 EthSwt_Stub.c
 EthDLC_ctrl.c
 EthDLC_ACTL.c

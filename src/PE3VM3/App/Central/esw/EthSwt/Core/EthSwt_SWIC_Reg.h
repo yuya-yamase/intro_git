@@ -1,18 +1,15 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_PWR.h                                          */
+/* file name  :  EthSwt_SWIC_Reg.h                                          */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHSWT_SWIC_PWR_H
-#define ETHSWT_SWIC_PWR_H
+#ifndef ETHSWT_SWIC_REG_H
+#define ETHSWT_SWIC_REG_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_PWR_Init(void);
-void EthSwt_SWIC_PWR_LoProc(void);
-void EthSwt_SWIC_PWR_PowerOnReq(void);
-void EthSwt_SWIC_PWR_PowerOffReq(void);
-void EthSwt_SWIC_PWR_ResetReq(void);
-uint8 EthSwt_SWIC_PWR_GetSWICPower(void);
+#include "EthSwt_SWIC_initRegCommon.h"
+/* -------------------------------------------------------------------------- */
+Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 cnt, uint32 * const dat);
 
 /* -------------------------------------------------------------------------- */
-#endif /* ETHSWT_SWIC_PWR_H */
+#endif /* ETHSWT_SWIC_REG_H */
 /* -------------------------------------------------------------------------- */

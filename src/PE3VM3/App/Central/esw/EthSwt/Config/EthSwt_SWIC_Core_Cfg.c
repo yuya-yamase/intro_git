@@ -2,12 +2,13 @@
 #include "EthSwt_SWIC_Core_Cfg.h"
 /* -------------------------------------------------------------------------- */
 
+
+/* -------------------------------------------------------------------------- */
 /* For EthSwt_SWIC_PWR */
 #include <Dio.h>
 #include <Dio_Symbols.h>
 #include <Port_Cfg.h>
 #include <Port.h>
-
 void EthSwt_SWIC_PWR_SetGPIOMode(void)
 {
     /* - Config: SPI通信ラインをGPIOモードへ変更　------------- */
@@ -65,3 +66,25 @@ void EthSwt_SWIC_PWR_ResetDeassert(void)
 
     return;
 }
+
+/* -------------------------------------------------------------------------- */
+/* For EthSwt_SWIC_STM */
+#include <Port_Cfg.h>
+#include <Port.h>
+#include <EthSwt_SWIC_PWR.h>
+Std_ReturnType EthSwt_SWIC_STM_CheckAvailable(void)
+{
+    Std_ReturnType swicAvailable = STD_OFF;
+    Std_ReturnType swicPowerStatus;
+    Std_ReturnType sailResoutN;
+
+    swicPowerStatus = EthSwt_SWIC_PWR_GetSWICPower();
+    sailResoutN = Dio_ReadChannel(DIO_ID_PORT8_CH8);
+
+    if (swicPowerStatus == STD_ON && sailResoutN == STD_ON) {
+        swicAvailable = STD_ON;
+    }
+
+    return swicAvailable;
+}
+/* -------------------------------------------------------------------------- */
