@@ -4,7 +4,10 @@
     :sourceDir=${APP_DIR}/Common/xspi
     :sourceDir=${APP_DIR}/Common/PwrCtrl
     :sourceDir=${APP_DIR}/Product/config_1MJP
-    :sourceDir=${APP_DIR}/Central/esw/EthSwt/src
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Config
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Core
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Custom
     :sourceDir=${APP_DIR}/Central/esw/EthSW_Task
     :sourceDir=${APP_DIR}/Central/esw/EthDLC
     :sourceDir=${APP_DIR}/Central/LIB
@@ -29,8 +32,10 @@
     -I${VEHOPE_DIR}/scc
     -I${LIB_DIR}
 
-    -I${APP_DIR}/Central/esw/EthSwt/cfg
-    -I${APP_DIR}/Central/esw/EthSwt/inc
+    -I${APP_DIR}/Central/esw/EthSwt
+    -I${APP_DIR}/Central/esw/EthSwt/Config
+    -I${APP_DIR}/Central/esw/EthSwt/Core
+    -I${APP_DIR}/Central/esw/EthSwt/Custom
     -I${APP_DIR}/Central/esw/EthDLC
     -I${APP_DIR}/Central/esw/inc
     -I${APP_DIR}/Central/inc
@@ -54,11 +59,6 @@ Mcu_Sip_Pwr.c
 Mcu_Sys_Pwr.c
 product_cfg.c
 EthSwt_SWIC.c
-EthSwt_SWIC_Pwr.c
-EthSwt_SWIC_Org.c
-EthSwt_SWIC_Reg.c
-EthSwt_SWIC_SpiS1.c
-EthSwt_Data.c
 EthDLC_ctrl.c
 EthDLC_ACTL.c
 EthDLC_DLC.c

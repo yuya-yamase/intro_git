@@ -6,13 +6,11 @@
 #include <EthSW_Task.h>
 #include <EthSwt_SWIC.h>
 #include "EthDLC.h"
-#include "EthSwt_Data.h"
 /* -------------------------------------------------------------------------- */
 void EthSW_StaBonInit(void)
 {
 	EthSwt_SWIC_Init(NULL_PTR);
 	EthDLC_Init();
-	EthSwt_Data_Init();
 	return;
 }
 /* -------------------------------------------------------------------------- */
@@ -35,13 +33,14 @@ void EthSW_StaWkupInit(void)
 void EthSW_MediumTask (void)
 {
 	EthDLC_LoProc();
-	EthSwt_Data_MidProc();
+	EthSwt_SWIC_LoProc();
+
 	return;
 }
 /* -------------------------------------------------------------------------- */
 void EthSW_HighTask (void)
 {
-	EthSwt_SWIC_MainFunction();
+	EthSwt_SWIC_HiProc();
 
 	return;
 }
