@@ -839,13 +839,13 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
 
 /* SOC_RESOUT_N & SAIL_RESOUT_N & POFF_COMPLETE_N =Lo? */
     if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP4){
-        vd_s_PwrCtrlSipOffValChkSOCRSOUT();    /* STEP4-1 */
+        vd_s_PwrCtrlSipOffValChkSOCRSOUT(); /* STEP4-1 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_SIPOFF_STEP4_1; /* TP */
 #endif
 
-        vd_s_PwrCtrlSipOffValChkSAILROUT();   /* STEP4-2 */
+        vd_s_PwrCtrlSipOffValChkSAILROUT(); /* STEP4-2 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_SIPOFF_STEP4_2; /* TP */
@@ -1035,17 +1035,17 @@ static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4* u4_a_counter , const U1 u1_a_onti
 static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , const U1 u1_a_ontime ,
         const U1 u1_a_PinID , const Dio_LevelType u1_a_Level)
 {
-        U1 read_lv;
+        U1 u1_t_read_lv;
 
         if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
-                if(*u4_a_counter >= u1_a_ontime){                             /* u1_a_ontime時間が経過したか */
-                   read_lv = Dio_ReadChannel(Mcu_Dio_PortId[u1_a_PinID]);     /* 経過していればDIOのREAD関数をコール */
-                   if( read_lv == u1_a_Level){                                /* READ関数で読みだした結果が期待値と一致するか */
-                      *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;           /* 一致すれば待ち時間の測定結果に完了を通知 */
+                if(*u4_a_counter >= u1_a_ontime){                              /* u1_a_ontime時間が経過したか */
+                   u1_t_read_lv = Dio_ReadChannel(Mcu_Dio_PortId[u1_a_PinID]); /* 経過していればDIOのREAD関数をコール */
+                   if( u1_t_read_lv == u1_a_Level){                            /* READ関数で読みだした結果が期待値と一致するか */
+                      *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;            /* 一致すれば待ち時間の測定結果に完了を通知 */
                    }
                 }
                 else{
-                   (*u4_a_counter)++;                                         /* 待ち時間のしきい値に達していない場合はカウントをインクリメント */
+                   (*u4_a_counter)++;                                          /* 待ち時間のしきい値に達していない場合はカウントをインクリメント */
                 }
         }
         

@@ -478,9 +478,9 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 
 /* 終了処理 */
     /* ★要検討★：全部が完了したら、要求を落として処理完了状態にする */
-    if( (u1_s_PwrCtrl_Main_SysPwrSts     == (U1)PWRCTRL_MAIN_SYS_STS_COMP)
-     && (u1_s_PwrCtrl_Main_SipPwrSts     == (U1)PWRCTRL_MAIN_SIP_STS_COMP))
-     {
+    if( (u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_COMP)
+     && (u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_COMP))
+    {
         u1_s_PwrCtrl_Main_Sts = (U1)PWRCTRL_MAIN_NO_REQ;                                                  /* 処理完了 */
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_NON;                                   /* 異常系エラーなし */
