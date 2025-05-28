@@ -1,13 +1,9 @@
 /* -------------------------------------------------------------------------- */
-/* file name   : EthDLC.h                                                     */
+/* file name   : EthDLC_Cutom_Cfg.h                                           */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHDLC_H
-#define ETHDLC_H
+#ifndef ETHDLC_CUSTOM_CFG_H
+#define ETHDLC_CUSTOM_CFG_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-void			EthDLC_Init(void);
-void			EthDLC_LoProc(void);
-Std_ReturnType	EthDLC_GetACTLState(void);
-/* -------------------------------------------------------------------------- */
-#endif/* ETHDLC_H */
+#endif /* ETHDLC_CUSTOM_CFG_H */

@@ -1,23 +1,25 @@
 /* -------------------------------------------------------------------------- */
-/* file name   : EthDLC_DLC.c                                                 */
+/* file name   : EthDLC_STM.c                                                 */
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-#include <EthDLC_ACTL.h>
-#include <EthDLC_DLC.h>
 #include <LIB.h>
+#include <EthDLC_ACTL.h>
+#include <EthDLC_Indicator.h>
+#include <EthDLC_PortState.h>
+#include <EthDLC_PowerState.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHDLC_ST_INIT_POINT		(0U)
 #define D_ETHDLC_ST_LINK_DOWN		(1U)
 #define D_ETHDLC_ST_LINK_WAIT		(2U)
 #define D_ETHDLC_ST_LINK_UP			(3U)
 #define D_ETHDLC_ST_NUM				(4U)
-
+/* -------------------------------------------------------------------------- */
 #define D_ETHDLC_EV_NONE			(0U)
 #define D_ETHDLC_EV_INIT			(1U << 0U)
 #define D_ETHDLC_EV_DLC_ON			(1U << 1U)
 #define D_ETHDLC_EV_DLC_OFF 		(1U << 2U)
 #define D_ETHDLC_EV_LINK_UP			(1U << 3U)
-
+/* -------------------------------------------------------------------------- */
 #define D_ETHDLC_RECORD_PER_ST_NUM	(2U)
 /* -------------------------------------------------------------------------- */
 typedef uint8 (*ETHDLC_ACT)(void);
@@ -27,53 +29,53 @@ typedef struct
 	ETHDLC_ACT	Action;
 } S_ETHDLC_ACTION;
 /* -------------------------------------------------------------------------- */
+#define EthDLC_START_SEC_VAR
+#include <EthDLC_MemMap.h>
+/* -------------------------------------------------------------------------- */
 static uint8 G_DLC_Status;
 static uint8 G_DLC_Event;
 /* -------------------------------------------------------------------------- */
-static void ethdlc_dlc_drive_stm(void);
-static void ethdlc_dlc_event_set(uint8 event);
+#define EthDLC_STOP_SEC_VAR
+#include <EthDLC_MemMap.h>
+/* -------------------------------------------------------------------------- */
+static void  ethdlc_dlc_event_set(uint8 event);
 static uint8 ethdlc_dlc_event_get(void);
-static void ethdlc_dlc_action(uint8 event);
+static uint8 ethdlc_dlc_get_dlc_on_event(void);
+static uint8 ethdlc_dlc_get_linkup_event(void);
+static void  ethdlc_dlc_action(uint8 event);
 static uint8 ethdlc_dlc_action_None (void);
 static uint8 ethdlc_dlc_action_Init(void);
 static uint8 ethdlc_dlc_action_DLCOn(void);
 static uint8 ethdlc_dlc_action_LinkUp(void);
 static uint8 ethdlc_dlc_action_DLCOff(void);
-static uint8 ethdlc_dlc_get_dlc_event (void);
-static uint8 ethdlc_dlc_get_linkup_event (void);
-static Std_ReturnType ethdlc_dlc_checkPwrState(void);
-static void ethdlc_dlc_notifyDoIPAction(void);
-
 /* -------------------------------------------------------------------------- */
-/* tag         : <ESW-EthDLC_DLC_Init>                                        */
+#define EthDLC_START_SEC_CODE
+#include <EthDLC_MemMap.h>
 /* -------------------------------------------------------------------------- */
-void EthDLC_DLC_Init (void)
+/* tag         : <ESW-EthDLC_STM_Init>                                        */
+/* -------------------------------------------------------------------------- */
+void EthDLC_STM_Init (void)
 {
 	G_DLC_Status = D_ETHDLC_ST_INIT_POINT;
 	G_DLC_Event  = D_ETHDLC_EV_NONE;
 
 	ethdlc_dlc_event_set(D_ETHDLC_EV_INIT);
+
+	return;
 }
 /* -------------------------------------------------------------------------- */
-/* tag         : <ESW-EthDLC_DLC_LoProc>                                      */
+/* tag         : <ESW-EthDLC_STM_LoProc>                                      */
 /* -------------------------------------------------------------------------- */
-void EthDLC_DLC_LoProc (void)
+void EthDLC_STM_LoProc (void)
 {
-	ethdlc_dlc_drive_stm();
-
-    ethdlc_dlc_notifyDoIPAction();
-}
-/* -------------------------------------------------------------------------- */
-/* tag         : <ESW-ethdlc_dlc_drive_stm>                                   */
-/* -------------------------------------------------------------------------- */
-static void ethdlc_dlc_drive_stm (void)
-{
-	uint8	evt;
+	uint8	event;
 
 
-	evt = ethdlc_dlc_event_get();
+	event = ethdlc_dlc_event_get();
 
-	ethdlc_dlc_action(evt);
+	ethdlc_dlc_action(event);
+
+	return;
 }
 /* -------------------------------------------------------------------------- */
 /* tag         : <ESW-ethdlc_dlc_event_set>                                   */
@@ -81,76 +83,74 @@ static void ethdlc_dlc_drive_stm (void)
 static void ethdlc_dlc_event_set (uint8 event)
 {
 	G_DLC_Event |= event;
+
+	return;
 }
 /* -------------------------------------------------------------------------- */
 /* tag         : <ESW-ethdlc_dlc_event_get>                                   */
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_event_get (void)
 {
-	uint8			event;
+	uint8	event = G_DLC_Event;
 
-	event = G_DLC_Event | ethdlc_dlc_get_dlc_event() | ethdlc_dlc_get_linkup_event();
 
 	G_DLC_Event = D_ETHDLC_EV_NONE;
+
+	event |= ethdlc_dlc_get_dlc_on_event();
+	event |= ethdlc_dlc_get_linkup_event();
 
 	return event;
 }
 /* -------------------------------------------------------------------------- */
-/* tag         : <ESW-ethdlc_dlc_get_dlc_event>                               */
+/* tag         : <ESW-ethdlc_dlc_get_dlc_on_event>                            */
 /* -------------------------------------------------------------------------- */
-static uint8 ethdlc_dlc_get_dlc_event (void)
+static uint8 ethdlc_dlc_get_dlc_on_event(void)
 {
-    uint8           ret;
+	uint8			event;
 	Std_ReturnType	actl;
-    Std_ReturnType  PwrState;
+	Std_ReturnType	power;
 
-    actl = EthDLC_ACTL_GetPortSatus();
-    PwrState = ethdlc_dlc_checkPwrState();
-    if (actl == STD_ON && PwrState == STD_ON)
+
+	actl  = EthDLC_ACTL_GetState();
+	power = EthDLC_Power_GetState();
+	if ((actl == STD_ON) && (power == STD_ON))
 	{
-		ret = D_ETHDLC_EV_DLC_ON;
+		event = D_ETHDLC_EV_DLC_ON;
 	}
 	else
 	{
-		ret = D_ETHDLC_EV_DLC_OFF;
+		event = D_ETHDLC_EV_DLC_OFF;
 	}
 
-    return ret;
-}
-/* -------------------------------------------------------------------------- */
-/* tag         : <ESW-ethdlc_dlc_checkPwrState>                               */
-/* -------------------------------------------------------------------------- */
-static Std_ReturnType ethdlc_dlc_checkPwrState(void)
-{
-    /* VISから車両電源基本ステートを取得して判断する	*/
-	/* 暫定でONを返す								*/
-    return STD_ON;
+    return event;
 }
 /* -------------------------------------------------------------------------- */
 /* tag         : <ESW-ethdlc_dlc_get_linkup_event>                            */
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_get_linkup_event (void)
 {
-    uint8                   ret;
-    EthTrcv_LinkStateType   linkState;
+	uint8			event;
+	Std_ReturnType	linkState;
 
-    ETHDLC_GET_DLC_LINK_STATE(&linkState);
 
-    if (linkState == ETHTRCV_LINK_STATE_ACTIVE)
-    {
-        ret = D_ETHDLC_EV_LINK_UP;
-    } else {
-        ret = D_ETHDLC_EV_NONE;
-    }
+	linkState = EthDLC_Port_GetState();
+	if (linkState == STD_ON)
+	{
+		event = D_ETHDLC_EV_LINK_UP;
+	}
+	else
+	{
+		event = D_ETHDLC_EV_NONE;
+	}
 
-    return ret;
+    return event;
 }
 /* -------------------------------------------------------------------------- */
 /* tag         : <ESW-ethdlc_dlc_action>                                      */
 /* -------------------------------------------------------------------------- */
 static void ethdlc_dlc_action (uint8 event)
 {
-	const S_ETHDLC_ACTION	action_tbl[ D_ETHDLC_ST_NUM ][ D_ETHDLC_RECORD_PER_ST_NUM ] = 
+	static const S_ETHDLC_ACTION	action_tbl[ D_ETHDLC_ST_NUM ][ D_ETHDLC_RECORD_PER_ST_NUM ] = 
 /*D_ETHDLC_ST_INIT_POINT */	{/*	{	Event				, Action						} */
 							{	{	D_ETHDLC_EV_INIT	, ethdlc_dlc_action_Init		}
 							,	{	D_ETHDLC_EV_NONE	, ethdlc_dlc_action_None		}
@@ -190,12 +190,16 @@ static void ethdlc_dlc_action (uint8 event)
 			}
 		}
 	}
+
+	return;
 }
 /* -------------------------------------------------------------------------- */
 /* tag         : <ESW-ethdlc_dlc_action_None>                                 */
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_action_None (void)
 {
+	/* do nothing */
+
 	return G_DLC_Status;
 }
 /* -------------------------------------------------------------------------- */
@@ -203,6 +207,8 @@ static uint8 ethdlc_dlc_action_None (void)
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_action_Init (void)
 {
+	/* do nothing */
+
 	return D_ETHDLC_ST_LINK_DOWN;
 }
 /* -------------------------------------------------------------------------- */
@@ -210,7 +216,8 @@ static uint8 ethdlc_dlc_action_Init (void)
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_action_DLCOn (void)
 {
-	ETHDLC_DLC_PORT_ON;
+	EthDLC_Port_SetActive();
+	EthDLC_Indicate_ACTLOn();
 
 	return D_ETHDLC_ST_LINK_WAIT;
 }
@@ -219,32 +226,23 @@ static uint8 ethdlc_dlc_action_DLCOn (void)
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_action_LinkUp (void)
 {
+	EthDLC_Indicate_DLCOn();
+
 	return D_ETHDLC_ST_LINK_UP;
 }
 /* -------------------------------------------------------------------------- */
-/* tag         : <ESW-ethdlc_dlc_action_DLCOff>                              */
+/* tag         : <ESW-ethdlc_dlc_action_DLCOff>                               */
 /* -------------------------------------------------------------------------- */
 static uint8 ethdlc_dlc_action_DLCOff (void)
 {
-	ETHDLC_DLC_PORT_OFF;
+	EthDLC_Port_SetInactive();
+
+	EthDLC_Indicate_ACTLOff();
+	EthDLC_Indicate_DLCOff();
 
 	return D_ETHDLC_ST_LINK_DOWN;
 }
 /* -------------------------------------------------------------------------- */
-/* tag         : <ESW-ethdlc_dlc_notifyDoIPAction>                               */
-/* -------------------------------------------------------------------------- */
-static void ethdlc_dlc_notifyDoIPAction(void)
-{
-    switch (G_DLC_Status) {
-    case D_ETHDLC_ST_LINK_UP:
-        /* ChipComへDoIP起動条件 ON通知*/
-        break;
-    case D_ETHDLC_ST_INIT_POINT:
-    case D_ETHDLC_ST_LINK_DOWN:
-    case D_ETHDLC_ST_LINK_WAIT:
-    default:
-        /* ChipComへDoIP起動条件 OFF通知*/
-        break;
-    }
-}
+#define EthDLC_STOP_SEC_CODE
+#include <EthDLC_MemMap.h>
 /* -------------------------------------------------------------------------- */

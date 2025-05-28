@@ -1,13 +1,11 @@
 /* -------------------------------------------------------------------------- */
-/* file name   : EthDLC.h                                                     */
+/* file name   : EthDLC_PowerState.h                                          */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHDLC_H
-#define ETHDLC_H
+#ifndef ETHDLC_POWERSTATE_H
+#define ETHDLC_POWERSTATE_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-void			EthDLC_Init(void);
-void			EthDLC_LoProc(void);
-Std_ReturnType	EthDLC_GetACTLState(void);
+Std_ReturnType EthDLC_Power_GetState(void);
 /* -------------------------------------------------------------------------- */
-#endif/* ETHDLC_H */
+#endif/* ETHDLC_POWERSTATE_H */

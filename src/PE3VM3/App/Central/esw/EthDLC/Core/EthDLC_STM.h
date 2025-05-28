@@ -1,13 +1,12 @@
 /* -------------------------------------------------------------------------- */
-/* file name   : EthDLC.h                                                     */
+/* file name   : EthDLC_STM.h                                                 */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHDLC_H
-#define ETHDLC_H
+#ifndef ETHDLC_STM_H
+#define ETHDLC_STM_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-void			EthDLC_Init(void);
-void			EthDLC_LoProc(void);
-Std_ReturnType	EthDLC_GetACTLState(void);
+void EthDLC_STM_Init(void);
+void EthDLC_STM_LoProc(void);
 /* -------------------------------------------------------------------------- */
-#endif/* ETHDLC_H */
+#endif/* ETHDLC_STM_H */
