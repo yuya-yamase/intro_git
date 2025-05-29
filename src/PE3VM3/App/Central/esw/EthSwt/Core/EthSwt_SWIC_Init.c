@@ -32,13 +32,13 @@ struct swic_reg_tbl {								/* レジスタテーブル */
 	const uint32			num;
 };
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Init_Setting(void)
+Std_ReturnType EthSwt_SWIC_Init_Setting(uint32 *errFactor)
 {
     struct swic_reg_seq {
         struct swic_reg_tbl tbl;
         const uint8			rst;		/* [STD_ON]値確認しリセット/[STD_OFF]読み捨て */
     };
-    static const struct swic_reg_seq	tbl[]
+    static const struct swic_reg_seq	tbl_list[]
 	=	{
 		#ifndef	g_regListSeqSetResetDetect							/* SWICリセット検出 */
 		  {SWIC_REG_TBL(g_regListSeqSetResetDetect)		, STD_OFF},	/* リセット検知用設定 */
@@ -86,12 +86,16 @@ void EthSwt_SWIC_Init_Setting(void)
 		, {SWIC_REG_TBL(g_regListSeqSetP9ActDis)		, STD_OFF}	/* Port8設定 */
 		#endif														/* g_regListSeqSetP8ActDis */
 		};
-    Std_ReturnType ret = E_OK;
     Std_ReturnType	err = E_OK;
 	uint32			idx;
 	uint32			val;
 
-    for (idx=0U ; idx < SWIC_TBL_NUM(tbl) ; idx++) {		/* リードバック無 */
-        
+    for (idx=0U ; idx < SWIC_TBL_NUM(tbl_list) ; idx++) {		/* リードバック無 */
+        err = EthSwt_SWIC_Reg_SetTbl(tbl_list[idx].tbl.tbl, tbl_list[idx].tbl.num, (tbl_list[idx].rst == STD_OFF) ? &val : NULL_PTR, errFactor);
+		if (err == E_NOT_OK) { break; }
+		// if (tbl_list[idx].rst == STD_OFF) { continue; }			/* これいる？ */
+		// break;
 	}
+
+	return err;
 }

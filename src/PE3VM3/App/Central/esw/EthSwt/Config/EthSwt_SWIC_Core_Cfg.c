@@ -74,17 +74,27 @@ void EthSwt_SWIC_PWR_ResetDeassert(void)
 #include <EthSwt_SWIC_PWR.h>
 Std_ReturnType EthSwt_SWIC_STM_CheckAvailable(void)
 {
-    Std_ReturnType swicAvailable = STD_OFF;
+    Std_ReturnType swicAvailable = E_NOT_OK;
     Std_ReturnType swicPowerStatus;
     Std_ReturnType sailResoutN;
 
     swicPowerStatus = EthSwt_SWIC_PWR_GetSWICPower();
-    sailResoutN = Dio_ReadChannel(DIO_ID_PORT8_CH8);
+    sailResoutN = Dio_ReadChannel(DIO_ID_PORT8_CH8); /* SAIL_RESOUT_Nも見る */
 
     if (swicPowerStatus == STD_ON && sailResoutN == STD_ON) {
-        swicAvailable = STD_ON;
+        swicAvailable = E_OK;
     }
 
     return swicAvailable;
+}
+
+Std_ReturnType EthSwt_SWIC_STM_CanRelay(void)
+{
+    /* ↓暫定　VISからEthernetチャネル起動電源を受け取る */
+    volatile Std_ReturnType result;
+    result = 0;
+    /* ↑暫定　VISからEthernetチャネル起動電源を受け取る */
+
+    return result;
 }
 /* -------------------------------------------------------------------------- */

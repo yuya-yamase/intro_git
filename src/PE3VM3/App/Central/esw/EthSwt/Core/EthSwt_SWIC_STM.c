@@ -4,6 +4,7 @@
 #include <EthSwt_SWIC_Core_Cfg.h>
 #include <EthSwt_SWIC_PWR.h>
 #include <EthSwt_SWIC_Init.h>
+#include <EthSwt_SWIC_Define.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_ST_UNINIT                         (0U)
 #define D_ETHSWT_SWIC_ST_INIT                           (1U)
@@ -79,19 +80,12 @@ void EthSwt_SWIC_STM_Background (void)
     }
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_STM_CheckUninit (void)
-{
-    Std_ReturnType ret = STD_OFF;
-    if (G_SWIC_Status == D_ETHSWT_SWIC_ST_UNINIT) {ret = STD_ON;}
-    return ret;
-}
-/* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_uninitProc (void)
 {
     Std_ReturnType swicAvailable;
 
     swicAvailable = EthSwt_SWIC_STM_CheckAvailable();
-    if (swicAvailable == STD_ON) {
+    if (swicAvailable == E_OK) {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_AVAILABLE);
     }
     
@@ -100,14 +94,39 @@ static void ethswt_swic_stm_uninitProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_initProc (void)
 {
-    EthSwt_SWIC_Init_Setting();
+    Std_ReturnType result;
+    uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
+
+    result = EthSwt_SWIC_Init_Setting(&errFactor);
+    if (result == E_OK) {
+        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_INIT_DONE);
+    } else {
+        switch (errFactor) {
+        case D_ETHSWT_SWIC_REG_FACT_CRC:
+            ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_CRC_ERROR);
+            break;
+        case D_ETHSWT_SWIC_REG_FACT_BSY:
+            ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_BUSYBIT_OUT);
+            break;
+        default:
+            /* àŸèÌån */
+            break;
+        }
+    }
 
     return;
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_portInitCompletedProc (void)
 {
+    Std_ReturnType result;
 
+    result = EthSwt_SWIC_STM_CanRelay();
+    if (result == E_OK) {
+        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_START_RELAY);
+    }
+
+    return;
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_setRelayOnProc (void)

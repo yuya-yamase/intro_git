@@ -21,12 +21,15 @@ void EthSwt_SWIC_PWR_ResetDeassert(void);
 /* -------------------------------------------------------------------------- */
 /* For EthSwt_SWIC_STM */
 Std_ReturnType EthSwt_SWIC_STM_CheckAvailable(void);
+Std_ReturnType EthSwt_SWIC_STM_CanRelay(void);
 
 /* -------------------------------------------------------------------------- */
 /* For EthSwt_SWIC_Init */
 #define g_regListSeqSetP3ActDis NULL_PTR
 #define g_regListSeqSetP4ActDis NULL_PTR
 #define g_regListSeqSetP9ActDis NULL_PTR
+
+
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_CORE_CFG_H */

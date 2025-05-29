@@ -1,16 +1,13 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_Reg.h                                          */
+/* file name  :  EthSwt_SWIC_Relay.h                                          */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHSWT_SWIC_REG_H
-#define ETHSWT_SWIC_REG_H
+#ifndef ETHSWT_SWIC_RELAY_H
+#define ETHSWT_SWIC_RELAY_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include "EthSwt_SWIC_initRegCommon.h"
+Std_ReturnType EthSwt_SWIC_Relay_On(uint32 *errFactor);
+Std_ReturnType EthSwt_SWIC_Relay_Off(uint32 *errFactor);
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Reg_Init (void);
-void EthSwt_SWIC_Reg_HiProc (void);
-Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 cnt, uint32 * const dat, uint32 * const errFactor);
-/* -------------------------------------------------------------------------- */
-#endif /* ETHSWT_SWIC_REG_H */
+#endif /* ETHSWT_SWIC_RELAY_H */
 /* -------------------------------------------------------------------------- */
