@@ -67,6 +67,11 @@ REM popd
 echo -- XCreate -- >> all_build.log
 call xCreate.bat >> all_build.log
 
+@echo OFF
+echo -- SectionAnalysis Start--
+call SectionAnalysis.bat
+echo -- SectionAnalysis End--
+
 echo ===============================
 echo Start Time: %start_time%
 echo End Time  : %time%

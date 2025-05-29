@@ -51,6 +51,7 @@
 
 #define    XSPI_IVI_VERSION_MAJOR_DIG (0x04U)    /*メジャー品番桁数*/
 #define    XSPI_IVI_VERSION_MINOR_DIG (0x04U)    /*マイナー品番桁数*/
+#define    XSPI_IVI_VERSION_GSEN_DIG  (14U)      /*Gセンサバージョン桁数*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,8 +60,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 volatile U4 * const    u4p_s_VERSION_MAJ = (volatile U4 *)0x007FFB00U;
 volatile U4 * const    u4p_s_VERSION_MIN = (volatile U4 *)0x007FFB00U;
-/*Gセンサバージョンはシス検では対応しない*/
 
+static U1              u1_sp_xspi_ivi_version_gsensor_data[XSPI_IVI_VERSION_GSEN_DIG];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -82,6 +83,7 @@ static void            vd_s_XspiIviSub1_VersionChangeASCII(U1* u1_ap_XSPI_ADD, c
 /*===================================================================================================================================*/
 void            vd_g_XspiIviSub1VersionInit(void)
 {
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_version_gsensor_data[0], (U1)0U, (U4)XSPI_IVI_VERSION_GSEN_DIG);
 }
 
 /*===================================================================================================================================*/
@@ -133,6 +135,7 @@ static void            vd_s_XspiIviSub1_VersionReq(const U1 * u1_ap_XSPI_ADD, co
 {
     U1     u1_s_MAJORVERSIZE = (U1)6U;   /*サブタイプ+バージョン情報*/
     U1     u1_s_MINORVERSIZE = (U1)6U;   /*サブタイプ+バージョン情報*/
+    U1     u1_s_GSENVERSIZE  = (U1)16U;   /*サブタイプ+バージョン情報*/
     U1     u1_t_verison_type;
     U1     u1_tp_data[XSPI_IVI_VERSION_SIZE];
     U4     u4_t_version;
@@ -154,7 +157,8 @@ static void            vd_s_XspiIviSub1_VersionReq(const U1 * u1_ap_XSPI_ADD, co
         vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_MINORVERSIZE);
         break;
     case XSPI_IVI_VERSION_GSEN:
-        /*シス検 skip*/
+        vd_g_MemcpyU1(&u1_tp_data[2], &u1_sp_xspi_ivi_version_gsensor_data[0], (U4)XSPI_IVI_VERSION_GSEN_DIG);
+        vd_s_XspiIviSub1_VersionDataToQueue(&u1_tp_data[0],u1_s_GSENVERSIZE);
         break;
     
     default:
@@ -239,6 +243,18 @@ static void            vd_s_XspiIviSub1_VersionChangeASCII(U1* u1_ap_XSPI_ADD, c
         }
         u1_ap_XSPI_ADD[u4_t_loop] = u1_t_ascii_data;
     }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1VersionGsenPut(const U1 * u1_ap_DATA)                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_DATA : Gsensor Version                                                                                     */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1VersionGsenPut(const U1 * u1_ap_DATA)
+{
+    vd_g_MemcpyU1(&u1_sp_xspi_ivi_version_gsensor_data[0], &u1_ap_DATA[0], (U4)XSPI_IVI_VERSION_GSEN_DIG);
 }
 
 /*===================================================================================================================================*/

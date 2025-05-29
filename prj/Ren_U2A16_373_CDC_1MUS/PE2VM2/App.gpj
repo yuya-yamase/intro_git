@@ -14,7 +14,9 @@
     :sourceDir=${APP_DIR}/IVI/GyrCtrl
     :sourceDir=${APP_DIR}/IVI/GyrCtrl/config
     :sourceDir=${APP_DIR}/IVI/DspCtrl
+    :sourceDir=${APP_DIR}/IVI/DspCtrl/VolumeMute
     :sourceDir=${APP_DIR}/IVI/DspCtrl/config
+    :sourceDir=${APP_DIR}/IVI/DrcCtrl
 
     -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
@@ -48,7 +50,9 @@
     -I${APP_DIR}/IVI/GyrCtrl
     -I${APP_DIR}/IVI/GyrCtrl/config
     -I${APP_DIR}/IVI/DspCtrl
+    -I${APP_DIR}/IVI/DspCtrl/VolumeMute
     -I${APP_DIR}/IVI/DspCtrl/config
+    -I${APP_DIR}/IVI/DrcCtrl
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
@@ -107,3 +111,9 @@ CarSpdPls.c
 PictMuteCtl.c
 AntCtl.c
 PowerIcCtl.c
+volmute.c
+volmute_cfg.c
+IVI_DrcCtrl_Main.c
+SysEcDrc.c
+DtcCtl.c
+RobCtl.c
