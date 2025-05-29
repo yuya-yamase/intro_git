@@ -1,7 +1,19 @@
 #include <Std_Types.h>
 #include "EthSwt_SWIC_Core_Cfg.h"
 /* -------------------------------------------------------------------------- */
-
+/* Common */
+const Eth_ModeType G_ETHSWT_SWIC_PORT_MODE[D_ETHSWT_SWIC_PORT_NUM] =
+{
+    ETH_MODE_DOWN           /* Port9 */
+,   ETH_MODE_ACTIVE         /* Port1 */
+,   ETH_MODE_ACTIVE         /* Port2 */
+,   ETH_MODE_DOWN           /* Port3 */
+,   ETH_MODE_DOWN           /* Port4 */
+,   ETH_MODE_ACTIVE         /* Port5 */
+,   ETH_MODE_DOWN           /* Port6 */
+,   ETH_MODE_ACTIVE         /* Port7 */
+,   ETH_MODE_ACTIVE         /* Port8 */
+};
 
 /* -------------------------------------------------------------------------- */
 /* For EthSwt_SWIC_PWR */
@@ -72,6 +84,7 @@ void EthSwt_SWIC_PWR_ResetDeassert(void)
 #include <Port_Cfg.h>
 #include <Port.h>
 #include <EthSwt_SWIC_PWR.h>
+#include <EthSwt_Stub.h> /* あとで消す */
 Std_ReturnType EthSwt_SWIC_STM_CheckAvailable(void)
 {
     Std_ReturnType swicAvailable = E_NOT_OK;
@@ -91,10 +104,14 @@ Std_ReturnType EthSwt_SWIC_STM_CheckAvailable(void)
 Std_ReturnType EthSwt_SWIC_STM_CanRelay(void)
 {
     /* ↓暫定　VISからEthernetチャネル起動電源を受け取る */
+    Std_ReturnType ret = E_NOT_OK;
     volatile Std_ReturnType result;
-    result = 0;
+    result = EthSwt_Driver_CheckEthChPwr();
+    if (result == STD_ON) {
+        ret = E_OK;
+    }
     /* ↑暫定　VISからEthernetチャネル起動電源を受け取る */
 
-    return result;
+    return ret;
 }
 /* -------------------------------------------------------------------------- */

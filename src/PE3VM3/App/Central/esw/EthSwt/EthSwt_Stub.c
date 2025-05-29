@@ -4,6 +4,7 @@
 
 volatile static uint8 EthSwt_Stub_StartReq = STD_OFF;
 volatile static uint8 EthSwt_Stub_StopReq = STD_OFF;
+volatile static Std_ReturnType EthSwt_Driver_EthChPwr = STD_OFF;
 
 void EthSwt_Stub_LoProc (void)
 {
@@ -20,4 +21,9 @@ void EthSwt_Stub_LoProc (void)
     }
 
     return;
+}
+
+Std_ReturnType EthSwt_Driver_CheckEthChPwr (void)
+{
+    return EthSwt_Driver_EthChPwr;
 }

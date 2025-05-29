@@ -22,6 +22,7 @@
 #include "EthSwt_SWIC_initRegListSeqPhySwicOff.h"
 #include "EthSwt_SWIC_initRegListSeqGetLink.h"
 #include "EthSwt_SWIC_initRegListSeqPhyReset.h"
+#include "EthSwt_SWIC_initRegListSeqBaseT1.h"
 
 /* -------------------------------------------------------------------------- */
 #define	SWIC_REG_TBL(a)		{(a), SWIC_TBL_NUM(a)}	/* swic_reg_tbl設定用 */
@@ -60,7 +61,8 @@ Std_ReturnType EthSwt_SWIC_Init_Setting(uint32 *errFactor)
 		, {SWIC_REG_TBL(g_regListSeqSWICReset)			, STD_OFF}	/* ソフトウェアリセット */
 		, {SWIC_REG_TBL(g_regListSeqPPUOff)				, STD_OFF}	/* PPU OFF */
 		, {SWIC_REG_TBL(g_regListSeqGetWatchdogError)	, STD_ON}	/* レジスタ/テーブル化け確認レジスタ */
-		, {SWIC_REG_TBL(g_regListSeqRelayOn)			, STD_OFF}	/* 中継ON */
+		, {SWIC_REG_TBL(g_regListSeqP1PhyOff)			, STD_OFF}	/* Port1 PHY OFF */
+		, {SWIC_REG_TBL(g_regListSeqP2PhyOff)			, STD_OFF}	/* Port2 PHY OFF */
 		#ifndef	g_regListSeqSetP1ActDis
 		, {SWIC_REG_TBL(g_regListSeqSetP1ActDis)		, STD_OFF}	/* Port1設定 */
 		#endif														/* g_regListSeqSetP1ActDis */

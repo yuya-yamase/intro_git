@@ -1,6 +1,7 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include "EthSwt_SWIC_initRegCommon.h"
+#include "EthSwt_SWIC_Core_Cfg.h"
 #include "EthSwt_SWIC_Spi.h"
 #include "EthSwt_SWIC_STM.h"
 #include "EthSwt_SWIC_Define.h"
@@ -23,7 +24,7 @@ void EthSwt_SWIC_Reg_Init (void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Reg_HiProc (void)
 {
-	timer = timer + (uint16)1;
+	timer = timer + D_ETHSWT_SWIC_PERIOD;
 	return;
 }
 /* -------------------------------------------------------------------------- */

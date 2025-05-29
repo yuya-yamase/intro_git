@@ -66,6 +66,7 @@ EthSwt_SWIC_Init.c
 EthSwt_SWIC_Reg.c
 EthSwt_SWIC_Spi.c
 EthSwt_SWIC_Relay.c
+EthSwt_SWIC_Link.c
 EthSwt_Stub.c
 EthDLC_ctrl.c
 EthDLC_ACTL.c

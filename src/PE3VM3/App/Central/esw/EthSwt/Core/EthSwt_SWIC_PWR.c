@@ -100,7 +100,7 @@ uint8 EthSwt_SWIC_PWR_GetSWICPower(void)
 {
     uint8 state = STD_OFF;
 
-    if (G_SWIC_PWR_Status == D_ETHSWT_SWIC_PWR_ST_ON && G_SWIC_PWR_ResetReq)
+    if (G_SWIC_PWR_Status == D_ETHSWT_SWIC_PWR_ST_ON && G_SWIC_PWR_ResetReq == STD_OFF)
     {
         state = STD_ON;
     }

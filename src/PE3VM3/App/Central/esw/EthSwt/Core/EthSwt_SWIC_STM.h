@@ -7,6 +7,7 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_STM_Init (void);
+void EthSwt_SWIC_STM_HiProc (void);
 void EthSwt_SWIC_STM_Background (void);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_STM_H */

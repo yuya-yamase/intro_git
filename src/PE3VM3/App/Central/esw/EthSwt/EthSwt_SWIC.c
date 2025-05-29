@@ -6,6 +6,7 @@
 #include <EthSwt_SWIC_STM.h>
 #include <EthSwt_SWIC_Spi.h>
 #include <EthSwt_SWIC_Reg.h>
+#include <EthSwt_SWIC_Link.h>
 #include <EthSwt_Stub.h> /* Ç†Ç∆Ç≈è¡Ç∑ */
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
@@ -14,12 +15,15 @@ void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 	EthSwt_SWIC_PWR_Init();
 	EthSwt_SWIC_Spi_Init();
 	EthSwt_SWIC_Reg_Init();
+	EthSwt_SWIC_Link_Init();
+
 	return;
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_HiProc(void)
 {
-	EthSwt_SWIC_Reg_HiProc();
+	EthSwt_SWIC_Reg_HiProc();		/* TimeÇ∆ÇµÇƒÇ‹Ç∆ÇﬂÇÈÇŸÇ§Ç™ÇÊÇ¢ */
+	EthSwt_SWIC_Link_HiProc();		/* TimeÇ∆ÇµÇƒÇ‹Ç∆ÇﬂÇÈÇŸÇ§Ç™ÇÊÇ¢ */
 	return;	
 }
 /* -------------------------------------------------------------------------- */
