@@ -67,11 +67,6 @@ REM popd
 echo -- motCreate -- >> all_build.log
 call U2A_BevCreateMot.bat >> all_build.log
 
-@echo OFF
-echo -- SectionAnalysis Start--
-call SectionAnalysis.bat
-echo -- SectionAnalysis End--
-
 echo ===============================
 echo Start Time: %start_time%
 echo End Time  : %time%
@@ -89,7 +84,11 @@ echo selected_variation: %last8%
 
 pushd ..\..\tool\MemAnalysis
 python SectionAnalysis.py %last8%
-move "*.xlsx" "%current%"
+move "Section_Size_EHVM.xlsx" "%current%\EHVM"
+move "Section_Size_PE0VM0.xlsx" "%current%\PE0VM0"
+move "Section_Size_PE1VM1.xlsx" "%current%\PE1VM1"
+move "Section_Size_PE2VM2.xlsx" "%current%\PE2VM2"
+move "Section_Size_PE3VM3.xlsx" "%current%\PE3VM3"
 popd
 
 echo -- Step: ReprogAPL build --

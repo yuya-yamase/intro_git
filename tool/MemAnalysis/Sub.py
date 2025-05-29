@@ -165,10 +165,6 @@ file_paths = [r"W:\prj\Ren_U2A16_373_{}\EHVM\dst\host.map".format(args[1]),
               r"W:\prj\Ren_U2A16_373_{}\PE3VM3\dst\PE3VM3.map".format(args[1]) ]
 
 sheet_names = ['EHVM', 'PE0VM0', 'PE1VM1', 'PE2VM2', 'PE3VM3']
-output_files = ["W:\prj\Ren_U2A16_373_{}\EHVM\Section_Size_EHVM.xlsx".format(args[1]),
-                "W:\prj\Ren_U2A16_373_{}\PE0VM0\Section_Size_PE0VM0.xlsx".format(args[1]),
-                "W:\prj\Ren_U2A16_373_{}\PE1VM1\Section_Size_PE1VM1.xlsx".format(args[1]),
-                "W:\prj\Ren_U2A16_373_{}\PE2VM2\Section_Size_PE2VM2.xlsx".format(args[1]),
-                "W:\prj\Ren_U2A16_373_{}\PE3VM3\Section_Size_PE3VM3.xlsx".format(args[1])]
+output_files = ['Section_Size_EHVM.xlsx', 'Section_Size_PE0VM0.xlsx', 'Section_Size_PE1VM1.xlsx', 'Section_Size_PE2VM2.xlsx', 'Section_Size_PE3VM3.xlsx']
 for json_file,file_path,sheet_name,output_file in zip(json_files, file_paths, sheet_names,output_files):
     map_file_analyze(json_file, file_path, sheet_name, output_file)
