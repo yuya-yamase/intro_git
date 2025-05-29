@@ -120,5 +120,3 @@ call CreateTSW.bat
 popd
 
 @echo '--- done all..'
-
-PUASE
