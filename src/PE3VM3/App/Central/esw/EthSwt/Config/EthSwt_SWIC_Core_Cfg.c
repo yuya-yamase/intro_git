@@ -84,7 +84,15 @@ void EthSwt_SWIC_PWR_ResetDeassert(void)
 #include <Port_Cfg.h>
 #include <Port.h>
 #include <EthSwt_SWIC_PWR.h>
+#include <EthSwt_SWIC_Link.h>
 #include <EthSwt_Stub.h> /* Ç†Ç∆Ç≈è¡Ç∑ */
+
+const EthSwt_Func G_ETHSWT_SWIC_ACTIVE_FUNC_LIST[] =
+{
+    
+    {EthSwt_SWIC_Link_TimerUpdate   , EthSwt_SWIC_Link_CheckAction  , EthSwt_SWIC_Link_Action}
+};
+
 Std_ReturnType EthSwt_SWIC_STM_CheckAvailable(void)
 {
     Std_ReturnType swicAvailable = E_NOT_OK;

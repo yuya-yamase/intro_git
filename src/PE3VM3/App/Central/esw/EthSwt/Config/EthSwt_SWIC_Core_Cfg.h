@@ -12,22 +12,20 @@
 #define D_ETHSWT_SWIC_PORT_NUM                      (9U)
 extern const Eth_ModeType G_ETHSWT_SWIC_PORT_MODE[D_ETHSWT_SWIC_PORT_NUM];
 
-// #define D_ETHSWT_SWIC_PORT1_MODE                    ETH_MODE_ACTIVE /* A-DC Port */
-// #define D_ETHSWT_SWIC_PORT2_MODE                    ETH_MODE_ACTIVE /* DCM Port */
-// #define D_ETHSWT_SWIC_PORT3_MODE                    ETH_MODE_DOWN   /* 未使用 */
-// #define D_ETHSWT_SWIC_PORT4_MODE                    ETH_MODE_DOWN   /* 未使用 */
-// #define D_ETHSWT_SWIC_PORT5_MODE                    ETH_MODE_ACTIVE /* SAIL Port */
-// #define D_ETHSWT_SWIC_PORT6_MODE                    ETH_MODE_DOWN   /* DLC Port */
-// #define D_ETHSWT_SWIC_PORT7_MODE                    ETH_MODE_ACTIVE /* Linux Port */
-// #define D_ETHSWT_SWIC_PORT8_MODE                    ETH_MODE_ACTIVE /* QNX Port */
-// #define D_ETHSWT_SWIC_PORT9_MODE                    ETH_MODE_DOWN   /* 未使用 */
-
 /* -------------------------------------------------------------------------- */
 /* For EthSwt_SWIC_PWR */
 #define D_ETHSWT_SWIC_PWR_CYCLE                     (5U)
 #define D_ETHSWT_SWIC_PWR_ON_WAIT                   (105U)  /* 35ms(T8) + 60ms(T9) + 5ms(PwrCtrlが先に動作するため) + (CPUクロック誤差考慮) */
 #define D_ETHSWT_SWIC_PWR_ASSERT_WAIT               (5U)    /* 1ms(T1) + (CPUクロック誤差) */
 #define D_ETHSWT_SWIC_PWR_DEASSERT_WAIT             (20U)   /* 15ms(T2) + (CPUクロック誤差) */
+
+typedef struct {
+    void (*timerUpdateFunc)(void);                      /* 1ms高優先でタイマー更新する関数 */
+    Std_ReturnType (*checkActionFunc)(void);            /* backgroundで実行するかどうか見る箇所 */
+    Std_ReturnType (*ActionFunc)(uint32 * const errFactor);                 /* backgroundで実施する箇所 */
+} EthSwt_Func;
+
+extern const EthSwt_Func G_ETHSWT_SWIC_ACTIVE_FUNC_LIST[];
 
 void EthSwt_SWIC_PWR_SetGPIOMode(void);
 void EthSwt_SWIC_PWR_SetSpiMode(void);
