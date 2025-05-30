@@ -30800,8 +30800,8 @@ static U1    u1_s_Pict_MLCycChk(void)
             u1_t_reg_read_result = st_sp_ML86294_MLFAILCYCCHK_RD_TBL[1].u1p_pdu[1];
             if(u1_t_reg_read_result == (U1)PICT_ML_MLFAILCYCCHK_DEV_ERR){               /* Device Error */
                 if(u1_s_pict_mlfail_drec_cnt < (U1)PICT_ML_MLFAILCYCCHK_DREC_CNT_MAX){  /* Drec Counter < 1 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlfail_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_2, (U1)0x00U, (U1)0x00U);
                 }
                 if(u1_s_pict_mlcyc_dev_reset_cnt < (U1)U1_MAX){
                     u1_s_pict_mlcyc_dev_reset_cnt++;
@@ -30840,8 +30840,8 @@ static U1    u1_s_Pict_MLCycChk(void)
             if((u1_t_sip_sync_err == (U1)PICT_ML_MLSYNCCYCCHK_SIP_ERR)              /* Sip Error */
             && (u1_s_pict_mlsync_pre_sip_sync_err == (U1)PICT_REG_MASK_BIT_1)){     /* Previous State OK */
                 if(u1_s_pict_mlsync_sip_drec_cnt < (U1)PICT_ML_MLSYNCCYCCHK_SIP_DREC_CNT_MAX){ /* Drec Counter < 3 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlsync_sip_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_3, u1_s_pict_mlsync_sip_drec_cnt, (U1)0x00U);
                 }
             }
 
@@ -30849,8 +30849,8 @@ static U1    u1_s_Pict_MLCycChk(void)
             if((u1_t_cam_sync_err == (U1)PICT_ML_MLSYNCCYCCHK_CAM_ERR)              /* Camera Error */
             && (u1_s_pict_mlsync_pre_cam_sync_err == (U1)PICT_REG_MASK_BIT_3)){     /* Previous State OK */
                 if(u1_s_pict_mlsync_cam_drec_cnt < (U1)PICT_ML_MLSYNCCYCCHK_SIP_DREC_CNT_MAX){ /* Drec Counter < 3 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlsync_cam_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_4, u1_s_pict_mlsync_cam_drec_cnt, (U1)0x00U);
                 }
             }
             /* Previous State Update */
@@ -30868,8 +30868,8 @@ static U1    u1_s_Pict_MLCycChk(void)
             if((u1_t_dio_read_result == (U1)PICT_ML_IO_STS_HIGH)                    /* V-IC-STATUS2 = H */
             && (u1_s_pict_mlroute_pre_v_ic_sts2_sts == (U1)PICT_ML_IO_STS_LOW)){    /* Previous State L */
                 if(u1_s_pict_mlroute_drec_cnt < (U1)PICT_ML_MLROUTECYCCHK_DREC_CNT_MAX){ /* Drec Counter < 3 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlroute_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_5, u1_s_pict_mlroute_drec_cnt, (U1)0x00U);
                 }
             }
 
@@ -30904,8 +30904,8 @@ static U1    u1_s_Pict_MLCycChk(void)
             u1_t_rcv_err = u1_t_reg_read_result & (U1)PICT_ML_MIPIRCVCYCCHK_RCV_DAT_MASK;   /* Get Receiver Error Result */
             if(u1_t_rcv_err != (U1)PICT_ML_MIPIRCVCYCCHK_RCV_OK ){                  /* Receiver Error */
                 if(u1_s_pict_mlmipircv_drec_cnt < (U1)PICT_ML_MLMIPIRCVCYCCHK_DREC_CNT_MAX){ /* Drec Counter < 3 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlmipircv_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_6, u1_s_pict_mlmipircv_drec_cnt, (U1)0x00U);
                 }
             }
         /* ----------6.10.1 定期処理 MIPI映像受信部のエラー検知終了---------- */
@@ -31018,8 +31018,8 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
             u1_t_frz_dat_sts = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_0;  /* Get Freeze Data Result */
             if(u1_t_frz_dat_sts != (U1)PICT_REG_MASK_BIT_0){                /* bit[0] = 0 */
                 if(u1_s_pict_mlfrzdatcyc_frz_off_drec_cnt < (U1)PICT_ML_MLFLZDATCYCCHK_FRZ_DREC_OFF_CNT_MAX){ /* Drec Counter < 3 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlfrzdatcyc_frz_off_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_7, u1_s_pict_mlfrzdatcyc_frz_off_drec_cnt, (U1)0x00U);
                 }
                 /* Next Process */
                 u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP6;
@@ -31099,8 +31099,8 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
             u1_t_frz_dat_sts = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_0;  /* Get Freeze Data Result */
             if(u1_t_frz_dat_sts == (U1)PICT_REG_MASK_BIT_0){                /* bit[0] = 1 */
                 if(u1_s_pict_mlfrzdatcyc_frz_on_drec_cnt < (U1)PICT_ML_MLFLZDATCYCCHK_FRZ_DREC_ON_CNT_MAX){ /* Drec Counter < 3 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlfrzdatcyc_frz_on_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_8, u1_s_pict_mlfrzdatcyc_frz_on_drec_cnt, (U1)0x00U);
                 }
                 /* Next Process */
                 u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP12;
@@ -31148,11 +31148,11 @@ static U1    u1_s_Pict_MLFrzDatCycChk(void)
             }
             break;
         case ML86294_FRZDAT_CYCCHK_STEP16:                                      /* STEP16 */
-            u1_t_reg_read_result = st_sp_ML86294_MLFRZDATCYCFRZBIT_RD_TBL[1].u1p_pdu[1];
+            u1_t_reg_read_result = st_sp_ML86294_MLFRZDATCYCROUTEBIT_RD_TBL[1].u1p_pdu[1];
             if(u1_t_reg_read_result == (U1)PICT_ML_MLFLZDATCYCCHK_ROUTE_BYPASS){                /* Route Bypass */
                 if(u1_s_pict_mlfrzdatcyc_route_drec_cnt < (U1)PICT_ML_MLFLZDATCYCCHK_ROUTE_DREC_CNT_MAX){ /* Drec Counter < 3 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlfrzdatcyc_route_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_9, u1_s_pict_mlfrzdatcyc_route_drec_cnt, (U1)0x00U);
                 }
                 /* Next Process */
                 u1_s_pict_mlfrzdatcycchk_sts = (U1)ML86294_FRZDAT_CYCCHK_STEP17;
@@ -31282,8 +31282,8 @@ static U1    u1_s_Pict_MLIrqHpdCycChk(void)
             u1_t_irqhpd_assert = u1_t_reg_read_result & (U1)PICT_REG_MASK_BIT_1;      /* Get IRQ_HPD Assert */
             if(u1_t_irqhpd_assert == (U1)PICT_REG_MASK_BIT_1){
                 if(u1_s_pict_mlirqhpdcyc_assert_drec_cnt < (U1)PICT_ML_MLIRQHPD_ASSERT_DREC_CNT_MAX){ /* Drec Counter < 3 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlirqhpdcyc_assert_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_10, u1_s_pict_mlirqhpdcyc_assert_drec_cnt, (U1)0x00U);
                 }
                 /* Next Process */
                 u1_s_pict_mlirqhpdcycchk_sts = (U1)ML86294_IRQHPD_CYCCHK_STEP4;
@@ -32300,8 +32300,8 @@ static U1    u1_s_Pict_MlRcvVIcStatusNty(void)
             if(u1_t_reg_req_sts == (U1)TRUE){
                 u1_t_reg_read_result = st_sp_ML86294_MlRCVVICSTATUS_RD_TBL[1].u1p_pdu[1];
                 if(u1_s_pict_mlfrz_drec_cnt < (U1)PICT_ML_MlRCVVICSTATUS_DREC_CNT_MAX){   /* Drec Counter < 4 */
-                    /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
                     u1_s_pict_mlfrz_drec_cnt++;
+                    vd_PICT_ML_DREC_REQ((U1)SYSECDRC_DREC_ID_1, u1_s_pict_mlfrz_drec_cnt, u1_t_reg_read_result);
                 }
 
                 /* Next Process */
