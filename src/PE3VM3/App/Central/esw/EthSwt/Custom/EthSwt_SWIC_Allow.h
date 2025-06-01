@@ -1,16 +1,15 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_STM.h                                          */
+/* file name  :  EthSwt_SWIC_Allow.h                                          */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHSWT_SWIC_STM_H
-#define ETHSWT_SWIC_STM_H
+#ifndef ETHSWT_SWIC_ALLOW_H
+#define ETHSWT_SWIC_ALLOW_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-#include <EthSwt_BSW_define.h>
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_STM_Init (void);
-void EthSwt_SWIC_STM_HiProc (void);
-void EthSwt_SWIC_STM_Background (void);
-EthSwt_StateType EthSwt_SWIC_STM_GetStatus (void);
+
 /* -------------------------------------------------------------------------- */
-#endif /* ETHSWT_SWIC_STM_H */
+Std_ReturnType EthSwt_SWIC_Allow_SetRegister(void);
+Std_ReturnType EthSwt_SWIC_Allow_Relay(void);
+/* -------------------------------------------------------------------------- */
+#endif /* ETHSWT_SWIC_ALLOW_H */
 /* -------------------------------------------------------------------------- */

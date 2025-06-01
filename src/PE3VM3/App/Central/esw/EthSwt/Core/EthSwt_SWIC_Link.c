@@ -2,6 +2,10 @@
 /* -------------------------------------------------------------------------- */
 #include "EthSwt_SWIC_Link.h"
 #include "EthSwt_SWIC_Core_Cfg.h"
+#include "EthSwt_SWIC_initRegCommon.h"
+#include "EthSwt_SWIC_Reg.h"
+#include "EthSwt_SWIC_initRegListSeqGetLink.h"
+#include "EthSwt_SWIC_STM.h"
 /* -------------------------------------------------------------------------- */
 static struct {
     volatile Std_ReturnType             getLinkResult;      /* 旧 lnk_err */
@@ -21,8 +25,8 @@ static struct {
 
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_link_Set(const uint8 SwitchPortIdx, const EthTrcv_LinkStateType LinkState, const uint16 tmo);
-static void swic_Reg_GetLinkState(const uint8 SwitchPortIdx);
-static Std_ReturnType swic_Reg_GetLink(const uint8 SwitchPortIdx, EthTrcv_LinkStateType *const LinkStatePtr);
+static Std_ReturnType swic_Reg_GetLinkState(const uint8 SwitchPortIdx, uint32 * const errFactor);
+static Std_ReturnType swic_Reg_GetLink(const uint8 SwitchPortIdx, EthTrcv_LinkStateType *const LinkStatePtr, uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Link_Init (void)
 {
@@ -37,7 +41,7 @@ void EthSwt_SWIC_Link_Init (void)
         swicLink[idx].expectedLinkStatus    = ETHTRCV_LINK_STATE_DOWN;
         swicLink[idx].linkTime              = 0;
         swicLink[idx].linkTimeout           = 0;
-        if (G_ETHSWT_SWIC_PORT_MODE[idx] == ETH_MODE_ACTIVE) {
+        if (G_ETHSWT_SWIC_PORT_DEFINE[idx] == ETH_MODE_ACTIVE) {
             ethswt_swic_link_Set(idx, ETHTRCV_LINK_STATE_ACTIVE, D_ETHSWT_SWIC_LINK_FAST_GET_TMO);
         }
     }
@@ -79,22 +83,56 @@ void EthSwt_SWIC_Link_TimerUpdate (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Link_CheckAction (void)
+Std_ReturnType EthSwt_SWIC_Link_Action (uint32 * const errFactor)
 {
-    Std_ReturnType ret = E_NOT_OK;
+    Std_ReturnType ret = E_OK;
+    uint8 idx;
 
     if (swicGetLinkTimer.req == STD_ON) {
         swicGetLinkTimer.req = STD_OFF;
-        ret = E_OK;
+        for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
+            ret = swic_Reg_GetLinkState(idx, errFactor);
+            if (ret == E_NOT_OK) {break;}
+        }
     }
 
     return ret;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Link_Action (uint32 * const errFactor)
+Std_ReturnType EthSwt_SWIC_Link_FastGet (uint32 * const errFactor)
 {
+    Std_ReturnType ret = E_NOT_OK;
+    uint8 idx;
+    uint16 timeout;
+
+    for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
+        if (swicLink[idx].linkCheck != STD_ON) { continue; }
+        timeout = timer - swicLink[idx].linkTime;
+        if (timeout > swicLink[idx].linkTimeout) {
+            swicLink[idx].linkCheck = STD_OFF;
+        }
+        ret = swic_Reg_GetLinkState(idx, errFactor);
+        if (ret == E_NOT_OK) {break;}
+    }
     
-    return E_OK;
+    return ret;
+}
+/* -------------------------------------------------------------------------- */
+Std_ReturnType EthSwt_SWIC_Link_GetLinkState(const uint8 SwitchPortIdx, EthTrcv_LinkStateType * const LinkStatePtr)
+{
+    Std_ReturnType ret = E_NOT_OK;
+    EthSwt_StateType status;
+    status = EthSwt_SWIC_STM_GetStatus();
+
+    do {
+        if (status != ETHSWT_STATE_ACTIVE)	            { break; }
+        if (SwitchPortIdx >= D_ETHSWT_SWIC_PORT_NUM)	{ break; }
+        if (LinkStatePtr == NULL_PTR)					{ break; }
+        *LinkStatePtr = swicLink[SwitchPortIdx].linkStatus;
+        ret = swicLink[SwitchPortIdx].getLinkResult;
+    } while (0);
+	
+	return ret;
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_link_Set(const uint8 SwitchPortIdx, const EthTrcv_LinkStateType LinkState, const uint16 tmo)
@@ -110,47 +148,53 @@ static void ethswt_swic_link_Set(const uint8 SwitchPortIdx, const EthTrcv_LinkSt
     return;
 }
 /* -------------------------------------------------------------------------- */
-// static void swic_Reg_GetLinkState(const uint8 SwitchPortIdx)
-// {
-    // Std_ReturnType			err;
-	// EthTrcv_LinkStateType	sts;
-	// err = swic_Reg_GetLink(SwitchPortIdx, &sts);
-	// if (err == E_OK) {	/* アクセス失敗時は更新しない(前回値) */
-	// 	swic_Reg_Mode[SwitchPortIdx].lnk_sts = sts;
-	// 	swic_Reg_Mode[SwitchPortIdx].lnk_err = err;
-	// 	if (swic_Reg_Mode[SwitchPortIdx].lnk_chk == STD_OFF){ return; }
-	// 	if (sts != swic_Reg_Mode[SwitchPortIdx].lnk_exp)	{ return; }
-	// }					/* アクセス失敗は確認を止める */
-	// swic_Reg_Mode[SwitchPortIdx].lnk_chk = STD_OFF;
-// }
+static Std_ReturnType swic_Reg_GetLinkState(const uint8 SwitchPortIdx, uint32 * const errFactor)
+{
+    Std_ReturnType			err;
+	EthTrcv_LinkStateType	sts;
+	err = swic_Reg_GetLink(SwitchPortIdx, &sts, errFactor);
+	if (err == E_OK) {
+        swicLink[SwitchPortIdx].linkStatus = sts;
+        swicLink[SwitchPortIdx].getLinkResult = err;
+		if (swicLink[SwitchPortIdx].linkCheck != STD_OFF && sts == swicLink[SwitchPortIdx].expectedLinkStatus) {
+            swicLink[SwitchPortIdx].linkCheck = STD_OFF;
+        }		
+	} else {					/* アクセス失敗はリンク取得結果をE_NOT_OKにする */
+        swicLink[SwitchPortIdx].getLinkResult = err;
+    }
+    return err;
+}
+/* -------------------------------------------------------------------------- */
+static Std_ReturnType swic_Reg_GetLink(const uint8 SwitchPortIdx, EthTrcv_LinkStateType *const LinkStatePtr, uint32 * const errFactor)
+{
+    struct swic_tbl_lnk {
+		const swic_reg_data_t	*tbl;
+		const uint32			num;
+		const uint32			msk;
+		const uint32			dat;
+	};
+	static const struct swic_tbl_lnk	tbl[]
+	=	{ {&g_regListSeqGetLinkIeee[26], 1u, 0x0800u, 0x0800u}	/* P9：未使用                  */
+		, {&g_regListSeqGetLinkIeee[ 0], 1u, 0x0800u, 0x0800u}	/* P1：ADC 1000BASE-T1         */
+		, {&g_regListSeqGetLinkIeee[ 1], 1u, 0x0800u, 0x0800u}	/* P2：DCM 1000BASE-T1         */
+		, {&g_regListSeqGetLinkIeee[ 2], 7u, 0x0004u, 0x0004u}	/* P3：未使用                  */
+		, {&g_regListSeqGetLinkIeee[ 9], 7u, 0x0004u, 0x0004u}	/* P4：未使用                  */
+		, {&g_regListSeqGetLinkIeee[16], 7u, 0x0004u, 0x0004u}	/* P5：SIP SAILSS_RGMII0 RGMII */
+		, {&g_regListSeqGetLinkIeee[23], 1u, 0x0800u, 0x0800u}	/* P6：DLC 100BASE-TX          */
+		, {&g_regListSeqGetLinkIeee[24], 1u, 0x0800u, 0x0800u}	/* P7：SIP SGMII0 SGMII        */
+		, {&g_regListSeqGetLinkIeee[25], 1u, 0x0800u, 0x0800u}	/* P8：SIP SGMII1 SGMII        */
+		};
 
-// static Std_ReturnType swic_Reg_GetLink(const uint8 SwitchPortIdx, EthTrcv_LinkStateType *const LinkStatePtr)
-// {
-    // struct swic_tbl_lnk {
-	// 	const swic_reg_data_t	*tbl;
-	// 	const uint32			num;
-	// 	const uint32			msk;
-	// 	const uint32			dat;
-	// };
-	// static const struct swic_tbl_lnk	tbl[]
-	// =	{ {&g_regListSeqGetLinkIeee[26], 1u, 0x0800u, 0x0800u}	/* P9：未使用                  */
-	// 	, {&g_regListSeqGetLinkIeee[ 0], 1u, 0x0800u, 0x0800u}	/* P1：ADC 1000BASE-T1         */
-	// 	, {&g_regListSeqGetLinkIeee[ 1], 1u, 0x0800u, 0x0800u}	/* P2：DCM 1000BASE-T1         */
-	// 	, {&g_regListSeqGetLinkIeee[ 2], 7u, 0x0004u, 0x0004u}	/* P3：未使用                  */
-	// 	, {&g_regListSeqGetLinkIeee[ 9], 7u, 0x0004u, 0x0004u}	/* P4：未使用                  */
-	// 	, {&g_regListSeqGetLinkIeee[16], 7u, 0x0004u, 0x0004u}	/* P5：SIP SAILSS_RGMII0 RGMII */
-	// 	, {&g_regListSeqGetLinkIeee[23], 1u, 0x0800u, 0x0800u}	/* P6：DLC 100BASE-TX          */
-	// 	, {&g_regListSeqGetLinkIeee[24], 1u, 0x0800u, 0x0800u}	/* P7：SIP SGMII0 SGMII        */
-	// 	, {&g_regListSeqGetLinkIeee[25], 1u, 0x0800u, 0x0800u}	/* P8：SIP SGMII1 SGMII        */
-	// 	};
+	Std_ReturnType	result = E_NOT_OK;
+	uint32			val = 0uL;
+    do {
+        if (SwitchPortIdx >= (sizeof(tbl)/sizeof(tbl[0])))	{ break; }
+        if (LinkStatePtr == NULL_PTR)			{ break; }
+        result = EthSwt_SWIC_Reg_SetTbl(tbl[SwitchPortIdx].tbl, tbl[SwitchPortIdx].num, &val, errFactor);
+        if (result == E_OK) {
+            *LinkStatePtr = ((val & tbl[SwitchPortIdx].msk) == tbl[SwitchPortIdx].dat) ? ETHTRCV_LINK_STATE_ACTIVE : ETHTRCV_LINK_STATE_DOWN;
+        }
+    } while(0);
 
-	// Std_ReturnType	err;
-	// uint32			val = 0uL;
-	// if (SwitchPortIdx >= SWIC_TBL_NUM(tbl))	{ return E_NOT_OK; }
-	// if (LinkStatePtr == NULL_PTR)			{ return E_NOT_OK; }
-	// err = swic_Reg_SetTbl(tbl[SwitchPortIdx].tbl, tbl[SwitchPortIdx].num, &val);
-	// if (err == E_OK) {
-	// 	*LinkStatePtr = ((val & tbl[SwitchPortIdx].msk) == tbl[SwitchPortIdx].dat) ? ETHTRCV_LINK_STATE_ACTIVE : ETHTRCV_LINK_STATE_DOWN;
-	// }
-	// return err;
-// }
+	return result;
+}

@@ -4,9 +4,11 @@
 #include <EthSwt_SWIC_Core_Cfg.h>
 #include <EthSwt_SWIC_PWR.h>
 #include <EthSwt_SWIC_Init.h>
-#include <EthSwt_SWIC_Relay.h>
 #include <EthSwt_SWIC_Link.h>
+#include <EthSWt_SWIC_Port.h>
+#include <EthSwt_SWIC_Allow.h>
 #include <EthSwt_SWIC_Define.h>
+#include <EthSwt_BSW_define.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_ST_UNINIT                         (0U)
 #define D_ETHSWT_SWIC_ST_INIT                           (1U)
@@ -59,9 +61,13 @@ void EthSwt_SWIC_STM_Init (void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_STM_HiProc (void)
 {
+    uint8 idx;
+
     switch (G_SWIC_Status) {
     case  D_ETHSWT_SWIC_ST_ACTIVE:
-        EthSwt_SWIC_Link_TimerUpdate();
+        for (idx = 0; idx < (D_ETHSWT_SWIC_HIPROC_FUNCS_NUM); idx++) {
+            G_ETHSWT_SWIC_HIPROC_FUNCS[idx]();
+        }
     default:
         break;
     }
@@ -93,11 +99,38 @@ void EthSwt_SWIC_STM_Background (void)
     }
 }
 /* -------------------------------------------------------------------------- */
+EthSwt_StateType EthSwt_SWIC_STM_GetStatus (void)
+{
+    EthSwt_StateType ret;
+
+    switch (G_SWIC_Status) {
+    case D_ETHSWT_SWIC_ST_UNINIT:
+        ret = ETHSWT_STATE_UNINIT;
+        break;
+    case D_ETHSWT_SWIC_ST_INIT:
+        ret = ETHSWT_STATE_INIT;
+        break;
+    case D_ETHSWT_SWIC_ST_PORT_INIT_COMPLETED:
+    case D_ETHSWT_SWIC_ST_SET_RELAY_ON:
+    case D_ETHSWT_SWIC_ST_SET_RELAY_OFF:
+        ret = ETHSWT_STATE_PORTINIT_COMPLETED;
+        break;
+    case D_ETHSWT_SWIC_ST_ACTIVE:
+        ret = ETHSWT_STATE_ACTIVE;
+        break;
+    default:
+        ret = ETHSWT_STATE_UNINIT;
+        break;
+    }
+
+    return ret;
+}
+/* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_uninitProc (void)
 {
     Std_ReturnType swicAvailable;
 
-    swicAvailable = EthSwt_SWIC_STM_CheckAvailable();
+    swicAvailable = EthSwt_SWIC_Allow_SetRegister();
     if (swicAvailable == E_OK) {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_AVAILABLE);
     }
@@ -124,7 +157,7 @@ static void ethswt_swic_stm_portInitCompletedProc (void)
 {
     Std_ReturnType relay;
 
-    relay = EthSwt_SWIC_STM_CanRelay();
+    relay = EthSwt_SWIC_Allow_Relay();
     if (relay == E_OK) {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_START_RELAY);
     } else {
@@ -140,7 +173,7 @@ static void ethswt_swic_stm_setRelayOnProc (void)
     Std_ReturnType result;
     uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
 
-    result = EthSwt_SWIC_Relay_On(&errFactor);
+    result = EthSwt_SWIC_Port_RelayOn(&errFactor);
     if (result == E_OK) {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_RELAYON_DONE);
     } else {
@@ -158,21 +191,15 @@ static void ethswt_swic_stm_activeProc (void)
     Std_ReturnType relay;
     Std_ReturnType result;
     uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
+    uint8 idx;
     
-    relay = EthSwt_SWIC_STM_CanRelay();
+    relay = EthSwt_SWIC_Allow_Relay();
     if (relay == E_OK) {
-        /* ポートモード設定 */
-        do {
-            if (EthSwt_SWIC_Link_CheckAction() == E_OK) {
-                result = EthSwt_SWIC_Link_Action(&errFactor);
-                if (result != E_OK) {
-                    ethswt_swic_stm_reset(errFactor);
-                    break;
-                }
-            }
-        } while (0);
-    
-        /* など */  
+        for (idx = 0; idx < (D_ETHSWT_SWIC_ACTIVE_FUNS_NUM); idx++)
+        result = G_ETHSWT_SWIC_ACTIVE_FUNCS[idx](&errFactor);
+        if (result == E_NOT_OK) {
+            ethswt_swic_stm_reset(errFactor);
+        } 
     } else {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_STOP_RELAY);
     }
@@ -185,7 +212,7 @@ static void ethswt_swic_stm_setRelayOffProc (void)
     Std_ReturnType result;
     uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
 
-    result = EthSwt_SWIC_Relay_Off(&errFactor);
+    result = EthSwt_SWIC_Port_RelayOff(&errFactor);
     if (result == E_OK) {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_RELAYOFF_DONE);
     } else {
@@ -245,9 +272,8 @@ static uint32 ethswt_swic_stm_act_move_init (void)
 }
 /* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_stm_act_move_port_init_completed (void)
-{
-    EthSwt_SWIC_Link_Clear();
-    
+{   
+    /* do nothing */
     return D_ETHSWT_SWIC_ST_PORT_INIT_COMPLETED;
 }
 /* -------------------------------------------------------------------------- */
@@ -259,7 +285,8 @@ static uint32 ethswt_swic_stm_act_move_set_relay_on (void)
 /* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_stm_act_move_active (void)
 {
-    /* do nothing */
+    EthSwt_SWIC_Link_Clear();
+
     return D_ETHSWT_SWIC_ST_ACTIVE;
 }
 /* -------------------------------------------------------------------------- */

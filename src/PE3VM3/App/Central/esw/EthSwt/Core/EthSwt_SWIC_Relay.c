@@ -21,7 +21,7 @@ Std_ReturnType EthSwt_SWIC_Relay_On(uint32 *errFactor)
     = {
         SWIC_REG_TBL(g_regListSeqRelayOn),
         SWIC_REG_TBL(g_regListSeqP1PhyOn),
-        SWIC_REG_TBL(g_regListSeqP2PhyOn)
+        SWIC_REG_TBL(g_regListSeqP2PhyOn),
     };
     
     Std_ReturnType	err = E_OK;
