@@ -42,6 +42,10 @@
 #include "IVI_DspCtrl_Main.h"
 #include "IVI_DrcCtrl_Main.h"
 
+/* ClkCtrl */
+#include "date_clk.h"
+#include "datesi.h"
+
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
@@ -53,6 +57,7 @@
 
 #include "veh_opemd.h"
 #include "gpi2c_ma.h"
+#include "RtcIc_drv.h"
 
 #include "rim_ctl.h"
 #include "run_m.h"
@@ -138,12 +143,15 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Platform Pre Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {vd_g_DateclkMainTask,              (U4)SCHDLR_TASKBIT__10MS_A  },
+
     {&vd_s_SchdlrCfgWdgTimRestart,      (U4)SCHDLR_TASKBIT__10MS_A  },
 
 //    {&vd_g_XpdiMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
 //    {&vd_g_EsmMStkmMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
 
 //    {&vd_g_FFLvCaptMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_RtcIc_MainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -206,6 +214,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  20ms A Task                                                      */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

@@ -60,6 +60,15 @@ CONST( AB_83_ConstV uint8, FEE_CONFIG_DATA ) FeeBlockConfigurations[] = {
     /* ID:35    */ 0U,
     /* ID:36    */ 0U,
     /* ID:37    */ 0U,
+    /* ID:38    */ 0U,
+    /* ID:39    */ 0U,
+    /* ID:40    */ 0U,
+    /* ID:41    */ 0U,
+    /* ID:42    */ 0U,
+    /* ID:43    */ 0U,
+    /* ID:44    */ 0U,
+    /* ID:45    */ 0U,
+    /* ID:46    */ 0U,
 
 };
 
@@ -104,6 +113,15 @@ CONST( AB_83_ConstV uint16, FEE_CONFIG_DATA ) FeeRecPosTblIdx[] = {
     /* ID:35    Area:0   Dataset:1   */ 33U,
     /* ID:36    Area:0   Dataset:1   */ 34U,
     /* ID:37    Area:0   Dataset:1   */ 35U,
+    /* ID:38    Area:0   Dataset:1   */ 36U,
+    /* ID:39    Area:0   Dataset:1   */ 37U,
+    /* ID:40    Area:0   Dataset:1   */ 38U,
+    /* ID:41    Area:0   Dataset:1   */ 39U,
+    /* ID:42    Area:0   Dataset:1   */ 40U,
+    /* ID:43    Area:0   Dataset:1   */ 41U,
+    /* ID:44    Area:0   Dataset:1   */ 42U,
+    /* ID:45    Area:0   Dataset:1   */ 43U,
+    /* ID:46    Area:0   Dataset:1   */ 44U,
 
 };
 

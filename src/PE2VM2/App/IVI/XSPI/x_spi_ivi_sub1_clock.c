@@ -18,6 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "x_spi_ivi_sub1_private.h"
 #include    "x_spi_ivi_sub1_clock.h"
+#include    "datesi_com.h"
 /*#include    "datesi_com.h"*/
 #include    "x_spi_ivi_sub4.h"
 
@@ -130,7 +131,7 @@ void            vd_g_XspiIviSub1ClcokMainTask(void)
 void            vd_g_XspiIviSub1ClockAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_DATA_SIZE)
 {
     U1 u1_t_subtype;
-    /*ST_DATESI_COMMAND_DATA st_t_data;*/
+    ST_DATESI_COMMAND_DATA st_t_data;
 
     u1_t_subtype = u1_ap_XSPI_ADD[0];
 
@@ -138,30 +139,30 @@ void            vd_g_XspiIviSub1ClockAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_
     {
     case XSPI_IVI_CLOCK_SET_REQ:
     /*DateSIに時刻情報を渡す*/
-/*        st_t_data.u1_clk_year      = u1_ap_XSPI_ADD[1];*/
-/*        st_t_data.u1_clk_mont      = u1_ap_XSPI_ADD[2];*/
-/*        st_t_data.u1_clk_day       = u1_ap_XSPI_ADD[3];*/
-/*        st_t_data.u1_clk_hour      = u1_ap_XSPI_ADD[4];*/
-/*        st_t_data.u1_clk_min       = u1_ap_XSPI_ADD[5];*/
-/*        st_t_data.u1_clk_sec       = u1_ap_XSPI_ADD[6];*/
-/*        st_t_data.u1_gps_st        = u1_ap_XSPI_ADD[7];*/
-/*        st_t_data.u1_gps_crct      = u1_ap_XSPI_ADD[8];*/
-/*        st_t_data.u1_tz            = u1_ap_XSPI_ADD[9];*/
-/*        st_t_data.u1_tz_sign       = u1_ap_XSPI_ADD[10];*/
-/*        st_t_data.u1_dst_s30       = u1_ap_XSPI_ADD[11];*/
-/*        st_t_data.u1_hour_usw      = u1_ap_XSPI_ADD[12];*/
-/*        st_t_data.u1_hour_dsw      = u1_ap_XSPI_ADD[13];*/
-/*        st_t_data.u1_min_usw       = u1_ap_XSPI_ADD[14];*/
-/*        st_t_data.u1_min_dsw       = u1_ap_XSPI_ADD[15];*/
-/*        st_t_data.u1_oset_usw      = u1_ap_XSPI_ADD[16];*/
-/*        st_t_data.u1_oset_dsw      = u1_ap_XSPI_ADD[17];*/
-/*        st_t_data.u1_clkfmtsw      = u1_ap_XSPI_ADD[18];*/
-/*        st_t_data.u1_m_rst_sw      = u1_ap_XSPI_ADD[19];*/
-/*        st_t_data.u1_clk_year_updt = u1_ap_XSPI_ADD[20];*/
-/*        st_t_data.u1_clk_mont_updt = u1_ap_XSPI_ADD[21];*/
-/*        st_t_data.u1_clk_day_updt  = u1_ap_XSPI_ADD[22];*/
+        st_t_data.u1_clk_year      = u1_ap_XSPI_ADD[1];
+        st_t_data.u1_clk_mont      = u1_ap_XSPI_ADD[2];
+        st_t_data.u1_clk_day       = u1_ap_XSPI_ADD[3];
+        st_t_data.u1_clk_hour      = u1_ap_XSPI_ADD[4];
+        st_t_data.u1_clk_min       = u1_ap_XSPI_ADD[5];
+        st_t_data.u1_clk_sec       = u1_ap_XSPI_ADD[6];
+        st_t_data.u1_gps_st        = u1_ap_XSPI_ADD[7];
+        st_t_data.u1_gps_crct      = u1_ap_XSPI_ADD[8];
+        st_t_data.u1_tz            = u1_ap_XSPI_ADD[9];
+        st_t_data.u1_tz_sign       = u1_ap_XSPI_ADD[10];
+        st_t_data.u1_dst_s30       = u1_ap_XSPI_ADD[11];
+        st_t_data.u1_hour_usw      = u1_ap_XSPI_ADD[12];
+        st_t_data.u1_hour_dsw      = u1_ap_XSPI_ADD[13];
+        st_t_data.u1_min_usw       = u1_ap_XSPI_ADD[14];
+        st_t_data.u1_min_dsw       = u1_ap_XSPI_ADD[15];
+        st_t_data.u1_oset_usw      = u1_ap_XSPI_ADD[16];
+        st_t_data.u1_oset_dsw      = u1_ap_XSPI_ADD[17];
+        st_t_data.u1_clkfmtsw      = u1_ap_XSPI_ADD[18];
+        st_t_data.u1_m_rst_sw      = u1_ap_XSPI_ADD[19];
+        st_t_data.u1_clk_year_updt = u1_ap_XSPI_ADD[20];
+        st_t_data.u1_clk_mont_updt = u1_ap_XSPI_ADD[21];
+        st_t_data.u1_clk_day_updt  = u1_ap_XSPI_ADD[22];
 
-/*        vd_g_DateSIComCommandRx(st_t_data);*/
+        vd_g_DateSIComCommandRx(st_t_data);
         break;
     case XSPI_IVI_CLOCK_GET_REQ:
         u1_s_xspi_ivi_clock_data_get_req_flg = (U1)TRUE;

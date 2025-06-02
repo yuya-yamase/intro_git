@@ -83,8 +83,6 @@
 #if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
 #endif
-#include "datesi_tim.h"
-#include "datesi_cal.h"
 #include "vds_ci.h"
 #include "oilmil.h"
 #include "ecojdg.h"
@@ -109,8 +107,6 @@
 #include "hmitt.h"
 #include "hmiwchime.h"
 #include "hmitripcom.h"
-#include "hmiclock.h"
-#include "hmidate.h"
 #include "hmimcst.h"
 #include "hmifuel.h"
 #include "hmiscreen.h"
@@ -281,6 +277,10 @@
 #define XSPI_EVSCHG_TMCHG_LINK_SIZE         (EVSCHG_TIMCHG_SCHDINFO_SIZE)
 
 #define XSPI_VDF_AREA_SIZE                  (9U)
+
+#define XSPI_CLOCK_AM                       (1U)
+#define XSPI_CLOCK_PM                       (2U)
+#define XSPI_CLOCK_12H                      (12U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -1040,9 +1040,34 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx) {
-    u4_ap_pdu_tx[0]  = u4_g_DateSITim();                           /* CLOCK_HOUR / CLOCK_MIN / CLOCK_SEC                            */
-    u4_ap_pdu_tx[0] |= ((U4)u1_g_DateSITimAdjAct() <<  28U);       /* CLOCK_ADJUST                                                  */
-    /* CLOCK_STS */
+    U1  u1_t_rx;
+    U1  u1_t_rx_ampm;
+    U1  u1_t_fmt_is12h;
+
+    u1_t_rx = (U1)0U;
+    u1_t_rx_ampm = (U1)0U;
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_SEC, &u1_t_rx);
+    u4_ap_pdu_tx[0]  = (U4)u1_t_rx & (U4)XSPI_MSK_06BIT;           /* CLOCK_SEC */
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_MIN, &u1_t_rx);
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_rx & (U4)XSPI_MSK_06BIT) << 6U;   /* CLOCK_MIN */
+
+    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_HOUR, &u1_t_rx);
+    u1_t_fmt_is12h = u1_g_TimeFormat12H24H();
+    if(u1_t_fmt_is12h == (U1)TIMEFMT_VAL_12H){
+        (void)Com_ReceiveSignal(ComConf_ComSignal_CL_AMPM, &u1_t_rx_ampm);
+        if((u1_t_rx_ampm == (U1)XSPI_CLOCK_PM) && (u1_t_rx != (U1)XSPI_CLOCK_12H)) {
+            u1_t_rx += (U1)XSPI_CLOCK_12H;
+        }
+        else if((u1_t_rx_ampm == (U1)XSPI_CLOCK_AM) && (u1_t_rx == (U1)XSPI_CLOCK_12H)) {
+            u1_t_rx = (U1)0U;
+        }
+        else {
+            /* Do Nothing */
+        }
+    }
+    u4_ap_pdu_tx[0] |= ((U4)u1_t_rx & (U4)XSPI_MSK_05BIT) << 12U;   /* CLOCK_HOUR */
 }
 
 /*===================================================================================================================================*/
@@ -1579,11 +1604,7 @@ static inline void    vd_s_XSpiCfgTxMetcstm(    U4 * u4_ap_pdu_tx) {
         u4_ap_pdu_tx[u4_t_loop] = (U4)0U;
     }
 
-    u4_ap_pdu_tx[0]  = ((u4_g_DateSITimGetAdjDispClk() & (U4)XSPI_MSK_CSTMCLK) >> 4);          /* Clock                          */
     u4_ap_pdu_tx[3]  = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
-    u4_ap_pdu_tx[4]  = ((u4_g_DateSICalGetAdjDispDate() & (U4)XSPI_MSK_CSTMDAT) << 4);         /* Customize Calendar             */
-    u4_ap_pdu_tx[4] |= ((u1_g_DateSICalSetImpossible()  & (U4)XSPI_MSK_01BIT  ) << 6);         /* Calender State                 */
-    u4_ap_pdu_tx[5]  = ((u1_g_DateSICalLimJdgYear()     & (U4)XSPI_MSK_02BIT  ) << 3);         /* Calender Year Limit            */
     u4_ap_pdu_tx[5] |= ((u4_g_HmiRim((U1)HMIRIM_INTERRUPT_CSTM) & (U4)XSPI_MSK_08BIT) << 8);   /* Interrupt Customize            */
 
 }
@@ -2451,11 +2472,6 @@ static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
     /* Customize */
     vd_g_HmiCstmPut(&u4_ap_PDU_RX[0]);
 
-    /* Clock */
-    vd_g_HmiClockPut(&u4_ap_PDU_RX[0]);
-
-    /*Calendar*/
-    vd_g_HmiDatePut(&u4_ap_PDU_RX[4]);
     /* Interrupt Customize */
     u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[5], (U1)0U, (U1)8U);
     if(u1_t_rxdata != (U1)XSPI_UNKNOWN){
@@ -3033,6 +3049,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-2     02/10/2025 SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*  BEV-3     02/26/2025 RS       Change for BEV System_Consideration_1.(Requests from the SOC team for electricity cost units)      */
 /*  BEV-4     03/06/2025 SF       Change for BEV System_Consideration_1.(Requests from the SOC team)                                 */
+/*  BEV-5     04/25/2025 MN       Change for BEV System_Consideration_1.(MET-M_CLKCTL-CSTD-0-06-A-C1)                                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -3049,5 +3066,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -52,7 +52,6 @@
 #include "tripsnsr.h"
 #include "tripcom.h"
 #include "ambtmp.h"
-#include "datesi.h"
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
 #include "rcmmui.h"
@@ -136,7 +135,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
         &vd_g_AmbtmpBonInit,
-        &vd_g_DateSIBonInit,
         &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
@@ -226,7 +224,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_DateSIRstWkupInit,
         &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
@@ -316,7 +313,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_DateSIRstWkupInit,
         &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
