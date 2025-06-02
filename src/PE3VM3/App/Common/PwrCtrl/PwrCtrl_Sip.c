@@ -65,7 +65,7 @@
 #define PWRCTRL_SIP_OFF_T_MM_SUSPEND_REQ_N (     5U / PWRCTRL_CFG_TASK_TIME) /* tMM_SUSPEND_REQ_N:5ms                                                */
 #define PWRCTRL_SIP_OFF_T_STR_WAKE         (     5U / PWRCTRL_CFG_TASK_TIME) /* tSTR_WAKE:5ms                                                        */
 #define PWRCTRL_SIP_OFF_T_MM_OFF_REQ_LO    (     5U / PWRCTRL_CFG_TASK_TIME) /* tMM_OFF_REQ_LO:5ms                                                   */
-#define PWRCTRL_SIP_OFF_WAIT_MM_STBY       (100000U / PWRCTRL_CFG_TASK_TIME) /* MM_STBY_N =Loチェック待機時間:100秒                                  */
+#define PWRCTRL_SIP_OFF_WAIT_MM_STBY       (     5U / PWRCTRL_CFG_TASK_TIME) /* MM_STBY_N =Loチェック待機時間:5ms                                    */
 
 /* SIPスタンバイ用処理 */
 #define PWRCTRL_SIP_STBY_T_MM_SUSPEND_REQ  (0U)                              /* tMM_SUSPEND_REQ_N:0ms                                                */
