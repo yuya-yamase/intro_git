@@ -197,8 +197,8 @@ void vd_g_Ant_Init(void)
     st_s_antctl_gnss.u1_fail_flg = (U1)FALSE;
     st_s_antctl_gnss.u1_antena_reboot_flg = (U1)FALSE;
     st_s_antctl_gnss.u1_antena_reboot_wait_time = (U1)0U;
-	u1_s_gnss_dtc_short_flg = (U1)FALSE;
-	u1_s_gnss_dtc_open_flg = (U1)FALSE;
+    u1_s_gnss_dtc_short_flg = (U1)FALSE;
+    u1_s_gnss_dtc_open_flg = (U1)FALSE;
 #ifdef ANTCTL_DAB
     st_s_antctl_dab.u2_poll_start_tim = (U2)0U;
     st_s_antctl_dab.u2_poll_det_tim = (U2)0U;
@@ -930,7 +930,7 @@ static void vd_s_Ant_Gnss_Fail(void)
     if(u1_s_gnss_short_cnt == (U1)ANTCTL_SHORT_DET_CNT) {
         /*ダイアグにショート検知ログを残す*/
         vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_LOW, (U1)ANTCTL_DTC_STS_FAIL);
-		u1_s_gnss_dtc_short_flg = (U1)TRUE;
+        u1_s_gnss_dtc_short_flg = (U1)TRUE;
     }
     Dio_WriteChannel((U2)DIO_ID_APORT4_CH2,(U1)ANTCTL_DIO_LOW);
     st_s_antctl_gnss.u1_antena_reboot_flg = (U1)TRUE;
