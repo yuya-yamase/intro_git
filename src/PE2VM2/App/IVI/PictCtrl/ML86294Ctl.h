@@ -13,6 +13,7 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "pictic.h"
 #include "PictCtl.h"
+#include "SysEcDrc.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -104,6 +105,8 @@
 
 #define u1_PICT_ML_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_VIDEO_IC, (u), (v), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (w), (x), (y), (z)))
 #define u1_PICT_ML_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_VIDEO_IC, (w), (U1)GP_I2C_MA_SLA_1_VIDEO_IC, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
+
+#define vd_PICT_ML_DREC_REQ(x, y, z)                    (vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_EIZOIC, (x), (y), (z)))
 
 #define u1_PICT_ML_GET_V_IC_STATUS1()                   (Dio_ReadChannel(DIO_ID_PORT3_CH0))
 
