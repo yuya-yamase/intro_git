@@ -40,6 +40,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define     XSPI_TRANS_RSLT_OK       (0U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -98,6 +99,7 @@ void            vd_g_XspiIviInit(void)
 void            vd_g_XspiIviMain1st(void)
 {
     U1          u1_t_buf_rslt;
+    U1          u1_t_trans_rslt;
 
     u1_t_buf_rslt   = (U1)XSPI_NG;
 
@@ -105,7 +107,13 @@ void            vd_g_XspiIviMain1st(void)
     u1_t_buf_rslt = xspi_Read((U1)XSPI_CH_01, &u1_g_XspiIviRcv[0], XSPI_RCV_FRM_MAX);
 
     if (u1_t_buf_rslt == (U1)XSPI_OK) {
-        vd_s_XspiIviAnaRcv(&u1_g_XspiIviRcv[0]);
+        u1_t_trans_rslt  = u1_g_XspiIviRcv[5552];
+        u1_t_trans_rslt |= u1_g_XspiIviRcv[5553];
+        u1_t_trans_rslt |= u1_g_XspiIviRcv[5554];
+        u1_t_trans_rslt |= u1_g_XspiIviRcv[5555];
+        if(u1_t_trans_rslt == (U1)XSPI_TRANS_RSLT_OK) {
+            vd_s_XspiIviAnaRcv(&u1_g_XspiIviRcv[0]);
+        }
     }
     else {
         /* 受信データの取得失敗 */
