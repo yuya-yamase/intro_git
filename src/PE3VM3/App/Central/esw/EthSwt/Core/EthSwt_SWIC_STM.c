@@ -156,15 +156,25 @@ static void ethswt_swic_stm_initProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_portInitCompletedProc (void)
 {
+    Std_ReturnType swicAvailable;
     Std_ReturnType relay;
 
-    relay = EthSwt_SWIC_Allow_Relay();
-    if (relay == E_OK) {
-        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_START_RELAY);
-    } else {
-        /* SWIC内部エラー検知 */
-        /* SWICリセット検出 */
-    }
+    do {
+        swicAvailable = EthSwt_SWIC_Allow_SetRegister();
+        if (swicAvailable != E_OK) {
+            ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_UNAVAILABLE);
+            break;
+        }
+
+        relay = EthSwt_SWIC_Allow_Relay();
+        if (relay == E_OK) {
+            ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_START_RELAY);
+            break;
+        } else {
+            /* SWIC内部エラー検知 */
+            /* SWICリセット検出 */
+        }
+    } while (0);
 
     return;
 }
