@@ -1,11 +1,12 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
+#include <EthSwt_SWIC_Core_Cfg.h>
 #include "EthSwt_SWIC_Link.h"
-#include "EthSwt_SWIC_Core_Cfg.h"
-#include "EthSwt_SWIC_initRegCommon.h"
 #include "EthSwt_SWIC_Reg.h"
-#include "EthSwt_SWIC_initRegListSeqGetLink.h"
 #include "EthSwt_SWIC_STM.h"
+
+#include <EthSwt_SWIC_initRegCommon.h>
+#include <EthSwt_SWIC_initRegListSeqGetLink.h>
 /* -------------------------------------------------------------------------- */
 static struct {
     volatile Std_ReturnType             getLinkResult;      /* ‹Œ lnk_err */

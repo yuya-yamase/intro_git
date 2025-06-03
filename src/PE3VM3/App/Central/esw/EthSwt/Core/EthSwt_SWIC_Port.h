@@ -6,8 +6,8 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include "EthSwt_SWIC_initRegCommon.h"
-#include "EthSwt_BSW_define.h"
+#include <EthSwt_SWIC_initRegCommon.h>
+#include <EthSwt_BSW_define.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Port_Init (void);
 Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 *errFactor);

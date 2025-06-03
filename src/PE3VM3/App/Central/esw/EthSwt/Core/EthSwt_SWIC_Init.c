@@ -1,29 +1,28 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_Init.h>
-#include <EthSwt_SWIC_Reg.h>
 #include <EthSwt_SWIC_Core_Cfg.h>
+#include "EthSwt_SWIC_Init.h"
+#include "EthSwt_SWIC_Reg.h"
 
-#include "EthSwt_SWIC_initRegCommon.h"
-#include "EthSwt_SWIC_initRegListPort.h"
-#include "EthSwt_SWIC_initRegListVlan.h"
-#include "EthSwt_SWIC_initRegListL2.h"
-#include "EthSwt_SWIC_initRegListQos.h"
-#include "EthSwt_SWIC_initRegListAcl.h"
-#include "EthSwt_SWIC_initRegListArp.h"
-#include "EthSwt_SWIC_initRegListTC10.h"
-#include "EthSwt_SWIC_initRegListPTP.h"
-#include "EthSwt_SWIC_initRegListBandwidthLimit.h"
-#include "EthSwt_SWIC_initRegListSeqInitSeq.h"
-#include "EthSwt_SWIC_initRegListSeqSetPortActDis.h"
-#include "EthSwt_SWIC_initRegListSeq100BTx.h"
-#include "EthSwt_SWIC_initRegListSeqAclTbl.h"
-#include "EthSwt_SWIC_initRegListSeqGetInterrupt.h"
-#include "EthSwt_SWIC_initRegListSeqPhySwicOff.h"
-#include "EthSwt_SWIC_initRegListSeqGetLink.h"
-#include "EthSwt_SWIC_initRegListSeqPhyReset.h"
-#include "EthSwt_SWIC_initRegListSeqBaseT1.h"
-
+#include <EthSwt_SWIC_initRegCommon.h>
+#include <EthSwt_SWIC_initRegListPort.h>
+#include <EthSwt_SWIC_initRegListVlan.h>
+#include <EthSwt_SWIC_initRegListL2.h>
+#include <EthSwt_SWIC_initRegListQos.h>
+#include <EthSwt_SWIC_initRegListAcl.h>
+#include <EthSwt_SWIC_initRegListArp.h>
+#include <EthSwt_SWIC_initRegListTC10.h>
+#include <EthSwt_SWIC_initRegListPTP.h>
+#include <EthSwt_SWIC_initRegListBandwidthLimit.h>
+#include <EthSwt_SWIC_initRegListSeqInitSeq.h>
+#include <EthSwt_SWIC_initRegListSeqSetPortActDis.h>
+#include <EthSwt_SWIC_initRegListSeq100BTx.h>
+#include <EthSwt_SWIC_initRegListSeqAclTbl.h>
+#include <EthSwt_SWIC_initRegListSeqGetInterrupt.h>
+#include <EthSwt_SWIC_initRegListSeqPhySwicOff.h>
+#include <EthSwt_SWIC_initRegListSeqGetLink.h>
+#include <EthSwt_SWIC_initRegListSeqPhyReset.h>
+#include <EthSwt_SWIC_initRegListSeqBaseT1.h>
 /* -------------------------------------------------------------------------- */
 #define	SWIC_REG_TBL(a)		{(a), SWIC_TBL_NUM(a)}	/* swic_reg_tblê›íËóp */
 #define	SWIC_TBL_NUM(a)	(sizeof(a)/sizeof((a)[0]))

@@ -5,9 +5,11 @@
     :sourceDir=${APP_DIR}/Common/PwrCtrl
     :sourceDir=${APP_DIR}/Product/config_1MJP
     :sourceDir=${APP_DIR}/Central/esw/EthSwt
-    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Config
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Register
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/Core
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Core_Cfg
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/Custom
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Custom_Cfg
     :sourceDir=${APP_DIR}/Central/esw/EthSW_Task
     :sourceDir=${APP_DIR}/Central/esw/EthDLC
     :sourceDir=${APP_DIR}/Central/LIB
@@ -33,9 +35,11 @@
     -I${LIB_DIR}
 
     -I${APP_DIR}/Central/esw/EthSwt
-    -I${APP_DIR}/Central/esw/EthSwt/Config
+    -I${APP_DIR}/Central/esw/EthSwt/Register
     -I${APP_DIR}/Central/esw/EthSwt/Core
+    -I${APP_DIR}/Central/esw/EthSwt/Core_Cfg
     -I${APP_DIR}/Central/esw/EthSwt/Custom
+    -I${APP_DIR}/Central/esw/EthSwt/Custom_Cfg
     -I${APP_DIR}/Central/esw/EthDLC
     -I${APP_DIR}/Central/esw/inc
     -I${APP_DIR}/Central/inc

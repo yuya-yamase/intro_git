@@ -2,10 +2,9 @@
 #include <Spi.h>
 #include <Rte_BswUcfg.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_Spi.h>
 #include <LIB.h>
-#include "EthSwt_SWIC_initRegCommon.h"
-
+#include <EthSwt_SWIC_initRegCommon.h>
+#include "EthSwt_SWIC_Spi.h"
 /* -------------------------------------------------------------------------- */
 #define	swic_SpiS1_Crc8Cmd(a,b)	swic_SpiS1_Crc8(a,b,0u)
 /* -------------------------------------------------------------------------- */

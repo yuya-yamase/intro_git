@@ -1,8 +1,8 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_PWR.h>
 #include <EthSwt_SWIC_Core_Cfg.h>
 #include <EthSwt_SWIC_Signal.h>
+#include "EthSwt_SWIC_PWR.h"
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_PWR_ST_INIT_POINT         (0U)
 #define D_ETHSWT_SWIC_PWR_ST_OFF                (1U)

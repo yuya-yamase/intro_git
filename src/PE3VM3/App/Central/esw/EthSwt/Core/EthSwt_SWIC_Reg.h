@@ -6,7 +6,7 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include "EthSwt_SWIC_initRegCommon.h"
+#include <EthSwt_SWIC_initRegCommon.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Reg_Init (void);
 void EthSwt_SWIC_Reg_HiProc (void);

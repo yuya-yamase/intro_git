@@ -14,6 +14,7 @@ void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 {
 	(void)CfgPtr;
 	EthSwt_SWIC_PWR_Init();
+	EthSwt_SWIC_STM_Init();
 	EthSwt_SWIC_Spi_Init();
 	EthSwt_SWIC_Reg_Init();
 	EthSwt_SWIC_Link_Init();
@@ -24,15 +25,15 @@ void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_HiProc(void)
 {
-	EthSwt_SWIC_Reg_HiProc();		/* TimeÇ∆ÇµÇƒÇ‹Ç∆ÇﬂÇÈÇŸÇ§Ç™ÇÊÇ¢ */
-	EthSwt_SWIC_Link_HiProc();		/* TimeÇ∆ÇµÇƒÇ‹Ç∆ÇﬂÇÈÇŸÇ§Ç™ÇÊÇ¢ */
+	EthSwt_SWIC_Reg_HiProc();		/* TimeÇ∆ÇµÇƒÇ‹Ç∆ÇﬂÇÈÇŸÇ§Ç™ÇÊÇ¢Ç©Ç‡ */
+	EthSwt_SWIC_Link_HiProc();		/* TimeÇ∆ÇµÇƒÇ‹Ç∆ÇﬂÇÈÇŸÇ§Ç™ÇÊÇ¢Ç©Ç‡ */
 	EthSwt_SWIC_STM_HiProc();	
 	return;	
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_LoProc(void)
 {
-	EthSwt_StubDriver_LoProc();
+	EthSwt_StubDriver_LoProc();	/* Ç†Ç∆Ç≈è¡Ç∑ */
 	EthSwt_SWIC_PWR_LoProc();
 
 	return;

@@ -1,11 +1,12 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
+#include <EthSwt_SWIC_initRegCommon.h>
 #include "EthSwt_SWIC_Relay.h"
-#include "EthSwt_SWIC_initRegCommon.h"
 #include "EthSwt_SWIC_Reg.h"
-#include "EthSwt_SWIC_initRegListSeqInitSeq.h"
-#include "EthSwt_SWIC_initRegListSeqBaseT1.h"
-#include "EthSwt_SWIC_initRegListSeqPhySwicOff.h"
+
+#include <EthSwt_SWIC_initRegListSeqInitSeq.h>
+#include <EthSwt_SWIC_initRegListSeqBaseT1.h>
+#include <EthSwt_SWIC_initRegListSeqPhySwicOff.h>
 /* -------------------------------------------------------------------------- */
 #define	SWIC_REG_TBL(a)		{(a), SWIC_TBL_NUM(a)}	/* swic_reg_tblê›íËóp */
 #define	SWIC_TBL_NUM(a)	(sizeof(a)/sizeof((a)[0]))

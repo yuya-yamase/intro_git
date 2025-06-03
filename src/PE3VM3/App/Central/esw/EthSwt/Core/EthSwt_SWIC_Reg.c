@@ -1,10 +1,12 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include "EthSwt_SWIC_initRegCommon.h"
-#include "EthSwt_SWIC_Core_Cfg.h"
+#include <EthSwt_SWIC_initRegCommon.h>
+#include <EthSwt_SWIC_Core_Cfg.h>
+#include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_Spi.h"
 #include "EthSwt_SWIC_STM.h"
-#include "EthSwt_SWIC_Define.h"
+#include <EthSwt_SWIC_Allow.h>
+#include <EthSwt_SWIC_Define.h>
 /* -------------------------------------------------------------------------- */
 volatile static uint16			timer;
 
@@ -57,28 +59,38 @@ Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 
 			ret = swic_Reg_SetTblReadMask(tbl, idx, &val, errFactor);
 			break;
 		default:
-			ret = E_NOT_OK;	/* ここの扱いどうするか */
+			ret = E_NOT_OK;										/* レジスタアクセス制御にない要求場合 */
+			*errFactor = D_ETHSWT_SWIC_REG_FACT_NOT_CTRL;
 			break;
 		}
-		if (ret == E_NOT_OK) {
-			break;
-		}
+		if (ret == E_NOT_OK) { break; }
 	}
     return ret;
 }
 /* -------------------------------------------------------------------------- */
-
 static Std_ReturnType swic_Reg_SetTblWriteOFF(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint32 * const errFactor)
 {
 	Std_ReturnType	err;
 	uint32			i;
+	Std_ReturnType	checkPwr;
+
 	for (i = 0U ; i < INIT_SEQ_RETRY_CNT ; i++) {
 		err = EthSwt_SWIC_Spi_Write(tbl, cnt, idx);
 		if (err == E_OK) {
 			break;
 		}
+
+		checkPwr = EthSwt_SWIC_Allow_SetRegister();		/* Custom */
+		if (checkPwr == E_NOT_OK) {
+			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+			break;
+		}
 	}
-	*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* errFactorに値を入れるが、E_OKの場合は値を見ない */
+
+	if (err == E_NOT_OK && checkPwr == E_OK) {
+		*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+	}
+	
 	return err;
 }
 /* -------------------------------------------------------------------------- */
@@ -89,14 +101,22 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 	uint32			i;
 	uint16			cnt = 0u;
 	const uint16	getTime = timer;
-	for (i=0uL ; i<SWIC_REG_WAIT_L ; i++) {
+	Std_ReturnType	checkPwr;
+
+	for (i = 0uL ; i < SWIC_REG_WAIT_L ; i++) {				/* ★ループガードについて要検討 */
 		uint16	tmo;
 		err = EthSwt_SWIC_Spi_ReadSPI(tbl, idx, &val);
 		if (err == E_OK) {
 			if (((val ^ value) & mask) == 0u) { break; }
-			cnt = 0u;							/* 連続3回 */
+			cnt = 0u;										/* 連続3回 */
 		}
 		else {
+			checkPwr = EthSwt_SWIC_Allow_SetRegister();		/* Custom */
+			if (checkPwr == E_NOT_OK) {
+				*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+				break;
+			}
+
 			cnt = cnt + (uint16)1;
 			if (cnt >= INIT_SEQ_RETRY_CNT) {
 				*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;
@@ -109,6 +129,7 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 			 break;
 		}
 	}
+	
 	return err;
 }
 /* -------------------------------------------------------------------------- */
@@ -117,20 +138,35 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 	Std_ReturnType	err;
 	uint16			val = 0u;
 	uint32			i;
+	Std_ReturnType	checkPwr = E_OK;
+
 	for (i = 0U ; i < INIT_SEQ_RETRY_CNT ; i++) {
 		err = EthSwt_SWIC_Spi_Read(tbl, cnt, idx, &val);
 		if (err == E_OK) {
-			if (dat != NULL_PTR) {	/* データ取得 */
+			if (dat != NULL_PTR) {							/* データ取得 */
 				*dat = (*dat << 16) | ((uint32)val & (uint32)tbl[idx].mask);
 				break;
-			}						/* リードバック無効に以降はない */
-			if (((val ^ tbl[idx].value) & tbl[idx].mask) == 0u)	{ break; }	/* 一致 */
-			// *errFactor = D_ETHSWT_SWIC_REG_FACT_INIT;	/* リードバック異常 *//* リードバック無効に以降はないということでコメントアウト*/
-			// err = E_NOT_OK; /* リードバック無効に以降はないということでコメントアウト*/
+			}												/* リードバック無効に以降はない */
+			if (((val ^ tbl[idx].value) & tbl[idx].mask) == 0u)	{
+				break;										/* 一致 */
+			} else {
+				*errFactor = D_ETHSWT_SWIC_REG_FACT_INIT;	/* ★要確認 */
+				err = E_NOT_OK;
+				break;
+			}
+		}
+
+		checkPwr = EthSwt_SWIC_Allow_SetRegister();			/* Custom */
+		if (checkPwr == E_NOT_OK) {
+			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+			break;
 		}
 	}
 
-	*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* errFactorに値を入れるが、E_OKの場合は値を見ない */
+	if (err == E_NOT_OK && checkPwr == E_OK) {
+		*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+	}
+
 	return err;
 }
 /* -------------------------------------------------------------------------- */
@@ -138,6 +174,8 @@ static Std_ReturnType swic_Reg_SetTblWriteMask(const swic_reg_data_t tbl[], cons
 {
 	Std_ReturnType	err;
 	uint32			i;
+	Std_ReturnType	checkPwr;
+
 	val ^= val & tbl[idx].mask;
 	val |= tbl[idx].value & tbl[idx].mask;
 	for (i = 0U ; i < INIT_SEQ_RETRY_CNT ; i++) {
@@ -145,9 +183,17 @@ static Std_ReturnType swic_Reg_SetTblWriteMask(const swic_reg_data_t tbl[], cons
 		if (err == E_OK) {
 			break;
 		}
-	}
-	*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* errFactorに値を入れるが、E_OKの場合は値を見ない */
 
+		checkPwr = EthSwt_SWIC_Allow_SetRegister();		/* Custom */
+		if (checkPwr == E_NOT_OK) {
+			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+			break;
+		}
+	}
+	if (err == E_NOT_OK && checkPwr == E_OK) {
+		*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+	}
+	
 	return err;
 }
 /* -------------------------------------------------------------------------- */
@@ -155,12 +201,24 @@ static Std_ReturnType swic_Reg_SetTblReadMask(const swic_reg_data_t tbl[], const
 {
 	Std_ReturnType	err;
 	uint32			i;
+	Std_ReturnType	checkPwr = E_OK;
+
 	for (i = 0U ; i < INIT_SEQ_RETRY_CNT ; i++) {
 		err = EthSwt_SWIC_Spi_ReadSPI(tbl, idx, val);
 		if (err == E_OK) {
 			break;
 		}
+
+		checkPwr = EthSwt_SWIC_Allow_SetRegister();			/* Custom */
+		if (checkPwr == E_NOT_OK) {
+			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+			break;
+		}
 	}
-	*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* errFactorに値を入れるが、E_OKの場合は値を見ない */
+
+	if (err == E_NOT_OK && checkPwr == E_OK) {
+		*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+	}
+	
 	return err;
 }

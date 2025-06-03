@@ -5,7 +5,7 @@
 #define ETHSWT_SWIC_SPI_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-#include "EthSwt_SWIC_initRegCommon.h"
+#include <EthSwt_SWIC_initRegCommon.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Spi_Init(void);
 void EthSwt_SWIC_Spi_ReqInit(void);

@@ -1,13 +1,15 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include "EthSwt_BSW_define.h"
-#include "EthSwt_SWIC_Core_Cfg.h"
+#include <LIB.h>
+#include <EthSwt_BSW_define.h>
+#include <EthSwt_SWIC_Core_Cfg.h>
+#include "EthSwt_SWIC_Port.h"
 #include "EthSwt_SWIC_Reg.h"
-#include "LIB.h"
-#include "EthSwt_SWIC_initRegListSeqInitSeq.h"
-#include "EthSwt_SWIC_initRegListSeqBaseT1.h"
-#include "EthSwt_SWIC_initRegListSeqPhySwicOff.h"
-#include "EthSwt_SWIC_initRegListSeq100BTx.h"
+
+#include <EthSwt_SWIC_initRegListSeqInitSeq.h>
+#include <EthSwt_SWIC_initRegListSeqBaseT1.h>
+#include <EthSwt_SWIC_initRegListSeqPhySwicOff.h>
+#include <EthSwt_SWIC_initRegListSeq100BTx.h>
 /* -------------------------------------------------------------------------- */
 #define	SWIC_REG_TBL(a)		{(a), SWIC_TBL_NUM(a)}	/* swic_reg_tblê›íËóp */
 #define	SWIC_TBL_NUM(a)	(sizeof(a)/sizeof((a)[0]))

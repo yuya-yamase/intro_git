@@ -1,14 +1,15 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_STM.h>
 #include <EthSwt_SWIC_Core_Cfg.h>
-#include <EthSwt_SWIC_PWR.h>
-#include <EthSwt_SWIC_Init.h>
-#include <EthSwt_SWIC_Link.h>
-#include <EthSWt_SWIC_Port.h>
-#include <EthSwt_SWIC_Allow.h>
-#include <EthSwt_SWIC_Define.h>
+#include <EthSwt_SWIC_STM_Cfg.h>
 #include <EthSwt_BSW_define.h>
+#include "EthSwt_SWIC_STM.h"
+#include "EthSwt_SWIC_PWR.h"
+#include "EthSwt_SWIC_Init.h"
+#include "EthSwt_SWIC_Link.h"
+#include "EthSwt_SWIC_Port.h"
+#include "EthSwt_SWIC_Define.h"
+#include <EthSwt_SWIC_Allow.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_ST_UNINIT                         (0U)
 #define D_ETHSWT_SWIC_ST_INIT                           (1U)
