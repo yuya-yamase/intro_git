@@ -102,7 +102,7 @@ Std_ReturnType EthSwt_SWIC_Link_Action (uint32 * const errFactor)
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Link_FastGet (uint32 * const errFactor)
 {
-    Std_ReturnType ret = E_NOT_OK;
+    Std_ReturnType ret = E_OK;
     uint8 idx;
     uint16 timeout;
 

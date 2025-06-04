@@ -148,7 +148,7 @@ static void ethswt_swic_stm_initProc (void)
     uint8 idx;
 
     for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
-        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].initFunc(&errFactor) == NULL_PTR) { continue; }
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].initFunc == NULL_PTR) { continue; }
         result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].initFunc(&errFactor);
         if (result != E_OK) { break; }
     }
@@ -170,7 +170,7 @@ static void ethswt_swic_stm_portInitCompletedProc (void)
     Std_ReturnType allowRelay;
 
     for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
-        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].portInitCompletedFunc(&errFactor) == NULL_PTR) { continue; }
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].portInitCompletedFunc == NULL_PTR) { continue; }
         result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].portInitCompletedFunc(&errFactor);
         if (result != E_OK) { break; }
     }
@@ -194,7 +194,7 @@ static void ethswt_swic_stm_setRelayOnProc (void)
     uint8 idx;
 
     for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
-        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOnFunc(&errFactor) == NULL_PTR) { continue; }
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOnFunc == NULL_PTR) { continue; }
         result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOnFunc(&errFactor);
         if (result != E_OK) { break; }
     }
@@ -216,7 +216,7 @@ static void ethswt_swic_stm_activeProc (void)
     Std_ReturnType allowRelay;
 
     for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
-        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].activeFunc(&errFactor) == NULL_PTR) { continue; }
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].activeFunc == NULL_PTR) { continue; }
         result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].activeFunc(&errFactor);
         if (result != E_OK) { break; }
     }
@@ -240,7 +240,7 @@ static void ethswt_swic_stm_setRelayOffProc (void)
     uint8 idx;
 
     for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
-        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOffFunc(&errFactor) == NULL_PTR) { continue; }
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOffFunc == NULL_PTR) { continue; }
         result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOffFunc(&errFactor);
         if (result != E_OK) { break; }
     }
