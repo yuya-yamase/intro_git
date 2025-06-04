@@ -18,7 +18,7 @@
 #define D_ETHSWT_SWIC_REG_FACT_BSY	    (0x0004uL)	/* BSY待ち */
 #define D_ETHSWT_SWIC_REG_FACT_SPI	    (0x0008uL)	/* CRC異常→SPI異常 */
 #define D_ETHSWT_SWIC_REG_FACT_INIT	    (0x0010uL)	/* 初期化でレジスタ/テーブル化け */ 			/* ★初期化でレジスタ/テーブル化けしかない？ */
-#define D_ETHSWT_SWIC_REG_FACT_SWIC	    (0x0020uL)	/* SWIC内部エラー */
+#define D_ETHSWT_SWIC_REG_FACT_INTN	    (0x0020uL)	/* SWIC内部エラー */
 #define D_ETHSWT_SWIC_REG_FACT_RESET	(0x0040uL)	/* SWICリセット検出 */
 #define D_ETHSWT_SWIC_REG_FACT_NOT_CTRL	(0x0080uL)	/* 対象レジスタコントロールなし(起きない) */
 

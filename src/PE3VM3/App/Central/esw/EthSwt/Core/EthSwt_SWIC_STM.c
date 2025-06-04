@@ -65,13 +65,47 @@ void EthSwt_SWIC_STM_HiProc (void)
     uint8 idx;
 
     switch (G_SWIC_Status) {
-    case  D_ETHSWT_SWIC_ST_ACTIVE:
-        for (idx = 0; idx < (D_ETHSWT_SWIC_HIPROC_FUNCS_NUM); idx++) {
-            G_ETHSWT_SWIC_HIPROC_FUNCS[idx]();
+    case D_ETHSWT_SWIC_ST_UNINIT:
+        for (idx = 0; idx < D_ETHSWT_SWIC_HIPROC_FUNC_NUM; idx++) {
+            if (G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].uninitFunc == NULL_PTR) { continue; }
+            G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].uninitFunc();
         }
+        break;
+    case D_ETHSWT_SWIC_ST_INIT:
+        for (idx = 0; idx < D_ETHSWT_SWIC_HIPROC_FUNC_NUM; idx++) {
+            if (G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].initFunc == NULL_PTR) { continue; }
+            G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].initFunc();
+        }
+        break;
+    case D_ETHSWT_SWIC_ST_PORT_INIT_COMPLETED:
+        for (idx = 0; idx < D_ETHSWT_SWIC_HIPROC_FUNC_NUM; idx++) {
+            if (G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].portInitCompletedFunc== NULL_PTR) { continue; }
+            G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].portInitCompletedFunc();
+        }
+        break;
+    case D_ETHSWT_SWIC_ST_SET_RELAY_ON:
+        for (idx = 0; idx < D_ETHSWT_SWIC_HIPROC_FUNC_NUM; idx++) {
+            if (G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].setRelayOnFunc == NULL_PTR) { continue; }
+            G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].setRelayOnFunc();
+        }
+        break;
+    case D_ETHSWT_SWIC_ST_ACTIVE:
+        for (idx = 0; idx < D_ETHSWT_SWIC_HIPROC_FUNC_NUM; idx++) {
+            if (G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].activeFunc == NULL_PTR) { continue; }
+            G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].activeFunc();
+        }
+        break;
+    case D_ETHSWT_SWIC_ST_SET_RELAY_OFF:
+        for (idx = 0; idx < D_ETHSWT_SWIC_HIPROC_FUNC_NUM; idx++) {
+            if (G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].setRelayOffFunc == NULL_PTR) { continue; }
+            G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[idx].setRelayOffFunc();
+        }
+        break;
     default:
         break;
     }
+    
+    return;
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_STM_Background (void)
@@ -266,6 +300,16 @@ static void ethswt_swic_err (uint32 resetFactor)
     case D_ETHSWT_SWIC_REG_FACT_BSY:
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_BUSYBIT_OUT);
         break;
+    case D_ETHSWT_SWIC_REG_FACT_INIT:
+        /* イベント追加する必要あり */
+        break;
+    case D_ETHSWT_SWIC_REG_FACT_INTN:
+        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_INTN_ERROR);
+        break;
+    case D_ETHSWT_SWIC_REG_FACT_RESET:
+        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_RESET_DETECT);
+        break;
+    case D_ETHSWT_SWIC_REG_FACT_SPI:
     default:
         /* 異常系 要検討 */
         break;

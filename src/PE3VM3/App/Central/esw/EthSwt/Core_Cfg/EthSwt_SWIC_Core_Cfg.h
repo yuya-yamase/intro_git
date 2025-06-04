@@ -13,7 +13,8 @@
 extern const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM];
 
 /* -------------------------------------------------------------------------- */
-/* For EthSwt_SWIC_PWR */
+/* Config for EthSwt_SWIC_PWR.c                                               */
+/* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_PWR_CYCLE                     (5U)
 #define D_ETHSWT_SWIC_PWR_ON_WAIT                   (105U)  /* 35ms(T8) + 60ms(T9) + 5ms(PwrCtrlが先に動作するため) + (CPUクロック誤差考慮) */
 #define D_ETHSWT_SWIC_PWR_ASSERT_WAIT               (5U)    /* 1ms(T1) + (CPUクロック誤差) */
