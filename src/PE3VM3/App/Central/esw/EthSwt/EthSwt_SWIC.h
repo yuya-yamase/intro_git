@@ -10,5 +10,6 @@ Std_ReturnType EthSwt_SWIC_GetLinkState(uint8 SwitchIdx, uint8 SwitchPortIdx, Et
 void EthSwt_SWIC_HiProc(void);
 void EthSwt_SWIC_LoProc(void);
 void EthSwt_SWIC_BackgroundTask(void);
-
+void EthSwt_SWIC_PowerOn(void);
+void EthSwt_SWIC_PowerOff(void);
 #endif /*ETHSWT_SWIC_H*/

@@ -43,7 +43,7 @@ static void ethswt_swic_stm_setRelayOnProc (void);
 static void ethswt_swic_stm_activeProc (void);
 static void ethswt_swic_stm_setRelayOffProc (void);
 static void ethswt_swic_stm_action (uint32 event);
-static void ethswt_swic_stm_reset (uint32 resetFactor);
+static void ethswt_swic_err (uint32 resetFactor);
 static uint32 ethswt_swic_stm_act_move_init (void);
 static uint32 ethswt_swic_stm_act_move_port_init_completed (void);
 static uint32 ethswt_swic_stm_act_move_set_relay_on (void);
@@ -76,27 +76,34 @@ void EthSwt_SWIC_STM_HiProc (void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_STM_Background (void)
 {
-    switch (G_SWIC_Status) {
-    case D_ETHSWT_SWIC_ST_UNINIT:
-        ethswt_swic_stm_uninitProc();
-        break;
-    case D_ETHSWT_SWIC_ST_INIT:
-        ethswt_swic_stm_initProc();
-        break;
-    case D_ETHSWT_SWIC_ST_PORT_INIT_COMPLETED:
-        ethswt_swic_stm_portInitCompletedProc();
-        break;
-    case D_ETHSWT_SWIC_ST_SET_RELAY_ON:
-        ethswt_swic_stm_setRelayOnProc();
-        break;
-    case D_ETHSWT_SWIC_ST_ACTIVE:
-        ethswt_swic_stm_activeProc();
-        break;
-    case D_ETHSWT_SWIC_ST_SET_RELAY_OFF:
-        ethswt_swic_stm_setRelayOffProc();
-        break;
-    default:
-        break;
+    Std_ReturnType swicAvailable;
+
+    swicAvailable = EthSwt_SWIC_Allow_SetRegister();
+    if (swicAvailable == E_OK) {
+        switch (G_SWIC_Status) {
+        case D_ETHSWT_SWIC_ST_UNINIT:
+            ethswt_swic_stm_uninitProc();
+            break;
+        case D_ETHSWT_SWIC_ST_INIT:
+            ethswt_swic_stm_initProc();
+            break;
+        case D_ETHSWT_SWIC_ST_PORT_INIT_COMPLETED:
+            ethswt_swic_stm_portInitCompletedProc();
+            break;
+        case D_ETHSWT_SWIC_ST_SET_RELAY_ON:
+            ethswt_swic_stm_setRelayOnProc();
+            break;
+        case D_ETHSWT_SWIC_ST_ACTIVE:
+            ethswt_swic_stm_activeProc();
+            break;
+        case D_ETHSWT_SWIC_ST_SET_RELAY_OFF:
+            ethswt_swic_stm_setRelayOffProc();
+            break;
+        default:
+            break;
+        }
+    } else {
+        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_UNAVAILABLE);
     }
 }
 /* -------------------------------------------------------------------------- */
@@ -129,13 +136,8 @@ EthSwt_StateType EthSwt_SWIC_STM_GetStatus (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_uninitProc (void)
 {
-    Std_ReturnType swicAvailable;
+    ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_AVAILABLE);
 
-    swicAvailable = EthSwt_SWIC_Allow_SetRegister();
-    if (swicAvailable == E_OK) {
-        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_AVAILABLE);
-    }
-    
     return;
 }
 /* -------------------------------------------------------------------------- */
@@ -143,38 +145,44 @@ static void ethswt_swic_stm_initProc (void)
 {
     Std_ReturnType result;
     uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
+    uint8 idx;
 
-    result = EthSwt_SWIC_Init_Setting(&errFactor);
+    for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].initFunc(&errFactor) == NULL_PTR) { continue; }
+        result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].initFunc(&errFactor);
+        if (result != E_OK) { break; }
+    }
+
     if (result == E_OK) {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_INIT_DONE);
     } else {
-        ethswt_swic_stm_reset(errFactor);
+        ethswt_swic_err(errFactor);
     }
-
+    
     return;
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_portInitCompletedProc (void)
 {
-    Std_ReturnType swicAvailable;
-    Std_ReturnType relay;
+    Std_ReturnType result;
+    uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
+    uint8 idx;
+    Std_ReturnType allowRelay;
 
-    do {
-        swicAvailable = EthSwt_SWIC_Allow_SetRegister();
-        if (swicAvailable != E_OK) {
-            ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_UNAVAILABLE);
-            break;
-        }
+    for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].portInitCompletedFunc(&errFactor) == NULL_PTR) { continue; }
+        result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].portInitCompletedFunc(&errFactor);
+        if (result != E_OK) { break; }
+    }
 
-        relay = EthSwt_SWIC_Allow_Relay();
-        if (relay == E_OK) {
-            ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_START_RELAY);
-            break;
-        } else {
-            /* SWIC内部エラー検知 */
-            /* SWICリセット検出 */
+    if (result == E_OK) {
+        allowRelay = EthSwt_SWIC_Allow_Relay();
+        if (allowRelay == E_OK) {
+             ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_START_RELAY);
         }
-    } while (0);
+    } else {
+        ethswt_swic_err(errFactor);
+    }
 
     return;
 }
@@ -183,38 +191,45 @@ static void ethswt_swic_stm_setRelayOnProc (void)
 {
     Std_ReturnType result;
     uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
+    uint8 idx;
 
-    result = EthSwt_SWIC_Port_RelayOn(&errFactor);
+    for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOnFunc(&errFactor) == NULL_PTR) { continue; }
+        result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOnFunc(&errFactor);
+        if (result != E_OK) { break; }
+    }
+
     if (result == E_OK) {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_RELAYON_DONE);
     } else {
-        ethswt_swic_stm_reset(errFactor);
+        ethswt_swic_err(errFactor);
     }
 
-    /* SWIC内部エラー検知 */
-    /* SWICリセット検出 */
-    /* 入れる */
     return;
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_activeProc (void)
 {
-    Std_ReturnType relay;
     Std_ReturnType result;
     uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
     uint8 idx;
-    
-    relay = EthSwt_SWIC_Allow_Relay();
-    if (relay == E_OK) {
-        for (idx = 0; idx < (D_ETHSWT_SWIC_ACTIVE_FUNS_NUM); idx++)
-        result = G_ETHSWT_SWIC_ACTIVE_FUNCS[idx](&errFactor);
-        if (result == E_NOT_OK) {
-            ethswt_swic_stm_reset(errFactor);
-        } 
-    } else {
-        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_STOP_RELAY);
+    Std_ReturnType allowRelay;
+
+    for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].activeFunc(&errFactor) == NULL_PTR) { continue; }
+        result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].activeFunc(&errFactor);
+        if (result != E_OK) { break; }
     }
 
+    if (result == E_OK) {
+        allowRelay = EthSwt_SWIC_Allow_Relay();
+        if (allowRelay != E_OK) {
+             ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_STOP_RELAY);
+        }
+    } else {
+        ethswt_swic_err(errFactor);
+    }
+    
     return;
 }
 /* -------------------------------------------------------------------------- */
@@ -222,23 +237,29 @@ static void ethswt_swic_stm_setRelayOffProc (void)
 {
     Std_ReturnType result;
     uint32 errFactor = D_ETHSWT_SWIC_REG_FACT_NONE;
+    uint8 idx;
 
-    result = EthSwt_SWIC_Port_RelayOff(&errFactor);
+    for (idx = 0; idx < D_ETHSWT_SWIC_BACK_FUNC_NUM; idx++) {
+        if (G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOffFunc(&errFactor) == NULL_PTR) { continue; }
+        result = G_ETHSWT_SWIC_BACK_FUNC_TABLE[idx].setRelayOffFunc(&errFactor);
+        if (result != E_OK) { break; }
+    }
+
     if (result == E_OK) {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_RELAYOFF_DONE);
     } else {
-        ethswt_swic_stm_reset(errFactor);
+        ethswt_swic_err(errFactor);
     }
-    
-    /* SWIC内部エラー検知 */
-    /* SWICリセット検出 */
-    /* 入れる */
+
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_swic_stm_reset (uint32 resetFactor)
+static void ethswt_swic_err (uint32 resetFactor)
 {
     switch (resetFactor) {
+    case D_ETHSWT_SWIC_REG_FACT_POWEROFF:
+        ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_UNAVAILABLE);
+        break;
     case D_ETHSWT_SWIC_REG_FACT_CRC:
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_CRC_ERROR);
         break;
