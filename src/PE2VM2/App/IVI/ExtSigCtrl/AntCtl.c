@@ -15,6 +15,7 @@
 #include "x_spi_ivi_sub1_system.h"
 #include "Dio.h"
 #include "Iohw_adc.h"
+#include "DtcCtl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -32,6 +33,9 @@
 #define   ANTCTL_DETECT_STS_DISCONECT       (1U)      /*接続状態：接続なし*/
 #define   ANTCTL_DETECT_STS_CONECT          (2U)      /*接続状態：接続あり*/
 #define   ANTCTL_DETECT_STS_SHORT           (3U)      /*接続状態：ショート*/
+
+#define   ANTCTL_DTC_STS_FAIL               (0U)
+#define   ANTCTL_DTC_STS_NML                (1U)
 
 #define   ANTCTL_DIO_LOW                    (0U)
 #define   ANTCTL_DIO_HIGH                   (1U)
@@ -106,48 +110,34 @@ static U1 u1_s_gnss_det_sts_pre;                /*GPSアンテナ検出状態（
 static U1 u1_s_gnss_short_cnt;                  /*GPSアンテナショート検知回数*/
 static U1 u1_s_gnss_confirm_sts;                /*GPSアンテナ状態確定後のステータス*/
 static U1 u1_s_gnss_confirm_sts_pre;            /*GPSアンテナ状態確定後のステータス(前回状態)*/
+static U1 u1_s_gnss_dtc_short_flg;              /*GPSアンテナDTC（ショート）検知フラグ*/
+static U1 u1_s_gnss_dtc_open_flg;               /*GPSアンテナDTC（未接続）検知フラグ*/
 #ifdef ANTCTL_DAB
 static U1 u1_s_dab1_poll_cnt;                   /*DAB1アンテナサンプリング回数（同じ状態）*/
 static U1 u1_s_dab1_det_sts_pre;                /*DAB1アンテナ検出状態（前回値）*/
 static U1 u1_s_dab1_short_cnt;                  /*DAB1アンテナショート検知回数*/
-static U1 u1_s_dab1_confirm_sts;                /*DAB1アンテナ状態確定後のステータス*/
-static U1 u1_s_dab1_confirm_sts_pre;            /*DAB1アンテナ状態確定後のステータス(前回状態)*/
 static U1 u1_s_dab2_poll_cnt;                   /*DAB2アンテナサンプリング回数（同じ状態）*/
 static U1 u1_s_dab2_det_sts_pre;                /*DAB2アンテナ検出状態（前回値）*/
 static U1 u1_s_dab2_short_cnt;                  /*DAB2アンテナショート検知回数*/
-static U1 u1_s_dab2_confirm_sts;                /*DAB2アンテナ状態確定後のステータス*/
-static U1 u1_s_dab2_confirm_sts_pre;            /*DAB2アンテナ状態確定後のステータス(前回状態)*/
 #endif
 #ifdef ANTCTL_DTV
 static U1 u1_s_dtv1_poll_cnt;                   /*DTV1アンテナサンプリング回数（同じ状態）*/
 static U1 u1_s_dtv1_det_sts_pre;                /*DTV1アンテナ検出状態（前回値）*/
 static U1 u1_s_dtv1_short_cnt;                  /*DTV1アンテナショート検知回数*/
-static U1 u1_s_dtv1_confirm_sts;                /*DTV1アンテナ状態確定後のステータス*/
-static U1 u1_s_dtv1_confirm_sts_pre;            /*DTV1アンテナ状態確定後のステータス(前回状態)*/
 static U1 u1_s_dtv2_poll_cnt;                   /*DTV2アンテナサンプリング回数（同じ状態）*/
 static U1 u1_s_dtv2_det_sts_pre;                /*DTV2アンテナ検出状態（前回値）*/
 static U1 u1_s_dtv2_short_cnt;                  /*DTV2アンテナショート検知回数*/
-static U1 u1_s_dtv2_confirm_sts;                /*DTV2アンテナ状態確定後のステータス*/
-static U1 u1_s_dtv2_confirm_sts_pre;            /*DTV2アンテナ状態確定後のステータス(前回状態)*/
 static U1 u1_s_dtv3_poll_cnt;                   /*DTV3アンテナサンプリング回数（同じ状態）*/
 static U1 u1_s_dtv3_det_sts_pre;                /*DTV3アンテナ検出状態（前回値）*/
 static U1 u1_s_dtv3_short_cnt;                  /*DTV3アンテナショート検知回数*/
-static U1 u1_s_dtv3_confirm_sts;                /*DTV3アンテナ状態確定後のステータス*/
-static U1 u1_s_dtv3_confirm_sts_pre;            /*DTV3アンテナ状態確定後のステータス(前回状態)*/
 static U1 u1_s_dtv4_poll_cnt;                   /*DTV4アンテナサンプリング回数（同じ状態）*/
 static U1 u1_s_dtv4_det_sts_pre;                /*DTV4アンテナ検出状態（前回値）*/
 static U1 u1_s_dtv4_short_cnt;                  /*DTV4アンテナショート検知回数*/
-static U1 u1_s_dtv4_confirm_sts;                /*DTV4アンテナ状態確定後のステータス*/
-static U1 u1_s_dtv4_confirm_sts_pre;            /*DTV4アンテナ状態確定後のステータス(前回状態)*/
 #endif
 static U1 u1_s_btwifi1_poll_cnt;                /*BT-WiFi1アンテナサンプリング回数（同じ状態）*/
 static U1 u1_s_btwifi1_det_sts_pre;             /*BT-WiFi1アンテナ検出状態（前回値）*/
-static U1 u1_s_btwifi1_confirm_sts;             /*BT-WiFi1アンテナ状態確定後のステータス*/
-static U1 u1_s_btwifi1_confirm_sts_pre;         /*BT-WiFi1アンテナ状態確定後のステータス(前回状態)*/
 static U1 u1_s_btwifi2_poll_cnt;                /*BT-WiFi2アンテナサンプリング回数（同じ状態）*/
 static U1 u1_s_btwifi2_det_sts_pre;             /*BT-WiFi2アンテナ検出状態（前回値）*/
-static U1 u1_s_btwifi2_confirm_sts;             /*BT-WiFi2アンテナ状態確定後のステータス*/
-static U1 u1_s_btwifi2_confirm_sts_pre;         /*BT-WiFi2アンテナ状態確定後のステータス(前回状態)*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -159,13 +149,22 @@ static U1 u1_s_btwifi2_confirm_sts_pre;         /*BT-WiFi2アンテナ状態確�
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void vd_s_Ant_Gnss_Poll(void);
+static void vd_s_Ant_GNSS_AdcStsDetermine(const U2 u2_a_VALUE);
 #ifdef ANTCTL_DAB
 static void vd_s_Ant_DAB_Poll(void);
+static void vd_s_Ant_DAB1_AdcStsDetermine(const U2 u2_a_VALUE);
+static void vd_s_Ant_DAB2_AdcStsDetermine(const U2 u2_a_VALUE);
 #endif
 #ifdef ANTCTL_DTV
 static void vd_s_Ant_DTV_Poll(void);
+static void vd_s_Ant_DTV1_AdcStsDetermine(const U2 u2_a_VALUE);
+static void vd_s_Ant_DTV2_AdcStsDetermine(const U2 u2_a_VALUE);
+static void vd_s_Ant_DTV3_AdcStsDetermine(const U2 u2_a_VALUE);
+static void vd_s_Ant_DTV4_AdcStsDetermine(const U2 u2_a_VALUE);
 #endif
 static void vd_s_Ant_BTWIFI_Poll(void);
+static void vd_s_Ant_BTWIFI1_AdcStsDetermine(const U2 u2_a_VALUE);
+static void vd_s_Ant_BTWIFI2_AdcStsDetermine(const U2 u2_a_VALUE);
 static void vd_s_Ant_Gnss_Fail(void);
 #ifdef ANTCTL_DAB
 static void vd_s_Ant_DAB_Fail(void);
@@ -180,19 +179,7 @@ static void vd_s_Ant_DAB_Reboot(void);
 #ifdef ANTCTL_DTV
 static void vd_s_Ant_DTV_Reboot(void);
 #endif
-static void vd_s_Ant_GNSS_Dtc_Record(void);
-#ifdef ANTCTL_DAB
-static void vd_s_Ant_DAB1_Dtc_Record(void);
-static void vd_s_Ant_DAB2_Dtc_Record(void);
-#endif
-#ifdef ANTCTL_DTV
-static void vd_s_Ant_DTV1_Dtc_Record(void);
-static void vd_s_Ant_DTV2_Dtc_Record(void);
-static void vd_s_Ant_DTV3_Dtc_Record(void);
-static void vd_s_Ant_DTV4_Dtc_Record(void);
-#endif
-static void vd_s_Ant_BTWIFI1_Dtc_Record(void);
-static void vd_s_Ant_BTWIFI2_Dtc_Record(void);
+
 static U1 u1_s_Ant_TimChk(const U2 u2_a_TIM_CINT, const U2 u2_a_WAIT_TIM);
 
 /*===================================================================================================================================*/
@@ -210,6 +197,8 @@ void vd_g_Ant_Init(void)
     st_s_antctl_gnss.u1_fail_flg = (U1)FALSE;
     st_s_antctl_gnss.u1_antena_reboot_flg = (U1)FALSE;
     st_s_antctl_gnss.u1_antena_reboot_wait_time = (U1)0U;
+    u1_s_gnss_dtc_short_flg = (U1)FALSE;
+    u1_s_gnss_dtc_open_flg = (U1)FALSE;
 #ifdef ANTCTL_DAB
     st_s_antctl_dab.u2_poll_start_tim = (U2)0U;
     st_s_antctl_dab.u2_poll_det_tim = (U2)0U;
@@ -239,44 +228,28 @@ void vd_g_Ant_Init(void)
     u1_s_dab1_poll_cnt = (U1)0U;
     u1_s_dab1_det_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dab1_short_cnt = (U1)0U;
-    u1_s_dab1_confirm_sts = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_dab1_confirm_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dab2_poll_cnt = (U1)0U;
     u1_s_dab2_det_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dab2_short_cnt = (U1)0U;
-    u1_s_dab2_confirm_sts = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_dab2_confirm_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
 #endif
 #ifdef ANTCTL_DTV
     u1_s_dtv1_poll_cnt = (U1)0U;
     u1_s_dtv1_det_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dtv1_short_cnt = (U1)0U;
-    u1_s_dtv1_confirm_sts = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_dtv1_confirm_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dtv2_poll_cnt = (U1)0U;
     u1_s_dtv2_det_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dtv2_short_cnt = (U1)0U;
-    u1_s_dtv2_confirm_sts = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_dtv2_confirm_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dtv3_poll_cnt = (U1)0U;
     u1_s_dtv3_det_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dtv3_short_cnt = (U1)0U;
-    u1_s_dtv3_confirm_sts = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_dtv3_confirm_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dtv4_poll_cnt = (U1)0U;
     u1_s_dtv4_det_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_dtv4_short_cnt = (U1)0U;
-    u1_s_dtv4_confirm_sts = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_dtv4_confirm_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
 #endif
     u1_s_btwifi1_poll_cnt = (U1)0U;
     u1_s_btwifi1_det_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_btwifi1_confirm_sts = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_btwifi1_confirm_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
     u1_s_btwifi2_poll_cnt = (U1)0U;
     u1_s_btwifi2_det_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_btwifi2_confirm_sts = (U1)ANTCTL_DETECT_STS_UNDEF;
-    u1_s_btwifi2_confirm_sts_pre = (U1)ANTCTL_DETECT_STS_UNDEF;
 }
 
 /*===================================================================================================================================*/
@@ -317,63 +290,15 @@ void vd_g_Ant_MainTask(void)
 #endif
     vd_s_Ant_BTWIFI_Poll();
 
-    /*DTC記録処理*/
+    /*DTC記録処理 未接続時*/
     /*GPS*/
     if((u1_s_gnss_confirm_sts != u1_s_gnss_confirm_sts_pre) &&
-      ((u1_s_gnss_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT) ||
-       (u1_s_gnss_confirm_sts == (U1)ANTCTL_DETECT_STS_SHORT))) {
-        vd_s_Ant_GNSS_Dtc_Record();
+       (u1_s_gnss_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT)) {
+        /*未接続判定した場合にDTC記録する*/
+        vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_OPEN, (U1)ANTCTL_DTC_STS_FAIL);
+        u1_s_gnss_dtc_open_flg = (U1)TRUE;
+        u1_s_gnss_confirm_sts_pre = u1_s_gnss_confirm_sts;
     }
-#ifdef ANTCTL_DAB
-    /*DAB1*/
-    if((u1_s_dab1_confirm_sts != u1_s_dab1_confirm_sts_pre) &&
-      ((u1_s_dab1_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT) ||
-       (u1_s_dab1_confirm_sts == (U1)ANTCTL_DETECT_STS_SHORT))) {
-        vd_s_Ant_DAB1_Dtc_Record();
-    }
-    /*DAB2*/
-    if((u1_s_dab2_confirm_sts != u1_s_dab2_confirm_sts_pre) &&
-       (u1_s_dab2_confirm_sts == (U1)ANTCTL_DETECT_STS_SHORT)) {
-        vd_s_Ant_DAB2_Dtc_Record();
-    }
-#endif
-#ifdef ANTCTL_DTV
-    /*DTV1*/
-    if((u1_s_dtv1_confirm_sts != u1_s_dtv1_confirm_sts_pre) &&
-      ((u1_s_dtv1_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT) ||
-       (u1_s_dtv1_confirm_sts == (U1)ANTCTL_DETECT_STS_SHORT))) {
-        vd_s_Ant_DTV1_Dtc_Record();
-    }
-    /*DTV2*/
-    if((u1_s_dtv2_confirm_sts != u1_s_dtv2_confirm_sts_pre) &&
-      ((u1_s_dtv2_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT) ||
-       (u1_s_dtv2_confirm_sts == (U1)ANTCTL_DETECT_STS_SHORT))) {
-        vd_s_Ant_DTV2_Dtc_Record();
-    }
-    /*DTV3*/
-    if((u1_s_dtv3_confirm_sts != u1_s_dtv3_confirm_sts_pre) &&
-      ((u1_s_dtv3_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT) ||
-       (u1_s_dtv3_confirm_sts == (U1)ANTCTL_DETECT_STS_SHORT))) {
-        vd_s_Ant_DTV3_Dtc_Record();
-    }
-    /*DTV4*/
-    if((u1_s_dtv4_confirm_sts != u1_s_dtv4_confirm_sts_pre) &&
-      ((u1_s_dtv4_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT) ||
-       (u1_s_dtv4_confirm_sts == (U1)ANTCTL_DETECT_STS_SHORT))) {
-        vd_s_Ant_DTV4_Dtc_Record();
-    }
-#endif
-    /*BT-WIFI1*/
-    if((u1_s_btwifi1_confirm_sts != u1_s_btwifi1_confirm_sts_pre) &&
-       (u1_s_btwifi1_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT)) {
-        vd_s_Ant_BTWIFI1_Dtc_Record();
-    }
-    /*BT-WIFI2*/
-    if((u1_s_btwifi2_confirm_sts != u1_s_btwifi2_confirm_sts_pre) &&
-       (u1_s_btwifi2_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT)) {
-        vd_s_Ant_BTWIFI2_Dtc_Record();
-    }
-
 
     /*フェール処理*/
     /*GPS*/
@@ -426,34 +351,7 @@ static void vd_s_Ant_Gnss_Poll(void)
         if(u1_t_poll_time_chk == (U1)TRUE) {
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_GPS_ANT,&u2_t_adc_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_adc_det_val >= (U2)ANTCTL_GPS_DET_ON){
-                    u1_t_adc_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                } else if(u2_t_adc_det_val >= (U2)ANTCTL_GPS_DET_OFF) {
-                    u1_t_adc_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_adc_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
-                }
-
-                if(u1_t_adc_det_sts != u1_s_gnss_det_sts_pre) {
-                    u1_s_gnss_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_gnss_poll_cnt < (U1)U1_MAX) {
-                        u1_s_gnss_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_gnss_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    if(u1_t_adc_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
-                        u1_s_gnss_short_cnt = 0U;
-                    } else {
-                        u1_s_gnss_short_cnt++;
-                        st_s_antctl_gnss.u1_fail_flg = (U1)TRUE;
-                    }
-                    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_GNSS,u1_t_adc_det_sts);
-                    u1_s_gnss_confirm_sts = u1_t_adc_det_sts;
-                }
-                u1_s_gnss_det_sts_pre = u1_t_adc_det_sts;
-                st_s_antctl_gnss.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_GNSS_AdcStsDetermine(u2_t_adc_det_val);
             }
         }
     } else {
@@ -463,6 +361,61 @@ static void vd_s_Ant_Gnss_Poll(void)
 
     st_s_antctl_gnss.u2_poll_det_tim++;
 }
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_GNSS_AdcStsDetermine(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    GNSSアンテナの状態確定                                                                                             */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_GNSS_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_adc_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_GPS_DET_ON){
+        u1_t_adc_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    } else if(u2_a_VALUE >= (U2)ANTCTL_GPS_DET_OFF) {
+        u1_t_adc_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_adc_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
+    }
+
+    if(u1_t_adc_det_sts != u1_s_gnss_det_sts_pre) {
+        u1_s_gnss_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_gnss_poll_cnt < (U1)U1_MAX) {
+            u1_s_gnss_poll_cnt++;
+        }
+    }
+
+    if(u1_s_gnss_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        if(u1_t_adc_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
+            u1_s_gnss_short_cnt = 0U;
+        } else {
+            u1_s_gnss_short_cnt++;
+            st_s_antctl_gnss.u1_fail_flg = (U1)TRUE;
+        }
+        if(u1_t_adc_det_sts == (U1)ANTCTL_DETECT_STS_CONECT) {
+            /*未接続からの正常復帰*/
+            if(u1_s_gnss_dtc_open_flg == (U1)TRUE) {
+                vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_OPEN, (U1)ANTCTL_DTC_STS_NML);
+                u1_s_gnss_dtc_open_flg = (U1)FALSE;
+            }
+            /*ショートからの正常復帰*/
+            if(u1_s_gnss_dtc_short_flg == (U1)TRUE) {
+                vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_LOW, (U1)ANTCTL_DTC_STS_NML);
+                u1_s_gnss_dtc_short_flg = (U1)FALSE;
+            }
+        }
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_GNSS,u1_t_adc_det_sts);
+        u1_s_gnss_confirm_sts_pre = u1_s_gnss_confirm_sts;
+        u1_s_gnss_confirm_sts = u1_t_adc_det_sts;
+    }
+    u1_s_gnss_det_sts_pre = u1_t_adc_det_sts;
+    st_s_antctl_gnss.u2_poll_det_tim = (U2)0U;
+
+}
+
 #ifdef ANTCTL_DAB
 /*===================================================================================================================================*/
 /*  static void vd_s_Ant_DAB_Poll(void)                                                                                              */
@@ -499,72 +452,13 @@ static void vd_s_Ant_DAB_Poll(void)
             /*DAB1アンテナのポーリング処理*/
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_DAB_ANT1,&u2_t_dab1_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_dab1_det_val >= (U2)ANTCTL_DAB_DET_ON){
-                    u1_t_dab1_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                } else if(u2_t_dab1_det_val >= (U2)ANTCTL_DAB_DET_OFF) {
-                    u1_t_dab1_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_dab1_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
-                }
-
-                if(u1_t_dab1_det_sts != u1_s_dab1_det_sts_pre) {
-                    u1_s_dab1_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_dab1_poll_cnt < (U1)U1_MAX) {
-                        u1_s_dab1_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_dab1_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    if(u1_t_dab1_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
-                        u1_s_dab1_short_cnt = 0U;
-                    } else {
-                        u1_s_dab1_short_cnt++;
-                        st_s_antctl_dab.u1_fail_flg = (U1)TRUE;
-                    }
-                    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DAB,u1_t_dab1_det_sts);
-                    u1_s_dab1_confirm_sts = u1_t_dab1_det_sts;
-                }
-                u1_s_dab1_det_sts_pre = u1_t_dab1_det_sts;
-                st_s_antctl_dab.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_DAB1_AdcStsDetermine(u2_t_dab1_det_val);
             }
 
             /*DAB2アンテナのポーリング処理*/
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_DAB_ANT2,&u2_t_dab2_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_dab2_det_val >= (U2)ANTCTL_DAB_DET_ON){
-                    u1_t_dab2_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                } else if(u2_t_dab2_det_val >= (U2)ANTCTL_DAB_DET_OFF) {
-                    u1_t_dab2_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_dab2_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
-                }
-
-                if(u1_t_dab2_det_sts != u1_s_dab2_det_sts_pre) {
-                    u1_s_dab2_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_dab2_poll_cnt < (U1)U1_MAX) {
-                        u1_s_dab2_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_dab2_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    if(u1_t_dab2_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
-                        u1_s_dab2_short_cnt = 0U;
-                    } else {
-                        u1_s_dab2_short_cnt++;
-                        st_s_antctl_dab.u1_fail_flg = (U1)TRUE;
-                    }
-
-                    if(u1_t_dab2_det_sts == (U1)ANTCTL_DETECT_STS_DISCONECT) {
-                        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DAB2,(U1)ANTCTL_DETECT_STS_UNDEF);
-                    } else {
-                        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DAB2,u1_t_dab2_det_sts);
-                    }
-                    u1_s_dab2_confirm_sts = u1_t_dab2_det_sts;
-                }
-                u1_s_dab2_det_sts_pre = u1_t_dab2_det_sts;
-                st_s_antctl_dab.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_DAB2_AdcStsDetermine(u2_t_dab2_det_val);
             }
         }
     } else {
@@ -576,6 +470,94 @@ static void vd_s_Ant_DAB_Poll(void)
 
     st_s_antctl_dab.u2_poll_det_tim++;
 }
+
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_DAB1_AdcStsDetermine(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DAB1アンテナの状態確定                                                                                             */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_DAB1_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_dab1_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_DAB_DET_ON){
+        u1_t_dab1_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    } else if(u2_a_VALUE >= (U2)ANTCTL_DAB_DET_OFF) {
+        u1_t_dab1_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_dab1_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
+    }
+
+    if(u1_t_dab1_det_sts != u1_s_dab1_det_sts_pre) {
+        u1_s_dab1_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_dab1_poll_cnt < (U1)U1_MAX) {
+            u1_s_dab1_poll_cnt++;
+        }
+    }
+
+    if(u1_s_dab1_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        if(u1_t_dab1_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
+            u1_s_dab1_short_cnt = 0U;
+        } else {
+            u1_s_dab1_short_cnt++;
+            st_s_antctl_dab.u1_fail_flg = (U1)TRUE;
+        }
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DAB,u1_t_dab1_det_sts);
+    }
+    u1_s_dab1_det_sts_pre = u1_t_dab1_det_sts;
+    st_s_antctl_dab.u2_poll_det_tim = (U2)0U;
+
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_DAB2_AdcStsDetermine(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DAB2アンテナの状態確定                                                                                             */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_DAB2_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_dab2_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_DAB_DET_ON){
+        u1_t_dab2_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    } else if(u2_a_VALUE >= (U2)ANTCTL_DAB_DET_OFF) {
+        u1_t_dab2_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_dab2_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
+    }
+
+    if(u1_t_dab2_det_sts != u1_s_dab2_det_sts_pre) {
+        u1_s_dab2_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_dab2_poll_cnt < (U1)U1_MAX) {
+            u1_s_dab2_poll_cnt++;
+        }
+    }
+
+    if(u1_s_dab2_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        if(u1_t_dab2_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
+            u1_s_dab2_short_cnt = 0U;
+        } else {
+            u1_s_dab2_short_cnt++;
+            st_s_antctl_dab.u1_fail_flg = (U1)TRUE;
+        }
+
+        if(u1_t_dab2_det_sts == (U1)ANTCTL_DETECT_STS_DISCONECT) {
+            vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DAB2,(U1)ANTCTL_DETECT_STS_UNDEF);
+        } else {
+            vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DAB2,u1_t_dab2_det_sts);
+        }
+    }
+    u1_s_dab2_det_sts_pre = u1_t_dab2_det_sts;
+    st_s_antctl_dab.u2_poll_det_tim = (U2)0U;
+
+}
+
 #endif
 
 #ifdef ANTCTL_DTV
@@ -618,133 +600,25 @@ static void vd_s_Ant_DTV_Poll(void)
             /*DTV1アンテナのポーリング処理*/
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_DTV_ANT1,&u2_t_dtv1_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_dtv1_det_val >= (U2)ANTCTL_DTV_DET_ON){
-                    u1_t_dtv1_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                } else if(u2_t_dtv1_det_val >= (U2)ANTCTL_DTV_DET_OFF) {
-                    u1_t_dtv1_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_dtv1_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
-                }
-
-                if(u1_t_dtv1_det_sts != u1_s_dtv1_det_sts_pre) {
-                    u1_s_dtv1_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_dtv1_poll_cnt < (U1)U1_MAX) {
-                        u1_s_dtv1_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_dtv1_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    if(u1_t_dtv1_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
-                        u1_s_dtv1_short_cnt = 0U;
-                    } else {
-                        u1_s_dtv1_short_cnt++;
-                        st_s_antctl_dtv.u1_fail_flg = (U1)TRUE;
-                    }
-                    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DTV,u1_t_dtv1_det_sts);
-                    u1_s_dtv1_confirm_sts = u1_t_dtv1_det_sts;
-                }
-                u1_s_dtv1_det_sts_pre = u1_t_dtv1_det_sts;
-                st_s_antctl_dtv.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_DTV1_AdcStsDetermine(u2_t_dtv1_det_val);
             }
 
             /*DTV2アンテナのポーリング処理*/
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_DTV_ANT2,&u2_t_dtv2_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_dtv2_det_val >= (U2)ANTCTL_DTV_DET_ON){
-                    u1_t_dtv2_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                } else if(u2_t_dtv2_det_val >= (U2)ANTCTL_DTV_DET_OFF) {
-                    u1_t_dtv2_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_dtv2_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
-                }
-
-                if(u1_t_dtv2_det_sts != u1_s_dtv2_det_sts_pre) {
-                    u1_s_dtv2_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_dtv2_poll_cnt < (U1)U1_MAX) {
-                        u1_s_dtv2_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_dtv2_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    if(u1_t_dtv2_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
-                        u1_s_dtv2_short_cnt = 0U;
-                    } else {
-                        u1_s_dtv2_short_cnt++;
-                        st_s_antctl_dtv.u1_fail_flg = (U1)TRUE;
-                    }
-                    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DTV2,u1_t_dtv2_det_sts);
-                    u1_s_dtv2_confirm_sts = u1_t_dtv2_det_sts;
-                }
-                u1_s_dtv2_det_sts_pre = u1_t_dtv2_det_sts;
-                st_s_antctl_dtv.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_DTV2_AdcStsDetermine(u2_t_dtv2_det_val);
             }
 
             /*DTV3アンテナのポーリング処理*/
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_DTV_ANT3,&u2_t_dtv3_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_dtv3_det_val >= (U2)ANTCTL_DTV_DET_ON){
-                    u1_t_dtv3_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                } else if(u2_t_dtv3_det_val >= (U2)ANTCTL_DTV_DET_OFF) {
-                    u1_t_dtv3_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_dtv3_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
-                }
-
-                if(u1_t_dtv3_det_sts != u1_s_dtv3_det_sts_pre) {
-                    u1_s_dtv3_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_dtv3_poll_cnt < (U1)U1_MAX) {
-                        u1_s_dtv3_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_dtv3_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    if(u1_t_dtv3_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
-                        u1_s_dtv3_short_cnt = 0U;
-                    } else {
-                        u1_s_dtv3_short_cnt++;
-                        st_s_antctl_dtv.u1_fail_flg = (U1)TRUE;
-                    }
-                    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DTV3,u1_t_dtv3_det_sts);
-                    u1_s_dtv3_confirm_sts = u1_t_dtv3_det_sts;
-                }
-                u1_s_dtv3_det_sts_pre = u1_t_dtv3_det_sts;
-                st_s_antctl_dtv.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_DTV3_AdcStsDetermine(u2_t_dtv3_det_val);
             }
 
             /*DTV4アンテナのポーリング処理*/
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_DTV_ANT4,&u2_t_dtv4_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_dtv4_det_val >= (U2)ANTCTL_DTV_DET_ON){
-                    u1_t_dtv4_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                } else if(u2_t_dtv4_det_val >= (U2)ANTCTL_DTV_DET_OFF) {
-                    u1_t_dtv4_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_dtv4_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
-                }
-
-                if(u1_t_dtv4_det_sts != u1_s_dtv4_det_sts_pre) {
-                    u1_s_dtv4_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_dtv4_poll_cnt < (U1)U1_MAX) {
-                        u1_s_dtv4_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_dtv4_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    if(u1_t_dtv4_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
-                        u1_s_dtv4_short_cnt = 0U;
-                    } else {
-                        u1_s_dtv4_short_cnt++;
-                        st_s_antctl_dtv.u1_fail_flg = (U1)TRUE;
-                    }
-                    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DTV4,u1_t_dtv4_det_sts);
-                    u1_s_dtv4_confirm_sts = u1_t_dtv4_det_sts;
-                }
-                u1_s_dtv4_det_sts_pre = u1_t_dtv4_det_sts;
-                st_s_antctl_dtv.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_DTV4_AdcStsDetermine(u2_t_dtv4_det_val);
             }
         }
     } else {
@@ -759,6 +633,167 @@ static void vd_s_Ant_DTV_Poll(void)
     }
 
     st_s_antctl_dtv.u2_poll_det_tim++;
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_DTV1_AdcStsDetermine(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DTV1アンテナの状態確定                                                                                             */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_DTV1_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_dtv1_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_DTV_DET_ON){
+        u1_t_dtv1_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    } else if(u2_a_VALUE >= (U2)ANTCTL_DTV_DET_OFF) {
+        u1_t_dtv1_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_dtv1_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
+    }
+
+    if(u1_t_dtv1_det_sts != u1_s_dtv1_det_sts_pre) {
+        u1_s_dtv1_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_dtv1_poll_cnt < (U1)U1_MAX) {
+            u1_s_dtv1_poll_cnt++;
+        }
+    }
+
+    if(u1_s_dtv1_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        if(u1_t_dtv1_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
+            u1_s_dtv1_short_cnt = 0U;
+        } else {
+            u1_s_dtv1_short_cnt++;
+            st_s_antctl_dtv.u1_fail_flg = (U1)TRUE;
+        }
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DTV,u1_t_dtv1_det_sts);
+    }
+    u1_s_dtv1_det_sts_pre = u1_t_dtv1_det_sts;
+    st_s_antctl_dtv.u2_poll_det_tim = (U2)0U;
+
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_DTV2_AdcStsDetermine(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DTV2アンテナの状態確定                                                                                             */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_DTV2_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_dtv2_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_DTV_DET_ON){
+        u1_t_dtv2_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    } else if(u2_a_VALUE >= (U2)ANTCTL_DTV_DET_OFF) {
+        u1_t_dtv2_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_dtv2_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
+    }
+
+    if(u1_t_dtv2_det_sts != u1_s_dtv2_det_sts_pre) {
+        u1_s_dtv2_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_dtv2_poll_cnt < (U1)U1_MAX) {
+            u1_s_dtv2_poll_cnt++;
+        }
+    }
+
+    if(u1_s_dtv2_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        if(u1_t_dtv2_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
+            u1_s_dtv2_short_cnt = 0U;
+        } else {
+            u1_s_dtv2_short_cnt++;
+            st_s_antctl_dtv.u1_fail_flg = (U1)TRUE;
+        }
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DTV2,u1_t_dtv2_det_sts);
+    }
+    u1_s_dtv2_det_sts_pre = u1_t_dtv2_det_sts;
+    st_s_antctl_dtv.u2_poll_det_tim = (U2)0U;
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_DTV3_AdcStsDetermine(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DTV3アンテナの状態確定                                                                                             */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_DTV3_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_dtv3_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_DTV_DET_ON){
+        u1_t_dtv3_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    } else if(u2_a_VALUE >= (U2)ANTCTL_DTV_DET_OFF) {
+        u1_t_dtv3_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_dtv3_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
+    }
+
+    if(u1_t_dtv3_det_sts != u1_s_dtv3_det_sts_pre) {
+        u1_s_dtv3_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_dtv3_poll_cnt < (U1)U1_MAX) {
+            u1_s_dtv3_poll_cnt++;
+        }
+    }
+
+    if(u1_s_dtv3_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        if(u1_t_dtv3_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
+            u1_s_dtv3_short_cnt = 0U;
+        } else {
+            u1_s_dtv3_short_cnt++;
+            st_s_antctl_dtv.u1_fail_flg = (U1)TRUE;
+        }
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DTV3,u1_t_dtv3_det_sts);
+    }
+    u1_s_dtv3_det_sts_pre = u1_t_dtv3_det_sts;
+    st_s_antctl_dtv.u2_poll_det_tim = (U2)0U;
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_DTV4_AdcStsDetermine(const U2 u2_a_VALUE)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DTV4アンテナの状態確定                                                                                             */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_DTV4_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_dtv4_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_DTV_DET_ON){
+        u1_t_dtv4_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    } else if(u2_a_VALUE >= (U2)ANTCTL_DTV_DET_OFF) {
+        u1_t_dtv4_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_dtv4_det_sts = (U1)ANTCTL_DETECT_STS_SHORT;
+    }
+
+    if(u1_t_dtv4_det_sts != u1_s_dtv4_det_sts_pre) {
+        u1_s_dtv4_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_dtv4_poll_cnt < (U1)U1_MAX) {
+            u1_s_dtv4_poll_cnt++;
+        }
+    }
+
+    if(u1_s_dtv4_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        if(u1_t_dtv4_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
+            u1_s_dtv4_short_cnt = 0U;
+        } else {
+            u1_s_dtv4_short_cnt++;
+            st_s_antctl_dtv.u1_fail_flg = (U1)TRUE;
+        }
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_DTV4,u1_t_dtv4_det_sts);
+    }
+    u1_s_dtv4_det_sts_pre = u1_t_dtv4_det_sts;
+    st_s_antctl_dtv.u2_poll_det_tim = (U2)0U;
 }
 #endif
 
@@ -797,51 +832,13 @@ static void vd_s_Ant_BTWIFI_Poll(void)
             /*BT-WiFI1アンテナのポーリング処理*/
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_BTWA1,&u2_t_btwifi1_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_btwifi1_det_val >= (U2)ANTCTL_BT_WIFI_DET_ON){
-                    u1_t_btwifi1_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_btwifi1_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                }
-
-                if(u1_t_btwifi1_det_sts != u1_s_btwifi1_det_sts_pre) {
-                    u1_s_btwifi1_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_btwifi1_poll_cnt < (U1)U1_MAX) {
-                        u1_s_btwifi1_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_btwifi1_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_WIFI,u1_t_btwifi1_det_sts);
-                    u1_s_btwifi1_confirm_sts = u1_t_btwifi1_det_sts;
-                }
-                u1_s_btwifi1_det_sts_pre = u1_t_btwifi1_det_sts;
-                st_s_antctl_btwifi.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_BTWIFI1_AdcStsDetermine(u2_t_btwifi1_det_val);
             }
 
             /*BT-WiFI2アンテナのポーリング処理*/
             u1_t_read_adc_sts = u1_g_IoHwAdcRead((U1)ADC_CH_BTWA2,&u2_t_btwifi2_det_val);
             if(u1_t_read_adc_sts == (U1)TRUE) {
-                if(u2_t_btwifi2_det_val >= (U2)ANTCTL_BT_WIFI_DET_ON){
-                    u1_t_btwifi2_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
-                } else {
-                    u1_t_btwifi2_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
-                }
-
-                if(u1_t_btwifi2_det_sts != u1_s_btwifi2_det_sts_pre) {
-                    u1_s_btwifi2_poll_cnt = (U1)1U;
-                } else {
-                    if(u1_s_btwifi2_poll_cnt < (U1)U1_MAX) {
-                        u1_s_btwifi2_poll_cnt++;
-                    }
-                }
-
-                if(u1_s_btwifi2_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
-                    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_WIFI2,u1_t_btwifi2_det_sts);
-                    u1_s_btwifi2_confirm_sts = u1_t_btwifi2_det_sts;
-                }
-                u1_s_btwifi2_det_sts_pre = u1_t_btwifi2_det_sts;
-                st_s_antctl_btwifi.u2_poll_det_tim = (U2)0U;
+                vd_s_Ant_BTWIFI2_AdcStsDetermine(u2_t_btwifi2_det_val);
             }
         }
     } else {
@@ -852,6 +849,72 @@ static void vd_s_Ant_BTWIFI_Poll(void)
     }
 
     st_s_antctl_btwifi.u2_poll_det_tim++;
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_BTWIFI1_AdcStsDetermine(const U2 u2_a_VALUE)                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    BT/WIFI1アンテナの状態確定                                                                                        */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_BTWIFI1_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_btwifi1_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_BT_WIFI_DET_ON){
+        u1_t_btwifi1_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_btwifi1_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    }
+
+    if(u1_t_btwifi1_det_sts != u1_s_btwifi1_det_sts_pre) {
+        u1_s_btwifi1_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_btwifi1_poll_cnt < (U1)U1_MAX) {
+            u1_s_btwifi1_poll_cnt++;
+        }
+    }
+
+    if(u1_s_btwifi1_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_WIFI,u1_t_btwifi1_det_sts);
+    }
+    u1_s_btwifi1_det_sts_pre = u1_t_btwifi1_det_sts;
+    st_s_antctl_btwifi.u2_poll_det_tim = (U2)0U;
+
+}
+
+/*===================================================================================================================================*/
+/*  static void vd_s_Ant_BTWIFI2_AdcStsDetermine(const U2 u2_a_VALUE)                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    BT/WIFI2アンテナの状態確定                                                                                        */
+/*  Arguments:      u2_a_VALUE AD値                                                                                                  */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void vd_s_Ant_BTWIFI2_AdcStsDetermine(const U2 u2_a_VALUE)
+{
+    U1    u1_t_btwifi2_det_sts;
+
+    if(u2_a_VALUE >= (U2)ANTCTL_BT_WIFI_DET_ON){
+        u1_t_btwifi2_det_sts = (U1)ANTCTL_DETECT_STS_DISCONECT;
+    } else {
+        u1_t_btwifi2_det_sts = (U1)ANTCTL_DETECT_STS_CONECT;
+    }
+
+    if(u1_t_btwifi2_det_sts != u1_s_btwifi2_det_sts_pre) {
+        u1_s_btwifi2_poll_cnt = (U1)1U;
+    } else {
+        if(u1_s_btwifi2_poll_cnt < (U1)U1_MAX) {
+            u1_s_btwifi2_poll_cnt++;
+        }
+    }
+
+    if(u1_s_btwifi2_poll_cnt >= (U1)ANTCTL_STS_SET_CNT) {
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_WIFI2,u1_t_btwifi2_det_sts);
+    }
+    u1_s_btwifi2_det_sts_pre = u1_t_btwifi2_det_sts;
+    st_s_antctl_btwifi.u2_poll_det_tim = (U2)0U;
+
 }
 
 /*===================================================================================================================================*/
@@ -866,7 +929,8 @@ static void vd_s_Ant_Gnss_Fail(void)
     /*フェール処理*/
     if(u1_s_gnss_short_cnt == (U1)ANTCTL_SHORT_DET_CNT) {
         /*ダイアグにショート検知ログを残す*/
-        /*暫定：シス検対応なし*/
+        vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_LOW, (U1)ANTCTL_DTC_STS_FAIL);
+        u1_s_gnss_dtc_short_flg = (U1)TRUE;
     }
     Dio_WriteChannel((U2)DIO_ID_APORT4_CH2,(U1)ANTCTL_DIO_LOW);
     st_s_antctl_gnss.u1_antena_reboot_flg = (U1)TRUE;
@@ -884,16 +948,6 @@ static void vd_s_Ant_Gnss_Fail(void)
 static void vd_s_Ant_DAB_Fail(void)
 {
     /*フェール処理*/
-    if(u1_s_dab1_short_cnt == (U1)(ANTCTL_SHORT_DET_CNT + 1U)) {
-        /*ダイアグにショート検知ログを残す*/
-        /*暫定：シス検対応なし*/
-    }
-
-    if(u1_s_dab2_short_cnt == (U1)(ANTCTL_SHORT_DET_CNT + 1U)) {
-        /*ダイアグにショート検知ログを残す*/
-        /*暫定：シス検対応なし*/
-    }
-
     if((u1_s_dab1_short_cnt != (U1)0U) ||
        (u1_s_dab2_short_cnt != (U1)0U)){
         if((u1_s_dab1_short_cnt <= (U1)ANTCTL_SHORT_DET_CNT) ||
@@ -917,26 +971,6 @@ static void vd_s_Ant_DAB_Fail(void)
 static void vd_s_Ant_DTV_Fail(void)
 {
     /*フェール処理*/
-    if(u1_s_dtv1_short_cnt == (U1)(ANTCTL_SHORT_DET_CNT + 1U)) {
-        /*ダイアグにショート検知ログを残す*/
-        /*暫定：シス検対応なし*/
-    }
-
-    if(u1_s_dtv2_short_cnt == (U1)(ANTCTL_SHORT_DET_CNT + 1U)) {
-        /*ダイアグにショート検知ログを残す*/
-        /*暫定：シス検対応なし*/
-    }
-
-    if(u1_s_dtv3_short_cnt == (U1)(ANTCTL_SHORT_DET_CNT + 1U)) {
-        /*ダイアグにショート検知ログを残す*/
-        /*暫定：シス検対応なし*/
-    }
-
-    if(u1_s_dtv4_short_cnt == (U1)(ANTCTL_SHORT_DET_CNT + 1U)) {
-        /*ダイアグにショート検知ログを残す*/
-        /*暫定：シス検対応なし*/
-    }
-
     if((u1_s_dtv1_short_cnt != (U1)0U) ||
        (u1_s_dtv2_short_cnt != (U1)0U) ||
        (u1_s_dtv3_short_cnt != (U1)0U) ||
@@ -1019,146 +1053,6 @@ static void vd_s_Ant_DTV_Reboot(void)
     }
 }
 #endif
-
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_GNSS_Dtc_Record(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    GNSSアンテナのDTC記録処理                                                                                         */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_GNSS_Dtc_Record(void)
-{
-    /*未接続/ショート判定した場合にDTC記録する*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_gnss_confirm_sts_pre = u1_s_gnss_confirm_sts;
-}
-
-#ifdef ANTCTL_DAB
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_DAB1_Dtc_Record(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    DAB1アンテナのDTC記録処理                                                                                         */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_DAB1_Dtc_Record(void)
-{
-    /*未接続/ショート判定した場合にDTC記録する*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_dab1_confirm_sts_pre = u1_s_dab1_confirm_sts;
-}
-
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_DAB2_Dtc_Record(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    DAB2アンテナのDTC記録処理                                                                                         */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_DAB2_Dtc_Record(void)
-{
-    /*ショート判定した場合にDTC記録する*/
-    /*接続なしはアンテナ1本判定のためDAB2は未確定状態*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_dab2_confirm_sts_pre = u1_s_dab2_confirm_sts;
-}
-#endif
-
-#ifdef ANTCTL_DTV
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_DTV1_Dtc_Record(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    DTV1アンテナのDTC記録処理                                                                                         */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_DTV1_Dtc_Record(void)
-{
-    /*未接続/ショート判定した場合にDTC記録する*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_dtv1_confirm_sts_pre = u1_s_dtv1_confirm_sts;
-}
-
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_DTV2_Dtc_Record(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    DTV2アンテナのDTC記録処理                                                                                         */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_DTV2_Dtc_Record(void)
-{
-    /*未接続/ショート判定した場合にDTC記録する*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_dtv2_confirm_sts_pre = u1_s_dtv2_confirm_sts;
-}
-
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_DTV3_Dtc_Record(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    DTV3アンテナのDTC記録処理                                                                                         */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_DTV3_Dtc_Record(void)
-{
-    /*未接続/ショート判定した場合にDTC記録する*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_dtv3_confirm_sts_pre = u1_s_dtv3_confirm_sts;
-}
-
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_DTV4_Dtc_Record(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    DTV4アンテナのDTC記録処理                                                                                         */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_DTV4_Dtc_Record(void)
-{
-    /*未接続/ショート判定した場合にDTC記録する*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_dtv4_confirm_sts_pre = u1_s_dtv4_confirm_sts;
-}
-#endif
-
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_BTWIFI1_Dtc_Record(void)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    BT-WiFi1アンテナのDTC記録処理                                                                                     */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_BTWIFI1_Dtc_Record(void)
-{
-    /*未接続判定した場合にDTC記録する*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_btwifi1_confirm_sts_pre = u1_s_btwifi1_confirm_sts;
-}
-
-/*===================================================================================================================================*/
-/*  static void vd_s_Ant_BTWIFI2_Dtc_Record(void)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    BT-WiFi2アンテナのDTC記録処理                                                                                     */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_Ant_BTWIFI2_Dtc_Record(void)
-{
-    /*未接続判定した場合にDTC記録する*/
-    /*暫定：シス検対応なし*/
-
-    u1_s_btwifi2_confirm_sts_pre = u1_s_btwifi2_confirm_sts;
-}
 
 /*===================================================================================================================================*/
 /*  static U1 u1_s_Ant_TimChk(const U2 u2_a_TIM_CINT, const U2 u2_a_WAIT_TIM)                                                        */

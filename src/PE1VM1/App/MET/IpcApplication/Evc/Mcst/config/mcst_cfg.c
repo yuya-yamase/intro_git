@@ -34,7 +34,6 @@
 #include "es_inspect_STUB.h"
 #endif
 #include "dimmer.h"
-#include "datesi_tim.h"
 #include "hmimcst.h"
 #include "hmirim.h"
 #include "engspd_varrz.h"
@@ -1730,7 +1729,6 @@ U4    u4_g_McstCfgInit(const U1 u1_a_BFI){
 void    vd_g_McstCfgUserChgHook(void){
 
     vd_g_DimMcstReadHook();
-    vd_g_DateSITimMcstReadHook();
     vd_g_HmiMcstRefHook();
 
 }
@@ -1744,7 +1742,6 @@ void    vd_g_McstCfgUserChgHook(void){
 void    vd_g_McstCfgUserCstmInitHook(void){
 
     vd_g_DimMcstDataResetHook();
-    vd_g_DateSITimMcstDelHook();
     vd_g_HmiMcstRefHook();
 
 }
@@ -3251,6 +3248,7 @@ void vd_g_McstCfgGetLeftFuelEco(U4 * u4_ap_bf){
 /* 19PFv3-11 07/12/2024  TN       Add Calibration Guard to Unify Vehicle Operation.                                                  */
 /* 19PFv3-12 07/12/2024  SW       Add IF for Left Contents of IG-ON ChargeMode                                                       */
 /* BEV-1     02/06/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
+/* BEV-2     05/21/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-)                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TM   = Takuya Mitsui,   Denso Techno                                                                                           */
@@ -3261,5 +3259,6 @@ void vd_g_McstCfgGetLeftFuelEco(U4 * u4_ap_bf){
 /*  * SK   = Shintaro Kano,   Denso Techno                                                                                           */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
 /*  * SF   = Shiro Furui,     Denso Techno                                                                                           */
+/*  * MN   = Mikiya Negishi,  KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

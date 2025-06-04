@@ -49,6 +49,7 @@ void Mcu_Dev_I2c_Ctrl_Ack_VideoIc(const uint8 mcu_ack);
 void Mcu_Dev_I2c_Ctrl_Ack_GvifRx(const uint8 mcu_ack);
 void Mcu_Dev_I2c_Ctrl_Ack_GvifTx(const uint8 mcu_ack);
 void Mcu_Dev_I2c_Ctrl_Ack_Power(const uint8 mcu_ack);
+void Mcu_Dev_I2c_Ctrl_Ack_Rtc(const uint8 mcu_ack);
 void Mcu_Dev_I2c_Ctrl_Ack_Gyro(const uint8 mcu_ack);
 void Mcu_Dev_I2c_Ctrl_Ack_Gmoni(const uint8 mcu_ack);
 

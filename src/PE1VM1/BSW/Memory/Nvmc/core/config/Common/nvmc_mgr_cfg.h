@@ -52,6 +52,9 @@
 #define NVMCID_U4_VDF_ESO_W6                     (0x0008U)
 #define NVMCID_U4_VDF_ESO_W7                     (0x0009U)
 #define NVMCID_U4_VDF_ESO_W8                     (0x000AU)
+#define NVMCID_U2_DATESI_CALENDAR                (0x000BU)
+#define NVMCID_U2_DATESI_OFFSET                  (0x000CU)
+#define NVMCID_U2_DATESI_TIMEFMT                 (0x000DU)
 /* END : ##TOOL_OUT#NVMC_NVMCID## */
 
 /* START : ##TOOL_OUT#NVMC_BLOCKID## */

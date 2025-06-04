@@ -1,4 +1,4 @@
-/* 1.0.0 */
+/* 1.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define AVGGRPH_C_MAJOR                         (1)
-#define AVGGRPH_C_MINOR                         (0)
+#define AVGGRPH_C_MINOR                         (1)
 #define AVGGRPH_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -195,8 +195,10 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
     U1                          u1_t_next;
     const ST_AVGGRPH_CNTT *     st_tp_cfg;
     U1                          u1_t_msid;
-    U4                          u4_t_yymmddwk;
+    U1                          u1_t_rx;
+    U2                          u2_t_mmdd;
 
+    u1_t_rx = (U1)0U;
     if(u1_a_CNTTID < (U1)AVGGRPH_NUM_CNTT){
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
         if((*(st_tp_cfg->u1p_latest) + (U1)1U) < st_tp_cfg->u1_size){
@@ -216,8 +218,11 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
             vd_g_TripcomMsSetNvmRqst(u1_t_msid);
         }
         if(st_tp_cfg->u2p_date != vdp_PTR_NA){
-            u4_t_yymmddwk = u4_g_DateSICalGetAdjDispDate();
-            st_tp_cfg->u2p_date[u1_t_next] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
+            (void)Com_ReceiveSignal(ComConf_ComSignal_M_DAY, &u1_t_rx);
+            u2_t_mmdd = (((U2)u1_t_rx << YYMMDDWK_LSB_DA) & (U2)YYMMDDWK_BIT_DA);
+            (void)Com_ReceiveSignal(ComConf_ComSignal_M_MONTH, &u1_t_rx);
+            u2_t_mmdd |= (((U2)u1_t_rx << YYMMDDWK_LSB_MO) & (U2)YYMMDDWK_BIT_MO);
+            st_tp_cfg->u2p_date[u1_t_next] = u2_t_mmdd >> YYMMDDWK_LSB_DA;
             u1_t_msid = st_tp_cfg->u1_msid_date + u1_t_next;
             vd_g_TripcomMsSetAccmltVal(u1_t_msid, (U4)(st_tp_cfg->u2p_date[u1_t_next]));
             if(u1_a_rwrqst == (U1)TRUE){
@@ -409,7 +414,13 @@ U1              u1_g_AvgGrphRslt(const U1 u1_a_CNTTID)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    12/19/2023  TH       New.                                                                                               */
+/*  1.1.0    05/08/2025  MN       Change for BEV PreCV.                                                                              */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/* BEV-1     05/08/2025  MN       Change for BEV PreCV.(MET-M_CLKCTL-CSTD-0-/MET-M_CAL-CSTD-0-)                                      */
 /*                                                                                                                                   */
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

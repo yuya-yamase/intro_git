@@ -40,9 +40,25 @@
 #define GVIFSNDR_CYCCHK_STEP12              (12U)
 #define GVIFSNDR_CYCCHK_STEP13              (13U)
 #define GVIFSNDR_CYCCHK_STEP14              (14U)
+#define GVIFSNDR_CYCCHK_STEP15              (15U)
+#define GVIFSNDR_CYCCHK_STEP16              (16U)
+#define GVIFSNDR_CYCCHK_STEP17              (17U)
+#define GVIFSNDR_CYCCHK_STEP18              (18U)
+#define GVIFSNDR_CYCCHK_STEP19              (19U)
+#define GVIFSNDR_CYCCHK_STEP20              (20U)
+#define GVIFSNDR_CYCCHK_STEP21              (21U)
+#define GVIFSNDR_CYCCHK_STEP22              (22U)
+#define GVIFSNDR_CYCCHK_STEP23              (23U)
+#define GVIFSNDR_CYCCHK_STEP24              (24U)
+#define GVIFSNDR_CYCCHK_STEP25              (25U)
+#define GVIFSNDR_CYCCHK_STEP26              (26U)
+#define GVIFSNDR_CYCCHK_STEP27              (27U)
+#define GVIFSNDR_CYCCHK_STEP28              (28U)
 
 #define CXD4937_BANKSET_WRINUM              (1U)
 #define CXD4957_GVIFSNDRERRCLEAR_SET_WRINUM (1U)
+#define CXD4937_GVIFSNDREDPERR_SET1_WRINUM  (2U)
+#define CXD4937_GVIFSNDREDPERR_SET2_WRINUM  (1U)
 
 #define GVIFSENDER_DEVRST_STEP0             (0U)
 #define GVIFSENDER_DEVRST_STEP1             (1U)
@@ -71,11 +87,21 @@ static U2 u2_s_gvifsnd_cycchk_timer;                    /* GVIF Sender Cycle Che
 
 static U1 u1_s_gvifsnd_devrst_sts;                      /* GVIF Sender Device Reset Status */
 static U2 u2_s_gvifsnd_devrst_timer;                    /* GVIF Sender Device Reset Wait Timer */
+static U1 u1_s_gvifsnd_devrst_drec_cnt;                 /* GVIF Sender Device Reset Drec Counter */
 
 static U1 u1_s_gvifsnd_linkchk_sts;                     /* GVIF Sender Link Check Status */
 static U2 u2_s_gvifsnd_linkchk_timer;                   /* GVIF Sender Link Check Wait Timer */
-static U1 u1_s_gvifsnd_linkchk_err_cnt;                 /* GVIF Sender Link Check Err Counter */
+static U1 u1_s_gvifsnd_linkchk_err_cnt;                 /* GVIF Sender Link Check Error Counter */
 
+static U1 u1_s_gvifsnd_edperr1_pre_sts;                 /* GVIF Sender eDP Input LANE0/1 Error Previous Status */
+static U1 u1_s_gvifsnd_edperr1_drec_cnt;                /* GVIF Sender eDP Input LANE0/1 Error Drec Counter */
+static U1 u1_s_gvifsnd_edperr2_pre_sts;                 /* GVIF Sender eDP Input LANE2/3 Error Previous Status */
+static U1 u1_s_gvifsnd_edperr2_drec_cnt;                /* GVIF Sender eDP Input LANE2/3 Error Drec Counter */
+static U1 u1_s_gvifsnd_edperr3_pre_sts;                 /* GVIF Sender eDP Input Skew Adjustment Error Previous Status */
+static U1 u1_s_gvifsnd_edperr3_drec_cnt;                /* GVIF Sender eDP Input Skew Adjustment Error Drec Counter */
+static U1 u1_s_gvifsnd_videoerr_drec_cnt;               /* GVIF Sender Input Video Error Drec Counter */
+static U1 u1_s_gvifsnd_loadererr_drec_cnt;              /* GVIF Sender Loader Error Drec Counter */
+static U1 u1_s_gvifsnd_cncterr_drec_cnt;                /* GVIF Sender Connection Error Drec Counter */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -96,6 +122,17 @@ static const ST_REG_WRI_REQ CXD4937_BANKSET[CXD4937_BANKSET_WRINUM] = {
 static const ST_REG_WRI_REQ CXD4957_GVIFSNDRERRCLEAR_SET[CXD4957_GVIFSNDRERRCLEAR_SET_WRINUM] = {
     /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
     {        0,         2,         0}
+};
+
+static const ST_REG_WRI_REQ CXD4937_GVIFSNDREDPERR_SET1[CXD4937_GVIFSNDREDPERR_SET1_WRINUM] = {
+    /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    {        0,         3,         0},
+    {        3,         1,         0}
+};
+
+static const ST_REG_WRI_REQ CXD4937_GVIFSNDREDPERR_SET2[CXD4937_GVIFSNDREDPERR_SET2_WRINUM] = {
+    /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    {        0,         1,         0}
 };
 
 const U1 u1_sp_CXD4957_GVIFSNDRBANK0_SET1[CXD4937_I2C_RWC_BYTE3] = {
@@ -157,6 +194,123 @@ const U1 u1_sp_CXD4957_GVIFSNDRLINKCHK_RD_PDU1[CXD4937_I2C_RWC_BYTE2] = {
 };
 
 U1 u1_sp_CXD4957_GVIFSNDRLINKCHK_RD_PDU2[CXD4937_I2C_RWC_BYTE2];
+
+const U1 u1_sp_CXD4937_GVIFSNDRBANK4_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x04U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR1_1_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x40U,    /* Write Address */
+    (U1)0x10U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR1_1_SET_PDU2[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x41U,    /* Write Address */
+    (U1)0x02U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR1_1_SET_PDU3[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x42U,    /* Write Address */
+    (U1)0x02U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR1_1_SET_PDU4[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x45U,    /* Write Address */
+    (U1)0x02U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR1_2_RD_PDU1[CXD4937_I2C_RWC_BYTE2] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x44U     /* Write Address */
+};
+
+U1 u1_sp_CXD4937_GVIFSNDREDPERR1_2_RD_PDU2[CXD4937_I2C_RWC_BYTE2];
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR1_3_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x45U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR2_1_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x40U,    /* Write Address */
+    (U1)0x10U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR2_1_SET_PDU2[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x41U,    /* Write Address */
+    (U1)0x02U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR2_1_SET_PDU3[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x42U,    /* Write Address */
+    (U1)0x03U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR2_1_SET_PDU4[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x45U,    /* Write Address */
+    (U1)0x02U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR2_2_RD_PDU1[CXD4937_I2C_RWC_BYTE2] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x44U     /* Write Address */
+};
+
+U1 u1_sp_CXD4937_GVIFSNDREDPERR2_2_RD_PDU2[CXD4937_I2C_RWC_BYTE2];
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR2_3_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x45U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR3_1_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x40U,    /* Write Address */
+    (U1)0x10U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR3_1_SET_PDU2[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x41U,    /* Write Address */
+    (U1)0x02U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR3_1_SET_PDU3[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x42U,    /* Write Address */
+    (U1)0x04U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR3_1_SET_PDU4[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x45U,    /* Write Address */
+    (U1)0x02U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR3_2_RD_PDU1[CXD4937_I2C_RWC_BYTE2] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x44U     /* Write Address */
+};
+
+U1 u1_sp_CXD4937_GVIFSNDREDPERR3_2_RD_PDU2[CXD4937_I2C_RWC_BYTE2];
+
+const U1 u1_sp_CXD4937_GVIFSNDREDPERR3_3_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x45U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
 
 const ST_GP_I2C_MA_REQ st_sp_CXD4957_GVIFSNDRBANK0_TBL[1] = {
     {
@@ -242,6 +396,124 @@ const ST_GP_I2C_MA_REQ st_sp_CXD4957_GVIFSNDRLINKCHK_RD_TBL[2] = {
     }
 };
 
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDRBANK4_TBL[1] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDRBANK4_SET_PDU1[0],
+        (U4)0x30400003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR1_1_TBL[4] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR1_1_SET_PDU1[0],
+        (U4)0x30440003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR1_1_SET_PDU2[0],
+        (U4)0x30480003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR1_1_SET_PDU3[0],
+        (U4)0x304C0003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR1_1_SET_PDU4[0],
+        (U4)0x30500003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR1_2_TBL[2] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR1_2_RD_PDU1[0],
+        (U4)0x30540002U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR1_2_RD_PDU2[0],
+        (U4)0x30580002U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR1_3_TBL[1] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR1_3_SET_PDU1[0],
+        (U4)0x305C0003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR2_1_TBL[4] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR2_1_SET_PDU1[0],
+        (U4)0x30600003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR2_1_SET_PDU2[0],
+        (U4)0x30640003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR2_1_SET_PDU3[0],
+        (U4)0x30680003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR2_1_SET_PDU4[0],
+        (U4)0x306C0003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR2_2_TBL[2] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR2_2_RD_PDU1[0],
+        (U4)0x30700002U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR2_2_RD_PDU2[0],
+        (U4)0x30740002U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR2_3_TBL[1] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR2_3_SET_PDU1[0],
+        (U4)0x30780003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR3_1_TBL[4] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR3_1_SET_PDU1[0],
+        (U4)0x307C0003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR3_1_SET_PDU2[0],
+        (U4)0x30800003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR3_1_SET_PDU3[0],
+        (U4)0x30840003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR3_1_SET_PDU4[0],
+        (U4)0x30880003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR3_2_TBL[2] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR3_2_RD_PDU1[0],
+        (U4)0x308C0002U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR3_2_RD_PDU2[0],
+        (U4)0x30900002U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR3_3_TBL[1] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDREDPERR3_3_SET_PDU1[0],
+        (U4)0x30940003U
+    }
+};
+
 /*===================================================================================================================================*/
 /*  void    vd_g_Pict_GvifSndrInit(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -261,10 +533,20 @@ void    vd_g_Pict_GvifSndrInit(void)
 
     u1_s_gvifsnd_devrst_sts = (U1)GVIFSENDER_DEVRST_STEP0;
     u2_s_gvifsnd_devrst_timer = (U2)0U;
+    u1_s_gvifsnd_devrst_drec_cnt = (U1)0U;
 
     u1_s_gvifsnd_linkchk_sts = (U1)GVIFSENDER_LINKCHK_STEP0;
     u2_s_gvifsnd_linkchk_timer = (U2)0U;
     u1_s_gvifsnd_linkchk_err_cnt = (U1)0U;
+    u1_s_gvifsnd_edperr1_pre_sts = (U1)CXD4937_EDPERR_STS_INIT;
+    u1_s_gvifsnd_edperr1_drec_cnt = (U1)0U;
+    u1_s_gvifsnd_edperr2_pre_sts = (U1)CXD4937_EDPERR_STS_INIT;
+    u1_s_gvifsnd_edperr2_drec_cnt = (U1)0U;
+    u1_s_gvifsnd_edperr3_pre_sts = (U1)CXD4937_EDPERR_STS_INIT;
+    u1_s_gvifsnd_edperr3_drec_cnt = (U1)0U;
+    u1_s_gvifsnd_videoerr_drec_cnt = (U1)0U;
+    u1_s_gvifsnd_loadererr_drec_cnt = (U1)0U;
+    u1_s_gvifsnd_cncterr_drec_cnt = (U1)0U;
 
     /*  データリード用テーブル初期化 */
     u1_sp_CXD4957_GVIFSNDRDEVERR_RD_PDU2[0] = (U1)CXD4937_I2C_SLAVEADR_RD;    /* Slave Address */
@@ -290,6 +572,17 @@ void    vd_g_Pict_GvifSndrInit(void)
     u1_sp_CXD4957_GVIFSNDRLINKCHK_RD_PDU2[0] = (U1)CXD4937_I2C_SLAVEADR_RD;    /* Slave Address */
     u1_sp_CXD4957_GVIFSNDRLINKCHK_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
 
+    /*  データリード用テーブル初期化 */
+    u1_sp_CXD4937_GVIFSNDREDPERR1_2_RD_PDU2[0] = (U1)CXD4937_I2C_SLAVEADR_RD;    /* Slave Address */
+    u1_sp_CXD4937_GVIFSNDREDPERR1_2_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_CXD4937_GVIFSNDREDPERR2_2_RD_PDU2[0] = (U1)CXD4937_I2C_SLAVEADR_RD;    /* Slave Address */
+    u1_sp_CXD4937_GVIFSNDREDPERR2_2_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_CXD4937_GVIFSNDREDPERR3_2_RD_PDU2[0] = (U1)CXD4937_I2C_SLAVEADR_RD;    /* Slave Address */
+    u1_sp_CXD4937_GVIFSNDREDPERR3_2_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
 }
 
 /*===================================================================================================================================*/
@@ -300,6 +593,11 @@ void    vd_g_Pict_GvifSndrInit(void)
 /*===================================================================================================================================*/
 void    vd_g_Pict_GvifSndrRoutine(void)
 {
+    /* Ack Wait Timer Countr Increment */
+    if(u4_s_gvifsnd_i2c_ack_wait_time < (U4)U4_MAX){        /* 暫定 I2Cアクセス時にカウンタクリアされるため定期では常にカウントアップする */
+        u4_s_gvifsnd_i2c_ack_wait_time++;
+    }
+
     switch (u1_s_gvifsnd_state){
         case GVIFSENDER_SEQ_IDLE:                                       /* IDLE */
             /* Timer Clear */
@@ -380,7 +678,7 @@ static void vd_s_Pict_GvifSndrCycChk(void)
                 u2_s_gvifsnd_cycchk_timer++;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP1:                                       /* STEP1 */
+        case GVIFSNDR_CYCCHK_STEP1:                                         /* STEP1 */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_BANKSET_WRINUM,
                                                            CXD4937_BANKSET, &u4_s_gvifsnd_i2c_ack_wait_time,
@@ -390,7 +688,7 @@ static void vd_s_Pict_GvifSndrCycChk(void)
                 u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP2;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP2:                                       /* STEP2 */
+        case GVIFSNDR_CYCCHK_STEP2:                                         /* STEP2 */
         /* ----------100-4-7 定期監視制御 デバイス異常検知---------- */
             /* Read Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
@@ -400,7 +698,7 @@ static void vd_s_Pict_GvifSndrCycChk(void)
                 u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP3;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP3:                                       /* STEP3 */
+        case GVIFSNDR_CYCCHK_STEP3:                                         /* STEP3 */
             u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRDEVERR_RD_TBL[1].u1p_pdu[1];
             if(u1_t_reg_read_result != (U1)PICT_GVIFSNDRDEVERR_NML ){                   /* Device Error */
                 /* State Update */
@@ -414,18 +712,18 @@ static void vd_s_Pict_GvifSndrCycChk(void)
                 /* Next Process */
                 u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP4;
             }
-        case GVIFSNDR_CYCCHK_STEP4:                                       /* STEP4 */
+        case GVIFSNDR_CYCCHK_STEP4:                                         /* STEP4 */
         /* ----------100-4-7 定期監視制御 GVIF3リンク切れ検知---------- */
             /* Read Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
-                                                           st_sp_CXD4957_GVIFSNDRDEVERR_RD_TBL, &u2_s_gvifsnd_reg_btwn_time);
+                                                           st_sp_CXD4957_GVIFSNDRLINKERR_RD_TBL, &u2_s_gvifsnd_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
                 u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP5;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP5:                                       /* STEP5 */
-            u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRDEVERR_RD_TBL[1].u1p_pdu[1];
+        case GVIFSNDR_CYCCHK_STEP5:                                         /* STEP5 */
+            u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRLINKERR_RD_TBL[1].u1p_pdu[1];
             u1_t_reg_read_result = u1_t_reg_read_result & (U1)PICT_CXD_REG_MASK_BIT_7;      /* Get Link Error Result */
             if(u1_t_reg_read_result != (U1)PICT_GVIFSNDRGVIFLINK_NML){                  /* Link Error */
                 /* HDCP認証停止関数 */ /* 暫定 シス検未対応 */
@@ -437,7 +735,7 @@ static void vd_s_Pict_GvifSndrCycChk(void)
                 u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP8;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP6:                                       /* STEP6 */
+        case GVIFSNDR_CYCCHK_STEP6:                                         /* STEP6 */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_BANKSET_WRINUM,
                                                            CXD4937_BANKSET, &u4_s_gvifsnd_i2c_ack_wait_time,
@@ -447,7 +745,7 @@ static void vd_s_Pict_GvifSndrCycChk(void)
                 u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP7;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP7:                                       /* STEP7 */
+        case GVIFSNDR_CYCCHK_STEP7:                                         /* STEP7 */
             /* State Update */
             u1_s_gvifsnd_state = (U1)GVIFSENDER_SEQ_LINKCHK;
             /* Link Error Check */
@@ -455,64 +753,235 @@ static void vd_s_Pict_GvifSndrCycChk(void)
             /* Process Reset */
             u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP0;
             break;
-        case GVIFSNDR_CYCCHK_STEP8:                                       /* STEP8 */
+        case GVIFSNDR_CYCCHK_STEP8:                                         /* STEP8 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_BANKSET_WRINUM,
+                                                           CXD4937_BANKSET, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4937_GVIFSNDRBANK4_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP9;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP9:                                         /* STEP9 */
+        /* ----------100-4-7 定期監視制御 eDP入力異常検知---------- */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_GVIFSNDREDPERR_SET1_WRINUM,
+                                                           CXD4937_GVIFSNDREDPERR_SET1, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4937_GVIFSNDREDPERR1_1_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP10;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP10:                                        /* STEP10 */
+            /* Read Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                            st_sp_CXD4937_GVIFSNDREDPERR1_2_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP11;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP11:                                        /* STEP11 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_GVIFSNDREDPERR_SET2_WRINUM,
+                                                           CXD4937_GVIFSNDREDPERR_SET2, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4937_GVIFSNDREDPERR1_3_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP12;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP12:                                        /* STEP12 */
+            u1_t_reg_read_result = st_sp_CXD4937_GVIFSNDREDPERR1_2_TBL[1].u1p_pdu[1];
+            u1_t_reg_read_result = u1_t_reg_read_result & (U1)PICT_GVIFSNDREDPERR_1;        /* Get eDP Input Error Result */
+            if(u1_t_reg_read_result != (U1)PICT_GVIFSNDREDPERR_1){                          /* eDP Input Error */
+                if((u1_s_gvifsnd_edperr1_drec_cnt < (U1)CXD4937_EDPERR1_DREC_CNT_MAX)       /* Drec Counter < 3 */
+                && ((u1_s_gvifsnd_edperr1_pre_sts == (U1)CXD4937_EDPERR_STS_INIT)           /* Initial Error */
+                 || (u1_s_gvifsnd_edperr1_pre_sts == (U1)CXD4937_EDPERR_STS_NORMAL))){      /* Normal -> Error */
+                    u1_s_gvifsnd_edperr1_drec_cnt++;
+                    vd_CXD4937_DREC_REQ((U1)SYSECDRC_DREC_ID_3, u1_s_gvifsnd_edperr1_drec_cnt, (U1)0x00U);
+                    u1_s_gvifsnd_edperr1_pre_sts = (U1)CXD4937_EDPERR_STS_ERROR;
+                }
+            }
+            else{
+                u1_s_gvifsnd_edperr1_pre_sts = (U1)CXD4937_EDPERR_STS_NORMAL;
+            }
+            /* Next Process */
+            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP13;
+            break;
+        case GVIFSNDR_CYCCHK_STEP13:                                        /* STEP13 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_GVIFSNDREDPERR_SET1_WRINUM,
+                                                           CXD4937_GVIFSNDREDPERR_SET1, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4937_GVIFSNDREDPERR2_1_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP14;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP14:                                        /* STEP14 */
+            /* Read Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                            st_sp_CXD4937_GVIFSNDREDPERR2_2_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP15;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP15:                                        /* STEP15 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_GVIFSNDREDPERR_SET2_WRINUM,
+                                                           CXD4937_GVIFSNDREDPERR_SET2, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4937_GVIFSNDREDPERR2_3_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP16;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP16:                                        /* STEP16 */
+            u1_t_reg_read_result = st_sp_CXD4937_GVIFSNDREDPERR2_2_TBL[1].u1p_pdu[1];
+            u1_t_reg_read_result = u1_t_reg_read_result & (U1)PICT_GVIFSNDREDPERR_2;        /* Get eDP Input Error Result */
+            if(u1_t_reg_read_result != (U1)PICT_GVIFSNDREDPERR_2){                          /* eDP Input Error */
+                if((u1_s_gvifsnd_edperr2_drec_cnt < (U1)CXD4937_EDPERR2_DREC_CNT_MAX)       /* Drec Counter < 3 */
+                && ((u1_s_gvifsnd_edperr2_pre_sts == (U1)CXD4937_EDPERR_STS_INIT)           /* Initial Error */
+                 || (u1_s_gvifsnd_edperr2_pre_sts == (U1)CXD4937_EDPERR_STS_NORMAL))){      /* Normal -> Error */
+                    u1_s_gvifsnd_edperr2_drec_cnt++;
+                    vd_CXD4937_DREC_REQ((U1)SYSECDRC_DREC_ID_4, u1_s_gvifsnd_edperr2_drec_cnt, (U1)0x00U);
+                    u1_s_gvifsnd_edperr2_pre_sts = (U1)CXD4937_EDPERR_STS_ERROR;
+                }
+            }
+            else{
+                u1_s_gvifsnd_edperr2_pre_sts = (U1)CXD4937_EDPERR_STS_NORMAL;
+            }
+            /* Next Process */
+            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP17;
+            break;
+        case GVIFSNDR_CYCCHK_STEP17:                                        /* STEP17 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_GVIFSNDREDPERR_SET1_WRINUM,
+                                                           CXD4937_GVIFSNDREDPERR_SET1, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4937_GVIFSNDREDPERR3_1_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP18;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP18:                                        /* STEP18 */
+            /* Read Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                            st_sp_CXD4937_GVIFSNDREDPERR3_2_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP19;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP19:                                        /* STEP19 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_GVIFSNDREDPERR_SET2_WRINUM,
+                                                           CXD4937_GVIFSNDREDPERR_SET2, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4937_GVIFSNDREDPERR3_3_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP20;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP20:                                        /* STEP20 */
+            u1_t_reg_read_result = st_sp_CXD4937_GVIFSNDREDPERR3_2_TBL[1].u1p_pdu[1];
+            u1_t_reg_read_result = u1_t_reg_read_result & (U1)PICT_CXD_REG_MASK_BIT_0;      /* Get eDP Input Error Result */
+            if(u1_t_reg_read_result != (U1)PICT_CXD_REG_MASK_BIT_0){                        /* eDP Input Error */
+                if((u1_s_gvifsnd_edperr3_drec_cnt < (U1)CXD4937_EDPERR3_DREC_CNT_MAX)       /* Drec Counter < 3 */
+                && ((u1_s_gvifsnd_edperr3_pre_sts == (U1)CXD4937_EDPERR_STS_INIT)           /* Initial Error */
+                 || (u1_s_gvifsnd_edperr3_pre_sts == (U1)CXD4937_EDPERR_STS_NORMAL))){      /* Normal -> Error */
+                    u1_s_gvifsnd_edperr3_drec_cnt++;
+                    vd_CXD4937_DREC_REQ((U1)SYSECDRC_DREC_ID_5, u1_s_gvifsnd_edperr3_drec_cnt, (U1)0x00U);
+                    u1_s_gvifsnd_edperr3_pre_sts = (U1)CXD4937_EDPERR_STS_ERROR;
+                }
+            }
+            else{
+                u1_s_gvifsnd_edperr3_pre_sts = (U1)CXD4937_EDPERR_STS_NORMAL;
+            }
+            /* Next Process */
+            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP21;
+            break;
+        case GVIFSNDR_CYCCHK_STEP21:                                        /* STEP21 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_BANKSET_WRINUM,
+                                                           CXD4937_BANKSET, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4957_GVIFSNDRBANK0_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
+                /* Next Process */
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP22;
+            }
+            break;
+        case GVIFSNDR_CYCCHK_STEP22:                                        /* STEP22 */
         /* ----------100-4-7 定期監視制御 入力映像異常検知---------- */
             /* Read Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
                                                             st_sp_CXD4957_GVIFSNDRINPUTERR_RD_TBL, &u2_s_gvifsnd_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP9;
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP23;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP9:                                       /* STEP9 */
+        case GVIFSNDR_CYCCHK_STEP23:                                        /* STEP23 */
             u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRINPUTERR_RD_TBL[1].u1p_pdu[1];
             u1_t_reg_read_result = u1_t_reg_read_result & (U1)PICT_CXD_REG_MASK_BIT_0;      /* Get Input Error Result */
             if(u1_t_reg_read_result != (U1)PICT_CXD_REG_MASK_BIT_0){                        /* Input Error */
-                /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
+                if(u1_s_gvifsnd_videoerr_drec_cnt < (U1)CXD4937_VIDEOERR_DREC_CNT_MAX){     /* Drec Counter < 3 */
+                    u1_s_gvifsnd_videoerr_drec_cnt++;
+                    vd_CXD4937_DREC_REQ((U1)SYSECDRC_DREC_ID_6, u1_s_gvifsnd_videoerr_drec_cnt, (U1)0x00U);
+                }
             }
             /* Next Process */
-            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP10;
+            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP24;
             break;
-        case GVIFSNDR_CYCCHK_STEP10:                                      /* STEP10 */
+        case GVIFSNDR_CYCCHK_STEP24:                                        /* STEP24 */
         /* ----------100-4-7 定期監視制御 LOADER異常検知---------- */
             /* Read Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
                                                             st_sp_CXD4957_GVIFSNDRLODERERR_RD_TBL, &u2_s_gvifsnd_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP11;
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP25;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP11:                                      /* STEP11 */
+        case GVIFSNDR_CYCCHK_STEP25:                                        /* STEP25 */
             u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRLODERERR_RD_TBL[1].u1p_pdu[1];
             u1_t_reg_read_result = u1_t_reg_read_result & ((U1)PICT_CXD_REG_MASK_BIT_7 | (U1)PICT_CXD_REG_MASK_BIT_6);   /* Get Loader Error Result */
-            if(u1_t_reg_read_result != (U1)PICT_GVIFSNDRLODERERR_NML){                  /* Loader Error */
-                /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
+            if(u1_t_reg_read_result != (U1)PICT_GVIFSNDRLODERERR_NML){                      /* Loader Error */
+                if(u1_s_gvifsnd_loadererr_drec_cnt < (U1)CXD4937_LOADERERR_DREC_CNT_MAX){   /* Drec Counter < 3 */
+                    u1_s_gvifsnd_loadererr_drec_cnt++;
+                    vd_CXD4937_DREC_REQ((U1)SYSECDRC_DREC_ID_7, u1_s_gvifsnd_loadererr_drec_cnt, u1_t_reg_read_result);
+                }
             }
             /* Next Process */
-            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP12;
+            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP26;
             break;
-        case GVIFSNDR_CYCCHK_STEP12:                                      /* STEP12 */
+        case GVIFSNDR_CYCCHK_STEP26:                                        /* STEP26 */
         /* ----------100-4-7 定期監視制御 GVIF3接続異常検知---------- */
             /* Read Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
                                                             st_sp_CXD4957_GVIFSNDRCONNECTERR_RD_TBL, &u2_s_gvifsnd_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
-                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP13;
+                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP27;
             }
             break;
-        case GVIFSNDR_CYCCHK_STEP13:                                      /* STEP13 */
+        case GVIFSNDR_CYCCHK_STEP27:                                        /* STEP27 */
             u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRCONNECTERR_RD_TBL[1].u1p_pdu[1];
             u1_t_reg_read_result = u1_t_reg_read_result & (U1)PICT_CXD_REG_MASK_BIT_0;      /* Get Connect Error Result */
             if(u1_t_reg_read_result != (U1)PICT_CXD_REG_MASK_BIT_0){                        /* Connect Error */
-                /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
+                if(u1_s_gvifsnd_cncterr_drec_cnt < (U1)CXD4937_CNCTERR_DREC_CNT_MAX){       /* Drec Counter < 3 */
+                    u1_s_gvifsnd_cncterr_drec_cnt++;
+                    vd_CXD4937_DREC_REQ((U1)SYSECDRC_DREC_ID_8, u1_s_gvifsnd_cncterr_drec_cnt, (U1)0x00U);
+                }
             }
             /* Next Process */
-            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP14;
+            u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP28;
             break;
-        case GVIFSNDR_CYCCHK_STEP14:                                      /* STEP14 */
+        case GVIFSNDR_CYCCHK_STEP28:                                        /* STEP28 */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4957_GVIFSNDRERRCLEAR_SET_WRINUM,
                                                            CXD4957_GVIFSNDRERRCLEAR_SET, &u4_s_gvifsnd_i2c_ack_wait_time,
@@ -547,7 +1016,10 @@ static void vd_s_Pict_GvifSndrDevRst(void)
             /* Timer Clear */
             u2_s_gvifsnd_devrst_timer = (U2)0;
 
-            /* ダイレコ保存 *//* 暫定 シス検ではダイレコ保存未対応 */
+            if(u1_s_gvifsnd_devrst_drec_cnt < (U1)CXD4937_DEVERR_DREC_CNT_MAX){     /* Drec Counter < 3 */
+                u1_s_gvifsnd_devrst_drec_cnt++;
+                vd_CXD4937_DREC_REQ((U1)SYSECDRC_DREC_ID_2, u1_s_gvifsnd_devrst_drec_cnt, (U1)0x00U);
+            }
 
             /* GVIF-TC(C-DISP)-RST = L */
             vd_PICT_CXD_GVIF_TX_RST_L();

@@ -36,6 +36,11 @@
 #include "IVI_DspCtrl_Main.h"
 #include "IVI_DrcCtrl_Main.h"
 
+/* ClkCtrl */
+#include "RtcIc_drv.h"
+#include "Date_clk.h"
+#include "datesi.h"
+
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -94,6 +99,10 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_Ivi_DspCtrl_Main_Bon_init();
 	vd_g_Ivi_DrcCtrl_Main_Bon_init();
 
+    /* ClkCtrl */
+    vd_g_RtcIc_MainInitial();
+    vd_g_DateclkBonInit();
+    vd_g_DateSIBonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -139,6 +148,11 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_Ivi_PictCtrl_Main_Rst_init();
     vd_g_Ivi_GyrCtrl_Main_Rst_init();
     vd_g_Ivi_DspCtrl_Main_Rst_init();
+
+    /* ClkCtrl */
+    vd_g_RtcIc_MainInitial();
+    vd_g_DateclkRstwkInit();
+    vd_g_DateSIRstWkupInit();
     vd_g_Ivi_DrcCtrl_Main_Rst_init();
     
     /* ^^ User Hook end   ^^ */
@@ -188,6 +202,10 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_Ivi_DspCtrl_Main_Wkup_init();
     vd_g_Ivi_DrcCtrl_Main_Wkup_init();
 
+    /* ClkCtrl */
+    vd_g_RtcIc_MainInitial();
+    vd_g_DateclkRstwkInit();
+    vd_g_DateSIRstWkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
