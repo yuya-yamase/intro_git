@@ -67,16 +67,30 @@ REM popd
 echo -- XCreate -- >> all_build.log
 call xCreate.bat >> all_build.log
 
-@echo OFF
-echo -- SectionAnalysis Start--
-call SectionAnalysis.bat
-echo -- SectionAnalysis End--
-
 echo ===============================
 echo Start Time: %start_time%
 echo End Time  : %time%
 
 @echo OFF
+echo -- Step: Calculate ROM/RAM  --
+set "current=%cd%"
+
+REM 上位フォルダ名を取得
+for %%a in ("%current%") do set "foldername=%%~nxa"
+
+REM 最後の8文字を取得
+set "last8=%foldername:~-8%"
+echo selected_variation: %last8%
+
+pushd ..\..\tool\MemAnalysis
+python SectionAnalysis.py %last8%
+move "Section_Size_EHVM.xlsx" "%current%\EHVM"
+move "Section_Size_PE0VM0.xlsx" "%current%\PE0VM0"
+move "Section_Size_PE1VM1.xlsx" "%current%\PE1VM1"
+move "Section_Size_PE2VM2.xlsx" "%current%\PE2VM2"
+move "Section_Size_PE3VM3.xlsx" "%current%\PE3VM3"
+popd
+
 echo -- Step: ReprogAPL build --
 pushd ..\..\src\DevRRPG\ReprogAPL_Info\env\Multi_V800
 call build.bat

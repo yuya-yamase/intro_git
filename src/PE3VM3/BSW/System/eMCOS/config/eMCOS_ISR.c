@@ -34,6 +34,7 @@
 ISR(eMCOS_ISR_INTOSTM2TINT);
 ISR(eMCOS_ISR_INTOSTM3TINT);
 ISR(eMCOS_ISR_INTP4);
+ISR(eMCOS_ISR_INTRLIN311UR1);
 
 /*----------------------------------------------------------------------------
  *		Codes
@@ -77,6 +78,16 @@ ISR(eMCOS_ISR_INTP4)
 {
     /*    INTP4_ISR;*/
 }
-
+/**---------------------------------------------------------------------------
+ * [Format]		ISR(eMCOS_ISR_INTRLIN311UR1)
+ * [Function]	
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRLIN311UR1)
+{
+    /*    INTRLIN311_ISR;*/
+}
 #define OS_STOP_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"
