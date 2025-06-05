@@ -204,6 +204,7 @@ uint16 Mcu_Dev_Pwroff_Most( void );
 uint16 Mcu_Dev_Pwroff_PowerIC( void );
 uint16 Mcu_Dev_Pwroff_XMTuner( void );
 uint16 Mcu_Dev_Pwroff_GNSS( void );
+uint16 Mcu_Dev_Pwroff_Gyro( void );
 
 /****************************************************************************/
 /* Scheduled Functions                                                      */
@@ -1178,7 +1179,9 @@ void Mcu_Dev_Pwroff( void ){
         }
 
         /* ジャイロ・加速度センサ(SMI230)制御 */
-        /* T.B.Dのためskip */
+        if((Mcu_Dev_Pwroff_Sts & (uint16)PWROFF_GYRO_BIT) != (uint16)PWROFF_GYRO_BIT){
+            Mcu_Dev_Pwroff_Sts  |=  Mcu_Dev_Pwroff_Gyro();
+        }
 
         /* 全プロセスが完了していればMcu_Dev_Pwroff_Sts=PWROFF_CONP_BITとなる */
     }
@@ -1594,6 +1597,30 @@ uint16 Mcu_Dev_Pwroff_GNSS( void ){
         break;
     }
 
+
+    return(mcu_return);
+}
+
+/*****************************************************************************
+  Function      : Mcu_Dev_Pwroff_Gyro
+  Description   : 
+  param[in/out] : 
+  return        : PWROFF_GYRO_BIT ：プロセス完了
+  Note          :
+*****************************************************************************/
+uint16 Mcu_Dev_Pwroff_Gyro( void ){
+
+    uint16          mcu_return;
+    Dio_LevelType   dl_t_sts;       /* ポート読出し値 */
+
+    mcu_return  = (uint16)FALSE;
+    dl_t_sts    = (Dio_LevelType)STD_HIGH;
+
+    dl_t_sts = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_SENSOR_ON]);
+
+    if(dl_t_sts == (Dio_LevelType)STD_HIGH){
+        mcu_return = (uint16)PWROFF_GYRO_BIT;
+    }
 
     return(mcu_return);
 }
