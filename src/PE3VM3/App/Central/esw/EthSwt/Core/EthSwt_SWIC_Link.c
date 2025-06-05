@@ -4,9 +4,7 @@
 #include "EthSwt_SWIC_Link.h"
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_STM.h"
-
-#include <EthSwt_SWIC_initRegCommon.h>
-#include <EthSwt_SWIC_initRegListSeqGetLink.h>
+#include <EthSwt_SWIC_Link_Cfg.h>
 /* -------------------------------------------------------------------------- */
 static struct {
     volatile Std_ReturnType             getLinkResult;      /* 旧 lnk_err */
@@ -69,6 +67,16 @@ void EthSwt_SWIC_Link_Clear (void)
     }
     swicGetLinkTimer.time   = 0;
     swicGetLinkTimer.req    = STD_ON;
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+void EthSwt_SWIC_Link_ClearGetLinkResult (void)
+{
+    uint8   idx;
+    for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
+        swicLink[idx].getLinkResult = E_NOT_OK;
+    }
 
     return;
 }
@@ -168,32 +176,14 @@ static Std_ReturnType swic_Reg_GetLinkState(const uint8 SwitchPortIdx, uint32 * 
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_GetLink(const uint8 SwitchPortIdx, EthTrcv_LinkStateType *const LinkStatePtr, uint32 * const errFactor)
 {
-    struct swic_tbl_lnk {
-		const swic_reg_data_t	*tbl;
-		const uint32			num;
-		const uint32			msk;
-		const uint32			dat;
-	};
-	static const struct swic_tbl_lnk	tbl[]
-	=	{ {&g_regListSeqGetLinkIeee[26], 1u, 0x0800u, 0x0800u}	/* P9：未使用                  */
-		, {&g_regListSeqGetLinkIeee[ 0], 1u, 0x0800u, 0x0800u}	/* P1：ADC 1000BASE-T1         */
-		, {&g_regListSeqGetLinkIeee[ 1], 1u, 0x0800u, 0x0800u}	/* P2：DCM 1000BASE-T1         */
-		, {&g_regListSeqGetLinkIeee[ 2], 7u, 0x0004u, 0x0004u}	/* P3：未使用                  */
-		, {&g_regListSeqGetLinkIeee[ 9], 7u, 0x0004u, 0x0004u}	/* P4：未使用                  */
-		, {&g_regListSeqGetLinkIeee[16], 7u, 0x0004u, 0x0004u}	/* P5：SIP SAILSS_RGMII0 RGMII */
-		, {&g_regListSeqGetLinkIeee[23], 1u, 0x0800u, 0x0800u}	/* P6：DLC 100BASE-TX          */
-		, {&g_regListSeqGetLinkIeee[24], 1u, 0x0800u, 0x0800u}	/* P7：SIP SGMII0 SGMII        */
-		, {&g_regListSeqGetLinkIeee[25], 1u, 0x0800u, 0x0800u}	/* P8：SIP SGMII1 SGMII        */
-		};
-
 	Std_ReturnType	result = E_NOT_OK;
 	uint32			val = 0uL;
     do {
-        if (SwitchPortIdx >= (sizeof(tbl)/sizeof(tbl[0])))	{ break; }
+        if (SwitchPortIdx >= (sizeof(G_ETHSWT_SWIC_GET_LINK_TABLE)/sizeof(G_ETHSWT_SWIC_GET_LINK_TABLE[0])))	{ break; }
         if (LinkStatePtr == NULL_PTR)			{ break; }
-        result = EthSwt_SWIC_Reg_SetTbl(tbl[SwitchPortIdx].tbl, tbl[SwitchPortIdx].num, &val, errFactor);
+        result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].tbl, G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].num, &val, errFactor);
         if (result == E_OK) {
-            *LinkStatePtr = ((val & tbl[SwitchPortIdx].msk) == tbl[SwitchPortIdx].dat) ? ETHTRCV_LINK_STATE_ACTIVE : ETHTRCV_LINK_STATE_DOWN;
+            *LinkStatePtr = ((val & G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].msk) == G_ETHSWT_SWIC_GET_LINK_TABLE[SwitchPortIdx].dat) ? ETHTRCV_LINK_STATE_ACTIVE : ETHTRCV_LINK_STATE_DOWN;
         }
     } while(0);
 

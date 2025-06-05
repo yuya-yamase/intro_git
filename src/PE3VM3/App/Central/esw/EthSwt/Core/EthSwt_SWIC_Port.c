@@ -1,22 +1,13 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <LIB.h>
+#include <EthSwt_SWIC_Port_Cfg.h>
 #include <EthSwt_BSW_define.h>
 #include <EthSwt_SWIC_Core_Cfg.h>
 #include "EthSwt_SWIC_Port.h"
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_Define.h"
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_initRegListSeqInitSeq.h>
-#include <EthSwt_SWIC_initRegListSeqBaseT1.h>
-#include <EthSwt_SWIC_initRegListSeqPhySwicOff.h>
-#include <EthSwt_SWIC_initRegListSeq100BTx.h>
-/* -------------------------------------------------------------------------- */
-struct swic_reg_tbl {								/* レジスタテーブル */
-	const swic_reg_data_t	*tbl;
-	const uint32			num;
-};
-
 static struct {
     Eth_ModeType                mode;
     volatile Eth_ModeType       mode_chg;
@@ -44,20 +35,13 @@ void EthSwt_SWIC_Port_Init (void)
 }
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 *errFactor)
-{
-    static const struct swic_reg_tbl tbl_list[]
-    = {
-        SWIC_REG_TBL(g_regListSeqRelayOn),
-        SWIC_REG_TBL(g_regListSeqP1PhyOn),
-        SWIC_REG_TBL(g_regListSeqP2PhyOn),
-    };
-    
+{    
     Std_ReturnType	err = E_OK;
 	uint32			idx;
 	uint32			val;
 
-    for (idx=0U ; idx < SWIC_TBL_NUM(tbl_list) ; idx++) {
-        err = EthSwt_SWIC_Reg_SetTbl(tbl_list[idx].tbl, tbl_list[idx].num, &val , errFactor);
+    for (idx=0U ; idx < SWIC_TBL_NUM(G_ETHSWT_SWIC_RELAY_ON_TABLE) ; idx++) {
+        err = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_RELAY_ON_TABLE[idx].tbl, G_ETHSWT_SWIC_RELAY_ON_TABLE[idx].num, &val , errFactor);
 		if (err == E_NOT_OK) { break; }
 	}
 
@@ -66,23 +50,40 @@ Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 *errFactor)
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Port_RelayOff(uint32 *errFactor)
 {
-    static const struct swic_reg_tbl tbl_list[]
-    = {
-        SWIC_REG_TBL(g_regListSeqP1PhyOff),
-        SWIC_REG_TBL(g_regListSeqP2PhyOff),
-        SWIC_REG_TBL(g_regListSeqRelayOff)
-    };
-
     Std_ReturnType	err = E_OK;
 	uint32			idx;
 	uint32			val;
 
-    for (idx=0U ; idx < SWIC_TBL_NUM(tbl_list) ; idx++) {
-        err = EthSwt_SWIC_Reg_SetTbl(tbl_list[idx].tbl, tbl_list[idx].num, &val , errFactor);
+    for (idx=0U ; idx < SWIC_TBL_NUM(G_ETHSWT_SWIC_RELAY_OFF_TABLE) ; idx++) {
+        err = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_RELAY_OFF_TABLE[idx].tbl, G_ETHSWT_SWIC_RELAY_OFF_TABLE[idx].num, &val , errFactor);
 		if (err == E_NOT_OK) { break; }
 	}
 
     return err;
+}
+/* -------------------------------------------------------------------------- */
+Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor)
+{
+	Std_ReturnType	ret;
+	uint8			idx;
+
+	for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++ ) {
+		if (swicPort[idx].mode == G_ETHSWT_SWIC_PORT_DEFINE[idx]) { continue; }	/* 動作モード変更なし */
+		switch (swicPort[idx].mode) {
+		case ETH_MODE_ACTIVE:
+			ret = swic_Reg_SetSwitchPortModeACTIVE(idx, errFactor);
+			if (ret != E_OK) { break; }
+			break;
+		case ETH_MODE_DOWN:
+			ret = swic_Reg_SetSwitchPortModeDOWN(idx, errFactor);
+			if (ret != E_OK) { break; }
+			break;
+		default:
+			break;
+		}
+	}
+
+	return ret;
 }
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Port_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode)
@@ -153,19 +154,8 @@ static Std_ReturnType swic_Reg_SetSwitchPortModeACTIVE(const uint8 SwitchPortIdx
 {
     Std_ReturnType  result;
     uint32          val;
-	static const struct swic_reg_tbl phyon_tbl[]
-	= { {NULL_PTR                       , 0u                                        }   /* P9：未使用                  */
-	  , {g_regListSeqP1PhyOn            , SWIC_TBL_NUM(g_regListSeqP1PhyOn)         }	/* P1：ADC 1000BASE-T1         */
-	  , {g_regListSeqP2PhyOn            , SWIC_TBL_NUM(g_regListSeqP2PhyOn)         }   /* P2：DCM 1000BASE-T1         */
-	  , {NULL_PTR                       , 0u                                        }	/* P3：未使用                  */
-	  , {NULL_PTR                       , 0u                                        }   /* P4：未使用                  */
-	  , {NULL_PTR                       , 0u                                        }	/* P5：SIP SAILSS_RGMII0 RGMII */
-	  , {g_regListSeqSet100BTxStart     , SWIC_TBL_NUM(g_regListSeqSet100BTxStart)  }	/* P6：DLC 100BASE-TX          */
-	  , {NULL_PTR                       , 0u                                        }	/* P7：SIP SGMII0 SGMII        */
-	  , {NULL_PTR                       , 0u                                        }	/* P8：SIP SGMII1 SGMII        */
-	  };
 
-    result = EthSwt_SWIC_Reg_SetTbl(phyon_tbl[SwitchPortIdx].tbl, phyon_tbl[SwitchPortIdx].num, &val, errFactor);
+    result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_PHY_ON_TABLE[SwitchPortIdx].tbl, G_ETHSWT_SWIC_PHY_ON_TABLE[SwitchPortIdx].num, &val, errFactor);
     
     return result;
 }
@@ -175,19 +165,7 @@ static Std_ReturnType swic_Reg_SetSwitchPortModeDOWN(const uint8 SwitchPortIdx, 
     Std_ReturnType  result;
     uint32          val;
 
-	static const struct swic_reg_tbl tbl[]
-	=	{ {NULL_PTR                     , 0u                                        }	/* P9：未使用                  */
-		, {g_regListSeqP1PhyOff         , SWIC_TBL_NUM(g_regListSeqP1PhyOff)        }	/* P1：ADC 1000BASE-T1         */
-		, {g_regListSeqP2PhyOff         , SWIC_TBL_NUM(g_regListSeqP2PhyOff)        }	/* P2：DCM 1000BASE-T1         */
-		, {NULL_PTR                     , 0u                                        }	/* P3：未使用                  */
-		, {NULL_PTR                     , 0u                                        }	/* P4：未使用                  */
-		, {NULL_PTR                     , 0u                                        }	/* P5：SIP SAILSS_RGMII0 RGMII */
-		, {g_regListSeqSet100BTxDown    , SWIC_TBL_NUM(g_regListSeqSet100BTxDown)   }	/* P6：DLC 100BASE-TX          */
-		, {NULL_PTR                     , 0u                                        }   /* P7：SIP SGMII0 SGMII        */
-		, {NULL_PTR                     , 0u                                        }	/* P8：SIP SGMII1 SGMII        */
-		};
-
-    result = EthSwt_SWIC_Reg_SetTbl(tbl[SwitchPortIdx].tbl, tbl[SwitchPortIdx].num, &val, errFactor);
+    result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_PHY_OFF_TABLE[SwitchPortIdx].tbl, G_ETHSWT_SWIC_PHY_OFF_TABLE[SwitchPortIdx].num, &val, errFactor);
 
 	return result;
 }
