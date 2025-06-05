@@ -1,7 +1,6 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Core_Cfg.h>
-#include <EthSwt_SWIC_Signal.h>
 #include "EthSwt_SWIC_PWR.h"
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_PWR_ST_INIT_POINT         (0U)
@@ -184,35 +183,35 @@ static uint32 ethswt_swic_pwr_act_initilize (void)
     G_SWIC_PWR_ResetAssertCount = 0;
     G_SWIC_PWR_ResetDeassertCount = 0;
 
-    EthSwt_SWIC_Signal_GPIOMode();          /* Custom */
-    EthSwt_SWIC_Signal_PowerOff();          /* Custom */
+    EthSwt_SWIC_SetGPIOMode();          /* OEM Config */
+    EthSwt_SWIC_PowerOff();             /* OEM Config */
     
     return D_ETHSWT_SWIC_PWR_ST_OFF;
 }
 static uint32 ethswt_swic_pwr_act_powerOn (void)
 {
-    EthSwt_SWIC_Signal_PowerOn();           /* Custom */
+    EthSwt_SWIC_PowerOn();              /* OEM Config */
 
     return D_ETHSWT_SWIC_PWR_ST_WAITON;
 }
 
 static uint32 ethswt_swic_pwr_act_setSpiMode (void)
 {
-    EthSwt_SWIC_Signal_SPIMode();           /* Custom */
+    EthSwt_SWIC_SetSPIMode();           /* OEM Config */
 
     return D_ETHSWT_SWIC_PWR_ST_ON;
 }
 
 static uint32 ethswt_swic_pwr_act_resetAssert (void)
 {
-    EthSwt_SWIC_Signal_ResetAssert();       /* Custom */
+    EthSwt_SWIC_SetResetAssert();       /* OEM Config */
 
     return D_ETHSWT_SWIC_PWR_ST_RESET_ASSERT;
 }
 
 static uint32 ethswt_swic_pwr_act_resetDeassert (void)
 {
-    EthSwt_SWIC_Signal_ResetDeassert();     /* Custom */
+    EthSwt_SWIC_SetResetDeassert();     /* OEM Config */
 
     return D_ETHSWT_SWIC_PWR_ST_RESET_DEASSERT;
 }
@@ -227,8 +226,8 @@ static uint32 ethswt_swic_pwr_act_resume (void)
 
 static uint32 ethswt_swic_pwr_act_powerOff (void)
 {
-    EthSwt_SWIC_Signal_GPIOMode();          /* Custom */
-    EthSwt_SWIC_Signal_PowerOff();          /* Custom */
+    EthSwt_SWIC_SetGPIOMode();          /* OEM Config */
+    EthSwt_SWIC_PowerOff();             /* OEM Config */
 
     G_SWIC_PWR_PowerOnCount = 0;
     G_SWIC_PWR_ResetReq = STD_OFF;

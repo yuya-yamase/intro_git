@@ -9,7 +9,6 @@
 #include "EthSwt_SWIC_Link.h"
 #include "EthSwt_SWIC_Port.h"
 #include "EthSwt_SWIC_Define.h"
-#include <EthSwt_SWIC_Allow.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_ST_UNINIT                         (0U)
 #define D_ETHSWT_SWIC_ST_INIT                           (1U)
@@ -112,7 +111,7 @@ void EthSwt_SWIC_STM_Background (void)
 {
     Std_ReturnType swicAvailable;
 
-    swicAvailable = EthSwt_SWIC_Allow_SetRegister();
+    swicAvailable = EthSwt_SWIC_AllowSetRegister();
     if (swicAvailable == E_OK) {
         switch (G_SWIC_Status) {
         case D_ETHSWT_SWIC_ST_UNINIT:
@@ -210,7 +209,7 @@ static void ethswt_swic_stm_portInitCompletedProc (void)
     }
 
     if (result == E_OK) {
-        allowRelay = EthSwt_SWIC_Allow_Relay();
+        allowRelay = EthSwt_SWIC_AllowRelay();
         if (allowRelay == E_OK) {
              ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_START_RELAY);
         }
@@ -256,7 +255,7 @@ static void ethswt_swic_stm_activeProc (void)
     }
 
     if (result == E_OK) {
-        allowRelay = EthSwt_SWIC_Allow_Relay();
+        allowRelay = EthSwt_SWIC_AllowRelay();
         if (allowRelay != E_OK) {
              ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_STOP_RELAY);
         }

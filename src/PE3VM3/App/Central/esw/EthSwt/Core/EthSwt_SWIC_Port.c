@@ -5,14 +5,12 @@
 #include <EthSwt_SWIC_Core_Cfg.h>
 #include "EthSwt_SWIC_Port.h"
 #include "EthSwt_SWIC_Reg.h"
-
+#include "EthSwt_SWIC_Define.h"
+/* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegListSeqInitSeq.h>
 #include <EthSwt_SWIC_initRegListSeqBaseT1.h>
 #include <EthSwt_SWIC_initRegListSeqPhySwicOff.h>
 #include <EthSwt_SWIC_initRegListSeq100BTx.h>
-/* -------------------------------------------------------------------------- */
-#define	SWIC_REG_TBL(a)		{(a), SWIC_TBL_NUM(a)}	/* swic_reg_tbl設定用 */
-#define	SWIC_TBL_NUM(a)	(sizeof(a)/sizeof((a)[0]))
 /* -------------------------------------------------------------------------- */
 struct swic_reg_tbl {								/* レジスタテーブル */
 	const swic_reg_data_t	*tbl;

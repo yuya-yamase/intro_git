@@ -71,8 +71,6 @@ EthSwt_SWIC_Reg.c
 EthSwt_SWIC_Spi.c
 EthSwt_SWIC_Link.c
 EthSwt_SWIC_Port.c
-EthSwt_SWIC_Signal.c
-EthSwt_SWIC_Allow.c
 EthSwt_StubDriver.c
 EthDLC_ctrl.c
 EthDLC_ACTL.c

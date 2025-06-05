@@ -8,7 +8,7 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-
+#include <EthSwt_SWIC_Define.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegListPort.h>
 #include <EthSwt_SWIC_initRegListVlan.h>
@@ -20,9 +20,6 @@
 #include <EthSwt_SWIC_initRegListSeqInitSeq.h>
 #include <EthSwt_SWIC_initRegListSeqPhySwicOff.h>
 #include <EthSwt_SWIC_initRegListSeqSetPortActDis.h>
-/* -------------------------------------------------------------------------- */
-#define	SWIC_REG_TBL(a)		{(a), SWIC_TBL_NUM(a)}	/* swic_reg_tbl設定用 */
-#define	SWIC_TBL_NUM(a)	    (sizeof(a)/sizeof((a)[0]))
 /* -------------------------------------------------------------------------- */
 struct swic_reg_tbl {								/* レジスタテーブル */
 	const swic_reg_data_t	*tbl;

@@ -5,7 +5,6 @@
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_Spi.h"
 #include "EthSwt_SWIC_STM.h"
-#include <EthSwt_SWIC_Allow.h>
 #include <EthSwt_SWIC_Define.h>
 /* -------------------------------------------------------------------------- */
 volatile static uint16			timer;
@@ -80,7 +79,7 @@ static Std_ReturnType swic_Reg_SetTblWriteOFF(const swic_reg_data_t tbl[], const
 			break;
 		}
 
-		checkPwr = EthSwt_SWIC_Allow_SetRegister();		/* Custom */
+		checkPwr = EthSwt_SWIC_AllowSetRegister();		/* Custom */
 		if (checkPwr == E_NOT_OK) {
 			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
 			break;
@@ -111,7 +110,7 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 			cnt = 0u;										/* ˜A‘±3‰ñ */
 		}
 		else {
-			checkPwr = EthSwt_SWIC_Allow_SetRegister();		/* Custom */
+			checkPwr = EthSwt_SWIC_AllowSetRegister();		/* Custom */
 			if (checkPwr == E_NOT_OK) {
 				*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
 				break;
@@ -156,7 +155,7 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 			}
 		}
 
-		checkPwr = EthSwt_SWIC_Allow_SetRegister();			/* Custom */
+		checkPwr = EthSwt_SWIC_AllowSetRegister();			/* Custom */
 		if (checkPwr == E_NOT_OK) {
 			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
 			break;
@@ -184,7 +183,7 @@ static Std_ReturnType swic_Reg_SetTblWriteMask(const swic_reg_data_t tbl[], cons
 			break;
 		}
 
-		checkPwr = EthSwt_SWIC_Allow_SetRegister();		/* Custom */
+		checkPwr = EthSwt_SWIC_AllowSetRegister();		/* Custom */
 		if (checkPwr == E_NOT_OK) {
 			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
 			break;
@@ -209,7 +208,7 @@ static Std_ReturnType swic_Reg_SetTblReadMask(const swic_reg_data_t tbl[], const
 			break;
 		}
 
-		checkPwr = EthSwt_SWIC_Allow_SetRegister();			/* Custom */
+		checkPwr = EthSwt_SWIC_AllowSetRegister();			/* Custom */
 		if (checkPwr == E_NOT_OK) {
 			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
 			break;
