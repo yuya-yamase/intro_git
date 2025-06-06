@@ -6,8 +6,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "GyroDevCtl.h"
 
-#include "gyro.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -19,8 +17,6 @@
 
 #define GYRODEV_SEQ_IDLE                    (0U)
 #define GYRODEV_SEQ_CYC                     (1U)
-#define GYRODEV_SEQ_ERROR_RST_GYRO          (2U)
-#define GYRODEV_SEQ_ERROR_RST_GSENS         (3U)
 
 #define GYRODEV_CYCCHK_STEP0                (0U)
 #define GYRODEV_CYCCHK_STEP1                (1U)
@@ -151,7 +147,6 @@ static U2 u2_s_gyrodev_regstep;                                 /* Gyro Device R
 static U4 u4_s_gyrodev_i2c_ack_wait_time;                       /* Gyro Device I2C Request Ack Wait Timer */
 static U2 u2_s_gyrodev_reg_btwn_time;                           /* Gyro Device Access Register Between Timer */
 
-static U1 u1_s_gyrodev_wkup_flag;                               /* Gyro Device Wake-Up Flag */
 static ST_XSPI_IVI_GYRO_SENSOR_DATA st_gyrodev_readdata;        /* Gyro Device Read Data */
 static U1 u1_s_gyrodev_pre_appon_sts;                           /* Previous APP-ON Status */
 
@@ -472,7 +467,6 @@ void    vd_g_GyroDev_BonInit(void)
     u1_s_gyrodev_state = (U1)GYRODEV_SEQ_IDLE;
 
     u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP0;
-    u1_s_gyrodev_wkup_flag = (U1)FALSE;
     u2_s_gyrodev_cycchk_timer = (U2)0;
     u2_s_gyrodev_gyro_max_err_cnt = (U2)0;
     u2_s_gyrodev_gyro_min_err_cnt = (U2)0;
@@ -565,8 +559,6 @@ void    vd_g_GyroDev_WkupInit(void)
 {
     U2 u2_t_cnt;
 
-    u1_s_gyrodev_wkup_flag = (U1)TRUE;
-
     u2_s_gyrodev_regstep = (U2)0;
     u4_s_gyrodev_i2c_ack_wait_time = (U4)0;
     u2_s_gyrodev_reg_btwn_time = (U2)0xFFFFU;
@@ -649,13 +641,16 @@ void    vd_g_GyroDev_WkupInit(void)
 /*===================================================================================================================================*/
 void    vd_g_GyroDev_Routine(void)
 {
+    U1  u1_t_modests;                                                               /* Gyro G-Sensor Power ON Maneger Mode Status */
+
     switch (u1_s_gyrodev_state){
         case GYRODEV_SEQ_IDLE:                                                      /* IDLE */
             /* Timer Clear */
             u2_s_gyrodev_cycchk_timer = (U2)0;
 
             /* Power ON Check */
-            if(Mcu_OnStep_Gyro_2_OVRALL == (U1)MCU_STEP_GYRO2_OVERALL_FIN){
+            u1_t_modests = vd_GYRODEV_GET_MODESTS();
+            if(u1_t_modests == (U1)GYRODEV_MODE_NORMAL){                            /* Mode : Normal */
                 /* State Update */
                 u1_s_gyrodev_state = (U1)GYRODEV_SEQ_CYC;
                 /* Poling Check Start */
@@ -664,34 +659,6 @@ void    vd_g_GyroDev_Routine(void)
             break;
         case GYRODEV_SEQ_CYC:                                                       /* CYCLIC */
             vd_s_vd_g_GyroDev_CycChk();
-            break;
-        case GYRODEV_SEQ_ERROR_RST_GYRO:                                            /* ERROR_RST_GYRO */
-                if(u1_s_gyrodev_wkup_flag == (U1)TRUE){
-                    /* Counter Clear */
-                    u2_s_gyrodev_gyro_max_err_cnt = (U2)0;
-                    u2_s_gyrodev_gyro_min_err_cnt = (U2)0;
-                    u1_s_gyrodev_gyro_rst_cnt = (U1)0;
-                    /* SENSOR-ON = H *//* SENSOR-ON = L -> Hで起動フロー(1)開始 */
-                    u1_GYRODEV_SET_SENSOR_ON_H();
-                    /* State Reset */
-                    u1_s_gyrodev_state = (U1)GYRODEV_SEQ_IDLE;
-                    /* Process Reset */
-                    u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP0;
-                }
-            break;
-        case GYRODEV_SEQ_ERROR_RST_GSENS:                                           /* ERROR_RST_GSENS */
-                if(u1_s_gyrodev_wkup_flag == (U1)TRUE){
-                    /* Counter Clear */
-                    u2_s_gyrodev_gsens_max_err_cnt = (U2)0;
-                    u2_s_gyrodev_gsens_min_err_cnt = (U2)0;
-                    u1_s_gyrodev_gsens_rst_cnt = (U1)0;
-                    /* SENSOR-ON = H *//* SENSOR-ON = L -> Hで起動フロー(1)開始 */
-                    u1_GYRODEV_SET_SENSOR_ON_H();
-                    /* State Reset */
-                    u1_s_gyrodev_state = (U1)GYRODEV_SEQ_IDLE;
-                    /* Process Reset */
-                    u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP0;
-                }
             break;
         default:                                                                    /* FAIL */
             vd_g_GyroDev_BonInit();
@@ -1007,9 +974,6 @@ static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_dat
                 u2_s_gyrodev_gyro_max_err_cnt = (U2)0;
                 u2_s_gyrodev_gyro_min_err_cnt = (U2)0;
 
-                /* SENSOR-ON = L */
-                u1_GYRODEV_SET_SENSOR_ON_L();
-
                 vd_GYRODEV_DREC_REQ((U1)SYSECDRC_DREC_ID_4, (U1)0x00U, (U1)0x00U);
 
                 /* Gyro Fail DTC Record */
@@ -1017,15 +981,21 @@ static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_dat
                 u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
 
                 if(u1_s_gyrodev_gyro_rst_cnt >= (U2)GYRODEV_GYRODTC_RSTCNT_MAX){    /* Reset Count >= n(6_3) */
-                    /* Flag Clear */
-                    u1_s_gyrodev_wkup_flag = (U1)FALSE;
-                    /* Set State */
-                    u1_s_gyrodev_state = (U1)GYRODEV_SEQ_ERROR_RST_GYRO;
+                    /* Counter Clear */
+                    u2_s_gyrodev_gyro_max_err_cnt = (U2)0;
+                    u2_s_gyrodev_gyro_min_err_cnt = (U2)0;
+                    u1_s_gyrodev_gyro_rst_cnt = (U1)0;
+                    /* Event Set */
+                    vd_GYRODEV_DEVICE_EVENT(GYRODEV_EVENT_DTC_ERR);
+                    /* State Reset */
+                    u1_s_gyrodev_state = (U1)GYRODEV_SEQ_IDLE;
+                    /* Process Reset */
+                    u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP0;
                 }
                 else{
                     u1_s_gyrodev_gyro_rst_cnt++;
-                    /* SENSOR-ON = H *//* SENSOR-ON = L -> Hで起動フロー(1)開始 */
-                    u1_GYRODEV_SET_SENSOR_ON_H();
+                    /* Event Set */
+                    vd_GYRODEV_DEVICE_EVENT(GYRODEV_EVENT_DEV_RST);
                     /* State Reset */
                     u1_s_gyrodev_state = (U1)GYRODEV_SEQ_IDLE;
                     /* Process Reset */
@@ -1093,25 +1063,28 @@ static void    vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_da
             u2_s_gyrodev_gsens_max_err_cnt = (U2)0;
             u2_s_gyrodev_gsens_min_err_cnt = (U2)0;
 
-            /* SENSOR-ON = L */
-            u1_GYRODEV_SET_SENSOR_ON_L();
-
             vd_GYRODEV_DREC_REQ((U1)SYSECDRC_DREC_ID_5, (U1)0x00U, (U1)0x00U);
 
             /* G Sonsor Fail DTC Record */
             vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GSNS_ERR, (U1)GYRODEV_DTC_STS_FAIL);
             u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
 
-            if(u1_s_gyrodev_gsens_rst_cnt >= (U2)GYRODEV_GSENSDTC_RSTCNT_MAX){    /* Reset Count >= n(6_3) */
-                /* Flag Clear */
-                u1_s_gyrodev_wkup_flag = (U1)FALSE;
-                /* Set State */
-                u1_s_gyrodev_state = (U1)GYRODEV_SEQ_ERROR_RST_GSENS;
+            if(u1_s_gyrodev_gsens_rst_cnt >= (U2)GYRODEV_GSENSDTC_RSTCNT_MAX){            /* Reset Count >= n(6_3) */
+                /* Counter Clear */
+                u2_s_gyrodev_gsens_max_err_cnt = (U2)0;
+                u2_s_gyrodev_gsens_min_err_cnt = (U2)0;
+                u1_s_gyrodev_gsens_rst_cnt = (U1)0;
+                /* Event Set */
+                vd_GYRODEV_DEVICE_EVENT(GYRODEV_EVENT_DTC_ERR);
+                /* State Reset */
+                u1_s_gyrodev_state = (U1)GYRODEV_SEQ_IDLE;
+                /* Process Reset */
+                u1_s_gyrodev_cycchk_sts = (U1)GYRODEV_CYCCHK_STEP0;
             }
             else{
                 u1_s_gyrodev_gsens_rst_cnt++;
-                /* SENSOR-ON = H *//* SENSOR-ON = L -> Hで起動フロー(1)開始 */
-                u1_GYRODEV_SET_SENSOR_ON_H();
+                /* Event Set */
+                vd_GYRODEV_DEVICE_EVENT(GYRODEV_EVENT_DEV_RST);
                 /* State Reset */
                 u1_s_gyrodev_state = (U1)GYRODEV_SEQ_IDLE;
                 /* Process Reset */
