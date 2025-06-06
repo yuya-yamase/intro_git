@@ -1,13 +1,16 @@
+/* -------------------------------------------------------------------------- */
+/* file name  :  EthSwt_SWIC_Spi.c                                            */
+/* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-#include <EthSwt_SWIC.h>
-#include <Rte_BswUcfg.h>
 #include <Spi.h>
+#include <Rte_BswUcfg.h>
+/* -------------------------------------------------------------------------- */
 #include <LIB.h>
-#include "EthSwt_SWIC_Def.h"
+#include <EthSwt_SWIC_initRegCommon.h>
 #include "EthSwt_SWIC_Spi.h"
-
+/* -------------------------------------------------------------------------- */
 #define	swic_SpiS1_Crc8Cmd(a,b)	swic_SpiS1_Crc8(a,b,0u)
-
+/* -------------------------------------------------------------------------- */
 #define ETHSWT_START_SEC_CONFIG_DATA_PREBUILD
 #include <EthSwt_SWIC_MemMap.h>
 static const uint8	swic_SpiS1_CrcOK[]	/* swic_SpiS1_Crc8({0xFF}, 1, crc)のテーブル:~swic_SpiS1_Crc[]と同じ */
@@ -48,94 +51,13 @@ static struct {
 	Spi_DataBufferType	dat[64];			/* SPI受信データ  (3+(3*16)+1バイト) */
 }	swic_SpiS1_Cmd;
 static volatile uint8 swic_SpiS1_RegErr;
-/* ★Debug_Start-------------------------------------------------------------- */
-#ifdef EthswtDebugMode1
-
-#define DBGSPI_NUM (100)   /* 保存数 */
-/* SPI書き込み処理 格納先 */
-struct {
-    Spi_DataBufferType snd_data[64];  /* SPI送信データ */
-    Spi_DataBufferType rcv_data;      /* CRC応答値 */
-    uint8              crc_info;      /* 比較CRC値 */
-    Std_ReturnType     spi_ret;       /* BSW_SPI戻り値 */
-}debug_SpiWrite[DBGSPI_NUM];
-/* SPI読み出し処理 格納先 */
-struct {
-    Spi_DataBufferType snd_data[6];  /* SPI送信データ */
-    Spi_DataBufferType rcv_data[6];  /* SPI受信データ */
-    uint8              crc_info;     /* 比較CRC値 */
-    Std_ReturnType     spi_ret;      /* BSW_SPI戻り値 */
-}debug_SpiRead[DBGSPI_NUM];
-
-uint8 debug_Spi_W_count;
-uint8 debug_Spi_R_count;
-#endif /* EthswtDebugMode1 */
-/* ★Debug_End---------------------------------------------------------------- */
 
 #define	ETHSWT_STOP_SEC_VAR_CLEARED
 #include <EthSwt_SWIC_MemMap.h>
 
 #define	ETHSWT_START_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>
-/* ★Debug_Start-------------------------------------------------------------- */
-#ifdef EthswtDebugMode1
-/* SPI読み書き処理 初期化 */
-static void debugSpi_init(void){
-	uint8 i;
-	uint8 j;
-	
-	debug_Spi_W_count=(uint8)0;
-	debug_Spi_R_count=(uint8)0;
-	
-	for(i=0;i<(uint8)DBGSPI_NUM;i++){
-	    for(j=0;j<(uint8)64;j++){
-	        debug_SpiWrite[i].snd_data[j] = (Spi_DataBufferType)0;
-	        debug_SpiRead[i].snd_data[j]  = (Spi_DataBufferType)0;
-	    }
-	    for(j=0;j<(uint8)6;j++){
-		    debug_SpiRead[i].rcv_data[j] = (Spi_DataBufferType)0;
-	    }
-	    debug_SpiWrite[i].rcv_data = (Spi_DataBufferType)0;
-	    debug_SpiWrite[i].crc_info = (uint8)0;
-	    debug_SpiWrite[i].spi_ret  = (Std_ReturnType)0;
-	    
-	    debug_SpiRead[i].crc_info  = (uint8)0;
-		debug_SpiRead[i].spi_ret   = (Std_ReturnType)0;
-	}
-}
-/* SPI書き込み処理 情報取得 */
-static void debugSpi_W_Check(Spi_DataBufferType* snd_data,uint8 snd_length,Spi_DataBufferType rcv_data, uint8 crc_info, Std_ReturnType spi_ret){
-	uint8 i;
-	for(i=0;i<snd_length;i++){
-	    debug_SpiWrite[debug_Spi_W_count].snd_data[i] = snd_data[i]; /* 送信データ */
-	}
-	debug_SpiWrite[debug_Spi_W_count].rcv_data = rcv_data;           /* 受信データ(CRCのみ) */
-	debug_SpiWrite[debug_Spi_W_count].crc_info = crc_info;           /* CRC        */
-	debug_SpiWrite[debug_Spi_W_count].spi_ret  = spi_ret;            /* 戻り値     */
-	debug_Spi_W_count++;
-	if (debug_Spi_W_count >= (uint8)DBGSPI_NUM) {
-		debug_Spi_W_count = (uint8)0;
-	}
-}
-/* SPI読み出し処理 情報取得 */
-static void debugSpi_R_Check(Spi_DataBufferType* snd_data,uint8 snd_length,Spi_DataBufferType* rcv_data, uint8 crc_info, Std_ReturnType spi_ret){
-	uint8 i;
-	for(i=0;i<snd_length;i++){
-	    debug_SpiRead[debug_Spi_R_count].snd_data[i] = snd_data[i]; /* 送信データ */
-	}
-	for(i=0;i<6;i++){
-		debug_SpiRead[debug_Spi_R_count].rcv_data[i] = rcv_data[i]; /* 受信データ */
-	}
-	debug_SpiRead[debug_Spi_R_count].crc_info = crc_info;           /* CRC        */
-	debug_SpiRead[debug_Spi_R_count].spi_ret  = spi_ret;            /* 戻り値     */
-	debug_Spi_R_count++;
-	if (debug_Spi_R_count >= (uint8)DBGSPI_NUM) {
-		debug_Spi_R_count = (uint8)0;
-	}
 
-}
-#endif /* EthswtDebugMode1 */
-/* ★Debug_End---------------------------------------------------------------- */
 void EthSwt_SWIC_Spi_Init(void)
 {
 	swic_SpiS1_Err.tbl	= NULL_PTR;
@@ -147,12 +69,8 @@ void EthSwt_SWIC_Spi_Init(void)
 	swic_SpiS1_Cmd.rcv	= 0u;
 	LIB_memset(swic_SpiS1_Cmd.rea, 0u, sizeof(swic_SpiS1_Cmd.rea));	/* データ部分を0クリアしておく */
 	swic_SpiS1_RegErr	= STD_OFF;
-/* ★Debug_Start-------------------------------------------------------------- */
-#ifdef EthswtDebugMode1
-    debugSpi_init();
-#endif /* EthswtDebugMode1 */
-/* ★Debug_End---------------------------------------------------------------- */
 }
+
 static Std_ReturnType swic_SpiS1_SetTblErr(const swic_reg_data_t tbl[], const uint32 idx, const Std_ReturnType err)
 {
 	swic_SpiS1_Err.tbl	= tbl;
@@ -160,6 +78,7 @@ static Std_ReturnType swic_SpiS1_SetTblErr(const swic_reg_data_t tbl[], const ui
 	swic_SpiS1_Err.err	= err;
 	return E_NOT_OK;
 }
+
 static uint8 swic_SpiS1_Crc8(const uint8 msg[], const uint32 len, const uint8 val)
 {
 	static const uint8	swic_SpiS1_Crc[]
@@ -187,6 +106,7 @@ static uint8 swic_SpiS1_Crc8(const uint8 msg[], const uint32 len, const uint8 va
 	}
 	return ~crc;
 }
+
 void EthSwt_SWIC_Spi_ReqInit(void)
 {
 	swic_SpiS1_Cmd.Paddr= 0u;
@@ -194,6 +114,7 @@ void EthSwt_SWIC_Spi_ReqInit(void)
 	swic_SpiS1_Cmd.wri	= 0u;
 	swic_SpiS1_Cmd.rcv	= 0u;
 }
+
 static Std_ReturnType swic_SpiS1_Req1(const Spi_DataBufferType *const cmd, Spi_DataBufferType *const dat, const Spi_NumberOfDataType len)
 {
 	Std_ReturnType		err;
@@ -205,6 +126,7 @@ static Std_ReturnType swic_SpiS1_Req1(const Spi_DataBufferType *const cmd, Spi_D
 	if (rslt != SPI_SEQ_OK) { return E_NOT_OK; }
 	return E_OK;
 }
+
 Std_ReturnType EthSwt_SWIC_Spi_WriteSPI(const swic_reg_data_t tbl[], const uint32 idx, const uint16 SndData)
 {
 	const uint8		Paddr = tbl[idx].devAddr;
@@ -225,13 +147,9 @@ Std_ReturnType EthSwt_SWIC_Spi_WriteSPI(const swic_reg_data_t tbl[], const uint3
 	if (err == E_OK) {
 		if (swic_SpiS1_Cmd.dat[6] == swic_SpiS1_CrcOK[crc])	{ return err; }
 	}
-/* ★Debug_Start-------------------------------------------------------------- */
-#ifdef EthswtDebugMode1
-    debugSpi_W_Check(&swic_SpiS1_Cmd.cmd[0],7,swic_SpiS1_Cmd.dat[6], swic_SpiS1_CrcOK[crc], err);
-#endif /* EthswtDebugMode1 */
-/* ★Debug_End---------------------------------------------------------------- */
-	return swic_SpiS1_SetTblErr(tbl, idx, err);
+    return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
+
 static uint8 swic_SpiS1_WriteCnt(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
 {
 	const uint8	Paddr = tbl[idx].devAddr;
@@ -248,6 +166,7 @@ static uint8 swic_SpiS1_WriteCnt(const swic_reg_data_t tbl[], const uint32 cnt, 
 	}
 	return wri;
 }
+
 static Std_ReturnType swic_SpiS1_WriteDat(const uint8 Paddr, const uint8 Raddr)
 {
 	uint8	wri;
@@ -257,6 +176,7 @@ static Std_ReturnType swic_SpiS1_WriteDat(const uint8 Paddr, const uint8 Raddr)
 	if (swic_SpiS1_Cmd.wri <= wri)		{ return E_NOT_OK; }
 	return E_OK;
 }
+
 Std_ReturnType EthSwt_SWIC_Spi_Write(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
 {
 	const uint8				Paddr = tbl[idx].devAddr;
@@ -294,13 +214,9 @@ Std_ReturnType EthSwt_SWIC_Spi_Write(const swic_reg_data_t tbl[], const uint32 c
 			return err;
 		}
 	}
-/* ★Debug_Start-------------------------------------------------------------- */
-#ifdef EthswtDebugMode1
-    debugSpi_W_Check(&swic_SpiS1_Cmd.cmd[0],len,swic_SpiS1_Cmd.dat[len], swic_SpiS1_CrcOK[crc], err);
-#endif /* EthswtDebugMode1 */
-/* ★Debug_End---------------------------------------------------------------- */
-	return swic_SpiS1_SetTblErr(tbl, idx, err);
+    return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
+
 Std_ReturnType EthSwt_SWIC_Spi_ReadSPI(const swic_reg_data_t tbl[], const uint32 idx, uint16 *const RcvData)
 {
 	const uint8			Paddr = tbl[idx].devAddr;
@@ -325,13 +241,9 @@ Std_ReturnType EthSwt_SWIC_Spi_ReadSPI(const swic_reg_data_t tbl[], const uint32
 			return err;
 		}
 	}
-/* ★Debug_Start-------------------------------------------------------------- */
-#ifdef EthswtDebugMode1
-    debugSpi_R_Check(&cmd[0],6,&swic_SpiS1_Cmd.dat[0], crc, err);
-#endif /* EthswtDebugMode1 */
-/* ★Debug_End---------------------------------------------------------------- */
-	return swic_SpiS1_SetTblErr(tbl, idx, err);
+    return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
+
 static uint8 swic_SpiS1_ReadCnt(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx)
 {
 	const uint8	Paddr = tbl[idx].devAddr;
@@ -348,6 +260,7 @@ static uint8 swic_SpiS1_ReadCnt(const swic_reg_data_t tbl[], const uint32 cnt, c
 	}
 	return rcv;
 }
+
 static Std_ReturnType swic_Spi_ReadDat(const uint8 Paddr, const uint8 Raddr, uint16 *const RcvData)
 {
 	uint8	rcv;
@@ -365,6 +278,7 @@ static Std_ReturnType swic_Spi_ReadDat(const uint8 Paddr, const uint8 Raddr, uin
 	}
 	return E_OK;
 }
+
 Std_ReturnType EthSwt_SWIC_Spi_Read(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint16 *const RcvData)
 {
 	const uint8		Paddr = tbl[idx].devAddr;
@@ -393,13 +307,9 @@ Std_ReturnType EthSwt_SWIC_Spi_Read(const swic_reg_data_t tbl[], const uint32 cn
 			return err;
 		}
 	}
-/* ★Debug_Start-------------------------------------------------------------- */
-#ifdef EthswtDebugMode1
-    debugSpi_R_Check(&swic_SpiS1_Cmd.rea[0],6,&swic_SpiS1_Cmd.dat[0], crc, err);
-#endif /* EthswtDebugMode1 */
-/* ★Debug_End---------------------------------------------------------------- */
-	return swic_SpiS1_SetTblErr(tbl, idx, err);
+    return swic_SpiS1_SetTblErr(tbl, idx, err);
 }
+
 void EthSwt_SWIC_SpiRegChkNotify(uint32 status)
 {
 	(void)status;
