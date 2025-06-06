@@ -1136,7 +1136,8 @@ void            vd_g_GyroDevEventGo(const U1 u1_a_EVENT)
 
     /* モードとイベントの範囲確認 */
     if((u1_t_mode < (U1)GYRO_MODE_MAX) && (u1_a_EVENT < (U1)GYRO_EVENT_MAX)){
-        fp_t_handler    = fp_sp2_GYRO_EVENT_HANDLER[u1_t_mode][u1_a_EVENT];
+        st_s_gyro_ctrl.u1_event = u1_a_EVENT;
+        fp_t_handler            = fp_sp2_GYRO_EVENT_HANDLER[u1_t_mode][u1_a_EVENT];
 
         if(fp_t_handler != vdp_PTR_NA){
             fp_t_handler();
@@ -1616,6 +1617,7 @@ static void     vd_s_GyroDevSeqStaUp1(void)
         u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_MODE_ON_ACC, st_sp_GYRO_WRISTEP_MODE_ON_ACC,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_MODE_ON, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
+            /*  */
             /* 次のシーケンスへ */
             st_s_gyro_seqmng.u1_step    = (U1)GYRO_SEQ_STAUP1_6;
         }
@@ -1787,6 +1789,9 @@ static void     vd_s_GyroDevSeqStaUp1(void)
         u1_t_sts    = GYRO_I2C_WRITE_GYRO(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_MODE_OFF_GYR, st_sp_GYRO_WRISTEP_MODE_OFF_GYR,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_GYR_MODE_OFF, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
+            /* GyroモードをSuspendに変更する */
+            st_s_gyro_ctrl.u1_dev_mode  = (U1)GYRO_DEV_MODE_SUSPEND;
+
             /* Selt-Test異常エラーカウント クリア */ 
             u1_s_errcnt_l   = (U1)0U;
             u1_s_errcnt_j   = (U1)0U;
@@ -2371,6 +2376,9 @@ static void     vd_s_GyroDevSeqStaUp2(void)
         u1_t_sts    = GYRO_I2C_WRITE_GYRO(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_MODE_ON_GYR, st_sp_GYRO_WRISTEP_MODE_ON_GYR,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_GYR_MODE_ON, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
+            /* GYROモードをNorma1に設定する */
+            st_s_gyro_ctrl.u1_dev_mode  = (U1)GYRO_DEV_MODE_NORMAL;
+
             /* 次のシーケンスへ */
             st_s_gyro_seqmng.u1_step    = (U1)GYRO_SEQ_STAUP2_6;
         }
@@ -2440,6 +2448,8 @@ static void     vd_s_GyroDevSeqGyrShutDn1(void)
         u1_t_sts    = GYRO_I2C_WRITE_GYRO(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_MODE_OFF_GYR, st_sp_GYRO_WRISTEP_MODE_OFF_GYR,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_GYR_MODE_OFF, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
+            /* GYROモードをSuspendに設定する */
+            st_s_gyro_ctrl.u1_dev_mode  = (U1)GYRO_DEV_MODE_NORMAL;
             /* 次のシーケンスへ */
             st_s_gyro_seqmng.u1_step    = (U1)GYRO_SEQ_SHUTDN1_3;
         }
