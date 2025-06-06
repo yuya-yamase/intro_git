@@ -91,6 +91,9 @@ static void vd_s_PwrCtrl_Sip_DioWriteCheck(U4* u4_a_counter , const U1 u1_a_onti
 static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , const U1 u1_a_ontime ,const U1 u1_a_PinID , const Dio_LevelType u1_a_Level);
 static void vd_s_PwrCtrl_Sip_DioFreqAct(U4* u4_a_counter , const U1 u1_a_ontime ,const U1 u1_a_PWM_CH, const U2 u2_a_PERIOD, const U2 u2_a_DUTY);
 
+/* LOW_POWER_ON状態要求 */
+static U1 u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts;
+
 /* ON/OFFシーケンス起動要求 */
 static U1 u1_s_PwrCtrl_Sip_Pwr_Sts;
 
@@ -177,17 +180,17 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void );
 #define vd_s_PwrCtrlSipOnMMOFFREQ()        (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_MM_OFF_REQ_Step1_Tim, (U1)PWRCTRL_SIP_ON_T_MM_OFF_REQ,(U1)PWRCTRL_CFG_PRIVATE_PORT_MM_OFF_REQ, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOnLOWPOWERON2()     (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_LOW_POWER_ON_Step2_Tim, (U1)PWRCTRL_SIP_ON_T_LOW_POWER_ON_HI,(U1)PWRCTRL_CFG_PRIVATE_PORT_LOW_POWER, (Dio_LevelType)MCU_DIO_HIGH))
 #define vd_s_PwrCtrlSipOnVB33SIPFREQ2()    (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_On_VB33_SIP_FREQ_Step2_Tim, (U1)PWRCTRL_SIP_ON_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_DEF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_DEF))
-#define vd_s_PwrCtrlSipOnInitValChkAOSS()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_AOSS_Tim, (U1)PWRCTRL_SIP_ON_T_AOSS,(U1)PWRCTRL_CFG_PRIVATE_PORT_AOSS_SLP_ENTRY_EXIT, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipOnInitChkPOFFCOMP() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_POFF_COMPLETE_N_Init_Tim, (U1)PWRCTRL_SIP_ON_T_POFF_COMPLETE_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_POFF_COMPLETE, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipOnInitValChkAOSS()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_AOSS_Tim, (U1)PWRCTRL_SIP_ON_T_AOSS,(U1)PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipOnInitChkPOFFCOMP() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_POFF_COMPLETE_N_Init_Tim, (U1)PWRCTRL_SIP_ON_T_POFF_COMPLETE_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_POFF_COMPLETE_N, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOnPMPWREN2()        (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Step3_Tim, (U1)PWRCTRL_SIP_ON_T_PM_PWR_EN_N_LO,(U1)PWRCTRL_CFG_PRIVATE_PORT_PM_PWR_EN, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOnPMICFASTPOFF2()   (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_PMIC_FAST_POFF_EN_N_Step3_Tim, (U1)PWRCTRL_SIP_ON_T_PMICFASTPOFF,(U1)PWRCTRL_CFG_PRIVATE_PORT_PMIC_FAST_POFF_EN, (Dio_LevelType)MCU_DIO_HIGH))
 #define vd_s_PwrCtrlSipOnMMSUSPEND()       (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_MM_SUSPEND_REQ_N_Tim, (U1)PWRCTRL_SIP_ON_T_MM_SUSPEND_REQ_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_MM_SUSPEND_REQ, (Dio_LevelType)MCU_DIO_HIGH))
 #define vd_s_PwrCtrlSipOnSTRWAKE()         (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_STR_WAKE_Tim, (U1)PWRCTRL_SIP_ON_T_STR_WAKE,(U1)PWRCTRL_CFG_PRIVATE_PORT_STR_WAKE, (Dio_LevelType)MCU_DIO_HIGH))
-#define vd_s_PwrCtrlSipOnInitChkPSHOLD()   (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Init_Tim, (U1)PWRCTRL_SIP_ON_T_PMA_PS_HOLD_INIT,(U1)PWRCTRL_CFG_PRIVATE_PORT_PMA_PS_HOLD, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipOnValChkPOFFCOMP()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_POFF_COMPLETE_N_Chk_Tim, (U1)PWRCTRL_SIP_ON_T_POFF_COMP_VAL,(U1)PWRCTRL_CFG_PRIVATE_PORT_POFF_COMPLETE, (Dio_LevelType)MCU_DIO_HIGH))
-#define vd_s_PwrCtrlSipOnValChkSOCRSOUT()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_SOC_RESOUT_N_Tim, (U1)PWRCTRL_SIP_ON_T_SOC_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_SOC_RESOUT, (Dio_LevelType)MCU_DIO_HIGH))
-#define vd_s_PwrCtrlSipOnValChkSAILRSOUT() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_N_Tim, (U1)PWRCTRL_SIP_ON_T_SAIL_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_SAIL_RESOUT, (Dio_LevelType)MCU_DIO_HIGH))
-#define vd_s_PwrCtrlSipOnValChkPSHOLD()    (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Chk_Tim, (U1)PWRCTRL_SIP_ON_T_PMA_PS_HOLD_VAL,(U1)PWRCTRL_CFG_PRIVATE_PORT_PMA_PS_HOLD, (Dio_LevelType)MCU_DIO_HIGH))
+#define vd_s_PwrCtrlSipOnInitChkPSHOLD()   (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Init_Tim, (U1)PWRCTRL_SIP_ON_T_PMA_PS_HOLD_INIT,(U1)PWRCTRL_CFG_PRIVATE_KIND_PMA_PS_HOLD, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipOnValChkPOFFCOMP()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_POFF_COMPLETE_N_Chk_Tim, (U1)PWRCTRL_SIP_ON_T_POFF_COMP_VAL,(U1)PWRCTRL_CFG_PRIVATE_KIND_POFF_COMPLETE_N, (Dio_LevelType)MCU_DIO_HIGH))
+#define vd_s_PwrCtrlSipOnValChkSOCRSOUT()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_SOC_RESOUT_N_Tim, (U1)PWRCTRL_SIP_ON_T_SOC_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N, (Dio_LevelType)MCU_DIO_HIGH))
+#define vd_s_PwrCtrlSipOnValChkSAILRSOUT() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_N_Tim, (U1)PWRCTRL_SIP_ON_T_SAIL_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N, (Dio_LevelType)MCU_DIO_HIGH))
+#define vd_s_PwrCtrlSipOnValChkPSHOLD()    (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Chk_Tim, (U1)PWRCTRL_SIP_ON_T_PMA_PS_HOLD_VAL,(U1)PWRCTRL_CFG_PRIVATE_KIND_PMA_PS_HOLD, (Dio_LevelType)MCU_DIO_HIGH))
 #define vd_s_PwrCtrlSipOnPMPWREN3()        (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_On_PM_PWR_EN_N_Step8_Tim, (U1)PWRCTRL_SIP_ON_T_PM_PWR_EN_N_HI_P2,(U1)PWRCTRL_CFG_PRIVATE_PORT_PM_PWR_EN, (Dio_LevelType)MCU_DIO_HIGH))
 /* SIPレジューム制御 */
 #define vd_s_PwrCtrlSipRsmLOWPOWERON()     (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Rsm_LOW_POWER_ON_Tim, (U1)PWRCTRL_SIP_RSM_T_LOW_POWER_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_LOW_POWER, (Dio_LevelType)MCU_DIO_HIGH))
@@ -196,11 +199,11 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void );
 #define vd_s_PwrCtrlSipRsmSTRWAKE()        (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Rsm_STR_WAKE_Tim, (U1)PWRCTRL_SIP_RSM_T_STR_WAKE,(U1)PWRCTRL_CFG_PRIVATE_PORT_STR_WAKE, (Dio_LevelType)MCU_DIO_HIGH))
 /* SIP電源OFF制御 */
 #define vd_s_PwrCtrlSipOffMMOFFREQ1()      (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Off_MM_OFF_REQ_Step1_Tim, (U1)PWRCTRL_SIP_OFF_T_MM_OFF_REQ_HI,(U1)PWRCTRL_CFG_PRIVATE_PORT_MM_OFF_REQ, (Dio_LevelType)MCU_DIO_HIGH))
-#define vd_s_PwrCtrlSipOffValChkMMSTBY()   (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_MM_STBY_N_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_MM_STBY,(U1)MCU_PORT_MM_STBY_N, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipOffValChkPSHOLD()   (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_PMA_PS_HOLD_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_PMA_PS_HOLD,(U1)PWRCTRL_CFG_PRIVATE_PORT_PMA_PS_HOLD, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipOffValChkSOCRSOUT() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_SOC_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_SOC_RESOUT, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipOffValChkSAILROUT() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_SAIL_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_SAIL_RESOUT, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipOffValChkPOFFCOMP() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_POFF_COMPLETE_N,(U1)PWRCTRL_CFG_PRIVATE_PORT_POFF_COMPLETE, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipOffValChkMMSTBY()   (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_MM_STBY_N_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_MM_STBY,(U1)PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipOffValChkPSHOLD()   (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_PMA_PS_HOLD_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_PMA_PS_HOLD,(U1)PWRCTRL_CFG_PRIVATE_KIND_PMA_PS_HOLD, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipOffValChkSOCRSOUT() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_SOC_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_SOC_RESOUT_N, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipOffValChkSAILROUT() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_SAIL_RESOUT_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_SAIL_RESOUT_N, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipOffValChkPOFFCOMP() (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Chk_Tim, (U1)PWRCTRL_SIP_OFF_T_POFF_COMPLETE_N,(U1)PWRCTRL_CFG_PRIVATE_KIND_POFF_COMPLETE_N, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOffVB33SIPFREQ()    (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_Off_VB33_SIP_FREQ_Tim, (U1)PWRCTRL_SIP_OFF_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_OFF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_OFF))
 #define vd_s_PwrCtrlSipOffVB33SIPON()      (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Off_VB33_SIP_ON_Tim, (U1)PWRCTRL_SIP_OFF_T_VB33_SIP_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_VB33_SIP, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipOffLOWPOWERON()     (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Off_LOW_POWER_ON_Tim, (U1)PWRCTRL_SIP_OFF_T_LOW_POWER_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_LOW_POWER, (Dio_LevelType)MCU_DIO_LOW))
@@ -212,8 +215,8 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void );
 /* スタンバイシーケンス */
 #define vd_s_PwrCtrlSipStbyMMSUSPEND()     (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Stby_MM_SUSPEND_REQ_N_Tim, (U1)PWRCTRL_SIP_STBY_T_MM_SUSPEND_REQ,(U1)PWRCTRL_CFG_PRIVATE_PORT_MM_SUSPEND_REQ, (Dio_LevelType)MCU_DIO_LOW))
 #define vd_s_PwrCtrlSipStbySTRWAKE()       (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Stby_STR_WAKE_Tim, (U1)PWRCTRL_SIP_STBY_T_STR_WAKE,(U1)PWRCTRL_CFG_PRIVATE_PORT_STR_WAKE, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipStbyValChkMMSTBY()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Stby_MM_STBY_N_Chk_Tim, (U1)PWRCTRL_SIP_STBY_T_MM_STBY,(U1)MCU_PORT_MM_STBY_N, (Dio_LevelType)MCU_DIO_LOW))
-#define vd_s_PwrCtrlSipStbyValChkAOSS()    (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Stby_AOSS_Tim, (U1)PWRCTRL_SIP_STBY_T_AOSS,(U1)PWRCTRL_CFG_PRIVATE_PORT_AOSS_SLP_ENTRY_EXIT, (Dio_LevelType)MCU_DIO_HIGH))
+#define vd_s_PwrCtrlSipStbyValChkMMSTBY()  (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Stby_MM_STBY_N_Chk_Tim, (U1)PWRCTRL_SIP_STBY_T_MM_STBY,(U1)PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N, (Dio_LevelType)MCU_DIO_LOW))
+#define vd_s_PwrCtrlSipStbyValChkAOSS()    (vd_s_PwrCtrl_Sip_DioReadCheck(&u4_s_PwrCtrl_Sip_Stby_AOSS_Tim, (U1)PWRCTRL_SIP_STBY_T_AOSS,(U1)PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT, (Dio_LevelType)MCU_DIO_HIGH))
 #define vd_s_PwrCtrlSipStbyVB33SIPFREQ()   (vd_s_PwrCtrl_Sip_DioFreqAct(&u4_s_PwrCtrl_Sip_Stby_FREQ_Tim, (U1)PWRCTRL_SIP_STBY_T_VB33_SIP_FREQ,(U1)PWM_CH_01_DDC_SIP_FREQ, (U2)PWRCTRL_SIP_PWM_PERIOD_OFF, (U2)PWRCTRL_SIP_PWM_DUTYCYCLE_OFF))
 #define vd_s_PwrCtrlSipStbyLOWPOWERON()    (vd_s_PwrCtrl_Sip_DioWriteCheck(&u4_s_PwrCtrl_Sip_Stby_LOW_POWER_ON_Tim, (U1)PWRCTRL_SIP_STBY_T_LOW_POWER_ON,(U1)PWRCTRL_CFG_PRIVATE_PORT_LOW_POWER, (Dio_LevelType)MCU_DIO_LOW))
 
@@ -252,6 +255,19 @@ U1 u1_g_PwrCtrlSipGetSts( void )
 }
 
 /*****************************************************************************
+  Function      : u1_g_PwrCtrlSipLowPowerOnInfo
+  Description   : LOW_POWER_ON ステータス通知関数
+  param[in/out] : none
+  return        : FALSE(0)：LOW_POWER_ON Lo
+                  TRUE(1) ：LOW_POWER_ON Hi
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlSipLowPowerOnInfo( void )
+{
+    return(u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts);
+}
+
+/*****************************************************************************
   Function      : vd_g_PwrCtrlSipBonInit
   Description   : 6-8-1,6-8-2,6-9,5-3,SIP起動全体の初期化処理
   param[in/out] : none
@@ -260,6 +276,7 @@ U1 u1_g_PwrCtrlSipGetSts( void )
 *****************************************************************************/
 void vd_g_PwrCtrlSipBonInit( void )
 {
+    u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts                 = (U1)FALSE;
     u1_s_PwrCtrl_Sip_Pwr_Sts                          = (U1)PWRCTRL_SIP_STS_NON;
 
     /* ステップ判定用RAMの初期化 */
@@ -349,6 +366,7 @@ void vd_g_PwrCtrlSipWkupInit( void )
 *****************************************************************************/
 void vd_g_PwrCtrlSipOnReq( void )
 {
+    u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts                 = (U1)FALSE;
     u1_s_PwrCtrl_Sip_Pwr_Sts                          = (U1)PWRCTRL_SIP_STS_PWRON;
 
     /* 現在起動ステップの初期化 */
@@ -392,6 +410,7 @@ void vd_g_PwrCtrlSipOnReq( void )
 *****************************************************************************/
 void vd_g_PwrCtrlSipRsmReq( void )
 {
+    u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts         = (U1)FALSE;
     u1_s_PwrCtrl_Sip_Pwr_Sts                  = (U1)PWRCTRL_SIP_STS_RESUME;
 
     /* 現在起動ステップの初期化 */
@@ -577,6 +596,8 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
         
         /* STEP2-1が完了していれば次の処理に進める */
         if(u4_s_PwrCtrl_Sip_On_LOW_POWER_ON_Step2_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
+            /* LOW-POWER-ON_HIを検知時に端子モニタ開始を設定 */
+            u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)TRUE;
             
             /* LOW-POWER-ON_HIからtVB33-SIP-FREQ_HI経過後にVB33-SIP-FREQ = HI */
             vd_s_PwrCtrlSipOnVB33SIPFREQ2();            /* STEP2-4 */
@@ -743,6 +764,8 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
         
         /* STEP1-1が完了していれば次のSTEPに進める */
         if(u4_s_PwrCtrl_Sip_Rsm_LOW_POWER_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
+            /* LOW-POWER-ON_HIを検知 */
+            u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)TRUE;
             u1_s_PwrCtrl_Sip_Rsm_Step     = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
         }
     }
@@ -887,6 +910,11 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
         vd_s_PwrCtrlSipOffSTRWAKE();         /* STEP6-6 */
         vd_s_PwrCtrlSipOffMMOFFREQ2();       /* STEP6-7 */
     
+        if(u4_s_PwrCtrl_Sip_Off_LOW_POWER_ON_Tim == PWRCTRL_SIP_TIME_INVALID){
+            /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
+            u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
+        }
+
         /* STEP6-1～6-7が完了していれば次のSTEPに進める */
         if((u4_s_PwrCtrl_Sip_Off_VB33_SIP_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) &&
            (u4_s_PwrCtrl_Sip_Off_LOW_POWER_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) &&
@@ -984,6 +1012,8 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
         
         /* STEP5-1が完了していれば次のSTEPに進める */
         if(u4_s_PwrCtrl_Sip_Stby_LOW_POWER_ON_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
+            /* LOW-POWER-ON_LOを検知時に端子モニタ停止を設定 */
+            u1_s_PwrCtrl_Sip_LOW_POWER_ON_Sts = (U1)FALSE;
             u1_s_PwrCtrl_Sip_Stby_Step    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
             u1_s_PwrCtrl_Sip_Pwr_Sts      = (U1)PWRCTRL_SIP_STS_NON;
         }
@@ -1035,7 +1065,7 @@ static void vd_s_PwrCtrl_Sip_DioReadCheck(U4* u4_a_counter , const U1 u1_a_ontim
 
     if(*u4_a_counter != (U4)PWRCTRL_SIP_TIME_INVALID){
         if(*u4_a_counter >= u1_a_ontime){                               /* u1_a_ontime時間が経過したか */
-            u1_t_read_lv = Dio_ReadChannel(Mcu_Dio_PortId[u1_a_PinID]); /* 経過していればDIOのREAD関数をコール */
+            u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(u1_a_PinID); /* DIOのREAD関数をコール */
             if( u1_t_read_lv == u1_a_Level){                            /* READ関数で読みだした結果が期待値と一致するか */
                 *u4_a_counter = (U4)PWRCTRL_SIP_TIME_INVALID;           /* 一致すれば待ち時間の測定結果に完了を通知 */
             }

@@ -50,6 +50,8 @@ void vd_g_PwrCtrlSipMainFunc( void );
 
 /* é¿çsèÛë‘í ímä÷êî */
 U1 u1_g_PwrCtrlSipGetSts( void );
+/* LOW_POWER_ONèÛë‘í ímä÷êî */
+U1 u1_g_PwrCtrlSipLowPowerOnInfo( void );
 
 #endif /* PWRCTRL_SIP_H */
 

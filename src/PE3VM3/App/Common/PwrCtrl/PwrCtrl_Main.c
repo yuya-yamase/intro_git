@@ -70,6 +70,8 @@ static U1  u1_s_PwrCtrl_Main_ShtdwnOkFlag;
 static U1  u1_s_PwrCtrl_Main_BusSleepFlag;
 static U4  u4_s_PwrCtrl_Main_BusSleep_Time;
 
+static U1  u1_s_PwrCtrl_Main_WakeUpFlag;                  /* MCU起動状態    */
+
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
 /*--------------------------------------------------------------------------*/
@@ -89,6 +91,17 @@ U1 u1_g_PwrCtrlMainShtdwnOk( void )
 {
     return( u1_s_PwrCtrl_Main_ShtdwnOkFlag );
 }
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlWakeUpInfo
+  Description   : MCU初期化処理、またはウェイクアップ処理完了状態判定通知処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlWakeUpInfo( void )
+{
+    return( u1_s_PwrCtrl_Main_WakeUpFlag );
+}
 
 /****************************************************************************/
 /* Scheduled Functions                                                      */
@@ -102,6 +115,11 @@ U1 u1_g_PwrCtrlMainShtdwnOk( void )
 *****************************************************************************/
 void vd_g_PwrCtrlMainBonReq( void )
 {
+    /* 端子モニタ制御初期化処理 */
+    vd_g_PwrCtrlPinMonitorInit();
+    /* MCUの起動完了フラグをONに設定 */
+    u1_s_PwrCtrl_Main_WakeUpFlag =(U1)TRUE;
+    
     vd_s_PwrCtrlMainStartSet();
     /* SYS電源制御 初期化処理 */
     vd_g_PwrCtrlSysInit();
@@ -130,6 +148,11 @@ void vd_g_PwrCtrlMainBonReq( void )
 *****************************************************************************/
 void vd_g_PwrCtrlMainWakeupReq( void )
 {
+    /* 端子モニタ制御初期化処理 */
+    vd_g_PwrCtrlPinMonitorInit();
+    /* MCUの起動完了フラグをONに設定 */
+    u1_s_PwrCtrl_Main_WakeUpFlag =(U1)TRUE;
+
     vd_s_PwrCtrlMainStartSet();
     /* SYS電源制御 初期化処理 */
     vd_g_PwrCtrlSysInit();
@@ -200,6 +223,9 @@ void vd_g_PwrCtrlMainStandbyReq( void )
 *****************************************************************************/
 void vd_g_PwrCtrlMainTask( void )
 {
+    /* 端子モニタ定期処理 */
+    vd_g_PwrCtrlPinMonitorMainFunc();
+    
     /* 終了シーケンス開始要否の判定 */
     vd_s_PwrCtrlMainSleepJudge();
 
@@ -263,7 +289,7 @@ static void vd_s_PwrCtrlMainSleepJudge( void )
     if ( u4_s_PwrCtrl_Main_BusSleep_Time == (U4)PWRCTRL_MAIN_BUSSLEEPTIME ) /* CANスリープが60sec間継続 */
     {
         /* BOOT入力値取得処理 */
-        u1_t_boot = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_BOOT]);
+        u1_t_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BOOT);
 
         if ( u1_t_boot == (U1)STD_LOW )                                     /* BOOT=Loを検知 */
         {
@@ -345,7 +371,7 @@ static void vd_s_PwrCtrlMainBonSeq( void )
 /* MM_STBY_N =Hi?(SOCメインドメインのQNX起動完了の確認) */
     if ( u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY )
     {
-        u1_t_read_lv = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);    /* MM_STBY_N端子の状態を取得 */
+        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N); /* MM_STBY_N端子の状態を取得 */
         if ( u1_t_read_lv == (U1)MCU_DIO_HIGH )
         {
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_COMP;       /* SIP電源状態：MM_STBY_N=Hi判定中→完了 */
@@ -401,7 +427,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
         if ( u1_t_syson_seq == (U1)TRUE )                                                                 /* 処理完了 */
         {
 /* AOSS_SLEEP_ENTRY_EXIT＝Hi？(SIPがサスペンド状態であることを確認※1度のみ実施) */
-            u1_t_read_lv = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_AOSS_SLP_ENTRY_EXIT]); /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
+            u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT); /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
             if(u1_t_read_lv == (U1)MCU_DIO_HIGH)
             {
                 u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_COMP;                              /* SYS電源状態：実行中→完了 */
@@ -433,7 +459,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 /* AOSS_SLEEP_ENTRY_EXIT=Lo?(PMICからのSIP電源レジューム完了確認) */
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_AOSS)
     {
-        u1_t_read_lv = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_AOSS_SLP_ENTRY_EXIT]);     /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
+        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT);   /* AOSS_SLEEP_ENTRY_EXIT端子の状態を取得    */
         if(u1_t_read_lv == (U1)MCU_DIO_LOW)
         {
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY;                            /* SIP電源状態：AOSS_SLEEP_ENTRY_EXIT=Low判定中→MM_STBY_N=Hi判定中 */
@@ -458,7 +484,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 /* MM_STBY_N =Hi?(SOCメインドメインのQNX起動完了の確認) */
     if (u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY)
     {
-        u1_t_read_lv = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);                               /* MM_STBY_N端子の状態を取得 */
+        u1_t_read_lv = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_MM_STBY_N);             /* MM_STBY_N端子の状態を取得 */
         if(u1_t_read_lv == (U1)MCU_DIO_HIGH)
         {
             u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_COMP;                                  /* SIP電源状態：MM_STBY_N=Hi判定中→完了 */
@@ -557,6 +583,9 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
     {
         u1_s_PwrCtrl_Main_Sts          = (U1)PWRCTRL_MAIN_NO_REQ;            /* 処理完了 */
         u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_ON;      /* 暫定 */
+        /* MCUの起動完了フラグをOFFに設定 */
+        u1_s_PwrCtrl_Main_WakeUpFlag   = (U1)FALSE;
+
         
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_NON;      /* 異常系エラーなし */
@@ -634,6 +663,9 @@ static void vd_s_PwrCtrlMainStandbySeq( void )
      {
         u1_s_PwrCtrl_Main_Sts          = (U1)PWRCTRL_MAIN_NO_REQ;            /* 処理完了 */
         u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_ON;      /* 暫定 */
+        /* MCUの起動完了フラグをOFFに設定 */
+        u1_s_PwrCtrl_Main_WakeUpFlag = (U1)FALSE;
+
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
         u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_NON;      /* 異常系エラーなし */
 #endif 

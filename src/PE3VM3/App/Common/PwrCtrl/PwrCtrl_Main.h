@@ -30,6 +30,7 @@ void vd_g_PwrCtrlMainStandbyReq( void );
 void vd_g_PwrCtrlMainTask( void );
 
 U1 u1_g_PwrCtrlMainShtdwnOk( void );
+U1 u1_g_PwrCtrlWakeUpInfo( void );
 
 #endif /* PWRCTRL_MAIN_H */
 
