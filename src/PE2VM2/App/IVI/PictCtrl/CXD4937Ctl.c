@@ -56,6 +56,7 @@
 #define GVIFSNDR_CYCCHK_STEP28              (28U)
 
 #define CXD4937_BANKSET_WRINUM              (1U)
+#define CXD4937_GVIFSNDRHDCPSTOP_WRINUM     (4U)
 #define CXD4957_GVIFSNDRERRCLEAR_SET_WRINUM (1U)
 #define CXD4937_GVIFSNDREDPERR_SET1_WRINUM  (2U)
 #define CXD4937_GVIFSNDREDPERR_SET2_WRINUM  (1U)
@@ -117,6 +118,19 @@ static void vd_s_Pict_GvifSndrGvifLinkChk(void);
 static const ST_REG_WRI_REQ CXD4937_BANKSET[CXD4937_BANKSET_WRINUM] = {
     /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
     {        0,         1,         0}
+};
+
+static const ST_REG_WRI_REQ CXD4937_BANKSET_WAIT_7MS[CXD4937_BANKSET_WRINUM] = {
+    /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    {        0,         1,         7 / GVIFSENDER_TASK_TIME}        /* 7ms wait */
+};
+
+static const ST_REG_WRI_REQ CXD4937_GVIFSNDRHDCPSTOP[CXD4937_GVIFSNDRHDCPSTOP_WRINUM] = {
+    /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+    {        0,         1,         7 / GVIFSENDER_TASK_TIME},       /* 7ms wait */
+    {        1,         1,         7 / GVIFSENDER_TASK_TIME},       /* 7ms wait */
+    {        2,         1,         20 / GVIFSENDER_TASK_TIME},      /* 20ms wait */
+    {        3,         1,         7 / GVIFSENDER_TASK_TIME}        /* 7ms wait */
 };
 
 static const ST_REG_WRI_REQ CXD4957_GVIFSNDRERRCLEAR_SET[CXD4957_GVIFSNDRERRCLEAR_SET_WRINUM] = {
@@ -309,6 +323,30 @@ U1 u1_sp_CXD4937_GVIFSNDREDPERR3_2_RD_PDU2[CXD4937_I2C_RWC_BYTE2];
 const U1 u1_sp_CXD4937_GVIFSNDREDPERR3_3_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
     (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
     (U1)0x45U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDRHDCPSTOP_SET_PDU1[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0xFFU,    /* Write Address */
+    (U1)0x08U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDRHDCPSTOP_SET_PDU2[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x15U,    /* Write Address */
+    (U1)0x83U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDRHDCPSTOP_SET_PDU3[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x12U,    /* Write Address */
+    (U1)0x11U     /* Write Data */
+};
+
+const U1 u1_sp_CXD4937_GVIFSNDRHDCPSTOP_SET_PDU4[CXD4937_I2C_RWC_BYTE3] = {
+    (U1)CXD4937_I2C_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x12U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
 
@@ -514,6 +552,25 @@ const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDREDPERR3_3_TBL[1] = {
     }
 };
 
+const ST_GP_I2C_MA_REQ st_sp_CXD4937_GVIFSNDRHDCPSTOP_TBL[4] = {
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDRHDCPSTOP_SET_PDU1[0],
+        (U4)0x30980003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDRHDCPSTOP_SET_PDU2[0],
+        (U4)0x309C0003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDRHDCPSTOP_SET_PDU3[0],
+        (U4)0x30A00003U
+    },
+    {
+        (U1 *)&u1_sp_CXD4937_GVIFSNDRHDCPSTOP_SET_PDU4[0],
+        (U4)0x30A40003U
+    }
+};
+
 /*===================================================================================================================================*/
 /*  void    vd_g_Pict_GvifSndrInit(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -700,7 +757,7 @@ static void vd_s_Pict_GvifSndrCycChk(void)
             break;
         case GVIFSNDR_CYCCHK_STEP3:                                         /* STEP3 */
             u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRDEVERR_RD_TBL[1].u1p_pdu[1];
-            if(u1_t_reg_read_result != (U1)PICT_GVIFSNDRDEVERR_NML ){                   /* Device Error */
+            if(u1_t_reg_read_result != (U1)PICT_GVIFSNDRDEVERR_NML){                   /* Device Error */
                 /* State Update */
                 u1_s_gvifsnd_state = (U1)GVIFSENDER_SEQ_DEVRST;
                 /* Device Restart */
@@ -712,33 +769,39 @@ static void vd_s_Pict_GvifSndrCycChk(void)
                 /* Next Process */
                 u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP4;
             }
+            break;
         case GVIFSNDR_CYCCHK_STEP4:                                         /* STEP4 */
         /* ----------100-4-7 定期監視制御 GVIF3リンク切れ検知---------- */
             /* Read Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGREAD(&u2_s_gvifsnd_regstep, &u4_s_gvifsnd_i2c_ack_wait_time,
                                                            st_sp_CXD4957_GVIFSNDRLINKERR_RD_TBL, &u2_s_gvifsnd_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
-                /* Next Process */
-                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP5;
+                u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRLINKERR_RD_TBL[1].u1p_pdu[1];
+                u1_t_reg_read_result &= (U1)PICT_CXD_REG_MASK_BIT_7;                        /* Get Link Error Result */
+                if(u1_t_reg_read_result == (U1)PICT_GVIFSNDRGVIFLINK_NML){                  /* Link Normal */
+                    /* Next Process */
+                    u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP8;
+                }
+                else{
+                    /* Next Process */                                                      /* Link Error */
+                    u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP5;
+                }
             }
             break;
         case GVIFSNDR_CYCCHK_STEP5:                                         /* STEP5 */
-            u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRLINKERR_RD_TBL[1].u1p_pdu[1];
-            u1_t_reg_read_result = u1_t_reg_read_result & (U1)PICT_CXD_REG_MASK_BIT_7;      /* Get Link Error Result */
-            if(u1_t_reg_read_result != (U1)PICT_GVIFSNDRGVIFLINK_NML){                  /* Link Error */
-                /* HDCP認証停止関数 */ /* 暫定 シス検未対応 */
+            /* Set Register */
+            u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_GVIFSNDRHDCPSTOP_WRINUM,
+                                                           CXD4937_GVIFSNDRHDCPSTOP, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           st_sp_CXD4937_GVIFSNDRHDCPSTOP_TBL, &u2_s_gvifsnd_reg_btwn_time);
+            if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
                 u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP6;
-            }
-            else{
-                /* Next Process */
-                u1_s_gvifsnd_cycchk_sts = (U1)GVIFSNDR_CYCCHK_STEP8;
             }
             break;
         case GVIFSNDR_CYCCHK_STEP6:                                         /* STEP6 */
             /* Set Register */
             u1_t_reg_req_sts = u1_PICT_CXD_I2C_CTRL_REGSET(&u2_s_gvifsnd_regstep, (U2)CXD4937_BANKSET_WRINUM,
-                                                           CXD4937_BANKSET, &u4_s_gvifsnd_i2c_ack_wait_time,
+                                                           CXD4937_BANKSET_WAIT_7MS, &u4_s_gvifsnd_i2c_ack_wait_time,
                                                            st_sp_CXD4957_GVIFSNDRBANK0_TBL, &u2_s_gvifsnd_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 /* Next Process */
@@ -1096,9 +1159,10 @@ static void vd_s_Pict_GvifSndrGvifLinkChk(void)
                                                            CXD4957_GVIFSNDRERRCLEAR_SET, &u4_s_gvifsnd_i2c_ack_wait_time,
                                                            st_sp_CXD4957_GVIFSNDRERRCLEAR_TBL, &u2_s_gvifsnd_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
-                /* HDCP認証フロー */ /* 暫定 シス検未対応 */
+                /* Return to HDCP Authentication Flow */
+                vd_g_Gvif3txSeqCtl(MCU_STEP_GVIF3TX_OVERALL_4);
                 /* State Reset */
-                u1_s_gvifsnd_state = (U1)GVIFSENDER_SEQ_CYC;
+                u1_s_gvifsnd_state = (U1)GVIFSENDER_SEQ_IDLE;
                 /* Process Reset */
                 u1_s_gvifsnd_linkchk_sts = (U1)GVIFSNDR_CYCCHK_STEP0;
             }
