@@ -5,29 +5,15 @@
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_Spi.h"
 #include "EthSwt_SWIC_STM.h"
+#include "EthSwt_SWIC_Time.h"
 #include <EthSwt_SWIC_Define.h>
-/* -------------------------------------------------------------------------- */
-volatile static uint16			timer;
-
+#include <LIB.h>
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetTblWriteOFF(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const uint32 idx, const uint16 mask, const uint16 value, uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint32 * const dat, uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetTblWriteMask(const swic_reg_data_t tbl[], const uint32 idx, uint16 val, uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetTblReadMask(const swic_reg_data_t tbl[], const uint32 idx, uint16 *const val, uint32 * const errFactor);
-/* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Reg_Init (void)
-{
-	timer = 0;
-
-	return;
-}
-/* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Reg_HiProc (void)
-{
-	timer = timer + D_ETHSWT_SWIC_PERIOD;
-	return;
-}
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 cnt, uint32 * const dat, uint32 * const errFactor)
 {
@@ -99,8 +85,13 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 	uint16			val = 0u;
 	uint32			i;
 	uint16			cnt = 0u;
-	const uint16	getTime = timer;
+	uint16			startTime;
+	uint16			endTime;
 	Std_ReturnType	checkPwr;
+
+	LIB_DI();
+	startTime = EthSwt_SWIC_Time_Get();
+	LIB_EI();
 
 	for (i = 0uL ; i < SWIC_REG_WAIT_L ; i++) {				/* ★ループガードについて要検討 */
 		uint16	tmo;
@@ -122,7 +113,10 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 				break;
 			}
 		}
-		tmo = timer - getTime;
+
+		LIB_DI();
+		endTime = EthSwt_SWIC_Time_Get();
+		tmo = endTime - startTime;
 		if (tmo > SWIC_REG_WAIT) {
 			*errFactor = D_ETHSWT_SWIC_REG_FACT_BSY;
 			 break;

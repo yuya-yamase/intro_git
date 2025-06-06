@@ -15,18 +15,11 @@ void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 	(void)CfgPtr;
 	EthSwt_SWIC_PWR_Init();
 	EthSwt_SWIC_STM_Init();
-	EthSwt_SWIC_Spi_Init();
-	EthSwt_SWIC_Reg_Init();
-	EthSwt_SWIC_Link_Init();
-	EthSwt_SWIC_Port_Init();
-
 	return;
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_HiProc(void)
 {
-	EthSwt_SWIC_Reg_HiProc();		/* Time‚Æ‚µ‚Ä‚Ü‚Æ‚ß‚é‚Ù‚¤‚ª‚æ‚¢‚©‚à */
-	EthSwt_SWIC_Link_HiProc();		/* Time‚Æ‚µ‚Ä‚Ü‚Æ‚ß‚é‚Ù‚¤‚ª‚æ‚¢‚©‚à */
 	EthSwt_SWIC_STM_HiProc();	
 	return;	
 }

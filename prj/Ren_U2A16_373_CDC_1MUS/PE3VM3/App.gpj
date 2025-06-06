@@ -9,7 +9,6 @@
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/Core
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/Core_Cfg
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/Custom
-    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Custom_Cfg
     :sourceDir=${APP_DIR}/Central/esw/EthSW_Task
     :sourceDir=${APP_DIR}/Central/esw/EthDLC
     :sourceDir=${APP_DIR}/Central/LIB
@@ -39,7 +38,6 @@
     -I${APP_DIR}/Central/esw/EthSwt/Core
     -I${APP_DIR}/Central/esw/EthSwt/Core_Cfg
     -I${APP_DIR}/Central/esw/EthSwt/Custom
-    -I${APP_DIR}/Central/esw/EthSwt/Custom_Cfg
     -I${APP_DIR}/Central/esw/EthDLC
     -I${APP_DIR}/Central/esw/inc
     -I${APP_DIR}/Central/inc
@@ -71,6 +69,8 @@ EthSwt_SWIC_Reg.c
 EthSwt_SWIC_Spi.c
 EthSwt_SWIC_Link.c
 EthSwt_SWIC_Port.c
+EthSwt_SWIC_Data.c
+EthSwt_SWIC_Time.c
 EthSwt_StubDriver.c
 EthDLC_ctrl.c
 EthDLC_ACTL.c

@@ -54,8 +54,14 @@ static uint32 ethswt_swic_stm_act_none (void);
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_STM_Init (void)
 {
+    uint8 idx;
+
     G_SWIC_Status = D_ETHSWT_SWIC_ST_UNINIT;
 
+    for(idx = 0; idx < D_ETHSWT_SWIC_INIT_FUNC_NUM; idx++) {
+        G_ETHSWT_SWIC_INIT_FUNC_LIST[idx]();
+    }
+    
     return;
 }
 /* -------------------------------------------------------------------------- */

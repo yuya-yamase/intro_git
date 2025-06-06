@@ -11,9 +11,23 @@
 #include <EthSwt_SWIC_Init.h>
 #include <EthSwt_SWIC_Link.h>
 #include <EthSwt_SWIC_Port.h>
+#include <EthSwt_SWIC_Spi.h>
+#include <EthSwt_SWIC_Link.h>
+#include <EthSwt_SWIC_Port.h>
+#include <EthSwt_SWIC_Time.h>
 /* -------------------------------------------------------------------------- */
 
 /* -------------------------------------------------------------------------- */
+typedef void (*EthSwt_InitFunc)(void);
+const EthSwt_InitFunc G_ETHSWT_SWIC_INIT_FUNC_LIST[] = 
+{
+    EthSwt_SWIC_Spi_Init
+,	EthSwt_SWIC_Link_Init
+,	EthSwt_SWIC_Port_Init
+,   EthSwt_SWIC_Time_Init
+};
+#define D_ETHSWT_SWIC_INIT_FUNC_NUM     (sizeof(G_ETHSWT_SWIC_INIT_FUNC_LIST) / sizeof(G_ETHSWT_SWIC_INIT_FUNC_LIST[0]))
+
 typedef void (*EthSwt_HiPorcFunc)(void);
 typedef struct {
     EthSwt_HiPorcFunc           uninitFunc;
@@ -24,10 +38,11 @@ typedef struct {
     EthSwt_HiPorcFunc           setRelayOffFunc;
 } EthSwt_HiProcFuncList;
 const EthSwt_HiProcFuncList G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[] =
-{   /*  UNINT                   , INIT                      , PORT_INIT_COMPLETED       , SET_RELAY_ON              , ACTIVE                        , SET_RELAY_OFF      */
-    {   NULL_PTR                , NULL_PTR                  , NULL_PTR                  , NULL_PTR                  , EthSwt_SWIC_Link_TimerUpdate  , NULL_PTR              }   /* リンク状態取得 */
+{   /*  UNINT                   , INIT                      , PORT_INIT_COMPLETED       , SET_RELAY_ON              , ACTIVE                        , SET_RELAY_OFF             */
+    {   EthSwt_SWIC_Time_HiProc , EthSwt_SWIC_Time_HiProc   , EthSwt_SWIC_Time_HiProc   , EthSwt_SWIC_Time_HiProc   , EthSwt_SWIC_Time_HiProc       , EthSwt_SWIC_Time_HiProc   }   /* タイマ更新 */
+,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                  , NULL_PTR                  , EthSwt_SWIC_Link_TimerUpdate  , NULL_PTR                  }   /* リンク状態取得 */
 };
-#define D_ETHSWT_SWIC_HIPROC_FUNC_NUM       (sizeof(G_ETHSWT_SWIC_HIPROC_FUNC_TABLE) / sizeof(G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[0]))
+#define D_ETHSWT_SWIC_HIPROC_FUNC_NUM   (sizeof(G_ETHSWT_SWIC_HIPROC_FUNC_TABLE) / sizeof(G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[0]))
 
 
 typedef Std_ReturnType (*EthSwt_registerAccessFunc)(uint32 * const);

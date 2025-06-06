@@ -13,7 +13,6 @@ static struct {
     volatile Eth_ModeType       mode_chg;
     volatile uint8              modeChangeRequest;
     volatile uint8              modeChangeIndication;
-
 } swicPort[D_ETHSWT_SWIC_PORT_NUM];
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, uint32 * const errFactor);

@@ -1,10 +1,13 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Core_Cfg.h>
+#include <EthSwt_BSW_define.h>
 #include "EthSwt_SWIC_Link.h"
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_STM.h"
 #include <EthSwt_SWIC_Link_Cfg.h>
+#include <LIB.h>
+#include "EthSwt_SWIC_Time.h"
 /* -------------------------------------------------------------------------- */
 static struct {
     volatile Std_ReturnType             getLinkResult;      /* ãå lnk_err */
@@ -14,8 +17,6 @@ static struct {
     uint16                              linkTime;           /* ãå lnk_tim */
     uint16                              linkTimeout;        /* ãå lnk_tmo */
 } swicLink[D_ETHSWT_SWIC_PORT_NUM];
-
-volatile static uint16                  timer;
 
 static struct {
     sint32                              time;
@@ -30,8 +31,6 @@ static Std_ReturnType swic_Reg_GetLink(const uint8 SwitchPortIdx, EthTrcv_LinkSt
 void EthSwt_SWIC_Link_Init (void)
 {
     uint8   idx;
-
-    timer                   = 0;
 
     for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
         swicLink[idx].getLinkResult         = E_NOT_OK;
@@ -50,19 +49,15 @@ void EthSwt_SWIC_Link_Init (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Link_HiProc (void)
-{
-    timer = timer + D_ETHSWT_SWIC_PERIOD;
-	return;
-}
-/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Link_Clear (void)
 {
     uint8   idx;
     for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
         swicLink[idx].getLinkResult = E_NOT_OK;
         if (swicLink[idx].linkCheck == STD_ON) {
-            swicLink[idx].linkTime = timer;
+            LIB_DI();
+            swicLink[idx].linkTime = EthSwt_SWIC_Time_Get();
+            LIB_EI();
         }
     }
     swicGetLinkTimer.time   = 0;
@@ -113,10 +108,14 @@ Std_ReturnType EthSwt_SWIC_Link_FastGet (uint32 * const errFactor)
     Std_ReturnType ret = E_OK;
     uint8 idx;
     uint16 timeout;
+    uint16 time;
 
     for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
         if (swicLink[idx].linkCheck != STD_ON) { continue; }
-        timeout = timer - swicLink[idx].linkTime;
+        LIB_DI();
+        time = EthSwt_SWIC_Time_Get();
+        LIB_EI();
+        timeout = time - swicLink[idx].linkTime;
         if (timeout > swicLink[idx].linkTimeout) {
             swicLink[idx].linkCheck = STD_OFF;
         }
@@ -146,11 +145,12 @@ Std_ReturnType EthSwt_SWIC_Link_GetLinkState(const uint8 SwitchPortIdx, EthTrcv_
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_link_Set(const uint8 SwitchPortIdx, const EthTrcv_LinkStateType LinkState, const uint16 tmo)
 {
-    /* ÅöMODE_DOWNéûÇ‡åƒÇŒÇÍÇÈÇÕÇ∏ */
     if (SwitchPortIdx < D_ETHSWT_SWIC_PORT_NUM) {
         swicLink[SwitchPortIdx].linkCheck = STD_ON;
         swicLink[SwitchPortIdx].expectedLinkStatus = LinkState;
-        swicLink[SwitchPortIdx].linkTime = timer;
+        LIB_DI();
+        swicLink[SwitchPortIdx].linkTime = EthSwt_SWIC_Time_Get();
+        LIB_EI();
         swicLink[SwitchPortIdx].linkTimeout = tmo;
     }
 
