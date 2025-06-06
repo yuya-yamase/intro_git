@@ -11,6 +11,9 @@
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/Custom
     :sourceDir=${APP_DIR}/Central/esw/EthSW_Task
     :sourceDir=${APP_DIR}/Central/esw/EthDLC
+    :sourceDir=${APP_DIR}/Central/esw/EthDLC/Config
+    :sourceDir=${APP_DIR}/Central/esw/EthDLC/Core
+    :sourceDir=${APP_DIR}/Central/esw/EthDLC/Custom
     :sourceDir=${APP_DIR}/Central/LIB
     :sourceDir=${APP_DIR}/Central/Pmic/src
 
@@ -39,6 +42,9 @@
     -I${APP_DIR}/Central/esw/EthSwt/Core_Cfg
     -I${APP_DIR}/Central/esw/EthSwt/Custom
     -I${APP_DIR}/Central/esw/EthDLC
+    -I${APP_DIR}/Central/esw/EthDLC/Config
+    -I${APP_DIR}/Central/esw/EthDLC/Core
+    -I${APP_DIR}/Central/esw/EthDLC/Custom
     -I${APP_DIR}/Central/esw/inc
     -I${APP_DIR}/Central/inc
 
@@ -72,9 +78,12 @@ EthSwt_SWIC_Port.c
 EthSwt_Data.c
 EthSwt_SWIC_Time.c
 EthSwt_StubDriver.c
-EthDLC_ctrl.c
+EthDLC.c
 EthDLC_ACTL.c
-EthDLC_DLC.c
+EthDLC_STM.c
+EthDLC_Indicator.c
+EthDLC_PortState.c
+EthDLC_PowerState.c
 LIB_interrupt.c
 LIB_memset.c
 Pmic_Pwr.c
