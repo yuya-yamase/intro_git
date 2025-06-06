@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/* file name  :  EthSwt_SWIC_PWR.c                                            */
+/* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Core_Cfg.h>
@@ -96,9 +99,9 @@ void EthSwt_SWIC_PWR_ResetReq(void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-uint8 EthSwt_SWIC_PWR_GetSWICPower(void)
+Std_ReturnType EthSwt_SWIC_PWR_GetSWICPower(void)
 {
-    uint8 state = STD_OFF;
+    Std_ReturnType state = STD_OFF;
 
     if (G_SWIC_PWR_Status == D_ETHSWT_SWIC_PWR_ST_ON && G_SWIC_PWR_ResetReq == STD_OFF)
     {

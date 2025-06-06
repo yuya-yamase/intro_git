@@ -1,12 +1,12 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_Link.h                                          */
+/* file name  :  EthSwt_SWIC_Link.h                                           */
 /* -------------------------------------------------------------------------- */
 #ifndef ETHSWT_SWIC_LINK_H
 #define ETHSWT_SWIC_LINK_H
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_BSW_define.h>
+#include <EthSwt_SWIC_Core_Cfg.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Link_Init (void);
 void EthSwt_SWIC_Link_HiProc (void);

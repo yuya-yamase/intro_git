@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_PWR.h                                          */
+/* file name  :  EthSwt_SWIC_PWR.h                                            */
 /* -------------------------------------------------------------------------- */
 #ifndef ETHSWT_SWIC_PWR_H
 #define ETHSWT_SWIC_PWR_H
@@ -11,8 +11,7 @@ void EthSwt_SWIC_PWR_LoProc(void);
 void EthSwt_SWIC_PWR_PowerOnReq(void);
 void EthSwt_SWIC_PWR_PowerOffReq(void);
 void EthSwt_SWIC_PWR_ResetReq(void);
-uint8 EthSwt_SWIC_PWR_GetSWICPower(void);
-
+Std_ReturnType EthSwt_SWIC_PWR_GetSWICPower(void);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_PWR_H */
 /* -------------------------------------------------------------------------- */

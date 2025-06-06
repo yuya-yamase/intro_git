@@ -69,7 +69,7 @@ EthSwt_SWIC_Reg.c
 EthSwt_SWIC_Spi.c
 EthSwt_SWIC_Link.c
 EthSwt_SWIC_Port.c
-EthSwt_SWIC_Data.c
+EthSwt_Data.c
 EthSwt_SWIC_Time.c
 EthSwt_StubDriver.c
 EthDLC_ctrl.c

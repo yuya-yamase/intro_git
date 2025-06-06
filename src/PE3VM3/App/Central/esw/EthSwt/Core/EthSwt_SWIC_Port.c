@@ -1,9 +1,11 @@
+/* -------------------------------------------------------------------------- */
+/* file name  :  EthSwt_SWIC_Port.c                                           */
+/* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
+#include <EthSwt_SWIC_Core_Cfg.h>
 #include <LIB.h>
 #include <EthSwt_SWIC_Port_Cfg.h>
-#include <EthSwt_BSW_define.h>
-#include <EthSwt_SWIC_Core_Cfg.h>
 #include "EthSwt_SWIC_Port.h"
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_Define.h"

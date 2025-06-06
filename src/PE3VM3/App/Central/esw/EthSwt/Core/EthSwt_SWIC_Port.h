@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_Port.h                                         */
+/* file name  :  EthSwt_SWIC_Port.h                                           */
 /* -------------------------------------------------------------------------- */
 #ifndef ETHSWT_SWIC_PORT_H
 #define ETHSWT_SWIC_PORT_H
@@ -7,7 +7,7 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegCommon.h>
-#include <EthSwt_BSW_define.h>
+#include <EthSwt_SWIC_Core_Cfg.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Port_Init (void);
 Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 *errFactor);

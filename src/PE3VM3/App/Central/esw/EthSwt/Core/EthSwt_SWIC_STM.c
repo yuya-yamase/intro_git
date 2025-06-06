@@ -1,8 +1,10 @@
+/* -------------------------------------------------------------------------- */
+/* file name  :  EthSwt_SWIC_STM.c                                            */
+/* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Core_Cfg.h>
 #include <EthSwt_SWIC_STM_Cfg.h>
-#include <EthSwt_BSW_define.h>
 #include "EthSwt_SWIC_STM.h"
 #include "EthSwt_SWIC_PWR.h"
 #include "EthSwt_SWIC_Init.h"

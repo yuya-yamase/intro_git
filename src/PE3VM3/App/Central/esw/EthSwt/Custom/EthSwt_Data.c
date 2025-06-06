@@ -1,30 +1,13 @@
+/* -------------------------------------------------------------------------- */
+/* file name  :  EthSwt_Data.c                                                */
+/* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include "EthSwt_Data.h"
-#include <EthSwt_BSW_define.h>
+#include <EthSwt_SWIC_Core_Cfg.h>
 #include <EthSwt_SWIC.h>
+#include <LIB.h>
 /* -------------------------------------------------------------------------- */
-#define D_ETHSWT_DATA_USE_PORT_NUM          (6U)
-/* -------------------------------------------------------------------------- */
-typedef struct {
-    Eth_ModeType            portMode;
-    uint8                   indMode;
-    EthTrcv_LinkStateType   linkStatus;
-    Std_ReturnType          linkGetResult;
-    uint8                   frameDiscardFactor[5];
-    uint32                  ingressDiscardNum;
-    uint32                  egressDiscardNum;
-    uint8                   tcamInfo[4];
-    uint8                   flowMeterInfo[4];
-    uint8                   sqiValue;
-    uint8                   sqiGetResult;
-} S_ETHSWT_DATA_FOR_PORT;
-
-typedef struct {
-    EthSwt_StateType        ethswtStatus;
-    S_ETHSWT_DATA_FOR_PORT  portData[D_ETHSWT_DATA_USE_PORT_NUM];
-} S_ETHSWT_DATA_CHIPCOM;
-
 typedef struct {
     uint8                   dataIdx;    /* S_ETHSWT_DATA_FOR_PORTÇÃIdx */
     uint8                   portIdx;    /* EthSwtÇ≈éùÇ¡ÇƒÇ¢ÇÈIdx        */
@@ -45,7 +28,7 @@ static void ethswt_data_get_linkStatus(void);
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void)
 {
-    // LIB_memset(((uint8*)&G_ETHSWT_DATA, 0, sizeof(G_ETHSWT_DATA)));
+    LIB_memset((uint8*)&G_ETHSWT_DATA, 0, sizeof(G_ETHSWT_DATA));
 
     return;
 }

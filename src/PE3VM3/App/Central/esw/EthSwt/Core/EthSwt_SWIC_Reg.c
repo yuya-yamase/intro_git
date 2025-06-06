@@ -1,3 +1,6 @@
+/* -------------------------------------------------------------------------- */
+/* file name  :  EthSwt_SWIC_Reg.c                                            */
+/* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegCommon.h>
@@ -116,6 +119,7 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 
 		LIB_DI();
 		endTime = EthSwt_SWIC_Time_Get();
+		LIB_EI();
 		tmo = endTime - startTime;
 		if (tmo > SWIC_REG_WAIT) {
 			*errFactor = D_ETHSWT_SWIC_REG_FACT_BSY;

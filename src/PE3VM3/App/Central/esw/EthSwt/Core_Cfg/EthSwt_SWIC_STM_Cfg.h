@@ -16,8 +16,6 @@
 #include <EthSwt_SWIC_Port.h>
 #include <EthSwt_SWIC_Time.h>
 /* -------------------------------------------------------------------------- */
-
-/* -------------------------------------------------------------------------- */
 typedef void (*EthSwt_InitFunc)(void);
 const EthSwt_InitFunc G_ETHSWT_SWIC_INIT_FUNC_LIST[] = 
 {

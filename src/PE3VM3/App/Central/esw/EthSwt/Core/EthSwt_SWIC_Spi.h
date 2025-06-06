@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_Spi.h                                          */
+/* file name  :  EthSwt_SWIC_Spi.h                                            */
 /* -------------------------------------------------------------------------- */
 #ifndef ETHSWT_SWIC_SPI_H
 #define ETHSWT_SWIC_SPI_H

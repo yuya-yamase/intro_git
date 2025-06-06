@@ -1,7 +1,9 @@
+/* -------------------------------------------------------------------------- */
+/* file name  :  EthSwt_SWIC_Link.c                                           */
+/* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Core_Cfg.h>
-#include <EthSwt_BSW_define.h>
 #include "EthSwt_SWIC_Link.h"
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_STM.h"

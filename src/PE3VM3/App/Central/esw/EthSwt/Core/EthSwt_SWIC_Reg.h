@@ -1,5 +1,5 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_Reg.h                                          */
+/* file name  :  EthSwt_SWIC_Reg.h                                            */
 /* -------------------------------------------------------------------------- */
 #ifndef ETHSWT_SWIC_REG_H
 #define ETHSWT_SWIC_REG_H
