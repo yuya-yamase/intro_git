@@ -62,4 +62,13 @@
 #define XSPI_DATA_CHECK_SUM		(2)
 #define XSPI_DATA_CHECK			(XSPI_DATA_CHECK_SUM)		/* データチェックあり（全領域チェックサム） */
 
+/*----------------------------------------------*/
+/*	通信周期（ms）								*/
+/*	5ms：XSPI_COMM_CYCLE_5ms					*/
+/*	10ms：XSPI_COMM_CYCLE_10ms					*/
+/*----------------------------------------------*/
+#define XSPI_COMM_CYCLE_10ms	(0)
+#define XSPI_COMM_CYCLE_5ms		(1)
+#define XSPI_COMM_CYCLE			(XSPI_COMM_CYCLE_10ms)		/* 通信周期：10ms */
+
 #endif	/* XSPICFG_H */

@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -185,7 +184,9 @@ static U4      u4_s_AlertD_4wdsysTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_4WDSYS_LSB_FWD1S90);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_4WD, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_D_4WDSYS_LSB_B_4WD);
 
     return(u4_t_src_chk);
@@ -211,7 +212,9 @@ static U4      u4_s_AlertD_4wdsysPdB4Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_4WDSYS_LSB_FWD1S90);
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_4WD, &u1_t_sgnl);
+#endif
     u4_t_src_chk |= ((U4)u1_t_sgnl);
 
     return(u4_t_src_chk);

@@ -21,7 +21,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -87,7 +86,7 @@ U1      u1_g_DrvIndPwrCfgComRxPMEVCR(S2 * const s2p_a_pct)
 #if ((defined(DRVIND_PWR_PMEVCR)) && (DRVIND_PWR_PMEVCR == 1))
     U1                  u1_t_sts;                                               /* Receiving Status                                  */
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PMEVCR_2, s2p_a_pct);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PMEVCR, s2p_a_pct);
     u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV2G02_RXCH0,
                                ((U2)OXCAN_RX_SYS_NRX_IGP |
                                 (U2)OXCAN_RX_SYS_NRX_IGR |
@@ -115,7 +114,7 @@ U1      u1_g_DrvIndPwrCfgComRxPMCHGTH(S1 * const s1p_a_pct)
 #if ((defined(DRVIND_PWR_PMCHGTH)) && (DRVIND_PWR_PMCHGTH == 1))
     U1                  u1_t_sts;                                               /* Receiving Status                                  */
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PMCHGTH_2, s1p_a_pct);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PMCHGTH, s1p_a_pct);
     u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV2G02_RXCH0,
                                ((U2)OXCAN_RX_SYS_NRX_IGP |
                                 (U2)OXCAN_RX_SYS_NRX_IGR |
@@ -140,7 +139,7 @@ U1      u1_g_DrvIndPwrCfgComRxPMPWRTH(U2 * const u2p_a_pct)
 #if ((defined(DRVIND_PWR_PMPWRTH)) && (DRVIND_PWR_PMPWRTH == 1))
     U1                  u1_t_sts;                                               /* Receiving Status                                  */
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PMPWRTH_2, u2p_a_pct);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PMPWRTH, u2p_a_pct);
     u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV2G02_RXCH0,
                                ((U2)OXCAN_RX_SYS_NRX_IGP |
                                 (U2)OXCAN_RX_SYS_NRX_IGR |

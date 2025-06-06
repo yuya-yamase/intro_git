@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -57,8 +56,13 @@
 #define u1_FSPOSNSR_RXMSG_ENG1G17STS(time)       (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G17_RXCH0   , \
                                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR, \
                                                   (time)))
+#if 0   /* BEV BSW provisionally */
 #define vd_FSPOSNSR_RXMSG_B_POM(sgnl)            ((void)Com_ReceiveSignal(ComConf_ComSignal_B_POM_3,  (sgnl)))
 #define vd_FSPOSNSR_RXMSG_B_THOE(sgnl)           ((void)Com_ReceiveSignal(ComConf_ComSignal_B_THOE_3, (sgnl)))
+#else
+#define vd_FSPOSNSR_RXMSG_B_POM(sgnl)            (vdp_PTR_NA)
+#define vd_FSPOSNSR_RXMSG_B_THOE(sgnl)           (vdp_PTR_NA)
+#endif
 
 #define u1_FSPOSNSR_RXMSG_VSC1G12STS()           ((U1)Com_GetIPDUStatus(MSG_VSC1G12_RXCH0))
 #define vd_FSPOSNSR_RXMSG_V_GXHR0(sgnl)          ((void)Com_ReceiveSignal(ComConf_ComSignal_V_GXHR0,  (sgnl)))
@@ -68,7 +72,11 @@
 #define vd_FSPOSNSR_RXMSG_VSC_GXIV(sgnl)         ((void)Com_ReceiveSignal(ComConf_ComSignal_VSC_GXIV, (sgnl)))
 #define vd_FSPOSNSR_RXMSG_VSC_GYIV(sgnl)         ((void)Com_ReceiveSignal(ComConf_ComSignal_VSC_GYIV, (sgnl)))
 
+#if 0   /* BEV BSW provisionally */
 #define u1_FSPOSNSR_RXMSG_VSC1G30STS()           ((U1)Com_GetIPDUStatus(MSG_VSC1G30_RXCH0))
+#else
+#define u1_FSPOSNSR_RXMSG_VSC1G30STS()           ((U1)COM_NO_RX)
+#endif
 #define vd_FSPOSNSR_RXMSG_FBKDRSYS(sgnl)         ((void)Com_ReceiveSignal(ComConf_ComSignal_FBKDRSYS, (sgnl)))
 #define vd_FSPOSNSR_RXMSG_FBKDR_AX(sgnl)         ((void)Com_ReceiveSignal(ComConf_ComSignal_FBKDR_AX, (sgnl)))
 

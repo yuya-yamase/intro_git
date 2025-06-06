@@ -20,7 +20,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "veh_opemd.h"
@@ -103,10 +102,14 @@ U1          u1_g_EcoJdgCfgScrInst(U1 * u1p_a_id, U1 * u1p_a_scr, U1 * u1p_a_cnt)
     u1_t_espohvid = (U1)0U;
     u1_t_espohvvl = (U1)0U;
 #if defined(ComConf_ComSignal_ESPOHVID)
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ESPOHVID, &u1_t_espohvid);
+#endif
 #endif/* >>ComConf_ComSignal_ESPOHVID */
 #if defined(ComConf_ComSignal_ESPOHVVL)
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ESPOHVVL, &u1_t_espohvvl);
+#endif
 #endif/* >>ComConf_ComSignal_ESPOHVVL */
 
 #if defined(OXCAN_PDU_RX_CAN_EHV1S23_RXCH0)

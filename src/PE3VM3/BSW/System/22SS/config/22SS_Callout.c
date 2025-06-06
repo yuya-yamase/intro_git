@@ -29,6 +29,9 @@
 #include "EthSW_Task.h"
 #include "Mcu_PwrCtrl.h"
 
+#include "chipcom.h"
+#include "VIS.h"
+
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -78,7 +81,9 @@ void vd_g_22SSCallout_StaBonInit(void)
     /* vv User Hook start vv */
     vd_g_StubBonInit();
     vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
-    EthSW_StaBonInit();
+    EthSW_Sch_PowerOnInit();
+    ChipCom_Init();
+    vd_g_VISInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -117,7 +122,9 @@ void vd_g_22SSCallout_StaRstInit(void)
     /* vv User Hook start vv */
     vd_g_StubRstInit();
     vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
-    EthSW_StaRstInit();
+    EthSW_Sch_PowerOnInit();
+    ChipCom_Init();
+    vd_g_VISInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -156,7 +163,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
     /* vv User Hook start vv */
     vd_g_StubWkupInit();
     vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
-    EthSW_StaWkupInit();
+    EthSW_Sch_PowerOnInit();
+    ChipCom_Init();
+    vd_g_VISInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/

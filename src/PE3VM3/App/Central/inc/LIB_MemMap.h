@@ -2,7 +2,6 @@
 /* file name	:	LIB_MemMap.h												*/
 /* file version	:																*/
 /* ---------------------------------------------------------------------------- */
-#if 0
 #if defined		LIB_START_SEC_CODE
 #undef			LIB_START_SEC_CODE
 #pragma	ghs section text = ".LIB_CODE"
@@ -52,6 +51,5 @@
 
 #else
 #error			"LIB_MemMap.h, error"
-#endif
 #endif
 /* - End Of File -------------------------------------------------------------- */

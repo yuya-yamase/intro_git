@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -166,7 +165,9 @@ static U4      u4_s_AlertP_rolawaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #endif /* OXCAN_PDU_RX_CAN_ENG1G97 */
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_ESTBZ, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_ESTBZ_LSB_MSGSTS);
@@ -202,7 +203,9 @@ static U4      u4_s_AlertP_rolawaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #endif /* OXCAN_PDU_RX_CAN_ENG1G97 */
 
     u1_t_sgnl     = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_ESTMSG, &u1_t_sgnl);
+#endif
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_ESTMSG_LSB_MSGSTS);

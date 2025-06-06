@@ -297,11 +297,13 @@ void            vd_g_MulmedTextMsg(const U1 u1_a_LINEID, U1 * u1p_a_modeid, U1 *
 /*===================================================================================================================================*/
 void            vd_g_MulmedMulfrRxTxtHk(const U2 u2_a_MSG)
 {
+#if 0   /* BEV BSW provisionally */
     if ((u2_a_MSG <= u2_g_MULMED_MULFR_AUB_MAX) &&
         (u2_a_MSG >= u2_g_MULMED_MULFR_AUB_MIN)) {
 
         vd_g_MulmedMulfrCfgRxTxtHk(u2_a_MSG);
     }
+#endif
 }
 
 /*===================================================================================================================================*/

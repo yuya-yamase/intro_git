@@ -70,10 +70,19 @@ enum {
 /*------------------------------*/
 /*	OSTM制御関連				*/
 /*------------------------------*/
-#define XSPI_OST_CNT_0_4ms	((uint32)( 400UL * GPT_OST_1US ))
-#define XSPI_OST_CNT_1ms	((uint32)( 1000UL * GPT_OST_1US ))
-#define XSPI_OST_CNT_9_6ms	((uint32)( 9600UL * GPT_OST_1US ))
-#define XSPI_OST_CNT_10ms	((uint32)( 10000UL * GPT_OST_1US ))
+#define XSPI_OST_CNT_INIT	((uint32)( 1000UL * GPT_OST_1US ))	/* 初期化用（1.0ms） */
+#define XSPI_OST_CNT_COMEND	((uint32)( 400UL * GPT_OST_1US ))	/* 通信終了用（0.4ms） */
+
+#if ( XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_5ms )
+
+#define XSPI_OST_CNT_NORMAL	((uint32)( 4600UL * GPT_OST_1US ))	/* 通常動作用（4.6ms） */
+#define XSPI_OST_CNT_N_NEXT	((uint32)( 5000UL * GPT_OST_1US ))	/* 通信継続用（5.0ms） */
+
+#else	/* (XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_10ms) */
+
+#define XSPI_OST_CNT_NORMAL	((uint32)( 9600UL * GPT_OST_1US ))	/* 通常動作用（9.6ms） */
+#define XSPI_OST_CNT_N_NEXT	((uint32)( 10000UL * GPT_OST_1US ))	/* 通信継続用（10.0ms） */
+#endif	/* (XSPI_COMM_CYCLE) */
 
 /*------------------------------*/
 /*	バッファ制御関連			*/

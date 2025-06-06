@@ -31,7 +31,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -45,7 +44,9 @@ typedef U1 (*FUNC_MMTEXT_CHECK_MODE)(U1 u1_a_mode);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV BSW provisionally */
 #define MMTEXT_AVNMS72_MSG                 (MSG_AVNMS72_RXCH1)
+#endif
 
 /* テキスト種別 */
 enum {
@@ -134,10 +135,12 @@ enum {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 /* メッセージラベル情報テーブル */
+#if 0   /* BEV BSW provisionally */
 static const U2 u2_tbl_msg_label_info[MMTEXT_KIND_MAX] =
 {
     (U2)MMTEXT_AVNMS72_MSG                 /* MMTEXT_KIND_AVNMS72 */
 };
+#endif
 
 /* 外部関数情報テーブル */
 static const struct

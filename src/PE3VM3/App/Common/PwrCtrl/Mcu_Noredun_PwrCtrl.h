@@ -28,17 +28,17 @@
 #define     MCU_WAIT_MBPWR_TIME             (0U                         )
 #define     MCU_WAIT_GVIF_TX_MBWK_TIME      (5U     / MCU_SYS_TASK_TIME )
 #define     MCU_WAIT_GVIF_TX_MBWK_OFF_TIME  (0U)
-#define     MCU_WAIT_MBPWR_OFF_TIME         (2000U  / MCU_SYS_TASK_TIME )
+#define     MCU_WAIT_MBPWR_OFF_TIME         (5U  / MCU_SYS_TASK_TIME )
 
 #define     MCU_WAIT_DISP_TIME              (0U                         )
 #define     MCU_WAIT_GVIF_TX_DSPWK_TIME     (5U     / MCU_SYS_TASK_TIME )
 #define     MCU_WAIT_GVIF_TX_DSPWK_OFF_TIME (0U                         )
-#define     MCU_WAIT_DISP_OFF_TIME          (2000U  / MCU_SYS_TASK_TIME )
+#define     MCU_WAIT_DISP_OFF_TIME          (5U  / MCU_SYS_TASK_TIME )
 
 #define     MCU_WAIT_HUB_PWRON_TIME         (0U                         )
 #define     MCU_WAIT_HUB_WAKE_TIME          (15U    / MCU_SYS_TASK_TIME )
 #define     MCU_WAIT_HUB_WAKE_OFF_TIME      (0U                         )
-#define     MCU_WAIT_HUB_PWROFF_TIME        (60000U / MCU_SYS_TASK_TIME )
+#define     MCU_WAIT_HUB_PWROFF_TIME        (5U / MCU_SYS_TASK_TIME )
 
 /* ‘Ò‹@ŽžŠÔ‘ª’èŠ®—¹”»’è */
 #define     MCU_NOREDUN_WAIT_TIME_FIN       (0xFFFFU)

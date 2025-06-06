@@ -71,7 +71,7 @@
 #define     MCU_SIP_PWROFF_T_MM_SUSPEND_REQ_N       (1u)     /* tMM_SUSPEND_REQ_N:5ms     */
 #define     MCU_SIP_PWROFF_T_STR_WAKE               (1u)     /* tSTR_WAKE:5ms             */
 #define     MCU_SIP_PWROFF_T_MM_OFF_REQ_LO          (1u)     /* tMM_OFF_REQ_LO:5ms   */
-#define     MCU_SIP_PWROFF_T_MM_STBY_N_LO           (20000u)     /* 100*1000ms/5ms周期   */
+#define     MCU_SIP_PWROFF_T_MM_STBY_N_LO           (1u)     /* 5ms/5ms周期   */
 #define     MCU_SIP_PWROFF_TIME_INVALID             (0xFFFFFFFFu)
 
 #define     MCU_SIP_PWROFF_STEP1      (0x01)
@@ -1338,7 +1338,7 @@ static void Mcu_Sip_PwrOn_ValChk_SAIL_RESOUT_N( void )
 
 		if( read_lv == (uint8)MCU_DIO_HIGH){
 			Mcu_Sip_PwrOn_SAIL_RESOUT_N_Time = MCU_SIP_PWRON_TIME_INVALID;
-			// EthSW_PowerON_Req_Bon(); /* 暫定_EtherSW起動要求 */
+			EthSW_PowerON_Req_Bon(); /* 暫定_EtherSW起動要求 */
 		}
 #if (MCU_ERR_CHK == 1U)
 		u1_s_Mcu_Err_dbg_state = MCU_ERR_BON_STEP7_2; /* TP */

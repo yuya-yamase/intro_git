@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "veh_opemd.h"
@@ -78,8 +77,13 @@
 #define u1_VMMUNIT_ACCISON()             (u1_g_VehopemdAccOn())
 
 #define u1_VMMUNIT_GETMSGSTS_AVN1S21()  (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S21, (U2)OXCAN_RX_SYS_NRX_ACC | (U2)OXCAN_RX_SYS_TOE_ACC, (U2)VMMUNIT_AVN1S21_TOUT))
+#if 0   /* BEV BSW provisionally */
 #define vd_VMMUNIT_RXMSG_A_CSPCHG(x)    ((void)Com_ReceiveSignal(ComConf_ComSignal_A_CSPCHG,(x)))
 #define vd_VMMUNIT_RXMSG_A_UNTCSP(x)    ((void)Com_ReceiveSignal(ComConf_ComSignal_A_UNTCSP,(x)))
+#else
+#define vd_VMMUNIT_RXMSG_A_CSPCHG(x)    (vdp_PTR_NA)
+#define vd_VMMUNIT_RXMSG_A_UNTCSP(x)    (vdp_PTR_NA)
+#endif
 
 #if 0   /* BEV BSW provisionally */
 #define vd_VMMUNIT_WRITE_M_UNTDB1(x)    ((void)Com_SendSignal(ComConf_ComSignal_M_UNTDB1,(x)))    /* COM Tx STUB delete */

@@ -25,7 +25,7 @@ static uint32 	bf_drv_dummy_snddata = 0x00000000UL;	/* 暫定対応 初回デー
 static uint32	bf_drv_OST_START[GPT_OST_START_NUM_CFG] = {	/* OSTM開始情報 */
 	((uint32)GPT_OST_START_CTRL_BIT_IRQ_EN |
 	 (uint32)GPT_OST_START_CTRL_BIT_TRG_ST),		/* GPT_OST_START_CTRL */
-	 (uint32)XSPI_OST_CNT_10ms						/* GPT_OST_START_PERIOD */
+	 (uint32)XSPI_OST_CNT_N_NEXT					/* GPT_OST_START_PERIOD */
 	};
 
 extern BF_DRV_SPI	bf_drv_SpiMng;		/* XSPI管理情報 */
@@ -79,7 +79,7 @@ static const TBL_DRV_SPI	tb_drv_SpiDrvJmp[CMDRV_STAT_MAX][CMDRV_EVT_MAX] = {
 		{ 0,					0,					0					},	/* 1：通常動作 */
 		{ 0,					0,					0					},	/* 2：通信継続 */
 		{ 0,					0,					0					},	/* 3：転送未完了タイムアウト */
-		{ fc_SpiInit,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_10ms	},	/* 4：EN信号High */
+		{ fc_SpiInit,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_N_NEXT	},	/* 4：EN信号High */
 		{ 0,					0,					0					},	/* 5：EN信号Low */
 		{ 0,					0,					0					},	/* 6：通信終了 */
 	},
@@ -89,39 +89,39 @@ static const TBL_DRV_SPI	tb_drv_SpiDrvJmp[CMDRV_STAT_MAX][CMDRV_EVT_MAX] = {
 		{ 0,					0,					0					},	/* 1：通常動作 */
 		{ 0,					0,					0					},	/* 2：通信継続 */
 		{ 0,					0,					0					},	/* 3：転送未完了タイムアウト */
-		{ fc_SpiInit,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_10ms	},	/* 4：EN信号High */
+		{ fc_SpiInit,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_N_NEXT	},	/* 4：EN信号High */
 		{ 0,					0,					0					},	/* 5：EN信号Low */
 		{ 0,					0,					0					},	/* 6：通信終了 */
 	},
 /* 2: アイドル状態（EN信号High） */
 	{																		/* Event */
 		{ 0,					0,					0					},	/* 0：初期化 */
-		{ fc_SpiStartPrepare,	CMDRV_STAT_COMM,	XSPI_OST_CNT_9_6ms	},	/* 1：通常動作 */
+		{ fc_SpiStartPrepare,	CMDRV_STAT_COMM,	XSPI_OST_CNT_NORMAL	},	/* 1：通常動作 */
 		{ 0,					0,					0					},	/* 2：通信継続 */
 		{ 0,					0,					0					},	/* 3：転送未完了タイムアウト */
 		{ 0,					0,					0					},	/* 4：EN信号High */
-		{ fc_SpiStop,			CMDRV_STAT_INVALID,	XSPI_OST_CNT_10ms	},	/* 5：EN信号Low */
+		{ fc_SpiStop,			CMDRV_STAT_INVALID,	XSPI_OST_CNT_N_NEXT	},	/* 5：EN信号Low */
 		{ 0,					0,					0					},	/* 6：通信終了 */
 	},
 /* 3: 送受信状態 */
 	{																		/* Event */
 		{ 0,					0,					0					},	/* 0：初期化 */
 		{ 0,					0,					0					},	/* 1：通常動作 */
-		{ 0,					0,					XSPI_OST_CNT_10ms	},	/* 2：通信継続 */
-		{ fc_SpiAbort,			CMDRV_STAT_RETRY,	XSPI_OST_CNT_0_4ms	},	/* 3：転送未完了タイムアウト */
+		{ 0,					0,					XSPI_OST_CNT_N_NEXT	},	/* 2：通信継続 */
+		{ fc_SpiAbort,			CMDRV_STAT_RETRY,	XSPI_OST_CNT_COMEND	},	/* 3：転送未完了タイムアウト */
 		{ 0,					0,					0					},	/* 4：EN信号High */
-		{ fc_SpiStop,			CMDRV_STAT_INVALID,	XSPI_OST_CNT_10ms	},	/* 5：EN信号Low */
-		{ fc_SpiEnd,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_0_4ms	},	/* 6：通信終了 */
+		{ fc_SpiStop,			CMDRV_STAT_INVALID,	XSPI_OST_CNT_N_NEXT	},	/* 5：EN信号Low */
+		{ fc_SpiEnd,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_COMEND	},	/* 6：通信終了 */
 	},
 /* 4: リトライ状態(アイドル) */
 	{																		/* Event */
 		{ 0,					0,					0					},	/* 0：初期化 */
-		{ fc_SpiStartPrepare,	CMDRV_STAT_COMM,	XSPI_OST_CNT_9_6ms	},	/* 1：通常動作 */
+		{ fc_SpiStartPrepare,	CMDRV_STAT_COMM,	XSPI_OST_CNT_NORMAL	},	/* 1：通常動作 */
 		{ 0,					0,					0					},	/* 2：通信継続 */
 		{ 0,					0,					0					},	/* 3：転送未完了タイムアウト */
 		{ 0,					0,					0					},	/* 4：EN信号High */
-		{ fc_SpiStop,			CMDRV_STAT_INVALID,	XSPI_OST_CNT_10ms	},	/* 5：EN信号Low */
-		{ fc_SpiEnd,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_0_4ms	},	/* 6：通信終了 */
+		{ fc_SpiStop,			CMDRV_STAT_INVALID,	XSPI_OST_CNT_N_NEXT	},	/* 5：EN信号Low */
+		{ fc_SpiEnd,			CMDRV_STAT_IDLE,	XSPI_OST_CNT_COMEND	},	/* 6：通信終了 */
 	}
 };
 
@@ -207,8 +207,8 @@ void	xspi_Init(
 	/* Frame信号をHigh出力 */
 	PDR_SPI_FRM_WR( STD_HIGH );
 
-	/* OSTM起動（1ms） */
-	bf_drv_OST_START[GPT_OST_START_PERIOD] = XSPI_OST_CNT_1ms;
+	/* OSTM起動（初期化用） */
+	bf_drv_OST_START[GPT_OST_START_PERIOD] = XSPI_OST_CNT_INIT;
 	vd_g_Gpt_OstStart( XSPI_OST_CH, bf_drv_OST_START );
 
 	return;
@@ -554,8 +554,8 @@ static uint8	fs_tbl_Excute(
 	}
 	else
 	{
-		/* OSTM割り込みのカウンタ値を10msでセット（通常の状態遷移では起こりえない） */
-		bf_drv_OST_START[GPT_OST_START_PERIOD] = XSPI_OST_CNT_10ms;
+		/* OSTM割り込みのカウンタ値をセット（通常の状態遷移では起こりえない） */
+		bf_drv_OST_START[GPT_OST_START_PERIOD] = XSPI_OST_CNT_N_NEXT;
 	}
 
 	/* OSTM起動 */

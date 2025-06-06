@@ -5,8 +5,8 @@
 #include <LIB.h>
 #include <Os.h>
 /* ------------------------------------------------------------------------ */
-#define LIB_START_SEC_CODE
-#include <LIB_MemMap.h>
+/* #define LIB_START_SEC_CODE */
+/* #include <LIB_MemMap.h> */
 /* ------------------------------------------------------------------------ */
 void LIB_DI (void)
 {
@@ -18,6 +18,6 @@ void LIB_EI (void)
 	ResumeOSInterrupts();
 }
 /* ------------------------------------------------------------------------ */
-#define LIB_STOP_SEC_CODE
-#include <LIB_MemMap.h>
+/* #define LIB_STOP_SEC_CODE */
+/* #include <LIB_MemMap.h> */
 /* ------------------------------------------------------------------------ */

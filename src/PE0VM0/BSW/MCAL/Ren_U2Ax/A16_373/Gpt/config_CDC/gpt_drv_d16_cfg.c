@@ -37,6 +37,9 @@
 
 #define GPT_D16_MDCTRL_FRT_CAPT                  (0x0156U)      /* 33.12.9 TAUDnTTINm Input Position Detection Function */
 
+#define GPT_D16_MDCTRL_FRT_IPIV                  (0x0144U)      /* 33.12.7 TAUDnTTINm Input Pulse Interval Measurement Function */
+#define GPT_D16_MDCTRL_FRT_EXEV                  (0x1006U)      /* 33.12.4 External Event Count Function */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -71,8 +74,8 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[11] */
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[12] */
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[13] */
-            (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[14] */
-            (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0                                     /* u2p_mdctrl[15] */
+            (U2)GPT_D16_MDCTRL_FRT_IPIV | (U2)GPT_D16_MDCTRL_CLKSRC_2,                                    /* u2p_mdctrl[14] */
+            (U2)GPT_D16_MDCTRL_FRT_EXEV | (U2)GPT_D16_MDCTRL_CLKSRC_2                                     /* u2p_mdctrl[15] */
         },
         {
             (U2)10U,                                                                                      /* u2p_irq_ch[0]  */
@@ -93,7 +96,7 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
             (U2)383U                                                                                      /* u2p_irq_ch[15] */
         },
 
-        (U2)0x0000U,                                                                                      /* u2_tps         */
+        (U2)0x0B00U,                                                                                      /* u2_tps         */
         (U2)0x0000U,                                                                                      /* u2_brs         */
 
         (U2)0x0140U,                                                                                      /* u2_out_en      */
@@ -119,9 +122,9 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
     {
         (volatile U2 *)0xffbf5000U,                                                                       /* u2p_base       */
         {
-            (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[0]  */
-            (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[1]  */
-            (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[2]  */
+            (U2)GPT_D16_MDCTRL_PWM_PERI | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[0]  */
+            (U2)GPT_D16_MDCTRL_PWM_DUTY | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[1]  */
+            (U2)GPT_D16_MDCTRL_PWM_DUTY | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[2]  */
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[3]  */
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[4]  */
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[5]  */
@@ -158,8 +161,8 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
         (U2)0x0000U,                                                                                      /* u2_tps         */
         (U2)0x0000U,                                                                                      /* u2_brs         */
 
-        (U2)0x0800U,                                                                                      /* u2_out_en      */
-        (U2)0x0800U,                                                                                      /* u2_out_md      */
+        (U2)0x0806U,                                                                                      /* u2_out_en      */
+        (U2)0x0806U,                                                                                      /* u2_out_md      */
         (U2)0x0000U,                                                                                      /* u2_out_cf      */
         (U2)0x0000U,                                                                                      /* u2_out_lv      */
 
@@ -172,7 +175,7 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
         (U2)0x0000U,                                                                                      /* u2_rto_lv      */
         (U2)0x0000U,                                                                                      /* u2_rto_mo      */
 
-        (U2)0x0000U,                                                                                      /* u2_rld_en      */
+        (U2)0x0007U,                                                                                      /* u2_rld_en      */
         (U2)0x0000U,                                                                                      /* u2_rld_md      */
         (U2)0x0000U,                                                                                      /* u2_rld_se      */
         (U2)0x0000U                                                                                       /* u2_rld_ct      */
