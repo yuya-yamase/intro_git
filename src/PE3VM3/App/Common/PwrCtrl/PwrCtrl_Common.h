@@ -20,6 +20,7 @@
 
 #define MCU_DIO_LOW                       (0U)
 #define MCU_DIO_HIGH                      (1U)
+#define MCU_DIO_INVALID                   (255U)
 
 #define PWRCTRL_COMMON_PROCESS_STEP1      (0x01U)
 #define PWRCTRL_COMMON_PROCESS_STEP2      (0x02U)

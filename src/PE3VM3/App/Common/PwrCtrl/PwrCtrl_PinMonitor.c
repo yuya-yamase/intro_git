@@ -141,6 +141,14 @@ static const ST_PWRCTRL_PINMONITOR_STS st_PwrCtrl_PinMonitor_Sts[PWRCTRL_CFG_PRI
         (U1)PWRCTRL_CFG_PRIVATE_BU_DET_WAITTIME,                           /* ポーリング開始待ち時間 */
         u1_g_PwrCtrlWakeUpInfo,                                            /* MCU初期化処理、またはウェイクアップ処理完了状態判定 */
     },
+    /* DBG_FAIL_OFF */
+    {
+        (U2)DIO_ID_PORT20_CH7,                                             /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_10ms,                         /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_JUDGECOUNT,                   /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_WAITTIME,                     /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlWakeUpInfo,                                            /* MCU初期化処理、またはウェイクアップ処理完了状態判定 */
+    },
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

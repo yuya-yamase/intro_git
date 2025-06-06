@@ -20,6 +20,8 @@
 #define PWRCTRL_MAIN_WAKEUP_REQ            (0x01U) /* ウェイクアップシーケンス要求           */
 #define PWRCTRL_MAIN_SIPOFF_MCUSTANDBY_REQ (0x02U) /* SIP電源OFF&MCUスタンバイシーケンス要求 */
 #define PWRCTRL_MAIN_STANDBY_REQ           (0x03U) /* スタンバイシーケンス要求               */
+#define PWRCTRL_MAIN_BUDET_REQ             (0x04U) /* BU断終了シーケンス要求                 */
+#define PWRCTRL_MAIN_FORCEDOFF_REQ         (0x05U) /* SIP電源強制OFFシーケンス要求           */
 #define PWRCTRL_MAIN_NO_REQ                (0xFFU) /* 要求無し(処理完了)                     */
 /*-------------------------------------------------------------------------------------------*/
 /* Function Prototypes                                                                       */
@@ -27,6 +29,7 @@
 void vd_g_PwrCtrlMainBonReq( void );
 void vd_g_PwrCtrlMainWakeupReq( void );
 void vd_g_PwrCtrlMainStandbyReq( void );
+void vd_g_PwrCtrlMainBuDetReq( void );
 void vd_g_PwrCtrlMainTask( void );
 
 U1 u1_g_PwrCtrlMainShtdwnOk( void );
