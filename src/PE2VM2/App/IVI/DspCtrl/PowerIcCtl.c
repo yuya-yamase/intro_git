@@ -1135,6 +1135,13 @@ static void vd_s_PowerIc_DiagCycChk(void)
         vd_s_PowerIc_Memset(&st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RL], (U1)0U, sizeof(st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RL]));
         /* RR Speaker Count Clear */
         vd_s_PowerIc_Memset(&st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RR], (U1)0U, sizeof(st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RR]));
+        /* Normal Count Set */
+        st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RL].u1_offset_nml = (U1)POWERIC_DIAGCYC_STSCONF_CNT;
+        st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RL].u1_vccshrt_nml = (U1)POWERIC_DIAGCYC_STSCONF_CNT;
+        st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RL].u1_gndshrt_nml = (U1)POWERIC_DIAGCYC_STSCONF_CNT;
+        st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RR].u1_offset_nml = (U1)POWERIC_DIAGCYC_STSCONF_CNT;
+        st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RR].u1_vccshrt_nml = (U1)POWERIC_DIAGCYC_STSCONF_CNT;
+        st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RR].u1_gndshrt_nml = (U1)POWERIC_DIAGCYC_STSCONF_CNT;
     }
 
     if((st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_FL].u1_offset_fail >= (U1)POWERIC_DIAGCYC_STSCONF_CNT)
@@ -1189,7 +1196,7 @@ static void vd_s_PowerIc_DiagCycChk(void)
             /* Short Normal DTC Record */
             vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT, (U1)POWERIC_DTC_STS_NORMAL);
             /* Flag Updata */
-            u1_s_poweric_diagcyc_offset_nrml_recflag = (U1)TRUE;
+            u1_s_poweric_diagcyc_short_nrml_recflag = (U1)TRUE;
         }
     }
 }
