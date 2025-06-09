@@ -28,6 +28,10 @@
 
 #include "EthSW_Task.h"
 
+/* Processing load */
+#include "gpt_drv_frt.h"
+/* Processing load */
+
 /*----------------------------------------------------------------------------
  *		ProtoTypes
  *--------------------------------------------------------------------------*/
@@ -39,6 +43,13 @@ TASK(eMCOS_TASK_Low);
 /*----------------------------------------------------------------------------
  *		Symbols
  *--------------------------------------------------------------------------*/
+/* Processing load */
+static volatile U4              u4_s_time_Task_High[10000];
+static U4                       u4_s_timecnt_TASK_High;
+
+static volatile U4              u4_s_time_TASK_Medium[2000];
+static U4                       u4_s_timecnt_TASK_Medium;
+/* Processing load */
 
 /*----------------------------------------------------------------------------
  *		Codes
@@ -70,9 +81,26 @@ TASK(eMCOS_TASK_Idle)
  *--------------------------------------------------------------------------*/
 TASK(eMCOS_TASK_High)
 {
+/* Processing load */
+    U4                  u4_t_sta_Task_High;
+    U4                  u4_t_end_Task_High;
+
+    SuspendAllInterrupts();
+    u4_t_sta_Task_High = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (U4)0x7fffffffU;
+/* Processing load */
+
     BswM_CS_MainFunctionHigh();
     EthSW_HighTask();
 
+/* Processing load */
+    u4_t_end_Task_High = u4_g_Gpt_FrtGetUsElapsed((void *)0);
+    ResumeAllInterrupts();
+
+    if(u4_s_timecnt_TASK_High < (U4)10000U){
+        u4_s_time_Task_High[u4_s_timecnt_TASK_High] = (U4)((u4_t_end_Task_High - u4_t_sta_Task_High) & (U4)0x7fffffffU);
+        u4_s_timecnt_TASK_High++;
+    }    
+/* Processing load */
     (void)TerminateTask();
 }
 
@@ -85,7 +113,25 @@ TASK(eMCOS_TASK_High)
  *--------------------------------------------------------------------------*/
 TASK(eMCOS_TASK_Medium)
 {
+/* Processing load */
+    U4                  u4_t_sta_Task_Medium;
+    U4                  u4_t_end_Task_Medium;
+ 
+    SuspendAllInterrupts();
+    u4_t_sta_Task_Medium = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (U4)0x7fffffffU;
+/* Processing load */
+
     vd_g_SchdlrMainTask();
+
+/* Processing load */
+    u4_t_end_Task_Medium = u4_g_Gpt_FrtGetUsElapsed((void *)0);
+    ResumeAllInterrupts();
+    
+    if(u4_s_timecnt_TASK_Medium < (U4)2000U){
+        u4_s_time_TASK_Medium[u4_s_timecnt_TASK_Medium] = (U4)((u4_t_end_Task_Medium - u4_t_sta_Task_Medium) & (U4)0x7fffffffU);
+        u4_s_timecnt_TASK_Medium++;
+    }
+/* Processing load */
     (void)TerminateTask();
 }
 

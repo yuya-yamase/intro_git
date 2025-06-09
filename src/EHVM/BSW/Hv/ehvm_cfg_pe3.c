@@ -97,7 +97,7 @@ static EhvmConst ehvm_guest_peid_register_t ehvm_guest_peid_list_pe3[VM_NUM_PE3]
 /****************************************************************************************/
 static EhvmConst ehvm_vm_table_info_t ehvm_sch_SchTable_pe3_0[1] = {
     {
-        400U,               /* VMCycle */
+        4850U,               /* VMCycle */
         GPID_VM0            /* VMId */
     }
 };
@@ -190,7 +190,7 @@ EhvmConst ehvm_cfg_tbl_t ehvm_cfg_tbl_pe3 =
     0U,                             /* tptm_dividingratio */
     VM_NUM_PE3,                     /* vmnum */
     6U,                            /* guest_int_num */
-    (ehvm_uint32_t)500U,           /* hv_cycle */
+    (ehvm_uint32_t)5000U,           /* hv_cycle */
     MPU_MPCFG_HBE_PE3,                  /* mpu_mpcfg_hbe */
     MPU_NUM_OF_HOST_ENTRY_PE3,          /* mpu_num_of_host_entry */
     MPU_GUEST_ENTRY_T_PE3,              /* mpu_guest_entry_t */
