@@ -47,10 +47,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1              u1_g_XspiIviRcv[XSPI_RCV_FRM_MAX];      /* XSPIデータ受信用バッファ */
+U1              u1_g_XspiIviRcv[XSPI_FRM_MAX];          /* XSPIデータ受信用バッファ */
 
 U1              u1_g_XspiIviSnd_flg;                    /* 次回送信データ作成可否 */
-U1              u1_g_XspiIviSnd[XSPI_RCV_FRM_MAX];      /* XSPI 次回送信データバッファ */
+U1              u1_g_XspiIviSnd[XSPI_FRM_MAX];          /* XSPI 次回送信データバッファ */
 
 U4              u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_NUM];                 /* 送信周期用 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,7 +59,8 @@ U4              u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_NUM];                 /* �
 static void     vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add);
 static void     vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add);
 static void     vd_s_XspiIviTaskCnt(void);
-
+static void     vd_s_XSpiIviComvertU1(U1* u1_ap_data,U4* u4_ap_data_tra);
+static void     vd_s_XSpiIviComvertU4(U1* u1_ap_data,U4* u4_ap_data_rec);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -76,10 +77,10 @@ static void     vd_s_XspiIviTaskCnt(void);
 void            vd_g_XspiIviInit(void)
 {
     /* 送受信バッファ,フラグ初期化 */
-    vd_g_MemfillU1(&u1_g_XspiIviRcv[0], (U1)0x00, (U4)XSPI_RCV_FRM_MAX);
+    vd_g_MemfillU1(&u1_g_XspiIviRcv[0], (U1)0x00, (U4)XSPI_FRM_MAX);
 
     u1_g_XspiIviSnd_flg = (U1)TRUE;
-    vd_g_MemfillU1(&u1_g_XspiIviSnd[0], (U1)0x00, (U4)XSPI_RCV_FRM_MAX);
+    vd_g_MemfillU1(&u1_g_XspiIviSnd[0], (U1)0x00, (U4)XSPI_FRM_MAX);
 
     /* 初期化処理 */
     vd_g_XspiIviQueueInit();
@@ -100,13 +101,17 @@ void            vd_g_XspiIviMain1st(void)
 {
     U1          u1_t_buf_rslt;
     U1          u1_t_trans_rslt;
+    U4          u4_tp_rec_data[XSPI_FRM_MAX_WORD];
 
     u1_t_buf_rslt   = (U1)XSPI_NG;
 
+    vd_g_MemfillU4(&u4_tp_rec_data[0], (U4)0U, (U4)XSPI_FRM_MAX_WORD);
+
     /* データ取得処理 */
-    u1_t_buf_rslt = xspi_Read((U1)XSPI_CH_01, &u1_g_XspiIviRcv[0], XSPI_RCV_FRM_MAX);
+    u1_t_buf_rslt = xspi_Read((U1)XSPI_CH_01, &u4_tp_rec_data[0], (U4)XSPI_FRM_MAX_WORD);
 
     if (u1_t_buf_rslt == (U1)XSPI_OK) {
+        vd_s_XSpiIviComvertU4(&u1_g_XspiIviRcv[0],&u4_tp_rec_data[0]);
         u1_t_trans_rslt  = u1_g_XspiIviRcv[5552];
         u1_t_trans_rslt |= u1_g_XspiIviRcv[5553];
         u1_t_trans_rslt |= u1_g_XspiIviRcv[5554];
@@ -132,8 +137,11 @@ void            vd_g_XspiIviMain2nd(void)
 {
     U1          u1_t_drvr_cond;
     U1          u1_t_buf_rslt;
+    U4          u4_tp_tra_data[XSPI_FRM_MAX_WORD];
 
     u1_t_buf_rslt   = (U1)XSPI_NG;
+
+    vd_g_MemfillU4(&u4_tp_tra_data[0], (U4)0U, (U4)XSPI_FRM_MAX_WORD);
     
     /* 次回送信データ作成処理 */
     if(u1_g_XspiIviSnd_flg == (U1)TRUE) {
@@ -146,7 +154,8 @@ void            vd_g_XspiIviMain2nd(void)
 
     if ((u1_t_drvr_cond == (U1)XSPI_DCOND_IDLE) || (u1_t_drvr_cond == (U1)XSPI_DCOND_TRANSMIT)) {
         /* 送信バッファアドレス取得処理 */
-        u1_t_buf_rslt = xspi_Write((U1)XSPI_CH_01, &u1_g_XspiIviSnd[0], XSPI_SND_FRM_MAX);
+        vd_s_XSpiIviComvertU1(&u1_g_XspiIviSnd[0], &u4_tp_tra_data[0]);
+        u1_t_buf_rslt = xspi_Write((U1)XSPI_CH_01, &u4_tp_tra_data[0], (U4)XSPI_FRM_MAX_WORD);
     }
     else {
         /* ドライバ状態が初期化前(XSPI_DCOND_INIT) or 通信無効(XSPI_DCOND_INVALID)なのでデータ送信スキップ */
@@ -228,6 +237,42 @@ static void           vd_s_XspiIviTaskCnt(void){
         } else {
             u4_s_xspi_ivi_task_cnt[u4_t_lpcnt] = (U4)0U;
         }
+    }
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_XSpiIviComvertU1(U1* u1_ap_data,U4* u4_ap_data_tra)                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_XSpiIviComvertU1(U1* u1_ap_data,U4* u4_ap_data_tra)
+{
+    U4 u4_t_lpcnt;
+
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_FRM_MAX_WORD; u4_t_lpcnt++){
+        u4_ap_data_tra[u4_t_lpcnt]  = (((U4)u1_ap_data[(u4_t_lpcnt * 4)    ]       ) & (U4)0x000000FFU);
+        u4_ap_data_tra[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 1] <<  8U) & (U4)0x0000FF00U);
+        u4_ap_data_tra[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 2] << 16U) & (U4)0x00FF0000U);
+        u4_ap_data_tra[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 3] << 24U) & (U4)0xFF000000U);
+    }
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_XSpiIviComvertU4(U1* u1_ap_data,U4* u4_ap_data_rec)                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_XSpiIviComvertU4(U1* u1_ap_data,U4* u4_ap_data_rec)
+{
+    U4 u4_t_lpcnt;
+
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_FRM_MAX_WORD; u4_t_lpcnt++){
+        u1_ap_data[u4_t_lpcnt * 4]     = (U1)(u4_ap_data_rec[u4_t_lpcnt]  & (U4)0x000000FFU);
+        u1_ap_data[(u4_t_lpcnt * 4)+1] = (U1)((u4_ap_data_rec[u4_t_lpcnt] & (U4)0x0000FF00U) >> 8U);
+        u1_ap_data[(u4_t_lpcnt * 4)+2] = (U1)((u4_ap_data_rec[u4_t_lpcnt] & (U4)0x00FF0000U) >> 16U);
+        u1_ap_data[(u4_t_lpcnt * 4)+3] = (U1)((u4_ap_data_rec[u4_t_lpcnt] & (U4)0xFF000000U) >> 24U);
     }
 }
 
