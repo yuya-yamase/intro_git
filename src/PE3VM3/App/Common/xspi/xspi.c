@@ -634,12 +634,12 @@ static void	fc_SpiStartPrepare(
 	if( bf_drv_skip_first_data == XSPI_NG )
 	{
 		/* ダミーデータ送信 */
-		Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)&bf_drv_dummy_snddata, (const Spi_ModeC_DataType *)&bf_drv_dummy_rcvdata, sizeof(uint32) );
+		Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)&bf_drv_dummy_snddata, (const Spi_ModeC_DataType *)&bf_drv_dummy_rcvdata, 1U );
 	}
 	else
 	{
 		/* SPI非同期通信開始 */
-		Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)snd_buf, (const Spi_ModeC_DataType *)rcv_buf,(U2)XSPI_FRM_MAX );
+		Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)snd_buf, (const Spi_ModeC_DataType *)rcv_buf,(U2)XSPI_FRM_MAX / 4  );
 	}
 
 	/* Frame信号をLow出力 */
