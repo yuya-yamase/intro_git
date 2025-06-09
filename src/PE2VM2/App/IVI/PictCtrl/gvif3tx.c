@@ -244,6 +244,60 @@ void    gvif3tx_main( void )
     }
 }
 
+/*===================================================================================================================================*/
+/* void            vd_g_Gvif3txSeqCtl(const U1 u1_a_MODE)                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_Gvif3txSeqCtl(const U1 u1_a_MODE)
+{
+    U4  u4_t_cnt;
+
+    switch (u1_a_MODE)
+    {
+    case (U1)MCU_STEP_GVIF3TX_OVERALL_1:
+        /* 初期設定用初期化処理 */
+        /* do nothing */
+        /* fall through */
+    case (U1)MCU_STEP_GVIF3TX_OVERALL_2:
+        /* eDP設定用所為化処理 */
+        Mcu_OnStep_GVIF3TX_eDPSET   = (U1)MCU_STEP_GVIF3TX_eDPSET_1;
+        /* fall through */
+    case (U1)MCU_STEP_GVIF3TX_OVERALL_3:
+        /* 出力設定用初期化処理 */
+        Mcu_OnStep_GVIF3TX_OUTSET   = (U1)MCU_STEP_GVIF3TX_OUTSET_1;
+        /* fall through */
+    case (U1)MCU_STEP_GVIF3TX_OVERALL_4:
+        /* HDCP認証用初期化処理 */
+        Mcu_OnStep_GVIF3TX_HDCP     = (U2)MCU_STEP_GVIF3TX_HDCP_01;
+        u1_g_HDCP_Act_Hook          = (U1)FALSE;
+        u1_g_HDCP_ErrCnt_AuthWait   = (U1)0U;
+        u1_g_HDCP_ErrCnt_Encrypt    = (U1)0U;
+        u1_g_HDCP_ErrCnt_PointD     = (U1)0U;
+        u1_g_HDCP_Dev_Cnt           = (U1)0U;
+
+        /* Misc Type 39h：HDMI 05h：C-Disp_HDCP認証応答配列初期化 */
+        u1_gp_HDCP_Act[MCU_HDCP_SUBTYPE]    = (U1)0x05U;    /* 05h：C-Disp_HDCP認証応答 */
+        u1_gp_HDCP_Act[MCU_HDCP_RSLT]       = (U1)0x01U;    /* 01h：認証失敗 */
+        for(u4_t_cnt = (U4)MCU_HDCP_MAX_DEVS_EXCEEDED; u4_t_cnt < (U4)MCU_MISC_HDCP_ACT; u4_t_cnt++){
+            u1_gp_HDCP_Act[u4_t_cnt] = (U1)0U;
+        }
+
+        /* 全モード共通処理 */
+        Mcu_OnStep_GVIF3TX_OVRALL   = u1_a_MODE;
+        u4_g_Gvif_LinkTimer         = (U4)0U;
+        Mcu_OnStep_GVIF3TX_AckTime  = (U4)0U;
+        Mcu_RegStep_GVIF3TX         = (U2)0U;
+        Mcu_RegSet_BetWaitTime      = (U2)0xFFFFU;
+        Mcu_Sys_Pwr_GvifSndr_Init();
+        break;
+    default:
+        /* do nothing */
+        break;
+    }
+}
+
 /*****************************************************************************
   Function      : Mcu_Dev_Pwron_GvifTx_Polling_Rst
   Description   : 
@@ -1168,6 +1222,7 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
             u1_g_HDCP_Dev_Cnt++;
             if(u1_g_HDCP_Dev_Cnt > u1_gp_HDCP_Act[MCU_HDCP_HDCPTX_DEVICE_COUNT]){
                 /* デバイス数の読み出し実施完了 次状態へ遷移 */
+                u1_g_HDCP_Dev_Cnt       = (U1)0U;
                 Mcu_OnStep_GVIF3TX_HDCP = (U2)MCU_STEP_GVIF3TX_HDCP_15;
             }
             else{
@@ -1297,6 +1352,8 @@ static U1       u1_s_GvifTx_Pwrno_HDCP( void )
         }
         else{
             /* エラー回数：4回：ダイレコ保存後、定期監視フローに遷移 */
+            /* D点への遷移回数初期化 */
+            u1_g_HDCP_ErrCnt_PointD = (U1)0U;
             /* ToDo：ダイレコ保存処理 */
             /* HDCP認証応答 */
             u1_gp_HDCP_Act[MCU_HDCP_RSLT]       = (U1)0x01U;    /* 01h：認証失敗 */

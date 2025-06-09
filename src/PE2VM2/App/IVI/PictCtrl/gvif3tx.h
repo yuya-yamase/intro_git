@@ -23,6 +23,7 @@
 void    gvif3tx_Init( void );
 void    gvif3tx_main( void );
 void    vd_g_GvifTx_HADC_Act_Hook( void );
+void            vd_g_Gvif3txSeqCtl(const U1 u1_a_MODE);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
