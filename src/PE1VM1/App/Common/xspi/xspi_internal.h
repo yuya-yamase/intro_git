@@ -53,8 +53,9 @@ enum {
 /*------------------------------*/
 /*	通信中呼び出しカウンタ状態	*/
 /*------------------------------*/
-#define	CMDRV_COM_TIME_1	(1)		/* 通信中呼び出しカウント 通信中１     */
-#define	CMDRV_COM_TIME_2	(2)		/* 通信中呼び出しカウント 通信中２     */
+#define	CMDRV_COM_TIME_0	(0)		/* 通信中呼び出しカウント 通信中0     */
+#define	CMDRV_COM_TIME_1	(1)		/* 通信中呼び出しカウント 通信中1     */
+#define	CMDRV_COM_TIME_2	(2)		/* 通信中呼び出しカウント 通信中2     */
 #define	CMDRV_COM_TIMEOUT	(3)		/* 通信中呼び出しカウント 通信中最大値 */
 
 /*------------------------------*/
@@ -70,10 +71,21 @@ enum {
 /*------------------------------*/
 /*	OSTM制御関連				*/
 /*------------------------------*/
-#define XSPI_OST_CNT_0_4ms	((uint32)( 400UL * GPT_OST_1US ))
-#define XSPI_OST_CNT_1ms	((uint32)( 1000UL * GPT_OST_1US ))
-#define XSPI_OST_CNT_9_6ms	((uint32)( 9600UL * GPT_OST_1US ))
-#define XSPI_OST_CNT_10ms	((uint32)( 10000UL * GPT_OST_1US ))
+#define XSPI_OST_CNT_INIT	((uint32)( 1000UL * GPT_OST_1US ))	/* 初期化用（1.0ms） */
+#define XSPI_OST_CNT_COMEND	((uint32)( 400UL * GPT_OST_1US ))	/* 通信終了用（0.4ms） */
+#define XSPI_OST_CNT_N_NEXT	((uint32)( 5000UL * GPT_OST_1US ))	/* 通信継続用（5.0ms） */
+
+#if ( XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_5ms )
+
+#define XSPI_OST_CNT_NORMAL	((uint32)( 4600UL * GPT_OST_1US ))	/* 通常動作用（4.6ms） */
+#define XSPI_OST_CNT_ENMONI	((uint32)( 5000UL * GPT_OST_1US ))	/* EN信号監視用（5.0ms） */
+
+#else	/* (XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_10ms) */
+
+#define XSPI_OST_CNT_NORMAL	((uint32)( 9600UL * GPT_OST_1US ))	/* 通常動作用（9.6ms） */
+#define XSPI_OST_CNT_ENMONI	((uint32)( 5000UL * GPT_OST_1US ))	/* EN信号監視用（10.0ms） */
+
+#endif	/* (XSPI_COMM_CYCLE) */
 
 /*------------------------------*/
 /*	バッファ制御関連			*/
@@ -122,13 +134,14 @@ enum {
 /*------------------------------*/
 /*	通信エラー検出状態フラグ	*/
 /*------------------------------*/
-#define		XSPI_ERR_MSK_DBG		(0x7F)			/* MASK：デバッグ用エラー				*/
-#define		XSPI_ERR_DBG_INTG		(0x01)			/* データ整合性エラー					*/
-#define		XSPI_ERR_DBG_OVERFLOW	(0x02)			/* 受信バッファ溢れ						*/
-#define		XSPI_ERR_DBG_DMAOVERRUN	(0x04)			/* DMAオーバーランエラー				*/
-#define		XSPI_ERR_DBG_SLAVETIM20	(0x08)			/* Slave通信タイムアウトエラー（20ms）	*/
-#define		XSPI_ERR_DBG_TX_LOCKED	(0x20)			/* 送信バッファロックエラー 			*/
-#define		XSPI_ERR_DBG_RX_LOCKED	(0x40)			/* 受信バッファロックエラー 			*/
+#define		XSPI_ERR_MSK_DBG			(0x7F)		/* MASK：デバッグ用エラー				*/
+#define		XSPI_ERR_DBG_INTG			(0x01)		/* データ整合性エラー					*/
+#define		XSPI_ERR_DBG_OVERFLOW		(0x02)		/* 受信バッファ溢れ						*/
+#define		XSPI_ERR_DBG_DMAOVERRUN		(0x04)		/* DMAオーバーランエラー				*/
+#define		XSPI_ERR_DBG_SLAVETIM		(0x08)		/* Slave通信タイムアウトエラー（CLK出力あり）	*/
+#define		XSPI_ERR_DBG_SLAVETIM_NOCLK	(0x10)		/* Slave通信タイムアウトエラー（CLK出力なし）	*/
+#define		XSPI_ERR_DBG_TX_LOCKED		(0x20)		/* 送信バッファロックエラー 			*/
+#define		XSPI_ERR_DBG_RX_LOCKED		(0x40)		/* 受信バッファロックエラー 			*/
 #endif /* XSPI_DEBUG */
 
 /************************************************************************

@@ -47,8 +47,8 @@
 /*	リングバッファ用バッファページ数		*/
 /*------------------------------------------*/
 #if ( XSPI_DATA_BUFFER == XSPI_DATA_BUFFER_RING )
-#define XSPI_RCV_PAGE			(3)		/* 送信バッファページ数 */
-#define XSPI_SND_PAGE			(3)		/* 受信バッファページ数 */
+#define XSPI_RCV_PAGE			(3)		/* 受信バッファページ数 */
+#define XSPI_SND_PAGE			(3)		/* 送信バッファページ数 */
 #endif
 
 /*----------------------------------------------------------------------*/
@@ -61,5 +61,14 @@
 #define XSPI_DATA_CHECK_FCC		(1)
 #define XSPI_DATA_CHECK_SUM		(2)
 #define XSPI_DATA_CHECK			(XSPI_DATA_CHECK_SUM)		/* データチェックあり（全領域チェックサム） */
+
+/*----------------------------------------------*/
+/*	通信周期（ms）								*/
+/*	5ms：XSPI_COMM_CYCLE_5ms					*/
+/*	10ms：XSPI_COMM_CYCLE_10ms					*/
+/*----------------------------------------------*/
+#define XSPI_COMM_CYCLE_10ms	(0)
+#define XSPI_COMM_CYCLE_5ms		(1)
+#define XSPI_COMM_CYCLE			(XSPI_COMM_CYCLE_10ms)		/* 通信周期：10ms */
 
 #endif	/* XSPICFG_H */
