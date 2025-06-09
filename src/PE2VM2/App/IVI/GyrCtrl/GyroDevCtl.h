@@ -15,6 +15,7 @@
 #include "PictCtl.h"
 #include "SysEcDrc.h"
 #include "DtcCtl.h"
+#include "gyro.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -75,6 +76,11 @@
 #define GYRODEV_DTC_STS_FAIL                        (0U)
 #define GYRODEV_DTC_STS_NORMAL                      (1U)
 
+#define GYRODEV_MODE_NORMAL                         (GYRO_MODE_NORM)
+
+#define GYRODEV_EVENT_DTC_ERR                       (GYRO_EVENT_DTC_ERR)
+#define GYRODEV_EVENT_DEV_RST                       (GYRO_EVENT_DEV_RST)
+
 #define u1_GYRODEV_GYRO_I2C_CTRL_REGSET(u, v, w, x, y, z)    (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GYRO, (u), (v), (U1)GP_I2C_MA_SLA_6_GYRO, (w), (x), (y), (z)))
 #define u1_GYRODEV_GYRO_I2C_CTRL_REGREAD(w, x, y, z)         (Mcu_Dev_I2c_Ctrl_RegRead((U1)MCU_I2C_ACK_GYRO, (w), (U1)GP_I2C_MA_SLA_6_GYRO, (x), (y), (z), (U1)MCU_I2C_WAIT_NON))
 #define u1_GYRODEV_GSENS_I2C_CTRL_REGSET(u, v, w, x, y, z)   (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_G_MONI, (u), (v), (U1)GP_I2C_MA_SLA_7_G_MONI, (w), (x), (y), (z)))
@@ -92,6 +98,8 @@
 #define vd_GYRODEV_NOTIFCONDSET_RESULT(x)           (vd_g_XspiIviSub2GyroIntSetSend(x))
 #define vd_GYRODEV_NOTIFCONDREAD_RESULT(x)          (vd_g_XspiIviSub2GyroIntGetSend(x))
 #define vd_GYRODEV_CTRLOUTSETSET_RESULT(x)          (vd_g_XspiIviSub2GyroIntOutSend(x))
+#define vd_GYRODEV_GET_MODESTS()                    (u1_g_GyroDevCtlMngModGet())
+#define vd_GYRODEV_DEVICE_EVENT(x)                  (vd_g_GyroDevEventGo(x))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
