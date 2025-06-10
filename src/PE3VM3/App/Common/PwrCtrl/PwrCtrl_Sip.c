@@ -1071,8 +1071,8 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
             (u4_s_PwrCtrl_Sip_On_POFF_COMPLETE_N_Init_Tim == (U4)PWRCTRL_SIP_TIME_INVALID) &&
             (u4_s_PwrCtrl_Sip_On_VB33_SIP_FREQ_Step2_Tim == (U4)PWRCTRL_SIP_TIME_INVALID)) ||
             ((u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW) &&
-            (u4_s_PwrCtrl_Sip_On_AOSS_Tim > (U4)PWRCTRL_SIP_ON_T_AOSS) &&
-            (u4_s_PwrCtrl_Sip_On_POFF_COMPLETE_N_Init_Tim > (U4)PWRCTRL_SIP_ON_T_POFF_COMPLETE_N))){
+            (u4_s_PwrCtrl_Sip_On_AOSS_Tim >= (U4)PWRCTRL_SIP_ON_T_AOSS) &&
+            (u4_s_PwrCtrl_Sip_On_POFF_COMPLETE_N_Init_Tim >= (U4)PWRCTRL_SIP_ON_T_POFF_COMPLETE_N))){
 #endif
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
             u4_s_PwrCtrl_Sip_On_POFFCOMP_Wait_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
