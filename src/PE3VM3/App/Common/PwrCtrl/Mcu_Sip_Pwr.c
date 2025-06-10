@@ -14,7 +14,7 @@
 /*--------------------------------------------------------------------------*/
 #include "Mcu_Common.h"
 #include "Mcu_Sip_Pwr.h"
-#include "EthSW_Task.h"
+#include "EthSwt_SWIC.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -1338,7 +1338,7 @@ static void Mcu_Sip_PwrOn_ValChk_SAIL_RESOUT_N( void )
 
 		if( read_lv == (uint8)MCU_DIO_HIGH){
 			Mcu_Sip_PwrOn_SAIL_RESOUT_N_Time = MCU_SIP_PWRON_TIME_INVALID;
-			EthSW_PowerON_Req_Bon(); /* 暫定_EtherSW起動要求 */
+			EthSwt_SWIC_PowerOn(); /* 暫定_EtherSW起動要求 */
 		}
 #if (MCU_ERR_CHK == 1U)
 		u1_s_Mcu_Err_dbg_state = MCU_ERR_BON_STEP7_2; /* TP */

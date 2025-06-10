@@ -98,7 +98,7 @@ TASK(eMCOS_TASK_Medium)
  *--------------------------------------------------------------------------*/
 TASK(eMCOS_TASK_Low)
 {
-    EthSW_LowTask();
+    EthSW_BackgroundTask();
     (void)TerminateTask();
 }
 
