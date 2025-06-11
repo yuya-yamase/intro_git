@@ -26,7 +26,7 @@ static const S_ETHSWT_DATA_COMB S_ETHSWT_DATA_IDX_TABLE[D_ETHSWT_DATA_USE_PORT_N
 static S_ETHSWT_DATA_CHIPCOM G_ETHSWT_DATA;
 /* -------------------------------------------------------------------------- */
 static void ethswt_data_get_linkStatus(void);
-static void ethswt_data_setChipComData(void);
+
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void)
 {
@@ -38,7 +38,8 @@ void EthSwt_Data_Init(void)
 void EthSwt_Data_LoProc(void)
 {
     ethswt_data_get_linkStatus();
-    ethswt_data_setChipComData();
+    
+    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_MCUINFO, sizeof(G_ETHSWT_DATA), (uint8*)&G_ETHSWT_DATA);
 
     return;
 }
@@ -58,14 +59,3 @@ static void ethswt_data_get_linkStatus(void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_setChipComData(void)
-{
-    Std_ReturnType ret = E_NOT_OK;
-    uint16 test = 10;
-
-    test = sizeof(G_ETHSWT_DATA);
-    ret = ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_MCUINFO, sizeof(G_ETHSWT_DATA), (uint8*)&G_ETHSWT_DATA);
-
-
-    return;
-}

@@ -48,7 +48,7 @@ Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 
 			break;
 		default:
 			result = E_NOT_OK;										/* レジスタアクセス制御にない要求場合 */
-			*errFactor = D_ETHSWT_SWIC_REG_FACT_NOT_CTRL;
+			*errFactor = D_ETHSWT_SWIC_ERR_NOPROC;
 			break;
 		}
 		if (result == E_NOT_OK) { break; }
@@ -70,13 +70,13 @@ static Std_ReturnType swic_Reg_SetTblWriteOFF(const swic_reg_data_t tbl[], const
 
 		checkPwr = EthSwt_SWIC_AllowSetRegister();			/* OEM Config */
 		if (checkPwr == E_NOT_OK) {
-			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+			*errFactor = D_ETHSWT_SWIC_ERR_POWEROFF;
 			break;
 		}
 	}
 
 	if (result == E_NOT_OK && checkPwr == E_OK) {
-		*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+		*errFactor = D_ETHSWT_SWIC_ERR_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
 	}
 	
 	return result;
@@ -106,13 +106,13 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 		else {
 			checkPwr = EthSwt_SWIC_AllowSetRegister();		/* OEM Config */
 			if (checkPwr == E_NOT_OK) {
-				*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+				*errFactor = D_ETHSWT_SWIC_ERR_POWEROFF;
 				break;
 			}
 
 			cnt = cnt + (uint16)1;
 			if (cnt >= INIT_SEQ_RETRY_CNT) {
-				*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;
+				*errFactor = D_ETHSWT_SWIC_ERR_CRC;
 				break;
 			}
 		}
@@ -122,7 +122,7 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 		LIB_EI();
 		tmo = endTime - startTime;
 		if (tmo > SWIC_REG_WAIT) {
-			*errFactor = D_ETHSWT_SWIC_REG_FACT_BSY;
+			*errFactor = D_ETHSWT_SWIC_ERR_BUSY;
 			 break;
 		}
 	}
@@ -147,7 +147,7 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 			if (((val ^ tbl[idx].value) & tbl[idx].mask) == 0u)	{
 				break;										/* 一致 */
 			} else {
-				*errFactor = D_ETHSWT_SWIC_REG_FACT_INIT;	/* ★要確認 */
+				*errFactor = D_ETHSWT_SWIC_ERR_WRONGVALUE;	/* 読出した値が期待と異なる */
 				result = E_NOT_OK;
 				break;
 			}
@@ -155,13 +155,13 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 
 		checkPwr = EthSwt_SWIC_AllowSetRegister();			/* OEM Config */
 		if (checkPwr == E_NOT_OK) {
-			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+			*errFactor = D_ETHSWT_SWIC_ERR_POWEROFF;
 			break;
 		}
 	}
 
 	if (result == E_NOT_OK && checkPwr == E_OK) {
-		*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+		*errFactor = D_ETHSWT_SWIC_ERR_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
 	}
 
 	return result;
@@ -183,12 +183,12 @@ static Std_ReturnType swic_Reg_SetTblWriteMask(const swic_reg_data_t tbl[], cons
 
 		checkPwr = EthSwt_SWIC_AllowSetRegister();			/* OEM Config */
 		if (checkPwr == E_NOT_OK) {
-			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+			*errFactor = D_ETHSWT_SWIC_ERR_POWEROFF;
 			break;
 		}
 	}
 	if (result == E_NOT_OK && checkPwr == E_OK) {
-		*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+		*errFactor = D_ETHSWT_SWIC_ERR_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
 	}
 	
 	return result;
@@ -208,13 +208,13 @@ static Std_ReturnType swic_Reg_SetTblReadMask(const swic_reg_data_t tbl[], const
 
 		checkPwr = EthSwt_SWIC_AllowSetRegister();			/* OEM Config */
 		if (checkPwr == E_NOT_OK) {
-			*errFactor = D_ETHSWT_SWIC_REG_FACT_POWEROFF;
+			*errFactor = D_ETHSWT_SWIC_ERR_POWEROFF;
 			break;
 		}
 	}
 
 	if (result == E_NOT_OK && checkPwr == E_OK) {
-		*errFactor = D_ETHSWT_SWIC_REG_FACT_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
+		*errFactor = D_ETHSWT_SWIC_ERR_CRC;	/* CRCエラーが連続INIT_SEQ_RETRY_CNT続いたとき */
 	}
 	
 	return result;
