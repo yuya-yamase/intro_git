@@ -5,20 +5,12 @@
 /* -------------------------------------------------------------------------- */
 #include <EthDLC_ACTL.h>
 #include <EthDLC_STM.h>
-#include <EthDLC_Core_Cfg.h>
+#include <EthDLC_Cfg.h>
 /* -------------------------------------------------------------------------- */
 #define EthDLC_START_SEC_CODE
 #include <EthDLC_MemMap.h>
 /* -------------------------------------------------------------------------- */
 void EthDLC_Init (void)
-{
-	EthDLC_ACTL_Init();
-	EthDLC_STM_Init();
-
-	return;
-}
-/* -------------------------------------------------------------------------- */
-void EthDLC_Stop (void)
 {
 	EthDLC_ACTL_Init();
 	EthDLC_STM_Init();

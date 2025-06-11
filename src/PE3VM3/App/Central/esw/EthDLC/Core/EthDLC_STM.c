@@ -5,7 +5,7 @@
 #include "EthDLC_STM.h"
 #include <LIB.h>
 #include "EthDLC_ACTL.h"
-#include <EthDLC_Core_Cfg.h>
+#include <EthDLC_Cfg.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHDLC_ST_INIT_POINT		(0U)
 #define D_ETHDLC_ST_LINK_DOWN		(1U)

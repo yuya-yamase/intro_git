@@ -10,7 +10,6 @@
 #define D_ETH_PORT_DLC				(6U)
 /* -------------------------------------------------------------------------- */
 void			EthDLC_Init(void);
-void			EthDLC_Stop(void);
 void			EthDLC_LoProc(void);
 Std_ReturnType	EthDLC_GetACTLState(void);
 /* -------------------------------------------------------------------------- */

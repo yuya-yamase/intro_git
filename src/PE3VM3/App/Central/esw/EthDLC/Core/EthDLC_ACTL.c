@@ -2,7 +2,7 @@
 /* file name   : EthDLC_ACTL.c                                                */
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-#include <EthDLC_Core_Cfg.h>
+#include <EthDLC_Cfg.h>
 #include "EthDLC_ACTL.h"
 /* -------------------------------------------------------------------------- */
 #define D_ETHDLC_ACTL_TIME_CLEAR		(0UL)

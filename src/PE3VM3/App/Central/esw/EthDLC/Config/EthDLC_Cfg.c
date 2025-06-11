@@ -1,16 +1,19 @@
 /* -------------------------------------------------------------------------- */
-/* file name   : EthDLC_Core_Cfg.c                                            */
+/* file name   : EthDLC_Cfg.c                                            */
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-#include "EthDLC_Core_Cfg.h"
+#include "EthDLC_Cfg.h"
 /* -------------------------------------------------------------------------- */
-
+#include <VIS.h>
+#include <EthDLC.h>
+#include <EthDLC_STM.h>
+#include <chipcom.h>
+/* -------------------------------------------------------------------------- */
 #define EthDLC_START_SEC_CODE
 #include <EthDLC_MemMap.h>
 /* -------------------------------------------------------------------------- */
 /* Config for EthDLC_STM.c                                                    */
 /* -------------------------------------------------------------------------- */
-#include <VIS.h>
 Std_ReturnType EthDLC_Power_GetState (void)
 {
 	/* TMC C-DC VISから車両電源基本ステートを取得して判断する	*/
@@ -29,7 +32,6 @@ Std_ReturnType EthDLC_Power_GetState (void)
 	return ret;
 }
 /* -------------------------------------------------------------------------- */
-#include <EthDLC.h>
 Std_ReturnType EthDLC_Port_GetState (void)
 {
 	Std_ReturnType	state = STD_ON;
@@ -51,28 +53,6 @@ Std_ReturnType EthDLC_Port_GetState (void)
 	return state;
 }
 /* -------------------------------------------------------------------------- */
-#include <chipcom.h>
-void EthDLC_Indicate_DLCOn (void)
-{
-    /* ChipComへDoIP起動データセット*/
-	Std_ReturnType txData = STD_ON;
-	(void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_DOIPMGR_DOIPCOMPWR, sizeof(txData), &txData);
-
-    return;
-}
-/* -------------------------------------------------------------------------- */
-#include <chipcom.h>
-void EthDLC_Indicate_DLCOff (void)
-{
-    /* ChipComへDoIP停止データセット*/
-    Std_ReturnType txData = STD_OFF;
-	(void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_DOIPMGR_DOIPCOMPWR, sizeof(txData), &txData);
-
-    return;
-}
-/* -------------------------------------------------------------------------- */
-#include <EthDLC_STM.h>
-#include <chipcom.h>
 void EthDLC_Indicate_Cycle(void)
 {
 	Std_ReturnType doipStart;
