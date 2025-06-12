@@ -29,9 +29,10 @@
 #include "EthSW_Task.h"
 
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
+#include "gpt_drv_frt.h"
+
 #define MEASURE_TIME_TASK_1MS      (U4)(PROCESSING_LOAD_MEASURE_TIME)
 #define MEASURE_TIME_TASK_5MS      (U4)(PROCESSING_LOAD_MEASURE_TIME / (U4)5U)
-#include "gpt_drv_frt.h"
 #endif
 
 /*----------------------------------------------------------------------------
@@ -90,10 +91,12 @@ TASK(eMCOS_TASK_High)
     SuspendAllInterrupts();
     u4t_StaTaskHigh_1ms = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (U4)0x7fffffffU;
 #endif
+/* Task hook start */
 
     BswM_CS_MainFunctionHigh();
     EthSW_HighTask();
 
+/* Task hook end */
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
     u4t_EndTaskHigh_1ms = u4_g_Gpt_FrtGetUsElapsed((void *)0);
     ResumeAllInterrupts();
@@ -122,9 +125,11 @@ TASK(eMCOS_TASK_Medium)
     SuspendAllInterrupts();
     u4t_StaTaskMedium_5ms = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (U4)0x7fffffffU;
 #endif
+/* Task hook start */
 
     vd_g_SchdlrMainTask();
 
+/* Task hook end */
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
     u4t_EndTaskMedium_5ms = u4_g_Gpt_FrtGetUsElapsed((void *)0);
     ResumeAllInterrupts();

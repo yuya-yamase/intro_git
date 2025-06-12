@@ -37,7 +37,7 @@ primaryTarget=v800_standalone.tgt
     -D__RELEASE_BUILD__
 
     # CompileSW (ProcessingLoad)
-    # Enter the measurement time in milliseconds
+    # Enter the measurement time in milliseconds (0:Disabled)
     -DPROCESSING_LOAD_MEASURE_TIME=0U
 
     -o host.elf

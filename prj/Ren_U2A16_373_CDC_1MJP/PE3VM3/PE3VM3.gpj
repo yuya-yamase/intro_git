@@ -75,7 +75,7 @@ primaryTarget=v800_standalone.tgt
     -DECU_INTG_LWH_GUEST
 
     # CompileSW (ProcessingLoad)
-    # Enter the measurement time in milliseconds
+    # Enter the measurement time in milliseconds (0:Disabled)
     -DPROCESSING_LOAD_MEASURE_TIME=0U
 
     -o PE3VM3.elf
