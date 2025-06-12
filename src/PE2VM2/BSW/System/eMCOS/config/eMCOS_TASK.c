@@ -126,7 +126,7 @@ TASK(eMCOS_TASK_Medium)
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
     u4t_EndTaskMedium_1ms = u4_g_Gpt_FrtGetUsElapsed((void *)0);
     ResumeAllInterrupts();
-    
+
     if(u4s_TimeCntTaskMedium_1ms < MEASURE_TIME_TASK_1MS){
         u4s_TimeTaskMedium_1ms[u4s_TimeCntTaskMedium_1ms] = (U4)((u4t_EndTaskMedium_1ms - u4t_StaTaskMedium_1ms) & (U4)0x7fffffffU);
         u4s_TimeCntTaskMedium_1ms++;

@@ -118,7 +118,7 @@ TASK(eMCOS_TASK_Medium)
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
     U4                  u4t_StaTaskMedium_5ms = (U4)0U;
     U4                  u4t_EndTaskMedium_5ms = (U4)0U;
- 
+
     SuspendAllInterrupts();
     u4t_StaTaskMedium_5ms = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (U4)0x7fffffffU;
 #endif
@@ -128,7 +128,7 @@ TASK(eMCOS_TASK_Medium)
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
     u4t_EndTaskMedium_5ms = u4_g_Gpt_FrtGetUsElapsed((void *)0);
     ResumeAllInterrupts();
-    
+
     if(u4s_TimeCntTaskMedium_5ms < MEASURE_TIME_TASK_5MS){
         u4s_TimeTaskMedium_5ms[u4s_TimeCntTaskMedium_5ms] = (U4)((u4t_EndTaskMedium_5ms - u4t_StaTaskMedium_5ms) & (U4)0x7fffffffU);
         u4s_TimeCntTaskMedium_5ms++;
