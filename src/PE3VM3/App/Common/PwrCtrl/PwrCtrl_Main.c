@@ -945,6 +945,7 @@ static void vd_s_PwrCtrlMainForcedOffSeq( void )
     U1 u1_t_sipstb_seq;                                                /* SIP電源強制OFFシーケンス状態問い合わせ結果 */
     U1 u1_t_sipfoff_seq;                                               /* SIP入力DDコン電源OFF処理実施要否取得結果 */
     U1 u1_t_wake_factor;                                               /* 起動要因 */
+    U1 u1_t_boot;                                                      /* 暫定 */
     
     /* SIP電源強制OFF処理開始 */
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC){
@@ -961,11 +962,13 @@ static void vd_s_PwrCtrlMainForcedOffSeq( void )
     if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_COMP){
 
         /* 【todo】起動要因の取得 */
-        /* 暫定対応(CANスリープ要否の確認) */
+        /* 暫定対応(CANスリープ要否の確認、Bootチェック) */
         u1_t_wake_factor = u1_g_oXCANEcuShtdwnOk();
+        u1_t_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BOOT);
         
         /* 【todo】起動要因が成立しているかの判定 */
-        if(u1_t_wake_factor == (U1)FALSE){
+        if((u1_t_wake_factor == (U1)FALSE) ||
+           (u1_t_boot == (U1)MCU_DIO_HIGH)){
             /* SIP入力DDコン電源OFF処理実施要否を取得 */
             u1_t_sipfoff_seq = u1_g_PwrCtrlSipFOffGetSts();
         
