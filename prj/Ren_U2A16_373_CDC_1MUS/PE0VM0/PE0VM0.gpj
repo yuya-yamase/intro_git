@@ -82,6 +82,10 @@ primaryTarget=v800_standalone.tgt
     -DECU_VM0
     -DECU_INTG_LWH_GUEST
 
+    # CompileSW (ProcessingLoad)
+    # Enter the measurement time in milliseconds
+    -DPROCESSING_LOAD_MEASURE_TIME=0U
+
     -o PE0VM0.elf
 
 ${PRJ_DIR}/bswCAN.gpj

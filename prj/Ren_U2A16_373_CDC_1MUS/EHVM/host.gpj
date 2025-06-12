@@ -35,6 +35,11 @@ primaryTarget=v800_standalone.tgt
 
     -DECU_HOST
     -D__RELEASE_BUILD__
+
+    # CompileSW (ProcessingLoad)
+    # Enter the measurement time in milliseconds
+    -DPROCESSING_LOAD_MEASURE_TIME=0U
+
     -o host.elf
 
     -T ${MCAL_SECTION_DIR}/memory_map_HOST.ld

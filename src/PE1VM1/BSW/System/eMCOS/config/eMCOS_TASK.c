@@ -26,9 +26,11 @@
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
-/* Processing load */
+#if (PROCESSING_LOAD_MEASURE_TIME > 0)
+#define MEASURE_TIME_TASK_1MS      (U4)(PROCESSING_LOAD_MEASURE_TIME)
+#define MEASURE_TIME_TASK_5MS      (U4)(PROCESSING_LOAD_MEASURE_TIME / (U4)5U)
 #include "gpt_drv_frt.h"
-/* Processing load */
+#endif
 
 /*----------------------------------------------------------------------------
  *		ProtoTypes
@@ -40,10 +42,10 @@ TASK(eMCOS_TASK_Medium);
 /*----------------------------------------------------------------------------
  *		Symbols
  *--------------------------------------------------------------------------*/
-/* Processing load */
-static volatile U4              u4_s_time_Task_High[10000];    
-static U4                       u4_s_timecnt_Task_High;              
-/* Processing load */
+#if (PROCESSING_LOAD_MEASURE_TIME > 0)
+static volatile U4              u4s_TimeTaskHigh_1ms[MEASURE_TIME_TASK_1MS] = {(U4)0U};
+static U4                       u4s_TimeCntTaskHigh_1ms = (U4)0U;
+#endif
 
 /*----------------------------------------------------------------------------
  *		Codes
@@ -75,25 +77,25 @@ TASK(eMCOS_TASK_Idle)
  *--------------------------------------------------------------------------*/
 TASK(eMCOS_TASK_High)
 {
-/* Processing load */
-    U4                  u4_t_sta_Task_High;
-    U4                  u4_t_end_Task_High;
+#if (PROCESSING_LOAD_MEASURE_TIME > 0)
+    U4                  u4t_StaTaskHigh_1ms = (U4)0U;
+    U4                  u4t_EndTaskHigh_1ms = (U4)0U;
 
     SuspendAllInterrupts();
-    u4_t_sta_Task_High = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (U4)0x7fffffffU;
-/* Processing load */
+    u4t_StaTaskHigh_1ms = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (U4)0x7fffffffU;
+#endif
 
     BswM_CS_MainFunctionHigh();
 
-/* Processing load */
-    u4_t_end_Task_High = u4_g_Gpt_FrtGetUsElapsed((void *)0);
+#if (PROCESSING_LOAD_MEASURE_TIME > 0)
+    u4t_EndTaskHigh_1ms = u4_g_Gpt_FrtGetUsElapsed((void *)0);
     ResumeAllInterrupts();
 
-    if(u4_s_timecnt_Task_High < (U4)10000U){
-        u4_s_time_Task_High[u4_s_timecnt_Task_High] = (U4)((u4_t_end_Task_High - u4_t_sta_Task_High) & (U4)0x7fffffffU);
-        u4_s_timecnt_Task_High++;
+    if(u4s_TimeCntTaskHigh_1ms < MEASURE_TIME_TASK_1MS){
+        u4s_TimeTaskHigh_1ms[u4s_TimeCntTaskHigh_1ms] = (U4)((u4t_EndTaskHigh_1ms - u4t_StaTaskHigh_1ms) & (U4)0x7fffffffU);
+        u4s_TimeCntTaskHigh_1ms++;
     }    
-/* Processing load */
+#endif
     (void)TerminateTask();
 }
 
