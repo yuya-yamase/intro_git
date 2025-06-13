@@ -110,6 +110,7 @@
 #define SOUND_INITIAL_WAIT_END                 (1U)
 
 #define SOUND_FLTBCHECK_WAIT_TIM               (10U)
+#define SOUND_FLTBCHECK_WAIT_TIM_INITIAL       (5U)
 #define SOUND_IC_ERROR_COUNT                   (2U)
 #define SOUND_IC_ERROR                         (1U)
 #define SOUND_IC_NORMAL                        (0U)
@@ -207,8 +208,8 @@ static ST_SOUND_OW_CTRL     st_sp_sound_ow_ctrl[SOUND_GROUP_NUM];               
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1                   u1_s_sound_initialwait;
 static U1                   u1_s_sound_fltbcheck_cycle;
-static U1                   u1_s_sound_err_count;
-       U1                   u1_s_sound_ic_error;
+static U1                   u1_s_fltb_befor;
+static U1                   u1_s_sound_ic_error;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -232,7 +233,7 @@ static        void    vd_s_SoundCriMgrErrorCallback(const CriChar8 * s1p_a_ERRID
 static inline U1      u1_s_SoundCriMgrCalibU1NumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static        void    vd_s_SoundCriMgrInitialize(void);
+static        void    vd_s_SoundCriMgrStartup(void);
 static        U1      u1_s_SoundDiagnosis(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -397,8 +398,8 @@ static const U2 u2_sp_SOUND_WAV_CYCLETIME_LEX[CRI_CUESHEET_0_LEX_CUENUM] = {
 void    vd_g_SoundCriMgrInitialize(void)
 {
     u1_s_sound_initialwait     = (U1)0U;
-    u1_s_sound_fltbcheck_cycle = (U1)0U;
-    u1_s_sound_err_count       = (U1)0U;
+    u1_s_sound_fltbcheck_cycle = (U1)SOUND_FLTBCHECK_WAIT_TIM_INITIAL;
+    u1_s_fltb_befor            = (U1)STD_HIGH;
     u1_s_sound_ic_error        = (U1)SOUND_IC_NORMAL;
 
     Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_HIGH);
@@ -407,12 +408,12 @@ void    vd_g_SoundCriMgrInitialize(void)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_s_SoundCriMgrInitialize(void)                                                                                         */
+/*  void    vd_s_SoundCriMgrStartup(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_SoundCriMgrInitialize(void)
+static void    vd_s_SoundCriMgrStartup(void)
 {
     CriAtomExConfig_Rh850u2a                st_t_config_rh850u2a;             /* Configuration structure for library initialization  */
     CriAtomExSoundGeneratorVoicePoolConfig  st_t_sound_voice_pool_config_sg;  /* Configuration structure for SG voice-pool creation  */
@@ -592,7 +593,7 @@ void    vd_g_SoundCriMgrMainTask(void)
 #endif
         if(u1_t_errsts == (U1)DMA_DTSER_DTSER_ERR){
             vd_g_SoundCriMgrFinalize();
-            vd_g_SoundCriMgrInitialize();
+            vd_s_SoundCriMgrStartup();
         }
 
         u1_t_playnum = u1_s_SoundCriMgrWavNext();                                           /* Control buzzer sounding every CH      */
@@ -2349,7 +2350,7 @@ static  U1  u1_s_SoundDiagnosis(void)
             Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_LOW);
             Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_LOW);
             if (u1_s_sound_initialwait == (U1)SOUND_INITIAL_WAIT_TIM) {
-                vd_s_SoundCriMgrInitialize();
+                vd_s_SoundCriMgrStartup();
             }
         }
     }
@@ -2357,16 +2358,12 @@ static  U1  u1_s_SoundDiagnosis(void)
         u1_s_sound_fltbcheck_cycle++;
         if (u1_s_sound_fltbcheck_cycle > (U1)SOUND_FLTBCHECK_WAIT_TIM) {
             u1_t_fltb = Dio_ReadChannel((U1)DIO_ID_PORT20_CH10);
-            if (u1_t_fltb == (U1)STD_LOW) {
-                u1_s_sound_err_count++;
-                if (u1_s_sound_err_count > (U1)SOUND_IC_ERROR_COUNT) {
+            if (u1_t_fltb == u1_s_fltb_befor) {
+                if (u1_t_fltb == (U1)STD_LOW) {
                     u1_s_sound_ic_error  = (U1)SOUND_IC_ERROR;
-                    u1_s_sound_err_count = (U1)SOUND_IC_ERROR_COUNT;
                 }
             }
-            else {
-                u1_s_sound_err_count = (U1)0U;
-            }
+            u1_s_fltb_befor = u1_t_fltb;
             u1_s_sound_fltbcheck_cycle = (U1)0U;
         }
         u1_t_ret = (U1)SOUND_INITIAL_WAIT_END;
@@ -2379,6 +2376,33 @@ static  U1  u1_s_SoundDiagnosis(void)
     return(u1_t_ret);
 }
 
+/*===================================================================================================================================*/
+/*  U1  u1_g_SoundIcErrorStatus(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_s_sound_ic_error                                                                                           */
+/*===================================================================================================================================*/
+U1  u1_g_SoundIcErrorStatus(void)
+{
+   return(u1_s_sound_ic_error);
+}
+
+/*===================================================================================================================================*/
+/*  void  vd_g_SoundCriMgr_DeInit(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void  vd_g_SoundCriMgr_DeInit(void)
+{
+    Dio_WriteChannel((U1)DIO_ID_PORT20_CH1, (U1)STD_LOW);
+    Dio_WriteChannel((U1)DIO_ID_PORT20_CH2, (U1)STD_LOW);
+
+    Port_SetPinMode((U2)PORT_ID_PORT20_PIN1,   (U4)PORT_MODE_CFG_P20_1_DO_LO); 
+    Port_SetPinMode((U2)PORT_ID_PORT20_PIN2,   (U4)PORT_MODE_CFG_P20_2_DO_LO);
+
+    Dio_WriteChannel((U1)DIO_ID_PORT0_CH5, (U1)STD_LOW);
+}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
