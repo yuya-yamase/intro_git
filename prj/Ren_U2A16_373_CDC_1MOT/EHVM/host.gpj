@@ -37,7 +37,8 @@ primaryTarget=v800_standalone.tgt
     -D__RELEASE_BUILD__
 
     # CompileSW (ProcessingLoad)
-    # Enter the measurement time in milliseconds (0:Disabled)
+    # Enter the measurement time in milliseconds
+    # Set to 0 to disable. Enable with any positive value (recommended: 10000).
     -DPROCESSING_LOAD_MEASURE_TIME=0U
 
     -o host.elf
