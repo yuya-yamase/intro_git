@@ -139,7 +139,7 @@ const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_XYZ[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
     (U1)0x12U     /* Write Address */
 };
 
-U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_XYZ[MCU_SYS_PWR_GYR_TX_RDSADR_NUM];
+U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_XYZ[MCU_SYS_PWR_GYR_RDTBL_XYZ_NUM];
 
 const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_TEMP[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
@@ -147,6 +147,43 @@ const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_TEMP[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
 };
 
 U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_TEMP[MCU_SYS_PWR_GYR_TX_RDSADR_NUM];
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_PWRCONF_ON[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x7CU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_PWRCONF_OFF[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x7CU,    /* Write Address */
+    (U1)0x03U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_ON[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x59U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_OFF[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x59U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_RD[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x2AU     /* Write Address */
+};
+
+U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_DT[MCU_SYS_PWR_GYR_TX_RDSADR_NUM];
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SOFTRESE[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x7EU,    /* Write Address */
+    (U1)0xB6U     /* Write Data */
+};
 
 const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_LSB[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
@@ -203,6 +240,16 @@ const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT2_MAP[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = 
     (U1)0x57U,    /* Write Address */
     (U1)0x00U     /* Write Data */
 };
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_CFG1[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x5BU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_CFG2[MCU_SYS_PWR_GYR_TX_TXDAT_NUM];
+
+U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_DATA[MCU_SYS_PWR_GYR_TX_CFGDATA_NUM];
 
 const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN1_BW_INPRM[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
@@ -357,55 +404,122 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_TEMP[MCU_SYS_PWR_GYR_RDTBL_
     }
 };
 
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_PWRCONF_ON[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_PWRCONF_ON[0],
+        (U4)0x70640003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_PWRCONF_OFF[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_PWRCONF_OFF[0],
+        (U4)0x70680003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_ON[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_ON[0],
+        (U4)0x706C0003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_OFF[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_OFF[0],
+        (U4)0x70700003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_READ[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_RD[0],
+        (U4)0x70740002U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_DT[0],
+        (U4)0x70780002U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_SOFTRESET[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SOFTRESE[0],
+        (U4)0x707C0003U
+    }
+};
+
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_INTSET_ANYMOT_TH[MCU_SYS_PWR_GYR_INTTBL_ANYMOT_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_LSB[0],
-        (U4)0x70640003U
+        (U4)0x70800003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_MSB[0],
-        (U4)0x70680003U
+        (U4)0x70840003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_DAT[0],
-        (U4)0x706C0004U
+        (U4)0x70880004U
     },
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_INTSET_ANYMOT_EN[MCU_SYS_PWR_GYR_INTTBL_ANYMOT_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_LSB[0],
-        (U4)0x70700003U
+        (U4)0x708C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_MSB[0],
-        (U4)0x70740003U
+        (U4)0x70900003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_DAT[0],
-        (U4)0x70780004U
+        (U4)0x70940004U
     },
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_INTSET_OTH[MCU_SYS_PWR_GYR_INTTBL_OTH_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT2_IO_CONF[0],
-        (U4)0x707C0003U
+        (U4)0x70980003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_LATCH[0],
-        (U4)0x70800003U
+        (U4)0x709C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT2_MAP[0],
-        (U4)0x70840003U
+        (U4)0x70A00003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_SEN1_BW_INPRM[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN1_BW_INPRM[0],
-        (U4)0x70880003U
+        (U4)0x70A40003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_CFG1[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_CFG1[0],
+        (U4)0x70A80003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_CFG2[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_CFG2[0],
+        (U4)0x70AC0003U
+    }
+};
+
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_DATA[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_DATA[0],
+        (U4)0x70B00022U
     }
 };
 
@@ -441,6 +555,21 @@ void            vd_g_GyroSysPwrInit(void)
         u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_TEMP[mcu_cnt] = (U1)0U;    /* 読出しデータ初期値 */
     }
 
+    /*  データリード用テーブル初期化 */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_DT[0] = (U1)MCU_SYS_PWR_GYR_SADR_ACC_RD;    /* Slave Address */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INTCONF_DT[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    /* address offset設定テーブル② 書込み用テーブル(Data可変)初期化 */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_CFG2[0] = (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR;    /* Slave Address */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_CFG2[1] = (U1)0x5CU;    /* Write Address */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_CFG2[2] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+
+    /* コンフィグファイルの書き込みデータ 書込み用テーブル(Data可変)初期化 */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_DATA[0] = (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR;    /* Slave Address */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_DATA[1] = (U1)0x5EU;    /* Write Address */
+    for(mcu_cnt = (U4)2U; mcu_cnt < (U4)34U; mcu_cnt++) {
+        u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_DATA[mcu_cnt] = (U1)0U;    /* Write Data初期値(定期処理内で更新) */
+    }
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
