@@ -285,10 +285,10 @@
 #define VDF_ESO_CH_SOLCHG                        (254U)
 #define VDF_ESO_CH_SW_OBBPWL                     (255U)
 #define VDF_ESO_CH_SYS_NOT_USED42                (256U)
-#define VDF_ESO_CH_SYS_NOT_USED43                (257U)
-#define VDF_ESO_CH_SYS_NOT_USED44                (258U)
-#define VDF_ESO_CH_SYS_NOT_USED45                (259U)
-#define VDF_ESO_CH_SYS_NOT_USED46                (260U)
+#define VDF_ESO_CH_VHCOBBSD                      (257U)
+#define VDF_ESO_CH_SW_OBBMODE                    (258U)
+#define VDF_ESO_CH_ERM_ADU                       (259U)
+#define VDF_ESO_CH_SW_OBBSAV                     (260U)
 #define VDF_ESO_CH_SYS_NOT_USED47                (261U)
 #define VDF_ESO_CH_SYS_NOT_USED48                (262U)
 #define VDF_ESO_CH_SYS_NOT_USED49                (263U)
@@ -324,7 +324,7 @@
 #define VDF_ESO_NVM_W5                           (0xC030E76CU)
 #define VDF_ESO_NVM_W6                           (0x3F840FFFU)
 #define VDF_ESO_NVM_W7                           (0x8FEFFD40U)
-#define VDF_ESO_NVM_W8                           (0x00000000U)
+#define VDF_ESO_NVM_W8                           (0x0000001CU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
