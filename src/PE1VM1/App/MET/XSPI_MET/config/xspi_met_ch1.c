@@ -3211,7 +3211,7 @@ static inline void    vd_s_XSpiCanTx_TITE_BB(const U4 * u4_ap_pck_rx)
 /*           01/31/2025  HY       Change for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                         */
 /*           02/10/2024  RO       Change for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                        */
 /*           02/10/2024  RO       Change for BEV System_Consideration_1.(MET-S_ADVMID-CSTD-0-)                                       */
-/*           02/10/2025  RO       Change for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                        */
+/*           02/10/2025  HF       Change for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                        */
 /*           02/10/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
 /*           03/06/2025  HT       Change for BEV System_Consideration_1.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
 /*           03/06/2025  HT       Change for BEV System_Consideration_1.(MET-B_TITEBB-CSTD-0-00-A-C0)                                */
