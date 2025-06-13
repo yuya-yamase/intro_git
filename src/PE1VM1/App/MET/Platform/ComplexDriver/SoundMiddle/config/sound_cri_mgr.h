@@ -51,6 +51,9 @@ void    vd_g_SoundCriMgrOwUnlock(const U4 u4_a_KEY);
 void    vd_g_SoundCriMgrOwAct(const U1 u1_a_SO_MDL_CH, const U1 u1_a_WAV_IDX);
 void    vd_g_SoundCriMgrOwDeAct(const U1 u1_a_SO_MDL_CH);
 
+U1      u1_g_SoundIcErrorStatus(void);
+void    vd_g_SoundCriMgr_DeInit(void);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
