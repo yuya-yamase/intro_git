@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_RX                           (178U)
+#define VDF_ESO_NUM_RX                           (179U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -2232,6 +2232,18 @@ const ST_VDF_ESO_CH    st_gp_VDF_ESO_CH[VDF_ESO_NUM_RX] = {
             (U2)2U,                             /* u2_rxc_min[MIN_INA] */
             (U2)2U                              /* u2_rxc_min[MIN_ACT] */
         }
+    },
+    {
+        &u1_g_VdfEsoRx_VHCOBBSD,                /* fp_u1_AVA_RX        */
+        (U2)VDF_ESO_CH_VHCOBBSD,                /* u2_eso_ch           */
+        (U1)VDF_ESO_INPUT_TYPE_CAN,             /* u1_input_type       */
+        (U2)OXCAN_PDU_RX_CAN_SCS1S11_RXCH0,     /* u2_msg_rx           */
+        (U2)0x0001U,                            /* u2_vom_act          */
+        ((U2)4200U / (U2)VDF_MAIN_TICK),        /* u2_rxc_peri         */
+        {
+            (U2)2U,                             /* u2_rxc_min[MIN_INA] */
+            (U2)2U                              /* u2_rxc_min[MIN_ACT] */
+        }
     }
 };
 
@@ -2316,7 +2328,7 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)VDF_ESO_INI_W8,                        /* u4_ini */
         (U4)VDF_ESO_NVM_W8,                        /* u4_nvm */
         (U4)0x00000000U,                           /* u4_unk */
-        (U4)0x00000000U,                           /* u4_rx  */
+        (U4)0x00000002U,                           /* u4_rx  */
 
         (U2)NVMCID_U4_VDF_ESO_W8,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W8                    /* u2_bid */
@@ -2452,6 +2464,7 @@ U1      u1_g_VardefEsOptCfgAvaByAVN(void)
 /*  BEV-12    02/10/2025  HF      Change config for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                 */
 /*  BEV-13    05/21/2025  MN      Change config for BEV PreCV.(MET-M_CLKCTL-CSTD-0-)                                                 */
 /*  BEV-14    05/30/2025  SN(K)   Change config for BEV System_Consideration_2.(MET-B_TITEBB-CSTD-0-)                                */
+/*  BEV-15    05/30/2025  SN(K)   Change config for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-)                                */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
