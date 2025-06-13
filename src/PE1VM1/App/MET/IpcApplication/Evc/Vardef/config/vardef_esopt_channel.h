@@ -1,4 +1,4 @@
-/* 2.5.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_ESOPT_CHANNEL_H_MAJOR             (2)
-#define VARDEF_ESOPT_CHANNEL_H_MINOR             (5)
+#define VARDEF_ESOPT_CHANNEL_H_MINOR             (6)
 #define VARDEF_ESOPT_CHANNEL_H_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -260,7 +260,7 @@
 #define VDF_ESO_CH_SYS_NOT_USED15                (229U)
 #define VDF_ESO_CH_ADIEXIST                      (230U)
 #define VDF_ESO_CH_SYS_NOT_USED17                (231U)
-#define VDF_ESO_CH_SYS_NOT_USED18                (232U)
+#define VDF_ESO_CH_SW_TITE                       (232U)
 #define VDF_ESO_CH_SYS_NOT_USED19                (233U)
 #define VDF_ESO_CH_SW_HEDLMP_AUT                 (234U)
 #define VDF_ESO_CH_SW_HEDLMP_HED                 (235U)
@@ -323,7 +323,7 @@
 #define VDF_ESO_NVM_W4                           (0x507835FEU)
 #define VDF_ESO_NVM_W5                           (0xC030E76CU)
 #define VDF_ESO_NVM_W6                           (0x3F840FFFU)
-#define VDF_ESO_NVM_W7                           (0x8FEFFC40U)
+#define VDF_ESO_NVM_W7                           (0x8FEFFD40U)
 #define VDF_ESO_NVM_W8                           (0x00000000U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
