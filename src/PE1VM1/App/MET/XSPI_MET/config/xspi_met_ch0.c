@@ -580,17 +580,12 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[11] |= (U4)TRUE << 4;                                 /*  SYS_DMTOSP               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 5;                                 /*  SYS_DMINEC               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 7;                                 /*  SYS_PERSET               */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[11] |= (U4)TRUE << 8;                                 /*  SYS_SW_TITE              */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 9;                                 /*  SYS_EPS_EPSSBW           */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 20;                                /*  SYS_SW_MULTI_WEATHERLAMP */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 28;                                /*  SYS_SW_CAMERA_WASHER     */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 29;                                /*  SYS_SW_WIPER_DEICER      */ /* BEV SV1 provisionally */
 
     u4_ap_pdu_tx[12] |= (U4)TRUE;                                      /*  SYS_SW_OBBPBD            */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[12] |= (U4)TRUE << 1;                                 /*  SYS_VHCOBBSD             */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[12] |= (U4)TRUE << 2;                                 /*  SYS_SW_OBBMODE           */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[12] |= (U4)TRUE << 3;                                 /*  SYS_ERM_ADU              */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[12] |= (U4)TRUE << 4;                                 /*  SYS_SW_OBBSAV            */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 5;                                 /*  SYS_DMEVRNGE             */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 6;                                 /*  SYS_DMTOEC               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 7;                                 /*  SYS_DMM1EC               */ /* BEV SV1 provisionally */
@@ -3050,6 +3045,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-3     02/26/2025 RS       Change for BEV System_Consideration_1.(Requests from the SOC team for electricity cost units)      */
 /*  BEV-4     03/06/2025 SF       Change for BEV System_Consideration_1.(Requests from the SOC team)                                 */
 /*  BEV-5     04/25/2025 MN       Change for BEV System_Consideration_1.(MET-M_CLKCTL-CSTD-0-06-A-C1)                                */
+/*  BEV-6     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-B_TITEBB-CSTD-0-00-A-C0)                                */
+/*  BEV-7     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
+/*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -3067,5 +3065,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
+/*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

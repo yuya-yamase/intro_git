@@ -1,4 +1,4 @@
-/* 2.5.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_ESOPT_ZN11S19_C_MAJOR             (2)
-#define VARDEF_ESOPT_ZN11S19_C_MINOR             (5)
+#define VARDEF_ESOPT_ZN11S19_C_MINOR             (6)
 #define VARDEF_ESOPT_ZN11S19_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -468,6 +468,28 @@ U1      u1_g_VdfEsoRx_SW_REAR_FOG(void)
 
     return(u1_t_ava_rx);
 }
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_TITE(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inable)                                                                  */
+/*===================================================================================================================================*/
+U1      u1_g_VdfEsoRx_SW_TITE(void)
+{
+    U1                 u1_t_rx;
+    U1                 u1_t_ava_rx;
+
+    u1_t_rx = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_TITE_FNC, &u1_t_rx);
+    if(u1_t_rx != (U1)0U){
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
+    }
+    else{
+        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
+    }
+
+    return(u1_t_ava_rx);
+}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -478,6 +500,7 @@ U1      u1_g_VdfEsoRx_SW_REAR_FOG(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  2.5.0    10/10/2024   KT      Newly Created                                                                                      */
+/*  2.6.0     5/30/2025   SN      vardef_esopt.c v2.5.0 -> v2.6.0                                                                    */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -486,9 +509,11 @@ U1      u1_g_VdfEsoRx_SW_REAR_FOG(void)
 /*  BEV-2    12/03/2024   HY      Added function for BEV System_Consideration_1.(MET-B_PWLBB-CSTD-0-)                                */
 /*  BEV-3    12/16/2024   HT      Added function for BEV System_Consideration_1.(MET-B_WPBB-CSTD-0-)                                 */
 /*  BEV-4     2/10/2025   HF      Added function for BEV System_Consideration_1.(MET-B_LMPBB-CSTD-0-)                                */
+/*  BEV-5     5/30/2025   SN      Added function for BEV System_Consideration_2.(MET-B_TITEBB-CSTD-0-)                               */
 /*                                                                                                                                   */
 /*  * KT = Kenta Takaji, Denso Techno                                                                                                */
 /*  * HY = Haruki Yagi, KSE                                                                                                          */
 /*  * HT = Hibiki Tanii, KSE                                                                                                         */
 /*  * HF = Hinari Fukamachi, KSE                                                                                                     */
+/*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*===================================================================================================================================*/

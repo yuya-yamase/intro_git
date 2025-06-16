@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_IDT1S07_C_MAJOR             (2)
-#define VARDEF_ESOPT_IDT1S07_C_MINOR             (6)
-#define VARDEF_ESOPT_IDT1S07_C_PATCH             (0)
+#define VARDEF_ESOPT_ADC1S14_C_MAJOR             (2)
+#define VARDEF_ESOPT_ADC1S14_C_MINOR             (6)
+#define VARDEF_ESOPT_ADC1S14_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_IDT1S07_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_IDT1S07_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_IDT1S07_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_IDT1S07.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_ADC1S14_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_ADC1S14_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_ADC1S14_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_ADC1S14.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,41 +50,22 @@
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_LCKCUS_UNLOCK(void)                                                                                     */
+/*===================================================================================================================================*/
+/*  U1      u1_g_VdfEsoRx_SW_OBBSAV(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Return:         U1 u1_t_ava_rx  : signal status (active/inactive)                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_LCKCUS_UNLOCK(void)
+U1      u1_g_VdfEsoRx_SW_OBBSAV(void)
 {
+    static const U1 u1_s_VDF_ESO_ACT_ADSEGDEX = (U1)1U;
+
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ULK_FUNC, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
-    }
-    else{
-        u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-    }
-
-    return(u1_t_ava_rx);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VdfEsoRx_SW_LCKCUS_AUTOLOCK(void)                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VdfEsoRx_SW_LCKCUS_AUTOLOCK(void)
-{
-    U1                 u1_t_rx;
-    U1                 u1_t_ava_rx;
-
-    u1_t_rx = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_LK_FUNC, &u1_t_rx);
-    if(u1_t_rx != (U1)0U){
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ADSEGDEX, &u1_t_rx);
+    if(u1_t_rx == u1_s_VDF_ESO_ACT_ADSEGDEX){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
     else{
@@ -101,16 +82,11 @@ U1      u1_g_VdfEsoRx_SW_LCKCUS_AUTOLOCK(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  2.4.0     2/19/2024  HF       NEW!                                                                                               */
-/*  2.5.0    11/25/2024  KO       vardef_esopt.c v2.4.0 -> v2.5.0                                                                    */
-/*  2.6.0     5/30/2025  SN       vardef_esopt.c v2.5.0 -> v2.6.0                                                                    */
+/*  2.6.0     5/30/2025  SN       NEW!                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  19PFv3    2/19/2024  HF       Change config for 19PFv3                                                                           */
 /*                                                                                                                                   */
-/*  * HF = Hinari Fukamachi, KSE                                                                                                     */
-/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
