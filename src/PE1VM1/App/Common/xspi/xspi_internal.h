@@ -83,7 +83,7 @@ enum {
 #else	/* (XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_10ms) */
 
 #define XSPI_OST_CNT_NORMAL	((uint32)( 9600UL * GPT_OST_1US ))	/* 通常動作用（9.6ms） */
-#define XSPI_OST_CNT_ENMONI	((uint32)( 5000UL * GPT_OST_1US ))	/* EN信号監視用（10.0ms） */
+#define XSPI_OST_CNT_ENMONI	((uint32)( 10000UL * GPT_OST_1US ))	/* EN信号監視用（10.0ms） */
 
 #endif	/* (XSPI_COMM_CYCLE) */
 
