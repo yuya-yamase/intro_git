@@ -206,7 +206,7 @@ typedef struct {
 /*	ドライバ管理テーブル		*/
 /*------------------------------*/
 typedef struct {
-	void(*func)(void);					/* イベント処理関数アドレス */
+	uint8(*func)(void);					/* イベント処理関数アドレス */
 	uint8	next_stat;					/* 処理後の状態 */
 	uint32	ostm_cnt;					/* OSTMカウント */
 } TBL_DRV_SPI;

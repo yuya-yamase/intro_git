@@ -170,7 +170,7 @@ void	fc_drv_ClearXSpiMng(
 *					  RET :	None											*
 *																			*
 ****************************************************************************/
-void	fc_drv_ClearXSpiSndRcvMng(
+void	fc_drv_ClearRingBuf(
 	void
 )
 {
@@ -459,7 +459,7 @@ uint8 fc_drv_getRcvBufPage(
 	if ( page > XSPI_RCV_PAGE )
 	{
 		/* リングバッファの全領域をクリア */
-		fc_drv_ClearXSpiSndRcvMng();
+		fc_drv_ClearRingBuf();
 	}
 
 	/* 受信用バッファ空チェック */
@@ -508,7 +508,7 @@ uint8 fc_drv_getSndBufPage(
 	if ( page > XSPI_SND_PAGE )
 	{
 		/* リングバッファの全領域をクリア */
-		fc_drv_ClearXSpiSndRcvMng();
+		fc_drv_ClearRingBuf();
 	}
 
 	/* 送信用バッファデータありチェック */
@@ -554,7 +554,7 @@ uint8	fc_drv_ReadBuf(
 		if ( page >= XSPI_RCV_PAGE )
 		{
 			/* リングバッファの全領域をクリア */
-			fc_drv_ClearXSpiSndRcvMng();
+			fc_drv_ClearRingBuf();
 		}
 		rcv_inf = bf_drv_SpiMng.rcv.page[page].inf;
 
@@ -627,7 +627,7 @@ uint8	fc_drv_WriteBuf(
 		if ( page >= XSPI_SND_PAGE )
 		{
 			/* リングバッファの全領域をクリア */
-			fc_drv_ClearXSpiSndRcvMng();
+			fc_drv_ClearRingBuf();
 		}
 		snd_inf = bf_drv_SpiMng.snd.page[page].inf;
 

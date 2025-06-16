@@ -39,11 +39,11 @@ extern uint8	bf_drv_Dbg_ErrInfo;		/* デバッグ用エラー情報 */
 *		prototype			*
 ****************************/
 static uint8	fs_tbl_Excute( uint8 event );						/* 処理テーブル内の該当状態・イベントの関数／状態を実施 */
-static void		fc_SpiInit( void );									/* ドライバ初期化 */
-static void		fc_SpiStartPrepare( void );							/* 送受信開始準備 */
-static void		fc_SpiEnd( void );									/* 送受信終了 */
-static void		fc_SpiAbort( void );								/* 送受信ドライバ中断 */
-static void		fc_SpiStop( void );									/* 送受信ドライバ停止 */
+static uint8	fc_SpiInit( void );									/* ドライバ初期化 */
+static uint8	fc_SpiStartPrepare( void );							/* 送受信開始準備 */
+static uint8	fc_SpiEnd( void );									/* 送受信終了 */
+static uint8	fc_SpiAbort( void );								/* 送受信ドライバ中断 */
+static uint8	fc_SpiStop( void );									/* 送受信ドライバ停止 */
 
 static uint8	fc_drv_ENSigCheck( void );							/* EN信号状態チェック */
 
@@ -561,21 +561,32 @@ static uint8	fs_tbl_Excute(
 )
 {
 	uint8	stat;
+	uint8	func_result;
 
 	/* テーブル処理前の状態を保存 */
 	stat = bf_drv_SpiMng.stat;
+	
+	func_result = XSPI_OK;
 
 	/* 処理テーブル内の該当状態・イベントの関数アドレス有無チェック */
 	if( tb_drv_SpiDrvJmp[stat][event].func != NULL_PTR )
 	{	/* 処理テーブル内の該当状態・イベントの関数アドレスあり */
 		/* 該当する処理関数呼び出し */
-		tb_drv_SpiDrvJmp[stat][event].func();
+		func_result = tb_drv_SpiDrvJmp[stat][event].func();
 	}
+
 	/* 処理テーブル内の該当状態・イベントの次の状態有無チェック */
 	if( tb_drv_SpiDrvJmp[stat][event].next_stat != 0U )
 	{	/* 処理テーブル内の該当状態・イベントの次の状態あり */
 		/* 該当する次の状態をセット */
 		bf_drv_SpiMng.stat = tb_drv_SpiDrvJmp[stat][event].next_stat;
+
+		/* イベント処理関数実行結果・次の状態が送受信状態かチェック */
+		if (( func_result != XSPI_OK ) && ( bf_drv_SpiMng.stat == CMDRV_STAT_COMM ))
+		{
+			/* リトライ状態に遷移させて通信をリトライする */
+			bf_drv_SpiMng.stat = CMDRV_STAT_RETRY;
+		}
 	}
 
 	/* OSTM停止 */
@@ -609,15 +620,18 @@ static uint8	fs_tbl_Excute(
 *																			*
 *					  OUT :	None											*
 *																			*
-*					  RET :	None											*
+*					  RET :	uint8											*
+*						XSPI_OK	(0x01)	成功			 	 				*
 *																			*
 ****************************************************************************/
-static void	fc_SpiInit(
+static uint8	fc_SpiInit(
 	void
 )
 {
 	/* Frame 信号High出力 */
 	PDR_SPI_FRM_WR( STD_HIGH );
+	
+	return( XSPI_OK );
 }
 
 /****************************************************************************
@@ -630,13 +644,17 @@ static void	fc_SpiInit(
 *																			*
 *					  OUT :	None											*
 *																			*
-*					  RET :	None											*
+*					  RET :	result	実行結果								*
+*						XSPI_NG	(0x00)	失敗	 							*
+*						XSPI_OK	(0x01)	成功	 	 						*
 *																			*
 ****************************************************************************/
-static void	fc_SpiStartPrepare(
+static uint8	fc_SpiStartPrepare(
 	void
 )
 {
+	uint8	result = XSPI_OK;
+	sint32	async_result = 0;
 	uint8	spage, rpage;
 	uint8	*rcv_buf, *snd_buf;
 
@@ -668,17 +686,26 @@ static void	fc_SpiStartPrepare(
 	if( bf_drv_skip_first_data == XSPI_NG )
 	{
 		/* ダミーデータ送信 */
-		Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)&bf_drv_dummy_snddata, (const Spi_ModeC_DataType *)&bf_drv_dummy_rcvdata, 1U );
+		async_result = Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)&bf_drv_dummy_snddata, (const Spi_ModeC_DataType *)&bf_drv_dummy_rcvdata, 1U );
 	}
 	else
 	{
 		/* SPI非同期通信開始 */
-		Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)snd_buf, (const Spi_ModeC_DataType *)rcv_buf,(U2)XSPI_FRM_MAX_WORD );
+		async_result = Spi_AsyncTransmit( XSPI_COMC_ID, (const Spi_ModeC_DataType *)snd_buf, (const Spi_ModeC_DataType *)rcv_buf,(U2)XSPI_FRM_MAX_WORD );
 	}
 
-	/* Frame信号をLow出力 */
-	PDR_SPI_FRM_WR( STD_LOW );
-
+	if( async_result == 0 )	/* No Error(==0) */
+	{
+		/* Frame信号をLow出力 */
+		PDR_SPI_FRM_WR( STD_LOW );
+	}
+	else	/* Error(!=0)*/
+	{
+		/* Spi_AsyncTransmitの戻り値がエラーの場合は失敗とする */
+		result = XSPI_NG;
+	}
+	
+	return( result );
 }
 
 /****************************************************************************
@@ -691,10 +718,11 @@ static void	fc_SpiStartPrepare(
 *																			*
 *					  OUT :	None											*
 *																			*
-*					  RET :	None											*
+*					  RET :	uint8											*
+*						XSPI_OK	(0x01)	成功			 	 				*
 *																			*
 ****************************************************************************/
-static void	fc_SpiEnd(
+static uint8	fc_SpiEnd(
 	void
 )
 {
@@ -735,6 +763,7 @@ static void	fc_SpiEnd(
 	/* Frame信号をHigh出力 */
 	PDR_SPI_FRM_WR( STD_HIGH );
 
+	return( XSPI_OK );
 }
 
 
@@ -748,10 +777,11 @@ static void	fc_SpiEnd(
 *																			*
 *					  OUT :	None											*
 *																			*
-*					  RET :	None											*
+*					  RET :	uint8											*
+*						XSPI_OK	(0x01)	成功			 	 				*
 *																			*
 ****************************************************************************/
-static void	fc_SpiAbort(
+static uint8	fc_SpiAbort(
 	void
 )
 {
@@ -760,6 +790,7 @@ static void	fc_SpiAbort(
 
 	PDR_SPI_FRM_WR( STD_HIGH );	/* Frame 信号High出力 */
 
+	return( XSPI_OK );
 }
 
 
@@ -773,10 +804,11 @@ static void	fc_SpiAbort(
 *																			*
 *					  OUT :	None											*
 *																			*
-*					  RET :	None											*
+*					  RET :	uint8											*
+*						XSPI_OK	(0x01)	成功			 	 				*
 *																			*
 ****************************************************************************/
-static void	fc_SpiStop(
+static uint8	fc_SpiStop(
 	void
 )
 {
@@ -788,6 +820,8 @@ static void	fc_SpiStop(
 #endif	/* XSPI_DATA_BUFFER */
 
 	PDR_SPI_FRM_WR( STD_HIGH );	/* Frame 信号High出力 */
+
+	return( XSPI_OK );
 }
 
 /****************************************************************************
