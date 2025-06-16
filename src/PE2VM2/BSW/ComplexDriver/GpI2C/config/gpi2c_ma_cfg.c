@@ -183,7 +183,7 @@ const ST_GP_I2C_MA_SLA           st_gp_GP_I2C_MA_SLA[GP_I2C_MA_NUM_SLA]  = {
         &vd_s_GpI2cMaCfgTRxAckCh1_Gmoni,           /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
-        (U2)10U                                    /* u2_rwc_max */
+        (U2)34U                                    /* u2_rwc_max */
     }
 };
 const U1                         u1_g_GP_I2C_MA_NUM_SLA = (U1)GP_I2C_MA_NUM_SLA;
