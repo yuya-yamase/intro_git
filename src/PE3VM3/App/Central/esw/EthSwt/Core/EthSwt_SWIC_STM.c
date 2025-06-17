@@ -334,7 +334,7 @@ static uint32 ethswt_swic_stm_act_move_set_relay_on (void)
 /* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_stm_act_move_active (void)
 {
-
+    /* do nothing */
     return D_ETHSWT_SWIC_ST_ACTIVE;
 }
 /* -------------------------------------------------------------------------- */
