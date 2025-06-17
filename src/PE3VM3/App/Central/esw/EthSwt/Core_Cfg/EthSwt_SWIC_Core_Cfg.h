@@ -41,7 +41,7 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Reg.c                                               */
 /* -------------------------------------------------------------------------- */
-#define	SWIC_REG_WAIT	(30u)	/* 30ms(REG_CTRL_READ.SURVEILLANCE_ON待ち時間(ns)) */
+#define	SWIC_REG_WAIT	(30u)	/* 30ms(REG_CTRL_READ.SURVEILLANCE_ON待ち時間) */
 #define	SWIC_REG_WAIT_L	(((SWIC_REG_WAIT*1000000u)/2410u)+1u) /* ループガード値 */
 								/* クロック2(20MHz)で1要求(6byte+10ns)=2410ns */
 								/* ※クロックは10MHzなので倍になる */

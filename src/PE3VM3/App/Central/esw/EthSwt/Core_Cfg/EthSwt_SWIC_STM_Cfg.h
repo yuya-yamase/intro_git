@@ -27,6 +27,7 @@ const EthSwt_InitFunc G_ETHSWT_SWIC_INIT_FUNC_LIST[] =
 };
 #define D_ETHSWT_SWIC_INIT_FUNC_NUM     (sizeof(G_ETHSWT_SWIC_INIT_FUNC_LIST) / sizeof(G_ETHSWT_SWIC_INIT_FUNC_LIST[0]))
 
+
 typedef void (*EthSwt_HiPorcFunc)(void);
 const EthSwt_HiPorcFunc G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[][D_ETHSWT_SWIC_ST_NUM] =
 {   /*  UNINT                   , INIT                      , PORT_INIT_COMPLETED       , SET_RELAY_ON              , ACTIVE                        , SET_RELAY_OFF             */
@@ -47,6 +48,15 @@ const EthSwt_registerAccessFunc G_ETHSWT_SWIC_BACK_FUNC_TABLE[][D_ETHSWT_SWIC_ST
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_Port_Action   , NULL_PTR                  }   /* ポートモード制御 */
 };
 #define D_ETHSWT_SWIC_BACK_FUNC_NUM         (sizeof(G_ETHSWT_SWIC_BACK_FUNC_TABLE) / sizeof(G_ETHSWT_SWIC_BACK_FUNC_TABLE[0]))
+
+
+typedef void (*EthSwt_ClearFunc)(void);
+const EthSwt_ClearFunc G_ETHSWT_SWIC_CLEAR_FULC_LIST[] = 
+{
+    EthSwt_SWIC_Link_Init
+};
+#define D_ETHSWT_SWIC_CLEAR_FUNC_NUM    (sizeof(G_ETHSWT_SWIC_CLEAR_FULC_LIST) / sizeof(G_ETHSWT_SWIC_CLEAR_FULC_LIST[0]))
+
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_STM_CFG_H */
 /* -------------------------------------------------------------------------- */
