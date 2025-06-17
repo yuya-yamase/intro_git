@@ -12,7 +12,6 @@
 void EthSwt_SWIC_Port_Init (void);
 Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 *errFactor);
 Std_ReturnType EthSwt_SWIC_Port_RelayOff(uint32 *errFactor);
-Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor);
 Std_ReturnType EthSwt_SWIC_Port_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode);
 Std_ReturnType EthSwt_SWIC_Port_Action (uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */

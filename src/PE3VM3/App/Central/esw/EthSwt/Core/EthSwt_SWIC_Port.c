@@ -17,6 +17,7 @@ static struct {
     volatile uint8              modeChangeIndication;
 } swicPort[D_ETHSWT_SWIC_PORT_NUM];
 /* -------------------------------------------------------------------------- */
+static Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor);
 static Std_ReturnType swic_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetSwitchPortModeACTIVE(const uint8 SwitchPortIdx, uint32 * const errFactor);
 static Std_ReturnType swic_Reg_SetSwitchPortModeDOWN(const uint8 SwitchPortIdx, uint32 * const errFactor);
@@ -41,10 +42,15 @@ Std_ReturnType EthSwt_SWIC_Port_RelayOn(uint32 *errFactor)
 	uint32			idx;
 	uint32			val;
 
-    for (idx=0U ; idx < SWIC_TBL_NUM(G_ETHSWT_SWIC_RELAY_ON_TABLE) ; idx++) {
-        result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_RELAY_ON_TABLE[idx].tbl, G_ETHSWT_SWIC_RELAY_ON_TABLE[idx].num, &val , errFactor);
+	do {
+		for (idx=0U ; idx < SWIC_TBL_NUM(G_ETHSWT_SWIC_RELAY_ON_TABLE) ; idx++) {
+			result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_RELAY_ON_TABLE[idx].tbl, G_ETHSWT_SWIC_RELAY_ON_TABLE[idx].num, &val , errFactor);
+			if (result == E_NOT_OK) { break; }
+		}
 		if (result == E_NOT_OK) { break; }
-	}
+
+		EthSwt_SWIC_Port_ResetSwitchPortMode(errFactor);
+	} while (0);
 
 	return result;
 }
@@ -61,30 +67,6 @@ Std_ReturnType EthSwt_SWIC_Port_RelayOff(uint32 *errFactor)
 	}
 
     return result;
-}
-/* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor)
-{
-	Std_ReturnType	ret;
-	uint8			idx;
-
-	for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++ ) {
-		if (swicPort[idx].mode == G_ETHSWT_SWIC_PORT_DEFINE[idx]) { continue; }	/* 動作モード変更なし */
-		switch (swicPort[idx].mode) {
-		case ETH_MODE_ACTIVE:
-			ret = swic_Reg_SetSwitchPortModeACTIVE(idx, errFactor);
-			if (ret != E_OK) { break; }
-			break;
-		case ETH_MODE_DOWN:
-			ret = swic_Reg_SetSwitchPortModeDOWN(idx, errFactor);
-			if (ret != E_OK) { break; }
-			break;
-		default:
-			break;
-		}
-	}
-
-	return ret;
 }
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Port_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode)
@@ -113,6 +95,30 @@ Std_ReturnType EthSwt_SWIC_Port_Action (uint32 * const errFactor)
     }
 
     return result;
+}
+/* -------------------------------------------------------------------------- */
+static Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor)
+{
+	Std_ReturnType	ret;
+	uint8			idx;
+
+	for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++ ) {
+		if (swicPort[idx].mode == G_ETHSWT_SWIC_PORT_DEFINE[idx]) { continue; }	/* 動作モード変更なし */
+		switch (swicPort[idx].mode) {
+		case ETH_MODE_ACTIVE:
+			ret = swic_Reg_SetSwitchPortModeACTIVE(idx, errFactor);
+			if (ret != E_OK) { break; }
+			break;
+		case ETH_MODE_DOWN:
+			ret = swic_Reg_SetSwitchPortModeDOWN(idx, errFactor);
+			if (ret != E_OK) { break; }
+			break;
+		default:
+			break;
+		}
+	}
+
+	return ret;
 }
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, uint32 * const errFactor)
