@@ -376,4 +376,5 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_PrepShtdwn(void)
 {
+    vd_g_SoundCriMgr_DeInit();
 }

@@ -1,4 +1,4 @@
-/* 5.1.0 */
+/* 5.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_RSA_C_MAJOR                      (5)
-#define ALERT_S_RSA_C_MINOR                      (1)
+#define ALERT_S_RSA_C_MINOR                      (2)
 #define ALERT_S_RSA_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -181,13 +181,13 @@ static U4      u4_s_AlertS_rsaBcSgnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_rsaBcLmtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-    static const U1 u1_s_ALERT_S_RSA_PD_LSB_FCM1S11_STS = (U1)1U;
+    static const U1 u1_s_ALERT_S_RSA_PD_LSB_FCM1S10_STS = (U1)1U;
     static const U2 u2_s_ALERT_S_RSA_PD_THRSH_TO    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_FCM1S11,
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_FCM1S10_RXCH0,
                                      (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_S_RSA_PD_THRSH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
@@ -197,7 +197,7 @@ static U4      u4_s_AlertS_rsaBcLmtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #endif /* defined(ComConf_ComSignal_SPBZRQ) */
 
     u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk  |= ((U4)u1_t_msgsts << u1_s_ALERT_S_RSA_PD_LSB_FCM1S11_STS);
+    u4_t_src_chk  |= ((U4)u1_t_msgsts << u1_s_ALERT_S_RSA_PD_LSB_FCM1S10_STS);
 
     return(u4_t_src_chk);
 }
@@ -263,8 +263,10 @@ static void    vd_s_AlertS_rsaRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0     12/26/2023  SW       New.                                                                                              */
 /*  5.1.0      4/ 5/2024  AA       Added remote warning (RSAW)                                                                       */
+/*  5.2.0      5/14/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-02-A-C0)                                */
 /*                                                                                                                                   */
 /*  * SW   = Shun Watanabe, Denso Techno                                                                                             */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

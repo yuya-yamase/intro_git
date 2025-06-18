@@ -78,6 +78,11 @@ primaryTarget=v800_standalone.tgt
     -DECU_VM2
     -DECU_INTG_LWH_GUEST
 
+    # CompileSW (ProcessingLoad)
+    # Enter the measurement time in milliseconds
+    # Set to 0 to disable. Enable with any positive value (recommended: 10000).
+    -DPROCESSING_LOAD_MEASURE_TIME=0U
+
     -o PE2VM2.elf
 
 ${PRJ_DIR}/bswCAN.gpj

@@ -1,4 +1,4 @@
-/* 0.0.0 */
+/* 0.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_MET_C_MAJOR                     (0U)
-#define XSPI_MET_C_MINOR                     (0U)
+#define XSPI_MET_C_MINOR                     (1U)
 #define XSPI_MET_C_PATCH                     (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -37,7 +37,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_MET_PDU_NBYTE                   (5620U)
 #define XSPI_MET_PDU_NWORD                   ((XSPI_MET_PDU_NBYTE + 3U) >> 2)
-#define XSPI_MET_SUBFRAME_NUM                (8U)
+#define XSPI_MET_SUBFRAME_NUM                (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -50,8 +50,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4                u4_sp_xspi_met_db_tra[XSPI_MET_PDU_NWORD];
-static U4                u4_sp_xspi_met_db_rec[XSPI_MET_PDU_NWORD];
-static U1                u1_sp_xspi_met_subframe_offset[XSPI_MET_SUBFRAME_NUM];
+static U4                u4_sp_xspi_met_subframe_offset[XSPI_MET_SUBFRAME_NUM];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -64,8 +63,6 @@ static U1                u1_sp_xspi_met_subframe_offset[XSPI_MET_SUBFRAME_NUM];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_s_XSpiMETComvertU1(U1* u1_ap_data,U4* u4_ap_data_rec);
-static void    vd_s_XSpiMETComvertU4(U1* u1_ap_data,U4* u4_ap_data_tra);
 /*===================================================================================================================================*/
 /*  void    vd_g_XSpiMETInit(void)                                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -85,11 +82,10 @@ void    vd_g_XSpiMETInit(void)
     /* Transmmit Recieve buff Init */
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_PDU_NWORD ; u4_t_lpcnt++){
         u4_sp_xspi_met_db_tra[u4_t_lpcnt] = (U4)U4_MAX;
-        u4_sp_xspi_met_db_rec[u4_t_lpcnt] = (U4)U4_MAX;
     }
     
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_SUBFRAME_NUM; u4_t_lpcnt++){
-        u1_sp_xspi_met_subframe_offset[u4_t_lpcnt] = (U1)0U;
+        u4_sp_xspi_met_subframe_offset[u4_t_lpcnt] = (U4)0U;
     }
 
     vd_g_XSpiMETCANGWInit();
@@ -109,17 +105,15 @@ void    vd_g_XSpiMETPduRx(void)
 {
 
     U1      u1_t_read_sts;
-    U1      u1p_t_data[XSPI_FRM_MAX];
+    U4      u4p_t_data[XSPI_FRM_MAX_WORD];
 
-    u1_t_read_sts = xspi_Read((U1)XSPI_CH_02, &u1p_t_data[0],(U4)XSPI_FRM_MAX);
-    if((u1_t_read_sts == (U1)XSPI_OK) && (u1p_t_data != vdp_PTR_NA)) {
-		vd_s_XSpiMETComvertU1(&u1p_t_data[0],u4_sp_xspi_met_db_rec);
-        vd_g_XSpiCfgPduRxCh0(&u4_sp_xspi_met_db_rec[0]);
-        vd_g_XSpiCfgPduRxCh1(&u4_sp_xspi_met_db_rec[700]);
-        vd_g_XSpiNvmRx(&u4_sp_xspi_met_db_rec[0]);
-        vd_g_XSpiOtaRx(&u4_sp_xspi_met_db_rec[0]);
-        vd_g_XSpiDsalRx(&u4_sp_xspi_met_db_rec[0]);
-
+    u1_t_read_sts = xspi_Read((U1)XSPI_CH_02, &u4p_t_data[0],(U4)XSPI_FRM_MAX_WORD);
+    if((u1_t_read_sts == (U1)XSPI_OK) && (u4p_t_data != vdp_PTR_NA)) {
+        vd_g_XSpiCfgPduRxCh0(&u4p_t_data[0]);
+        vd_g_XSpiCfgPduRxCh1(&u4p_t_data[700]);
+        vd_g_XSpiNvmRx(&u4p_t_data[0]);
+        vd_g_XSpiOtaRx(&u4p_t_data[0]);
+        vd_g_XSpiDsalRx(&u4p_t_data[0]);
     }
 }
 
@@ -142,11 +136,11 @@ void    vd_g_XSpiMETPduTx(void)
 
     U1      u1_t_xspi_condition;
     U1      u1_t_write_sts;
-    U1      u1p_t_data[XSPI_FRM_MAX];
+    U4      u4p_t_data[XSPI_FRM_MAX_WORD];
 
     u1_t_write_sts = (U1)XSPI_NG;
 
-    vd_g_MemfillU1(&u1p_t_data[0], (U1)0U, (U4)XSPI_FRM_MAX);
+    vd_g_MemfillU4(&u4p_t_data[0], (U4)0U, (U4)XSPI_FRM_MAX_WORD);
 
     u1_t_xspi_condition = xspi_GetCondition((U1)XSPI_CH_02);
 
@@ -156,56 +150,15 @@ void    vd_g_XSpiMETPduTx(void)
     vd_g_XSpiMETTxSCL(&u4_sp_xspi_met_db_tra[660]);
     vd_g_XSpiMETPduTxCAN(&u4_sp_xspi_met_db_tra[670], &st_sp_XSPIMET_CAN_TXCFG[XSPIMETCANGW_BLOCK]);
 
-    vd_g_MemcpyU1(&u1p_t_data[0], &u1_sp_xspi_met_subframe_offset[0], (U4)XSPI_MET_SUBFRAME_NUM);
-    vd_s_XSpiMETComvertU4(&u1p_t_data[8],u4_sp_xspi_met_db_tra);
+    vd_g_MemcpyU4(&u4p_t_data[0], &u4_sp_xspi_met_subframe_offset[0], (U4)XSPI_MET_SUBFRAME_NUM);
+    vd_g_MemcpyU4(&u4p_t_data[2], &u4_sp_xspi_met_db_tra[0], (U4)XSPI_MET_PDU_NWORD);
 
     if((u1_t_xspi_condition == (U1)XSPI_DCOND_IDLE) || (u1_t_xspi_condition == (U1)XSPI_DCOND_TRANSMIT)) {
-        u1_t_write_sts = xspi_Write((U1)XSPI_CH_02, &u1p_t_data[0],(U4)XSPI_FRM_MAX);
+        u1_t_write_sts = xspi_Write((U1)XSPI_CH_02, &u4p_t_data[0],(U4)XSPI_FRM_MAX_WORD);
     }
 
 }
 
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiMETComvertU4(U1* u1_ap_data,U4* u4_ap_data_tra)                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_XSpiMETComvertU4(U1* u1_ap_data,U4* u4_ap_data_tra)
-{
-
-    U4 u4_t_lpcnt;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_PDU_NWORD; u4_t_lpcnt++){
-        u1_ap_data[u4_t_lpcnt * 4] = (U1)(u4_ap_data_tra[u4_t_lpcnt] & (U4)0x000000FFU);
-        u1_ap_data[(u4_t_lpcnt * 4)+1] = (U1)((u4_ap_data_tra[u4_t_lpcnt] & (U4)0x0000FF00U) >> 8U);
-        u1_ap_data[(u4_t_lpcnt * 4)+2] = (U1)((u4_ap_data_tra[u4_t_lpcnt] & (U4)0x00FF0000U) >> 16U);
-        u1_ap_data[(u4_t_lpcnt * 4)+3] = (U1)((u4_ap_data_tra[u4_t_lpcnt] & (U4)0xFF000000U) >> 24U);
-    }
-
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiMETComvertU1(U1* u1_ap_data,U4* u4_ap_data_tra)                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_XSpiMETComvertU1(U1* u1_ap_data,U4* u4_ap_data_rec)
-{
-
-/* BEV Sample Code */
-    U4 u4_t_lpcnt;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_PDU_NWORD; u4_t_lpcnt++){
-        u4_ap_data_rec[u4_t_lpcnt]  = (((U4)u1_ap_data[(u4_t_lpcnt * 4)    ]       ) & (U4)0x000000FFU);
-        u4_ap_data_rec[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 1] <<  8U) & (U4)0x0000FF00U);
-        u4_ap_data_rec[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 2] << 16U) & (U4)0x00FF0000U);
-        u4_ap_data_rec[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 3] << 24U) & (U4)0xFF000000U);
-    }
-
-/* BEV Sample Code */
-}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -215,6 +168,7 @@ static void    vd_s_XSpiMETComvertU1(U1* u1_ap_data,U4* u4_ap_data_rec)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    12/18/2024  KT       New.                                                                                               */
+/*  0.1.0    06/09/2025  KT       Change for xspi IF.(1byte -> 4byte)                                                                */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

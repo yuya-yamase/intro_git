@@ -42,7 +42,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define GWMMCFG_SIG_NUM                          (111U)                   /*  Gateway Number           */
+#define GWMMCFG_SIG_NUM                          (110U)                   /*  Gateway Number           */
 
 #define GWMMCFG_MSGBUF_NUM                       (34U)                    /*  Message Buf Number       */
 
@@ -121,7 +121,6 @@ static void vd_s_GwmmCfgSend_BSMMSW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_DOAM_SW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_RCTAMSW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_SW_RCD01(const U1 u1_a_SIG);
-static void vd_s_GwmmCfgSend_IDAMSW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_TSR_MAIN(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_ACCADPSW(const U1 u1_a_SIG);
 static void vd_s_GwmmCfgSend_ACCROSSW(const U1 u1_a_SIG);
@@ -233,7 +232,6 @@ static U1 u1_s_GwmmCfgRead_BSMMSW(void);
 static U1 u1_s_GwmmCfgRead_DOAM_SW(void);
 static U1 u1_s_GwmmCfgRead_RCTAMSW(void);
 static U1 u1_s_GwmmCfgRead_SW_RCD01(void);
-static U1 u1_s_GwmmCfgRead_IDAMSW(void);
 static U1 u1_s_GwmmCfgRead_TSR_MAIN(void);
 static U1 u1_s_GwmmCfgRead_ACCADPSW(void);
 static U1 u1_s_GwmmCfgRead_ACCROSSW(void);
@@ -368,7 +366,6 @@ const ST_GWMM_MSGCOMVERT st_gp_GWMM_MSGCOMVERT[GWMMCFG_SIG_NUM] = {
     {(U1)4U,       (U1)20U,      (U4)0x00000001U},         /*  DOAM_SW   */
     {(U1)1U,       (U1)7U,       (U4)0x00000001U},         /*  RCTAMSW   */
     {(U1)0U,       (U1)0U,       (U4)0x00000001U},         /*  SW_RCD01  */
-    {(U1)4U,       (U1)14U,      (U4)0x00000001U},         /*  IDAMSW    */
     {(U1)5U,       (U1)24U,      (U4)0x00000001U},         /*  PDAMSW    */
     {(U1)5U,       (U1)8U,       (U4)0x00000001U},         /*  SDGMSW    */
     {(U1)2U,       (U1)31U,      (U4)0x00000001U},         /*  USMMAIN   */
@@ -483,7 +480,6 @@ const ST_GWMM_SIGCONF st_gp_GWMM_SIGCONF[GWMMCFG_SIG_NUM] = {
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)1U,        (U1)0xFFU},                    /*  DOAM_SW   */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC01,        (U1)1U,        (U1)0xFFU},                    /*  RCTAMSW   */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC01,        (U1)1U,        (U1)0xFFU},                    /*  SW_RCD01  */
-    {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)1U,        (U1)0xFFU},                    /*  IDAMSW    */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)1U,        (U1)0xFFU},                    /*  PDAMSW    */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC03,        (U1)1U,        (U1)0xFFU},                    /*  SDGMSW    */
     {(U1)GWMM_PWRSTS_IGR,        (U1)GWMMCFG_MSG_AVNMC02,        (U1)1U,        (U1)0xFFU},                    /*  USMMAIN   */
@@ -598,7 +594,6 @@ const ST_GWMM_COMIF st_gp_GWMM_COMIF[GWMMCFG_SIG_NUM] = {
     {&vd_s_GwmmCfgSend_DOAM_SW,         &u1_s_GwmmCfgRead_DOAM_SW},         /*  DOAM_SW   */
     {&vd_s_GwmmCfgSend_RCTAMSW,         &u1_s_GwmmCfgRead_RCTAMSW},         /*  RCTAMSW   */
     {&vd_s_GwmmCfgSend_SW_RCD01,        &u1_s_GwmmCfgRead_SW_RCD01},        /*  SW_RCD01  */
-    {&vd_s_GwmmCfgSend_IDAMSW,          &u1_s_GwmmCfgRead_IDAMSW},          /*  IDAMSW    */
     {&vd_s_GwmmCfgSend_PDAMSW,          &u1_s_GwmmCfgRead_PDAMSW},          /*  PDAMSW    */
     {&vd_s_GwmmCfgSend_SDGMSW,          &u1_s_GwmmCfgRead_SDGMSW},          /*  SDGMSW    */
     {&vd_s_GwmmCfgSend_USMMAIN,         &u1_s_GwmmCfgRead_USMMAIN},         /*  USMMAIN   */
@@ -1212,20 +1207,6 @@ static void vd_s_GwmmCfgSend_SW_RCD01(const U1 u1_a_SIG)
     u1_t_sig = u1_a_SIG;
     (void)Com_SendSignal(ComConf_ComSignal_SW_RCD01, &u1_t_sig);
 #endif /* ComConf_ComSignal_SW_RCD01 */
-}
-/*===================================================================================================================================*/
-/*  static void vd_s_GwmmCfgSend_IDAMSW(const U1 u1_a_SIG)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_SIG : Send Signal Value                                                                                     */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_GwmmCfgSend_IDAMSW(const U1 u1_a_SIG)
-{
-#ifdef ComConf_ComSignal_IDAMSW
-    U1    u1_t_sig;
-    u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_IDAMSW, &u1_t_sig);
-#endif /* ComConf_ComSignal_IDAMSW */
 }
 /*===================================================================================================================================*/
 /*  static void vd_s_GwmmCfgSend_TSR_MAIN(const U1 u1_a_SIG)                                                                         */
@@ -2828,21 +2809,6 @@ static U1 u1_s_GwmmCfgRead_SW_RCD01(void)
     return(u1_t_sig);
 }
 /*===================================================================================================================================*/
-/*  static U1 u1_s_GwmmCfgRead_IDAMSW(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_t_sig : Receive Signal Value                                                                                  */
-/*===================================================================================================================================*/
-static U1 u1_s_GwmmCfgRead_IDAMSW(void)
-{
-    U1  u1_t_sig;
-    u1_t_sig = (U1)0U;
-#ifdef ComConf_ComSignal_IDAMSW
-    (void)Com_ReceiveSignal(ComConf_ComSignal_IDAMSW, &u1_t_sig);
-#endif /* ComConf_ComSignal_IDAMSW */
-    return(u1_t_sig);
-}
-/*===================================================================================================================================*/
 /*  static U1 u1_s_GwmmCfgRead_TSR_MAIN(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -4353,6 +4319,7 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
 /*  BEV-1     1/30/2025  KO       Change for BEV System_Consideration_1.(MET-C_HCS-CSTD-0-00-A-C0)                                   */
 /*  BEV-2    02/10/2025  RO       Change for BEV System_Consideration_1.(MET-S_ADMID-CSTD-0-)                                        */
 /*  BEV-3    02/10/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
+/*  BEV-4    05/30/2025  SN       Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*                                                                                                                                   */
 /*  * RS   = Ryosuke Sato, KSE                                                                                                       */
 /*  * SK   = Shinichi Kato, KSE                                                                                                      */
@@ -4363,5 +4330,6 @@ U1        u1_g_GwmmCfgRead_L_TMNSSW(void)
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
+/*  * SN   = Shzuka Nakajima, KSE                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

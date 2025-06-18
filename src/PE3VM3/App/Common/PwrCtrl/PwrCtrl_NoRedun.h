@@ -104,7 +104,8 @@
 #define PWROFF_POWERIC_BIT              (0x0100U)
 #define PWROFF_XMTUNER_BIT              (0x0200U)
 #define PWROFF_GNSS_BIT                 (0x0400U)
-#define PWROFF_CONP_BIT                 (0x07FFU)
+#define     PWROFF_GYRO_BIT             (0x0800U)
+#define PWROFF_CONP_BIT                 (0x0FFFU)
 
 /*--------------------------------------------------------------------------*/
 /*  Function Prototypes                                                     */
