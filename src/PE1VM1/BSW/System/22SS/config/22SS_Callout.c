@@ -18,7 +18,6 @@
 #include <Ecu_Memmap.h>
 #include <22SS_Callout.h>
 
-#include "stub.h"
 #include "veh_opemd.h"
 #include "oxcan.h"
 
@@ -28,7 +27,6 @@
 
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "fpcall_vd_fvd.h"
@@ -54,7 +52,6 @@
 #include "tripsnsr.h"
 #include "tripcom.h"
 #include "ambtmp.h"
-#include "datesi.h"
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
 #include "rcmmui.h"
@@ -138,7 +135,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
         &vd_g_AmbtmpBonInit,
-        &vd_g_DateSIBonInit,
         &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
@@ -187,7 +183,6 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_NWCMBonInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_BON_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_BON_INIT));
     vd_g_XSpiMETInit();
-    vd_g_StubBonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -229,7 +224,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_DateSIRstWkupInit,
         &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
@@ -278,7 +272,6 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_NWCMWkupInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_RST_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_RST_INIT));
     vd_g_XSpiMETInit();
-    vd_g_StubRstInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -320,7 +313,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_DateSIRstWkupInit,
         &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
@@ -369,7 +361,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_NWCMWkupInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_WKUP_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_WKUP_INIT));
     vd_g_XSpiMETInit();
-    vd_g_StubWkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -385,4 +376,5 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_PrepShtdwn(void)
 {
+    vd_g_SoundCriMgr_DeInit();
 }

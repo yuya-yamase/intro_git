@@ -11,7 +11,7 @@
 /* include files																				*/
 /*==============================================================================================*/
 #include	"Std_Types.h"
-#include	"Rte_BswUcfg.h"
+#include	"Spi_Ucfg.h"
 
 #include	"pil_spi.h"
 /*==============================================================================================*/
@@ -25,16 +25,12 @@
 /*==============================================================================================*/
 /* constants																					*/
 /*==============================================================================================*/
-// #define SEL_ROMSEC	(BSW_SEC_C_LROM0_CPU0_ASIL_CFG_SDA)
-// #include "Bsw_Seccfg_Roms.h"
 #pragma ghs section rodata=".SPI_RODATA_CONST"
 
 const	Pil_Spi_UserConfigType		cstPil_Spi_UcfgData = {
 	(U2)IOC_SPINLOCK_ID_PIL_SPI
 };
 
-// #include "Bsw_Seccfg_Rome.h"
-// #undef SEL_ROMSEC
 #pragma ghs section rodata=default
 
 /*==============================================================================================*/

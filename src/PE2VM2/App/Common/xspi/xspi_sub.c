@@ -25,6 +25,7 @@ uint8	bf_drv_Dbg_ErrInfo;				/* デバッグ用エラー情報 */
 *		prototype			*
 ****************************/
 void	fc_drv_ClearXSpiMng( void );						/* XSPI管理情報初期化 */
+void	fc_drv_ClearRingBuf( void );						/* リングバッファ初期化 */
 void	fc_drv_SpiSetErrInfoKind( uint8 kind );				/* エラー種別情報設定 */
 void	fc_drv_SpiClearErrInfoKind( uint8 kind );			/* エラー種別情報クリア */
 #ifdef XSPI_DEBUG
@@ -33,15 +34,15 @@ void	fc_drv_SpiSetDbgErrInfo( uint8 err_info );			/* デバッグ用エラー情
 
 uint8	fc_drv_getRcvBufPage( void );						/* 受信バッファページ取得 */
 uint8	fc_drv_getSndBufPage( void );						/* 送信バッファページ取得 */
-uint8	fc_drv_ReadBuf( uint8* p_addr, uint32 size );		/* 受信データ読み出し */
-uint8	fc_drv_WriteBuf( const uint8* p_addr, uint32 size );/* 送信データ書き込み */
+uint8	fc_drv_ReadBuf( uint32* p_addr, uint32 size );		/* 受信データ読み出し */
+uint8	fc_drv_WriteBuf( const uint32* const p_addr, uint32 size );	/* 送信データ書き込み */
 #if (XSPI_DATA_BUFFER != XSPI_DATA_BUFFER_DOUBLE)
 void	fc_drv_SpiRcvDpageRenew( void );					/* ドライバ受信バッファページ更新(リングバッファ用) */
 void	fc_drv_SpiSendDpageRenew( void );					/* ドライバ送信バッファページ更新(リングバッファ用) */
 #endif /* XSPI_DATA_BUFFER */
 #if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
-uint8	fc_drv_CheckIntegrityData( const uint8* p_frame );	/* 整合性データチェック */
-void	fc_drv_AddIntegrityData( uint8* p_frame );			/* 整合性データ付加 */
+uint8	fc_drv_CheckIntegrityData( const uint32* p_frame );	/* 整合性データチェック */
+void	fc_drv_AddIntegrityData( uint32* p_frame );			/* 整合性データ付加 */
 #endif	/* XSPI_DATA_CHECK */
 
 /********************************
@@ -102,8 +103,8 @@ static	void	XSPI_MEMCPY (
 	void * p_dst, const void * p_src, uint32 size
 )
 {
-	uint8 *p_usrc = (uint8 *)p_src;
-	uint8 *p_udst = (uint8 *)p_dst;
+	uint32 *p_usrc = (uint32 *)p_src;
+	uint32 *p_udst = (uint32 *)p_dst;
 	while (0UL < size)
 	{
 		size--;
@@ -138,8 +139,8 @@ void	fc_drv_ClearXSpiMng(
 
 	/* 暫定対応 初回データスキップ(初回受信バッファに整合性データ付与) */
 #if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
-	fc_drv_AddIntegrityData(bf_drv_SpiMng.rcv.page[0].dat);
-	fc_drv_AddIntegrityData(bf_drv_SpiMng.rcv.page[1].dat);
+	fc_drv_AddIntegrityData((uint32 *)bf_drv_SpiMng.rcv.page[0].dat);
+	fc_drv_AddIntegrityData((uint32 *)bf_drv_SpiMng.rcv.page[1].dat);
 #endif	/* XSPI_DATA_CHECK */
 
 #if (XSPI_DATA_BUFFER == XSPI_DATA_BUFFER_DOUBLE)
@@ -154,6 +155,29 @@ void	fc_drv_ClearXSpiMng(
 #ifdef XSPI_DEBUG
 	bf_drv_Dbg_ErrInfo = 0U;		/* デバッグ用エラー情報初期化 */
 #endif	/* XSPI_DEBUG */
+}
+
+/****************************************************************************
+*																			*
+*		SYMBOL		: fc_drv_ClearRingBuf									*
+*																			*
+*		DESCRIPTION	: リングバッファ初期化									*
+*																			*
+*		PARAMETER	: IN  :	None											*
+*																			*
+*					  OUT :	None											*
+*																			*
+*					  RET :	None											*
+*																			*
+****************************************************************************/
+void	fc_drv_ClearXSpiSndRcvMng(
+	void
+)
+{
+	/* 送信リングバッファ初期化 */
+	XSPI_MEMSET( &bf_drv_SpiMng.snd, 0U, sizeof(bf_drv_SpiMng.snd) );
+	/* 受信リングバッファ初期化 */
+	XSPI_MEMSET( &bf_drv_SpiMng.rcv, 0U, sizeof(bf_drv_SpiMng.rcv) );
 }
 
 /****************************************************************************
@@ -250,11 +274,14 @@ uint8 fc_drv_getRcvBufPage(
 	rcv_inf = bf_drv_SpiMng.rcv.page_inf & ((uint8)XSPI_BUF_PAGE_LOCK |(uint8)XSPI_BUF_PAGE_1 );
 	if( rcv_inf >= XSPI_BUF_PAGE_LOCK )
 	{
+		fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_RX_BUF_OVF );
 		rcv_inf ^= ((uint8)XSPI_BUF_PAGE_LOCK |(uint8)XSPI_BUF_PAGE_1 );
 		bf_drv_SpiMng.rcv.page_inf = rcv_inf;
 	}
 	else
 	{
+		/* 受信バッファオーバーフロー */
+		fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_RX_BUF_OVF );
 #ifdef XSPI_DEBUG
 		fc_drv_SpiSetDbgErrInfo( XSPI_ERR_DBG_RX_LOCKED );
 #endif	/* XSPI_DEBUG */
@@ -306,7 +333,7 @@ uint8 fc_drv_getSndBufPage(
 *																			*
 *		DESCRIPTION	: 受信バッファ読み出し(ダブルバッファ)					*
 *																			*
-*		PARAMETER	: OUT :	uint8*	読み出し先頭アドレス					*
+*		PARAMETER	: OUT :	uint32*	読み出し先頭アドレス					*
 *					  IN  :	uint32	読み出しサイズ							*
 *																			*
 *					  RET :													*
@@ -316,11 +343,11 @@ uint8 fc_drv_getSndBufPage(
 *																			*
 ****************************************************************************/
 uint8	fc_drv_ReadBuf(
-	uint8* p_addr, uint32 size
+	uint32* p_addr, uint32 size
 )
 {
 	uint8 result = XSPI_NG;
-	uint8* prcv_buf;
+	uint32* prcv_buf;
 	uint8 rcv_inf;
 	uint8 page;
 	uint8 is_match;
@@ -328,10 +355,10 @@ uint8	fc_drv_ReadBuf(
 	if ( NULL_PTR != p_addr )
 	{
 		rcv_inf = bf_drv_SpiMng.rcv.page_inf & ((uint8)XSPI_BUF_PAGE_LOCK | (uint8)XSPI_BUF_PAGE_1);
-		if (( XSPI_BUF_PAGE_LOCK > rcv_inf ) && ( XSPI_FRM_MAX >= size ))
+		if (( XSPI_BUF_PAGE_LOCK > rcv_inf ) && ( XSPI_RCV_FRM_MAX >= size ))
 		{
 			page = rcv_inf ^ (uint8)XSPI_BUF_PAGE_1;
-			prcv_buf = bf_drv_SpiMng.rcv.page[page].dat;
+			prcv_buf = (uint32 *)bf_drv_SpiMng.rcv.page[page].dat;
 
 #if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
 			is_match = fc_drv_CheckIntegrityData( prcv_buf );
@@ -368,7 +395,7 @@ uint8	fc_drv_ReadBuf(
 *																			*
 *		DESCRIPTION	: 送信バッファ書き込み(ダブルバッファ)					*
 *																			*
-*		PARAMETER	: OUT :	uint8*	書き込みデータアドレス					*
+*		PARAMETER	: OUT :	uint32*	書き込みデータアドレス					*
 *					  IN  :	uint32	書き込みデータサイズ					*
 *																			*
 *					  RET :													*
@@ -378,21 +405,21 @@ uint8	fc_drv_ReadBuf(
 *																			*
 ****************************************************************************/
 uint8	fc_drv_WriteBuf(
-	const uint8* p_addr, uint32 size
+	const uint32* const p_addr, uint32 size
 )
 {
 	uint8 result = XSPI_NG;
-	uint8* psnd_buf;
+	uint32* psnd_buf;
 	uint8 page;
 	uint8 snd_inf;
 
 	if ( NULL_PTR != p_addr )
 	{
 		snd_inf = bf_drv_SpiMng.snd.page_inf & ((uint8)XSPI_BUF_PAGE_LOCK | (uint8)XSPI_BUF_PAGE_1);
-		if (( XSPI_BUF_PAGE_LOCK > snd_inf ) && ( XSPI_FRM_MAX >= size ))
+		if (( XSPI_BUF_PAGE_LOCK > snd_inf ) && ( XSPI_SND_FRM_MAX >= size ))
 		{
 			page = snd_inf ^ (uint8)XSPI_BUF_PAGE_1;
-			psnd_buf = bf_drv_SpiMng.snd.page[page].dat;
+			psnd_buf = (uint32 *)bf_drv_SpiMng.snd.page[page].dat;
 
 			/* 送信バッファに送信データを設定 */
 			XSPI_MEMCPY( psnd_buf, p_addr, size );
@@ -429,14 +456,26 @@ uint8 fc_drv_getRcvBufPage(
 	uint8 page;
 
 	page = bf_drv_SpiMng.rcv.page_drv;
+	if ( page > XSPI_RCV_PAGE )
+	{
+		/* リングバッファの全領域をクリア */
+		fc_drv_ClearXSpiSndRcvMng();
+	}
 
 	/* 受信用バッファ空チェック */
 	if( bf_drv_SpiMng.rcv.page[page].inf != (uint8)RCV_FRM_DATA_NON )
 	{	/* 受信用バッファにデータあり（固定アドレスへ受信＆破棄） */
 		page = XSPI_RCV_PAGE;
+
+		/* 受信バッファオーバーフロー */
+		fc_drv_SpiSetErrInfoKind( XSPI_ERR_KIND_RX_BUF_OVF );
 #ifdef XSPI_DEBUG
 		fc_drv_SpiSetDbgErrInfo( XSPI_ERR_DBG_OVERFLOW );
 #endif	/* XSPI_DEBUG */
+	}
+	else
+	{
+		fc_drv_SpiClearErrInfoKind( XSPI_ERR_KIND_RX_BUF_OVF );
 	}
 
 	/* 受信中バッファページ保存 */
@@ -466,6 +505,11 @@ uint8 fc_drv_getSndBufPage(
 	uint8 page;
 
 	page = bf_drv_SpiMng.snd.page_drv;
+	if ( page > XSPI_SND_PAGE )
+	{
+		/* リングバッファの全領域をクリア */
+		fc_drv_ClearXSpiSndRcvMng();
+	}
 
 	/* 送信用バッファデータありチェック */
 	if( bf_drv_SpiMng.snd.page[page].inf != (uint8)SND_FRM_DATA_FIX )
@@ -485,7 +529,7 @@ uint8 fc_drv_getSndBufPage(
 *																			*
 *		DESCRIPTION	: 受信バッファ読み出し(リングバッファ)					*
 *																			*
-*		PARAMETER	: OUT :	uint8*	読み出しデータアドレス					*
+*		PARAMETER	: OUT :	uint32*	読み出しデータアドレス					*
 *					  IN  :	uint32	読み出しデータサイズ					*
 *																			*
 *					  RET :													*
@@ -495,11 +539,11 @@ uint8 fc_drv_getSndBufPage(
 *																			*
 ****************************************************************************/
 uint8	fc_drv_ReadBuf(
-	uint8* p_addr, uint32 size
+	uint32* p_addr, uint32 size
 )
 {
 	uint8 result = XSPI_NG;
-	uint8* prcv_buf;
+	uint32* prcv_buf;
 	uint8 rcv_inf;
 	uint8 page;
 	uint8 is_match;
@@ -507,11 +551,16 @@ uint8	fc_drv_ReadBuf(
 	if ( NULL_PTR != p_addr )
 	{
 		page = bf_drv_SpiMng.rcv.page_task;
+		if ( page >= XSPI_RCV_PAGE )
+		{
+			/* リングバッファの全領域をクリア */
+			fc_drv_ClearXSpiSndRcvMng();
+		}
 		rcv_inf = bf_drv_SpiMng.rcv.page[page].inf;
 
-		if (( RCV_FRM_DATA_FIX == rcv_inf ) && ( XSPI_FRM_MAX >= size ))
+		if (( RCV_FRM_DATA_FIX == rcv_inf ) && ( XSPI_RCV_FRM_MAX >= size ))
 		{
-			prcv_buf = bf_drv_SpiMng.rcv.page[page].dat;
+			prcv_buf = (uint32 *)bf_drv_SpiMng.rcv.page[page].dat;
 
 #if (XSPI_DATA_CHECK != XSPI_DATA_CHECK_NONE)
 			is_match = fc_drv_CheckIntegrityData( prcv_buf );
@@ -553,7 +602,7 @@ uint8	fc_drv_ReadBuf(
 *																			*
 *		DESCRIPTION	: 送信バッファ書き込み(リングバッファ)					*
 *																			*
-*		PARAMETER	: OUT :	uint8*	書き込みデータアドレス					*
+*		PARAMETER	: OUT :	uint32*	書き込みデータアドレス					*
 *					  IN  :	uint32	書き込みデータサイズ					*
 *																			*
 *					  RET :													*
@@ -563,22 +612,28 @@ uint8	fc_drv_ReadBuf(
 *																			*
 ****************************************************************************/
 uint8	fc_drv_WriteBuf(
-	const uint8* p_addr, uint32 size
+	const uint32* const p_addr, uint32 size
 )
 {
 	uint8 result = XSPI_NG;
-	uint8* psnd_buf;
+	uint32* psnd_buf;
 	uint8 snd_inf;
 	uint8 page;
 
 	if ( NULL_PTR != p_addr )
 	{
 		page = bf_drv_SpiMng.snd.page_task;
+
+		if ( page >= XSPI_SND_PAGE )
+		{
+			/* リングバッファの全領域をクリア */
+			fc_drv_ClearXSpiSndRcvMng();
+		}
 		snd_inf = bf_drv_SpiMng.snd.page[page].inf;
 
-		if (( SND_FRM_DATA_NON == snd_inf ) && ( XSPI_FRM_MAX >= size ))
+		if (( SND_FRM_DATA_NON == snd_inf ) && ( XSPI_SND_FRM_MAX >= size ))
 		{
-			psnd_buf = bf_drv_SpiMng.snd.page[page].dat;
+			psnd_buf = (uint32 *)bf_drv_SpiMng.snd.page[page].dat;
 
 			/* 送信バッファに送信データを設定 */
 			XSPI_MEMCPY( psnd_buf, p_addr, size );
@@ -766,7 +821,7 @@ static uint32	fc_drv_CalculationFcc(
 *																			*
 *		DESCRIPTION	: 整合性データチェック（FCC）							*
 *																			*
-*		PARAMETER	: IN  :	uint8*	フレーム先頭アドレス					*
+*		PARAMETER	: IN  :	uint32*	フレーム先頭アドレス					*
 *																			*
 *					  OUT :	None											*
 *																			*
@@ -777,19 +832,16 @@ static uint32	fc_drv_CalculationFcc(
 *																			*
 ****************************************************************************/
 uint8	fc_drv_CheckIntegrityData(
-	const uint8* p_frame
+	const uint32* p_frame
 )
 {
 	uint8 ret = XSPI_OK;
 	uint32 fcc;
 	uint32 fcc_calc;
-	uint32 *p_lframe;
-
-	p_lframe = (uint32*)&p_frame[0];
 
 	/* Calclation FCC */
-	fcc = BYTE_SWAP_32(p_lframe[XSPI_FCC_LONG_OFFSET]);
-	fcc_calc = fc_drv_CalculationFcc(p_lframe);
+	fcc = BYTE_SWAP_32(p_frame[XSPI_FCC_LONG_OFFSET]);
+	fcc_calc = fc_drv_CalculationFcc(p_frame);
 
 	if( fcc != fcc_calc ){
 		ret = XSPI_NG;
@@ -804,7 +856,7 @@ uint8	fc_drv_CheckIntegrityData(
 *																			*
 *		DESCRIPTION	: 整合性データ付加（FCC）								*
 *																			*
-*		PARAMETER	: IN  :	uint8*	フレーム先頭アドレス					*
+*		PARAMETER	: IN  :	uint32*	フレーム先頭アドレス					*
 *																			*
 *					  OUT :	None											*
 *																			*
@@ -812,19 +864,14 @@ uint8	fc_drv_CheckIntegrityData(
 *																			*
 ****************************************************************************/
 void    fc_drv_AddIntegrityData(
-    uint8* p_frame
+    uint32* p_frame
 )
 {
-	uint32 fcc_offset;
 	uint32 fcc_calc;
 
 	/* Calclation FCC */
-	fcc_offset = XSPI_FCC_OFFSET;
-	fcc_calc = fc_drv_CalculationFcc((uint32*)p_frame);
-	p_frame[fcc_offset  ] = BYTE_SWAP4(fcc_calc);
-	p_frame[fcc_offset+1UL] = BYTE_SWAP3(fcc_calc);
-	p_frame[fcc_offset+2UL] = BYTE_SWAP2(fcc_calc);
-	p_frame[fcc_offset+3UL] = BYTE_SWAP1(fcc_calc);
+	fcc_calc = fc_drv_CalculationFcc(p_frame);
+	p_frame[XSPI_FCC_LONG_OFFSET] = BYTE_SWAP_32(fcc_calc);
 }
 
 #elif (XSPI_DATA_CHECK == XSPI_DATA_CHECK_SUM)
@@ -866,7 +913,7 @@ static uint32	fc_drv_CalculationChkSum(
 *																			*
 *		DESCRIPTION	: 整合性データチェック（CheckSum）						*
 *																			*
-*		PARAMETER	: IN  :	uint8*	フレーム先頭アドレス					*
+*		PARAMETER	: IN  :	uint32*	フレーム先頭アドレス					*
 *																			*
 *					  OUT :	None											*
 *																			*
@@ -877,7 +924,7 @@ static uint32	fc_drv_CalculationChkSum(
 *																			*
 ****************************************************************************/
 uint8   fc_drv_CheckIntegrityData(
-	const uint8* p_frame
+	const uint32* p_frame
 )
 {
 	uint8 ret = XSPI_OK;
@@ -885,20 +932,17 @@ uint8   fc_drv_CheckIntegrityData(
 	uint32 chksum_calc = 0UL;
 	uint32 offset = 0UL;
 	uint32 offset_calc = 0UL;
-	uint32 *p_lframe;
 	uint32 ulsize;
 	uint8 i;
-
-	p_lframe = (uint32*)&p_frame[0];
 
 	/* Calclation CheckSum */
 	for (i = 0U; i < XSPI_PAYLOAD_NUM; i++)
 	{
 		offset = (XSPI_CHKSUM_LONG_OFFSET + i);
-		chksum = p_lframe[offset];
+		chksum = p_frame[offset];
 		ulsize = tb_drv_payload_size[i] / sizeof(uint32);
 
-		chksum_calc = fc_drv_CalculationChkSum( &p_lframe[offset_calc], ulsize );
+		chksum_calc = fc_drv_CalculationChkSum( &p_frame[offset_calc], ulsize );
 		if (chksum_calc != chksum)
 		{
 			ret = XSPI_NG;
@@ -917,7 +961,7 @@ uint8   fc_drv_CheckIntegrityData(
 *																			*
 *		DESCRIPTION	: 整合性データ付加（CheckSum）							*
 *																			*
-*		PARAMETER	: IN/OUT  :	フレーム先頭アドレス						*
+*		PARAMETER	: IN/OUT  :	uint32*	フレーム先頭アドレス				*
 *																			*
 *					  OUT :	None											*
 *																			*
@@ -925,26 +969,23 @@ uint8   fc_drv_CheckIntegrityData(
 *																			*
 ****************************************************************************/
 void    fc_drv_AddIntegrityData(
-    uint8* p_frame
+    uint32* p_frame
 )
 {
 	uint32 chksum_calc = 0UL;
 	uint32 offset_add = 0UL;
 	uint32 offset_calc = 0UL;
-	uint32 *p_lframe;
 	uint32 ulsize;
 	uint8 i;
-
-	p_lframe = (uint32*)&p_frame[0];
 
 	/* Calclation CheckSum */
 	for (i = 0U; i < XSPI_PAYLOAD_NUM; i++)
 	{
 		ulsize = tb_drv_payload_size[i] / sizeof(uint32);
-		chksum_calc = fc_drv_CalculationChkSum( &p_lframe[offset_calc], ulsize );
+		chksum_calc = fc_drv_CalculationChkSum( &p_frame[offset_calc], ulsize );
 
 		offset_add = (XSPI_CHKSUM_LONG_OFFSET + i);
-		p_lframe[offset_add] = chksum_calc;
+		p_frame[offset_add] = chksum_calc;
 		offset_calc += ulsize;
     }
 }

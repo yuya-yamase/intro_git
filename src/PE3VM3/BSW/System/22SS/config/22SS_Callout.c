@@ -18,7 +18,6 @@
 #include <Ecu_Memmap.h>
 #include <22SS_Callout.h>
 
-#include "stub.h"
 #include "veh_opemd.h"
 #include "oxcan.h"
 
@@ -27,7 +26,7 @@
 /* #include "nvmc_mgr.h" */
 
 #include "EthSW_Task.h"
-#include "Mcu_PwrCtrl.h"
+#include "PwrCtrl_Main.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -76,8 +75,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
-    vd_g_StubBonInit();
-    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
+    vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
     /* ^^ User Hook end   ^^ */
 
@@ -115,8 +113,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
-    vd_g_StubRstInit();
-    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
+    vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
     /* ^^ User Hook end   ^^ */
 
@@ -154,8 +151,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_VehopemdWkupInit();
 
     /* vv User Hook start vv */
-    vd_g_StubWkupInit();
-    vd_g_Mcu_PwrCtrl_Bon_Wakeup_Req();
+    vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
     /* ^^ User Hook end   ^^ */
 

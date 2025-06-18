@@ -45,6 +45,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#pragma ghs section rodata=".UART_RODATA_CONST"
+
 /* ----------------------------------------------------------------------------------------------------------------------------------*/
 /* Attention :                                                                                                                       */
 /* Since the peripheral clock varies depending on the product, pay attention to the baud rate setting.                               */
@@ -204,7 +206,7 @@ const ST_SPI_UART_CH      st_gp_SPI_UART_CH_CFG[SPI_UART_NUM_CH]  = {
         (U1)0x00U,                                /* u1_lmd_luor1     */
         (U1)0x00U                                 /* u1_lede          */
     },
-    /* SPI_UART_CH_11 */
+    /* SPI_UART_CH_11_SAIL */
     {
         (volatile U4 *)0xffc7c280,                /* u4p_rbase        */
 
@@ -212,8 +214,8 @@ const ST_SPI_UART_CH      st_gp_SPI_UART_CH_CFG[SPI_UART_NUM_CH]  = {
         (U2)462U,                                 /* u2_irq_rx        */
         (U2)461U,                                 /* u2_irq_tx        */
 
-        (U2)0x0000U,                              /* u2_lbrp          */
-        (U1)0x00U,                                /* u1_lwbr          */
+        (U2)0x001CU,                              /* u2_lbrp          */
+        (U1)0x50U,                                /* u1_lwbr          */
         (U1)0x00U,                                /* u1_lbfc          */
         (U1)0x00U,                                /* u1_lmd_luor1     */
         (U1)0x00U                                 /* u1_lede          */
@@ -388,6 +390,8 @@ const ST_SPI_UART_CH      st_gp_SPI_UART_CH_CFG[SPI_UART_NUM_CH]  = {
     }
 };
 const U1                  u1_g_SPI_UART_NUM_CH = (U1)SPI_UART_NUM_CH;
+
+#pragma ghs section rodata=default
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */

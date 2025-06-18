@@ -130,6 +130,8 @@ void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const 
     vd_g_XspiIviSub1GpsStsSend();
     vd_g_XspiIviSub1ExtSiGSend();
     vd_g_XspiIviSub1VehspdCntSend();
+    vd_g_XspiIviSub1TmuteSend();
+    vd_g_XspiIviSub1PowerBmoniVolSend();
 }
 
 /*===================================================================================================================================*/

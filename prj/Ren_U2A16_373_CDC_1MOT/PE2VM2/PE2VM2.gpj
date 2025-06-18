@@ -20,10 +20,15 @@ primaryTarget=v800_standalone.tgt
 	:macro=IOHW_DIR=${ROOT_DIR}/BSW/IoHwAbstract
 	:macro=APP_DIR=${ROOT_DIR}/App
 	:macro=LIB_DIR=${ROOT_DIR}/LIB
+    :macro=CMPSW_DIR=${PRJ_DIR}/../../CmpSW
+
+    # OTH
+    :macro=COUNTRY_SW_OTH=
 
     :optionsFile=${CMN_DIR}/common.opt
     :optionsFile=${CMN_DIR}/MCAL.opt
     :optionsFile=${CMN_DIR}/IOHW.opt
+    :optionsFile=${CMPSW_DIR}/PE2VM2_CmpSW.opt
 
     -I${GPI2C_DIR}/config
     -I${GPI2C_DIR}/scc
@@ -46,8 +51,6 @@ primaryTarget=v800_standalone.tgt
 	-I${OS_DIR}/include/ar_sys
     -I${OS_DIR}/config
     -I${EHVM_IF_DIR}/include/ehvm
-
-	-I${APP_DIR}/Stub
 
     -L${ROOT_DIR}/BSW/Aubist/Os/os_lib/release
     -lsc1.sc.notrace.rh850u2a.a
@@ -74,6 +77,11 @@ primaryTarget=v800_standalone.tgt
     -DAR_OS_USE_HYPERVISOR
     -DECU_VM2
     -DECU_INTG_LWH_GUEST
+
+    # CompileSW (ProcessingLoad)
+    # Enter the measurement time in milliseconds
+    # Set to 0 to disable. Enable with any positive value (recommended: 10000).
+    -DPROCESSING_LOAD_MEASURE_TIME=0U
 
     -o PE2VM2.elf
 

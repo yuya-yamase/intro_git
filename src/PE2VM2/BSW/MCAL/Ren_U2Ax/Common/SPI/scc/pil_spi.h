@@ -13,7 +13,7 @@
 /*==============================================================================================*/
 /*	include files																				*/
 /*==============================================================================================*/
-#include	"Bsw_cfg.h"
+#include	"Spi_Ucfg.h"
 
 #include	"Reg_Mspi.h"
 
@@ -306,13 +306,7 @@ ZORN	Pil_Spi_GetOvrunErrStatus( U1 t_u1HwChannelID );
 /*==============================================================================================*/
 /*	constants																					*/
 /*==============================================================================================*/
-// #define SEL_ROMSEC	(BSW_SEC_C_LROM0_CPU0_ASIL_CFG_SDA)
-// #include "Bsw_Seccfg_Roms.h"
-#pragma ghs section rodata=".SPI_RODATA_CONST"
 extern	const	Pil_Spi_UserConfigType	cstPil_Spi_UcfgData;
-// #include "Bsw_Seccfg_Rome.h"
-// #undef SEL_ROMSEC
-#pragma ghs section rodata=default
 
 #endif /* PIL_SPI_H */
 /*-- End Of File -------------------------------------------------------------------------------*/

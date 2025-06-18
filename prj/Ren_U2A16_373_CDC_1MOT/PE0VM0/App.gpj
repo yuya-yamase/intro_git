@@ -4,6 +4,7 @@
     :sourceDir=${ROOT_DIR}
 
     -I${CAN_DIR}/inc
+    -I${APP_DIR}/Common
 
     -I${CAN_DIR}/CS/inc
     -I${CAN_DIR}/Com/inc
@@ -47,6 +48,8 @@
     -I${CGW_L3R_DIR}/MDL/INFO/UTIL/inc
 
     -I${LIB_DIR}
+    
+    -I${MCAL_DIR}/GPT
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
@@ -57,4 +60,3 @@ ${SS_DIR}/SchdM/config/scheduler_cfg.c
 ${SS_DIR}/RprgIf/config/rprg_if_request.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
-${APP_DIR}/Stub/stub_u2a.c

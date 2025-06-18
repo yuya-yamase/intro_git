@@ -22,6 +22,7 @@
 
 /* Communication         */
 #include "oxcan.h"
+#include "date_clk.h"
 /* Complex Device Driver */
 /* MCAL                  */
 /* Memory                */
@@ -156,6 +157,10 @@ void    vd_g_RunMCfgWksrcCfgRefresh(void)
 /*===================================================================================================================================*/
 U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 {
+    U1        u1_t_2nd;
+
+    u1_t_2nd = u1_g_DateclkShtdwnOk();
+
     return(u1_a_1ST);
 }
 /*===================================================================================================================================*/

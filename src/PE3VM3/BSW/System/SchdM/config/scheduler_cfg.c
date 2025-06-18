@@ -28,7 +28,6 @@
 /*---------------------------------------------------------------------------*/
 /* Application Header                                                        */
 /*---------------------------------------------------------------------------*/
-#include "stub.h"
 #include "xspi.h"
 
 /*---------------------------------------------------------------------------*/
@@ -50,8 +49,8 @@
 #include "wdg_drv.h"
 
 #include "EthSW_Task.h"
-#include "Mcu_PwrCtrl.h"
-#include "Mcu_Sys_Pwr.h" /* Žb’è */
+#include "PwrCtrl_Main.h"
+#include "PwrCtrl_Sys.h" /* Žb’è */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -152,8 +151,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Task                                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_Mcu_PwrCtrl_SipOffMcuStandby_Req, (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_Mcu_PwrCtrl_Task,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_PwrCtrlMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
     {&Mcu_Dev_Pwron,                    (U4)SCHDLR_TASKBIT___5MS    },
     {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
 
@@ -162,7 +160,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Non-Platform Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_Stub10msTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

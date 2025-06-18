@@ -2,6 +2,7 @@ import os
 import json
 import tkinter as tk
 import subprocess
+import sys
 
 def find_files_and_folders(base_path, extensions, include_pattern, exclude_pattern):
     path_list = []
@@ -67,33 +68,38 @@ def analysis_file(base_path, existing_json_file, include_pattern, options, VM_ke
 
 ## GUI 選択ターブル
 options = ["CDC_1SUS", "CDC_1SJP", "CDC_1SOT", "CDC_1MUS", "CDC_1MJP", "CDC_1MOT"]
+include_pattern = []
+selected_variation = ""
+if len(sys.argv) == 1:
+    root = tk.Tk()
+    root.title("仕向け選択")
 
-root = tk.Tk()
-root.title("仕向け選択")
+    var = tk.StringVar()
+    var.set(options[0])  # デフォルトの選択
 
-var = tk.StringVar()
-var.set(options[0])  # デフォルトの選択
+    for option in options:
+        radio_button = tk.Radiobutton(root, text=option, variable=var, value=option)
+        radio_button.pack(anchor=tk.W)
 
-for option in options:
-    radio_button = tk.Radiobutton(root, text=option, variable=var, value=option)
-    radio_button.pack(anchor=tk.W)
+    button = tk.Button(root, text="決定", command=save_selection)
+    button.pack()
 
-button = tk.Button(root, text="決定", command=save_selection)
-button.pack()
-
-root.mainloop()
-print(f"選択されたオプション: {selected_variation}")
-include_pattern = [selected_variation[:-2],selected_variation]
-options.remove(selected_variation)
+    root.mainloop()
+    print(f"選択されたオプション: {selected_variation}")
 #print(f"フィルタオプション(include): {include_pattern}")
 #print(f"フィルタオプション(除外): {options}")
+else:
+    selected_variation = sys.argv[1]
+
+include_pattern = [selected_variation[:-2],selected_variation]
+options.remove(selected_variation)
 
 # 使用するフォルダパスと拡張子リストを指定してください
-base_paths = ['W:\src\EHVM',  # 例: '/path/to/your/folder'
-             'W:\src\PE0VM0',
-             'W:\src\PE1VM1',
-             'W:\src\PE2VM2',
-             'W:\src\PE3VM3'
+base_paths = [r'W:\src\EHVM',  # 例: '/path/to/your/folder'
+             r'W:\src\PE0VM0',
+             r'W:\src\PE1VM1',
+             r'W:\src\PE2VM2',
+             r'W:\src\PE3VM3'
             ]
 VM_keywords = ['EHVM','PE0VM0','PE1VM1','PE2VM2','PE3VM3']
 # 既存のJSONファイルのパス

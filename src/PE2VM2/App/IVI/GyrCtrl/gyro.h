@@ -1,4 +1,21 @@
 /* メインタスクコードに移管するまでの仮置き */
+/* 1.0.0 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/*  Gyro/G-sensor for 26CDC Models                                                                                                   */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+
+#ifndef GYRO_H
+#define GYRO_H
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version                                                                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define GYRO_H_MAJOR                            (1)
+#define GYRO_H_MINOR                            (0)
+#define GYRO_H_PATCH                            (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -8,38 +25,48 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define MCU_GYRO_TASK_TIME              (5U)    /* 周期の時間指定(LSB:1ms) */
+#define GYRO_TASK_TIME                          (1U)    /* 周期の時間指定(LSB:1ms) */
 
-/* フロー */
-/* SENSOR-ON端子 ⇒ Hi (GPIO端子処理)：別プロセスで実施 */
-/* Wati t3 (SENSOR-ON High → I2Cアクセス可能までの時間)：Mcu_Dev_Pwron_Gyro_RegSetting()で監視 */
-#define MCU_STEP_GYRO1_OVERALL_1        (1U)    /* Set Watchdog Timer (Gyro) */
-#define MCU_STEP_GYRO1_OVERALL_2        (2U)    /* Set Watchdog Timer (Gセンサ) */
-#define MCU_STEP_GYRO1_OVERALL_3        (3U)    /* Mode Change (Gセンサ) ON suspend mode ⇒ normal mode */
-#define MCU_STEP_GYRO1_OVERALL_4        (4U)    /* Wait t11 (デバイス仕様：50ms (Gセンサのモード切替後wait時間)) */
-#define MCU_STEP_GYRO1_OVERALL_5        (5U)    /* Setup Sensor (Gyro) */
-#define MCU_STEP_GYRO1_OVERALL_6        (6U)    /* Self-Test (Gyro) */
-#define MCU_STEP_GYRO1_OVERALL_7        (7U)    /* Setup Sensor (Gyro) */
-#define MCU_STEP_GYRO1_OVERALL_8        (8U)    /* Setup Sensor (Gセンサ2) */
-#define MCU_STEP_GYRO1_OVERALL_9        (9U)    /* Self-Test (Gセンサ) */
-#define MCU_STEP_GYRO1_OVERALL_10       (10U)   /* Setup Sensor (Gセンサ1) */
-#define MCU_STEP_GYRO1_OVERALL_11       (11U)   /* Mode Change (Gyro) OFF normal mode ⇒ suspend mode */
-#define MCU_STEP_GYRO1_OVERALL_FIN      (12U)   
+/* シーケンス実行No 共通 */
+#define GYRO_SEQ_IDLE_STA                       (0U)    /* アイドルシーケンス実行No */
 
-#define MCU_STEP_GYRO2_OVERALL_1        (1U)    /* V33-Peri-ON監視 */
-#define MCU_STEP_GYRO2_OVERALL_2        (2U)    /* Gセンサ 0x40に0xA8をWrite */
-#define MCU_STEP_GYRO2_OVERALL_3        (3U)    /* Mode Change (Gyro) ON suspend mode ⇒ normal mode */
-#define MCU_STEP_GYRO2_OVERALL_4        (4U)    /* Wait t10 (Gyroセンサsuspend mode時のwait time) */
-#define MCU_STEP_GYRO2_OVERALL_FIN      (5U)
+/* ジャイロ状態遷移モード */
+#define GYRO_MODE_MAX                           (7U)    /* 状態最大数 */
+#define GYRO_MODE_UNINIT                        (0U)    /* 0:未初期化 */
+#define GYRO_MODE_STUP1_PRO                     (1U)    /* 1:起動(1)実施中 */
+#define GYRO_MODE_STUP1_COMP                    (2U)    /* 2:起動(1)実施完了 */
+#define GYRO_MODE_STUP2_PRO                     (3U)    /* 3:起動(2)実施中 */
+#define GYRO_MODE_NORM                          (4U)    /* 4:通常動作中 */
+#define GYRO_MODE_SHTDN1_PRO                    (5U)    /* 5:終了(1)実施中 */
+#define GYRO_MODE_ERR                           (6U)    /* 6:異常停止中 */
+
+/* ジャイロ状態遷移イベント */
+#define GYRO_EVENT_MAX                          (9U)    /* イベント最大数 */
+#define GYRO_EVENT_TASKSTUP                     (0U)    /* 0:タスク起動 */
+#define GYRO_EVENT_V33PERION_ON                 (1U)    /* 1:V33-Peri-ON ON */
+#define GYRO_EVENT_V33PERION_OFF                (2U)    /* 2:V33-Peri-ON OFF */
+#define GYRO_EVENT_SYS_OFF                      (3U)    /* 3:システムオフ 予備設計 */
+#define GYRO_EVENT_SEQ_COMP                     (4U)    /* 4:シーケンス完了 */
+#define GYRO_EVENT_STUP_ERR                     (5U)    /* 5:起動異常検知 */
+#define GYRO_EVENT_DTC_ERR                      (6U)    /* 6:DTC異常検知 */
+#define GYRO_EVENT_SHTDN_ERR                    (7U)    /* 7:終了異常検知 */
+#define GYRO_EVENT_DEV_RST                      (8U)    /* 8:リセット */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    gyro_Init( void );
-void    gyro_main( void );
+void            vd_g_GyroInit(void);
+void            vd_g_GyroMainTask(void);
+
+U1              u1_g_GyroDevCtlMngModGet(void);
+void            vd_g_GyroDevEventGo(const U1 u1_a_EVENT);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern uint8    Mcu_OnStep_Gyro_1_OVRALL;
-extern uint8    Mcu_OnStep_Gyro_2_OVRALL;
+#endif /* GYRO_H */
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Change History  :  gyro.c                                                                                                        */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/

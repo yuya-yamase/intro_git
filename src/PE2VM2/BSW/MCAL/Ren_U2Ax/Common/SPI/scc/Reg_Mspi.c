@@ -26,8 +26,6 @@
 /*	constants																					*/
 /*==============================================================================================*/
 
-// #define SEL_ROMSEC	(BSW_SEC_C_LROM0_CPU0_ASIL_SDA)
-// #include "Bsw_Seccfg_Roms.h"
 #pragma ghs section rodata=".SPI_RODATA_CONST"
 volatile Reg_Mspi_UnitType* const cpstReg_Mspi[MSPI_UNIT_NUM] = {
 	(&REG_MSPI0),
@@ -57,8 +55,6 @@ volatile Reg_Mspi_IntfType* const cpstReg_MspiIntf[MSPI_UNIT_NUM] = {
 	,(&REG_MSPI8INTF)
 #endif
 };
-// #include "Bsw_Seccfg_Rome.h"
-// #undef SEL_ROMSEC
 #pragma ghs section rodata=default
 
 /*-- End Of File -------------------------------------------------------------------------------*/

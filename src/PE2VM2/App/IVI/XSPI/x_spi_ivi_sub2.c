@@ -18,6 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "x_spi_ivi_sub2_private.h"
 #include    "x_spi_ivi_private.h"
+#include    "GyroDevCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -112,6 +113,20 @@
 #define XSPI_IVI_ACCL_AXS_CEN            (0x0000)
 #define XSPI_IVI_ACCL_TEMP_CEN           (0x0017)
 
+/*GセンサINT*/
+#define XSPI_IVI_GYRO_INT_SET_REQ        (0x11U)
+#define XSPI_IVI_GYRO_INT_GET_REQ        (0x13U)
+#define XSPI_IVI_GYRO_INT_OUT_REQ        (0x15U)
+#define XSPI_IVI_GYRO_INT_SET_RES        (0x12U)
+#define XSPI_IVI_GYRO_INT_GET_RES        (0x14U)
+#define XSPI_IVI_GYRO_INT_OUT_RES        (0x16U)
+
+#define XSPI_IVI_DATA_INT_SET_LENGTH     (8U)
+#define XSPI_IVI_DATA_INT_GET_LENGTH     (16U)
+#define XSPI_IVI_DATA_INT_OUT_LENGTH     (8U)
+
+#define XSPI_IVI_GYRO_INT_GET_DATA_SIZE  (9U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -138,36 +153,50 @@ static U1 u1_s_xspi_ivi_gyro_temp_center;
 static U1 u1_s_xspi_ivi_acc_xyz_center;
 static U1 u1_s_xspi_ivi_acc_temp_center;
 /*センサデータ格納RAM*/
-static U2 u2_sp_xspi_ivi_gyro_x_data[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_gyro_y_data[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_gyro_z_data[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_x_data_down[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_x_data_up[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_y_data_down[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_y_data_up[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_z_data_down[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_z_data_up[XSPI_IVI_TMPDATA];
 static U1 u1_sp_xspi_ivi_gyro_temp_data[XSPI_IVI_TMPDATA];
 static U1 u1_s_xspi_ivi_gyro_x_valid_data;
 static U1 u1_s_xspi_ivi_gyro_y_valid_data;
 static U1 u1_s_xspi_ivi_gyro_z_valid_data;
 static U1 u1_s_xspi_ivi_gyro_temp_valid_data;
-static U2 u2_sp_xspi_ivi_acc_x_data[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_acc_y_data[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_acc_z_data[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_acc_temp_data[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_x_data_down[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_x_data_up[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_y_data_down[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_y_data_up[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_z_data_down[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_z_data_up[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_temp_data_down[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_temp_data_up[XSPI_IVI_TMPDATA];
 static U1 u1_s_xspi_ivi_acc_x_valid_data;
 static U1 u1_s_xspi_ivi_acc_y_valid_data;
 static U1 u1_s_xspi_ivi_acc_z_valid_data;
 static U1 u1_s_xspi_ivi_acc_temp_valid_data;
 static U2 u2_sp_xspi_ivi_pulse_num[XSPI_IVI_TMPDATA];
 /*100msデータ作成までの退避RAM*/
-static U2 u2_sp_xspi_ivi_gyro_x_data_tmp[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_gyro_y_data_tmp[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_gyro_z_data_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_x_data_down_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_x_data_up_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_y_data_down_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_y_data_up_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_z_data_down_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_gyro_z_data_up_tmp[XSPI_IVI_TMPDATA];
 static U1 u1_s_xspi_ivi_gyro_temp_data_tmp;
 static U1 u1_s_xspi_ivi_gyro_x_valid_data_tmp;
 static U1 u1_s_xspi_ivi_gyro_y_valid_data_tmp;
 static U1 u1_s_xspi_ivi_gyro_z_valid_data_tmp;
 static U1 u1_s_xspi_ivi_gyro_temp_valid_data_tmp;
-static U2 u2_sp_xspi_ivi_acc_x_data_tmp[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_acc_y_data_tmp[XSPI_IVI_TMPDATA];
-static U2 u2_sp_xspi_ivi_acc_z_data_tmp[XSPI_IVI_TMPDATA];
-static U2 u2_s_xspi_ivi_acc_temp_data_tmp;
+static U1 u1_sp_xspi_ivi_acc_x_data_down_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_x_data_up_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_y_data_down_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_y_data_up_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_z_data_down_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_sp_xspi_ivi_acc_z_data_up_tmp[XSPI_IVI_TMPDATA];
+static U1 u1_s_xspi_ivi_acc_temp_data_down_tmp;
+static U1 u1_s_xspi_ivi_acc_temp_data_up_tmp;
 static U1 u1_s_xspi_ivi_acc_x_valid_data_tmp;
 static U1 u1_s_xspi_ivi_acc_y_valid_data_tmp;
 static U1 u1_s_xspi_ivi_acc_z_valid_data_tmp;
@@ -179,19 +208,22 @@ static U4 u4_s_xspi_ivi_pulse_count_tmp;
 
 static U2 u2_s_xspi_ivi_total_pulse_num;
 
-static U2 u2_s_xspi_ivi_transmission_cnt;                     /*SubFlame Transmission Count*/
 static U1 u2_s_xspi_ivi_ini_buf_cnt;                          /*SubFrame Num*/
 static U1 u1_s_xspi_ivi_tmp_gyro_ini_cnt;                     /*tmp_gyro ini buf num*/
 static U1 u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf;                     /*tmp_gyro ini buf num*/
 static U1 u1_s_xspi_ivi_gyro_buf_cnt;
 static U1 u1_s_xspi_ivi_pulse_buf_cnt;
 
-static U4 u4_s_xspi_ivi_task_cnt_subframe2_pre;
-static U4 u4_s_xspi_ivi_task_cnt_subframe2_ini_send_pre;
-
 static U1 u1_s_xspi_ivi_gyro_receive_finish_flg;
 static U1 u1_s_xspi_ivi_pulsenum_receive_finish_flg;
 static U1 u1_s_xspi_ivi_pulsewid_receive_finish_flg;
+
+static U1 u1_sp_xspi_ivi_gyro_int_setting_result;
+static U1 u1_sp_xspi_ivi_gyro_int_get_data[XSPI_IVI_GYRO_INT_GET_DATA_SIZE];
+static U1 u1_sp_xspi_ivi_gyro_int_output_result;
+static U1 u1_s_xspi_ivi_gyroint_set_response_flg;
+static U1 u1_s_xspi_ivi_gyroint_get_response_flg;
+static U1 u1_s_xspi_ivi_gyroint_output_response_flg;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -231,36 +263,50 @@ void            vd_g_XspiIviSub2Init(void)
     u1_s_xspi_ivi_acc_xyz_center = (U1)0U;
     u1_s_xspi_ivi_acc_temp_center = (U1)0U;
     /*センサデータ格納バッファ初期化*/
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_gyro_x_data[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_gyro_y_data[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_gyro_z_data[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_x_data_down[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_x_data_up[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_y_data_down[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_y_data_up[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_z_data_down[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_z_data_up[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
     vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_temp_data[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
     u1_s_xspi_ivi_gyro_x_valid_data = (U1)0U;
     u1_s_xspi_ivi_gyro_y_valid_data = (U1)0U;
     u1_s_xspi_ivi_gyro_z_valid_data = (U1)0U;
     u1_s_xspi_ivi_gyro_temp_valid_data = (U1)0U;
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_acc_x_data[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_acc_y_data[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_acc_z_data[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_acc_temp_data[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_x_data_down[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_x_data_up[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_y_data_down[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_y_data_up[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_z_data_down[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_z_data_up[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_temp_data_down[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_temp_data_up[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
     u1_s_xspi_ivi_acc_x_valid_data = (U1)0U;
     u1_s_xspi_ivi_acc_y_valid_data = (U1)0U;
     u1_s_xspi_ivi_acc_z_valid_data = (U1)0U;
     u1_s_xspi_ivi_acc_temp_valid_data = (U1)0U;
     vd_g_MemfillU2(&u2_sp_xspi_ivi_pulse_num[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
     /*送信バッファに格納する前の退避バッファの初期化*/
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_gyro_x_data_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_gyro_y_data_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_gyro_z_data_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_x_data_down_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_x_data_up_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_y_data_down_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_y_data_up_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_z_data_down_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_z_data_up_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
     u1_s_xspi_ivi_gyro_temp_data_tmp = (U1)0U;
     u1_s_xspi_ivi_gyro_x_valid_data_tmp = (U1)0U;
     u1_s_xspi_ivi_gyro_y_valid_data_tmp = (U1)0U;
     u1_s_xspi_ivi_gyro_z_valid_data_tmp = (U1)0U;
     u1_s_xspi_ivi_gyro_temp_valid_data_tmp = (U1)0U;
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_acc_x_data_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_acc_y_data_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    vd_g_MemfillU2(&u2_sp_xspi_ivi_acc_z_data_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
-    u2_s_xspi_ivi_acc_temp_data_tmp = (U1)0U;
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_x_data_down_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_x_data_up_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_y_data_down_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_y_data_up_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_z_data_down_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_acc_z_data_up_tmp[0], (U1)0U, (U4)XSPI_IVI_TMPDATA);
+    u1_s_xspi_ivi_acc_temp_data_down_tmp = (U1)0U;
+    u1_s_xspi_ivi_acc_temp_data_up_tmp = (U1)0U;
     u1_s_xspi_ivi_acc_x_valid_data_tmp = (U1)0U;
     u1_s_xspi_ivi_acc_y_valid_data_tmp = (U1)0U;
     u1_s_xspi_ivi_acc_z_valid_data_tmp = (U1)0U;
@@ -270,7 +316,6 @@ void            vd_g_XspiIviSub2Init(void)
     u1_s_xspi_ivi_clock_freq_tmp = (U1)0U;
     u4_s_xspi_ivi_pulse_count_tmp = (U4)0U;
 
-    u2_s_xspi_ivi_transmission_cnt = (U2)0U;                    /*サブフレームの送信回数初期化*/
 	u1_s_xspi_ivi_com_start_flg  = (U1)FALSE;                   /*通信開始フラグ初期化*/
     u1_s_xspi_ivi_ini_send_flg   = (U1)FALSE;                   /*初回送信開始フラグ初期化*/
     u1_s_xspi_ivi_comp_com_start = (U1)FALSE;                   /*通信開始応答完了フラグ初期化*/
@@ -278,8 +323,6 @@ void            vd_g_XspiIviSub2Init(void)
     u2_s_xspi_ivi_ini_buf_cnt = (U2)0U;                         /*分割送信フレーム番号初期化*/
     u1_s_xspi_ivi_tmp_gyro_ini_cnt = (U1)0U;                    /*初回送信データ数初期化*/
     u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf = (U1)0U;                /*初回送信データのリングバッファ格納箇所初期化*/
-    u4_s_xspi_ivi_task_cnt_subframe2_pre = (U4)0U;              /*定期送信カウント前回値初期化*/
-    u4_s_xspi_ivi_task_cnt_subframe2_ini_send_pre = (U4)0U;     /*初回送信カウント前回値初期化*/
     u1_s_xspi_ivi_gyro_buf_cnt = (U1)0U;                        /*ジャイロセンサ受信回数初期化*/
     u1_s_xspi_ivi_pulse_buf_cnt = (U1)0U;                       /*パルス受信回数初期化*/
 
@@ -288,6 +331,13 @@ void            vd_g_XspiIviSub2Init(void)
     u1_s_xspi_ivi_gyro_receive_finish_flg = (U1)FALSE;
     u1_s_xspi_ivi_pulsenum_receive_finish_flg = (U1)FALSE;
     u1_s_xspi_ivi_pulsewid_receive_finish_flg = (U1)FALSE;
+
+    u1_sp_xspi_ivi_gyro_int_setting_result = (U1)0U;
+    u1_sp_xspi_ivi_gyro_int_output_result = (U1)0U;
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_gyro_int_get_data[0], (U1)0U, (U4)XSPI_IVI_GYRO_INT_GET_DATA_SIZE);
+    u1_s_xspi_ivi_gyroint_set_response_flg = (U1)FALSE;
+    u1_s_xspi_ivi_gyroint_get_response_flg = (U1)FALSE;
+    u1_s_xspi_ivi_gyroint_output_response_flg = (U1)FALSE;
 }
 
 /*===================================================================================================================================*/
@@ -327,6 +377,8 @@ static void            vd_s_XspiIviSub2GyroAna(const U1 * u1_ap_SUB2_ADD, const 
     static const U1 u1_s_GYRO_SUBTYPE_INIT_DATA_REQ = (U1)0x03U;
 
     U1          u1_t_subtype;   /*SubFlame Subtype*/
+    ST_GYRODEV_NOTIFCOND_SETDATA  st_t_setdata;
+    ST_GYRODEV_CTRLOUT_SETDATA    st_t_outputdata;
 
     u1_t_subtype = u1_ap_SUB2_ADD[0];
 
@@ -337,6 +389,30 @@ static void            vd_s_XspiIviSub2GyroAna(const U1 * u1_ap_SUB2_ADD, const 
     }else{
         /* Do Nothing */
     }
+
+    switch (u1_t_subtype)
+    {
+    case XSPI_IVI_GYRO_INT_SET_REQ:
+        st_t_setdata.u1_threshold = u1_ap_SUB2_ADD[4];
+        st_t_setdata.u1_axis_x = u1_ap_SUB2_ADD[5];
+        st_t_setdata.u1_axis_y = u1_ap_SUB2_ADD[6];
+        st_t_setdata.u1_axis_z = u1_ap_SUB2_ADD[7];
+        st_t_setdata.u1_active = u1_ap_SUB2_ADD[8];
+        vd_g_GyroDev_NotifCond_SetReq(st_t_setdata);
+        break;
+    case XSPI_IVI_GYRO_INT_GET_REQ:
+        vd_g_GyroDev_NotifCond_ReadReq();
+        break;
+    case XSPI_IVI_GYRO_INT_OUT_REQ:
+        st_t_outputdata.u1_type         = u1_ap_SUB2_ADD[4];
+        st_t_outputdata.u1_type_standby = u1_ap_SUB2_ADD[5];
+        vd_g_GyroDev_OutCtl_SetReq(st_t_outputdata);
+        break;
+    
+    default:
+        break;
+    }
+
 }
 
 /*===================================================================================================================================*/
@@ -366,13 +442,12 @@ void            vd_g_XspiIviSub2Send(U1 * u1_ap_xspi_add)
         u1_s_xspi_ivi_pulsenum_receive_finish_flg = (U1)FALSE;
         u1_s_xspi_ivi_pulsewid_receive_finish_flg = (U1)FALSE;
     }
-    
-    
+
+    vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
+
     /*通信開始応答かそうじゃないか*/
     if((u1_s_xspi_ivi_com_start_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_com_start == (U1)FALSE)) {
         /* 通信開始応答 */
-        vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
-        u2_s_xspi_ivi_transmission_cnt++;
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_COM_START_RES_LENGTH,(U2)0U);
         u1_ap_xspi_add[8] = (U1)0x02;
         u1_ap_xspi_add[9] = (U1)0x00;
@@ -380,7 +455,7 @@ void            vd_g_XspiIviSub2Send(U1 * u1_ap_xspi_add)
         u1_ap_xspi_add[11] = (U1)0x00;
 
         u1_s_xspi_ivi_comp_com_start = (U1)TRUE;
-        u4_s_xspi_ivi_task_cnt_subframe2_pre = u4_s_xspi_ivi_task_cnt;
+        u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO] = (U4)0U;
     }else if((u1_s_xspi_ivi_com_start_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_com_start == (U1)TRUE)){
         /*Gyroセンサデータ取得処理*/
         vd_s_XspiIviSub2SenSensorData(u1_ap_xspi_add);
@@ -398,8 +473,8 @@ void            vd_g_XspiIviSub2Send(U1 * u1_ap_xspi_add)
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
 {
-    U4 u4_s_XSPI_IVI_TASK_SEND_CNT = (U4)100U / (U4)5U;
-    U4 u4_s_XSPI_IVI_TASK_INIT_SEND_CNT = (U4)20U / (U4)5U;
+    U4 u4_s_XSPI_IVI_TASK_SEND_CNT = (U4)100U / (U4)XSPI_IVI_TASK_TIME;
+    U4 u4_s_XSPI_IVI_TASK_INIT_SEND_CNT = (U4)20U / (U4)XSPI_IVI_TASK_TIME;
 
 
     U2 u2_t_buf_cnt;
@@ -409,26 +484,20 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
     u2_t_dt_size = (U2)0U;
 
     /*定期送信処理と初回送信処理の切り分け*/
-    if((u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_task_cnt_subframe2_pre) >= u4_s_XSPI_IVI_TASK_SEND_CNT){
+    if(u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO] >= u4_s_XSPI_IVI_TASK_SEND_CNT){
         /*定期送信処理*/
-        vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
-
-        u2_s_xspi_ivi_transmission_cnt++;
         vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_LENGTH,(U2)0U);
         vd_g_MemcpyU1(&u1_ap_xspi_add[8], &u1_sp_xspi_ivi_gyro_data[0], (U4)XSPI_IVI_DATA_LENGTH);
         u1_ap_xspi_add[8]  = (U1)0x05; /*SubType*/
         u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
         u1_ap_xspi_add[10] = (U1)0x00; /*Reserve*/
         u1_ap_xspi_add[11] = (U1)0x00; /*Reserve*/
-        u4_s_xspi_ivi_task_cnt_subframe2_pre = u4_s_xspi_ivi_task_cnt;
+        u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO] = (U4)0U;
 
     }else if((u1_s_xspi_ivi_ini_send_flg == (U1)TRUE) && (u1_s_xspi_ivi_comp_ini_send == (U1)FALSE)) {
         /*20msごとに*/
-        if((u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_task_cnt_subframe2_ini_send_pre) >= u4_s_XSPI_IVI_TASK_INIT_SEND_CNT) {
+        if(u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO_INI] >= u4_s_XSPI_IVI_TASK_INIT_SEND_CNT) {
             /*初回送信*/
-            vd_g_MemfillU1(&u1_ap_xspi_add[0],(U1)0U,(U4)XSPI_IVI_SUBFRAME2_TOTAL_LENGTH);
-
-            u2_s_xspi_ivi_transmission_cnt++;
             u2_t_buf_cnt = u2_s_xspi_ivi_ini_buf_cnt * (U2)1016U;
 
             vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_INIT_DATA_LENGTH,u2_s_xspi_ivi_ini_buf_cnt);
@@ -458,9 +527,36 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
             }
 
             u2_s_xspi_ivi_ini_buf_cnt++;
-            u4_s_xspi_ivi_task_cnt_subframe2_ini_send_pre = u4_s_xspi_ivi_task_cnt;
+            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_GYRO_INI] = (U4)0U;
         }
         /*Gyroセンサデータ取得処理*/
+    }else if(u1_s_xspi_ivi_gyroint_set_response_flg == (U1)TRUE){
+        vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_INT_SET_LENGTH,(U2)0U);
+        u1_ap_xspi_add[8]  = (U1)XSPI_IVI_GYRO_INT_SET_RES; /*SubType*/
+        u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[10] = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[11] = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[12] = u1_sp_xspi_ivi_gyro_int_setting_result;
+        u1_s_xspi_ivi_gyroint_set_response_flg = (U1)FALSE;
+
+    }else if(u1_s_xspi_ivi_gyroint_get_response_flg == (U1)TRUE){
+        vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_INT_GET_LENGTH,(U2)0U);
+        u1_ap_xspi_add[8]  = (U1)XSPI_IVI_GYRO_INT_GET_RES; /*SubType*/
+        u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[10] = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[11] = (U1)0x00; /*Reserve*/
+        vd_g_MemcpyU1(&u1_ap_xspi_add[12], &u1_sp_xspi_ivi_gyro_int_get_data[0], (U4)XSPI_IVI_GYRO_INT_GET_DATA_SIZE);
+        u1_s_xspi_ivi_gyroint_get_response_flg = (U1)FALSE;
+
+    }else if(u1_s_xspi_ivi_gyroint_output_response_flg == (U1)TRUE){
+        vd_s_XspiIviSub2FrameHeader(u1_ap_xspi_add,(U2)XSPI_IVI_DATA_INT_OUT_LENGTH,(U2)0U);
+        u1_ap_xspi_add[8]  = (U1)XSPI_IVI_GYRO_INT_OUT_RES; /*SubType*/
+        u1_ap_xspi_add[9]  = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[10] = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[11] = (U1)0x00; /*Reserve*/
+        u1_ap_xspi_add[12] = u1_sp_xspi_ivi_gyro_int_output_result;
+        u1_s_xspi_ivi_gyroint_output_response_flg = (U1)FALSE;
+
     }else{
         /*Do Nothing*/
     }
@@ -476,10 +572,8 @@ static void            vd_s_XspiIviSub2SenSensorData(U1 * u1_ap_xspi_add)
 static void              vd_s_XspiIviSub2FrameHeader(U1 * u1_ap_buf,const U2 u2_a_DTLEN,const U2 u2_a_CNT)
 {
     U1          u1_tp_subframe2_header[XSPI_IVI_HEADER];    /* Sub Frame2 Header Field */
-    U2          u2_t_subframe2_num;
     U2          u2_t_subframe2_dtlen;
 
-    u2_t_subframe2_num = ((u2_a_DTLEN + (U2)XSPI_IVI_HEADER) / (U2)XSPI_IVI_SUBFRAME2_DATA_LENGTH) + (U2)1U;
     if(u2_a_DTLEN > (U2)XSPI_IVI_SUBFRAME2_DATA_LENGTH) {
         u2_t_subframe2_dtlen = (u2_a_DTLEN - (u2_a_CNT * ((U2)XSPI_IVI_SUBFRAME2_DATA_LENGTH - (U2)XSPI_IVI_HEADER)));
         if(u2_t_subframe2_dtlen > (U2)XSPI_IVI_SUBFRAME2_VARDT_LENGTH){
@@ -496,10 +590,10 @@ static void              vd_s_XspiIviSub2FrameHeader(U1 * u1_ap_buf,const U2 u2_
     }
 
     /* SubFrame2 Header Field */
-    u1_tp_subframe2_header[0] = (U1)((u2_s_xspi_ivi_transmission_cnt & 0xFF00U) >> XSPI_IVI_SFT_08);
-    u1_tp_subframe2_header[1] = (U1)(u2_s_xspi_ivi_transmission_cnt & 0x00FFU);
-    u1_tp_subframe2_header[2] = (U1)((u2_t_subframe2_num & 0xFF00U) >> XSPI_IVI_SFT_08);
-    u1_tp_subframe2_header[3] = (U1)(u2_t_subframe2_num & 0x00FFU);
+    u1_tp_subframe2_header[0] = (U1)0x00U;
+    u1_tp_subframe2_header[1] = (U1)0x01U;
+    u1_tp_subframe2_header[2] = (U1)0x00U;
+    u1_tp_subframe2_header[3] = (U1)0x01U;
     u1_tp_subframe2_header[4] = (U1)((u2_t_subframe2_dtlen & 0xFF00U) >> XSPI_IVI_SFT_08);
     u1_tp_subframe2_header[5] = (U1)(u2_t_subframe2_dtlen & 0x00FFU);
     u1_tp_subframe2_header[6] = (U1)0x04;
@@ -526,18 +620,25 @@ void            vd_g_XspiIviSub2GyroDataPut(const ST_XSPI_IVI_GYRO_SENSOR_DATA s
     u1_s_xspi_ivi_gyro_temp_center = st_a_GYRO_DATA.st_gyro_reso.u1_gyro_temp_center;
     u1_s_xspi_ivi_acc_xyz_center = st_a_GYRO_DATA.st_gyro_reso.u1_accel_xyz_center;
     u1_s_xspi_ivi_acc_temp_center = st_a_GYRO_DATA.st_gyro_reso.u1_accel_temp_center;
-    u2_sp_xspi_ivi_gyro_x_data[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u2_gyro_x_data;
-    u2_sp_xspi_ivi_gyro_y_data[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u2_gyro_y_data;
-    u2_sp_xspi_ivi_gyro_z_data[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u2_gyro_z_data;
+    u1_sp_xspi_ivi_gyro_x_data_down[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_gyro_x_data_down;
+    u1_sp_xspi_ivi_gyro_x_data_up[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_gyro_x_data_up;
+    u1_sp_xspi_ivi_gyro_y_data_down[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_gyro_y_data_down;
+    u1_sp_xspi_ivi_gyro_y_data_up[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_gyro_y_data_up;
+    u1_sp_xspi_ivi_gyro_z_data_down[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_gyro_z_data_down;
+    u1_sp_xspi_ivi_gyro_z_data_up[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_gyro_z_data_up;
     u1_sp_xspi_ivi_gyro_temp_data[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_gyro_temp_data;
     u1_s_xspi_ivi_gyro_x_valid_data |= st_a_GYRO_DATA.u1_gyro_x_data_sts;
     u1_s_xspi_ivi_gyro_y_valid_data |= st_a_GYRO_DATA.u1_gyro_y_data_sts;
     u1_s_xspi_ivi_gyro_z_valid_data |= st_a_GYRO_DATA.u1_gyro_z_data_sts;
     u1_s_xspi_ivi_gyro_temp_valid_data |= st_a_GYRO_DATA.u1_gyro_temp_data_sts;
-    u2_sp_xspi_ivi_acc_x_data[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u2_accl_x_data;
-    u2_sp_xspi_ivi_acc_y_data[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u2_accl_y_data;
-    u2_sp_xspi_ivi_acc_z_data[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u2_accl_z_data;
-    u2_sp_xspi_ivi_acc_temp_data[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u2_accl_temp_data;
+    u1_sp_xspi_ivi_acc_x_data_down[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_accl_x_data_down;
+    u1_sp_xspi_ivi_acc_x_data_up[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_accl_x_data_up;
+    u1_sp_xspi_ivi_acc_y_data_down[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_accl_y_data_down;
+    u1_sp_xspi_ivi_acc_y_data_up[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_accl_y_data_up;
+    u1_sp_xspi_ivi_acc_z_data_down[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_accl_z_data_down;
+    u1_sp_xspi_ivi_acc_z_data_up[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_accl_z_data_up;
+    u1_sp_xspi_ivi_acc_temp_data_down[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_accl_temp_data_down;
+    u1_sp_xspi_ivi_acc_temp_data_up[u1_s_xspi_ivi_gyro_buf_cnt] = st_a_GYRO_DATA.u1_accl_temp_data_up;
     u1_s_xspi_ivi_acc_x_valid_data |= st_a_GYRO_DATA.u1_accl_x_data_sts;
     u1_s_xspi_ivi_acc_y_valid_data |= st_a_GYRO_DATA.u1_accl_y_data_sts;
     u1_s_xspi_ivi_acc_z_valid_data |= st_a_GYRO_DATA.u1_accl_z_data_sts;
@@ -546,18 +647,25 @@ void            vd_g_XspiIviSub2GyroDataPut(const ST_XSPI_IVI_GYRO_SENSOR_DATA s
     u1_s_xspi_ivi_gyro_buf_cnt++;
     if(u1_s_xspi_ivi_gyro_buf_cnt >= (U1)XSPI_IVI_TMPDATA){
         /*退避用バッファに移動*/
-        vd_g_MemcpyU2(&u2_sp_xspi_ivi_gyro_x_data_tmp[0], &u2_sp_xspi_ivi_gyro_x_data[0], (U4)XSPI_IVI_TMPDATA);
-        vd_g_MemcpyU2(&u2_sp_xspi_ivi_gyro_y_data_tmp[0], &u2_sp_xspi_ivi_gyro_y_data[0], (U4)XSPI_IVI_TMPDATA);
-        vd_g_MemcpyU2(&u2_sp_xspi_ivi_gyro_z_data_tmp[0], &u2_sp_xspi_ivi_gyro_z_data[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_gyro_x_data_down_tmp[0], &u1_sp_xspi_ivi_gyro_x_data_down[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_gyro_x_data_up_tmp[0], &u1_sp_xspi_ivi_gyro_x_data_up[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_gyro_y_data_down_tmp[0], &u1_sp_xspi_ivi_gyro_y_data_down[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_gyro_y_data_up_tmp[0], &u1_sp_xspi_ivi_gyro_y_data_up[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_gyro_z_data_down_tmp[0], &u1_sp_xspi_ivi_gyro_z_data_down[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_gyro_z_data_up_tmp[0], &u1_sp_xspi_ivi_gyro_z_data_up[0], (U4)XSPI_IVI_TMPDATA);
         u1_s_xspi_ivi_gyro_temp_data_tmp = u1_sp_xspi_ivi_gyro_temp_data[9];
         u1_s_xspi_ivi_gyro_x_valid_data_tmp = u1_s_xspi_ivi_gyro_x_valid_data;
         u1_s_xspi_ivi_gyro_y_valid_data_tmp = u1_s_xspi_ivi_gyro_y_valid_data;
         u1_s_xspi_ivi_gyro_z_valid_data_tmp = u1_s_xspi_ivi_gyro_z_valid_data;
         u1_s_xspi_ivi_gyro_temp_valid_data_tmp = u1_s_xspi_ivi_gyro_temp_valid_data;
-        vd_g_MemcpyU2(&u2_sp_xspi_ivi_acc_x_data_tmp[0], &u2_sp_xspi_ivi_acc_x_data[0], (U4)XSPI_IVI_TMPDATA);
-        vd_g_MemcpyU2(&u2_sp_xspi_ivi_acc_y_data_tmp[0], &u2_sp_xspi_ivi_acc_y_data[0], (U4)XSPI_IVI_TMPDATA);
-        vd_g_MemcpyU2(&u2_sp_xspi_ivi_acc_z_data_tmp[0], &u2_sp_xspi_ivi_acc_z_data[0], (U4)XSPI_IVI_TMPDATA);
-        u2_s_xspi_ivi_acc_temp_data_tmp = u2_sp_xspi_ivi_acc_temp_data[9];
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_acc_x_data_down_tmp[0], &u1_sp_xspi_ivi_acc_x_data_down[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_acc_x_data_up_tmp[0], &u1_sp_xspi_ivi_acc_x_data_up[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_acc_y_data_down_tmp[0], &u1_sp_xspi_ivi_acc_y_data_down[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_acc_y_data_up_tmp[0], &u1_sp_xspi_ivi_acc_y_data_up[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_acc_z_data_down_tmp[0], &u1_sp_xspi_ivi_acc_z_data_down[0], (U4)XSPI_IVI_TMPDATA);
+        vd_g_MemcpyU1(&u1_sp_xspi_ivi_acc_z_data_up_tmp[0], &u1_sp_xspi_ivi_acc_z_data_up[0], (U4)XSPI_IVI_TMPDATA);
+        u1_s_xspi_ivi_acc_temp_data_down_tmp = u1_sp_xspi_ivi_acc_temp_data_down[9];
+        u1_s_xspi_ivi_acc_temp_data_up_tmp = u1_sp_xspi_ivi_acc_temp_data_up[9];
         u1_s_xspi_ivi_acc_x_valid_data_tmp = u1_s_xspi_ivi_acc_x_valid_data;
         u1_s_xspi_ivi_acc_y_valid_data_tmp = u1_s_xspi_ivi_acc_y_valid_data;
         u1_s_xspi_ivi_acc_z_valid_data_tmp = u1_s_xspi_ivi_acc_z_valid_data;
@@ -619,6 +727,53 @@ void            vd_g_XspiIviSub2PulseWidDataPut(const ST_XSPI_IVI_PULSE_WID_DATA
 }
 
 /*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub2GyroIntSetSend(const U1 u1_a_DATA)                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame2(Gyro Data) Transmission data                                                                           */
+/*  Arguments:      u1_a_DATA : Setting Result                                                                                       */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub2GyroIntSetSend(const U1 u1_a_DATA)
+{
+    u1_sp_xspi_ivi_gyro_int_setting_result = u1_a_DATA;
+    u1_s_xspi_ivi_gyroint_set_response_flg = (U1)TRUE;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub2GyroIntGetSend(const ST_XSPI_IVI_GYRO_INT_DATA st_a_DATA)                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame2(Gyro Data) Transmission data                                                                           */
+/*  Arguments:      u1_a_DATA : INT Data                                                                                             */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub2GyroIntGetSend(const ST_XSPI_IVI_GYRO_INT_DATA st_a_DATA)
+{
+    u1_sp_xspi_ivi_gyro_int_get_data[0] = st_a_DATA.u1_result;
+    u1_sp_xspi_ivi_gyro_int_get_data[1] = (U1)0x00U;/*Reserve*/
+    u1_sp_xspi_ivi_gyro_int_get_data[2] = (U1)0x00U;/*Reserve*/
+    u1_sp_xspi_ivi_gyro_int_get_data[3] = (U1)0x00U;/*Reserve*/
+    u1_sp_xspi_ivi_gyro_int_get_data[4] = st_a_DATA.u1_threshold;
+    u1_sp_xspi_ivi_gyro_int_get_data[5] = st_a_DATA.u1_gyro_int_x;
+    u1_sp_xspi_ivi_gyro_int_get_data[6] = st_a_DATA.u1_gyro_int_y;
+    u1_sp_xspi_ivi_gyro_int_get_data[7] = st_a_DATA.u1_gyro_int_z;
+    u1_sp_xspi_ivi_gyro_int_get_data[8] = st_a_DATA.u1_gyro_int_active;
+    u1_s_xspi_ivi_gyroint_get_response_flg = (U1)TRUE;
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub2GyroIntOutSend(const U1 u1_a_DATA)                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame2(Gyro Data) Transmission data                                                                           */
+/*  Arguments:      u1_a_DATA : Output Result                                                                                        */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub2GyroIntOutSend(const U1 u1_a_DATA)
+{
+    u1_sp_xspi_ivi_gyro_int_output_result = u1_a_DATA;
+    u1_s_xspi_ivi_gyroint_output_response_flg = (U1)TRUE;
+}
+
+/*===================================================================================================================================*/
 /*  static void     vd_s_XspiIviSub2PeriBufSet(void)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame2(Gyro Data) Transmission data to periodic buff                                                          */
@@ -659,29 +814,29 @@ static void     vd_s_XspiIviSub2PeriBufSet(void)
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_IVI_TMPDATA; u4_t_lpcnt++) {
         /*ジャイロXYZ軸データ格納*/
         u4_t_bufpos = (U4)XSPI_IVI_GYRO_X_BUF_POS + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_gyro_x_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_gyro_x_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = u1_sp_xspi_ivi_gyro_x_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_gyro_x_data_up_tmp[u4_t_lpcnt];
 
         u4_t_bufpos = (U4)XSPI_IVI_GYRO_Y_BUF_POS + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_gyro_y_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_gyro_y_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = u1_sp_xspi_ivi_gyro_y_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_gyro_y_data_up_tmp[u4_t_lpcnt];
 
         u4_t_bufpos = (U4)XSPI_IVI_GYRO_Z_BUF_POS + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_gyro_z_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_gyro_z_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = u1_sp_xspi_ivi_gyro_z_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_gyro_z_data_up_tmp[u4_t_lpcnt];
 
         /*加速度XYZ軸データ格納*/
         u4_t_bufpos = (U4)XSPI_IVI_ACCL_X_BUF_POS + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_acc_x_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_acc_x_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = u1_sp_xspi_ivi_acc_x_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_acc_x_data_up_tmp[u4_t_lpcnt];
 
         u4_t_bufpos = (U4)XSPI_IVI_ACCL_Y_BUF_POS + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_acc_y_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_acc_y_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = u1_sp_xspi_ivi_acc_y_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_acc_y_data_up_tmp[u4_t_lpcnt];
 
         u4_t_bufpos = (U4)XSPI_IVI_ACCL_Z_BUF_POS + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_acc_z_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_acc_z_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos]  = u1_sp_xspi_ivi_acc_z_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_acc_z_data_up_tmp[u4_t_lpcnt];
 
         /*生涯スピードパルス数格納*/
         u4_t_bufpos = (U4)XSPI_IVI_PULSE_NUM_BUF_POS + (u4_t_lpcnt * (U4)2);
@@ -694,8 +849,8 @@ static void     vd_s_XspiIviSub2PeriBufSet(void)
     u1_sp_xspi_ivi_gyro_data[XSPI_IVI_GYRO_TEMP_BUF_POS + 2U] = (U1)0x00; /*Reserve*/
     u1_sp_xspi_ivi_gyro_data[XSPI_IVI_GYRO_TEMP_BUF_POS + 3U] = (U1)0x00; /*Reserve*/
     /*加速度温度データ格納*/
-    u1_sp_xspi_ivi_gyro_data[XSPI_IVI_ACCL_TEMP_BUF_POS] = (U1)(u2_s_xspi_ivi_acc_temp_data_tmp & 0x00FF);
-    u1_sp_xspi_ivi_gyro_data[XSPI_IVI_ACCL_TEMP_BUF_POS + 1U] = (U1)((u2_s_xspi_ivi_acc_temp_data_tmp & 0xFF00)>>XSPI_IVI_SFT_08);
+    u1_sp_xspi_ivi_gyro_data[XSPI_IVI_ACCL_TEMP_BUF_POS] = u1_s_xspi_ivi_acc_temp_data_down_tmp;
+    u1_sp_xspi_ivi_gyro_data[XSPI_IVI_ACCL_TEMP_BUF_POS + 1U] = u1_s_xspi_ivi_acc_temp_data_up_tmp;
     u1_sp_xspi_ivi_gyro_data[XSPI_IVI_ACCL_TEMP_BUF_POS + 2U] = (U1)0x00; /*Reserve*/
     u1_sp_xspi_ivi_gyro_data[XSPI_IVI_ACCL_TEMP_BUF_POS + 3U] = (U1)0x00; /*Reserve*/
     /*ジャイロセンサ有効情報格納*/
@@ -773,29 +928,29 @@ static void     vd_s_XspiIviSub21stBufSet(void)
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_IVI_TMPDATA; u4_t_lpcnt++) {
         /*ジャイロXYZ軸データ格納*/
         u4_t_bufpos = (U4)XSPI_IVI_GYRO_X_INIT_BUF_POS + ((U4)u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf * (U2)64U) + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_gyro_x_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_gyro_x_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = u1_sp_xspi_ivi_gyro_x_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_gyro_x_data_up_tmp[u4_t_lpcnt];
 
         u4_t_bufpos = (U4)XSPI_IVI_GYRO_Y_INIT_BUF_POS + ((U4)u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf * (U2)64U) + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_gyro_y_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_gyro_y_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = u1_sp_xspi_ivi_gyro_y_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_gyro_y_data_up_tmp[u4_t_lpcnt];
 
         u4_t_bufpos = (U4)XSPI_IVI_GYRO_Z_INIT_BUF_POS + ((U4)u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf * (U2)64U) + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_gyro_z_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_gyro_z_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = u1_sp_xspi_ivi_gyro_z_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_gyro_z_data_up_tmp[u4_t_lpcnt];
 
         /*加速度XYZ軸データ格納*/
         u4_t_bufpos = (U4)XSPI_IVI_ACCL_X_INIT_BUF_POS + ((U4)u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf * (U2)64U) + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_acc_x_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_acc_x_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = u1_sp_xspi_ivi_acc_x_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_acc_x_data_up_tmp[u4_t_lpcnt];
 
         u4_t_bufpos = (U4)XSPI_IVI_ACCL_Y_INIT_BUF_POS + ((U4)u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf * (U2)64U) + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_acc_y_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_acc_y_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = u1_sp_xspi_ivi_acc_y_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_acc_y_data_up_tmp[u4_t_lpcnt];
 
         u4_t_bufpos = (U4)XSPI_IVI_ACCL_Z_INIT_BUF_POS + ((U4)u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf * (U2)64U) + (u4_t_lpcnt * (U4)2);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = (U1)(u2_sp_xspi_ivi_acc_z_data_tmp[u4_t_lpcnt] & 0x00FF);
-        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = (U1)((u2_sp_xspi_ivi_acc_z_data_tmp[u4_t_lpcnt] & 0xFF00)>>XSPI_IVI_SFT_08);
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos]  = u1_sp_xspi_ivi_acc_z_data_down_tmp[u4_t_lpcnt];
+        u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1]  = u1_sp_xspi_ivi_acc_z_data_up_tmp[u4_t_lpcnt];
 
         /*生涯スピードパルス数格納*/
         u4_t_bufpos = (U4)XSPI_IVI_PULSE_NUM_INIT_BUF_POS + (U4)(u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf * (U1)24U) + (u4_t_lpcnt * (U4)2);
@@ -810,8 +965,8 @@ static void     vd_s_XspiIviSub21stBufSet(void)
     u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 3U] = (U1)0x00; /*Reserve*/
     /*加速度温度データ格納*/
     u4_t_bufpos = (U4)XSPI_IVI_ACCL_TEMP_INIT_BUF_POS + ((U4)u1_s_xspi_ivi_tmp_gyro_ini_cnt_buf * (U2)64U);
-    u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos] = (U1)(u2_s_xspi_ivi_acc_temp_data_tmp & 0x00FF);
-    u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1U] = (U1)((u2_s_xspi_ivi_acc_temp_data_tmp & 0xFF00)>>XSPI_IVI_SFT_08);
+    u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos] = u1_s_xspi_ivi_acc_temp_data_down_tmp;
+    u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 1U] = u1_s_xspi_ivi_acc_temp_data_up_tmp;
     u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 2U] = (U1)0x00; /*Reserve*/
     u1_sp_xspi_ivi_gyro_init_data[u4_t_bufpos + 3U] = (U1)0x00; /*Reserve*/
     /*ジャイロセンサ有効情報格納*/

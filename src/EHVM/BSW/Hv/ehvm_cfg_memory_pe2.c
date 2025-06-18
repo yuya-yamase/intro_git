@@ -43,59 +43,38 @@ static EhvmConst ehvm_mpu_guest_memory_t s_MpuGuestMemoryData_pe2[VM_NUM_PE2] = 
 
 static EhvmConst ehvm_mpu_memory_entry_t s_MpuHostEntryData_VM0_pe2[MPU_NUM_OF_VARIABLE_HOST_ENTRY_PE2] = {
     {
-        0x00020000U, /* MPLA */
+        0x00000000U, /* MPLA */
         0xFFFFFFFCU, /* MPUA */
-        0x010100BFU  /* MPAT */ /* change from 0x01010080 -> 0x010100BF */
+        0x01010080U  /* MPAT */
     },
     {
-        0x00800000U, /* MPLA */
-        0x009FFFFCU, /* MPUA */
+        0x00000000U, /* MPLA */
+        0x0FFFFFFCU, /* MPUA */
         0x010100BFU  /* MPAT */
     },
     {
-        0xFD808000U, /* MPLA */
-        0xFD80FFFCU, /* MPUA */
+        0x10000000U, /* MPLA */
+        0xF900FFFCU, /* MPUA */
         0x010100BFU  /* MPAT */
     },
     {
-        0xFE030000U, /* MPLA */
-        0xFE03FFFCU, /* MPUA */
+        0xF9010000U, /* MPLA */
+        0xFD5FFFFCU, /* MPUA */
         0x010100BFU  /* MPAT */
     },
     {
-        0xFE130000U, /* MPLA */
-        0xFE13FFFCU, /* MPUA */
-        0x010100BFU  /* MPAT */
-    },
-    {
-        0xFE4C0000U, /* MPLA */
-        0xFE4FFFFCU, /* MPUA */
-        0x010100BFU  /* MPAT */
-    },
-    {
-        0xFE818000U, /* MPLA */
-        0xFE81FFFCU, /* MPUA */
-        0x010100BFU  /* MPAT */
-    },
-    {
-        0xFFF80000U, /* MPLA */
-        0xFFF8FFFCU, /* MPUA */
+        0xFD600000U, /* MPLA */
+        0xFDFFFFFCU, /* MPUA */
         0x010100BFU  /* MPAT */
     },
     {
         0xFE000000U, /* MPLA */
-//        0xFFBF09FCU, /* MPUA */
-        0xFFFFFFFCU, /* MPUA */   /* @zantei: WDTへのアクセスを許可する */
+        0xFEFFFFFCU, /* MPUA */
         0x010100BFU  /* MPAT */
     },
     {
-        0xFFD90000U, /* MPLA */
-        0xFFD9FFFCU, /* MPUA */
-        0x010100BFU  /* MPAT */
-    },
-    {
-        0xFF980000U, /* MPLA */
-        0xFF98FFFCU, /* MPUA */
+        0xFF000000U, /* MPLA */
+        0xFFFFFFFCU, /* MPUA */
         0x010100BFU  /* MPAT */
     }
 };
@@ -142,17 +121,17 @@ static EhvmConst ehvm_peg_prot_t s_Peg_ProtData_CH2[3] = {
     {
         0x01800000U,  /* PEGBAD */
         0x03FF8000U,  /* PEGADV */
-        0x00000140U   /* PEGPROT */
+        0x00000043U   /* PEGPROT */
     },
     {
         0x01808000U,  /* PEGBAD */
         0x03FF8000U,  /* PEGADV */
-        0x00000140U   /* PEGPROT */
+        0x00000043U   /* PEGPROT */
     },
     {
         0x03FCC000U,  /* PEGBAD */
         0x03FFC000U,  /* PEGADV */
-        0x00000140U   /* PEGPROT */
+        0x00000043U   /* PEGPROT */
     }
 };
 

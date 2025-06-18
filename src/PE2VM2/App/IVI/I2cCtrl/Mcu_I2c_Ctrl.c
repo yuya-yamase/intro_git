@@ -17,6 +17,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "Mcu_I2c_Ctrl_private.h"
+#include "gvif3tx.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -58,6 +59,7 @@ static uint8    Mcu_I2c_Ack_Eizoic;             /* Video-IC : W 0x72, R 0x73 */
 static uint8    Mcu_I2c_Ack_Gvif_Rx;            /* GVIF-Rx  : W 0x46, R 0x47 */
 static uint8    Mcu_I2c_Ack_Gvif_Tx;            /* GVIF-Tx  : W 0x48, R 0x49 */
 static uint8    Mcu_I2c_Ack_Power;              /* P-IC     : W 0xDE, R 0xDF */
+static uint8    Mcu_I2c_Ack_Rtc;                /* RTC-IC   : W 0x64, R 0x65 */
 static uint8    Mcu_I2c_Ack_Gyro;               /* Gryo     : W 0xD2, R 0xD3 */
 static uint8    Mcu_I2c_Ack_G_Moni;             /* Gmoni    : W 0x32, R 0x33 */
 
@@ -66,6 +68,7 @@ static uint8 *  Mcu_I2c_Ack[MCU_I2C_ACK_NUM] = {
     &Mcu_I2c_Ack_Gvif_Rx,
     &Mcu_I2c_Ack_Gvif_Tx,
     &Mcu_I2c_Ack_Power,
+    &Mcu_I2c_Ack_Rtc,
     &Mcu_I2c_Ack_Gyro,
     &Mcu_I2c_Ack_G_Moni
 };
@@ -96,6 +99,7 @@ void Mcu_Dev_I2c_Ctrl_Init(void)
     Mcu_I2c_Ack_Gvif_Rx     = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Gvif_Tx     = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Power       = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_Rtc         = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_Gyro        = (uint8)MCU_REGWRI_ACK_INI;
     Mcu_I2c_Ack_G_Moni      = (uint8)MCU_REGWRI_ACK_INI;
 }
@@ -130,10 +134,12 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
         /* 初回レジスタ書込み位置設定 */
         mcu_nxt = (uint16)0U;
         /* レジスタアクセス間waitタイマ 初期化(0xFFFF) */
-        (*mcu_btwmtime_cnt) = (uint16)0xFFFF;
+        (*mcu_btwmtime_cnt) = (uint16)0xFFFFU;
     }
-    /* Ackあり(正常) */
-    else if((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_RCV){
+    /* Ackあり(正常 or レジスタアクセス間wait中) */
+    else if(((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_RCV) || (((U2)0U < (*mcu_btwmtime_cnt) && ((*mcu_btwmtime_cnt) < (U2)0xFFFFU)))){
+        /* Ackを正常に置換(Ack受信は単発でありwait中保持されていないため) */
+        (*Mcu_I2c_Ack[mcu_ack]) = (U1)MCU_REGWRI_ACK_RCV;
         /* 次のレジスタ書込み位置取得 */
         mcu_nxt = (*mcu_regstep) + (uint16)1U;
         /* レジスタアクセス間waitタイマ インクリメント */
@@ -149,13 +155,16 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
 
     /* [Ackあり(正常) or 初回] & [レジスタアクセス間のWait時間経過] */
     if((((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_INI) || ((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_RCV)) &&
-       ((*mcu_btwmtime_cnt) > I2C_WR_REGSET[(*mcu_regstep)].u2_wait)){
+       ((*mcu_btwmtime_cnt) >= I2C_WR_REGSET[(*mcu_regstep)].u2_wait)){
+        /* レジスタアクセス間waitタイマのゼロクリア */
+        (*mcu_btwmtime_cnt) = (uint16)0U;
+
         /* 規定の書込み回数分完了したか判定 */
         if(mcu_nxt >= mcu_wri_max){
             /* 初期設定フロー完了通知 */
-            (*Mcu_I2c_Ack[mcu_ack])      = (uint8)MCU_REGWRI_ACK_INI;
-            (*mcu_regstep)  = (uint8)0U;
-            mcu_return      = (uint8)MCU_REGWRI_RTRN_FIN;
+            (*Mcu_I2c_Ack[mcu_ack]) = (uint8)MCU_REGWRI_ACK_INI;
+            (*mcu_regstep)          = (uint8)0U;
+            mcu_return              = (uint8)MCU_REGWRI_RTRN_FIN;
         }
         else{
             /* I2Cの書込みキューの空き状況確認 */
@@ -169,8 +178,6 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
                 mcu_return = (uint8)MCU_REGWRI_RTRN_ACT;
                 /* Ack取得RAMのクリア */
                 (*Mcu_I2c_Ack[mcu_ack]) = (uint8)MCU_REGWRI_ACK_NON;
-                /* レジスタアクセス間waitタイマのゼロクリア */
-                (*mcu_btwmtime_cnt) = (uint16)0U;
             }
         }
     }
@@ -249,28 +256,43 @@ uint8 Mcu_Dev_I2c_Ctrl_RegSet(uint8 mcu_ack, uint16 * mcu_regstep, const uint16 
                   [io]mcu_timeout_cnt   : Ackのタイムアウト管理
                   [i ]mcu_setreg        : レジスタ書込みデータ 書込みデータ定義用配列へのアドレス
                   [io]mcu_btwmtime_cnt  : レジスタアクセス間Waitタイマ
+                  [i ]mcu_mcu_b89_wait  : Bank8,9へのアクセス間Wait要否
   return        : FALSE                 : 読出し処理未完了
                   TRUE                  : 読出し処理完了
   Note          : I2C レジスタ読出し処理
 *****************************************************************************/
 uint8 Mcu_Dev_I2c_Ctrl_RegRead(uint8 mcu_ack, uint16 * mcu_regstep, const uint8 mcu_i2c_sla,
-                                uint32 * mcu_timeout_cnt, const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt)
+                                uint32 * mcu_timeout_cnt, const ST_GP_I2C_MA_REQ * mcu_setreg, uint16 * mcu_btwmtime_cnt, const uint8 mcu_waitmode)
 {
     static const ST_REG_WRI_REQ I2C_READ[MCU_WRINUM_I2C_READ] = {
-        /*  開始位置,   書込み個数 */
-        {        0,         1},
-        {        1,         1}
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         0},
+        {        1,         1,         0}
     };
-    uint8   mcu_sts;        /* 書込み状況 */
-    uint8   mcu_return;     /* 戻り値：フロー完了通知 */
+    /* GVIF送信向け Bank8,9アクセス時のWait時間 */
+    static const ST_REG_WRI_REQ I2C_READ_B89[MCU_WRINUM_I2C_READ] = {
+        /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
+        {        0,         1,         7U/MCU_GVIFTX_TASK_TIME},
+        {        1,         1,         7U/MCU_GVIFTX_TASK_TIME}
+    };
+    uint8           mcu_sts;        /* 書込み状況 */
+    uint8           mcu_return;     /* 戻り値：フロー完了通知 */
 
     mcu_sts         = (uint8)FALSE;
     mcu_return      = (uint8)FALSE;
 
-    /* レジスタ書込み処理 */
-    mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet(mcu_ack, mcu_regstep, (uint16)MCU_WRINUM_I2C_READ,
-                                            (uint8)mcu_i2c_sla, I2C_READ, mcu_timeout_cnt,
-                                            mcu_setreg, mcu_btwmtime_cnt);
+    if(mcu_waitmode == (uint8)MCU_I2C_WAIT_B89){
+        /* レジスタ書込み処理 */
+        mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet(mcu_ack, mcu_regstep, (uint16)MCU_WRINUM_I2C_READ,
+                                                (uint8)mcu_i2c_sla, I2C_READ_B89, mcu_timeout_cnt,
+                                                mcu_setreg, mcu_btwmtime_cnt);
+    }
+    else{
+        /* レジスタ書込み処理 */
+        mcu_sts = Mcu_Dev_I2c_Ctrl_RegSet(mcu_ack, mcu_regstep, (uint16)MCU_WRINUM_I2C_READ,
+                                                (uint8)mcu_i2c_sla, I2C_READ, mcu_timeout_cnt,
+                                                mcu_setreg, mcu_btwmtime_cnt);
+    }
 
     if(mcu_sts == (uint8)TRUE){
         /* 全書込み完了 */
@@ -326,6 +348,18 @@ void Mcu_Dev_I2c_Ctrl_Ack_GvifTx(const uint8 mcu_ack)
 void Mcu_Dev_I2c_Ctrl_Ack_Power(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_Power       |=  mcu_ack;
+}
+
+/*****************************************************************************
+  Function      : Mcu_Dev_I2c_Ctrl_Ack_Rtc
+  Description   : 
+  param[in/out] : [i ]mcu_ack           : Ack受信結果
+  return        : -
+  Note          : RTC-IC Ack取得処理
+*****************************************************************************/
+void Mcu_Dev_I2c_Ctrl_Ack_Rtc(const uint8 mcu_ack)
+{
+    Mcu_I2c_Ack_Rtc         |=  mcu_ack;
 }
 
 /*****************************************************************************

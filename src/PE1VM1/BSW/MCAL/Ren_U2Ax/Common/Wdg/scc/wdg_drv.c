@@ -58,12 +58,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define RH850_G4MH_SYNCP_BYTE  /* static inline void  vd_s_SYNCP_B(const volatile U1 * const u1_ap_RDBK) */
+#include "rh850_g4mh.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#pragma ghs section text=".WDG_TEXT_CODE"
+
 /*===================================================================================================================================*/
 /*  void    vd_g_Wdg_Init(void)                                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -76,22 +81,22 @@ void    vd_g_Wdg_Init(void)
     U4               u4_t_cnt;
 
     U1               u1_t_chk;
-    volatile U1      u1_t_rdbk;
 
-    for(u4_t_cnt = (U4)0U; u4_t_cnt<(U4)u1_g_WDG_NUM_CH; u4_t_cnt++)
-    {
+    for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)u1_g_WDG_NUM_CH; u4_t_cnt++){
+
         /* -----------------------------------------------------------------------------------------------------*/
         /* WARNING :                                                                                            */
         /* Because VAC is not supported, if OPBT0.OPWDVACA/OPBT1.OPWDVACA = "1", an expected reset may occur.   */
         /* -----------------------------------------------------------------------------------------------------*/
         u1_tp_raddr_wdt = u1_gp_WDG_CH_CFG[u4_t_cnt];
-        u1_t_chk = u1_REG_READ(u1_tp_raddr_wdt[WDG_RO_BYTE_WDTE]);
+        u1_t_chk        = u1_REG_READ(u1_tp_raddr_wdt[WDG_RO_BYTE_WDTE]);
         if(u1_t_chk == (U1)WDG_KEY_TO_RESTART){
+
             /* Do nothing, as the WDGT is already started   */
         }else{
+
             vd_REG_U1_WRITE(u1_tp_raddr_wdt[WDG_RO_BYTE_MD], u1_gp_WDG_WDTA_MD_CFG[u4_t_cnt]);
-            u1_t_rdbk = u1_REG_READ(u1_tp_raddr_wdt[WDG_RO_BYTE_MD]);
-            __SYNCP();
+            vd_s_SYNCP_B(&u1_tp_raddr_wdt[WDG_RO_BYTE_MD]);
         }
     }
 }
@@ -106,20 +111,20 @@ void    vd_g_Wdg_SetTriggerCondition(const U2 u2_a_TO)
     volatile U1 *    u1_tp_raddr_wdt;
     U4               u4_t_cnt;
 
-    volatile U1      u1_t_rdbk;
+    for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)u1_g_WDG_NUM_CH; u4_t_cnt++){
 
-    for(u4_t_cnt = (U4)0U; u4_t_cnt<(U4)u1_g_WDG_NUM_CH; u4_t_cnt++)
-    {
         /* -----------------------------------------------------------------------------------------------------*/
         /* WARNING :                                                                                            */
         /* Because VAC is not supported, if OPBT0.OPWDVACA/OPBT1.OPWDVACA = "1", an expected reset may occur.   */
         /* -----------------------------------------------------------------------------------------------------*/
         u1_tp_raddr_wdt = u1_gp_WDG_CH_CFG[u4_t_cnt];
         vd_REG_U1_WRITE(u1_tp_raddr_wdt[WDG_RO_BYTE_WDTE], (U1)WDG_KEY_TO_RESTART);
-        u1_t_rdbk = u1_REG_READ(u1_tp_raddr_wdt[WDG_RO_BYTE_WDTE]);
-        __SYNCP();
+        vd_s_SYNCP_B(&u1_tp_raddr_wdt[WDG_RO_BYTE_WDTE]);
     }
 }
+
+#pragma ghs section text=default
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

@@ -1,6 +1,7 @@
 #!gbuild
 [Subproject]
     :sourceDir=${ROOT_DIR}
+    :sourceDir=${APP_DIR}/Common/ExtSigCtrl
     :sourceDir=${APP_DIR}/Common/xspi
     :sourceDir=${APP_DIR}/IVI/XSPI
     :sourceDir=${APP_DIR}/IVI/I2cCtrl
@@ -13,8 +14,19 @@
     :sourceDir=${APP_DIR}/IVI/GyrCtrl
     :sourceDir=${APP_DIR}/IVI/GyrCtrl/config
     :sourceDir=${APP_DIR}/IVI/DspCtrl
+    :sourceDir=${APP_DIR}/IVI/DspCtrl/VolumeMute
     :sourceDir=${APP_DIR}/IVI/DspCtrl/config
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/Dateclk/scc
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/Dateclk/config
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/DateSI/scc
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/DateSI/config
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/Common/scc
+    :sourceDir=${APP_DIR}/IVI/ClkCtrl/STUB/config
+    :sourceDir=${APP_DIR}/IVI/DrcCtrl
 
+    -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
 
     -I${CAN_DIR}/inc
@@ -46,7 +58,18 @@
     -I${APP_DIR}/IVI/GyrCtrl
     -I${APP_DIR}/IVI/GyrCtrl/config
     -I${APP_DIR}/IVI/DspCtrl
+    -I${APP_DIR}/IVI/DspCtrl/VolumeMute
     -I${APP_DIR}/IVI/DspCtrl/config
+    -I${APP_DIR}/IVI/DrcCtrl
+
+    -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
+    -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
+    -I${APP_DIR}/IVI/ClkCtrl/Dateclk/scc
+    -I${APP_DIR}/IVI/ClkCtrl/Dateclk/config
+    -I${APP_DIR}/IVI/ClkCtrl/DateSI/scc
+    -I${APP_DIR}/IVI/ClkCtrl/DateSI/config
+    -I${APP_DIR}/IVI/ClkCtrl/Common/scc
+    -I${APP_DIR}/IVI/ClkCtrl/STUB/config
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
@@ -58,14 +81,18 @@ ${SS_DIR}/SchdM/config/scheduler_cfg.c
 ${SS_DIR}/22SS/config/22SS_Callout.c
 ${APP_DIR}/Stub/stub_u2a.c
 
+ExtSigCtrl.c
 xspi.c
 xspi_sub.c
 x_spi_ivi.c
 x_spi_ivi_sub4.c
 x_spi_ivi_sub2.c
 x_spi_ivi_sub1.c
+x_spi_ivi_sub1_audio.c
 x_spi_ivi_sub1_camera.c
+x_spi_ivi_sub1_clock.c
 x_spi_ivi_sub1_control.c
+x_spi_ivi_sub1_hdmi.c
 x_spi_ivi_sub1_power.c
 x_spi_ivi_sub1_system.c
 x_spi_ivi_sub1_diag.c
@@ -101,3 +128,28 @@ USBCtl.c
 CarSpdPls.c
 PictMuteCtl.c
 AntCtl.c
+Mcu_Sys_Met_RtcIc.c
+RtcIc_drv.c
+RtcIc_drv_if.c
+bcd.c
+rtime.c
+date.c
+veh_opemd_xmode_STUB.c
+date_clk.c
+date_clk_cfg.c
+datesi_cal_cfg.c
+datesi_cfg.c
+datesi_tim_cfg.c
+datesi_cal.c
+datesi_tim_avn.c
+datesi_tim.c
+datesi_time_zone.c
+datesi_com.c
+datesi.c
+PowerIcCtl.c
+volmute.c
+volmute_cfg.c
+IVI_DrcCtrl_Main.c
+SysEcDrc.c
+DtcCtl.c
+RobCtl.c

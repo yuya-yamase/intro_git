@@ -2,7 +2,6 @@
 [Subproject]
     :optionsFile=${CMN_DIR}/IOHW.opt
     :sourceDir=${ROOT_DIR}
-    :sourceDir=${APP_DIR}/Common/ExtSigCtrl
 
     -I${CAN_DIR}/inc
     -I${APP_DIR}/Common
@@ -52,8 +51,6 @@
     
     -I${MCAL_DIR}/GPT
 
-    -I${APP_DIR}/Common/ExtSigCtrl
-
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
 ${SS_DIR}/RunM/scc/run_m.c
@@ -63,6 +60,3 @@ ${SS_DIR}/SchdM/config/scheduler_cfg.c
 ${SS_DIR}/RprgIf/config/rprg_if_request.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
-${APP_DIR}/Stub/stub_u2a.c
-
-ExtSigCtrl.c

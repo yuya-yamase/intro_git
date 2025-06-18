@@ -18,13 +18,14 @@
 #include <Ecu_Memmap.h>
 #include <22SS_Callout.h>
 
-#include "stub.h"
 #include "veh_opemd.h"
 #include "oxcan.h"
 
 /* Memory               */
 #include "rim_ctl.h"
 /* #include "nvmc_mgr.h" */
+
+#include "ExtSigCtrl_Main.h"
 
 /* IVI */
 #include "x_spi_ivi.h"
@@ -33,6 +34,12 @@
 #include "IVI_PictCtrl_Main.h"
 #include "IVI_GyrCtrl_Main.h"
 #include "IVI_DspCtrl_Main.h"
+#include "IVI_DrcCtrl_Main.h"
+
+/* ClkCtrl */
+#include "RtcIc_drv.h"
+#include "Date_clk.h"
+#include "datesi.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -81,6 +88,8 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
+    ExtSigCtrl_Init();
+
     /* IVI */
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Bon_init();
@@ -88,7 +97,12 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_Ivi_PictCtrl_Main_Bon_init();
     vd_g_Ivi_GyrCtrl_Main_Bon_init();
     vd_g_Ivi_DspCtrl_Main_Bon_init();
+	vd_g_Ivi_DrcCtrl_Main_Bon_init();
 
+    /* ClkCtrl */
+    vd_g_RtcIc_MainInitial();
+    vd_g_DateclkBonInit();
+    vd_g_DateSIBonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -125,6 +139,8 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
+    ExtSigCtrl_Init();
+
     /* IVI */
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Rst_init();
@@ -132,6 +148,12 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_Ivi_PictCtrl_Main_Rst_init();
     vd_g_Ivi_GyrCtrl_Main_Rst_init();
     vd_g_Ivi_DspCtrl_Main_Rst_init();
+
+    /* ClkCtrl */
+    vd_g_RtcIc_MainInitial();
+    vd_g_DateclkRstwkInit();
+    vd_g_DateSIRstWkupInit();
+    vd_g_Ivi_DrcCtrl_Main_Rst_init();
     
     /* ^^ User Hook end   ^^ */
 
@@ -169,6 +191,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_VehopemdWkupInit();
 
     /* vv User Hook start vv */
+    ExtSigCtrl_Init();
+
     /* IVI */
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Wkup_init();
@@ -176,7 +200,12 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_Ivi_PictCtrl_Main_Wkup_init();
     vd_g_Ivi_GyrCtrl_Main_Wkup_init();
     vd_g_Ivi_DspCtrl_Main_Wkup_init();
+    vd_g_Ivi_DrcCtrl_Main_Wkup_init();
 
+    /* ClkCtrl */
+    vd_g_RtcIc_MainInitial();
+    vd_g_DateclkRstwkInit();
+    vd_g_DateSIRstWkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/

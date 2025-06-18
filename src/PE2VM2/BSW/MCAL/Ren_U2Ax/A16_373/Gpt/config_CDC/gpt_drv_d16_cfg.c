@@ -55,6 +55,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#pragma ghs section rodata=".GPT_RODATA_CONST"
+
 const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
     /*---------------------------- GPT_D16_UNIT_00 -------------------------------------------------------------------------*/
     {
@@ -122,9 +124,9 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
     {
         (volatile U2 *)0xffbf5000U,                                                                       /* u2p_base       */
         {
-            (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[0]  */
-            (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[1]  */
-            (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[2]  */
+            (U2)GPT_D16_MDCTRL_PWM_PERI | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[0]  */
+            (U2)GPT_D16_MDCTRL_PWM_DUTY | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[1]  */
+            (U2)GPT_D16_MDCTRL_PWM_DUTY | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[2]  */
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[3]  */
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[4]  */
             (U2)GPT_D16_MDCTRL_RLT_REPT | (U2)GPT_D16_MDCTRL_CLKSRC_0,                                    /* u2p_mdctrl[5]  */
@@ -161,8 +163,8 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
         (U2)0x0000U,                                                                                      /* u2_tps         */
         (U2)0x0000U,                                                                                      /* u2_brs         */
 
-        (U2)0x0800U,                                                                                      /* u2_out_en      */
-        (U2)0x0800U,                                                                                      /* u2_out_md      */
+        (U2)0x0806U,                                                                                      /* u2_out_en      */
+        (U2)0x0806U,                                                                                      /* u2_out_md      */
         (U2)0x0000U,                                                                                      /* u2_out_cf      */
         (U2)0x0000U,                                                                                      /* u2_out_lv      */
 
@@ -175,7 +177,7 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
         (U2)0x0000U,                                                                                      /* u2_rto_lv      */
         (U2)0x0000U,                                                                                      /* u2_rto_mo      */
 
-        (U2)0x0000U,                                                                                      /* u2_rld_en      */
+        (U2)0x0007U,                                                                                      /* u2_rld_en      */
         (U2)0x0000U,                                                                                      /* u2_rld_md      */
         (U2)0x0000U,                                                                                      /* u2_rld_se      */
         (U2)0x0000U                                                                                       /* u2_rld_ct      */
@@ -244,6 +246,8 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
     }
 };
 const U1                 u1_g_GPT_D16_NUM_UNIT = (U1)GPT_D16_NUM_UNIT;
+
+#pragma ghs section rodata=default
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */

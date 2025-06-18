@@ -21,7 +21,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "veh_opemd.h"
@@ -265,7 +264,9 @@ U1              u1_g_MmlangCfgGetA_LNGCHG(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNGCHG, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -279,7 +280,9 @@ U1              u1_g_MmlangCfgGetA_LNG_ST(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNG_ST, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -293,7 +296,9 @@ U1              u1_g_MmlangCfgGetA_LANG(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LANG, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -307,7 +312,9 @@ U1              u1_g_MmlangCfgGetA_LNGDB1(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNGDB1, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -321,7 +328,9 @@ U1              u1_g_MmlangCfgGetA_LNGDB2(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNGDB2, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -335,7 +344,9 @@ U1              u1_g_MmlangCfgGetA_LNGDB3(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNGDB3, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -349,7 +360,9 @@ U1              u1_g_MmlangCfgGetA_LNGDB4(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNGDB4, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -363,7 +376,9 @@ U1              u1_g_MmlangCfgGetA_LNGDB5(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNGDB5, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -377,7 +392,9 @@ U1              u1_g_MmlangCfgGetA_LNGDB6(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNGDB6, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/
@@ -391,7 +408,9 @@ U1              u1_g_MmlangCfgGetA_LNGDB7(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_LNGDB7, &u1_t_sgnl);
+#endif
     return (u1_t_sgnl);
 }
 /*===================================================================================================================================*/

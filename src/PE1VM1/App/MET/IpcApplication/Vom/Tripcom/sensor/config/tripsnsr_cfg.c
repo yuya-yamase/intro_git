@@ -20,7 +20,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "gpt_drv_frt.h"
@@ -106,9 +105,14 @@ U1              u1_g_TripsnsrCfgEcoMode(void)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode)
 {
+#if 0   /* BEV BSW provisionally */
 #if defined(ComConf_ComSignal_ECOMODE3)
     (void)Com_ReceiveSignal(ComConf_ComSignal_ECOMODE3, u1p_a_ecomode);
     return ((U1)Com_GetIPDUStatus(MSG_ECO1S90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else
+    (*u1p_a_ecomode) = (U1)0U;
+    return ((U1)TRIPCOM_STSBIT_INVALID);
+#endif
 #else
     (*u1p_a_ecomode) = (U1)0U;
     return ((U1)TRIPCOM_STSBIT_INVALID);
@@ -130,7 +134,11 @@ U1              u1_g_TripsnsrCfgGetPtsSts(void)
     u1_t_calib  = u1_CALIB_MCUID0237_CANMOVEFLAG;
 
     if (u1_t_calib == (U1)CALIB_MCUID0237_NE1) {
+#if 0   /* BEV BSW provisionally */
         u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_ENG1G02_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else
+        u1_t_msgsts = (U1)COM_NO_RX;
+#endif
     }
     else {
         u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_ENG1G90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
@@ -180,10 +188,10 @@ U1              u1_g_TripsnsrCfgGetBFC(U4 * u4p_a_fuel_inst)
 
 
 #if 0   /* BEV BSW provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_B_FC, &u2_t_bfc);
 #else
     u2_t_bfc = (U2)0U;
 #endif
-    (void)Com_ReceiveSignal(ComConf_ComSignal_B_FC, &u2_t_bfc);
     (*u4p_a_fuel_inst) = (U4)u2_t_bfc;
     u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S28,
                                         (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),

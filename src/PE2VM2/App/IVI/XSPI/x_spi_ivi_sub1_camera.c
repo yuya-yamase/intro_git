@@ -47,7 +47,7 @@
 #define    XSPI_IVI_CAMERA_SYNC_SEND      (0x03U)
 #define    XSPI_IVI_CAMERA_MODE_REC       (0x04U)
 
-#define    XSPI_IVI_CAMERA_TASK           (3000U / 5U)
+#define    XSPI_IVI_CAMERA_TASK           (3000U / XSPI_IVI_TASK_TIME)
 #define    XSPI_IVI_CAMERA_DATA_SIZE      (6U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -62,9 +62,6 @@ U1      u1_sp_xspi_ivi_camera_sync_pass_data_pre[5];
 
 U1      u1_s_xspi_ivi_camera_data_1stsend_flg;
 U1      u1_s_xspi_ivi_camera_sync_1stsend_flg;
-
-U4      u4_s_xspi_ivi_task_cnt_subframe1_camera_pre;
-U4      u4_s_xspi_ivi_task_cnt_subframe1_camera_sync_pre;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -88,8 +85,6 @@ static U1              u1_s_XspiIviSub1CameraDataEventJdg(const U1* u1_ap_DATA,c
 void            vd_g_XspiIviSub1CameraInit(void)
 {
     /*構造体初期化*/
-    u4_s_xspi_ivi_task_cnt_subframe1_camera_pre = (U4)0U;
-    u4_s_xspi_ivi_task_cnt_subframe1_camera_sync_pre = (U4)0U;
     u1_s_xspi_ivi_camera_data_1stsend_flg = (U1)FALSE;
     u1_s_xspi_ivi_camera_sync_1stsend_flg = (U1)FALSE;
 
@@ -116,8 +111,8 @@ void            vd_g_XspiIviSub1CameraMainTask(void)
     U4 u4_t_camera_sync_task;
     U1 u1_t_camera_ivent_jdg;
 
-    u4_t_cameara_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_task_cnt_subframe1_camera_pre;
-    u4_t_camera_sync_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_task_cnt_subframe1_camera_sync_pre;
+    u4_t_cameara_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_CAMERA];
+    u4_t_camera_sync_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_CAMERA_SYNC];
 
     u1_t_camera_ivent_jdg = (U1)FALSE;
     u1_t_camera_ivent_jdg = u1_s_XspiIviSub1CameraDataEventJdg(&u1_sp_xspi_ivi_camera_data[0],&u1_sp_xspi_ivi_camera_data_pre[0],(U1)XSPI_IVI_CAMERA_DATA_SIZE - (U1)1U);
@@ -229,7 +224,7 @@ static void            vd_s_XspiIviSub1CameraData(void)
     vd_s_XspiIviSub1CameraDataToQueue((U2)XSPI_IVI_CAMERA_DATA_SIZE,u1_tp_data);
 
     vd_g_MemcpyU1(&u1_sp_xspi_ivi_camera_data_pre[0],&u1_sp_xspi_ivi_camera_data[0],(U1)XSPI_IVI_CAMERA_DATA_SIZE - (U1)1U);
-    u4_s_xspi_ivi_task_cnt_subframe1_camera_pre = u4_s_xspi_ivi_task_cnt;
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_CAMERA] = (U4)0U;
 }
 
 /*===================================================================================================================================*/
@@ -248,7 +243,7 @@ static void            vd_s_XspiIviSub1CameraSyncPassData(void)
     vd_s_XspiIviSub1CameraDataToQueue((U2)XSPI_IVI_CAMERA_DATA_SIZE,u1_tp_data);
 
     vd_g_MemcpyU1(&u1_sp_xspi_ivi_camera_sync_pass_data_pre[0],&u1_sp_xspi_ivi_camera_sync_pass_data[0],(U1)XSPI_IVI_CAMERA_DATA_SIZE - (U1)1U);
-    u4_s_xspi_ivi_task_cnt_subframe1_camera_sync_pre = u4_s_xspi_ivi_task_cnt;
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_CAMERA_SYNC] = (U4)0U;
 }
 
 /*===================================================================================================================================*/

@@ -29,7 +29,7 @@
 /****************************************************************************************/
 /* Hv4mVmConfig                                                                         */
 /****************************************************************************************/
-static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe3[5] = {
+static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe3[6] = {
     {
         109U,  /* intno */
         PEID_3,  /* Peid */
@@ -47,6 +47,11 @@ static EhvmConst ehvm_guest_int_config_t ehvm_guest_int_configs_pe3[5] = {
     },
     {
         202U,  /* intno */
+        PEID_3,  /* Peid */
+        GPID_VM0  /* Gpid */
+    },
+    {
+        462U,  /* intno */
         PEID_3,  /* Peid */
         GPID_VM0  /* Gpid */
     },
@@ -92,7 +97,11 @@ static EhvmConst ehvm_guest_peid_register_t ehvm_guest_peid_list_pe3[VM_NUM_PE3]
 /****************************************************************************************/
 static EhvmConst ehvm_vm_table_info_t ehvm_sch_SchTable_pe3_0[1] = {
     {
+#if (PROCESSING_LOAD_MEASURE_TIME > 0)
+        4850U,               /* VMCycle */
+#else
         400U,               /* VMCycle */
+#endif
         GPID_VM0            /* VMId */
     }
 };
@@ -184,8 +193,12 @@ EhvmConst ehvm_cfg_tbl_t ehvm_cfg_tbl_pe3 =
 {
     0U,                             /* tptm_dividingratio */
     VM_NUM_PE3,                     /* vmnum */
-    5U,                            /* guest_int_num */
+    6U,                            /* guest_int_num */
+#if (PROCESSING_LOAD_MEASURE_TIME > 0)
+    (ehvm_uint32_t)5000U,           /* hv_cycle */
+#else
     (ehvm_uint32_t)500U,           /* hv_cycle */
+#endif
     MPU_MPCFG_HBE_PE3,                  /* mpu_mpcfg_hbe */
     MPU_NUM_OF_HOST_ENTRY_PE3,          /* mpu_num_of_host_entry */
     MPU_GUEST_ENTRY_T_PE3,              /* mpu_guest_entry_t */

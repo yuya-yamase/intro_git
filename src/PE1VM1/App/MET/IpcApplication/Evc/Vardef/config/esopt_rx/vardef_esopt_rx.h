@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 #include "hmivardef.h"
@@ -56,10 +55,6 @@ U1      u1_g_VdfEsoRx_P_DPTZ(void);
 U1      u1_g_VdfEsoRx_ADIEXIST(void);
 U1      u1_g_VdfEsoRx_SW_DM_CAMERA(void);
 U1      u1_g_VdfEsoRx_SW_WRN_SEN(void);
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* vardef_esopt_AVN1S30.c */
-U1      u1_g_VdfEsoRx_CNTR_DISP(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* vardef_esopt_AVN1S98.c */

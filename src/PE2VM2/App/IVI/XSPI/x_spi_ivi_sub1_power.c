@@ -20,6 +20,7 @@
 #include    "x_spi_ivi_sub1_power.h"
 #include    "Dio.h"
 #include    "Dio_Symbols.h"
+#include    "Iohw_adc.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -47,11 +48,14 @@
 #define    XSPI_IVI_POWER_STATE_REC             (0x02U)
 #define    XSPI_IVI_POWER_STATE_TRANS_REC       (0x03U)
 #define    XSPI_IVI_POWER_STATE_TRANS_SEND      (0x04U)
+#define    XSPI_IVI_POWER_BMONIVOL_SEND         (0x05U)
 
 
-#define    XSPI_IVI_POWER_TASK                  (2000U / 5U)
+#define    XSPI_IVI_POWER_TASK                  (2000U / XSPI_IVI_TASK_TIME)
+#define    XSPI_IVI_POWER_SIZE                  (7U)
 #define    XSPI_IVI_POWER_STATE_SIZE            (5U)
 #define    XSPI_IVI_POWER_TRANS_SIZE            (6U)
+#define    XSPI_IVI_POWER_BMONI_SIZE            (7U)
 
 #define    XSPI_IVI_POWER_STATE_NUM             (7U)    /* 状態総数 */
 #define    XSPI_IVI_POWER_STATE_OFF             (0U)    /* OFF */
@@ -71,7 +75,10 @@
 #define    XSPI_IVI_POWER_DEV_INI_COMP_GYRO     (0x0008U)
 #define    XSPI_IVI_POWER_DEV_INI_COMP_POWER    (0x0010U)
 /*GPS-RST端子 Lo→Hiからのカウント*/
-#define    XSPI_IVI_POWER_GPSRST_INI_TASK       (400U / 1U)
+#define    XSPI_IVI_POWER_GPSRST_INI_TASK       (400U / XSPI_IVI_TASK_TIME)
+
+/*B-MON電圧端子のポーリング周期*/
+#define    XSPI_IVI_POWER_BMONVOL_TASK          (100U / XSPI_IVI_TASK_TIME)
 
 
 /*デバイス初期化確認Pin*/
@@ -162,8 +169,6 @@ static U1 u1_s_xspi_ivi_power_state_pre[4];
 /*状態移行格納*/
 static ST_XSPI_IVI_POWER_STATE_TRANS st_s_xspi_ivi_state_trans; 
 
-static U4 u4_s_xspi_ivi_task_cnt_subframe1_power_pre;
-
 /*SPI通信許可状態*/
 static U1 u1_s_xspi_ivi_power_start_flg;
 /*状態移行指示有無*/
@@ -172,10 +177,15 @@ static U1 u1_s_xspi_ivi_power_state_trans_flg;
 static U1 u1_s_xspi_ivi_power_device_init_fin_flg;
 /*アプリからのデバイス初期化状態格納*/
 static U2 u2_s_xspi_ivi_power_device_init_app;
-static U4 u4_s_xspi_ivi_power_gpsrst_task_pre;
 static U1 u1_s_xspi_ivi_power_gpsrst_sts_pre;
 static U1 u1_s_xspi_ivi_power_gpsrst_init_fin_flg;
 static U1 u1_s_xspi_ivi_power_gpsrst_sts_chk;
+
+/*Bモニ電圧取得値*/
+static U2 u2_s_xspi_ivi_power_bmonivol1_data;
+static U2 u2_s_xspi_ivi_power_bmonivol2_data;
+static U2 u2_s_xspi_ivi_power_bmonivol3_data;
+static U1 u1_s_xspi_ivi_power_bmoni_1stsend_flg;
 
 /*デバイス初期化確認Port配列*/
 static U2 Mcu_Dio_PortId[MCU_PORT_NUM] = {
@@ -264,12 +274,17 @@ void            vd_g_XspiIviSub1PowerInit(void)
     st_s_xspi_ivi_state_trans.u1_ota_state = (U1)U1_MAX;
     st_s_xspi_ivi_state_trans.u1_appearance_state = (U1)U1_MAX;
 
-    u4_s_xspi_ivi_task_cnt_subframe1_power_pre = (U4)0U;
     u2_s_xspi_ivi_power_device_init_app = (U2)0U;
-    u4_s_xspi_ivi_power_gpsrst_task_pre = (U4)0U;
     u1_s_xspi_ivi_power_gpsrst_sts_pre = (U1)STD_LOW;
     u1_s_xspi_ivi_power_gpsrst_init_fin_flg = (U1)FALSE;
     u1_s_xspi_ivi_power_gpsrst_sts_chk = (U1)FALSE;
+
+    u2_s_xspi_ivi_power_bmonivol1_data = (U2)0U;
+    u2_s_xspi_ivi_power_bmonivol2_data = (U2)0U;
+    u2_s_xspi_ivi_power_bmonivol3_data = (U2)0U;
+    u1_s_xspi_ivi_power_bmoni_1stsend_flg = (U1)FALSE;
+
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_BMONI] = (U4)XSPI_IVI_POWER_BMONVOL_TASK;
 }
 
 /*===================================================================================================================================*/
@@ -350,7 +365,7 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
     }
     /* シス検暫定ここまで */
 
-    u4_t_power_task = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_task_cnt_subframe1_power_pre;
+    u4_t_power_task = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_STS];
     u1_t_power_ivent_jdg = (U1)FALSE;
     u1_t_power_ivent_jdg = u1_s_XspiIviSub1PowerDataEventJdg(&u1_s_xspi_ivi_power_state[0],&u1_s_xspi_ivi_power_state_pre[0],(U1)4U);
 
@@ -362,7 +377,7 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
             u1_tp_data[0] = (U1)XSPI_IVI_POWER_STATE_SEND;
             vd_g_MemcpyU1(&u1_tp_data[1],&u1_s_xspi_ivi_power_state[0],(U1)4U);
             vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_STATE_SIZE,u1_tp_data);
-            u4_s_xspi_ivi_task_cnt_subframe1_power_pre = u4_s_xspi_ivi_task_cnt;
+            u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_STS] = (U4)0U;
         }else{
             /*Do Nothing*/
         }
@@ -381,8 +396,47 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
             u1_s_xspi_ivi_power_state_trans_flg = (U1)FALSE;
         }
     }
+
+    /* Bモニ電圧値取得*/
+    if(u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_BMONI] >= (U4)XSPI_IVI_POWER_BMONVOL_TASK){
+        (void)u1_g_IoHwAdcRead((U1)ADC_CH_B_MON1,&u2_s_xspi_ivi_power_bmonivol1_data);
+        (void)u1_g_IoHwAdcRead((U1)ADC_CH_B_MON2,&u2_s_xspi_ivi_power_bmonivol2_data);
+        (void)u1_g_IoHwAdcRead((U1)ADC_CH_B_MON3,&u2_s_xspi_ivi_power_bmonivol3_data);
+        u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_BMONI] = (U4)0U;
+        if(u1_s_xspi_ivi_power_bmoni_1stsend_flg == (U1)TRUE) {
+            vd_g_XspiIviSub1PowerBmoniVolSend();
+        }
+    }
 }
 
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1PowerBmoniVolSend(void)                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1PowerBmoniVolSend(void)
+{
+    /*Bモニ電圧送信*/    
+    U1 u1_tp_data[7];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_POWER_BMONIVOL_SEND;
+    u1_tp_data[1] = (U1)((u2_s_xspi_ivi_power_bmonivol1_data & 0x0F00U) >> XSPI_IVI_SFT_08);
+    u1_tp_data[2] = (U1)(u2_s_xspi_ivi_power_bmonivol1_data & 0x00FFU);
+    u1_tp_data[3] = (U1)((u2_s_xspi_ivi_power_bmonivol2_data & 0x0F00U) >> XSPI_IVI_SFT_08);
+    u1_tp_data[4] = (U1)(u2_s_xspi_ivi_power_bmonivol2_data & 0x00FFU);
+    u1_tp_data[5] = (U1)((u2_s_xspi_ivi_power_bmonivol3_data & 0x0F00U) >> XSPI_IVI_SFT_08);
+    u1_tp_data[6] = (U1)(u2_s_xspi_ivi_power_bmonivol3_data & 0x00FFU);
+
+    vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_BMONI_SIZE,u1_tp_data);
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_BMONI] = (U4)0U;
+
+    if(u1_s_xspi_ivi_power_bmoni_1stsend_flg == (U1)FALSE) {
+        u1_s_xspi_ivi_power_bmoni_1stsend_flg = (U1)TRUE;
+    }
+}
 
 /*===================================================================================================================================*/
 /*  void            vd_g_XspiIviSub1_PowerState1stSend(void)                                                                         */
@@ -400,7 +454,7 @@ void            vd_g_XspiIviSub1_PowerState1stSend(void)
     vd_g_MemcpyU1(&u1_tp_data[1],&u1_s_xspi_ivi_power_state[0],(U1)4U);
     vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_STATE_SIZE,u1_tp_data);
     u1_s_xspi_ivi_power_start_flg = (U1)TRUE;
-    u4_s_xspi_ivi_task_cnt_subframe1_power_pre = u4_s_xspi_ivi_task_cnt;
+    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_STS] = (U4)0U;
 }
 
 /*===================================================================================================================================*/
@@ -472,11 +526,11 @@ void            vd_g_XspiIviSub1DevInitFinish(void)
             u1_t_gpsrst_pin = Dio_ReadChannel(Mcu_Dio_PortId[u4_t_loop]);
             if((u1_t_gpsrst_pin == (U1)STD_HIGH) &&
               (u1_t_gpsrst_pin != u1_s_xspi_ivi_power_gpsrst_sts_pre)) {
-                u4_s_xspi_ivi_power_gpsrst_task_pre = u4_s_xspi_ivi_task_cnt;
+                u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_GPSRST] = (U4)0U;
                 u1_s_xspi_ivi_power_gpsrst_sts_chk = (U1)TRUE;
             }
 
-            u4_t_task_cnt = u4_s_xspi_ivi_task_cnt - u4_s_xspi_ivi_power_gpsrst_task_pre;
+            u4_t_task_cnt = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_GPSRST];
             if((u1_s_xspi_ivi_power_gpsrst_sts_chk == (U1)TRUE) &&
                (u4_t_task_cnt >= (U4)XSPI_IVI_POWER_GPSRST_INI_TASK)){
                 u1_s_xspi_ivi_power_gpsrst_init_fin_flg = (U1)TRUE;
@@ -541,12 +595,12 @@ void            vd_g_XspiIviSub1PowerDevInitCmpApp(const U1 u1_a_ID)
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviSub1PowerDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD)
 {
-    U1     u1_tp_data[6];
+    U1     u1_tp_data[XSPI_IVI_POWER_SIZE];
     U1     u1_t_id;
 
     u1_t_id = (U1)XSPI_IVI_POWER_ID;
 
-    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)6U);
+    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)XSPI_IVI_POWER_SIZE);
     vd_g_MemcpyU1(&u1_tp_data[0], &u1_ap_XSPI_ADD[0], (U4)u2_a_size);
 
     /*キューの関数呼び出し（そっちでヘッダーとかは入れてく）*/

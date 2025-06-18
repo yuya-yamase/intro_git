@@ -61,7 +61,9 @@ U1      u1_g_VdfEsoRx_GPF(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_PMPILE, &u1_t_rx);
+#endif
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }

@@ -16,6 +16,8 @@
 #include "Mcu_Sys_Pwr_Gvif3Rx.h"
 #include "gvif3rx.h"
 #include "pictic.h"
+#include "SysEcDrc.h"
+#include "RobCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -80,28 +82,30 @@
 
 /* デバイス異常検知 */
 #define GVIF3RX_GETREG_DEV_NORMAL               (0x20U)
+#define GVIF3RX_DEVERR_FLGON                    (1U)
+#define GVIF3RX_DEVERR_FLGOFF                   (0U)
 
 /* 再起動フラグ */
-#define GVIF3_RESTART_FLGON                     (1U)
-#define GVIF3_RESTART_FLGOFF                    (0U)
-#define GVIF3_RESTART_WAIT                      (5U)
+#define GVIF3RX_RESTART_FLGON                   (1U)
+#define GVIF3RX_RESTART_FLGOFF                  (0U)
+#define GVIF3RX_RESTART_WAIT                    (5U)
 
 /* カメラシステム種別(カメラ有/カメラ無) */
 #define GVIF3RX_KIND_CAM_NONE                   (0U)
 #define GVIF3RX_KIND_DOMECON_EXIST              (1U)
 
 /* 未接続検知 */
-#define GVIF3_UNCON_CNT_CNF                     (24U)
-#define GVIF3_UNCON_IDLE                        (0x00U)
-#define GVIF3_RX0_UNCON_MASK                    (0x10U)
-#define GVIF3_RX1_UNCON_MASK                    (0x80U)
-#define GVIF3_UNCON_FLGON                       (1U)
-#define GVIF3_UNCON_FLGOFF                      (0U)
+#define GVIF3RX_UNCON_CNT_CNF                   (24U)
+#define GVIF3RX_UNCON_IDLE                      (0x00U)
+#define GVIF3RX_RX0_UNCON_MASK                  (0x10U)
+#define GVIF3RX_RX1_UNCON_MASK                  (0x80U)
+#define GVIF3RX_UNCON_FLGON                     (1U)
+#define GVIF3RX_UNCON_FLGOFF                    (0U)
 
 /* ダイレコ記憶回数 */
-#define GVIF3_ERROR_MAXLOGCNT                   (3U)
-#define GVIF3_ERRORCHK_NON                      (0x00U)
-#define GVIF3_ERRORCHK_MASK                     (0x80U)
+#define GVIF3RX_ERROR_MAXLOGCNT                 (3U)
+#define GVIF3RX_ERRORCHK_NON                    (0x00U)
+#define GVIF3RX_ERRORCHK_MASK                   (0x80U)
 
 #define GVIF3RX_RDTBL_NUM                       (2U)
 #define GVIF3RX_WRTBL_NUM                       (1U)
@@ -111,7 +115,7 @@
 #define GVIF3RX_SLAVEADR_WR                     (0x46U)
 #define GVIF3RX_SLAVEADR_RD                     (0x47U)
 #define GVIF3RX_OUTSET_WRINUM                   (1U)
-#define GVIF3RX_CANKINDSET_WRINUM               (8U)
+#define GVIF3RX_CANKINDSET_WRINUM               (9U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -132,6 +136,7 @@ static U1    u1_s_gvif3rxsipfailflg;
 static U1    u1_s_gvif3rxchkflg;
 static U1    u1_s_gvif3rxchk_cnt;
 static U1    u1_s_gvif3rxrestartcnt;
+static U1    u1_s_gvif3rxdeverrflg;
 static U1    u1_s_gvif3rx0unconflg;
 static U1    u1_s_gvif3rx1unconflg;
 static U1    u1_s_gvif3rxrestartflg;
@@ -159,11 +164,12 @@ static U1    u1_s_gvif3rxsiperr_date;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void   vd_s_Gvif3RxReset(void);
 static void   vd_s_Gvif3RxReadDateInit(void);
 static U1     u1_s_Gvif3RxCamKindDatSet(void);
 static void   vd_s_Gvif3RxCycChk(void);
 static void   vd_s_Gvif3Restart(void);
-static void   vd_s_Gvif3SipFailTask(void);
+static U1     u1_s_Gvif3SipFailTask(void);
 static U1     u1_s_Gvif3Mipijdg(void);
 static U1     u1_s_Gvif3DevErrChk(void);
 static U1     u1_s_Gvif3LinkChk(void);
@@ -332,6 +338,13 @@ const U1 u1_sp_GVIF3RX_REG_BANK3[GVIF3RX_REG_RWC_BYTE3] = {
     (U1)0xFFU,    /* Write Address */
     (U1)0x03U     /* Write Data */
 };
+
+const U1 u1_sp_GVIF3RX_REG_MIPITX_RD_PDU1[GVIF3RX_REG_RWC_BYTE2] = {
+    (U1)GVIF3RX_SLAVEADR_WR,    /* Slave Address */
+    (U1)0x9CU     /* Write Address */
+};
+
+U1 u1_sp_GVIF3RX_REG_MIPITX_RD_PDU2[GVIF3RX_REG_RWC_BYTE2];
 
 const ST_GP_I2C_MA_REQ st_sp_GVIF3RX_REG_DEVERROR[GVIF3RX_RDTBL_NUM] = {
     {
@@ -526,11 +539,22 @@ const ST_GP_I2C_MA_REQ st_sp_GVIF3RX_REG_BANK3[GVIF3RX_WRTBL_NUM] = {
     }
 };
 
+const ST_GP_I2C_MA_REQ st_sp_GVIF3RX_REG_MIPI_RD[GVIF3RX_RDTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_GVIF3RX_REG_MIPITX_RD_PDU1[0],
+        (U4)0x20000002U
+    },
+    {
+        (U1 *)&u1_sp_GVIF3RX_REG_MIPITX_RD_PDU2[0],
+        (U4)0x20000002U
+    }
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiProxyMainTask(void)                                                                                              */
+/*  void    vd_g_Gvif3RxInit(void)                                                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -540,20 +564,32 @@ void    vd_g_Gvif3RxInit(void)
     u1_s_gvif3rxstby3sts = (U1)FALSE;
     u1_s_gvif3rxcamkind_now = (U1)GVIF3RX_KIND_CAM_NONE; /* DTF読み出し値(暫定) */
     u1_s_gvifcamKind_last = (U1)GVIF3RX_KIND_CAM_NONE;   /* DTF読み出し値(暫定) */
-    u1_s_gvif3rxstartflg = (U1)FALSE;
-    u1_s_gvif3rxsipfailflg = (U1)FALSE;
-    u1_s_gvif3rxchkflg = (U1)FALSE;
     u1_s_gvif3rxchk_cnt = (U1)GVIF3RX_CNT_CLR;
-    u1_s_gvif3rxrestartcnt = (U1)GVIF3RX_CNT_CLR;
-    u1_s_gvif3rx0unconflg = (U1)GVIF3_UNCON_FLGOFF;
-    u1_s_gvif3rx0unconcnt = (U1)GVIF3RX_CNT_CLR;
-    u1_s_gvif3rx1unconflg = (U1)GVIF3_UNCON_FLGOFF;
-    u1_s_gvif3rx1unconcnt = (U1)GVIF3RX_CNT_CLR;
-    u1_s_gvif3rxrestartflg = (U1)GVIF3_RESTART_FLGOFF;
+    u1_s_gvif3rxdeverrflg = (U1)GVIF3RX_DEVERR_FLGOFF;
+    u1_s_gvif3rx0unconflg = (U1)GVIF3RX_UNCON_FLGOFF;
+    u1_s_gvif3rx1unconflg = (U1)GVIF3RX_UNCON_FLGOFF;
     u1_s_gvif3rxerror1chkcnt = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3rxerror2chkcnt = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3rxerror3chkcnt = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3rxerror4chkcnt = (U1)GVIF3RX_CNT_CLR;
+    vd_s_Gvif3RxReset();
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_Gvif3RxReset(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_Gvif3RxReset(void)
+{
+    u1_s_gvif3rxstartflg = (U1)FALSE;
+    u1_s_gvif3rxsipfailflg = (U1)FALSE;
+    u1_s_gvif3rxchkflg = (U1)FALSE;
+    u1_s_gvif3rxrestartcnt = (U1)GVIF3RX_CNT_CLR;
+    u1_s_gvif3rx0unconcnt = (U1)GVIF3RX_CNT_CLR;
+    u1_s_gvif3rx1unconcnt = (U1)GVIF3RX_CNT_CLR;
+    u1_s_gvif3rxrestartflg = (U1)GVIF3RX_RESTART_FLGOFF;
     u4_s_gcif3acktime = (U1)GVIF3RX_CNT_CLR;
     u1_s_gvif3maintask_step = (U1)GVIF3RX_MAINTASK_STEP1;
     u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP1;
@@ -571,7 +607,7 @@ void    vd_g_Gvif3RxInit(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCycChk(void)                                                                                          */
+/*  static void    vd_s_Gvif3RxReadDateInit(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -626,10 +662,14 @@ static void    vd_s_Gvif3RxReadDateInit(void)
     u1_sp_GVIF3RX_REG_EERROR10CHK_RD_PDU2[0] = (U1)GVIF3RX_SLAVEADR_RD;    /* Slave Address */
     u1_sp_GVIF3RX_REG_EERROR10CHK_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
 
+    /*  データリード用テーブル初期化 */
+    u1_sp_GVIF3RX_REG_MIPITX_RD_PDU2[0] = (U1)GVIF3RX_SLAVEADR_RD;    /* Slave Address */
+    u1_sp_GVIF3RX_REG_MIPITX_RD_PDU2[1] = (U1)0U;    /* 読出しデータ初期値 */
+
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiProxyMainTask(void)                                                                                              */
+/*  void    vd_g_Gvif3RxMainTask(void)                                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -663,6 +703,7 @@ void    vd_g_Gvif3RxMainTask(void)
         case GVIF3RX_MAINTASK_STEP3:
             if(u1_s_gvif3rxchk_cnt >= (U1)GVIF3RX_CHKTIME){
                 u1_s_gvif3rxchkflg = (U1)TRUE;
+                u1_s_gvif3rxchk_cnt = (U1)GVIF3RX_CNT_CLR;
             }
             break;
     
@@ -676,9 +717,6 @@ void    vd_g_Gvif3RxMainTask(void)
     }
     if(u1_s_gvif3rxstartflg == (U1)TRUE){
         vd_s_Gvif3Restart();
-    }
-    if(u1_s_gvif3rxsipfailflg == (U1)TRUE){
-        vd_s_Gvif3SipFailTask();
     }
 }
 
@@ -724,7 +762,15 @@ static void    vd_s_Gvif3RxCycChk(void)
                 }
             }
             else{
-                u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP12;/* カメラ有無共通のSTEPへ */
+                if(u1_s_gvif3rxsipfailflg == (U1)TRUE){
+                    u1_t_jdg = u1_s_Gvif3SipFailTask();
+                }
+                else{
+                    u1_t_jdg = (U1)TRUE;
+                }
+                if(u1_t_jdg == (U1)TRUE){
+                    u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP12;/* カメラ有無共通のSTEPへ */
+                }
             }
             break;
     
@@ -738,8 +784,12 @@ static void    vd_s_Gvif3RxCycChk(void)
         case GVIF3RX_PERIMONI_STEP5:
             u1_t_date = (U1)st_sp_GVIF3RX_REG_DEVERROR[1].u1p_pdu[1];
             if(u1_t_date != (U1)GVIF3RX_GETREG_DEV_NORMAL){
-                /* ダイレコ 再起動要求(暫定) */
-                u1_s_gvif3rxrestartflg = (U1)GVIF3_RESTART_FLGON;
+                if(u1_s_gvif3rxdeverrflg == (U1)GVIF3RX_DEVERR_FLGOFF){
+                    /* ダイレコ 再起動要求 */
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX, (U1)SYSECDRC_DREC_ID_1, (U1)0x00U, (U1)0x00U);
+                    u1_s_gvif3rxdeverrflg = (U1)GVIF3RX_DEVERR_FLGON;
+                }
+                u1_s_gvif3rxrestartflg = (U1)GVIF3RX_RESTART_FLGON;
                 u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP_FIN; /* 定期終了 */
             }
             else{
@@ -760,7 +810,7 @@ static void    vd_s_Gvif3RxCycChk(void)
             break;
     
         case GVIF3RX_PERIMONI_STEP7:
-            if(u1_s_gvif3rx0unconflg == (U1)GVIF3_UNCON_FLGOFF){
+            if(u1_s_gvif3rx0unconflg == (U1)GVIF3RX_UNCON_FLGOFF){
                 u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP8;
             }
             else{
@@ -783,7 +833,7 @@ static void    vd_s_Gvif3RxCycChk(void)
             break;
     
         case GVIF3RX_PERIMONI_STEP10:
-            if(u1_s_gvif3rx1unconflg == (U1)GVIF3_UNCON_FLGOFF){
+            if(u1_s_gvif3rx1unconflg == (U1)GVIF3RX_UNCON_FLGOFF){
                 u1_t_jdg = u1_s_Gvif3Error2Chk();
                 if(u1_t_jdg == (U1)TRUE){
                     u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP11;
@@ -795,7 +845,7 @@ static void    vd_s_Gvif3RxCycChk(void)
             break;
     
         case GVIF3RX_PERIMONI_STEP11:
-            if((u1_s_gvif3rx0unconflg == (U1)GVIF3_UNCON_FLGOFF) && (u1_s_gvif3rx1unconflg == (U1)GVIF3_UNCON_FLGOFF)){
+            if((u1_s_gvif3rx0unconflg == (U1)GVIF3RX_UNCON_FLGOFF) && (u1_s_gvif3rx1unconflg == (U1)GVIF3RX_UNCON_FLGOFF)){
                 u1_t_jdg = u1_s_Gvif3Error4Chk();
                 if(u1_t_jdg == (U1)TRUE){
                     u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP12;
@@ -899,7 +949,7 @@ static void    vd_s_Gvif3RxCycChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiProxyMainTask(void)                                                                                              */
+/*  void    vd_g_Gvif3RxCamKindPut(U1 u1_a_CAMEXSIT)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -915,7 +965,7 @@ void    vd_g_Gvif3RxCamKindPut(U1 u1_a_CAMEXSIT)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3RxCamKindDatSet(void)                                                                                   */
+/*  static U1     u1_s_Gvif3RxCamKindDatSet(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -931,12 +981,15 @@ static U1     u1_s_Gvif3RxCamKindDatSet(void)
         {        6,         1,         0},
         {        7,         2,         0},
         {        9,         1,         0},
-        {       10,         3,         0}
+        {       10,         2,         0},
+        {       12,         1,         0}
     };
     
     U1 u1_t_return;
     U1 u1_t_sts;
 
+    u1_t_return = (U1)FALSE;
+    u1_t_sts = (U1)FALSE;
     if(u1_s_gvifcamKind_last == (U1)GVIF3RX_KIND_DOMECON_EXIST){
         u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (U2)GVIF3RX_CANKINDSET_WRINUM,
                                                (U1)GP_I2C_MA_SLA_2_GVIF_RX, st_sp_GVIF3RX_CANKINDSET, &u4_s_gcif3acktime,
@@ -966,7 +1019,7 @@ void    vd_g_Gvif3RxStby3StsSet(U1 u1_a_stby3sts)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3Mipijdg(void)                                                                                          */
+/*  static U1     u1_s_Gvif3Mipijdg(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -974,12 +1027,10 @@ void    vd_g_Gvif3RxStby3StsSet(U1 u1_a_stby3sts)
 static U1     u1_s_Gvif3Mipijdg(void)
 {
     U1 u1_t_return;
-    U1 u1_t_siperr;
     U1 u1_t_sts;
     U1 u1_t_writedate;
     
     u1_t_return = (U1)FALSE;
-    u1_t_siperr = u1_s_PictCtl_SiPErrstsInfo();
     u1_t_sts = (U1)FALSE;
     u1_t_writedate = (U1)0U;
 
@@ -997,7 +1048,7 @@ static U1     u1_s_Gvif3Mipijdg(void)
             if(Mcu_OnStep_EIZOIC_OVRALL == (uint8)MCU_STEP_EIZOIC_OVERALL_FIN){ /* 映像IC初期化済み(暫定) */
                 u1_t_writedate |= (U1)GVIF3RX_VIDEO_OUTPUT_ENABLE_0;
             }
-            if((u1_s_gvif3rxstby3sts == (U1)TRUE) && (u1_t_siperr == (U1)PICT_SIP_ERR_OFF)){
+            if((u1_s_gvif3rxstby3sts == (U1)TRUE) && (u1_s_gvif3rxsipfailflg == (U1)FALSE)){
                 u1_t_writedate |= (U1)GVIF3RX_VIDEO_OUTPUT_ENABLE_1;
             }
             u1_s_gvif3rxmipitx_date = u1_t_writedate;
@@ -1010,6 +1061,7 @@ static U1     u1_s_Gvif3Mipijdg(void)
                                                     &st_sp_GVIF3RX_REG_MIPI_WR[u1_s_gvif3rxmipitx_date], &u2_s_gvif3rxregset_betwaittime_stub);
             if(u1_t_sts == (U1)TRUE){
                 u1_t_return = (U1)TRUE;
+                u1_s_gvif3rxsipfailflg = (U1)FALSE;
                 u1_s_gvif3mipi_step = (U1)GVIF3RX_MIPI_STEP1;
             }
 
@@ -1024,7 +1076,7 @@ static U1     u1_s_Gvif3Mipijdg(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3Error1Chk(void)                                                                                         */
+/*  static U1     u1_s_Gvif3DevErrChk(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1036,7 +1088,7 @@ static U1     u1_s_Gvif3DevErrChk(void)
 
     u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_DEVERROR, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_DEVERROR, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1055,18 +1107,22 @@ void     vd_g_Gvif3SipFail(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void     vd_s_Gvif3SipFailTask(void)                                                                                      */
+/*  static U1     u1_s_Gvif3SipFailTask(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void     vd_s_Gvif3SipFailTask(void)
+static U1     u1_s_Gvif3SipFailTask(void)
 {
+    U1 u1_t_return;
     U1 u1_t_sts;
     U1 u1_t_writedate;
+    U1 u1_t_jdg;
     
+    u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)FALSE;
     u1_t_writedate = (U1)0U;
+    u1_t_jdg = (U1)0U;
 
     switch (u1_s_gvif3siperr_step)
     {
@@ -1080,18 +1136,24 @@ static void     vd_s_Gvif3SipFailTask(void)
             break;
 
         case GVIF3RX_SIPERR_STEP2:
-            if(Mcu_OnStep_EIZOIC_OVRALL == (uint8)MCU_STEP_EIZOIC_OVERALL_FIN){ /* 映像IC初期化済み(暫定) */
-                u1_t_writedate |= (U1)GVIF3RX_VIDEO_OUTPUT_ENABLE_0;
+            u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_MIPI_RD, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
+            if(u1_t_sts == (U1)TRUE){
+                u1_t_jdg = (U1)st_sp_GVIF3RX_REG_MIPI_RD[1].u1p_pdu[1] & (U1)GVIF3RX_VIDEO_OUTPUT_ENABLE_0;
+                if(u1_t_jdg == (U1)GVIF3RX_VIDEO_OUTPUT_ENABLE_0){
+                    u1_t_writedate |= (U1)GVIF3RX_VIDEO_OUTPUT_ENABLE_0;
+                }
+                u1_s_gvif3rxsiperr_date = u1_t_writedate;
+                u1_s_gvif3siperr_step = (U1)GVIF3RX_MIPI_STEP3;
             }
-            u1_s_gvif3rxsiperr_date = u1_t_writedate;
-            u1_s_gvif3siperr_step = (U1)GVIF3RX_MIPI_STEP3;
             break;
     
-        case GVIF3RX_MIPI_STEP3:
+        case GVIF3RX_SIPERR_STEP3:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (U2)GVIF3RX_OUTSET_WRINUM,
                                                    (U1)GP_I2C_MA_SLA_2_GVIF_RX, st_sp_GVIFRX_OUTSET, &u4_s_gcif3acktime,
                                                     &st_sp_GVIF3RX_REG_MIPI_WR[u1_s_gvif3rxsiperr_date], &u2_s_gvif3rxregset_betwaittime_stub);
             if(u1_t_sts == (U1)TRUE){
+                u1_t_return = (U1)TRUE;
                 u1_s_gvif3rxsipfailflg = (U1)FALSE;
                 u1_s_gvif3siperr_step = (U1)GVIF3RX_SIPERR_STEP1;
             }
@@ -1101,6 +1163,7 @@ static void     vd_s_Gvif3SipFailTask(void)
             u1_s_gvif3siperr_step = (U1)GVIF3RX_SIPERR_STEP1;
             break;
     }
+    return(u1_t_return);
 }
 
 /*===================================================================================================================================*/
@@ -1118,20 +1181,20 @@ static void     vd_s_Gvif3Restart(void)
         u1_s_gvif3rxrestartcnt++;
     }
     
-    if(u1_s_gvif3rxrestartflg == (U1)GVIF3_RESTART_FLGON){
+    if(u1_s_gvif3rxrestartflg == (U1)GVIF3RX_RESTART_FLGON){
         if(u1_t_sts == (U1)TRUE){
             Dio_WriteChannel(GVIF3RX_PORT_CAM_RST, (Dio_LevelType)FALSE);
             u1_s_gvif3rxrestartcnt = (U1)GVIF3RX_CNT_CLR;
         }
-        if(u1_s_gvif3rxrestartcnt >= GVIF3_RESTART_WAIT){
+        if(u1_s_gvif3rxrestartcnt >= (U1)GVIF3RX_RESTART_WAIT){
             Dio_WriteChannel(GVIF3RX_PORT_CAM_RST, (Dio_LevelType)TRUE);
-            vd_g_Gvif3RxInit();
+            vd_s_Gvif3RxReset();
         }
     }
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3LinkChk(void)                                                                                           */
+/*  static U1     u1_s_Gvif3LinkChk(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1151,7 +1214,7 @@ static U1     u1_s_Gvif3LinkChk(void)
     {
         case GVIF3RX_LINK_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_LINKCHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_LINKCHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* 全書込み完了 次状態に遷移 */
                 u1_s_gvif3link_step = (U1)GVIF3RX_LINK_STEP2;
@@ -1159,30 +1222,34 @@ static U1     u1_s_Gvif3LinkChk(void)
             break;
 
         case GVIF3RX_LINK_STEP2:
-            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_LINKCHK[1].u1p_pdu[1] & (U1)GVIF3_RX0_UNCON_MASK;
-            if(u1_t_jdg == (U1)GVIF3_UNCON_IDLE){
+            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_LINKCHK[1].u1p_pdu[1] & (U1)GVIF3RX_RX0_UNCON_MASK;
+            if(u1_t_jdg == (U1)GVIF3RX_UNCON_IDLE){
                 if(u1_s_gvif3rx0unconcnt < (U1)U1_MAX){
                     u1_s_gvif3rx0unconcnt++;
                 }
-                if(u1_s_gvif3rx0unconcnt >= (U1)GVIF3_UNCON_CNT_CNF){
-                    if(u1_s_gvif3rx0unconflg == (U1)GVIF3_UNCON_FLGOFF){
-                        /* ダイレコ Rob①(暫定) */
-                        u1_s_gvif3rx0unconflg = (U1)GVIF3_UNCON_FLGON;
+                if(u1_s_gvif3rx0unconcnt >= (U1)GVIF3RX_UNCON_CNT_CNF){
+                    if(u1_s_gvif3rx0unconflg == (U1)GVIF3RX_UNCON_FLGOFF){
+                        /* ダイレコ Rob① */
+                        vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX, (U1)SYSECDRC_DREC_ID_2, (U1)0x00U, (U1)0x00U);
+                        vd_g_RobCtl_SetRobId((U1)ROBCTL_ROBID_GVIFRX0_ERR);
+                        u1_s_gvif3rx0unconflg = (U1)GVIF3RX_UNCON_FLGON;
                     }
                 }
             }
             else{
                 u1_s_gvif3rx0unconcnt = (U1)GVIF3RX_CNT_CLR;
             }
-            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_LINKCHK[1].u1p_pdu[1] & (U1)GVIF3_RX1_UNCON_MASK;
-            if(u1_t_jdg == (U1)GVIF3_UNCON_IDLE){
+            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_LINKCHK[1].u1p_pdu[1] & (U1)GVIF3RX_RX1_UNCON_MASK;
+            if(u1_t_jdg == (U1)GVIF3RX_UNCON_IDLE){
                 if(u1_s_gvif3rx1unconcnt < (U1)U1_MAX){
                     u1_s_gvif3rx1unconcnt++;
                 }
-                if(u1_s_gvif3rx1unconcnt >= (U1)GVIF3_UNCON_CNT_CNF){
-                    if(u1_s_gvif3rx1unconflg == (U1)GVIF3_UNCON_FLGOFF){
-                        /* ダイレコ Rob②(暫定) */
-                        u1_s_gvif3rx1unconflg = (U1)GVIF3_UNCON_FLGON;
+                if(u1_s_gvif3rx1unconcnt >= (U1)GVIF3RX_UNCON_CNT_CNF){
+                    if(u1_s_gvif3rx1unconflg == (U1)GVIF3RX_UNCON_FLGOFF){
+                        /* ダイレコ Rob② */
+                        vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX, (U1)SYSECDRC_DREC_ID_3, (U1)0x00U, (U1)0x00U);
+                        vd_g_RobCtl_SetRobId((U1)ROBCTL_ROBID_GVIFRX1_ERR);
+                        u1_s_gvif3rx1unconflg = (U1)GVIF3RX_UNCON_FLGON;
                     }
                 }
             }
@@ -1201,7 +1268,7 @@ static U1     u1_s_Gvif3LinkChk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3Error1Chk(void)                                                                                         */
+/*  static U1     u1_s_Gvif3Error1Chk(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1220,7 +1287,7 @@ static U1     u1_s_Gvif3Error1Chk(void)
     {
         case GVIF3RX_ERROR1_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR1CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR1CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* 全書込み完了 次状態に遷移 */
                 u1_s_gvif3error1_step = (U1)GVIF3RX_ERROR1_STEP2;
@@ -1228,14 +1295,18 @@ static U1     u1_s_Gvif3Error1Chk(void)
             break;
 
         case GVIF3RX_ERROR1_STEP2:
-            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_EERROR1CHK[1].u1p_pdu[1] & (U1)GVIF3_ERRORCHK_MASK;
-            if(u1_t_jdg != (U1)GVIF3_ERRORCHK_NON){
-                if(u1_s_gvif3rxerror1chkcnt < (U1)GVIF3_ERROR_MAXLOGCNT){
+            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_EERROR1CHK[1].u1p_pdu[1] & (U1)GVIF3RX_ERRORCHK_MASK;
+            if(u1_t_jdg != (U1)GVIF3RX_ERRORCHK_NON){
+                if(u1_s_gvif3rxerror1chkcnt < (U1)GVIF3RX_ERROR_MAXLOGCNT){
                     /* ダイレコ */
                     u1_s_gvif3rxerror1chkcnt++;
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX,
+                                       (U1)SYSECDRC_DREC_ID_4,
+                                       (U1)u1_s_gvif3rxerror1chkcnt,
+                                       (U1)st_sp_GVIF3RX_REG_EERROR1CHK[1].u1p_pdu[1]);
                 }
             }
-    		u1_t_return = (U1)TRUE;
+            u1_t_return = (U1)TRUE;
             u1_s_gvif3error1_step = (U1)GVIF3RX_ERROR1_STEP1;
             break;
 
@@ -1247,7 +1318,7 @@ static U1     u1_s_Gvif3Error1Chk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3Error2Chk(void)                                                                                         */
+/*  static U1     u1_s_Gvif3Error2Chk(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1266,7 +1337,7 @@ static U1     u1_s_Gvif3Error2Chk(void)
     {
         case GVIF3RX_ERROR2_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR2CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR2CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* 全書込み完了 次状態に遷移 */
                 u1_s_gvif3error2_step = (U1)GVIF3RX_ERROR2_STEP2;
@@ -1274,14 +1345,18 @@ static U1     u1_s_Gvif3Error2Chk(void)
             break;
 
         case GVIF3RX_ERROR2_STEP2:
-            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_EERROR2CHK[1].u1p_pdu[1] & (U1)GVIF3_ERRORCHK_MASK;
-            if(u1_t_jdg != (U1)GVIF3_ERRORCHK_NON){
-                if(u1_s_gvif3rxerror2chkcnt < (U1)GVIF3_ERROR_MAXLOGCNT){
+            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_EERROR2CHK[1].u1p_pdu[1] & (U1)GVIF3RX_ERRORCHK_MASK;
+            if(u1_t_jdg != (U1)GVIF3RX_ERRORCHK_NON){
+                if(u1_s_gvif3rxerror2chkcnt < (U1)GVIF3RX_ERROR_MAXLOGCNT){
                     /* ダイレコ */
                     u1_s_gvif3rxerror2chkcnt++;
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX,
+                                       (U1)SYSECDRC_DREC_ID_5,
+                                       u1_s_gvif3rxerror2chkcnt,
+                                       (U1)st_sp_GVIF3RX_REG_EERROR2CHK[1].u1p_pdu[1]);
                 }
             }
-    		u1_t_return = (U1)TRUE;
+            u1_t_return = (U1)TRUE;
             u1_s_gvif3error2_step = (U1)GVIF3RX_ERROR2_STEP1;
             break;
 
@@ -1293,7 +1368,7 @@ static U1     u1_s_Gvif3Error2Chk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3Error3Chk(void)                                                                                         */
+/*  static U1     u1_s_Gvif3Error3Chk(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1312,7 +1387,7 @@ static U1     u1_s_Gvif3Error3Chk(void)
     {
         case GVIF3RX_ERROR3_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR3CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR3CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* 全書込み完了 次状態に遷移 */
                 u1_s_gvif3error3_step = (U1)GVIF3RX_ERROR3_STEP2;
@@ -1320,14 +1395,18 @@ static U1     u1_s_Gvif3Error3Chk(void)
             break;
 
         case GVIF3RX_ERROR3_STEP2:
-            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_EERROR3CHK[1].u1p_pdu[1] & (U1)GVIF3_ERRORCHK_MASK;
-            if(u1_t_jdg != (U1)GVIF3_ERRORCHK_NON){
-                if(u1_s_gvif3rxerror3chkcnt < (U1)GVIF3_ERROR_MAXLOGCNT){
+            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_EERROR3CHK[1].u1p_pdu[1] & (U1)GVIF3RX_ERRORCHK_MASK;
+            if(u1_t_jdg != (U1)GVIF3RX_ERRORCHK_NON){
+                if(u1_s_gvif3rxerror3chkcnt < (U1)GVIF3RX_ERROR_MAXLOGCNT){
                     /* ダイレコ */
                     u1_s_gvif3rxerror3chkcnt++;
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX,
+                                       (U1)SYSECDRC_DREC_ID_6,
+                                       u1_s_gvif3rxerror3chkcnt,
+                                       (U1)st_sp_GVIF3RX_REG_EERROR3CHK[1].u1p_pdu[1]);
                 }
             }
-    		u1_t_return = (U1)TRUE;
+            u1_t_return = (U1)TRUE;
             u1_s_gvif3error3_step = (U1)GVIF3RX_ERROR3_STEP1;
             break;
 
@@ -1339,7 +1418,7 @@ static U1     u1_s_Gvif3Error3Chk(void)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_Gvif3Error4Chk(void)                                                                                         */
+/*  static U1     u1_s_Gvif3Error4Chk(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -1358,7 +1437,7 @@ static U1     u1_s_Gvif3Error4Chk(void)
     {
         case GVIF3RX_ERROR4_STEP1:
             u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR4CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                                     &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR4CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
             if(u1_t_sts == (U1)TRUE){
                /* 全書込み完了 次状態に遷移 */
                 u1_s_gvif3error4_step = (U1)GVIF3RX_ERROR4_STEP2;
@@ -1366,14 +1445,18 @@ static U1     u1_s_Gvif3Error4Chk(void)
             break;
 
         case GVIF3RX_ERROR4_STEP2:
-            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_EERROR4CHK[1].u1p_pdu[1] & (U1)GVIF3_ERRORCHK_MASK;
-            if(u1_t_jdg != (U1)GVIF3_ERRORCHK_NON){
-                if(u1_s_gvif3rxerror4chkcnt < (U1)GVIF3_ERROR_MAXLOGCNT){
+            u1_t_jdg = (U1)st_sp_GVIF3RX_REG_EERROR4CHK[1].u1p_pdu[1] & (U1)GVIF3RX_ERRORCHK_MASK;
+            if(u1_t_jdg != (U1)GVIF3RX_ERRORCHK_NON){
+                if(u1_s_gvif3rxerror4chkcnt < (U1)GVIF3RX_ERROR_MAXLOGCNT){
                     /* ダイレコ */
                     u1_s_gvif3rxerror4chkcnt++;
+                    vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_GVIFRX,
+                                       (U1)SYSECDRC_DREC_ID_7,
+                                       u1_s_gvif3rxerror4chkcnt,
+                                       (U1)st_sp_GVIF3RX_REG_EERROR4CHK[1].u1p_pdu[1]);
                 }
             }
-    		u1_t_return = (U1)TRUE;
+            u1_t_return = (U1)TRUE;
             u1_s_gvif3error4_step = (U1)GVIF3RX_ERROR4_STEP1;
             break;
 
@@ -1395,8 +1478,9 @@ static U1     u1_s_Gvif3Error5Chk(void)
     U1 u1_t_return;
     U1 u1_t_sts;
 
+    u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR5CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR5CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1414,8 +1498,9 @@ static U1     u1_s_Gvif3Error6Chk(void)
     U1 u1_t_return;
     U1 u1_t_sts;
 
+    u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR6CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR6CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1433,8 +1518,9 @@ static U1     u1_s_Gvif3Error7Chk(void)
     U1 u1_t_return;
     U1 u1_t_sts;
 
+    u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR7CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR7CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1452,8 +1538,9 @@ static U1     u1_s_Gvif3Error8Chk(void)
     U1 u1_t_return;
     U1 u1_t_sts;
 
+    u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR8CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR8CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1471,8 +1558,9 @@ static U1     u1_s_Gvif3Error9Chk(void)
     U1 u1_t_return;
     U1 u1_t_sts;
 
+    u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR9CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR9CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1490,8 +1578,9 @@ static U1     u1_s_Gvif3Error10Chk(void)
     U1 u1_t_return;
     U1 u1_t_sts;
 
+    u1_t_return = (U1)FALSE;
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegRead((uint8)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (uint8)GP_I2C_MA_SLA_2_GVIF_RX,
-                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR10CHK, &u2_s_gvif3rxregset_betwaittime_stub);
+                                            &u4_s_gcif3acktime, st_sp_GVIF3RX_REG_EERROR10CHK, &u2_s_gvif3rxregset_betwaittime_stub, (U1)MCU_I2C_WAIT_NON);
     if(u1_t_sts == (U1)TRUE){
         u1_t_return = (U1)TRUE;
     }
@@ -1510,7 +1599,7 @@ static U1     u1_s_Gvif3Bank0Chg(void)
     U1 u1_t_sts;
     
     u1_t_return = (U1)FALSE;
-	u1_t_sts = (U1)FALSE;
+    u1_t_sts = (U1)FALSE;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (U2)GVIF3RX_OUTSET_WRINUM,
                                            (U1)GP_I2C_MA_SLA_2_GVIF_RX, st_sp_GVIFRX_OUTSET, &u4_s_gcif3acktime,
@@ -1533,7 +1622,7 @@ static U1     u1_s_Gvif3Bank2Chg(void)
     U1 u1_t_sts;
     
     u1_t_return = (U1)FALSE;
-	u1_t_sts = (U1)FALSE;
+    u1_t_sts = (U1)FALSE;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (U2)GVIF3RX_OUTSET_WRINUM,
                                            (U1)GP_I2C_MA_SLA_2_GVIF_RX, st_sp_GVIFRX_OUTSET, &u4_s_gcif3acktime,
@@ -1556,7 +1645,7 @@ static U1     u1_s_Gvif3Bank3Chg(void)
     U1 u1_t_sts;
     
     u1_t_return = (U1)FALSE;
-	u1_t_sts = (U1)FALSE;
+    u1_t_sts = (U1)FALSE;
 
     u1_t_sts = (U1)Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GVIF_RX, &u2_s_gvif3rx_regstep, (U2)GVIF3RX_OUTSET_WRINUM,
                                            (U1)GP_I2C_MA_SLA_2_GVIF_RX, st_sp_GVIFRX_OUTSET, &u4_s_gcif3acktime,
@@ -1565,6 +1654,17 @@ static U1     u1_s_Gvif3Bank3Chg(void)
         u1_t_return = (U1)TRUE;
     }
     return(u1_t_return);
+}
+
+/*===================================================================================================================================*/
+/*  U1     u1_g_Gvif3SipErrorFlgChk(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1     u1_g_Gvif3SipErrorFlgChk(void)
+{
+    return(u1_s_gvif3rxsipfailflg);
 }
 
 /*===================================================================================================================================*/

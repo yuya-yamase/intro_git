@@ -63,8 +63,6 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Batcare/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Battpow/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Battpow/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/DrvInd/config
@@ -138,7 +136,6 @@ ${SS_DIR}/SchdM//scc/scheduler.c
 ${SS_DIR}/SchdM/config/scheduler_cfg.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
-${APP_DIR}/Stub/stub_u2a.c
 
 xspi.c
 xspi_sub.c
@@ -197,7 +194,6 @@ App/MET/IpcApplication/Evc/Mcst/config/mcst_cfg.c
 App/MET/IpcApplication/Evc/Mcst/scc/mcst.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ABG1S01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADU1S07.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVN1S30.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVN1S98.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVNMC08.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_AVNMS31.c
@@ -280,8 +276,6 @@ App/MET/IpcApplication/Hmi/config/hmiputxt_cfg.c
 App/MET/IpcApplication/Hmi/config/hmiputxt_if_cfg.c
 App/MET/IpcApplication/Hmi/config/hmitt_cfg.c
 App/MET/IpcApplication/Hmi/config/hmitt_if_cfg.c
-App/MET/IpcApplication/Hmi/scc/hmiclock.c
-App/MET/IpcApplication/Hmi/scc/hmidate.c
 App/MET/IpcApplication/Hmi/scc/hmidiag.c
 App/MET/IpcApplication/Hmi/scc/hmifuel.c
 App/MET/IpcApplication/Hmi/scc/hmigateway.c
@@ -528,14 +522,6 @@ App/MET/IpcApplication/Vom/Attmp/scc/attmp_cel.c
 App/MET/IpcApplication/Vom/Batcare/scc/batcare.c
 App/MET/IpcApplication/Vom/Battpow/config/battpow_cfg.c
 App/MET/IpcApplication/Vom/Battpow/scc/battpow.c
-App/MET/IpcApplication/Vom/DateSI/config/datesi_cal_cfg.c
-App/MET/IpcApplication/Vom/DateSI/config/datesi_cfg.c
-App/MET/IpcApplication/Vom/DateSI/config/datesi_tim_cfg.c
-App/MET/IpcApplication/Vom/DateSI/scc/datesi_cal.c
-App/MET/IpcApplication/Vom/DateSI/scc/datesi_tim_avn.c
-App/MET/IpcApplication/Vom/DateSI/scc/datesi_tim.c
-App/MET/IpcApplication/Vom/DateSI/scc/datesi_time_zone.c
-App/MET/IpcApplication/Vom/DateSI/scc/datesi.c
 App/MET/IpcApplication/Vom/Dimmer/config/dimmer_cfg.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_daynight.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_usadjbysw.c

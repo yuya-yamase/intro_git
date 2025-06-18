@@ -1,6 +1,6 @@
 #include <Std_Types.h>
 #include <EthSwt_SWIC.h>
-#include <Rte_BswUcfg.h>
+#include <Spi_Ucfg.h>
 #include <Spi.h>
 #include <LIB.h>
 #include "EthSwt_SWIC_Def.h"

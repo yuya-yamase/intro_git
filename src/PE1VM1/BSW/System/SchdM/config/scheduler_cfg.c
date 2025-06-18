@@ -28,7 +28,6 @@
 /*---------------------------------------------------------------------------*/
 /* Application Header                                                        */
 /*---------------------------------------------------------------------------*/
-#include "stub.h"
 #include "xspi.h"
 
 /*---------------------------------------------------------------------------*/
@@ -68,7 +67,6 @@
 #include "tripcom.h"
 #include "tripcom_comtx.h"
 #include "ambtmp.h"
-#include "datesi.h"
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
 #include "rcmmui.h"
@@ -290,7 +288,6 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Non-Platform Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_Stub10msTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -356,7 +353,6 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_TripcomComTxTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_TripcomSmoothingTask,        (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_AmbtmpMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
-    {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_MulmedColorMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MulmedMulfrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
@@ -456,6 +452,9 @@ void    vd_g_SchdlrCfgMainTick(const U4 u4_a_TRGBIT)
     else if(u4_a_TRGBIT != (U4)0U){                 /* SCHDLR_TASKBIT___5MS | SCHDLR_TASKBIT__10MS_A ... etc */
 
         (void)ActivateTask(eMCOS_TASK_Medium);
+    }
+    else{
+        /* do nothing */
     }
 }
 /*===================================================================================================================================*/

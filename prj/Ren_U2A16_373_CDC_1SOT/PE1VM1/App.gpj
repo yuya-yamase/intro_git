@@ -24,9 +24,6 @@
     -I${VEHOPE_DIR}/scc
     -I${LIB_DIR}
 
-    -I${SS_DIR}/SchdM
-    -I${SS_DIR}/SchdM/cfg
-
     -I${APP_DIR}/MET/STUB/config
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config
@@ -142,7 +139,6 @@ ${SS_DIR}/SchdM//scc/scheduler.c
 ${SS_DIR}/SchdM/config/scheduler_cfg.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
-${APP_DIR}/Stub/stub_u2a.c
 
 xspi.c
 xspi_sub.c

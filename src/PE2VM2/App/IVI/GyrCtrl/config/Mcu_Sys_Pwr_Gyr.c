@@ -44,12 +44,10 @@ const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_TEST[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
 
 const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_TEST_RD[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_GRY_WR,    /* Slave Address */
-    (U1)0x3CU    /* Read Address */
+    (U1)0x3CU     /* Write Address */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_READ[MCU_SYS_PWR_GYR_TX_RDSADR_NUM] = {
-    (U1)MCU_SYS_PWR_GYR_SADR_GRY_RD    /* Slave Address */
-};
+U1 u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_READ[MCU_SYS_PWR_GYR_TX_RDSADR_NUM];
 
 const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_WDG[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_GRY_WR,    /* Slave Address */
@@ -68,6 +66,13 @@ const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_MODE_SPD[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = 
     (U1)0x11U,    /* Write Address */
     (U1)0x80U     /* Write Data */
 };
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_MODE_RD[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_GRY_WR,    /* Slave Address */
+    (U1)0x11U     /* Write Address */
+};
+
+U1 u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_MODE_READ[MCU_SYS_PWR_GYR_TX_RDSADR_NUM];
 
 const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN1_BW[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
@@ -129,48 +134,80 @@ const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_DISTEST[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_XLSB[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_XYZ[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
-    (U1)0x12U    /* Read Address */
+    (U1)0x12U     /* Write Address */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[MCU_SYS_PWR_GYR_TX_RDSADR_NUM] = {
-    (U1)MCU_SYS_PWR_GYR_SADR_ACC_RD    /* Slave Address */
+U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_XYZ[MCU_SYS_PWR_GYR_TX_RDSADR_NUM];
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_TEMP[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x22U     /* Write Address */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_XMSB[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_TEMP[MCU_SYS_PWR_GYR_TX_RDSADR_NUM];
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_LSB[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
-    (U1)0x13U    /* Read Address */
+    (U1)0x5BU,    /* Write Address */
+    (U1)0x00U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_YLSB[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_MSB[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
-    (U1)0x14U    /* Read Address */
+    (U1)0x5CU,    /* Write Address */
+    (U1)0x10U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_YMSB[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
-    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
-    (U1)0x15U    /* Read Address */
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_DAT[MCU_SYS_PWR_GYR_TX_BURSTDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,
+    (U1)0x5EU,    /* Write Address   */
+    (U1)0xFFU,    /* Write Data 0x5E */
+    (U1)0x03U     /* Write Data 0x5F */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_ZLSB[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_LSB[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
-    (U1)0x16U    /* Read Address */
+    (U1)0x5BU,    /* Write Address */
+    (U1)0x01U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_ZMSB[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_MSB[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
-    (U1)0x17U    /* Read Address */
+    (U1)0x5CU,    /* Write Address */
+    (U1)0x10U     /* Write Data */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_TEMPLSB[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
-    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
-    (U1)0x22U    /* Read Address */
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_DAT[MCU_SYS_PWR_GYR_TX_BURSTDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,
+    (U1)0x5EU,    /* Write Address   */
+    (U1)0x01U,    /* Write Data 0x5E */
+    (U1)0xE0U     /* Write Data 0x5F */
 };
 
-const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_TEMPMSB[MCU_SYS_PWR_GYR_TX_RDREGADR_NUM] = {
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT2_IO_CONF[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
     (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
-    (U1)0x23U    /* Read Address */
+    (U1)0x54U,    /* Write Address */
+    (U1)0x02U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_LATCH[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x55U,    /* Write Address */
+    (U1)0x01U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT2_MAP[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x57U,    /* Write Address */
+    (U1)0x00U     /* Write Data */
+};
+
+const U1 u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN1_BW_INPRM[MCU_SYS_PWR_GYR_TX_TXDAT_NUM] = {
+    (U1)MCU_SYS_PWR_GYR_SADR_ACC_WR,    /* Slave Address */
+    (U1)0x40U,    /* Write Address */
+    (U1)0xACU     /* Write Data */
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_SETUP[MCU_SYS_PWR_GYR_SETUPTBL_NUM] = {
@@ -223,158 +260,188 @@ const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_MODE_OFF[MCU_SYS_PWR_GYR_WR
     }
 };
 
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_MODE_RD[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_MODE_RD[0],
+        (U4)0x60240002U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_MODE_READ[0],
+        (U4)0x60280002U
+    }
+};
+
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_SEN1_SETUP[MCU_SYS_PWR_GYR_SETUPTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN1_BW[0],
-        (U4)0x70240003U
+        (U4)0x702C0003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN1_RANGE[0],
-        (U4)0x70280003U
+        (U4)0x70300003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_SEN2_SETUP[MCU_SYS_PWR_GYR_SETUPTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN2_BW[0],
-        (U4)0x702C0003U
+        (U4)0x70340003U
     },
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN2_RANGE[0],
-        (U4)0x70300003U
+        (U4)0x70380003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_WDG[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_WDG[0],
-        (U4)0x70340003U
+        (U4)0x703C0003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_MODE_ON[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_MODE_NML[0],
-        (U4)0x70380003U
+        (U4)0x70400003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_MODE_OFF[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_MODE_SPD[0],
-        (U4)0x703C0003U
+        (U4)0x70440003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_PLSTEST[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_PLSTEST[0],
-        (U4)0x70400003U
+        (U4)0x70480003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_MNSTEST[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_MNSTEST[0],
-        (U4)0x70440003U
+        (U4)0x704C0003U
     }
 };
 
 const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_DISTEST[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
     {
         (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_DISTEST[0],
-        (U4)0x70480003U
+        (U4)0x70500003U
     }
 };
 
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_XLSB[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_XYZ[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_XLSB[0],
-        (U4)0x704C0002U
-    },
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[0],
-        (U4)0x70500002U
-    }
-};
-
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_XMSB[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_XMSB[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_XYZ[0],
         (U4)0x70540002U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[0],
-        (U4)0x70580002U
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_XYZ[0],
+        (U4)0x70580007U
     }
 };
 
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_YLSB[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_TEMP[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_YLSB[0],
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_TEMP[0],
         (U4)0x705C0002U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[0],
-        (U4)0x70600002U
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_TEMP[0],
+        (U4)0x70600003U
     }
 };
 
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_YMSB[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_INTSET_ANYMOT_TH[MCU_SYS_PWR_GYR_INTTBL_ANYMOT_NUM] = {
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_YMSB[0],
-        (U4)0x70640002U
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_LSB[0],
+        (U4)0x70640003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[0],
-        (U4)0x70680002U
-    }
-};
-
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_ZLSB[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_ZLSB[0],
-        (U4)0x706C0002U
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_MSB[0],
+        (U4)0x70680003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[0],
-        (U4)0x70700002U
-    }
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_TH_DAT[0],
+        (U4)0x706C0004U
+    },
 };
 
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_ZMSB[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_INTSET_ANYMOT_EN[MCU_SYS_PWR_GYR_INTTBL_ANYMOT_NUM] = {
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_ZMSB[0],
-        (U4)0x70740002U
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_LSB[0],
+        (U4)0x70700003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[0],
-        (U4)0x70780002U
-    }
-};
-
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_TEMPLSB[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
-    {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_TEMPLSB[0],
-        (U4)0x707C0002U
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_MSB[0],
+        (U4)0x70740003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[0],
-        (U4)0x70800002U
-    }
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_ANYMOT_EN_DAT[0],
+        (U4)0x70780004U
+    },
 };
 
-const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_GYR_TEMPMSB[MCU_SYS_PWR_GYR_RDTBL_NUM] = {
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_INTSET_OTH[MCU_SYS_PWR_GYR_INTTBL_OTH_NUM] = {
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_TEMPMSB[0],
-        (U4)0x70840002U
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT2_IO_CONF[0],
+        (U4)0x707C0003U
     },
     {
-        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ[0],
-        (U4)0x70880002U
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT_LATCH[0],
+        (U4)0x70800003U
+    },
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_INT2_MAP[0],
+        (U4)0x70840003U
     }
 };
 
+const ST_GP_I2C_MA_REQ st_sp_MCU_SYS_PWR_GYR_REG_ACC_SEN1_BW_INPRM[MCU_SYS_PWR_GYR_WRTBL_NUM] = {
+    {
+        (U1 *)&u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_SEN1_BW_INPRM[0],
+        (U4)0x70880003U
+    }
+};
+
+/*===================================================================================================================================*/
+/* void            vd_g_GyroSysPwrInit(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_GyroSysPwrInit(void)
+{
+    U4  mcu_cnt;
+    
+    mcu_cnt = (U4)0U;
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_READ[0] = (U1)MCU_SYS_PWR_GYR_SADR_GRY_RD;    /* Slave Address */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_READ[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    /*  データリード用テーブル初期化 */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_MODE_READ[0] = (U1)MCU_SYS_PWR_GYR_SADR_GRY_RD;    /* Slave Address */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_GYR_MODE_READ[1] = (U1)0U;    /* 読出しデータ初期値 */
+
+    /*  データリード用テーブル(BurstRead)初期化 */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_XYZ[0] = (U1)MCU_SYS_PWR_GYR_SADR_ACC_RD;    /* Slave Address */
+    for(mcu_cnt = (U4)1U; mcu_cnt < (U4)7U; mcu_cnt++) {
+        u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_XYZ[mcu_cnt] = (U1)0U;    /* 読出しデータ初期値 */
+    }
+
+    /*  データリード用テーブル(BurstRead)初期化 */
+    u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_TEMP[0] = (U1)MCU_SYS_PWR_GYR_SADR_ACC_RD;    /* Slave Address */
+    for(mcu_cnt = (U4)1U; mcu_cnt < (U4)3U; mcu_cnt++) {
+        u1_sp_MCU_SYS_PWR_GYR_DAT_ACC_READ_TEMP[mcu_cnt] = (U1)0U;    /* 読出しデータ初期値 */
+    }
+
+}
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */

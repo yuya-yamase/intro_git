@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -338,7 +337,9 @@ static U1      u1_s_AlertP_tmntMSTEDG(void)
                                        (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                        u2_s_ALERT_P_TMNT_PD_TO_TRSH_MST) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_msgsts == (U1)0U){
+#if 0   /* BEV BSW provisionally */
             (void)Com_ReceiveSignal(ComConf_ComSignal_MSTART, &u1_t_retval);
+#endif
         }
     }
     else{
@@ -346,7 +347,9 @@ static U1      u1_s_AlertP_tmntMSTEDG(void)
                                        (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                        u2_s_ALERT_P_TMNT_PD_TO_TRSH_BST) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_msgsts == (U1)0U){
+#if 0   /* BEV BSW provisionally */
             (void)Com_ReceiveSignal(ComConf_ComSignal_B_ST, &u1_t_retval);
+#endif
         }
     }
 

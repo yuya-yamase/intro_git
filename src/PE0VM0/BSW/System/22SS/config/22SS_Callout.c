@@ -25,10 +25,6 @@
 #include "rim_ctl.h"
 /* #include "nvmc_mgr.h" */
 
-#include "stub.h"
-
-#include "ExtSigCtrl_Main.h"
-
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -78,9 +74,6 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
-    ExtSigCtrl_Init();
-
-    vd_g_StubBonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -119,9 +112,6 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
-    ExtSigCtrl_Init();
-
-    vd_g_StubRstInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -160,9 +150,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_VehopemdWkupInit();
 
     /* vv User Hook start vv */
-    ExtSigCtrl_Init();
-
-    vd_g_StubWkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/

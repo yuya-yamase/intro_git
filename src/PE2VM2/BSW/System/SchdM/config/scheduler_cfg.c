@@ -28,6 +28,8 @@
 /*---------------------------------------------------------------------------*/
 /* Application Header                                                        */
 /*---------------------------------------------------------------------------*/
+#include "ExtSigCtrl_Main.h"
+
 #include "xspi.h"
 
 /* IVI */
@@ -38,6 +40,11 @@
 #include "IVI_PictCtrl_Main.h"
 #include "IVI_GyrCtrl_Main.h"
 #include "IVI_DspCtrl_Main.h"
+#include "IVI_DrcCtrl_Main.h"
+
+/* ClkCtrl */
+#include "date_clk.h"
+#include "datesi.h"
 
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
@@ -50,6 +57,7 @@
 
 #include "veh_opemd.h"
 #include "gpi2c_ma.h"
+#include "RtcIc_drv.h"
 
 #include "rim_ctl.h"
 #include "run_m.h"
@@ -135,13 +143,15 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  10ms A Platform Pre Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {vd_g_DateclkMainTask,              (U4)SCHDLR_TASKBIT__10MS_A  },
+
     {&vd_s_SchdlrCfgWdgTimRestart,      (U4)SCHDLR_TASKBIT__10MS_A  },
 
 //    {&vd_g_XpdiMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
 //    {&vd_g_EsmMStkmMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
 
 //    {&vd_g_FFLvCaptMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
-    {&vd_g_GpI2cMaMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_RtcIc_MainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -159,6 +169,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  1ms Platform Pre Task                                            */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_GpI2cMaMainTask,             (U4)SCHDLR_TASKBIT___1MS    },
     {&vd_g_XspiIviMain1st,              (U4)SCHDLR_TASKBIT___1MS    },
 
     /*-------------------------------------------------------------------*/
@@ -183,12 +194,14 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  5ms Non-Platform Task                                            */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&ExtSigCtrl_MainFunction,          (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  10ms A Non-Platform Task                                         */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_Ivi_DrcCtrl_Main,            (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -201,6 +214,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  20ms A Task                                                      */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

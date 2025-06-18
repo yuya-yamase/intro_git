@@ -22,7 +22,6 @@
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
 #else
-#include "Com_Cfg_STUB.h"
 #include "oxcan_channel_STUB.h"
 #endif
 
@@ -96,7 +95,9 @@ static U4      u4_s_AlertH_batlowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
     u1_t_sgnl     = (U1)0U;
 #ifdef ComConf_ComSignal_SBT_VLWF
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SBT_VLWF, &u1_t_sgnl);
+#endif
 #endif /* ComConf_ComSignal_SBT_VLWF */ /* 840B_CAN */
     u4_t_src_chk  = (U4)u1_t_sgnl;
 

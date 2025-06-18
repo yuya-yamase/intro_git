@@ -23,6 +23,9 @@
     -I${OXCAN_DIR}/libc
     -I${OXCAN_DIR}/scc
 
+    -I${APP_DIR}/IVI/XSPI
+    -I${APP_DIR}/IVI/PictCtrl
+
     -T ${MCAL_DIR}/section.ld
 
 config_U2A16_met/oxcan_cfg.c

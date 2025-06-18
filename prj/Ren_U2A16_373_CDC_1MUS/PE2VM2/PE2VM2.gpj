@@ -52,8 +52,6 @@ primaryTarget=v800_standalone.tgt
     -I${OS_DIR}/config
     -I${EHVM_IF_DIR}/include/ehvm
 
-	-I${APP_DIR}/Stub
-
     -L${ROOT_DIR}/BSW/Aubist/Os/os_lib/release
     -lsc1.sc.notrace.rh850u2a.a
 
@@ -79,6 +77,11 @@ primaryTarget=v800_standalone.tgt
     -DAR_OS_USE_HYPERVISOR
     -DECU_VM2
     -DECU_INTG_LWH_GUEST
+
+    # CompileSW (ProcessingLoad)
+    # Enter the measurement time in milliseconds
+    # Set to 0 to disable. Enable with any positive value (recommended: 10000).
+    -DPROCESSING_LOAD_MEASURE_TIME=0U
 
     -o PE2VM2.elf
 

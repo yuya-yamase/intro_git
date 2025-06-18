@@ -32,7 +32,7 @@
 /*------------------------------------------*/
 /*	有効フレームサイズ						*/
 /*------------------------------------------*/
-#define XSPI_FRAME_SIZE			(5624UL)
+#define XSPI_FRAME_SIZE			(1060UL)
 
 /*----------------------------------------------*/
 /*	送受信データバッファ方式					*/
@@ -47,8 +47,8 @@
 /*	リングバッファ用バッファページ数		*/
 /*------------------------------------------*/
 #if ( XSPI_DATA_BUFFER == XSPI_DATA_BUFFER_RING )
-#define XSPI_RCV_PAGE			(3)		/* 送信バッファページ数 */
-#define XSPI_SND_PAGE			(3)		/* 受信バッファページ数 */
+#define XSPI_RCV_PAGE			(2)		/* 受信バッファページ数 */
+#define XSPI_SND_PAGE			(2)		/* 送信バッファページ数 */
 #endif
 
 /*----------------------------------------------------------------------*/
@@ -61,5 +61,14 @@
 #define XSPI_DATA_CHECK_FCC		(1)
 #define XSPI_DATA_CHECK_SUM		(2)
 #define XSPI_DATA_CHECK			(XSPI_DATA_CHECK_FCC)		/* データチェックあり（FCC） */
+
+/*----------------------------------------------*/
+/*	通信周期（ms）								*/
+/*	5ms：XSPI_COMM_CYCLE_5ms					*/
+/*	10ms：XSPI_COMM_CYCLE_10ms					*/
+/*----------------------------------------------*/
+#define XSPI_COMM_CYCLE_10ms	(0)
+#define XSPI_COMM_CYCLE_5ms		(1)
+#define XSPI_COMM_CYCLE			(XSPI_COMM_CYCLE_5ms)		/* 通信周期：5ms */
 
 #endif	/* XSPICFG_H */

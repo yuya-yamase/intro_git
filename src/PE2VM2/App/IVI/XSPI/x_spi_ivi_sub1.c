@@ -23,6 +23,9 @@
 #include    "x_spi_ivi_sub1_camera.h"
 #include    "x_spi_ivi_sub1_version.h"
 #include    "x_spi_ivi_sub1_diag.h"
+#include    "x_spi_ivi_sub1_clock.h"
+#include    "x_spi_ivi_sub1_hdmi.h"
+#include    "x_spi_ivi_sub1_audio.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -53,6 +56,7 @@
 #define XSPI_IVI_MISC_DISPLAY               (0x36U)
 #define XSPI_IVI_MISC_REPRO                 (0x38U)
 #define XSPI_IVI_MISC_HDMI                  (0x39U)
+#define XSPI_IVI_MISC_AUDIO                 (0x42U)
 
 #define XSPI_IVI_MISC_DATA_SIZE_MAX         (256U)
 #define XSPI_IVI_MISC_DATA_SIZE_OFFSET      (1U)
@@ -95,6 +99,8 @@ void            vd_g_XspiIviSub1Init(void)
     vd_g_XspiIviSub1SystemInit();
     vd_g_XspiIviSub1CameraInit();
     vd_g_XspiIviSub1DiagInit();
+    vd_g_XspiIviSub1ClockInit();
+	vd_g_XspiIviSub1VersionInit();
 }
 
 /*===================================================================================================================================*/
@@ -166,7 +172,7 @@ static void            vd_s_XspiIviSub1MiscAna(const U1 * u1_ap_SUB1_ADD, const 
                 vd_g_XspiIviSub1CameraAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             case XSPI_IVI_MISC_CLOCK:
-            /*シス検 skip*/
+                vd_g_XspiIviSub1ClockAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             case XSPI_IVI_MISC_DISPLAY:
             /*SOCで完結 skip*/
@@ -175,7 +181,10 @@ static void            vd_s_XspiIviSub1MiscAna(const U1 * u1_ap_SUB1_ADD, const 
             /*シス検 skip*/
             break;
             case XSPI_IVI_MISC_HDMI:
-            /*シス検 skip*/
+                vd_g_XspiIviSub1HdmiAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
+            break;
+            case XSPI_IVI_MISC_AUDIO:
+                vd_g_XspiIviSub1AudioAna(&u1_ap_SUB1_ADD[u2_t_data_id + 8U],u2_t_datasize);
             break;
             default:
             break;
@@ -231,6 +240,7 @@ static void            vd_s_XspiIviSub1SendCommandPeriCall(void)
     vd_g_XspiIviSub1PowerMainTask();
     vd_g_XspiIviSub1CameraMainTask();
     vd_g_XspiIviSub1SystemMainTask();
+    vd_g_XspiIviSub1ClcokMainTask();
 
     /*デバイス初期化確認*/
     vd_g_XspiIviSub1DevInitFinish();

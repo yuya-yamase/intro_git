@@ -45,6 +45,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#pragma ghs section rodata=".ICU_RODATA_CONST"
+
 const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
     /* ICU_WK_CFG_MCU_STA_BY_RST (0) */
     {
@@ -351,6 +353,8 @@ const ST_ICU_WK_INVLD       st_gp_ICU_WK_INVLD_GR[ICU_WK_NUM_INVLD_GR] =
     {   (U4)0xff98e210U,    (U4)0x00FFFFFFU     },  /* WUF0_I1 */
     {   (U4)0xff98e330U,    (U4)0x00FFFFFFU     }   /* WUF1_I1 */
 };
+
+#pragma ghs section rodata=default
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
