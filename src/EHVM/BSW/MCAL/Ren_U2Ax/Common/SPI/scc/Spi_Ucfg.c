@@ -63,12 +63,14 @@
 		/* u1CsActiveLevelId:Chip Select Active Level */													\
 		(U1)SPI_UCFG_MODEA_CH##id##_CSACTIVELEVEL,															\
 		/* u1MasterSlave(don't care) */																		\
-		(U1)PIL_SPI_MASTERSLAVE_MASTER																		\
+		(U1)PIL_SPI_MASTERSLAVE_MASTER,																		\
+		/* u1TrgSelDmaDts(don't care) */																	\
+		(U1)PIL_SPI_TGCTL_TRGSEL_DMA																		\
 	},																										\
 	/* u4CoreId */																							\
 	(U4)SPI_UCFG_MODEA_CH##id##_COREID,																		\
 	/* u2DataSize */																						\
-	(U2)SPI_UCFG_MODEA_CH##id##_DATASIZE,																\
+	(U2)SPI_UCFG_MODEA_CH##id##_DATASIZE,																	\
 	/* u1HwChannel */																						\
 	(U1)SPI_UCFG_MODEA_CH##id##_HARDCH																		\
 }
@@ -115,7 +117,9 @@
 		/* u1CsActiveLevelId:Chip Select Active Level */													\
 		(U1)SPI_UCFG_MODEB_CH##id##_CSACTIVELEVEL,															\
 		/* u1MasterSlave(don't care) */																		\
-		(U1)PIL_SPI_MASTERSLAVE_MASTER																		\
+		(U1)PIL_SPI_MASTERSLAVE_MASTER,																		\
+		/* u1TrgSelDmaDts(don't care) */																	\
+		(U1)PIL_SPI_TGCTL_TRGSEL_DMA																		\
 	},																										\
 	/* u4CoreId */																							\
 	(U4)SPI_UCFG_MODEB_CH##id##_COREID,																		\
@@ -174,7 +178,9 @@
 		/* u1CsActiveLevelId:Chip Select Active Level */													\
 		(U1)SPI_UCFG_MODEC_CH##id##_CSACTIVELEVEL,															\
 		/* u1MasterSlave */																					\
-		(U1)SPI_UCFG_MODEC_CH##id##_MASTERSLAVEMODE															\
+		(U1)SPI_UCFG_MODEC_CH##id##_MASTERSLAVEMODE,														\
+		/* u1TrgSelDmaDts */																				\
+		(U1)SPI_UCFG_MODEC_CH##id##_TRGSELDMADTS															\
 	},																										\
 	/* u4CoreId */																							\
 	(U4)SPI_UCFG_MODEC_CH##id##_COREID,																		\
@@ -201,7 +207,7 @@
 	{																										\
 		/* MSPInCTL1レジスタに設定する値 */																	\
 		( (U4)MSPI_CTL1_MSSEL 	* (U4)SPI_UCFG_MODEC_CH##id##_MASTERSLAVEMODE ) 						+	\
-		( (U4)MSPI_CTL1_CSIE	* (U4)MSPI_CTL1_CSIE_RECOGNIZE ) 											+	\
+		( (U4)MSPI_CTL1_CSIE	* (U4)MSPI_CTL1_CSIE_RECOGNIZE ) 										+	\
 		( (U4)MSPI_CTL1_SAMP 	* (U4)MSPI_CTL1_SAMP_STANDARD ) 										+	\
 		( (U4)MSPI_CTL1_CKR 	* (U4)SPI_UCFG_MODEC_CH##id##_SHIFTCLOCKIDLELEVEL ) 					+	\
 		( (U4)MSPI_CTL1_SOLS_0 	* (U4)MSPI_CTL1_SOLS_LOW_HOLD ),											\
@@ -237,7 +243,9 @@
 		/* u1CsActiveLevelId:Chip Select Active Level */													\
 		(U1)SPI_UCFG_MODEC_CH##id##_CSACTIVELEVEL,															\
 		/* u1MasterSlave */																					\
-		(U1)SPI_UCFG_MODEC_CH##id##_MASTERSLAVEMODE															\
+		(U1)SPI_UCFG_MODEC_CH##id##_MASTERSLAVEMODE,														\
+		/* u1TrgSelDmaDts */																				\
+		(U1)SPI_UCFG_MODEC_CH##id##_TRGSELDMADTS															\
 	},																										\
 	/* u4CoreId */																							\
 	(U4)SPI_UCFG_MODEC_CH##id##_COREID,																		\
@@ -334,7 +342,7 @@ static	const	Spi_ModeA_ChannelConfigType	s_cstSpi_UcfgModeAChannelData[SPI_UCFG_
 #else
 static	const	Spi_ModeA_ChannelConfigType	s_cstSpi_UcfgModeAChannelData[1] =
 {
-	{ { (U4)0x00000000U, (U4)0x00000000U, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U1)0x00, (U1)0x00, (U1)0x00 }, (U4)0x00000000U, (U2)0x0000, (U1)0x00 }
+	{ { (U4)0x00000000U, (U4)0x00000000U, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00 }, (U4)0x00000000U, (U2)0x0000, (U1)0x00 }
 };
 #endif
 
@@ -394,7 +402,7 @@ static	const	Spi_ModeB_ChannelConfigType	s_cstSpi_UcfgModeBChannelData[SPI_UCFG_
 #else
 static	const	Spi_ModeB_ChannelConfigType	s_cstSpi_UcfgModeBChannelData[1] =
 {
-	{ { (U4)0x00000000U, (U4)0x00000000U, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U1)0x00, (U1)0x00, (U1)0x00 }, (U4)0x00000000U, (U1)0x00 }
+	{ { (U4)0x00000000U, (U4)0x00000000U, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00 }, (U4)0x00000000U, (U1)0x00 }
 };
 #endif
 #endif
@@ -434,7 +442,7 @@ static	const	Spi_ModeC_ChannelConfigType	s_cstSpi_UcfgModeCChannelData[SPI_UCFG_
 #else
 static	const	Spi_ModeC_ChannelConfigType	s_cstSpi_UcfgModeCChannelData[1] =
 {
-	{ { (U4)0x00000000U, (U4)0x00000000U, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U1)0x00, (U1)0x00, (U1)0x00 }, (U4)0x00000000U, (U4)(RTE_EVT_ID_DUMMY), (U4)0x00000000U, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00 }
+	{ { (U4)0x00000000U, (U4)0x00000000U, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U2)0x0000, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00 }, (U4)0x00000000U, (U4)(0x00000000U), (U4)0x00000000U, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00, (U1)0x00 }
 };
 #endif
 #endif

@@ -79,7 +79,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 {
 #if (__RUN_M_CHK_1ST__ == 1)
     static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
-        &u1_g_oXCANEcuShtdwnOk
+        &u1_g_oXCANShtdwnOk
     };
 
     U1                        u1_t_1st;

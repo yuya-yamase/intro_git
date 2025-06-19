@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_AUBIF_COM_C_MAJOR                  (1U)
-#define OXCAN_AUBIF_COM_C_MINOR                  (3U)
+#define OXCAN_AUBIF_COM_C_MAJOR                  (2U)
+#define OXCAN_AUBIF_COM_C_MINOR                  (0U)
 #define OXCAN_AUBIF_COM_C_PATCH                  (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -22,7 +22,6 @@
 #include "bsw_com_config.h"            /* BSW_COM_TX_MSG_NUM is defined in bsw_com_config.h            */
 
 #include "bsw_com_st.h"                /* bsw_com_stMsgInfoTbl[] is defined in bsw_com_st.h            */
-#include "bsw_cannm_ch_config.h"       /* BSW_CANNM_NM_TYPE_USE(x) is defined in bsw_cannm_ch_config.h */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((OXCAN_E2E_NUM_TRA > 0U) || (OXCAN_E2E_NUM_REC > 0U))
@@ -48,7 +47,8 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_E2E_OFFSET                         (0U)
-#define OXCAN_E2E_MAXDELTACNT                    (3U)
+#define OXCAN_E2E_MAX_DELTA_CNT                  (3U)
+#define OXCAN_E2E_LEN_BYT_TO_BIT                 (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -83,6 +83,83 @@ static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoT
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+#if (BSW_COM_TX_MSG_NUM > 0U)
+
+
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/*  boolean Com_TxIpduCallout( PduIdType PduId, PduInfoType* PduInfoPtr )                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Aubist/cs Type Definitions                                                                                                       */
+/*                  PduIdType:      typedef unsigned short                                                                           */
+/*                  PduInfoType:    refer to following member                                                                        */
+/*                      - SduDataPtr:   unsigned char * SduDataPtr                                                                   */
+/*                      - SduLength:    unsigned short  SduLength                                                                    */
+/*===================================================================================================================================*/
+boolean Com_TxIpduCallout( PduIdType PduId, PduInfoType* PduInfoPtr )
+{
+#if (OXCAN_E2E_NUM_TRA > 0U)
+    vd_s_oXCANAubIfE2ePrepTx(PduId, PduInfoPtr);
+#endif /* #if (OXCAN_E2E_NUM_TRA > 0U) */
+
+#if ((defined(CAN_LPR_H)) && (CAN_LPR_RR_EN_IPDU_TX == 1U))
+    return(u1_g_CANLpRIngIPduTx(PduId, PduInfoPtr));
+#else
+    return((boolean)TRUE);
+#endif /* #if ((defined(CAN_LPR_H)) && (CAN_LPR_RR_EN_IPDU_TX == 1U)) */
+}
+/*===================================================================================================================================*/
+/*  void    Com_CbkTxReq(NetworkHandleType network, PduIdType PduId, Com_TxModeType TxMode)                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Aubist/cs Type Definitions                                                                                                       */
+/*                  NetworkHandleType:  typedef unsigned char                                                                        */
+/*                  PduIdType:          typedef unsigned short                                                                       */
+/*                  Com_TxModeType:     typedef unsigned char                                                                        */
+/*===================================================================================================================================*/
+void    Com_CbkTxReq(NetworkHandleType network, PduIdType PduId, Com_TxModeType TxMode)
+{
+    vd_g_oXCANUsrhkTraReq(network, PduId, TxMode);
+}
+/*===================================================================================================================================*/
+/*  void    Com_CbkTxAck(PduIdType PduId)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Aubist/cs Type Definitions                                                                                                       */
+/*                  PduIdType:          typedef unsigned short                                                                       */
+/*===================================================================================================================================*/
+void    Com_CbkTxAck(PduIdType PduId)
+{
+    vd_g_oXCANUsrhkTraAck(PduId);
+}
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+#endif /* #if (BSW_COM_TX_MSG_NUM > 0U) */
+
+
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+#if (OXCAN_E2E_NUM_REC > 0U)
+
+
+
 /*===================================================================================================================================*/
 /*  boolean Com_RxIpduCallout(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -99,45 +176,9 @@ static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoT
 /*===================================================================================================================================*/
 boolean Com_RxIpduCallout(PduIdType PduId, BswConstR PduInfoType* PduInfoPtr)
 {
-    U1                  u1_t_ok;
-
-    u1_t_ok = u1_g_oXCANMsgOnline(PduId);
-#if (OXCAN_E2E_NUM_REC > 0U)
-    if(u1_t_ok == (U1)TRUE){
-        u1_t_ok = u1_s_oXCANAubIfE2eRxOk(PduId, PduInfoPtr);
-    }
+    return(u1_s_oXCANAubIfE2eRxOk(PduId, PduInfoPtr));
+}
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
-
-    return(u1_t_ok);
-}
-/*===================================================================================================================================*/
-/*  void    Com_CbkTxReq(NetworkHandleType network, PduIdType PduId, Com_TxModeType TxMode)                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Aubist/cs Type Definitions                                                                                                       */
-/*                  NetworkHandleType:  typedef unsigned char                                                                        */
-/*                  PduIdType:          typedef unsigned short                                                                       */
-/*                  Com_TxModeType:     typedef unsigned char                                                                        */
-/*===================================================================================================================================*/
-void    Com_CbkTxReq(NetworkHandleType network, PduIdType PduId, Com_TxModeType TxMode)
-{
-    vd_g_oXCANUsrhkTxConfirm(PduId, network, TxMode);
-}
-/*===================================================================================================================================*/
-/*  void    Com_CbkTxAck(PduIdType PduId)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Aubist/cs Type Definitions                                                                                                       */
-/*                  PduIdType:          typedef unsigned short                                                                       */
-/*===================================================================================================================================*/
-void    Com_CbkTxAck(PduIdType PduId)
-{
-    vd_g_oXCANUsrhkTxAck(PduId);
-}
 /*===================================================================================================================================*/
 /*  void    Com_CbkRxAck(PduIdType PduId)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -149,115 +190,15 @@ void    Com_CbkTxAck(PduIdType PduId)
 /*===================================================================================================================================*/
 void    Com_CbkRxAck(PduIdType PduId)
 {
-    if(PduId < (U2)BSW_COM_MSG_NUM){
-        vd_g_oXCANRxAck(bsw_com_stMsgInfoTbl[PduId].u1Network, PduId);
-    }
+#if (OXCAN_LIB_CFG_EN_RXD == 1U)
+    vd_g_oXCANRxdPduAck((U1)OXCAN_RXD_GR_CAN, PduId);
+#endif /* #if (OXCAN_LIB_CFG_EN_RXD == 1U) */
 
-#if ((defined(BSW_BSWM_CS_CFG_FUNC_CS   )  ) && \
-     (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
-     (BSW_BSWM_CS_CFG_FUNC_CS    == BSW_USE) && \
-     (BSW_BSWM_CS_CFG_FUNC_SECOC == BSW_USE))
+#ifdef OXDOCAN_AUBIF_MA_H
     vd_g_TyDoCANAubIfComKzkRx(PduId);
-#endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && ... */
+#endif /* #ifdef OXDOCAN_AUBIF_MA_H */
 
-    vd_g_oXCANUsrhkRxMsg(PduId);
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-
-
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  boolean Com_CbkPreEventTxReq(PduIdType PduId)                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Aubist/cs Type Definitions                                                                                                       */
-/*                  PduIdType:          typedef unsigned short                                                                       */
-/*                  boolean:            typedef unsigned char                                                                        */
-/*===================================================================================================================================*/
-boolean Com_CbkPreEventTxReq(PduIdType PduId)
-{
-#if (BSW_COM_TX_MSG_NUM > 0U)
-    if(PduId < (U2)BSW_COM_TX_MSG_NUM){
-        vd_g_oXCANNmwkEvtxByCh(bsw_com_stMsgInfoTbl[PduId].u1Network);
-        vd_g_oXCANUsrhkEvtxReqed(PduId);
-    }
-#endif
-
-    return((boolean)TRUE);
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
-
-
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  boolean    Com_CbkCounterErr(PduIdType PduId, Std_ReturnType CheckResult, uint8 ExpectedCounter, uint8 ReceivedCounter)          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Aubist/cs Type Definitions                                                                                                       */
-/*                  PduIdType:          typedef unsigned short                                                                       */
-/*                  Std_ReturnType:     typedef unsigned char                                                                        */
-/*                  uint8:              typedef unsigned char                                                                        */
-/*                  boolean:            typedef unsigned char                                                                        */
-/*===================================================================================================================================*/
-boolean    Com_CbkCounterErr(PduIdType PduId, Std_ReturnType CheckResult, uint8 ExpectedCounter, uint8 ReceivedCounter)
-{
-    U1          u1_t_permission;
-
-    if(CheckResult == COM_FIRST_RX){
-        u1_t_permission = (U1)TRUE;
-    }
-    else{
-        u1_t_permission = u1_g_oXCANUsrhkCntChk(PduId, CheckResult, ExpectedCounter, ReceivedCounter);
-    }
-
-    return(u1_t_permission);
-}
-/*===================================================================================================================================*/
-/*  void    Com_CbkTxTOut(PduIdType PduId)                                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Aubist/cs Type Definitions                                                                                                       */
-/*                  PduIdType:          typedef unsigned short                                                                       */
-/*===================================================================================================================================*/
-void    Com_CbkTxTOut(PduIdType PduId)
-{
-    vd_g_oXCANUsrhkTxTOut(PduId);
-}
-/*===================================================================================================================================*/
-/*  boolean Com_TxIpduCallout( PduIdType PduId, PduInfoType* PduInfoPtr )                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Aubist/cs Type Definitions                                                                                                       */
-/*                  PduIdType:      typedef unsigned short                                                                           */
-/*                  PduInfoType:    refer to following member                                                                        */
-/*                      - SduDataPtr:   unsigned char * SduDataPtr                                                                   */
-/*                      - SduLength:    unsigned short  SduLength                                                                    */
-/*===================================================================================================================================*/
-boolean Com_TxIpduCallout( PduIdType PduId, PduInfoType* PduInfoPtr )
-{
-#if (OXCAN_E2E_NUM_TRA > 0U)
-    vd_s_oXCANAubIfE2ePrepTx(PduId, PduInfoPtr );
-#endif /* #if (OXCAN_E2E_NUM_TRA > 0U) */
-
-    return ((boolean)TRUE);
+    vd_g_oXCANUsrhkRecAck(PduId);
 }
 /*===================================================================================================================================*/
 
@@ -278,7 +219,7 @@ void    vd_g_oXCANAubIfE2eInit(void)
         /* typedef struct {           */
         /*     uint8 Counter;         */
         /* } E2E_P05ProtectStateType; */
-        st_sp_oxcan_e2e_tra[u4_t_lpcnt].Counter = (U1)0;
+        st_sp_oxcan_e2e_tra[u4_t_lpcnt].Counter = (U1)0U;
     }
 #endif /* #if (OXCAN_E2E_NUM_TRA > 0U) */
 
@@ -290,7 +231,7 @@ void    vd_g_oXCANAubIfE2eInit(void)
         /*     uint8                   Counter;  */
         /* } E2E_P05CheckStateType;              */
         st_sp_oxcan_e2e_rec[u4_t_lpcnt].Status  = E2E_P05STATUS_ERROR;
-        st_sp_oxcan_e2e_rec[u4_t_lpcnt].Counter = (U1)0U;
+        st_sp_oxcan_e2e_rec[u4_t_lpcnt].Counter = (U1)U1_MAX;
     }
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
 }
@@ -312,8 +253,18 @@ static inline void    vd_s_oXCANAubIfE2ePrepTx(PduIdType PduId, PduInfoType* Pdu
     U2                           u2_t_offset;
     U1                           u1_t_ok;
 
+    /* ----------------------------------------------------------------------------------------------------- */
+    /* Attention :                                                                                           */
+    /* ----------------------------------------------------------------------------------------------------- */
+    /* To prevent build errors, the check for an unsigned integer being greater than or equal to zero        */
+    /* is omitted when OXCAN_E2E_TRA_MIN is 0.                                                               */
+    /* ----------------------------------------------------------------------------------------------------- */
+#if (OXCAN_E2E_TRA_MIN > 0U)
     if((PduId >= (U2)OXCAN_E2E_TRA_MIN) &&
        (PduId <= (U2)OXCAN_E2E_TRA_MAX)){
+#else
+    if(PduId <= (U2)OXCAN_E2E_TRA_MAX){
+#endif /* #if (OXCAN_E2E_TRA_MIN > 0U) */
  
         u2_t_offset = PduId - (U2)OXCAN_E2E_TRA_MIN;
         u2_t_offset = u2_gp_OXCAN_E2E_TRA_BY_PDU[u2_t_offset];
@@ -321,9 +272,9 @@ static inline void    vd_s_oXCANAubIfE2ePrepTx(PduIdType PduId, PduInfoType* Pdu
 
             u2_t_length              = PduInfoPtr->SduLength;
             st_t_cfg.Offset          = (U2)OXCAN_E2E_OFFSET;
-            st_t_cfg.DataLength      = u2_t_length << 3U;
+            st_t_cfg.DataLength      = u2_t_length << OXCAN_E2E_LEN_BYT_TO_BIT;
             st_t_cfg.DataID          = (U2)Com_GetFrameID(PduId);
-            st_t_cfg.MaxDeltaCounter = (U1)OXCAN_E2E_MAXDELTACNT;
+            st_t_cfg.MaxDeltaCounter = (U1)OXCAN_E2E_MAX_DELTA_CNT;
             (void)E2E_P05Protect(&st_t_cfg, &st_sp_oxcan_e2e_tra[u2_t_offset], PduInfoPtr->SduDataPtr, u2_t_length);
         }
     }
@@ -348,8 +299,19 @@ static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoT
     U1                           u1_t_ok;
 
     u1_t_ok = (U1)TRUE;
+
+    /* ----------------------------------------------------------------------------------------------------- */
+    /* Attention :                                                                                           */
+    /* ----------------------------------------------------------------------------------------------------- */
+    /* To prevent build errors, the check for an unsigned integer being greater than or equal to zero        */
+    /* is omitted when OXCAN_E2E_REC_MIN is 0.                                                               */
+    /* ----------------------------------------------------------------------------------------------------- */
+#if (OXCAN_E2E_REC_MIN > 0U)
     if((PduId >= (U2)OXCAN_E2E_REC_MIN) &&
        (PduId <= (U2)OXCAN_E2E_REC_MAX)){
+#else
+    if(PduId <= (U2)OXCAN_E2E_REC_MAX){
+#endif /* #if (OXCAN_E2E_REC_MIN > 0U) */
 
         u2_t_offset = PduId - (U2)OXCAN_E2E_REC_MIN;
         u2_t_offset = u2_gp_OXCAN_E2E_REC_BY_PDU[u2_t_offset];
@@ -357,9 +319,9 @@ static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoT
 
             u2_t_length              = PduInfoPtr->SduLength;
             st_t_cfg.Offset          = (U2)OXCAN_E2E_OFFSET;
-            st_t_cfg.DataLength      = u2_t_length << 3U;
+            st_t_cfg.DataLength      = u2_t_length << OXCAN_E2E_LEN_BYT_TO_BIT;
             st_t_cfg.DataID          = (U2)Com_GetFrameID(PduId);
-            st_t_cfg.MaxDeltaCounter = (U1)OXCAN_E2E_MAXDELTACNT;
+            st_t_cfg.MaxDeltaCounter = (U1)OXCAN_E2E_MAX_DELTA_CNT;
 
             /* #define E2E_P05STATUS_OK                (E2E_P05CheckStatusType)(0x00U) */
             /* #define E2E_P05STATUS_NONEWDATA         (E2E_P05CheckStatusType)(0x01U) */
@@ -389,7 +351,7 @@ static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoT
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.3.0    12/20/2024  TN       oxcan_aubif.c was divided by Aubist/Com component.                                                 */
+/*  2.0.0     2/21/2025  TN       oxcan_aubif.c v1.2.0 -> v2.0.0 was redesigned for Toyota BEVStep3.                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*                                                                                                                                   */

@@ -1,0 +1,23 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${OXSEC_DIR}
+
+    -I${CAN_DIR}/BswM_CS/cfg
+
+    -I${SEC_DIR}/Crypto_82_Hsm/inc
+    -I${SEC_DIR}/Crypto_82_Hsm/cfg
+    -I${SEC_DIR}/Crypto_82_Hsm/usr
+    -I${SEC_DIR}/CycurHSM/ecy_hsm/CSAI/api
+    -I${SEC_DIR}/CycurHSM/ecy_hsm/Host_Applet/api
+    -I${SEC_DIR}/CycurHSM/ecy_hsm/Host_Proxy/api
+    -I${SEC_DIR}/CycurHSM/ecy_hsm_RH850_GHS_D7_DM/api
+
+    -I${OXSEC_DIR}/config
+    -I${OXSEC_DIR}/scc
+
+config/oxsec_cfg.c
+
+scc/Csm_Callout_User.c
+scc/oxsec.c
+scc/oxsec_rh850u2a.c
+scc/SecOC_Callout_User.c

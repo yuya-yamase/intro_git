@@ -55,8 +55,8 @@ BswConst BswU1 bsw_cannm_y_u1TxData[BSW_CANNM_Y_CAN_CH_NUM][BSW_CANNM_Y_PDU_DATA
 {
     /* Set NM-PDU data by byte */
     { (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU }   /* [0] */
-   ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU }   /* [1] */
-   ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU }   /* [2] */
+   ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU }   /* [1] */
+   ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0x00U, (BswU1)0x00U, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU, (BswU1)0x0FU }   /* [2] */
    ,{ (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU, (BswU1)0xFFU }   /* [3] */
 };
 
@@ -72,7 +72,7 @@ BswConst BswU1 bsw_cannm_y_u1TxData[BSW_CANNM_Y_CAN_CH_NUM][BSW_CANNM_Y_PDU_DATA
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

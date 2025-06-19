@@ -20,6 +20,10 @@
                   <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Dio/Dio/DioGeneral/DioPackage</DEFINITION-REF>
                   <VALUE>DIO_U2A16_373</VALUE>
                 </ECUC-TEXTUAL-PARAM-VALUE>
+                <ECUC-NUMERICAL-PARAM-VALUE>
+                  <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Dio/Dio/DioGeneral/DioProtectionControl</DEFINITION-REF>
+                  <VALUE>false</VALUE>
+                </ECUC-NUMERICAL-PARAM-VALUE>
               </PARAMETER-VALUES>
             </ECUC-CONTAINER-VALUE>
             <ECUC-CONTAINER-VALUE>
@@ -29,30 +33,6 @@
                 <ECUC-CONTAINER-VALUE>
                   <SHORT-NAME>NewDioPort0</SHORT-NAME>
                   <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Dio/Dio/DioConfig/DioPort</DEFINITION-REF>
-                  <SUB-CONTAINERS>
-                    <ECUC-CONTAINER-VALUE>
-                      <SHORT-NAME>NewDioChannelGroup0</SHORT-NAME>
-                      <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Dio/Dio/DioConfig/DioPort/DioChannelGroup</DEFINITION-REF>
-                      <PARAMETER-VALUES>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Dio/Dio/DioConfig/DioPort/DioChannelGroup/DioPortId</DEFINITION-REF>
-                          <VALUE>DIO_ID_PORT0</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/Dio/Dio/DioConfig/DioPort/DioChannelGroup/DioChannelGroupIdentification</DEFINITION-REF>
-                          <VALUE>DIO_CFG_CH_GRP_ARRAY</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-TEXTUAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Dio/Dio/DioConfig/DioPort/DioChannelGroup/DioPortMask</DEFINITION-REF>
-                          <VALUE>DIO_CH_GRP_MASK_16_0</VALUE>
-                        </ECUC-TEXTUAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Dio/Dio/DioConfig/DioPort/DioChannelGroup/DioPortOffset</DEFINITION-REF>
-                          <VALUE>0</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                      </PARAMETER-VALUES>
-                    </ECUC-CONTAINER-VALUE>
-                  </SUB-CONTAINERS>
                 </ECUC-CONTAINER-VALUE>
               </SUB-CONTAINERS>
             </ECUC-CONTAINER-VALUE>

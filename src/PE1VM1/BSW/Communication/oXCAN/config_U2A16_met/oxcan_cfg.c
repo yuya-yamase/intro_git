@@ -1,36 +1,25 @@
-/* 1.4.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Oem eXtention of CAN                                                                                                             */
+/*  OEM eXtention of CAN                                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_CFG_C_MAJOR                 (1U)
-#define OXCAN_CFG_C_MINOR                 (4U)
+#define OXCAN_CFG_C_MAJOR                 (2U)
+#define OXCAN_CFG_C_MINOR                 (0U)
 #define OXCAN_CFG_C_PATCH                 (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxcan_cfg_private.h"
-
 #include "int_handler.h"
-/*#include "icu_drv_wk.h"*/
-/*#include "Port.h"*/
-/* #include "dio_drv.h" */
-
-#include "can_rscf4_cfg.h"  /* CAN_CFG_RX_PROCESSING_x defined in can_rscf4_cfg.h */
-
-#if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U))
-#include "Cdd_Canic.h"
-#endif /* #if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U)) */
-
 #include "veh_opemd.h"
-#include "l3r_test.h"
+/* #include "can_lpr_test.h" */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -73,10 +62,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (defined(PORT_DRV_H) && defined(DIO_DRV_H))
-static void    vd_s_oXCANIocfgchk(void);
-#endif /* #if (defined(PORT_DRV_H) && defined(DIO_DRV_H)) */
-
 static void    vd_s_oXCANCfgEI(void);
 static void    vd_s_oXCANCfgDI(void);
 
@@ -106,38 +91,6 @@ const U4         u4_g_OXCAN_WKSRC_CHK = (BSW_CANIF_CFG_WAKEUPSRC_CTRL0 |
 const U1         u1_gp_OXCAN_CTRLR_BY_CH[BSW_COM_CFG_CHNUM] = {
     (U1)U1_MAX  /* CAN Virtual Channel  =  0 ch. */
 };
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U4         u4_g_OXCAN_SYS_POWER = ((U4)OXCAN_SYS_BAT |
-                                         (U4)OXCAN_SYS_ACC |
-                                         (U4)OXCAN_SYS_IGP |
-                                         (U4)OXCAN_SYS_PBA |
-                                         (U4)OXCAN_SYS_IGR |
-                                         (U4)OXCAN_SYS_NM_0);
-
-/*--------------------------------------------------------------------------------*/
-#if (defined(PORT_DRV_H))
-#define OXCAN_CHKPIN_NUM            (17U)
-
-const U2         u2_gp_OXCAN_CHKPIN[OXCAN_CHKPIN_NUM] = {
-    (U2)PORT_ID_PORT11_PIN1,   /* CAN(G2M-1)-RXD     */
-    (U2)PORT_ID_PORT11_PIN0,   /* CAN(G2M-1)-CLK     */
-    (U2)PORT_ID_PORT2_PIN4,    /* CAN(G2M-2)-DRV-CTX */
-    (U2)PORT_ID_PORT11_PIN3,   /* CAN(G2M-1)-CS      */
-    (U2)PORT_ID_PORT11_PIN2,   /* CAN(G2M-1)-TXD     */
-    (U2)PORT_ID_PORT2_PIN5,    /* CAN(G2M-2)-DRV-CRX */
-    (U2)PORT_ID_PORT11_PIN9,   /* CAN(G2M-2)-RXD     */
-    (U2)PORT_ID_PORT11_PIN8,   /* CAN(G2M-2)-CLK     */
-    (U2)PORT_ID_PORT11_PIN11,  /* CAN(G2M-2)-CS      */
-    (U2)PORT_ID_PORT11_PIN10,  /* CAN(G2M-2)-TXD     */
-    (U2)PORT_ID_APORT2_PIN9,   /* CAN-5V-MONITOR     */
-    (U2)PORT_ID_PORT4_PIN11,   /* CAN(G2M-1)-DRV-CTX */
-    (U2)PORT_ID_PORT4_PIN12,   /* CAN(G2M-1)-DRV-CRX */
-    (U2)PORT_ID_PORT3_PIN5,    /* CAN(G5M)-DRV-CRX   */
-    (U2)PORT_ID_APORT5_PIN2,   /* CAN(G2M-1)-WAKE    */
-    (U2)PORT_ID_PORT3_PIN4,    /* CAN(G5M)-DRV-CTX   */
-    (U2)PORT_ID_APORT5_PIN3    /* CAN(G5M)-STBY      */
-};
-#endif /* #if (defined(PORT_DRV_H)) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -150,7 +103,9 @@ const U2         u2_gp_OXCAN_CHKPIN[OXCAN_CHKPIN_NUM] = {
 /*===================================================================================================================================*/
 void    vd_g_oXCANCfgRstInit(void)
 {
-    vd_g_L3rTestInit();
+#ifdef CAN_LPR_TEST_H
+    vd_g_CANLpRTestInit();
+#endif /* #ifdef CAN_LPR_TEST_H */
     vd_s_oXCANCfgEI();                 /* vd_s_oXCANCfgEI shall be called at end                      */
 }
 /*===================================================================================================================================*/
@@ -161,18 +116,22 @@ void    vd_g_oXCANCfgRstInit(void)
 /*===================================================================================================================================*/
 void    vd_g_oXCANCfgWkupInit(void)
 {
-    vd_g_L3rTestInit();
+#ifdef CAN_LPR_TEST_H
+    vd_g_CANLpRTestInit();
+#endif /* #ifdef CAN_LPR_TEST_H */
     vd_s_oXCANCfgEI();                /* vd_s_oXCANCfgEI shall be called at end                      */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgSysEvhk(const U4 u4_a_SYSBIT_PREV, const U4 u4_a_SYSBIT_NEXT)                                               */
+/*  void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYSBIT_LAST, const U4 u4_a_SYSBIT_NEXT)                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgSysEvhk(const U4 u4_a_SYSBIT_PREV, const U4 u4_a_SYSBIT_NEXT)
+void    vd_g_oXCANCfgVomEvhk(const U4 u4_a_SYSBIT_LAST, const U4 u4_a_SYSBIT_NEXT)
 {
-    vd_g_L3rTestStart();
+#ifdef CAN_LPR_TEST_H
+    vd_g_CANLpRTestLogStart();
+#endif /* #ifdef CAN_LPR_TEST_H */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYSBIT)                                                                               */
@@ -182,15 +141,17 @@ void    vd_g_oXCANCfgSysEvhk(const U4 u4_a_SYSBIT_PREV, const U4 u4_a_SYSBIT_NEX
 /*===================================================================================================================================*/
 void    vd_g_oXCANCfgPreTask(const U4 u4_a_SYSBIT)
 {
-    vd_g_L3rTestMainTask();
+#ifdef CAN_LPR_TEST_H
+    vd_g_CANLpRTestMainTask();
+#endif /* #ifdef CAN_LPR_TEST_H */
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgPostTask(const U1 u4_a_SYSBIT, const U2 u2_a_FATAL)                                                         */
+/*  void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgPostTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
+void    vd_g_oXCANCfgPosTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
 {
     /* ------------------------------------------------------------------------------------------------- */
     /* Attention :                                                                                       */
@@ -200,7 +161,6 @@ void    vd_g_oXCANCfgPostTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
     /*                                                                                                   */
     /* #define OXCAN_FATAL_AUB_GIC                      (0x0001U)             Global Interrupt Control   */
     /* #define OXCAN_FATAL_AUB_COM                      (0x0002U)             Aubist/Com                 */
-    /* #define OXCAN_FATAL_AUB_SEC                      (0x0004U)             Aubist/SecOC, Csm          */
     /*                                                                                                   */
     /* Aubist/CAN : Register Check and/or CAN Controller Initialization Failure                          */
     /* #define OXCAN_FATAL_AUB_CAN_0                    (0x0100U)             CAN Controller 0           */
@@ -208,38 +168,24 @@ void    vd_g_oXCANCfgPostTask(const U4 u4_a_SYSBIT, const U2 u2_a_FATAL)
     /* #define OXCAN_FATAL_AUB_CAN_2                    (0x0400U)             CAN Controller 2           */
     /*                                                                                                   */
     /* ------------------------------------------------------------------------------------------------- */
-#if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U))
-    U4          u4_t_trcvic_no;
-#endif  /* #if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U)) */
-    U2          u2_t_res_run;
+    U2                 u2_t_res_run;
 
-    u2_t_res_run = u2_a_FATAL & ((U2)OXCAN_FATAL_AUB_GIC |
-                                 (U2)OXCAN_FATAL_AUB_COM);
+    u2_t_res_run = u2_a_FATAL & (U2)OXCAN_FATAL_AUB_COM;
     if(u2_t_res_run != (U2)0U){
 /*-------------------------------------------------------------------------------------*/
 /*        vd_g_EcuMTriggerSwReset((U1)ECU_M_SWRST_TYPE_SOFT, (U1)ECU_M_SWRST_BY_OXCAN);*/
 /*-------------------------------------------------------------------------------------*/
     }
 
-#if (defined(PORT_DRV_H))
-    vd_s_oXCANIocfgchk();
-#endif /* #if (defined(PORT_DRV_H)) */
-
-#if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U))
-    for(u4_t_trcvic_no = (U4)0U;u4_t_trcvic_no < (U4)CDD_CANIC_CFG_IC_NUM;u4_t_trcvic_no++){
-        Cdd_Canic_Idle((U1)u4_t_trcvic_no);
-    }
-#endif  /* #if ((OXCAN_IC_TJA1145_USE == 1U) && (OXCAN_IC_TJA1145_REFRESH == 1U)) */
-
     vd_s_oXCANCfgEI();
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANCfgShutdown(void)                                                                                              */
+/*  void    vd_g_oXCANCfgShtdwn(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANCfgShutdown(void)
+void    vd_g_oXCANCfgShtdwn(void)
 {
     vd_s_oXCANCfgDI();               /* vd_s_oXCANCfgDI shall be called at 1st                     */
 }
@@ -251,29 +197,90 @@ void    vd_g_oXCANCfgShutdown(void)
 /*===================================================================================================================================*/
 U4      u4_g_oXCANCfgSyschk(void)
 {
-#if ((OXCAN_SYS_ACC  != VEH_OPEMD_MDBIT_ACC ) || \
-     (OXCAN_SYS_IGP  != VEH_OPEMD_MDBIT_IG_P) || \
-     (OXCAN_SYS_PBA  != VEH_OPEMD_MDBIT_PBA ) || \
-     (OXCAN_SYS_IGR  != VEH_OPEMD_MDBIT_IG_R) || \
-     (OXCAN_SYS_NM_0 != VEH_OPEMD_EXBIT_NM_0))
+#if ((OXCAN_SYS_ACC != VEH_OPEMD_MDBIT_ACC ) || \
+     (OXCAN_SYS_IGP != VEH_OPEMD_MDBIT_IG_P) || \
+     (OXCAN_SYS_PBA != VEH_OPEMD_MDBIT_PBA ) || \
+     (OXCAN_SYS_IGR != VEH_OPEMD_MDBIT_IG_R))
 #error "oxcan_cfg.c : OXCAN_SYS_XXX shall be equal to VEH_OPEMD_MDBIT_XXX."    
     return((U4)0U);
 #else
-    U4       u4_t_sys_chk;
+    /* #define ComMConf_ComMChannel_CDC_VCAN_BUS                   (0U) */
+    const U1           u1_sp_OXCAN_CFG_PNC[OXCAN_SYS_NUM_PNC] = {
+        (U1)16,
+        (U1)40,
+        (U1)43,
+        (U1)44
+    };
+
+    U4                 u4_t_sys_chk;
+    U4                 u4_t_bit;
+    U4                 u4_t_lpcnt;
+    U1                 u1_t_net_chk;
+    U1                 u1_t_pnc_chk;
 
     u4_t_sys_chk = u4_g_VehopemdMdfield() & ((U4)OXCAN_SYS_ACC |
                                              (U4)OXCAN_SYS_IGP |
                                              (U4)OXCAN_SYS_PBA |
-                                             (U4)OXCAN_SYS_IGR |
-                                             (U4)OXCAN_SYS_NM_0);
-    if(u4_t_sys_chk >= (U4)OXCAN_SYS_NM_0){
-        u4_t_sys_chk |= (U4)OXCAN_SYS_BAT;
-    }
-    else{
-        u4_t_sys_chk  = (U4)0U;
+                                             (U4)OXCAN_SYS_IGR);
+
+    /* #define COMM_NO_COM_NO_PENDING_REQUEST          (BSW_COMM_NO_COM_NO_PENDING_REQUEST)  */
+    /* #define COMM_NO_COM_REQUEST_PENDING             (BSW_COMM_NO_COM_REQUEST_PENDING)     */
+    /* #define COMM_FULL_COM_NETWORK_REQUESTED         (BSW_COMM_FULL_COM_NETWORK_REQUESTED) */
+    /* #define COMM_FULL_COM_READY_SLEEP               (BSW_COMM_FULL_COM_READY_SLEEP)       */
+    /* #define COMM_SILENT_COM                         (BSW_COMM_SILENT_COM)                 */
+    /* #define COMM_INVALID_COM                        (BSW_COMM_INVALID_COM)                */
+    /* #define BSW_COMM_NO_COM_NO_PENDING_REQUEST      (0U)                                  */
+    /* #define BSW_COMM_NO_COM_REQUEST_PENDING         (1U)                                  */
+    /* #define BSW_COMM_FULL_COM_NETWORK_REQUESTED     (2U)                                  */
+    /* #define BSW_COMM_FULL_COM_READY_SLEEP           (3U)                                  */
+    /* #define BSW_COMM_SILENT_COM                     (4U)                                  */
+    /* #define BSW_COMM_INVALID_COM                    (5U)                                  */
+    /*                                                                                       */
+    /* Std_ReturnType ComM_GetState(NetworkHandleType Channel, ComM_StateType* State )       */
+    /*                                                                                       */
+    /* comm/bsw_comm_public.h 446:typedef uint8               Bsw_ComM_StateType;            */
+    /* ComM.h                 369:#define ComM_StateType      Bsw_ComM_StateType             */
+    /* ComStack_Types.h        83:typedef uint8               NetworkHandleType;             */
+    /*                                                                                       */
+    u1_t_net_chk = (U1)BSW_COMM_INVALID_COM;
+    (void)ComM_GetState((U1)0U, &u1_t_net_chk);
+    if((u1_t_net_chk == (U1)COMM_FULL_COM_NETWORK_REQUESTED) ||
+       (u1_t_net_chk == (U1)COMM_FULL_COM_READY_SLEEP      )){
+
+       u4_t_sys_chk |= (U4)OXCAN_SYS_VIR_0;
     }
 
-    return(u4_t_sys_chk);
+    /* #define COMM_PNC_REQUESTED                      (BSW_COMM_PNC_REQUESTED)              */
+    /* #define COMM_PNC_READY_SLEEP                    (BSW_COMM_PNC_READY_SLEEP)            */
+    /* #define COMM_PNC_PREPARE_SLEEP                  (BSW_COMM_PNC_PREPARE_SLEEP)          */
+    /* #define COMM_PNC_NO_COMMUNICATION               (BSW_COMM_PNC_NO_COMMUNICATION)       */
+    /* #define BSW_COMM_PNC_REQUESTED                      (0U)                              */
+    /* #define BSW_COMM_PNC_READY_SLEEP                    (1U)                              */
+    /* #define BSW_COMM_PNC_PREPARE_SLEEP                  (2U)                              */
+    /* #define BSW_COMM_PNC_NO_COMMUNICATION               (3U)                              */
+    /*                                                                                       */
+    /* Std_ReturnType ComM_GetChPncMode( NetworkHandleType Channel, PNCHandleType PNC,       */
+    /*                                                     ComM_PncModeType* RequestedMode ) */
+    /*                                                                                       */
+    /* ComStack_Types.h        55:typedef uint8                PNCHandleType;                */
+    /* comm/bsw_comm_public.h 450:typedef uint8                Bsw_ComM_PncModeType;         */
+    /* ComM.h                 376:#define ComM_PncModeType     Bsw_ComM_PncModeType          */
+    /*                                                                                       */
+    u4_t_bit = (U4)OXCAN_SYS_PNC_16;
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)OXCAN_SYS_NUM_PNC; u4_t_lpcnt++){
+
+        u1_t_pnc_chk = (U1)COMM_PNC_NO_COMMUNICATION;
+        (void)ComM_GetChPncMode((U1)ComMConf_ComMChannel_CDC_VCAN_BUS,
+                                u1_sp_OXCAN_CFG_PNC[u4_t_lpcnt], &u1_t_pnc_chk);
+        if((u1_t_pnc_chk == (U1)COMM_PNC_REQUESTED  ) ||
+           (u1_t_pnc_chk == (U1)COMM_PNC_READY_SLEEP)){
+
+            u4_t_sys_chk |= u4_t_bit;
+        }
+        u4_t_bit <<= 1U;
+    }
+
+    return(u4_t_sys_chk | (U4)OXCAN_SYS_BAT);
 #endif
 }
 /*===================================================================================================================================*/
@@ -420,68 +427,6 @@ static void    vd_s_oXCANCfgDI(void)
     vd_g_IntHndlrIRQCtrlCh((U2)OXCAN_IRQ_CH_TX7, (U1)0U);
 #endif
 }
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-
-
-#if (defined(PORT_H))
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_oXCANIocfgchk(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_oXCANIocfgchk(void)
-{
-    /* ------------------------------------------------------------------------------------------------- */
-    /* NOTE :                                                                                            */
-    /* Depending on ISO26262 requiuremet for ECU, Pin configurations might have to be monitered since    */
-    /* CAN communication can not be recovered automatically if they are corrupted.                       */
-    /* ------------------------------------------------------------------------------------------------- */
-
-    U4          u4_t_pm_chk;
-    U1          u1_t_nw_chk;
-    U1          u1_t_chkpin;
-#ifdef CXPICDD_H
-    U1          u1_t_cxpi_nw_chk;
-    U1          u1_t_cxpi_pm_chk;
-#endif
-
-    u1_t_nw_chk = u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_CAN);
-    if(u1_t_nw_chk == (U1)TRUE){
-        u4_t_pm_chk = (U4)PORT_REGCHK_OK;
-        for(u1_t_chkpin = (U1)0U;u1_t_chkpin < (U1)OXCAN_CHKPIN_NUM;u1_t_chkpin++){
-            u4_t_pm_chk |= (U4)Port_Regchk_Pin(u2_gp_OXCAN_CHKPIN[u1_t_chkpin]);
-        }
-
-        if(u4_t_pm_chk != (U4)PORT_REGCHK_OK){
-#warning "oxcan_cfg.c : DESIGN AND IMPLEMENT AN APPROPIRATE METHOD IF I/O PORT CONFIGURATION SHALL BE RECOVERD."
-        }
-    }
-    
-#ifdef CXPICDD_H
-    u1_t_cxpi_nw_chk = u1_g_oXCANRxEnabled((U1)OXCAN_CH_1_CXPI);
-    if(u1_t_cxpi_nw_chk == (U1)TRUE){
-
-        u1_t_cxpi_pm_chk  = u1_g_Dio_ReadChannel((U2)DIO_CH_CXPI_NSLP) ^ (U1)DIO_LVL_LOW;
-        u1_t_cxpi_pm_chk &= u1_g_Port_PinModeAct((U2)PORT_PIN_MODE_P0_03_RLIN32_RX);
-        u1_t_cxpi_pm_chk &= u1_g_Port_PinModeAct((U2)PORT_PIN_MODE_P0_02_RLIN32_TX);
-        u1_t_cxpi_pm_chk &= u1_g_Port_PinModeAct((U2)PORT_PIN_MODE_P42_9_DO_HI);
-
-        if(u1_t_cxpi_pm_chk != (U1)TRUE){
-#warning "oxcan_cfg.c : DESIGN AND IMPLEMENT AN APPROPIRATE METHOD IF I/O PORT CONFIGURATION SHALL BE RECOVERD."
-        }
-    }
-#endif
-
-}
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-
-
-#endif /* #if (defined(PORT_H) */
-
-
-/* --------------------------------------------------------------------------------------------------------------------------------- */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -490,28 +435,11 @@ static void    vd_s_oXCANIocfgchk(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     2/22/2022  HU       ty19epf_ren_d1x_v220_r009 -> ox25epf_ren_d1x_v100_r000.                                            */
-/*  1.0.1     9/27/2022  TM       oxcan v1.0.0 -> v1.0.1.                                                                            */
-/*  1.0.2    10/14/2022  HU       oxcan v1.0.1 -> v1.0.2.                                                                            */
-/*  1.0.3    10/20/2022  HU       oxcan v1.0.2 -> v1.0.3.                                                                            */
-/*  1.0.4    10/26/2022  HU       oxcan v1.0.3 -> v1.0.4.                                                                            */
-/*  1.1.0    11/29/2022  SY       oxcan v1.0.4 -> v1.1.0.                                                                            */
-/*  1.1.1    12/13/2022  TM       oxcan v1.1.0 -> v1.1.1.                                                                            */
-/*  1.1.2     1/25/2023  TM       oxcan v1.1.1 -> v1.1.2.                                                                            */
-/*  1.1.3     5/10/2023  SY       oxcan v1.1.2 -> v1.1.3.                                                                            */
-/*  1.1.4     6/08/2023  MI       oxcan v1.1.3 -> v1.1.4.                                                                            */
-/*  1.2.0    12/20/2023  TM       oxcan v1.1.4 -> v1.2.0.                                                                            */
-/*  1.2.1     1/31/2024  TI       oxcan v1.2.0 -> v1.2.1.                                                                            */
-/*  1.3.0     2/22/2024  MI       oxcan v1.2.1 -> v1.3.0.                                                                            */
-/*  1.4.0     5/23/2024  HU       oxcan v1.3.0 -> v1.4.0.                                                                            */
+/*  2.0.0     2/25/2025  TN       oxcan v1.4.0 -> v2.0.0.                                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
-/*  * HU   = Hayato Usui, DENSO                                                                                                      */
-/*  * TM   = Takanori Maruyama, DENSO                                                                                                */
-/*  * SY   = Satoshi Yamada, DENSO                                                                                                   */
-/*  * TI   = Tomoko Inuzuka, DENSO                                                                                                   */
-/*  * MI   = Masahiko Izumi, DENSO                                                                                                   */
+/*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

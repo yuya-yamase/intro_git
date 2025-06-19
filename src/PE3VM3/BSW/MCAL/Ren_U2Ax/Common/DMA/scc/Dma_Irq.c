@@ -63553,646 +63553,646 @@
 #define DMA_START_SEC_RODATA_CONST
 #include "Dma_MemMap.h"
 
-static	volatile	const	U1	cu1Dma_Ucfg_ChDataTable[DMA_DTS_MAX_CH] = {
+static	volatile	const	uint8	cu1Dma_Ucfg_ChDataTable[DMA_DTS_MAX_CH] = {
 		#ifdef DMA_HWCH0_CHDATA
-			(U1)DMA_HWCH0_CHDATA,
+			(uint8)DMA_HWCH0_CHDATA,
 		#else
-		    (U1)DMA_DTS_CH_NOUSE,
+		    (uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH1_CHDATA
-			(U1)DMA_HWCH1_CHDATA,
+			(uint8)DMA_HWCH1_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH2_CHDATA
-			(U1)DMA_HWCH2_CHDATA,
+			(uint8)DMA_HWCH2_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH3_CHDATA
-			(U1)DMA_HWCH3_CHDATA,
+			(uint8)DMA_HWCH3_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH4_CHDATA
-			(U1)DMA_HWCH4_CHDATA,
+			(uint8)DMA_HWCH4_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH5_CHDATA
-			(U1)DMA_HWCH5_CHDATA,
+			(uint8)DMA_HWCH5_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH6_CHDATA
-			(U1)DMA_HWCH6_CHDATA,
+			(uint8)DMA_HWCH6_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH7_CHDATA
-			(U1)DMA_HWCH7_CHDATA,
+			(uint8)DMA_HWCH7_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH8_CHDATA
-			(U1)DMA_HWCH8_CHDATA,
+			(uint8)DMA_HWCH8_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH9_CHDATA
-			(U1)DMA_HWCH9_CHDATA,
+			(uint8)DMA_HWCH9_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH10_CHDATA
-			(U1)DMA_HWCH10_CHDATA,
+			(uint8)DMA_HWCH10_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH11_CHDATA
-			(U1)DMA_HWCH11_CHDATA,
+			(uint8)DMA_HWCH11_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH12_CHDATA
-			(U1)DMA_HWCH12_CHDATA,
+			(uint8)DMA_HWCH12_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH13_CHDATA
-			(U1)DMA_HWCH13_CHDATA,
+			(uint8)DMA_HWCH13_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH14_CHDATA
-			(U1)DMA_HWCH14_CHDATA,
+			(uint8)DMA_HWCH14_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH15_CHDATA
-			(U1)DMA_HWCH15_CHDATA,
+			(uint8)DMA_HWCH15_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH16_CHDATA
-			(U1)DMA_HWCH16_CHDATA,
+			(uint8)DMA_HWCH16_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH17_CHDATA
-			(U1)DMA_HWCH17_CHDATA,
+			(uint8)DMA_HWCH17_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH18_CHDATA
-			(U1)DMA_HWCH18_CHDATA,
+			(uint8)DMA_HWCH18_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH19_CHDATA
-			(U1)DMA_HWCH19_CHDATA,
+			(uint8)DMA_HWCH19_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH20_CHDATA
-			(U1)DMA_HWCH20_CHDATA,
+			(uint8)DMA_HWCH20_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH21_CHDATA
-			(U1)DMA_HWCH21_CHDATA,
+			(uint8)DMA_HWCH21_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH22_CHDATA
-			(U1)DMA_HWCH22_CHDATA,
+			(uint8)DMA_HWCH22_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH23_CHDATA
-			(U1)DMA_HWCH23_CHDATA,
+			(uint8)DMA_HWCH23_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH24_CHDATA
-			(U1)DMA_HWCH24_CHDATA,
+			(uint8)DMA_HWCH24_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH25_CHDATA
-			(U1)DMA_HWCH25_CHDATA,
+			(uint8)DMA_HWCH25_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH26_CHDATA
-			(U1)DMA_HWCH26_CHDATA,
+			(uint8)DMA_HWCH26_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH27_CHDATA
-			(U1)DMA_HWCH27_CHDATA,
+			(uint8)DMA_HWCH27_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH28_CHDATA
-			(U1)DMA_HWCH28_CHDATA,
+			(uint8)DMA_HWCH28_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH29_CHDATA
-			(U1)DMA_HWCH29_CHDATA,
+			(uint8)DMA_HWCH29_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH30_CHDATA
-			(U1)DMA_HWCH30_CHDATA,
+			(uint8)DMA_HWCH30_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH31_CHDATA
-		(U1)DMA_HWCH31_CHDATA,
+		(uint8)DMA_HWCH31_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH32_CHDATA
-			(U1)DMA_HWCH32_CHDATA,
+			(uint8)DMA_HWCH32_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH33_CHDATA
-			(U1)DMA_HWCH33_CHDATA,
+			(uint8)DMA_HWCH33_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH34_CHDATA
-			(U1)DMA_HWCH34_CHDATA,
+			(uint8)DMA_HWCH34_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH35_CHDATA
-			(U1)DMA_HWCH35_CHDATA,
+			(uint8)DMA_HWCH35_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH36_CHDATA
-			(U1)DMA_HWCH36_CHDATA,
+			(uint8)DMA_HWCH36_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH37_CHDATA
-			(U1)DMA_HWCH37_CHDATA,
+			(uint8)DMA_HWCH37_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH38_CHDATA
-			(U1)DMA_HWCH38_CHDATA,
+			(uint8)DMA_HWCH38_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH39_CHDATA
-			(U1)DMA_HWCH39_CHDATA,
+			(uint8)DMA_HWCH39_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH40_CHDATA
-			(U1)DMA_HWCH40_CHDATA,
+			(uint8)DMA_HWCH40_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH41_CHDATA
-			(U1)DMA_HWCH41_CHDATA,
+			(uint8)DMA_HWCH41_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH42_CHDATA
-			(U1)DMA_HWCH42_CHDATA,
+			(uint8)DMA_HWCH42_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH43_CHDATA
-			(U1)DMA_HWCH43_CHDATA,
+			(uint8)DMA_HWCH43_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH44_CHDATA
-			(U1)DMA_HWCH44_CHDATA,
+			(uint8)DMA_HWCH44_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH45_CHDATA
-			(U1)DMA_HWCH45_CHDATA,
+			(uint8)DMA_HWCH45_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH46_CHDATA
-			(U1)DMA_HWCH46_CHDATA,
+			(uint8)DMA_HWCH46_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH47_CHDATA
-			(U1)DMA_HWCH47_CHDATA,
+			(uint8)DMA_HWCH47_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH48_CHDATA
-			(U1)DMA_HWCH48_CHDATA,
+			(uint8)DMA_HWCH48_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH49_CHDATA
-			(U1)DMA_HWCH49_CHDATA,
+			(uint8)DMA_HWCH49_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH50_CHDATA
-			(U1)DMA_HWCH50_CHDATA,
+			(uint8)DMA_HWCH50_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH51_CHDATA
-			(U1)DMA_HWCH51_CHDATA,
+			(uint8)DMA_HWCH51_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH52_CHDATA
-			(U1)DMA_HWCH52_CHDATA,
+			(uint8)DMA_HWCH52_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH53_CHDATA
-			(U1)DMA_HWCH53_CHDATA,
+			(uint8)DMA_HWCH53_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH54_CHDATA
-			(U1)DMA_HWCH54_CHDATA,
+			(uint8)DMA_HWCH54_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH55_CHDATA
-			(U1)DMA_HWCH55_CHDATA,
+			(uint8)DMA_HWCH55_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH56_CHDATA
-			(U1)DMA_HWCH56_CHDATA,
+			(uint8)DMA_HWCH56_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH57_CHDATA
-			(U1)DMA_HWCH57_CHDATA,
+			(uint8)DMA_HWCH57_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH58_CHDATA
-			(U1)DMA_HWCH58_CHDATA,
+			(uint8)DMA_HWCH58_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH59_CHDATA
-			(U1)DMA_HWCH59_CHDATA,
+			(uint8)DMA_HWCH59_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH60_CHDATA
-			(U1)DMA_HWCH60_CHDATA,
+			(uint8)DMA_HWCH60_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH61_CHDATA
-			(U1)DMA_HWCH61_CHDATA,
+			(uint8)DMA_HWCH61_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH62_CHDATA
-			(U1)DMA_HWCH62_CHDATA,
+			(uint8)DMA_HWCH62_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH63_CHDATA
-			(U1)DMA_HWCH63_CHDATA,
+			(uint8)DMA_HWCH63_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH64_CHDATA
-			(U1)DMA_HWCH64_CHDATA,
+			(uint8)DMA_HWCH64_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH65_CHDATA
-			(U1)DMA_HWCH65_CHDATA,
+			(uint8)DMA_HWCH65_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH66_CHDATA
-			(U1)DMA_HWCH66_CHDATA,
+			(uint8)DMA_HWCH66_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH67_CHDATA
-			(U1)DMA_HWCH67_CHDATA,
+			(uint8)DMA_HWCH67_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH68_CHDATA
-			(U1)DMA_HWCH68_CHDATA,
+			(uint8)DMA_HWCH68_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH69_CHDATA
-			(U1)DMA_HWCH69_CHDATA,
+			(uint8)DMA_HWCH69_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH70_CHDATA
-			(U1)DMA_HWCH70_CHDATA,
+			(uint8)DMA_HWCH70_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH71_CHDATA
-			(U1)DMA_HWCH71_CHDATA,
+			(uint8)DMA_HWCH71_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH72_CHDATA
-			(U1)DMA_HWCH72_CHDATA,
+			(uint8)DMA_HWCH72_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH73_CHDATA
-			(U1)DMA_HWCH73_CHDATA,
+			(uint8)DMA_HWCH73_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH74_CHDATA
-			(U1)DMA_HWCH74_CHDATA,
+			(uint8)DMA_HWCH74_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH75_CHDATA
-			(U1)DMA_HWCH75_CHDATA,
+			(uint8)DMA_HWCH75_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH76_CHDATA
-			(U1)DMA_HWCH76_CHDATA,
+			(uint8)DMA_HWCH76_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH77_CHDATA
-			(U1)DMA_HWCH77_CHDATA,
+			(uint8)DMA_HWCH77_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH78_CHDATA
-			(U1)DMA_HWCH78_CHDATA,
+			(uint8)DMA_HWCH78_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH79_CHDATA
-			(U1)DMA_HWCH79_CHDATA,
+			(uint8)DMA_HWCH79_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH80_CHDATA
-			(U1)DMA_HWCH80_CHDATA,
+			(uint8)DMA_HWCH80_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH81_CHDATA
-			(U1)DMA_HWCH81_CHDATA,
+			(uint8)DMA_HWCH81_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH82_CHDATA
-			(U1)DMA_HWCH82_CHDATA,
+			(uint8)DMA_HWCH82_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH83_CHDATA
-			(U1)DMA_HWCH83_CHDATA,
+			(uint8)DMA_HWCH83_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH84_CHDATA
-			(U1)DMA_HWCH84_CHDATA,
+			(uint8)DMA_HWCH84_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH85_CHDATA
-			(U1)DMA_HWCH85_CHDATA,
+			(uint8)DMA_HWCH85_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH86_CHDATA
-			(U1)DMA_HWCH86_CHDATA,
+			(uint8)DMA_HWCH86_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH87_CHDATA
-			(U1)DMA_HWCH87_CHDATA,
+			(uint8)DMA_HWCH87_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH88_CHDATA
-			(U1)DMA_HWCH88_CHDATA,
+			(uint8)DMA_HWCH88_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH89_CHDATA
-			(U1)DMA_HWCH89_CHDATA,
+			(uint8)DMA_HWCH89_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH90_CHDATA
-			(U1)DMA_HWCH90_CHDATA,
+			(uint8)DMA_HWCH90_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH91_CHDATA
-			(U1)DMA_HWCH91_CHDATA,
+			(uint8)DMA_HWCH91_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH92_CHDATA
-			(U1)DMA_HWCH92_CHDATA,
+			(uint8)DMA_HWCH92_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH93_CHDATA
-			(U1)DMA_HWCH93_CHDATA,
+			(uint8)DMA_HWCH93_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH94_CHDATA
-			(U1)DMA_HWCH94_CHDATA,
+			(uint8)DMA_HWCH94_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH95_CHDATA
-			(U1)DMA_HWCH95_CHDATA,
+			(uint8)DMA_HWCH95_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH96_CHDATA
-			(U1)DMA_HWCH96_CHDATA,
+			(uint8)DMA_HWCH96_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH97_CHDATA
-			(U1)DMA_HWCH97_CHDATA,
+			(uint8)DMA_HWCH97_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH98_CHDATA
-			(U1)DMA_HWCH98_CHDATA,
+			(uint8)DMA_HWCH98_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH99_CHDATA
-			(U1)DMA_HWCH99_CHDATA,
+			(uint8)DMA_HWCH99_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH100_CHDATA
-			(U1)DMA_HWCH100_CHDATA,
+			(uint8)DMA_HWCH100_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH101_CHDATA
-			(U1)DMA_HWCH101_CHDATA,
+			(uint8)DMA_HWCH101_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH102_CHDATA
-			(U1)DMA_HWCH102_CHDATA,
+			(uint8)DMA_HWCH102_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH103_CHDATA
-			(U1)DMA_HWCH103_CHDATA,
+			(uint8)DMA_HWCH103_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH104_CHDATA
-			(U1)DMA_HWCH104_CHDATA,
+			(uint8)DMA_HWCH104_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH105_CHDATA
-			(U1)DMA_HWCH105_CHDATA,
+			(uint8)DMA_HWCH105_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH106_CHDATA
-			(U1)DMA_HWCH106_CHDATA,
+			(uint8)DMA_HWCH106_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH107_CHDATA
-			(U1)DMA_HWCH107_CHDATA,
+			(uint8)DMA_HWCH107_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH108_CHDATA
-			(U1)DMA_HWCH108_CHDATA,
+			(uint8)DMA_HWCH108_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH109_CHDATA
-		(U1)DMA_HWCH109_CHDATA,
+		(uint8)DMA_HWCH109_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH110_CHDATA
-			(U1)DMA_HWCH110_CHDATA,
+			(uint8)DMA_HWCH110_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH111_CHDATA
-			(U1)DMA_HWCH111_CHDATA,
+			(uint8)DMA_HWCH111_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH112_CHDATA
-			(U1)DMA_HWCH112_CHDATA,
+			(uint8)DMA_HWCH112_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH113_CHDATA
-			(U1)DMA_HWCH113_CHDATA,
+			(uint8)DMA_HWCH113_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH114_CHDATA
-			(U1)DMA_HWCH114_CHDATA,
+			(uint8)DMA_HWCH114_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH115_CHDATA
-			(U1)DMA_HWCH115_CHDATA,
+			(uint8)DMA_HWCH115_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH116_CHDATA
-			(U1)DMA_HWCH116_CHDATA,
+			(uint8)DMA_HWCH116_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH117_CHDATA
-			(U1)DMA_HWCH117_CHDATA,
+			(uint8)DMA_HWCH117_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH118_CHDATA
-			(U1)DMA_HWCH118_CHDATA,
+			(uint8)DMA_HWCH118_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH119_CHDATA
-			(U1)DMA_HWCH119_CHDATA,
+			(uint8)DMA_HWCH119_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH120_CHDATA
-			(U1)DMA_HWCH120_CHDATA,
+			(uint8)DMA_HWCH120_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH121_CHDATA
-			(U1)DMA_HWCH121_CHDATA,
+			(uint8)DMA_HWCH121_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH122_CHDATA
-			(U1)DMA_HWCH122_CHDATA,
+			(uint8)DMA_HWCH122_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH123_CHDATA
-			(U1)DMA_HWCH123_CHDATA,
+			(uint8)DMA_HWCH123_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH124_CHDATA
-			(U1)DMA_HWCH124_CHDATA,
+			(uint8)DMA_HWCH124_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH125_CHDATA
-			(U1)DMA_HWCH125_CHDATA,
+			(uint8)DMA_HWCH125_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH126_CHDATA
-			(U1)DMA_HWCH126_CHDATA,
+			(uint8)DMA_HWCH126_CHDATA,
 		#else
-			(U1)DMA_DTS_CH_NOUSE,
+			(uint8)DMA_DTS_CH_NOUSE,
 		#endif
 		#ifdef DMA_HWCH127_CHDATA
-			(U1)DMA_HWCH127_CHDATA
+			(uint8)DMA_HWCH127_CHDATA
 		#else
-			(U1)DMA_DTS_CH_NOUSE
+			(uint8)DMA_DTS_CH_NOUSE
 		#endif
 };
 
@@ -64210,21 +64210,21 @@ static	volatile	const	U1	cu1Dma_Ucfg_ChDataTable[DMA_DTS_MAX_CH] = {
 /*----------------------------------------------------------------------------------------------*/
 void Dma_INTDTS31TO0( void )
 {
-	U4		t_u4Reg;
-	U1		t_u1DtsChannelID;
-	U1		t_u1ChData;
+	uint32		t_u4Reg;
+	uint8		t_u1DtsChannelID;
+	uint8		t_u1ChData;
 
 	t_u4Reg = Reg_INTIF.unPINT[INTC_PINT_REGNO_TCI0_31].u4Data;
 	Reg_INTIF.unPINTCLR[INTC_PINT_REGNO_TCI0_31].u4Data = t_u4Reg;
 	Bswlib_Sync_Pipeline_4( Reg_INTIF.unPINT[INTC_PINT_REGNO_TCI0_31].u4Data );
 
 	/* Get DTS channel ID from acquired PINT register value */
-	t_u1DtsChannelID = (U1)Bswlib_SearchOneFromRight( t_u4Reg );
+	t_u1DtsChannelID = (uint8)Bswlib_SearchOneFromRight( t_u4Reg );
 
 	/* Reverse logical channel from DTS channel ID */
 	t_u1ChData = cu1Dma_Ucfg_ChDataTable[t_u1DtsChannelID];
 
-	if ( t_u1ChData != (U1)DMA_DTS_CH_NOUSE )
+	if ( t_u1ChData != (uint8)DMA_DTS_CH_NOUSE )
 	{
 		Dma_Interrupt( t_u1ChData );
 	}
@@ -64235,21 +64235,21 @@ void Dma_INTDTS31TO0( void )
 /*----------------------------------------------------------------------------------------------*/
 void Dma_INTDTS63TO32( void )
 {
-	U4		t_u4Reg;
-	U1		t_u1DtsChannelID;
-	U1		t_u1ChData;
+	uint32		t_u4Reg;
+	uint8		t_u1DtsChannelID;
+	uint8		t_u1ChData;
 
 	t_u4Reg = Reg_INTIF.unPINT[INTC_PINT_REGNO_TCI32_63].u4Data;
 	Reg_INTIF.unPINTCLR[INTC_PINT_REGNO_TCI32_63].u4Data = t_u4Reg;
 	Bswlib_Sync_Pipeline_4( Reg_INTIF.unPINT[INTC_PINT_REGNO_TCI32_63].u4Data );
 
 	/* Get DTS channel ID from acquired PINT register value */
-	t_u1DtsChannelID = (U1)( Bswlib_SearchOneFromRight( t_u4Reg ) + (U1)32U );
+	t_u1DtsChannelID = (uint8)( Bswlib_SearchOneFromRight( t_u4Reg ) + (uint8)32U );
 
 	/* Reverse logical channel from DTS channel ID */
 	t_u1ChData = cu1Dma_Ucfg_ChDataTable[t_u1DtsChannelID];
 
-	if ( t_u1ChData != (U1)DMA_DTS_CH_NOUSE )
+	if ( t_u1ChData != (uint8)DMA_DTS_CH_NOUSE )
 	{
 		Dma_Interrupt( t_u1ChData );
 	}
@@ -64260,21 +64260,21 @@ void Dma_INTDTS63TO32( void )
 /*----------------------------------------------------------------------------------------------*/
 void Dma_INTDTS95TO64( void )
 {
-	U4		t_u4Reg;
-	U1		t_u1DtsChannelID;
-	U1		t_u1ChData;
+	uint32		t_u4Reg;
+	uint8		t_u1DtsChannelID;
+	uint8		t_u1ChData;
 
 	t_u4Reg = Reg_INTIF.unPINT[INTC_PINT_REGNO_TCI64_95].u4Data;
 	Reg_INTIF.unPINTCLR[INTC_PINT_REGNO_TCI64_95].u4Data = t_u4Reg;
 	Bswlib_Sync_Pipeline_4( Reg_INTIF.unPINT[INTC_PINT_REGNO_TCI64_95].u4Data );
 
 	/* Get DTS channel ID from acquired PINT register value */
-	t_u1DtsChannelID = (U1)( Bswlib_SearchOneFromRight( t_u4Reg ) + (U1)64U );
+	t_u1DtsChannelID = (uint8)( Bswlib_SearchOneFromRight( t_u4Reg ) + (uint8)64U );
 
 	/* Reverse logical channel from DTS channel ID */
 	t_u1ChData = cu1Dma_Ucfg_ChDataTable[t_u1DtsChannelID];
 
-	if ( t_u1ChData != (U1)DMA_DTS_CH_NOUSE )
+	if ( t_u1ChData != (uint8)DMA_DTS_CH_NOUSE )
 	{
 		Dma_Interrupt( t_u1ChData );
 	}
@@ -64284,21 +64284,21 @@ void Dma_INTDTS95TO64( void )
 /*----------------------------------------------------------------------------------------------*/
 void Dma_INTDTS127TO96( void )
 {
-	U4		t_u4Reg;
-	U1		t_u1DtsChannelID;
-	U1		t_u1ChData;
+	uint32		t_u4Reg;
+	uint8		t_u1DtsChannelID;
+	uint8		t_u1ChData;
 
 	t_u4Reg = Reg_INTIF.unPINT[INTC_PINT_REGNO_TCI96_127].u4Data;
 	Reg_INTIF.unPINTCLR[INTC_PINT_REGNO_TCI96_127].u4Data = t_u4Reg;
 	Bswlib_Sync_Pipeline_4( Reg_INTIF.unPINT[INTC_PINT_REGNO_TCI96_127].u4Data );
 
 	/* Get DTS channel ID from acquired PINT register value */
-	t_u1DtsChannelID = (U1)( Bswlib_SearchOneFromRight( t_u4Reg ) + (U1)96U );
+	t_u1DtsChannelID = (uint8)( Bswlib_SearchOneFromRight( t_u4Reg ) + (uint8)96U );
 
 	/* Reverse logical channel from DTS channel ID */
 	t_u1ChData = cu1Dma_Ucfg_ChDataTable[t_u1DtsChannelID];
 
-	if ( t_u1ChData != (U1)DMA_DTS_CH_NOUSE )
+	if ( t_u1ChData != (uint8)DMA_DTS_CH_NOUSE )
 	{
 		Dma_Interrupt( t_u1ChData );
 	}
@@ -64308,21 +64308,21 @@ void Dma_INTDTS127TO96( void )
 /*----------------------------------------------------------------------------------------------*/
 void Dma_INTDTSCT31TO0( void )
 {
-	U4		t_u4Reg;
-	U1		t_u1DtsChannelID;
-	U1		t_u1ChData;
+	uint32		t_u4Reg;
+	uint8		t_u1DtsChannelID;
+	uint8		t_u1ChData;
 
 	t_u4Reg = Reg_INTIF.unPINT[INTC_PINT_REGNO_CCI0_31].u4Data;
 	Reg_INTIF.unPINTCLR[INTC_PINT_REGNO_CCI0_31].u4Data = t_u4Reg;
 	Bswlib_Sync_Pipeline_4( Reg_INTIF.unPINT[INTC_PINT_REGNO_CCI0_31].u4Data );
 
 	/* Get DTS channel ID from acquired PINT register value */
-	t_u1DtsChannelID = (U1)Bswlib_SearchOneFromRight( t_u4Reg );
+	t_u1DtsChannelID = (uint8)Bswlib_SearchOneFromRight( t_u4Reg );
 
 	/* Reverse logical channel from DTS channel ID */
 	t_u1ChData = cu1Dma_Ucfg_ChDataTable[t_u1DtsChannelID];
 
-	if ( t_u1ChData != (U1)DMA_DTS_CH_NOUSE )
+	if ( t_u1ChData != (uint8)DMA_DTS_CH_NOUSE )
 	{
 		Dma_Interrupt( t_u1ChData );
 	}
@@ -64332,21 +64332,21 @@ void Dma_INTDTSCT31TO0( void )
 /*----------------------------------------------------------------------------------------------*/
 void Dma_INTDTSCT63TO32( void )
 {
-	U4		t_u4Reg;
-	U1		t_u1DtsChannelID;
-	U1		t_u1ChData;
+	uint32		t_u4Reg;
+	uint8		t_u1DtsChannelID;
+	uint8		t_u1ChData;
 
 	t_u4Reg = Reg_INTIF.unPINT[INTC_PINT_REGNO_CCI32_63].u4Data;
 	Reg_INTIF.unPINTCLR[INTC_PINT_REGNO_CCI32_63].u4Data = t_u4Reg;
 	Bswlib_Sync_Pipeline_4( Reg_INTIF.unPINT[INTC_PINT_REGNO_CCI32_63].u4Data );
 
 	/* Get DTS channel ID from acquired PINT register value */
-	t_u1DtsChannelID = (U1)( Bswlib_SearchOneFromRight( t_u4Reg ) + (U1)32U );
+	t_u1DtsChannelID = (uint8)( Bswlib_SearchOneFromRight( t_u4Reg ) + (uint8)32U );
 
 	/* Reverse logical channel from DTS channel ID */
 	t_u1ChData = cu1Dma_Ucfg_ChDataTable[t_u1DtsChannelID];
 
-	if ( t_u1ChData != (U1)DMA_DTS_CH_NOUSE )
+	if ( t_u1ChData != (uint8)DMA_DTS_CH_NOUSE )
 	{
 		Dma_Interrupt( t_u1ChData );
 	}
@@ -64356,21 +64356,21 @@ void Dma_INTDTSCT63TO32( void )
 /*----------------------------------------------------------------------------------------------*/
 void Dma_INTDTSCT95TO64( void )
 {
-	U4		t_u4Reg;
-	U1		t_u1DtsChannelID;
-	U1		t_u1ChData;
+	uint32		t_u4Reg;
+	uint8		t_u1DtsChannelID;
+	uint8		t_u1ChData;
 
 	t_u4Reg = Reg_INTIF.unPINT[INTC_PINT_REGNO_CCI64_95].u4Data;
 	Reg_INTIF.unPINTCLR[INTC_PINT_REGNO_CCI64_95].u4Data = t_u4Reg;
 	Bswlib_Sync_Pipeline_4( Reg_INTIF.unPINT[INTC_PINT_REGNO_CCI64_95].u4Data );
 
 	/* Get DTS channel ID from acquired PINT register value */
-	t_u1DtsChannelID = (U1)( Bswlib_SearchOneFromRight( t_u4Reg ) + (U1)64U );
+	t_u1DtsChannelID = (uint8)( Bswlib_SearchOneFromRight( t_u4Reg ) + (uint8)64U );
 
 	/* Reverse logical channel from DTS channel ID */
 	t_u1ChData = cu1Dma_Ucfg_ChDataTable[t_u1DtsChannelID];
 
-	if ( t_u1ChData != (U1)DMA_DTS_CH_NOUSE )
+	if ( t_u1ChData != (uint8)DMA_DTS_CH_NOUSE )
 	{
 		Dma_Interrupt( t_u1ChData );
 	}
@@ -64380,21 +64380,21 @@ void Dma_INTDTSCT95TO64( void )
 /*----------------------------------------------------------------------------------------------*/
 void Dma_INTDTSCT127TO96( void )
 {
-	U4		t_u4Reg;
-	U1		t_u1DtsChannelID;
-	U1		t_u1ChData;
+	uint32		t_u4Reg;
+	uint8		t_u1DtsChannelID;
+	uint8		t_u1ChData;
 
 	t_u4Reg = Reg_INTIF.unPINT[INTC_PINT_REGNO_CCI96_127].u4Data;
 	Reg_INTIF.unPINTCLR[INTC_PINT_REGNO_CCI96_127].u4Data = t_u4Reg;
 	Bswlib_Sync_Pipeline_4( Reg_INTIF.unPINT[INTC_PINT_REGNO_CCI96_127].u4Data );
 
 	/* Get DTS channel ID from acquired PINT register value */
-	t_u1DtsChannelID = (U1)( Bswlib_SearchOneFromRight( t_u4Reg ) + (U1)96U );
+	t_u1DtsChannelID = (uint8)( Bswlib_SearchOneFromRight( t_u4Reg ) + (uint8)96U );
 
 	/* Reverse logical channel from DTS channel ID */
 	t_u1ChData = cu1Dma_Ucfg_ChDataTable[t_u1DtsChannelID];
 
-	if ( t_u1ChData != (U1)DMA_DTS_CH_NOUSE )
+	if ( t_u1ChData != (uint8)DMA_DTS_CH_NOUSE )
 	{
 		Dma_Interrupt( t_u1ChData );
 	}
@@ -64405,24 +64405,24 @@ void Dma_INTDTSCT127TO96( void )
 void Dma_INTSDMAC0CH0( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[0].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[0].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[0].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[0].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[0].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[0].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[0].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH0_TCI
 		T_INTSDMAC0CH0_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[0].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[0].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[0].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[0].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[0].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[0].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[0].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[0].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[0].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH0_DSCI
 		T_INTSDMAC0CH0_DSCI();
@@ -64436,24 +64436,24 @@ void Dma_INTSDMAC0CH0( void )
 void Dma_INTSDMAC0CH1( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[1].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[1].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[1].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[1].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[1].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[1].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[1].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH1_TCI
 		T_INTSDMAC0CH1_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[1].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[1].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[1].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[1].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[1].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[1].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[1].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[1].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[1].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH1_DSCI
 		T_INTSDMAC0CH1_DSCI();
@@ -64468,24 +64468,24 @@ void Dma_INTSDMAC0CH1( void )
 void Dma_INTSDMAC0CH2( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[2].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[2].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[2].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[2].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[2].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[2].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[2].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH2_TCI
 		T_INTSDMAC0CH2_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[2].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[2].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[2].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[2].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[2].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[2].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[2].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[2].unCHSTA.u4Data  & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[2].unCHSTA.u4Data  & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH2_DSCI
 		T_INTSDMAC0CH2_DSCI();
@@ -64499,24 +64499,24 @@ void Dma_INTSDMAC0CH2( void )
 void Dma_INTSDMAC0CH3( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[3].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[3].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[3].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[3].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[3].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[3].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[3].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH3_TCI
 		T_INTSDMAC0CH3_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[3].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[3].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[3].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[3].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[3].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[3].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[3].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[3].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[3].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH3_DSCI
 		T_INTSDMAC0CH3_DSCI();
@@ -64530,24 +64530,24 @@ void Dma_INTSDMAC0CH3( void )
 void Dma_INTSDMAC0CH4( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[4].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[4].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[4].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[4].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[4].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[4].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[4].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH4_TCI
 		T_INTSDMAC0CH4_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[4].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[4].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[4].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[4].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[4].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[4].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[4].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[4].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[4].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH4_DSCI
 		T_INTSDMAC0CH4_DSCI();
@@ -64561,24 +64561,24 @@ void Dma_INTSDMAC0CH4( void )
 void Dma_INTSDMAC0CH5( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[5].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[5].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[5].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[5].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[5].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[5].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[5].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH5_TCI
 		T_INTSDMAC0CH5_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[5].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[5].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[5].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[5].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[5].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[5].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[5].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[5].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[5].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH5_DSCI
 		T_INTSDMAC0CH5_DSCI();
@@ -64592,24 +64592,24 @@ void Dma_INTSDMAC0CH5( void )
 void Dma_INTSDMAC0CH6( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[6].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[6].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[6].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[6].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[6].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[6].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[6].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH6_TCI
 		T_INTSDMAC0CH6_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[6].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[6].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[6].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[6].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[6].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[6].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[6].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[6].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[6].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH6_DSCI
 		T_INTSDMAC0CH6_DSCI();
@@ -64623,24 +64623,24 @@ void Dma_INTSDMAC0CH6( void )
 void Dma_INTSDMAC0CH7( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[7].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[7].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[7].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[7].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[7].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[7].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[7].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH7_TCI
 		T_INTSDMAC0CH7_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[7].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[7].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[7].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[7].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[7].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[7].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[7].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[7].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[7].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH7_DSCI
 		T_INTSDMAC0CH7_DSCI();
@@ -64654,24 +64654,24 @@ void Dma_INTSDMAC0CH7( void )
 void Dma_INTSDMAC0CH8( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[8].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[8].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[8].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[8].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[8].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[8].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[8].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH8_TCI
 		T_INTSDMAC0CH8_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[8].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[8].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[8].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[8].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[8].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[8].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[8].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[8].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[8].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH8_DSCI
 		T_INTSDMAC0CH8_DSCI();
@@ -64685,24 +64685,24 @@ void Dma_INTSDMAC0CH8( void )
 void Dma_INTSDMAC0CH9( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[9].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[9].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[9].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[9].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[9].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[9].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[9].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH9_TCI
 		T_INTSDMAC0CH9_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[9].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[9].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[9].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[9].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[9].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[9].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[9].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[9].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[9].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH9_DSCI
 		T_INTSDMAC0CH9_DSCI();
@@ -64716,24 +64716,24 @@ void Dma_INTSDMAC0CH9( void )
 void Dma_INTSDMAC0CH10( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[10].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[10].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[10].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[10].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[10].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[10].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[10].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH10_TCI
 		T_INTSDMAC0CH10_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[10].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[10].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[10].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[10].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[10].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[10].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[10].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[10].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[10].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH10_DSCI
 		T_INTSDMAC0CH10_DSCI();
@@ -64747,24 +64747,24 @@ void Dma_INTSDMAC0CH10( void )
 void Dma_INTSDMAC0CH11( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[11].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[11].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[11].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[11].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[11].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[11].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[11].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH11_TCI
 		T_INTSDMAC0CH11_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[11].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[11].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[11].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[11].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[11].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[11].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[11].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[11].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[11].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH11_DSCI
 		T_INTSDMAC0CH11_DSCI();
@@ -64778,24 +64778,24 @@ void Dma_INTSDMAC0CH11( void )
 void Dma_INTSDMAC0CH12( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[12].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[12].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[12].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[12].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[12].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[12].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[12].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH12_TCI
 		T_INTSDMAC0CH12_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[12].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[12].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[12].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[12].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[12].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[12].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[12].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[12].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[12].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH12_DSCI
 		T_INTSDMAC0CH12_DSCI();
@@ -64809,24 +64809,24 @@ void Dma_INTSDMAC0CH12( void )
 void Dma_INTSDMAC0CH13( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[13].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[13].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[13].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[13].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[13].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[13].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[13].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH13_TCI
 		T_INTSDMAC0CH13_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[13].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[13].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[13].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[13].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[13].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[13].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[13].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[13].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[13].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH13_DSCI
 		T_INTSDMAC0CH13_DSCI();
@@ -64840,24 +64840,24 @@ void Dma_INTSDMAC0CH13( void )
 void Dma_INTSDMAC0CH14( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[14].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[14].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[14].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[14].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[14].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[14].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[14].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH14_TCI
 		T_INTSDMAC0CH14_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[14].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[14].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[14].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[14].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[14].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[14].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[14].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[14].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[14].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH14_DSCI
 		T_INTSDMAC0CH14_DSCI();
@@ -64871,24 +64871,24 @@ void Dma_INTSDMAC0CH14( void )
 void Dma_INTSDMAC0CH15( void )
 {
 
-	if ( ( ( Reg_DMAC0.stDMAC_CH[15].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[15].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[15].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[15].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC0.stDMAC_CH[15].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC0.stDMAC_CH[15].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[15].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC0CH15_TCI
 		T_INTSDMAC0CH15_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC0.stDMAC_CH[15].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC0.stDMAC_CH[15].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC0.stDMAC_CH[15].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC0.stDMAC_CH[15].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC0.stDMAC_CH[15].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC0.stDMAC_CH[15].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC0.stDMAC_CH[15].unCHFCR.u4Data );
-		}while( ( Reg_DMAC0.stDMAC_CH[15].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC0.stDMAC_CH[15].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC0CH15_DSCI
 		T_INTSDMAC0CH15_DSCI();
@@ -64902,24 +64902,24 @@ void Dma_INTSDMAC0CH15( void )
 void Dma_INTSDMAC1CH0( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[0].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[0].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[0].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[0].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[0].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[0].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[0].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH0_TCI
 		T_INTSDMAC1CH0_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[0].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[0].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[0].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[0].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[0].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[0].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[0].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[0].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[0].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH0_DSCI
 		T_INTSDMAC1CH0_DSCI();
@@ -64933,24 +64933,24 @@ void Dma_INTSDMAC1CH0( void )
 void Dma_INTSDMAC1CH1( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[1].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[1].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[1].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[1].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[1].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[1].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[1].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH1_TCI
 		T_INTSDMAC1CH1_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[1].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[1].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[1].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[1].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[1].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[1].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[1].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[1].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[1].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH1_DSCI
 		T_INTSDMAC1CH1_DSCI();
@@ -64964,24 +64964,24 @@ void Dma_INTSDMAC1CH1( void )
 void Dma_INTSDMAC1CH2( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[2].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[2].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[2].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[2].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[2].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[2].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[2].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH2_TCI
 		T_INTSDMAC1CH2_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[2].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[2].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[2].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[2].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[2].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[2].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[2].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[2].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[2].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH2_DSCI
 		T_INTSDMAC1CH2_DSCI();
@@ -64995,24 +64995,24 @@ void Dma_INTSDMAC1CH2( void )
 void Dma_INTSDMAC1CH3( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[3].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[3].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[3].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[3].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[3].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[3].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[3].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH3_TCI
 		T_INTSDMAC1CH3_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[3].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[3].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[3].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[3].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[3].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[3].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[3].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[3].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[3].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH3_DSCI
 		T_INTSDMAC1CH3_DSCI();
@@ -65026,24 +65026,24 @@ void Dma_INTSDMAC1CH3( void )
 void Dma_INTSDMAC1CH4( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[4].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[4].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[4].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[4].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[4].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[4].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[4].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH4_TCI
 		T_INTSDMAC1CH4_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[4].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[4].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[4].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[4].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[4].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[4].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[4].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[4].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[4].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH4_DSCI
 		T_INTSDMAC1CH4_DSCI();
@@ -65057,24 +65057,24 @@ void Dma_INTSDMAC1CH4( void )
 void Dma_INTSDMAC1CH5( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[5].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[5].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[5].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[5].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[5].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[5].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[5].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH5_TCI
 		T_INTSDMAC1CH5_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[5].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[5].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[5].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[5].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[5].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[5].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[5].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[5].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[5].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH5_DSCI
 		T_INTSDMAC1CH5_DSCI();
@@ -65088,24 +65088,24 @@ void Dma_INTSDMAC1CH5( void )
 void Dma_INTSDMAC1CH6( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[6].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[6].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[6].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[6].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[6].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[6].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[6].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH6_TCI
 		T_INTSDMAC1CH6_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[6].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[6].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[6].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[6].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[6].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[6].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[6].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[6].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[6].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH6_DSCI
 		T_INTSDMAC1CH6_DSCI();
@@ -65119,24 +65119,24 @@ void Dma_INTSDMAC1CH6( void )
 void Dma_INTSDMAC1CH7( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[7].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[7].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[7].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[7].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[7].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[7].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[7].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH7_TCI
 		T_INTSDMAC1CH7_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[7].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[7].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[7].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[7].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[7].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[7].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[7].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[7].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[7].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH7_DSCI
 		T_INTSDMAC1CH7_DSCI();
@@ -65150,24 +65150,24 @@ void Dma_INTSDMAC1CH7( void )
 void Dma_INTSDMAC1CH8( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[8].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[8].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[8].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[8].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[8].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[8].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[8].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH8_TCI
 		T_INTSDMAC1CH8_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[8].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[8].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[8].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[8].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[8].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[8].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[8].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[8].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[8].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH8_DSCI
 		T_INTSDMAC1CH8_DSCI();
@@ -65181,24 +65181,24 @@ void Dma_INTSDMAC1CH8( void )
 void Dma_INTSDMAC1CH9( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[9].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[9].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[9].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[9].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[9].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[9].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[9].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH9_TCI
 		T_INTSDMAC1CH9_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[9].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[9].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[9].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[9].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[9].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[9].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[9].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[9].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[9].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH9_DSCI
 		T_INTSDMAC1CH9_DSCI();
@@ -65212,24 +65212,24 @@ void Dma_INTSDMAC1CH9( void )
 void Dma_INTSDMAC1CH10( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[10].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[10].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[10].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[10].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[10].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[10].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[10].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH10_TCI
 		T_INTSDMAC1CH10_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[10].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[10].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[10].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[10].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[10].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[10].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[10].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[10].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[10].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH10_DSCI
 		T_INTSDMAC1CH10_DSCI();
@@ -65243,24 +65243,24 @@ void Dma_INTSDMAC1CH10( void )
 void Dma_INTSDMAC1CH11( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[11].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[11].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[11].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[11].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[11].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[11].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[11].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH11_TCI
 		T_INTSDMAC1CH11_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[11].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[11].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[11].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[11].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[11].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[11].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[11].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[11].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[11].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH11_DSCI
 		T_INTSDMAC1CH11_DSCI();
@@ -65274,24 +65274,24 @@ void Dma_INTSDMAC1CH11( void )
 void Dma_INTSDMAC1CH12( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[12].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[12].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[12].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[12].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[12].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[12].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[12].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH12_TCI
 		T_INTSDMAC1CH12_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[12].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[12].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[12].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[12].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[12].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[12].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[12].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[12].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[12].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH12_DSCI
 		T_INTSDMAC1CH12_DSCI();
@@ -65305,24 +65305,24 @@ void Dma_INTSDMAC1CH12( void )
 void Dma_INTSDMAC1CH13( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[13].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[13].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[13].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[13].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[13].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[13].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[13].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH13_TCI
 		T_INTSDMAC1CH13_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[13].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[13].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[13].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[13].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[13].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[13].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[13].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[13].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[13].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH13_DSCI
 		T_INTSDMAC1CH13_DSCI();
@@ -65336,24 +65336,24 @@ void Dma_INTSDMAC1CH13( void )
 void Dma_INTSDMAC1CH14( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[14].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[14].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[14].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[14].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[14].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[14].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[14].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH14_TCI
 		T_INTSDMAC1CH14_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[14].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[14].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[14].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[14].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[14].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[14].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[14].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[14].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[14].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH14_DSCI
 		T_INTSDMAC1CH14_DSCI();
@@ -65367,24 +65367,24 @@ void Dma_INTSDMAC1CH14( void )
 void Dma_INTSDMAC1CH15( void )
 {
 
-	if ( ( ( Reg_DMAC1.stDMAC_CH[15].unCHCR.u2Data & (U2)DMA_CHCR_IE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[15].unCHSTA.u4Data & (U4)DMA_CHSTA_TE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[15].unCHCR.u2Data & (uint16)DMA_CHCR_IE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[15].unCHSTA.u4Data & (uint32)DMA_CHSTA_TE ) != (uint32)0U ) )
 	{
-		Reg_DMAC1.stDMAC_CH[15].unCHFCR.u4Data = (U4)DMA_CHFCR_TEC;
+		Reg_DMAC1.stDMAC_CH[15].unCHFCR.u4Data = (uint32)DMA_CHFCR_TEC;
 		Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[15].unCHFCR.u4Data );
 
  #ifdef T_INTSDMAC1CH15_TCI
 		T_INTSDMAC1CH15_TCI();
  #endif
 	}
-	if ( ( ( Reg_DMAC1.stDMAC_CH[15].unCHCR.u2Data & (U2)DMA_CHCR_DSIE ) != (U2)0U )
-	  && ( ( Reg_DMAC1.stDMAC_CH[15].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U ) )
+	if ( ( ( Reg_DMAC1.stDMAC_CH[15].unCHCR.u2Data & (uint16)DMA_CHCR_DSIE ) != (uint16)0U )
+	  && ( ( Reg_DMAC1.stDMAC_CH[15].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U ) )
 	{
 		/* Continue iterating until DSE interrupt is cleared considering cases where it is not cleared */
 		do{
-			Reg_DMAC1.stDMAC_CH[15].unCHFCR.u4Data = (U4)DMA_CHFCR_DSEC;
+			Reg_DMAC1.stDMAC_CH[15].unCHFCR.u4Data = (uint32)DMA_CHFCR_DSEC;
 			Bswlib_Sync_Pipeline_4( Reg_DMAC1.stDMAC_CH[15].unCHFCR.u4Data );
-		}while( ( Reg_DMAC1.stDMAC_CH[15].unCHSTA.u4Data & (U4)DMA_CHSTA_DSE ) != (U4)0U );
+		}while( ( Reg_DMAC1.stDMAC_CH[15].unCHSTA.u4Data & (uint32)DMA_CHSTA_DSE ) != (uint32)0U );
 
  #ifdef T_INTSDMAC1CH15_DSCI
 		T_INTSDMAC1CH15_DSCI();

@@ -50,6 +50,7 @@ MCAL_GPT_Frt.gpj
 ${CMN_DIR}/MCAL_ICU.gpj
 ${CMN_DIR}/MCAL_MCU.gpj
 ${CMN_DIR}/MCAL_PORT.gpj
+${CMN_DIR}/MCAL_tyPORT.gpj
 #${CMN_DIR}/MCAL_PWM.gpj
 ${CMN_DIR}/MCAL_SPI.gpj
 #${CMN_DIR}/MCAL_WDG.gpj

@@ -63,7 +63,6 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
   /*--- VM Reception(VHRH)    -----------------------------*/
      ( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [0] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [1] */
-  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [2] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [3] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [4] */
@@ -71,6 +70,7 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [6] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [7] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [8] */
+  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [9] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [10] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [11] */
@@ -105,6 +105,15 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [40] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [41] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [42] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [43] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [44] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [45] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [46] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [47] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [48] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [49] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [50] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [51] */
 };
 
 /************************************************/
@@ -115,8 +124,15 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
 {
   /*   CAN ID      , Mask              */
   /*--- VM Reception(VHRH) ------------*/
-     { 0x00000000UL, 0xBFFFF800UL }   /* [0] */
-    ,{ 0x80000000UL, 0x80000000UL }   /* [1] */
+     { 0x40000000UL, 0xFFFFFC00UL }   /* [0] */
+    ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [1] */
+    ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [2] */
+    ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [3] */
+    ,{ 0x98DA1CE0UL, 0xBFFFFFFEUL }   /* [4] */
+    ,{ 0x98DBEFE0UL, 0xBFFFFFFEUL }   /* [5] */
+    ,{ 0x98000000UL, 0xBFFFFC00UL }   /* [6] */
+    ,{ 0x98002000UL, 0xBFFFFE00UL }   /* [7] */
+    ,{ 0x98008000UL, 0xBFFFFF00UL }   /* [8] */
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
 
@@ -131,9 +147,9 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
 BswConst Bsw_VCan_RxNodeTblType bsw_vcan_stRxNodeTbl_VControl0[ BSW_VCAN_CFG_RXNUM_VCONTROL0 ] =
 {
     /* Rx Node Id, Rx Timing, Extend1, Rx MaxNum(Polling), Rx MaxNum(Interrupt), Extend2 */
-    { (BswU4)0x00000004, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)45,    (BswU2)0,     (BswU2)0 }   /* [0] */
-   ,{ (BswU4)0x00000005, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)45,    (BswU2)0,     (BswU2)0 }   /* [1] */
-   ,{ (BswU4)0x00000007, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)45,    (BswU2)0,     (BswU2)0 }   /* [2] */
+    { (BswU4)0x00000004, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)56,    (BswU2)0,     (BswU2)0 }   /* [0] */
+   ,{ (BswU4)0x00000005, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)20,    (BswU2)0,     (BswU2)0 }   /* [1] */
+   ,{ (BswU4)0x00000007, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)20,    (BswU2)0,     (BswU2)0 }   /* [2] */
 };
 #endif /* ( BSW_VCAN_CFG_RXNUM_VCONTROL0 != 0U ) */
 
@@ -291,6 +307,8 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl0[ BSW_VCAN_TX_VMBOXNUM_0 ] =
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [38] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [39] */
    ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [40] */
+   ,(BswU1)(BSW_VCAN_INTERRUPT | BSW_VCAN_KIND_TRANSMIT )   /* [41] */
+   ,(BswU1)(BSW_VCAN_POLLING   | BSW_VCAN_KIND_TRANSMIT )   /* [42] */
 };
 
 #endif /* ( BSW_VCAN_TX_VMBOXNUM_0 != 0U ) */
@@ -427,7 +445,7 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl15[ BSW_VCAN_TX_VMBOXNUM_15 ] =
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

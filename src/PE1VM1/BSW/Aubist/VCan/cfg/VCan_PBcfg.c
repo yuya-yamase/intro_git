@@ -63,9 +63,9 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
   /*--- VM Reception(VHRH)    -----------------------------*/
      ( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [0] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [1] */
-  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [2] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [3] */
+  /*--- VM Transmission(VHTH) -----------------------------*/
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [4] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [5] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [6] */
@@ -84,6 +84,8 @@ BswConst BswU1 bsw_vcan_stVirtualHohTbl[ BSW_VCAN_VHOHNUM ] =
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [19] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [20] */
     ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [21] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [22] */
+    ,( (BswU1)BSW_VCAN_VCONTROLLER0 )   /* [23] */
 };
 
 /************************************************/
@@ -94,8 +96,10 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
 {
   /*   CAN ID      , Mask              */
   /*--- VM Reception(VHRH) ------------*/
-     { 0x00000000UL, 0xBFFFF800UL }   /* [0] */
-    ,{ 0x80000000UL, 0x80000000UL }   /* [1] */
+     { 0x40000000UL, 0xFFFFFC00UL }   /* [0] */
+    ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [1] */
+    ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [2] */
+    ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [3] */
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
 
@@ -110,9 +114,9 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
 BswConst Bsw_VCan_RxNodeTblType bsw_vcan_stRxNodeTbl_VControl0[ BSW_VCAN_CFG_RXNUM_VCONTROL0 ] =
 {
     /* Rx Node Id, Rx Timing, Extend1, Rx MaxNum(Polling), Rx MaxNum(Interrupt), Extend2 */
-    { (BswU4)0x00000004, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)45,    (BswU2)0,     (BswU2)0 }   /* [0] */
-   ,{ (BswU4)0x00000006, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)45,    (BswU2)0,     (BswU2)0 }   /* [1] */
-   ,{ (BswU4)0x00000007, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)45,    (BswU2)0,     (BswU2)0 }   /* [2] */
+    { (BswU4)0x00000004, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)56,    (BswU2)0,     (BswU2)0 }   /* [0] */
+   ,{ (BswU4)0x00000006, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)20,    (BswU2)0,     (BswU2)0 }   /* [1] */
+   ,{ (BswU4)0x00000007, (BswU1)BSW_VCAN_POLLING,   (BswU1)0, (BswU2)20,    (BswU2)0,     (BswU2)0 }   /* [2] */
 };
 #endif /* ( BSW_VCAN_CFG_RXNUM_VCONTROL0 != 0U ) */
 
@@ -385,7 +389,7 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl15[ BSW_VCAN_TX_VMBOXNUM_15 ] =
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

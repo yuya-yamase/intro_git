@@ -180,6 +180,7 @@ SECTIONS {
 
 // MCAL Data
     .DMA_BSS_VAR_NO_INIT         align(4)                  : > .
+    .SPI_BSS_VAR_NO_INIT         align(4)                  : > .
 
 // IOHW Data
     .iohw_ram_top                align(4)                  : > .
@@ -220,7 +221,6 @@ SECTIONS {
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
-    .bss_SHARE_COMPLEX_VEHOPEMD_SYSSTS SHARE_COMPLEX_VEHOPEMD_SYSSTS_ADDR ABS    : > .
 
     .cluster2_share_ramend                                   : > ram_end_cluster2_share 
 

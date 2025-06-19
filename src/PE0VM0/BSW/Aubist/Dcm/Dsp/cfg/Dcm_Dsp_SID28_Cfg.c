@@ -49,7 +49,7 @@ static CONST ( AB_83_ConstV Dcm_Dsp_ComControlAllChType, DCM_CONFIG_DATA ) Dcm_P
     /* Used */          /* ChannelRef */
     { (boolean)TRUE,    (uint8)0x00U   },
     { (boolean)TRUE,    (uint8)0x01U   },
-    { (boolean)TRUE,    (uint8)0x02U   }
+    { (boolean)TRUE,    (uint8)0x03U   }
 };
 
 
@@ -142,7 +142,7 @@ FUNC( Std_ReturnType, DCM_CODE ) Dcm_SID28_Sub03
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 

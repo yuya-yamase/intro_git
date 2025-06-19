@@ -200,7 +200,7 @@ U4		Spi_InterruptTransmit( U1 t_u1ModeBChannelID, U4 t_u4SendData );
 /*					:	  新しいデータを再セットして通信する。									*/
 /*					:	・通信中は同じユニットを使用する他ModeC Channel IDに対する				*/
 /*					:	  本APIの発行禁止														*/
-/*					:	・DMAはDTSは非サポート、DMACのみサポート								*/
+/*					:	・DMAC/DTSの両方をサポート												*/
 /************************************************************************************************/
 ZORN	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstSendData, const Spi_ModeC_DataType* t_pcstReceiveData, U2 t_u2Times );
 
