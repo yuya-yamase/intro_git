@@ -202,11 +202,11 @@ static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_RNG, const U1 u1_a_GEA
         (U1)XSPI_VPTRAN_SFT_N   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_N_ON  */
         (U1)XSPI_VPTRAN_SFT_D   ,        (U1)XSPI_VPTRAN_SFT_DM  ,      /* VPTRAN_RNG_D_ON  */
         (U1)XSPI_VPTRAN_SFT_B   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_B_ON  */
-        (U1)XSPI_VPTRAN_SFT_S   ,        (U1)XSPI_VPTRAN_SFT_SM  ,      /* VPTRAN_RNG_S_ON  */
+        (U1)XSPI_VPTRAN_SFT_SM  ,        (U1)XSPI_VPTRAN_SFT_SM  ,      /* VPTRAN_RNG_S_ON  */
         (U1)XSPI_VPTRAN_SFT_DM  ,        (U1)XSPI_VPTRAN_SFT_DM  ,      /* VPTRAN_RNG_DM_ON */
         (U1)XSPI_VPTRAN_SFT_SM  ,        (U1)XSPI_VPTRAN_SFT_SM  ,      /* VPTRAN_RNG_SM_ON */
         (U1)XSPI_VPTRAN_SFT_MM  ,        (U1)XSPI_VPTRAN_SFT_MM  ,      /* VPTRAN_RNG_MM_ON */
-        (U1)XSPI_VPTRAN_SFT_M   ,        (U1)XSPI_VPTRAN_SFT_MM  ,      /* VPTRAN_RNG_M_ON  */
+        (U1)XSPI_VPTRAN_SFT_MM  ,        (U1)XSPI_VPTRAN_SFT_MM  ,      /* VPTRAN_RNG_M_ON  */
         (U1)XSPI_VPTRAN_SFT_SD  ,        (U1)XSPI_VPTRAN_SFT_OFF        /* VPTRAN_RNG_SD_ON */
     };
 
@@ -305,11 +305,13 @@ static  U1      u1_s_XSpiCfgVptranHideDispJdg(void)
 /*  1.5.0     1/16/2024  GM       19PFv3 Update                                                                                      */
 /*  1.6.0     4/12/2024  GM       Fix a bug (Send Shift Pos Blink Pattern 1 when N Range and Double parking mode)                    */
 /*  1.7.0    10/10/2024  HF       Change config for BEV System_Consideration_1.(MET-D_SFTPOS-CSTD-1-)                                */
+/*  1.8.0     6/ 6/2025  JS       Fix a bug (Change Shift Pos to XSPI_VPTRAN_SFT_S XSPI_VPTRAN_SFT_M when inactive)                  */
 /*                                                                                                                                   */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
 /*  * KK   = Kohei Kato,      Denso Techno                                                                                           */
 /*  * TN   = Tetsu Naruse,    Denso Techno                                                                                           */
 /*  * GM   = Glen Monteposo,  DTPH                                                                                                   */
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
+/*  * JS   = Jun Sugiyama ,KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
