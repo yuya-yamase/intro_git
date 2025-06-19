@@ -3066,6 +3066,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
-/*  * JS   = Jun Sugiyama, KSE                                                                                                     */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
