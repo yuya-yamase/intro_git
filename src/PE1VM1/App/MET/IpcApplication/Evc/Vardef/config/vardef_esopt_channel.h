@@ -281,7 +281,7 @@
 #define VDF_ESO_CH_SW_REAR_WASHER                (250U)
 #define VDF_ESO_CH_SW_SERVICE_POS                (251U)
 #define VDF_ESO_CH_SYS_NOT_USED38                (252U)
-#define VDF_ESO_CH_SYS_NOT_USED39                (253U)
+#define VDF_ESO_CH_SW_WIPER_DEICER               (253U)
 #define VDF_ESO_CH_SOLCHG                        (254U)
 #define VDF_ESO_CH_SW_OBBPWL                     (255U)
 #define VDF_ESO_CH_SYS_NOT_USED42                (256U)
@@ -323,7 +323,7 @@
 #define VDF_ESO_NVM_W4                           (0x507835FEU)
 #define VDF_ESO_NVM_W5                           (0xC030E76CU)
 #define VDF_ESO_NVM_W6                           (0x3F840FFFU)
-#define VDF_ESO_NVM_W7                           (0x8FEFFD40U)
+#define VDF_ESO_NVM_W7                           (0xAFEFFD40U)
 #define VDF_ESO_NVM_W8                           (0x0000001CU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
