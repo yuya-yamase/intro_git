@@ -30,20 +30,20 @@ Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 
     if (dat != NULL_PTR)	{ *dat = 0u; }
     for (idx=0U; idx < cnt ; idx++) {
         switch (((uint16)tbl[idx].regCtrl << 8) | tbl[idx].surveillance) {
-		case ((uint16)REG_CTRL_WRITE << 8) | SURVEILLANCE_ON:	/* リードバック無 */
-		case ((uint16)REG_CTRL_WRITE << 8) | SURVEILLANCE_OFF:
+		case ((uint16)REG_CTRL_WRITE << 8) | SURVEILLANCE_ON:									/* リードバック無 */
+		case ((uint16)REG_CTRL_WRITE << 8) | SURVEILLANCE_OFF:									/* レジスタ書込み */
 			result = swic_Reg_SetTblWriteOFF(tbl, cnt, idx, errFactor);
 			break;
-		case ((uint16)REG_CTRL_READ << 8) | SURVEILLANCE_ON:
+		case ((uint16)REG_CTRL_READ << 8) | SURVEILLANCE_ON:									/* レジスタ読出し(監視あり) */
 			result = swic_Reg_SetTblReadON(tbl, idx, tbl[idx].mask, tbl[idx].value, errFactor);
 			break;
-		case ((uint16)REG_CTRL_READ << 8) | SURVEILLANCE_OFF:
+		case ((uint16)REG_CTRL_READ << 8) | SURVEILLANCE_OFF:									/* レジスタ読出し(監視なし)*/
 			result = swic_Reg_SetTblReadOFF(tbl, cnt, idx, dat, errFactor);
 			break;
-		case ((uint16)REG_CTRL_WRITE_MASK << 8) | SURVEILLANCE_OFF:
+		case ((uint16)REG_CTRL_WRITE_MASK << 8) | SURVEILLANCE_OFF:								/* Write処理(保存した値に対してMASK計算して書き込み) */
 			result = swic_Reg_SetTblWriteMask(tbl, idx, val, errFactor);
 			break;
-		case ((uint16)REG_CTRL_READ_TMP << 8) | SURVEILLANCE_OFF:
+		case ((uint16)REG_CTRL_READ_TMP << 8) | SURVEILLANCE_OFF:								/* READ処理(値保持) */
 			result = swic_Reg_SetTblReadMask(tbl, idx, &val, errFactor);
 			break;
 		default:
@@ -58,7 +58,7 @@ Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetTblWriteOFF(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint32 * const errFactor)
 {
-	Std_ReturnType	result;
+	Std_ReturnType	result = E_OK;
 	uint32			i;
 	Std_ReturnType	checkPwr;
 
@@ -84,7 +84,7 @@ static Std_ReturnType swic_Reg_SetTblWriteOFF(const swic_reg_data_t tbl[], const
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const uint32 idx, const uint16 mask, const uint16 value, uint32 * const errFactor)
 {
-	Std_ReturnType	result;
+	Std_ReturnType	result = E_OK;
 	uint16			val = 0u;
 	uint32			i;
 	uint16			cnt = 0u;
@@ -132,7 +132,7 @@ static Std_ReturnType swic_Reg_SetTblReadON(const swic_reg_data_t tbl[], const u
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const uint32 cnt, const uint32 idx, uint32 * const dat, uint32 * const errFactor)
 {
-	Std_ReturnType	result;
+	Std_ReturnType	result = E_OK;
 	uint16			val = 0u;
 	uint32			i;
 	Std_ReturnType	checkPwr = E_OK;
@@ -169,7 +169,7 @@ static Std_ReturnType swic_Reg_SetTblReadOFF(const swic_reg_data_t tbl[], const 
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetTblWriteMask(const swic_reg_data_t tbl[], const uint32 idx, uint16 val, uint32 * const errFactor)
 {
-	Std_ReturnType	result;
+	Std_ReturnType	result = E_OK;
 	uint32			i;
 	Std_ReturnType	checkPwr;
 
@@ -196,7 +196,7 @@ static Std_ReturnType swic_Reg_SetTblWriteMask(const swic_reg_data_t tbl[], cons
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetTblReadMask(const swic_reg_data_t tbl[], const uint32 idx, uint16 *const val, uint32 * const errFactor)
 {
-	Std_ReturnType	result;
+	Std_ReturnType	result = E_OK;
 	uint32			i;
 	Std_ReturnType	checkPwr = E_OK;
 

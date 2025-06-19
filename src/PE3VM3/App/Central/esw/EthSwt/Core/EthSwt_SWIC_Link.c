@@ -161,7 +161,7 @@ static void ethswt_swic_link_Set(const uint8 SwitchPortIdx, const EthTrcv_LinkSt
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_GetLinkState(const uint8 SwitchPortIdx, uint32 * const errFactor)
 {
-    Std_ReturnType			result;
+    Std_ReturnType			result = E_OK;
 	EthTrcv_LinkStateType	sts;
 	result = swic_Reg_GetLink(SwitchPortIdx, &sts, errFactor);
 	if (result == E_OK) {

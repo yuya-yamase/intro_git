@@ -105,6 +105,8 @@ void EthSwt_SWIC_STM_Background (void)
     } else {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_UNAVAILABLE);
     }
+
+    return;
 }
 /* -------------------------------------------------------------------------- */
 EthSwt_StateType EthSwt_SWIC_STM_GetStatus (void)
@@ -143,7 +145,7 @@ static void ethswt_swic_stm_uninitProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_initProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
 
@@ -164,7 +166,7 @@ static void ethswt_swic_stm_initProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_portInitCompletedProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
     Std_ReturnType allowRelay;
@@ -189,7 +191,7 @@ static void ethswt_swic_stm_portInitCompletedProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_setRelayOnProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
 
@@ -210,7 +212,7 @@ static void ethswt_swic_stm_setRelayOnProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_activeProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
     Std_ReturnType allowRelay;
@@ -235,7 +237,7 @@ static void ethswt_swic_stm_activeProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_setRelayOffProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
 

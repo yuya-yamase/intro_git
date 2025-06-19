@@ -72,7 +72,7 @@ Std_ReturnType EthSwt_SWIC_Port_RelayOff(uint32 *errFactor)
 Std_ReturnType EthSwt_SWIC_Port_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode)
 {	/* 1msタスク */
 	// if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{ return E_NOT_OK; } /* どの状態でも受け付けるように変更 */
-    Std_ReturnType ret;
+    Std_ReturnType ret = E_OK;
 	if (SwitchPortIdx >= D_ETHSWT_SWIC_PORT_NUM) {
         ret = E_NOT_OK;
     } else {
@@ -99,7 +99,7 @@ Std_ReturnType EthSwt_SWIC_Port_Action (uint32 * const errFactor)
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor)
 {
-	Std_ReturnType	ret;
+	Std_ReturnType	ret = E_OK;
 	uint8			idx;
 
 	for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++ ) {
@@ -124,7 +124,7 @@ static Std_ReturnType EthSwt_SWIC_Port_ResetSwitchPortMode(uint32 *errFactor)
 static Std_ReturnType swic_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, uint32 * const errFactor)
 {
 	Eth_ModeType	PortMode;
-	Std_ReturnType	result;
+	Std_ReturnType	result = E_OK;
 	LIB_DI();
 	swicPort[SwitchPortIdx].modeChangeRequest = STD_OFF;	/* 下との間で割り込まれると同じ状態を通知する */
 	PortMode = swicPort[SwitchPortIdx].mode_chg;	/* 問題なければ排他不要 */
@@ -159,7 +159,7 @@ static Std_ReturnType swic_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, uint
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetSwitchPortModeACTIVE(const uint8 SwitchPortIdx, uint32 * const errFactor)
 {
-    Std_ReturnType  result;
+    Std_ReturnType  result = E_OK;
     uint32          val;
 
     result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_PHY_ON_TABLE[SwitchPortIdx].tbl, G_ETHSWT_SWIC_PHY_ON_TABLE[SwitchPortIdx].num, &val, errFactor);
@@ -169,7 +169,7 @@ static Std_ReturnType swic_Reg_SetSwitchPortModeACTIVE(const uint8 SwitchPortIdx
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_SetSwitchPortModeDOWN(const uint8 SwitchPortIdx, uint32 * const errFactor)
 {
-    Std_ReturnType  result;
+    Std_ReturnType  result = E_OK;
     uint32          val;
 
     result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_PHY_OFF_TABLE[SwitchPortIdx].tbl, G_ETHSWT_SWIC_PHY_OFF_TABLE[SwitchPortIdx].num, &val, errFactor);

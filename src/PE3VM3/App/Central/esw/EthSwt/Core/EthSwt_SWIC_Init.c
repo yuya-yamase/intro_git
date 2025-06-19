@@ -11,7 +11,7 @@
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Init_Setting(uint32 *errFactor)
 {
-    Std_ReturnType	result;
+    Std_ReturnType	result = E_OK;
 	uint32			idx;
 	uint32			val;
 
