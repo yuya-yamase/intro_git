@@ -7,8 +7,7 @@
     :sourceDir=${APP_DIR}/Central/esw/EthSwt
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/Register
     :sourceDir=${APP_DIR}/Central/esw/EthSwt/Core
-    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Core_Cfg
-    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Custom
+    :sourceDir=${APP_DIR}/Central/esw/EthSwt/Config
     :sourceDir=${APP_DIR}/Central/esw/EthSW_Task
     :sourceDir=${APP_DIR}/Central/esw/EthDLC
     :sourceDir=${APP_DIR}/Central/esw/EthDLC/Config
@@ -40,8 +39,7 @@
     -I${APP_DIR}/Central/esw/EthSwt
     -I${APP_DIR}/Central/esw/EthSwt/Register
     -I${APP_DIR}/Central/esw/EthSwt/Core
-    -I${APP_DIR}/Central/esw/EthSwt/Core_Cfg
-    -I${APP_DIR}/Central/esw/EthSwt/Custom
+    -I${APP_DIR}/Central/esw/EthSwt/Config
     -I${APP_DIR}/Central/esw/EthDLC
     -I${APP_DIR}/Central/esw/EthDLC/Config
     -I${APP_DIR}/Central/esw/EthDLC/Core
@@ -70,7 +68,7 @@ Mcu_Sys_Pwr.c
 product_cfg.c
 EthSwt_SWIC.c
 EthSwt_SWIC_PWR.c
-EthSwt_SWIC_Core_Cfg.c
+EthSwt_SWIC_Cfg.c
 EthSwt_SWIC_STM.c
 EthSwt_SWIC_Init.c
 EthSwt_SWIC_Reg.c

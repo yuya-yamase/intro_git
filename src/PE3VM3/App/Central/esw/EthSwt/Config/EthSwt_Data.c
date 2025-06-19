@@ -4,7 +4,7 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include "EthSwt_Data.h"
-#include <EthSwt_SWIC_Core_Cfg.h>
+#include <EthSwt_SWIC_Cfg.h>
 #include <EthSwt_SWIC.h>
 #include <LIB.h>
 #include <chipcom.h>

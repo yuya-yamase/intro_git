@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_Core_Cfg.h>
+#include <EthSwt_SWIC_Cfg.h>
 #include <LIB.h>
 #include <EthSwt_SWIC_Port_Cfg.h>
 #include "EthSwt_SWIC_Port.h"

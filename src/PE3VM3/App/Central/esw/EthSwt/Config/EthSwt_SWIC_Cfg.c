@@ -1,9 +1,9 @@
 /* -------------------------------------------------------------------------- */
-/* file name  :  EthSwt_SWIC_Core_Cfg.c                                       */
+/* file name  :  EthSwt_SWIC_Cfg.c                                       */
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include "EthSwt_SWIC_Core_Cfg.h"
+#include "EthSwt_SWIC_Cfg.h"
 /* -------------------------------------------------------------------------- */
 /* Common */
 const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM] =

@@ -1,7 +1,7 @@
 #ifndef ETHSWT_SWIC_H
 #define ETHSWT_SWIC_H
 #include <Std_Types.h>
-#include <EthSwt_SWIC_Core_Cfg.h>
+#include <EthSwt_SWIC_Cfg.h>
 #include <EthSwt.h>
 
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr);
