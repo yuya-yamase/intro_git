@@ -312,6 +312,6 @@ static  U1      u1_s_XSpiCfgVptranHideDispJdg(void)
 /*  * TN   = Tetsu Naruse,    Denso Techno                                                                                           */
 /*  * GM   = Glen Monteposo,  DTPH                                                                                                   */
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
-/*  * JS   = Jun Sugiyama ,KSE                                                                                                       */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
