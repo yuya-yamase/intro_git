@@ -56,7 +56,10 @@ EthSwt_SWIC.c
 EthSwt_SWIC_Org.c
 EthSwt_SWIC_Reg.c
 EthSwt_SWIC_SpiS1.c
+LIB_byteswap.c
+LIB_counter.c
 LIB_interrupt.c
+LIB_memcpy.c
 LIB_memset.c
 Pmic_Pwr.c
 EthSW_Task.c
