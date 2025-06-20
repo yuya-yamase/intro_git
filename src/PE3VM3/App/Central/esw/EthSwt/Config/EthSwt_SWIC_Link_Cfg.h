@@ -18,8 +18,8 @@ struct swic_tbl_lnk {
 };
 
 static const struct swic_tbl_lnk	G_ETHSWT_SWIC_GET_LINK_TABLE[]
-=	{ {&g_regListSeqGetLinkIeee[26], 1u, 0x0800u, 0x0800u}	/* P9：未使用                  */
-    , {&g_regListSeqGetLinkIeee[ 0], 1u, 0x0800u, 0x0800u}	/* P1：ADC 1000BASE-T1         */
+=	{ 
+      {&g_regListSeqGetLinkIeee[ 0], 1u, 0x0800u, 0x0800u}	/* P1：ADC 1000BASE-T1         */
     , {&g_regListSeqGetLinkIeee[ 1], 1u, 0x0800u, 0x0800u}	/* P2：DCM 1000BASE-T1         */
     , {&g_regListSeqGetLinkIeee[ 2], 7u, 0x0004u, 0x0004u}	/* P3：未使用                  */
     , {&g_regListSeqGetLinkIeee[ 9], 7u, 0x0004u, 0x0004u}	/* P4：未使用                  */
@@ -27,6 +27,7 @@ static const struct swic_tbl_lnk	G_ETHSWT_SWIC_GET_LINK_TABLE[]
     , {&g_regListSeqGetLinkIeee[23], 1u, 0x0800u, 0x0800u}	/* P6：DLC 100BASE-TX          */
     , {&g_regListSeqGetLinkIeee[24], 1u, 0x0800u, 0x0800u}	/* P7：SIP SGMII0 SGMII        */
     , {&g_regListSeqGetLinkIeee[25], 1u, 0x0800u, 0x0800u}	/* P8：SIP SGMII1 SGMII        */
+    , {&g_regListSeqGetLinkIeee[26], 1u, 0x0800u, 0x0800u}	/* P9：未使用                  */
     };
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_LINK_CFG_H */
