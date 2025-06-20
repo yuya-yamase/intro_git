@@ -51,6 +51,7 @@
 #include "EthSW_Task.h"
 #include "PwrCtrl_Main.h"
 #include "PwrCtrl_Sys.h" /* Žb’è */
+#include "VIS.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -154,6 +155,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_PwrCtrlMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
     {&Mcu_Dev_Pwron,                    (U4)SCHDLR_TASKBIT___5MS    },
     {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_VISMidCycle	,               (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
