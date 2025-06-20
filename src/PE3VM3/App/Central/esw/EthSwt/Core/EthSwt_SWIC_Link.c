@@ -53,35 +53,6 @@ void EthSwt_SWIC_Link_Init (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Link_Clear (void)
-{
-    uint8   idx;
-    for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
-        swicLink[idx].getLinkResult = E_NOT_OK;
-        if (swicLink[idx].linkCheck == STD_ON) {
-            LIB_DI();
-            swicLink[idx].linkTime = EthSwt_SWIC_Time_Get();
-            LIB_EI();
-        }
-    }
-    swicGetLinkTimer.time   = 0;
-    LIB_DI();
-    swicGetLinkTimer.req    = STD_ON;
-    LIB_EI();
-
-    return;
-}
-/* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Link_ClearGetLinkResult (void)
-{
-    uint8   idx;
-    for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
-        swicLink[idx].getLinkResult = E_NOT_OK;
-    }
-
-    return;
-}
-/* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Link_TimerUpdate (void)
 {
     swicGetLinkTimer.time = swicGetLinkTimer.time + D_ETHSWT_SWIC_PERIOD;
