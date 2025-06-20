@@ -256,7 +256,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_C_BRLV_2_BC,      (U1)ALERT_REQ_C_BRLV_2_BC_MALFUNC,     (U1)WCHIME_REQ_IN_BRK_FLDLEAK        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BRK_FLDLEAK        & (U1)0x1FU)  }, /* MET-C_BRLV-CSTD-              */
         {  (U2)ALERT_CH_C_STEER_BC,       (U1)ALERT_REQ_C_STEER_BC_CYCL,         (U1)WCHIME_REQ_IN_STEER_STP          >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_STEER_STP          & (U1)0x1FU)  }, /* MET-C_STEER-CSTD-             */
         {  (U2)ALERT_CH_S_ACC_BC,         (U1)ALERT_REQ_S_ACC_BC_REQ_BRK,        (U1)WCHIME_REQ_IN_ACC_BRKREQ         >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_ACC_BRKREQ         & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
-        {  (U2)ALERT_CH_C_BRKBZ,          (U1)ALERT_REQ_C_BRKBZ_TESTMODE3,       (U1)WCHIME_REQ_SI_BRK_TST_FIN        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_BRK_TST_FIN        & (U1)0x1FU)  }, /* MET-C_BRKBZ-CSTD-             */
+        {  (U2)ALERT_CH_C_BRKBZ,          (U1)ALERT_REQ_C_BRKBZ_APPOPE6,         (U1)WCHIME_REQ_SI_BRK_APP6           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_BRK_APP6           & (U1)0x1FU)  }, /* MET-C_BRKBZ-CSTD-             */
         {  (U2)ALERT_CH_D_SBW_BZ_BSFT,    (U1)ALERT_REQ_D_SBW_BZ_BSFT_DOUBLE,    (U1)WCHIME_REQ_SI_SBW_RJCT           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_SBW_RJCT           & (U1)0x1FU)  }, /* MET-D_SBW-CSTD-               */
         {  (U2)ALERT_CH_H_ONACCN,         (U1)ALERT_REQ_H_ONACCN_MALFUNC,        (U1)WCHIME_REQ_CO_NACCON             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_NACCON             & (U1)0x1FU)  }, /* MET-H_ONACCN-CSTD-            */
         {  (U2)ALERT_CH_H_PEXI_WARN,      (U1)ALERT_REQ_H_PEXI_WARN_MALFUNC,     (U1)WCHIME_REQ_CO_PEXI_HV_NDBW       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_PEXI_HV_NDBW       & (U1)0x1FU)  }, /* MET-H_PEXI-CSTD-              */
@@ -276,7 +276,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_O_CHAMAL,         (U1)ALERT_REQ_O_CHAMAL_PRMRYCHK_BZ,    (U1)WCHIME_REQ_IN_CHAMAL_BAT_FAIL    >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_CHAMAL_BAT_FAIL    & (U1)0x1FU)  }, /* MET-O_CHAMAL-CSTD-            */
         {  (U2)ALERT_CH_O_CHAMAL,         (U1)ALERT_REQ_O_CHAMAL_INSPECTION_BZ,  (U1)WCHIME_REQ_IN_CHAMAL_BAT_FAIL    >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_CHAMAL_BAT_FAIL    & (U1)0x1FU)  }, /* MET-O_CHAMAL-CSTD-            */    
         {  (U2)ALERT_CH_H_SYSMAL_BC,      (U1)ALERT_REQ_H_SYSMAL_BC_CYCL2,       (U1)WCHIME_REQ_IN_SYSMAL_REQSTP      >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_SYSMAL_REQSTP      & (U1)0x1FU)  }, /* MET-H_SYSMAL-CSTD-            */
-        {  (U2)ALERT_CH_C_BRKBZ,          (U1)ALERT_REQ_C_BRKBZ_TESTMODE1,       (U1)WCHIME_REQ_IN_BRK_TST_LRN        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BRK_TST_LRN        & (U1)0x1FU)  }, /* MET-C_BRKBZ-CSTD-             */
+        {  (U2)ALERT_CH_C_BRKBZ,          (U1)ALERT_REQ_C_BRKBZ_APPOPE4,         (U1)WCHIME_REQ_IN_BRK_APP4           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_BRK_APP4           & (U1)0x1FU)  }, /* MET-C_BRKBZ-CSTD-             */
         {  (U2)ALERT_CH_C_EPB_WRN_IG,     (U1)ALERT_REQ_C_EPB_WRN_IG_LOCK,       (U1)WCHIME_REQ_IN_EPB                >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_EPB                & (U1)0x1FU)  }, /* MET-C_EPB-CSTD-               */
         {  (U2)ALERT_CH_O_EIGCON_ENG,     (U1)ALERT_REQ_O_EIGCON_ENG_ON,         (U1)WCHIME_REQ_CO_EIGCON_IGOFF       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_EIGCON_IGOFF       & (U1)0x1FU)  }, /* MET-O_EIGCON-CSTD-            */
         {  (U2)ALERT_CH_S_ACC_BC,         (U1)ALERT_REQ_S_ACC_BC_CANCEL,         (U1)WCHIME_REQ_SI_ACC_LSPDCNSL       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_ACC_LSPDCNSL       & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
@@ -342,7 +342,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_C_BRKHLD_WRN,     (U1)ALERT_REQ_C_BRKHLD_WRN_MAINT1,     (U1)WCHIME_REQ_SI_BKHLD_REL_R10      >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_BKHLD_REL_R10      & (U1)0x1FU)  }, /* MET-C_BRKHLD-CSTD-            */
         {  (U2)ALERT_CH_C_BRKHLD_WRN,     (U1)ALERT_REQ_C_BRKHLD_WRN_MAINT2,     (U1)WCHIME_REQ_SI_BKHLD_REL_R11      >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_BKHLD_REL_R11      & (U1)0x1FU)  }, /* MET-C_BRKHLD-CSTD-            */
         {  (U2)ALERT_CH_C_BRKHLD_WRN,     (U1)ALERT_REQ_C_BRKHLD_WRN_UNAVBL4,    (U1)WCHIME_REQ_SI_BKHLD_NOTACT_R13   >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_BKHLD_NOTACT_R13   & (U1)0x1FU)  }, /* MET-C_BRKHLD-CSTD-            */
-        {  (U2)ALERT_CH_C_BRKBZ,          (U1)ALERT_REQ_C_BRKBZ_TESTMODE2,       (U1)WCHIME_REQ_SI_BRK_TST_STRT       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_BRK_TST_STRT       & (U1)0x1FU)  }, /* MET-C_BRKBZ-CSTD-             */
+        {  (U2)ALERT_CH_C_BRKBZ,          (U1)ALERT_REQ_C_BRKBZ_APPOPE5,         (U1)WCHIME_REQ_SI_BRK_APP5           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_BRK_APP5           & (U1)0x1FU)  }, /* MET-C_BRKBZ-CSTD-             */
         {  (U2)ALERT_CH_S_ACC_BC,         (U1)ALERT_REQ_S_ACC_BC_START_APRVAL,   (U1)WCHIME_REQ_SI_ACC_APPRVLSTART    >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_ACC_APPRVLSTART    & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_B_PERSET,         (U1)ALERT_REQ_B_PERSET_SINGLE,         (U1)WCHIME_REQ_SI_PERSET_SUC         >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_PERSET_SUC         & (U1)0x1FU)  }, /* MET-B_PERSET-CSTD-            */
         {  (U2)ALERT_CH_B_PERSET,         (U1)ALERT_REQ_B_PERSET_DOUBLE,         (U1)WCHIME_REQ_SI_PERSET_FAIL        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_PERSET_FAIL        & (U1)0x1FU)  }, /* MET-B_PERSET-CSTD-            */
@@ -816,6 +816,7 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  BEV-1    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_BRLV-CSTD-2-00-A-C0)                                  */
 /*  BEV-1    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
 /*  BEV-1    03/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1 / MET-D_SFTPOS-CSTD-1-00-A-C0) */
+/*  BEV-2    06/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
@@ -835,5 +836,6 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  * TR   = Tebs Ramos, DTPH                                                                                                        */
 /*  * T.Nakano   = Tetsushi Nakano, Denso Techno                                                                                     */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
