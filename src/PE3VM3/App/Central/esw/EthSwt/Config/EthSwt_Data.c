@@ -4,24 +4,31 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include "EthSwt_Data.h"
-#include <EthSwt_SWIC_Core_Cfg.h>
+#include <EthSwt_SWIC_Cfg.h>
 #include <EthSwt_SWIC.h>
 #include <LIB.h>
 #include <chipcom.h>
+#include <EthSwt.h>
 /* -------------------------------------------------------------------------- */
-typedef struct {
-    uint8                   dataIdx;    /* S_ETHSWT_DATA_FOR_PORTÇÃIdx */
-    uint8                   portIdx;    /* EthSwtÇ≈éùÇ¡ÇƒÇ¢ÇÈIdx        */
-} S_ETHSWT_DATA_COMB;
-static const S_ETHSWT_DATA_COMB S_ETHSWT_DATA_IDX_TABLE[D_ETHSWT_DATA_USE_PORT_NUM] =
-/*                      dataIdx , portIdx   */
-/* A-DC     */  {   {   0       , 1         }
-/* DCM      */  ,   {   1       , 2         }
-/* SAIL     */  ,   {   2       , 5         }
-/* Tool     */  ,   {   3       , 6         }
-/* Linux    */  ,   {   4       , 7         }
-/* Android  */  ,   {   5       , 8         }
-                };
+#define D_ETHSWT_SWIC_ID                        ETHSWT_SWIC_IDX
+
+#define D_ETHSWT_SWIC_ADC_PORT_ID               (0U)
+#define D_ETHSWT_SWIC_DCM_PORT_ID               (1U)
+#define D_ETHSWT_SWIC_SAIL_PORT_ID              (4U)
+#define D_ETHSWT_SWIC_TOOL_PORT_ID              (5U)
+#define D_ETHSWT_SWIC_LINUX_PORT_ID             (6U)
+#define D_ETHSWT_SWIC_ANDROID_PORT_ID           (7U)
+
+/* -------------------------------------------------------------------------- */
+static const uint8 S_ETHSWT_DATA_IDX_TABLE[D_ETHSWT_DATA_USE_PORT_NUM] =
+{
+    D_ETHSWT_SWIC_ADC_PORT_ID
+,   D_ETHSWT_SWIC_DCM_PORT_ID
+,   D_ETHSWT_SWIC_SAIL_PORT_ID
+,   D_ETHSWT_SWIC_TOOL_PORT_ID
+,   D_ETHSWT_SWIC_LINUX_PORT_ID
+,   D_ETHSWT_SWIC_ANDROID_PORT_ID
+};
 /* -------------------------------------------------------------------------- */
 static S_ETHSWT_DATA_CHIPCOM G_ETHSWT_DATA;
 /* -------------------------------------------------------------------------- */
@@ -51,7 +58,7 @@ static void ethswt_data_get_linkStatus(void)
     Std_ReturnType          getResult;
 
     for(idx = 0; idx < D_ETHSWT_DATA_USE_PORT_NUM; idx++) {
-        getResult = EthSwt_SWIC_GetLinkState(0, S_ETHSWT_DATA_IDX_TABLE[idx].portIdx, &status);
+        getResult = EthSwt_SWIC_GetLinkState(D_ETHSWT_SWIC_ID, S_ETHSWT_DATA_IDX_TABLE[idx], &status);
         G_ETHSWT_DATA.portData[idx].linkStatus = status;
         G_ETHSWT_DATA.portData[idx].linkGetResult = getResult;
     }

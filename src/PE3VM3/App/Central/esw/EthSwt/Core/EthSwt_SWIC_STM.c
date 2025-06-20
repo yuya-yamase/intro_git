@@ -3,12 +3,11 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_Core_Cfg.h>
+#include <EthSwt_SWIC_Cfg.h>
 #include <EthSwt_SWIC_STM_Cfg.h>
 #include "EthSwt_SWIC_STM.h"
 #include "EthSwt_SWIC_PWR.h"
 #include "EthSwt_SWIC_Init.h"
-#include "EthSwt_SWIC_Link.h"
 #include "EthSwt_SWIC_Port.h"
 #include "EthSwt_SWIC_Define.h"
 /* -------------------------------------------------------------------------- */
@@ -48,6 +47,7 @@ static uint32 ethswt_swic_stm_act_move_set_relay_off (void);
 static uint32 ethswt_swic_stm_act_unavailable (void);
 static uint32 ethswt_swic_stm_act_reset (void);
 static uint32 ethswt_swic_stm_act_none (void);
+static void ethswt_swic_stm_clear (void);
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_STM_Init (void)
 {
@@ -105,6 +105,8 @@ void EthSwt_SWIC_STM_Background (void)
     } else {
         ethswt_swic_stm_action(D_ETHSWT_SWIC_EV_UNAVAILABLE);
     }
+
+    return;
 }
 /* -------------------------------------------------------------------------- */
 EthSwt_StateType EthSwt_SWIC_STM_GetStatus (void)
@@ -143,7 +145,7 @@ static void ethswt_swic_stm_uninitProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_initProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
 
@@ -164,7 +166,7 @@ static void ethswt_swic_stm_initProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_portInitCompletedProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
     Std_ReturnType allowRelay;
@@ -189,7 +191,7 @@ static void ethswt_swic_stm_portInitCompletedProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_setRelayOnProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
 
@@ -210,7 +212,7 @@ static void ethswt_swic_stm_setRelayOnProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_activeProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
     Std_ReturnType allowRelay;
@@ -235,7 +237,7 @@ static void ethswt_swic_stm_activeProc (void)
 /* -------------------------------------------------------------------------- */
 static void ethswt_swic_stm_setRelayOffProc (void)
 {
-    Std_ReturnType result;
+    Std_ReturnType result = E_OK;
     uint32 errFactor = D_ETHSWT_SWIC_ERR_NONE;
     uint8 idx;
 
@@ -334,26 +336,28 @@ static uint32 ethswt_swic_stm_act_move_set_relay_on (void)
 /* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_stm_act_move_active (void)
 {
-    EthSwt_SWIC_Link_Clear();
-
+    /* do nothing */
     return D_ETHSWT_SWIC_ST_ACTIVE;
 }
 /* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_stm_act_move_set_relay_off (void)
 {
-    /* do nothing */
+    ethswt_swic_stm_clear();
+
     return D_ETHSWT_SWIC_ST_SET_RELAY_OFF;
 }
 /* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_stm_act_unavailable (void)
 {
-    /* do nothing */
+    ethswt_swic_stm_clear();
+
     return D_ETHSWT_SWIC_ST_UNINIT;
 }
 /* -------------------------------------------------------------------------- */
 static uint32 ethswt_swic_stm_act_reset (void)
 {
     EthSwt_SWIC_PWR_ResetReq();
+    ethswt_swic_stm_clear();
 
     return D_ETHSWT_SWIC_ST_UNINIT;
 }
@@ -363,3 +367,14 @@ static uint32 ethswt_swic_stm_act_none (void)
     /* do nothing */
     return G_SWIC_Status;
 }
+/* -------------------------------------------------------------------------- */
+static void ethswt_swic_stm_clear (void)
+{
+    uint8 idx;
+    
+    for(idx = 0; idx < D_ETHSWT_SWIC_CLEAR_FUNC_NUM; idx++) {
+        G_ETHSWT_SWIC_CLEAR_FULC_LIST[idx]();
+    }
+    return;
+}
+/* -------------------------------------------------------------------------- */

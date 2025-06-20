@@ -3,7 +3,7 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_Core_Cfg.h>
+#include <EthSwt_SWIC_Cfg.h>
 #include "EthSwt_SWIC_Link.h"
 #include "EthSwt_SWIC_Reg.h"
 #include "EthSwt_SWIC_STM.h"
@@ -46,34 +46,9 @@ void EthSwt_SWIC_Link_Init (void)
         }
     }
     swicGetLinkTimer.time   = 0;
+    LIB_DI();
     swicGetLinkTimer.req    = STD_ON;
-
-    return;
-}
-/* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Link_Clear (void)
-{
-    uint8   idx;
-    for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
-        swicLink[idx].getLinkResult = E_NOT_OK;
-        if (swicLink[idx].linkCheck == STD_ON) {
-            LIB_DI();
-            swicLink[idx].linkTime = EthSwt_SWIC_Time_Get();
-            LIB_EI();
-        }
-    }
-    swicGetLinkTimer.time   = 0;
-    swicGetLinkTimer.req    = STD_ON;
-
-    return;
-}
-/* -------------------------------------------------------------------------- */
-void EthSwt_SWIC_Link_ClearGetLinkResult (void)
-{
-    uint8   idx;
-    for (idx = 0; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
-        swicLink[idx].getLinkResult = E_NOT_OK;
-    }
+    LIB_EI();
 
     return;
 }
@@ -93,9 +68,16 @@ Std_ReturnType EthSwt_SWIC_Link_Action (uint32 * const errFactor)
 {
     Std_ReturnType result = E_OK;
     uint8 idx;
+    uint8 req;
 
-    if (swicGetLinkTimer.req == STD_ON) {
-        swicGetLinkTimer.req = STD_OFF;
+    LIB_DI();
+    req = swicGetLinkTimer.req;
+    LIB_EI();
+    
+    if(req == STD_ON) {
+        LIB_DI();
+        swicGetLinkTimer.req = STD_OFF;             /* ‚±‚±‚Ü‚Å‚ÉSTD_ON‚³‚ê‚½‚Æ‚µ‚Ä‚àA100msŠÔŠu‚É‚È‚é‚½‚ß–â‘è‚È‚µ */
+        LIB_EI();
         for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
             result = swic_Reg_GetLinkState(idx, errFactor);
             if (result == E_NOT_OK) {break;}
@@ -161,7 +143,7 @@ static void ethswt_swic_link_Set(const uint8 SwitchPortIdx, const EthTrcv_LinkSt
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType swic_Reg_GetLinkState(const uint8 SwitchPortIdx, uint32 * const errFactor)
 {
-    Std_ReturnType			result;
+    Std_ReturnType			result = E_OK;
 	EthTrcv_LinkStateType	sts;
 	result = swic_Reg_GetLink(SwitchPortIdx, &sts, errFactor);
 	if (result == E_OK) {

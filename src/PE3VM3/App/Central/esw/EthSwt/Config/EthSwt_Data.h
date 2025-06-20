@@ -6,7 +6,7 @@
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
-#include <EthSwt_SWIC_Core_Cfg.h>
+#include <EthSwt_SWIC_Cfg.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_DATA_USE_PORT_NUM          (6U)
 /* -------------------------------------------------------------------------- */
@@ -27,7 +27,7 @@ typedef struct {
 
 typedef struct {
     EthSwt_StateType        ethswtStatus;                           /* 1byte */
-    S_ETHSWT_DATA_FOR_PORT  portData[D_ETHSWT_DATA_USE_PORT_NUM];   /* 180byte */
+    S_ETHSWT_DATA_FOR_PORT  portData[D_ETHSWT_DATA_USE_PORT_NUM];   /* 180byte */ /* idx = 0:A-DC, 1:DCM, 2:SAIL, 3:Tool, 4:Linux, 5:Android */
 } S_ETHSWT_DATA_CHIPCOM;                                            /* Total: 181byte */
 #pragma pack()
 /* -------------------------------------------------------------------------- */
