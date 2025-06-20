@@ -70,7 +70,7 @@ Std_ReturnType EthSwt_SWIC_Port_RelayOff(uint32 *errFactor)
 }
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Port_SetSwitchPortMode(const uint8 SwitchPortIdx, const Eth_ModeType PortMode)
-{	/* 1msタスク */
+{
 	// if (swic_Reg_Inf.sts == ETHSWT_SWIC_STATE_UNINIT)	{ return E_NOT_OK; } /* どの状態でも受け付けるように変更 */
     Std_ReturnType ret = E_OK;
 	if (SwitchPortIdx >= D_ETHSWT_SWIC_PORT_NUM) {
@@ -88,8 +88,13 @@ Std_ReturnType EthSwt_SWIC_Port_Action (uint32 * const errFactor)
 {
     Std_ReturnType  result = E_OK;
     uint8           idx;
+	uint8			req;
+
     for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
-        if (swicPort[idx].modeChangeRequest != STD_ON) { continue; }
+		LIB_DI();
+		req = swicPort[idx].modeChangeRequest;
+		LIB_EI();
+        if (req != STD_ON) { continue; }
         result = swic_Reg_SetSwitchPortMode(idx, errFactor);
         if (result == E_NOT_OK) {break;}
     }
@@ -131,17 +136,14 @@ static Std_ReturnType swic_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, uint
 	LIB_EI();
 	if (swicPort[SwitchPortIdx].mode != PortMode) {
 		switch (PortMode) {
-		default:									/* default */
-			break;
-		case ETH_MODE_ACTIVE_WITH_WAKEUP_REQUEST:
-			PortMode = ETH_MODE_ACTIVE;				/* [SWS_EthSwt_00439] */
-			break;
 		case ETH_MODE_ACTIVE:
 			result = swic_Reg_SetSwitchPortModeACTIVE(SwitchPortIdx, errFactor);
 			break;
 		case ETH_MODE_DOWN:
 			result = swic_Reg_SetSwitchPortModeDOWN(SwitchPortIdx, errFactor);
 			// swic_Reg_LinkTimSet(SwitchPortIdx, ETHTRCV_LINK_STATE_DOWN, 1u); /* ETH_MODE_DOWNは反応がいいので確認 */  /* ★ 必要？ */
+			break;
+		default:
 			break;
 		}
 	}
@@ -151,7 +153,9 @@ static Std_ReturnType swic_Reg_SetSwitchPortMode(const uint8 SwitchPortIdx, uint
 	    swicPort[SwitchPortIdx].modeChangeIndication = STD_ON;
         LIB_EI();
     } else {
+		LIB_DI();
         swicPort[SwitchPortIdx].modeChangeRequest = STD_ON;
+		LIB_EI();
     }
 
     return result;

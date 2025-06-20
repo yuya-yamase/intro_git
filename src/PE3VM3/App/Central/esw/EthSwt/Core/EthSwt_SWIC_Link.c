@@ -46,7 +46,9 @@ void EthSwt_SWIC_Link_Init (void)
         }
     }
     swicGetLinkTimer.time   = 0;
+    LIB_DI();
     swicGetLinkTimer.req    = STD_ON;
+    LIB_EI();
 
     return;
 }
@@ -63,7 +65,9 @@ void EthSwt_SWIC_Link_Clear (void)
         }
     }
     swicGetLinkTimer.time   = 0;
+    LIB_DI();
     swicGetLinkTimer.req    = STD_ON;
+    LIB_EI();
 
     return;
 }
@@ -93,9 +97,16 @@ Std_ReturnType EthSwt_SWIC_Link_Action (uint32 * const errFactor)
 {
     Std_ReturnType result = E_OK;
     uint8 idx;
+    uint8 req;
 
-    if (swicGetLinkTimer.req == STD_ON) {
-        swicGetLinkTimer.req = STD_OFF;
+    LIB_DI();
+    req = swicGetLinkTimer.req;
+    LIB_EI();
+    
+    if(req == STD_ON) {
+        LIB_DI();
+        swicGetLinkTimer.req = STD_OFF;             /* Ç±Ç±Ç‹Ç≈Ç…STD_ONÇ≥ÇÍÇΩÇ∆ÇµÇƒÇ‡ÅA100msä‘äuÇ…Ç»ÇÈÇΩÇﬂñ‚ëËÇ»Çµ */
+        LIB_EI();
         for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
             result = swic_Reg_GetLinkState(idx, errFactor);
             if (result == E_NOT_OK) {break;}

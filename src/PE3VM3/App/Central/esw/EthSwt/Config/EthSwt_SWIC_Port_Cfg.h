@@ -31,8 +31,8 @@ static const struct swic_reg_tbl G_ETHSWT_SWIC_RELAY_OFF_TABLE[] =
 {
     SWIC_REG_TBL(g_regListSeqP1PhyOff),
     SWIC_REG_TBL(g_regListSeqP2PhyOff),
-    SWIC_REG_TBL(g_regListSeqRelayOff),
-    SWIC_REG_TBL(g_regListSeqSet100BTxDown)
+    SWIC_REG_TBL(g_regListSeqSet100BTxDown),
+    SWIC_REG_TBL(g_regListSeqRelayOff)
 };
 
 static const struct swic_reg_tbl G_ETHSWT_SWIC_PHY_ON_TABLE[] =
