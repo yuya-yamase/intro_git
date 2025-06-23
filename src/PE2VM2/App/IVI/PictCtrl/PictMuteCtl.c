@@ -9,6 +9,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define PICTMUTE_MUTEHI_VEHPOW               (0x01U)
+#define PICTMUTE_MUTEHI_SIPERR               (0x02U)
+#define PICTMUTE_MUTEHI_CAMERA               (0x04U)
+#define PICTMUTE_MUTEHI_OTARST               (0x08U)
+#define PICTMUTE_MUTELO_VICRST               (~(PICTMUTE_MUTEHI_VEHPOW | PICTMUTE_MUTEHI_SIPERR | PICTMUTE_MUTEHI_CAMERA | PICTMUTE_MUTEHI_OTARST))
+#define PICTMUTE_MUTELO_PMAPSHOLD            (~PICTMUTE_MUTEHI_SIPERR)
+#define PICTMUTE_MUTELO_CAMERA               (~PICTMUTE_MUTEHI_CAMERA)
+#define PICTMUTE_MUTESET_MASK                (PICTMUTE_MUTEHI_VEHPOW | PICTMUTE_MUTEHI_SIPERR | PICTMUTE_MUTEHI_CAMERA | PICTMUTE_MUTEHI_OTARST)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -24,10 +32,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U2 u2_s_pictmute_cycchk_timer;                       /* PictMute Cycle Check Poling Timer */
 
-static U1 u1_s_pictmute_siperror_flag;                      /* Sip Error flag */
-static U1 u1_s_pictmute_camaeramute_flag;                   /* Camera Process MUTE Request Flag */
-static U1 u1_s_pictmute_pmpsailerrn_pre_sts;                /* Previous PORT-PM-PSAIL-ERR-N Status */
-static U1 u1_s_pictmute_vicrst_pre_sts;                     /* Previous /V-IC-RST Status */
+static U1 u1_s_pictmute_mute_signal;                        /* MUTE ON/OFF Setting Signal */
+static U1 u1_s_pictmute_pmapshold_pre_sts;                  /* Previous PMA_PS_HOLD Status */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -46,11 +52,9 @@ static U1   u1_s_PictMute_TimChk(const U2 u2_a_tim_cnt, const U2 u2_a_wait_tim);
 /*===================================================================================================================================*/
 void    vd_g_PictMute_Init(void)
 {
-    u2_s_pictmute_cycchk_timer = (U2)0;
-    u1_s_pictmute_siperror_flag = (U1)FALSE;
-    u1_s_pictmute_camaeramute_flag = (U1)FALSE;
-    u1_s_pictmute_pmpsailerrn_pre_sts = (U1)PICTMUTE_IO_STS_LOW;
-    u1_s_pictmute_vicrst_pre_sts = (U1)PICTMUTE_IO_STS_LOW;
+    u2_s_pictmute_cycchk_timer = (U2)0U;
+    u1_s_pictmute_mute_signal = (U1)0x00U;
+    u1_s_pictmute_pmapshold_pre_sts = (U1)PICTMUTE_IO_STS_LOW;
 }
 
 /*===================================================================================================================================*/
@@ -61,62 +65,44 @@ void    vd_g_PictMute_Init(void)
 /*===================================================================================================================================*/
 void    vd_g_PictMute_Routine(void)
 {
-    static const U2 PICTMUTE_CYCCHK_POLING = (U2)(20U / PICTMUTE_TASK_TIME);    /* PictMUTE Poling Check Time : 20ms */
+    static const U2 PICTMUTE_CYCCHK_POLING = (U2)(1U / PICTMUTE_TASK_TIME);    /* PictMUTE Poling Check Time : 1ms */
 
-    U1  u1_t_read_pmvmute_sts;                                                  /* Read PM-V-MUTE Status */
-    U1  u1_t_read_dispreqgpio0_sts;                                             /* Read DISP-REQ-GPIO0 Status */
+    U1  u1_t_read_vehpowstt_sts;                                                /* Read Vehicle Power State Status */
     U1  u1_t_read_pmapshold_sts;                                                /* Read PMA-PS-HOLD Status */
-    U1  u1_t_read_sailerr1_sts;                                                 /* Read SAIL-ERR1 Status */
-    U1  u1_t_read_sailerr2_sts;                                                 /* Read SAIL-ERR2 Status */
-    U1  u1_t_read_pmpsailerrn_sts;                                              /* Read PORT-PM-PSAIL-ERR-N Status */
     U1  u1_t_read_vicrst_sts;                                                   /* Read /V-IC-RST Status */
     U1  u1_t_cyc_time_chk_flg;
 
     u1_t_cyc_time_chk_flg = u1_s_PictMute_TimChk(u2_s_pictmute_cycchk_timer, PICTMUTE_CYCCHK_POLING);
     if(u1_t_cyc_time_chk_flg == (U1)TRUE){
-        u2_s_pictmute_cycchk_timer = (U2)0;
-        u1_t_read_pmvmute_sts = u1_PICTMUTE_GET_PM_V_MUTE();
-        u1_t_read_dispreqgpio0_sts = u1_PICTMUTE_GET_DISP_REQ_GPIO0();
+        u2_s_pictmute_cycchk_timer = (U2)0U;
+        u1_t_read_vehpowstt_sts = u1_PICTMUTE_GET_VEHPOWSTT();
         u1_t_read_pmapshold_sts = u1_PICTMUTE_GET_PMA_PS_HOLD();
-        u1_t_read_sailerr1_sts = u1_PICTMUTE_GET_SAIL_ERR1();
-        u1_t_read_sailerr2_sts = u1_PICTMUTE_GET_SAIL_ERR2();
-        u1_t_read_pmpsailerrn_sts = u1_PICTMUTE_GET_PORT_PM_PSAIL_ERR_N();
         u1_t_read_vicrst_sts = u1_PICTMUTE_GET_V_IC_RST();
 
-        /* Sip Error Check */
-        if(u1_t_read_dispreqgpio0_sts == (U1)PICTMUTE_IO_STS_LOW){
-            /* MUTE ON Check */
-            if((u1_t_read_pmapshold_sts == (U1)PICTMUTE_IO_STS_LOW)
-            || ((u1_t_read_sailerr1_sts != (U1)PICTMUTE_IO_STS_HIGH) || (u1_t_read_sailerr2_sts != (U1)PICTMUTE_IO_STS_LOW))
-            || ((u1_t_read_pmpsailerrn_sts == (U1)PICTMUTE_IO_STS_HIGH) && (u1_s_pictmute_pmpsailerrn_pre_sts == (U1)PICTMUTE_IO_STS_LOW))){
-                u1_s_pictmute_siperror_flag = (U1)TRUE;
-            }
-
-            /* MUTE OFF Check */
-            if(((u1_t_read_pmpsailerrn_sts == (U1)PICTMUTE_IO_STS_LOW) && (u1_s_pictmute_pmpsailerrn_pre_sts == (U1)PICTMUTE_IO_STS_HIGH))
-            || ((u1_t_read_vicrst_sts == (U1)PICTMUTE_IO_STS_LOW) && (u1_s_pictmute_vicrst_pre_sts == (U1)PICTMUTE_IO_STS_HIGH))){
-                u1_s_pictmute_siperror_flag = (U1)FALSE;
-            }
+        /* MUTE ON Check */
+        if((u1_t_read_vehpowstt_sts == (U1)PICTMUTE_VEHPOWSTT_PARKING)
+        || (u1_t_read_vehpowstt_sts == (U1)PICTMUTE_VEHPOWSTT_EDS)){
+            u1_s_pictmute_mute_signal |= (U1)PICTMUTE_MUTEHI_VEHPOW;
         }
-        else{
-            u1_s_pictmute_siperror_flag = (U1)FALSE;
+
+        /* MUTE OFF Check */
+        if((u1_t_read_pmapshold_sts == (U1)PICTMUTE_IO_STS_HIGH)
+        && (u1_s_pictmute_pmapshold_pre_sts == (U1)PICTMUTE_IO_STS_LOW)){
+            u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTELO_PMAPSHOLD;
+        }
+        if(u1_t_read_vicrst_sts == (U1)PICTMUTE_IO_STS_LOW){
+            u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTELO_VICRST;
         }
 
         /* PM-V-MUTE Update */
-        if((u1_s_pictmute_siperror_flag == (U1)TRUE)
-        || (u1_s_pictmute_camaeramute_flag == (U1)TRUE)){
-            if(u1_t_read_pmvmute_sts == (U1)PICTMUTE_IO_STS_LOW){
-                u1_PICTMUTE_SET_PM_V_MUTE_H();
-            }
+        u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTESET_MASK;
+        if(u1_s_pictmute_mute_signal != (U1)0x00U){
+            vd_PICTMUTE_SET_PM_V_MUTE_H();
         }
-        else{                                                                   /* Sip Error Flag All OFF */
-            if(u1_t_read_pmvmute_sts == (U1)PICTMUTE_IO_STS_HIGH){
-                u1_PICTMUTE_SET_PM_V_MUTE_L();
-            }
+        else{
+            vd_PICTMUTE_SET_PM_V_MUTE_L();
         }
-
-        u1_s_pictmute_pmpsailerrn_pre_sts = u1_t_read_pmpsailerrn_sts;
-        u1_s_pictmute_vicrst_pre_sts = u1_t_read_vicrst_sts;
+        u1_s_pictmute_pmapshold_pre_sts = u1_t_read_pmapshold_sts;
     }
     else{
         u2_s_pictmute_cycchk_timer++;
@@ -142,12 +128,43 @@ static U1 u1_s_PictMute_TimChk(const U2 u2_a_tim_cnt, const U2 u2_a_wait_tim)
 }
 
 /*===================================================================================================================================*/
-/*  void  vd_g_PictMute_CamMuteReq(const U1 u1_a_mute_sts)                                                                           */
+/*  void    vd_g_PictMute_CamMuteReq(const U1 u1_a_req_sts)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      v  :  MUTE_OFF(FALSE) /  MUTE_ON(TRUE)                                                                           */
+/*  Arguments:      u1_a_req_sts  :  MUTE_OFF(FALSE) /  MUTE_ON(TRUE)                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void vd_g_PictMute_CamMuteReq(const U1 u1_a_req_sts)
+void    vd_g_PictMute_CamMuteReq(const U1 u1_a_req_sts)
 {
-    u1_s_pictmute_camaeramute_flag = u1_a_req_sts;
+    if(u1_a_req_sts == (U1)TRUE){
+        u1_s_pictmute_mute_signal |= (U1)PICTMUTE_MUTEHI_CAMERA;
+    }
+    else{
+        u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTELO_CAMERA;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_g_PictMute_SipErrorReq(const U1 u1_a_req_sts)                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_req_sts  :  MUTE_OFF(FALSE) /  MUTE_ON(TRUE)                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_PictMute_SipErrorReq(const U1 u1_a_req_sts)
+{
+    if(u1_a_req_sts == (U1)TRUE){
+        u1_s_pictmute_mute_signal |= (U1)PICTMUTE_MUTEHI_SIPERR;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_g_PictMute_OtaResetReq(const U1 u1_a_req_sts)                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_req_sts  :  MUTE_OFF(FALSE) /  MUTE_ON(TRUE)                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_PictMute_OtaResetReq(const U1 u1_a_req_sts)
+{
+    if(u1_a_req_sts == (U1)TRUE){
+        u1_s_pictmute_mute_signal |= (U1)PICTMUTE_MUTEHI_OTARST;
+    }
 }

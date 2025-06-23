@@ -1,34 +1,44 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-#ifndef PICTMUTECTL_H
-#define PICTMUTECTL_H
+#ifndef PWRCTL_H
+#define PWRCTL_H
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 
 #include "Dio.h"
-#include "PwrCtl.h"
+#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define PICTMUTE_VEHPOWSTT_PARKING              (POWER_MODE_STATE_PARK)
-#define PICTMUTE_VEHPOWSTT_EDS                  (POWER_MODE_STATE_EDS)
+/* Power Mode State */
+#define POWER_MODE_STATE_NUM                        (4U)
+#define POWER_MODE_STATE_PARK                       (0U)        /* 0 : Parking  */
+#define POWER_MODE_STATE_APPOFF                     (1U)        /* 1 : Display Off */
+#define POWER_MODE_STATE_APPON                      (2U)        /* 2 : Display On */
+#define POWER_MODE_STATE_EDS                        (3U)        /* 3 : EDS */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define PICTMUTE_IO_STS_LOW                     (0U)
-#define PICTMUTE_IO_STS_HIGH                    (1U)
+#define POWER_IO_STS_LOW                            (STD_LOW)
+#define POWER_IO_STS_HIGH                           (STD_HIGH)
 
-#define u1_PICTMUTE_GET_VEHPOWSTT()             (u1_g_Power_ModeState())
-#define u1_PICTMUTE_GET_PMA_PS_HOLD()           (Dio_ReadChannel(DIO_ID_PORT3_CH1))
-#define u1_PICTMUTE_GET_V_IC_RST()              (Dio_ReadChannel(DIO_ID_PORT3_CH3))
+#define u1_POWER_GET_BOOT()                         ((U1)Dio_ReadChannel((Dio_ChannelType)DIO_ID_PORT0_CH2))    /* 暫定 量産時削除 */
 
-#define vd_PICTMUTE_SET_PM_V_MUTE_L()           (Dio_WriteChannel(DIO_ID_PORT24_CH9, (Dio_LevelType)PICTMUTE_IO_STS_LOW))
-#define vd_PICTMUTE_SET_PM_V_MUTE_H()           (Dio_WriteChannel(DIO_ID_PORT24_CH9, (Dio_LevelType)PICTMUTE_IO_STS_HIGH))
+#define vd_POWER_GET_VPSINFO1(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, (x)))
+#define vd_POWER_GET_VPSINFO2(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, (x)))
+#define vd_POWER_GET_VPSINFO3(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, (x)))
+#define vd_POWER_GET_VPSINFO4(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, (x)))
+#define vd_POWER_GET_VPSINFO5(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, (x)))
+#define vd_POWER_GET_VPSINFO6(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, (x)))
+#define vd_POWER_GET_VPSINFO7(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, (x)))
+#define vd_POWER_GET_VPSINFOS(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, (x)))
+#define vd_POWER_GET_APOFRQ(x)                      ((void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ, (x)))
+#define vd_POWER_GET_PWRERRST(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_PWRERRST, (x)))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -41,19 +51,18 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_PictMute_Init(void);
-void    vd_g_PictMute_Routine(void);
-void    vd_g_PictMute_CamMuteReq(const U1 u1_a_req_sts);
-void    vd_g_PictMute_SipErrorReq(const U1 u1_a_req_sts);
-void    vd_g_PictMute_OtaResetReq(const U1 u1_a_req_sts);
+void    vd_g_Power_BonInit(void);
+void    vd_g_Power_WkupInit(void);
+void    vd_g_Power_Routine(void);
+U1      u1_g_Power_ModeState(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* PICTMUTECTL_H */
+#endif      /* PWRCTL_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  PictMuteCtl.c                                                                                                 */
+/*  Change History  :  PwrCtl.c                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
