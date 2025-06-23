@@ -147,6 +147,8 @@ datesi_time_zone.c
 datesi_com.c
 datesi.c
 PowerIcCtl.c
+PwrCtl.c
+
 volmute.c
 volmute_cfg.c
 IVI_DrcCtrl_Main.c

@@ -20,6 +20,7 @@
 #include    "IVI_PwrCtrl_DDFreq.h"
 #include    "GNSSCtl.h"
 #include    "XMTunerCtl.h"
+#include    "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -67,6 +68,7 @@ void            vd_g_Ivi_PwrCtrl_Main_Bon_init(void)
     vd_g_Ivi_PwrCtrl_DDFreq_init();
     vd_g_Gnss_Init();
     vd_g_XMTuner_Init();
+    vd_g_Power_BonInit();
 }
 
 /*===================================================================================================================================*/
@@ -82,6 +84,7 @@ void            vd_g_Ivi_PwrCtrl_Main_Wkup_init(void)
     vd_g_Ivi_PwrCtrl_DDFreq_init();
     vd_g_Gnss_Init();
     vd_g_XMTuner_Init();
+    vd_g_Power_WkupInit();
 }
 
 /*===================================================================================================================================*/
@@ -97,6 +100,7 @@ void            vd_g_Ivi_PwrCtrl_Main_Rst_init(void)
     vd_g_Ivi_PwrCtrl_DDFreq_init();
     vd_g_Gnss_Init();
     vd_g_XMTuner_Init();
+    vd_g_Power_WkupInit();
 }
 
 /*===================================================================================================================================*/
@@ -112,6 +116,7 @@ void            vd_g_Ivi_PwrCtrl_Main(void)
     vd_g_Ivi_PwrCtrl_DDFreq();
 	vd_g_Gnss_Routine();
     vd_g_XMTuner_MainTask();
+    vd_g_Power_Routine();
 }
 
 /*===================================================================================================================================*/
