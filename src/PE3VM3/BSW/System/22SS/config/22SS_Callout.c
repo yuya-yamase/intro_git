@@ -28,6 +28,7 @@
 #include "EthSW_Task.h"
 #include "PwrCtrl_Main.h"
 
+#include "PwrCtlSup.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -77,6 +78,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     /* vv User Hook start vv */
     vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
+    vd_g_PowerSup_BonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -115,6 +117,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     /* vv User Hook start vv */
     vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
+    vd_g_PowerSup_BonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -153,6 +156,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     /* vv User Hook start vv */
     vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
+    vd_g_PowerSup_WkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
