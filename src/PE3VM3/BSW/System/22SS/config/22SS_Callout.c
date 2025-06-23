@@ -113,7 +113,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
-    vd_g_PwrCtrlMainBonReq();
+    vd_g_PwrCtrlMainWakeupReq();
     EthSW_Sch_PowerOnInit();
     /* ^^ User Hook end   ^^ */
 
@@ -151,7 +151,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_VehopemdWkupInit();
 
     /* vv User Hook start vv */
-    vd_g_PwrCtrlMainBonReq();
+    vd_g_PwrCtrlMainWakeupReq();
     EthSW_Sch_PowerOnInit();
     /* ^^ User Hook end   ^^ */
 
