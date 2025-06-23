@@ -126,24 +126,24 @@ static U4 Mcu_frt_stamp[GPT_FRT_USELPSD_NUM_PARAM];
 /* ON/OFFシーケンス起動要求 */
 static U1 u1_s_PwrCtrl_Sys_Pwr_Sts;
 
-static U1 u1_s_PwrCtrl_PwrOn_Step;
-static U1 u1_s_PwrCtrl_PwrOff_Step;
+static U1 u1_s_PwrCtrl_Sys_PwrOn_Step;
+static U1 u1_s_PwrCtrl_Sys_PwrOff_Step;
 
-static U4 u4_s_PwrCtrl_Bu_Dd_Mode_Time;
-static U4 u4_s_PwrCtrl_DisCharge_Time;
-static U4 u4_s_PwrCtrl_Boost_Dcdc_Time;
-static U4 u4_s_PwrCtrl_Boost_Asil_Dcdc_Time;
-static U4 u4_s_PwrCtrl_Dd_Freq_Time;
-static U4 u4_s_PwrCtrl_Boost_Asil_Freq_Time;
-static U4 u4_s_PwrCtrl_V33_Peri_Time;
-static U4 u4_s_PwrCtrl_V33_Asil_Time;
-static U4 u4_s_PwrCtrl_V18_Time;
-static U4 u4_s_PwrCtrl_V18_Asil_Time;
-static U4 u4_s_PwrCtrl_Audio_Time;
-static U4 u4_s_PwrCtrl_V11_Asil_Time;
-static U4 u4_s_PwrCtrl_Eizo_Time;
+static U4 u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time;
+static U4 u4_s_PwrCtrl_Sys_DisCharge_Time;
+static U4 u4_s_PwrCtrl_Sys_Boost_Dcdc_Time;
+static U4 u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time;
+static U4 u4_s_PwrCtrl_Sys_Dd_Freq_Time;
+static U4 u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time;
+static U4 u4_s_PwrCtrl_Sys_V33_Peri_Time;
+static U4 u4_s_PwrCtrl_Sys_V33_Asil_Time;
+static U4 u4_s_PwrCtrl_Sys_V18_Time;
+static U4 u4_s_PwrCtrl_Sys_V18_Asil_Time;
+static U4 u4_s_PwrCtrl_Sys_Audio_Time;
+static U4 u4_s_PwrCtrl_Sys_V11_Asil_Time;
+static U4 u4_s_PwrCtrl_Sys_Eizo_Time;
 
-static U4 u4_s_PwrCtrl_Off_Time;
+static U4 u4_s_PwrCtrl_Sys_Off_Time;
 
 /* デバイス起動用カウンタ */
 static U4 u4_s_PwrCtrl_Polling_V33PERI;
@@ -273,24 +273,24 @@ void vd_g_PwrCtrlSysInit( void )
     u1_s_PwrCtrl_Sys_Pwr_Sts             = (U1)PWRCTRL_SYS_NON;
 
     /* 現在起動ステップの初期化 */
-    u1_s_PwrCtrl_PwrOn_Step              = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-    u1_s_PwrCtrl_PwrOff_Step             = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+    u1_s_PwrCtrl_Sys_PwrOn_Step              = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+    u1_s_PwrCtrl_Sys_PwrOff_Step             = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
     
     /* 待機時間測定用RAMの初期化 */
-    u4_s_PwrCtrl_Bu_Dd_Mode_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_DisCharge_Time          = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_Boost_Dcdc_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_Boost_Asil_Dcdc_Time    = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_Dd_Freq_Time            = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_Boost_Asil_Freq_Time    = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_V33_Peri_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_V33_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_V18_Time                = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_V18_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_Audio_Time              = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_V11_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_Eizo_Time               = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_Off_Time                = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_DisCharge_Time          = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_Boost_Dcdc_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time    = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_Dd_Freq_Time            = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time    = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_V33_Peri_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_V33_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_V18_Time                = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_V18_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_Audio_Time              = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_V11_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_Eizo_Time               = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+    u4_s_PwrCtrl_Sys_Off_Time                = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
 
     /* デバイス起動用カウンタの初期化 */
     u4_s_PwrCtrl_Polling_V33PERI         = (uint32)0U;
@@ -335,20 +335,20 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
     if ( u1_s_PwrCtrl_Sys_Pwr_Sts == PWRCTRL_SYS_ON )
     {
         /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
-        u1_s_PwrCtrl_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u4_s_PwrCtrl_Off_Time    = (U4)0U;
+        u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+        u4_s_PwrCtrl_Sys_Off_Time    = (U4)0U;
 
-        switch ( u1_s_PwrCtrl_PwrOn_Step )
+        switch ( u1_s_PwrCtrl_Sys_PwrOn_Step )
         {
             case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 vd_s_PwrCtrlSysPwrOnBuDdMode(); /* STEP1-2 */
                 vd_s_PwrCtrlSysPwrOnDisCharge();  /* STEP1-1 */
 
                 /* STEP1-1とSTEP1-2が完了していれば次のSTEPに進める */
-                if ( ( u4_s_PwrCtrl_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_DisCharge_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
+                if ( ( u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
-                    u1_s_PwrCtrl_PwrOn_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
+                    u1_s_PwrCtrl_Sys_PwrOn_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
                 }
                 break;
 
@@ -357,10 +357,10 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnBoostAsilDcdc();  /* STEP2-2 */
 
                 /* STEP2-1とSTEP2-2が完了していれば次のSTEPに進める */
-                if ( ( u4_s_PwrCtrl_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
+                if ( ( u4_s_PwrCtrl_Sys_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
-                    u1_s_PwrCtrl_PwrOn_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
+                    u1_s_PwrCtrl_Sys_PwrOn_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
                 }
                 break;
 
@@ -371,12 +371,12 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnV33Asil();       /* STEP3-4 */
 
                 /* STEP3-1~STEP3-4が完了していれば次のSTEPに進める */
-                if ( ( u4_s_PwrCtrl_Dd_Freq_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_Boost_Asil_Freq_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_V33_Peri_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_V33_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
+                if ( ( u4_s_PwrCtrl_Sys_Dd_Freq_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_V33_Peri_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_V33_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
-                    u1_s_PwrCtrl_PwrOn_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
+                    u1_s_PwrCtrl_Sys_PwrOn_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
                 }
                 break;
 
@@ -388,14 +388,14 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnEizo();    /* STEP4-5 */
 
                 /* STEP4-1~STEP4-5が完了していれば正常起動を設定 */
-                if ( ( u4_s_PwrCtrl_V18_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_V18_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_Audio_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_V11_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-                  && ( u4_s_PwrCtrl_Eizo_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
+                if ( ( u4_s_PwrCtrl_Sys_V18_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_V18_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_Audio_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_V11_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                  && ( u4_s_PwrCtrl_Sys_Eizo_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
                     /* 正常起動を設定 */
-                    u1_s_PwrCtrl_PwrOn_Step  = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                    u1_s_PwrCtrl_Sys_PwrOn_Step  = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                     /* 要求初期化 */
                     u1_s_PwrCtrl_Sys_Pwr_Sts = (U1)PWRCTRL_SYS_NON;
                 }
@@ -433,20 +433,20 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
     if ( u1_s_PwrCtrl_Sys_Pwr_Sts == (U1)PWRCTRL_SYS_OFF )
     {
         /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
-        u1_s_PwrCtrl_PwrOn_Step           = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u4_s_PwrCtrl_Bu_Dd_Mode_Time      = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_DisCharge_Time       = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_Boost_Dcdc_Time      = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_Boost_Asil_Dcdc_Time = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_Dd_Freq_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_Boost_Asil_Freq_Time = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_V33_Peri_Time        = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_V33_Asil_Time        = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_V18_Time             = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_V18_Asil_Time        = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_Audio_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_V11_Asil_Time        = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-        u4_s_PwrCtrl_Eizo_Time            = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u1_s_PwrCtrl_Sys_PwrOn_Step           = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+        u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time      = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_DisCharge_Time       = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_Boost_Dcdc_Time      = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_Dd_Freq_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_V33_Peri_Time        = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_V33_Asil_Time        = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_V18_Time             = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_V18_Asil_Time        = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_Audio_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_V11_Asil_Time        = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
+        u4_s_PwrCtrl_Sys_Eizo_Time            = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
         u4_s_PwrCtrl_Polling_V33PERI      = (U4)0U;
         u4_s_PwrCtrl_Polling_EIZO         = (U4)0U;
         u4_s_PwrCtrl_Polling_AUDIO        = (U4)0U;
@@ -461,15 +461,15 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
         Mcu_OnStep_PowerIc_OVRALL         = (uint8)MCU_STEP_P_IC_OVERALL_1;
         Mcu_PowerIc_LinkTimer             = (uint32)0U;
 
-        switch ( u1_s_PwrCtrl_PwrOff_Step )
+        switch ( u1_s_PwrCtrl_Sys_PwrOff_Step )
         {
             case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 vd_s_PwrCtrlSysPwrOffflw();
 
                 /* STEP1が完了していれば正常起動を設定 */
-                if ( u4_s_PwrCtrl_Off_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                if ( u4_s_PwrCtrl_Sys_Off_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                 {
-                    u1_s_PwrCtrl_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;     /* 次状態に遷移 */
+                    u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;     /* 次状態に遷移 */
                 }
                 break;
 
@@ -490,7 +490,7 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
                     vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_LOW);     /* P-IC電源制限 */
                     Mcu_PowerIc_OffTime = (uint16)0U;                           /* タイマクリア */
                     /* STEP2が完了していれば正常起動を設定 */
-                    u1_s_PwrCtrl_PwrOff_Step     =   (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                    u1_s_PwrCtrl_Sys_PwrOff_Step     =   (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                     /* 要求初期化 */
                     u1_s_PwrCtrl_Sys_Pwr_Sts = (U1)PWRCTRL_SYS_NON;
                 }
@@ -519,13 +519,13 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnBuDdMode( void )
 {
-    if(u4_s_PwrCtrl_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_WAIT_BU_DD_MODE_TIME){
+    if(u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_WAIT_BU_DD_MODE_TIME){
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BU_DD_MODE, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_Bu_Dd_Mode_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_Bu_Dd_Mode_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_Bu_Dd_Mode_Time++;
+    if(u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time++;
     }
     
     return;
@@ -540,12 +540,12 @@ static void vd_s_PwrCtrlSysPwrOnBuDdMode( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnDisCharge( void )
 {
-    if(u4_s_PwrCtrl_DisCharge_Time == (U4)PWRCTRL_SYS_WAIT_DISCHARGE_TIME){ /* 放電待ち時間を経過したか */
-        u4_s_PwrCtrl_DisCharge_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;        /* 経過していれば計測完了を設定 */
+    if(u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_WAIT_DISCHARGE_TIME){ /* 放電待ち時間を経過したか */
+        u4_s_PwrCtrl_Sys_DisCharge_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;        /* 経過していれば計測完了を設定 */
     }
     
-    if(u4_s_PwrCtrl_DisCharge_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_DisCharge_Time++;
+    if(u4_s_PwrCtrl_Sys_DisCharge_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_DisCharge_Time++;
     }
     
     return;
@@ -561,13 +561,13 @@ static void vd_s_PwrCtrlSysPwrOnDisCharge( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnBoostDcdc( void )
 {
-    if(u4_s_PwrCtrl_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_DCDC_TIME){    /* ウェイトタイムを経過したか 比較対象が0設定のため一致で確認 */
+    if(u4_s_PwrCtrl_Sys_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_DCDC_TIME){    /* ウェイトタイムを経過したか 比較対象が0設定のため一致で確認 */
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BOOST_DCDC, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_Boost_Dcdc_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_Boost_Dcdc_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_Boost_Dcdc_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_Boost_Dcdc_Time++;
+    if(u4_s_PwrCtrl_Sys_Boost_Dcdc_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_Boost_Dcdc_Time++;
     }
     
     return;
@@ -582,13 +582,13 @@ static void vd_s_PwrCtrlSysPwrOnBoostDcdc( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnBoostAsilDcdc( void )
 {
-    if(u4_s_PwrCtrl_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_DCDC_TIME){    /* ウェイトタイムを経過したか 比較対象が0設定のため一致で確認 */
+    if(u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_DCDC_TIME){    /* ウェイトタイムを経過したか 比較対象が0設定のため一致で確認 */
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_ASIL_DCDC, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_Boost_Asil_Dcdc_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_Boost_Asil_Dcdc_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_Boost_Asil_Dcdc_Time++;
+    if(u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time++;
     }
     
     return;
@@ -605,14 +605,14 @@ static void vd_s_PwrCtrlSysPwrOnDdFreq( void )
 {
     U2 dd_freq_duty;
 
-    if(u4_s_PwrCtrl_Dd_Freq_Time == (U4)PWRCTRL_SYS_WAIT_DD_FREQ_TIME){
+    if(u4_s_PwrCtrl_Sys_Dd_Freq_Time == (U4)PWRCTRL_SYS_WAIT_DD_FREQ_TIME){
         dd_freq_duty = PWRCTRL_SYS_PWM_DUTYCYCLE(5000U);    /* 50% */
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ, (U2)PWRCTRL_SYS_PWM_PERIOD, dd_freq_duty);
-        u4_s_PwrCtrl_Dd_Freq_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_Dd_Freq_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_Dd_Freq_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_Dd_Freq_Time++;
+    if(u4_s_PwrCtrl_Sys_Dd_Freq_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_Dd_Freq_Time++;
     }
     
     return;
@@ -629,14 +629,14 @@ static void vd_s_PwrCtrlSysPwrOnBoostAsilFreq( void )
 {
     U2 boost_asil_duty;
 
-    if(u4_s_PwrCtrl_Boost_Asil_Freq_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_FREQ_TIME){
+    if(u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_FREQ_TIME){
         boost_asil_duty = PWRCTRL_SYS_PWM_DUTYCYCLE(5000U);    /* 50% */
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ, (U2)PWRCTRL_SYS_PWM_PERIOD, boost_asil_duty);
-        u4_s_PwrCtrl_Boost_Asil_Freq_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_Boost_Asil_Freq_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_Boost_Asil_Freq_Time++;
+    if(u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time++;
     }
     
     return;
@@ -651,13 +651,13 @@ static void vd_s_PwrCtrlSysPwrOnBoostAsilFreq( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnV33Peri( void )
 {
-    if(u4_s_PwrCtrl_V33_Peri_Time == (U4)PWRCTRL_SYS_WAIT_V33_PERI_TIME){
+    if(u4_s_PwrCtrl_Sys_V33_Peri_Time == (U4)PWRCTRL_SYS_WAIT_V33_PERI_TIME){
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V33_PERI, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_V33_Peri_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_V33_Peri_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_V33_Peri_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_V33_Peri_Time++;
+    if(u4_s_PwrCtrl_Sys_V33_Peri_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_V33_Peri_Time++;
     }
     
     return;
@@ -672,13 +672,13 @@ static void vd_s_PwrCtrlSysPwrOnV33Peri( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnV33Asil( void )
 {
-    if(u4_s_PwrCtrl_V33_Asil_Time == (U4)PWRCTRL_SYS_WAIT_V33_ASIL_TIME){ 
+    if(u4_s_PwrCtrl_Sys_V33_Asil_Time == (U4)PWRCTRL_SYS_WAIT_V33_ASIL_TIME){ 
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V33_ASIL, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_V33_Asil_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_V33_Asil_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_V33_Asil_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_V33_Asil_Time++;
+    if(u4_s_PwrCtrl_Sys_V33_Asil_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_V33_Asil_Time++;
     }
     
     return;
@@ -693,13 +693,13 @@ static void vd_s_PwrCtrlSysPwrOnV33Asil( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnV18( void )
 {
-    if(u4_s_PwrCtrl_V18_Time == (U4)PWRCTRL_SYS_WAIT_V18_TIME){ 
+    if(u4_s_PwrCtrl_Sys_V18_Time == (U4)PWRCTRL_SYS_WAIT_V18_TIME){ 
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V18, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_V18_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_V18_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_V18_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_V18_Time++;
+    if(u4_s_PwrCtrl_Sys_V18_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_V18_Time++;
     }
     
     return;
@@ -714,13 +714,13 @@ static void vd_s_PwrCtrlSysPwrOnV18( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnV18Asil( void )
 {
-    if(u4_s_PwrCtrl_V18_Asil_Time == (U4)PWRCTRL_SYS_WAIT_V18_ASIL_TIME){ 
+    if(u4_s_PwrCtrl_Sys_V18_Asil_Time == (U4)PWRCTRL_SYS_WAIT_V18_ASIL_TIME){ 
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V18_ASIL, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_V18_Asil_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_V18_Asil_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_V18_Asil_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_V18_Asil_Time++;
+    if(u4_s_PwrCtrl_Sys_V18_Asil_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_V18_Asil_Time++;
     }
     
     return;
@@ -735,13 +735,13 @@ static void vd_s_PwrCtrlSysPwrOnV18Asil( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnAudio( void )
 {
-    if(u4_s_PwrCtrl_Audio_Time == (U4)PWRCTRL_SYS_WAIT_AUDIO_TIME){ 
+    if(u4_s_PwrCtrl_Sys_Audio_Time == (U4)PWRCTRL_SYS_WAIT_AUDIO_TIME){ 
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_AUDIO, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_Audio_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_Audio_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_Audio_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_Audio_Time++;
+    if(u4_s_PwrCtrl_Sys_Audio_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_Audio_Time++;
     }
     
     return;
@@ -756,13 +756,13 @@ static void vd_s_PwrCtrlSysPwrOnAudio( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnV11Asil( void )
 {
-    if(u4_s_PwrCtrl_V11_Asil_Time == (U4)PWRCTRL_SYS_WAIT_V11_ASIL_TIME){ 
+    if(u4_s_PwrCtrl_Sys_V11_Asil_Time == (U4)PWRCTRL_SYS_WAIT_V11_ASIL_TIME){ 
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V11_ASIL, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_V11_Asil_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_V11_Asil_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_V11_Asil_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_V11_Asil_Time++;
+    if(u4_s_PwrCtrl_Sys_V11_Asil_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_V11_Asil_Time++;
     }
     
     return;
@@ -777,13 +777,13 @@ static void vd_s_PwrCtrlSysPwrOnV11Asil( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnEizo( void )
 {
-    if(u4_s_PwrCtrl_Eizo_Time == (U4)PWRCTRL_SYS_WAIT_EIZO_TIME){ 
+    if(u4_s_PwrCtrl_Sys_Eizo_Time == (U4)PWRCTRL_SYS_WAIT_EIZO_TIME){ 
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_EIZO, MCU_DIO_HIGH);
-        u4_s_PwrCtrl_Eizo_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_Eizo_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
     
-    if(u4_s_PwrCtrl_Eizo_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
-        u4_s_PwrCtrl_Eizo_Time++;
+    if(u4_s_PwrCtrl_Sys_Eizo_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
+        u4_s_PwrCtrl_Sys_Eizo_Time++;
     }
     
     return;
@@ -798,7 +798,7 @@ static void vd_s_PwrCtrlSysPwrOnEizo( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOffflw( void )
 {
-    if ( u4_s_PwrCtrl_Off_Time == (U4)PWRCTRL_SYS_WAIT_SYSOFF ) /* ウェイトタイムを経過したか 比較対象が0設定のため一致で確認 */
+    if ( u4_s_PwrCtrl_Sys_Off_Time == (U4)PWRCTRL_SYS_WAIT_SYSOFF ) /* ウェイトタイムを経過したか 比較対象が0設定のため一致で確認 */
     {
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V18             , MCU_DIO_LOW);
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V18_ASIL        , MCU_DIO_LOW);
@@ -814,12 +814,12 @@ static void vd_s_PwrCtrlSysPwrOffflw( void )
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD_OFF, (U2)0U);
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD_OFF, (U2)0U);
 
-        u4_s_PwrCtrl_Off_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
+        u4_s_PwrCtrl_Sys_Off_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
 
-    if ( u4_s_PwrCtrl_Off_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+    if ( u4_s_PwrCtrl_Sys_Off_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN )
     {
-        u4_s_PwrCtrl_Off_Time++;
+        u4_s_PwrCtrl_Sys_Off_Time++;
     }
 
     return;
