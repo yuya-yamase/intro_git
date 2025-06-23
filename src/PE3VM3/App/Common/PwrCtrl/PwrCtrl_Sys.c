@@ -14,36 +14,24 @@
 /*--------------------------------------------------------------------------*/
 #include "PwrCtrl_cfg_private.h"
 
+#include "PwrCtlSup.h"
+
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 
-/* GNSS§Œäd—l */
+/* GNSSï¿½ï¿½ï¿½ï¿½dï¿½l */
 #define MCU_STEP_GNSS_PRE               (1U)
 #define MCU_STEP_GNSS_INI_CHK           (2U)
 #define MCU_STEP_GNSS_PRECHK            (3U)
 #define MCU_STEP_GNSS_POSTCHK           (4U)
 #define MCU_STEP_GNSS_POLING            (5U)
 #define MCU_STEP_GNSS_FIN               (6U)
+#define MCU_STEP_GNSS_WAIT              (7U)
 
 #define PWRCTRL_WAIT_GNSS_400MS         (400U / PWRCTRL_CFG_TASK_TIME)
 #define PWRCTRL_WAIT_GNSS_550MS         (550U / PWRCTRL_CFG_TASK_TIME)
 
-/* ƒWƒƒƒCƒE‰Á‘¬“xƒZƒ“ƒT§Œäd—l */
-#define MCU_STEP_GYRO1_OVERALL_1        (1U)    /* SENSOR-ON’[q Ë Hi (GPIO’[qˆ—) */
-#define MCU_STEP_GYRO1_OVERALL_FIN      (2U)
-/* Power-IC§Œäd—l */
-#define MCU_STEP_P_IC_OVERALL_1         (1U)    /* P-IC”j‰óƒƒO‚ ‚èH”»’è */
-#define MCU_STEP_P_IC_OVERALL_2         (2U)    /* P-IC“dŒ¹§Œä‰ğœ PIC-POFF=H */
-#define MCU_STEP_P_IC_OVERALL_3         (3U)    /* [P-IC‹N“®ó‘Ô](3ÍQÆ)‚ğSiP‚É’Ê’m‚µ‚Ä‚¢‚é‚©H ~ ƒXƒ^ƒ“ƒoƒC‰ğœ P-ON=H */
-#define MCU_STEP_P_IC_OVERALL_4         (4U)    /* ‰Šúİ’è u5-1.‰Šúİ’èv */
-#define MCU_STEP_P_IC_OVERALL_5         (5U)    /* Amp Onİ’è */
-#define MCU_STEP_P_IC_OVERALL_6         (6U)    /* wait 60ms */
-#define MCU_STEP_P_IC_OVERALL_7         (7U)    /* Diag—LŒøİ’è */
-#define MCU_STEP_P_IC_OVERALL_8         (8U)    /* MUTE‰ğœİ’è */
-#define MCU_STEP_P_IC_OVERALL_FIN       (9U)
-
-#define PWRCTRL_WAIT_POWERIC_60MS       (60U / PWRCTRL_CFG_TASK_TIME)
 #define PWRCTRL_WAIT_POWERIC_100MS      (100U   / PWRCTRL_CFG_TASK_TIME)
 
 /*--------------------------------------------------------------------------*/
@@ -68,23 +56,23 @@ static void vd_s_PwrCtrlSysPwrOnV11Asil( void );
 static void vd_s_PwrCtrlSysPwrOnEizo( void );
 static void vd_s_PwrCtrlSysPwrOffflw( void );
 
-/* ƒfƒoƒCƒXON§Œä */
-uint8   Mcu_Dev_Pwron_TimChk( uint32 mcu_tim_cnt, const uint32 mcu_tim_fim );
-void    Mcu_Dev_Pwron_Polling_V33PERI( void );
-void    Mcu_Dev_Pwron_Polling_EIZO( void );
-void    Mcu_Dev_Pwron_Polling_AUDIO( void );
-void    Mcu_Dev_Pwron_USB( void );
-void    Mcu_Dev_Pwron_PictIC( void );
-void    Mcu_Dev_Pwron_GVIFRx( void );
-void    Mcu_Dev_Pwron_GVIFTx_CDisp( void );
-void    Mcu_Dev_Pwron_Mic( void );
-void    Mcu_Dev_Pwron_Ant( void );
-void    Mcu_Dev_Pwron_SoundMUTE( void );
-void    Mcu_Dev_Pwron_Most( void );
-void    Mcu_Dev_Pwron_PowerIc( void );
-void    Mcu_Dev_Pwron_XMTuner( void );
+/* ï¿½fï¿½oï¿½Cï¿½XONï¿½ï¿½ï¿½ï¿½ */
+static U1       u1_t_Pwron_TimChk(const U4 u1_a_TIMCNT, const U4 u1_a_TIMFIN);
+static void     vd_s_McuDev_Polling_V33PERI(void);
+static void     vd_s_McuDev_Polling_EIZO( void );
+static void     vd_s_McuDev_Polling_AUDIO( void );
+static void     vd_s_McuDev_Pwron_USB(const U1 u1_a_PWR);
+static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR);
+static void     vd_s_McuDev_Pwron_GVIFRx(void);
+static void     vd_s_McuDev_Pwron_GVIFTx_CDisp(const U1 u1_a_PWR);
+static void     vd_s_McuDev_Pwron_Mic(const U1 u1_a_PWR);
+static void     vd_s_McuDev_Pwron_Ant(const U1 u1_a_PWR);
+static void     vd_s_McuDev_SoundMUTE(void);
+static void     vd_s_McuDev_Pwron_Most(const U1 u1_a_PWR);
+static void     vd_s_McuDev_Pwron_XMTuner(void);
+static void     vd_s_McuDev_Pwron_PowerIc(const U1 u1_a_PWR);
 void    Mcu_Dev_Pwron_GNSS( void );
-void    Mcu_Dev_Pwron_Gyro( void );
+static void    vd_s_McuDev_Pwron_Gyro(void);
 
 void    Mcu_Dev_Pwron_EizoIc_Init( void );
 void    Mcu_Dev_Pwron_GvifRcvr_Init( void );
@@ -120,14 +108,15 @@ static U1 Mcu_Dio_Port_level_Pre[MCU_PORT_NUM];
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
-/* ƒtƒŠ[ƒ‰ƒ“ƒ^ƒCƒ} */
+/* ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½} */
 static U4 Mcu_frt_stamp[GPT_FRT_USELPSD_NUM_PARAM];
 
-/* ON/OFFƒV[ƒPƒ“ƒX‹N“®—v‹ */
+/* ON/OFFï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½ï¿½ */
 static U1 u1_s_PwrCtrl_Sys_Pwr_Sts;
 
 static U1 u1_s_PwrCtrl_Sys_PwrOn_Step;
 static U1 u1_s_PwrCtrl_Sys_PwrOff_Step;
+static U1 u1_s_PwrCtrl_Sys_Off_SubStep;
 
 static U4 u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time;
 static U4 u4_s_PwrCtrl_Sys_DisCharge_Time;
@@ -143,31 +132,30 @@ static U4 u4_s_PwrCtrl_Sys_Audio_Time;
 static U4 u4_s_PwrCtrl_Sys_V11_Asil_Time;
 static U4 u4_s_PwrCtrl_Sys_Eizo_Time;
 
-static U4 u4_s_PwrCtrl_Sys_Off_Time;
-
-/* ƒfƒoƒCƒX‹N“®—pƒJƒEƒ“ƒ^ */
+/* ï¿½fï¿½oï¿½Cï¿½Xï¿½Nï¿½ï¿½ï¿½pï¿½Jï¿½Eï¿½ï¿½ï¿½^ */
 static U4 u4_s_PwrCtrl_Polling_V33PERI;
 static U4 u4_s_PwrCtrl_Polling_EIZO;
 static U4 u4_s_PwrCtrl_Polling_AUDIO;
+
+static U4 u4_s_PwrCtrl_waittim_usb;
+static U4 u4_s_PwrCtrl_waittim_pictic;
 
 static U2 u2_s_PwrCtrl_Polling_VIcRst;
 static U2 u2_s_PwrCtrl_Polling_GvifRxRst;
 static U2 u2_s_PwrCtrl_Polling_GvifTxRst;
 
-/* GNSS§Œäd—l */
-static uint8    Mcu_OnStep_GNSS;                /* 4§ŒäƒV[ƒPƒ“ƒX */
-static uint32   Mcu_GNSS_LinkTimer;             /* GNSS Watiˆ——pƒ^ƒCƒ} */
-static uint8    Mcu_Fail_GNSS;                  /* GNSS PMONI Low ŒŸ’mƒJƒEƒ“ƒ^ (2‰ñ–ÚŒŸ’m‚Å‚k‚‚—Œp‘±) */
+/* GNSSï¿½ï¿½ï¿½ï¿½dï¿½l */
+static uint8    Mcu_OnStep_GNSS;                /* 4ï¿½ï¿½ï¿½ï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½X */
+static uint32   Mcu_GNSS_LinkTimer;             /* GNSS Watiï¿½ï¿½ï¿½ï¿½ï¿½pï¿½^ï¿½Cï¿½} */
+static uint8    Mcu_Fail_GNSS;                  /* GNSS PMONI Low ï¿½ï¿½ï¿½mï¿½Jï¿½Eï¿½ï¿½ï¿½^ (2ï¿½ï¿½ÚŒï¿½ï¿½mï¿½Å‚kï¿½ï¿½ï¿½ï¿½ï¿½pï¿½ï¿½) */
 
-static uint16  Mcu_Gvif_LinkTimer;    /* CDC‹N“®‚©‚ç‚Ìƒ^ƒCƒ}¨–{—ˆ‚Í‚à‚Á‚Æ•Ê‚ÌêŠ‚ÅŠÇ—H */
-/* ƒWƒƒƒCƒE‰Á‘¬“xƒZƒ“ƒT§Œäd—l */
-static uint8    Mcu_OnStep_Gyro_1_OVRALL;       /* ‹N“®ƒtƒ[(1) */
+static uint16  Mcu_Gvif_LinkTimer;    /* CDCï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìƒ^ï¿½Cï¿½}ï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½Í‚ï¿½ï¿½ï¿½ï¿½Æ•Ê‚ÌêŠï¿½ÅŠÇ—ï¿½ï¿½H */
+/* ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Zï¿½ï¿½ï¿½Tï¿½ï¿½ï¿½ï¿½dï¿½l */
 static uint8   mcu_gvif_restart_sts;
 
-/* Power-IC§Œäd—l */
-static uint8    Mcu_OnStep_PowerIc_OVRALL;      /* 4.§Œäƒtƒ[ 4-1.’Êí‹N“® */
-static uint32   Mcu_PowerIc_LinkTimer;          /* Power-IC Watiˆ——pƒ^ƒCƒ} */
-static uint16   Mcu_PowerIc_OffTime;            /* Power-IC Off Waitˆ——pƒ^ƒCƒ} */
+/* Power-ICï¿½ï¿½ï¿½ï¿½dï¿½l */
+static U1 u1_s_PwrCtrl_PowerIc_OVRALL;      /* 4.ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½[ 4-1.ï¿½Êï¿½Nï¿½ï¿½ */
+static uint16   Mcu_PowerIc_OffTime;        /* Power-IC Off Waitï¿½ï¿½ï¿½ï¿½ï¿½pï¿½^ï¿½Cï¿½} */
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -184,17 +172,17 @@ static uint16   Mcu_PowerIc_OffTime;            /* Power-IC Off Waitˆ——pƒ^ƒCƒ}
 /****************************************************************************/
 /*****************************************************************************
   Function      : PwrCtrl_Sys_PwrOn_GetSts
-  Description   : SYS“dŒ¹ó‘Ô–â‚¢‡‚í‚¹
+  Description   : SYSï¿½dï¿½ï¿½ï¿½ï¿½Ô–â‚¢ï¿½ï¿½ï¿½í‚¹
   param[in/out] : none
-  return        : FALSE(0)FSYS“dŒ¹ƒV[ƒPƒ“ƒXÀs’†
-                  TRUE(1) FSYS“dŒ¹ƒV[ƒPƒ“ƒXŠ®—¹
+  return        : FALSE(0)ï¿½FSYSï¿½dï¿½ï¿½ï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½sï¿½ï¿½
+                  TRUE(1) ï¿½FSYSï¿½dï¿½ï¿½ï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½ï¿½
   Note          : 
 *****************************************************************************/
 U1 u1_g_PwrCtrlSysGetSts( void )
 {
     U1 u1_t_ret;
 
-    u1_t_ret = (U1)FALSE; /* ‰Šú‰»FSYS“dŒ¹ƒV[ƒPƒ“ƒXÀs’† */
+    u1_t_ret = (U1)FALSE; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½FSYSï¿½dï¿½ï¿½ï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½sï¿½ï¿½ */
 
     if ( u1_s_PwrCtrl_Sys_Pwr_Sts == (U1)PWRCTRL_SYS_NON )
     {
@@ -206,11 +194,11 @@ U1 u1_g_PwrCtrlSysGetSts( void )
 
 /*****************************************************************************
   Function      : vd_g_PwrCtrlSysPwrOnStart
-  Description   : SYS“dŒ¹ON—v‹
+  Description   : SYSï¿½dï¿½ï¿½ONï¿½vï¿½ï¿½
   param[in/out] : none
   return        : none
-  Note          : SYS“dŒ¹ONˆ—‚ğÀ{‚·‚éğŒ‚ğ–‚½‚µ‚½ê‡‚ÉƒR[ƒ‹‚·‚éB
-                  ÀÛ‚ÌONˆ—(‘Ò‚¿‡‚í‚¹AHWƒAƒNƒZƒX)‚ÍMET/IVI’èŠúˆ—(5ms)‚ÅÀ{‚·‚é‚±‚ÆB
+  Note          : SYSï¿½dï¿½ï¿½ONï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ–‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉƒRï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+                  ï¿½ï¿½ï¿½Û‚ï¿½ONï¿½ï¿½ï¿½ï¿½(ï¿½Ò‚ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½AHWï¿½Aï¿½Nï¿½Zï¿½X)ï¿½ï¿½MET/IVIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(5ms)ï¿½Åï¿½ï¿½{ï¿½ï¿½ï¿½é‚±ï¿½ÆB
 *****************************************************************************/
 void vd_g_PwrCtrlSysPwrOnStart( void )
 {
@@ -221,11 +209,11 @@ void vd_g_PwrCtrlSysPwrOnStart( void )
 
 /*****************************************************************************
   Function      : vd_g_PwrCtrlSysPwrOffStart
-  Description   : SYS“dŒ¹OFF—v‹
+  Description   : SYSï¿½dï¿½ï¿½OFFï¿½vï¿½ï¿½
   param[in/out] : none
   return        : none
-  Note          : SYS“dŒ¹OFF—vˆ—‚ğÀ{‚·‚éğŒ‚ğ–‚½‚µ‚½ê‡‚ÉƒR[ƒ‹‚·‚éB
-                  ÀÛ‚ÌOFFˆ—(‘Ò‚¿‡‚í‚¹AHWƒAƒNƒZƒX)‚ÍMET/IVI’èŠúˆ—(5ms)‚ÅÀ{‚·‚é‚±‚ÆB
+  Note          : SYSï¿½dï¿½ï¿½OFFï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ğ–‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ê‡ï¿½ÉƒRï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+                  ï¿½ï¿½ï¿½Û‚ï¿½OFFï¿½ï¿½ï¿½ï¿½(ï¿½Ò‚ï¿½ï¿½ï¿½ï¿½í‚¹ï¿½AHWï¿½Aï¿½Nï¿½Zï¿½X)ï¿½ï¿½MET/IVIï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(5ms)ï¿½Åï¿½ï¿½{ï¿½ï¿½ï¿½é‚±ï¿½ÆB
 *****************************************************************************/
 void vd_g_PwrCtrlSysPwrOffStart( void )
 {
@@ -236,20 +224,20 @@ void vd_g_PwrCtrlSysPwrOffStart( void )
 
 /*****************************************************************************
   Function      : u1_g_PwrCtrlSysShtdwnGetSts
-  Description   : SYSŒnƒfƒoƒCƒXI—¹ó‘Ô–â‚¢‡‚í‚¹
+  Description   : SYSï¿½nï¿½fï¿½oï¿½Cï¿½Xï¿½Iï¿½ï¿½ï¿½ï¿½Ô–â‚¢ï¿½ï¿½ï¿½í‚¹
   param[in/out] : none
-  return        : FALSE(0)FSYSŒnƒfƒoƒCƒXI—¹ˆ—Às’†
-                  TRUE(1) FSYSŒnƒfƒoƒCƒXI—¹ˆ—Š®—¹
-  Note          : SiP“dŒ¹OFFŠ®—¹Œã‚ÉƒR[ƒ‹‚·‚éB
-                  HW§Œäd—l‘ã‚ÍA‘ÎÛ‚ÍŠeƒfƒoƒCƒX‚Ì§Œäd—l‘QÆ‚Æ‚Ì‹LÚ‚ ‚èB
+  return        : FALSE(0)ï¿½FSYSï¿½nï¿½fï¿½oï¿½Cï¿½Xï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½sï¿½ï¿½
+                  TRUE(1) ï¿½FSYSï¿½nï¿½fï¿½oï¿½Cï¿½Xï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+  Note          : SiPï¿½dï¿½ï¿½OFFï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ÉƒRï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½B
+                  HWï¿½ï¿½ï¿½ï¿½dï¿½lï¿½ï¿½ï¿½ï¿½ÍAï¿½ÎÛ‚ÍŠeï¿½fï¿½oï¿½Cï¿½Xï¿½Ìï¿½ï¿½ï¿½dï¿½lï¿½ï¿½ï¿½Qï¿½Æ‚Æ‚Ì‹Lï¿½Ú‚ï¿½ï¿½ï¿½B
 *****************************************************************************/
 U1   u1_g_PwrCtrlSysShtdwnGetSts( void )
 {
     U1 u1_t_ret;
 
-    u1_t_ret  = (U1)FALSE; /* ‰Šú‰»FSYS“dŒ¹ONƒV[ƒPƒ“ƒXÀs’† */
+    u1_t_ret  = (U1)FALSE; /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½FSYSï¿½dï¿½ï¿½ONï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½ï¿½ï¿½sï¿½ï¿½ */
 
-    if(Mcu_Dev_Pwroff_Sts == (uint16)PWROFF_CONP_BIT){
+    if(u2_g_PwrCtrl_OffSts == (U2)PWROFF_CONP_BIT){
         u1_t_ret  =   (U1)TRUE;
     }
     return(u1_t_ret);
@@ -264,19 +252,20 @@ U1   u1_g_PwrCtrlSysShtdwnGetSts( void )
 *****************************************************************************/
 void vd_g_PwrCtrlSysInit( void )
 {
-    /* ƒtƒŠ[ƒ‰ƒ“ƒ^ƒCƒ}—p”z—ñ‰Šú‰» */
+    /* ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½}ï¿½pï¿½zï¿½ñ‰Šï¿½ï¿½ï¿½ */
     for(U4 cnt = 0; cnt < (U4)GPT_FRT_USELPSD_NUM_PARAM; cnt++){
         Mcu_frt_stamp[cnt] = 0;
     }
 
-    /* ON/OFFƒV[ƒPƒ“ƒX‹N“®—v‹‚Ì‰Šú‰» */
+    /* ON/OFFï¿½Vï¿½[ï¿½Pï¿½ï¿½ï¿½Xï¿½Nï¿½ï¿½ï¿½vï¿½ï¿½ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ */
     u1_s_PwrCtrl_Sys_Pwr_Sts             = (U1)PWRCTRL_SYS_NON;
 
-    /* Œ»İ‹N“®ƒXƒeƒbƒv‚Ì‰Šú‰» */
+    /* ï¿½ï¿½ï¿½İ‹Nï¿½ï¿½ï¿½Xï¿½eï¿½bï¿½vï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ */
     u1_s_PwrCtrl_Sys_PwrOn_Step              = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
     u1_s_PwrCtrl_Sys_PwrOff_Step             = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-    
-    /* ‘Ò‹@ŠÔ‘ª’è—pRAM‚Ì‰Šú‰» */
+    u1_s_PwrCtrl_Sys_Off_SubStep             = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+
+    /* ï¿½Ò‹@ï¿½ï¿½ï¿½Ô‘ï¿½ï¿½ï¿½pRAMï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ */
     u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
     u4_s_PwrCtrl_Sys_DisCharge_Time          = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
     u4_s_PwrCtrl_Sys_Boost_Dcdc_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
@@ -290,29 +279,29 @@ void vd_g_PwrCtrlSysInit( void )
     u4_s_PwrCtrl_Sys_Audio_Time              = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
     u4_s_PwrCtrl_Sys_V11_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
     u4_s_PwrCtrl_Sys_Eizo_Time               = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
-    u4_s_PwrCtrl_Sys_Off_Time                = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
 
-    /* ƒfƒoƒCƒX‹N“®—pƒJƒEƒ“ƒ^‚Ì‰Šú‰» */
+    /* ï¿½fï¿½oï¿½Cï¿½Xï¿½Nï¿½ï¿½ï¿½pï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ */
     u4_s_PwrCtrl_Polling_V33PERI         = (uint32)0U;
     u4_s_PwrCtrl_Polling_EIZO            = (uint32)0U;
     u4_s_PwrCtrl_Polling_AUDIO           = (uint32)0U;
+
+    u4_s_PwrCtrl_waittim_usb            = (U4)0U; 
+    u4_s_PwrCtrl_waittim_pictic         = (U4)0U;
 
     u2_s_PwrCtrl_Polling_VIcRst          = (uint32)0U;
     u2_s_PwrCtrl_Polling_GvifRxRst       = (uint32)0U;
     u2_s_PwrCtrl_Polling_GvifTxRst       = (uint32)0U;
     mcu_gvif_restart_sts        = (uint8)0U;
 
-    /* Init‚ÌƒtƒŠ[ƒ‰ƒ“ƒ^ƒCƒ}æ“¾ */
-    /* g—pæFGNSS,ƒWƒƒƒCƒE‰Á‘¬“xƒZƒ“ƒT§Œä */
+    /* Initï¿½ï¿½ï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½}ï¿½æ“¾ */
+    /* ï¿½gï¿½pï¿½ï¿½FGNSS,ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Zï¿½ï¿½ï¿½Tï¿½ï¿½ï¿½ï¿½ */
     Mcu_frt_stamp[GPT_FRT_USELPSD_BASE] = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
 
     Mcu_OnStep_GNSS             = (uint8)MCU_STEP_GNSS_PRE;
     Mcu_GNSS_LinkTimer          = (uint32)0U;
     Mcu_Fail_GNSS               = (uint8)0U;
 
-    Mcu_OnStep_Gyro_1_OVRALL    = (uint8)MCU_STEP_GYRO1_OVERALL_1;
-    Mcu_OnStep_PowerIc_OVRALL   = (uint8)MCU_STEP_P_IC_OVERALL_1;
-    Mcu_PowerIc_LinkTimer       = (uint32)0U;
+    u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
     Mcu_PowerIc_OffTime         = (uint16)0U;
 
     for(U1 cnt = 0; cnt < MCU_PORT_NUM; cnt++){
@@ -331,12 +320,12 @@ void vd_g_PwrCtrlSysInit( void )
 *****************************************************************************/
 void vd_g_PwrCtrlSysPwrOnMainFunction( void )
 {
-    /* SYS‹N“®“dŒ¹ON—v‹‚ ‚è */
+    /* SYSï¿½Nï¿½ï¿½ï¿½dï¿½ï¿½ONï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     if ( u1_s_PwrCtrl_Sys_Pwr_Sts == PWRCTRL_SYS_ON )
     {
-        /* OFF‘¤‚ÌSTEPŠÇ—RAM,ƒ^ƒCƒ}‚ğƒNƒŠƒA‚µ‚ÄOFF2T–Ú‚àÀs‚Å‚«‚é‚æ‚¤‚É‚·‚é */
+        /* OFFï¿½ï¿½ï¿½ï¿½STEPï¿½Ç—ï¿½RAM,ï¿½^ï¿½Cï¿½}ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½OFF2ï¿½Tï¿½Ú‚ï¿½ï¿½ï¿½ï¿½sï¿½Å‚ï¿½ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½ */
         u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-        u4_s_PwrCtrl_Sys_Off_Time    = (U4)0U;
+        u1_s_PwrCtrl_Sys_Off_SubStep = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
 
         switch ( u1_s_PwrCtrl_Sys_PwrOn_Step )
         {
@@ -344,7 +333,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnBuDdMode(); /* STEP1-2 */
                 vd_s_PwrCtrlSysPwrOnDisCharge();  /* STEP1-1 */
 
-                /* STEP1-1‚ÆSTEP1-2‚ªŠ®—¹‚µ‚Ä‚¢‚ê‚ÎŸ‚ÌSTEP‚Éi‚ß‚é */
+                /* STEP1-1ï¿½ï¿½STEP1-2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½STEPï¿½Éiï¿½ß‚ï¿½ */
                 if ( ( u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
@@ -356,7 +345,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnBoostDcdc();      /* STEP2-1 */
                 vd_s_PwrCtrlSysPwrOnBoostAsilDcdc();  /* STEP2-2 */
 
-                /* STEP2-1‚ÆSTEP2-2‚ªŠ®—¹‚µ‚Ä‚¢‚ê‚ÎŸ‚ÌSTEP‚Éi‚ß‚é */
+                /* STEP2-1ï¿½ï¿½STEP2-2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½STEPï¿½Éiï¿½ß‚ï¿½ */
                 if ( ( u4_s_PwrCtrl_Sys_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
@@ -370,7 +359,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnV33Peri();       /* STEP3-3 */
                 vd_s_PwrCtrlSysPwrOnV33Asil();       /* STEP3-4 */
 
-                /* STEP3-1~STEP3-4‚ªŠ®—¹‚µ‚Ä‚¢‚ê‚ÎŸ‚ÌSTEP‚Éi‚ß‚é */
+                /* STEP3-1~STEP3-4ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½STEPï¿½Éiï¿½ß‚ï¿½ */
                 if ( ( u4_s_PwrCtrl_Sys_Dd_Freq_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_V33_Peri_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
@@ -387,30 +376,30 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnV11Asil(); /* STEP4-4 */
                 vd_s_PwrCtrlSysPwrOnEizo();    /* STEP4-5 */
 
-                /* STEP4-1~STEP4-5‚ªŠ®—¹‚µ‚Ä‚¢‚ê‚Î³í‹N“®‚ğİ’è */
+                /* STEP4-1~STEP4-5ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½İ’ï¿½ */
                 if ( ( u4_s_PwrCtrl_Sys_V18_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_V18_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_Audio_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_V11_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_Eizo_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
-                    /* ³í‹N“®‚ğİ’è */
+                    /* ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½İ’ï¿½ */
                     u1_s_PwrCtrl_Sys_PwrOn_Step  = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-                    /* —v‹‰Šú‰» */
+                    /* ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
                     u1_s_PwrCtrl_Sys_Pwr_Sts = (U1)PWRCTRL_SYS_NON;
                 }
                 break;
 
             case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
-                /* ³í‹N“®‚Í‰½‚à‚µ‚È‚¢ */
+                /* ï¿½ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ */
                 break;
 
             default:
-                /* ˆÙíŒn‚Í–¢l—¶ */
+                /* ï¿½Ùï¿½nï¿½Í–ï¿½ï¿½lï¿½ï¿½ */
                 break;
         }
 
-        /* PortXVˆ— */
+        /* Portï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ */
         vd_g_McuDevPwronWritePort();
     }
     return;
@@ -429,10 +418,10 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
 
     u1_t_read_v33_peri   = (U1)STD_HIGH;
 
-    /* SYS‹N“®“dŒ¹OFF—v‹‚ ‚è */
+    /* SYSï¿½Nï¿½ï¿½ï¿½dï¿½ï¿½OFFï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     if ( u1_s_PwrCtrl_Sys_Pwr_Sts == (U1)PWRCTRL_SYS_OFF )
     {
-        /* ON‘¤‚ÌSTEPŠÇ—RAM,ƒ^ƒCƒ}‚ğƒNƒŠƒA‚µ‚ÄON2T–Ú‚àÀs‚Å‚«‚é‚æ‚¤‚É‚·‚é */
+        /* ONï¿½ï¿½ï¿½ï¿½STEPï¿½Ç—ï¿½RAM,ï¿½^ï¿½Cï¿½}ï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½Aï¿½ï¿½ï¿½ï¿½ON2ï¿½Tï¿½Ú‚ï¿½ï¿½ï¿½ï¿½sï¿½Å‚ï¿½ï¿½ï¿½æ‚¤ï¿½É‚ï¿½ï¿½ï¿½ */
         u1_s_PwrCtrl_Sys_PwrOn_Step           = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
         u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time      = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
         u4_s_PwrCtrl_Sys_DisCharge_Time       = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
@@ -450,6 +439,8 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
         u4_s_PwrCtrl_Polling_V33PERI      = (U4)0U;
         u4_s_PwrCtrl_Polling_EIZO         = (U4)0U;
         u4_s_PwrCtrl_Polling_AUDIO        = (U4)0U;
+        u4_s_PwrCtrl_waittim_usb          = (U4)0U;
+        u4_s_PwrCtrl_waittim_pictic       = (U4)0U;
         u2_s_PwrCtrl_Polling_VIcRst       = (U2)0U;
         u2_s_PwrCtrl_Polling_GvifRxRst    = (U2)0U;
         u2_s_PwrCtrl_Polling_GvifTxRst    = (U2)0U;
@@ -457,19 +448,17 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
         Mcu_GNSS_LinkTimer                = (uint32)0U;
         Mcu_Fail_GNSS                     = (uint8)0U;
 
-        Mcu_OnStep_Gyro_1_OVRALL          = (uint8)MCU_STEP_GYRO1_OVERALL_1;
-        Mcu_OnStep_PowerIc_OVRALL         = (uint8)MCU_STEP_P_IC_OVERALL_1;
-        Mcu_PowerIc_LinkTimer             = (uint32)0U;
+        u1_s_PwrCtrl_PowerIc_OVRALL       = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
 
         switch ( u1_s_PwrCtrl_Sys_PwrOff_Step )
         {
             case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 vd_s_PwrCtrlSysPwrOffflw();
 
-                /* STEP1‚ªŠ®—¹‚µ‚Ä‚¢‚ê‚Î³í‹N“®‚ğİ’è */
-                if ( u4_s_PwrCtrl_Sys_Off_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
+                /* STEP1ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½İ’ï¿½ */
+                if ( u1_s_PwrCtrl_Sys_Off_SubStep == (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT )
                 {
-                    u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;     /* Ÿó‘Ô‚É‘JˆÚ */
+                    u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;     /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
                 }
                 break;
 
@@ -479,31 +468,31 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
                     Mcu_PowerIc_OffTime++;
                 }
 
-                u1_t_read_v33_peri = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]); /* V33-PERI-ON“Ç‚İo‚µ */
+                u1_t_read_v33_peri = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]); /* V33-PERI-ONï¿½Ç‚İoï¿½ï¿½ */
                 if ( u1_t_read_v33_peri == (U1)STD_HIGH )
                 {
-                    Mcu_PowerIc_OffTime = (uint16)0U;       /* V33-PERI-ON=High‚Ìê‡Ÿˆ—‚Ö‚Ì‘JˆÚ‚ğ—}§‚·‚é */
+                    Mcu_PowerIc_OffTime = (uint16)0U;       /* V33-PERI-ON=Highï¿½Ìê‡ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ö‚Ì‘Jï¿½Ú‚ï¿½}ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
                 }
 
                 if ( Mcu_PowerIc_OffTime >= PWRCTRL_WAIT_POWERIC_100MS )
                 {
-                    vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_LOW);     /* P-IC“dŒ¹§ŒÀ */
-                    Mcu_PowerIc_OffTime = (uint16)0U;                           /* ƒ^ƒCƒ}ƒNƒŠƒA */
-                    /* STEP2‚ªŠ®—¹‚µ‚Ä‚¢‚ê‚Î³í‹N“®‚ğİ’è */
+                    vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_LOW);     /* P-ICï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+                    Mcu_PowerIc_OffTime = (uint16)0U;                           /* ï¿½^ï¿½Cï¿½}ï¿½Nï¿½ï¿½ï¿½A */
+                    /* STEP2ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½Îï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½İ’ï¿½ */
                     u1_s_PwrCtrl_Sys_PwrOff_Step     =   (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-                    /* —v‹‰Šú‰» */
+                    /* ï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
                     u1_s_PwrCtrl_Sys_Pwr_Sts = (U1)PWRCTRL_SYS_NON;
                 }
                 break;
             case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
-                /* ³íI—¹‚Í‰½‚à‚µ‚È‚¢ */
+                /* ï¿½ï¿½ï¿½ï¿½Iï¿½ï¿½ï¿½ï¿½ï¿½Í‰ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ */
                 break;
             default:
-                /* ˆÙíŒn‚Í–¢l—¶ */
+                /* ï¿½Ùï¿½nï¿½Í–ï¿½ï¿½lï¿½ï¿½ */
                 break;
         }
         
-        /* PortXVˆ— */
+        /* Portï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ */
         vd_g_McuDevPwronWritePort();
     }
 
@@ -540,8 +529,8 @@ static void vd_s_PwrCtrlSysPwrOnBuDdMode( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnDisCharge( void )
 {
-    if(u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_WAIT_DISCHARGE_TIME){ /* •ú“d‘Ò‚¿ŠÔ‚ğŒo‰ß‚µ‚½‚© */
-        u4_s_PwrCtrl_Sys_DisCharge_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;        /* Œo‰ß‚µ‚Ä‚¢‚ê‚ÎŒv‘ªŠ®—¹‚ğİ’è */
+    if(u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_WAIT_DISCHARGE_TIME){ /* ï¿½ï¿½ï¿½dï¿½Ò‚ï¿½ï¿½ï¿½ï¿½Ô‚ï¿½ï¿½oï¿½ß‚ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        u4_s_PwrCtrl_Sys_DisCharge_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;        /* ï¿½oï¿½ß‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ÎŒvï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½ */
     }
     
     if(u4_s_PwrCtrl_Sys_DisCharge_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
@@ -561,7 +550,7 @@ static void vd_s_PwrCtrlSysPwrOnDisCharge( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnBoostDcdc( void )
 {
-    if(u4_s_PwrCtrl_Sys_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_DCDC_TIME){    /* ƒEƒFƒCƒgƒ^ƒCƒ€‚ğŒo‰ß‚µ‚½‚© ”äŠr‘ÎÛ‚ª0İ’è‚Ì‚½‚ßˆê’v‚ÅŠm”F */
+    if(u4_s_PwrCtrl_Sys_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_DCDC_TIME){    /* ï¿½Eï¿½Fï¿½Cï¿½gï¿½^ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ß‚ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½rï¿½ÎÛ‚ï¿½0ï¿½İ’ï¿½Ì‚ï¿½ï¿½ßˆï¿½vï¿½ÅŠmï¿½F */
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BOOST_DCDC, MCU_DIO_HIGH);
         u4_s_PwrCtrl_Sys_Boost_Dcdc_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
@@ -582,7 +571,7 @@ static void vd_s_PwrCtrlSysPwrOnBoostDcdc( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnBoostAsilDcdc( void )
 {
-    if(u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_DCDC_TIME){    /* ƒEƒFƒCƒgƒ^ƒCƒ€‚ğŒo‰ß‚µ‚½‚© ”äŠr‘ÎÛ‚ª0İ’è‚Ì‚½‚ßˆê’v‚ÅŠm”F */
+    if(u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_DCDC_TIME){    /* ï¿½Eï¿½Fï¿½Cï¿½gï¿½^ï¿½Cï¿½ï¿½ï¿½ï¿½ï¿½oï¿½ß‚ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½rï¿½ÎÛ‚ï¿½0ï¿½İ’ï¿½Ì‚ï¿½ï¿½ßˆï¿½vï¿½ÅŠmï¿½F */
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_ASIL_DCDC, MCU_DIO_HIGH);
         u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
@@ -798,100 +787,120 @@ static void vd_s_PwrCtrlSysPwrOnEizo( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOffflw( void )
 {
-    if ( u4_s_PwrCtrl_Sys_Off_Time == (U4)PWRCTRL_SYS_WAIT_SYSOFF ) /* ƒEƒFƒCƒgƒ^ƒCƒ€‚ğŒo‰ß‚µ‚½‚© ”äŠr‘ÎÛ‚ª0İ’è‚Ì‚½‚ßˆê’v‚ÅŠm”F */
+    switch (u1_s_PwrCtrl_Off_SubStep)
     {
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V18             , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V18_ASIL        , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_AUDIO           , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V11_ASIL        , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_EIZO            , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V33_PERI        , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V33_ASIL        , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BU_DD_MODE      , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BOOST_DCDC      , MCU_DIO_LOW);
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_ASIL_DCDC , MCU_DIO_LOW);
+    case PWRCTRL_COMMON_PROCESS_STEP1:
+        /* ï¿½ï¿½ï¿½ï¿½[ï¿½qï¿½Ì‘Oï¿½É’[ï¿½qOFFï¿½ï¿½ï¿½ï¿½Kï¿½vï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CAN_RST                   , MCU_DIO_LOW); /* AUDIO-ON 1msï¿½O */
+        vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CDISP_RST                 , MCU_DIO_LOW); /* AUDIO-ON 1msï¿½O */
+
+        u1_s_PwrCtrl_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
+        break;
+
+    case PWRCTRL_COMMON_PROCESS_STEP2:
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V18            , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V18_ASIL       , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_AUDIO          , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V11_ASIL       , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_EIZO           , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V33_PERI       , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_V33_ASIL       , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BU_DD_MODE     , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BOOST_DCDC     , MCU_DIO_LOW);
+        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_ASIL_DCDC      , MCU_DIO_LOW);
 
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD_OFF, (U2)0U);
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD_OFF, (U2)0U);
 
-        u4_s_PwrCtrl_Sys_Off_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
-    }
+        u1_s_PwrCtrl_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+        break;
 
-    if ( u4_s_PwrCtrl_Sys_Off_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN )
-    {
-        u4_s_PwrCtrl_Sys_Off_Time++;
-    }
+    case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+        /* do nothing */
+        break;
 
-    return;
+    default:
+        u1_s_PwrCtrl_Off_SubStep = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+        break;
+    }
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron
+  Function      : vd_g_McuDev_Pwron
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : ƒfƒoƒCƒXON§Œä 
+  Note          : ï¿½fï¿½oï¿½Cï¿½XONï¿½ï¿½ï¿½ï¿½ 
 *****************************************************************************/
-void Mcu_Dev_Pwron( void ){
-    if (u1_g_PwrCtrl_NoRedun_Pwr_Sts == (uint8)PWRCTRL_NOREDUN_STS_ON) {
-        /* ‘ÎÛƒ|[ƒg‚Ìƒ|[ƒŠƒ“ƒO‚Æƒ^ƒCƒ}ƒJƒEƒ“ƒgŠJn”»’f */
-        Mcu_Dev_Pwron_Polling_V33PERI();
-        Mcu_Dev_Pwron_Polling_EIZO();
-        Mcu_Dev_Pwron_Polling_AUDIO();
+void            vd_g_McuDev_Pwron(void)
+{
+    U1      u1_t_pwr;
 
-        Mcu_Dev_Pwron_USB();            /* USBƒAƒ_ƒvƒ^Ú‘±ŒŸ’m */
-        Mcu_Dev_Pwron_PictIC();         /* ‰f‘œIC(ML86294)§Œä */
-        Mcu_Dev_Pwron_GVIFRx();         /* GVIF3óM(CXD4984ER)§Œä */
-        Mcu_Dev_Pwron_GVIFTx_CDisp();   /* GVIF3‘—M(CXD4937/57)§Œä C-Disp */
-        Mcu_Dev_Pwron_Mic();            /* ƒ}ƒCƒN“dŒ¹§Œä */
-        Mcu_Dev_Pwron_Ant();            /* ƒAƒ“ƒeƒi“dŒ¹§Œä */
-        Mcu_Dev_Pwron_SoundMUTE();      /* ‰¹ºMUTE§Œä */
-        Mcu_Dev_Pwron_Most();           /* MOST(v2)ƒVƒXƒeƒ€§Œä */
-        Mcu_Dev_Pwron_XMTuner();        /* XM TUNER§Œä */
-        Mcu_Dev_Pwron_GNSS();           /* GNSS§Œä */
+    if (u1_g_PwrCtrl_NoRedun_Pwr_Sts == (U1)PWRCTRL_NOREDUN_STS_ON) {
+        /* ï¿½ÎÛƒ|ï¿½[ï¿½gï¿½Ìƒ|ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½Æƒ^ï¿½Cï¿½}ï¿½Jï¿½Eï¿½ï¿½ï¿½gï¿½Jï¿½nï¿½ï¿½ï¿½f */
+        vd_s_McuDev_Polling_V33PERI();
+        vd_s_McuDev_Polling_EIZO();
+        vd_s_McuDev_Polling_AUDIO();
 
-        Mcu_Dev_Pwron_PowerIc();        /* Power-IC§Œä */
-        Mcu_Dev_Pwron_Gyro();           /* ƒWƒƒƒCƒE‰Á‘¬“xƒZƒ“ƒT(SMI230)§Œä */
+        /* ï¿½dï¿½ï¿½ï¿½ï¿½Ôæ“¾ */
+        u1_t_pwr    = u1_g_PowerSup_ModeState();
 
-        vd_g_McuDevPwronWritePort();      /* PortXVˆ— */
+        /* ï¿½Aï¿½vï¿½ï¿½ONï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_Pwron_USB(u1_t_pwr);            /* USBï¿½Aï¿½_ï¿½vï¿½^ï¿½Ú‘ï¿½ï¿½ï¿½ï¿½m */
+        vd_s_McuDev_Pwron_PictIC(u1_t_pwr);         /* ï¿½fï¿½ï¿½IC(ML86294)ï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_Pwron_GVIFRx();                 /* GVIF3ï¿½ï¿½M(CXD4984ER)ï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_Pwron_GVIFTx_CDisp(u1_t_pwr);   /* GVIF3ï¿½ï¿½ï¿½M(CXD4937/57)ï¿½ï¿½ï¿½ï¿½ C-Disp */
+        vd_s_McuDev_Pwron_Mic(u1_t_pwr);            /* ï¿½}ï¿½Cï¿½Nï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_Pwron_Ant(u1_t_pwr);            /* ï¿½Aï¿½ï¿½ï¿½eï¿½iï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_SoundMUTE();                    /* ï¿½ï¿½ï¿½ï¿½MUTEï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_Pwron_Most(u1_t_pwr);           /* MOST(v2)ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_Pwron_XMTuner();                /* XM TUNERï¿½ï¿½ï¿½ï¿½ */
+        Mcu_Dev_Pwron_GNSS();                       /* GNSSï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_Pwron_PowerIc(u1_t_pwr);        /* Power-ICï¿½ï¿½ï¿½ï¿½ */
+        vd_s_McuDev_Pwron_Gyro();                   /* ï¿½Wï¿½ï¿½ï¿½Cï¿½ï¿½ï¿½Eï¿½ï¿½ï¿½ï¿½ï¿½xï¿½Zï¿½ï¿½ï¿½T(SMI230)ï¿½ï¿½ï¿½ï¿½ */
+
+        /* Portï¿½Xï¿½Vï¿½ï¿½ï¿½ï¿½ */
+        vd_g_McuDevPwronWritePort();
     }
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_TimChk
-  Description   : 
-  param[in/out] : 
-  return        : -
-  Note          : 
-*****************************************************************************/
-uint8 Mcu_Dev_Pwron_TimChk( uint32 mcu_tim_cnt, const uint32 mcu_tim_fim){
-    uint8   mcu_ret;
-    mcu_ret =   (uint8)FALSE;
-
-    if(mcu_tim_cnt  >  mcu_tim_fim){
-        mcu_ret =   (uint8)TRUE;
-    }
-
-    return(mcu_ret);
-}
-
-/*****************************************************************************
-  Function      : Mcu_Dev_Pwron_Polling_V33PERI
+  Function      : u1_t_Pwron_TimChk
   Description   : 
   param[in/out] : 
   return        : -
   Note          : 
 *****************************************************************************/
-void Mcu_Dev_Pwron_Polling_V33PERI( void ){
-    uint8   mcu_dio_ret;
+static U1       u1_t_Pwron_TimChk(const U4 u1_a_TIMCNT, const U4 u1_a_TIMFIN)
+{
+    U1   u1_t_ret;
+    u1_t_ret =  (U1)FALSE;
 
-    mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);
-
-    if(mcu_dio_ret  ==  (uint8)STD_LOW){
-        u4_s_PwrCtrl_Polling_V33PERI =   (uint32)0U;
+    if(u1_a_TIMCNT  >  u1_a_TIMFIN){
+        u1_t_ret =  (U1)TRUE;
     }
-    else if(mcu_dio_ret  ==  (uint8)STD_HIGH &&
-        u4_s_PwrCtrl_Polling_V33PERI <   (uint32)PWRCTRL_SYS_COUNTTIME_FIN){
+
+    return(u1_t_ret);
+}
+
+/*****************************************************************************
+  Function      : vd_s_McuDev_Polling_V33PERI
+  Description   : 
+  param[in/out] : 
+  return        : -
+  Note          : 
+*****************************************************************************/
+static void     vd_s_McuDev_Polling_V33PERI(void)
+{
+    Dio_LevelType   dl_t_port;
+
+    dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);
+
+    if(dl_t_port == (Dio_LevelType)STD_LOW){
+        u4_s_PwrCtrl_Polling_V33PERI    = (U4)0U;
+    }
+    else if((dl_t_port == (Dio_LevelType)STD_HIGH) &&
+            (u4_s_PwrCtrl_Polling_V33PERI < (U4)PWRCTRL_SYS_COUNTTIME_FIN)){
         u4_s_PwrCtrl_Polling_V33PERI++;
     }
     else{
@@ -900,22 +909,23 @@ void Mcu_Dev_Pwron_Polling_V33PERI( void ){
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_Polling_EIZO
+  Function      : vd_s_McuDev_Polling_EIZO
   Description   : 
   param[in/out] : 
   return        : -
   Note          : 
 *****************************************************************************/
-void Mcu_Dev_Pwron_Polling_EIZO( void ){
-    uint8   mcu_dio_ret;
+static void     vd_s_McuDev_Polling_EIZO(void)
+{
+    Dio_LevelType   dl_t_port;
 
-    mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_EIZO]);
+    dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_EIZO]);
 
-    if(mcu_dio_ret  ==  (uint8)STD_LOW){
-        u4_s_PwrCtrl_Polling_EIZO =   (uint32)0U;
+    if(dl_t_port == (Dio_LevelType)STD_LOW){
+        u4_s_PwrCtrl_Polling_EIZO =   (U4)0U;
     }
-    else if(mcu_dio_ret  ==  (uint8)STD_HIGH &&
-        u4_s_PwrCtrl_Polling_EIZO <   (uint32)PWRCTRL_SYS_COUNTTIME_FIN){
+    else if((dl_t_port == (Dio_LevelType)STD_HIGH) &&
+            (u4_s_PwrCtrl_Polling_EIZO < (U4)PWRCTRL_SYS_COUNTTIME_FIN)){
         u4_s_PwrCtrl_Polling_EIZO++;
     }
     else{
@@ -924,22 +934,23 @@ void Mcu_Dev_Pwron_Polling_EIZO( void ){
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_Polling_AUDIO
+  Function      : vd_s_McuDev_Polling_AUDIO
   Description   : 
   param[in/out] : 
   return        : -
   Note          : 
 *****************************************************************************/
-void Mcu_Dev_Pwron_Polling_AUDIO( void ){
-    uint8   mcu_dio_ret;
+static void     vd_s_McuDev_Polling_AUDIO(void)
+{
+    Dio_LevelType   dl_t_port;
 
-    mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_AUDIO]);
+    dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_AUDIO]);
 
-    if(mcu_dio_ret  ==  (uint8)STD_LOW){
-        u4_s_PwrCtrl_Polling_AUDIO =   (uint32)0U;
+    if(dl_t_port == (Dio_LevelType)STD_LOW){
+        u4_s_PwrCtrl_Polling_AUDIO =   (U4)0U;
     }
-    else if(mcu_dio_ret  ==  (uint8)STD_HIGH &&
-        u4_s_PwrCtrl_Polling_AUDIO <   (uint32)PWRCTRL_SYS_COUNTTIME_FIN){
+    else if((dl_t_port == (Dio_LevelType)STD_HIGH) &&
+            (u4_s_PwrCtrl_Polling_AUDIO < (U4)PWRCTRL_SYS_COUNTTIME_FIN)){
         u4_s_PwrCtrl_Polling_AUDIO++;
     }
     else{
@@ -948,343 +959,295 @@ void Mcu_Dev_Pwron_Polling_AUDIO( void ){
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_USB
+  Function      : vd_s_McuDev_Pwron_USB
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : V33-PERI-ON = Hi‚©‚ç100msŒã‚ÉUSB-LED-ON = Hi
+  Note          : "ï¿½Xï¿½^ï¿½ï¿½ï¿½oï¿½C" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ "ï¿½kï¿½Ş‘ï¿½ï¿½s"ï¿½ÈŠOï¿½Ö‘Jï¿½ÚŒï¿½100msï¿½oï¿½ß‚ï¿½USB-LED-ON = Hi
 *****************************************************************************/
-void    Mcu_Dev_Pwron_USB( void ){
-    static const uint32  MCU_PWRON_TIME_USB  =   (100U / PWRCTRL_CFG_TASK_TIME);
+static void     vd_s_McuDev_Pwron_USB(const U1 u1_a_PWR)
+{
+    static const U4 u4_s_WAITTIME_USB   = (U4)(100U / PWRCTRL_CFG_TASK_TIME);
 
-    uint8   mcu_time_chk;
+    U1      u1_t_timchk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, MCU_PWRON_TIME_USB);
+    if((u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY) && (u1_a_PWR != (U1)POWER_MODE_STATE_EDS)){
+        /* "ï¿½Xï¿½^ï¿½ï¿½ï¿½oï¿½C" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ "ï¿½kï¿½Ş‘ï¿½ï¿½s"ï¿½ÈŠOï¿½ÍƒJï¿½Eï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½g */
+        if(u4_s_PwrCtrl_waittim_usb < U4_MAX){
+            u4_s_PwrCtrl_waittim_usb++;
+        }
+    }
+    else{
+        /* ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½Nï¿½ï¿½ï¿½A */
+        u4_s_PwrCtrl_waittim_usb    = (U4)0U;
+    }
 
-    if(mcu_time_chk ==  (uint8)TRUE){
+    u1_t_timchk     = u1_t_Pwron_TimChk(u4_s_PwrCtrl_waittim_usb, u4_s_WAITTIME_USB);
+
+    if(u1_t_timchk ==  (U1)TRUE){
         vd_g_McuDevPwronSetPort(MCU_PORT_USB_LED_ON , MCU_DIO_HIGH);
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_USB_BIT;
     }
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_PictIC
+  Function      : vd_s_McuDev_Pwron_PictIC
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : EIZO-ON=Hi ‚©‚ç30msŒã‚É/V-IC-RST = HiA[‰f‘œIC‹N“®ˆ—]‚Ì‰Šú‰»ˆ—
+  Note          : EIZO-ON=H ï¿½ï¿½ï¿½Âuï¿½ï¿½ï¿½ï¿½ï¿½ÚƒIï¿½tï¿½Nï¿½ï¿½ï¿½vï¿½Ü‚ï¿½ï¿½Íuï¿½ï¿½ï¿½ï¿½ï¿½ÚƒIï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½vï¿½Ü‚ï¿½ï¿½ÍuOTAï¿½vï¿½Ö‘Jï¿½ï¿½
 *****************************************************************************/
-void    Mcu_Dev_Pwron_PictIC( void ){
-    static const uint32  MCU_PWRON_TIME_PICTIC  =   (30U / PWRCTRL_CFG_TASK_TIME);
+static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR)
+{
+    static const U4 u4_s_WAITTIME_PICTIC    = (U4)(40U / PWRCTRL_CFG_TASK_TIME);
 
-    uint8   mcu_time_chk;
+    Dio_LevelType   dl_t_port;
+    U1              u1_t_timchk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_EIZO, MCU_PWRON_TIME_PICTIC);
+    dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_EIZO]);
 
-    if(mcu_time_chk ==  (uint8)TRUE){
+    if((dl_t_port == (Dio_LevelType)STD_HIGH) && 
+       ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
+        /* EIZO-ON=H ï¿½ï¿½ï¿½Âuï¿½ï¿½ï¿½ï¿½ï¿½ÚƒIï¿½tï¿½Nï¿½ï¿½ï¿½vï¿½Ü‚ï¿½ï¿½Íuï¿½ï¿½ï¿½ï¿½ï¿½ÚƒIï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½vï¿½Ü‚ï¿½ï¿½ÍuOTAï¿½vï¿½Ö‚ÅƒJï¿½Eï¿½ï¿½ï¿½^ï¿½Cï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½g */
+        if(u4_s_PwrCtrl_waittim_pictic < U4_MAX){
+            u4_s_PwrCtrl_waittim_pictic++;
+        }
+    }
+    else{
+        /* ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½Nï¿½ï¿½ï¿½A */
+        u4_s_PwrCtrl_waittim_pictic    = (U4)0U;
+    }
+
+    u1_t_timchk     = u1_t_Pwron_TimChk(u4_s_PwrCtrl_waittim_pictic, u4_s_WAITTIME_PICTIC);
+
+    if(u1_t_timchk  == (U1)TRUE){
         vd_g_McuDevPwronSetPort(MCU_PORT_V_IC_RST , MCU_DIO_HIGH);
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_PICTIC_BIT;
     }
 
-    /* [‰f‘œIC‹N“®ˆ—]ƒV[ƒg‚Ì‰Šú‰»ˆ— ‚É‘±‚­ */
+    /* [ï¿½fï¿½ï¿½ICï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½Vï¿½[ï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½É‘ï¿½ï¿½ï¿½ */
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_GVIFRx
+  Function      : vd_s_McuDev_Pwron_GVIFRx
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : AUDIO-ON = Hi‚©‚ç10msŒã‚Éu/GVIF-RX(CAM)-RST = Hiv
+  Note          : AUDIO-ON = Hiï¿½ï¿½ï¿½ï¿½15msï¿½ï¿½Éu/GVIF-RX(CAM)-RST = Hiï¿½v
 *****************************************************************************/
-void    Mcu_Dev_Pwron_GVIFRx( void ){
-    static const uint32  MCU_PWRON_TIME_GVIFRX  =   (10U / PWRCTRL_CFG_TASK_TIME);
+static void     vd_s_McuDev_Pwron_GVIFRx(void)
+{
+    static const U4 u4_s_WAITTIME_GVIFRX    = (U4)(15U / PWRCTRL_CFG_TASK_TIME);
 
-    uint8   mcu_time_chk;
+    U1      u1_t_timchk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_AUDIO, MCU_PWRON_TIME_GVIFRX);
+    u1_t_timchk = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_AUDIO, u4_s_WAITTIME_GVIFRX);
 
-    if(mcu_time_chk ==  (uint8)TRUE){
+    if(u1_t_timchk == (U1)TRUE){
         vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CAN_RST , MCU_DIO_HIGH);
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_GVIFRX_BIT;
     }
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_GVIFTx_CDisp
+  Function      : vd_s_McuDev_Pwron_GVIFTx_CDisp
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : AUDIO-ON = Hi‚©‚ç10msŒã‚Éu/GVIF-TX(C-DISP)-RST = Hiv
+  Note          : ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Í‰ï¿½ï¿½Lï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½×‚Ä‚ğ–‘ï¿½ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½ï¿½É‚Éu/GVIF-TX(C-DISP)-RST = Hiï¿½v
+                  ï¿½Eï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½~ï¿½ï¿½ï¿½O(t1)ï¿½Èï¿½oï¿½ß‚ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½
+                  ï¿½Eï¿½Ô—ï¿½ï¿½dï¿½ï¿½ï¿½Xï¿½eï¿½[ï¿½gï¿½ï¿½"ï¿½ï¿½ï¿½ï¿½ï¿½ÚƒIï¿½ï¿½ï¿½Nï¿½ï¿½"ï¿½Ü‚ï¿½ï¿½ï¿½"ï¿½ï¿½ï¿½ï¿½ï¿½ÚƒIï¿½tï¿½Nï¿½ï¿½"ï¿½Ü‚ï¿½ï¿½ï¿½"OTA"ï¿½Ìï¿½Ô‚É‘Jï¿½Ú‚ï¿½ï¿½ï¿½ï¿½Æ‚ï¿½
 *****************************************************************************/
-void    Mcu_Dev_Pwron_GVIFTx_CDisp( void ){
-    static const uint32  MCU_PWRON_TIME_GVIFTX  =   (10U / PWRCTRL_CFG_TASK_TIME);
+static void     vd_s_McuDev_Pwron_GVIFTx_CDisp(const U1 u1_a_PWR)
+{
+    static const U4 u4_s_WAITTIME_GVIFTX    = (U4)(10U / PWRCTRL_CFG_TASK_TIME);
 
-    uint8   mcu_time_chk;
+    U1          u1_t_timchk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_AUDIO, MCU_PWRON_TIME_GVIFTX);
+    u1_t_timchk     = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_AUDIO, u4_s_WAITTIME_GVIFTX);
 
-    if(mcu_time_chk ==  (uint8)TRUE){
-        /*****************************************************************************
-        ƒVƒXŒŸb’è‘Î‰
-        ƒVƒXŒŸ‚Å‚Í“dŒ¹ƒXƒe[ƒg‚ÍŒÅ’è‚ÅPowerON’Êí‚Å‚ ‚èŒ©‚½–ÚƒIƒ“‹N“®‚Ì‚İ‚Ì‚½‚ßA‰º‹LğŒ‚Í‘Î‰‚µ‚È‚¢
-        EÔ—¼“dŒ¹ƒXƒe[ƒg‚ª"Œ©‚½–ÚƒIƒ“‹N“®"‚Ü‚½‚Í"Œ©‚½–ÚƒIƒt‹N“®"‚Ìó‘Ô‚É‘JˆÚ‚µ‚½‚Æ‚«
-        *****************************************************************************/
+    if((u1_t_timchk ==  (U1)TRUE) &&
+       ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
         vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CDISP_RST , MCU_DIO_HIGH);
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_GVIFTX_BIT;
     }
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_Mic
+  Function      : vd_s_McuDev_Pwron_Mic
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : V33-PERI-ON = Hi ‚©‚ç 100msŒã & uæÔ’†(Œ©‚½–ÚON)/ƒtƒ‹‹N“®v‚É‘JˆÚŒã‚É MIC-ON = Hi
+  Note          : V33-PERI-ON = Hi ï¿½ï¿½ï¿½ï¿½ 100msï¿½ï¿½ & ï¿½u"ï¿½Xï¿½^ï¿½ï¿½ï¿½oï¿½C" ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ "ï¿½kï¿½Ş‘ï¿½ï¿½s" ï¿½ÈŠOï¿½vï¿½É‘Jï¿½ÚŒï¿½ï¿½ MIC-ON = Hi
 *****************************************************************************/
-void    Mcu_Dev_Pwron_Mic( void ){
-    static const uint32  MCU_PWRON_TIME_MIC  =   (100U / PWRCTRL_CFG_TASK_TIME);
+static void     vd_s_McuDev_Pwron_Mic(const U1 u1_a_PWR)
+{
+    static const U4 u4_s_WAITTIME_MIC   = (U4)(100U / PWRCTRL_CFG_TASK_TIME);
 
-    uint8   mcu_time_chk;
-    uint8   mcu_noredun_sts;
+    U1      u1_t_timchk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, MCU_PWRON_TIME_MIC);
-    mcu_noredun_sts =   u1_g_PwrCtrlNoRedunGetSts();
+   u1_t_timchk  = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_MIC);
 
-    if(mcu_time_chk ==  (uint8)TRUE &&
-        mcu_noredun_sts ==  (uint8)TRUE ){
+    if((u1_t_timchk ==  (U1)TRUE) && (u1_a_PWR != (U1)POWER_MODE_STATE_EDS)){
         vd_g_McuDevPwronSetPort(MCU_PORT_MIC_ON , MCU_DIO_HIGH);
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_MIC_BIT;
     }
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_Ant
+  Function      : vd_s_McuDev_Pwron_Ant
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : V33-PERI-ON = Hi‚©‚ç100msŒã ‚©‚Â uæÔ’†(Œ©‚½–ÚON)/ƒtƒ‹‹N“®v‚É‘JˆÚŒã‚É
+  Note          : V33-PERI-ON = Hiï¿½ï¿½ï¿½ï¿½100msï¿½ï¿½ ï¿½ï¿½ï¿½ï¿½ ï¿½uï¿½ï¿½Ô’ï¿½(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ON)/ï¿½tï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½vï¿½É‘Jï¿½ÚŒï¿½ï¿½
                   AM/FM-ANT-ON,GPS-ANT-ON,DAB-ANT-ON = Hi
 *****************************************************************************/
-void    Mcu_Dev_Pwron_Ant( void ){
-    static const uint32  MCU_PWRON_TIME_ANT  =   (100U / PWRCTRL_CFG_TASK_TIME);
+static void     vd_s_McuDev_Pwron_Ant(const U1 u1_a_PWR)
+{
+    static const U4 u4_s_WAITTIME_ANT   = (U4)(100U / PWRCTRL_CFG_TASK_TIME);
 
-    uint8   mcu_time_chk;
-    uint8   mcu_noredun_sts;
+    U1      u1_t_timchk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, MCU_PWRON_TIME_ANT);
-    mcu_noredun_sts =   u1_g_PwrCtrlNoRedunGetSts();
+    u1_t_timchk     =   u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_ANT);
 
-    if(mcu_time_chk ==  (uint8)TRUE &&
-        mcu_noredun_sts ==  (uint8)TRUE ){
-        /* AMFMƒ‰ƒWƒI */
-        vd_g_McuDevPwronSetPort(MCU_PORT_AMFM_ANT_ON , MCU_DIO_HIGH);
-
-        /* GNSSƒAƒ“ƒeƒi */
+    if(u1_t_timchk ==  (U1)TRUE){
+        /* GNSSï¿½Aï¿½ï¿½ï¿½eï¿½i */
         vd_g_McuDevPwronSetPort(MCU_PORT_GPS_ANT_ON , MCU_DIO_HIGH);
 
-
-        /* DABƒAƒ“ƒeƒi(“ú–{/–k•ÄdŒü‚¯ˆÈŠO‚Ì‚İ) */
+        if(u1_a_PWR == (U1)POWER_MODE_STATE_APPON){
+            /* AMFMï¿½ï¿½ï¿½Wï¿½I */
+            vd_g_McuDevPwronSetPort(MCU_PORT_AMFM_ANT_ON , MCU_DIO_HIGH);
+            /* DABï¿½Aï¿½ï¿½ï¿½eï¿½i(ï¿½ï¿½ï¿½{/ï¿½kï¿½Ädï¿½ï¿½ï¿½ï¿½ï¿½ÈŠOï¿½Ì‚ï¿½) */
 #ifdef SYS_PWR_ANT_DAB
-        vd_g_McuDevPwronSetPort(MCU_PORT_DAB_ANT_ON , MCU_DIO_HIGH);
+            vd_g_McuDevPwronSetPort(MCU_PORT_DAB_ANT_ON , MCU_DIO_HIGH);
 #endif
-        /* DTVƒAƒ“ƒeƒi(“ú–{dŒü‚¯‚Ì‚İ) */
+            /* DTVï¿½Aï¿½ï¿½ï¿½eï¿½i(ï¿½ï¿½ï¿½{ï¿½dï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½) */
 #ifdef SYS_PWR_ANT_DTV
-        vd_g_McuDevPwronSetPort(MCU_PORT_DTV_ANT_ON , MCU_DIO_HIGH);
+            vd_g_McuDevPwronSetPort(MCU_PORT_DTV_ANT_ON , MCU_DIO_HIGH);
 #endif
+        }
+
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_ANT_BIT;
     }
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_SoundMUTE
+  Function      : vd_s_McuDev_SoundMUTE
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : ‹N“®ƒgƒŠƒK(Œ©‚½–ÚƒIƒ“/ƒIƒt‹N“®)Œã0ms‚ÅMOST-WAKE-ON=Hi
-                  MOST-WAKE-ON=HiŒã0ms‚ÅSiP‚ÉMOST‹N“®ó‘Ô‚ğ’Ê’m
-                  ƒVƒXŒŸb’è‘Î‰‚ ‚è
+  Note          : PowerICï¿½Å‹Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ï¿½Ì‚ï¿½ï¿½ßï¿½ï¿½ï¿½ï¿½È‚ï¿½ ï¿½\ï¿½ï¿½ï¿½İŒv
 *****************************************************************************/
-void    Mcu_Dev_Pwron_SoundMUTE( void ){
-    /*****************************************************************************
-    ƒVƒXŒŸb’è‘Î‰
-    ƒVƒXŒŸ‚Ì“dŒ¹ƒXƒe[ƒg‚Í"Œ©‚½–ÚƒIƒ“‹N“®"or"OFF"‚Ì‚½‚ßA‰º‹LğŒ‚Í‘Î‰‚µ‚È‚¢
-    EÔ—¼“dŒ¹ƒXƒe[ƒg‚ª"Œ©‚½–ÚƒIƒ“"‚Ü‚½‚Í"Œ©‚½–ÚƒIƒt"‚Ìó‘Ô‚É‘JˆÚ‚µ‚½‚Æ‚«
-    *****************************************************************************/
-   /*****************************************************************************
-    ƒVƒXŒŸb’è‘Î‰
-    PM-SYS-MUTE’[q‚Ì‘€ì—v”Û•s–¾
-    *****************************************************************************/
-    vd_g_McuDevPwronSetPort(MCU_PORT_PM_SYS_MUTE , MCU_DIO_LOW);
+static void     vd_s_McuDev_SoundMUTE(void)
+{
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_Most
+  Function      : vd_s_McuDev_Pwron_Most
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : ‹N“®ƒgƒŠƒK(Œ©‚½–ÚƒIƒ“/ƒIƒt‹N“®)Œã0ms‚ÅMOST-WAKE-ON=Hi
-                  MOST-WAKE-ON=HiŒã0ms‚ÅSiP‚ÉMOST‹N“®ó‘Ô‚ğ’Ê’m
-                  ƒVƒXŒŸb’è‘Î‰‚ ‚è
+  Note          : ï¿½ï¿½ï¿½ï¿½ï¿½ÚƒIï¿½ï¿½/ï¿½Iï¿½tï¿½Nï¿½ï¿½ï¿½ï¿½MOST-WAKE-ON=Hi
+                  MOST-WAKE-ON=Hiï¿½ï¿½0msï¿½ï¿½SiPï¿½ï¿½MOSTï¿½Nï¿½ï¿½ï¿½ï¿½Ô‚ï¿½Ê’m
+                  ï¿½bï¿½ï¿½Î‰ï¿½ï¿½ï¿½ï¿½ï¿½
 *****************************************************************************/
-void    Mcu_Dev_Pwron_Most( void ){
-    /*****************************************************************************
-    ƒVƒXŒŸb’è‘Î‰
-    ƒVƒXŒŸ‚Ì“dŒ¹ƒXƒe[ƒg‚Í"Œ©‚½–ÚƒIƒ“‹N“®"or"OFF"‚Ì‚½‚ßA‰º‹LğŒ‚Í‘Î‰‚µ‚È‚¢
-    EÔ—¼“dŒ¹ƒXƒe[ƒg‚ª"Œ©‚½–ÚƒIƒ“"‚Ü‚½‚Í"Œ©‚½–ÚƒIƒt"‚Ìó‘Ô‚É‘JˆÚ‚µ‚½‚Æ‚«
-    *****************************************************************************/
-    vd_g_McuDevPwronSetPort(MCU_PORT_MOST_WAKE_ON , MCU_DIO_HIGH);
-
-    /* ƒVƒXŒŸb’è‘Î‰FSPI’ÊMŒn‚ÍÀ‘•‚µ‚È‚¢(SPI‘¤–¢À‘•,IF‰ÓŠ•s–¾) */
-}
-
-/*****************************************************************************
-  Function      : Mcu_Dev_Pwron_PowerIc
-  Description   : 
-  param[in/out] : 
-  return        : -
-  Note          : Power-IC’Êí‹N“®ˆ—
-                  ƒVƒXŒŸb’è‘Î‰‚ ‚è
-*****************************************************************************/
-void    Mcu_Dev_Pwron_PowerIc( void ){
-    static const uint32  MCU_PWRON_TIME_POWERIC  =   (PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);    /* V33-PERI-ON=HI‚Æ“¯‚¶ƒ^ƒCƒ~ƒ“ƒO */
-    uint8   mcu_log_exist;          /* P-IC”j‰óƒƒO—L–³ */
-    uint8   mcu_time_chk;           /* V33-PERI-ON=HIŒo‰ßŠÔ”»’è */
-    uint8   mcu_sts;        /* ‘‚İó‹µ */
-
-    mcu_sts         = (uint8)FALSE;
-    /*****************************************************************************
-    ƒVƒXŒŸb’è‘Î‰
-    ƒVƒXŒŸ‚Ì“dŒ¹ƒXƒe[ƒg‚Í"Œ©‚½–ÚƒIƒ“‹N“®"or"OFF"‚Ì‚½‚ßA‰º‹LğŒ‚Í‘Î‰‚µ‚È‚¢
-    EÔ—¼“dŒ¹ƒXƒe[ƒg‚ª"Œ©‚½–ÚƒIƒ“"‚Ü‚½‚Í"Œ©‚½–ÚƒIƒt"‚Ìó‘Ô‚É‘JˆÚ‚µ‚½‚Æ‚«‹N“®
-    *****************************************************************************/
-
-    switch (Mcu_OnStep_PowerIc_OVRALL) {
-        case MCU_STEP_P_IC_OVERALL_1:
-            /* Power-IC”j‰óƒƒOæ“¾ˆ— */
-            /*****************************************************************************
-            ƒVƒXŒŸb’è‘Î‰
-            P-IC”j‰óƒƒO‚Íí‚É–³‚µ‘¤‚Å§Œä‚·‚é
-            *****************************************************************************/
-            mcu_log_exist    =   (uint8)FALSE;
-
-            if(mcu_log_exist == (uint8)TRUE) {  /* P-IC”j‰óƒƒO‚ ‚è */
-                /* Power-IC”j‰ó‚ÌƒƒO‚ªc‚Á‚Ä‚¢‚éê‡‚ÍPower-IC‚ğ‹N“®‚³‚¹‚È‚¢ */
-                Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_FIN;
-            }
-            else {  /* ”j‰óƒƒO‚È‚µ */
-                Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_2;  /* Ÿó‘Ô‚É‘JˆÚ */
-            }
-            break;
-
-        case MCU_STEP_P_IC_OVERALL_2:
-            mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, MCU_PWRON_TIME_POWERIC);  /* V33-PERI-ON=HI”»’è */
-            if(mcu_time_chk == (uint8)TRUE) {
-                vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_HIGH);    /* P-IC“dŒ¹§ŒÀ‰ğœ */
-                Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_3;         /* Ÿó‘Ô‚É‘JˆÚ */
-            }
-            break;
-        
-        case MCU_STEP_P_IC_OVERALL_3:
-            /*****************************************************************************
-            ƒVƒXŒŸb’è‘Î‰
-            SPI’ÊM–¢À‘•‚Ì‚½‚ßA‰º‹L‚ÍÀ‘•‚µ‚È‚¢
-            "[P-IC‹N“®ó‘Ô](3ÍQÆ)‚ğSiP‚É’Ê’m‚µ‚Ä‚¢‚é‚©H"
-            *****************************************************************************/
-            vd_g_McuDevPwronSetPort(MCU_PORT_P_ON , MCU_DIO_HIGH);        /* ƒXƒ^ƒ“ƒoƒC‰ğœ */
-            Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_4; /* Ÿó‘Ô‚É‘JˆÚ */
-            break;
-
-        case MCU_STEP_P_IC_OVERALL_4:
-            /* 1ms‘Ò‹@‚Í–{case‚É“’B‚µ‚½“_‚Å–‚½‚µ‚Ä‚¢‚é‚Æ”»’f‚·‚é‚½‚ßwaitˆ—‚ÍÀ{‚µ‚È‚¢ */
-            /* ƒŒƒWƒXƒ^‘‚İˆ— */
-            mcu_sts = (uint8)TRUE;
-            if(mcu_sts == (uint8)TRUE){
-                /* ‘S‘‚İŠ®—¹ Ÿó‘Ô‚É‘JˆÚ */
-                Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_5;
-            }
-            break;
-
-        case MCU_STEP_P_IC_OVERALL_5:
-            /* ƒŒƒWƒXƒ^‘‚İˆ— */
-            mcu_sts = (uint8)TRUE;
-
-            if(mcu_sts == (uint8)TRUE){
-                /* ‘S‘‚İŠ®—¹ Ÿó‘Ô‚É‘JˆÚ */
-                Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_6;
-            }
-            break;
-
-        case MCU_STEP_P_IC_OVERALL_6:
-            if(Mcu_PowerIc_LinkTimer != (uint32)PWRCTRL_SYS_COUNTTIME_FIN){
-                Mcu_PowerIc_LinkTimer++;
-            }
-            if(Mcu_PowerIc_LinkTimer >= (uint32)PWRCTRL_WAIT_POWERIC_60MS){
-                Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_7;         /* Ÿó‘Ô‚É‘JˆÚ */
-                Mcu_PowerIc_LinkTimer = (uint32)0U;
-            }
-            break;
-
-        case MCU_STEP_P_IC_OVERALL_7:
-            /* ƒŒƒWƒXƒ^‘‚İˆ— */
-            mcu_sts = (uint8)TRUE;
-
-            if(mcu_sts == (uint8)TRUE){
-                /* ‘S‘‚İŠ®—¹ Ÿó‘Ô‚É‘JˆÚ */
-                Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_8;
-            }
-            break;
-
-        case MCU_STEP_P_IC_OVERALL_8:
-            /* ƒŒƒWƒXƒ^‘‚İˆ— */
-            mcu_sts = (uint8)TRUE;
-
-            if(mcu_sts == (uint8)TRUE){
-                /* ‘S‘‚İŠ®—¹ Ÿó‘Ô‚É‘JˆÚ */
-                Mcu_OnStep_PowerIc_OVRALL = (uint8)MCU_STEP_P_IC_OVERALL_FIN;
-            }
-            break;
-
-        case MCU_STEP_P_IC_OVERALL_FIN:
-            /* ³í‹N“®‚Í‰½‚à‚µ‚È‚¢ */
-            break;
-
-        default:
-            /* do nothing */
-            break;
+static void     vd_s_McuDev_Pwron_Most(const U1 u1_a_PWR)
+{
+    if((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF)){
+        vd_g_McuDevPwronSetPort(MCU_PORT_MOST_WAKE_ON , MCU_DIO_HIGH);
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_MOST_BIT;
     }
+
+    /* ï¿½bï¿½ï¿½Î‰ï¿½ï¿½FSPIï¿½ÊMï¿½nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½(OSï¿½Ô’ÊMï¿½Rï¿½}ï¿½ï¿½ï¿½hï¿½sï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½) */
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_XMTuner
+  Function      : vd_s_McuDev_Pwron_XMTuner
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 
-                  ƒVƒXŒŸb’è‘Î‰‚ ‚è
+  Note          : V33-PERI-ON=Hï¿½ï¿½XM-ON,V33-PERI-ON=Hï¿½ï¿½ï¿½ï¿½1010msï¿½ï¿½XM-SHDN=H
+                  ï¿½bï¿½ï¿½Î‰ï¿½ï¿½ï¿½ï¿½ï¿½
 *****************************************************************************/
-void    Mcu_Dev_Pwron_XMTuner( void ){
-    static const uint32 MCU_PWRON_TIME_XM_ON    =   (PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);
-    static const uint32 MCU_PWRON_TIME_XM_SHDN  =   (1000U / PWRCTRL_CFG_TASK_TIME);
+static void     vd_s_McuDev_Pwron_XMTuner(void)
+{
+    static const U4 u4_s_WAITTIME_XM_ON     = (U4)(PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);
+    static const U4 u4_s_WAITTIME_XM_SHDN   = (U4)(1010U / PWRCTRL_CFG_TASK_TIME);
 
-    uint8   mcu_time_chk_xmon;
-    uint8   mcu_time_chk_xmshdn;
+    U1      u1_t_timchk_xmon;
+    U1      u1_t_timchk_xmshdn;
     
-    mcu_time_chk_xmon       =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, MCU_PWRON_TIME_XM_ON);
-    mcu_time_chk_xmshdn     =   Mcu_Dev_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, MCU_PWRON_TIME_XM_SHDN);
+    u1_t_timchk_xmon    = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_XM_ON);
+    u1_t_timchk_xmshdn  = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_XM_SHDN);
 
-    if(mcu_time_chk_xmon ==  (uint8)TRUE) {
+    if(u1_t_timchk_xmon == (U1)TRUE){
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_ON , MCU_DIO_HIGH);
-        /*****************************************************************************
-        ƒVƒXŒŸb’è‘Î‰
-        SPI’ÊMŒn‚Í–¢À‘•‚Ì‚½‚ßA‰º‹LŠJnğŒ‚ÍÀ‘•‚µ‚È‚¢
-        ƒƒCƒ“‚ÖSHDN§ŒäŠ®—¹’Ê’m
-        *****************************************************************************/
     }
-
-    if(mcu_time_chk_xmshdn ==  (uint8)TRUE) {
-        /* –k•ÄdŒü‚¯‚Ì‚İ */
+    if(u1_t_timchk_xmshdn == (U1)TRUE){
 #ifdef SYS_PWR_ANT_XM_SHDN
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_SHDN , MCU_DIO_HIGH);
 #endif
-        /*****************************************************************************
-        ƒVƒXŒŸb’è‘Î‰
-        SPI’ÊMŒn‚Í–¢À‘•‚Ì‚½‚ßA‰º‹LŠJnğŒ‚ÍÀ‘•‚µ‚È‚¢
-        ƒƒCƒ“‚ÖSHDN§ŒäŠ®—¹’Ê’m
-        *****************************************************************************/
+        /* ï¿½bï¿½ï¿½Î‰ï¿½ï¿½FSPIï¿½ÊMï¿½nï¿½Í–ï¿½ï¿½ï¿½ï¿½ï¿½(OSï¿½ÔƒRï¿½}ï¿½ï¿½ï¿½hï¿½sï¿½ï¿½) */
+    }
+    if((u1_t_timchk_xmon == (U1)TRUE) && (u1_t_timchk_xmshdn == (U1)TRUE)){
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_XMTUNER_BIT;
+    }
+}
+/*****************************************************************************
+  Function      : vd_s_McuDev_Pwron_PowerIc
+  Description   : 
+  param[in/out] : 
+  return        : -
+  Note          : Power-ICï¿½Êï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
+                  ï¿½bï¿½ï¿½Î‰ï¿½ï¿½ï¿½ï¿½ï¿½
+*****************************************************************************/
+static void     vd_s_McuDev_Pwron_PowerIc(const U1 u1_a_PWR)
+{
+    static const U4 u4_s_WAITTIME_POWERIC    = (U4)(PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);
+
+    U1              u1_t_logexi;        /* P-ICï¿½jï¿½óƒƒOï¿½Lï¿½ï¿½ */
+    U1              u1_t_timchk;        /* V33-PERI-ON=HIï¿½oï¿½ßï¿½ï¿½Ô”ï¿½ï¿½ï¿½ */
+    Dio_LevelType   dl_t_port;
+
+    switch (u1_s_PwrCtrl_PowerIc_OVRALL) {
+        case PWRCTRL_COMMON_PROCESS_STEP1:
+            /* Power-ICï¿½jï¿½óƒƒOï¿½æ“¾ï¿½ï¿½ï¿½ï¿½ */
+            /*****************************************************************************
+            ï¿½bï¿½ï¿½Î‰ï¿½
+            P-ICï¿½jï¿½óƒƒOï¿½Íï¿½É–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Åï¿½ï¿½ä‚·ï¿½ï¿½
+            *****************************************************************************/
+            u1_t_logexi = (U1)FALSE;
+
+            if(u1_t_logexi == (U1)TRUE) {  /* P-ICï¿½jï¿½óƒƒOï¿½ï¿½ï¿½ï¿½ */
+                /* Power-ICï¿½jï¿½ï¿½Ìƒï¿½ï¿½Oï¿½ï¿½ï¿½cï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½ê‡ï¿½ï¿½Power-ICï¿½ï¿½ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ */
+                u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+            }
+            else {  /* ï¿½jï¿½óƒƒOï¿½È‚ï¿½ */
+                u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP2;  /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
+            }
+            break;
+
+        case PWRCTRL_COMMON_PROCESS_STEP2:
+            u1_t_timchk = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_POWERIC);  /* V33-PERI-ON=HIï¿½ï¿½ï¿½ï¿½ */
+
+            if((u1_t_timchk == (U1)TRUE) && (u1_a_PWR == (U1)POWER_MODE_STATE_PARK)){
+                vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_HIGH);          /* P-ICï¿½dï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+                u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_POWERIC_BIT;
+                u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;     /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
+            }
+            break;
+
+        case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+            /* PowerIC=OFFï¿½ï¿½ï¿½mï¿½ï¿½ï¿½ï¿½ */
+            dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_PIC_POFF]);
+            if(dl_t_port == (Dio_LevelType)STD_LOW){
+                u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+            }
+            break;
+
+        default:
+            u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+            break;
     }
 }
 
@@ -1293,12 +1256,11 @@ void    Mcu_Dev_Pwron_XMTuner( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 
-                  ƒVƒXŒŸb’è‘Î‰‚ ‚è
+  Note          : ï¿½Vï¿½Xï¿½ï¿½ï¿½bï¿½ï¿½Î‰ï¿½ï¿½ï¿½ï¿½ï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GNSS( void ){
-    static const uint32 MCU_PWRON_TIME_GNSS_T8  =   (uint32)(100U * GPT_FRT_1US);     /* typ 100ms /GPS-RST‚ÌƒŠƒZƒbƒgŠÔ• */
-    static const uint8  MCU_PWRON_FAIL_MAX      =   (uint32)(2U);       /* PMONI Low 2‰ñ–ÚŒŸ’m‚ÅLowŒp‘± */
+    static const uint32 MCU_PWRON_TIME_GNSS_T8  =   (uint32)(100U * GPT_FRT_1US);     /* typ 100ms /GPS-RSTï¿½Ìƒï¿½ï¿½Zï¿½bï¿½gï¿½ï¿½ï¿½Ô•ï¿½ */
+    static const uint8  MCU_PWRON_FAIL_MAX      =   (uint32)(2U);       /* PMONI Low 2ï¿½ï¿½ÚŒï¿½ï¿½mï¿½ï¿½Lowï¿½pï¿½ï¿½ */
 
     uint8   mcu_dio_ret;
     uint32  mcu_frt_elpsd;
@@ -1308,12 +1270,12 @@ void    Mcu_Dev_Pwron_GNSS( void ){
 
     switch (Mcu_OnStep_GNSS) {
         case MCU_STEP_GNSS_PRE:
-            /* B-ON Init‚ğMCU§Œä‚Ì‹N“_‚Æ‚µƒtƒŠ[ƒ‰ƒ“ƒ^ƒCƒ}‚ÅŒo‰ßŠÔ‚ğŠÄ‹‚·‚é */
+            /* B-ON Initï¿½ï¿½MCUï¿½ï¿½ï¿½ï¿½Ì‹Nï¿½_ï¿½Æ‚ï¿½ï¿½tï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½^ï¿½Cï¿½}ï¿½ÅŒoï¿½ßï¿½ï¿½Ô‚ï¿½ï¿½Äï¿½ï¿½ï¿½ï¿½ï¿½ */
             mcu_frt_elpsd = u4_g_Gpt_FrtGetUsElapsed(Mcu_frt_stamp);
 
             if(mcu_frt_elpsd > MCU_PWRON_TIME_GNSS_T8){
                 vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_HIGH);
-                Mcu_OnStep_GNSS = MCU_STEP_GNSS_INI_CHK;        /* Ÿó‘Ô‚É‘JˆÚ */
+                Mcu_OnStep_GNSS = MCU_STEP_GNSS_INI_CHK;        /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
             }
             break;
         case MCU_STEP_GNSS_INI_CHK:
@@ -1323,25 +1285,25 @@ void    Mcu_Dev_Pwron_GNSS( void ){
             if(Mcu_GNSS_LinkTimer >= (uint32)PWRCTRL_WAIT_GNSS_400MS){
                 mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);
                 if(mcu_dio_ret == (uint8)STD_HIGH){
-                    /* ‰Šú‰»¸”s */
+                    /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½s */
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
-                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* Ÿó‘Ô‚É‘JˆÚ */
-                    Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* ƒ^ƒCƒ}ƒNƒŠƒA */
+                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
+                    Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* ï¿½^ï¿½Cï¿½}ï¿½Nï¿½ï¿½ï¿½A */
                 }
                 else {
-                    /* ‰Šú‰»¬Œ÷ Hibernateó‘Ô */
-                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRECHK;      /* Ÿó‘Ô‚É‘JˆÚ */
-                    Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* ƒ^ƒCƒ}ƒNƒŠƒA */
+                    /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ Hibernateï¿½ï¿½ï¿½ */
+                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRECHK;      /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
+                    Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* ï¿½^ï¿½Cï¿½}ï¿½Nï¿½ï¿½ï¿½A */
                 }
             }
             break;
         case MCU_STEP_GNSS_PRECHK:
-            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);    /* t3‚Ímin0ms‚Ì‚½‚ßAwaitˆ—‚ğ‚¹‚¸‚ÉŸˆ—‚ğÀ{ */
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);    /* t3ï¿½ï¿½min0msï¿½Ì‚ï¿½ï¿½ßAwaitï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ */
             if(mcu_dio_ret == (uint8)STD_HIGH){
-                /* ‰Šú‰»‘Oƒ`ƒFƒbƒN‚Ì“à—e•s–¾‚Ì‚½‚ßskip */
-                //if(‰Šú‰»‘Oƒ`ƒFƒbƒN=OK){
+                /* ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½`ï¿½Fï¿½bï¿½Nï¿½Ì“ï¿½ï¿½eï¿½sï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ï¿½skip */
+                //if(ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Oï¿½`ï¿½Fï¿½bï¿½N=OK){
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_HIGH);
-                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POSTCHK;         /* Ÿó‘Ô‚É‘JˆÚ */
+                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POSTCHK;         /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
                 //}
             }
             break;
@@ -1350,41 +1312,61 @@ void    Mcu_Dev_Pwron_GNSS( void ){
                 Mcu_GNSS_LinkTimer++;
             }
             if(Mcu_GNSS_LinkTimer >= (uint32)PWRCTRL_WAIT_GNSS_550MS){
-                /* ‹N“®Œãƒ`ƒFƒbƒN */
+                /* ï¿½Nï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½N */
                 mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);
                 if(mcu_dio_ret == (uint8)STD_HIGH){
-                    /* ‹N“®Œãƒ`ƒFƒbƒN¬Œ÷F/GPS-RST=HˆÛ */
+                    /* ï¿½Nï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½F/GPS-RST=Hï¿½Ûï¿½ */
                     /* do nothing */
                 }
                 else {
-                    /* ‹N“®Œãƒ`ƒFƒbƒN¸”sF/GPS-RST=H¨L */
+                    /* ï¿½Nï¿½ï¿½ï¿½ï¿½`ï¿½Fï¿½bï¿½Nï¿½ï¿½ï¿½sï¿½F/GPS-RST=Hï¿½ï¿½L */
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
                 }
-                Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POLING;      /* Ÿó‘Ô‚É‘JˆÚ */
-                Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* ƒ^ƒCƒ}ƒNƒŠƒA */
+                u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_GNSS_BIT;
+                Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POLING;      /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
+                Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* ï¿½^ï¿½Cï¿½}ï¿½Nï¿½ï¿½ï¿½A */
             }
             break;
         case MCU_STEP_GNSS_POLING:
-            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);  /* ’èŠú“I‚Éƒ|[ƒŠƒ“ƒO */
-            if(mcu_dio_ret == (uint8)STD_LOW){
-                /* t17‚Ímin0ms‚Ì‚½‚ßAwaitˆ—‚ğ‚¹‚¸‚ÉŸˆ—‚ğÀ{ */
-                /* /GPS-RST,GPS-PCTL‚ğH¨L */
-                vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
-                vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
+            if(mcu_dio_ret == (U1)STD_LOW){
+                Mcu_Fail_GNSS   = (U1)0U;
+                Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_WAIT;
+            }
+            else{
+                mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);  /* ï¿½ï¿½ï¿½ï¿½Iï¿½Éƒ|ï¿½[ï¿½ï¿½ï¿½ï¿½ï¿½O */
+                if(mcu_dio_ret == (uint8)STD_LOW){
+                    /* t17ï¿½ï¿½min0msï¿½Ì‚ï¿½ï¿½ßAwaitï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Éï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½{ */
+                    /* /GPS-RST,GPS-PCTLï¿½ï¿½Hï¿½ï¿½L */
+                    vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
+                    vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
 
-                /* ¸”s‰ñ”ƒJƒEƒ“ƒg */
-                Mcu_Fail_GNSS++;
+                    /* ï¿½ï¿½ï¿½sï¿½ñ”ƒJï¿½Eï¿½ï¿½ï¿½g */
+                    Mcu_Fail_GNSS++;
 
-                if(Mcu_Fail_GNSS >= MCU_PWRON_FAIL_MAX){    /* PMONI Low 2‰ñ–ÚŒŸ’m‚ÅLowŒp‘± */
-                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* Ÿó‘Ô‚É‘JˆÚ */
-                }
-                else{
-                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRE;         /* Ÿó‘Ô‚É‘JˆÚ */
+                    if(Mcu_Fail_GNSS >= MCU_PWRON_FAIL_MAX){    /* PMONI Low 2ï¿½ï¿½ÚŒï¿½ï¿½mï¿½ï¿½Lowï¿½pï¿½ï¿½ */
+                        Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
+                    }
+                    else{
+                        Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRE;         /* ï¿½ï¿½ï¿½ï¿½Ô‚É‘Jï¿½ï¿½ */
+                    }
                 }
             }
             break;
         case MCU_STEP_GNSS_FIN:
-            /* do nothing */
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
+            if(mcu_dio_ret == (U1)STD_LOW){
+                Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_WAIT;
+            }
+            break;
+        case MCU_STEP_GNSS_WAIT:
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
+            if(mcu_dio_ret == (U1)STD_HIGH){
+                Mcu_Fail_GNSS   = (U1)0U;
+                Mcu_GNSS_LinkTimer  = (uint32)0U;
+                Mcu_frt_stamp[GPT_FRT_USELPSD_BASE] = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
+                Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRE;
+            }
             break;
         default:
             /* do nothing */
@@ -1393,39 +1375,19 @@ void    Mcu_Dev_Pwron_GNSS( void ){
 }
 
 /*****************************************************************************
-  Function      : Mcu_Dev_Pwron_Gyro
+  Function      : vd_s_McuDev_Pwron_Gyro
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 
-                  ƒVƒXŒŸb’è‘Î‰‚ ‚è
+  Note          : VM2ï¿½Åï¿½ï¿½{ï¿½ï¿½ï¿½é‚½ï¿½ßï¿½ï¿½ï¿½ï¿½È‚ï¿½
 *****************************************************************************/
-void    Mcu_Dev_Pwron_Gyro( void ){
-    static const uint32 MCU_PWRON_TIME_GYRO  =   (uint32)(1 * GPT_FRT_1US);   /* 1ms */
-    uint32  mcu_frt_elpsd;
+static void     vd_s_McuDev_Pwron_Gyro(void)
+{
+    Dio_LevelType dl_t_port;
 
-    mcu_frt_elpsd   = (uint32)0U;
-    /* 5.2.1 ‹N“®ƒtƒ[(1) +B‹N“®‚Ì‰Šúİ’è */
-    switch (Mcu_OnStep_Gyro_1_OVRALL)
-    {
-    case MCU_STEP_GYRO1_OVERALL_1:
-        /* ƒtƒŠ[ƒ‰ƒ“ƒ^ƒCƒ}‚ª1msŒo‰ß‚µ‚Ä‚½‚çƒ|[ƒg‚ğ—§‚Ä‚é */
-        mcu_frt_elpsd = u4_g_Gpt_FrtGetUsElapsed(Mcu_frt_stamp);
-
-        if(mcu_frt_elpsd > MCU_PWRON_TIME_GYRO){
-            vd_g_McuDevPwronSetPort(MCU_PORT_SENSOR_ON , MCU_DIO_HIGH);
-            Mcu_OnStep_Gyro_1_OVRALL = (uint8)MCU_STEP_GYRO1_OVERALL_FIN;         /* Ÿó‘Ô‚É‘JˆÚ */
-        }
-        break;
-
-    case MCU_STEP_GYRO1_OVERALL_FIN:
-        /* do nothing */
-        break;
-
-    default:
-        /* ˆÙí‚Íƒtƒ[‚ğ‚Í‚¶‚ß‚©‚ç‚â‚è’¼‚· */
-        Mcu_OnStep_Gyro_1_OVRALL = (uint8)MCU_STEP_GYRO1_OVERALL_1;
-        break;
+    dl_t_port =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_SENSOR_ON]);
+    if(dl_t_port == (Dio_LevelType)STD_HIGH){
+        u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_GYRO_BIT;
     }
 }
 
@@ -1434,21 +1396,21 @@ void    Mcu_Dev_Pwron_Gyro( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : ‰f‘œIC‹N“®ˆ—
+  Note          : ï¿½fï¿½ï¿½ICï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_EizoIc_Init( void ){
-    /* ó‘Ô‘JˆÚ–¢ŒŸ“¢‚Ì‚½‚ß‰¼ƒR[ƒh */
-    /* [‰f‘œIC‹N“®ˆ—]ƒV[ƒg‚Ì‰Šú‰»ˆ— */
-    /* 6.2 ‰Šú‰»ˆ— */
+    /* ï¿½ï¿½Ô‘Jï¿½Ú–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‰ï¿½ï¿½Rï¿½[ï¿½h */
+    /* [ï¿½fï¿½ï¿½ICï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½]ï¿½Vï¿½[ï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+    /* 6.2 ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     Mcu_Dev_Pwron_EizoIc_Polling_VIcRst();
 
-    /* 7.ƒŒƒWƒXƒ^İ’è */
+    /* 7.ï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’ï¿½ */
     Mcu_Dev_Pwron_EizoIc_RegSetting();
 
-    /* 6.3 SiP‰f‘œ•\¦‚ÉŠÖ‚·‚éˆ— */
+    /* 6.3 SiPï¿½fï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ÉŠÖ‚ï¿½ï¿½éˆï¿½ï¿½ */
     Mcu_Dev_Pwron_EizoIc_PctDspSetting();
 
-    /* 6.5.1.1 ‹N“®‚ÌƒJƒƒ‰ƒGƒCƒY•\¦‚ÉŠÖ‚·‚éİ’èƒtƒ[ */
+    /* 6.5.1.1 ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ÌƒJï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½Cï¿½Yï¿½\ï¿½ï¿½ï¿½ÉŠÖ‚ï¿½ï¿½ï¿½İ’ï¿½tï¿½ï¿½ï¿½[ */
     Mcu_Dev_Pwron_EizoIc_CamDspSetting();
 }
 
@@ -1457,7 +1419,7 @@ void    Mcu_Dev_Pwron_EizoIc_Init( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : /V-IC-RST=Hi ŠÄ‹
+  Note          : /V-IC-RST=Hi ï¿½Äï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_EizoIc_Polling_VIcRst( void ){
     uint8   mcu_dio_ret;
@@ -1481,14 +1443,14 @@ void    Mcu_Dev_Pwron_EizoIc_Polling_VIcRst( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 7.ƒŒƒWƒXƒ^İ’è
+  Note          : 7.ï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’ï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_EizoIc_RegSetting( void ){
     static const uint32 MCU_PWRON_TIME_EIZOIC  =   (PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);    /* min:1ms */
 
     uint8   mcu_time_chk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u2_s_PwrCtrl_Polling_VIcRst, MCU_PWRON_TIME_EIZOIC);
+    mcu_time_chk    =   u1_t_Pwron_TimChk(u2_s_PwrCtrl_Polling_VIcRst, MCU_PWRON_TIME_EIZOIC);
 
     if(mcu_time_chk ==  (uint8)TRUE){
         Mcu_Dev_Pwron_EizoIc_SetReg();
@@ -1500,10 +1462,10 @@ void    Mcu_Dev_Pwron_EizoIc_RegSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : ‰f‘œIC‰Šú‰»ˆ— ƒŒƒWƒXƒ^İ’è
+  Note          : ï¿½fï¿½ï¿½ICï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’ï¿½
 *****************************************************************************/
 void Mcu_Dev_Pwron_EizoIc_SetReg( void ){
-    /* IF•s–¾‚Ì‚½‚ß–¢İ’è EizoIc_Init.h‚É’è‹`‚µ‚½’è””z—ñ(Eizo_Init_RegAdd,Eizo_Init_RegSet)‚ğ—p‚¢‚Äİ’è‚·‚é */
+    /* IFï¿½sï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß–ï¿½ï¿½İ’ï¿½ EizoIc_Init.hï¿½É’ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½è”ï¿½zï¿½ï¿½(Eizo_Init_RegAdd,Eizo_Init_RegSet)ï¿½ï¿½pï¿½ï¿½ï¿½Äİ’è‚·ï¿½ï¿½ */
 }
 
 /*****************************************************************************
@@ -1511,14 +1473,14 @@ void Mcu_Dev_Pwron_EizoIc_SetReg( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 6.3 SiP‰f‘œ•\¦‚ÉŠÖ‚·‚éˆ—
+  Note          : 6.3 SiPï¿½fï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ÉŠÖ‚ï¿½ï¿½éˆï¿½ï¿½
 *****************************************************************************/
 void Mcu_Dev_Pwron_EizoIc_PctDspSetting( void ){
-    /* eDP-RX’Êí“®ìƒ‚[ƒh‚ÖˆÚs */
-    /* 0x0760ƒŒƒWƒXƒ^=0x01 */
+    /* eDP-RXï¿½Êí“®ï¿½ìƒ‚ï¿½[ï¿½hï¿½ÖˆÚs */
+    /* 0x0760ï¿½ï¿½ï¿½Wï¿½Xï¿½^=0x01 */
 
-    /* eDPƒzƒbƒgƒvƒ‰ƒOON( DP0_HPD(V-IC)=Hi ) */
-    /* 0x0403ƒŒƒWƒXƒ^=0x41 */
+    /* eDPï¿½zï¿½bï¿½gï¿½vï¿½ï¿½ï¿½OON( DP0_HPD(V-IC)=Hi ) */
+    /* 0x0403ï¿½ï¿½ï¿½Wï¿½Xï¿½^=0x41 */
 }
 
 /*****************************************************************************
@@ -1526,13 +1488,13 @@ void Mcu_Dev_Pwron_EizoIc_PctDspSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 6.5.1.1 ‹N“®‚ÌƒJƒƒ‰ƒGƒCƒY•\¦‚ÉŠÖ‚·‚éİ’èƒtƒ[
+  Note          : 6.5.1.1 ï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ÌƒJï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½Cï¿½Yï¿½\ï¿½ï¿½ï¿½ÉŠÖ‚ï¿½ï¿½ï¿½İ’ï¿½tï¿½ï¿½ï¿½[
 *****************************************************************************/
 void Mcu_Dev_Pwron_EizoIc_CamDspSetting( void ){
-    /* MCU‚ÉƒoƒbƒNƒAƒbƒv‚µ‚Ä‚¢‚éuƒJƒƒ‰ƒVƒXƒeƒ€í•Êv‚ÆuƒJƒƒ‰‰f‘œ‚ÌØ‚èo‚µƒTƒCƒY v‚ÉŠî‚Ã‚«
-    u6.5.2.1 ƒJƒƒ‰‰f‘œ•\¦‚ÉŠÖ‚·‚éİ’èƒŠƒXƒgvŠe‰t»ƒ‚ƒfƒ‹‚²‚Æ‚Ìİ’è‚ğÀ{ */
+    /* MCUï¿½Éƒoï¿½bï¿½Nï¿½Aï¿½bï¿½vï¿½ï¿½ï¿½Ä‚ï¿½ï¿½ï¿½uï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½Vï¿½Xï¿½eï¿½ï¿½ï¿½ï¿½Êvï¿½Æuï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ÌØ‚ï¿½oï¿½ï¿½ï¿½Tï¿½Cï¿½Y ï¿½vï¿½ÉŠï¿½Ã‚ï¿½
+    ï¿½u6.5.2.1 ï¿½Jï¿½ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½ÉŠÖ‚ï¿½ï¿½ï¿½İ’èƒŠï¿½Xï¿½gï¿½vï¿½eï¿½tï¿½ï¿½ï¿½ï¿½ï¿½fï¿½ï¿½ï¿½ï¿½ï¿½Æ‚Ìİ’ï¿½ï¿½ï¿½ï¿½ï¿½{ */
 
-    /* î•ñ•s‘«‚É‚æ‚èˆ—ì¬ƒXƒLƒbƒv */
+    /* ï¿½ï¿½ï¿½sï¿½ï¿½ï¿½É‚ï¿½èˆï¿½ï¿½ï¿½ì¬ï¿½Xï¿½Lï¿½bï¿½v */
 }
 
 /*****************************************************************************
@@ -1540,15 +1502,15 @@ void Mcu_Dev_Pwron_EizoIc_CamDspSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIFóM‹N“®ˆ—
+  Note          : GVIFï¿½ï¿½Mï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifRcvr_Init( void ){
-    /* ó‘Ô‘JˆÚ–¢ŒŸ“¢‚Ì‚½‚ß‰¼ƒR[ƒh */
-    /* [6-1~6-4. ‘S‘Ìƒtƒ[]ƒV[ƒg‚Ì‰Šú‰»ˆ— */
-    /* 6.2 ‰Šúİ’èˆ— */
+    /* ï¿½ï¿½Ô‘Jï¿½Ú–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‰ï¿½ï¿½Rï¿½[ï¿½h */
+    /* [6-1~6-4. ï¿½Sï¿½Ìƒtï¿½ï¿½ï¿½[]ï¿½Vï¿½[ï¿½gï¿½Ìï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
+    /* 6.2 ï¿½ï¿½ï¿½ï¿½ï¿½İ’èˆï¿½ï¿½ */
     Mcu_Dev_Pwron_GvifRx_Polling_Rst();
 
-    /* 7.ƒŒƒWƒXƒ^İ’è */
+    /* 7.ï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’ï¿½ */
     Mcu_Dev_Pwron_GvifRx_RegSetting();
 }
 
@@ -1557,7 +1519,7 @@ void    Mcu_Dev_Pwron_GvifRcvr_Init( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : /GVIF-RX(CAM)-RST=Hi ŠÄ‹
+  Note          : /GVIF-RX(CAM)-RST=Hi ï¿½Äï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifRx_Polling_Rst( void ){
     uint8   mcu_dio_ret;
@@ -1581,14 +1543,14 @@ void    Mcu_Dev_Pwron_GvifRx_Polling_Rst( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 7.ƒŒƒWƒXƒ^İ’è
+  Note          : 7.ï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’ï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifRx_RegSetting( void ){
     static const uint32 MCU_PWRON_TIME_GVIFRX  =   (uint16)(15U / PWRCTRL_CFG_TASK_TIME);    /* min:15ms */
 
     uint8   mcu_time_chk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u2_s_PwrCtrl_Polling_GvifRxRst, MCU_PWRON_TIME_GVIFRX);
+    mcu_time_chk    =   u1_t_Pwron_TimChk(u2_s_PwrCtrl_Polling_GvifRxRst, MCU_PWRON_TIME_GVIFRX);
 
     if(mcu_time_chk ==  (uint8)TRUE){
         Mcu_Dev_Pwron_GvifRx_SetReg();
@@ -1600,10 +1562,10 @@ void    Mcu_Dev_Pwron_GvifRx_RegSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIFóM‹@‰Šú‰»ˆ— ƒŒƒWƒXƒ^İ’è
+  Note          : GVIFï¿½ï¿½Mï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’ï¿½
 *****************************************************************************/
 void Mcu_Dev_Pwron_GvifRx_SetReg( void ){
-    /* IF•s–¾‚Ì‚½‚ß–¢İ’è  ‚É’è‹`‚µ‚½’è””z—ñ‚ğ—p‚¢‚Äİ’è‚·‚é */
+    /* IFï¿½sï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß–ï¿½ï¿½İ’ï¿½  ï¿½É’ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½è”ï¿½zï¿½ï¿½ï¿½pï¿½ï¿½ï¿½Äİ’è‚·ï¿½ï¿½ */
 }
 
 /*****************************************************************************
@@ -1611,21 +1573,21 @@ void Mcu_Dev_Pwron_GvifRx_SetReg( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIFóM‹N“®ˆ—
+  Note          : GVIFï¿½ï¿½Mï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifSndr_Init( void ){
-    /* ó‘Ô‘JˆÚ–¢ŒŸ“¢‚Ì‚½‚ß‰¼ƒR[ƒh */
-    /* [(C-Disp)§Œäƒtƒ[]ƒV[ƒg‚Ìu’èŠúŠÄ‹ƒtƒ[v‘O‚Ü‚Å */
-    /* 6.2 ‰Šúİ’èˆ— */
+    /* ï¿½ï¿½Ô‘Jï¿½Ú–ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß‰ï¿½ï¿½Rï¿½[ï¿½h */
+    /* [(C-Disp)ï¿½ï¿½ï¿½ï¿½tï¿½ï¿½ï¿½[]ï¿½Vï¿½[ï¿½gï¿½Ìuï¿½ï¿½ï¿½ï¿½Äï¿½ï¿½tï¿½ï¿½ï¿½[ï¿½vï¿½Oï¿½Ü‚ï¿½ */
+    /* 6.2 ï¿½ï¿½ï¿½ï¿½ï¿½İ’èˆï¿½ï¿½ */
     Mcu_Dev_Pwron_GvifTx_Polling_Rst();
 
-    /* ‰Šúİ’è + eDPİ’è */
+    /* ï¿½ï¿½ï¿½ï¿½ï¿½İ’ï¿½ + eDPï¿½İ’ï¿½ */
     Mcu_Dev_Pwron_GvifTx_RegSetting();
 
-    /* o—Íİ’èƒtƒ[ +  */
+    /* ï¿½oï¿½Íİ’ï¿½tï¿½ï¿½ï¿½[ +  */
     Mcu_Dev_Pwron_GvifTx_OutputSetting();
 
-    /* HDCP”FØƒtƒ[(SiP—p‚Ìƒtƒ[‚Ì‚½‚ßˆ—–³‚µ) */
+    /* HDCPï¿½Fï¿½Øƒtï¿½ï¿½ï¿½[(SiPï¿½pï¿½Ìƒtï¿½ï¿½ï¿½[ï¿½Ì‚ï¿½ï¿½ßï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½) */
 }
 
 /*****************************************************************************
@@ -1633,7 +1595,7 @@ void    Mcu_Dev_Pwron_GvifSndr_Init( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : /GVIF-RX(CAM)-RST=Hi ŠÄ‹
+  Note          : /GVIF-RX(CAM)-RST=Hi ï¿½Äï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifTx_Polling_Rst( void ){
     uint8   mcu_dio_ret;
@@ -1657,14 +1619,14 @@ void    Mcu_Dev_Pwron_GvifTx_Polling_Rst( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : (C-Disp)ƒŒƒWƒXƒ^İ’è
+  Note          : (C-Disp)ï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’ï¿½
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifTx_RegSetting( void ){
-    static const uint8  MCU_PWRON_TIME_GVIFTX  =   (11U);    /* min:55ms 11ƒ^ƒXƒNŒo‰ßŒã‚ğİ’è */
+    static const uint8  MCU_PWRON_TIME_GVIFTX  =   (11U);    /* min:55ms 11ï¿½^ï¿½Xï¿½Nï¿½oï¿½ßŒï¿½ï¿½İ’ï¿½ */
 
     uint8   mcu_time_chk;
 
-    mcu_time_chk    =   Mcu_Dev_Pwron_TimChk(u2_s_PwrCtrl_Polling_GvifTxRst, MCU_PWRON_TIME_GVIFTX);
+    mcu_time_chk    =   u1_t_Pwron_TimChk(u2_s_PwrCtrl_Polling_GvifTxRst, MCU_PWRON_TIME_GVIFTX);
 
     if(mcu_time_chk ==  (uint8)TRUE){
         Mcu_Dev_Pwron_GvifTx_SetReg();
@@ -1676,10 +1638,10 @@ void    Mcu_Dev_Pwron_GvifTx_RegSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF‘—M‹@‰Šú‰»ˆ— ƒŒƒWƒXƒ^İ’è
+  Note          : GVIFï¿½ï¿½ï¿½Mï¿½@ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ ï¿½ï¿½ï¿½Wï¿½Xï¿½^ï¿½İ’ï¿½
 *****************************************************************************/
 void Mcu_Dev_Pwron_GvifTx_SetReg( void ){
-    /* IF•s–¾‚Ì‚½‚ß–¢İ’è  ‚É’è‹`‚µ‚½’è””z—ñ‚ğ—p‚¢‚Äİ’è‚·‚é */
+    /* IFï¿½sï¿½ï¿½ï¿½Ì‚ï¿½ï¿½ß–ï¿½ï¿½İ’ï¿½  ï¿½É’ï¿½`ï¿½ï¿½ï¿½ï¿½ï¿½è”ï¿½zï¿½ï¿½ï¿½pï¿½ï¿½ï¿½Äİ’è‚·ï¿½ï¿½ */
 }
 
 /*****************************************************************************
@@ -1687,13 +1649,13 @@ void Mcu_Dev_Pwron_GvifTx_SetReg( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF‘—M‹@ o—Íİ’èƒtƒ[
+  Note          : GVIFï¿½ï¿½ï¿½Mï¿½@ ï¿½oï¿½Íİ’ï¿½tï¿½ï¿½ï¿½[
 *****************************************************************************/
 void Mcu_Dev_Pwron_GvifTx_OutputSetting( void ){
 
     if(mcu_gvif_restart_sts == MCU_GVIF_RESTRT_STS_1ST){
-        /* I2Cİ’è Display IC (ML86294) ‰f‘œo—ÍŠJnieDPo—Íj*/
-        /* I2Cwrite ƒAƒhƒŒƒXF0xFF, İ’è’l:0x00 */
+        /* I2Cï¿½İ’ï¿½ Display IC (ML86294) ï¿½fï¿½ï¿½ï¿½oï¿½ÍŠJï¿½nï¿½ieDPï¿½oï¿½Íj*/
+        /* I2Cwrite ï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½F0xFF, ï¿½İ’ï¿½l:0x00 */
 
         Mcu_Dev_Pwron_GvifTx_LnkChk();
     }
@@ -1710,32 +1672,32 @@ void Mcu_Dev_Pwron_GvifTx_OutputSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF‘—M‹@ ƒŠƒ“ƒNŠm—§ó‘ÔŠÄ‹
+  Note          : GVIFï¿½ï¿½ï¿½Mï¿½@ ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½mï¿½ï¿½ï¿½ï¿½ÔŠÄï¿½
 *****************************************************************************/
 void Mcu_Dev_Pwron_GvifTx_LnkChk( void ){
     uint8 mcu_gvif_linkchk;
     mcu_gvif_linkchk = 0;
 
-    /* I2Cwrite ƒAƒhƒŒƒXF0x60, İ’è’l:0730 */
+    /* I2Cwrite ï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½F0x60, ï¿½İ’ï¿½l:0730 */
     /* 50mswait */
-    mcu_gvif_linkchk = 0; /* I2CƒŒƒWƒXƒ^Read ƒAƒhƒŒƒXF0x00 */
-    mcu_gvif_linkchk = mcu_gvif_linkchk & 1; /* 0bit–Ú‚Ìƒf[ƒ^Šm”F */
-    Mcu_Gvif_LinkTimer = 6000U; /* ‚Ç‚±‚©‚©‚çCDC‹N“®‚©‚ç‚ÌŠÔ‚ğæ“¾ b’è‚Å‹­§ƒGƒ‰[ˆ— */
+    mcu_gvif_linkchk = 0; /* I2Cï¿½ï¿½ï¿½Wï¿½Xï¿½^Read ï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½F0x00 */
+    mcu_gvif_linkchk = mcu_gvif_linkchk & 1; /* 0bitï¿½Ú‚Ìƒfï¿½[ï¿½^ï¿½mï¿½F */
+    Mcu_Gvif_LinkTimer = 6000U; /* ï¿½Ç‚ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½CDCï¿½Nï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Ìï¿½ï¿½Ô‚ï¿½ï¿½æ“¾ ï¿½bï¿½ï¿½Å‹ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ */
     if(mcu_gvif_linkchk == MCU_GVIF_LNK_ACTIVE){
          Mcu_Gvif_LinkTimer = 0;
-        /* I2Cwrite ƒAƒhƒŒƒXF0xFF, İ’è’l:0x07 */
-        /* I2Cwrite ƒAƒhƒŒƒXF0xFB, İ’è’l:0x00 */
-        /* I2Cwrite ƒAƒhƒŒƒXF0xFF, İ’è’l:0x00 */
-        /* I2Cwrite ƒAƒhƒŒƒXF0x2E, İ’è’l:0x01 */
-        /* I2Cwrite ƒAƒhƒŒƒXF0x2E, İ’è’l:0x00 */
+        /* I2Cwrite ï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½F0xFF, ï¿½İ’ï¿½l:0x07 */
+        /* I2Cwrite ï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½F0xFB, ï¿½İ’ï¿½l:0x00 */
+        /* I2Cwrite ï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½F0xFF, ï¿½İ’ï¿½l:0x00 */
+        /* I2Cwrite ï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½F0x2E, ï¿½İ’ï¿½l:0x01 */
+        /* I2Cwrite ï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½F0x2E, ï¿½İ’ï¿½l:0x00 */
         mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_CMP;
     }
     else if(Mcu_Gvif_LinkTimer > MCU_GVIF_LNK_TIMEOUT){
-        /* ƒŠƒ“ƒNƒGƒ‰[ˆ— d—lTBD */
-        mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_CMP; /* ƒ^ƒCƒ€ƒAƒEƒgƒŠƒ“ƒNƒGƒ‰[‚Íb’è‚ÅŠ®—¹ó‘Ô */
+        /* ï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½ï¿½ ï¿½dï¿½lTBD */
+        mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_CMP; /* ï¿½^ï¿½Cï¿½ï¿½ï¿½Aï¿½Eï¿½gï¿½ï¿½ï¿½ï¿½ï¿½Nï¿½Gï¿½ï¿½ï¿½[ï¿½ï¿½ï¿½Íbï¿½ï¿½ÅŠï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ */
     }
     else{
-        mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_2ND; /* GVIFo—ÍÄİ’è */
+        mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_2ND; /* GVIFï¿½oï¿½ÍÄİ’ï¿½ */
     }
 }
 

@@ -93,6 +93,7 @@
 #define PWRCTRL_NOREDUN_PWR_ON          (2U)    /* ON制御実施 */
 
 /* デバイスOFF制御実施状況管理マクロ */
+#define PWROFF_BIT_OFF                  (0x0000U)
 #define PWROFF_USB_BIT                  (0x0001U)
 #define PWROFF_PICTIC_BIT               (0x0002U)
 #define PWROFF_GVIFRX_BIT               (0x0004U)
@@ -104,7 +105,7 @@
 #define PWROFF_POWERIC_BIT              (0x0100U)
 #define PWROFF_XMTUNER_BIT              (0x0200U)
 #define PWROFF_GNSS_BIT                 (0x0400U)
-#define     PWROFF_GYRO_BIT             (0x0800U)
+#define PWROFF_GYRO_BIT                 (0x0800U)
 #define PWROFF_CONP_BIT                 (0x0FFFU)
 
 /*--------------------------------------------------------------------------*/
@@ -117,11 +118,12 @@ void vd_g_PwrCtrlNoRedunPwrOnStart( void );       /* 非冗長電源ON要求 */
 void vd_g_PwrCtrlNoRedunPwrOffStart( void );      /* 非冗長電源OFF要求 */
 U1 u1_g_PwrCtrlNoRedunGetSts( void );             /* 非冗長電源ONシーケンス状態問い合わせ */
 
+void            vd_g_McuDev_Pwroff(void);
 /*--------------------------------------------------------------------------*/
 /*  Constant Externs                                                        */
 /*--------------------------------------------------------------------------*/
 /* SYS系デバイス終了状態 */
-extern  U2 Mcu_Dev_Pwroff_Sts;
+extern  U2 u2_g_PwrCtrl_OffSts;
 extern  U1 u1_g_PwrCtrl_NoRedun_Pwr_Sts;
 
 #endif /* PWRCTRL_NOREDUN_H */
