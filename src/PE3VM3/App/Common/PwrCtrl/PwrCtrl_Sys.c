@@ -20,7 +20,7 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 
-/* GNSS����d�l */
+/* GNSS制御仕様 */
 #define MCU_STEP_GNSS_PRE               (1U)
 #define MCU_STEP_GNSS_INI_CHK           (2U)
 #define MCU_STEP_GNSS_PRECHK            (3U)
@@ -56,7 +56,7 @@ static void vd_s_PwrCtrlSysPwrOnV11Asil( void );
 static void vd_s_PwrCtrlSysPwrOnEizo( void );
 static void vd_s_PwrCtrlSysPwrOffflw( void );
 
-/* �f�o�C�XON���� */
+/* デバイスON制御 */
 static U1       u1_t_Pwron_TimChk(const U4 u1_a_TIMCNT, const U4 u1_a_TIMFIN);
 static void     vd_s_McuDev_Polling_V33PERI(void);
 static void     vd_s_McuDev_Polling_EIZO( void );
@@ -108,10 +108,10 @@ static U1 Mcu_Dio_Port_level_Pre[MCU_PORT_NUM];
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
-/* �t���[�����^�C�} */
+/* フリーランタイマ */
 static U4 Mcu_frt_stamp[GPT_FRT_USELPSD_NUM_PARAM];
 
-/* ON/OFF�V�[�P���X�N���v�� */
+/* ON/OFFシーケンス起動要求 */
 static U1 u1_s_PwrCtrl_Sys_Pwr_Sts;
 
 static U1 u1_s_PwrCtrl_Sys_PwrOn_Step;
@@ -132,7 +132,7 @@ static U4 u4_s_PwrCtrl_Sys_Audio_Time;
 static U4 u4_s_PwrCtrl_Sys_V11_Asil_Time;
 static U4 u4_s_PwrCtrl_Sys_Eizo_Time;
 
-/* �f�o�C�X�N���p�J�E���^ */
+/* デバイス起動用カウンタ */
 static U4 u4_s_PwrCtrl_Polling_V33PERI;
 static U4 u4_s_PwrCtrl_Polling_EIZO;
 static U4 u4_s_PwrCtrl_Polling_AUDIO;
@@ -144,18 +144,18 @@ static U2 u2_s_PwrCtrl_Polling_VIcRst;
 static U2 u2_s_PwrCtrl_Polling_GvifRxRst;
 static U2 u2_s_PwrCtrl_Polling_GvifTxRst;
 
-/* GNSS����d�l */
-static uint8    Mcu_OnStep_GNSS;                /* 4����V�[�P���X */
-static uint32   Mcu_GNSS_LinkTimer;             /* GNSS Wati�����p�^�C�} */
-static uint8    Mcu_Fail_GNSS;                  /* GNSS PMONI Low ���m�J�E���^ (2��ڌ��m�łk�����p��) */
+/* GNSS制御仕様 */
+static uint8    Mcu_OnStep_GNSS;                /* 4制御シーケンス */
+static uint32   Mcu_GNSS_LinkTimer;             /* GNSS Wati処理用タイマ */
+static uint8    Mcu_Fail_GNSS;                  /* GNSS PMONI Low 検知カウンタ (2回目検知でＬｏｗ継続) */
 
-static uint16  Mcu_Gvif_LinkTimer;    /* CDC�N������̃^�C�}���{���͂����ƕʂ̏ꏊ�ŊǗ��H */
-/* �W���C���E�����x�Z���T����d�l */
+static uint16  Mcu_Gvif_LinkTimer;    /* CDC起動からのタイマ→本来はもっと別の場所で管理？ */
+/* ジャイロ・加速度センサ制御仕様 */
 static uint8   mcu_gvif_restart_sts;
 
-/* Power-IC����d�l */
-static U1 u1_s_PwrCtrl_PowerIc_OVRALL;      /* 4.����t���[ 4-1.�ʏ�N�� */
-static uint16   Mcu_PowerIc_OffTime;        /* Power-IC Off Wait�����p�^�C�} */
+/* Power-IC制御仕様 */
+static U1 u1_s_PwrCtrl_PowerIc_OVRALL;      /* 4.制御フロー 4-1.通常起動 */
+static uint16   Mcu_PowerIc_OffTime;        /* Power-IC Off Wait処理用タイマ */
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -172,17 +172,17 @@ static uint16   Mcu_PowerIc_OffTime;        /* Power-IC Off Wait�����p
 /****************************************************************************/
 /*****************************************************************************
   Function      : PwrCtrl_Sys_PwrOn_GetSts
-  Description   : SYS�d����Ԗ₢���킹
+  Description   : SYS電源状態問い合わせ
   param[in/out] : none
-  return        : FALSE(0)�FSYS�d���V�[�P���X���s��
-                  TRUE(1) �FSYS�d���V�[�P���X����
+  return        : FALSE(0)：SYS電源シーケンス実行中
+                  TRUE(1) ：SYS電源シーケンス完了
   Note          : 
 *****************************************************************************/
 U1 u1_g_PwrCtrlSysGetSts( void )
 {
     U1 u1_t_ret;
 
-    u1_t_ret = (U1)FALSE; /* �������FSYS�d���V�[�P���X���s�� */
+    u1_t_ret = (U1)FALSE; /* 初期化：SYS電源シーケンス実行中 */
 
     if ( u1_s_PwrCtrl_Sys_Pwr_Sts == (U1)PWRCTRL_SYS_NON )
     {
@@ -194,11 +194,11 @@ U1 u1_g_PwrCtrlSysGetSts( void )
 
 /*****************************************************************************
   Function      : vd_g_PwrCtrlSysPwrOnStart
-  Description   : SYS�d��ON�v��
+  Description   : SYS電源ON要求
   param[in/out] : none
   return        : none
-  Note          : SYS�d��ON���������{��������𖞂������ꍇ�ɃR�[������B
-                  ���ۂ�ON����(�҂����킹�AHW�A�N�Z�X)��MET/IVI�������(5ms)�Ŏ��{���邱�ƁB
+  Note          : SYS電源ON処理を実施する条件を満たした場合にコールする。
+                  実際のON処理(待ち合わせ、HWアクセス)はMET/IVI定期処理(5ms)で実施すること。
 *****************************************************************************/
 void vd_g_PwrCtrlSysPwrOnStart( void )
 {
@@ -209,11 +209,11 @@ void vd_g_PwrCtrlSysPwrOnStart( void )
 
 /*****************************************************************************
   Function      : vd_g_PwrCtrlSysPwrOffStart
-  Description   : SYS�d��OFF�v��
+  Description   : SYS電源OFF要求
   param[in/out] : none
   return        : none
-  Note          : SYS�d��OFF�v���������{��������𖞂������ꍇ�ɃR�[������B
-                  ���ۂ�OFF����(�҂����킹�AHW�A�N�Z�X)��MET/IVI�������(5ms)�Ŏ��{���邱�ƁB
+  Note          : SYS電源OFF要処理を実施する条件を満たした場合にコールする。
+                  実際のOFF処理(待ち合わせ、HWアクセス)はMET/IVI定期処理(5ms)で実施すること。
 *****************************************************************************/
 void vd_g_PwrCtrlSysPwrOffStart( void )
 {
@@ -224,18 +224,18 @@ void vd_g_PwrCtrlSysPwrOffStart( void )
 
 /*****************************************************************************
   Function      : u1_g_PwrCtrlSysShtdwnGetSts
-  Description   : SYS�n�f�o�C�X�I����Ԗ₢���킹
+  Description   : SYS系デバイス終了状態問い合わせ
   param[in/out] : none
-  return        : FALSE(0)�FSYS�n�f�o�C�X�I���������s��
-                  TRUE(1) �FSYS�n�f�o�C�X�I����������
-  Note          : SiP�d��OFF������ɃR�[������B
-                  HW����d�l����́A�Ώۂ͊e�f�o�C�X�̐���d�l���Q�ƂƂ̋L�ڂ���B
+  return        : FALSE(0)：SYS系デバイス終了処理実行中
+                  TRUE(1) ：SYS系デバイス終了処理完了
+  Note          : SiP電源OFF完了後にコールする。
+                  HW制御仕様書上は、対象は各デバイスの制御仕様書参照との記載あり。
 *****************************************************************************/
 U1   u1_g_PwrCtrlSysShtdwnGetSts( void )
 {
     U1 u1_t_ret;
 
-    u1_t_ret  = (U1)FALSE; /* �������FSYS�d��ON�V�[�P���X���s�� */
+    u1_t_ret  = (U1)FALSE; /* 初期化：SYS電源ONシーケンス実行中 */
 
     if(u2_g_PwrCtrl_OffSts == (U2)PWROFF_CONP_BIT){
         u1_t_ret  =   (U1)TRUE;
@@ -252,20 +252,20 @@ U1   u1_g_PwrCtrlSysShtdwnGetSts( void )
 *****************************************************************************/
 void vd_g_PwrCtrlSysInit( void )
 {
-    /* �t���[�����^�C�}�p�z�񏉊��� */
+    /* フリーランタイマ用配列初期化 */
     for(U4 cnt = 0; cnt < (U4)GPT_FRT_USELPSD_NUM_PARAM; cnt++){
         Mcu_frt_stamp[cnt] = 0;
     }
 
-    /* ON/OFF�V�[�P���X�N���v���̏����� */
+    /* ON/OFFシーケンス起動要求の初期化 */
     u1_s_PwrCtrl_Sys_Pwr_Sts             = (U1)PWRCTRL_SYS_NON;
 
-    /* ���݋N���X�e�b�v�̏����� */
+    /* 現在起動ステップの初期化 */
     u1_s_PwrCtrl_Sys_PwrOn_Step              = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
     u1_s_PwrCtrl_Sys_PwrOff_Step             = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
     u1_s_PwrCtrl_Sys_Off_SubStep             = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
 
-    /* �ҋ@���ԑ���pRAM�̏����� */
+    /* 待機時間測定用RAMの初期化 */
     u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
     u4_s_PwrCtrl_Sys_DisCharge_Time          = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
     u4_s_PwrCtrl_Sys_Boost_Dcdc_Time         = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
@@ -280,7 +280,7 @@ void vd_g_PwrCtrlSysInit( void )
     u4_s_PwrCtrl_Sys_V11_Asil_Time           = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
     u4_s_PwrCtrl_Sys_Eizo_Time               = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
 
-    /* �f�o�C�X�N���p�J�E���^�̏����� */
+    /* デバイス起動用カウンタの初期化 */
     u4_s_PwrCtrl_Polling_V33PERI         = (uint32)0U;
     u4_s_PwrCtrl_Polling_EIZO            = (uint32)0U;
     u4_s_PwrCtrl_Polling_AUDIO           = (uint32)0U;
@@ -293,8 +293,8 @@ void vd_g_PwrCtrlSysInit( void )
     u2_s_PwrCtrl_Polling_GvifTxRst       = (uint32)0U;
     mcu_gvif_restart_sts        = (uint8)0U;
 
-    /* Init���̃t���[�����^�C�}�擾 */
-    /* �g�p��FGNSS,�W���C���E�����x�Z���T���� */
+    /* Init時のフリーランタイマ取得 */
+    /* 使用先：GNSS,ジャイロ・加速度センサ制御 */
     Mcu_frt_stamp[GPT_FRT_USELPSD_BASE] = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
 
     Mcu_OnStep_GNSS             = (uint8)MCU_STEP_GNSS_PRE;
@@ -320,10 +320,10 @@ void vd_g_PwrCtrlSysInit( void )
 *****************************************************************************/
 void vd_g_PwrCtrlSysPwrOnMainFunction( void )
 {
-    /* SYS�N���d��ON�v������ */
+    /* SYS起動電源ON要求あり */
     if ( u1_s_PwrCtrl_Sys_Pwr_Sts == PWRCTRL_SYS_ON )
     {
-        /* OFF����STEP�Ǘ�RAM,�^�C�}���N���A����OFF2�T�ڂ����s�ł���悤�ɂ��� */
+        /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
         u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
         u1_s_PwrCtrl_Sys_Off_SubStep = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
 
@@ -333,7 +333,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnBuDdMode(); /* STEP1-2 */
                 vd_s_PwrCtrlSysPwrOnDisCharge();  /* STEP1-1 */
 
-                /* STEP1-1��STEP1-2���������Ă���Ύ���STEP�ɐi�߂� */
+                /* STEP1-1とSTEP1-2が完了していれば次のSTEPに進める */
                 if ( ( u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
@@ -345,7 +345,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnBoostDcdc();      /* STEP2-1 */
                 vd_s_PwrCtrlSysPwrOnBoostAsilDcdc();  /* STEP2-2 */
 
-                /* STEP2-1��STEP2-2���������Ă���Ύ���STEP�ɐi�߂� */
+                /* STEP2-1とSTEP2-2が完了していれば次のSTEPに進める */
                 if ( ( u4_s_PwrCtrl_Sys_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
@@ -359,7 +359,7 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnV33Peri();       /* STEP3-3 */
                 vd_s_PwrCtrlSysPwrOnV33Asil();       /* STEP3-4 */
 
-                /* STEP3-1~STEP3-4���������Ă���Ύ���STEP�ɐi�߂� */
+                /* STEP3-1~STEP3-4が完了していれば次のSTEPに進める */
                 if ( ( u4_s_PwrCtrl_Sys_Dd_Freq_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_Boost_Asil_Freq_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_V33_Peri_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
@@ -376,30 +376,30 @@ void vd_g_PwrCtrlSysPwrOnMainFunction( void )
                 vd_s_PwrCtrlSysPwrOnV11Asil(); /* STEP4-4 */
                 vd_s_PwrCtrlSysPwrOnEizo();    /* STEP4-5 */
 
-                /* STEP4-1~STEP4-5���������Ă���ΐ���N����ݒ� */
+                /* STEP4-1~STEP4-5が完了していれば正常起動を設定 */
                 if ( ( u4_s_PwrCtrl_Sys_V18_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_V18_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_Audio_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_V11_Asil_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN )
                   && ( u4_s_PwrCtrl_Sys_Eizo_Time == (U4)PWRCTRL_SYS_COUNTTIME_FIN ) )
                 {
-                    /* ����N����ݒ� */
+                    /* 正常起動を設定 */
                     u1_s_PwrCtrl_Sys_PwrOn_Step  = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-                    /* �v�������� */
+                    /* 要求初期化 */
                     u1_s_PwrCtrl_Sys_Pwr_Sts = (U1)PWRCTRL_SYS_NON;
                 }
                 break;
 
             case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
-                /* ����N�����͉������Ȃ� */
+                /* 正常起動時は何もしない */
                 break;
 
             default:
-                /* �ُ�n�͖��l�� */
+                /* 異常系は未考慮 */
                 break;
         }
 
-        /* Port�X�V���� */
+        /* Port更新処理 */
         vd_g_McuDevPwronWritePort();
     }
     return;
@@ -418,10 +418,10 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
 
     u1_t_read_v33_peri   = (U1)STD_HIGH;
 
-    /* SYS�N���d��OFF�v������ */
+    /* SYS起動電源OFF要求あり */
     if ( u1_s_PwrCtrl_Sys_Pwr_Sts == (U1)PWRCTRL_SYS_OFF )
     {
-        /* ON����STEP�Ǘ�RAM,�^�C�}���N���A����ON2�T�ڂ����s�ł���悤�ɂ��� */
+        /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
         u1_s_PwrCtrl_Sys_PwrOn_Step           = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
         u4_s_PwrCtrl_Sys_Bu_Dd_Mode_Time      = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
         u4_s_PwrCtrl_Sys_DisCharge_Time       = (U4)PWRCTRL_SYS_WAIT_TIME_INIT;
@@ -455,10 +455,10 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
             case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
                 vd_s_PwrCtrlSysPwrOffflw();
 
-                /* STEP1���������Ă���ΐ���N����ݒ� */
+                /* STEP1が完了していれば正常起動を設定 */
                 if ( u1_s_PwrCtrl_Sys_Off_SubStep == (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT )
                 {
-                    u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;     /* ����ԂɑJ�� */
+                    u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;     /* 次状態に遷移 */
                 }
                 break;
 
@@ -468,31 +468,31 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
                     Mcu_PowerIc_OffTime++;
                 }
 
-                u1_t_read_v33_peri = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]); /* V33-PERI-ON�ǂݏo�� */
+                u1_t_read_v33_peri = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]); /* V33-PERI-ON読み出し */
                 if ( u1_t_read_v33_peri == (U1)STD_HIGH )
                 {
-                    Mcu_PowerIc_OffTime = (uint16)0U;       /* V33-PERI-ON=High�̏ꍇ�������ւ̑J�ڂ�}������ */
+                    Mcu_PowerIc_OffTime = (uint16)0U;       /* V33-PERI-ON=Highの場合次処理への遷移を抑制する */
                 }
 
                 if ( Mcu_PowerIc_OffTime >= PWRCTRL_WAIT_POWERIC_100MS )
                 {
-                    vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_LOW);     /* P-IC�d������ */
-                    Mcu_PowerIc_OffTime = (uint16)0U;                           /* �^�C�}�N���A */
-                    /* STEP2���������Ă���ΐ���N����ݒ� */
+                    vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_LOW);     /* P-IC電源制限 */
+                    Mcu_PowerIc_OffTime = (uint16)0U;                           /* タイマクリア */
+                    /* STEP2が完了していれば正常起動を設定 */
                     u1_s_PwrCtrl_Sys_PwrOff_Step     =   (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-                    /* �v�������� */
+                    /* 要求初期化 */
                     u1_s_PwrCtrl_Sys_Pwr_Sts = (U1)PWRCTRL_SYS_NON;
                 }
                 break;
             case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
-                /* ����I�����͉������Ȃ� */
+                /* 正常終了時は何もしない */
                 break;
             default:
-                /* �ُ�n�͖��l�� */
+                /* 異常系は未考慮 */
                 break;
         }
         
-        /* Port�X�V���� */
+        /* Port更新処理 */
         vd_g_McuDevPwronWritePort();
     }
 
@@ -529,8 +529,8 @@ static void vd_s_PwrCtrlSysPwrOnBuDdMode( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnDisCharge( void )
 {
-    if(u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_WAIT_DISCHARGE_TIME){ /* ���d�҂����Ԃ��o�߂����� */
-        u4_s_PwrCtrl_Sys_DisCharge_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;        /* �o�߂��Ă���Όv��������ݒ� */
+    if(u4_s_PwrCtrl_Sys_DisCharge_Time == (U4)PWRCTRL_SYS_WAIT_DISCHARGE_TIME){ /* 放電待ち時間を経過したか */
+        u4_s_PwrCtrl_Sys_DisCharge_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;        /* 経過していれば計測完了を設定 */
     }
     
     if(u4_s_PwrCtrl_Sys_DisCharge_Time != (U4)PWRCTRL_SYS_COUNTTIME_FIN){
@@ -550,7 +550,7 @@ static void vd_s_PwrCtrlSysPwrOnDisCharge( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnBoostDcdc( void )
 {
-    if(u4_s_PwrCtrl_Sys_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_DCDC_TIME){    /* �E�F�C�g�^�C�����o�߂����� ��r�Ώۂ�0�ݒ�̂��߈�v�Ŋm�F */
+    if(u4_s_PwrCtrl_Sys_Boost_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_DCDC_TIME){    /* ウェイトタイムを経過したか 比較対象が0設定のため一致で確認 */
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_BOOST_DCDC, MCU_DIO_HIGH);
         u4_s_PwrCtrl_Sys_Boost_Dcdc_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
@@ -571,7 +571,7 @@ static void vd_s_PwrCtrlSysPwrOnBoostDcdc( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOnBoostAsilDcdc( void )
 {
-    if(u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_DCDC_TIME){    /* �E�F�C�g�^�C�����o�߂����� ��r�Ώۂ�0�ݒ�̂��߈�v�Ŋm�F */
+    if(u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time == (U4)PWRCTRL_SYS_WAIT_BOOST_ASIL_DCDC_TIME){    /* ウェイトタイムを経過したか 比較対象が0設定のため一致で確認 */
         vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_ASIL_DCDC, MCU_DIO_HIGH);
         u4_s_PwrCtrl_Sys_Boost_Asil_Dcdc_Time = (U4)PWRCTRL_SYS_COUNTTIME_FIN;
     }
@@ -787,14 +787,14 @@ static void vd_s_PwrCtrlSysPwrOnEizo( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlSysPwrOffflw( void )
 {
-    switch (u1_s_PwrCtrl_Off_SubStep)
+    switch (u1_s_PwrCtrl_Sys_Off_SubStep)
     {
     case PWRCTRL_COMMON_PROCESS_STEP1:
-        /* ����[�q�̑O�ɒ[�qOFF����K�v��������� */
-        vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CAN_RST                   , MCU_DIO_LOW); /* AUDIO-ON 1ms�O */
-        vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CDISP_RST                 , MCU_DIO_LOW); /* AUDIO-ON 1ms�O */
+        /* 特定端子の前に端子OFFする必要があるもの */
+        vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CAN_RST                   , MCU_DIO_LOW); /* AUDIO-ON 1ms前 */
+        vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CDISP_RST                 , MCU_DIO_LOW); /* AUDIO-ON 1ms前 */
 
-        u1_s_PwrCtrl_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
+        u1_s_PwrCtrl_Sys_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
         break;
 
     case PWRCTRL_COMMON_PROCESS_STEP2:
@@ -812,7 +812,7 @@ static void vd_s_PwrCtrlSysPwrOffflw( void )
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_00_DDC_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD_OFF, (U2)0U);
         vd_g_Pwm_SetPeriodAndDuty((U1)PWM_CH_02_DDC_ASIL_FREQ , (U2)PWRCTRL_SYS_PWM_PERIOD_OFF, (U2)0U);
 
-        u1_s_PwrCtrl_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+        u1_s_PwrCtrl_Sys_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
         break;
 
     case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
@@ -820,7 +820,7 @@ static void vd_s_PwrCtrlSysPwrOffflw( void )
         break;
 
     default:
-        u1_s_PwrCtrl_Off_SubStep = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+        u1_s_PwrCtrl_Sys_Off_SubStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
         break;
     }
 }
@@ -830,36 +830,36 @@ static void vd_s_PwrCtrlSysPwrOffflw( void )
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : �f�o�C�XON���� 
+  Note          : デバイスON制御 
 *****************************************************************************/
 void            vd_g_McuDev_Pwron(void)
 {
     U1      u1_t_pwr;
 
     if (u1_g_PwrCtrl_NoRedun_Pwr_Sts == (U1)PWRCTRL_NOREDUN_STS_ON) {
-        /* �Ώۃ|�[�g�̃|�[�����O�ƃ^�C�}�J�E���g�J�n���f */
+        /* 対象ポートのポーリングとタイマカウント開始判断 */
         vd_s_McuDev_Polling_V33PERI();
         vd_s_McuDev_Polling_EIZO();
         vd_s_McuDev_Polling_AUDIO();
 
-        /* �d����Ԏ擾 */
+        /* 電源状態取得 */
         u1_t_pwr    = u1_g_PowerSup_ModeState();
 
-        /* �A�v��ON���� */
-        vd_s_McuDev_Pwron_USB(u1_t_pwr);            /* USB�A�_�v�^�ڑ����m */
-        vd_s_McuDev_Pwron_PictIC(u1_t_pwr);         /* �f��IC(ML86294)���� */
-        vd_s_McuDev_Pwron_GVIFRx();                 /* GVIF3��M(CXD4984ER)���� */
-        vd_s_McuDev_Pwron_GVIFTx_CDisp(u1_t_pwr);   /* GVIF3���M(CXD4937/57)���� C-Disp */
-        vd_s_McuDev_Pwron_Mic(u1_t_pwr);            /* �}�C�N�d������ */
-        vd_s_McuDev_Pwron_Ant(u1_t_pwr);            /* �A���e�i�d������ */
-        vd_s_McuDev_SoundMUTE();                    /* ����MUTE���� */
-        vd_s_McuDev_Pwron_Most(u1_t_pwr);           /* MOST(v2)�V�X�e������ */
-        vd_s_McuDev_Pwron_XMTuner();                /* XM TUNER���� */
-        Mcu_Dev_Pwron_GNSS();                       /* GNSS���� */
-        vd_s_McuDev_Pwron_PowerIc(u1_t_pwr);        /* Power-IC���� */
-        vd_s_McuDev_Pwron_Gyro();                   /* �W���C���E�����x�Z���T(SMI230)���� */
+        /* アプリON処理 */
+        vd_s_McuDev_Pwron_USB(u1_t_pwr);            /* USBアダプタ接続検知 */
+        vd_s_McuDev_Pwron_PictIC(u1_t_pwr);         /* 映像IC(ML86294)制御 */
+        vd_s_McuDev_Pwron_GVIFRx();                 /* GVIF3受信(CXD4984ER)制御 */
+        vd_s_McuDev_Pwron_GVIFTx_CDisp(u1_t_pwr);   /* GVIF3送信(CXD4937/57)制御 C-Disp */
+        vd_s_McuDev_Pwron_Mic(u1_t_pwr);            /* マイク電源制御 */
+        vd_s_McuDev_Pwron_Ant(u1_t_pwr);            /* アンテナ電源制御 */
+        vd_s_McuDev_SoundMUTE();                    /* 音声MUTE制御 */
+        vd_s_McuDev_Pwron_Most(u1_t_pwr);           /* MOST(v2)システム制御 */
+        vd_s_McuDev_Pwron_XMTuner();                /* XM TUNER制御 */
+        Mcu_Dev_Pwron_GNSS();                       /* GNSS制御 */
+        vd_s_McuDev_Pwron_PowerIc(u1_t_pwr);        /* Power-IC制御 */
+        vd_s_McuDev_Pwron_Gyro();                   /* ジャイロ・加速度センサ(SMI230)制御 */
 
-        /* Port�X�V���� */
+        /* Port更新処理 */
         vd_g_McuDevPwronWritePort();
     }
 }
@@ -963,7 +963,7 @@ static void     vd_s_McuDev_Polling_AUDIO(void)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : "�X�^���o�C" �������� "�k�ޑ��s"�ȊO�֑J�ڌ�100ms�o�߂�USB-LED-ON = Hi
+  Note          : "スタンバイ" もしくは "縮退走行"以外へ遷移後100ms経過でUSB-LED-ON = Hi
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_USB(const U1 u1_a_PWR)
 {
@@ -972,13 +972,13 @@ static void     vd_s_McuDev_Pwron_USB(const U1 u1_a_PWR)
     U1      u1_t_timchk;
 
     if((u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY) && (u1_a_PWR != (U1)POWER_MODE_STATE_EDS)){
-        /* "�X�^���o�C" �������� "�k�ޑ��s"�ȊO�̓J�E���^�C���N�������g */
+        /* "スタンバイ" もしくは "縮退走行"以外はカウンタインクリメント */
         if(u4_s_PwrCtrl_waittim_usb < U4_MAX){
             u4_s_PwrCtrl_waittim_usb++;
         }
     }
     else{
-        /* �J�E���^�N���A */
+        /* カウンタクリア */
         u4_s_PwrCtrl_waittim_usb    = (U4)0U;
     }
 
@@ -995,7 +995,7 @@ static void     vd_s_McuDev_Pwron_USB(const U1 u1_a_PWR)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : EIZO-ON=H ���u�����ڃI�t�N���v�܂��́u�����ڃI���N���v�܂��́uOTA�v�֑J��
+  Note          : EIZO-ON=H かつ「見た目オフ起動」または「見た目オン起動」または「OTA」へ遷移
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR)
 {
@@ -1008,13 +1008,13 @@ static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR)
 
     if((dl_t_port == (Dio_LevelType)STD_HIGH) && 
        ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
-        /* EIZO-ON=H ���u�����ڃI�t�N���v�܂��́u�����ڃI���N���v�܂��́uOTA�v�ւŃJ�E���^�C���N�������g */
+        /* EIZO-ON=H かつ「見た目オフ起動」または「見た目オン起動」または「OTA」へでカウンタインクリメント */
         if(u4_s_PwrCtrl_waittim_pictic < U4_MAX){
             u4_s_PwrCtrl_waittim_pictic++;
         }
     }
     else{
-        /* �J�E���^�N���A */
+        /* カウンタクリア */
         u4_s_PwrCtrl_waittim_pictic    = (U4)0U;
     }
 
@@ -1025,7 +1025,7 @@ static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR)
         u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_PICTIC_BIT;
     }
 
-    /* [�f��IC�N������]�V�[�g�̏��������� �ɑ��� */
+    /* [映像IC起動処理]シートの初期化処理 に続く */
 }
 
 /*****************************************************************************
@@ -1033,7 +1033,7 @@ static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : AUDIO-ON = Hi����15ms��Ɂu/GVIF-RX(CAM)-RST = Hi�v
+  Note          : AUDIO-ON = Hiから15ms後に「/GVIF-RX(CAM)-RST = Hi」
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_GVIFRx(void)
 {
@@ -1054,9 +1054,9 @@ static void     vd_s_McuDev_Pwron_GVIFRx(void)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : ���Z�b�g�����͉��L�������ׂĂ𖞑�����Ƃ��ɂɁu/GVIF-TX(C-DISP)-RST = Hi�v
-                  �E�N�������Z�b�g�����^�C�~���O(t1)�ȏ�o�߂��Ă���
-                  �E�ԗ��d���X�e�[�g��"�����ڃI���N��"�܂���"�����ڃI�t�N��"�܂���"OTA"�̏�ԂɑJ�ڂ����Ƃ�
+  Note          : リセット解除は下記条件すべてを満足するときにに「/GVIF-TX(C-DISP)-RST = Hi」
+                  ・起動時リセット解除タイミング(t1)以上経過している
+                  ・車両電源ステートが"見た目オン起動"または"見た目オフ起動"または"OTA"の状態に遷移したとき
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_GVIFTx_CDisp(const U1 u1_a_PWR)
 {
@@ -1078,7 +1078,7 @@ static void     vd_s_McuDev_Pwron_GVIFTx_CDisp(const U1 u1_a_PWR)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : V33-PERI-ON = Hi ���� 100ms�� & �u"�X�^���o�C" �������� "�k�ޑ��s" �ȊO�v�ɑJ�ڌ�� MIC-ON = Hi
+  Note          : V33-PERI-ON = Hi から 100ms後 & 「"スタンバイ" もしくは "縮退走行" 以外」に遷移後に MIC-ON = Hi
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_Mic(const U1 u1_a_PWR)
 {
@@ -1099,7 +1099,7 @@ static void     vd_s_McuDev_Pwron_Mic(const U1 u1_a_PWR)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : V33-PERI-ON = Hi����100ms�� ���� �u��Ԓ�(������ON)/�t���N���v�ɑJ�ڌ��
+  Note          : V33-PERI-ON = Hiから100ms後 かつ 「乗車中(見た目ON)/フル起動」に遷移後に
                   AM/FM-ANT-ON,GPS-ANT-ON,DAB-ANT-ON = Hi
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_Ant(const U1 u1_a_PWR)
@@ -1111,17 +1111,17 @@ static void     vd_s_McuDev_Pwron_Ant(const U1 u1_a_PWR)
     u1_t_timchk     =   u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_ANT);
 
     if(u1_t_timchk ==  (U1)TRUE){
-        /* GNSS�A���e�i */
+        /* GNSSアンテナ */
         vd_g_McuDevPwronSetPort(MCU_PORT_GPS_ANT_ON , MCU_DIO_HIGH);
 
         if(u1_a_PWR == (U1)POWER_MODE_STATE_APPON){
-            /* AMFM���W�I */
+            /* AMFMラジオ */
             vd_g_McuDevPwronSetPort(MCU_PORT_AMFM_ANT_ON , MCU_DIO_HIGH);
-            /* DAB�A���e�i(���{/�k�Ďd�����ȊO�̂�) */
+            /* DABアンテナ(日本/北米仕向け以外のみ) */
 #ifdef SYS_PWR_ANT_DAB
             vd_g_McuDevPwronSetPort(MCU_PORT_DAB_ANT_ON , MCU_DIO_HIGH);
 #endif
-            /* DTV�A���e�i(���{�d�����̂�) */
+            /* DTVアンテナ(日本仕向けのみ) */
 #ifdef SYS_PWR_ANT_DTV
             vd_g_McuDevPwronSetPort(MCU_PORT_DTV_ANT_ON , MCU_DIO_HIGH);
 #endif
@@ -1136,7 +1136,7 @@ static void     vd_s_McuDev_Pwron_Ant(const U1 u1_a_PWR)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : PowerIC�ŋN���������{�̂��ߏ����Ȃ� �\���݌v
+  Note          : PowerICで起動処理実施のため処理なし 予備設計
 *****************************************************************************/
 static void     vd_s_McuDev_SoundMUTE(void)
 {
@@ -1147,9 +1147,9 @@ static void     vd_s_McuDev_SoundMUTE(void)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : �����ڃI��/�I�t�N����MOST-WAKE-ON=Hi
-                  MOST-WAKE-ON=Hi��0ms��SiP��MOST�N����Ԃ�ʒm
-                  �b��Ή�����
+  Note          : 見た目オン/オフ起動でMOST-WAKE-ON=Hi
+                  MOST-WAKE-ON=Hi後0msでSiPにMOST起動状態を通知
+                  暫定対応あり
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_Most(const U1 u1_a_PWR)
 {
@@ -1158,7 +1158,7 @@ static void     vd_s_McuDev_Pwron_Most(const U1 u1_a_PWR)
         u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_MOST_BIT;
     }
 
-    /* �b��Ή��FSPI�ʐM�n������(OS�ԒʐM�R�}���h�s���̂���) */
+    /* 暫定対応：SPI通信系未実装(OS間通信コマンド不明のため) */
 }
 
 /*****************************************************************************
@@ -1166,8 +1166,8 @@ static void     vd_s_McuDev_Pwron_Most(const U1 u1_a_PWR)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : V33-PERI-ON=H��XM-ON,V33-PERI-ON=H����1010ms��XM-SHDN=H
-                  �b��Ή�����
+  Note          : V33-PERI-ON=HでXM-ON,V33-PERI-ON=Hから1010msでXM-SHDN=H
+                  暫定対応あり
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_XMTuner(void)
 {
@@ -1187,7 +1187,7 @@ static void     vd_s_McuDev_Pwron_XMTuner(void)
 #ifdef SYS_PWR_ANT_XM_SHDN
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_SHDN , MCU_DIO_HIGH);
 #endif
-        /* �b��Ή��FSPI�ʐM�n�͖�����(OS�ԃR�}���h�s��) */
+        /* 暫定対応：SPI通信系は未実装(OS間コマンド不明) */
     }
     if((u1_t_timchk_xmon == (U1)TRUE) && (u1_t_timchk_xmshdn == (U1)TRUE)){
         u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_XMTUNER_BIT;
@@ -1198,47 +1198,47 @@ static void     vd_s_McuDev_Pwron_XMTuner(void)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : Power-IC�ʏ�N������
-                  �b��Ή�����
+  Note          : Power-IC通常起動処理
+                  暫定対応あり
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_PowerIc(const U1 u1_a_PWR)
 {
     static const U4 u4_s_WAITTIME_POWERIC    = (U4)(PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);
 
-    U1              u1_t_logexi;        /* P-IC�j�󃍃O�L�� */
-    U1              u1_t_timchk;        /* V33-PERI-ON=HI�o�ߎ��Ԕ��� */
+    U1              u1_t_logexi;        /* P-IC破壊ログ有無 */
+    U1              u1_t_timchk;        /* V33-PERI-ON=HI経過時間判定 */
     Dio_LevelType   dl_t_port;
 
     switch (u1_s_PwrCtrl_PowerIc_OVRALL) {
         case PWRCTRL_COMMON_PROCESS_STEP1:
-            /* Power-IC�j�󃍃O�擾���� */
+            /* Power-IC破壊ログ取得処理 */
             /*****************************************************************************
-            �b��Ή�
-            P-IC�j�󃍃O�͏�ɖ������Ő��䂷��
+            暫定対応
+            P-IC破壊ログは常に無し側で制御する
             *****************************************************************************/
             u1_t_logexi = (U1)FALSE;
 
-            if(u1_t_logexi == (U1)TRUE) {  /* P-IC�j�󃍃O���� */
-                /* Power-IC�j��̃��O���c���Ă���ꍇ��Power-IC���N�������Ȃ� */
+            if(u1_t_logexi == (U1)TRUE) {  /* P-IC破壊ログあり */
+                /* Power-IC破壊のログが残っている場合はPower-ICを起動させない */
                 u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
             }
-            else {  /* �j�󃍃O�Ȃ� */
-                u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP2;  /* ����ԂɑJ�� */
+            else {  /* 破壊ログなし */
+                u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP2;  /* 次状態に遷移 */
             }
             break;
 
         case PWRCTRL_COMMON_PROCESS_STEP2:
-            u1_t_timchk = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_POWERIC);  /* V33-PERI-ON=HI���� */
+            u1_t_timchk = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_POWERIC);  /* V33-PERI-ON=HI判定 */
 
             if((u1_t_timchk == (U1)TRUE) && (u1_a_PWR == (U1)POWER_MODE_STATE_PARK)){
-                vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_HIGH);          /* P-IC�d���������� */
+                vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_HIGH);          /* P-IC電源制限解除 */
                 u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_POWERIC_BIT;
-                u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;     /* ����ԂɑJ�� */
+                u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;     /* 次状態に遷移 */
             }
             break;
 
         case PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
-            /* PowerIC=OFF���m���� */
+            /* PowerIC=OFF検知処理 */
             dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_PIC_POFF]);
             if(dl_t_port == (Dio_LevelType)STD_LOW){
                 u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
@@ -1256,11 +1256,11 @@ static void     vd_s_McuDev_Pwron_PowerIc(const U1 u1_a_PWR)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : �V�X���b��Ή�����
+  Note          : シス検暫定対応あり
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GNSS( void ){
-    static const uint32 MCU_PWRON_TIME_GNSS_T8  =   (uint32)(100U * GPT_FRT_1US);     /* typ 100ms /GPS-RST�̃��Z�b�g���ԕ� */
-    static const uint8  MCU_PWRON_FAIL_MAX      =   (uint32)(2U);       /* PMONI Low 2��ڌ��m��Low�p�� */
+    static const uint32 MCU_PWRON_TIME_GNSS_T8  =   (uint32)(100U * GPT_FRT_1US);     /* typ 100ms /GPS-RSTのリセット時間幅 */
+    static const uint8  MCU_PWRON_FAIL_MAX      =   (uint32)(2U);       /* PMONI Low 2回目検知でLow継続 */
 
     uint8   mcu_dio_ret;
     uint32  mcu_frt_elpsd;
@@ -1270,12 +1270,12 @@ void    Mcu_Dev_Pwron_GNSS( void ){
 
     switch (Mcu_OnStep_GNSS) {
         case MCU_STEP_GNSS_PRE:
-            /* B-ON Init��MCU����̋N�_�Ƃ��t���[�����^�C�}�Ōo�ߎ��Ԃ��Ď����� */
+            /* B-ON InitをMCU制御の起点としフリーランタイマで経過時間を監視する */
             mcu_frt_elpsd = u4_g_Gpt_FrtGetUsElapsed(Mcu_frt_stamp);
 
             if(mcu_frt_elpsd > MCU_PWRON_TIME_GNSS_T8){
                 vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_HIGH);
-                Mcu_OnStep_GNSS = MCU_STEP_GNSS_INI_CHK;        /* ����ԂɑJ�� */
+                Mcu_OnStep_GNSS = MCU_STEP_GNSS_INI_CHK;        /* 次状態に遷移 */
             }
             break;
         case MCU_STEP_GNSS_INI_CHK:
@@ -1285,25 +1285,25 @@ void    Mcu_Dev_Pwron_GNSS( void ){
             if(Mcu_GNSS_LinkTimer >= (uint32)PWRCTRL_WAIT_GNSS_400MS){
                 mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);
                 if(mcu_dio_ret == (uint8)STD_HIGH){
-                    /* ���������s */
+                    /* 初期化失敗 */
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
-                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* ����ԂɑJ�� */
-                    Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* �^�C�}�N���A */
+                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* 次状態に遷移 */
+                    Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* タイマクリア */
                 }
                 else {
-                    /* ���������� Hibernate��� */
-                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRECHK;      /* ����ԂɑJ�� */
-                    Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* �^�C�}�N���A */
+                    /* 初期化成功 Hibernate状態 */
+                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRECHK;      /* 次状態に遷移 */
+                    Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* タイマクリア */
                 }
             }
             break;
         case MCU_STEP_GNSS_PRECHK:
-            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);    /* t3��min0ms�̂��߁Await�����������Ɏ����������{ */
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);    /* t3はmin0msのため、wait処理をせずに次処理を実施 */
             if(mcu_dio_ret == (uint8)STD_HIGH){
-                /* �������O�`�F�b�N�̓��e�s���̂���skip */
-                //if(�������O�`�F�b�N=OK){
+                /* 初期化前チェックの内容不明のためskip */
+                //if(初期化前チェック=OK){
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_HIGH);
-                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POSTCHK;         /* ����ԂɑJ�� */
+                    Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POSTCHK;         /* 次状態に遷移 */
                 //}
             }
             break;
@@ -1312,19 +1312,19 @@ void    Mcu_Dev_Pwron_GNSS( void ){
                 Mcu_GNSS_LinkTimer++;
             }
             if(Mcu_GNSS_LinkTimer >= (uint32)PWRCTRL_WAIT_GNSS_550MS){
-                /* �N����`�F�b�N */
+                /* 起動後チェック */
                 mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);
                 if(mcu_dio_ret == (uint8)STD_HIGH){
-                    /* �N����`�F�b�N�����F/GPS-RST=H�ێ� */
+                    /* 起動後チェック成功：/GPS-RST=H維持 */
                     /* do nothing */
                 }
                 else {
-                    /* �N����`�F�b�N���s�F/GPS-RST=H��L */
+                    /* 起動後チェック失敗：/GPS-RST=H→L */
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
                 }
                 u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_GNSS_BIT;
-                Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POLING;      /* ����ԂɑJ�� */
-                Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* �^�C�}�N���A */
+                Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_POLING;      /* 次状態に遷移 */
+                Mcu_GNSS_LinkTimer   = (uint32)0U;                       /* タイマクリア */
             }
             break;
         case MCU_STEP_GNSS_POLING:
@@ -1334,21 +1334,21 @@ void    Mcu_Dev_Pwron_GNSS( void ){
                 Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_WAIT;
             }
             else{
-                mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);  /* ����I�Ƀ|�[�����O */
+                mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_GPS_PMONI]);  /* 定期的にポーリング */
                 if(mcu_dio_ret == (uint8)STD_LOW){
-                    /* t17��min0ms�̂��߁Await�����������Ɏ����������{ */
-                    /* /GPS-RST,GPS-PCTL��H��L */
+                    /* t17はmin0msのため、wait処理をせずに次処理を実施 */
+                    /* /GPS-RST,GPS-PCTLをH→L */
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
                     vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
 
-                    /* ���s�񐔃J�E���g */
+                    /* 失敗回数カウント */
                     Mcu_Fail_GNSS++;
 
-                    if(Mcu_Fail_GNSS >= MCU_PWRON_FAIL_MAX){    /* PMONI Low 2��ڌ��m��Low�p�� */
-                        Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* ����ԂɑJ�� */
+                    if(Mcu_Fail_GNSS >= MCU_PWRON_FAIL_MAX){    /* PMONI Low 2回目検知でLow継続 */
+                        Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_FIN;         /* 次状態に遷移 */
                     }
                     else{
-                        Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRE;         /* ����ԂɑJ�� */
+                        Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_PRE;         /* 次状態に遷移 */
                     }
                 }
             }
@@ -1379,7 +1379,7 @@ void    Mcu_Dev_Pwron_GNSS( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : VM2�Ŏ��{���邽�ߏ����Ȃ�
+  Note          : VM2で実施するため処理なし
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_Gyro(void)
 {
@@ -1396,21 +1396,21 @@ static void     vd_s_McuDev_Pwron_Gyro(void)
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : �f��IC�N������
+  Note          : 映像IC起動処理
 *****************************************************************************/
 void    Mcu_Dev_Pwron_EizoIc_Init( void ){
-    /* ��ԑJ�ږ������̂��߉��R�[�h */
-    /* [�f��IC�N������]�V�[�g�̏��������� */
-    /* 6.2 ���������� */
+    /* 状態遷移未検討のため仮コード */
+    /* [映像IC起動処理]シートの初期化処理 */
+    /* 6.2 初期化処理 */
     Mcu_Dev_Pwron_EizoIc_Polling_VIcRst();
 
-    /* 7.���W�X�^�ݒ� */
+    /* 7.レジスタ設定 */
     Mcu_Dev_Pwron_EizoIc_RegSetting();
 
-    /* 6.3 SiP�f���\���Ɋւ��鏈�� */
+    /* 6.3 SiP映像表示に関する処理 */
     Mcu_Dev_Pwron_EizoIc_PctDspSetting();
 
-    /* 6.5.1.1 �N�����̃J�����G�C�Y�\���Ɋւ���ݒ�t���[ */
+    /* 6.5.1.1 起動時のカメラエイズ表示に関する設定フロー */
     Mcu_Dev_Pwron_EizoIc_CamDspSetting();
 }
 
@@ -1419,7 +1419,7 @@ void    Mcu_Dev_Pwron_EizoIc_Init( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : /V-IC-RST=Hi �Ď�
+  Note          : /V-IC-RST=Hi 監視
 *****************************************************************************/
 void    Mcu_Dev_Pwron_EizoIc_Polling_VIcRst( void ){
     uint8   mcu_dio_ret;
@@ -1443,7 +1443,7 @@ void    Mcu_Dev_Pwron_EizoIc_Polling_VIcRst( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 7.���W�X�^�ݒ�
+  Note          : 7.レジスタ設定
 *****************************************************************************/
 void    Mcu_Dev_Pwron_EizoIc_RegSetting( void ){
     static const uint32 MCU_PWRON_TIME_EIZOIC  =   (PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);    /* min:1ms */
@@ -1462,10 +1462,10 @@ void    Mcu_Dev_Pwron_EizoIc_RegSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : �f��IC���������� ���W�X�^�ݒ�
+  Note          : 映像IC初期化処理 レジスタ設定
 *****************************************************************************/
 void Mcu_Dev_Pwron_EizoIc_SetReg( void ){
-    /* IF�s���̂��ߖ��ݒ� EizoIc_Init.h�ɒ�`�����萔�z��(Eizo_Init_RegAdd,Eizo_Init_RegSet)��p���Đݒ肷�� */
+    /* IF不明のため未設定 EizoIc_Init.hに定義した定数配列(Eizo_Init_RegAdd,Eizo_Init_RegSet)を用いて設定する */
 }
 
 /*****************************************************************************
@@ -1473,14 +1473,14 @@ void Mcu_Dev_Pwron_EizoIc_SetReg( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 6.3 SiP�f���\���Ɋւ��鏈��
+  Note          : 6.3 SiP映像表示に関する処理
 *****************************************************************************/
 void Mcu_Dev_Pwron_EizoIc_PctDspSetting( void ){
-    /* eDP-RX�ʏ퓮�샂�[�h�ֈڍs */
-    /* 0x0760���W�X�^=0x01 */
+    /* eDP-RX通常動作モードへ移行 */
+    /* 0x0760レジスタ=0x01 */
 
-    /* eDP�z�b�g�v���OON( DP0_HPD(V-IC)=Hi ) */
-    /* 0x0403���W�X�^=0x41 */
+    /* eDPホットプラグON( DP0_HPD(V-IC)=Hi ) */
+    /* 0x0403レジスタ=0x41 */
 }
 
 /*****************************************************************************
@@ -1488,13 +1488,13 @@ void Mcu_Dev_Pwron_EizoIc_PctDspSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 6.5.1.1 �N�����̃J�����G�C�Y�\���Ɋւ���ݒ�t���[
+  Note          : 6.5.1.1 起動時のカメラエイズ表示に関する設定フロー
 *****************************************************************************/
 void Mcu_Dev_Pwron_EizoIc_CamDspSetting( void ){
-    /* MCU�Ƀo�b�N�A�b�v���Ă���u�J�����V�X�e����ʁv�Ɓu�J�����f���̐؂�o���T�C�Y �v�Ɋ�Â�
-    �u6.5.2.1 �J�����f���\���Ɋւ���ݒ胊�X�g�v�e�t�����f�����Ƃ̐ݒ�����{ */
+    /* MCUにバックアップしている「カメラシステム種別」と「カメラ映像の切り出しサイズ 」に基づき
+    「6.5.2.1 カメラ映像表示に関する設定リスト」各液晶モデルごとの設定を実施 */
 
-    /* ���s���ɂ�菈���쐬�X�L�b�v */
+    /* 情報不足により処理作成スキップ */
 }
 
 /*****************************************************************************
@@ -1502,15 +1502,15 @@ void Mcu_Dev_Pwron_EizoIc_CamDspSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF��M�N������
+  Note          : GVIF受信起動処理
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifRcvr_Init( void ){
-    /* ��ԑJ�ږ������̂��߉��R�[�h */
-    /* [6-1~6-4. �S�̃t���[]�V�[�g�̏��������� */
-    /* 6.2 �����ݒ菈�� */
+    /* 状態遷移未検討のため仮コード */
+    /* [6-1~6-4. 全体フロー]シートの初期化処理 */
+    /* 6.2 初期設定処理 */
     Mcu_Dev_Pwron_GvifRx_Polling_Rst();
 
-    /* 7.���W�X�^�ݒ� */
+    /* 7.レジスタ設定 */
     Mcu_Dev_Pwron_GvifRx_RegSetting();
 }
 
@@ -1519,7 +1519,7 @@ void    Mcu_Dev_Pwron_GvifRcvr_Init( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : /GVIF-RX(CAM)-RST=Hi �Ď�
+  Note          : /GVIF-RX(CAM)-RST=Hi 監視
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifRx_Polling_Rst( void ){
     uint8   mcu_dio_ret;
@@ -1543,7 +1543,7 @@ void    Mcu_Dev_Pwron_GvifRx_Polling_Rst( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : 7.���W�X�^�ݒ�
+  Note          : 7.レジスタ設定
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifRx_RegSetting( void ){
     static const uint32 MCU_PWRON_TIME_GVIFRX  =   (uint16)(15U / PWRCTRL_CFG_TASK_TIME);    /* min:15ms */
@@ -1562,10 +1562,10 @@ void    Mcu_Dev_Pwron_GvifRx_RegSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF��M�@���������� ���W�X�^�ݒ�
+  Note          : GVIF受信機初期化処理 レジスタ設定
 *****************************************************************************/
 void Mcu_Dev_Pwron_GvifRx_SetReg( void ){
-    /* IF�s���̂��ߖ��ݒ�  �ɒ�`�����萔�z���p���Đݒ肷�� */
+    /* IF不明のため未設定  に定義した定数配列を用いて設定する */
 }
 
 /*****************************************************************************
@@ -1573,21 +1573,21 @@ void Mcu_Dev_Pwron_GvifRx_SetReg( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF��M�N������
+  Note          : GVIF受信起動処理
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifSndr_Init( void ){
-    /* ��ԑJ�ږ������̂��߉��R�[�h */
-    /* [(C-Disp)����t���[]�V�[�g�́u����Ď��t���[�v�O�܂� */
-    /* 6.2 �����ݒ菈�� */
+    /* 状態遷移未検討のため仮コード */
+    /* [(C-Disp)制御フロー]シートの「定期監視フロー」前まで */
+    /* 6.2 初期設定処理 */
     Mcu_Dev_Pwron_GvifTx_Polling_Rst();
 
-    /* �����ݒ� + eDP�ݒ� */
+    /* 初期設定 + eDP設定 */
     Mcu_Dev_Pwron_GvifTx_RegSetting();
 
-    /* �o�͐ݒ�t���[ +  */
+    /* 出力設定フロー +  */
     Mcu_Dev_Pwron_GvifTx_OutputSetting();
 
-    /* HDCP�F�؃t���[(SiP�p�̃t���[�̂��ߏ�������) */
+    /* HDCP認証フロー(SiP用のフローのため処理無し) */
 }
 
 /*****************************************************************************
@@ -1595,7 +1595,7 @@ void    Mcu_Dev_Pwron_GvifSndr_Init( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : /GVIF-RX(CAM)-RST=Hi �Ď�
+  Note          : /GVIF-RX(CAM)-RST=Hi 監視
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifTx_Polling_Rst( void ){
     uint8   mcu_dio_ret;
@@ -1619,10 +1619,10 @@ void    Mcu_Dev_Pwron_GvifTx_Polling_Rst( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : (C-Disp)���W�X�^�ݒ�
+  Note          : (C-Disp)レジスタ設定
 *****************************************************************************/
 void    Mcu_Dev_Pwron_GvifTx_RegSetting( void ){
-    static const uint8  MCU_PWRON_TIME_GVIFTX  =   (11U);    /* min:55ms 11�^�X�N�o�ߌ��ݒ� */
+    static const uint8  MCU_PWRON_TIME_GVIFTX  =   (11U);    /* min:55ms 11タスク経過後を設定 */
 
     uint8   mcu_time_chk;
 
@@ -1638,10 +1638,10 @@ void    Mcu_Dev_Pwron_GvifTx_RegSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF���M�@���������� ���W�X�^�ݒ�
+  Note          : GVIF送信機初期化処理 レジスタ設定
 *****************************************************************************/
 void Mcu_Dev_Pwron_GvifTx_SetReg( void ){
-    /* IF�s���̂��ߖ��ݒ�  �ɒ�`�����萔�z���p���Đݒ肷�� */
+    /* IF不明のため未設定  に定義した定数配列を用いて設定する */
 }
 
 /*****************************************************************************
@@ -1649,13 +1649,13 @@ void Mcu_Dev_Pwron_GvifTx_SetReg( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF���M�@ �o�͐ݒ�t���[
+  Note          : GVIF送信機 出力設定フロー
 *****************************************************************************/
 void Mcu_Dev_Pwron_GvifTx_OutputSetting( void ){
 
     if(mcu_gvif_restart_sts == MCU_GVIF_RESTRT_STS_1ST){
-        /* I2C�ݒ� Display IC (ML86294) �f���o�͊J�n�ieDP�o�́j*/
-        /* I2Cwrite �A�h���X�F0xFF, �ݒ�l:0x00 */
+        /* I2C設定 Display IC (ML86294) 映像出力開始（eDP出力）*/
+        /* I2Cwrite アドレス：0xFF, 設定値:0x00 */
 
         Mcu_Dev_Pwron_GvifTx_LnkChk();
     }
@@ -1672,32 +1672,32 @@ void Mcu_Dev_Pwron_GvifTx_OutputSetting( void ){
   Description   : 
   param[in/out] : 
   return        : -
-  Note          : GVIF���M�@ �����N�m����ԊĎ�
+  Note          : GVIF送信機 リンク確立状態監視
 *****************************************************************************/
 void Mcu_Dev_Pwron_GvifTx_LnkChk( void ){
     uint8 mcu_gvif_linkchk;
     mcu_gvif_linkchk = 0;
 
-    /* I2Cwrite �A�h���X�F0x60, �ݒ�l:0730 */
+    /* I2Cwrite アドレス：0x60, 設定値:0730 */
     /* 50mswait */
-    mcu_gvif_linkchk = 0; /* I2C���W�X�^Read �A�h���X�F0x00 */
-    mcu_gvif_linkchk = mcu_gvif_linkchk & 1; /* 0bit�ڂ̃f�[�^�m�F */
-    Mcu_Gvif_LinkTimer = 6000U; /* �ǂ�������CDC�N������̎��Ԃ��擾 �b��ŋ����G���[���� */
+    mcu_gvif_linkchk = 0; /* I2CレジスタRead アドレス：0x00 */
+    mcu_gvif_linkchk = mcu_gvif_linkchk & 1; /* 0bit目のデータ確認 */
+    Mcu_Gvif_LinkTimer = 6000U; /* どこかからCDC起動からの時間を取得 暫定で強制エラー処理 */
     if(mcu_gvif_linkchk == MCU_GVIF_LNK_ACTIVE){
          Mcu_Gvif_LinkTimer = 0;
-        /* I2Cwrite �A�h���X�F0xFF, �ݒ�l:0x07 */
-        /* I2Cwrite �A�h���X�F0xFB, �ݒ�l:0x00 */
-        /* I2Cwrite �A�h���X�F0xFF, �ݒ�l:0x00 */
-        /* I2Cwrite �A�h���X�F0x2E, �ݒ�l:0x01 */
-        /* I2Cwrite �A�h���X�F0x2E, �ݒ�l:0x00 */
+        /* I2Cwrite アドレス：0xFF, 設定値:0x07 */
+        /* I2Cwrite アドレス：0xFB, 設定値:0x00 */
+        /* I2Cwrite アドレス：0xFF, 設定値:0x00 */
+        /* I2Cwrite アドレス：0x2E, 設定値:0x01 */
+        /* I2Cwrite アドレス：0x2E, 設定値:0x00 */
         mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_CMP;
     }
     else if(Mcu_Gvif_LinkTimer > MCU_GVIF_LNK_TIMEOUT){
-        /* �����N�G���[���� �d�lTBD */
-        mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_CMP; /* �^�C���A�E�g�����N�G���[���͎b��Ŋ������ */
+        /* リンクエラー処理 仕様TBD */
+        mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_CMP; /* タイムアウトリンクエラー時は暫定で完了状態 */
     }
     else{
-        mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_2ND; /* GVIF�o�͍Đݒ� */
+        mcu_gvif_restart_sts = MCU_GVIF_RESTRT_STS_2ND; /* GVIF出力再設定 */
     }
 }
 
