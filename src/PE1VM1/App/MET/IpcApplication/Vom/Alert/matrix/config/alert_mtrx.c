@@ -445,7 +445,6 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertB_tbeam12Init,
         &vd_g_AlertB_tdoorInit,
         &vd_g_AlertB_tpwsrInit,
-        &vd_g_AlertC_brkbzInit,
         &vd_g_AlertC_brlv_2Init,
         &vd_g_AlertC_pkbwarInit,
         &vd_g_AlertO_eigconInit,
@@ -501,10 +500,12 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-7    12/20/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
 /*  BEV-8     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
 /*  BEV-9     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-C_BRK-CSTD-2-00-A-C0)                                   */
+/*  BEV-10    6/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*  * KO   = Kazuto Oishi,    Denso Techno                                                                                           */
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
+/*  * JS   = Jun Sugiyam,KSE                                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
