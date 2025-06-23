@@ -130,7 +130,7 @@
 #define     PWRCTRL_CFG_PRIVATE_BU_DET_WAITTIME                  (0U) /* BU_DETのウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_WAITTIME            (0U) /* DBG_FAIL_OFFのウェイト時間(0ms) */
 
-#define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF             (0U) /* 開発期間のみの実装：DBG_FAIL_OFF */
+#define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF    /* 開発期間のみの実装：DBG_FAIL_OFF */
 
 typedef enum {
  PWRCTRL_CFG_PRIVATE_KIND_AOSS_SLP_ENTRY_EXIT,  /* AOSS_SLP_ENTRY_EXIT */
