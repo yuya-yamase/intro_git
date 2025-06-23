@@ -18,6 +18,7 @@
 #include "pictic.h"
 #include "SysEcDrc.h"
 #include "RobCtl.h"
+#include "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -732,7 +733,7 @@ static void    vd_s_Gvif3RxCycChk(void)
     U1 u1_t_date;
     U1 u1_t_jdg;
     
-    u1_t_stasts = u1_g_PictCtl_StartSts();/* 見た目オン起動情報取得(暫定) */
+    u1_t_stasts = u1_g_Power_ModeState();
     u1_t_date = (U1)0U;
     u1_t_jdg = (U1)FALSE;
 
@@ -798,7 +799,7 @@ static void    vd_s_Gvif3RxCycChk(void)
             break;
     
         case GVIF3RX_PERIMONI_STEP6:
-            if(u1_t_stasts == (U1)PICT_NOREDUN_STATE_APPON){/* 見た目オン起動(暫定) */
+            if(u1_t_stasts == (U1)POWER_MODE_STATE_APPON){/* 見た目オン起動 */
                 u1_t_jdg = u1_s_Gvif3LinkChk();
                 if(u1_t_jdg == (U1)TRUE){
                     u1_s_gvif3perimoni_step = (U1)GVIF3RX_PERIMONI_STEP7;
