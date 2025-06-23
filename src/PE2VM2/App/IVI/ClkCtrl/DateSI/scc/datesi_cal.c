@@ -19,6 +19,7 @@
 #include "datesi_cal_cfg_private.h"
 #include "datesi_tim_cfg_private.h"
 #include "datesi_cfg_private.h"
+#include "datesi_com.h"
 #include "rtime.h"
 #include "date_clk.h"
 
@@ -139,7 +140,6 @@ void            vd_g_DateSICalRstWkupInit(void)
 
 #if 0   /* BEV provisionally */
     u2_t_date_calendar = (U2)0U;
-
     u1_t_nvm_sts       = u1_g_Nvmc_ReadStrValU2withSts(u2_g_DATESI_CAL_NVMCID_CALE, &u2_t_date_calendar);
 
     if(u1_t_nvm_sts == (U1)NVMC_STATUS_COMP){
@@ -245,6 +245,7 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
 
     if(u4_t_adj != (U4)YYMMDDWK_UNKNWN){
         (void)u1_s_DateSICalAdjustOwnClk(u4_t_adj);
+        vd_g_DateSIComSetCmp();
     }
 
     u1_s_datesi_cal_timsync_act = (U1)FALSE;
@@ -333,6 +334,7 @@ void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD)
     u4_t_yymmddwk_zerorst = u4_g_DaycntToYymmddwk(u4_t_daycnt_zerorst);
     u4_t_abs_yymmdd       = u4_s_DateSICalToUpdtDate(u4_t_yymmddwk_zerorst, (U1)DATESI_CAL_ABS_DATE);
     (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+    vd_g_DateSIComSetCmp();
 }
 
 /*===================================================================================================================================*/
@@ -784,6 +786,42 @@ U1              u1_g_DateSICalLimJdgYear(void)
     }
     return(u1_t_return);
 
+}
+
+/*===================================================================================================================================*/
+/* U1              vd_g_DateSICalAdjustdate(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_DateSICalAdjustdate(void)
+{
+    U1                u1_t_exsit;
+    U4                u4_t_abs_yymmdd;
+    U4                u4_t_yymmdd;
+    U1                u1_t_range_is_ok;
+    ST_DATESI_CAL_RX  st_t_cal_rx;
+
+    u4_t_yymmdd                          = (U4)YYMMDDWK_UNKNWN;
+    st_t_cal_rx.u1_valid                 = (U1)FALSE;
+    st_t_cal_rx.u1_act                   = (U1)FALSE;
+    st_t_cal_rx.u1p_date[YYMMDD_DATE_DA] = (U1)U1_MAX;
+    st_t_cal_rx.u1p_date[YYMMDD_DATE_MO] = (U1)U1_MAX;
+    st_t_cal_rx.u1p_date[YYMMDD_DATE_YR] = (U1)U1_MAX;
+
+    u1_t_exsit = u1_g_DateSICfgCalExst();
+    if(u1_t_exsit == (U1)DATESI_CALEXIST_ON){
+        vd_g_DateSICalCfgRxUpdtdate(&st_t_cal_rx);
+        u1_t_range_is_ok = u1_s_DateSICalDateSyncChk(st_t_cal_rx, &u4_t_yymmdd);
+
+        if(u1_t_range_is_ok == (U1)TRUE){
+            u4_t_abs_yymmdd     = u4_s_DateSICalToUpdtDate(u4_t_yymmdd, (U1)DATESI_CAL_ABS_DATE);
+            (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+            u4_t_abs_yymmdd     = u4_g_DateclkYymmddwk();
+            u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
+            vd_g_DateSIComSetCmp();
+        }
+    }
 }
 
 /*===================================================================================================================================*/

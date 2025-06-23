@@ -20,6 +20,7 @@
 #include "datesi_cal_cfg_private.h"
 #include "datesi_cfg_private.h"
 #include "datesi_time_zone.h"
+#include "datesi_com.h"
 #include "bitcnt.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -336,6 +337,9 @@ static U1       u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now)
         if(u1_t_calendar == (U1)DATESI_CALEXIST_ON){
             vd_g_DateSICalSyncAct();
         }
+        else{
+            vd_g_DateSIComSetCmp();
+        }
     }
 
     if((u1_t_rxsts & (U1)DATESI_TIM_STSBIT_INVALID) != (U1)0U){
@@ -581,6 +585,7 @@ static void     vd_s_DateSITimExecMinD(void)
     vd_g_DateSITimSetAdjStart();
     vd_g_DateSITimAdjustClk((U1)DATESI_TIM_RNK_MIN, (U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_MINUS);
     vd_g_DateSITimClockUpdate();
+    vd_g_DateSIComSetCmp();
     vd_g_DateSITimSetAdjEnd();
 }
 
@@ -595,6 +600,7 @@ static void     vd_s_DateSITimExecMinU(void)
     vd_g_DateSITimSetAdjStart();
     vd_g_DateSITimAdjustClk((U1)DATESI_TIM_RNK_MIN, (U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_PLUS);
     vd_g_DateSITimClockUpdate();
+    vd_g_DateSIComSetCmp();
     vd_g_DateSITimSetAdjEnd();
 }
 
@@ -609,6 +615,7 @@ static void     vd_s_DateSITimExecHourD(void)
     vd_g_DateSITimSetAdjStart();
     vd_g_DateSITimAdjustClk((U1)DATESI_TIM_RNK_HUR, (U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_MINUS);
     vd_g_DateSITimClockUpdate();
+    vd_g_DateSIComSetCmp();
     vd_g_DateSITimSetAdjEnd();
 }
 
@@ -623,6 +630,7 @@ static void     vd_s_DateSITimExecHourU(void)
     vd_g_DateSITimSetAdjStart();
     vd_g_DateSITimAdjustClk((U1)DATESI_TIM_RNK_HUR, (U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_PLUS);
     vd_g_DateSITimClockUpdate();
+    vd_g_DateSIComSetCmp();
     vd_g_DateSITimSetAdjEnd();
 }
 
@@ -684,6 +692,7 @@ void            vd_g_DateSITimExecTmSet(void)
 static void     vd_s_DateSITimExecOffsMD(void)
 {
     vd_s_DateSITimAddOfstTime((U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_MINUS);
+    vd_g_DateSIComSetCmp();
 }
 
 /*===================================================================================================================================*/
@@ -695,6 +704,7 @@ static void     vd_s_DateSITimExecOffsMD(void)
 static void     vd_s_DateSITimExecOffsMU(void)
 {
     vd_s_DateSITimAddOfstTime((U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_PLUS);
+    vd_g_DateSIComSetCmp();
 }
 
 /*===================================================================================================================================*/

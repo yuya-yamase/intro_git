@@ -92,9 +92,7 @@ void    vd_g_TimeZoneBonInit(void)
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)TIMEZONE_NUM_RX ; u4_t_loop++){
         u1_sp_tz_rx[u4_t_loop] = u1_sp_TIMEZONE_DEF[u4_t_loop];
-#if 0   /* BEV provisionally */
         vd_g_Rim_WriteU1(u2_gp_TIMEZONE_RIMID[u4_t_loop], u1_sp_TIMEZONE_DEF[u4_t_loop]);
-#endif
     }
     s4_s_utcdifsec = (S4)0;
 }
@@ -110,12 +108,8 @@ void    vd_g_TimeZoneRstWkupInit(void)
     U1  u1_t_sts;
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)TIMEZONE_NUM_RX ; u4_t_loop++){
-#if 0   /* BEV provisionally */
         u1_t_sts = u1_g_Rim_ReadU1withStatus(u2_gp_TIMEZONE_RIMID[u4_t_loop],
                                              &u1_sp_tz_rx[u4_t_loop]) & (U1)RIM_RESULT_KIND_MASK;
-#else
-        u1_t_sts = RIM_RESULT_KIND_NG;
-#endif
         if(u1_t_sts != (U1)RIM_RESULT_KIND_OK){
             u1_sp_tz_rx[u4_t_loop] = u1_sp_TIMEZONE_DEF[u4_t_loop];
         }
@@ -139,9 +133,7 @@ void    vd_g_TimeZoneMainTask(void)
     if((u1_t_sts == (U1)0U) &&
        (u1_t_rx  <= (U1)TIMEZONE_TZ_MAX_VAL)){
         u1_sp_tz_rx[TIMEZONE_RX_TZ] = u1_t_rx;
-#if 0   /* BEV provisionally */
         vd_g_Rim_WriteU1(u2_gp_TIMEZONE_RIMID[TIMEZONE_RX_TZ], u1_t_rx);
-#endif
     }
 
     u1_t_rx  = (U1)0U;
@@ -149,9 +141,7 @@ void    vd_g_TimeZoneMainTask(void)
     if((u1_t_sts == (U1)0U) &&
        (u1_t_rx  <= (U1)TIMEZONE_TZ_SIGN_PLUS)){
         u1_sp_tz_rx[TIMEZONE_RX_TZ_SIGN] = u1_t_rx;
-#if 0   /* BEV provisionally */
         vd_g_Rim_WriteU1(u2_gp_TIMEZONE_RIMID[TIMEZONE_RX_TZ_SIGN], u1_t_rx);
-#endif
     }
 
     u1_t_rx  = (U1)0U;
@@ -159,9 +149,7 @@ void    vd_g_TimeZoneMainTask(void)
     if((u1_t_sts == (U1)0U) &&
        (u1_t_rx  <= (U1)TIMEZONE_DST_S30_VALID)){
         u1_sp_tz_rx[TIMEZONE_RX_DST_S30] = u1_t_rx;
-#if 0   /* BEV provisionally */
         vd_g_Rim_WriteU1(u2_gp_TIMEZONE_RIMID[TIMEZONE_RX_DST_S30], u1_t_rx);
-#endif
     }
 
     vd_s_TimeZoneUtcDiffSec();

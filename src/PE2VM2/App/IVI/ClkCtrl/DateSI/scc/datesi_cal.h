@@ -55,6 +55,7 @@ void            vd_g_DateSICalAdjustEnd(void);
 U4              u4_g_DateSICalGetAdjDispDate(void);
 U1              u1_g_DateSICalSetImpossible(void);
 U1              u1_g_DateSICalLimJdgYear(void);
+void            vd_g_DateSICalAdjustdate(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
