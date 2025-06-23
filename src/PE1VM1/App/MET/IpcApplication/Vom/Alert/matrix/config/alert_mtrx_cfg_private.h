@@ -379,7 +379,6 @@ void    vd_g_AlertB_smastaInit(void);
 void    vd_g_AlertB_tbeam12Init(void);
 void    vd_g_AlertB_tdoorInit(void);
 void    vd_g_AlertB_tpwsrInit(void);
-void    vd_g_AlertC_brkbzInit(void);
 void    vd_g_AlertC_brlv_2Init(void);
 void    vd_g_AlertC_pkbwarInit(void);
 void    vd_g_AlertO_eigconInit(void);

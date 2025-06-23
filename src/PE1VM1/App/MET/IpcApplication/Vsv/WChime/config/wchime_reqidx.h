@@ -74,7 +74,7 @@
 #define WCHIME_REQ_IN_STEER_STP                  (39U)                          /* MET-C_STEER-CSTD-                                 */
 #define WCHIME_REQ_IN_SBLT_FMV                   (40U)                          /* MET-B_SEAREM-CSTD--                               */
 #define WCHIME_REQ_IN_ACC_BRKREQ                 (41U)                          /* MET-S_ADBZR-CSTD-                                 */
-#define WCHIME_REQ_SI_BRK_TST_FIN                (42U)                          /* MET-C_BRKBZ-CSTD-                                 */
+#define WCHIME_REQ_SI_BRK_APP6                   (42U)                          /* MET-C_BRKBZ-CSTD-                                 */
 #define WCHIME_REQ_SI_SBW_RJCT                   (43U)                          /* MET-D_SBW-CSTD-                                   */
 #define WCHIME_REQ_CO_NACCON                     (44U)                          /* MET-H_ONACCN-CSTD-                                */
 #define WCHIME_REQ_CO_PEXI_HV_NDBW               (45U)                          /* MET-H_PEXI-CSTD-                                  */
@@ -88,7 +88,7 @@
 #define WCHIME_REQ_CO_SYSMAL_RNG_P               (53U)                          /* MET-H_SYSMAL-CSTD-                                */
 #define WCHIME_REQ_IN_CHAMAL_BAT_FAIL            (54U)                          /* MET-O_CHAMAL-CSTD-                                */
 #define WCHIME_REQ_IN_SYSMAL_REQSTP              (55U)                          /* MET-H_SYSMAL-CSTD-                                */
-#define WCHIME_REQ_IN_BRK_TST_LRN                (56U)                          /* MET-C_BRKBZ-CSTD-                                 */
+#define WCHIME_REQ_IN_BRK_APP4                   (56U)                          /* MET-C_BRKBZ-CSTD-                                 */
 #define WCHIME_REQ_IN_EPB                        (57U)                          /* MET-C_EPB-CSTD-                                   */
 #define WCHIME_REQ_CO_EIGCON_IGOFF               (58U)                          /* MET-O_EIGCON-CSTD-                                */
 #define WCHIME_REQ_SI_SFTPOS_NML                 (59U)                          /* MET-D_SFTPOS-CSTD-                                */
@@ -156,7 +156,7 @@
 #define WCHIME_REQ_SI_BKHLD_REL_R10              (121U)                         /* MET-C_BRKHLD-CSTD-                                */
 #define WCHIME_REQ_SI_BKHLD_REL_R11              (122U)                         /* MET-C_BRKHLD-CSTD-                                */
 #define WCHIME_REQ_SI_BKHLD_NOTACT_R13           (123U)                         /* MET-C_BRKHLD-CSTD-                                */
-#define WCHIME_REQ_SI_BRK_TST_STRT               (124U)                         /* MET-C_BRKBZ-CSTD-                                 */
+#define WCHIME_REQ_SI_BRK_APP5                   (124U)                         /* MET-C_BRKBZ-CSTD-                                 */
 #define WCHIME_REQ_SI_ACC_APPRVLSTART            (125U)                         /* MET-S_ADBZR-CSTD-                                 */
 #define WCHIME_REQ_SI_PERSET_SUC                 (126U)                         /* MET-B_PERSET-CSTD-                                */
 #define WCHIME_REQ_SI_PERSET_FAIL                (127U)                         /* MET-B_PERSET-CSTD-                                */
