@@ -62,6 +62,7 @@ BswConst PduIdType bsw_pdur_u2ComRoutingTbl[BSW_PDUR_CFG_MSGCOM_NUM] =
 {
     /* PDU ID (Lower Component | ID)   */
     ((BswU2)BSW_PDUR_LOCOMP_CANIF  | (BswU2)0x0000U)  /* [0] up:BDC1S81_Rx_CANFD_G2M_1_BUS, low:BDC1S81_Rx_CANFD_G2M_1_BUS */
+   ,((BswU2)BSW_PDUR_LOCOMP_CANIF  | (BswU2)0x0001U)  /* [1] up:BDC1S91_Rx_CANFD_G2M_2_BUS, low:BDC1S91_Rx_CANFD_G2M_2_BUS */
 };
 #endif
 
@@ -118,6 +119,7 @@ BswConst Bsw_PduR_RoutingType bsw_pdur_stCanIfRoutingTbl[BSW_PDUR_CFG_MSGCANIF_N
 {
     /* I-PDU ID (Upper Component | ID)           ,    SecOC ID                      */
     { ((BswU2)BSW_PDUR_UPCOMP_COM      | (BswU2)0x0000U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [0] up:BDC1S81_Rx_CANFD_G2M_1_BUS, low:BDC1S81_Rx_CANFD_G2M_1_BUS */
+   ,{ ((BswU2)BSW_PDUR_UPCOMP_COM      | (BswU2)0x0001U),    (BswU2)BSW_PDUR_INVALID_PDUID }                      /* [1] up:BDC1S91_Rx_CANFD_G2M_2_BUS, low:BDC1S91_Rx_CANFD_G2M_2_BUS */
 };
 #endif /* ( (BSW_BSWM_CS_FUNC_CANIF == BSW_USE) && (BSW_PDUR_CFG_MSGCANIF_NUM != 0U) ) */
 
@@ -337,7 +339,7 @@ BswConst PduIdType bsw_pdur_u2Cdd2SecOCTbl[BSW_PDUR_CFG_MSGCDD2_NUM] =
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

@@ -20,19 +20,28 @@
     -I${VEHOPE_DIR}/scc
 
     -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/lib
     -I${OXCAN_DIR}/scc
 
     -T ${MCAL_DIR}/section.ld
 
 config_U2A16_met/oxcan_cfg.c
 config_U2A16_met/oxcan_e2e_cfg.c
-config_U2A16_met/oxcan_rx_cfg.c
+###config_U2A16_met/oxcan_nmc_cfg.c
+config_U2A16_met/oxcan_rxd_cfg.c
+###config_U2A16_met/oxcan_sysea_cfg.c
+config_U2A16_met/oxcan_vct_cfg.c
+config_U2A16_met/oxcan_wrh_cfg.c
 config_U2A16_met/oxcan_usrhk.c
+###config_U2A16_met/can_lpr_test.c
 
-libc/oxcan.c
-libc/oxcan_rx.c
+###lib/oxcan_nmc.c
+lib/oxcan_rxd.c
+###lib/oxcan_sysea.c
+lib/oxcan_vct.c
+lib/oxcan_wrh.c
 
+scc/oxcan.c
 scc/oxcan_aubif.c
 scc/oxcan_aubif_can.c
 scc/oxcan_aubif_canif.c

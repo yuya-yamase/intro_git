@@ -1,0 +1,15 @@
+#!gbuild
+[Subproject]
+    :sourceDir=${CANLPR_DIR}
+
+    -I${LIB_DIR}
+    -I${CAN_DIR}/CanIf/inc
+    -I${CAN_DIR}/Com/inc
+    -I${CAN_DIR}/ComM/cfg
+    -I${CAN_DIR}/ComM/inc
+    -I${CAN_DIR}/CanSM/inc
+    -I${CAN_DIR}/CanSM/cfg
+    -I${CAN_DIR}/VCan/inc
+
+config/vcan_tx_ack_cfg.c
+lib/vcan_tx_ack.c

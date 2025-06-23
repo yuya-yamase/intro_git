@@ -40,6 +40,10 @@ static ehvm_uint32_t   CH8_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH8][VCC_SIZE_
 static ehvm_uint32_t   CH9_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH9][VCC_SIZE_OF_MESSAGE_BUFFER_CH9];
 static ehvm_uint32_t   CH10_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH10][VCC_SIZE_OF_MESSAGE_BUFFER_CH10];
 static ehvm_uint32_t   CH11_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH11][VCC_SIZE_OF_MESSAGE_BUFFER_CH11];
+static ehvm_uint32_t   CH12_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH12][VCC_SIZE_OF_MESSAGE_BUFFER_CH12];
+static ehvm_uint32_t   CH13_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH13][VCC_SIZE_OF_MESSAGE_BUFFER_CH13];
+static ehvm_uint32_t   CH14_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH14][VCC_SIZE_OF_MESSAGE_BUFFER_CH14];
+static ehvm_uint32_t   CH15_Vcc_Msg_Buffer[VCC_NUM_OF_RING_ELEMENT_CH15][VCC_SIZE_OF_MESSAGE_BUFFER_CH15];
 
 #pragma ghs section bss=default
 
@@ -57,6 +61,10 @@ static ehvm_uint8_t   CH8_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH9_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH10_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 static ehvm_uint8_t   CH11_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
+static ehvm_uint8_t   CH12_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
+static ehvm_uint8_t   CH13_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
+static ehvm_uint8_t   CH14_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
+static ehvm_uint8_t   CH15_Vcc_Receive_SPID[VCC_MAX_VALUE_OF_SPID];
 
 static ehvm_vcc_ring_buffer_t   CH0_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH0];
 static ehvm_vcc_ring_buffer_t   CH1_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH1];
@@ -70,6 +78,10 @@ static ehvm_vcc_ring_buffer_t   CH8_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_
 static ehvm_vcc_ring_buffer_t   CH9_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH9];
 static ehvm_vcc_ring_buffer_t   CH10_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH10];
 static ehvm_vcc_ring_buffer_t   CH11_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH11];
+static ehvm_vcc_ring_buffer_t   CH12_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH12];
+static ehvm_vcc_ring_buffer_t   CH13_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH13];
+static ehvm_vcc_ring_buffer_t   CH14_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH14];
+static ehvm_vcc_ring_buffer_t   CH15_Vcc_Ring_Buffer[VCC_NUM_OF_RECEIVER_CHANNEL_CH15];
 
 static ehvm_vcc_ring_element_t   CH0_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH0];
 static ehvm_vcc_ring_element_t   CH1_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH1];
@@ -83,6 +95,10 @@ static ehvm_vcc_ring_element_t   CH8_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEME
 static ehvm_vcc_ring_element_t   CH9_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH9];
 static ehvm_vcc_ring_element_t   CH10_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH10];
 static ehvm_vcc_ring_element_t   CH11_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH11];
+static ehvm_vcc_ring_element_t   CH12_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH12];
+static ehvm_vcc_ring_element_t   CH13_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH13];
+static ehvm_vcc_ring_element_t   CH14_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH14];
+static ehvm_vcc_ring_element_t   CH15_Vcc_Ring_Element_Info[VCC_NUM_OF_RING_ELEMENT_CH15];
 
 #pragma ghs section bss=default
 
@@ -100,7 +116,11 @@ static ehvm_uint32_t* EhvmConst VccMsgBufferManagement[VCC_NUM_OF_VCCID] = {
     CH8_Vcc_Msg_Buffer[0],
     CH9_Vcc_Msg_Buffer[0],
     CH10_Vcc_Msg_Buffer[0],
-    CH11_Vcc_Msg_Buffer[0]
+    CH11_Vcc_Msg_Buffer[0],
+    CH12_Vcc_Msg_Buffer[0],
+    CH13_Vcc_Msg_Buffer[0],
+    CH14_Vcc_Msg_Buffer[0],
+    CH15_Vcc_Msg_Buffer[0]
 };
 
 static ehvm_uint8_t* EhvmConst VccReceiveSPIDManagement[VCC_NUM_OF_VCCID] = {
@@ -115,7 +135,11 @@ static ehvm_uint8_t* EhvmConst VccReceiveSPIDManagement[VCC_NUM_OF_VCCID] = {
     &CH8_Vcc_Receive_SPID[0],
     &CH9_Vcc_Receive_SPID[0],
     &CH10_Vcc_Receive_SPID[0],
-    &CH11_Vcc_Receive_SPID[0]
+    &CH11_Vcc_Receive_SPID[0],
+    &CH12_Vcc_Receive_SPID[0],
+    &CH13_Vcc_Receive_SPID[0],
+    &CH14_Vcc_Receive_SPID[0],
+    &CH15_Vcc_Receive_SPID[0]
 };
 
 static ehvm_vcc_ring_buffer_t* EhvmConst VccRingBufferManagement[VCC_NUM_OF_VCCID] = {
@@ -130,7 +154,11 @@ static ehvm_vcc_ring_buffer_t* EhvmConst VccRingBufferManagement[VCC_NUM_OF_VCCI
     &CH8_Vcc_Ring_Buffer[0],
     &CH9_Vcc_Ring_Buffer[0],
     &CH10_Vcc_Ring_Buffer[0],
-    &CH11_Vcc_Ring_Buffer[0]
+    &CH11_Vcc_Ring_Buffer[0],
+    &CH12_Vcc_Ring_Buffer[0],
+    &CH13_Vcc_Ring_Buffer[0],
+    &CH14_Vcc_Ring_Buffer[0],
+    &CH15_Vcc_Ring_Buffer[0]
 };
 
 static ehvm_vcc_ring_element_t* EhvmConst VccRingElementManagement[VCC_NUM_OF_VCCID] = {
@@ -145,7 +173,11 @@ static ehvm_vcc_ring_element_t* EhvmConst VccRingElementManagement[VCC_NUM_OF_VC
     &CH8_Vcc_Ring_Element_Info[0],
     &CH9_Vcc_Ring_Element_Info[0],
     &CH10_Vcc_Ring_Element_Info[0],
-    &CH11_Vcc_Ring_Element_Info[0]
+    &CH11_Vcc_Ring_Element_Info[0],
+    &CH12_Vcc_Ring_Element_Info[0],
+    &CH13_Vcc_Ring_Element_Info[0],
+    &CH14_Vcc_Ring_Element_Info[0],
+    &CH15_Vcc_Ring_Element_Info[0]
 };
 
 #pragma ghs section rodata=default
@@ -560,6 +592,18 @@ static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH7[VCC_NUM_OF_RECEIV
 };
 static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH8[VCC_NUM_OF_RECEIVER_CHANNEL_CH8] = {
     {
+        0x00000004U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x0000000CU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
         0x0000000EU,    /* VccReceiverSpid */
         NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
         NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
@@ -567,6 +611,18 @@ static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH8[VCC_NUM_OF_RECEIV
     }
 };
 static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH9[VCC_NUM_OF_RECEIVER_CHANNEL_CH9] = {
+    {
+        0x00000001U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x0000000CU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
     {
         0x0000000EU,    /* VccReceiverSpid */
         NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
@@ -576,13 +632,87 @@ static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH9[VCC_NUM_OF_RECEIV
 };
 static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH10[VCC_NUM_OF_RECEIVER_CHANNEL_CH10] = {
     {
-        0x0000000CU,    /* VccReceiverSpid */
+        0x00000001U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x00000004U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x0000000EU,    /* VccReceiverSpid */
         NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
         NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
         NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
     }
 };
 static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH11[VCC_NUM_OF_RECEIVER_CHANNEL_CH11] = {
+    {
+        0x00000001U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x00000004U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x0000000CU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    }
+};
+static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH12[VCC_NUM_OF_RECEIVER_CHANNEL_CH12] = {
+    {
+        0x00000004U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x0000000CU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
+    {
+        0x0000000EU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    }
+};
+static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH13[VCC_NUM_OF_RECEIVER_CHANNEL_CH13] = {
+    {
+        0x0000000EU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    }
+};
+static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH14[VCC_NUM_OF_RECEIVER_CHANNEL_CH14] = {
+    {
+        0x0000000EU,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    }
+};
+static EhvmConst ehvm_vcc_receiver_channel_t s_VccReceiver_CH15[VCC_NUM_OF_RECEIVER_CHANNEL_CH15] = {
+    {
+        0x00000004U,    /* VccReceiverSpid */
+        NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
+        NOUSE_VCC_INTERRUPT,           /* VccOverwriteInterruptNumber */
+        NOUSE_VCC_EDGE_DETECTION         /* VccEdgeRequest */
+    },
     {
         0x0000000CU,    /* VccReceiverSpid */
         NOUSE_VCC_INTERRUPT,           /* VccReceiveInterruptNumber */
@@ -690,36 +820,36 @@ static EhvmConst ehvm_vcc_channel_t s_VccChannelData[VCC_NUM_OF_VCCID] = {
     },
     /* VCCID:8 */
     {
-        0x00000010U,                       /* VccTransmitVMMask */
+        0x00000002U,                       /* VccTransmitVMMask */
         NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
         VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
         VCC_NUM_OF_RECEIVER_CHANNEL_CH8,   /* VccNumOfReceiveVM */
         &s_VccReceiver_CH8[0],             /* VccReceiverChannel */
-        0x00004000U,                       /* VccReceiveVMMask */
+        0x00005010U,                       /* VccReceiveVMMask */
         VCC_SIZE_OF_PACKET_CH8,            /* VccPacketSize */
         VCC_NUM_OF_RING_ELEMENT_CH8,       /* VccNumOfRingElement */
         VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
     },
     /* VCCID:9 */
     {
-        0x00001000U,                       /* VccTransmitVMMask */
+        0x00000010U,                       /* VccTransmitVMMask */
         NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
         VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
         VCC_NUM_OF_RECEIVER_CHANNEL_CH9,   /* VccNumOfReceiveVM */
         &s_VccReceiver_CH9[0],             /* VccReceiverChannel */
-        0x00004000U,                       /* VccReceiveVMMask */
+        0x00005002U,                       /* VccReceiveVMMask */
         VCC_SIZE_OF_PACKET_CH9,            /* VccPacketSize */
         VCC_NUM_OF_RING_ELEMENT_CH9,       /* VccNumOfRingElement */
         VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
     },
     /* VCCID:10 */
     {
-        0x00004000U,                       /* VccTransmitVMMask */
+        0x00001000U,                       /* VccTransmitVMMask */
         NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
         VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
         VCC_NUM_OF_RECEIVER_CHANNEL_CH10,   /* VccNumOfReceiveVM */
         &s_VccReceiver_CH10[0],             /* VccReceiverChannel */
-        0x00001000U,                       /* VccReceiveVMMask */
+        0x00004012U,                       /* VccReceiveVMMask */
         VCC_SIZE_OF_PACKET_CH10,            /* VccPacketSize */
         VCC_NUM_OF_RING_ELEMENT_CH10,       /* VccNumOfRingElement */
         VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
@@ -731,15 +861,63 @@ static EhvmConst ehvm_vcc_channel_t s_VccChannelData[VCC_NUM_OF_VCCID] = {
         VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
         VCC_NUM_OF_RECEIVER_CHANNEL_CH11,   /* VccNumOfReceiveVM */
         &s_VccReceiver_CH11[0],             /* VccReceiverChannel */
-        0x00001000U,                       /* VccReceiveVMMask */
+        0x00001012U,                       /* VccReceiveVMMask */
         VCC_SIZE_OF_PACKET_CH11,            /* VccPacketSize */
         VCC_NUM_OF_RING_ELEMENT_CH11,       /* VccNumOfRingElement */
+        VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
+    },
+    /* VCCID:12 */
+    {
+        0x00000002U,                       /* VccTransmitVMMask */
+        NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
+        VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
+        VCC_NUM_OF_RECEIVER_CHANNEL_CH12,   /* VccNumOfReceiveVM */
+        &s_VccReceiver_CH12[0],             /* VccReceiverChannel */
+        0x00005010U,                       /* VccReceiveVMMask */
+        VCC_SIZE_OF_PACKET_CH12,            /* VccPacketSize */
+        VCC_NUM_OF_RING_ELEMENT_CH12,       /* VccNumOfRingElement */
+        VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
+    },
+    /* VCCID:13 */
+    {
+        0x00000010U,                       /* VccTransmitVMMask */
+        NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
+        VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
+        VCC_NUM_OF_RECEIVER_CHANNEL_CH13,   /* VccNumOfReceiveVM */
+        &s_VccReceiver_CH13[0],             /* VccReceiverChannel */
+        0x00004000U,                       /* VccReceiveVMMask */
+        VCC_SIZE_OF_PACKET_CH13,            /* VccPacketSize */
+        VCC_NUM_OF_RING_ELEMENT_CH13,       /* VccNumOfRingElement */
+        VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
+    },
+    /* VCCID:14 */
+    {
+        0x00001000U,                       /* VccTransmitVMMask */
+        NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
+        VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
+        VCC_NUM_OF_RECEIVER_CHANNEL_CH14,   /* VccNumOfReceiveVM */
+        &s_VccReceiver_CH14[0],             /* VccReceiverChannel */
+        0x00004000U,                       /* VccReceiveVMMask */
+        VCC_SIZE_OF_PACKET_CH14,            /* VccPacketSize */
+        VCC_NUM_OF_RING_ELEMENT_CH14,       /* VccNumOfRingElement */
+        VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
+    },
+    /* VCCID:15 */
+    {
+        0x00004000U,                       /* VccTransmitVMMask */
+        NOUSE_VCC_INTERRUPT,               /* VccTransmitInterruptNumber */
+        VCC_EDGE_DETECTION_DISABLE,        /* VccEdgeEnable */
+        VCC_NUM_OF_RECEIVER_CHANNEL_CH15,   /* VccNumOfReceiveVM */
+        &s_VccReceiver_CH15[0],             /* VccReceiverChannel */
+        0x00001010U,                       /* VccReceiveVMMask */
+        VCC_SIZE_OF_PACKET_CH15,            /* VccPacketSize */
+        VCC_NUM_OF_RING_ELEMENT_CH15,       /* VccNumOfRingElement */
         VCC_OVERWRITE_ENABLE              /* VccOverwriteConfiguration */
     }
 };
 
 static EhvmConst ehvm_vcc_config_t ehvmVccConfigData = {
-    12U,                     /* VccNumOfVccId */
+    16U,                     /* VccNumOfVccId */
     &s_VccChannelData[0],   /* VccChannel */
     &ring_buffer_list[0]    /* VccRingBufferList */
 };

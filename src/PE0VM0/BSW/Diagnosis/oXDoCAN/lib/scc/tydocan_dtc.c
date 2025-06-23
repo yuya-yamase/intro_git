@@ -673,8 +673,8 @@ static void    vd_s_TydcDtcTrDeAct(void)
 /*===================================================================================================================================*/
 static void    vd_s_TydcDtcRxcInit(void)
 {
-#if (OXCAN_RX_RXEV_CNT_UNK != 0xffU)
-#error "tydocan_dtc.c : OXCAN_RX_RXEV_CNT_UNK shall be equal to 0xff."
+#if (OXCAN_RXD_EVC_UNK != 0xffU)
+#error "tydocan_dtc.c : OXCAN_RXD_EVC_UNK shall be equal to 0xff."
 #endif
     U4                         u4_t_lpcnt;
 

@@ -21,8 +21,14 @@
 #define	DMA_CFG_REG_CHK						(STD_OFF)
 #define DMA_CFG_REG_REFRESH					(STD_OFF)
 
+/* DMATRGSEL DTS,DMA Access */
+#define DMA_CFG_GLOBAL_REG_CONTROL			(STD_ON)
+#define DMA_CFG_DMA0_ACCESS					(STD_ON)
+#define DMA_CFG_DMA1_ACCESS					(STD_ON)
+#if 1  /* BEVCDCFD-1405 */ /* 下記コードの位置が問題ないかご確認ください */
 void vd_g_SoundCriDrvDmacInterrupt(void);
 #define ADX_INTR_PTR		(&vd_g_SoundCriDrvDmacInterrupt)
+#endif /* BEVCDCFD-1405 */
 
 /*==============================================================================================*/
 /*	Configuration per DMA channel ID															*/

@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_AUBIF_CAN_C_MAJOR                  (1U)
-#define OXCAN_AUBIF_CAN_C_MINOR                  (3U)
+#define OXCAN_AUBIF_CAN_C_MAJOR                  (2U)
+#define OXCAN_AUBIF_CAN_C_MINOR                  (0U)
 #define OXCAN_AUBIF_CAN_C_PATCH                  (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -94,7 +94,7 @@ void    Can_UEdgeInit( uint8 Controller )
 /*===================================================================================================================================*/
 void    Can_UEdgeEnableDetect(uint8 Controller)
 {
-    vd_g_oXCANUsrhkExirEnaCh(Controller);
+    vd_g_oXCANUsrhkWRQDet(Controller, (U1)TRUE);
 }
 /*===================================================================================================================================*/
 /*  void    Can_UEdgeDisableDetect(uint8 Controller)                                                                                 */
@@ -104,7 +104,7 @@ void    Can_UEdgeEnableDetect(uint8 Controller)
 /*===================================================================================================================================*/
 void    Can_UEdgeDisableDetect(uint8 Controller)
 {
-    vd_g_oXCANUsrhkExirDisCh(Controller);
+    vd_g_oXCANUsrhkWRQDet(Controller, (U1)FALSE);
 }
 /*===================================================================================================================================*/
 /*  void    Can_UEdgeClearStatus(uint8 Controller)                                                                                   */
@@ -114,7 +114,7 @@ void    Can_UEdgeDisableDetect(uint8 Controller)
 /*===================================================================================================================================*/
 void    Can_UEdgeClearStatus(uint8 Controller)
 {
-    vd_g_oXCANUsrhkExirClrIRQst(Controller);
+    (void)u4_g_oXCANUsrhkWRQst(Controller, (U1)TRUE);
 }
 /*===================================================================================================================================*/
 /*  Can_ReturnType Can_UEdgeGetStatus(uint8 Controller)                                                                              */
@@ -124,11 +124,13 @@ void    Can_UEdgeClearStatus(uint8 Controller)
 /*===================================================================================================================================*/
 Can_ReturnType Can_UEdgeGetStatus(uint8 Controller)
 {
-    U4          u4_t_irqbit;
+/* #define CAN_OK                      (0U) */
+/* #define CAN_NOT_OK                  (1U) */
+    U4          u4_t_wrqbit;
     U1          u1_t_edge;         /* inc/Can.h:89:typedef uint8           Can_ReturnType; */
 
-    u4_t_irqbit = u4_g_oXCANUsrhkExirIRQst(Controller);
-    if(u4_t_irqbit != (U4)0U){
+    u4_t_wrqbit = u4_g_oXCANUsrhkWRQst(Controller, (U1)FALSE);
+    if(u4_t_wrqbit != (U4)0U){
         u1_t_edge = (U1)CAN_OK;
     }
     else{
@@ -154,25 +156,9 @@ Can_ReturnType Can_UEdgeGetStatus(uint8 Controller)
 /*===================================================================================================================================*/
 void    Can_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 {
-#if (defined(CHM_CHCNVTR_H)    && \
-     defined(L3R_CANMBQ_CFG_H) && \
-     defined(L3R_CANMBQ_TX_H))
-
-    uint8          u1LogicCh;
-    uint8          queId;
-    
-    if((u1Controller < CHM_PHY_IP0_CONTROLLER_NUM) &&
-       (u1MsgBuffer  < CANMBQ_MBOX_IDX_MAX_IP0   )){
-
-        u1LogicCh = CHM_ChCnvtr_PhyIp0_To_Log[u1Controller];
-        queId     = MBQ_MboxId2SendPriority_Tbl_IP0[u1MsgBuffer];
-        if((u1LogicCh < CANMBQ_CHMAX ) &&
-           (queId     < CANMBQ_QUENUM)) {
-
-            TxChannel_TxFin(txChannelArray[u1LogicCh], queId);
-        }
-    }
-#endif /* #if (defined(CHM_CHCNVTR_H) && */
+#ifdef CAN_LPR_H
+    vd_g_CANLpRPhyTxAck(u1Controller, u1MsgBuffer);
+#endif /* #ifdef CAN_LPR_H */
 }
 /*===================================================================================================================================*/
 /*  uint8   Can_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )                                  */
@@ -180,31 +166,41 @@ void    Can_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
+#ifdef CAN_LPR_H
+/*===================================================================================================================================*/
 uint8   Can_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
 {
-#if (defined(CHM_CHCNVTR_H) && \
-     defined(CID_SEARCH_H)  && \
-     defined(L3R_COMMON_H))
+    uint8          u1_t_ing;
+    uint8          u1_t_ok;
 
-    uint32         u4FdfFlg;
-    uint8          u1t_result;
+#if (CAN_LPR_ING_PHY_CAN_MIN > 0U)
+    u1_t_ing = u1Controller + (U1)CAN_LPR_ING_PHY_CAN_MIN;
+#else
+    u1_t_ing = u1Controller;
+#endif
 
-    u4FdfFlg = ptMsg->u4Id & (uint32)OXCAN_AUB_IF_BIT_FDF;
-    if((u1Controller         <  CHM_PHY_IP0_CONTROLLER_NUM          ) &&
-       ((u4FdfFlg != (U4)0U) || (ptMsg->u1Length <= L3R_CAN_DATAMAX))){
-
-        Cid_Search_ReceiveCanData(CHM_ChCnvtr_PhyIp0_To_Log[u1Controller], ptMsg);
-        u1t_result = (uint8)CAN_PROC_OK;
+    if(u1_t_ing <= (U1)CAN_LPR_ING_PHY_CAN_MAX){
+        u1_t_ok = u1_g_CANLpRIngCANRx(u1_t_ing, u1MsgBuffer, ptMsg);
     }
     else{
-        u1t_result = (uint8)CAN_PROC_NG;
+        u1_t_ok = (uint8)CAN_PROC_OK;
     }
 
-    return(u1t_result);
-#else
-    return((uint8)CAN_PROC_NG);
-#endif /* #if (defined(CHM_CHCNVTR_H) && */
+    return(u1_t_ok);
 }
+/*===================================================================================================================================*/
+#else /* #ifdef CAN_LPR_H */
+/*===================================================================================================================================*/
+uint8   Can_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
+{
+#if ((defined(CAN_QSEV_RX_H)) && (OXCAN_AUBIF_PHY_CAN_QSEV_RX == 1U))
+    return(u1_g_CANQSEvRxFqCAN(u1Controller, u1MsgBuffer, ptMsg));
+#else
+    return((uint8)CAN_PROC_OK);
+#endif /* #if ((defined(CAN_QSEV_RX_H)) && (OXCAN_AUBIF_PHY_CAN_QSEV_RX == 1U)) */
+}
+/*===================================================================================================================================*/
+#endif /* #ifdef CAN_LPR_H */
 /*===================================================================================================================================*/
 /*  void    Can_UPreStart( uint8 u1Controller )                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -231,25 +227,6 @@ void    Can_UPreStart( uint8 u1Controller )
 /*===================================================================================================================================*/
 void    Can_IP0_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 {
-#if (defined(CHM_CHCNVTR_H)    && \
-     defined(L3R_CANMBQ_CFG_H) && \
-     defined(L3R_CANMBQ_TX_H))
-
-    uint8          u1LogicCh;
-    uint8          queId;
-    
-    if((u1Controller < CHM_PHY_IP0_CONTROLLER_NUM) &&
-       (u1MsgBuffer  < CANMBQ_MBOX_IDX_MAX_IP0   )){
-
-        u1LogicCh = CHM_ChCnvtr_PhyIp0_To_Log[u1Controller];
-        queId     = MBQ_MboxId2SendPriority_Tbl_IP0[u1MsgBuffer];
-        if((u1LogicCh < CANMBQ_CHMAX ) &&
-           (queId     < CANMBQ_QUENUM)) {
-
-            TxChannel_TxFin(txChannelArray[u1LogicCh], queId);
-        }
-    }
-#endif /* #if (defined(CHM_CHCNVTR_H) && */
 }
 /*===================================================================================================================================*/
 /*  void    Can_IP1_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )                                                         */
@@ -259,25 +236,6 @@ void    Can_IP0_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 /*===================================================================================================================================*/
 void    Can_IP1_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 {
-#if (defined(CHM_CHCNVTR_H)    && \
-     defined(L3R_CANMBQ_CFG_H) && \
-     defined(L3R_CANMBQ_TX_H))
-
-    uint8          u1LogicCh;
-    uint8          queId;
-    
-    if((u1Controller < CHM_PHY_IP1_CONTROLLER_NUM) &&
-       (u1MsgBuffer  < CANMBQ_MBOX_IDX_MAX_IP1   )){
-
-        u1LogicCh = CHM_ChCnvtr_PhyIp1_To_Log[u1Controller];
-        queId     = MBQ_MboxId2SendPriority_Tbl_IP1[u1MsgBuffer];
-        if((u1LogicCh < CANMBQ_CHMAX ) &&
-           (queId     < CANMBQ_QUENUM)) {
-
-            TxChannel_TxFin(txChannelArray[u1LogicCh], queId);
-        }
-    }
-#endif /* #if (defined(CHM_CHCNVTR_H) && */
 }
 /*===================================================================================================================================*/
 /*  uint8   Can_IP0_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )                              */
@@ -287,21 +245,9 @@ void    Can_IP1_UTxConfirmation( uint8 u1Controller, uint8 u1MsgBuffer )
 /*===================================================================================================================================*/
 uint8   Can_IP0_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
 {
-#if (defined(CHM_CHCNVTR_H) && defined(CID_SEARCH_H))
-    uint8          u1t_result;
-
-    if(u1Controller < CHM_PHY_IP0_CONTROLLER_NUM){
-        Cid_Search_ReceiveCanData(CHM_ChCnvtr_PhyIp0_To_Log[u1Controller], ptMsg);
-        u1t_result = (uint8)CAN_PROC_OK;
-    }
-    else{
-        u1t_result = (uint8)CAN_PROC_NG;
-    }
-
-    return(u1t_result);
-#else
-    return((uint8)CAN_PROC_NG);
-#endif /* #if (defined(CHM_CHCNVTR_H) && defined(CID_SEARCH_H)) */
+#ifdef CAN_LPR_H
+#warning "oxcan_aubif_can.c : CAN L-PDU Router is NOT integrated into Can_IP0_URxIndication."
+#endif
 }
 /*===================================================================================================================================*/
 /*  uint8   Can_IP1_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )                              */
@@ -311,21 +257,9 @@ uint8   Can_IP0_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR 
 /*===================================================================================================================================*/
 uint8   Can_IP1_URxIndication( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
 {
-#if (defined(CHM_CHCNVTR_H) && defined(CID_SEARCH_H))
-    uint8          u1t_result;
-
-    if(u1Controller < CHM_PHY_IP1_CONTROLLER_NUM){
-        Cid_Search_ReceiveCanData(CHM_ChCnvtr_PhyIp1_To_Log[u1Controller], ptMsg);
-        u1t_result = (uint8)CAN_PROC_OK;
-    }
-    else{
-        u1t_result = (uint8)CAN_PROC_NG;
-    }
-
-    return (u1t_result);
-#else
-    return((uint8)CAN_PROC_NG);
-#endif /* #if (defined(CHM_CHCNVTR_H) && defined(CID_SEARCH_H)) */
+#ifdef CAN_LPR_H
+#warning "oxcan_aubif_can.c : CAN L-PDU Router is NOT integrated into Can_IP1_URxIndication."
+#endif
 }
 /*===================================================================================================================================*/
 /*  void    Can_IP0_UPreStart( uint8 u1Controller )                                                                                  */
@@ -371,7 +305,7 @@ void    Can_IP1_UPreStart( uint8 u1Controller )
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.3.0    12/20/2024  TN       oxcan_aubif.c was divided by Aubist/Com component.                                                 */
+/*  2.0.0     2/21/2025  TN       oxcan_aubif.c v1.2.0 -> v2.0.0 was redesigned for Toyota BEVStep3.                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*                                                                                                                                   */

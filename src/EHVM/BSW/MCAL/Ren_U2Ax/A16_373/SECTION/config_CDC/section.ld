@@ -87,17 +87,13 @@ SECTIONS {
     .DMA_TEXT_CODE          align(4)                        : > .
     .ERRH_TEXT_CODE         align(4)                        : > .
     .GPT_TEXT_CODE          align(4)                        : > .
-    .GPT_TEXT_CODE_FAST     align(4)                        : > .
     .ICU_TEXT_CODE          align(4)                        : > .
-    .ICU_TEXT_CODE_FAST     align(4)                        : > .
     .INTC_TEXT_CODE         align(4)                        : > .
     .MCALCOMMON_TEXT_CODE   align(4)                        : > .
     .MCU_TEXT_CODE          align(4)                        : > .
     .PORT_TEXT_CODE         align(4)                        : > .
-    .PWM_TEXT_CODE          align(4)                        : > .
-    .PWM_TEXT_CODE_FAST     align(4)                        : > .
+    .TYPORT_TEXT_CODE       align(4)                        : > .
     .SPI_TEXT_CODE          align(4)                        : > .
-    .WDG_TEXT_CODE          align(4)                        : > .
     .ADCDIAG_RODATA_CONST   align(4)                        : > .
     .ADC_RODATA_CONST       align(4)                        : > .
     .DIO_RODATA_CONST       align(4)                        : > .
@@ -108,9 +104,8 @@ SECTIONS {
     .INTC_RODATA_CONST      align(4)                        : > .
     .MCU_RODATA_CONST       align(4)                        : > .
     .PORT_RODATA_CONST      align(4)                        : > .
-    .PWM_RODATA_CONST       align(4)                        : > .
+    .TYPORT_RODATA_CONST    align(4)                        : > .
     .SPI_RODATA_CONST       align(4)                        : > .
-    .WDG_RODATA_CONST       align(4)                        : > .
     .mcal_rom_bottom        align(4)                        : > .
     _MCAL_ROM_SIZE = . - ADDR(.mcal_rom_top);
 
@@ -172,14 +167,10 @@ SECTIONS {
     .ADC_BSS_VAR_NO_INIT         align(4)                   : > .
     .DMA_BSS_VAR_NO_INIT         align(4)                   : > .
     .ERRH_BSS_VAR_NO_INIT        align(4)                   : > .
-    .GPT_BSS_VAR_NO_INIT         align(4)                   : > .
-    .ICU_BSS_VAR_NO_INIT         align(4)                   : > .
     .MCALCOMMON_BSS_VAR_NO_INIT  align(4)                   : > .
     .MCU_BSS_VAR_NO_INIT         align(4)                   : > .
     .PORT_BSS_VAR_NO_INIT        align(4)                   : > .
-    .PWM_BSS_VAR_NO_INIT         align(4)                   : > .
     .SPI_BSS_VAR_NO_INIT         align(4)                   : > .
-    .WDG_BSS_VAR_NO_INIT         align(4)                   : > .
     .mcal_ram_bottom             align(4)                   : > .
     _MCAL_RAM_SIZE = . - ADDR(.mcal_ram_top);
 

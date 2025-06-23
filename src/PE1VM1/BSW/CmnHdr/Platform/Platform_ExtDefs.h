@@ -18,53 +18,23 @@
 /*--------------------------------------------------------------------------*/
 /* Nothing */
 
-
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#ifndef HI	/* 2d’è‹`–h~‚Ì‚½‚ß */
-#define		HI						(1U)
-#endif
-#ifndef LO	/* 2d’è‹`–h~‚Ì‚½‚ß */
-#define		LO						(0U)
-#endif
-
-#ifndef ON	/* 2d’è‹`–h~‚Ì‚½‚ß */
-#define		ON						(HI)
-#endif
-#ifndef OFF	/* 2d’è‹`–h~‚Ì‚½‚ß */
-#define		OFF						(LO)
-#endif
-
-#ifndef OK	/* 2d’è‹`–h~‚Ì‚½‚ß */
-#define		OK						(0U)
-#endif
-#ifndef NG	/* 2d’è‹`–h~‚Ì‚½‚ß */
-#define		NG						(1U)
-#endif
-
-#ifndef UNFIX	/* 2d’è‹`–h~‚Ì‚½‚ß */
-#define		UNFIX					(3U)
-#endif
-
-#ifndef NULL_POINTER	/* 2d’è‹`–h~‚Ì‚½‚ß */
-#define		NULL_POINTER			((void*)0)
-#endif
-
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
 /* @zantei 240903 */
-typedef		unsigned char		U1;
-typedef		unsigned short		U2;
-typedef		unsigned long		U4;
-typedef		signed char			S1;
-typedef		signed short		S2;
-typedef		signed long			S4;
-typedef		signed long			ZORN;
+typedef     unsigned char       U1;
+typedef     unsigned short      U2;
+typedef     unsigned long       U4;
+typedef     signed char         S1;
+typedef     signed short        S2;
+typedef     signed long         S4;
+typedef     signed long         ZORN;
 
-typedef		float				PL;			/* •¨—’l(•‚“®¬”“_) */
-typedef		U1					Std_StatusType;			/* ON/OFF */
+typedef     float               PL;         /* •¨—’l(•‚“®¬”“_) */
+typedef     U1                  Std_StatusType;         /* ON/OFF */
 /* @zantei 240903 */
 
 /*--------------------------------------------------------------------------*/

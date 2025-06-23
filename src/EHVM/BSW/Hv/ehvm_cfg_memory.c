@@ -5312,70 +5312,70 @@ EhvmConst ehvm_intc2g_config_t ehvmIntc2gConfigData = {
 /****************************************************************************************/
 static EhvmConst ehvm_crg_spid_t s_Crg_CrgSpidData_CH0[5] = {
     {
-        0x00000001U  /* CRGSPID */
+        0x06000001U  /* CRGSPID */
     },
     {
-        0x00000002U  /* CRGSPID */
+        0x06000002U  /* CRGSPID */
     },
     {
-        0x00000010U  /* CRGSPID */
+        0x06000010U  /* CRGSPID */
     },
     {
-        0x00001000U  /* CRGSPID */
+        0x06001000U  /* CRGSPID */
     },
     {
-        0x00004000U  /* CRGSPID */
+        0x06004000U  /* CRGSPID */
     }
 };
 static EhvmConst ehvm_crg_spid_t s_Crg_CrgSpidData_CH1[5] = {
     {
-        0x00000001U  /* CRGSPID */
+        0x06000001U  /* CRGSPID */
     },
     {
-        0x00000002U  /* CRGSPID */
+        0x06000002U  /* CRGSPID */
     },
     {
-        0x00000010U  /* CRGSPID */
+        0x06000010U  /* CRGSPID */
     },
     {
-        0x00001000U  /* CRGSPID */
+        0x06001000U  /* CRGSPID */
     },
     {
-        0x00004000U  /* CRGSPID */
+        0x06004000U  /* CRGSPID */
     }
 };
 static EhvmConst ehvm_crg_spid_t s_Crg_CrgSpidData_CH2[5] = {
     {
-        0x00000001U  /* CRGSPID */
+        0x06000001U  /* CRGSPID */
     },
     {
-        0x00000003U  /* CRGSPID */
+        0x06000003U  /* CRGSPID */
     },
     {
-        0x00000011U  /* CRGSPID */
+        0x06000011U  /* CRGSPID */
     },
     {
-        0x00001001U  /* CRGSPID */
+        0x06001001U  /* CRGSPID */
     },
     {
-        0x00004001U  /* CRGSPID */
+        0x06004001U  /* CRGSPID */
     }
 };
 static EhvmConst ehvm_crg_spid_t s_Crg_CrgSpidData_CH3[5] = {
     {
-        0x00000001U  /* CRGSPID */
+        0x06000001U  /* CRGSPID */
     },
     {
-        0x00000002U  /* CRGSPID */
+        0x06000002U  /* CRGSPID */
     },
     {
-        0x00000010U  /* CRGSPID */
+        0x06000010U  /* CRGSPID */
     },
     {
-        0x00001000U  /* CRGSPID */
+        0x06001000U  /* CRGSPID */
     },
     {
-        0x00004000U  /* CRGSPID */
+        0x06004000U  /* CRGSPID */
     }
 };
 

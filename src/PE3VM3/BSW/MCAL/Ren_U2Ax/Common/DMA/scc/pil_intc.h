@@ -34,16 +34,16 @@ typedef struct
 
 	union
 	{
-		U4		u4Data;
-		U2		u2Data[2];
-		U1		u1Data[4];
+		uint32		u4Data;
+		uint16		u2Data[2];
+		uint8		u1Data[4];
 	}unPINT[INTC_PINT_REG_NUM];						/* 0xFF090000-0xFF090020 *//* Peripheral Interrupt Status Register */
 
 	union
 	{
-		U4		u4Data;
-		U2		u2Data[2];
-		U1		u1Data[4];
+		uint32		u4Data;
+		uint16		u2Data[2];
+		uint8		u1Data[4];
 	}unPINTCLR[INTC_PINT_REG_NUM];					/* 0xFF090020-0xFF090040 *//* Peripheral Interrupt Status Clear Register */
 
 }Reg_Intif_Type;
@@ -54,19 +54,19 @@ typedef struct
 
 	union
 	{
-		U2		u2Data;
-		U1		u1Data[2];
+		uint16		u2Data;
+		uint8		u1Data[2];
 		struct
 		{
-			U2		b4EIP		:4;		/* Interrupt priority */
-			U2		b1Dummy1	:1;		/* reserved bit */
-			U2		xEIOV		:1;		/* Interrupt overflow */
-			U2		xEITB		:1;		/* Interrupt vector selection bit */
-			U2		xEIMK		:1;		/* Interrupt mask bit */
-			U2		b4Dummy2	:4;		/* reserved bit */
-			U2		xEIRF		:1;		/* Interrupt request flag */
-			U2		b2Dummy3	:2;		/* reserved bit */
-			U2		xEICT		:1;		/* Interrupt channel type bit */
+			uint16		b4EIP		:4;		/* Interrupt priority */
+			uint16		b1Dummy1	:1;		/* reserved bit */
+			uint16		xEIOV		:1;		/* Interrupt overflow */
+			uint16		xEITB		:1;		/* Interrupt vector selection bit */
+			uint16		xEIMK		:1;		/* Interrupt mask bit */
+			uint16		b4Dummy2	:4;		/* reserved bit */
+			uint16		xEIRF		:1;		/* Interrupt request flag */
+			uint16		b2Dummy3	:2;		/* reserved bit */
+			uint16		xEICT		:1;		/* Interrupt channel type bit */
 		}stBit;
 	}unEIC[INTC_CH_NUM];			/* 0 -31 is dummy definition: no access */	/* 0xFFF 80,000 - 0xFFF80800 *//* EI level interrupt control register */
 
@@ -122,9 +122,10 @@ typedef struct
 /*					:	EIC register not allowed to operate within category 10% embedded function*/
 /*					:	Interrupt numbers bound to other cores are disabled						*/
 /************************************************************************************************/
-void	Pil_Intc2_SetInterrupt( U2 t_u2IntcChannel, U1 t_u1Ie );
+void	Pil_Intc2_SetInterrupt( uint16 t_u2IntcChannel, uint8 t_u1Ie );
 
-#if ( DMA_CFG_REG_CHK == STD_ON ) 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
+#if ( DMA_CFG_REG_CHK == STD_ON )
 /************************************************************************************************/
 /*	Service name	:	GetInterrupt															*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -132,7 +133,8 @@ void	Pil_Intc2_SetInterrupt( U2 t_u2IntcChannel, U1 t_u1Ie );
 /*	Return value	:	Interrupt Enable (ON:Enable / OFF:Disable)								*/
 /*	Caveat			:																			*/
 /************************************************************************************************/
-U1		Pil_Intc2_GetInterrupt( U2 t_u2IntcChannel );
+uint8		Pil_Intc2_GetInterrupt( uint16 t_u2IntcChannel );
+#endif
 #endif
 
 

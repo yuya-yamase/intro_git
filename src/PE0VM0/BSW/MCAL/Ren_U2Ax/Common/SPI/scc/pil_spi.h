@@ -163,9 +163,35 @@
 #define		PIL_SPI_SOLS_HIGH_HOLD		(MSPI_CTL1_SOLS_HIGH_HOLD)
 #define		PIL_SPI_SOLS_HIGH			(MSPI_CTL1_SOLS_HIGH)
 
+/* MSPITGCTLn.TRGSELn: This bit selects the trigger (DMA or DTS) for each channel */
+#define		PIL_SPI_TGCTL_TRGSEL_DMA	(MSPI_TGCTL_TRGSEL_DMA)
+#define		PIL_SPI_TGCTL_TRGSEL_DTS	(MSPI_TGCTL_TRGSEL_DTS)
+
 /* タイムアウト設定値 */
 #define PIL_SPI_WAIT_MAX				(0xFFFFFFFFU)			/* 設定最大値 */
 #define u4PIL_SPI_WAIT_1US				((U4)1)					/* LIB_WaitによるWait時間 */
+
+/*==============================================================================================*/
+#if ((defined(HI)          ) || \
+     (defined(LO)          ) || \
+     (defined(ON)          ) || \
+     (defined(OFF)         ) || \
+     (defined(OK)          ) || \
+     (defined(NG)          ) || \
+     (defined(UNFIX)       ) || \
+     (defined(NULL_POINTER)))
+#error "pil_spi.h : #defines are already defined."
+#endif
+
+#define     HI                      (1U)
+#define     LO                      (0U)
+#define     ON                      (HI)
+#define     OFF                     (LO)
+#define     OK                      (0U)
+#define     NG                      (1U)
+#define     UNFIX                   (3U)
+#define     NULL_POINTER            ((void*)0)
+/*==============================================================================================*/
 
 /* User Config Data Type Definition */
 typedef struct
@@ -187,6 +213,7 @@ typedef struct{
 	U1									u1CsID; 			/* Chip Select ID					*/
 	U1									u1CsActiveLevel;	/* Chip Select ActiveLevel			*/
 	U1									u1MasterSlave;		/* Master mode / Slave mode 		*/
+	U1									u1TrgSelDmaDts;		/* Trigger Select DMA / DTS 		*/
 }Pil_Spi_ChannelConfigType;
 
 /* Pil Spi ModeC Data Type */

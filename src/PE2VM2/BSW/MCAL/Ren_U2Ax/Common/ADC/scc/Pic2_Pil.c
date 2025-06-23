@@ -27,16 +27,28 @@
 /*--------------------------------------------------------------------------*/
 /* defines																	*/
 /*--------------------------------------------------------------------------*/
-#define	PIC2_UNIT_PIC20		(0u)
-#define	PIC2_UNIT_PIC21		(1u)
 
 /*--------------------------------------------------------------------------*/
 /* structs																	*/
 /*--------------------------------------------------------------------------*/
 
+#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 /*==============================================================================================*/
 /* constants																					*/
 /*==============================================================================================*/
+/* config to register set value convert table	*/
+#define ADC_START_SEC_CONST_16
+#include "Adc_MemMap.h"
+static CONST(uint16, PIC2_CONST)	s_u2EDGSELBitPostbl[PIC2_ADC_SG_NUM] = {
+	PIC2_PIC2xADCXnEDGSEL_SG0_0,		/* scan group 0	*/
+	PIC2_PIC2xADCXnEDGSEL_SG1_0,		/* scan group 1	*/
+	PIC2_PIC2xADCXnEDGSEL_SG2_0,		/* scan group 2	*/
+	PIC2_PIC2xADCXnEDGSEL_SG3_0,		/* scan group 3	*/
+	PIC2_PIC2xADCXnEDGSEL_SG4_0			/* scan group 4	*/
+};
+#define ADC_STOP_SEC_CONST_16
+#include "Adc_MemMap.h"
+
 /*==============================================================================================*/
 /* variables																					*/
 /*==============================================================================================*/
@@ -188,11 +200,11 @@ FUNC(void, PIC2_CODE) Pic2_Pil_SetHardwareTrigger(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check all registers and refresh ones w expected value.				*/
+/* Description			: Check all registers and refresh ones with expected value.				*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_All(void)
 {
@@ -238,11 +250,11 @@ FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_All(void)
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group related registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_Grp(
 	CONST(Adc_GroupType,	PIC2_CONST)	t_cudGrp
@@ -290,7 +302,7 @@ FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_Grp(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -330,7 +342,7 @@ static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkPreFix(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -372,11 +384,11 @@ static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkPostFix(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check registers deceided by convesion status							*/
+/* Description			: Check registers deceided by conversion status							*/
 /************************************************************************************************/
 static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkDynamic(
 	CONST(Adc_GroupType,				PIC2_CONST)				t_cudGrp,
@@ -462,8 +474,8 @@ static FUNC(uint32, ADC_CODE) Pic2_Pil_RegchkDynamic(
 /* Service name			: Pic2_Pil_DataInit														*/
 /* Sync/Async			: Synchronous															*/
 /* Reentrancy			: Non Reentrant															*/
-/* Parameters (in)		: 																		*/
-/* Parameters (inout)	: None																	*/
+/* Parameters (in)		: None																	*/
+/* Parameters (inout)	: 																		*/
 /*		Pic20EDGSEL		: Async: Pic20EDGSEL register											*/
 /*		Pic21EDGSEL		: Async: Pic21EDGSEL register											*/
 /* Parameters (out)		: None																	*/
@@ -477,14 +489,6 @@ static FUNC(void, PIC2_CODE) Pic2_Pil_DataInit(
 	#endif
 )
 {
-	static  CONST(uint16, PIC2_CONST)	s_u2EDGSELBitPostbl[PIC2_ADC_SG_NUM] = {
-		PIC2_PIC2xADCXnEDGSEL_SG0_0,		/* scan group 0	*/
-		PIC2_PIC2xADCXnEDGSEL_SG1_0,		/* scan group 1	*/
-		PIC2_PIC2xADCXnEDGSEL_SG2_0,		/* scan group 2	*/
-		PIC2_PIC2xADCXnEDGSEL_SG3_0,		/* scan group 3	*/
-		PIC2_PIC2xADCXnEDGSEL_SG4_0			/* scan group 4	*/
-	};
-
 	VAR(Adc_GroupType,	PIC2_VAR_NO_INIT)				t_udGrp;
 	VAR(Adc_HWUnitType,	PIC2_VAR_NO_INIT)				t_udHWUnit;
 	VAR(Adc_SGType,		PIC2_VAR_NO_INIT)				t_udSG;
@@ -530,4 +534,5 @@ static FUNC(void, PIC2_CODE) Pic2_Pil_DataInit(
 #define ADC_STOP_SEC_CODE_GLOBAL
 #include "Adc_MemMap.h"
 
+#endif
 /*-- End Of File -------------------------------------------------------------------------------*/

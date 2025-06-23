@@ -1,4 +1,4 @@
-/* MCU-r04-307 */
+/* MCU-r04-303 */
 /************************************************************************************************/
 /*																								*/
 /*		MCU Driver																				*/
@@ -44,6 +44,7 @@
 #define	MCU_MOSCS_STOPPED				( (uint32)( ( CLOCK_MOSCS_MOSCEN_DISTRG_SET * CLOCK_MOSCS_MOSCEN ) + ( CLOCK_MOSCS_MOSCSTAB_UNSTABLE * CLOCK_MOSCS_MOSCSTAB ) ) )		/* MainOSC is stopped */
 #define	MCU_MOSCS_STABLE 				( (uint32)( ( CLOCK_MOSCS_MOSCEN_ENTRG_SET * CLOCK_MOSCS_MOSCEN ) + ( CLOCK_MOSCS_MOSCSTAB_STABLE * CLOCK_MOSCS_MOSCSTAB ) ) )			/* MainOSC is stable and enable */
 #define	MCU_MOSCS_MOSCSTAB_STABLE		( (uint32)( CLOCK_MOSCS_MOSCSTAB_STABLE * CLOCK_MOSCS_MOSCSTAB ) )					/* MainOSC is stable */
+#define	MCU_MOSCS_MOSCEN_ENABLE			( (uint32)( CLOCK_MOSCS_MOSCEN_ENTRG_SET * CLOCK_MOSCS_MOSCEN ) )					/* MainOSC is enable */
 
 #define	MCU_HSOSCS_STABLE 				( (uint32)( CLOCK_HSOSCS_HSOSCSTAB_STABLE * CLOCK_HSOSCS_HSOSCSTAB ) )				/* HSIntOSC is stable */
 
@@ -52,14 +53,11 @@
 #define	MCU_FOUT1C_STOPPED				( (uint32)( 0U * CLOCK_CLKD_FOUT1C_FOUT1DIV_0 ) )									/* FOUT1 is stopped */
 #define	MCU_EXTCLK1C_STOPPED			( (uint32)( 0U * CLOCK_CKD_EXTCLK1C_EXTCLK1DIV_0 ) )								/* EXTCLK1 is stopped */
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define	MCU_PLL_SYNC					( (uint32)( CLOCK_CLKD_PLLS_PLLCLKDSYNC_SYNC * CLOCK_CLKD_PLLS_PLLCLKDSYNC ) )		/* PLL is synchronized */
 #define	MCU_FOUT0S_STABLE				( (uint32)( CLOCK_CLKD_FOUT0S_FOUT0SYNC_STABLE * CLOCK_CLKD_FOUT0S_FOUT0SYNC ) )	/* FOUT0 is synchronized */
 #define	MCU_FOUT0S_STOP_STABLE			( (uint32)( CLOCK_CLKD_FOUT0S_FOUT0CLKACT_STOP * CLOCK_CLKD_FOUT0S_FOUT0CLKACT ) + \
 												  ( CLOCK_CLKD_FOUT0S_FOUT0SYNC_STABLE * CLOCK_CLKD_FOUT0S_FOUT0SYNC ) )	/* FOUT0 is stop and synchronized */
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
-
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define	MCU_FOUT1S_STABLE				( (uint32)( CLOCK_CLKD_FOUT1S_FOUT1SYNC_STABLE * CLOCK_CLKD_FOUT1S_FOUT1SYNC ) )	/* FOUT1 is synchronized */
 #define	MCU_FOUT1S_STOP_STABLE			( (uint32)( CLOCK_CLKD_FOUT1S_FOUT1CLKACT_STOP * CLOCK_CLKD_FOUT1S_FOUT1CLKACT ) + \
 												  ( CLOCK_CLKD_FOUT1S_FOUT1SYNC_STABLE * CLOCK_CLKD_FOUT1S_FOUT1SYNC ) )	/* FOUT1 is stop and synchronized */
@@ -139,10 +137,6 @@
 										+ ( MCU_CFG_CLMA3CLME * BIT6 ) + ( MCU_CFG_CLMA5CLME * BIT8 ) + ( MCU_CFG_CLMA6CLME * BIT9 )		\
 										+ ( MCU_CFG_CLMA7CLME * BIT10 ) + ( MCU_CFG_CLMA13CLME * BIT16 ) + ( MCU_CFG_CLMA14CLME * BIT17 )	\
 										+ ( MCU_CFG_CLMA15CLME * BIT18 ) + ( MCU_CFG_CLMA16CLME * BIT19 ) + ( MCU_CFG_CLMA17CLME * BIT20 ) )/* Enabled clock monitor */
-
-#elif ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH )
-#define	MCU_CLMATEST_ENABLE				( ( MCU_CFG_CLMA0CLME * BIT3 ) + ( MCU_CFG_CLMA1CLME * BIT4 ) + ( MCU_CFG_CLMA2CLME * BIT5 )		\
-										+ ( MCU_CFG_CLMA3CLME * BIT6 ) + ( MCU_CFG_CLMA6CLME * BIT9 ) + ( MCU_CFG_CLMA7CLME * BIT10 ) )		/* Enabled clock monitor */
 #endif
 
 #if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
@@ -161,9 +155,6 @@
 #define	MCU_CLMATEST_ENABLE_ISO			( (uint32)( ( MCU_CFG_CLMA3CLME * BIT6 ) + ( MCU_CFG_CLMA5CLME * BIT8 ) + ( MCU_CFG_CLMA6CLME * BIT9 )		\
 												  + ( MCU_CFG_CLMA7CLME * BIT10 ) + ( MCU_CFG_CLMA13CLME * BIT16 ) + ( MCU_CFG_CLMA14CLME * BIT17 )	\
 												  + ( MCU_CFG_CLMA15CLME * BIT18 ) + ( MCU_CFG_CLMA16CLME * BIT19 ) + ( MCU_CFG_CLMA17CLME * BIT20 ) ) )/* Enabled clock monitor in ISO area */
-
-#elif ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH )
-#define	MCU_CLMATEST_ENABLE_ISO			( (uint32)( ( MCU_CFG_CLMA3CLME * BIT6 ) + ( MCU_CFG_CLMA6CLME * BIT9 ) + ( MCU_CFG_CLMA7CLME * BIT10 ) ) )	/* Enabled clock monitor in ISO area */
 #endif
 
 #define	MCU_CLMATEST_CLMA3TESEN			( (uint32)( MCU_CFG_CLMA3CLME * BIT6 ) )			/* CLMA3 self-test enable */
@@ -199,31 +190,22 @@
 
 #elif ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
 #define	MCU_NUM_RESET_REASON			( (sint32)15 )										/* Number of reset factors */
-
-#elif ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH )
-#define	MCU_NUM_RESET_REASON			( (sint32)12 )										/* Number of reset factors */
 #endif
 
 #if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define MCU_NUM_CLK_REG_SET_TBL			( 10U )
 #elif ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
 #define MCU_NUM_CLK_REG_SET_TBL			( 5U )
-#else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-#define MCU_NUM_CLK_REG_SET_TBL			( 6U )
 #endif
 
 #if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define MCU_NUM_CLK_SLEEP_REG_SET_TBL	( 6U )
-#else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-#define MCU_NUM_CLK_SLEEP_REG_SET_TBL	( 3U )
 #endif
 
 #if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define MCU_NUM_MSR_REG_SET_TBL			( 27U )
 #elif ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
 #define MCU_NUM_MSR_REG_SET_TBL			( 23U )
-#else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-#define MCU_NUM_MSR_REG_SET_TBL			( 13U )
 #endif
 
 #define MCU_CLK_REG_SET_TIMEOUT_CNT_PERI		( (sint32)0x000003E8 )
@@ -314,27 +296,6 @@
 #define MCU_ENABLE_BIT_MASK_MSR_EMU			( MSR_EMU_MS_EMU_0 + MSR_EMU_MS_EMU_1 )
 #define MCU_ENABLE_BIT_MASK_MSR_HRPWM		( MSR_HRPWM_MS_HRPWM_0 )
 
-#else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-#define MCU_ENABLE_BIT_MASK_MSR_RTCA		( MSR_RTCA_MS_RTCA_0 + MSR_RTCA_STPMSK_RTCA )
-#define MCU_ENABLE_BIT_MASK_MSR_RSENT		( MSR_RSENT_MS_RSENT_0 + MSR_RSENT_MS_RSENT_1 + MSR_RSENT_MS_RSENT_2 + MSR_RSENT_MS_RSENT_3 + MSR_RSENT_MS_RSENT_4	\
-											+ MSR_RSENT_MS_RSENT_5 + MSR_RSENT_MS_RSENT_6 + MSR_RSENT_MS_RSENT_7 )
-#define MCU_ENABLE_BIT_MASK_MSR_WDTB_AWO	( MSR_WDTB_AWO_STPMSK_WDTB_AWO)
-#define MCU_ENABLE_BIT_MASK_MSR_FLXA		( MSR_FLXA_MS_FLXA_0 )
-#define MCU_ENABLE_BIT_MASK_MSR_RSCFD		( MSR_RSCFD_MS_RSCFD_0 + MSR_RSCFD_MS_RSCFD_1 )
-#define MCU_ENABLE_BIT_MASK_MSR_ETNB		( MSR_ETNB_MS_ETNB_0 )
-#define MCU_ENABLE_BIT_MASK_MSR_MSPI		( MSR_MSPI_MS_MSPI_0 + MSR_MSPI_MS_MSPI_1 + MSR_MSPI_MS_MSPI_2 + MSR_MSPI_MS_MSPI_3 + MSR_MSPI_MS_MSPI_4	\
-											+ MSR_MSPI_MS_MSPI_5 )
-#define MCU_ENABLE_BIT_MASK_MSR_RLIN3		( MSR_RLIN3_MS_RLIN3_0 + MSR_RLIN3_MS_RLIN3_1 + MSR_RLIN3_MS_RLIN3_2 + MSR_RLIN3_MS_RLIN3_3 + MSR_RLIN3_MS_RLIN3_4	\
-											+ MSR_RLIN3_MS_RLIN3_5 + MSR_RLIN3_MS_RLIN3_6 + MSR_RLIN3_MS_RLIN3_7 + MSR_RLIN3_MS_RLIN3_8 + MSR_RLIN3_MS_RLIN3_9	\
-											+ MSR_RLIN3_MS_RLIN3_10 + MSR_RLIN3_MS_RLIN3_11 + MSR_RLIN3_MS_RLIN3_12 + MSR_RLIN3_MS_RLIN3_13 + MSR_RLIN3_MS_RLIN3_14	\
-											+ MSR_RLIN3_MS_RLIN3_15 )
-#define MCU_ENABLE_BIT_MASK_MSR_RIIC		( MSR_RIIC_MS_RIIC_0 )
-#define MCU_ENABLE_BIT_MASK_MSR_TAUD		( MSR_TAUD_MS_TAUD_0 + MSR_TAUD_MS_TAUD_1 )
-#define MCU_ENABLE_BIT_MASK_MSR_TAUJ_ISO	( MSR_TAUJ_ISO_MS_TAUJ_1 )
-#define MCU_ENABLE_BIT_MASK_MSR_OSTM		( MSR_OSTM_MS_OSTM_0 + MSR_OSTM_MS_OSTM_1 + MSR_OSTM_MS_OSTM_2 + MSR_OSTM_MS_OSTM_3 + MSR_OSTM_MS_OSTM_4	\
-											+ MSR_OSTM_MS_OSTM_5 + MSR_OSTM_MS_OSTM_8 + MSR_OSTM_MS_OSTM_9 )
-#define MCU_ENABLE_BIT_MASK_MSR_TAUJ_AWO	( MSR_TAUJ_AWO_MS_TAUJ_3 + MSR_TAUJ_AWO_STPMSK_TAUJ_AWO )
-
 #endif /* MCAL_SPAL_TARGET */
 
 #define MCU_SSCGC_REGCHK_EXPECTED_VALUE	( ( CLOCK_SSCGC_SSMODE1_ENABLE * CLOCK_SSCGC_SSMODE1 )				\
@@ -342,6 +303,11 @@
 										+ ( MCU_CFG_CLK_SSCG_PERCENT_TYPE_0 * CLOCK_SSCGC_SELMPERCENT_0 ) )
 #define MCU_ENABLE_BIT_MASK_SSCGC		( CLOCK_SSCGC_SSMODE1 + CLOCK_SSCGC_SELMFREQ + CLOCK_SSCGC_SELMPERCENT )
 #define MCU_REGCHK_RESULT_DUMMY_BIT		( (uint32)BIT31 )	/* Dummy bit for QAC countermeasures */
+
+#define MCU_WAIT_SLEEP_TIMEOUT_UNLIMITED	(0xFFFFFFFFU)
+ 
+#define MCU_CONVERT_WAITTIME_SHIFT_PLLO2	(1U)
+#define MCU_CONVERT_WAITTIME_SHIFT_IOSC		(2U)
 
 typedef struct {
 	volatile uint32*	pu4ControlReg;	/* Control Register Address */
@@ -389,16 +355,16 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockUpPll( void );
 
 #if	( MCU_CFG_CLK_MONITOR == STD_ON )
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #if	( MCU_CFG_CLMA3CLME == STD_ON )
 static FUNC( void, MCU_CODE ) Mcu_ClockMonitorReset( void );
 #endif	/* ( MCU_CFG_CLMA3CLME == STD_ON ) */
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockMonitorSetup( void );
 #endif	/* ( MCU_CFG_CLK_MONITOR == STD_ON ) */
 
-#if( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 
 #if	( MCU_CFG_CLK_MONITOR == STD_ON )
 static FUNC( void, MCU_CODE ) Mcu_ClockMonitorStandby( void );
@@ -407,33 +373,28 @@ static FUNC( void, MCU_CODE ) Mcu_ClockMonitorStandby( void );
 static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyClockDown( void );
 static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyPeri( void );
 static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyFout( void );
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
-
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbySetPwrgdCnt( void );
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if	( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( ( MCU_CFG_REG_CHK == STD_ON ) && ( MCU_CFG_REG_REFRESH == STD_ON ) ) ) ) ||	\
-	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) )
 static FUNC( Std_ReturnType, MCU_CODE ) Mcu_SetClockRegister
 	( volatile uint32* t_pu4ControlReg, const volatile uint32* t_pu4StatusReg, const uint32 t_u4SetValue, const sint32 t_s4TimeoutCnt );
 #endif
 
-#if	( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( MCU_CFG_NO_PLL == FALSE ) ) ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( MCU_CFG_NO_PLL == FALSE ) ) ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) )
 static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ProcessTimeOut
 	( volatile uint32* t_pu4StatusReg, uint32 t_u4RegMask, const uint32 t_u4StatusValue, const sint32 t_s4TimeoutCnt );
-#endif	/* ( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( MCU_CFG_NO_PLL == FALSE ) ) ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( MCU_CFG_NO_PLL == FALSE ) ) ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) ) */
 
 #if ( MCU_CFG_REG_CHK == STD_ON )
 static FUNC( uint32, MCU_CODE ) Mcu_Regchk_ClockRegister( volatile uint32* t_pu4ControlReg, const volatile uint32* t_pu4StatusReg, const uint32 t_u4ExpectValue, const uint32 t_u4RegMask );
 static FUNC( uint32, MCU_CODE ) Mcu_Regchk_u4ForRefreshPossible( volatile uint32* t_pu4Register, const uint32 t_u4ExpectValue , const uint32 t_u4RegMask );
 static FUNC( uint32, MCU_CODE ) Mcu_Regchk_u4ForRefreshImpossible( volatile uint32* t_pu4Register, const uint32 t_u4ExpectValue , const uint32 t_u4RegMask );
 static FUNC( uint32, MCU_CODE ) Mcu_Regchk_ClkCtrl( void );
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 static FUNC( uint32, MCU_CODE ) Mcu_Regchk_Fout( void );
 static FUNC( uint32, MCU_CODE ) Mcu_Regchk_Fout0Clkd( void );
-#endif
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 static FUNC( uint32, MCU_CODE ) Mcu_Regchk_Fout1Clkd( void );
 #endif
 #if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
@@ -470,19 +431,11 @@ static const stMcu_ResetReason stMcu_ResetReasonTbl[ MCU_NUM_RESET_REASON ] = {
 	{ (uint32)MCU_RESF_SOFTWARE_SYSTEM_RESET, MCU_SOFTWARE_SYSTEM_RESET },				/* Software System Reset */
 	{ (uint32)MCU_RESF_ECM_SYSTEM_RESET_2, MCU_ECM_SYSTEM_RESET_2 },					/* ECM System Reset 2 */
 	{ (uint32)MCU_RESF_WDTBA_RESET, MCU_WDTBA_RESET },									/* WDTBA Reset */
-
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) )
 	{ (uint32)MCU_RESF_SOFTWARE_APPLICATION_RESET, MCU_SOFTWARE_APPLICATION_RESET },	/* Software Application Reset */
 	{ (uint32)MCU_RESF_ECM_APPLICATION_RESET, MCU_ECM_APPLICATION_RESET },				/* ECM Application Reset */
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) ) */
-
 	{ (uint32)MCU_RESF_HW_BIST0_EXECUTION_RESET, MCU_HW_BIST0_EXECUTION_RESET },		/* HW BIST0 Execution Reset */
 	{ (uint32)MCU_RESF_HW_BIST1_EXECUTION_RESET, MCU_HW_BIST1_EXECUTION_RESET },		/* HW BIST1 Execution Reset */
-
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) )
 	{ (uint32)MCU_RESF_HW_BIST2_EXECUTION_RESET, MCU_HW_BIST2_EXECUTION_RESET },		/* HW BIST2 Execution Reset */
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) ) */
-
 	{ (uint32)MCU_RESF_DEEPSTOP_RESET	, MCU_DEEPSTOP_RESET },							/* DeepSTOP Reset */
 
 #if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
@@ -494,12 +447,6 @@ static const stMcu_ResetReason stMcu_ResetReasonTbl[ MCU_NUM_RESET_REASON ] = {
 	{ (uint32)MCU_RESF_ICUMHB_SOFT_SYS_RESET, MCU_ICUMHB_SOFT_SYS_RESET },				/* ICUM Software System Reset for RH850U2B */
 	{ (uint32)MCU_RESF_ICUMHB_SOFT_APP_RESET, MCU_ICUMHB_SOFT_APP_RESET }				/* ICUM Software Application Reset for RH850U2B */
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) */
-
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH )
-	{ (uint32)MCU_RESF_SOFT_POWER_ON_RESET, MCU_SOFT_POWER_ON_RESET },					/* Soft Power On Reset */
-	{ (uint32)MCU_RESF_SYSTEM_WDT_RESET, MCU_SYSTEM_WDT_RESET },						/* System WDT Reset */
-	{ (uint32)MCU_RESF_RWDT_RESET, MCU_RWDT_RESET }										/* RWDT Reset */
-#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) */
 
 };
 #endif	/* ( MCU_CFG_RESET_REASON == STD_ON ) */
@@ -528,37 +475,20 @@ static const Mcu_ClockRegisterSettingType stMcu_ClockRegisterSettingTbl[ MCU_NUM
 	{	&REG_CLOCK_ISO.u4CKS_MSPIC,		&REG_CLOCK_ISO.u4CKS_MSPIS,		(uint32)MCU_CFG_CLK_MSPI_B_TYPE_0,		MCU_CLK_REG_SET_TIMEOUT_CNT_PERI,			CLOCK_CKS_MSPIS_MSPISACT	},
 	{	&REG_CLOCK_AWO.u4CKS_WDTC,		&REG_CLOCK_AWO.u4CKS_WDTS,		(uint32)MCU_CFG_CLK_WDTC_B_TYPE_0,		MCU_CLK_REG_SET_TIMEOUT_CNT_PRE_WDT,		CLOCK_CKS_WDTS_WDTSACT		},
 	{	&REG_CLOCK_ISO.u4CKS_SWDTC,		&REG_CLOCK_ISO.u4CKS_SWDTS,		(uint32)MCU_CFG_CLK_SWDT_TYPE_0,		MCU_CLK_REG_SET_TIMEOUT_CNT_PRE_SWDT,		CLOCK_CKS_SWDTS_SWDTSACT	}
-
-#else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-	{	&REG_CLOCK_ISO.u4CKSC_RLINC,	&REG_CLOCK_ISO.u4CKSC_RLINS,	(uint32)MCU_CFG_CLK_RLIN_TYPE_0,		MCU_CLK_REG_SET_TIMEOUT_CNT_PERI,			CLOCK_CKSC_RLINS_RLINSACT	},
-	{	&REG_CLOCK_ISO.u4CKSC_RCANC,	&REG_CLOCK_ISO.u4CKSC_RCANS,	(uint32)MCU_CFG_CLK_RCAN_TYPE_0,		MCU_CLK_REG_SET_TIMEOUT_CNT_PERI,			CLOCK_CKSC_RCANS_RCANSACT	},
-	{	&REG_CLOCK_ISO.u4CKSC_MSPIC,	&REG_CLOCK_ISO.u4CKSC_MSPIS,	(uint32)MCU_CFG_CLK_MSPI_A_TYPE_0,		MCU_CLK_REG_SET_TIMEOUT_CNT_PERI,			CLOCK_CKSC_MSPIS_MSPISACT	},
-	{	&REG_CLOCK_AWO.u4CKSC_ATAUJC,	&REG_CLOCK_AWO.u4CKSC_ATAUJS,	(uint32)MCU_CFG_CLK_ATAUJC_A_TYPE_0,	MCU_CLK_REG_SET_TIMEOUT_CNT_PRE_PERI,		CLOCK_CKSC_ATAUJS_ATAUJSACT	},
-	{	&REG_CLOCK_AWO.u4CKSC_ARTCAC,	&REG_CLOCK_AWO.u4CKSC_ARTCAS,	(uint32)MCU_CFG_CLK_ARTCAC_A_TYPE_0,	MCU_CLK_REG_SET_TIMEOUT_CNT_PRE_PERI,		CLOCK_CKSC_ARTCAS_ARTCASACT	},
-	{	&REG_CLOCK_AWO.u4CKSC_WDTC,		&REG_CLOCK_AWO.u4CKSC_WDTS,		(uint32)MCU_CFG_CLK_WDTC_A_TYPE_0,		MCU_CLK_REG_SET_TIMEOUT_CNT_PRE_WDT,		CLOCK_CKSC_WDTS_WDTSACT		}
 #endif
 
 };
 
-#if( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 static const Mcu_ClockRegisterSettingType stMcu_SleepClockRegisterSettingTbl[ MCU_NUM_CLK_SLEEP_REG_SET_TBL ] = {
-
-#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	{	&REG_CLOCK_AWO.u4CKSC_AWDTC,	&REG_CLOCK_AWO.u4CKSC_AWDTS,	(uint32)MCU_CFG_CLK_WDTBA_A_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_POST_AWDTB,		CLOCK_CKSC_AWDTS_AWDTSACT	},
 	{	&REG_CLOCK_AWO.u4CKSC_ATAUJC,	&REG_CLOCK_AWO.u4CKSC_ATAUJS,	(uint32)MCU_CFG_CLK_ATAUJC_A_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_POST_PERI,		CLOCK_CKSC_ATAUJS_ATAUJSACT	},
 	{	&REG_CLOCK_AWO.u4CKSC_ARTCAC,	&REG_CLOCK_AWO.u4CKSC_ARTCAS,	(uint32)MCU_CFG_CLK_ARTCAC_A_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_POST_PERI,		CLOCK_CKSC_ARTCAS_ARTCASACT	},
 	{	&REG_CLOCK_AWO.u4CKSC_AADCC,	&REG_CLOCK_AWO.u4CKSC_AADCS,	(uint32)MCU_CFG_CLK_AADCC_A_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_PERI,			CLOCK_CKSC_AADCS_AADCSACT	},
 	{	&REG_CLOCK_AWO.u4CLKD_AADCC,	&REG_CLOCK_AWO.u4CLKD_AADCS,	(uint32)MCU_CFG_CLKD_AADCC_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_PERI,			CLOCK_CLKD_AADCS_AADCDACT	},
 	{	&REG_CLOCK_AWO.u4CKSC_WDTC,		&REG_CLOCK_AWO.u4CKSC_WDTS,		(uint32)MCU_CFG_CLK_WDTC_A_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_POST_WDT,		CLOCK_CKSC_WDTS_WDTSACT		}
-
-#else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-	{	&REG_CLOCK_AWO.u4CKSC_ATAUJC,	&REG_CLOCK_AWO.u4CKSC_ATAUJS,	(uint32)MCU_CFG_CLK_ATAUJC_A_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_POST_PERI,		CLOCK_CKSC_ATAUJS_ATAUJSACT	},
-	{	&REG_CLOCK_AWO.u4CKSC_ARTCAC,	&REG_CLOCK_AWO.u4CKSC_ARTCAS,	(uint32)MCU_CFG_CLK_ARTCAC_A_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_POST_PERI,		CLOCK_CKSC_ARTCAS_ARTCASACT	},
-	{	&REG_CLOCK_AWO.u4CKSC_WDTC,		&REG_CLOCK_AWO.u4CKSC_WDTS,		(uint32)MCU_CFG_CLK_WDTC_A_SLEEP,		MCU_CLK_REG_SET_TIMEOUT_CNT_POST_WDT,		CLOCK_CKSC_WDTS_WDTSACT		}
-#endif
-
 };
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 static const Mcu_ModuleStandbyRegisterType stMcu_ModuleStandbyRegisterSettingTbl[ MCU_NUM_MSR_REG_SET_TBL ] = {
 
@@ -906,85 +836,6 @@ static const Mcu_ModuleStandbyRegisterType stMcu_ModuleStandbyRegisterSettingTbl
 
 	{	&REG_STBC_ISO.u4MSR_HRPWM,		  ( MCU_CFG_MS_HRPWM_0_TYPE_0		* MSR_HRPWM_MS_HRPWM_0 )		,
 											MCU_ENABLE_BIT_MASK_MSR_HRPWM									}
-
-#else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-	{	&REG_STBC_AWO.u4MSR_RTCA,		  ( MCU_CFG_MS_RTCA_0_TYPE_0		* MSR_RTCA_MS_RTCA_0 )
-										+ ( MCU_CFG_STPMSK_RTCA_TYPE_0		* MSR_RTCA_STPMSK_RTCA )		,
-											MCU_ENABLE_BIT_MASK_MSR_RTCA									},
-
-	{	&REG_STBC_ISO.u4MSR_RSENT,		  ( MCU_CFG_MS_RSENT_0_TYPE_0		* MSR_RSENT_MS_RSENT_0 )
-										+ ( MCU_CFG_MS_RSENT_1_TYPE_0		* MSR_RSENT_MS_RSENT_1 )
-										+ ( MCU_CFG_MS_RSENT_2_TYPE_0		* MSR_RSENT_MS_RSENT_2 )
-										+ ( MCU_CFG_MS_RSENT_3_TYPE_0		* MSR_RSENT_MS_RSENT_3 )
-										+ ( MCU_CFG_MS_RSENT_4_TYPE_0		* MSR_RSENT_MS_RSENT_4 )
-										+ ( MCU_CFG_MS_RSENT_5_TYPE_0		* MSR_RSENT_MS_RSENT_5 )
-										+ ( MCU_CFG_MS_RSENT_6_TYPE_0		* MSR_RSENT_MS_RSENT_6 )
-										+ ( MCU_CFG_MS_RSENT_7_TYPE_0		* MSR_RSENT_MS_RSENT_7 )		,
-											MCU_ENABLE_BIT_MASK_MSR_RSENT									},
-
-	{	&REG_STBC_AWO.u4MSR_WDTB_AWO,	  ( MCU_CFG_STPMSK_WDTB_AWO_TYPE_0	* MSR_WDTB_AWO_STPMSK_WDTB_AWO ),
-											MCU_ENABLE_BIT_MASK_MSR_WDTB_AWO								},
-
-	{	&REG_STBC_ISO.u4MSR_FLXA,		  ( MCU_CFG_MS_FLXA_0_TYPE_0		* MSR_FLXA_MS_FLXA_0 )
-										+ ( MCU_MS_FLXA_1_RESERVED_BIT		* MSR_FLXA_MS_FLXA_1 )			,
-											MCU_ENABLE_BIT_MASK_MSR_FLXA									},
-
-	{	&REG_STBC_ISO.u4MSR_RSCFD,		  ( MCU_CFG_MS_RSCFD_0_TYPE_0		* MSR_RSCFD_MS_RSCFD_0 )
-										+ ( MCU_CFG_MS_RSCFD_1_TYPE_0		* MSR_RSCFD_MS_RSCFD_1 )		,
-											MCU_ENABLE_BIT_MASK_MSR_RSCFD									},
-
-	{	&REG_STBC_ISO.u4MSR_ETNB,		  ( MCU_CFG_MS_ETNB_0_TYPE_0		* MSR_ETNB_MS_ETNB_0 )			,
-											MCU_ENABLE_BIT_MASK_MSR_ETNB									},
-
-	{	&REG_STBC_ISO.u4MSR_MSPI,		  ( MCU_CFG_MS_MSPI_0_TYPE_0		* MSR_MSPI_MS_MSPI_0 )
-										+ ( MCU_CFG_MS_MSPI_1_TYPE_0		* MSR_MSPI_MS_MSPI_1 )
-										+ ( MCU_CFG_MS_MSPI_2_TYPE_0		* MSR_MSPI_MS_MSPI_2 )
-										+ ( MCU_CFG_MS_MSPI_3_TYPE_0		* MSR_MSPI_MS_MSPI_3 )
-										+ ( MCU_CFG_MS_MSPI_4_TYPE_0		* MSR_MSPI_MS_MSPI_4 )
-										+ ( MCU_CFG_MS_MSPI_5_TYPE_0		* MSR_MSPI_MS_MSPI_5 )			,
-											MCU_ENABLE_BIT_MASK_MSR_MSPI									},
-
-	{	&REG_STBC_ISO.u4MSR_RLIN3,		  ( MCU_CFG_MS_RLIN3_0_TYPE_0		* MSR_RLIN3_MS_RLIN3_0 )
-										+ ( MCU_CFG_MS_RLIN3_1_TYPE_0		* MSR_RLIN3_MS_RLIN3_1 )
-										+ ( MCU_CFG_MS_RLIN3_2_TYPE_0		* MSR_RLIN3_MS_RLIN3_2 )
-										+ ( MCU_CFG_MS_RLIN3_3_TYPE_0		* MSR_RLIN3_MS_RLIN3_3 )
-										+ ( MCU_CFG_MS_RLIN3_4_TYPE_0		* MSR_RLIN3_MS_RLIN3_4 )
-										+ ( MCU_CFG_MS_RLIN3_5_TYPE_0		* MSR_RLIN3_MS_RLIN3_5 )
-										+ ( MCU_CFG_MS_RLIN3_6_TYPE_0		* MSR_RLIN3_MS_RLIN3_6 )
-										+ ( MCU_CFG_MS_RLIN3_7_TYPE_0		* MSR_RLIN3_MS_RLIN3_7 )
-										+ ( MCU_CFG_MS_RLIN3_8_TYPE_0		* MSR_RLIN3_MS_RLIN3_8 )
-										+ ( MCU_CFG_MS_RLIN3_9_TYPE_0		* MSR_RLIN3_MS_RLIN3_9 )
-										+ ( MCU_CFG_MS_RLIN3_10_TYPE_0		* MSR_RLIN3_MS_RLIN3_10 )
-										+ ( MCU_CFG_MS_RLIN3_11_TYPE_0		* MSR_RLIN3_MS_RLIN3_11 )
-										+ ( MCU_CFG_MS_RLIN3_12_TYPE_0		* MSR_RLIN3_MS_RLIN3_12 )
-										+ ( MCU_CFG_MS_RLIN3_13_TYPE_0		* MSR_RLIN3_MS_RLIN3_13 )
-										+ ( MCU_CFG_MS_RLIN3_14_TYPE_0		* MSR_RLIN3_MS_RLIN3_14 )
-										+ ( MCU_CFG_MS_RLIN3_15_TYPE_0		* MSR_RLIN3_MS_RLIN3_15 )		,
-											MCU_ENABLE_BIT_MASK_MSR_RLIN3									},
-
-	{	&REG_STBC_ISO.u4MSR_RIIC,		  ( MCU_CFG_MS_RIIC_0_TYPE_0		* MSR_RIIC_MS_RIIC_0 )			,
-											MCU_ENABLE_BIT_MASK_MSR_RIIC									},
-
-	{	&REG_STBC_ISO.u4MSR_TAUD,		  ( MCU_CFG_MS_TAUD_0_TYPE_0		* MSR_TAUD_MS_TAUD_0 )
-										+ ( MCU_CFG_MS_TAUD_1_TYPE_0		* MSR_TAUD_MS_TAUD_1 )			,
-											MCU_ENABLE_BIT_MASK_MSR_TAUD									},
-
-	{	&REG_STBC_ISO.u4MSR_TAUJ_ISO,	  ( MCU_CFG_MS_TAUJ_ISO_1_TYPE_0	* MSR_TAUJ_ISO_MS_TAUJ_1 )		,
-											MCU_ENABLE_BIT_MASK_MSR_TAUJ_ISO								},
-
-	{	&REG_STBC_ISO.u4MSR_OSTM,		  ( MCU_CFG_MS_OSTM_0_TYPE_0		* MSR_OSTM_MS_OSTM_0 )
-										+ ( MCU_CFG_MS_OSTM_1_TYPE_0		* MSR_OSTM_MS_OSTM_1 )
-										+ ( MCU_CFG_MS_OSTM_2_TYPE_0		* MSR_OSTM_MS_OSTM_2 )
-										+ ( MCU_CFG_MS_OSTM_3_TYPE_0		* MSR_OSTM_MS_OSTM_3 )
-										+ ( MCU_CFG_MS_OSTM_4_TYPE_0		* MSR_OSTM_MS_OSTM_4 )
-										+ ( MCU_CFG_MS_OSTM_5_TYPE_0		* MSR_OSTM_MS_OSTM_5 )
-										+ ( MCU_CFG_MS_OSTM_8_TYPE_0		* MSR_OSTM_MS_OSTM_8 )
-										+ ( MCU_CFG_MS_OSTM_9_TYPE_0		* MSR_OSTM_MS_OSTM_9 )			,
-											MCU_ENABLE_BIT_MASK_MSR_OSTM									},
-
-	{	&REG_STBC_AWO.u4MSR_TAUJ_AWO,	  ( MCU_CFG_MS_TAUJ_AWO_3_TYPE_0	* MSR_TAUJ_AWO_MS_TAUJ_3 )
-										+ ( MCU_CFG_STPMSK_TAUJ_AWO_TYPE_0	* MSR_TAUJ_AWO_STPMSK_TAUJ_AWO ),
-											MCU_ENABLE_BIT_MASK_MSR_TAUJ_AWO								}
 #endif
 
 };
@@ -1113,11 +964,11 @@ FUNC( Std_ReturnType, MCU_CODE ) Mcu_DistributePllClock( void )
 #if	( MCU_CFG_CLK_MONITOR == STD_ON )
 	if ( t_udResult == E_OK )
 	{
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #if	( MCU_CFG_CLMA3CLME == STD_ON )
 		Mcu_ClockMonitorReset();
 #endif	/* ( MCU_CFG_CLMA3CLME == STD_ON ) */
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 		t_udResult = Mcu_ClockMonitorSetup();
 	}
@@ -1165,16 +1016,16 @@ FUNC( Mcu_PllStatusType, MCU_CODE ) Mcu_GetPllStatus( void )
 {
 	Mcu_PllStatusType t_udResult;
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	sint32 t_s4Count;
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if ( MCU_CFG_NO_PLL == FALSE )
 	if ( ( REG_CLOCK_ISO.u4PLLS & MCU_PLLS_MASK ) == MCU_PLLS_STABLE )				/* Confirm that the PLL/SSCG has been stable */
 	{
 		t_udResult = MCU_PLL_LOCKED;
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 		for ( t_s4Count = 0; t_s4Count < MCU_PLL_READ_STABLE_TIMES; t_s4Count++ )	/* Read PLL clock stable state 4 times */
 		{
 			if ( ( REG_CLOCK_ISO.u4PLLS & CLOCK_PLLS_PLLCLKSTAB ) != MCU_PLLS_PLLCLKSTAB_STABLE )
@@ -1183,7 +1034,7 @@ FUNC( Mcu_PllStatusType, MCU_CODE ) Mcu_GetPllStatus( void )
 				break;
 			}
 		}
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 	}
 	else
@@ -1198,21 +1049,22 @@ FUNC( Mcu_PllStatusType, MCU_CODE ) Mcu_GetPllStatus( void )
 	return ( t_udResult );
 }
 
-#if( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/
 /* Service name		:	Switch to Chip Standby Mode												*/
 /* Reentrancy		:	Non Re-entrant															*/
 /* Parameters(in)	:	McuMode - Chip Standby Mode configuration								*/
 /* Return value		:	None																	*/
-/* Limitation		:	For R-CarS4 G4MH, set Cortex-R52 to Sleep mode and Cortex-A55 CPU core	*/
-/*					:	and cluster to OFF mode before calling this API.						*/
-/*					:	DeepSTOP mode is not supported for U2B.									*/
+/* Limitation		:	DeepSTOP mode is not supported for U2B.									*/
 /*					:	Call Mcu_Init before calling this API.									*/
 /************************************************************************************************/
 FUNC( void, MCU_CODE ) Mcu_SetMode( Mcu_ModeType McuMode )
 {
 	Std_ReturnType t_udResult;
+	uint32 t_u4RegValue;
 	(void)McuMode;
+
+	t_udResult = E_OK;
 
 	/*---------------------------------------*/
 	/* Enable writing to protected registers */
@@ -1220,28 +1072,40 @@ FUNC( void, MCU_CODE ) Mcu_SetMode( Mcu_ModeType McuMode )
 	REG_CLOCK_ISO.u4CLKKCPROT1 = MCU_CLOCK_PROTECT_ENABLE;
 	REG_STBC_ISO.u4STBCKCPROT = MCU_STBC_PROTECT_ENABLE;
 
+	/* If Mcu_SetMode is called after wake-up from DeepSTOP mode without gear-up in Mcu_InitClock, */
+	/* the processings of setting regsiters that are retained in DeepSTOP mode are skipped. */
+	/* Whether a gear-up has been performed is determined by the clock source of CPU system clock. */
+	t_u4RegValue = REG_CLOCK_ISO.u4CKSC_CPUS;
+	if ( t_u4RegValue == MCU_CKSC_CPUC_CPUCLKSCSID_PLLO )
+	{
 #if	( MCU_CFG_CLK_MONITOR == STD_ON )
-	Mcu_ClockMonitorStandby();
+		Mcu_ClockMonitorStandby();
 #endif	/* ( MCU_CFG_CLK_MONITOR == STD_ON ) */
 
-	t_udResult = Mcu_StandbyClockDown();
+		t_udResult = Mcu_StandbyClockDown();
 
-	if ( t_udResult == E_OK )
-	{
-		t_udResult = Mcu_StandbyPeri();
-	}
+		if ( t_udResult == E_OK )
+		{
+			t_udResult = Mcu_StandbyPeri();
+		}
 
-	if ( t_udResult == E_OK )
-	{
-		t_udResult = Mcu_StandbyFout();
-	}
+		if ( t_udResult == E_OK )
+		{
+			t_udResult = Mcu_StandbyFout();
+		}
 
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
-	if ( t_udResult == E_OK )
-	{
-		t_udResult = Mcu_StandbySetPwrgdCnt();
+		if ( t_udResult == E_OK )
+		{
+			t_udResult = Mcu_StandbySetPwrgdCnt();
+		}
 	}
-#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
+	else
+	{
+		if ( ( REG_CLOCK_AWO.u4MOSCS & CLOCK_MOSCS_MOSCEN ) == MCU_MOSCS_MOSCEN_ENABLE )
+		{
+			t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_AWO.u4MOSCS, CLOCK_MOSCS_MOSCSTAB, MCU_MOSCS_MOSCSTAB_STABLE, MCU_PROCESS_TIME_OUT_OTHER );
+		}
+	}
 
 	if ( t_udResult == E_OK )
 	{
@@ -1249,16 +1113,27 @@ FUNC( void, MCU_CODE ) Mcu_SetMode( Mcu_ModeType McuMode )
 		REG_RESET_ISO.u4RESFC = MCU_CLEAR_RESET_FACTOR;			/* Clear the reset factor register */
 #endif	/* ( MCU_CFG_RESET_REASON == STD_ON ) */
 
+#if	( MCU_CFG_USE_SLEEP_READY_CALLOUT == STD_ON )
+		MCU_CFG_SLEEP_READY_CALLOUT();
+#endif	/* ( MCU_CFG_USE_SLEEP_READY_CALLOUT == STD_ON ) */
+
 		REG_STBC_AWO.u4STBC0PSC = MCU_STBC0PSC_DEEPSTOP_MODE;	/* Activate the DeepSTOP Mode */
 
 		/* Wait for transition to DeepSTOP */
-#if	( MCU_CFG_WAIT_SLEEP_TIMEOUT == 0xFFFFFFFFU )
+#if	( MCU_CFG_WAIT_SLEEP_TIMEOUT == MCU_WAIT_SLEEP_TIMEOUT_UNLIMITED )
 		while(1)
 		{
 			/* Infinity loop. No action required. */
 		}
 #else
-		MCAL_LIB_Wait( MCU_CFG_WAIT_SLEEP_TIMEOUT >> 1U );
+		if ( t_u4RegValue == MCU_CKSC_CPUC_CPUCLKSCSID_PLLO )
+		{
+			MCAL_LIB_Wait( MCU_CFG_WAIT_SLEEP_TIMEOUT >> MCU_CONVERT_WAITTIME_SHIFT_PLLO2 );
+		}
+		else
+		{
+			MCAL_LIB_Wait( MCU_CFG_WAIT_SLEEP_TIMEOUT >> MCU_CONVERT_WAITTIME_SHIFT_IOSC );
+		}
 #endif
 	}
 #if	( MCU_CFG_DEM_SET_EVENT == STD_ON )
@@ -1274,7 +1149,7 @@ FUNC( void, MCU_CODE ) Mcu_SetMode( Mcu_ModeType McuMode )
 	REG_CLOCK_ISO.u4CLKKCPROT1 = MCU_CLOCK_PROTECT_DISABLE;
 	REG_STBC_ISO.u4STBCKCPROT = MCU_STBC_PROTECT_DISABLE;
 }
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if	( MCU_CFG_PERFORM_RESET == STD_ON )
 /************************************************************************************************/
@@ -1384,9 +1259,9 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockUpStart( void )
 	sint32 i;
 	Std_ReturnType t_udResult;
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	sint32 t_s4Count;
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 	if ( ( REG_CLOCK_AWO.u4MOSCS & MCU_MOSCS_MASK ) == MCU_MOSCS_STOPPED )		/* Confirm that MainOSC is stopped */
 	{
@@ -1403,7 +1278,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockUpStart( void )
 		}
 	}
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	if ( t_udResult == E_OK )
 	{
 		for ( t_s4Count = 0; t_s4Count < MCU_PLL_READ_STABLE_TIMES; t_s4Count++ )	/* Read MainOSC stable state 4 times */
@@ -1423,7 +1298,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockUpStart( void )
 			REG_CLOCK_ISO.u4PLLE = MCU_PLLE_PLLENTRG_STARTPLL;					/* Start the PLL */
 		}
 	}
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
 	if ( t_udResult == E_OK )
@@ -1475,7 +1350,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockSetupPeri( void )
 		}
 	}
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	/*-------------------------------------------*/
 	/* Initialize FOUT0 clock selector/divider   */
 	/*-------------------------------------------*/
@@ -1499,9 +1374,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockSetupPeri( void )
 			}
 		}
 	}
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
 
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	/*-------------------------------------------*/
 	/* Initialize FOUT1 clock selector/divider   */
 	/*-------------------------------------------*/
@@ -1591,7 +1464,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockDistributePll( void )
 	/*------------------------------------------------------------------------*/
 	/* Check the synchronized divider clock before setting frequency division */
 	/*------------------------------------------------------------------------*/
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_ISO.u4CLKD_PLLS, CLOCK_CLKD_PLLS_PLLCLKDSYNC, MCU_PLL_SYNC, MCU_PROCESS_TIME_OUT_PERI );
 
 #elif	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
@@ -1638,7 +1511,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockControlPll( void )
 {
 	Std_ReturnType t_udResult;
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	REG_CLOCK_ISO.u4CLKD_PLLC = MCU_CLK_SYS_PLL_2;					/* Division ratio of clock source PLL is changed from 1/1 to 1/2 */
 	t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_ISO.u4CLKD_PLLS, CLOCK_CLKD_PLLS_PLLCLKDSYNC, MCU_PLL_SYNC, MCU_PROCESS_TIME_OUT_PERI );
 
@@ -1801,7 +1674,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockSetupFout( void )
 
 	t_udResult = E_OK;
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	if ( REG_CLOCK_AWO.u4CLKD_FOUT0C != ( MCU_CFG_CLKD_FOUT0C_TYPE_0 * CLOCK_CLKD_FOUT0C_FOUT0DIV_0 ) )
 	{
 		t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_AWO.u4CLKD_FOUT0S, CLOCK_CLKD_FOUT0S_FOUT0SYNC, MCU_FOUT0S_STABLE, MCU_PROCESS_TIME_OUT_POST_FOUT );
@@ -1812,9 +1685,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockSetupFout( void )
 			t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_AWO.u4CLKD_FOUT0S, CLOCK_CLKD_FOUT0S_FOUT0SYNC, MCU_FOUT0S_STABLE, MCU_PROCESS_TIME_OUT_POST_FOUT );
 		}
 	}
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
 
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	if ( REG_CLOCK_AWO.u4CLKD_FOUT1C != ( MCU_CFG_CLKD_FOUT1C_TYPE_0 * CLOCK_CLKD_FOUT1C_FOUT1DIV_0 ) )
 	{
 		if ( t_udResult == E_OK )
@@ -1894,10 +1765,6 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockSupplyPeri( void )
 #elif ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
 	t_udResult = Mcu_ProcessTimeOut( &REG_STBC_ISO.u4MSR_HRPWM, MSR_HRPWM_MS_HRPWM_0,
 		( MCU_CFG_MS_HRPWM_0_TYPE_0 * MSR_HRPWM_MS_HRPWM_0 ), MCU_PROCESS_TIME_OUT_PERI );
-
-#elif ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH )
-	t_udResult = Mcu_ProcessTimeOut( &REG_STBC_AWO.u4MSR_TAUJ_AWO, ( MSR_TAUJ_AWO_MS_TAUJ_3 + MSR_TAUJ_AWO_STPMSK_TAUJ_AWO ),
-		( MCU_CFG_MS_TAUJ_AWO_3_TYPE_0 * MSR_TAUJ_AWO_MS_TAUJ_3 ) + ( MCU_CFG_STPMSK_TAUJ_AWO_TYPE_0 * MSR_TAUJ_AWO_STPMSK_TAUJ_AWO ), MCU_PROCESS_TIME_OUT_POST_PERI );
 #endif /* MCAL_SPAL_TARGET */
 
 	return ( t_udResult );
@@ -1906,7 +1773,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockSupplyPeri( void )
 
 #if	( MCU_CFG_CLK_MONITOR == STD_ON )
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #if	( MCU_CFG_CLMA3CLME == STD_ON )
 /************************************************************************************************/
 /* Function			:	Mcu_ClockMonitorReset													*/
@@ -1946,7 +1813,7 @@ static FUNC( void, MCU_CODE ) Mcu_ClockMonitorReset( void )
 	REG_CLMAKCPROT.u4CLMAKCPROT = CLMA_CLMAKCPROT_DISABLE;		/* Disable writing to protected registers */
 }
 #endif	/* ( MCU_CFG_CLMA3CLME == STD_ON ) */
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 /************************************************************************************************/
 /* Function			:	Mcu_ClockMonitorSetup													*/
@@ -2036,7 +1903,6 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockMonitorSetup( void )
 
 	REG_CLMA4.u1CLMA4CTL = CLMA_CLMAnCTL_CLMAnCLME_DISABLE;
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) )
 #if	( MCU_CFG_CLMA5CLME == STD_ON )
 	REG_CLMA5.u2CLMA5CMPL = MCU_CFG_CLMA5CMPL;
 	REG_CLMA5.u2CLMA5CMPH = MCU_CFG_CLMA5CMPH;
@@ -2044,7 +1910,6 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockMonitorSetup( void )
 #else	/* ( MCU_CFG_CLMA5CLME == STD_OFF ) */
 	REG_CLMA5.u1CLMA5CTL = CLMA_CLMAnCTL_CLMAnCLME_DISABLE;
 #endif	/* ( MCU_CFG_CLMA5CLME == STD_ON ) */
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) ) */
 
 #if	( MCU_CFG_CLMA6CLME == STD_ON )
 	REG_CLMA6.u2CLMA6CMPL = MCU_CFG_CLMA6CMPL;
@@ -2154,7 +2019,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ClockMonitorSetup( void )
 }
 #endif	/* ( MCU_CFG_CLK_MONITOR == STD_ON ) */
 
-#if	( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 
 #if	( MCU_CFG_CLK_MONITOR == STD_ON )
 /************************************************************************************************/
@@ -2188,9 +2053,9 @@ static FUNC( void, MCU_CODE ) Mcu_ClockMonitorStandby( void )
 }
 #endif	/* ( MCU_CFG_CLK_MONITOR == STD_ON ) */
 
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
-#if( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/
 /* Function			:	Mcu_StandbyClockDown													*/
 /* Reentrancy		:	Re-entrant																*/
@@ -2219,22 +2084,19 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyClockDown( void )
 	if ( t_udResult == E_OK )
 	{
 #endif
-		if ( REG_CLOCK_ISO.u4CKSC_CPUS == MCU_CKSC_CPUC_CPUCLKSCSID_PLLO )
+		if ( REG_CLOCK_ISO.u4CLKD_PLLC == MCU_CLK_SYS_PLL_1 )
 		{
-			if ( REG_CLOCK_ISO.u4CLKD_PLLC == MCU_CLK_SYS_PLL_1 )
+			t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_ISO.u4CLKD_PLLS, CLOCK_CLKD_PLLS_PLLCLKDSYNC, MCU_PLL_SYNC, MCU_PROCESS_TIME_OUT_PERI );
+
+			if ( t_udResult == E_OK )
 			{
+				REG_CLOCK_ISO.u4CLKD_PLLC = MCU_CLK_SYS_PLL_2;		/* Change the clock divider of the PLL to 1/2 */
 				t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_ISO.u4CLKD_PLLS, CLOCK_CLKD_PLLS_PLLCLKDSYNC, MCU_PLL_SYNC, MCU_PROCESS_TIME_OUT_PERI );
+			}
 
-				if ( t_udResult == E_OK )
-				{
-					REG_CLOCK_ISO.u4CLKD_PLLC = MCU_CLK_SYS_PLL_2;		/* Change the clock divider of the PLL to 1/2 */
-					t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_ISO.u4CLKD_PLLS, CLOCK_CLKD_PLLS_PLLCLKDSYNC, MCU_PLL_SYNC, MCU_PROCESS_TIME_OUT_PERI );
-				}
-
-				if ( t_udResult == E_OK )
-				{
-					MCAL_LIB_Wait( MCU_WAIT_PLL_STABLE_TIME_1_2_PLL );			/* Wait at least 100 microseconds */
-				}
+			if ( t_udResult == E_OK )
+			{
+				MCAL_LIB_Wait( MCU_WAIT_PLL_STABLE_TIME_1_2_PLL );			/* Wait at least 100 microseconds */
 			}
 		}
 #if ( MCU_CFG_REG_CHK == STD_ON )
@@ -2243,9 +2105,9 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyClockDown( void )
 
 	return ( t_udResult );
 }
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
-#if( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/
 /* Function			:	Mcu_StandbyPeri															*/
 /* Reentrancy		:	Re-entrant																*/
@@ -2259,25 +2121,11 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyPeri( void )
 	sint32 t_s4Count;
 	const Mcu_ClockRegisterSettingType* t_pstSetTbl;
 
-	if ((REG_CLOCK_ISO.u4PLLS & 0x00000003UL) != 0x00000000UL)
-	{
-		t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_ISO.u4PLLS, CLOCK_PLLS_PLLCLKSTAB, MCU_PLLS_PLLCLKSTAB_STABLE, MCU_PROCESS_TIME_OUT_PERI );
-	} 
-	else
-	{
-		t_udResult = E_OK;
-	}
-	
+	t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_ISO.u4PLLS, CLOCK_PLLS_PLLCLKSTAB, MCU_PLLS_PLLCLKSTAB_STABLE, MCU_PROCESS_TIME_OUT_PERI );
+
 	if ( t_udResult == E_OK )
 	{
-		if ((REG_CLOCK_AWO.u4MOSCS & 0x00000003UL) != 0x00000000UL)
-		{
-			t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_AWO.u4MOSCS, ( CLOCK_MOSCS_MOSCEN + CLOCK_MOSCS_MOSCSTAB ), MCU_MOSCS_STABLE, MCU_PROCESS_TIME_OUT_OTHER );
-		} 
-		else
-		{
-			t_udResult = E_OK;
-		}
+		t_udResult = Mcu_ProcessTimeOut( &REG_CLOCK_AWO.u4MOSCS, ( CLOCK_MOSCS_MOSCEN + CLOCK_MOSCS_MOSCSTAB ), MCU_MOSCS_STABLE, MCU_PROCESS_TIME_OUT_OTHER );
 	}
 
 	if ( t_udResult == E_OK )
@@ -2299,9 +2147,9 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyPeri( void )
 
 	return ( t_udResult );
 }
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
-#if( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/
 /* Function			:	Mcu_StandbyFout															*/
 /* Reentrancy		:	Re-entrant																*/
@@ -2358,7 +2206,6 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyFout( void )
 		}
 	}
 
-#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	/*-------------------------------------------------*/
 	/* Set FOUT1 clock selector/divider for standby    */
 	/*-------------------------------------------------*/
@@ -2404,11 +2251,10 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbyFout( void )
 			}
 		}
 	}
-#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 	return ( t_udResult );
 }
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/
@@ -2453,7 +2299,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_StandbySetPwrgdCnt( void )
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if	( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( ( MCU_CFG_REG_CHK == STD_ON ) && ( MCU_CFG_REG_REFRESH == STD_ON ) ) ) ) ||	\
-	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) )
 /************************************************************************************************/
 /* Function			:	Mcu_SetClockRegister													*/
 /* Reentrancy		:	Re-entrant																*/
@@ -2490,7 +2336,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_SetClockRegister( volatile uint32* t
 }
 #endif
 
-#if	( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( MCU_CFG_NO_PLL == FALSE ) ) ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( MCU_CFG_NO_PLL == FALSE ) ) ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) )
 /************************************************************************************************/
 /* Function			:	Mcu_ProcessTimeOut														*/
 /* Reentrancy		:	Re-entrant																*/
@@ -2519,7 +2365,7 @@ static FUNC( Std_ReturnType, MCU_CODE ) Mcu_ProcessTimeOut( volatile uint32* t_p
 
 	return ( t_udResult );
 }
-#endif	/* ( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( MCU_CFG_NO_PLL == FALSE ) ) ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B ) && ( ( MCU_CFG_INIT_CLOCK == STD_ON ) || ( MCU_CFG_NO_PLL == FALSE ) ) ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) ) */
 
 #if ( MCU_CFG_REG_CHK == STD_ON )
 /************************************************************************************************/
@@ -2538,7 +2384,7 @@ FUNC( uint32, MCU_CODE ) Mcu_Regchk_All( void )
 	/* Check Clock Controller Register */
 	REG_CLOCK_ISO.u4CLKKCPROT1 = MCU_CLOCK_PROTECT_ENABLE;
 	t_u4Result = Mcu_Regchk_ClkCtrl();
-#if ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	t_u4Result |= Mcu_Regchk_Fout();
 #else	/* MCAL_TARGET_RH850U2B */
 	t_u4Result |= Mcu_Regchk_Extclk();
@@ -2646,7 +2492,7 @@ static FUNC( uint32, MCU_CODE ) Mcu_Regchk_u4ForRefreshPossible( volatile uint32
 /* Parameters(in)	:	t_u4ExpectValue - Expected Register Value								*/
 /* Parameters(in)	:	t_u4RegMask - Mask value for bits to check								*/
 /* Return value		:	Register Check Result													*/
-/* Limitation		:	Assumed that Protection Register has already enabled write access		*/
+/* Limitation		:	None																	*/
 /************************************************************************************************/
 static FUNC( uint32, MCU_CODE ) Mcu_Regchk_u4ForRefreshImpossible( volatile uint32* t_pu4Register, const uint32 t_u4ExpectValue , const uint32 t_u4RegMask )
 {
@@ -2718,7 +2564,7 @@ static FUNC( uint32, MCU_CODE ) Mcu_Regchk_ClkCtrl( void )
 	return ( t_u4Result );
 }
 
-#if ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/
 /* Function			:	Mcu_Regchk_Fout															*/
 /* Reentrancy		:	Non Reentrant															*/
@@ -2732,16 +2578,14 @@ static FUNC( uint32, MCU_CODE ) Mcu_Regchk_Fout( void )
 
 	t_u4Result = Mcu_Regchk_Fout0Clkd();
 	t_u4Result |= Mcu_Regchk_u4ForRefreshImpossible( &REG_CLOCK_AWO.u4CKSC_FOUT0S, MCU_CFG_CLK_FOUT0C_TYPE_0, CLOCK_CKSC_FOUT0S_FOUT0SACT );
-#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 	t_u4Result |= Mcu_Regchk_Fout1Clkd();
 	t_u4Result |= Mcu_Regchk_u4ForRefreshImpossible( &REG_CLOCK_AWO.u4CKSC_FOUT1S, MCU_CFG_CLK_FOUT1C_TYPE_0, CLOCK_CKSC_FOUT1S_FOUT1SACT );
-#endif
 
 	return ( t_u4Result );
 }
-#endif /* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif /* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
-#if ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/
 /* Function			:	Mcu_Regchk_Fout0Clkd													*/
 /* Reentrancy		:	Non Reentrant															*/
@@ -2795,7 +2639,7 @@ static FUNC( uint32, MCU_CODE ) Mcu_Regchk_Fout0Clkd( void )
 
 	return ( t_u4Result );
 }
-#endif /* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif /* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/

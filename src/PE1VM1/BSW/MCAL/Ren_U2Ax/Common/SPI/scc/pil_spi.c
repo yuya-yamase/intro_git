@@ -407,14 +407,14 @@ void	Pil_Spi_StartAsync( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t_
 	/* CS選択 */
 	cpstReg_Mspi[t_u1UnitNo]->stCH[t_u1ChNo].unSSEL.u2Data = t_pcstPilChannelConfig->u2SSEL;
 
-	/* DTS転送要因選択、DTS使用設定 */
+	/* DMA/DTS転送要因選択、DMA/DTS使用設定 */
 	if ( t_u1ChNo < u1PIL_SPI_TGCTL_JDG_NO )													/* チャネル0-7と8-11で設定するレジスタが異なるため、チャネル番号の判定を行う */
 	{
 		t_u4Data = REG_MSPITG.unTGCTLN[t_u1UnitNo].u4Data;
 		t_u1BitShiftNum = t_u1ChNo * u1PIL_SPI_TGCTL_SHIFT;
 		t_u4Mask = ( (U4)MSPI_TGCTLN_TRGSEL0 | (U4)MSPI_TGCTLN_SRCSEL0 ) << (U4)t_u1BitShiftNum;
 		t_u4Data &= (U4)~t_u4Mask;																/* 該当CHのみ0でクリア */
-		t_u4SetData = ( (U4)MSPI_TGCTLN_TRGSEL0		* (U4)MSPI_TGCTL_TRGSEL_DMA )		+
+		t_u4SetData = ( (U4)MSPI_TGCTLN_TRGSEL0		* (U4)t_pcstPilChannelConfig->u1TrgSelDmaDts )		+
 					  ( (U4)MSPI_TGCTLN_SRCSEL0_0	* (U4)MSPI_TGCTL_SRCSEL_TX_RX );
 		t_u4SetData = t_u4SetData << (U4)t_u1BitShiftNum;
 		t_u4Data |= t_u4SetData; 
@@ -426,7 +426,7 @@ void	Pil_Spi_StartAsync( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t_
 		t_u1BitShiftNum = ( t_u1ChNo - u1PIL_SPI_TGCTL_JDG_NO ) * u1PIL_SPI_TGCTL_SHIFT;		/* 格納先を合わせる処理が必要となる */
 		t_u4Mask = ( (U4)MSPI_TGCTLI_TRGSEL8 | (U4)MSPI_TGCTLI_SRCSEL8 ) << (U4)t_u1BitShiftNum;
 		t_u4Data &= (U4)~t_u4Mask;																/* 該当CHのみ0でクリア */
-		t_u4SetData = ( (U4)MSPI_TGCTLI_TRGSEL8		* (U4)MSPI_TGCTL_TRGSEL_DMA )		+
+		t_u4SetData = ( (U4)MSPI_TGCTLI_TRGSEL8		* (U4)t_pcstPilChannelConfig->u1TrgSelDmaDts )		+
 					  ( (U4)MSPI_TGCTLI_SRCSEL8_0	* (U4)MSPI_TGCTL_SRCSEL_TX_RX );
 		t_u4SetData = t_u4SetData << (U4)t_u1BitShiftNum;
 		t_u4Data |= t_u4SetData; 

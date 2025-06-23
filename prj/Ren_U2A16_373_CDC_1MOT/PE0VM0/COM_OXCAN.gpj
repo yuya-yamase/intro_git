@@ -22,43 +22,22 @@
 
     -I${CANIC_DIR}
 
-    -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
-    -I${OXCAN_DIR}/scc
-
-    -I${CGW_L3R_DIR}/config
-    -I${CGW_L3R_DIR}/GW/Cid/cfg
-    -I${CGW_L3R_DIR}/GW/Cid/inc
-    -I${CGW_L3R_DIR}/GW/L3R/CMN/cfg
-    -I${CGW_L3R_DIR}/GW/L3R/CMN/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Basis/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Ctrl/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Diag/cfg
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Diag/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Dynamic/inc
-    -I${CGW_L3R_DIR}/GW/L3R/RM/cfg
-    -I${CGW_L3R_DIR}/GW/L3R/Support/Fail/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Support/Frm_Info/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Tx/BandLimit/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Tx/Gate/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Tx/MBQ/cfg
-    -I${CGW_L3R_DIR}/GW/L3R/Tx/MBQ/inc
-    -I${CGW_L3R_DIR}/MDL/INFO/CHM
-
-    -T ${MCAL_DIR}/section.ld
-
 config_U2A16_met/oxcan_cfg.c
 config_U2A16_met/oxcan_e2e_cfg.c
-config_U2A16_met/oxcan_nmwk_cfg.c
-config_U2A16_met/oxcan_sysea_cfg.c
-config_U2A16_met/oxcan_rx_cfg.c
+config_U2A16_met/oxcan_nmc_cfg.c
+###config_U2A16_met/oxcan_rxd_cfg.c
+###config_U2A16_met/oxcan_sysea_cfg.c
+config_U2A16_met/oxcan_vct_cfg.c
+###config_U2A16_met/oxcan_wrh_cfg.c
 config_U2A16_met/oxcan_usrhk.c
 
-libc/oxcan.c
-libc/oxcan_nmwk.c
-libc/oxcan_sysea.c
-libc/oxcan_rx.c
+lib/oxcan_nmc.c
+###lib/oxcan_rxd.c
+###lib/oxcan_sysea.c
+lib/oxcan_vct.c
+###lib/oxcan_wrh.c
 
+scc/oxcan.c
 scc/oxcan_aubif.c
 scc/oxcan_aubif_can.c
 scc/oxcan_aubif_canif.c
