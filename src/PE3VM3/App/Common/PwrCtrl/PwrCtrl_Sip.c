@@ -671,7 +671,7 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
 
         /* SAIL_RESOUT_N変化(Hi)チェックが完了したらEtherSW起動要求を通知 */
         if(u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_N_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
-            EthSW_PowerON_Req_Bon(); /* 暫定_EtherSW起動要求 */
+            EthSwt_SWIC_PowerOn(); /* 暫定_EtherSW起動要求 */
         }
         
         /* STEP6-1,6-2が完了していれば次の処理に進める */

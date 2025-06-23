@@ -78,7 +78,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 
     /* vv User Hook start vv */
     vd_g_PwrCtrlMainBonReq();
-    EthSW_Sch_PowerOnInit();
+    EthSW_StaBonInit();
     ChipCom_Init();
     vd_g_VISInit();
     /* ^^ User Hook end   ^^ */
@@ -118,7 +118,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 
     /* vv User Hook start vv */
     vd_g_PwrCtrlMainBonReq();
-    EthSW_Sch_PowerOnInit();
+    EthSW_StaRstInit();
     ChipCom_Init();
     vd_g_VISInit();
     /* ^^ User Hook end   ^^ */
@@ -158,7 +158,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
 
     /* vv User Hook start vv */
     vd_g_PwrCtrlMainBonReq();
-    EthSW_Sch_PowerOnInit();
+    EthSW_StaWkupInit();
     ChipCom_Init();
     vd_g_VISInit();
     /* ^^ User Hook end   ^^ */

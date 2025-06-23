@@ -2,13 +2,8 @@
 /* file name  :  EthSwt_SWIC_Spi.c                                            */
 /* -------------------------------------------------------------------------- */
 #include <Std_Types.h>
-<<<<<<< HEAD:src/PE3VM3/App/Central/esw/EthSwt/src/EthSwt_SWIC_SpiS1.c
-#include <EthSwt_SWIC.h>
 #include <Spi_Ucfg.h>
-=======
->>>>>>> feature/sys#2/ESW_matching:src/PE3VM3/App/Central/esw/EthSwt/Core/EthSwt_SWIC_Spi.c
 #include <Spi.h>
-#include <Rte_BswUcfg.h>
 /* -------------------------------------------------------------------------- */
 #include <LIB.h>
 #include <EthSwt_SWIC_initRegCommon.h>
