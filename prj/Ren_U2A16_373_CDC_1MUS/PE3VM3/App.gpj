@@ -8,6 +8,7 @@
     :sourceDir=${APP_DIR}/Central/LIB
     :sourceDir=${APP_DIR}/Central/Pmic/src
     :sourceDir=${APP_DIR}/Central/EthSW_Task
+    :sourceDir=${APP_DIR}/Central/chipcom/src
     :sourceDir=${APP_DIR}/Central/VIS/src
 
 
@@ -33,6 +34,7 @@
     -I${APP_DIR}/Central/esw/EthSwt/inc
     -I${APP_DIR}/Central/esw/inc
     -I${APP_DIR}/Central/inc
+    -I${APP_DIR}/Central/chipcom/inc
     -I${APP_DIR}/Central/VIS/inc
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -63,6 +65,8 @@ LIB_memcpy.c
 LIB_memset.c
 Pmic_Pwr.c
 EthSW_Task.c
+chipcom.c
+chipcom_config.c
 VIS_Can.c
 VIS_Main.c
 VIS_Pwr.c

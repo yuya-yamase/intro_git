@@ -1,21 +1,45 @@
 /* ------------------------------------------------------------------------ */
-/* file name   : LIB_interrupt.c                                           */
+/* file name   : LIB_byteswap.c                                            */
 /* ------------------------------------------------------------------------ */
 #include <Std_Types.h>
 #include <LIB.h>
-#include <Os.h>
 /* ------------------------------------------------------------------------ */
 /* #define LIB_START_SEC_CODE */
 /* #include <LIB_MemMap.h> */
 /* ------------------------------------------------------------------------ */
-void LIB_DI (void)
+uint16 LIB_htons(uint16 val)
 {
-	SuspendOSInterrupts();
+	uint16	ret;
+
+
+	ret  =         (val >> 8U);
+	ret |= (uint16)(val << 8U);
+
+	return ret;
 }
 /* ------------------------------------------------------------------------ */
-void LIB_EI (void)
+uint32 LIB_htonl(uint32 val)
 {
-	ResumeOSInterrupts();
+	uint32	ret;
+
+
+	ret  = (val >> 24U);
+	ret |= (val >>  8U) & 0x0000FF00U;
+	ret |= (val <<  8U) & 0x00FF0000U;
+	ret |= (val << 24U);
+
+	return ret;
+}
+/* ------------------------------------------------------------------------ */
+uint16 LIB_ntohs(uint16 val)
+{
+	uint16	ret;
+
+
+	ret  =         (val >> 8U);
+	ret |= (uint16)(val << 8U);
+
+	return ret;
 }
 /* ------------------------------------------------------------------------ */
 /* #define LIB_STOP_SEC_CODE */
