@@ -27,6 +27,7 @@
 
 #include "EthSW_Task.h"
 #include "PwrCtrl_Main.h"
+#include "VIS.h"
 
 #include "chipcom.h"
 /*----------------------------------------------------------------------------
@@ -79,6 +80,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
     ChipCom_Init();
+    vd_g_VISInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -118,6 +120,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
     ChipCom_Init();
+    vd_g_VISInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -157,6 +160,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_PwrCtrlMainBonReq();
     EthSW_Sch_PowerOnInit();
     ChipCom_Init();
+    vd_g_VISInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/

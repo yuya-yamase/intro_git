@@ -26,8 +26,8 @@
 /* threshold for word copy */
 #define D_SET_WORDFILL_THRESHOLD	D_SET_4WORD_SIZE
 
-#define LIB_START_SEC_CODE
-#include <LIB_MemMap.h>
+/* #define LIB_START_SEC_CODE */
+/* #include <LIB_MemMap.h> */
 /* ------------------------------------------------------------------------ */
 static void LIB_memset_4(uint8 dst[], uint8 data, uint32 *set_byte, uint32 word);
 /* ------------------------------------------------------------------------ */
@@ -141,6 +141,6 @@ static void LIB_memset_4 (uint8 dst[], uint8 data, uint32 *set_byte, uint32 word
 	*set_byte = byte;
 }
 /* ------------------------------------------------------------------------ */
-#define LIB_STOP_SEC_CODE
-#include <LIB_MemMap.h>
+/* #define LIB_STOP_SEC_CODE */
+/* #include <LIB_MemMap.h> */
 /* ------------------------------------------------------------------------ */
