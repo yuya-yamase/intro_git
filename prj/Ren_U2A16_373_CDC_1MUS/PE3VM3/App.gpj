@@ -70,3 +70,4 @@ chipcom_config.c
 VIS_Can.c
 VIS_Main.c
 VIS_Pwr.c
+VIS_Pwrcfg.c
