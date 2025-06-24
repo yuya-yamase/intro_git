@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_SEA_C_MAJOR                      (5)
-#define ALERT_S_SEA_C_MINOR                      (7)
+#define ALERT_S_SEA_C_MINOR                      (8)
 #define ALERT_S_SEA_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -221,7 +221,7 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     (void)Com_ReceiveSignal(ComConf_ComSignal_DOA_BUZ, &u1_t_sgnl);
 
     u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BSR1S01_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+                                     (U2)OXCAN_RX_SYS_NRX_ACC | (U2)OXCAN_RX_SYS_TOE_ACC,
                                      u2_s_ALERT_S_SEA_BC_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_s_sea_msgsts_doa_buz, u1_t_msgsts);
@@ -294,6 +294,7 @@ static U4      u4_s_AlertS_seaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  5.6.0     8/13/2021  MO       Change dlytimer thresh.                                                                            */
 /*  5.6.1     6/28/2022  YN       Update for 840B#2 1A(Version update).                                                              */
 /*  5.7.0     1/09/2024  RO       Update for 19PFv3.                                                                                 */
+/*  5.8.0     6/23/2024  JS       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-05-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
@@ -304,5 +305,6 @@ static U4      u4_s_AlertS_seaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
 /*  * YN   = Yuma Nagahara, NTTD MSE                                                                                                 */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
