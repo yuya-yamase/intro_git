@@ -246,7 +246,7 @@ static void vd_s_PwrCtrlMainSleepJudge( void )
     u1_t_boot = (U1)STD_LOW;
     u1_t_chk  = (U1)FALSE;
 
-    u1_t_chk = u1_g_oXCANEcuShtdwnOk();
+    u1_t_chk = u1_g_oXCANShtdwnOk();
 
     if ( u1_t_chk == (U1)TRUE )
     {
