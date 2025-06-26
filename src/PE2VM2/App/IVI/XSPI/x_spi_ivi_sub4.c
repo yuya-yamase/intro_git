@@ -351,8 +351,8 @@ static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
         {0x000002E1,    MSG_AVN1SC7_TXCH0},
         {0x000002E2,    MSG_AVN1SC8_TXCH0},
         {0x000002E3,    MSG_AVN1SH1_TXCH0},
-        {0x000002E7,    MSG_AVN1SG8_TXCH0},
-        {0x000002E8,    MSG_AVN1SG9_TXCH0},
+        /*{0x000002E7,    MSG_AVN1SG8_TXCH0},*/
+        /*{0x000002E8,    MSG_AVN1SG9_TXCH0},*/
         {0x000002EF,    MSG_AVN1SC9_TXCH0},
         {0x000002F0,    MSG_AVN1SD1_TXCH0},
         {0x000002F2,    MSG_AVN1SD2_TXCH0},
@@ -361,7 +361,7 @@ static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
         {0x000002F7,    MSG_AVN1SF7_TXCH0},
         {0x000002F8,    MSG_AVN1SF8_TXCH0},
         {0x000002FA,    MSG_AVN1SF9_TXCH0},
-        {0x000002FB,    MSG_AVN1SG1_TXCH0},
+        /*{0x000002FB,    MSG_AVN1SG1_TXCH0},*/
         {0x0000030E,    MSG_AVN1S67_TXCH0},
         {0x0000030F,    MSG_AVN1S68_TXCH0},
         {0x00000313,    MSG_AVN1SB2_TXCH0},
@@ -371,7 +371,7 @@ static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
         {0x0000033A,    MSG_AVN1SG3_TXCH0},
         {0x00000345,    MSG_AVN1S94_TXCH0},
         {0x00000346,    MSG_AVN1S95_TXCH0},
-        {0x0000034E,    MSG_AVN1S61_TXCH0},
+        /*{0x0000034E,    MSG_AVN1S61_TXCH0},*/
         {0x00000351,    MSG_CDC1S04_TXCH0},
         {0x0000035A,    MSG_AVN1SA7_TXCH0},
         {0x0000035B,    MSG_AVN1S62_TXCH0},
@@ -394,7 +394,7 @@ static U4              u4_s_XspiIviBinarySearch(U4 u4_a_CANID) {
         {0x000003E4,    MSG_AVN1S98_TXCH0},
         {0x000003E6,    MSG_AVN1S11_TXCH0},
         {0x000003F1,    MSG_AVN1SA8_TXCH0},
-        {0x000003F2,    MSG_AVN1SB6_TXCH0},
+        /*{0x000003F2,    MSG_AVN1SB6_TXCH0},*/
         {0x000003FD,    MSG_AVN1S77_TXCH0},
         {0x0000040E,    MSG_AVN1SB1_TXCH0},
         {0x0000042E,    MSG_AVN1S33_TXCH0},
