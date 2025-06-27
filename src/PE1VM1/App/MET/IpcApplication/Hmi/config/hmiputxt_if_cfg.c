@@ -62,6 +62,7 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_D_4WDSYS_PD_B4,       (U1)ALERT_REQ_D_4WDSYS_PD_B4_TSTMODE,   (U1)0U,     (U4)0x00008000U    },
     {    (U2)ALERT_CH_P_CHADYN,             (U1)ALERT_REQ_P_CHADYN_2WD_CDY,         (U1)0U,     (U4)0x00010000U    },
     {    (U2)ALERT_CH_P_CHADYN,             (U1)ALERT_REQ_P_CHADYN_4WD_CDY,         (U1)0U,     (U4)0x00020000U    },
+    {    (U2)ALERT_CH_O_PDSMAL_PD,          (U1)ALERT_REQ_O_PDSMAL_PD_MULFUNC,      (U1)0U,     (U4)0x00400000U    },
     {    (U2)ALERT_CH_H_BATINS_PD,          (U1)ALERT_REQ_H_BATINS_PD_DIAGNOSIS,    (U1)0U,     (U4)0x08000000U    },
     {    (U2)ALERT_CH_C_HCS_PD,             (U1)ALERT_REQ_C_HCS_PD_HCSMLFNC,        (U1)0U,     (U4)0x10000000U    },
     {    (U2)ALERT_CH_C_HCS_PD,             (U1)ALERT_REQ_C_HCS_PD_ASUSMLFNC,       (U1)0U,     (U4)0x20000000U    },
@@ -667,7 +668,6 @@ const ST_ALERT_REQBIT   st_gp_HMIPUTXTREQBIT[HMIPUTXTCFG_IF_NUM] = {
     {    (U2)ALERT_CH_P_HTGDMI,             (U1)ALERT_REQ_P_HTGDMI_HI,              (U1)39U,    (U4)0x00800000U    },
     {    (U2)ALERT_CH_B_RPWSEA,             (U1)ALERT_REQ_B_RPWSEA_IMPSBLUSE,       (U1)39U,    (U4)0x01000000U    },
     {    (U2)ALERT_CH_B_ALOA,               (U1)ALERT_REQ_B_ALOA_MALFUNC,           (U1)39U,    (U4)0x08000000U    },
-    {    (U2)ALERT_CH_H_SBMMAL,             (U1)ALERT_REQ_H_SBMMAL_IMPSBLBU,        (U1)39U,    (U4)0x10000000U    },
     {    (U2)ALERT_CH_H_NLOCK,              (U1)ALERT_REQ_H_NLOCK_NLOCK,            (U1)40U,    (U4)0x00000004U    },
     {    (U2)ALERT_CH_H_QUICHA_CHG,         (U1)ALERT_REQ_H_QUICHA_CHG_CMPLMT,      (U1)40U,    (U4)0x00000010U    },
     {    (U2)ALERT_CH_S_LCA_PD_MG,          (U1)ALERT_REQ_S_LCA_PD_MG_UNAVLBL1,     (U1)40U,    (U4)0x00000080U    },
@@ -722,6 +722,7 @@ U2 u2_g_HmiputxtSizeReqbit(void){
 /*  BEV-5    11/25/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
 /*  BEV-6     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-C_BRK-CSTD-2-00-A-C0)                                   */
 /*  BEV-7     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
+/*  BEV-8     6/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */

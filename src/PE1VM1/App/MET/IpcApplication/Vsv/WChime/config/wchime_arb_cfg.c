@@ -118,7 +118,7 @@ static const U4              u4_sp_WCHIME_REQBIT_CH_0[WCHIME_REQBIT_NUM_WORD] = 
     (U4)0xFFFFFEE3U,
     (U4)0x9FFFFBFFU,
     (U4)0xFFFFFFFFU,
-    (U4)0x0000007FU
+    (U4)0x000000FFU
 };
 
 static const U4              u4_sp_WCHIME_REQBIT_CH_1[WCHIME_REQBIT_NUM_WORD] = {
@@ -126,7 +126,7 @@ static const U4              u4_sp_WCHIME_REQBIT_CH_1[WCHIME_REQBIT_NUM_WORD] = 
     (U4)0x00000000U,
     (U4)0x00000000U,
     (U4)0x00000000U,
-    (U4)0x01FFFF80U
+    (U4)0x03FFFF00U
 };
 
 static const U4              u4_sp_WCHIME_REQBIT_CH_2[WCHIME_REQBIT_NUM_WORD] = {
@@ -313,6 +313,7 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_S_RSA_BC_SGN,     (U1)ALERT_REQ_S_RSA_BC_SGN_SPDLMT,     (U1)WCHIME_REQ_SI_RSA_SIGN_CTN1_OTH  >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_RSA_SIGN_CTN1_OTH  & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_DMC_BC,         (U1)ALERT_REQ_S_DMC_BC_SINGLE,         (U1)WCHIME_REQ_SI_DMC_LV1            >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_DMC_LV1            & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_H_SYSMAL_BC,      (U1)ALERT_REQ_H_SYSMAL_BC_SINGLE,      (U1)WCHIME_REQ_SI_SYSMAL_FAIL        >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_SYSMAL_FAIL        & (U1)0x1FU)  }, /* MET-H_SYSMAL-CSTD-            */
+        {  (U2)ALERT_CH_O_PDSMAL_BC,      (U1)ALERT_REQ_O_PDSMAL_BC_CYCL,        (U1)WCHIME_REQ_IN_PDSMAL             >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_PDSMAL             & (U1)0x1FU)  }, /* MET-O_PDSMAL-CSTD-0-00-A0     */
         {  (U2)ALERT_CH_S_LTA_2_BC_LTA,   (U1)ALERT_REQ_S_LTA_2_BC_LTA_PTN1,     (U1)WCHIME_REQ_IN_LTA_PTN1           >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_LTA_PTN1           & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_S_ITS_BC,         (U1)ALERT_REQ_S_ITS_BC_SINGLE,         (U1)WCHIME_REQ_SI_INFRA_SNGL         >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_INFRA_SNGL         & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_B_BLGT,           (U1)ALERT_REQ_B_BLGT_ON,               (U1)WCHIME_REQ_CO_LIGHT              >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_LIGHT              & (U1)0x1FU)  }, /* MET-B_BLGT-CSTD-              */
@@ -817,6 +818,7 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  BEV-1    11/12/2024  KO       Change for BEV System_Consideration_1.(MET-C_ECB-CSTD-1-00-A-C0 / MET-C_EPB-CSTD-1-00-A-C0)        */
 /*  BEV-1    03/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1 / MET-D_SFTPOS-CSTD-1-00-A-C0) */
 /*  BEV-2    06/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
+/*  BEV-3    06/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */

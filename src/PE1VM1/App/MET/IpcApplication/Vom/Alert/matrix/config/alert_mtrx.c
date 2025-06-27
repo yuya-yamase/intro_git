@@ -1,4 +1,4 @@
-/* 5.1.0 */
+/* 5.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -15,7 +15,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_MTRX_C_MAJOR                       (5)
-#define ALERT_MTRX_C_MINOR                       (1)
+#define ALERT_MTRX_C_MINOR                       (2)
 #define ALERT_MTRX_C_PATCH                       (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -134,6 +134,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_H_PRECON_MTRX[0],        (U2)ALERT_CH_H_PRECON,                 (U1)ALERT_H_PRECON_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_C_HCS_MTRX[0],           (U2)ALERT_CH_C_HCS_TTB,                (U1)ALERT_C_HCS_CH_NUM,             (U1)0U  },
+    {  &st_gp_ALERT_O_PDSMAL_MTRX[0],        (U2)ALERT_CH_O_PDSMAL_BC,              (U1)ALERT_O_PDSMAL_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_PEDPRO_MTRX[0],        (U2)ALERT_CH_B_PEDPRO,                 (U1)ALERT_B_PEDPRO_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_ABS_MTRX[0],           (U2)ALERT_CH_C_ABS_TT,                 (U1)ALERT_C_ABS_CH_NUM,             (U1)1U  },
     {  &st_gp_ALERT_C_BRKHLD_MTRX[0],        (U2)ALERT_CH_C_BRKHLD_STBY,            (U1)ALERT_C_BRKHLD_CH_NUM,          (U1)1U  },
@@ -262,7 +263,6 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_S_PLUSSP_MTRX[0],        (U2)ALERT_CH_S_PLUSSP,                 (U1)ALERT_S_PLUSSP_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_S_PMAR_MTRX[0],          (U2)ALERT_CH_S_PMAR_BC,                (U1)ALERT_S_PMAR_CH_NUM,            (U1)2U  },
     {  &st_gp_ALERT_S_SEA_MTRX[0],           (U2)ALERT_CH_S_SEA_BC,                 (U1)ALERT_S_SEA_CH_NUM,             (U1)2U  },
-    {  &st_gp_ALERT_H_SBMMAL_MTRX[0],        (U2)ALERT_CH_H_SBMMAL,                 (U1)ALERT_H_SBMMAL_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_B_BKEY_MTRX[0],          (U2)ALERT_CH_B_BKEY,                   (U1)ALERT_B_BKEY_CH_NUM,            (U1)2U  },
     {  &st_gp_ALERT_H_CHGCON_MTRX[0],        (U2)ALERT_CH_H_CHGCON,                 (U1)ALERT_H_CHGCON_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_H_BATREF_MTRX[0],        (U2)ALERT_CH_H_BATREF,                 (U1)ALERT_H_BATREF_CH_NUM,          (U1)2U  },
@@ -473,7 +473,8 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertP_cootemInit,
         &vd_g_AlertH_quichaInit,
         &vd_g_AlertC_sbrdmbInit,
-        &vd_g_AlertC_hcsInit
+        &vd_g_AlertC_hcsInit,
+        &vd_g_AlertO_pdsmalInit
     };
 
     vd_g_Fpcall_vd_Fvd(&fp_vd_ALERT_MTRX_INIT[0], u2_NC_VD_FVD(fp_vd_ALERT_MTRX_INIT));
@@ -488,6 +489,7 @@ void    vd_g_AlertMtrxInit(void)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0    05/10/2019  YI       New.                                                                                               */
 /*  5.1.0    10/15/2024  RS       Change for BEV System_Consideration_1                                                              */
+/*  5.2.0    06/25/2025  KO       Change for BEV System_Consideration_2                                                              */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -501,6 +503,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-8     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
 /*  BEV-9     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-C_BRK-CSTD-2-00-A-C0)                                   */
 /*  BEV-10    6/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
+/*  BEV-11    6/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */

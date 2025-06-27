@@ -711,6 +711,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_RSA_SIGN_CTN1_OTH       */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_DMC_LV1                 */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_SYSMAL_FAIL             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_PDSMAL                  */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                /* WCHIME_REQ_IN_LTA_PTN1                */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_INFRA_SNGL              */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                 /* WCHIME_REQ_SI_MLT_MSG                 */
@@ -867,6 +868,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_RSA_SIGN_CTN1_OTH       */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_DMC_LV1                 */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_SYSMAL_FAIL             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_PDSMAL                  */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNL_0_00,                                  /* WCHIME_REQ_IN_LTA_PTN1                */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_INFRA_SNGL              */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_NOTICE1_0_00,                                   /* WCHIME_REQ_SI_MLT_MSG                 */
@@ -2465,8 +2467,9 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  19PFv3-12 7/10/2024  TR       Add SBRDMB buzzer request                                                                          */
 /*                                                                                                                                   */
 /*  BEV-1     3/19/2025  SU                                                                                                          */
-/*  BEV-1     3/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */  
+/*  BEV-1     3/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */
 /*  BEV-2     6/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */  
+/*  BEV-3     6/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */ 
 /*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */
@@ -2485,5 +2488,6 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  * SU       = Shin Uchida, Denso Techno                                                                                           */
 /*  * RO       = Ryo Oohashi, Denso Techno                                                                                           */
 /*  * JS       = Jun Sugiyama, KSE                                                                                                   */
+/*  * KO       = Kazuto Oishi, Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
