@@ -188,8 +188,8 @@ static U4      u4_s_AlertC_brk_0Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u1_t_egrt_on  = (U1)0U;
     u4_t_src_chk  = (U4)0U;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ZN11S17_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ZN11S17_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_C_BRK_TO_ZN11S17) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_C_BRK_ZN11S17_LSB_STS);

@@ -171,8 +171,8 @@ static U4      u4_s_AlertB_bkeySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     U1              u1_t_ign_3p8v;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S01_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0,
+                                     (U4)OXCAN_SYS_PNC_ALL,
                                      u2_s_ALERT_B_BKEY_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_bkey_msgsts, u1_t_msgsts);

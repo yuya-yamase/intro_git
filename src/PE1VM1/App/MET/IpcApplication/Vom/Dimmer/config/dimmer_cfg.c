@@ -146,7 +146,7 @@ void    vd_g_DimCfgInit(void)
     vd_g_DimDaynightInit();
     vd_g_DimUsadjbySwInit();
 
-    u1_s_dim_adim_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01_RXCH0);
+    u1_s_dim_adim_rxcnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimCfgIFidx(void)                                                                                                   */
@@ -166,7 +166,9 @@ U1      u1_g_DimCfgIFidx(void)
 /*===================================================================================================================================*/
 U1      u1_g_DimDaynightCfgRxEnabled(void)
 {
+
     return(u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_VCAN));
+
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)                                                                        */
@@ -182,7 +184,7 @@ U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)
 
     u1_t_rx_evt = (U1)FALSE;
 
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01_RXCH0);
+    u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0);
     if(u1_t_rx_cnt != u1_s_dim_adim_rxcnt){
 
         u1_t_adim = (U1)0U;

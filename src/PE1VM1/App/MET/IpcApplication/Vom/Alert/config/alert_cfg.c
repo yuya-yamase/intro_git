@@ -193,8 +193,8 @@ U1    u1_g_AlertCfgS_cvrsAdds(U1 * u1p_a_rprt, U1 * u1p_a_sfty)
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVNMS73,
-                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_AVNMS73,
+                                   (U4)OXCAN_SYS_IGR,
                                    u2_s_ALERT_S_CVRS_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl   = (U1)0U;
@@ -266,8 +266,8 @@ U2 u2_g_AlertCfgC_brk_0EngineRPMVal(void)
     u4_t_egrt_val = (U4)0U;
     u2_t_ret      = (U2)0U;
 
-    u1_t_stsbit   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G02,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_stsbit   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ENG1G02,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_C_BRK_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
 #if 0   /* BEV BSW provisionally */
@@ -418,8 +418,8 @@ U1    u1_g_AlertCfgEcomodeOn(void)
     U1              u1_t_pts_on;
 
     u1_t_pts_on = (U1)FALSE;
-    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
-                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
+                                   (U4)OXCAN_SYS_IGR,
                                    u2_s_ALERT_ECOMODE3_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if(u1_t_msgsts == (U1)0U){

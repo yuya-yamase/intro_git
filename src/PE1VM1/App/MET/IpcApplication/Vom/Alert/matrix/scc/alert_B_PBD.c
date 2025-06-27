@@ -47,9 +47,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if defined(OXCAN_PDU_RX_CAN_BKD1S01_RXCH0) /*840B_CAN CV-R*/
+#if defined(OXCAN_RXD_PDU_CAN_BKD1S01_CH0) /*840B_CAN CV-R*/
 static U1      u1_s_alert_b_pbd_bkd1s01_sts;
-#endif /* defined(OXCAN_PDU_RX_CAN_BKD1S01_RXCH0) */ /*840B_CAN CV-R*/
+#endif /* defined(OXCAN_RXD_PDU_CAN_BKD1S01_CH0) */ /*840B_CAN CV-R*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -96,9 +96,9 @@ const ST_ALERT_MTRX st_gp_ALERT_B_PBD_MTRX[1] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertB_pbdInit(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_BKD1S01_RXCH0) /*840B_CAN CV-R*/
+#if defined(OXCAN_RXD_PDU_CAN_BKD1S01_CH0) /*840B_CAN CV-R*/
     u1_s_alert_b_pbd_bkd1s01_sts = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_BKD1S01_RXCH0) */ /*840B_CAN CV-R*/
+#endif /* defined(OXCAN_RXD_PDU_CAN_BKD1S01_CH0) */ /*840B_CAN CV-R*/
 }
 
 /*===================================================================================================================================*/
@@ -109,15 +109,15 @@ void    vd_g_AlertB_pbdInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_pbdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_BKD1S01_RXCH0) /*840B_CAN CV-R*/
+#if defined(OXCAN_RXD_PDU_CAN_BKD1S01_CH0) /*840B_CAN CV-R*/
     static const U1 u1_s_ALERT_B_PBD_LSB_BKD1S01 = (U1)1U;
     static const U4 u4_s_ALERT_B_PBD_BIT_BTWT    = (U4)0x00000004U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BKD1S01_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_PBA,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BKD1S01_CH0,
+                                          (U4)OXCAN_SYS_PNC_ALL,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_pbd_bkd1s01_sts, u1_t_msgsts);
 
@@ -136,7 +136,7 @@ static U4      u4_s_AlertB_pbdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_BKD1S01_RXCH0) */ /*840B_CAN CV-R*/
+#endif /* defined(OXCAN_RXD_PDU_CAN_BKD1S01_CH0) */ /*840B_CAN CV-R*/
 }
 
 /*===================================================================================================================================*/

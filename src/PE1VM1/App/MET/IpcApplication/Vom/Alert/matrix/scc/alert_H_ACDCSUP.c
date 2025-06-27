@@ -120,8 +120,8 @@ static U4      u4_s_AlertH_acdcsupSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PLG1G10,
-                                     (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_PLG1G10,
+                                     (U4)OXCAN_SYS_PNC_ALL,
                                      u2_s_ALERT_H_ACDCSUP_TRSH_PL10) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_h_acdcsup_plg1g10_sts, u1_t_msgsts);
 

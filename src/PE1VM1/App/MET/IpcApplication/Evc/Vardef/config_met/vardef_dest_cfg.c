@@ -190,7 +190,7 @@ const U2        u2_g_VDF_DST_C_CODE_RIM_U2      = (U2)RIMID_U2_VDF_C_CODE;
 const U2        u2_g_VDF_DST_DEST_BDB_RIM_U1    = (U2)RIMID_U1_VDF_DEST_BDB;
 const U2        u2_g_VDF_DST_STRG_WHL_RIM_U1    = (U2)RIMID_U1_VDF_STRG_WHL;
 
-const U1        u1_g_VDF_DST_RXEV_CNT_INIT      = (U1)OXCAN_RX_RXEV_CNT_UNK;
+const U1        u1_g_VDF_DST_RXEV_CNT_INIT      = (U1)OXCAN_RXD_EVC_UNK;
 
 const U1        u1_g_VDF_DST_C_CODE_IDX_DEF     = (U1)U1_MAX;
 const U1        u1_g_VDF_DST_DEST_BDB_IDX_DEF   = (U1)VDF_DST_DEST_BDB_B_GNR_L;
@@ -469,7 +469,7 @@ U1      u1_g_VardefDestCfg(U2 * u2p_a_c_code, U1 * u1p_a_dest_bdb, U1 * u1p_a_st
     U1  u1_t_c_code;
 
     u1_t_c_code = (U1)0U;
-    u1_t_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S08_RXCH0);
+    u1_t_rxcnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S08_CH0);
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE1, &u1_t_c_code);
     *u2p_a_c_code =  ((U2)u1_t_c_code & u2_s_VDF_DST_C_CODE_MSK) << u1_s_VDF_DST_C_CODE1_BIT;

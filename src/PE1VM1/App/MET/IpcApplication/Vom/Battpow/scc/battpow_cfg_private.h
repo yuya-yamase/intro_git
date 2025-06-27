@@ -34,6 +34,9 @@
 #define BATTPOW_SOCMON_PHEV                      (1U)                           /* Ptsys PHEV                                        */
 #define BATTPOW_SOCMON_BEV                       (2U)                           /* Ptsys BEV                                         */
 
+/** PNC check **/
+#define OXCAN_SYS_PNC_ALL                        (OXCAN_SYS_PNC_16 | OXCAN_SYS_PNC_40 | OXCAN_SYS_PNC_43 | OXCAN_SYS_PNC_44)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

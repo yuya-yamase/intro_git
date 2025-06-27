@@ -38,7 +38,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void           vd_g_AlertBRxTrnsSts(U1 * u1p_a_msgsts, const U1 u1_a_TRNS_FACT);
                                     /* u1_ap_msgsts   : RAM of message status.  Updated in this function.                            */
-                                    /* u1_a_TRNS_FACT : bit0, bit1 : Return value of u1_g_oXCANRxStat().                             */
+                                    /* u1_a_TRNS_FACT : bit0, bit1 : Return value of u1_g_oXCANRxdStat().                             */
                                     /*                : bit2       : Factor bit of COM_TIMEOUT transfer to COM_NO_RX | COM_TIME_OUT. */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

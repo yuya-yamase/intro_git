@@ -610,8 +610,8 @@ static void    vd_s_TydcDtcTrDeAct(void)
 /*===================================================================================================================================*/
 static void    vd_s_TydcDtcRxcInit(void)
 {
-#if (OXCAN_RX_RXEV_CNT_UNK != 0xffU)
-#error "tydocan_dtc.c : OXCAN_RX_RXEV_CNT_UNK shall be equal to 0xff."
+#if (OXCAN_RXD_EVC_UNK != 0xffU)
+#error "tydocan_dtc.c : OXCAN_RXD_EVC_UNK shall be equal to 0xff."
 #endif
     U4                         u4_t_lpcnt;
 
@@ -769,18 +769,18 @@ static U1      u1_s_TydcDtcPduRx(const ST_TYDC_DTC_COM_RX * st_ap_COM_RX, const 
 
         st_tp_PDU_RX = &st_gp_TYDC_DTC_PDU_RX[u4_t_lpcnt];
 
-        u1_t_rxc_nex = u1_g_oXCANRxEvcnt(st_tp_PDU_RX->u2_pdu_idx);
+        u1_t_rxc_nex = u1_g_oXCANRxdEvcnt(st_tp_PDU_RX->u2_pdu_idx);
         u1_t_rxc_las = u1_gp_tydc_dtc_rx_cnt[u4_t_lpcnt];
         if((u1_a_EVM     != (U1)OXDC_DTC_TR_INA         ) ||
-           (u1_t_rxc_nex >  (U1)OXCAN_RX_RXEV_CNT_MAX) ||
-           (u1_t_rxc_las >  (U1)OXCAN_RX_RXEV_CNT_MAX)){
+           (u1_t_rxc_nex >  (U1)OXCAN_RXD_EVC_MAX) ||
+           (u1_t_rxc_las >  (U1)OXCAN_RXD_EVC_MAX)){
 
             u2_gp_tydc_dtc_rxc_st[u4_t_lpcnt] = u2_s_tydc_dtc_rxc_cyctim;
             u1_gp_tydc_dtc_rx_cnt[u4_t_lpcnt] = u1_t_rxc_nex;
         }
         else{
 
-            u2_t_rxc_inc = (U2)((U2)u1_t_rxc_nex - (U2)u1_t_rxc_las) & (U2)OXCAN_RX_RXEV_CNT_MAX;
+            u2_t_rxc_inc = (U2)((U2)u1_t_rxc_nex - (U2)u1_t_rxc_las) & (U2)OXCAN_RXD_EVC_MAX;
             if(u2_t_rxc_inc >= st_tp_PDU_RX->u2_rxc_min){
                 st_tp_log_rx->u4_ev |= ((st_tp_log_rx->u4_rx ^ u4_t_log_bit) & u4_t_log_bit);
                 st_tp_log_rx->u4_rx |= u4_t_log_bit;
@@ -794,7 +794,7 @@ static U1      u1_s_TydcDtcPduRx(const ST_TYDC_DTC_COM_RX * st_ap_COM_RX, const 
         }
 
         u2_t_rx_tout = st_tp_PDU_RX->u2_rx_tout;
-        u1_t_rx_stat = u1_g_oXCANRxStat(st_tp_PDU_RX->u2_pdu_idx, st_tp_PDU_RX->u2_sys_chk, u2_t_rx_tout);
+        u1_t_rx_stat = u1_g_oXCANRxdStat(st_tp_PDU_RX->u2_pdu_idx, st_tp_PDU_RX->u2_sys_chk, u2_t_rx_tout);
         if((u2_a_ELPSD   < u2_t_rx_tout         ) ||
            (u1_t_rx_stat < (U1)OXCAN_RX_RXST_TOE)){
             u4_t_unk_chk  |= u4_t_log_bit;

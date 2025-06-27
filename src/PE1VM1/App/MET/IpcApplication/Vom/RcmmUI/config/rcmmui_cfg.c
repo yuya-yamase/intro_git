@@ -73,8 +73,8 @@ static  U1                                      u1_s_rcmmui_prereq;
 /*===================================================================================================================================*/
 void            vd_g_RcmmUIInitCfg(void)
 {
-#ifdef OXCAN_PDU_RX_CAN_BDB1S13_RXCH0
-    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13_RXCH0);
+#ifdef OXCAN_RXD_PDU_CAN_BDB1S13_CH0
+    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
 #else
 	u1_s_rcmmui_rxcnt  = (U1)0U;
 #endif
@@ -94,8 +94,8 @@ void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm, U1 * u1p_a_powreq)
     U1          u1_t_req2;
     U1          u1_t_req3;
 
-#ifdef OXCAN_PDU_RX_CAN_BDB1S13_RXCH0
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13_RXCH0);
+#ifdef OXCAN_RXD_PDU_CAN_BDB1S13_CH0
+    u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
 #else
 	u1_t_rx_cnt = (U1)0U;
 #endif

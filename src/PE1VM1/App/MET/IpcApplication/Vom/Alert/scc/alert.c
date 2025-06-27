@@ -470,6 +470,7 @@ static U1      u1_s_AlertToutchk(void)
     U1                       u1_t_wk;
 
     u1_t_wk = u1_g_oXCANRxEnabled(u1_g_ALERT_BUS_CH);
+    
     if(u1_t_wk == (U1)TRUE){
         u4_s_alert_bslp_tm_elpsd = (U4)U4_MAX;
     }

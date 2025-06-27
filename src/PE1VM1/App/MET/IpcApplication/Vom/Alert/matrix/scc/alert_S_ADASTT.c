@@ -319,15 +319,15 @@ const ST_ALERT_MTRX st_gp_ALERT_S_ADASTT_MTRX[6] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_adasttTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_ADISTATE)
+#if defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_ADISTATE)
     static const U2 u2_s_ALERT_S_ADASTT_TT_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_ADASTT_TT_LSB_STS = (U1)3U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ADU1S07_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_S_ADASTT_TT_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -339,7 +339,7 @@ static U4      u4_s_AlertS_adasttTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 #else
     return((U4)0U); /* UNKNOWN sts for TT */
-#endif /* defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_ADISTATE) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_ADISTATE) */
 }
 
 /*===================================================================================================================================*/
@@ -350,15 +350,15 @@ static U4      u4_s_AlertS_adasttTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_adasttBsmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_BSMADIM)
+#if defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_BSMADIM)
     static const U2 u2_s_ALERT_S_ADASTT_BSM_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_ADASTT_BSM_LSB_STS = (U1)2U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ADU1S07_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_S_ADASTT_BSM_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -370,7 +370,7 @@ static U4      u4_s_AlertS_adasttBsmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0U); /* UNKNOWN sts for BSM */
-#endif /* defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_BSMADIM) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_BSMADIM) */
 }
 
 /*===================================================================================================================================*/
@@ -381,15 +381,15 @@ static U4      u4_s_AlertS_adasttBsmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_adasttSeaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_SEAADIM)
+#if defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_SEAADIM)
     static const U2 u2_s_ALERT_S_ADASTT_SEA_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_ADASTT_SEA_LSB_STS = (U1)2U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ADU1S07_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_S_ADASTT_SEA_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -401,7 +401,7 @@ static U4      u4_s_AlertS_adasttSeaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0U); /* UNKNOWN sts for SEA */
-#endif /* defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_SEAADIM) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_SEAADIM) */
 }
 
 /*===================================================================================================================================*/
@@ -412,15 +412,15 @@ static U4      u4_s_AlertS_adasttSeaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_adasttRcdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_BCC1S06_RXCH0) && defined(ComConf_ComSignal_CAAINDIM)
+#if defined(OXCAN_RXD_PDU_CAN_BCC1S06_CH0) && defined(ComConf_ComSignal_CAAINDIM)
     static const U2 u2_s_ALERT_S_ADASTT_RCD_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_ADASTT_RCD_LSB_STS = (U1)4U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BCC1S06_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BCC1S06_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_S_ADASTT_RCD_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -432,7 +432,7 @@ static U4      u4_s_AlertS_adasttRcdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0U); /* UNKNOWN sts for RCD */
-#endif /* defined(OXCAN_PDU_RX_CAN_BCC1S06_RXCH0) && defined(ComConf_ComSignal_CAAINDIM) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BCC1S06_CH0) && defined(ComConf_ComSignal_CAAINDIM) */
 }
 
 /*===================================================================================================================================*/
@@ -443,15 +443,15 @@ static U4      u4_s_AlertS_adasttRcdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_adasttRctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_RCTAADIM )
+#if defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_RCTAADIM )
     static const U2 u2_s_ALERT_S_ADASTT_RCTA_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_ADASTT_RCTA_LSB_STS = (U1)2U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ADU1S07_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_S_ADASTT_RCTA_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -463,7 +463,7 @@ static U4      u4_s_AlertS_adasttRctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     return(u4_t_src_chk);
 #else
     return((U4)0U); /* UNKNOWN sts for RCTA */
-#endif /* defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_RCTAADIM) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_RCTAADIM) */
 }
 
 /*===================================================================================================================================*/
@@ -474,15 +474,15 @@ static U4      u4_s_AlertS_adasttRctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_adasttSasSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_PMARADIM )
+#if defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_PMARADIM )
     static const U2 u2_s_ALERT_S_ADASTT_SAS_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_ADASTT_SAS_LSB_STS = (U1)2U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ADU1S07_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_S_ADASTT_SAS_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -494,7 +494,7 @@ static U4      u4_s_AlertS_adasttSasSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0U); /* UNKNOWN sts for SAS */
-#endif /* defined(OXCAN_PDU_RX_CAN_ADU1S07_RXCH0) && defined(ComConf_ComSignal_PMARADIM) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_ADU1S07_CH0) && defined(ComConf_ComSignal_PMARADIM) */
 }
 
 /*===================================================================================================================================*/

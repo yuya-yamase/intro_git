@@ -333,8 +333,8 @@ static U1      u1_s_AlertP_tmntMSTEDG(void)
     u1_t_retval = (U1)0U;
 
     if(u1_t_ecorun == (U1)TRUE){
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
-                                       (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+        u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
+                                       (U4)OXCAN_SYS_IGR,
                                        u2_s_ALERT_P_TMNT_PD_TO_TRSH_MST) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_msgsts == (U1)0U){
 #if 0   /* BEV BSW provisionally */
@@ -343,8 +343,8 @@ static U1      u1_s_AlertP_tmntMSTEDG(void)
         }
     }
     else{
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G92_RXCH0,
-                                       (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+        u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ENG1G92_CH0,
+                                       (U4)OXCAN_SYS_IGR,
                                        u2_s_ALERT_P_TMNT_PD_TO_TRSH_BST) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_msgsts == (U1)0U){
 #if 0   /* BEV BSW provisionally */

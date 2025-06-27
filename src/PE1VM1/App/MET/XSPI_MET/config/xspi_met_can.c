@@ -733,7 +733,9 @@ void    vd_g_XSpiMETTxSCL(U4 * u4_ap_pdu_tx)
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_TM, &u2_t_astm);
     (void)Com_ReceiveSignal(ComConf_ComSignal_IN_EC, &u2_t_inec);
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_EC, &u2_t_asec);
+#if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_DT, &u2_t_asdt);
+#endif
 
     u4_ap_pdu_tx[0] =  ((U4)u1_t_ecscl << 3);
     u4_ap_pdu_tx[0] |= ((U4)u1_t_unit6 << 6);

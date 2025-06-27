@@ -327,15 +327,15 @@ const ST_ALERT_MTRX st_gp_ALERT_S_PCS1_MTRX[6] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pcs1TtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if  defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSINDI)
+#if  defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSINDI)
     static const U1 u1_s_ALERT_S_PCS1_TT_LSB_MSG   = (U1)2U;
     static const U2 u2_s_ALERT_S_PCS1_TT_THRESH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS12F02_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F02_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_S_PCS1_TT_THRESH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -347,7 +347,7 @@ static U4      u4_s_AlertS_pcs1TtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSINDI) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSINDI) */
 }
 
 /*===================================================================================================================================*/
@@ -358,15 +358,15 @@ static U4      u4_s_AlertS_pcs1TtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pcs1BzrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if  defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSMTBZ2)
+#if  defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSMTBZ2)
     static const U1 u1_s_ALERT_S_PCS1_BZR_LSB_MSG  = (U1)4U;
     static const U2 u2_s_ALERT_S_PCS1_BZ_THRESH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS12F02_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F02_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_S_PCS1_BZ_THRESH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -378,7 +378,7 @@ static U4      u4_s_AlertS_pcs1BzrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSMTBZ2) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSMTBZ2) */
 }
 
 /*===================================================================================================================================*/
@@ -389,7 +389,7 @@ static U4      u4_s_AlertS_pcs1BzrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pcs1PcswmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if  defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSWM) && defined(ComConf_ComSignal_PCSWDUCT)
+#if  defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSWM) && defined(ComConf_ComSignal_PCSWDUCT)
     static const U1 u1_s_ALERT_S_PCS1_WM_LSB_MSG   = (U1)3U;
     static const U1 u1_s_ALERT_S_PCS1_WM_LSB_DUCT  = (U1)2U;
     static const U2 u2_s_ALERT_S_PCS1_WM_THRESH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
@@ -397,8 +397,8 @@ static U4      u4_s_AlertS_pcs1PcswmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS12F02_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F02_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_S_PCS1_WM_THRESH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -414,7 +414,7 @@ static U4      u4_s_AlertS_pcs1PcswmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSWM) && defined(ComConf_ComSignal_PCSWDUCT) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSWM) && defined(ComConf_ComSignal_PCSWDUCT) */
 }
 
 /*===================================================================================================================================*/
@@ -425,15 +425,15 @@ static U4      u4_s_AlertS_pcs1PcswmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pcs1FssSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if  defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_FSSINFO)
+#if  defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_FSSINFO)
     static const U1 u1_s_ALERT_S_PCS1_FSS_LSB_MSG   = (U1)3U;
     static const U2 u2_s_ALERT_S_PCS1_FSS_THRESH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS12F02_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F02_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_S_PCS1_FSS_THRESH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -445,7 +445,7 @@ static U4      u4_s_AlertS_pcs1FssSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_FSSINFO) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_FSSINFO) */
 }
 
 /*===================================================================================================================================*/
@@ -456,15 +456,15 @@ static U4      u4_s_AlertS_pcs1FssSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pcs1PcsrtwmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if  defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSRTWM)
+#if  defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSRTWM)
     static const U1 u1_s_ALERT_S_PCS1_RTWM_LSB_MSG   = (U1)2U;
     static const U2 u2_s_ALERT_S_PCS1_RTWM_THRESH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS12F02_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F02_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_S_PCS1_RTWM_THRESH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -476,7 +476,7 @@ static U4      u4_s_AlertS_pcs1PcsrtwmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSRTWM) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSRTWM) */
 }
 
 /*===================================================================================================================================*/
@@ -487,15 +487,15 @@ static U4      u4_s_AlertS_pcs1PcsrtwmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pcs1PcsswmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if  defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSSWM)
+#if  defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSSWM)
     static const U1 u1_s_ALERT_S_PCS1_SWM_LSB_MSG   = (U1)1U;
     static const U2 u2_s_ALERT_S_PCS1_SWM_THRESH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DS12F02_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F02_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_S_PCS1_SWM_THRESH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -507,7 +507,7 @@ static U4      u4_s_AlertS_pcs1PcsswmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DS12F02_RXCH0) && defined(ComConf_ComSignal_PCSSWM) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DS12F02_CH0) && defined(ComConf_ComSignal_PCSSWM) */
 }
 
 /*===================================================================================================================================*/
