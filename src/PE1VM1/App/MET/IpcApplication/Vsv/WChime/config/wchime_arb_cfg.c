@@ -107,8 +107,6 @@ static  void    vd_s_wChimeCfgMWVCReqchk(U4 * u4p_a_reqbit);
 static  void    vd_s_wChimeCfgReqOn(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID);
 static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID);
 
-static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -724,23 +722,6 @@ static  void    vd_s_wChimeCfgReqDel(U4 * u4_ap_reqbit, const U1 u1_a_REQ_ID)
     u4_ap_reqbit[u1_t_idx] &= ((U4)U4_MAX ^ ((U4)0x00000001U << u1_t_pos));
 }
 /*===================================================================================================================================*/
-/*  static  U1      u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const U1 u1_a_NUM, const U1 u1_a_DEF)
-{
-    U1 u1_t_ret;
-
-    u1_t_ret = u1_a_CALIBID;
-    if(u1_t_ret >= u1_a_NUM){
-        u1_t_ret = u1_a_DEF;
-    }
-
-    return(u1_t_ret);
-}
-/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -815,6 +796,7 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  BEV-2    06/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
 /*  BEV-3    06/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
 /*  BEV-4    06/24/2025  RO       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-02-A-C0)                                 */
+/*  BEV-5    06/24/2025  RO       Change for BEV System_Consideration_2.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
