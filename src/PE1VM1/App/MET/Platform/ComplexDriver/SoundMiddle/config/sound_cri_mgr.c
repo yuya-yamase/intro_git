@@ -655,7 +655,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_STEER_STP               */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_TBZ_SEAREM_LV1_24_01,                                  /* WCHIME_REQ_IN_SBLT_FMV                */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_ACC_BRKREQ              */
-        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BRK_TST_FIN             */
+        (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BRK_APP6                */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_SBW_RJCT                */
         (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_NACCON                  */
         (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_PEXI_HV_NDBW            */
@@ -669,7 +669,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_SYSMAL_RNG_P            */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_CHAMAL_BAT_FAIL         */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_SYSMAL_REQSTP           */
-        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BRK_TST_LRN             */
+        (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_BRK_APP4                */
         (U2)CRI_CUESHEET_0_TYT_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                /* WCHIME_REQ_IN_EPB                     */
         (U2)CRI_CUESHEET_0_TYT_REN_MET_CBZ_BASE_CONTWARN_0_00,                                /* WCHIME_REQ_CO_EIGCON_IGOFF            */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_SFTPOS_NML              */
@@ -737,7 +737,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_REL_R10           */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_REL_R11           */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_BKHLD_NOTACT_R13        */
-        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_BRK_TST_STRT            */
+        (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_BRK_APP5                */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_ACC_APPRVLSTART         */
         (U2)CRI_CUESHEET_0_TYT_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                  /* WCHIME_REQ_SI_PERSET_SUC              */
         (U2)CRI_CUESHEET_0_TYT_2REN_MET_CBZ_BASE_REJECT_0_00,                                 /* WCHIME_REQ_SI_PERSET_FAIL             */
@@ -811,7 +811,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_STEER_STP               */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_LBZ_SEAREM_LV1_24_02_A,                                  /* WCHIME_REQ_IN_SBLT_FMV                */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_ACC_BRKREQ              */
-        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BRK_TST_FIN             */
+        (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BRK_APP6                */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_SBW_RJCT                */
         (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_NACCON                  */
         (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_PEXI_HV_NDBW            */
@@ -825,7 +825,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_SYSMAL_RNG_P            */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_CHAMAL_BAT_FAIL         */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_SYSMAL_REQSTP           */
-        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BRK_TST_LRN             */
+        (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_BRK_APP4                */
         (U2)CRI_CUESHEET_0_LEX_DAN_MET_CBZ_BASE_INTWARNM_0_00,                                  /* WCHIME_REQ_IN_EPB                     */
         (U2)CRI_CUESHEET_0_LEX_REN_MET_CBZ_BASE_CONTWARN_0_00,                                  /* WCHIME_REQ_CO_EIGCON_IGOFF            */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_SFTPOS_NML              */
@@ -893,7 +893,7 @@ static  U1      u1_s_SoundCriMgrWavNext(void)
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_REL_R10           */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_REL_R11           */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_BKHLD_NOTACT_R13        */
-        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_BRK_TST_STRT            */
+        (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_BRK_APP5                */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_ACC_APPRVLSTART         */
         (U2)CRI_CUESHEET_0_LEX_TAN_MET_CBZ_BASE_ACCEPT_0_00,                                    /* WCHIME_REQ_SI_PERSET_SUC              */
         (U2)CRI_CUESHEET_0_LEX_2REN_MET_CBZ_BASE_REJECT_0_00,                                   /* WCHIME_REQ_SI_PERSET_FAIL             */
@@ -2466,6 +2466,7 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*                                                                                                                                   */
 /*  BEV-1     3/19/2025  SU                                                                                                          */
 /*  BEV-1     3/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1)                               */  
+/*  BEV-2     6/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */  
 /*                                                                                                                                   */
 /*  * YK       = Yuuki Kato, Denso Techno                                                                                            */
 /*  * TN       = Toshiharu Nagata, Denso Techno                                                                                      */
@@ -2482,6 +2483,7 @@ void  vd_g_SoundCriMgr_DeInit(void)
 /*  * SN       = Shimon Nambu, Denso Techno                                                                                          */
 /*  * TR       = Tebs Ramos, DTPH                                                                                                    */
 /*  * SU       = Shin Uchida, Denso Techno                                                                                           */
-/*  * RO       = Ryo Oohashi, Denso Techno                                                                                               */
+/*  * RO       = Ryo Oohashi, Denso Techno                                                                                           */
+/*  * JS       = Jun Sugiyama, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

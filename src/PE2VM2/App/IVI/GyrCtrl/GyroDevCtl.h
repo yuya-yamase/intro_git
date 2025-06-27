@@ -12,10 +12,10 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "x_spi_ivi_sub2.h"
 #include "CarSpdPls.h"
-#include "PictCtl.h"
 #include "SysEcDrc.h"
 #include "DtcCtl.h"
 #include "gyro.h"
+#include "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -67,8 +67,8 @@
 #define GYRODEV_READ_DATA_OK                        (0U)
 #define GYRODEV_READ_DATA_NG                        (1U)
 
-#define GYRODEV_APPOFF                              (PICT_NOREDUN_STATE_APPOFF)
-#define GYRODEV_APPON                               (PICT_NOREDUN_STATE_APPON)
+#define GYRODEV_APPOFF                              (POWER_MODE_STATE_APPOFF)
+#define GYRODEV_APPON                               (POWER_MODE_STATE_APPON)
 
 #define GYRODEV_LAST_PLS_STOP                       (CARSPDPLS_PLS_STP_CYC)
 #define GYRODEV_LAST_PLS_8KM                        (CARSPDPLS_PLS_8KM_CYC)
@@ -92,7 +92,7 @@
 #define u1_GYRODEV_GET_V33_PERI_ON()                (Dio_ReadChannel(DIO_ID_PORT10_CH2))
 #define u1_GYRODEV_SET_SENSOR_ON_L()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_LOW))
 #define u1_GYRODEV_SET_SENSOR_ON_H()                (Dio_WriteChannel(DIO_ID_PORT8_CH7, (Dio_LevelType)GYRODEV_IO_STS_HIGH))
-#define u1_GYRODEV_GET_APP_ON()                     (u1_g_PictCtl_StartSts())
+#define u1_GYRODEV_GET_APP_ON()                     (u1_g_Power_ModeState())
 #define vd_GYRODEV_OSCMD_GYRO_DATA_NOTIF(x)         (vd_g_XspiIviSub2GyroDataPut(x))
 #define u1_GYRODEV_GET_LAST_PLS()                   (u2_g_CarSpdPls_LastPlsGet())
 #define vd_GYRODEV_NOTIFCONDSET_RESULT(x)           (vd_g_XspiIviSub2GyroIntSetSend(x))

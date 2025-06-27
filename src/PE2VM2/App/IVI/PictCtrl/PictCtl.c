@@ -17,6 +17,7 @@
 #include "ML86294Ctl.h"
 #include "PictMuteCtl.h"
 #include "SysEcDrc.h"
+#include "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -485,7 +486,6 @@ static void vd_s_PictCtl_CamKindNtySnd(void);
 static void vd_s_PictCtl_CamOffMuteOff(void);
 static void vd_s_PictCtl_CamAreaChk(void);
 /* 暫定対応 */
-static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void);
 static void vd_s_PictCtl_CdsizeChk(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -604,7 +604,7 @@ void vd_g_PictCtl_Init(void)
     st_sp_Pict_BackUpInf.u1_CamKind = (U1)0U;      /* DTFバックアップ値を設定(暫定) */
     st_sp_Pict_BackUpInf.u1_CenterCamSiz= (U1)0U;  /* DTFバックアップ値を設定(暫定) */
 
-    bfg_Pict_StsMng.u1_stasts = (U1)PICT_NOREDUN_STATE_OFF;
+    bfg_Pict_StsMng.u1_stasts = (U1)POWER_MODE_STATE_PARK;
     bfg_Pict_StsMng.u1_RcvQualModeFlg = (U1)FALSE;
     bfg_Pict_StsMng.u1_RcvCamQualModeFlg = (U1)FALSE;
     bfg_Pict_StsMng.u1_RcvNoCamQualModeFlg = (U1)PICT_RCV_NOCAMQUAL_NONE;
@@ -1062,10 +1062,10 @@ static void vd_s_PictCtl_IgStsChk(void)
     U2 u2_t_time;
     U1 u1_t_vicrset;
     
-    u1_t_stasts = u1_s_NoRedun_PwrCtrl_Nxtsts(); /* 見た目オン起動状態(暫定) */
+    u1_t_stasts = u1_g_Power_ModeState(); /* 見た目オン起動状態 */
     
-    if((u1_t_stasts == (U1)PICT_NOREDUN_STATE_APPON) &&
-       (bfg_Pict_StsMng.u1_stasts != (U1)PICT_NOREDUN_STATE_APPON)){
+    if((u1_t_stasts == (U1)POWER_MODE_STATE_APPON) &&
+       (bfg_Pict_StsMng.u1_stasts != (U1)POWER_MODE_STATE_APPON)){
         u2_t_time = u2_s_PictCtl_GetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA);
         u1_t_vicrset = (U1)Dio_ReadChannel(PICT_PORT_V_IC_RST);
         if(((u2_t_time == (U2)PICT_TIM_STOP) &&
@@ -1078,8 +1078,8 @@ static void vd_s_PictCtl_IgStsChk(void)
         u1_s_pict_apponflg = (U1)TRUE;
         
     }
-    if((u1_t_stasts != (U1)PICT_NOREDUN_STATE_APPON) &&
-       (bfg_Pict_StsMng.u1_stasts == (U1)PICT_NOREDUN_STATE_APPON)){
+    if((u1_t_stasts != (U1)POWER_MODE_STATE_APPON) &&
+       (bfg_Pict_StsMng.u1_stasts == (U1)POWER_MODE_STATE_APPON)){
         /* カメラシステム種別判別フラグOFF */
         bfg_Pict_StsMng.st_CamDisc.u1_CamKindDiscEn = (U1)FALSE;
         /* MIPI設定完了フラグOFF */
@@ -1402,7 +1402,7 @@ static void vd_s_PictCtl_MainMipiSetEndStsUpDate(void)
     if((bfg_Pict_StsMng.u1_CamCapStbySts == (U1)PICT_POLLPORT_ON)
       &&(bfg_Pict_StsMng.u1_CamCapStby2Sts == (U1)PICT_POLLPORT_ON)) {
         bfg_Pict_StsMng.u1_MainMipiSetEndSts = (U1)TRUE;
-        if(bfg_Pict_StsMng.u1_stasts == (U1)PICT_NOREDUN_STATE_APPON) {
+        if(bfg_Pict_StsMng.u1_stasts == (U1)POWER_MODE_STATE_APPON) {
             bfg_Pict_StsMng.u1_MainMipiSetEndFlg = (U1)TRUE;
         }
     }
@@ -2867,7 +2867,7 @@ static void vd_s_PictCtl_CycChkStart(void)
         if(bfg_Pict_StsMng.u1_DispReqGpio0Sts == (U1)PICT_POLLPORT_ON){
             vd_s_PictCtl_CamSyncChkSta();
         }
-        else if((bfg_Pict_StsMng.u1_stasts == (U1)PICT_NOREDUN_STATE_APPON) && (u2_t_tim == (U2)PICT_TIM_STOP)){
+        else if((bfg_Pict_StsMng.u1_stasts == (U1)POWER_MODE_STATE_APPON) && (u2_t_tim == (U2)PICT_TIM_STOP)){
             vd_s_PictCtl_SetTim((U1)PICT_TIMID_ML_CAMSYNC_CHKSTA, (U2)PICT_TIMER_ML_CAMSYNC_CHKSTA_WAIT);
         }
         else{
@@ -3695,117 +3695,6 @@ static void vd_s_PictCtl_CdsizeChk(void)
 U1 u1_g_PictCtl_CdsizeSnd(void)
 {
 	return(u1_s_pict_cd_size);
-}
-
-/* 見た目オン起動処理暫定対応 */
-static U1 u1_s_NoRedun_PwrCtrl_Nxtsts(void)
-{
-  U1 u1_t_return;     /* 戻り値 */
-  U1 u1_t_appea;      /* CAN入力：見た目オンオフ(スタブ) */
-  U1 u1_t_VPSINFO1;   /* CAN入力：判定中 */
-  U1 u1_t_VPSINFO2;   /* CAN入力：駐車中 */
-  U1 u1_t_VPSINFO3;   /* CAN入力：乗車中 */
-  U1 u1_t_VPSINFO4;   /* CAN入力：PowerON通常 */
-  U1 u1_t_VPSINFO5;   /* CAN入力：PowerON緊急停止 */
-  U1 u1_t_VPSINFO6;   /* CAN入力：駐車中高圧起動 */
-  U1 u1_t_VPSINFO7;   /* CAN入力：駐車中高圧・温調起動 */
-  U1 u1_t_VPSINFO;    /* 電源状態取り纏め */
-  U1 u1_t_boot;       /* 開発時のみ使用する、BOOT入力取得(量産時削除予定) */
-
-  u1_t_return    = bfg_Pict_StsMng.u1_stasts;  /* 初期値：前回保持状態 */
-  u1_t_appea     = (U1)FALSE;
-  u1_t_VPSINFO1  = (U1)FALSE;
-  u1_t_VPSINFO2  = (U1)FALSE;
-  u1_t_VPSINFO3  = (U1)FALSE;
-  u1_t_VPSINFO4  = (U1)FALSE;
-  u1_t_VPSINFO5  = (U1)FALSE;
-  u1_t_VPSINFO6  = (U1)FALSE;
-  u1_t_VPSINFO7  = (U1)FALSE;
-  u1_t_VPSINFO   = (U1)0U;
-  u1_t_boot      = STD_LOW;
-
-  (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &u1_t_VPSINFO1 );
-  (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &u1_t_VPSINFO2 );
-  (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &u1_t_VPSINFO3 );
-  (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, &u1_t_VPSINFO4 );
-  (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, &u1_t_VPSINFO5 );
-  (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, &u1_t_VPSINFO6 );
-  (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, &u1_t_VPSINFO7 );
-  (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ  , &u1_t_appea    );
-
-  /* BOOT入力値取得処理 */
-    u1_t_boot = (U1)Dio_ReadChannel(DIO_ID_PORT0_CH2);
-
-  u1_t_VPSINFO =   (u1_t_appea    & (U1)TRUE) << 7;  /* 8bit：見た目オンオフ */
-  u1_t_VPSINFO |=  (u1_t_VPSINFO1 & (U1)TRUE) << 6;  /* 7bit：CAN入力：判定中 */
-  u1_t_VPSINFO |=  (u1_t_VPSINFO2 & (U1)TRUE) << 5;  /* 6bit：CAN入力：駐車中 */
-  u1_t_VPSINFO |=  (u1_t_VPSINFO3 & (U1)TRUE) << 4;  /* 5bit：CAN入力：乗車中 */
-  u1_t_VPSINFO |=  (u1_t_VPSINFO4 & (U1)TRUE) << 3;  /* 4bit：CAN入力：PowerON通常 */
-  u1_t_VPSINFO |=  (u1_t_VPSINFO5 & (U1)TRUE) << 2;  /* 3bit：CAN入力：PowerON緊急停止 */
-  u1_t_VPSINFO |=  (u1_t_VPSINFO6 & (U1)TRUE) << 1;  /* 2bit：CAN入力：駐車中高圧起動 */
-  u1_t_VPSINFO |=  u1_t_VPSINFO7  & (U1)TRUE;        /* 1bit：CAN入力：駐車中高圧・温調起動 */
-
-    switch (u1_t_VPSINFO)
-    {
-    case  0x40U:    /* 見た目：オフ ステート：状態未定 */
-      u1_t_return  = bfg_Pict_StsMng.u1_stasts;  /* 前回状態保持 */
-      break;
-    case  0x20U:    /* 見た目：オフ ステート：駐車中 */
-        u1_t_return  = (U1)PICT_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    case  0x33U:    /* 見た目：オフ ステート：乗車中 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_APPOFF;  /* 見た目オフ起動 */
-      break;
-    case  0x3BU:    /* 見た目：オフ ステート：PowerON緊急停止 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-      break;
-    case  0x3FU:    /* 見た目：オフ ステート：PowerON通常 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-      break;
-    case  0x22U:    /* 見た目：オフ ステート：駐車中 高圧起動 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    case  0x23U:    /* 見た目：オフ ステート：駐車中 高圧・温調起動 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    case  0xC0U:    /* 見た目：オン ステート：状態未定 */
-      u1_t_return  = (U1)bfg_Pict_StsMng.u1_stasts;  /* 前回状態保持 */
-      break;
-    case  0xA0U:    /* 見た目：オン ステート：駐車中 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    case  0xB3U:    /* 見た目：オン ステート：乗車中 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-      break;
-    case  0xBBU:    /* 見た目：オン ステート：PowerON緊急停止 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-      break;
-    case  0xBFU:    /* 見た目：オン ステート：PowerON通常 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-      break;
-    case  0xA2U:    /* 見た目：オン ステート：駐車中 高圧起動 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    case  0xA3U:    /* 見た目：オン ステート：駐車中 高圧・温調起動 */
-      u1_t_return  = (U1)PICT_NOREDUN_STATE_PARK;  /* 駐車中起動 */
-      break;
-    default:
-      /* 遷移条件の一致なし */
-      break;
-    }
-
-  /* 量産向け暫定 */
-  if(u1_t_boot == (U1)TRUE){   /* BOOT=Hiを検知した場合、どの状態でも見た目オン起動へ上書き */
-    u1_t_return  = (U1)PICT_NOREDUN_STATE_APPON;   /* 電源ON 見た目オン起動 */
-  }
-  /* 量産向け暫定ここまで */
-
-  return(u1_t_return);
-}
-
-U1 u1_g_PictCtl_StartSts(void)
-{
-    return(bfg_Pict_StsMng.u1_stasts);
 }
 
 /*===================================================================================================================================*/

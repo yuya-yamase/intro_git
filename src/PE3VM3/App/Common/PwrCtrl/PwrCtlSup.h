@@ -1,54 +1,71 @@
-/* 2.2.0 */
+/* サンプルコード */
+
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  ODO sensor count for Tripcom                                                                                                     */
-/*                                                                                                                                   */
-/*===================================================================================================================================*/
-
-#ifndef TRIPSNSR_ODOCNT_H
-#define TRIPSNSR_ODOCNT_H
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Version                                                                                                                          */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TRIPSNSR_ODOCNT_H_MAJOR                 (2)
-#define TRIPSNSR_ODOCNT_H_MINOR                 (2)
-#define TRIPSNSR_ODOCNT_H_PATCH                 (0)
-
+#ifndef PWRCTLSUP_H
+#define PWRCTLSUP_H
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "aip_common.h"
+
+#include "Dio.h"
+#include "oxcan.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Power Mode State */
+#define POWER_MODE_STATE_NUM                        (4U)
+#define POWER_MODE_STATE_PARK                       (0U)        /* 0 : Parking  */
+#define POWER_MODE_STATE_APPOFF                     (1U)        /* 1 : Display Off */
+#define POWER_MODE_STATE_APPON                      (2U)        /* 2 : Display On */
+#define POWER_MODE_STATE_EDS                        (3U)        /* 3 : EDS */
+#define POWER_MODE_STATE_STANDBY                    (4U)        /* 4 : Standby 仮状態 */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define POWER_IO_STS_LOW                            (STD_LOW)
+#define POWER_IO_STS_HIGH                           (STD_HIGH)
+
+#define u1_POWER_GET_BOOT()                         ((U1)Dio_ReadChannel((Dio_ChannelType)DIO_ID_PORT0_CH2))    /* 暫定 量産時削除 */
+
+#define vd_POWER_GET_VPSINFO1(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, (x)))
+#define vd_POWER_GET_VPSINFO2(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, (x)))
+#define vd_POWER_GET_VPSINFO3(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, (x)))
+#define vd_POWER_GET_VPSINFO4(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, (x)))
+#define vd_POWER_GET_VPSINFO5(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, (x)))
+#define vd_POWER_GET_VPSINFO6(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, (x)))
+#define vd_POWER_GET_VPSINFO7(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, (x)))
+#define vd_POWER_GET_VPSINFOS(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, (x)))
+#define vd_POWER_GET_APOFRQ(x)                      ((void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ, (x)))
+#define vd_POWER_GET_PWRERRST(x)                    ((void)Com_ReceiveSignal(ComConf_ComSignal_PWRERRST, (x)))
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_g_TripsnsrOdocntInit(void);
-void            vd_g_TripsnsrOdocntSmplngTask(const U2 u2_a_VEHSYSSTS, const U1 u1_a_PTSSTS);
-U2              u2_g_TripsnsrOdocntGetDelta(U4 * u4_ap_delta);
-void            vd_g_TripsnsrOdocntSnpshtDelta(const U1 u1_a_RESETBIT);
-U2              u2_g_TripsnsrOdocntEmgfGetDelta(U4 * u4_ap_delta);
-U2              u2_g_TripsnsrOdocntEmgfSts(void);
+void    vd_g_PowerSup_BonInit(void);
+void    vd_g_PowerSup_WkupInit(void);
+void    vd_g_PowerSup_Routine(void);
+U1      u1_g_PowerSup_ModeState(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* TRIPSNSR_ODOCNT_H */
-
+#endif      /* PWRCTLSUP_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  tripsnsr_odocnt.c                                                                                             */
+/*  Change History  :  PwrCtl.c                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

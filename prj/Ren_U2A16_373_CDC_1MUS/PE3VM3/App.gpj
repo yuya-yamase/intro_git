@@ -44,9 +44,11 @@ ${SS_DIR}/22SS/config/22SS_Callout.c
 
 xspi.c
 xspi_sub.c
+PwrCtlSup.c
 PwrCtrl_cfg.c
 PwrCtrl_Main.c
 PwrCtrl_NoRedun.c
+PwrCtrl_PinMonitor.c
 PwrCtrl_Sip.c
 PwrCtrl_Sys.c
 product_cfg.c
