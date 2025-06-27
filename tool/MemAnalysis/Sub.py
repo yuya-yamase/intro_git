@@ -55,21 +55,35 @@ def aggregate_section_sizes(extracted_lines):
         module_name, section, size = parse_line(line)
         if module_name and section and size:
             component = module_name
-            section_component_sizes[section][component] += size
+            section_component_sizes[sortkey_section + section][component] += size
             if section not in SECTION_DICT.keys():
                 category_component_sizes['<.Unknown>'][component] += size
 
     for category in CATEGORY_LIST:
         for section in SECTION_DICT.keys():
             if category == SECTION_DICT[section]:
-                for component, size in section_component_sizes[section].items():
+                for component, size in section_component_sizes[sortkey_section + section].items():
                     category_component_sizes[category][component] += size
+
+    #未使用のセクション含む全セクションを列に追加
+    for section in SECTION_DICT.keys():
+        section_component_sizes[sortkey_section + section][component] += 0
+
+    #未使用のカテゴリ含む全カテゴリを列に追加（容量0のカテゴリを除く）
+    for category in CATEGORY_LIST:
+        if category != "<.Unknown>":
+            if category == "<.text>" or category == "<.rodata>":
+                if CAPACITY_DICT["Capacity<.CodeFlash> (= <.text> + <.rodata>)"] != 0:
+                    category_component_sizes[category][component] += 0
+            else:
+                 if CAPACITY_DICT['Capacity' + category] != 0:
+                    category_component_sizes[category][component] += 0
 
     return section_component_sizes, category_component_sizes
 
 
 def map_file_analyze(json_file, file_path, sheet_name,output_file):
-    global SECTION_INFO, CATEGORY_LIST, SECTION_DICT, COMPONENT_LIST
+    global SECTION_INFO, CATEGORY_LIST, SECTION_DICT, COMPONENT_LIST, CAPACITY_DICT
 
     # JSON設定ファイルの読み込み
     with open(json_file, 'r') as f:
@@ -79,6 +93,7 @@ def map_file_analyze(json_file, file_path, sheet_name,output_file):
     CATEGORY_LIST = SECTION_INFO["CATEGORY_LIST"]
     SECTION_DICT = SECTION_INFO["SECTION_DICT"]
     COMPONENT_LIST = config["COMPONENT_LIST"]
+    CAPACITY_DICT = SECTION_INFO["CAPACITY_DICT"]
 
     extracted_lines = extract_lines_from_map(file_path)
     section_component_sizes, category_component_sizes = aggregate_section_sizes(extracted_lines)
@@ -135,9 +150,29 @@ def map_file_analyze(json_file, file_path, sheet_name,output_file):
     # データを平坦化してリストに変換
     data_list = []
     for component, sizes in component_sizes.items():
+        #CodeFlash領域の使用量集計のリセット
+        codeflash_value = 0
         for size_type, size_value in sizes.items():
-            if size_type in SECTION_DICT.keys() or size_type in CATEGORY_LIST:
+            if size_type.replace(sortkey_section, "") in SECTION_DICT.keys() or size_type in CATEGORY_LIST:
                 data_list.append({'Component': component, 'Section': size_type, 'Size': size_value})
+                #使用してるカテゴリの容量、使用率の計算（CodeFlash領域除く）
+                capacity_name = 'Capacity' + size_type
+                usagerate_name = 'UsageRate' + size_type
+                if size_type == "<.text>" or size_type == "<.rodata>":
+                    #CodeFlash領域の使用量の集計
+                    codeflash_value += size_value
+                elif capacity_name in CAPACITY_DICT:
+                    #容量の列追加
+                    data_list.append({'Component': component, 'Section': capacity_name, 'Size': CAPACITY_DICT[capacity_name]})
+                    #使用率の計算、列追加
+                    data_list.append({'Component': component, 'Section': usagerate_name, 'Size': size_value / CAPACITY_DICT[capacity_name] * 100})
+        #CodeFlash領域の容量、使用率の計算
+        capacity_name_codeflash = "Capacity<.CodeFlash> (= <.text> + <.rodata>)"
+        usagerate_name_codeflash = "UsageRate<.CodeFlash> (= <.text> + <.rodata>)"
+        #CodeFlashの容量の列追加
+        data_list.append({'Component': component, 'Section': capacity_name_codeflash, 'Size': CAPACITY_DICT[capacity_name_codeflash]})
+        #CodeFlashの使用率の計算、列追加
+        data_list.append({'Component': component, 'Section': usagerate_name_codeflash, 'Size': codeflash_value / CAPACITY_DICT[capacity_name_codeflash] * 100})
 
     # DataFrameに変換
     df = pd.DataFrame(data_list)
@@ -146,12 +181,27 @@ def map_file_analyze(json_file, file_path, sheet_name,output_file):
     # 'Section'を先頭行に移動
     df = df.pivot(index='Component', columns='Section', values='Size').reset_index()
 
+    # カテゴリの容量の空白セルを埋める
+    for col in df.columns:
+        if col in CAPACITY_DICT.keys():
+            df[col] = CAPACITY_DICT[col]
     # 空白セルを0で埋める
     df.fillna(0, inplace=True)
+
+    #ソート用に付与したラベルの削除
+    new_columns = []
+    for col in df.columns:
+        if sortkey_section in col:
+            new_columns.append(col.replace(sortkey_section, ""))
+        else:
+            new_columns.append(col)
+    df.columns = new_columns
 
     # DataFrameをExcelファイルに書き出し
     df.to_excel(output_file, sheet_name=sheet_name, index=False)
 
+#セクションの使用量が一番左に並ぶよう、列名の先頭に付与するラベル
+sortkey_section = ".section_"
 
 args = sys.argv
 
