@@ -22,7 +22,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDS_CI_NUM_CH         (164U)
+#define VDS_CI_NUM_CH         (167U)
 
 #define VDS_CI_SW_ASD_CONT    ( 0U)
 #define VDS_CI_SW_ASD_CANC    ( 1U)
@@ -188,6 +188,9 @@
 #define VDS_CI_SW_HCSMNSW     (161U)
 #define VDS_CI_SW_HCSSTPOP    (162U)
 #define VDS_CI_SW_ADSEGDSW    (163U)
+#define VDS_CI_SW_DPMS_BB     (164U)
+#define VDS_CI_SW_POS_CALL    (165U)
+#define VDS_CI_SW_POS_REG     (166U)
 
 #define VDS_CI_LCASGAPR_MAX   ( 2U)
 #define VDS_CI_M_COP_S_MAX    ( 3U)
@@ -256,6 +259,8 @@
 #define VDS_CI_TITE_BB_MAX    (15U)
 #define VDS_CI_METMDSEL_MAX   ( 3U)
 #define VDS_CI_ADSEGDSW_MAX   ( 3U)
+#define VDS_CI_POS_CALL_MAX   ( 3U)
+#define VDS_CI_POS_REG_MAX    ( 3U)
 
 /* SETDCLVI */
 #define VDS_CI_SETDCLVI_INIT  ( 0U)

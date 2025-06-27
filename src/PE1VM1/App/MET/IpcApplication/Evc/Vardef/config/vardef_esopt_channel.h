@@ -26,7 +26,7 @@
 #define VDF_ESO_CH_BIT_AVA_LSB                   (0x001fU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_CH                           (264U)
+#define VDF_ESO_NUM_CH                           (267U)
 
 #define VDF_ESO_CH_INDSPDALT                     (  0U)
 #define VDF_ESO_CH_CNTR_DISP                     (  1U)
@@ -292,6 +292,9 @@
 #define VDF_ESO_CH_SYS_NOT_USED47                (261U)
 #define VDF_ESO_CH_SYS_NOT_USED48                (262U)
 #define VDF_ESO_CH_SYS_NOT_USED49                (263U)
+#define VDF_ESO_CH_SW_DPM1                       (264U)
+#define VDF_ESO_CH_SW_DPM2                       (265U)
+#define VDF_ESO_CH_SW_DPM3                       (266U)
 
 #define VDF_ESO_CH_DA                            (255U)
 #define VDF_ESO_CH_CXSWS1S01                     (255U)
@@ -324,7 +327,7 @@
 #define VDF_ESO_NVM_W5                           (0xC030E76CU)
 #define VDF_ESO_NVM_W6                           (0x3F840FFFU)
 #define VDF_ESO_NVM_W7                           (0xAFEFFD40U)
-#define VDF_ESO_NVM_W8                           (0x0000001CU)
+#define VDF_ESO_NVM_W8                           (0x0000071CU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
