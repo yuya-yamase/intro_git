@@ -188,6 +188,9 @@ static U1             u1_s_prehcsmnsw;            /*  HCSMNSW Previous RxValue *
 static U1             u1_s_prehcsstpop;           /*  HCSSTPOP Previous RxValue*/
 static U1             u1_s_pretite_bb;            /*  TITE_BB Previous RxValue */
 static U1             u1_s_preadsegdsw;           /*  ADSEGDSW Previous RxValue*/
+static U1             u1_s_predpms_bb;            /*  DPMS_BB Previous RxValue */
+static U1             u1_s_prepos_call;           /*  POS_CALL Previous RxValue*/
+static U1             u1_s_prepos_reg;            /*  POS_REG Previous RxValue */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -292,6 +295,9 @@ static inline void    vd_s_XSpiCanTx_HCSMNSW(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_HCSSTPOP(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_TITE_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_ADSEGDSW(const U4* u4_ap_pck_rx);
+static inline void    vd_s_XSpiCanTx_DPMS_BB(const U4* u4_ap_pck_rx);
+static inline void    vd_s_XSpiCanTx_POS_CALL(const U4* u4_ap_pck_rx);
+static inline void    vd_s_XSpiCanTx_POS_REG(const U4* u4_ap_pck_rx);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -413,6 +419,9 @@ void    vd_g_XSpiCfgInitCh1(void)
     u1_s_prehcsstpop = (U1)0U;
     u1_s_pretite_bb  = (U1)0U;
     u1_s_preadsegdsw = (U1)0U;
+    u1_s_predpms_bb  = (U1)0U;
+    u1_s_prepos_call = (U1)0U;
+    u1_s_prepos_reg  = (U1)0U;
 
     for (u1_t_loop = (U1)0U; u1_t_loop < (U1)XSPI_MMCUS_NUM_TXSIGNAL; u1_t_loop++) {
         u1_sp_xspi_mmcus_pretxsig[u1_t_loop] = (U1)0U;
@@ -531,6 +540,9 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCanTx_HCSSTPOP(&u4_ap_PDU_RX[87]);
     vd_s_XSpiCanTx_TITE_BB(&u4_ap_PDU_RX[35]);
     vd_s_XSpiCanTx_ADSEGDSW(&u4_ap_PDU_RX[51]);
+    vd_s_XSpiCanTx_DPMS_BB(&u4_ap_PDU_RX[35]);
+    vd_s_XSpiCanTx_POS_CALL(&u4_ap_PDU_RX[35]);
+    vd_s_XSpiCanTx_POS_REG(&u4_ap_PDU_RX[35]);
 
 }
 
@@ -3141,6 +3153,69 @@ static inline void    vd_s_XSpiCanTx_ADSEGDSW(const U4 * u4_ap_pck_rx)
 }
 
 /*===================================================================================================================================*/
+/*  static inline void    vd_s_XSpiCanTx_DPMS_BB(U4 * u4_ap_pdu_tx)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:     u4_ap_pck_rx                                                                                                      */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static inline void    vd_s_XSpiCanTx_DPMS_BB(const U4 * u4_ap_pck_rx)
+{
+    static const U1 u1_s_XSPI_MET_DPMS_BB_MAX = (U1)0x01U;
+    U1 u1_t_rxdata;
+
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)16U, (U1)1U);
+
+    if (u1_t_rxdata != u1_s_predpms_bb) {
+        if (u1_t_rxdata <= u1_s_XSPI_MET_DPMS_BB_MAX) {
+            vd_g_VdsCIReqTx((U1)VDS_CI_SW_DPMS_BB, u1_t_rxdata);
+        }
+    }
+    u1_s_predpms_bb = u1_t_rxdata;
+}
+
+/*===================================================================================================================================*/
+/*  static inline void    vd_s_XSpiCanTx_POS_CALL(U4 * u4_ap_pdu_tx)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:     u4_ap_pck_rx                                                                                                      */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static inline void    vd_s_XSpiCanTx_POS_CALL(const U4 * u4_ap_pck_rx)
+{
+    static const U1 u1_s_XSPI_MET_POS_CALL_MAX = (U1)0x03U;
+    U1 u1_t_rxdata;
+
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)18U, (U1)2U);
+
+    if (u1_t_rxdata != u1_s_prepos_call) {
+        if (u1_t_rxdata <= u1_s_XSPI_MET_POS_CALL_MAX) {
+            vd_g_VdsCIReqTx((U1)VDS_CI_SW_POS_CALL, u1_t_rxdata);
+        }
+    }
+    u1_s_prepos_call = u1_t_rxdata;
+}
+
+/*===================================================================================================================================*/
+/*  static inline void    vd_s_XSpiCanTx_POS_REG(U4 * u4_ap_pdu_tx)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:     u4_ap_pck_rx                                                                                                      */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static inline void    vd_s_XSpiCanTx_POS_REG(const U4 * u4_ap_pck_rx)
+{
+    static const U1 u1_s_XSPI_MET_POS_REG_MAX = (U1)0x03U;
+    U1 u1_t_rxdata;
+
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)22U, (U1)2U);
+
+    if (u1_t_rxdata != u1_s_prepos_reg) {
+        if (u1_t_rxdata <= u1_s_XSPI_MET_POS_REG_MAX) {
+            vd_g_VdsCIReqTx((U1)VDS_CI_SW_POS_REG, u1_t_rxdata);
+        }
+    }
+    u1_s_prepos_reg = u1_t_rxdata;
+}
+
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -3188,6 +3263,7 @@ static inline void    vd_s_XSpiCanTx_ADSEGDSW(const U4 * u4_ap_pck_rx)
 /*           03/06/2025  HT       Change for BEV System_Consideration_1.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
 /*           05/14/2025  RO       Change for BEV EMC R.(MET-S_ADMID-CSTD-0-02-A-C0)                                                  */
 /*           05/30/2025  SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
+/*           06/13/2025  KO       Change for BEV System_Consideration_2.(MET-B_DRPBB-CSTD-0-01-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */

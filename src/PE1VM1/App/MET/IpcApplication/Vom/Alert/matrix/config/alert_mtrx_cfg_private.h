@@ -1,4 +1,4 @@
-/* 5.1.0 */
+/* 5.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -228,7 +228,6 @@
 #define ALERT_C_OFRMDL_CH_NUM                    (1U)
 #define ALERT_B_THESEN_CH_NUM                    (1U)
 #define ALERT_P_TECOLP2_CH_NUM                   (1U)
-#define ALERT_H_SBMMAL_CH_NUM                    (1U)
 #define ALERT_H_ACDCSUP_CH_NUM                   (1U)
 #define ALERT_M_MINDSPWR_CH_NUM                  (1U)
 #define ALERT_H_XMDRJT_CH_NUM                    (2U)
@@ -277,6 +276,7 @@
 #define ALERT_P_CIRMOD_CH_NUM                    (4U)
 #define ALERT_C_SBRDMB_CH_NUM                    (1U)
 #define ALERT_C_HCS_CH_NUM                       (3U)
+#define ALERT_O_PDSMAL_CH_NUM                    (2U)
 
 #define ALERT_SPD_STSBIT_VALID                   (VEHSPD_STSBIT_VALID)
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
@@ -408,6 +408,7 @@ void    vd_g_AlertP_cootemInit(void);
 void    vd_g_AlertH_quichaInit(void);
 void    vd_g_AlertC_sbrdmbInit(void);
 void    vd_g_AlertC_hcsInit(void);
+void    vd_g_AlertO_pdsmalInit(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Required  */
@@ -594,7 +595,6 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_B_TFFOG_MTRX[ALERT_B_TFFOG_CH_NUM
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_OFRMDL_MTRX[ALERT_C_OFRMDL_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_B_THESEN_MTRX[ALERT_B_THESEN_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_P_TECOLP2_MTRX[ALERT_P_TECOLP2_CH_NUM];
-extern const ST_ALERT_MTRX         st_gp_ALERT_H_SBMMAL_MTRX[ALERT_H_SBMMAL_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_ACDCSUP_MTRX[ALERT_H_ACDCSUP_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_M_MINDSPWR_MTRX[ALERT_M_MINDSPWR_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_H_XMDRJT_MTRX[ALERT_H_XMDRJT_CH_NUM];
@@ -643,6 +643,7 @@ extern const ST_ALERT_MTRX         st_gp_ALERT_H_ZMILRQ_MTRX[ALERT_H_ZMILRQ_CH_N
 extern const ST_ALERT_MTRX         st_gp_ALERT_P_CIRMOD_MTRX[ALERT_P_CIRMOD_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_SBRDMB_MTRX[ALERT_C_SBRDMB_CH_NUM];
 extern const ST_ALERT_MTRX         st_gp_ALERT_C_HCS_MTRX[ALERT_C_HCS_CH_NUM];
+extern const ST_ALERT_MTRX         st_gp_ALERT_O_PDSMAL_MTRX[ALERT_O_PDSMAL_CH_NUM];
 
 #endif      /* ALERT_MTRX_CFG_H */
 
