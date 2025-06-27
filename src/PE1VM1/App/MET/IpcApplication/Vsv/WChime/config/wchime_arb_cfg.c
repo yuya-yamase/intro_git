@@ -116,9 +116,9 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 static const U4              u4_sp_WCHIME_REQBIT_CH_0[WCHIME_REQBIT_NUM_WORD] = {
     (U4)0xFE3E07FFU,
     (U4)0xFFFFFEE3U,
-    (U4)0x9FFFFBFFU,
+    (U4)0xE7FFFEFFU,
     (U4)0xFFFFFFFFU,
-    (U4)0x000000FFU
+    (U4)0x0000003FU
 };
 
 static const U4              u4_sp_WCHIME_REQBIT_CH_1[WCHIME_REQBIT_NUM_WORD] = {
@@ -126,7 +126,7 @@ static const U4              u4_sp_WCHIME_REQBIT_CH_1[WCHIME_REQBIT_NUM_WORD] = 
     (U4)0x00000000U,
     (U4)0x00000000U,
     (U4)0x00000000U,
-    (U4)0x03FFFF00U
+    (U4)0x00FFFFC0U
 };
 
 static const U4              u4_sp_WCHIME_REQBIT_CH_2[WCHIME_REQBIT_NUM_WORD] = {
@@ -140,7 +140,7 @@ static const U4              u4_sp_WCHIME_REQBIT_CH_2[WCHIME_REQBIT_NUM_WORD] = 
 static const U4              u4_sp_WCHIME_REQBIT_CH_3[WCHIME_REQBIT_NUM_WORD] = {
     (U4)0x00000000U,
     (U4)0x00000100U,
-    (U4)0x60000400U,
+    (U4)0x18000100U,
     (U4)0x00000000U,
     (U4)0x00000000U
 };
@@ -268,8 +268,6 @@ void    vd_g_wChimeCfgReqchk(U4 * u4p_a_reqbit)
         {  (U2)ALERT_CH_S_RSA_BC_SGN,     (U1)ALERT_REQ_S_RSA_BC_SGN_RED_LGHT,   (U1)WCHIME_REQ_IN_RSA_SIGN_CAUTION2  >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_RSA_SIGN_CAUTION2  & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_B_ESWUOC_BCB,     (U1)ALERT_REQ_B_ESWUOC_BCB_DOUBLE,     (U1)WCHIME_REQ_SI_ESWUOC_REL         >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_SI_ESWUOC_REL         & (U1)0x1FU)  }, /* MET-B_ESWUOC-CSTD-            */
         {  (U2)ALERT_CH_S_PMAR_BC,        (U1)ALERT_REQ_S_PMAR_BC_ON,            (U1)WCHIME_REQ_IN_PMAR               >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_PMAR               & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
-        {  (U2)ALERT_CH_S_APP_BC,         (U1)ALERT_REQ_S_APP_BC_NOTOPERATED1,   (U1)WCHIME_REQ_IN_APP_NONOPE_REQ2    >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_APP_NONOPE_REQ2    & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
-        {  (U2)ALERT_CH_S_APP_BC,         (U1)ALERT_REQ_S_APP_BC_NOTOPERATED2,   (U1)WCHIME_REQ_CO_APP_NONOPE_REQ4    >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_APP_NONOPE_REQ4    & (U1)0x1FU)  }, /* MET-S_ADBZR-CSTD-             */
         {  (U2)ALERT_CH_H_SYSMAL_BC,      (U1)ALERT_REQ_H_SYSMAL_BC_ON,          (U1)WCHIME_REQ_CO_SYSMAL_RNG_P       >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_CO_SYSMAL_RNG_P       & (U1)0x1FU)  }, /* MET-H_SYSMAL-CSTD-            */
         {  (U2)ALERT_CH_O_CHAMAL,         (U1)ALERT_REQ_O_CHAMAL_CYCL,           (U1)WCHIME_REQ_IN_CHAMAL_BAT_FAIL    >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_CHAMAL_BAT_FAIL    & (U1)0x1FU)  }, /* MET-O_CHAMAL-CSTD-            */
         {  (U2)ALERT_CH_O_CHAMAL,         (U1)ALERT_REQ_O_CHAMAL_MALFUNC_BZ,     (U1)WCHIME_REQ_IN_CHAMAL_BAT_FAIL    >> 5U,  (U4)0x00000001 << ((U1)WCHIME_REQ_IN_CHAMAL_BAT_FAIL    & (U1)0x1FU)  }, /* MET-O_CHAMAL-CSTD-            */
@@ -581,8 +579,7 @@ static  void    vd_s_wChimeCfgTurhazReqchk(U4 * u4p_a_reqbit)
 static void   vd_s_wChimeCfgAppReqchk(U4 * u4p_a_reqbit)
 {
     static const U1     u1_sp_WCHIME_APP_BZ_LIST[WCHIME_APP_BZ_NUM] = {
-        (U1)WCHIME_REQ_SI_APP_DIS_ASSIST,     (U1)WCHIME_REQ_SI_APP_CMPLT,
-        (U1)WCHIME_REQ_IN_APP_NONOPE_REQ2,    (U1)WCHIME_REQ_CO_APP_NONOPE_REQ4
+        (U1)WCHIME_REQ_SI_APP_DIS_ASSIST,     (U1)WCHIME_REQ_SI_APP_CMPLT
     };
 
     U4                    u4_t_loop;
@@ -661,8 +658,6 @@ static  void    vd_s_wChimeCfgAppDelchk(U4 * u4p_a_reqbit)
     if(u1_t_app == (U1)FALSE){
         vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_SI_APP_DIS_ASSIST);
         vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_SI_APP_CMPLT);
-        vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_IN_APP_NONOPE_REQ2);
-        vd_s_wChimeCfgReqDel(u4p_a_reqbit, (U1)WCHIME_REQ_CO_APP_NONOPE_REQ4);
     }
 }
 /*===================================================================================================================================*/
@@ -819,6 +814,7 @@ static inline U1    u1_s_wChimeGetCalibU1DataNumChk(const U1 u1_a_CALIBID, const
 /*  BEV-1    03/21/2025  RO       Change for BEV System_Consideration_1.(MET-M_CONTBUZZ2-CSTD-0004-C1 / MET-D_SFTPOS-CSTD-1-00-A-C0) */
 /*  BEV-2    06/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
 /*  BEV-3    06/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
+/*  BEV-4    06/24/2025  RO       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
