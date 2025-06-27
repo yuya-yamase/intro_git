@@ -137,10 +137,10 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U4                     u4_gp_WCHIME_REQBIT_SIN[WCHIME_REQBIT_NUM_WORD] = {                    /* Bitmap of single buzzer.      */
     (U4)0x00000020U,
-    (U4)0xF8020C00U,
-    (U4)0xD860503FU,
-    (U4)0xFFE559B3U,
-    (U4)0x03FFFFFFU
+    (U4)0xFE020C00U,
+    (U4)0xF618140FU,
+    (U4)0xFFF9566CU,
+    (U4)0x00FFFFFFU
 };
 
 const U4                     u4_gp_WCHIME_REQBIT_PRIFREE[WCHIME_REQBIT_NUM_WORD] = {               /* Bitmap of priority-free buzzer.*/
@@ -148,7 +148,7 @@ const U4                     u4_gp_WCHIME_REQBIT_PRIFREE[WCHIME_REQBIT_NUM_WORD]
     (U4)0x00000000U,
     (U4)0x00000000U,
     (U4)0x00000000U,
-    (U4)0x03FFFF00U
+    (U4)0x00FFFFC0U
 };
 const U1                     u1_g_WCHIME_REQBIT_NUM_WORD = (U1)WCHIME_REQBIT_NUM_WORD;
 const U1                     u1_g_WCHIME_NUM_REQ         = (U1)WCHIME_NUM_REQ;
@@ -157,9 +157,9 @@ const U1                     u1_g_WCHIME_NUM_REQ         = (U1)WCHIME_NUM_REQ;
 static const U4              u4_sp_WCHIME_REQBIT_BAT_ON[WCHIME_REQBIT_NUM_WORD] = {               /* Bitmap of +B-ON start buzzer.   */
     (U4)0x00000400U,
     (U4)0x00020802U,
-    (U4)0x00000228U,
-    (U4)0x80024164U,
-    (U4)0x03FFFFBDU
+    (U4)0x0000008AU,
+    (U4)0x60009059U,
+    (U4)0x00FFFFEFU
 };
 
 static const U4              u4_sp_WCHIME_REQBIT_IGN_ON[WCHIME_REQBIT_NUM_WORD] = {               /* Bitmap of IG-ON start buzzer.   */
@@ -167,7 +167,7 @@ static const U4              u4_sp_WCHIME_REQBIT_IGN_ON[WCHIME_REQBIT_NUM_WORD] 
     (U4)0xFFFFFFFFU,
     (U4)0xFFFFFFFFU,
     (U4)0xFFFFFFFFU,
-    (U4)0x03FFFFFFU
+    (U4)0x00FFFFFFU
 };
 
 const U4 * const             u4p_gp_WCHIME_REQBIT_BY_OPEMD[WCHIME_NUM_OPEMD] = {
@@ -231,8 +231,6 @@ const ST_WCHIME_MM_INFO      st_gp_WCHIME_BUZ_OUTPUT_INFO[WCHIME_NUM_REQ] = {
     {(U1)WCHIME_BUZ_LV5,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_IN_RSA_SIGN_CAUTION2  */
     {(U1)WCHIME_BUZ_LV5,     (U1)WCHIME_BUZ_SHORT,   (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_SI_ESWUOC_REL         */
     {(U1)WCHIME_BUZ_LV5,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_IN_PMAR               */
-    {(U1)WCHIME_BUZ_LV5,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_IN_APP_NONOPE_REQ2    */
-    {(U1)WCHIME_BUZ_LV5,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_CO_APP_NONOPE_REQ4    */
     {(U1)WCHIME_BUZ_LV5,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_CO_SYSMAL_RNG_P       */
     {(U1)WCHIME_BUZ_LV5,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_IN_CHAMAL_BAT_FAIL    */
     {(U1)WCHIME_BUZ_LV5,     (U1)WCHIME_BUZ_LONG,    (U1)WCHIME_BUZ_EMOFF},    /* WCHIME_REQ_IN_SYSMAL_REQSTP      */
@@ -390,8 +388,6 @@ static const U1              u1_sp2_WCHIME_REQ_VOL_INFO[WCHIME_NUM_REQ][WCHIME_V
     {  (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MAX      },    /* WCHIME_REQ_IN_RSA_SIGN_CAUTION2  */
     {  (U1)WCHIME_VOL_BASE_REJECT_MID,       (U1)WCHIME_VOL_BASE_REJECT_MID,       (U1)WCHIME_VOL_BASE_REJECT_MAX        },    /* WCHIME_REQ_SI_ESWUOC_REL         */
     {  (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MAX      },    /* WCHIME_REQ_IN_PMAR               */
-    {  (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MAX      },    /* WCHIME_REQ_IN_APP_NONOPE_REQ2    */
-    {  (U1)WCHIME_VOL_BASE_CONTWARN_MID,     (U1)WCHIME_VOL_BASE_CONTWARN_MID,     (U1)WCHIME_VOL_BASE_CONTWARN_MAX      },    /* WCHIME_REQ_CO_APP_NONOPE_REQ4    */
     {  (U1)WCHIME_VOL_BASE_CONTWARN_MID,     (U1)WCHIME_VOL_BASE_CONTWARN_MID,     (U1)WCHIME_VOL_BASE_CONTWARN_MAX      },    /* WCHIME_REQ_CO_SYSMAL_RNG_P       */
     {  (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MAX      },    /* WCHIME_REQ_IN_CHAMAL_BAT_FAIL    */
     {  (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MID,     (U1)WCHIME_VOL_BASE_INTWARNM_MAX      },    /* WCHIME_REQ_IN_SYSMAL_REQSTP      */
@@ -560,7 +556,7 @@ U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL)
         (U1)0x00U,  /* WCHIME_REQ_IN_SCB                */
         (U1)0x03U,  /* WCHIME_REQ_IN_BSM                */
         (U1)0x03U,  /* WCHIME_REQ_IN_LDA                */
-        (U1)0x03U,  /* WCHIME_REQ_IN_INFRA_INT          */
+        (U1)0x00U,  /* WCHIME_REQ_IN_INFRA_INT          */
         (U1)0x00U,  /* WCHIME_REQ_IN_SMASTA_INT3        */
         (U1)0x03U,  /* WCHIME_REQ_IN_CSR_FR_FD          */
         (U1)0x03U,  /* WCHIME_REQ_IN_CSR_RR_FD          */
@@ -579,8 +575,6 @@ U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL)
         (U1)0x00U,  /* WCHIME_REQ_IN_RSA_SIGN_CAUTION2  */
         (U1)0x02U,  /* WCHIME_REQ_SI_ESWUOC_REL         */
         (U1)0x00U,  /* WCHIME_REQ_IN_PMAR               */
-        (U1)0x00U,  /* WCHIME_REQ_IN_APP_NONOPE_REQ2    */
-        (U1)0x00U,  /* WCHIME_REQ_CO_APP_NONOPE_REQ4    */
         (U1)0x00U,  /* WCHIME_REQ_CO_SYSMAL_RNG_P       */
         (U1)0x00U,  /* WCHIME_REQ_IN_CHAMAL_BAT_FAIL    */
         (U1)0x00U,  /* WCHIME_REQ_IN_SYSMAL_REQSTP      */
@@ -760,8 +754,6 @@ U1      u1_g_wChimeCfgSwWaitInsert(const U1 u1_a_REQ_SEL, const U1 u1_a_REQ_NEXT
                 /* Switching between WCHIME_REQ_SI_SMASTA_SNGL2, the silent duration must be 0. */
                 (*u2p_a_wait_time) = (U2)WCHIME_WT_TIM_NOTHING;
                 break;
-            case (U1)WCHIME_REQ_IN_APP_NONOPE_REQ2:
-            case (U1)WCHIME_REQ_CO_APP_NONOPE_REQ4:
             case (U1)WCHIME_REQ_SI_APP_DIS_ASSIST:
             case (U1)WCHIME_REQ_SI_APP_CMPLT:
                 /* Switching between APP and APP, the silent duration must be 300. */
@@ -819,8 +811,7 @@ U1      u1_g_wChimeCfgVolGet(const U1 u1_a_REQ_SEL)
 static U1   u1_s_wChimeCfgSwExcptOtherToApp(const U1 u1_a_REQ_SEL, const U1 u1_a_REQ_NEXT)
 {
     static const U1     u1_sp_WCHIME_APP_BZ_LIST[WCHIME_APP_BZ_NUM] = {
-        (U1)WCHIME_REQ_SI_APP_DIS_ASSIST,     (U1)WCHIME_REQ_SI_APP_CMPLT,
-        (U1)WCHIME_REQ_IN_APP_NONOPE_REQ2,    (U1)WCHIME_REQ_CO_APP_NONOPE_REQ4
+        (U1)WCHIME_REQ_SI_APP_DIS_ASSIST,     (U1)WCHIME_REQ_SI_APP_CMPLT
     };
 
     U4    u4_t_loop;
@@ -856,8 +847,7 @@ static U1   u1_s_wChimeCfgSwExcptOtherToApp(const U1 u1_a_REQ_SEL, const U1 u1_a
 static U1   u1_s_wChimeCfgSwExcptAppToOther(const U1 u1_a_REQ_SEL, const U1 u1_a_REQ_NEXT)
 {
     static const U1     u1_sp_WCHIME_APP_BZ_LIST[WCHIME_APP_BZ_NUM] = {
-        (U1)WCHIME_REQ_SI_APP_DIS_ASSIST,     (U1)WCHIME_REQ_SI_APP_CMPLT,
-        (U1)WCHIME_REQ_IN_APP_NONOPE_REQ2,    (U1)WCHIME_REQ_CO_APP_NONOPE_REQ4
+        (U1)WCHIME_REQ_SI_APP_DIS_ASSIST,     (U1)WCHIME_REQ_SI_APP_CMPLT
     };
 
     U4    u4_t_loop;
@@ -1183,6 +1173,7 @@ static U1   u1_s_wChimeCfgClesonVolGet(const U1 u1_a_REQ_SEL)
 /*  BEV-2    04/03/2025  RO       Change for BEV System_Consideration_2.(MET-D_SFTPOS-CSTD-1-00-A-C0)                                */
 /*  BEV-2    06/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
 /*  BEV-3    06/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
+/*  BEV-4    06/24/2025  RO       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-02-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * ToN  = Toshiharu Nagata, Denso Techno                                                                                          */
