@@ -936,7 +936,6 @@ static U4      u4_s_AlertB_smastaS2igSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_B_SMASTA_S2I_LSB_ENG1G13_MSG);
 
     u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PTSYS, &u1_t_sgnl);
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_B_SMASTA_S2I_LSB_PTSYS_SIG);
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_IDT1S02_CH0,
