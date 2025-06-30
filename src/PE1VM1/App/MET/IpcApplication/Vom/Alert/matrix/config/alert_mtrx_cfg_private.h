@@ -48,7 +48,7 @@
 
 #define ALERT_CH_TICK                            (ALERT_MAIN_TICK * ALERT_TASK_NUM_SLOT)
 
-/** PNC check **/
+/* PNC check */
 #define OXCAN_SYS_PNC_ALL                        (OXCAN_SYS_PNC_16 | OXCAN_SYS_PNC_40 | OXCAN_SYS_PNC_43 | OXCAN_SYS_PNC_44)
 
 #define ALERT_HW_ID_B_BKEY_IGN__3P8V             (IOHW_DISGNL_IGN__3P8V)

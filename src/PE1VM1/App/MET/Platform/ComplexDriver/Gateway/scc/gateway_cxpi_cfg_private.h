@@ -60,7 +60,7 @@
 
 #define GWCXCFG_EXIST_COUNT                       (2U)        /* When MET receives 3 times of signals, function is available */
 
-/** PNC check **/
+/* PNC check */
 #define OXCAN_SYS_PNC_ALL                        (OXCAN_SYS_PNC_16 | OXCAN_SYS_PNC_40 | OXCAN_SYS_PNC_43 | OXCAN_SYS_PNC_44)
 
 /** CXMET1S02 **/
