@@ -95,7 +95,6 @@ U1      u1_g_VdfEsoRx_SGAUGE(void)
     U2                 u2_t_chk;
 
     u1_t_rx  = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VARTRM1, &u1_t_rx);
     u2_t_chk = ((U2)TRUE << u1_t_rx);
 
     if((u2_t_chk & u2_s_VDF_ESO_SGAUGE_3GAUGE_ACT) != (U2)0U){

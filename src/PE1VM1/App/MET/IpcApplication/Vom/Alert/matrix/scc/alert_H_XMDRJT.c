@@ -124,8 +124,8 @@ static U4      u4_s_AlertH_xmdrjtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1E00,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_EHV1E00,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl     = (U1)0U;
 #if 0   /* BEV BSW provisionally */
@@ -150,8 +150,8 @@ static U4      u4_s_AlertH_xmdrjtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1E00,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_EHV1E00,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;

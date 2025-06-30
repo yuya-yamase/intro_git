@@ -50,12 +50,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_BZ)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_BZ)
 static U1      u1_s_alert_b_eswuoc_bcb_msgsts;
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_BZ) */
-#if defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_MID)
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_BZ) */
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_MID)
 static U1      u1_s_alert_b_eswuoc_pdb_msgsts;
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_MID) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_MID) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -209,12 +209,12 @@ const ST_ALERT_MTRX st_gp_ALERT_B_ESWUOC_MTRX[4] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertB_eswuocInit(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_BZ)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_BZ)
     u1_s_alert_b_eswuoc_bcb_msgsts = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_BZ) */
-#if defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_MID)
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_BZ) */
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_MID)
     u1_s_alert_b_eswuoc_pdb_msgsts = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_MID) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_MID) */
 }
 
 /*===================================================================================================================================*/
@@ -225,15 +225,15 @@ void    vd_g_AlertB_eswuocInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_eswuocBcbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_BZ)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_BZ)
     static const U1 u1_s_ALERT_B_ESWUOC_BCB_LSB_MSG  = (U1)2U;
     static const U4 u4_s_ALERT_B_ESWUOC_BCB_BIT_BTWT = (U4)0x00000008U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S05_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_PBA,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S05_CH0,
+                                     (U4)OXCAN_SYS_PNC_ALL,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_eswuoc_bcb_msgsts, u1_t_msgsts);
 
@@ -250,7 +250,7 @@ static U4      u4_s_AlertB_eswuocBcbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_BZ) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_BZ) */
 }
 
 /*===================================================================================================================================*/
@@ -261,14 +261,14 @@ static U4      u4_s_AlertB_eswuocBcbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_eswuocBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_BZ)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_BZ)
     static const U1 u1_s_ALERT_B_ESWUOC_BC_LSB_MSG = (U1)2U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S05_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S05_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EL_BZ, &u1_t_sgnl);
@@ -278,7 +278,7 @@ static U4      u4_s_AlertB_eswuocBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_BZ) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_BZ) */
 }
 
 /*===================================================================================================================================*/
@@ -289,14 +289,14 @@ static U4      u4_s_AlertB_eswuocBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_eswuocPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_MID)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_MID)
     static const U1 u1_s_ALERT_B_ESWUOC_PD_LSB_MSG = (U1)3U;
     U4              u4_t_src_chk;
     U1              u1_t_sgnl;
     U1              u1_t_msgsts;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S05_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S05_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EL_MID, &u1_t_sgnl);
@@ -306,7 +306,7 @@ static U4      u4_s_AlertB_eswuocPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_MID) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_MID) */
 }
 
 /*===================================================================================================================================*/
@@ -317,7 +317,7 @@ static U4      u4_s_AlertB_eswuocPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_eswuocPdbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_MID)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_MID)
     static const U2 u2_s_ALERT_B_ESWUOC_PDB_TO_THRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_ESWUOC_PDB_LSB_MSG  = (U1)3U;
     static const U4 u4_s_ALERT_B_ESWUOC_PDB_BIT_BTWT = (U4)0x00000010U;
@@ -325,8 +325,8 @@ static U4      u4_s_AlertB_eswuocPdbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
     U1              u1_t_trns_fact;
 
-    u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S05_RXCH0,
-                                      (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+    u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S05_CH0,
+                                      (U4)OXCAN_SYS_PNC_ALL,
                                       u2_s_ALERT_B_ESWUOC_PDB_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
@@ -346,7 +346,7 @@ static U4      u4_s_AlertB_eswuocPdbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05_RXCH0) && defined(ComConf_ComSignal_EL_MID) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S05_CH0) && defined(ComConf_ComSignal_EL_MID) */
 }
 
 /*===================================================================================================================================*/

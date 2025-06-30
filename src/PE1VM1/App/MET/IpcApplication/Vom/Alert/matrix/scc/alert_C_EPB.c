@@ -49,12 +49,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_PKBLP) /* _235D_CAN_ */
+#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_PKBLP) /* _235D_CAN_ */
 static U1      u1_s_alert_epb_msgsts_pkblp;
-#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_PKBLP) */
-#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_EPBMID) /* _235D_CAN_ */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_PKBLP) */
+#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_EPBMID) /* _235D_CAN_ */
 static U1      u1_s_alert_epb_msgsts_wrnbat;
-#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_EPBMID) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_EPBMID) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -204,12 +204,12 @@ const ST_ALERT_MTRX st_gp_ALERT_C_EPB_MTRX[3] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertC_epbInit(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_PKBLP) /* _235D_CAN_ */
+#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_PKBLP) /* _235D_CAN_ */
     u1_s_alert_epb_msgsts_pkblp  = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_PKBLP) */
-#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_EPBMID) /* _235D_CAN_ */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_PKBLP) */
+#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_EPBMID) /* _235D_CAN_ */
     u1_s_alert_epb_msgsts_wrnbat = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_EPBMID) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_EPBMID) */
 }
 
 /*===================================================================================================================================*/
@@ -220,7 +220,7 @@ void    vd_g_AlertC_epbInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_epbTtPkbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_PKBLP) /* _235D_CAN_ */
+#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_PKBLP) /* _235D_CAN_ */
     static const U2 u2_s_ALERT_C_EPB_PKB_TO_THRESH  = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_EPB_PKB_LSB_MSG    = (U1)3U;
     static const U4 u4_s_ALERT_C_EPB_PKB_BIT_BAT_WT = (U4)0x00000010U;
@@ -228,8 +228,8 @@ static U4      u4_s_AlertC_epbTtPkbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U4              u4_t_src_chk;
     U1              u1_t_trns_fact;
 
-    u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
-                                           (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+    u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
+                                           (U4)OXCAN_SYS_PNC_ALL,
                                            u2_s_ALERT_C_EPB_PKB_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
@@ -251,7 +251,7 @@ static U4      u4_s_AlertC_epbTtPkbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_PKBLP) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_PKBLP) */
 }
 
 /*===================================================================================================================================*/
@@ -262,15 +262,15 @@ static U4      u4_s_AlertC_epbTtPkbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_epbWrnIgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && (defined(ComConf_ComSignal_B_EPBMID)) /* _235D_CAN_ */
+#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && (defined(ComConf_ComSignal_B_EPBMID)) /* _235D_CAN_ */
     static const U2 u2_s_ALERT_C_EPB_WRNIG_TO_THRESH = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_EPB_WRNIG_LSB_MSG   = (U1)5U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_C_EPB_WRNIG_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -284,7 +284,7 @@ static U4      u4_s_AlertC_epbWrnIgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && (defined(ComConf_ComSignal_B_EPBMID)) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && (defined(ComConf_ComSignal_B_EPBMID)) */
 }
 
 /*===================================================================================================================================*/
@@ -295,15 +295,15 @@ static U4      u4_s_AlertC_epbWrnIgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_epbWrnBatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_EPBMID) /* _235D_CAN_ */
+#if defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_EPBMID) /* _235D_CAN_ */
     static const U2 u2_s_ALERT_C_EPB_WRNBAT_TO_TRSH = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_EPB_WRNBAT_LSB_MSG = (U1)5U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_DDM1S17_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DDM1S17_CH0,
+                                          (U4)OXCAN_SYS_PNC_ALL,
                                           u2_s_ALERT_C_EPB_WRNBAT_TO_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     vd_g_AlertBRxTrnsSts(&u1_s_alert_epb_msgsts_wrnbat, u1_t_msgsts);
 
@@ -317,7 +317,7 @@ static U4      u4_s_AlertC_epbWrnBatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_DDM1S17_RXCH0) && defined(ComConf_ComSignal_B_EPBMID) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_DDM1S17_CH0) && defined(ComConf_ComSignal_B_EPBMID) */
 }
 
 /*===================================================================================================================================*/

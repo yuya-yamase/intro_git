@@ -98,8 +98,8 @@ static U4      u4_s_AlertS_rtanSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BSR1S01_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BSR1S01_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_S_RTAN_TO_THRS_BSR) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;

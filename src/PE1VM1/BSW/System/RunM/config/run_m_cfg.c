@@ -131,7 +131,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
     U1                        u1_t_tycan_ok;
 
     u4_t_req      = (U4)0U;
-    u1_t_tycan_ok = u1_g_oXCANEcuShtdwnOk();
+    u1_t_tycan_ok = u1_g_oXCANShtdwnOk();
     if(u1_t_tycan_ok == (U1)TRUE){
         if(u4_s_run_m_forceslp_tout < (U4)RUN_M_SLPNG_TYCAN_TOUT){
             u4_t_req = (U4)RUN_M_SLPNG_CHK_TYCAN;

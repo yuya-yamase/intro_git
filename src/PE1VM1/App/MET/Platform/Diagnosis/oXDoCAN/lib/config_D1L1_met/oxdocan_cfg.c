@@ -544,7 +544,7 @@ U2      u2_g_oXDoCANCfgKmph(void)
     U1                      u1_t_rx_stat;
 
     u2_t_sp1     = (U2)0U;
-    u1_t_rx_stat = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_VSC1G13,
+    u1_t_rx_stat = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_VSC1G13,
                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_VDC,
                                     u2_s_OXDC_KMPH_RX_TOUT) & ((U1)COM_NO_RX | (U1)COM_TIMEOUT);
 

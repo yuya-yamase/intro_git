@@ -51,8 +51,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U1                u1_g_VDF_NAVSPDLMT_RXC_INT  = (U1)OXCAN_RX_RXEV_CNT_UNK;
-const U1                u1_g_VDF_NAVSPDLMT_RXC_MAX  = (U1)OXCAN_RX_RXEV_CNT_MAX;
+const U1                u1_g_VDF_NAVSPDLMT_RXC_INT  = (U1)OXCAN_RXD_EVC_UNK;
+const U1                u1_g_VDF_NAVSPDLMT_RXC_MAX  = (U1)OXCAN_RXD_EVC_MAX;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -68,7 +68,7 @@ U1      u1_g_VardefNavSpdLmtCfgMSig(U1 * u1_ap_ctyinf_rx)
 #if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CTY_INF, u1_ap_ctyinf_rx);
 #endif
-    return(u1_g_oXCANRxEvcnt((U2)U2_MAX)); /*@@@ 19pvf CANFDItem OXCAN_PDU_RX_CAN_AVNMS43 @@@*/
+    return(u1_g_oXCANRxdEvcnt((U2)U2_MAX)); /*@@@ 19pvf CANFDItem OXCAN_PDU_RX_CAN_AVNMS43 @@@*/
 }
 /*===================================================================================================================================*/
 /*  U1    u1_g_VardefNavSpdLmtCfgESig(U1 * u1_ap_ctyinf_rx)                                                                          */

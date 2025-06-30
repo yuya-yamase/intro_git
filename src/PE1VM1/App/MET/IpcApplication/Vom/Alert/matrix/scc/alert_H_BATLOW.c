@@ -101,13 +101,13 @@ static U4      u4_s_AlertH_batlowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 #endif /* ComConf_ComSignal_SBT_VLWF */ /* 840B_CAN */
     u4_t_src_chk  = (U4)u1_t_sgnl;
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR,
+#if defined(OXCAN_RXD_PDU_CAN_EHV1S94_CH0)
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94_RXCH0) */ /* 840B_CAN */
+#endif /* defined(OXCAN_RXD_PDU_CAN_EHV1S94_CH0) */ /* 840B_CAN */
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_BATLOW_LSB_MSGSTS);
 
     return(u4_t_src_chk);
