@@ -25,7 +25,6 @@ uint8	bf_drv_Dbg_ErrInfo;				/* デバッグ用エラー情報 */
 *		prototype			*
 ****************************/
 void	fc_drv_ClearXSpiMng( void );						/* XSPI管理情報初期化 */
-void	fc_drv_ClearRingBuf( void );						/* リングバッファ初期化 */
 void	fc_drv_SpiSetErrInfoKind( uint8 kind );				/* エラー種別情報設定 */
 void	fc_drv_SpiClearErrInfoKind( uint8 kind );			/* エラー種別情報クリア */
 #ifdef XSPI_DEBUG
@@ -155,29 +154,6 @@ void	fc_drv_ClearXSpiMng(
 #ifdef XSPI_DEBUG
 	bf_drv_Dbg_ErrInfo = 0U;		/* デバッグ用エラー情報初期化 */
 #endif	/* XSPI_DEBUG */
-}
-
-/****************************************************************************
-*																			*
-*		SYMBOL		: fc_drv_ClearRingBuf									*
-*																			*
-*		DESCRIPTION	: リングバッファ初期化									*
-*																			*
-*		PARAMETER	: IN  :	None											*
-*																			*
-*					  OUT :	None											*
-*																			*
-*					  RET :	None											*
-*																			*
-****************************************************************************/
-void	fc_drv_ClearRingBuf(
-	void
-)
-{
-	/* 送信リングバッファ初期化 */
-	XSPI_MEMSET( &bf_drv_SpiMng.snd, 0U, sizeof(bf_drv_SpiMng.snd) );
-	/* 受信リングバッファ初期化 */
-	XSPI_MEMSET( &bf_drv_SpiMng.rcv, 0U, sizeof(bf_drv_SpiMng.rcv) );
 }
 
 /****************************************************************************
@@ -458,8 +434,11 @@ uint8 fc_drv_getRcvBufPage(
 	page = bf_drv_SpiMng.rcv.page_drv;
 	if ( page > XSPI_RCV_PAGE )
 	{
-		/* リングバッファの全領域をクリア */
-		fc_drv_ClearRingBuf();
+		/* 受信リングバッファクリア */
+		XSPI_MEMSET( &bf_drv_SpiMng.rcv, 0U, sizeof(bf_drv_SpiMng.rcv) );
+
+		/* バッファクリア後にページを再取得 */
+		page = bf_drv_SpiMng.rcv.page_drv;
 	}
 
 	/* 受信用バッファ空チェック */
@@ -507,8 +486,11 @@ uint8 fc_drv_getSndBufPage(
 	page = bf_drv_SpiMng.snd.page_drv;
 	if ( page > XSPI_SND_PAGE )
 	{
-		/* リングバッファの全領域をクリア */
-		fc_drv_ClearRingBuf();
+		/* 送信リングバッファクリア */
+		XSPI_MEMSET( &bf_drv_SpiMng.snd, 0U, sizeof(bf_drv_SpiMng.snd) );
+
+		/* バッファクリア後にページを再取得 */
+		page = bf_drv_SpiMng.snd.page_drv;
 	}
 
 	/* 送信用バッファデータありチェック */
@@ -553,8 +535,11 @@ uint8	fc_drv_ReadBuf(
 		page = bf_drv_SpiMng.rcv.page_task;
 		if ( page >= XSPI_RCV_PAGE )
 		{
-			/* リングバッファの全領域をクリア */
-			fc_drv_ClearRingBuf();
+			/* 受信リングバッファクリア */
+			XSPI_MEMSET( &bf_drv_SpiMng.rcv, 0U, sizeof(bf_drv_SpiMng.rcv) );
+
+			/* バッファクリア後にページを再取得 */
+			page = bf_drv_SpiMng.rcv.page_task;
 		}
 		rcv_inf = bf_drv_SpiMng.rcv.page[page].inf;
 
@@ -626,8 +611,11 @@ uint8	fc_drv_WriteBuf(
 
 		if ( page >= XSPI_SND_PAGE )
 		{
-			/* リングバッファの全領域をクリア */
-			fc_drv_ClearRingBuf();
+			/* 送信リングバッファクリア */
+			XSPI_MEMSET( &bf_drv_SpiMng.snd, 0U, sizeof(bf_drv_SpiMng.snd) );
+
+			/* バッファクリア後にページを再取得 */
+			page = bf_drv_SpiMng.snd.page_task;
 		}
 		snd_inf = bf_drv_SpiMng.snd.page[page].inf;
 
