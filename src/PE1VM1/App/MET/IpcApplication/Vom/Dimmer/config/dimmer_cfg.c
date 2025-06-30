@@ -166,9 +166,18 @@ U1      u1_g_DimCfgIFidx(void)
 /*===================================================================================================================================*/
 U1      u1_g_DimDaynightCfgRxEnabled(void)
 {
+    U4                      u4_t_canbus_sts;
+    U1                      u1_t_rx_ena;
 
-    return(u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_VCAN));
+    u4_t_canbus_sts = u4_g_oXCANSysActvtd() & ((U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_44);
+    if(u4_t_canbus_sts != (U4)0U){
+        u1_t_rx_ena = (U1)TRUE;
+    }
+    else{
+        u1_t_rx_ena = (U1)FALSE;
+    }
 
+    return(u1_t_rx_ena);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)                                                                        */
@@ -451,6 +460,7 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  19PFv3-1 04/12/2024  SH       Add calibration guard                                                                              */
 /*  19PFv3-2 06/27/2024  TN(DT)   Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-3 07/12/2024  TN(DT)   Add Calibration Guard to Avoid out of array references.                                            */
+/*  BEV-1    06/30/2025  SF       BSW Update:u1_g_DimDaynightCfgRxEnabled was modified                                               */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, DENSO                                                                                                  */
 /*  * SH     = Shota Higashide                                                                                                       */
@@ -459,5 +469,6 @@ static inline U1    u1_s_DimCfgCalibU1MaxChk(const U1 u1_a_CALIBID, const U1 u1_
 /*  * HH     = Hiroki Hara                                                                                                           */
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
+/*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

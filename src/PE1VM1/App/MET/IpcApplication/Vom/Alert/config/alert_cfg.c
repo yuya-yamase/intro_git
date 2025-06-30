@@ -1,4 +1,4 @@
-/* 5.5.0 */
+/* 5.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_CFG_C_MAJOR                        (5)
-#define ALERT_CFG_C_MINOR                        (5)
+#define ALERT_CFG_C_MINOR                        (6)
 #define ALERT_CFG_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -79,7 +79,7 @@ static inline U1      u1_s_AlertCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U4                    u4_g_ALERT_IGN_OFF_TOUT    = (U4)150000U; /* 25 minutes */
-const U1                    u1_g_ALERT_BUS_CH          = (U1)OXCAN_CH_0_VCAN;
+const U4                    u4_g_ALERT_BUS_CH_MSK      = ((U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -448,6 +448,7 @@ U1    u1_g_AlertCfgEcomodeOn(void)
 /*  5.3.0     5/10/2019  YI       alert v5.2.0 -> v5.3.0.                                                                            */
 /*  5.4.0     9/20/2019  YI       alert v5.3.0 -> v5.4.0.                                                                            */
 /*  5.5.0    10/31/2019  DS       alert v5.4.0 -> v5.5.0.                                                                            */
+/*  5.6.0     6/30/2025  SF       alert v5.5.0 -> v5.6.0.                                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -459,6 +460,7 @@ U1    u1_g_AlertCfgEcomodeOn(void)
 /*  19PFv3-5 05/06/2024  YR       Added config for ECOMODE3                                                                          */
 /*  19PFv3-6 06/27/2024  TN(DT)   Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-7 07/12/2024  TN(DT)   Add Calibration Guard to Unify Vehicle Operation.                                                  */
+/*  BEV-1    06/30/2025  SF       BSW Update:CAN BUS CH definition was modified                                                      */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
@@ -469,5 +471,6 @@ U1    u1_g_AlertCfgEcomodeOn(void)
 /*  * DR     = Dyan Reyes, DTPH                                                                                                      */
 /*  * YR     = Yhana Regalario, DTPH                                                                                                 */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
+/*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
