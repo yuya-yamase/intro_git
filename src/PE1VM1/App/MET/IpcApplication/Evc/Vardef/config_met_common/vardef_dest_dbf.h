@@ -257,6 +257,7 @@
 #define u1_g_VardefDefUnitFuecoByPid()                 (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_DEFUNIT_FUECO))
 #define u1_g_VardefDefUnitElecoByPid()                 (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_DEFUNIT_ELECO))
 #define u1_g_VardefUnitSlctFuecoByPid()                (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_UNITSLCT_FUECO))
+#define u1_g_VardefUnitSlctDstByPid()                  (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_UNITSLCT_DEST))
 #define u1_g_VardefUnitSlctTypeByPid()                 (u1_g_VardefCfgUnitType())
 #define u1_g_VardefDefTmFmtByPid()                     (u1_g_VardefDestDbfByPid((U1)VDF_DEST_DBF_TIMEFMT))
 #define u1_g_Vardef4wdSysByPid()                       (u1_g_VardefCfg4wdSys())
