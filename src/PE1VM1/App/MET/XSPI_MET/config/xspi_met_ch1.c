@@ -2565,7 +2565,7 @@ static inline void vd_s_XSpiCanTx_CANSignal(const U4 * u4_ap_pck_rx){
                                             st_sp_XSPI_MMCUS_TXSIG[u1_t_loop].u1_bitpos, st_sp_XSPI_MMCUS_TXSIG[u1_t_loop].u1_datalen);
 
             if(u1_t_rxdata != u1_sp_xspi_mmcus_pretxsig[u1_t_loop]) {
-                if(u1_t_rxdata != (U1)st_sp_XSPI_MMCUS_TXSIG[u1_t_loop].u1_maxvalue) {
+                if(u1_t_rxdata <= (U1)st_sp_XSPI_MMCUS_TXSIG[u1_t_loop].u1_maxvalue) {
                     vd_g_VdsCIReqTx((U1)st_sp_XSPI_MMCUS_TXSIG[u1_t_loop].u1_vdsci_id, u1_t_rxdata);
                 }
             }
@@ -2578,7 +2578,7 @@ static inline void vd_s_XSpiCanTx_CANSignal(const U4 * u4_ap_pck_rx){
                                             st_sp_XSPI_METCUS_TXSIG[u1_t_loop].u1_bitpos, st_sp_XSPI_METCUS_TXSIG[u1_t_loop].u1_datalen);
 
             if(u1_t_rxdata != u1_sp_xspi_metcus_pretxsig[u1_t_loop]) {
-                if(u1_t_rxdata != (U1)st_sp_XSPI_METCUS_TXSIG[u1_t_loop].u1_maxvalue) {
+                if(u1_t_rxdata <= (U1)st_sp_XSPI_METCUS_TXSIG[u1_t_loop].u1_maxvalue) {
                     vd_g_VdsCIReqTx((U1)st_sp_XSPI_METCUS_TXSIG[u1_t_loop].u1_vdsci_id, u1_t_rxdata);
                 }
             }
@@ -3264,6 +3264,7 @@ static inline void    vd_s_XSpiCanTx_POS_REG(const U4 * u4_ap_pck_rx)
 /*           05/14/2025  RO       Change for BEV EMC R.(MET-S_ADMID-CSTD-0-02-A-C0)                                                  */
 /*           05/30/2025  SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*           06/13/2025  KO       Change for BEV System_Consideration_2.(MET-B_DRPBB-CSTD-0-01-A-C0)                                 */
+/*           06/30/2025  KT       Change for BEV System_Consideration_2.(BEV3CDCMET-547/BEV3CDCMET-549)                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
