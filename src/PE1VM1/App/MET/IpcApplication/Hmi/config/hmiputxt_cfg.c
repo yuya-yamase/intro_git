@@ -1,4 +1,4 @@
-/* 1.6.0 */
+/* 1.7.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_CFG_C_MAJOR                     (1)
-#define HMIPUTXT_CFG_C_MINOR                     (6)
+#define HMIPUTXT_CFG_C_MINOR                     (7)
 #define HMIPUTXT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -371,8 +371,6 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
 {
     static const ST_HMIPUTXT_ESOPT st_sp_HMIPUTXT_ESOPT[] = {
-        {    (U2)308U,    (U2)VDF_ESO_CH_DSC      },
-        {    (U2)314U,    (U2)VDF_ESO_CH_AUTOP    },
         {    (U2)394U,    (U2)VDF_ESO_CH_OILMNT   },
         {    (U2)539U,    (U2)VDF_ESO_CH_OILMNT   },
         {    (U2)597U,    (U2)VDF_ESO_CH_AVSEXT   },
@@ -846,6 +844,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  1.3.0    01/06/2021  TH       Setting for 800B 1A.                                                                               */
 /*  1.4.0    06/04/2021  TH       Setting for 22-24FGM CV.                                                                           */
 /*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1                                                             */
+/*  1.7.0    06/23/2025  HY       Setting for BEV System_Consideration_2                                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -860,6 +859,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  BEV-1    10/30/2024  RS       Change for BEV System_Consideration_1.(MET-H_SYSMAL-CSTD-2-00-A-C0)                                */
 /*  BEV-2    12/23/2024  MN       Change for BEV System_Consideration_1.(MET-B_LEDHEA-CSTD-1-01-A-C0)                                */
 /*  BEV-3     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
+/*  BEV-4    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -873,5 +873,6 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*  * MN   = Mikiya Negishi,  KSE                                                                                                    */
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
