@@ -554,6 +554,10 @@ void    vd_g_oXCANUsrhkDetectBusoff(const U1 u1_a_NW)
 
 /* #include "can_lpr_test.h" */
 
+/* App */
+#include "x_spi_ivi_sub4.h"
+#include "PictCtl.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -861,6 +865,17 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
 /*      default:                                            */
 /*          break;                                          */
 /*  }                                                       */
+
+    vd_g_XspiIviCANGWPushPDU(u2_a_IPDU_RX);
+
+    switch(u2_a_IPDU_RX)
+    {
+        case MSG_BCC1S05_RXCH0:
+            vd_g_PictCtl_RcvBCC1S05();
+            break;
+        default:
+            break;
+    }
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
