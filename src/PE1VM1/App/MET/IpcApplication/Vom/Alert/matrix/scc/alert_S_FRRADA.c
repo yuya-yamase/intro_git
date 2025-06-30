@@ -1,4 +1,4 @@
-/* 5.0.0 */
+/* 5.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_FRRADA_C_MAJOR                     (5)
-#define ALERT_S_FRRADA_C_MINOR                     (0)
+#define ALERT_S_FRRADA_C_MINOR                     (1)
 #define ALERT_S_FRRADA_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -35,7 +35,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_S_FRRADA_TT_NUM_DST                (32U)
 #define ALERT_S_FRRADA_BZ_CMP_NUM_DST            (64U)
 #define ALERT_S_FRRADA_BZ_ERR_NUM_DST            (64U)
 
@@ -52,48 +51,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertS_frradaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertS_frradaBzCmpSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertS_frradaBzErrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_S_FRRADA_TT_DST[ALERT_S_FRRADA_TT_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 01 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 02 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 03 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 04 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 05 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 06 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 07 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 08 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 09 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 10 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 11 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 12 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 13 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 14 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_S_FRRADA_TT_FLASH_4HZ,                                       /* 15 FLASH_4HZ                                       */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 17 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 19 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 20 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 21 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 22 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 23 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 24 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 26 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 27 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
-};
-
 static const U1  u1_sp_ALERT_S_FRRADA_BZ_CMP_DST[ALERT_S_FRRADA_BZ_CMP_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_S_FRRADA_BZ_CMP_CYCLE,                                       /* 01 CYCLE                                           */
@@ -229,18 +192,7 @@ static const U1  u1_sp_ALERT_S_FRRADA_BZ_ERR_DST[ALERT_S_FRRADA_BZ_ERR_NUM_DST] 
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_S_FRRADA_MTRX[3] = {
-    {
-        &u4_s_AlertS_frradaTtSrcchk,                                           /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_S_FRRADA_TT_DST[0],                                       /* u1p_DST                                            */
-        (U2)ALERT_S_FRRADA_TT_NUM_DST,                                         /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
+const ST_ALERT_MTRX st_gp_ALERT_S_FRRADA_MTRX[2] = {
     {
         &u4_s_AlertS_frradaBzCmpSrcchk,                                        /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
@@ -269,47 +221,6 @@ const ST_ALERT_MTRX st_gp_ALERT_S_FRRADA_MTRX[3] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_frradaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_frradaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_FSR    = (U1)1U;
-    static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_RSL    = (U1)2U;
-    static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_RSR    = (U1)3U;
-    static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_MSGSTS = (U1)4U;
-    U4              u4_t_src_chk;
-    U1              u1_t_sgnl;
-    U1              u1_t_msgsts;
-    
-    u1_t_msgsts  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ADU1S07_RXCH0,
-                                    (U2)OXCAN_RX_SYS_NRX_IGR,
-                                    (U2)U2_MAX) & (U1)COM_NO_RX;
-
-    u1_t_sgnl    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_FSL_PLRQ, &u1_t_sgnl);
-    u4_t_src_chk = (U4)u1_t_sgnl;
-    
-    u1_t_sgnl    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_FSR_PLRQ, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl << u1_s_ALERT_CH_S_FRRADA_LSB_FSR;
-
-    u1_t_sgnl    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RSL_PLRQ, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl << u1_s_ALERT_CH_S_FRRADA_LSB_RSL;
-
-    u1_t_sgnl    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RSR_PLRQ, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl << u1_s_ALERT_CH_S_FRRADA_LSB_RSR;
-
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_FRRADA_LSB_MSGSTS);
-
-    return(u4_t_src_chk);
-}
-
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertS_frradaBzCmpSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -403,7 +314,9 @@ static U4      u4_s_AlertS_frradaBzErrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0     1/16/2024  PG       New.                                                                                               */
+/*  5.1.0     6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0,MET-S_ADTT-CSTD-0-02-A-C0)       */
 /*                                                                                                                                   */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
