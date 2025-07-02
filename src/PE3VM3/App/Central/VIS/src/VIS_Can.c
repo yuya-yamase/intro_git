@@ -392,35 +392,16 @@ static void vd_s_VISCanGetVin(void)
         (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_17, &u1_tp_vindata[VIS_CAN_VIN16_NM]);
         
         u1_s_vis_vin_responsestate = VIS_COMMUNICATION_OK;              /* CANメッセージ受信状態：正常受信 */
+        
+        for (u1_t_datacnt = VIS_CAN_VIN0_NM; u1_t_datacnt < VIS_VIN_MAX_NM; u1_t_datacnt++) {
+            u1_sp_vis_can_vindata[u1_t_datacnt] = u1_tp_vindata[u1_t_datacnt];
+        }
     }
     else if ((U1)COM_TIMEOUT == u1_t_ipdu_st){
         u1_s_vis_vin_responsestate = VIS_COMMUNICATION_ERROR;           /* CANメッセージ受信状態：途絶 */
     }
     else{
         /* do nothing */
-    }
-
-    /* VINデータ受信値確認 */
-    for (u1_t_datacnt = VIS_CAN_VIN0_NM; u1_t_datacnt < VIS_VIN_MAX_NM; u1_t_datacnt++) {
-        if (VIS_VIN_INIT_VAL == u1_tp_vindata[u1_t_datacnt]) {
-            u1_s_vis_vin_responsestate = VIS_NORESPONSE;
-            break;
-        }
-    }
-
-    if (VIS_COMMUNICATION_OK == u1_s_vis_vin_responsestate) {
-        for (u1_t_datacnt = VIS_CAN_VIN0_NM; u1_t_datacnt < VIS_VIN_MAX_NM; u1_t_datacnt++) {
-            u1_sp_vis_can_vindata[u1_t_datacnt] = u1_tp_vindata[u1_t_datacnt];
-        }
-    }
-    else if (VIS_NORESPONSE == u1_s_vis_vin_responsestate){
-        for (u1_t_datacnt = VIS_CAN_VIN0_NM; u1_t_datacnt < VIS_VIN_MAX_NM; u1_t_datacnt++) {
-            u1_sp_vis_can_vindata[u1_t_datacnt] = VIS_VIN_INIT_VAL;
-        }
-    }
-    else {
-        /* 途絶時は前回値を保持する */
-        u1_s_vis_vin_responsestate = VIS_COMMUNICATION_ERROR;
     }
 
     /* チップ間通信_送信要求 */
@@ -482,38 +463,11 @@ static void vd_s_VISCanGetPwrerrst(void)
 
         u1_s_vis_pwrerrst_responsestate = VIS_COMMUNICATION_OK;             /* CANメッセージ受信状態：正常受信 */
 
-        switch (u1_t_pwrerrst_data) {
-        case VIS_NORMAL_USERDRIVEN:
-            u1_s_vis_can_pwrerrst = VIS_NORMAL_USERDRIVEN;
-            break;
-        case VIS_NORMAL_ADSUPPORT_NOTPOSSIBLE:
-            u1_s_vis_can_pwrerrst = VIS_NORMAL_ADSUPPORT_NOTPOSSIBLE;
-            break;
-        case VIS_NORMAL_ADSUPPORT_INPROGRESS:
-            u1_s_vis_can_pwrerrst = VIS_NORMAL_ADSUPPORT_INPROGRESS;
-            break;
-        case VIS_EDS_DCDCFAILED_SYSTEMDRIVE:
-            u1_s_vis_can_pwrerrst = VIS_EDS_DCDCFAILED_SYSTEMDRIVE;
-            break;
-        case VIS_EDS_DCDCFAILED_USERDRIVE:
-            u1_s_vis_can_pwrerrst = VIS_EDS_DCDCFAILED_USERDRIVE;
-            break;
-        case VIS_EDS_DCDCFAILED_STOP:
-            u1_s_vis_can_pwrerrst = VIS_EDS_DCDCFAILED_STOP;
-            break;
-        case VIS_EDS_LIBFAILED_SYSTEMDRIVE:
-            u1_s_vis_can_pwrerrst = VIS_EDS_LIBFAILED_SYSTEMDRIVE;
-            break;
-        case VIS_EDS_LIBFAILED_USERDRIVE:
-            u1_s_vis_can_pwrerrst = VIS_EDS_LIBFAILED_USERDRIVE;
-            break;
-        case VIS_EDS_LIBFAILED_STOP:
-            u1_s_vis_can_pwrerrst = VIS_EDS_LIBFAILED_STOP;
-            break;
-        default:
-            /* 未定義値の場合は前回値を保持する */
+        if (VIS_CAN_RCV_PWRERRST_CHK >= u1_t_pwrerrst_data) {
+            u1_s_vis_can_pwrerrst = u1_t_pwrerrst_data;
+        }
+        else {
             u1_s_vis_pwrerrst_responsestate = VIS_UNDEFINED_VALUE;          /* CANメッセージ受信状態：範囲外 */
-            break;
         }
     }
     else if ((U1)COM_TIMEOUT == u1_t_ipdu_st){
@@ -522,8 +476,6 @@ static void vd_s_VISCanGetPwrerrst(void)
     else{
         /* do nothing */
     }
-
-
 
     /* チップ間通信_送信要求 */
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vis_can_pwrerrst;
@@ -559,8 +511,6 @@ static void vd_s_VISCanGetCrlyof(void)
     else{
         /* do nothing */
     }
-
-    
 
     /* チップ間通信_送信要求 */
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vis_can_crlyof;
