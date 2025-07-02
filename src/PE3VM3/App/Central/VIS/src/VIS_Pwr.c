@@ -41,6 +41,7 @@ static U1   u1_s_vispwr_vpscng_responsestate;       /* é‘óºìdåπ(ì¡éÍ)ÉXÉeÅ[ÉgëJà
 static U1   u1_s_vispwr_ch_compwr;                  /* É`ÉÉÉlÉãí êMãNìÆìdåπèÛë‘ */
 static U2   u2_s_vispwr_tm_passive_on;              /* ÉpÉbÉVÉuãNìÆèåèê¨óßï€éùÉ^ÉCÉ} */
 static U2   u2_s_vispwr_tm_ch_off;                  /* É`ÉÉÉlÉãí êMãNìÆìdåπ OFFÉ^ÉCÉ} */
+static U1   u1_s_vispwr_apofrq;                     /* å©ÇΩñ⁄OFFêßå‰óvãÅ */
 
 /* #define VIS_STOP_SEC_VAR */
 /* #include <VIS_MemMap.h> */
@@ -55,10 +56,12 @@ static void vd_s_VISPwrGetBatVolt(void);
 static U1 u1_s_VISPwrBatVoltADCnv(const U2 u2_a_digitalbatvolt);
 static void vd_s_VISPwrJudgeBasicState(void);
 static void vd_s_VISPwrJudgeSpecialState(void);
-static void u1_s_VISPwrJudgeTransFlg(void);
+static void vd_s_VISPwrJudgeTransFlg(void);
 static U1 u1_s_VISPwrJudgeEthActiveStartup(void);
 static U1 u1_s_VISPwrJudgeEthPassiveStartup(void);
 static void vd_s_VISPwrJudgeEthChComPwr(void);
+static void vd_s_VISPwrJudgeApofrq(void);
+
 /************************************************************************************************/
 /* Function Name     : vd_g_VISPwrInit                                                          */
 /************************************************************************************************/
@@ -76,6 +79,7 @@ void vd_g_VISPwrInit(void)
     u1_s_vispwr_ch_compwr = (U1)STD_OFF;
     u2_s_vispwr_tm_passive_on = VIS_PWR_JUDGE_PASSIVEON_TM;
     u2_s_vispwr_tm_ch_off = VIS_PWR_JUDGE_CH_POWEROFF_TM;
+    u1_s_vispwr_apofrq = (U1)STD_OFF;
     
     return;
 }
@@ -88,8 +92,9 @@ void vd_g_VISPwrCyc(void)
     vd_s_VISPwrGetBatVolt();
     vd_s_VISPwrJudgeBasicState();
     vd_s_VISPwrJudgeSpecialState();
-    u1_s_VISPwrJudgeTransFlg();
+    vd_s_VISPwrJudgeTransFlg();
     vd_s_VISPwrJudgeEthChComPwr();
+    vd_s_VISPwrJudgeApofrq();
 
     return;
 }
@@ -291,6 +296,7 @@ static void vd_s_VISPwrJudgeSpecialState(void)
         case VIS_SPECIALSTATE_WIRED_REPRO:
         case VIS_SPECIALSTATE_EMERGENCY_STOP:
         case VIS_SPECIALSTATE_POWEROFF_ALL:
+        case VIS_SPECIALSTATE_SERVICE_LLC:
             u1_s_vispwr_specialstate = u1_t_vpsinfos;
             break;
         default:
@@ -315,9 +321,9 @@ static void vd_s_VISPwrJudgeSpecialState(void)
 }
 
 /************************************************************************************************/
-/* Function Name     : VISPwr_JudgeGetTransFlg_vd                                               */
+/* Function Name     : vd_s_VISPwrJudgeTransFlg                                                 */
 /************************************************************************************************/
-static void u1_s_VISPwrJudgeTransFlg(void)
+static void vd_s_VISPwrJudgeTransFlg(void)
 {
     U1 u1_t_transflg = (U1)STD_OFF;
     U1 u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_LENGTH_2];
@@ -394,7 +400,6 @@ static U1 u1_s_VISPwrJudgeEthActiveStartup(void)
     return u1_t_active_startup;
 }
 
-
 /************************************************************************************************/
 /* Function Name     :  u1_s_VISPwrJudgeEthPassiveStartup                                       */
 /************************************************************************************************/
@@ -421,7 +426,7 @@ static U1 u1_s_VISPwrJudgeEthPassiveStartup(void)
         u1_t_passive_startup = (U1)STD_ON;
         u2_s_vispwr_tm_passive_on = VIS_PWR_TIMEOUTINIT;
     }
-    else if (VIS_PWR_JUDGE_PASSIVEON_TM >= u2_s_vispwr_tm_passive_on) {
+    else if (VIS_PWR_JUDGE_PASSIVEON_TM > u2_s_vispwr_tm_passive_on) {
         u1_t_passive_startup = (U1)STD_ON;
         u2_s_vispwr_tm_passive_on++;
     }
@@ -431,6 +436,7 @@ static U1 u1_s_VISPwrJudgeEthPassiveStartup(void)
 
     return u1_t_passive_startup;
 }
+
 /************************************************************************************************/
 /* Function Name     :  vd_s_VISPwrJudgeEthChComPwr                                             */
 /************************************************************************************************/
@@ -454,7 +460,7 @@ static void vd_s_VISPwrJudgeEthChComPwr(void)
     else{
         if ((STD_OFF == u1_t_active_startup)
         && (STD_OFF == u1_t_passive_startup)) {
-            if (VIS_PWR_JUDGE_CH_POWEROFF_TM < u2_s_vispwr_tm_ch_off) {
+            if (VIS_PWR_JUDGE_CH_POWEROFF_TM <= u2_s_vispwr_tm_ch_off) {
                 u1_s_vispwr_ch_compwr = (U1)STD_OFF;
             }
             else{
@@ -469,6 +475,32 @@ static void vd_s_VISPwrJudgeEthChComPwr(void)
     /* É`ÉbÉvä‘í êM_ëóêMóvãÅ */
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vispwr_ch_compwr;
     (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_COMPWR,VIS_PWR_TRANSREQ_DATA_LENGTH_1,u1_tp_transreq_data);
+
+    return;
+}
+
+/************************************************************************************************/
+/* Function Name     : vd_s_VISPwrJudgeApofrq                                                   */
+/************************************************************************************************/
+static void vd_s_VISPwrJudgeApofrq(void)
+{
+    U1 u1_t_apofrq = (U1)STD_OFF;
+    U1 u1_t_ipdu_st;
+
+    u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+    if (VIS_PWR_COM_IPDUST_OK == u1_t_ipdu_st){
+        (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ, &u1_t_apofrq);
+
+        if (VIS_PWR_RCVCHK_VAL >= u1_t_apofrq) {
+            u1_s_vispwr_apofrq = u1_t_apofrq;
+        }
+        else {
+            /* do nothing */
+        }
+    }
+    else{
+        /* do nothing */
+    }
 
     return;
 }
@@ -510,6 +542,15 @@ U1 u1_g_VISPwrGetEthChPwr (void)
 {
     return u1_s_vispwr_ch_compwr;
 }
+
+/************************************************************************************************/
+/* Function Name     :  u1_g_VISPwrGetApofrq                                                    */
+/************************************************************************************************/
+U1 u1_g_VISPwrGetApofrq (void)
+{
+    return u1_s_vispwr_apofrq;
+}
+
 /************************************************************************************************/
 /* #define VIS_STOP_SEC_CODE */
 /* #include <VIS_MemMap.h> */
