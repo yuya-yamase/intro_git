@@ -10,6 +10,7 @@
 #include "EthSwt_SWIC_Init.h"
 #include "EthSwt_SWIC_Port.h"
 #include "EthSwt_SWIC_Define.h"
+#include <LIB.h>
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_EV_AVAILABLE                      (0U)
 #define D_ETHSWT_SWIC_EV_INIT_DONE                      (1U)
@@ -311,8 +312,14 @@ static void ethswt_swic_stm_action (uint32 event)
     /* EV_FAIL_INIT     */  , {ethswt_swic_stm_act_none         , ethswt_swic_stm_act_reset                     , ethswt_swic_stm_act_none              , ethswt_swic_stm_act_none          , ethswt_swic_stm_act_none                  , ethswt_swic_stm_act_none                      }
     /* EV_NO_PROC       */  , {ethswt_swic_stm_act_none         , ethswt_swic_stm_act_reset                     , ethswt_swic_stm_act_reset             , ethswt_swic_stm_act_reset         , ethswt_swic_stm_act_reset                 , ethswt_swic_stm_act_reset                     }
     };
-    G_SWIC_Status = action_tbl[event][G_SWIC_Status]();
 
+    uint32 nextStatus;
+
+    nextStatus = action_tbl[event][G_SWIC_Status]();
+    LIB_DI();
+    G_SWIC_Status = nextStatus;
+    LIB_EI();
+    
     return;
 }
 /* -------------------------------------------------------------------------- */
