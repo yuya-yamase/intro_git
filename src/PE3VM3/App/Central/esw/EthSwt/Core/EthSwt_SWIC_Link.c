@@ -147,13 +147,17 @@ static Std_ReturnType swic_Reg_GetLinkState(const uint8 SwitchPortIdx, uint32 * 
 	EthTrcv_LinkStateType	sts;
 	result = swic_Reg_GetLink(SwitchPortIdx, &sts, errFactor);
 	if (result == E_OK) {
+        LIB_DI();
         swicLink[SwitchPortIdx].linkStatus = sts;
         swicLink[SwitchPortIdx].getLinkResult = result;
+        LIB_EI();
 		if (swicLink[SwitchPortIdx].linkCheck != STD_OFF && sts == swicLink[SwitchPortIdx].expectedLinkStatus) {
             swicLink[SwitchPortIdx].linkCheck = STD_OFF;
         }		
 	} else {					/* アクセス失敗はリンク取得結果をE_NOT_OKにする */
+        LIB_DI();
         swicLink[SwitchPortIdx].getLinkResult = result;
+        LIB_EI();
     }
     return result;
 }
