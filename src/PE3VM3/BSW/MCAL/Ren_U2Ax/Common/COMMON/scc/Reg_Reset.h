@@ -232,7 +232,44 @@ typedef	struct {
 	uint32	u4RESKCPROT0;
 
 #else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-	uint32	test;
+	uint8	u1Dummy1[80];
+	uint32	u4STAC_MSPI;
+	uint8	u1Dummy2[172];
+	uint32	u4SWMRESA_RSCFD;
+	uint32	u4SWMRESS_RSCFD;
+	uint8	u1Dummy3[8];
+	uint32	u4SWMRESA_FLXA;
+	uint32	u4SWMRESS_FLXA;
+	uint8	u1Dummy4[24];
+	uint32	u4SWMRESA_ETNB;
+	uint32	u4SWMRESS_ETNB;
+	uint8	u1Dummy5[8];
+	uint32	u4SWMRESA_RSENT;
+	uint32	u4SWMRESS_RSENT;
+	uint8	u1Dummy6[8];
+	uint32	u4SWMRESA_MSPI;
+	uint32	u4SWMRESS_MSPI;
+	uint8	u1Dummy7[8];
+	uint32	u4SWMRESA_RLIN3;
+	uint32	u4SWMRESS_RLIN3;
+	uint8	u1Dummy8[136];
+	uint32	u4SWMRESA_RIIC;
+	uint32	u4SWMRESS_RIIC;
+	uint8	u1Dummy9[56];
+	uint32	u4SWMRESA_TAUD;
+	uint32	u4SWMRESS_TAUD;
+	uint8	u1Dummy10[8];
+	uint32	u4SWMRESA_TAUJ_ISO;
+	uint32	u4SWMRESS_TAUJ_ISO;
+	uint8	u1Dummy11[56];
+	uint32	u4SWMRESA_OSTM;
+	uint32	u4SWMRESS_OSTM;
+	uint8	u1Dummy12[376];
+	uint32	u4RESFC;
+	uint8	u1Dummy13[12];
+	uint32	u4RESFDDC;
+	uint8	u1Dummy14[748];
+	uint32	u4RESKCPROT0;
 
 #endif
 
@@ -277,7 +314,11 @@ typedef	struct {
 	uint32	u4SWMRESS_WDTB_AWO;
 
 #else	/* MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH */
-	uint32	test;
+	uint32	u4SWSRESA;
+	uint8	u1Dummy1[240];
+	uint32	u4RESF;
+	uint8	u1Dummy2[12];
+	uint32	u4RESFDD;
 
 #endif
 

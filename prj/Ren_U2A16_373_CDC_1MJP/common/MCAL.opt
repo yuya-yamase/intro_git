@@ -16,6 +16,7 @@
     :macro=MCAL_INTC_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Intc/scc
     :macro=MCAL_MCU_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/MCU/scc
     :macro=MCAL_PORT_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/PORT/scc
+    :macro=MCAL_TYPORT_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/tyPORT/scc
     :macro=MCAL_PWM_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Pwm/scc
     :macro=MCAL_SPI_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/SPI/scc
     :macro=MCAL_UART_SCC_DIR=${MCAL_DIR}/Ren_U2Ax/Common/Uart/scc
@@ -33,9 +34,10 @@
     :macro=MCAL_INTC_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Intc/config_CDC
     :macro=MCAL_MCU_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/MCU/config_CDC
     :macro=MCAL_PORT_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/PORT/config_CDC_1MJP
+    :macro=MCAL_TYPORT_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/tyPORT/config_CDC
     :macro=MCAL_PWM_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Pwm/config_CDC
     :macro=MCAL_SPI_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/SPI/config_CDC
-    :macro=MCAL_UART_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Uart/config_CDC_1M
+    :macro=MCAL_UART_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Uart/config_CDC
     :macro=MCAL_WDG_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Wdg/config_CDC
     
     :macro=MCAL_SECTION_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/SECTION/config_CDC
@@ -53,6 +55,7 @@
     -I${MCAL_INTC_SCC_DIR}
     -I${MCAL_MCU_SCC_DIR}
     -I${MCAL_PORT_SCC_DIR}
+    -I${MCAL_TYPORT_SCC_DIR}
     -I${MCAL_PWM_SCC_DIR}
     -I${MCAL_SPI_SCC_DIR}
     -I${MCAL_UART_SCC_DIR}
@@ -70,6 +73,7 @@
     -I${MCAL_INTC_CFG_DIR}
     -I${MCAL_MCU_CFG_DIR}
     -I${MCAL_PORT_CFG_DIR}
+    -I${MCAL_TYPORT_CFG_DIR}
     -I${MCAL_PWM_CFG_DIR}
     -I${MCAL_SPI_CFG_DIR}
     -I${MCAL_UART_CFG_DIR}

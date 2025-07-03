@@ -1,0 +1,11 @@
+#!gbuild
+[Relocatable Object]
+	{streq(PLATFORM_NAME, RH850)} -sda=0
+	-I../../inc
+	-Mn
+	-map
+	-object_dir=$TOP_DIR/parts/Csm/Crypto_83_sw_Dummy/obj
+	{optgroup=GhsCommonOptions} -o $TOP_DIR/parts/Csm/Crypto_83_sw_Dummy/obj/Crypto_83_sw_Dummy.rel.o
+
+./Crypto_83_sw.c
+

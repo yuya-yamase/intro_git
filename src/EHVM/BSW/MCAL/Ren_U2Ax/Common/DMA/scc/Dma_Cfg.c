@@ -22,10 +22,10 @@
 {                                                           \
     DMA_UCFG_CHDATA##id##_NOTIFICATION,                     \
     (Dma_ChannelDataType*)DMA_GetNotificationDataType(id),  \
-    (U2)DMA_UCFG_CHDATA##id##_HWCH,                         \
-    (U2)DMA_UCFG_CHDATA##id##_REQ,                          \
-    (U1)DMA_UCFG_CHDATA##id##_TYPE,                         \
-    (U1)DMA_UCFG_CHDATA##id##_PRILEVEL                      \
+    (uint16)DMA_UCFG_CHDATA##id##_HWCH,                     \
+    (uint16)DMA_UCFG_CHDATA##id##_REQ,                      \
+    (uint8)DMA_UCFG_CHDATA##id##_TYPE,                      \
+    (uint8)DMA_UCFG_CHDATA##id##_PRILEVEL                   \
 }
 
 #define DMA_GetNotificationDataType(id)   (&stDma_Notification[id])
@@ -35,9 +35,9 @@
 #define DMA_START_SEC_BSS_VAR_NO_INIT
 #include "Dma_MemMap.h"
 #if (DMA_UCFG_CHDATA_NUM > 0U)
-Dma_ChannelDataType		stDma_Notification[DMA_UCFG_CHDATA_NUM]          __attribute__((section(".bss_SHARE_DMA_NOTICATION")));
+static Dma_ChannelDataType		stDma_Notification[DMA_UCFG_CHDATA_NUM]          __attribute__((section(".bss_SHARE_DMA_NOTICATION")));
 #else
-Dma_ChannelDataType		stDma_Notification[1]                            __attribute__((section(".bss_SHARE_DMA_NOTICATION")));
+static Dma_ChannelDataType		stDma_Notification[1]                            __attribute__((section(".bss_SHARE_DMA_NOTICATION")));
 #endif
 
 #define DMA_STOP_SEC_BSS_VAR_NO_INIT
@@ -51,7 +51,7 @@ Dma_ChannelDataType		stDma_Notification[1]                            __attribut
 
 /* DMA configuration settings */
 #if ( DMA_UCFG_CHDATA_NUM > 0U )
- const   Dma_ChDataDefType   cstDma_UcfgChData[DMA_UCFG_CHDATA_NUM] = {
+ static   const   Dma_ChDataDefType   cstDma_UcfgChData[DMA_UCFG_CHDATA_NUM] = {
     Dma_SetChDataConfig(0)
   #if ( DMA_UCFG_CHDATA_NUM > 1U )
       ,Dma_SetChDataConfig(1)
@@ -532,14 +532,14 @@ Dma_ChannelDataType		stDma_Notification[1]                            __attribut
   #endif
  };
 #else
-const   Dma_ChDataDefType   cstDma_UcfgChData[1] = {
+static   const   Dma_ChDataDefType   cstDma_UcfgChData[1] = {
     {
         NULL_PTR, 
         (Dma_ChannelDataType*) &stDma_Notification[0],
-        (U2)0x0000,
-        (U2)0x0000,
-        (U1)0x00,
-        (U1)0x00
+        (uint16)0x0000,
+        (uint16)0x0000,
+        (uint8)0x00,
+        (uint8)0x00
     }
 };
 #endif
@@ -547,7 +547,7 @@ const   Dma_ChDataDefType   cstDma_UcfgChData[1] = {
 const   Dma_UserConfigType  cstDma_UcfgData =
 {
     &cstDma_UcfgChData[0],
-    (U1)DMA_UCFG_CHDATA_NUM
+    (uint8)DMA_UCFG_CHDATA_NUM
 };
 
 #define DMA_STOP_SEC_RODATA_CONST

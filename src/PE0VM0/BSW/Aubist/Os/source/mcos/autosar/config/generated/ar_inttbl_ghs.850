@@ -341,8 +341,8 @@ ar_inttbl_0:   /* Core 0 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 305 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 306 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 307 */
-    .word   _mcos_v850_undefint_entry  /* INTC2 : 308 */
-    .word   _mcos_v850_undefint_entry  /* INTC2 : 309 */
+    .word   ar_c2isr_eMCOS_ISR_INTRCAN3REC  /* INTC2 : 308 */
+    .word   ar_c2isr_eMCOS_ISR_INTRCAN3TRX  /* INTC2 : 309 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 310 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 311 */
     .word   _mcos_v850_undefint_entry  /* INTC2 : 312 */
@@ -852,6 +852,24 @@ ar_c2isr_eMCOS_ISR_INTTAUD0I14:
     mov     _ar_isrcb_eMCOS_ISR_INTTAUD0I14, r1
     jmp     _mcos_v850_cat2isr_entry[r0]
     .size   ar_c2isr_eMCOS_ISR_INTTAUD0I14, .-ar_c2isr_eMCOS_ISR_INTTAUD0I14
+
+    .type   ar_c2isr_eMCOS_ISR_INTRCAN3REC, $function
+    .global ar_c2isr_eMCOS_ISR_INTRCAN3REC
+    .extern _ar_isrcb_eMCOS_ISR_INTRCAN3REC
+ar_c2isr_eMCOS_ISR_INTRCAN3REC:
+    pushsp  r1
+    mov     _ar_isrcb_eMCOS_ISR_INTRCAN3REC, r1
+    jmp     _mcos_v850_cat2isr_entry[r0]
+    .size   ar_c2isr_eMCOS_ISR_INTRCAN3REC, .-ar_c2isr_eMCOS_ISR_INTRCAN3REC
+
+    .type   ar_c2isr_eMCOS_ISR_INTRCAN3TRX, $function
+    .global ar_c2isr_eMCOS_ISR_INTRCAN3TRX
+    .extern _ar_isrcb_eMCOS_ISR_INTRCAN3TRX
+ar_c2isr_eMCOS_ISR_INTRCAN3TRX:
+    pushsp  r1
+    mov     _ar_isrcb_eMCOS_ISR_INTRCAN3TRX, r1
+    jmp     _mcos_v850_cat2isr_entry[r0]
+    .size   ar_c2isr_eMCOS_ISR_INTRCAN3TRX, .-ar_c2isr_eMCOS_ISR_INTRCAN3TRX
 
     .type   ar_c2isr_eMCOS_ISR_INTRCAN5REC, $function
     .global ar_c2isr_eMCOS_ISR_INTRCAN5REC

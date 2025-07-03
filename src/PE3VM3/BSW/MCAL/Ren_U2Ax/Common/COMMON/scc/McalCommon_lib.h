@@ -60,7 +60,7 @@ void mcalcommon_wait_func( uint32 t_u4Cycle );
 /* Return value     :    none                                                                   */
 /* Limitation       :    Note that if you specify a long time, it will wait longer than the set */
 /*                  :    value. If 1000us is specified, the actual time is about 1200us.        */
-/*                  :    Set within the range of 1 ≦ time < 100ms (1us - 99999us)              */
+/*                  :    Set within the range of 1 <= time < 100ms (1us - 99999us)              */
 /************************************************************************************************/
 #define MCAL_LIB_Wait( t_u4Time ) mcalcommon_wait_func( (t_u4Time) * (uint32)(STDLIB_CLK_TYPE) )
 

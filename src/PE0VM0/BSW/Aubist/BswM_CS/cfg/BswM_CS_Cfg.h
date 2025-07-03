@@ -42,7 +42,7 @@
 #define BSW_BSWM_CS_CFG_FUNC_CANRX            (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANTX            (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANTX_PHY        (BSW_USE)
-#define BSW_BSWM_CS_CFG_FUNC_CANTX_VIR        (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_CANTX_VIR        (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANTP            (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_CANCDD1          (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_CANCDD2          (BSW_NOUSE)
@@ -73,9 +73,9 @@
 
 #define BSW_BSWM_CS_CFG_XCP_KIND              (BSW_BSWM_CS_XCP_KIND_NONE)
 
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_0        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_1        (BSW_NOUSE)
-#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_2        (BSW_NOUSE)
+#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_0        (BSW_USE)
+#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_1        (BSW_USE)
+#define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_2        (BSW_USE)
 #define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_3        (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_4        (BSW_NOUSE)
 #define BSW_BSWM_CS_CFG_FUNC_PNCIPDU_5        (BSW_NOUSE)
@@ -172,9 +172,9 @@
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_30       (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PW_31       (0U)
 
-#define BSW_BSWM_CS_CFG_SENDSTART_PN_0        (0U)
-#define BSW_BSWM_CS_CFG_SENDSTART_PN_1        (0U)
-#define BSW_BSWM_CS_CFG_SENDSTART_PN_2        (0U)
+#define BSW_BSWM_CS_CFG_SENDSTART_PN_0        (150U)
+#define BSW_BSWM_CS_CFG_SENDSTART_PN_1        (150U)
+#define BSW_BSWM_CS_CFG_SENDSTART_PN_2        (150U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PN_3        (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PN_4        (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PN_5        (0U)
@@ -205,9 +205,9 @@
 #define BSW_BSWM_CS_CFG_SENDSTART_PN_30       (0U)
 #define BSW_BSWM_CS_CFG_SENDSTART_PN_31       (0U)
 
-#define BSW_BSWM_CS_CFG_ENABLPERI_PN_0        (0U)
-#define BSW_BSWM_CS_CFG_ENABLPERI_PN_1        (0U)
-#define BSW_BSWM_CS_CFG_ENABLPERI_PN_2        (0U)
+#define BSW_BSWM_CS_CFG_ENABLPERI_PN_0        (300U)
+#define BSW_BSWM_CS_CFG_ENABLPERI_PN_1        (300U)
+#define BSW_BSWM_CS_CFG_ENABLPERI_PN_2        (300U)
 #define BSW_BSWM_CS_CFG_ENABLPERI_PN_3        (0U)
 #define BSW_BSWM_CS_CFG_ENABLPERI_PN_4        (0U)
 #define BSW_BSWM_CS_CFG_ENABLPERI_PN_5        (0U)
@@ -312,7 +312,6 @@
 #define BswM_CSConf_SysStatusName_IG                        (BSW_BSWM_CS_SYSSTAT_IG)
 #define BswM_CSConf_SysStatusName_PBA                       (BSW_BSWM_CS_SYSSTAT_USER1)
 #define BswM_CSConf_SysStatusName_IGR                       (BSW_BSWM_CS_SYSSTAT_USER2)
-#define BswM_CSConf_SysStatusName_VCAN                      (BSW_BSWM_CS_SYSSTAT_USER29)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -345,7 +344,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

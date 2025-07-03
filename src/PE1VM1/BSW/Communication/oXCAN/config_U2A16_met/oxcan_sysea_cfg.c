@@ -1,15 +1,15 @@
-/* 1.0.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Oem eXtention of CAN System Event and Action                                                                                     */
+/*  OEM eXtention of CAN : System Event and Action                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_SYSEA_CFG_C_MAJOR                  (1U)
+#define OXCAN_SYSEA_CFG_C_MAJOR                  (2U)
 #define OXCAN_SYSEA_CFG_C_MINOR                  (0U)
 #define OXCAN_SYSEA_CFG_C_PATCH                  (0U)
 
@@ -37,6 +37,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if (OXCAN_LIB_CFG_EN_SEA == 1U)
+#else
+#error "oxcan_sysea_cfg.c : OXCAN_LIB_CFG_EN_SEA is NOT equal to 1U."
+#endif /* #if (OXCAN_LIB_CFG_EN_SEA == 1U) */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -68,29 +73,29 @@ const ST_OXCAN_SYSEA_TIM           st_gp_OXCAN_SYSEA_TIM[OXCAN_SYSEA_NUM_TIM] = 
     }
 };
 const U1                           u1_g_OXCAN_SYSEA_NUM_TIM  = (U1)OXCAN_SYSEA_NUM_TIM;
-#if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE)
-const U1                           u1_g_OXCAN_SYSEA_TIM_NMWK = (U1)U1_MAX;
-#endif /* #if (BSW_CANNM_NM_TYPE_USE(Y) == BSW_USE) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_OXCAN_SYSEA_EVTX          st_gp_OXCAN_SYSEA_EVTX[] = {
+const ST_OXCAN_SYSEA_ACT           st_gp_OXCAN_SYSEA_ACT[] = {
+    /* Event Action Group 2nd executed at vd_g_oXCANMainPosTask : u1_g_OXCAN_SYSEA_EA2_BGN = 0 */
     {
-        &vd_s_oXCANSysEvTxAccOn250ms,  /* fp_vd_EVTX */
+        &vd_s_oXCANSysEvTxAccOn250ms,    /* fp_vd_ACT  */
         (U2)OXCAN_SYSEA_TIM_ACC_ON,      /* u2_tim_idx */
-        (U2)250U / (U2)OXCAN_MAIN_TICK   /* u2_tim_evt */
+        (U2)250U / (U2)OXCAN_MAIN_TICK   /* u2_tim_act */
     },
     {
-        &vd_s_oXCANSysEvTxAccOn2p5s,  /* fp_vd_EVTX */
+        &vd_s_oXCANSysEvTxAccOn2p5s,    /* fp_vd_ACT */
         (U2)OXCAN_SYSEA_TIM_ACC_ON,     /* u2_tim_idx */
         (U2)2500U / (U2)OXCAN_MAIN_TICK /* u2_tim_evt */
     },
     {
-        &vd_s_oXCANSysEvTxIgnOn250ms, /* fp_vd_EVTX */
+        &vd_s_oXCANSysEvTxIgnOn250ms,   /* fp_vd_ACT */
         (U2)OXCAN_SYSEA_TIM_IGN_ON,     /* u2_tim_idx */
         (U2)250U / (U2)OXCAN_MAIN_TICK  /* u2_tim_evt */
     }
 };
-const U1                           u1_g_OXCAN_SYSEA_NUM_EVTX = (U1)3U;
+const U1                           u1_g_OXCAN_SYSEA_NUM_ACT = (U1)3U;
+const U1                           u1_g_OXCAN_SYSEA_EA2_BGN = (U1)0U;
+                                                /* u1_g_OXCAN_SYSEA_EA2_BGN shall be less than or equalt to u1_g_OXCAN_SYSEA_NUM_ACT */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -148,7 +153,7 @@ static void    vd_s_oXCANSysEvTxIgnOn250ms(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     2/13/2025  TN       oxcan_opemd.* -> oxcan_sysea.*                                                                     */
+/*  2.0.0     2/28/2025  TN       oxcan_opemd -> oxcan_sysea v2.0.0.                                                                 */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

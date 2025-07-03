@@ -52,7 +52,7 @@ const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
     {
         /* u4p_elc[ICU_WK_ELC_NUM_WORD] */
         {
-            (U4)0x00210100U,                     /* 0 : INTP[0]  - INTP[7]  */
+            (U4)0x00212100U,                     /* 0 : INTP[0]  - INTP[7]  */
             (U4)0x00000000U,                     /* 1 : INTP[8]  - INTP[15] */
             (U4)0x00000000U,                     /* 2 : INTP[16] - INTP[23] */
             (U4)0x00000000U,                     /* 3 : INTP[24] - INTP[31] */
@@ -61,7 +61,7 @@ const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
         },
         /* u4p_ena[ICU_WK_NUM_GR]       */
         {
-            (U4)0x00000d00U,                     /* GR_A0 : WUFMSK0_A0      */
+            (U4)0x00000f00U,                     /* GR_A0 : WUFMSK0_A0      */
             (U4)0x00000000U,                     /* GR_A1 : WUFMSK0_A1      */
             (U4)0x00000000U                      /* GR_A2 : WUFMSK0_A2      */
         },
@@ -83,7 +83,7 @@ const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
     {
         /* u4p_elc[ICU_WK_ELC_NUM_WORD] */
         {
-            (U4)0x00210100U,                     /* 0 : INTP[0]  - INTP[7]  */
+            (U4)0x00212100U,                     /* 0 : INTP[0]  - INTP[7]  */
             (U4)0x00000000U,                     /* 1 : INTP[8]  - INTP[15] */
             (U4)0x00000000U,                     /* 2 : INTP[16] - INTP[23] */
             (U4)0x00000000U,                     /* 3 : INTP[24] - INTP[31] */
@@ -92,7 +92,7 @@ const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
         },
         /* u4p_ena[ICU_WK_NUM_GR]       */
         {
-            (U4)0x00000d00U,                     /* GR_A0 : WUFMSK0_A0      */
+            (U4)0x00000f00U,                     /* GR_A0 : WUFMSK0_A0      */
             (U4)0x00000000U,                     /* GR_A1 : WUFMSK0_A1      */
             (U4)0x00000000U                      /* GR_A2 : WUFMSK0_A2      */
         },
@@ -105,7 +105,7 @@ const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
         /* ---------------------------------------------------------------------------------- */
         /* u4p_clr[ICU_WK_NUM_GR]       */
         {
-            (U4)0xfffff2ffU,                     /* GR_A0 : WUFMSK0_A0      */
+            (U4)0xfffff0ffU,                     /* GR_A0 : WUFMSK0_A0      */
             (U4)0xffffffffU,                     /* GR_A1 : WUFMSK0_A1      */
             (U4)0xffffffffU                      /* GR_A2 : WUFMSK0_A2      */
         }
@@ -114,7 +114,7 @@ const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
     {
         /* u4p_elc[ICU_WK_ELC_NUM_WORD] */
         {
-            (U4)0x00210100U,                     /* 0 : INTP[0]  - INTP[7]  */
+            (U4)0x00212100U,                     /* 0 : INTP[0]  - INTP[7]  */
             (U4)0x00000000U,                     /* 1 : INTP[8]  - INTP[15] */
             (U4)0x00000000U,                     /* 2 : INTP[16] - INTP[23] */
             (U4)0x00000000U,                     /* 3 : INTP[24] - INTP[31] */
@@ -123,7 +123,7 @@ const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
         },
         /* u4p_ena[ICU_WK_NUM_GR]       */
         {
-            (U4)0x00000d00U,                     /* GR_A0 : WUFMSK0_A0      */
+            (U4)0x00000f00U,                     /* GR_A0 : WUFMSK0_A0      */
             (U4)0x00000000U,                     /* GR_A1 : WUFMSK0_A1      */
             (U4)0x00000000U                      /* GR_A2 : WUFMSK0_A2      */
         },
@@ -136,7 +136,7 @@ const ST_ICU_WK           st_gp_ICU_WK_CFG[ICU_WK_NUM_CFG] = {
         /* ---------------------------------------------------------------------------------- */
         /* u4p_clr[ICU_WK_NUM_GR]       */
         {
-            (U4)0xfffff2ffU,                     /* GR_A0 : WUFMSK0_A0      */
+            (U4)0xfffff0ffU,                     /* GR_A0 : WUFMSK0_A0      */
             (U4)0xffffffffU,                     /* GR_A1 : WUFMSK0_A1      */
             (U4)0xffffffffU                      /* GR_A2 : WUFMSK0_A2      */
         }

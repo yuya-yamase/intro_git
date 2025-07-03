@@ -121,13 +121,13 @@
 #define BSW_COMM_CFG_COM_CH_USERAWK_31 (BSW_COMM_USERAWAKE_NONE)
 
 /* Support Of Partial Networking */
-#define BSW_COMM_CFG_PNC                    (BSW_NOUSE)
+#define BSW_COMM_CFG_PNC                    (BSW_USE)
 
 /* Interface Type For Partial Networking */
 #define BSW_COMM_CFG_PNC_IF_TYPE            (BSW_COMM_PNC_IF_TYPE_AR_COMPLIANCE)
 
 /* Number Of PNC */
-#define BSW_COMM_CFG_CH_PNCNUM_0            (0U)
+#define BSW_COMM_CFG_CH_PNCNUM_0            (4U)
 #define BSW_COMM_CFG_CH_PNCNUM_1            (0U)
 #define BSW_COMM_CFG_CH_PNCNUM_2            (0U)
 #define BSW_COMM_CFG_CH_PNCNUM_3            (0U)
@@ -161,7 +161,7 @@
 #define BSW_COMM_CFG_CH_PNCNUM_31           (0U)
 
 /* EIRA Reset Time */
-#define BSW_COMM_CFG_PNC_RESETTIME_0        (0U)
+#define BSW_COMM_CFG_PNC_RESETTIME_0        (3000U)
 #define BSW_COMM_CFG_PNC_RESETTIME_1        (0U)
 #define BSW_COMM_CFG_PNC_RESETTIME_2        (0U)
 #define BSW_COMM_CFG_PNC_RESETTIME_3        (0U)
@@ -195,8 +195,8 @@
 #define BSW_COMM_CFG_PNC_RESETTIME_31       (0U)
 
 /* Communication Activated Factor From PNC */
-#define BSW_COMM_CFG_PNC_PER_CH_0UP         (BSW_COMM_PNCAWAKE_NONE)
-#define BSW_COMM_CFG_PNC_PER_CH_0LO         (BSW_COMM_PNCAWAKE_NONE)
+#define BSW_COMM_CFG_PNC_PER_CH_0UP         (BSW_COMM_PNCAWAKE_40|BSW_COMM_PNCAWAKE_43|BSW_COMM_PNCAWAKE_44)
+#define BSW_COMM_CFG_PNC_PER_CH_0LO         (BSW_COMM_PNCAWAKE_16)
 #define BSW_COMM_CFG_PNC_PER_CH_1UP         (BSW_COMM_PNCAWAKE_NONE)
 #define BSW_COMM_CFG_PNC_PER_CH_1LO         (BSW_COMM_PNCAWAKE_NONE)
 #define BSW_COMM_CFG_PNC_PER_CH_2UP         (BSW_COMM_PNCAWAKE_NONE)
@@ -261,7 +261,7 @@
 #define BSW_COMM_CFG_PNC_PER_CH_31LO        (BSW_COMM_PNCAWAKE_NONE)
 
 /* Wait Time In BSW_COMM_PNC_PREPARE_SLEEP */
-#define BSW_COMM_CFG_PNC_PREPSLPTIME_0      (0U)
+#define BSW_COMM_CFG_PNC_PREPSLPTIME_0      (3000U)
 #define BSW_COMM_CFG_PNC_PREPSLPTIME_1      (0U)
 #define BSW_COMM_CFG_PNC_PREPSLPTIME_2      (0U)
 #define BSW_COMM_CFG_PNC_PREPSLPTIME_3      (0U)
@@ -432,10 +432,10 @@
 
 
 /* PNC Awake power supply USE/NOUSE */
-#define BSW_COMM_CFG_PNC_AWAKEPW            (BSW_NOUSE)
+#define BSW_COMM_CFG_PNC_AWAKEPW            (BSW_USE)
 
 /* Network management function action type */
-#define BSW_COMM_CFG_NM_ACT_TYPE_0          (BSW_COMM_NM_ACT_TYPE_NO_BSSLP)
+#define BSW_COMM_CFG_NM_ACT_TYPE_0          (BSW_COMM_NM_ACT_TYPE_BSSLP)
 #define BSW_COMM_CFG_NM_ACT_TYPE_1          (BSW_COMM_NM_ACT_TYPE_NO_BSSLP)
 #define BSW_COMM_CFG_NM_ACT_TYPE_2          (BSW_COMM_NM_ACT_TYPE_NO_BSSLP)
 #define BSW_COMM_CFG_NM_ACT_TYPE_3          (BSW_COMM_NM_ACT_TYPE_NO_BSSLP)
@@ -472,6 +472,10 @@
 #define ComMConf_ComMChannel_CDC_VCAN_BUS                   (0U)
 
 /* Symbolic Name Reference - PNC No. */
+#define ComMConf_ComMPnc_Awake_16                           (16U)
+#define ComMConf_ComMPnc_Awake_40                           (40U)
+#define ComMConf_ComMPnc_Awake_43                           (43U)
+#define ComMConf_ComMPnc_Awake_44                           (44U)
 
 /* Symbolic Name Reference - SysStatus */
 #define ComMConf_SysStatusName_BAT                          (BSW_COMM_PWSTAT_BAT)
@@ -479,8 +483,6 @@
 #define ComMConf_SysStatusName_IG                           (BSW_COMM_PWSTAT_IG)
 #define ComMConf_SysStatusName_PBA                          (BSW_COMM_PWSTAT_USER1)
 #define ComMConf_SysStatusName_IGR                          (BSW_COMM_PWSTAT_USER2)
-#define ComMConf_SysStatusName_Special                      (BSW_COMM_PWSTAT_USER3)
-#define ComMConf_SysStatusName_NM_0                         (BSW_COMM_PWSTAT_USER29)
 
 /* Symbolic Name Reference - UserAwake */
 #define ComMConf_UserAwakeName_UserAwake1                   (BSW_COMM_USERAWAKE_1)
@@ -514,7 +516,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

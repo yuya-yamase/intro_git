@@ -11,10 +11,14 @@
     -I${CAN_DIR}/Can/cfg/rscf4
 
     -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/lib
     -I${OXCAN_DIR}/scc
     -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
+
+    -I${OXDOCAN_DIR}/lib/config_U2A16_met
+    -I${OXDOCAN_DIR}/lib/scc
+
     -I${LIB_DIR}
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c

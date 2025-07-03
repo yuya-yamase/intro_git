@@ -262,126 +262,126 @@ ZORN	Spi_AsyncTransmit( U1 t_u1ModeCChannelID, const Spi_ModeC_DataType* t_pcstS
 	if ( ( ( (U4)t_pcstSendData & t_u4AddressMask ) == 0 )
 	  && ( ( (U4)t_pcstReceiveData & t_u4AddressMask ) == 0 ) )
 	{
-	t_u1HwChannel = t_pcstChannelConfig->u1HwChannel;
-	t_pcstPilChannelConfig = &t_pcstChannelConfig->stPilChannelConfig;
-	t_u1SendDmaChannel = t_pcstChannelConfig->u1DmaTxChannel;
-	t_u1ReceiveDmaChannel = t_pcstChannelConfig->u1DmaRxChannel;
-	t_u1MasterSlave = t_pcstPilChannelConfig->u1MasterSlave;
+		t_u1HwChannel = t_pcstChannelConfig->u1HwChannel;
+		t_pcstPilChannelConfig = &t_pcstChannelConfig->stPilChannelConfig;
+		t_u1SendDmaChannel = t_pcstChannelConfig->u1DmaTxChannel;
+		t_u1ReceiveDmaChannel = t_pcstChannelConfig->u1DmaRxChannel;
+		t_u1MasterSlave = t_pcstPilChannelConfig->u1MasterSlave;
 
-	t_u1UnitNo = Pil_Spi_GetUnitNo( t_u1HwChannel );
-	t_u1ChNo = Pil_Spi_GetSpiChNo( t_u1HwChannel );
+		t_u1UnitNo = Pil_Spi_GetUnitNo( t_u1HwChannel );
+		t_u1ChNo = Pil_Spi_GetSpiChNo( t_u1HwChannel );
 
-	BSW_CFG_GETSPINLOCK_SPI();
-	/* DI_ALL(); */		/* GETSPINLOCK内でDI_ALL実施のためコメント化 */
+		BSW_CFG_GETSPINLOCK_SPI();
+		/* DI_ALL(); */		/* GETSPINLOCK内でDI_ALL実施のためコメント化 */
 
-	/* DMA転送無効化 */
-	Dma_DisableTrans( t_u1SendDmaChannel );
-	Dma_DisableTrans( t_u1ReceiveDmaChannel );
+		/* DMA転送無効化 */
+		Dma_DisableTrans( t_u1SendDmaChannel );
+		Dma_DisableTrans( t_u1ReceiveDmaChannel );
 
-	/* 同一HwChannelで実施中の通信停止 */
-	Pil_Spi_DisableCommunication( t_u1HwChannel );
+		/* 同一HwChannelで実施中の通信停止 */
+		Pil_Spi_DisableCommunication( t_u1HwChannel );
 
-	/* レジスタ再設定(使用時リフレッシュ) */
-	Pil_Spi_SetComMode( t_u1HwChannel, t_pcstPilChannelConfig );
+		/* レジスタ再設定(使用時リフレッシュ) */
+		Pil_Spi_SetComMode( t_u1HwChannel, t_pcstPilChannelConfig );
 
 #if ( SPI_CFG_SENDDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX )
-	t_u4CountVal = (U4)0;
+		t_u4CountVal = (U4)0;
 #endif
-	/* Dma_Disable前に実施開始していたDMA転送の完了待ち(Dma_SetTransModeでDMA設定後にDMA転送完了すると、DMA転送回数が1回ずれるため) */
-	while(Dma_GetTransStatus( t_u1SendDmaChannel ) == u1DMA_TRANS_STATUS_BUSY)
-	{
-		/* DMA転送の完了待ち */
-#if ( SPI_CFG_SENDDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX )
-		/* タイムアウト判定 */
-		if( t_u4CountVal >= (U4)SPI_CFG_SENDDMASTOP_TIMEOUT )
+		/* Dma_Disable前に実施開始していたDMA転送の完了待ち(Dma_SetTransModeでDMA設定後にDMA転送完了すると、DMA転送回数が1回ずれるため) */
+		while(Dma_GetTransStatus( t_u1SendDmaChannel ) == u1DMA_TRANS_STATUS_BUSY)
 		{
-			/* タイムアウト通知処理 */
+			/* DMA転送の完了待ち */
+#if ( SPI_CFG_SENDDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX )
+			/* タイムアウト判定 */
+			if( t_u4CountVal >= (U4)SPI_CFG_SENDDMASTOP_TIMEOUT )
+			{
+				/* タイムアウト通知処理 */
 #if ( SPI_CFG_MODEC_FSLEVEL == SPI_ASIL )
-			Esr_Ap_Spi_SendDmaStop_AsilTimeOutError();
+				Esr_Ap_Spi_SendDmaStop_AsilTimeOutError();
 #else
-			Esr_Ap_Spi_SendDmaStop_TimeOutError();
+				Esr_Ap_Spi_SendDmaStop_TimeOutError();
 #endif
-			break;
+				break;
+			}
+			LIB_Wait( u4PIL_SPI_WAIT_1US );
+			t_u4CountVal++;														/* @qac 3383:ラップアラウンドしない */
+#endif
 		}
-		LIB_Wait( u4PIL_SPI_WAIT_1US );
-		t_u4CountVal++;														/* @qac 3383:ラップアラウンドしない */
-#endif
-	}
 
-	Dma_SetTransMode( t_u1SendDmaChannel,
+		Dma_SetTransMode( t_u1SendDmaChannel,
 						  t_pcstChannelConfig->u1DmaSize,
 						  u1SPI_SEND_DMA_MODE,
 						  (volatile const void*)&( t_pcstSendData->u1Data ),
 						  (volatile const void*)&(cpstReg_Mspi[t_u1UnitNo]->stCH[t_u1ChNo].unTXDA0.u4Data),
 						  t_u2Times );
 
-	/* DMA転送有効化(送信側) */
-	Dma_EnableTrans( t_u1SendDmaChannel );
+		/* DMA転送有効化(送信側) */
+		Dma_EnableTrans( t_u1SendDmaChannel );
 
 #if ( SPI_CFG_RECEIVEDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX )
-	t_u4CountVal = (U4)0;
+		t_u4CountVal = (U4)0;
 #endif
-	/* Dma_Disable前に実施開始していたDMA転送の完了待ち(SetTransModeでDMA設定後にDMA転送完了すると、DMA転送回数が1回ずれるため) */
-	while(Dma_GetTransStatus( t_u1ReceiveDmaChannel ) == u1DMA_TRANS_STATUS_BUSY)
-	{
-		/* DMA転送の完了待ち */
-#if ( SPI_CFG_RECEIVEDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX )
-		/* タイムアウト判定 */
-		if( t_u4CountVal >= (U4)SPI_CFG_RECEIVEDMASTOP_TIMEOUT )
+		/* Dma_Disable前に実施開始していたDMA転送の完了待ち(SetTransModeでDMA設定後にDMA転送完了すると、DMA転送回数が1回ずれるため) */
+		while(Dma_GetTransStatus( t_u1ReceiveDmaChannel ) == u1DMA_TRANS_STATUS_BUSY)
 		{
-			/* タイムアウト通知処理 */
+			/* DMA転送の完了待ち */
+#if ( SPI_CFG_RECEIVEDMASTOP_TIMEOUT < PIL_SPI_WAIT_MAX )
+			/* タイムアウト判定 */
+			if( t_u4CountVal >= (U4)SPI_CFG_RECEIVEDMASTOP_TIMEOUT )
+			{
+				/* タイムアウト通知処理 */
 #if ( SPI_CFG_MODEC_FSLEVEL == SPI_ASIL )
-			Esr_Ap_Spi_ReceiveDmaStop_AsilTimeOutError();
+				Esr_Ap_Spi_ReceiveDmaStop_AsilTimeOutError();
 #else
-			Esr_Ap_Spi_ReceiveDmaStop_TimeOutError();
+				Esr_Ap_Spi_ReceiveDmaStop_TimeOutError();
 #endif
-			break;
+				break;
+			}
+			LIB_Wait( u4PIL_SPI_WAIT_1US );
+			t_u4CountVal++;														/* @qac 3383:ラップアラウンドしない */
+#endif
 		}
-		LIB_Wait( u4PIL_SPI_WAIT_1US );
-		t_u4CountVal++;														/* @qac 3383:ラップアラウンドしない */
-#endif
-	}
 
-	Dma_SetTransMode( t_u1ReceiveDmaChannel,
+		Dma_SetTransMode( t_u1ReceiveDmaChannel,
 						  t_pcstChannelConfig->u1DmaSize,
 						  u1SPI_RECEIVE_DMA_MODE,
 						  (volatile const void*)&(cpstReg_Mspi[t_u1UnitNo]->stCH[t_u1ChNo].unRXDA0.u4Data),
 						  (volatile const void*)&( t_pcstReceiveData->u1Data ),
 						  t_u2Times );
 
-	/* 受信完了通知の有効・無効のコンフィグによって割り込み許可・禁止を切り替える */
-	Dma_SetInterrupt( t_pcstChannelConfig->u1DmaRxChannel, (U1)OFF, t_pcstChannelConfig->u1NotifEnable );
+		/* 受信完了通知の有効・無効のコンフィグによって割り込み許可・禁止を切り替える */
+		Dma_SetInterrupt( t_pcstChannelConfig->u1DmaRxChannel, (U1)OFF, t_pcstChannelConfig->u1NotifEnable );
 
-	/* DMA転送有効化(受信側) */
-	Dma_EnableTrans( t_u1ReceiveDmaChannel );
+		/* DMA転送有効化(受信側) */
+		Dma_EnableTrans( t_u1ReceiveDmaChannel );
 
-	/* DMA転送トリガ */
-	Pil_Spi_StartAsync( t_u1HwChannel, t_pcstPilChannelConfig, t_u2Times );
+		/* DMA転送トリガ */
+		Pil_Spi_StartAsync( t_u1HwChannel, t_pcstPilChannelConfig, t_u2Times );
 
-	stSpi_ModeC_ChannelData[t_u1ModeCChannelID].u1Status = u1SPI_BUSY;
+		stSpi_ModeC_ChannelData[t_u1ModeCChannelID].u1Status = u1SPI_BUSY;
 
-	if ( t_u1MasterSlave == (U1)PIL_SPI_MASTERSLAVE_SLAVE )
-	{
+		if ( t_u1MasterSlave == (U1)PIL_SPI_MASTERSLAVE_SLAVE )
+		{
 #if ( SPI_CFG_ASYNCDMASTART_TIMEOUT < PIL_SPI_WAIT_MAX )
-		t_u4CountVal = (U4)0;
+			t_u4CountVal = (U4)0;
 #endif
-		do{
-			t_u2Data = Dma_GetTransCount( t_u1SendDmaChannel );				/* DMA転送回数取得 */
+			do{
+				t_u2Data = Dma_GetTransCount( t_u1SendDmaChannel );				/* DMA転送回数取得 */
 #if ( SPI_CFG_ASYNCDMASTART_TIMEOUT < PIL_SPI_WAIT_MAX )
-			/* タイムアウト判定 */
-			if( t_u4CountVal >= (U4)SPI_CFG_ASYNCDMASTART_TIMEOUT )
-			{
-				Esr_Ap_Spi_AsyncDmaStart_TimeOutError();					/* タイムアウト通知処理 */
-				break;
-			}
-			LIB_Wait( u4PIL_SPI_WAIT_1US );
-			t_u4CountVal++;													/* @qac 3383:ラップアラウンドしない */
+				/* タイムアウト判定 */
+				if( t_u4CountVal >= (U4)SPI_CFG_ASYNCDMASTART_TIMEOUT )
+				{
+					Esr_Ap_Spi_AsyncDmaStart_TimeOutError();					/* タイムアウト通知処理 */
+					break;
+				}
+				LIB_Wait( u4PIL_SPI_WAIT_1US );
+				t_u4CountVal++;													/* @qac 3383:ラップアラウンドしない */
 #endif
-		}while ( t_u2Data >= t_u2Times );
-	}
+			}while ( t_u2Data >= t_u2Times );
+		}
 
-	/* EI_ALL(); */		/* RELEASESPINLOCK内でEI_ALL実施のためコメント化 */
-	BSW_CFG_RELEASESPINLOCK_SPI();
+		/* EI_ALL(); */		/* RELEASESPINLOCK内でEI_ALL実施のためコメント化 */
+		BSW_CFG_RELEASESPINLOCK_SPI();
 	}
 	else
 	{
@@ -851,7 +851,7 @@ void Spi_ReceiveInterrupt( const S4* t_pcs4Param )
 
 //	(void)Rte_SendEvent( t_u4NotifId , &t_s4Param );
 #ifdef JGXSTACK
-    SYNC_stack_s_cstSpi_UcfgModeCChannelData_u4NotifId( &t_s4Param );
+//    SYNC_stack_s_cstSpi_UcfgModeCChannelData_u4NotifId( &t_s4Param );
 #endif /* JGXSTACK */
 
 }

@@ -1,7 +1,7 @@
-/* Ecm-r04-30300-0000-a-v02 */
+/* Reg_ECM-r04-307 */
 /************************************************************************************************/
 /*																								*/
-/*		Ecm register definition (for RH850U2x)													*/
+/*		Ecm register definition (for RH850U2A and RH850U2B and RCARS4 G4MH)						*/
 /*																								*/
 /*		Copyright : DENSO CORPORATION															*/
 /*																								*/
@@ -21,13 +21,17 @@
 #if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #if ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_516PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) )
 #define ECM_INDEX_MAX_J		((uint8)11U)			/* j = 0 to 10 */
-#elif ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN )
+#elif ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_144PIN ) )
 #define ECM_INDEX_MAX_J		((uint8)9U)				/* j = 0 to 8 */
 #endif
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 #if MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B
 #define ECM_INDEX_MAX_J		((uint8)10U)			/* j = 0 to 9 */
 #endif
+#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH )
+#define ECM_INDEX_MAX_J		((uint8)12U)			/* j = 0 to 11 */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) */
+
 
 typedef	struct {
 
@@ -54,7 +58,7 @@ typedef	struct {
 		uint32	u4ECMMECLR3;						/* 0xFFD39024 - 0xFFD39028 */
 
 		uint8	u1Dummy1[( 0xFFD39048U - 0xFFD39028U )];
-#elif ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN )
+#elif ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_144PIN ) )
 		uint8	u1Dummy1[( 0xFFD39048U - 0xFFD39018U )];
 #endif
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
@@ -65,7 +69,10 @@ typedef	struct {
 
 		uint8	u1Dummy1[( 0xFFD39048U - 0xFFD39020U )];
 #endif
-		uint32	u4ECMMESSTRj[ECM_INDEX_MAX_J];		/* 0xFFD38048 - (0xFFD38028 + 4*j) */
+#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH )
+		uint8	u1Dummy1[( 0xFFD39048U - 0xFFD39018U )];
+#endif
+		uint32	u4ECMMESSTRj[ECM_INDEX_MAX_J];		/* 0xFFD39048 - (0xFFD39048 + 4*j) */
 
 	} stECMMASTER;
 } REGTYPE_ECM_MASTER;
@@ -95,7 +102,7 @@ typedef	struct {
 		uint32	u4ECMCECLR3;						/* 0xFFD3A024 - 0xFFD3A028 */
 
 		uint8	u1Dummy1[( 0xFFD39048U - 0xFFD39028U )];
-#elif ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN )
+#elif ( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_144PIN ) )
 		uint8	u1Dummy1[( 0xFFD39048U - 0xFFD39018U )];
 #endif
 #endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
@@ -106,7 +113,10 @@ typedef	struct {
 
 		uint8	u1Dummy1[( 0xFFD39048U - 0xFFD39020U )];
 #endif
-		uint32	u4ECMCESSTRj[ECM_INDEX_MAX_J];		/* 0xFFD38048 - (0xFFD38028 + 4*j) */
+#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH )
+		uint8	u1Dummy1[( 0xFFD3A048U - 0xFFD3A018U )];
+#endif
+		uint32	u4ECMCESSTRj[ECM_INDEX_MAX_J];		/* 0xFFD3A048 - (0xFFD3A048 + 4*j) */
 
 	} stECMCHECKER;
 } REGTYPE_ECM_CHECKER;
@@ -216,7 +226,7 @@ typedef	struct {
 		uint32	u4ECMKCPROT;						/* 0xFFD384B4 - 0xFFD384B8 */
 		uint8	u1Dummy10[( 0xFFD38740U - 0xFFD384B8U )];
 		uint32	u4ECMPEM;							/* 0xFFD38740 - 0xFFD38744 */
-#elif	( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN ) )
+#elif	( ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_144PIN ) )
 		uint8	u1Dummy1[( 0xFFD38004U - 0xFFD38000U )];
 		uint32	u4ECMISCFG0;						/* 0xFFD38004 - 0xFFD38008 */
 		uint32	u4ECMISCFG1;						/* 0xFFD38008 - 0xFFD3800C */
@@ -422,7 +432,8 @@ typedef	struct {
 		uint32	u4ECMIRCFG8;						/* 0xFFD38240 - 0xFFD38244 */
 		uint32	u4ECMIRCFG9;						/* 0xFFD38244 - 0xFFD38248 */
 		uint32	u4ECMIRCFG10;						/* 0xFFD38248 - 0xFFD3824C */
-		uint8	u1Dummy5[( 0xFFD3825CU - 0xFFD3824CU )];
+		uint32	u4ECMIRCFG11;						/* 0xFFD3824C - 0xFFD38250 */
+		uint8	u1Dummy5[( 0xFFD3825CU - 0xFFD38250U )];
 		uint32	u4ECMEMK0;							/* 0xFFD3825C - 0xFFD38260 */
 		uint32	u4ECMEMK1;							/* 0xFFD38260 - 0xFFD38264 */
 		uint32	u4ECMEMK2;							/* 0xFFD38264 - 0xFFD38268 */
@@ -433,7 +444,8 @@ typedef	struct {
 		uint32	u4ECMEMK7;							/* 0xFFD38278 - 0xFFD3827C */
 		uint32	u4ECMEMK8;							/* 0xFFD3827C - 0xFFD38280 */
 		uint32	u4ECMEMK9;							/* 0xFFD38280 - 0xFFD38284 */
-		uint32	u4ECMEMK10;							/* 0xFFD38284 - 0xFFD3828C */
+		uint32	u4ECMEMK10;							/* 0xFFD38284 - 0xFFD38288 */
+		uint32	u4ECMEMK11;							/* 0xFFD38288 - 0xFFD3828C */
 		uint8	u1Dummy6[( 0xFFD38478U - 0xFFD3828CU )];
 		uint32	u4ECMESSTC0;						/* 0xFFD38478 - 0xFFD3847C */
 		uint32	u4ECMESSTC1;						/* 0xFFD3847C - 0xFFD38480 */
@@ -468,7 +480,7 @@ typedef	struct {
 #define		Reg_ECM_ECMCHECKER			((volatile REGTYPE_ECM_CHECKER *)			0xFFCCF000UL)
 #endif
 
-#if MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A
+#if ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
 #define REG_ECM_BASE_ADDR					((uint32)0xFFD38000U)	/* Base address of ECM register	*/
 #define REG_ECM_ECMIRCFG7_ADDRESS			((uint32)0xFFD3823CU)	/* ECMIRCFG j:7  Address		*/
 #define REG_ECM_ECMIRCFG8_ADDRESS			((uint32)0xFFD38240U)	/* ECMIRCFG j:8  Address		*/

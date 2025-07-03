@@ -337,7 +337,7 @@ void SS_Pm_shutdownCallout(void)
     /* vv User Hook start vv */
     vd_g_22SSCallout_PrepShtdwn();
 
-    vd_g_oXCANShutdown();
+    vd_g_oXCANShtdwn();
     vd_g_Rim_DeInit();
 
     vd_g_GpI2cMaDeInit();

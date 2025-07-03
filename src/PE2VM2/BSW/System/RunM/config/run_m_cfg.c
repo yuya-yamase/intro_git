@@ -23,6 +23,10 @@
 /* Communication         */
 #include "oxcan.h"
 /* Complex Device Driver */
+
+/* Diagnosis             */
+#include "oxdocan.h"
+
 /* MCAL                  */
 /* Memory                */
 /* Application           */
@@ -79,7 +83,8 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 {
 #if (__RUN_M_CHK_1ST__ == 1)
     static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
-        &u1_g_oXCANEcuShtdwnOk
+        &u1_g_oXCANShtdwnOk
+        /* &u1_g_oXDoCANShtdwnOk */ /* @todo: Temporary fix:Remove DIAG from sleep check */
     };
 
     U1                        u1_t_1st;
@@ -99,33 +104,6 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 /*===================================================================================================================================*/
 U1      u1_g_RunMCfgWksrcIrqchk(void)
 {
-#if 0    
-    static const U4           u4_s_RUN_M_WKSRC_EIRQBIT = ((U4)ICU_WK_WRQ_CAN_VEH |
-                                                          (U4)ICU_WK_WRQ_HWI_WK);
-
-    static const U4           u4_s_RUN_M_WKSRC_ECLRBIT = (U4)ICU_WK_WRQ_HWI_WK;
-
-    U4                        u4_t_irqst;
-    U1                        u1_t_shtdwn;
-
-    u4_t_irqst  = u4_g_IcuWkRQst((U1)ICU_WK_GR_A0, (U4)u4_s_RUN_M_WKSRC_EIRQBIT, (U1)FALSE);
-    /* ----------------------------------------------------------------------------------- */
-    /* Attention :                                                                         */
-    /* ----------------------------------------------------------------------------------- */
-    /* u4_g_IcuWkRQst is being called twice in order to clear IGN and HAR irqsts.          */
-    /* By doing above, the time slit is being eliminated in which WkEvts are lost and      */
-    /* discarded by clearing them.                                                         */
-    /* ----------------------------------------------------------------------------------- */
-    u4_t_irqst |= u4_g_IcuWkRQst((U1)ICU_WK_GR_A0, u4_s_RUN_M_WKSRC_ECLRBIT, (U1)TRUE);
-    if(u4_t_irqst == (U4)0U){
-        u1_t_shtdwn = (U1)TRUE;
-    }
-    else{
-        u1_t_shtdwn = (U1)FALSE;
-    }
-
-    return(u1_t_shtdwn);
-#endif
     return((U1)TRUE);
 }
 /*===================================================================================================================================*/
@@ -136,17 +114,6 @@ U1      u1_g_RunMCfgWksrcIrqchk(void)
 /*===================================================================================================================================*/
 void    vd_g_RunMCfgWksrcCfgRefresh(void)
 {
-    /* ----------------------------------------------------------------------------------- */
-    /* Warning :                                                                           */
-    /* ----------------------------------------------------------------------------------- */
-    /* DO NOT CALL vd_g_IcuWkSetCh with the parameter "ICU_WK_CFGBIT_WRQ_CLR".             */
-    /* If vd_g_IcuWkSetCh is called with the parameter "ICU_WK_CFGBIT_WRQ_CLR",            */
-    /* wakeup sources could be lost and discarded.                                         */
-    /* ----------------------------------------------------------------------------------- */
-#if 0
-    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP_5,  (U1)ICU_WK_CFGBIT_ELC_HI | (U1)ICU_WK_CFGBIT_WRQ_ENA);
-    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP_15, (U1)ICU_WK_CFGBIT_ELC_HI | (U1)ICU_WK_CFGBIT_WRQ_ENA);
-#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)                                                    */

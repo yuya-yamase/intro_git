@@ -12,7 +12,7 @@
     -I${CAN_DIR}/Can/cfg/rscf4
 
     -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/lib
     -I${OXCAN_DIR}/scc
 
     -I${VEHOPE_DIR}/config_tybev3
@@ -22,29 +22,6 @@
 
     -I${MS_DIR}/Rim/scc
     -I${MS_DIR}/Rim/config
-
-    -I${CGW_L3R_DIR}/config
-    -I${CGW_L3R_DIR}/GW/Cid/cfg
-    -I${CGW_L3R_DIR}/GW/Cid/inc
-    -I${CGW_L3R_DIR}/GW/L3R/CMN/cfg
-    -I${CGW_L3R_DIR}/GW/L3R/CMN/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Basis/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Ctrl/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Diag/cfg
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Diag/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Relay/Dynamic/inc
-    -I${CGW_L3R_DIR}/GW/L3R/RM/cfg
-    -I${CGW_L3R_DIR}/GW/L3R/Support/Fail/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Support/Frm_Info/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Tx/BandLimit/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Tx/Gate/inc
-    -I${CGW_L3R_DIR}/GW/L3R/Tx/MBQ/cfg
-    -I${CGW_L3R_DIR}/GW/L3R/Tx/MBQ/inc
-    -I${CGW_L3R_DIR}/MDL/FW/EVT/cfg
-    -I${CGW_L3R_DIR}/MDL/FW/EVT/inc
-    -I${CGW_L3R_DIR}/MDL/FW/inc
-    -I${CGW_L3R_DIR}/MDL/INFO/CHM
-    -I${CGW_L3R_DIR}/MDL/INFO/UTIL/inc
 
     -I${LIB_DIR}
 

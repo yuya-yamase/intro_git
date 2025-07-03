@@ -98,7 +98,8 @@
 
 const	Cdd_Canic_IcConfigType	cstCdd_Canic_UcfgIcData[CDD_CANIC_CFG_IC_NUM] =
 {
-	Cdd_Canic_Set_IcConfig(0)
+	Cdd_Canic_Set_IcConfig(0),
+	Cdd_Canic_Set_IcConfig(1)
 };
 
 const	Cdd_Canic_UserConfigType	cstCdd_Canic_UcfgData =

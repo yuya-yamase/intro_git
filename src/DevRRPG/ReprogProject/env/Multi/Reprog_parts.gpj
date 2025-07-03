@@ -5,9 +5,10 @@ $TOP_DIR/parts/Crc/env/Multi/Crc.gpj										[Relocatable Object]
 
 $TOP_DIR/parts/Csm/CryIf/env/Multi/CryIf.gpj								[Relocatable Object]
 $TOP_DIR/parts/Csm/Csm/env/Multi/Csm.gpj									[Relocatable Object]
-$TOP_DIR/parts/Csm/Crypto_83_sw/Crypto/env/Multi/Crypto_83_sw_Crypto.gpj	[Relocatable Object]
-$TOP_DIR/parts/Csm/Crypto_83_sw/SecStd/env/Multi/Crypto_83_sw_SecStd.gpj	[Relocatable Object]
-$TOP_DIR/parts/Csm/Crypto_83_sw/SWSHE/env/Multi/Crypto_83_sw_SWSHE.gpj		[Relocatable Object]
+#$TOP_DIR/parts/Csm/Crypto_83_sw/Crypto/env/Multi/Crypto_83_sw_Crypto.gpj	[Relocatable Object]
+#$TOP_DIR/parts/Csm/Crypto_83_sw/SecStd/env/Multi/Crypto_83_sw_SecStd.gpj	[Relocatable Object]
+#$TOP_DIR/parts/Csm/Crypto_83_sw/SWSHE/env/Multi/Crypto_83_sw_SWSHE.gpj		[Relocatable Object]
+$TOP_DIR/parts/Csm/Crypto_83_sw_Dummy/Crypto_83_sw_Dummy.gpj           		[Relocatable Object]
 
 # usr
 $TOP_DIR/parts/Csm/SchM/env/Multi/SchM_usr.gpj								[Relocatable Object]

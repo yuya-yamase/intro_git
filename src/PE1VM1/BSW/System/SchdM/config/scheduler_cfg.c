@@ -44,6 +44,7 @@
 #include "run_m.h"
 #include "nvmc_mgr.h"
 #include "oxcan.h"
+#include "ivdsh.h"
 
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
@@ -198,7 +199,8 @@ const U2               u2_g_SCHDLR_TASK_CYCL_MAX   = (U2)SCHDLR_TASK_CYCL_MAX;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  WARNING : vdp_PTR_NA shall NOT be set to ST_SCHDLR_RGLR.fp_vd_TASK.                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
+const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
+
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  10ms A Platform Pre Task                                         */
@@ -206,7 +208,6 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_s_SchdlrCfgWdgTimRestart,      (U4)SCHDLR_TASKBIT__10MS_A  },
 
-    
 //    {&vd_g_XpdiMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
 //    {&vd_g_EsmMStkmMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
 
@@ -217,6 +218,7 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Pre Task                                           */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_iVDshMainReaTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
@@ -241,7 +243,8 @@ const ST_SCHDLR_RGLR   st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Post Task                                          */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_oXCANMainPostTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXCANMainPosTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_iVDshMainWriTask,           (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

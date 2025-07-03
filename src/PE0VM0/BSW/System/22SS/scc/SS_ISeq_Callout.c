@@ -372,7 +372,7 @@ void SS_Pm_shutdownCallout(void)
 
     /* TPcsw_SS_Pm_shutdownCallout_if0 */
     vd_g_oXDoCANShutdown();
-    vd_g_oXCANShutdown();
+    vd_g_oXCANShtdwn();
     /* vd_g_Nvmc_DeInit(); */
     vd_g_Rim_DeInit();
 

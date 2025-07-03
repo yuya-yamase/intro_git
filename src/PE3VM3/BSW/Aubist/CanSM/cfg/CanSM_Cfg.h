@@ -22,7 +22,7 @@
 #define BSW_CANSM_CFG_TXRX_INDSTATE                  (BSW_NOUSE)
 
 #define BSW_CANSM_CFG_ICOM                           (BSW_NOUSE)
-#define BSW_CANSM_CFG_PNC                            (BSW_NOUSE)
+#define BSW_CANSM_CFG_PNC                            (BSW_USE)
 #define BSW_CANSM_CFG_SET_BAUDRATE                   (BSW_NOUSE)
 #define BSW_CANSM_CFG_ECU_PASSIVE                    (BSW_NOUSE)
 
@@ -229,7 +229,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

@@ -22,9 +22,10 @@
     -I${CAN_DIR}/Dem/usr
 
     -I${CAN_DIR}/CS/inc
+    -I${CAN_DIR}/ComM/inc
 
     -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/lib
     -I${OXCAN_DIR}/scc
 
     -I${VEHOPE_DIR}/config_tybev3

@@ -23,7 +23,6 @@
 #include "run_m.h"
 
 #include "oxcan.h"
-#include "l3r_test.h"
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
@@ -68,9 +67,7 @@ TASK(eMCOS_TASK_Idle)
  *--------------------------------------------------------------------------*/
 TASK(eMCOS_TASK_High)
 {
-    vd_g_L3rTestCycleHigh();
     BswM_CS_MainFunctionHigh();
-
     (void)TerminateTask();
 }
 

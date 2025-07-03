@@ -24,7 +24,6 @@
 
 #include "oxcan.h"
 #include "oxdocan.h"
-#include "L3R_Scheduler.h"
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
@@ -70,8 +69,6 @@ TASK(eMCOS_TASK_Idle)
 TASK(eMCOS_TASK_High)
 {
     BswM_CS_MainFunctionHigh();
-    L3R_System_DriverTask();
-
     (void)TerminateTask();
 }
 
