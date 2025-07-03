@@ -28,8 +28,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define STUB_VM_SWNO_NUM                         (36U)      /* for sample */
-#define STUB_VM_HWNO_NUM                         (15U)      /* for sample */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,34 +57,34 @@
 
 U1      u1_g_oXDoCANRebyId_F188(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 {
-    static const U1 u1_sp_SW_NUMBER[STUB_VM_SWNO_NUM] = { 2U,                       /* Number of output sw parts number     */
-                                                          16U,                               /* Data Length                          */
-                                                          1U,                                /* ECU ID                               */
-                                                          0x38U,0x33U,0x38U,0x31U,           /* sw parts number 8381G1234510         */
-                                                          0x47U,0x31U,0x32U,0x33U,
-                                                          0x34U,0x35U,0x31U,0x30U,
-                                                          0x00U,0x00U,0x00U,0x00U,  /* Digits 13-16 shall be outputted with ASCII 'NULL(00h)' */
-                                                          2U,                       /* ECU ID2                              */
-                                                          0x38U,0x33U,0x38U,0x31U,  /* sw parts number 8381G1234555         */
-                                                          0x47U,0x31U,0x32U,0x33U,
-                                                          0x34U,0x35U,0x35U,0x35U,
-                                                          0x00U,0x00U,0x00U,0x00U };/* Digits 13-16 shall be outputted with ASCII 'NULL(00h)' */
+    static const U1 u1_sp_SW_NUMBER[OXDC_DATA_REA_ANS_NB_F188] = { 2U,                       /* Number of output sw parts number     */
+                                                                   16U,                      /* Data Length                          */
+                                                                   1U,                       /* ECU ID                               */
+                                                                   0x38U,0x33U,0x38U,0x31U,  /* sw parts number 8381G1234510         */
+                                                                   0x47U,0x31U,0x32U,0x33U,
+                                                                   0x34U,0x35U,0x31U,0x30U,
+                                                                   0x00U,0x00U,0x00U,0x00U,  /* Digits 13-16 shall be outputted with ASCII 'NULL(00h)' */
+                                                                   2U,                       /* ECU ID2                              */
+                                                                   0x38U,0x33U,0x38U,0x31U,  /* sw parts number 8381G1234555         */
+                                                                   0x47U,0x31U,0x32U,0x33U,
+                                                                   0x34U,0x35U,0x35U,0x35U,
+                                                                   0x00U,0x00U,0x00U,0x00U };/* Digits 13-16 shall be outputted with ASCII 'NULL(00h)' */
 
-    vd_g_MemcpyU1(&u1_ap_ans[0], &u1_sp_SW_NUMBER[0], (U4)STUB_VM_SWNO_NUM);
+    vd_g_MemcpyU1(&u1_ap_ans[0], &u1_sp_SW_NUMBER[0], (U4)OXDC_DATA_REA_ANS_NB_F188);
 
     return((U1)OXDC_SAL_PROC_FIN);
 }
 
 U1      u1_g_oXDoCANRebyId_F191(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 {
-    static const U1 u1_sp_HW_NUMBER[STUB_VM_HWNO_NUM] = { 1U,                                 /* Number of output ECU parts number   */
-                                                          12U,                                /* Data Length                         */
-                                                          1U,                                 /* ECU ID                              */
-                                                          0x38U,0x33U,0x38U,0x30U,            /* ECU parts number 8380030A80G0       */
-                                                          0x30U,0x33U,0x30U,0x41U,
-                                                          0x38U,0x30U,0x47U,0x30U };
+    static const U1 u1_sp_HW_NUMBER[OXDC_DATA_REA_ANS_NB_F191] = { 1U,                        /* Number of output ECU parts number   */
+                                                                   12U,                       /* Data Length                         */
+                                                                   1U,                        /* ECU ID                              */
+                                                                   0x38U,0x33U,0x38U,0x30U,   /* ECU parts number 8380030A80G0       */
+                                                                   0x30U,0x33U,0x30U,0x41U,
+                                                                   0x38U,0x30U,0x47U,0x30U };
 
-    vd_g_MemcpyU1(&u1_ap_ans[0], &u1_sp_HW_NUMBER[0], (U4)STUB_VM_HWNO_NUM);
+    vd_g_MemcpyU1(&u1_ap_ans[0], &u1_sp_HW_NUMBER[0], (U4)OXDC_DATA_REA_ANS_NB_F191);
 
     return((U1)OXDC_SAL_PROC_FIN);
 }

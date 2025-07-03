@@ -54,13 +54,13 @@ static const U4             u4_sp_CAN_LPR_UDS_EGR_TA_G2M_1[] = {
     (U4)0x0000aaaaU            /* CAN-ID bit#15-8 Target Address : 0xe0 - 0xff */
 };
 static const U4             u4_sp_CAN_LPR_UDS_EGR_SO_G2M_1[] = {
-    (U4)0xff7fffffU,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
+    (U4)0xef7fffffU,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
     (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0x20 - 0x3f */
     (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0x40 - 0x5f */
     (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0x60 - 0x7f */
     (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0x80 - 0x9f */
     (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0xa0 - 0xbf */
-    (U4)0xfffffffdU,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
+    (U4)0xffffffffU,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
     (U4)0xffffd555U            /* CAN-ID bit#7-0  Source Address : 0xe0 - 0xff */
 };
 static const U4             u4_sp_CAN_LPR_UDS_REC_TA_G2M_1[] = {
@@ -86,23 +86,23 @@ static const U4             u4_sp_CAN_LPR_UDS_REC_SO_G2M_1[] = {
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U4             u4_sp_CAN_LPR_UDS_EGR_TA_VIR_0[] = {
-    (U4)0xff7fffffU,           /* CAN-ID bit#15-8 Target Address : 0x00 - 0x1f */
+    (U4)0xef7fffffU,           /* CAN-ID bit#15-8 Target Address : 0x00 - 0x1f */
     (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x20 - 0x3f */
     (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x40 - 0x5f */
     (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x60 - 0x7f */
     (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0x80 - 0x9f */
     (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0xa0 - 0xbf */
-    (U4)0xfffffffdU,           /* CAN-ID bit#15-8 Target Address : 0xc0 - 0xdf */
+    (U4)0xffffffffU,           /* CAN-ID bit#15-8 Target Address : 0xc0 - 0xdf */
     (U4)0xffffd555U            /* CAN-ID bit#15-8 Target Address : 0xe0 - 0xff */
 };
 static const U4             u4_sp_CAN_LPR_UDS_EGR_SO_VIR_0[] = {
-    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
+    (U4)0x10000000U,           /* CAN-ID bit#7-0  Source Address : 0x00 - 0x1f */
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x20 - 0x3f */
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x40 - 0x5f */
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x60 - 0x7f */
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0x80 - 0x9f */
     (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xa0 - 0xbf */
-    (U4)0x00000002U,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
+    (U4)0x00000000U,           /* CAN-ID bit#7-0  Source Address : 0xc0 - 0xdf */
     (U4)0x0000aaaaU            /* CAN-ID bit#7-0  Source Address : 0xe0 - 0xff */
 };
 #if (CAN_LPR_UDS_RX_VIR_EN == 1U)

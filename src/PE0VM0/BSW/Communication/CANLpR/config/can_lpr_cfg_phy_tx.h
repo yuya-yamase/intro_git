@@ -98,7 +98,7 @@ const ST_CAN_LPR_PHY_TX         st_gp_CAN_LPR_PHY_TX[]   = {
         &vd_g_CANLpFqResCh,                                /* fp_vd_RES_CH */
         &u1_g_CANLpFqDeqCh,                                /* fp_u1_DEQ_CH */
         &u4_sp_can_lpr_phy_tx_log_3[0U],                   /* u4p_log      */
-        (U4)CAN_LPR_REGR_EN_UDS_FQ_G2M1,                   /* u4_regr_en   */
+        (U4)CAN_LPR_REGR_EN_PHY_FQ_G2M1,                   /* u4_regr_en   */
         (U2)CAN_LPFQ_CH_PHY_TX_G2M1_P3,                    /* u2_que_ch    */
         (U2)CAN_LPR_PHY_TX_VACK_DI                         /* u2_vack      */
     },
@@ -106,7 +106,7 @@ const ST_CAN_LPR_PHY_TX         st_gp_CAN_LPR_PHY_TX[]   = {
         &vd_g_CANLpFqResCh,                                /* fp_vd_RES_CH */
         &u1_g_CANLpFqDeqCh,                                /* fp_u1_DEQ_CH */
         &u4_sp_can_lpr_phy_tx_log_4[0U],                   /* u4p_log      */
-        (U4)CAN_LPR_REGR_EN_UDS_FQ_G2M1,                   /* u4_regr_en   */
+        (U4)CAN_LPR_REGR_EN_PHY_FQ_G2M1,                   /* u4_regr_en   */
         (U2)CAN_LPFQ_CH_PHY_TX_G2M1_P4,                    /* u2_que_ch    */
         (U2)CAN_LPR_PHY_TX_VACK_DI                         /* u2_vack      */
     },
@@ -114,7 +114,7 @@ const ST_CAN_LPR_PHY_TX         st_gp_CAN_LPR_PHY_TX[]   = {
         &vd_g_CANLpFqResCh,                                /* fp_vd_RES_CH */
         &u1_g_CANLpFqDeqCh,                                /* fp_u1_DEQ_CH */
         &u4_sp_can_lpr_phy_tx_log_5[0U],                   /* u4p_log      */
-        (U4)CAN_LPR_REGR_EN_UDS_FQ_G2M1,                   /* u4_regr_en   */
+        (U4)CAN_LPR_REGR_EN_PHY_FQ_G2M1,                   /* u4_regr_en   */
         (U2)CAN_LPFQ_CH_PHY_TX_G2M1_P5,                    /* u2_que_ch    */
         (U2)CAN_LPR_PHY_TX_VACK_DI                         /* u2_vack      */
     },
@@ -122,7 +122,7 @@ const ST_CAN_LPR_PHY_TX         st_gp_CAN_LPR_PHY_TX[]   = {
         &vd_g_CANLpFqResCh,                                /* fp_vd_RES_CH */
         &u1_g_CANLpFqDeqCh,                                /* fp_u1_DEQ_CH */
         &u4_sp_can_lpr_phy_tx_log_6[0U],                   /* u4p_log      */
-        (U4)CAN_LPR_REGR_EN_UDS_FQ_G2M1,                   /* u4_regr_en   */
+        (U4)CAN_LPR_REGR_EN_PHY_FQ_G2M1,                   /* u4_regr_en   */
         (U2)CAN_LPFQ_CH_PHY_TX_G2M1_P6,                    /* u2_que_ch    */
         (U2)CAN_LPR_PHY_TX_VACK_DI                         /* u2_vack      */
     },

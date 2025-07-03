@@ -64,62 +64,66 @@ void    vd_g_iVDshInit(void)
 {
     U4                      u4_t_lpcnt;
 
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_IVDSH_NUM_RX; u4_t_lpcnt++){
-        u1_gp_ivdsh_buf_rd[u4_t_lpcnt] = (U1)IVDSH_RXBUF_1;
-        u1_gp_ivdsh_rcvd[u4_t_lpcnt] = (U1)FALSE;
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u4_g_IVDSH_WA_NWORD; u4_t_lpcnt++){
+        u4_gp_ivdsh_buf_wa[u4_t_lpcnt] = (U4)0U;
     }
 
-    vd_g_iVDshCfgInit();
+    vd_g_iVDshFqIfInit();
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_iVDshMainRx(void)                                                                                                   */
+/*  void    vd_g_iVDshMainReaTask(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_iVDshMainRx(void)
+void    vd_g_iVDshMainReaTask(void)
 {
-    U4                      u4_t_rx;
-    U4                      u4_t_ch;
-    U4                      u4_t_buf_sta;
+    const ST_IVDSH_WA *     st_tp_FQ_REA;
 
-    U2                      u2_t_rx_nword;
+    U4                      u4_t_lpcnt;
+    U4                      u4_t_begin;
 
-    U1                      u1_t_act;
-    U1                      u1_t_rd_tmp;
+    U2                      u2_t_nword;
 
-    u4_t_buf_sta = (U4)u2_g_IVDSH_BUFLEN_TX;
-    for(u4_t_rx = (U4)0U; u4_t_rx < (U4)u1_g_IVDSH_NUM_RX; u4_t_rx++)
-    {
-        u4_t_ch       = (U4)st_gp_IVDSH_CFG_RX[u4_t_rx].u2_ch;
-        u2_t_rx_nword = st_gp_IVDSH_CFG_RX[u4_t_rx].u2_nword;
+    U1                      u1_t_db_act;
+    U1                      u1_t_ok;
 
-        u1_t_rd_tmp   = u1_gp_ivdsh_buf_rd[u4_t_rx];
-        if(u1_t_rd_tmp == (U1)IVDSH_RXBUF_0){
-            u1_t_rd_tmp = (U1)IVDSH_RXBUF_1;
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_IVDSH_NUM_FQ_REA; u4_t_lpcnt++){
+
+        st_tp_FQ_REA = &stp_g_IVDSH_FQ_REA[u4_t_lpcnt];
+        u2_t_nword   = st_tp_FQ_REA->u2_nword;
+
+        u1_t_db_act  = st_gp_ivdsh_fq_rea[u4_t_lpcnt].u1_db_act;
+        if(u1_t_db_act == (U1)IVDSH_FQ_REA_DB_0){
+            u1_t_db_act = (U1)IVDSH_FQ_REA_DB_1;
+            u4_t_begin  = (U4)st_tp_FQ_REA->u2_begin + (U4)u2_t_nword;
         }else{
-            u1_t_rd_tmp = (U1)IVDSH_RXBUF_0;
+            u1_t_db_act = (U1)IVDSH_FQ_REA_DB_0;
+            u4_t_begin  = (U4)st_tp_FQ_REA->u2_begin;
         }
-        u1_t_act = u1_g_iVDshCfgReceive(u4_t_ch, &u4_gp_ivdsh_buf[u4_t_buf_sta + (u2_g_IVDSH_BUFLEN_RX * (U2)u1_t_rd_tmp)], u2_t_rx_nword);
 
-        if(u1_t_act == (U1)TRUE){
-            u1_gp_ivdsh_buf_rd[u4_t_rx] = u1_t_rd_tmp;
-            u1_gp_ivdsh_rcvd[u4_t_rx] = (U1)TRUE;
-        }else{
-            break;
+        u1_t_ok = u1_g_iVDshFqIfReaCh(st_tp_FQ_REA->u2_fq_ch,
+                                      &u4_gp_ivdsh_buf_wa[u4_t_begin],
+                                      u2_t_nword);
+        if(u1_t_ok == (U1)TRUE){
+            st_gp_ivdsh_fq_rea[u4_t_lpcnt].u1_db_act = u1_t_db_act;
+            st_gp_ivdsh_fq_rea[u4_t_lpcnt].u1_log_ok = (U1)TRUE;
         }
-        u4_t_buf_sta = u4_t_buf_sta + (U4)u2_t_rx_nword;
     }
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_iVDshMainTx(void)                                                                                                   */
+/*  void    vd_g_iVDshMainWriTask(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_iVDshMainTx(void)
+void    vd_g_iVDshMainWriTask(void)
 {
-    vd_g_iVDshCfgTransmit(u2_g_IVDSH_CH_TX, &u4_gp_ivdsh_buf[0U], u2_g_IVDSH_BUFLEN_TX);
+    if(stp_g_IVDSH_FQ_WRI != vdp_PTR_NA){
+        vd_g_iVDshFqIfWriCh(stp_g_IVDSH_FQ_WRI->u2_fq_ch,
+                            &u4_gp_ivdsh_buf_wa[stp_g_IVDSH_FQ_WRI->u2_begin],
+                            stp_g_IVDSH_FQ_WRI->u2_nword);
+    }
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_iVDshWribyDid(const U2 u2_a_DID, const U4 * u4_ap_WRI, const U2 u2_a_NWORD)                                         */
@@ -129,15 +133,27 @@ void    vd_g_iVDshMainTx(void)
 /*===================================================================================================================================*/
 void    vd_g_iVDshWribyDid(const U2 u2_a_DID, const U4 * u4_ap_WRI, const U2 u2_a_NWORD)
 {
-    const ST_IVDSH_DID *    st_tp_DID;
-    U4                      u4_t_wrcnt;
+    const ST_IVDSH_WA *     st_tp_DID;
+    U4 *                    u4_tp_wa;
 
-    if(u2_a_DID < u2_g_IVDSH_DID_NUM_TX)
-    {
-        st_tp_DID = &st_gp_IVDSH_CFG_DID[u2_a_DID];
-        if(u2_a_NWORD <= st_tp_DID->u2_nword){
-            for(u4_t_wrcnt = (U4)0U; u4_t_wrcnt < (U4)u2_a_NWORD; u4_t_wrcnt++){
-                u4_gp_ivdsh_buf[st_tp_DID->u2_offset + u4_t_wrcnt] = u4_ap_WRI[u4_t_wrcnt];
+    U4                      u4_t_lpcnt;
+    U4                      u4_t_begin;
+    U4                      u4_t_nword;
+    U2                      u2_t_fq_ch;
+
+    if((u2_a_DID           <  u2_g_IVDSH_NUM_DID) &&
+       (stp_g_IVDSH_FQ_WRI != vdp_PTR_NA        )){
+
+        st_tp_DID  = &st_gp_IVDSH_WA_BY_DID[u2_a_DID];
+        u4_t_nword = (U4)st_tp_DID->u2_nword;
+        u2_t_fq_ch = st_tp_DID->u2_fq_ch;
+        if((u2_t_fq_ch >= (U2)u1_g_IVDSH_NUM_FQ_REA) &&
+           (u4_t_nword <= (U4)u2_a_NWORD           )){
+
+            u4_t_begin = (U4)st_tp_DID->u2_begin + (U4)stp_g_IVDSH_FQ_WRI->u2_begin;
+            u4_tp_wa   = &u4_gp_ivdsh_buf_wa[u4_t_begin];
+            for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u4_t_nword; u4_t_lpcnt++){
+                u4_tp_wa[u4_t_lpcnt] = u4_ap_WRI[u4_t_lpcnt];
             }
         }
     }
@@ -150,32 +166,56 @@ void    vd_g_iVDshWribyDid(const U2 u2_a_DID, const U4 * u4_ap_WRI, const U2 u2_
 /*===================================================================================================================================*/
 U1      u1_g_iVDshReabyDid(const U2 u2_a_DID, U4 * u4_ap_rea, const U2 u2_a_NWORD)
 {
-    const ST_IVDSH_DID *    st_tp_DID;
-    U4                      u4_t_rdcnt;
-    U4                      u4_t_rx;
-    U4                      u4_t_offset;
+    const ST_IVDSH_WA *     st_tp_DID;
+    const U4 *              u4_tp_WA;
 
-    U1                      u1_t_ret;
+    U4                      u4_t_begin;
+    U4                      u4_t_nword;
+    U4                      u4_t_lpcnt;
 
-    u1_t_ret = (U1)IVDSH_NO_RX;
-    if((u2_a_DID >= u2_g_IVDSH_DID_NUM_TX) &&
-       (u2_a_DID <  u2_g_IVDSH_DID_NUM_RX))
-    {
-        st_tp_DID = &st_gp_IVDSH_CFG_DID[u2_a_DID];
+    U2                      u2_t_fq_ch;
+    U1                      u1_t_db_act;
+    U1                      u1_t_rea;
 
-        u4_t_rx     = u1_gp_IVDSH_RX_BY_DID[u2_a_DID];
-        u4_t_offset = (U4)((u1_gp_ivdsh_buf_rd[u4_t_rx] * st_gp_IVDSH_CFG_RX[u4_t_rx].u2_nword) + st_tp_DID->u2_offset);
-        if((u1_gp_ivdsh_rcvd[u4_t_rx] == (U1)TRUE           ) &&
-           (u2_a_NWORD                <= st_tp_DID->u2_nword))
-        {
-            for(u4_t_rdcnt = (U4)0U; u4_t_rdcnt < (U4)u2_a_NWORD; u4_t_rdcnt++){
-                u4_ap_rea[u4_t_rdcnt] = u4_gp_ivdsh_buf[u4_t_offset + u4_t_rdcnt];
+    u1_t_rea = (U1)IVDSH_NO_REA;
+    if(u2_a_DID < u2_g_IVDSH_NUM_DID){
+
+        st_tp_DID  = &st_gp_IVDSH_WA_BY_DID[u2_a_DID];
+        u4_t_begin = (U4)st_tp_DID->u2_begin;
+        u4_t_nword = (U4)st_tp_DID->u2_nword;
+        u2_t_fq_ch = st_tp_DID->u2_fq_ch;
+
+        if(u2_t_fq_ch < (U2)u1_g_IVDSH_NUM_FQ_REA){
+           
+            u1_t_db_act = st_gp_ivdsh_fq_rea[u2_t_fq_ch].u1_db_act;
+            u1_t_rea    = st_gp_ivdsh_fq_rea[u2_t_fq_ch].u1_log_ok;
+            if(u1_t_db_act == (U1)IVDSH_FQ_REA_DB_1){
+                u4_t_begin += (U4)stp_g_IVDSH_FQ_REA[u2_t_fq_ch].u2_nword;
             }
-            u1_t_ret = (U1)0U;
+            u4_t_begin += (U4)stp_g_IVDSH_FQ_REA[u2_t_fq_ch].u2_begin;
+        }
+        else if(stp_g_IVDSH_FQ_WRI != vdp_PTR_NA){
+            u1_t_rea    = (U1)TRUE;
+            u4_t_begin += (U4)stp_g_IVDSH_FQ_WRI->u2_begin;
+        }
+        else{
+         /* u1_t_rea    = (U1)IVDSH_NO_REA; */
+        }
+
+        if((u1_t_rea   == (U1)TRUE      ) &&
+           (u4_t_nword <= (U4)u2_a_NWORD)){
+
+            u4_tp_WA = &u4_gp_ivdsh_buf_wa[u4_t_begin];
+            for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u4_t_nword; u4_t_lpcnt++){
+                u4_ap_rea[u4_t_lpcnt] = u4_tp_WA[u4_t_lpcnt];
+            }
+        }
+        else{
+            u1_t_rea = (U1)IVDSH_NO_REA; 
         }
     }
 
-    return(u1_t_ret);
+    return(u1_t_rea);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -185,8 +225,8 @@ U1      u1_g_iVDshReabyDid(const U2 u2_a_DID, U4 * u4_ap_rea, const U2 u2_a_NWOR
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    06/13/2025  AM       New.                                                                                               */
+/*  1.0.0     6/23/2025  TN       New.                                                                                               */
 /*                                                                                                                                   */
-/*  * AM   = Akira Motomatsu, Denso                                                                                                  */
+/*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -2698,7 +2698,7 @@
 #define BSW_CANIF_CFG_0_XCPMASK                 (0xFFFFFFFFUL)
 
 #define BSW_CANIF_CFG_1_PDURMASK                (0xFFFFFFFFUL)
-#define BSW_CANIF_CFG_1_CANNMMASK               (0xFFFFFFFFUL)
+#define BSW_CANIF_CFG_1_CANNMMASK               (0xFFFFFFC0UL)
 #define BSW_CANIF_CFG_1_CANTPMASK               (0xFFFFFFFFUL)
 #define BSW_CANIF_CFG_1_CDD1MASK                (0xFFFFFFFFUL)
 #define BSW_CANIF_CFG_1_CDD2MASK                (0xFFFFFFFFUL)

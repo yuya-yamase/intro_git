@@ -58,7 +58,7 @@
 		(U2)1U,																								\
 		/* u2IDLE:MSPInINDAmレジスタに設定する値 */															\
 		(U2)( ( (PL)SPI_UCFG_MODEA_CH##id##_INTERDATATIME / plPIL_SPI_CLOCK_LSB ) + (PL)0.5 ),				\
-		/* u1CsID:Chip Select ID (0 ～ 11) */																\
+		/* u1CsID:Chip Select ID (0 ～ 7) */																\
 		(U1)SPI_UCFG_MODEA_CH##id##_CSID,																	\
 		/* u1CsActiveLevelId:Chip Select Active Level */													\
 		(U1)SPI_UCFG_MODEA_CH##id##_CSACTIVELEVEL,															\
@@ -112,7 +112,7 @@
 		(U2)( ( (PL)SPI_UCFG_MODEB_CH##id##_NEXTACCESSDELAY / plPIL_SPI_CLOCK_LSB ) + (PL)0.5 ),			\
 		/* u2IDLE:MSPInINDAmレジスタに設定する値 */															\
 		(U2)( ( (PL)SPI_UCFG_MODEB_CH##id##_INTERDATATIME / plPIL_SPI_CLOCK_LSB ) + (PL)0.5 ),				\
-		/* u1CsID:Chip Select ID (0 ～ 11) */																\
+		/* u1CsID:Chip Select ID (0 ～ 7) */																\
 		(U1)SPI_UCFG_MODEB_CH##id##_CSID,																	\
 		/* u1CsActiveLevelId:Chip Select Active Level */													\
 		(U1)SPI_UCFG_MODEB_CH##id##_CSACTIVELEVEL,															\
@@ -173,7 +173,7 @@
 		(U2)( ( (PL)SPI_UCFG_MODEC_CH##id##_NEXTACCESSDELAY / plPIL_SPI_CLOCK_LSB ) + (PL)0.5 ),			\
 		/* u2IDLE:MSPInINDAmレジスタに設定する値 */															\
 		(U2)( ( (PL)SPI_UCFG_MODEC_CH##id##_INTERDATATIME / plPIL_SPI_CLOCK_LSB ) + (PL)0.5 ),				\
-		/* u1CsID:Chip Select ID (0 ～ 11) */																\
+		/* u1CsID:Chip Select ID (0 ～ 7) */																\
 		(U1)SPI_UCFG_MODEC_CH##id##_CSID,																	\
 		/* u1CsActiveLevelId:Chip Select Active Level */													\
 		(U1)SPI_UCFG_MODEC_CH##id##_CSACTIVELEVEL,															\
@@ -238,7 +238,7 @@
 		(U2)1U,																								\
 		/* u2IDLE:MSPInINDAmレジスタに設定する値 */															\
 		(U2)0U,																								\
-		/* u1CsID:Chip Select ID (0 ～ 11) */																\
+		/* u1CsID:Chip Select ID (0 ～ 7) */																\
 		(U1)SPI_UCFG_MODEC_CH##id##_CSID,																	\
 		/* u1CsActiveLevelId:Chip Select Active Level */													\
 		(U1)SPI_UCFG_MODEC_CH##id##_CSACTIVELEVEL,															\

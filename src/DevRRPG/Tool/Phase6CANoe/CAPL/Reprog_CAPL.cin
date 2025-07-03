@@ -353,6 +353,10 @@ variables
     E_PP1_SID_0x11_ECUReset_posres,     /* SID 0x11 ECUReset ポジティブレスポンス受信 */
     E_PP1_SID_0x10_def_req,             /* SID 0x10 DiagnosticSessionControl(defaultSession) 送信 */
     E_PP1_SID_0x10_def_posres,          /* SID 0x10 DiagnosticSessionControl(defaultSession) ポジティブレスポンス受信  */
+// @@@
+    E_PP2_SID_0x22_swi_req,             /* SID 0x22 vehicleManufacturerECUSoftwareNumberDataIdentifier 送信 */
+    E_PP2_SID_0x22_swi_posres,          /* SID 0x22 vehicleManufacturerECUSoftwareNumberDataIdentifier 送信 */
+// @@@
     /* ****************** ProgrammingPhase#1 Completed *********************** */
     E_PP1_Seqence_Normal_End = 256,     /* 正常終了状態 */
 

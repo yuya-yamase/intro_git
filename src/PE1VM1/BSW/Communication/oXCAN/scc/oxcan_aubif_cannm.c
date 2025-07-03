@@ -115,7 +115,7 @@ void    Nm_CbkTRxIndication(PduIdType PduId, NetworkHandleType nmNetworkHandle,
     if(nmDir == (Nm_DirectionType)NM_DIRECTION_RX){
         vd_g_oXCANNmcRxAck(nmNetworkHandle, PduInfoPtr->SduDataPtr, PduInfoPtr->SduLength);
     }
- /* else if(nmDir == (Nm_DirectionType)NM_DIRECTION_RX){ */
+ /* else if(nmDir == (Nm_DirectionType)NM_DIRECTION_TX){ */
  /* }                                                    */
  /* else{                                                */
  /* }                                                    */

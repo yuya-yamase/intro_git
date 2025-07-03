@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_CFG_C_MAJOR                 (2U)
-#define OXCAN_CFG_C_MINOR                 (0U)
-#define OXCAN_CFG_C_PATCH                 (0U)
+#define OXCAN_CFG_C_MAJOR                        (2U)
+#define OXCAN_CFG_C_MINOR                        (0U)
+#define OXCAN_CFG_C_PATCH                        (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -37,22 +37,22 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_IRQ_CH_RX0                  (299U)
-#define OXCAN_IRQ_CH_TX0                  (300U)
-#define OXCAN_IRQ_CH_RX1                  (302U)
-#define OXCAN_IRQ_CH_TX1                  (303U)
-#define OXCAN_IRQ_CH_RX2                  (305U)
-#define OXCAN_IRQ_CH_TX2                  (306U)
-#define OXCAN_IRQ_CH_RX3                  (308U)
-#define OXCAN_IRQ_CH_TX3                  (309U)
-#define OXCAN_IRQ_CH_RX4                  (311U)
-#define OXCAN_IRQ_CH_TX4                  (312U)
-#define OXCAN_IRQ_CH_RX5                  (314U)
-#define OXCAN_IRQ_CH_TX5                  (315U)
-#define OXCAN_IRQ_CH_RX6                  (317U)
-#define OXCAN_IRQ_CH_TX6                  (318U)
-#define OXCAN_IRQ_CH_RX7                  (320U)
-#define OXCAN_IRQ_CH_TX7                  (321U)
+#define OXCAN_IRQ_CH_RX0                         (299U)
+#define OXCAN_IRQ_CH_TX0                         (300U)
+#define OXCAN_IRQ_CH_RX1                         (302U)
+#define OXCAN_IRQ_CH_TX1                         (303U)
+#define OXCAN_IRQ_CH_RX2                         (305U)
+#define OXCAN_IRQ_CH_TX2                         (306U)
+#define OXCAN_IRQ_CH_RX3                         (308U)
+#define OXCAN_IRQ_CH_TX3                         (309U)
+#define OXCAN_IRQ_CH_RX4                         (311U)
+#define OXCAN_IRQ_CH_TX4                         (312U)
+#define OXCAN_IRQ_CH_RX5                         (314U)
+#define OXCAN_IRQ_CH_TX5                         (315U)
+#define OXCAN_IRQ_CH_RX6                         (317U)
+#define OXCAN_IRQ_CH_TX6                         (318U)
+#define OXCAN_IRQ_CH_RX7                         (320U)
+#define OXCAN_IRQ_CH_TX7                         (321U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -71,26 +71,6 @@ static void    vd_s_oXCANCfgDI(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* ------------------------------------------------------------------------------------------ */
-/* Attention :                                                                                */
-/* ------------------------------------------------------------------------------------------ */
-/* BSW_CANIF_CFG_WAKEUPSRC_CTRLx is defined in CanIf_Cfg.h                                    */
-/* CanIf_Cfg.h is included in CS_Can_Cfg.h                                                    */
-/* CS_Can_Cfg.h is included in oxcan.h                                                        */
-/*                                                                                            */
-/* u4_g_OXCAN_WKSRC_CHK shall be configured based on how many physical CAN channel are        */
-/* available. Since RH850/D1x has 3 CAN channels, 3 wakeup sources are configured.            */
-/* ------------------------------------------------------------------------------------------ */
-const U4         u4_g_OXCAN_WKSRC_CHK = (BSW_CANIF_CFG_WAKEUPSRC_CTRL0 |
-                                         BSW_CANIF_CFG_WAKEUPSRC_CTRL1 |
-                                         BSW_CANIF_CFG_WAKEUPSRC_CTRL2 |
-                                         BSW_CANIF_CFG_WAKEUPSRC_CTRL3 |
-                                         BSW_CANIF_CFG_WAKEUPSRC_CTRL4 |
-                                         BSW_CANIF_CFG_WAKEUPSRC_CTRL5 |
-                                         BSW_CANIF_CFG_WAKEUPSRC_CTRL6 |
-                                         BSW_CANIF_CFG_WAKEUPSRC_CTRL7 );
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U1         u1_gp_OXCAN_CTRLR_BY_CH[BSW_COM_CFG_CHNUM] = {
     (U1)5U,     /* CAN Physical Channel =  5 ch. */

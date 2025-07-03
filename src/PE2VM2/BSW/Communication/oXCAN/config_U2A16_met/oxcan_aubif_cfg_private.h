@@ -28,7 +28,7 @@
 /* #include "oxdocan_aubif_ma.h" */
 
 /* #include "can_lpr.h"     */
-/* #include "can_qsev_rx.h" */
+#include "can_qsev_rx.h"
 #include "vcan_tx_ack.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

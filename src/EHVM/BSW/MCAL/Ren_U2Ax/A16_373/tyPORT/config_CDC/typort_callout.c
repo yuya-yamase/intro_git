@@ -46,8 +46,8 @@
 /* Pin Output Logic Holding Configuration */
 /******************************************/
 /* Wakeup時にスリープ前の出力を保持する機能の有効・無効設定 */
-#define TYPORT_CFG_WAKEUP_IO_HOLD_AWO_ENABLE			(ON) /* AWO領域の端子 ON:有効 、OFF:無効 */
-#define TYPORT_CFG_WAKEUP_IO_HOLD_ISO_ENABLE			(ON) /* ISO領域の端子 ON:有効 、OFF:無効 */
+#define TYPORT_CFG_WAKEUP_IO_HOLD_AWO_ENABLE			(STD_ON) /* AWO領域の端子 STD_ON:有効 、STD_OFF:無効 */
+#define TYPORT_CFG_WAKEUP_IO_HOLD_ISO_ENABLE			(STD_ON) /* ISO領域の端子 STD_ON:有効 、STD_OFF:無効 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -83,7 +83,7 @@ typedef struct{
 /* AWO領域の端子 */
 /* (1)Port_Init()で、対象の端子に関するレジスタ操作を行わないようコンフィグする     */
 /* (2)Port_SetPinMode()で、起動時の製品の仕様に沿った出力ができるようコンフィグする */
-#if (TYPORT_CFG_WAKEUP_IO_HOLD_AWO_ENABLE == ON)
+#if (TYPORT_CFG_WAKEUP_IO_HOLD_AWO_ENABLE == STD_ON)
 static const ST_TYPORT_AWO_CFG st_sp_TYPORT_AWO_CFG[]      = {
     {(U2)PORT_ID_PORT8_PIN0,   (U4)PORT_MODE_CFG_P8_0_DO_LO},
     {(U2)PORT_ID_PORT8_PIN2,   (U4)PORT_MODE_CFG_P8_2_DO_LO},
@@ -95,7 +95,7 @@ static const U4 cu4_TYPORT_AWO_CFG_NUM = ((U4)sizeof(st_sp_TYPORT_AWO_CFG) / (U4
 /* ISO領域の端子 */
 /* (1)起動時のPort_Init()で対象端子のIOが入出力になるようコンフィグする     */
 /* (2)DeepStop遷移時のPort_Init()でレジスタ操作を行わないようコンフィグする */
-#if (TYPORT_CFG_WAKEUP_IO_HOLD_ISO_ENABLE == ON)
+#if (TYPORT_CFG_WAKEUP_IO_HOLD_ISO_ENABLE == STD_ON)
 static const ST_TYPORT_ISO_CFG st_sp_TYPORT_ISO_CFG[]      = {
     {(U2)DIO_ID_PORT10_CH5, (U1)DIO_ID_PORT10}
 };
@@ -115,7 +115,7 @@ static const U4 cu4_TYPORT_ISO_CFG_NUM = ((U4)sizeof(st_sp_TYPORT_ISO_CFG) / (U4
 /*===================================================================================================================================*/
 void vd_g_tyPortCalloutInit(const U1 u1_a_CFGID)
 {
-#if (TYPORT_CFG_WAKEUP_IO_HOLD_AWO_ENABLE == ON)
+#if (TYPORT_CFG_WAKEUP_IO_HOLD_AWO_ENABLE == STD_ON)
     if(u1_a_CFGID == (U1)TYPORT_CFG_STA_BY_RST){
         
         U4 u4_t_awo_pin;
@@ -126,7 +126,7 @@ void vd_g_tyPortCalloutInit(const U1 u1_a_CFGID)
     }
 #endif
     
-#if (TYPORT_CFG_WAKEUP_IO_HOLD_ISO_ENABLE == ON)
+#if (TYPORT_CFG_WAKEUP_IO_HOLD_ISO_ENABLE == STD_ON)
     if(u1_a_CFGID == (U1)TYPORT_CFG_STA_BY_WK){
         
         U4 u4_t_iso_pin;

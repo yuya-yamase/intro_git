@@ -2,7 +2,7 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Inter-Vm Data SHaring                                                                                                            */
+/*  inter-Virtual Machine Data Sharing                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -21,13 +21,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "ivdsh.h"
+#include "ehvm.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_RXBUF                          (2U)
-#define IVDSH_RXBUF_0                            (0U)
-#define IVDSH_RXBUF_1                            (1U)
+#define IVDSH_FQ_REA_DB_0                        (0U)       /* double buffer #0 */
+#define IVDSH_FQ_REA_DB_1                        (1U)       /* double buffer #1 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -37,52 +37,47 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct
 {
-    U2      u2_offset;
+    U2      u2_begin;                  /* top index of u4_gp_ivdsh_buf_wa[] */
     U2      u2_nword;
-}ST_IVDSH_DID;
+    U2      u2_fq_ch;                  /* FIFO/Queue Channel                */
+}ST_IVDSH_WA;                          /* Word Array                        */
 
-typedef struct
-{
-    U2      u2_ch;
-    U2      u2_nword;
-}ST_IVDSH_RX;
+typedef struct{
+    U1      u1_db_act;
+    U1      u1_log_ok;
+}ST_IVDSH_FQ_REA;                      /* FIFO/Queue Read                   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern U4              u4_gp_ivdsh_buf[];
-
-extern U1              u1_gp_ivdsh_rcvd[];
-extern U1              u1_gp_ivdsh_buf_rd[];
+extern U4                          u4_gp_ivdsh_buf_wa[];
+extern ST_IVDSH_FQ_REA             st_gp_ivdsh_fq_rea[];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_iVDshCfgInit(void);
-void    vd_g_iVDshCfgTransmit(const U4 u4_a_CH, const U4 * u4_ap_TXBUF, const U2 u2_a_NWORD);
-U1      u1_g_iVDshCfgReceive(const U4 u4_a_CH, U4 * u4_ap_rxbuf, const U2 u2_a_NWORD);
+void    vd_g_iVDshFqIfInit(void);
+void    vd_g_iVDshFqIfWriCh(const U2 u2_a_CH, const U4 * const u4_ap_WRI, const U2 u2_a_NWORD);
+U1      u1_g_iVDshFqIfReaCh(const U2 u2_a_CH, U4 * const u4_ap_rea, const U2 u2_a_NWORD);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const ST_IVDSH_DID          st_gp_IVDSH_CFG_DID[];
-extern const U1                    u1_gp_IVDSH_RX_BY_DID[];
-extern const U2                    u2_g_IVDSH_DID_NUM_TX;
-extern const U2                    u2_g_IVDSH_DID_NUM_RX;
+extern const U4                    u4_g_IVDSH_WA_NWORD;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2                    u2_g_IVDSH_CH_TX;
-extern const ST_IVDSH_RX           st_gp_IVDSH_CFG_RX[];
+extern const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[];
+extern const U2                    u2_g_IVDSH_NUM_DID;
 
-extern const U1                    u1_g_IVDSH_NUM_RX;
-
-extern const U2                    u2_g_IVDSH_BUFLEN_TX;
-extern const U2                    u2_g_IVDSH_BUFLEN_RX;
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern const ST_IVDSH_WA * const   stp_g_IVDSH_FQ_WRI;
+extern const ST_IVDSH_WA * const   stp_g_IVDSH_FQ_REA;
+extern const U1                    u1_g_IVDSH_NUM_FQ_REA;
 
 #endif      /* IVDSH_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  ivdsh.c                                                                                                    */
+/*  Change History  :  ivdsh.c                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

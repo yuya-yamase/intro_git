@@ -74,8 +74,8 @@ static const ST_OXCAN_ICU_RX      st_sp_OXCAN_ICU_RX_BY_CTRL[CAN_CFG_CONTROLLERN
         (U1)U1_MAX                     /* u1_ch  */
     },
     {
-        (U4)0x00000000U,               /* u4_wrq */
-        (U1)U1_MAX                     /* u1_ch  */
+        (U4)ICU_WK_WRQ_INTP3,          /* u4_wrq */
+        (U1)ICU_WK_CH_INTP3            /* u1_ch  */
     },
     {
         (U4)0x00000000U,               /* u4_wrq */
@@ -98,7 +98,7 @@ static const ST_OXCAN_ICU_RX      st_sp_OXCAN_ICU_RX_BY_CTRL[CAN_CFG_CONTROLLERN
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static const U2               u2_sp_OXCAN_TRCV_BY_CH[BSW_COM_CFG_CHNUM] = {
     (U2)OXCAN_TRCV_SPI,         /* CAN-FD Bus/G2M-1 */
-	(U2)U2_MAX,                 /* CAN-FD Bus/G2M-2 */
+	(U2)OXCAN_TRCV_SPI,         /* CAN-FD Bus/G2M-2 */
     (U2)U2_MAX,                 /* Virtual CAN      */
     (U2)DIO_ID_APORT5_CH3       /* CAN-FD Bus/G5M   */
     

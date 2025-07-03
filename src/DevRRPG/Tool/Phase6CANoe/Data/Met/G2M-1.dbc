@@ -1,0 +1,243 @@
+VERSION ""
+
+
+NS_ : 
+	NS_DESC_
+	CM_
+	BA_DEF_
+	BA_
+	VAL_
+	CAT_DEF_
+	CAT_
+	FILTER
+	BA_DEF_DEF_
+	EV_DATA_
+	ENVVAR_DATA_
+	SGTYPE_
+	SGTYPE_VAL_
+	BA_DEF_SGTYPE_
+	BA_SGTYPE_
+	SIG_TYPE_REF_
+	VAL_TABLE_
+	SIG_GROUP_
+	SIG_VALTYPE_
+	SIGTYPE_VALTYPE_
+	BO_TX_BU_
+	BA_DEF_REL_
+	BA_REL_
+	BA_DEF_DEF_REL_
+	BU_SG_REL_
+	BU_EV_REL_
+	BU_BO_REL_
+	SG_MUL_VAL_
+
+BS_:
+
+BU_:
+
+
+BO_ 1088 NM_MSG: 8 Vector__XXX
+
+BO_ 471 DDM1S17: 32 Vector__XXX
+ SG_ B_DAINDP : 52|2@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ B_ABS : 27|3@0+ (1,0) [0|7] "" Vector__XXX
+ SG_ E_CRC1D7 : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ E_CNT1D7 : 23|8@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 919 BDB1S29: 32 Vector__XXX
+
+BO_ 1578 BDB1S28: 8 Vector__XXX
+
+BO_ 1577 BDB1S27: 8 Vector__XXX
+
+BO_ 773 BDB1S26: 8 Vector__XXX
+
+BO_ 774 BDB1S25: 8 Vector__XXX
+
+BO_ 1020 BDB1S19: 8 Vector__XXX
+
+BO_ 1580 BDB1S13: 8 Vector__XXX
+
+BO_ 1574 BDB1S10: 8 Vector__XXX
+
+BO_ 1572 BDB1S08: 8 Vector__XXX
+
+BO_ 896 BDB1S05: 8 Vector__XXX
+
+BO_ 1571 BDB1S04: 8 Vector__XXX
+
+BO_ 1570 BDB1S03: 8 Vector__XXX
+
+BO_ 1569 BDB1S02: 8 Vector__XXX
+
+BO_ 463 BDB1S01: 8 Vector__XXX
+
+BO_ 500 BDB1F03: 8 Vector__XXX
+
+BO_ 909 BDB1F02: 8 Vector__XXX
+
+BO_ 907 BDB1F01: 8 Vector__XXX
+
+BO_ 889 BCC1S05: 8 Vector__XXX
+
+BO_ 341 BAT1S11: 8 Vector__XXX
+
+BO_ 292 BAT1S08: 8 Vector__XXX
+
+BO_ 997 BAT1S01: 32 Vector__XXX
+
+BO_ 366 BAT1E45: 32 Vector__XXX
+
+BO_ 532 BAT1E41: 32 Vector__XXX
+
+BO_ 464 ARS1S90: 8 Vector__XXX
+
+BO_ 526 ADU1S07: 32 Vector__XXX
+
+BO_ 448 ADC1S31: 32 Vector__XXX
+
+BO_ 841 ADC1S30: 8 Vector__XXX
+
+BO_ 523 ADC1S23: 32 Vector__XXX
+
+BO_ 458 EPS1S90: 8 Vector__XXX
+ SG_ EPS_REMT : 32|1@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ EPS_MINF : 37|5@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ EPS_WLMP : 29|3@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ EPS_BZER : 31|2@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ E_CNT1CA : 23|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ E_CRC1CA : 7|16@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 519 ADC1S13: 32 Vector__XXX
+
+BO_ 382 ADC1S11: 32 Vector__XXX
+
+BO_ 1286 ACN1S29: 32 Vector__XXX
+
+BO_ 597 ACN1S25: 32 Vector__XXX
+
+BO_ 852 ACN1S22: 32 Vector__XXX
+
+BO_ 1032 ACN1S16: 8 Vector__XXX
+
+BO_ 1031 ACN1S15: 8 Vector__XXX
+
+BO_ 944 ACN1S07: 8 Vector__XXX
+
+BO_ 898 ACN1S05: 8 Vector__XXX
+
+BO_ 897 ACN1S04: 32 Vector__XXX
+
+BO_ 929 ACN1S03: 8 Vector__XXX
+
+BO_ 1208 ACN1D50: 8 Vector__XXX
+
+BO_ 945 ABG1S01: 8 Vector__XXX
+
+BO_ 1212 ABG1D51: 8 Vector__XXX
+ SG_ DRABG16 : 63|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG15 : 55|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG14 : 47|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG13 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG12 : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG11 : 23|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG10 : 15|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG09 : 7|8@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 1196 ABG1D50: 8 Vector__XXX
+ SG_ DRABG08 : 63|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG07 : 55|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG06 : 47|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG05 : 39|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG04 : 31|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG03 : 23|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG02 : 15|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ DRABG01 : 7|8@0+ (1,0) [0|0] "" Vector__XXX
+
+BO_ 483 BDC1S81: 32 Vector__XXX
+ SG_ VPSISOTA : 63|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ VPSINFOS : 47|8@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ VPSINFO7 : 30|1@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ VPSINFO6 : 29|1@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ VPSINFO5 : 28|1@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ VPSINFO4 : 27|1@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ VPSINFO3 : 26|1@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ VPSINFO2 : 25|1@0- (1,0) [0|0] "" Vector__XXX
+ SG_ VPSINFO1 : 24|1@0- (1,0) [0|0] "" Vector__XXX
+ SG_ KZK1E3_D : 231|32@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ FV1E3_D : 175|56@0+ (1,0) [0|0] "" Vector__XXX
+ SG_ E_CRC1E3 : 7|16@0+ (1,0) [0|65535] "" Vector__XXX
+ SG_ E_CNT1E3 : 23|8@0+ (1,0) [0|255] "" Vector__XXX
+ SG_ APOFRQ : 72|1@0+ (1,0) [0|0] "" Vector__XXX
+
+
+
+BA_DEF_ BO_  "CANFD_BRS" ENUM  "0","1";
+BA_DEF_  "DBName" STRING ;
+BA_DEF_  "BusType" STRING ;
+BA_DEF_ BU_  "NodeLayerModules" STRING ;
+BA_DEF_ BU_  "ECU" STRING ;
+BA_DEF_ BU_  "CANoeJitterMax" INT 0 0;
+BA_DEF_ BU_  "CANoeJitterMin" INT 0 0;
+BA_DEF_ BU_  "CANoeDrift" INT 0 0;
+BA_DEF_ BU_  "CANoeStartDelay" INT 0 0;
+BA_DEF_ BO_  "VFrameFormat" ENUM  "StandardCAN","ExtendedCAN","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","reserved","StandardCAN_FD","ExtendedCAN_FD";
+BA_DEF_DEF_  "CANFD_BRS" "1";
+BA_DEF_DEF_  "DBName" "";
+BA_DEF_DEF_  "BusType" "";
+BA_DEF_DEF_  "NodeLayerModules" "";
+BA_DEF_DEF_  "ECU" "";
+BA_DEF_DEF_  "CANoeJitterMax" 0;
+BA_DEF_DEF_  "CANoeJitterMin" 0;
+BA_DEF_DEF_  "CANoeDrift" 0;
+BA_DEF_DEF_  "CANoeStartDelay" 0;
+BA_DEF_DEF_  "VFrameFormat" "StandardCAN";
+BA_ "BusType" "CAN FD";
+BA_ "DBName" "G2M1";
+BA_ "VFrameFormat" BO_ 471 14;
+BA_ "VFrameFormat" BO_ 919 14;
+BA_ "VFrameFormat" BO_ 1578 14;
+BA_ "VFrameFormat" BO_ 1577 14;
+BA_ "VFrameFormat" BO_ 773 14;
+BA_ "VFrameFormat" BO_ 774 14;
+BA_ "VFrameFormat" BO_ 1020 14;
+BA_ "VFrameFormat" BO_ 1580 14;
+BA_ "VFrameFormat" BO_ 1574 14;
+BA_ "VFrameFormat" BO_ 1572 14;
+BA_ "VFrameFormat" BO_ 896 14;
+BA_ "VFrameFormat" BO_ 1571 14;
+BA_ "VFrameFormat" BO_ 1570 14;
+BA_ "VFrameFormat" BO_ 1569 14;
+BA_ "VFrameFormat" BO_ 463 14;
+BA_ "VFrameFormat" BO_ 500 14;
+BA_ "VFrameFormat" BO_ 909 14;
+BA_ "VFrameFormat" BO_ 907 14;
+BA_ "VFrameFormat" BO_ 889 14;
+BA_ "VFrameFormat" BO_ 341 14;
+BA_ "VFrameFormat" BO_ 292 14;
+BA_ "VFrameFormat" BO_ 997 14;
+BA_ "VFrameFormat" BO_ 366 14;
+BA_ "VFrameFormat" BO_ 532 14;
+BA_ "VFrameFormat" BO_ 464 14;
+BA_ "VFrameFormat" BO_ 526 14;
+BA_ "VFrameFormat" BO_ 448 14;
+BA_ "VFrameFormat" BO_ 841 14;
+BA_ "VFrameFormat" BO_ 523 14;
+BA_ "VFrameFormat" BO_ 458 14;
+BA_ "VFrameFormat" BO_ 519 14;
+BA_ "VFrameFormat" BO_ 382 14;
+BA_ "VFrameFormat" BO_ 1286 14;
+BA_ "VFrameFormat" BO_ 597 14;
+BA_ "VFrameFormat" BO_ 852 14;
+BA_ "VFrameFormat" BO_ 1032 14;
+BA_ "VFrameFormat" BO_ 1031 14;
+BA_ "VFrameFormat" BO_ 944 14;
+BA_ "VFrameFormat" BO_ 898 14;
+BA_ "VFrameFormat" BO_ 897 14;
+BA_ "VFrameFormat" BO_ 929 14;
+BA_ "VFrameFormat" BO_ 1208 14;
+BA_ "VFrameFormat" BO_ 945 14;
+BA_ "VFrameFormat" BO_ 1212 14;
+BA_ "VFrameFormat" BO_ 1196 14;
+BA_ "VFrameFormat" BO_ 483 14;
+

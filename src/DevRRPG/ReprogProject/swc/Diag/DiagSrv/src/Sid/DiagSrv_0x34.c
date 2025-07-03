@@ -407,6 +407,7 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x34_Time_PreFscDtct (void)
 
     Nrc = DIAG_NRC_RCRRP;
 
+#if 0	/* @@@ */
     Status = FscDtct_GetStatus();
     if( Status == FSCDTCT_IDLE )
     {
@@ -415,13 +416,16 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x34_Time_PreFscDtct (void)
         JobResult = FscDtct_GetJobResult();
         if( JobResult == FSCDTCT_JOB_OK )
         {
+#endif	/* @@@ */
             Nrc = DiagSrv_0x34_WriteStart();
             if( Nrc == DIAG_NRC_PR )
             {
                 DiagSrv_0x34_Status = DIAGSRV_0X34_STAT_IDLE;
             }
+#if 0	/* @@@ */
         }
     }
+#endif	/* @@@ */
 
     return Nrc;
 }
@@ -813,7 +817,7 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x34_PreSigVerify (void)
     {
         DiagSrv_SetWriteDeviceType(DeviceType);
 
-        FscDtct_ReqPreSigVerify();
+/*        FscDtct_ReqPreSigVerify();*//* @@@ */
 
         DiagSrv_0x34_Status = DIAGSRV_0X34_STAT_WAIT_PRE_FSCDTCT;
         Nrc = DIAG_NRC_RCRRP;

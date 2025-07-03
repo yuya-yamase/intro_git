@@ -178,6 +178,20 @@ ar_isrcb_t ar_isrcb_eMCOS_ISR_INTTAUD0I14;
 #define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
 #include "Os_MemMap.h"
 
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRCAN3REC;
+
+#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
+#include "Os_MemMap.h"
+
+ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRCAN3TRX;
+
+#define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
+#include "Os_MemMap.h"
+#define OS_START_SEC_VAR_LOCAL0_NO_INIT_32
+#include "Os_MemMap.h"
+
 ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRCAN5REC;
 
 #define OS_STOP_SEC_VAR_LOCAL0_NO_INIT_32
@@ -238,6 +252,14 @@ const ar_isr_config_t ar_isr_configs[AR_OS_NUM_C2ISRS] = {
     {
         &(ar_int_configs[5]),
         (const ar_osap_config_t  *)NULL
+    },
+    {
+        &(ar_int_configs[6]),
+        (const ar_osap_config_t  *)NULL
+    },
+    {
+        &(ar_int_configs[7]),
+        (const ar_osap_config_t  *)NULL
     }
 };
 
@@ -254,6 +276,8 @@ const ar_isr_config_t ar_isr_configs[AR_OS_NUM_C2ISRS] = {
 ar_isrcb_t * const ar_isrcb_ptr_table[AR_OS_NUM_C2ISRS] = {
     &ar_isrcb_eMCOS_ISR_INTOSTM5TINT,
     &ar_isrcb_eMCOS_ISR_INTTAUD0I14,
+    &ar_isrcb_eMCOS_ISR_INTRCAN3REC,
+    &ar_isrcb_eMCOS_ISR_INTRCAN3TRX,
     &ar_isrcb_eMCOS_ISR_INTRCAN5REC,
     &ar_isrcb_eMCOS_ISR_INTRCAN5TRX,
     &ar_isrcb_eMCOS_ISR_INTRCAN7REC,
@@ -285,6 +309,18 @@ const ar_int_config_t ar_int_configs[AR_OS_NUM_C2ISRS] = {
         &GENNAME_ISR(eMCOS_ISR_INTTAUD0I14),
         HAL_V850_INTC1_OFFSET + 26U,  /* INTC1 : 26 */
         -1,
+        AR_DISABLE
+    },
+    {
+        &GENNAME_ISR(eMCOS_ISR_INTRCAN3REC),
+        HAL_V850_INTC2_OFFSET + 308U,  /* INTC2 : 308 */
+        -6,
+        AR_DISABLE
+    },
+    {
+        &GENNAME_ISR(eMCOS_ISR_INTRCAN3TRX),
+        HAL_V850_INTC2_OFFSET + 309U,  /* INTC2 : 309 */
+        -6,
         AR_DISABLE
     },
     {

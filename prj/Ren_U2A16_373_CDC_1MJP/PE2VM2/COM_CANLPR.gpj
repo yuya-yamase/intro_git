@@ -11,5 +11,10 @@
     -I${CAN_DIR}/CanSM/cfg
     -I${CAN_DIR}/VCan/inc
 
+config/can_lpfq_cfg.c
+config/can_qsev_rx_cfg.c
 config/vcan_tx_ack_cfg.c
+
+lib/can_lpfq.c
+lib/can_qsev_rx.c
 lib/vcan_tx_ack.c

@@ -24,36 +24,24 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_DID_BUFLEN_TX                      (6U)
-
-#define IVDSH_DID_BUFLEN_RX                      (1U)   /* @todo A.Motomatsu : Dummy definition for build. Config without send/receive not thought through */
-
-#define IVDSH_NUM_RX                             (1U)   /* @todo A.Motomatsu : Dummy definition for build. Config without send/receive not thought through */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_DID_NUM_TX                         (6U)
+#define IVDSH_NUM_DID_WRI                        (6U)
 
 /*-------------------------------------------------------------------------------*/
 /* CPREQ_XXX = "https://wiki.geniie.net/x/Wcq5pQ" numbering list (sample config) */
 /*-------------------------------------------------------------------------------*/
-#define IVDSH_DID_TX_CPREQ_006                   (0U)
-#define IVDSH_DID_TX_CPREQ_008                   (1U)
-#define IVDSH_DID_TX_CPREQ_029                   (2U)
-#define IVDSH_DID_TX_CPREQ_032                   (3U)
-#define IVDSH_DID_TX_CPREQ_035                   (4U)
-#define IVDSH_DID_TX_CPREQ_038                   (5U)
+#define IVDSH_DID_WRI_CPREQ_006                  (0U)
+#define IVDSH_DID_WRI_CPREQ_008                  (1U)
+#define IVDSH_DID_WRI_CPREQ_029                  (2U)
+#define IVDSH_DID_WRI_CPREQ_032                  (3U)
+#define IVDSH_DID_WRI_CPREQ_035                  (4U)
+#define IVDSH_DID_WRI_CPREQ_038                  (5U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_DID_NUM_RX                         (1U)   /* @todo A.Motomatsu : Dummy definition for build. Config without send/receive not thought through */
+#define IVDSH_NUM_DID_REA                        (0U)
 
-/* Recieve from VM#1 */
-#define IVDSH_DID_RX_DUMMY                       (1U)   /* @todo A.Motomatsu : Dummy definition for build. Config without send/receive not thought through */
-
-/* Recieve from VM#2 */
-
-/* Recieve from VM#3 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */

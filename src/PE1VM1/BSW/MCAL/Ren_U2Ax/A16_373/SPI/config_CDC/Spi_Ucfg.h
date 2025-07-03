@@ -14,15 +14,16 @@
 /*	include files																				*/
 /*==============================================================================================*/
 #include "bswlib.h"
+#include "Os.h"
 
 /*==============================================================================================*/
 /*	defines / data types / structs / unions / macros											*/
 /*==============================================================================================*/
-#define BSW_CFG_GETSPINLOCK_SPI()
-#define BSW_CFG_RELEASESPINLOCK_SPI()
+#define BSW_CFG_GETSPINLOCK_SPI()					SuspendAllInterrupts()
+#define BSW_CFG_RELEASESPINLOCK_SPI()	 			ResumeAllInterrupts()
 
-#define BSW_CFG_GETSPINLOCK_PIL_SPI()
-#define BSW_CFG_RELEASESPINLOCK_PIL_SPI()
+#define BSW_CFG_GETSPINLOCK_PIL_SPI()				SuspendAllInterrupts()
+#define BSW_CFG_RELEASESPINLOCK_PIL_SPI()			ResumeAllInterrupts()
 
 #define SPI_CFG_MODEA_USE					(ON)
 #define SPI_CFG_MODEB_USE					(OFF)

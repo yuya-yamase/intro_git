@@ -18,10 +18,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxcan_cfg_private.h"
 
-/* #include "oxcan.h" */          /* BSW_BSWM_CS_CFG_FUNC_CS is defined in BswM_CS_Cfg.h          */
-                                  /* BSW_BSWM_CS_CFG_FUNC_SECOC is defined in BswM_CS_Cfg.h       */
-                                  /* BswM_CS_Cfg.h is included in CS_Can_Cfg.h                    */
+/* #include "oxcan.h" */          /* BSW_CANIF_CFG_WAKEUPSRC_CTRLx is defined in CanIf_Cfg.h      */
+                                  /* CanIf_Cfg.h is included in CS_Can_Cfg.h                      */
                                   /* CS_Can_Cfg.h is included in oxcan.h                          */
+
+#include "bsw_canif_st.h"         /* bsw_canif_st_u1ControllerToCh[] is defined in bsw_canif_st.h */
 
 #include "bsw_com_config.h"       /* BSW_COM_MSG_NUM is defined in bsw_com_config.h               */
                                   /* BSW_COM_TX_MSG_NUM is defined in bsw_com_config.h            */
@@ -50,10 +51,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_BACK_EN                     (0x5aU)
-#define OXCAN_BACK_DI                     (0xa5U)
+#define OXCAN_BACK_EN                            (0x5aU)
+#define OXCAN_BACK_DI                            (0xa5U)
 
-#define OXCAN_BACK_NWORD                  ((BSWM_CAN_BACKUPDATASIZE + 3U) >> 2U)
+#define OXCAN_BACK_NWORD                         ((BSWM_CAN_BACKUPDATASIZE + 3U) >> 2U)
                                                                             /* BSWM_CAN_BACKUPDATASIZE is defined in BswM_Can.h  */
                                                                             /* BswM_Can.h is included in CS_Can.h                */
 
@@ -385,6 +386,7 @@ U4      u4_g_oXCANSysActvtd(void)
 static void    vd_s_oXCANAubCsInit(void)
 {
     U4                  u4_t_lpcnt;
+    U4                  u4_t_ctrl_num;
     U1                  u1_t_br_chk;
 
     u1_t_br_chk       = u1_s_oxcan_br_chk;
@@ -392,7 +394,12 @@ static void    vd_s_oXCANAubCsInit(void)
     if(u1_t_br_chk == (U1)OXCAN_BACK_EN){
 
         BswM_Can_SetBackupData((U1 *)&u4_sp_oxcan_back[0]);
-        (void)CanIf_CheckWakeup(u4_g_OXCAN_WKSRC_CHK);
+
+        u4_t_ctrl_num = (U4)BSW_CANIF_CFG_MPU_CONTROLLERNUM;
+        for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < u4_t_ctrl_num; u4_t_lpcnt++){
+            (void)CanIf_CheckWakeup(bsw_canif_st_u1ControllerToCh[u4_t_lpcnt]);
+        }
+
         BswM_CS_Wakeup();
 
         for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)BSW_COM_MSG_NUM; u4_t_lpcnt++){

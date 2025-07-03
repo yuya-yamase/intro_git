@@ -173,7 +173,7 @@ void    Aubist_UsrSetWakeupEvent(const uint32 u4_a_SRC)
     /* The bit0-bit4 for u4_a_SRC is reserved by Aubist. The bit31-bit5 can be used as  */
     /* user wakeup source. Thus, u4_a_WKUP_SRC is right-shifted.                        */
     /* -------------------------------------------------------------------------------- */
-    u4_s_oxcan_aubif_wksrc = u4_a_SRC >> OXCAN_AUBIF_LSB_WKUPSRC;
+    u4_s_oxcan_aubif_wksrc |= (u4_a_SRC >> OXCAN_AUBIF_LSB_WKUPSRC);
 }
 /*===================================================================================================================================*/
 /*  void BswM_CS_CbkChkWkupSrcInd(void)                                                                                              */

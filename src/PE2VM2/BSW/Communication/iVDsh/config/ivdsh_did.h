@@ -24,67 +24,56 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_DID_BUFLEN_TX                      (13U)
-
-#define IVDSH_DID_BUFLEN_RX0                     (6U)
-#define IVDSH_DID_BUFLEN_RX1                     (14U)
-#define IVDSH_DID_BUFLEN_RX2                     (4U)
-#define IVDSH_DID_BUFLEN_RX                      (IVDSH_DID_BUFLEN_RX0 + IVDSH_DID_BUFLEN_RX1 + IVDSH_DID_BUFLEN_RX2)
-
-#define IVDSH_NUM_RX                             (3U)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_DID_NUM_TX                         (13U)
+#define IVDSH_NUM_DID_WRI                        (13U)
 
 /*-------------------------------------------------------------------------------*/
 /* CPREQ_XXX = "https://wiki.geniie.net/x/Wcq5pQ" numbering list (sample config) */
 /*-------------------------------------------------------------------------------*/
-#define IVDSH_DID_TX_CPREQ_003                   (0U)
-#define IVDSH_DID_TX_CPREQ_009                   (1U)
-#define IVDSH_DID_TX_CPREQ_011                   (2U)
-#define IVDSH_DID_TX_CPREQ_013                   (3U)
-#define IVDSH_DID_TX_CPREQ_015                   (4U)
-#define IVDSH_DID_TX_CPREQ_017                   (5U)
-#define IVDSH_DID_TX_CPREQ_019                   (6U)
-#define IVDSH_DID_TX_CPREQ_020                   (7U)
-#define IVDSH_DID_TX_CPREQ_024                   (8U)
-#define IVDSH_DID_TX_CPREQ_025                   (9U)
-#define IVDSH_DID_TX_CPREQ_027                   (10U)
-#define IVDSH_DID_TX_CPREQ_042                   (11U)
-#define IVDSH_DID_TX_CPREQ_046                   (12U)
+#define IVDSH_DID_WRI_CPREQ_003                  (0U)
+#define IVDSH_DID_WRI_CPREQ_009                  (1U)
+#define IVDSH_DID_WRI_CPREQ_011                  (2U)
+#define IVDSH_DID_WRI_CPREQ_013                  (3U)
+#define IVDSH_DID_WRI_CPREQ_015                  (4U)
+#define IVDSH_DID_WRI_CPREQ_017                  (5U)
+#define IVDSH_DID_WRI_CPREQ_019                  (6U)
+#define IVDSH_DID_WRI_CPREQ_020                  (7U)
+#define IVDSH_DID_WRI_CPREQ_024                  (8U)
+#define IVDSH_DID_WRI_CPREQ_025                  (9U)
+#define IVDSH_DID_WRI_CPREQ_027                  (10U)
+#define IVDSH_DID_WRI_CPREQ_042                  (11U)
+#define IVDSH_DID_WRI_CPREQ_046                  (12U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_DID_NUM_RX                         (22U)
+#define IVDSH_NUM_DID_REA                        (22U)
 
-/* Recieve from VM#0 */
-#define IVDSH_DID_RX_CPREQ_006                   (13U)
-#define IVDSH_DID_RX_CPREQ_008                   (14U)
-#define IVDSH_DID_RX_CPREQ_029                   (15U)
-#define IVDSH_DID_RX_CPREQ_032                   (16U)
-#define IVDSH_DID_RX_CPREQ_035                   (17U)
-#define IVDSH_DID_RX_CPREQ_038                   (18U)
-
-/* Recieve from VM#1 */
-#define IVDSH_DID_RX_CPREQ_004                   (19U)
-#define IVDSH_DID_RX_CPREQ_010                   (20U)
-#define IVDSH_DID_RX_CPREQ_012                   (21U)
-#define IVDSH_DID_RX_CPREQ_014                   (22U)
-#define IVDSH_DID_RX_CPREQ_016                   (23U)
-#define IVDSH_DID_RX_CPREQ_018                   (24U)
-#define IVDSH_DID_RX_CPREQ_021                   (25U)
-#define IVDSH_DID_RX_CPREQ_022                   (26U)
-#define IVDSH_DID_RX_CPREQ_026                   (27U)
-#define IVDSH_DID_RX_CPREQ_028                   (28U)
-#define IVDSH_DID_RX_CPREQ_041                   (29U)
-#define IVDSH_DID_RX_CPREQ_044                   (30U)
-
-/* Recieve from VM#3 */
-#define IVDSH_DID_RX_CPREQ_005                   (31U)
-#define IVDSH_DID_RX_CPREQ_007                   (32U)
-#define IVDSH_DID_RX_CPREQ_043                   (33U)
-#define IVDSH_DID_RX_CPREQ_045                   (34U)
+/* Read from VM#0 */
+#define IVDSH_DID_REA_CPREQ_006                  (13U)
+#define IVDSH_DID_REA_CPREQ_008                  (14U)
+#define IVDSH_DID_REA_CPREQ_029                  (15U)
+#define IVDSH_DID_REA_CPREQ_032                  (16U)
+#define IVDSH_DID_REA_CPREQ_035                  (17U)
+#define IVDSH_DID_REA_CPREQ_038                  (18U)
+/* Read from VM#1 */
+#define IVDSH_DID_REA_CPREQ_004                  (19U)
+#define IVDSH_DID_REA_CPREQ_010                  (20U)
+#define IVDSH_DID_REA_CPREQ_012                  (21U)
+#define IVDSH_DID_REA_CPREQ_014                  (22U)
+#define IVDSH_DID_REA_CPREQ_016                  (23U)
+#define IVDSH_DID_REA_CPREQ_018                  (24U)
+#define IVDSH_DID_REA_CPREQ_021                  (25U)
+#define IVDSH_DID_REA_CPREQ_022                  (26U)
+#define IVDSH_DID_REA_CPREQ_026                  (27U)
+#define IVDSH_DID_REA_CPREQ_028                  (28U)
+#define IVDSH_DID_REA_VM1TO2_FLYNOP              (29U)
+#define IVDSH_DID_REA_CPREQ_044                  (30U)
+/* Read from VM#3 */
+#define IVDSH_DID_REA_CPREQ_005                  (31U)
+#define IVDSH_DID_REA_CPREQ_007                  (32U)
+#define IVDSH_DID_REA_CPREQ_043                  (33U)
+#define IVDSH_DID_REA_CPREQ_045                  (34U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */

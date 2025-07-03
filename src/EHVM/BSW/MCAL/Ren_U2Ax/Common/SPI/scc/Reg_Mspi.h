@@ -1,7 +1,7 @@
 /* Reg_Mspi-r04-3000-0100-a-v00 */
 /************************************************************************************************/
 /*																								*/
-/*		MSPI register definition (for RH850U2B)													*/
+/*		MSPI register definition (for RH850U2A)													*/
 /*																								*/
 /*		Copyright : DENSO CORPORATION															*/
 /*																								*/
@@ -24,7 +24,6 @@
 #endif
 #define	MSPI_CH_NUM				(8)				/* ユニット内のチャネル数 */
 
-#define	MSPI_TGCTLI_NUM			(0)				/* TGCTLiレジスタ数 */
 #if ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN ) 
 #define	MSPI_RAM_SIZE			(0x80)			/* MSPI RAMサイズ(バイト数) */
 #elif ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN )
@@ -60,8 +59,8 @@ typedef	struct {
 	union {
 		U4	u4Data;
 		struct {
-			U4	b12CSP		:12;
-			U4	b12Dummy1	:12;
+			U4	b8CSP		:8;
+			U4	b16Dummy1	:16;
 			U4	b2SOLS		:2;
 			U4	xDummy2		:1;
 			U4	xCKR		:1;
@@ -88,7 +87,8 @@ typedef	struct {
 		struct {
 			U1	xCSF		:1;
 			U1	b3Dummy1	:3;
-			U1	b4CNUMF		:4;
+			U1	b3CNUMF		:3;
+			U1	xDummy2		:1;
 		}stBit;
 	}unSTR0;	/* 0x0010 */
 
@@ -234,8 +234,8 @@ typedef	struct {
 			U4	u4Data;
 			struct {
 				U4	b16TXDA0	:16;
-				U4	b12CSR		:12;
-				U4	b3Dummy1	:3;
+				U4	b8CSR		:8;
+				U4	b7Dummy1	:7;
 				U4	xJOBEN		:1;
 			}stBit;
 		}unSSTX;		/* 0x30 + ( 0x80 * (m+1) ) */
@@ -264,8 +264,8 @@ typedef	struct {
 		union {
 			U2	u2Data;
 			struct {
-				U2	b12CSR		:12;
-				U2	b3Dummy1	:3;
+				U2	b8CSR		:8;
+				U2	b7Dummy1	:7;
 				U2	xJOBEN		:1;
 			}stBit;
 		}unSSEL;		/* 0x3C + ( 0x80 * (m+1) ) */
@@ -396,24 +396,24 @@ typedef	struct {
 		union {
 			U4	u4Data;
 			struct {
-				U4	b12INTF		:12;
-				U4	b20Dummy1	:20;
+				U4	b8INTF		:8;
+				U4	b24Dummy1	:24;
 			}stBit;
 		}unINTF;	/* 0x00 + ( k * 0x30 ) */
 
 		union {
 			U4	u4Data;
 			struct {
-				U4	b12INTMSK	:12;
-				U4	b20Dummy1	:20;
+				U4	b8INTMSK	:8;
+				U4	b24Dummy1	:24;
 			}stBit;
 		}unINTMSK;	/* 0x04 + ( k * 0x30 ) */
 
 		union {
 			U4	u4Data;
 			struct {
-				U4	b12INTFC	:12;
-				U4	b20Dummy1	:20;
+				U4	b8INTFC		:8;
+				U4	b24Dummy1	:24;
 			}stBit;
 		}unINTFC;	/* 0x08 + ( k * 0x30 ) */
 
@@ -456,21 +456,11 @@ typedef	struct {
 			U4	xDMAAS03	:1;
 			U4	xDMAAS06	:1;
 			U4	xDMAAS07	:1;
-			U4	xDMAAS010	:1;
-			U4	xDMAAS011	:1;
 			U4	xDMAAS12	:1;
 			U4	xDMAAS13	:1;
 			U4	xDMAAS16	:1;
 			U4	xDMAAS17	:1;
-			U4	xDMAAS110	:1;
-			U4	xDMAAS111	:1;
-			U4	xDMAAS22	:1;
-			U4	xDMAAS23	:1;
-			U4	xDMAAS26	:1;
-			U4	xDMAAS27	:1;
-			U4	xDMAAS210	:1;
-			U4	xDMAAS211	:1;
-			U4	b14Dummy1	:14;
+			U4	b24Dummy1	:24;
 		}stBit;
 	}unTGDMAALT;	/* 0x28 */
 
@@ -479,32 +469,21 @@ typedef	struct {
 		struct {
 			U4	xDTSAS06	:1;
 			U4	xDTSAS07	:1;
-			U4	xDTSAS08	:1;
-			U4	xDTSAS09	:1;
-			U4	xDTSAS010	:1;
-			U4	xDTSAS011	:1;
-			U4	xDTSAS18	:1;
-			U4	xDTSAS19	:1;
-			U4	xDTSAS110	:1;
-			U4	xDTSAS111	:1;
-			U4	b22Dummy1	:22;
+			U4	xDTSAS14	:1;
+			U4	xDTSAS15	:1;
+			U4	xDTSAS16	:1;
+			U4	xDTSAS17	:1;
+			U4	xDTSAS24	:1;
+			U4	xDTSAS25	:1;
+			U4	xDTSAS26	:1;
+			U4	xDTSAS27	:1;
+			U4	xDTSAS34	:1;
+			U4	xDTSAS35	:1;
+			U4	xDTSAS36	:1;
+			U4	xDTSAS37	:1;
+			U4	b18Dummy1	:18;
 		}stBit;
 	}unTGDTSALT;	/* 0x2C */
-
-	union {
-		U4	u4Data;
-		struct {
-			U4	xTRGSEL8	:1;
-			U4	b3SRCSEL8	:3;
-			U4	xTRGSEL9	:1;
-			U4	b3SRCSEL9	:3;
-			U4	xTRGSEL10	:1;
-			U4	b3SRCSEL10	:3;
-			U4	xTRGSEL11	:1;
-			U4	b3SRCSEL11	:3;
-			U4	b16Dummy1	:16;
-		}stBit;
-	}unTGCTLI[MSPI_TGCTLI_NUM];	/* 0x30 */
 }Reg_Mspi_TgType;
 
 /*======================================================================*/
@@ -531,7 +510,7 @@ typedef	struct {
 #define		MSPI_CTL1_CKR									(BIT27)
 #define		MSPI_CTL1_SOLS									(BIT25 + BIT24)
 #define		MSPI_CTL1_SOLS_0								(BIT24)
-#define		MSPI_CTL1_CSP									(BIT11 + BIT10 + BIT9 + BIT8 + BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
+#define		MSPI_CTL1_CSP									(BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
 #define		MSPI_CTL1_CSP_0									(BIT0)
 
 /* ビット設定値定義 */
@@ -573,7 +552,7 @@ typedef	struct {
 /*	STR0															*/
 /*------------------------------------------------------------------*/
 /* ビット定義 */
-#define		MSPI_STR0_CNUMF									(BIT7 + BIT6 + BIT5 + BIT4)
+#define		MSPI_STR0_CNUMF									(BIT6 + BIT5 + BIT4)
 #define		MSPI_STR0_CNUMF_0								(BIT4) /* 設定値は数値として参照するため定義不要 */
 #define		MSPI_STR0_CSF									(BIT0)
 
@@ -723,10 +702,10 @@ typedef	struct {
 
 /* ビット設定値定義 */
 #define		MSPI_CFG4_HWTS_DISABLE							(0)
-#define		MSPI_CFG4_HWTS_IRQ0_ATU0						(1)
-#define		MSPI_CFG4_HWTS_IRQ1_ATU1						(2)
-#define		MSPI_CFG4_HWTS_IRQ2_ATU2						(3)
-#define		MSPI_CFG4_HWTS_IRQ3_ATU3						(4)
+#define		MSPI_CFG4_HWTS_INTP0							(1)
+#define		MSPI_CFG4_HWTS_INTP1							(2)
+#define		MSPI_CFG4_HWTS_INTP2							(3)
+#define		MSPI_CFG4_HWTS_INTP3							(4)
 #define		MSPI_CFG4_HWTS_INTTPTMU00						(5)
 #define		MSPI_CFG4_HWTS_INTTPTMU01						(6)
 #define		MSPI_CFG4_HWTS_INTTPTMU02						(7)
@@ -743,49 +722,28 @@ typedef	struct {
 #define		MSPI_CFG4_HWTS_INTTPTMU31						(18)
 #define		MSPI_CFG4_HWTS_INTTPTMU32						(19)
 #define		MSPI_CFG4_HWTS_INTTPTMU33						(20)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG00_ATU4				(21)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG01_ATU5				(22)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG02_ATU6				(23)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG10_ATU7				(24)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG11_ATU8				(25)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG12_ATU9				(26)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG20_ATU10				(27)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG21_ATU11				(28)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG22_ATU12				(29)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG30_ATU13				(30)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG31_ATU14				(31)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG32_ATU15				(32)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG40_ATU16				(33)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG41_ATU17				(34)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG42_ATU18				(35)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG50_ATU19				(36)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG51_ATU20				(37)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG52_ATU21				(38)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG60_ATU22				(39)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG61_ATU23				(40)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG62_ATU24				(41)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG70_ATU25				(42)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG71_ATU26				(43)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG72_ATU27				(44)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG80_ATU28				(45)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG81_ATU29				(46)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG82_ATU30				(47)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG90_ATU31				(48)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG91_TAUD0_8				(49)
-#define		MSPI_CFG4_HWTS_GTMMSPICFG92_TAUD1_9				(50)
-#define		MSPI_CFG4_HWTS_TAUD2_10							(51)
-#define		MSPI_CFG4_HWTS_TAUD3_11							(52)
-#define		MSPI_CFG4_HWTS_TAUD4_12							(53)
-#define		MSPI_CFG4_HWTS_TAUD5_13							(54)
-#define		MSPI_CFG4_HWTS_TAUD6_14							(55)
-#define		MSPI_CFG4_HWTS_INTTSG30IVLY						(56)
-#define		MSPI_CFG4_HWTS_INTTSG30IPEK						(57)
-#define		MSPI_CFG4_HWTS_INTTSG30I12						(58)
-#define		MSPI_CFG4_HWTS_INTTSG30I11						(59)
-#define		MSPI_CFG4_HWTS_INTTSG31IVLY						(60)
-#define		MSPI_CFG4_HWTS_INTTSG31IPEK						(61)
-#define		MSPI_CFG4_HWTS_INTTSG31I12						(62)
-#define		MSPI_CFG4_HWTS_INTTSG31I11						(63)
+#define		MSPI_CFG4_HWTS_MCS0_IRQ0						(21)
+#define		MSPI_CFG4_HWTS_MCS0_IRQ1						(22)
+#define		MSPI_CFG4_HWTS_MCS0_IRQ2						(23)
+#define		MSPI_CFG4_HWTS_MCS0_IRQ3						(24)
+#define		MSPI_CFG4_HWTS_MCS0_IRQ4						(25)
+#define		MSPI_CFG4_HWTS_MCS0_IRQ5						(26)
+#define		MSPI_CFG4_HWTS_MCS0_IRQ6						(27)
+#define		MSPI_CFG4_HWTS_MCS0_IRQ7						(28)
+#define		MSPI_CFG4_HWTS_MCS2_IRQ0						(29)
+#define		MSPI_CFG4_HWTS_MCS2_IRQ1						(30)
+#define		MSPI_CFG4_HWTS_MCS2_IRQ2						(31)
+#define		MSPI_CFG4_HWTS_MCS2_IRQ3						(32)
+/* (33) to (48) Setting is prohibited */
+#define		MSPI_CFG4_HWTS_INTTSG30IVLY						(49)
+#define		MSPI_CFG4_HWTS_INTTSG30IPEK						(50)
+#define		MSPI_CFG4_HWTS_INTTSG30I12						(51)
+#define		MSPI_CFG4_HWTS_INTTSG30I11						(52)
+#define		MSPI_CFG4_HWTS_INTTSG31IVLY						(53)
+#define		MSPI_CFG4_HWTS_INTTSG31IPEK						(54)
+#define		MSPI_CFG4_HWTS_INTTSG31I12						(55)
+#define		MSPI_CFG4_HWTS_INTTSG31I11						(56)
+/* (57) to (63) Setting is prohibited */
 
 #define		MSPI_CFG4_SIZE_STAGESIZE8						(0)
 #define		MSPI_CFG4_SIZE_STAGESIZE16						(1)
@@ -848,7 +806,7 @@ typedef	struct {
 /*------------------------------------------------------------------*/
 /* ビット定義 */
 #define		MSPI_SSTX_JOBEN									(BIT31)
-#define		MSPI_SSTX_CSR									(BIT27 + BIT26 + BIT25 + BIT24 + BIT23 + BIT22 + BIT21 + BIT20 + BIT19 + BIT18 + BIT17 + BIT16)
+#define		MSPI_SSTX_CSR									(BIT23 + BIT22 + BIT21 + BIT20 + BIT19 + BIT18 + BIT17 + BIT16)
 #define		MSPI_SSTX_CSR_0									(BIT16)
 #define		MSPI_SSTX_TXDA0									(BIT15 + BIT14 + BIT13 + BIT12 + BIT11 + BIT10 + BIT9 + BIT8 \
 															+ BIT7 + BIT6 +  BIT5 +  BIT4 +  BIT3 +  BIT2 +  BIT1 + BIT0)
@@ -885,7 +843,7 @@ typedef	struct {
 /*------------------------------------------------------------------*/
 /* ビット定義 */
 #define		MSPI_SSEL_JOBEN									(BIT15)
-#define		MSPI_SSEL_CSR									(BIT11 + BIT10 + BIT9 + BIT8 + BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
+#define		MSPI_SSEL_CSR									(BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
 #define		MSPI_SSEL_CSR_0									(BIT0)
 
 /* ビット設定値定義 */
@@ -1053,7 +1011,7 @@ typedef	struct {
 /*	INTF															*/
 /*------------------------------------------------------------------*/
 /* ビット定義 */
-#define		MSPI_INTF_INTF									(BIT11 + BIT10 + BIT9 + BIT8 + BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
+#define		MSPI_INTF_INTF									(BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
 #define		MSPI_INTF_INTF_0								(BIT0)
 
 /* ビット設定値定義 */
@@ -1064,7 +1022,7 @@ typedef	struct {
 /*	INTMSK															*/
 /*------------------------------------------------------------------*/
 /* ビット定義 */
-#define		MSPI_INTMSK_INTMSK								(BIT11 + BIT10 + BIT9 + BIT8 + BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
+#define		MSPI_INTMSK_INTMSK								(BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
 #define		MSPI_INTMSK_INTMSK_0							(BIT0)
 
 /* ビット設定値定義 */
@@ -1075,7 +1033,7 @@ typedef	struct {
 /*	INTFC															*/
 /*------------------------------------------------------------------*/
 /* ビット定義 */
-#define		MSPI_INTFC_INTFC								(BIT11 + BIT10 + BIT9 + BIT8 + BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
+#define		MSPI_INTFC_INTFC								(BIT7 + BIT6 + BIT5 + BIT4 + BIT3 + BIT2 + BIT1 + BIT0)
 #define		MSPI_INTFC_INTFC_0								(BIT0)
 
 /* ビット設定値定義 */
@@ -1128,20 +1086,10 @@ typedef	struct {
 /*	TGDMAALT														*/
 /*------------------------------------------------------------------*/
 /* ビット定義 */
-#define		MSPI_TGDMAALT_DMAAS211							(BIT17)
-#define		MSPI_TGDMAALT_DMAAS210							(BIT16)
-#define		MSPI_TGDMAALT_DMAAS27							(BIT15)
-#define		MSPI_TGDMAALT_DMAAS26							(BIT14)
-#define		MSPI_TGDMAALT_DMAAS23							(BIT13)
-#define		MSPI_TGDMAALT_DMAAS22							(BIT12)
-#define		MSPI_TGDMAALT_DMAAS111							(BIT11)
-#define		MSPI_TGDMAALT_DMAAS110							(BIT10)
-#define		MSPI_TGDMAALT_DMAAS17							(BIT9)
-#define		MSPI_TGDMAALT_DMAAS16							(BIT8)
-#define		MSPI_TGDMAALT_DMAAS13							(BIT7)
-#define		MSPI_TGDMAALT_DMAAS12							(BIT6)
-#define		MSPI_TGDMAALT_DMAAS011							(BIT5)
-#define		MSPI_TGDMAALT_DMAAS010							(BIT4)
+#define		MSPI_TGDMAALT_DMAAS17							(BIT7)
+#define		MSPI_TGDMAALT_DMAAS16							(BIT6)
+#define		MSPI_TGDMAALT_DMAAS13							(BIT5)
+#define		MSPI_TGDMAALT_DMAAS12							(BIT4)
 #define		MSPI_TGDMAALT_DMAAS07							(BIT3)
 #define		MSPI_TGDMAALT_DMAAS06							(BIT2)
 #define		MSPI_TGDMAALT_DMAAS03							(BIT1)
@@ -1155,39 +1103,24 @@ typedef	struct {
 /*	TGDTSALT														*/
 /*------------------------------------------------------------------*/
 /* ビット定義 */
-#define		MSPI_TGDTSALT_DTSAS111							(BIT9)
-#define		MSPI_TGDTSALT_DTSAS110							(BIT8)
-#define		MSPI_TGDTSALT_DTSAS19							(BIT7)
-#define		MSPI_TGDTSALT_DTSAS18							(BIT6)
-#define		MSPI_TGDTSALT_DTSAS011							(BIT5)
-#define		MSPI_TGDTSALT_DTSAS010							(BIT4)
-#define		MSPI_TGDTSALT_DTSAS09							(BIT3)
-#define		MSPI_TGDTSALT_DTSAS08							(BIT2)
+#define		MSPI_TGDTSALT_DTSAS37							(BIT13)
+#define		MSPI_TGDTSALT_DTSAS36							(BIT12)
+#define		MSPI_TGDTSALT_DTSAS35							(BIT11)
+#define		MSPI_TGDTSALT_DTSAS34							(BIT10)
+#define		MSPI_TGDTSALT_DTSAS27							(BIT9)
+#define		MSPI_TGDTSALT_DTSAS26							(BIT8)
+#define		MSPI_TGDTSALT_DTSAS25							(BIT7)
+#define		MSPI_TGDTSALT_DTSAS24							(BIT6)
+#define		MSPI_TGDTSALT_DTSAS17							(BIT5)
+#define		MSPI_TGDTSALT_DTSAS16							(BIT4)
+#define		MSPI_TGDTSALT_DTSAS15							(BIT3)
+#define		MSPI_TGDTSALT_DTSAS14							(BIT2)
 #define		MSPI_TGDTSALT_DTSAS07							(BIT1)
 #define		MSPI_TGDTSALT_DTSAS06							(BIT0)
 
 /* ビット設定値定義 */
 #define		MSPI_TGDTSALT_DTSAS_NOT_USE						(0)
 #define		MSPI_TGDTSALT_DTSAS_USE							(1)
-
-/*------------------------------------------------------------------*/
-/*	TGCTLi															*/
-/*------------------------------------------------------------------*/
-/* ビット定義 */
-#define		MSPI_TGCTLI_SRCSEL11							(BIT15 + BIT14 + BIT13)
-#define		MSPI_TGCTLI_SRCSEL11_0							(BIT13)
-#define		MSPI_TGCTLI_TRGSEL11							(BIT12)
-#define		MSPI_TGCTLI_SRCSEL10							(BIT11 + BIT10 + BIT9)
-#define		MSPI_TGCTLI_SRCSEL10_0							(BIT9)
-#define		MSPI_TGCTLI_TRGSEL10							(BIT8)
-#define		MSPI_TGCTLI_SRCSEL9								(BIT7  + BIT6  + BIT5)
-#define		MSPI_TGCTLI_SRCSEL9_0							(BIT5)
-#define		MSPI_TGCTLI_TRGSEL9								(BIT4)
-#define		MSPI_TGCTLI_SRCSEL8								(BIT3  + BIT2  + BIT1)
-#define		MSPI_TGCTLI_SRCSEL8_0							(BIT1)
-#define		MSPI_TGCTLI_TRGSEL8								(BIT0)
-
-/* ビット設定値定義 (設定値はTGCTLnレジスタの同ビットと同じため定義不要) */
 
 
 /*==============================================================================================*/

@@ -48,7 +48,7 @@
 #pragma ghs section rodata=".GPT_RODATA_CONST"
 
 const ST_GPT_OST       st_gp_GPT_OST_CFG[GPT_OST_NUM_CH] = {
-    /* GPT_OST_CH_00                  */
+    /* GPT_OST_CH_00_SPI_TICK_MET     */
     {
         (volatile U4 *)0xffbf0000U,                                 /* u4p_base    */
         (U4)U4_MAX,                                                 /* u4_select   */
