@@ -50,10 +50,12 @@
 
 #include "EthSW_Task.h"
 #include "PwrCtrl_Main.h"
-#include "PwrCtrl_Sys.h" /* Žb’è */
+#include "PwrCtrl_Sys.h"        /* for VM2 PowerControl */
+#include "PwrCtrl_NoRedun.h"    /* for VM2 PowerControl */
 #include "VIS.h"
 
 #include "chipcom.h"
+#include "PwrCtlSup.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -153,8 +155,10 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Task                                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_PowerSup_Routine,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_PwrCtrlMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
-    {&Mcu_Dev_Pwron,                    (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_McuDev_Pwron,                (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_McuDev_Pwroff,               (U4)SCHDLR_TASKBIT___5MS    },
     {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
     {&ChipCom_Main	,                   (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VISMidCycle	,               (U4)SCHDLR_TASKBIT___5MS    },

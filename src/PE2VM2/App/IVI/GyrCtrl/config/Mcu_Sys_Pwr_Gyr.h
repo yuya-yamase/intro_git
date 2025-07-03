@@ -21,9 +21,11 @@
 #define MCU_SYS_PWR_GYR_TX_TXDAT_NUM                    (3U)
 #define MCU_SYS_PWR_GYR_TX_RDREGADR_NUM                 (2U)
 #define MCU_SYS_PWR_GYR_TX_RDSADR_NUM                   (2U)
+#define MCU_SYS_PWR_GYR_RDTBL_XYZ_NUM                   (7U)
 #define MCU_SYS_PWR_GYR_TX_BURSTDAT_NUM                 (4U)
 #define MCU_SYS_PWR_GYR_INTTBL_ANYMOT_NUM               (4U)
 #define MCU_SYS_PWR_GYR_INTTBL_OTH_NUM                  (3U)
+#define MCU_SYS_PWR_GYR_TX_CFGDATA_NUM                  (34U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -59,10 +61,19 @@ extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_MNSTEST[];
 extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_DISTEST[];
 extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_GYR_XYZ[];
 extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_GYR_TEMP[];
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_PWRCONF_ON[]; 
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_PWRCONF_OFF[];
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_ON[];
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_OFF[];
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_READ[];
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_SOFTRESET[];
 extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_INTSET_ANYMOT_TH[];
 extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_INTSET_ANYMOT_EN[];
 extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_INTSET_OTH[];
 extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_SEN1_BW_INPRM[];
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_CFG1[];
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_CFG2[];
+extern const ST_GP_I2C_MA_REQ       st_sp_MCU_SYS_PWR_GYR_REG_ACC_DATA[];
 
 #endif      /* MCU_SYS_PWR_GYR_H */
 /*===================================================================================================================================*/

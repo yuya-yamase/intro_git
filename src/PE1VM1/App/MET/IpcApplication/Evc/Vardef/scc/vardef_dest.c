@@ -1,4 +1,4 @@
-/* 2.0.0 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_DEST_C_MAJOR                     (2)
-#define VARDEF_DEST_C_MINOR                     (0)
+#define VARDEF_DEST_C_MINOR                     (1)
 #define VARDEF_DEST_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -265,10 +265,23 @@ static void    vd_s_VardefDestDBIdxJdg(void)
 
     u1_t_idx = (U1)U1_MAX;
     for(u1_t_idx_loop = (U1)0U; u1_t_idx_loop < u1_g_VDF_DST_NUM_C_CODE; u1_t_idx_loop++){
-        if(u2_s_vdf_dst_c_code == u2_gp_VDF_DST_C_CODE[u1_t_idx_loop]){
-            u1_t_idx = u1_t_idx_loop;
+        if(u2_s_vdf_dst_c_code == st_gp_VDF_DST_C_CODE[u1_t_idx_loop].u2_t_c_code){
+            u1_t_idx = st_gp_VDF_DST_C_CODE[u1_t_idx_loop].u1_t_c_code_idx;
         }
     }
+
+    if((u1_t_idx           == u1_g_VDF_DST_C_CODE_KOR  ) &&
+       (u1_CALIB_MCUID0810_KOREA_LOW == (U1)CALIB_MCUID0810_KOREA_LOW_MIN)){
+        u1_t_idx = u1_g_VDF_DST_C_CODE_KOR_FMVSS;
+    }
+    else if((u1_t_idx           == u1_g_VDF_DST_C_CODE_MEX  ) &&
+            (u1_CALIB_MCUID0809_MEXICO_LOW == (U1)CALIB_MCUID0809_MEXICO_LOW_MIN)){
+        u1_t_idx = u1_g_VDF_DST_C_CODE_MEX_FMVSS;
+    }
+    else {
+        /* Do Nothing */
+     }
+
     if(u1_t_idx != (U1)U1_MAX){
         u1_s_vdf_dst_c_code_idx = u1_t_idx;
     }
@@ -364,8 +377,10 @@ static void    vd_s_VardefDestHdlJdg(const U1 u1_a_STRG_WHL)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0     1/25/2021  SF       New.                                                                                               */
 /*  2.0.0     1/19/2024  HF       for 19PFv3.                                                                                        */
+/*  2.1.0     6/27/2025  SN       for BEV System_Consideration_2.(MET-M_DESTVARI-CSTD-A0-06)                                         */
 /*                                                                                                                                   */
 /*  * SF = Seiya Fukutome, DENSO-TECHNO                                                                                              */
 /*  * HF = Hinari Fukamachi, KSE                                                                                                     */
+/*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

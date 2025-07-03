@@ -11,9 +11,9 @@
 #include "Dio.h"
 #include "Iohw_adc.h"
 #include "Mcu_I2c_Ctrl_private.h"
-#include "PictCtl.h"
 #include "SysEcDrc.h"
 #include "DtcCtl.h"
+#include "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -50,8 +50,8 @@
 #define POWERIC_SOFTMUTE_STS_OFF                    (0U)
 #define POWERIC_SOFTMUTE_STS_ON                     (1U)
 
-#define POWERIC_POWER_STATE_APP_OFF                 (PICT_NOREDUN_STATE_APPOFF)
-#define POWERIC_POWER_STATE_APP_ON                  (PICT_NOREDUN_STATE_APPON)
+#define POWERIC_POWER_STATE_APP_OFF                 (POWER_MODE_STATE_APPOFF)
+#define POWERIC_POWER_STATE_APP_ON                  (POWER_MODE_STATE_APPON)
 
 #define POWERIC_SPEAKER_TYPE_2SPK                   (0U)    /* 暫定 車パラI/F展開後に見直し */
 #define POWERIC_SPEAKER_TYPE_4SPK                   (1U)    /* 暫定 車パラI/F展開後に見直し */
@@ -65,7 +65,7 @@
 #define vd_POWERIC_DREC_REQ(x, y, z)                (vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_POWERIC, (x), (y), (z)))
 #define vd_POWERIC_DTC_REQ(x, y)                    (vd_g_DtcCtl_SetDtcId((x), (y)))
 
-#define u1_POWERIC_GET_POWER_STATE()                (u1_g_PictCtl_StartSts())
+#define u1_POWERIC_GET_POWER_STATE()                (u1_g_Power_ModeState())
 #define u1_POWERIC_GET_V33_PERI_ON()                (Dio_ReadChannel(DIO_ID_PORT10_CH2))
 #define u1_POWERIC_GET_P_ON()                       (Dio_ReadChannel(DIO_ID_PORT11_CH6))
 #define u1_POWERIC_GET_PIC_CURRENT_DET(x)           (u1_g_IoHwAdcRead(ADC_CH_PIC_CUR, (x)))

@@ -20,14 +20,7 @@
 #include "datesi_cfg_private.h"
 #include "datesi_com.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#include "vardef.h"
-#endif
 #include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#include "locale.h"
-#include "mcst.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -111,13 +104,11 @@ const   S4                                      s4_g_DATESI_TIM_OFFSET_MAX      
 const   S4                                      s4_g_DATESI_TIM_TIMZN_MIN         = (((S4)HHMMSS_HR_TO_SE * (S4)(-15)) - (S4)DATESI_TIM_HALF_HOUR);
 const   S4                                      s4_g_DATESI_TIM_TIMZN_MAX         = (((S4)HHMMSS_HR_TO_SE * (S4)16) + (S4)DATESI_TIM_HALF_HOUR);
 
-#if 0   /* BEV provisionally */
 const   U2                                      u2_gp_TIMEZONE_RIMID[TIMEZONE_NUM_RX] = {
     (U2)RIMID_U1_TIMEZONE_TZ,                   /* TIMEZONE_RX_TZ                    (0U) */
     (U2)RIMID_U1_TIMEZONE_TZ_SIGN,              /* TIMEZONE_RX_TZ_SIGN               (1U) */
     (U2)RIMID_U1_TIMEZONE_DST_S30               /* TIMEZONE_RX_DST_S30               (2U) */
 };
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -269,7 +260,7 @@ U1              u1_g_DateSITimCfgCanRx(ST_DATESI_TIM_RX * stp_a_rx)
     ST_DATESI_COMMAND_DATA  st_t_command_data;
     U1                      u1_t_status;
 
-    u1_t_status = (U1)0U; /* BEV provisionally */
+    u1_t_status = (U1)DATESI_TIM_STSBIT_VALID;
 
     st_t_command_data = st_g_DateSIComRx();
     stp_a_rx->u1p_time[HHMMSS_24H_TIME_SE] = st_t_command_data.u1_clk_sec;
@@ -817,7 +808,7 @@ U1      u1_g_TimeZoneCfgRxTZ(U1 * u1p_a_rx)
     st_t_command_data = st_g_DateSIComRx();
     (*u1p_a_rx) = st_t_command_data.u1_tz;
 
-    return((U1)DATESI_TIM_STSBIT_VALID); /* BEV BSW provisionally */
+    return((U1)DATESI_TIM_STSBIT_VALID);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)                                                                                 */
@@ -832,7 +823,7 @@ U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)
     st_t_command_data = st_g_DateSIComRx();
     (*u1p_a_rx) = st_t_command_data.u1_tz_sign;
 
-    return((U1)DATESI_TIM_STSBIT_VALID); /* BEV BSW provisionally */
+    return((U1)DATESI_TIM_STSBIT_VALID);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)                                                                                 */
@@ -847,7 +838,7 @@ U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)
     st_t_command_data = st_g_DateSIComRx();
     (*u1p_a_rx) = st_t_command_data.u1_dst_s30;
 
-    return((U1)DATESI_TIM_STSBIT_VALID); /* BEV BSW provisionally */
+    return((U1)DATESI_TIM_STSBIT_VALID);
 }
 
 /*===================================================================================================================================*/

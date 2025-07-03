@@ -1,23 +1,24 @@
-/* 5.4.0 */
+/* 5.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Alert S_FHL                                                                                                                      */
+/*  Alert O_PDSMAL                                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_S_FHL_C_MAJOR                      (5)
-#define ALERT_S_FHL_C_MINOR                      (4)
-#define ALERT_S_FHL_C_PATCH                      (0)
+#define ALERT_O_PDSMAL_C_MAJOR                      (5)
+#define ALERT_O_PDSMAL_C_MINOR                      (0)
+#define ALERT_O_PDSMAL_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "alert_cfg_private.h"
 #include "alert_mtrx_cfg_private.h"
+#include "alert_brx.h"
 
 #include "oxcan.h"
 #if 0   /* BEV BSW provisionally */
@@ -28,14 +29,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (ALERT_S_FHL_C_MAJOR != ALERT_CFG_H_MAJOR)
-#error "alert_S_FHL.c and alert_cfg_private.h : source and header files are inconsistent!"
+#if (ALERT_O_PDSMAL_C_MAJOR != ALERT_CFG_H_MAJOR)
+#error "alert_O_PDSMAL.c and alert_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_S_FHL_NUM_DST                      (32U)
+#define ALERT_O_PDSMAL_BC_NUM_DST                (16U)
+#define ALERT_O_PDSMAL_PD_NUM_DST                (16U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -46,63 +48,82 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_BUZ)
+static U1      u1_s_alert_o_pdsmal_cycl_sts;
+#endif /* defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_BUZ) */
+#if defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_DISP)
+static U1      u1_s_alert_o_pdsmal_mulfunc_sts;
+#endif /* defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_DISP) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertS_fhlSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertS_fhlRwTx  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
+static U4      u4_s_AlertO_pdsmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static U4      u4_s_AlertO_pdsmalPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_S_FHL_DST[ALERT_S_FHL_NUM_DST] = {
+static const U1  u1_sp_ALERT_O_PDSMAL_BC_DST[ALERT_O_PDSMAL_BC_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_FHL_ACTIVATION,                                            /* 03 ACTIVATION                                      */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_FHL_RW,                                                    /* 05 RW                                              */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
+    (U1)ALERT_REQ_O_PDSMAL_BC_CYCL,                                            /* 09 CYCL                                            */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 17 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 19 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 20 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 21 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 22 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 23 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 24 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 26 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 27 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
+};
+static const U1  u1_sp_ALERT_O_PDSMAL_PD_DST[ALERT_O_PDSMAL_PD_NUM_DST] = {
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 01 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
+    (U1)ALERT_REQ_O_PDSMAL_PD_MULFUNC,                                         /* 09 MULFUNC                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
+    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_S_FHL_MTRX[1] = {
+const ST_ALERT_MTRX st_gp_ALERT_O_PDSMAL_MTRX[2] = {
     {
-        &u4_s_AlertS_fhlSrcchk,                                                /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertS_fhlRwTx,                                                  /* fp_vd_XDST                                         */
+        &u4_s_AlertO_pdsmalBcSrcchk,                                           /* fp_u4_SRC_CHK                                      */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
 
         (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
         (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
 
-        &u1_sp_ALERT_S_FHL_DST[0],                                             /* u1p_DST                                            */
-        (U2)ALERT_S_FHL_NUM_DST,                                               /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
+        &u1_sp_ALERT_O_PDSMAL_BC_DST[0],                                       /* u1p_DST                                            */
+        (U2)ALERT_O_PDSMAL_BC_NUM_DST,                                         /* u2_num_srch                                        */
+        (U1)ALERT_VOM_BAT_WT                                                   /* u1_vom_act                                         */
+    },
+    {
+        &u4_s_AlertO_pdsmalPdSrcchk,                                           /* fp_u4_SRC_CHK                                      */
+        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
+
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
+        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
+
+        &u1_sp_ALERT_O_PDSMAL_PD_DST[0],                                       /* u1p_DST                                            */
+        (U2)ALERT_O_PDSMAL_PD_NUM_DST,                                         /* u2_num_srch                                        */
+        (U1)ALERT_VOM_BAT_WT                                                   /* u1_vom_act                                         */
     }
 };
 
@@ -110,51 +131,91 @@ const ST_ALERT_MTRX st_gp_ALERT_S_FHL_MTRX[1] = {
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_fhlSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                                 */
+/*  void    vd_g_AlertO_pdsmalInit(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertS_fhlSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+void    vd_g_AlertO_pdsmalInit(void)
 {
-    static const U2 u2_s_ALERT_FHL_TO_THRESH    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_S_FHL_LSB_MSGSTS = (U1)3U;
-    U4              u4_t_src_chk;
-    U1              u1_t_sgnl;
-    U1              u1_t_msgsts;
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BSR1S01_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
-                                     u2_s_ALERT_FHL_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_FHL_STAT, &u1_t_sgnl);
-
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_FHL_LSB_MSGSTS);
-    return(u4_t_src_chk);
+#if defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_BUZ)
+    u1_s_alert_o_pdsmal_cycl_sts = (U1)COM_NO_RX;
+#endif /* defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_BUZ) */
+#if defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_DISP)
+    u1_s_alert_o_pdsmal_mulfunc_sts = (U1)COM_NO_RX;
+#endif /* defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_DISP) */
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_AlertS_fhlRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                   */
+/*  static U4      u4_s_AlertO_pdsmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_AlertS_fhlRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
+static U4      u4_s_AlertO_pdsmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_BUZ)
+    static const U1 u1_s_ALERT_O_PDSMAL_LSB_BC_MSGSTS  = (U1)2U;
+    static const U4 u4_s_ALERT_O_PDSMAL_BIT_BC_BTWT    = (U4)0x00000008U;
+    U4              u4_t_src_chk;
+    U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    if (((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                ) &&
-        (u1_a_DST                          == (U1)ALERT_REQ_S_FHL_RW)) {
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else {
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDC1S46_RXCH0,
+                                          (U2)OXCAN_RX_SYS_NRX_PBA,
+                                          (U2)U2_MAX) & (U1)COM_NO_RX;
+    vd_g_AlertBRxTrnsSts(&u1_s_alert_o_pdsmal_cycl_sts, u1_t_msgsts);
+
+    u4_t_src_chk  = (((U4)u1_s_alert_o_pdsmal_cycl_sts & (U4)COM_NO_RX) << u1_s_ALERT_O_PDSMAL_LSB_BC_MSGSTS);
+
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PDS_BUZ, &u1_t_sgnl);
+    u4_t_src_chk |= (U4)u1_t_sgnl;
+
+    if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){
+        u4_t_src_chk |= u4_s_ALERT_O_PDSMAL_BIT_BC_BTWT;
     }
 
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_FHLW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
+    return(u4_t_src_chk);
+#else
+    return((U4)0U);
+#endif /* defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_BUZ) */
+}
+
+/*===================================================================================================================================*/
+/*  static U4      u4_s_AlertO_pdsmalPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U4      u4_s_AlertO_pdsmalPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+{
+#if defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_DISP)
+    static const U1 u1_s_ALERT_O_PDSMAL_LSB_PD_MSGSTS  = (U1)2U;
+    static const U4 u4_s_ALERT_O_PDSMAL_BIT_PD_BTWT    = (U4)0x00000008U;
+    U4              u4_t_src_chk;
+    U1              u1_t_msgsts;
+    U1              u1_t_sgnl;
+
+    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDC1S46_RXCH0,
+                                          (U2)OXCAN_RX_SYS_NRX_PBA,
+                                          (U2)U2_MAX) & (U1)COM_NO_RX;
+    vd_g_AlertBRxTrnsSts(&u1_s_alert_o_pdsmal_mulfunc_sts, u1_t_msgsts);
+
+    u4_t_src_chk  = (((U4)u1_s_alert_o_pdsmal_mulfunc_sts & (U4)COM_NO_RX) << u1_s_ALERT_O_PDSMAL_LSB_PD_MSGSTS);
+
+    u1_t_sgnl     = (U1)0U;
+    (void)Com_ReceiveSignal(ComConf_ComSignal_PDS_DISP, &u1_t_sgnl);
+    u4_t_src_chk |= (U4)u1_t_sgnl;
+
+    if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){
+        u4_t_src_chk |= u4_s_ALERT_O_PDSMAL_BIT_PD_BTWT;
+    }
+
+    return(u4_t_src_chk);
+#else
+    return((U4)0U);
+#endif /* defined(OXCAN_PDU_RX_CAN_BDC1S46_RXCH0) && defined(ComConf_ComSignal_PDS_DISP) */
 }
 
 /*===================================================================================================================================*/
@@ -165,16 +226,8 @@ static void    vd_s_AlertS_fhlRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, cons
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  5.0.0     3/23/2020  TI       New.                                                                                               */
-/*  5.1.0     9/02/2020  DS       Add esopt available for RwTx func.                                                                 */
-/*  5.2.0     1/19/2021  MO       Add compile switch to RwTx function.                                                               */
-/*  5.3.0     11/02/2023 SN       Add FHL_STAT TimeOut function. Delete RwTx func.                                                   */
-/*  5.4.0     4/04/2024  AA       Add remote warning (FHLW)                                                                          */
+/*  5.0.0    06/20/2025  KO       New.                                                                                               */
 /*                                                                                                                                   */
-/*  * TI   = Takuro Iwanaga, NTTD MSE                                                                                                */
-/*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
-/*  * MO   = Masayuki Oofuji, NTTD MSE                                                                                               */
-/*  * SN   = Shimon Nambu, Denso Techno                                                                                              */
-/*  * AA   = Anna Asuncion, Denso Techno                                                                                             */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

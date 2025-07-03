@@ -85,7 +85,6 @@ U1      u1_g_PictCtl_RcvQualModeRevFlgSts(void);
 U1      u1_g_PictCtl_RcvQualModeRevDate(void);
 void    vd_g_PictCtl_RcvDiagModInd(const U1 u1_a_MODE);
 /* Žb’è */
-U1      u1_g_PictCtl_StartSts(void);
 U1      u1_s_PictCtl_SiPErrstsInfo(void);
 U1      u1_g_PictCtl_CdsizeSnd(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

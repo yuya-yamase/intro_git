@@ -49,6 +49,7 @@ xspi_sub.c
 PwrCtrl_cfg.c
 PwrCtrl_Main.c
 PwrCtrl_NoRedun.c
+PwrCtrl_PinMonitor.c
 PwrCtrl_Sip.c
 PwrCtrl_Sys.c
 product_cfg.c

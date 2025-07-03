@@ -83,7 +83,7 @@ enum {
 #else	/* (XSPI_COMM_CYCLE == XSPI_COMM_CYCLE_10ms) */
 
 #define XSPI_OST_CNT_NORMAL	((uint32)( 9600UL * GPT_OST_1US ))	/* 通常動作用（9.6ms） */
-#define XSPI_OST_CNT_ENMONI	((uint32)( 5000UL * GPT_OST_1US ))	/* EN信号監視用（10.0ms） */
+#define XSPI_OST_CNT_ENMONI	((uint32)( 10000UL * GPT_OST_1US ))	/* EN信号監視用（10.0ms） */
 
 #endif	/* (XSPI_COMM_CYCLE) */
 
@@ -206,7 +206,7 @@ typedef struct {
 /*	ドライバ管理テーブル		*/
 /*------------------------------*/
 typedef struct {
-	void(*func)(void);					/* イベント処理関数アドレス */
+	uint8(*func)(void);					/* イベント処理関数アドレス */
 	uint8	next_stat;					/* 処理後の状態 */
 	uint32	ostm_cnt;					/* OSTMカウント */
 } TBL_DRV_SPI;

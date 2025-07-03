@@ -1,4 +1,4 @@
-/* 2.1.1 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPSNSR_CFG_C_MAJOR                    (2)
-#define TRIPSNSR_CFG_C_MINOR                    (1)
-#define TRIPSNSR_CFG_C_PATCH                    (1)
+#define TRIPSNSR_CFG_C_MINOR                    (2)
+#define TRIPSNSR_CFG_C_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -23,7 +23,6 @@
 #include "oxcan_channel_STUB.h"
 #endif
 #include "gpt_drv_frt.h"
-#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -127,24 +126,7 @@ U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode)
 /*===================================================================================================================================*/
 U1              u1_g_TripsnsrCfgGetPtsSts(void)
 {
-    U1          u1_t_msgsts;
-    U1          u1_t_calib;
-
-    u1_t_msgsts = (U1)TRIPCOM_STSBIT_UNKNOWN;
-    u1_t_calib  = u1_CALIB_MCUID0237_CANMOVEFLAG;
-
-    if (u1_t_calib == (U1)CALIB_MCUID0237_NE1) {
-#if 0   /* BEV BSW provisionally */
-        u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_ENG1G02_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-#else
-        u1_t_msgsts = (U1)COM_NO_RX;
-#endif
-    }
-    else {
-        u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_ENG1G90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    }
-
-    return (u1_t_msgsts);
+    return ((U1)Com_GetIPDUStatus(MSG_ENG1G90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
 /*===================================================================================================================================*/
@@ -536,6 +518,7 @@ U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)
 /*  2.0.2    10/27/2021  TK       tripsnsr.c v2.0.1 -> v2.0.2.                                                                       */
 /*  2.1.0    04/14/2022  TA(M)    tripsnsr.c v2.0.2 -> v2.1.0.                                                                       */
 /*  2.1.1    08/08/2022  YI       tripsnsr.c v2.1.0 -> v2.1.1.                                                                       */
+/*  2.2.0    06/23/2025  RS       Change for BEV System_Consideration_2.                                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -548,5 +531,6 @@ U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg)
 /*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
 /*  * YI   = Yoshiki Iwata, NTT Data MSE                                                                                             */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

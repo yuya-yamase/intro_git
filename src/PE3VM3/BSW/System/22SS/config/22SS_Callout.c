@@ -29,6 +29,7 @@
 #include "PwrCtrl_Main.h"
 #include "VIS.h"
 
+#include "PwrCtlSup.h"
 #include "chipcom.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -81,6 +82,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     EthSW_StaBonInit();
     ChipCom_Init();
     vd_g_VISInit();
+    vd_g_PowerSup_BonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -117,10 +119,11 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_VehopemdRstInit();
 
     /* vv User Hook start vv */
-    vd_g_PwrCtrlMainBonReq();
+    vd_g_PwrCtrlMainWakeupReq();
     EthSW_StaRstInit();
     ChipCom_Init();
     vd_g_VISInit();
+    vd_g_PowerSup_BonInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/
@@ -157,10 +160,11 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_VehopemdWkupInit();
 
     /* vv User Hook start vv */
-    vd_g_PwrCtrlMainBonReq();
+    vd_g_PwrCtrlMainWakeupReq();
     EthSW_StaWkupInit();
     ChipCom_Init();
     vd_g_VISInit();
+    vd_g_PowerSup_WkupInit();
     /* ^^ User Hook end   ^^ */
 
     /*******************************************************************/

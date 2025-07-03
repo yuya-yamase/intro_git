@@ -207,6 +207,19 @@
             ".ecu_n_bvar": "<.Retention_RAM>",
             ".app_n_bvar": "<.Retention_RAM>",
             ".app_n_rvar": "<.Retention_RAM>"
+        },
+        "CAPACITY_DICT": {
+            "Capacity<.CodeFlash> (= <.text> + <.rodata>)": 1703936,
+            "Capacity<.Local_RAM0>": 32768,
+            "Capacity<.Local_RAM1>": 0,
+            "Capacity<.Local_RAM2>": 0,
+            "Capacity<.Local_RAM3>": 0,
+            "Capacity<.Local_RAM_SELF>": 0,
+            "Capacity<.Cluster_RAM0>": 65536,
+            "Capacity<.Cluster_RAM1>": 65536,
+            "Capacity<.Cluster_RAM2>": 524288,
+            "Capacity<.Cluster_RAM2_SHARE>": 65536,
+            "Capacity<.Retention_RAM>": 32768
         }
     },
     "COMPONENT_LIST": [

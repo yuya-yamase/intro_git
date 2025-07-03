@@ -18,6 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "datesi_com.h"
 #include "datesi_tim.h"
+#include "datesi_cal.h"
 #include "date_clk.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -169,7 +170,7 @@ void           vd_g_DateSIComInit(void)
     st_s_clock_disp_data.u1_1224format_disp    = (U1)DATESI_COM_TIME_SET_INI;
 
     u1_s_datesi_com_send_act                   = (U1)FALSE;
-    u1_s_setting_sts                           = (U1)DATESI_COM_SET_OK;
+    u1_s_setting_sts                           = (U1)DATESI_COM_SET_NG;
 }
 
 
@@ -207,6 +208,7 @@ void            vd_g_DateSIComCommandRx(const ST_DATESI_COMMAND_DATA st_a_DATA)
     u1_s_datesi_com_req_act = (U1)TRUE;
 
     vd_g_DateSITimCanRxHk();
+    vd_g_DateSICalAdjustdate();
 
 }
 
@@ -288,12 +290,12 @@ void            vd_g_DateSIComCommandTx(void)
         /* Send Setting Status to XSPI*/
         if(u1_s_datesi_com_req_act == (U1)TRUE){
             vd_g_XspiIviSub1ClockSettingSend(u1_s_setting_sts);
+            u1_s_setting_sts        = (U1)DATESI_COM_SET_NG;
             u1_s_datesi_com_req_act = (U1)FALSE;
         }
     }
 
     u1_s_datesi_com_send_act = (U1)FALSE;
-    u1_s_setting_sts         = (U1)DATESI_COM_SET_OK;
 
 }
 
@@ -354,7 +356,7 @@ ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
                 st_t_clock_rtc_data.u1_year_rtc = (U1)(u2_tp_cal[YYMMDD_DATE_YR] - (U2)DATESI_COM_YEAR_OFFSET);
             }
             else{
-                st_t_clock_rtc_data.u1_year_rtc = (U1)((U2)DATESI_COM_CAL_MIN - (U2)DATESI_COM_YEAR_OFFSET);
+                st_t_clock_rtc_data.u1_clock_set_sts_rtc = (U1)FALSE;
             }
             st_t_clock_rtc_data.u1_month_rtc = (U1)u2_tp_cal[YYMMDD_DATE_MO];
             st_t_clock_rtc_data.u1_day_rtc   = (U1)u2_tp_cal[YYMMDD_DATE_DA];
@@ -386,6 +388,17 @@ ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
 ST_DATESI_COMMAND_DATA  st_g_DateSIComRx(void)
 {
     return(st_s_command_data);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_DateSIComSetCmp(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_DateSIComSetCmp(void)
+{
+    u1_s_setting_sts = (U1)DATESI_COM_SET_OK;
 }
 
 /*===================================================================================================================================*/
