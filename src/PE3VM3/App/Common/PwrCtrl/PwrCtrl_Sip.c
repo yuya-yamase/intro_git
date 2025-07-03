@@ -240,7 +240,7 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void );
 /* SIP電源強制OFF制御 */
 static void vd_s_PwrCtrlSipForcedOffMainFunc( void );
 /* SIP電源強制OFF初期化要求 共通変数初期化 */
-static void vd_s_PwrCtrlSipFoccedOffInitReq( void );
+static void vd_s_PwrCtrlSipForcedOffInitReq( void );
 
 /*--------------------------------------------------------------------------*/
 /* Function Macros                                                          */
@@ -859,13 +859,13 @@ void vd_g_PwrCtrlSipStbyReq( void )
 }
 
 /*****************************************************************************
-  Function      : vd_g_PwrCtrlSipFoccedOffSTEP1Req
+  Function      : vd_g_PwrCtrlSipForcedOffSTEP1Req
   Description   : 5-6.SIP電源強制OFFシーケンス STEP1開始要求
   param[in/out] : none
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_g_PwrCtrlSipFoccedOffSTEP1Req( void )
+void vd_g_PwrCtrlSipForcedOffSTEP1Req( void )
 {
     /* 起動ステップの初期化 */
     /* SIP電源強制OFF処理(SoC異常)開始 */
@@ -873,49 +873,49 @@ void vd_g_PwrCtrlSipFoccedOffSTEP1Req( void )
     /* EtherSW終了要求を設定 */
     u1_s_PwrCtrl_Sip_EthReq_Sts     = (U1)PWRCTRL_ETH_REQ_OFF;
     
-    vd_s_PwrCtrlSipFoccedOffInitReq();
+    vd_s_PwrCtrlSipForcedOffInitReq();
 }
 
 /*****************************************************************************
-  Function      : vd_g_PwrCtrlSipFoccedOffSTEP2Req
+  Function      : vd_g_PwrCtrlSipForcedOffSTEP2Req
   Description   : 5-6.SIP電源強制OFFシーケンス STEP2開始要求
   param[in/out] : none
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_g_PwrCtrlSipFoccedOffSTEP2Req( void )
+void vd_g_PwrCtrlSipForcedOffSTEP2Req( void )
 {
     /* 起動ステップの初期化 */
     /* SIP電源強制OFF処理(PMIC異常)開始 */
     u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
     
-    vd_s_PwrCtrlSipFoccedOffInitReq();
+    vd_s_PwrCtrlSipForcedOffInitReq();
 }
 
 /*****************************************************************************
-  Function      : vd_g_PwrCtrlSipFoccedOffSTEP4Req
+  Function      : vd_g_PwrCtrlSipForcedOffSTEP4Req
   Description   : 5-6.SIP電源強制OFFシーケンス STEP4開始要求
   param[in/out] : none
   return        : none
   Note          : none
 *****************************************************************************/
-void vd_g_PwrCtrlSipFoccedOffSTEP4Req( void )
+void vd_g_PwrCtrlSipForcedOffSTEP4Req( void )
 {
     /* 起動ステップの初期化 */
     /* SIP入力DDコンOFF処理開始 */
     u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
     
-    vd_s_PwrCtrlSipFoccedOffInitReq();
+    vd_s_PwrCtrlSipForcedOffInitReq();
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlSipFoccedOffInitReq
+  Function      : vd_s_PwrCtrlSipForcedOffInitReq
   Description   : 5-6.SIP電源強制OFFシーケンス 共通部分の初期化
   param[in/out] : none
   return        : none
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrlSipFoccedOffInitReq( void )
+static void vd_s_PwrCtrlSipForcedOffInitReq( void )
 {
     u1_s_PwrCtrl_Sip_Pwr_Sts                           = (U1)PWRCTRL_SIP_STS_FORCEDOFF;
     u1_s_PwrCtrl_Sip_FOff_Sts                          = (U1)PWRCTRL_SIP_FORCEDOFF_NON;

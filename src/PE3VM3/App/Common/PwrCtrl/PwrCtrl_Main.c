@@ -66,6 +66,7 @@ static void vd_s_PwrCtrlMainBonDDconvOnReq( void );
 static void vd_s_PwrCtrlMainBonPwrOnReq( void );
 static void vd_s_PwrCtrlMainSipOffMcuStandbyReq( void );
 static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq( void );
+static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype );
 
 static void vd_s_PwrCtrlMainSleepJudge( void );
 
@@ -333,31 +334,31 @@ void vd_g_PwrCtrlMainBuDetReq( void )
 }
 
 /*****************************************************************************
-  Function      : vd_g_PwrCtrlMainForcedOffReq
+  Function      : vd_s_PwrCtrlMainForcedOffReq
   Description   : SIP電源強制OFFシーケンス要求
   param[in/out] : [ in ] u1_s_evtype 発生したイベントタイプ
   return        : none
   Note          : none
 *****************************************************************************/
-static void vd_g_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
+static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
 {
     switch(u1_s_evtype){
        case (U1)PWRCTRL_MAIN_FORCEDOFF_STS_SOCERR:
         u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_FORCEDOFF_REQ;
         u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC; /* SIP電源状態：実行中 */
-        vd_g_PwrCtrlSipFoccedOffSTEP1Req();                           /* SIP強制OFFシーケンス STEP1から開始 */
+        vd_g_PwrCtrlSipForcedOffSTEP1Req();                           /* SIP強制OFFシーケンス STEP1から開始 */
         break;
 
        case (U1)PWRCTRL_MAIN_FORCEDOFF_STS_PMICERR:
         u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_FORCEDOFF_REQ;
         u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC; /* SIP電源状態：実行中 */
-        vd_g_PwrCtrlSipFoccedOffSTEP2Req();                           /* SIP強制OFFシーケンス STEP2から開始 */
+        vd_g_PwrCtrlSipForcedOffSTEP2Req();                           /* SIP強制OFFシーケンス STEP2から開始 */
         break;
 
        case (U1)PWRCTRL_MAIN_FORCEDOFF_STS_DDERR:
         u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_FORCEDOFF_REQ;
         u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_INPRC; /* SIP電源状態：実行中 */
-        vd_g_PwrCtrlSipFoccedOffSTEP4Req();                           /* SIP強制OFFシーケンス STEP4から開始 */
+        vd_g_PwrCtrlSipForcedOffSTEP4Req();                           /* SIP強制OFFシーケンス STEP4から開始 */
         break;
 
        default:
@@ -580,7 +581,7 @@ static void vd_s_PwrCtrlMainBonSeq( void )
     }
 
     /* 強制OFFシーケンス要求 */
-    vd_g_PwrCtrlMainForcedOffReq(u1_t_foff_req);
+    vd_s_PwrCtrlMainForcedOffReq(u1_t_foff_req);
 /* 終了処理 */
     /* ★要検討★：全部が完了したら、要求を落として処理完了状態にする */
     if ( ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_COMP )
@@ -747,7 +748,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
     }
 
     /* 強制OFFシーケンス要求 */
-    vd_g_PwrCtrlMainForcedOffReq(u1_t_foff_req);
+    vd_s_PwrCtrlMainForcedOffReq(u1_t_foff_req);
 
 /* 終了処理 */
     /* ★要検討★：全部が完了したら、要求を落として処理完了状態にする */
@@ -786,7 +787,7 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySeq( void )
         u1_t_foff_req  = u1_g_PwrCtrlSipFOffInfo();                          /* SIP電源強制OFFシーケンス要求問い合わせ */
         
         /* 強制OFFシーケンス要求 */
-        vd_g_PwrCtrlMainForcedOffReq(u1_t_foff_req);
+        vd_s_PwrCtrlMainForcedOffReq(u1_t_foff_req);
 
         u1_t_sipoff_seq = u1_g_PwrCtrlSipGetSts();                           /* SIP電源シーケンス状態問い合わせ */
         if ( u1_t_sipoff_seq == (U1)TRUE )                                   /* 処理完了 */
@@ -872,7 +873,7 @@ static void vd_s_PwrCtrlMainStandbySeq( void )
         u1_t_foff_req  = u1_g_PwrCtrlSipFOffInfo();                          /* SIP電源強制OFFシーケンス要求問い合わせ */
         
         /* 強制OFFシーケンス要求 */
-        vd_g_PwrCtrlMainForcedOffReq(u1_t_foff_req);
+        vd_s_PwrCtrlMainForcedOffReq(u1_t_foff_req);
 
         u1_t_sipstb_seq = u1_g_PwrCtrlSipGetSts();                           /* SIP電源シーケンス状態問い合わせ */
         if(u1_t_sipstb_seq == (U1)TRUE)                                      /* 処理完了 */

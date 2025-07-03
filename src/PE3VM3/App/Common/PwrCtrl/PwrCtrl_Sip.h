@@ -54,9 +54,9 @@ void vd_g_PwrCtrlSipOnPwrOnReq( void );
 void vd_g_PwrCtrlSipRsmReq( void );
 void vd_g_PwrCtrlSipOffReq( void );
 void vd_g_PwrCtrlSipStbyReq( void );
-void vd_g_PwrCtrlSipFoccedOffSTEP1Req( void );
-void vd_g_PwrCtrlSipFoccedOffSTEP2Req( void );
-void vd_g_PwrCtrlSipFoccedOffSTEP4Req( void );
+void vd_g_PwrCtrlSipForcedOffSTEP1Req( void );
+void vd_g_PwrCtrlSipForcedOffSTEP2Req( void );
+void vd_g_PwrCtrlSipForcedOffSTEP4Req( void );
 
 /* íËä˙èàóù */
 void vd_g_PwrCtrlSipMainFunc( void );
