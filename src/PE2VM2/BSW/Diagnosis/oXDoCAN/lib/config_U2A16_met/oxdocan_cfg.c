@@ -337,7 +337,7 @@ void    vd_g_oXDoCANCfgMainStart(const ST_OXDC_REQ * st_ap_REQ, const U2 u2_a_TS
     }
 #endif /* #ifdef TYDOCAN_DTC_MA_CFG_H */
 
-    if(st_ap_REQ->u1_eom_aft == (U1)OXDC_SESSION_DEF){
+    if(st_ap_REQ->u1_ses_aft == (U1)OXDC_SESSION_DEF){
         for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)DCM_P_COMCTRL_ALLCH_N; u4_t_lpcnt++){
             u1_t_ch = Dcm_P_SID28_stComCtrl_Tbl.ptAllCh[u4_t_lpcnt].u1ComMChannel;
             (void)BswM_CS_ResumeTxPdu(u1_t_ch);
