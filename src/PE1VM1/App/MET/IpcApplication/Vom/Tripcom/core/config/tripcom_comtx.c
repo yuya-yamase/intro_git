@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_COMTX_C_MAJOR                     (2)
-#define TRIPCOM_COMTX_C_MINOR                     (3)
+#define TRIPCOM_COMTX_C_MINOR                     (4)
 #define TRIPCOM_COMTX_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -67,6 +67,8 @@
 
 #define TRIPCOM_COMTX_DTE_TYPE                  (0U)
 
+#define TRIPCOM_UNIT_VAL_ELECO_MPKWH_US         (3U)
+#define TRIPCOM_UNIT_VAL_ELECO_MPKWH_UK         (4U)
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -445,14 +447,21 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
 static  void    vd_s_TripcomCfgCanTxUNIT6(const U1 u1_a_UNIT)
 {
     U1          u1_t_preunit;
+    U1          u1_t_var;
+    U1          u1_t_sndval;
 
     u1_t_preunit = (U1)0U;
+    u1_t_sndval  = u1_a_UNIT;
+    u1_t_var     = u1_g_VardefUnitSlctDstByPid();
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_6, &u1_t_preunit);
-    if (u1_t_preunit != u1_a_UNIT) {
-        (void)Com_SendSignal(ComConf_ComSignal_UNIT_6, &u1_a_UNIT);
-#if 0   /* BEV BSW provisionally */
-        (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
-#endif
+    if ((u1_t_var  == (U1)VDF_UNIT_TYPE_UK) &&
+        (u1_a_UNIT == (U1)TRIPCOM_UNIT_VAL_ELECO_MPKWH_US         )) {
+        u1_t_sndval = (U1)TRIPCOM_UNIT_VAL_ELECO_MPKWH_UK;
+    }
+
+    if (u1_t_preunit != u1_t_sndval) {
+        (void)Com_SendSignal(ComConf_ComSignal_UNIT_6, &u1_t_sndval);
+        (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
     }
 }
 
@@ -1048,6 +1057,7 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  2.2.2    07/28/2022  YI       tripcom.c v2.2.1 -> v2.2.2.                                                                        */
 /*  2.2.3    08/08/2022  YI       tripcom.c v2.2.2 -> v2.2.3.                                                                        */
 /*  2.3.0    01/11/2024  TH       tripcom.c v2.2.3 -> v2.3.0.                                                                        */
+/*  2.4.0    06/23/2025  RS       Change for BEV System_Consideration_2.                                                             */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -1081,5 +1091,6 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 /*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -94,34 +94,13 @@ U1              u1_g_DateSICalCfgCanRx(ST_DATESI_CAL_RX * stp_a_rx)
 {
     ST_DATESI_COMMAND_DATA  st_t_command_data;
     U1                      u1_t_status;
-    U1                      u1_t_gpsst;
-    U1                      u1_t_gpscrst;
-
-    u1_t_status  = (U1)DATESI_CAL_STSBIT_UNKNOWN;
-    u1_t_gpsst   = (U1)FALSE;
-    u1_t_gpscrst = (U1)FALSE;
 
     st_t_command_data = st_g_DateSIComRx();
     stp_a_rx->u1p_date[YYMMDD_DATE_DA] = st_t_command_data.u1_clk_day;
     stp_a_rx->u1p_date[YYMMDD_DATE_MO] = st_t_command_data.u1_clk_mont;
     stp_a_rx->u1p_date[YYMMDD_DATE_YR] = st_t_command_data.u1_clk_year;
-    u1_t_gpsst                         = st_t_command_data.u1_gps_st;
-    u1_t_gpscrst                       = st_t_command_data.u1_gps_crct;
 
-    if(u1_t_gpsst == (U1)TRUE){
-        stp_a_rx->u1_valid = (U1)TRUE;
-    }
-    else{
-        stp_a_rx->u1_valid = (U1)FALSE;
-    }
-    if(u1_t_gpscrst == (U1)TRUE){
-        stp_a_rx->u1_act = (U1)TRUE;
-    }
-    else{
-        stp_a_rx->u1_act = (U1)FALSE;
-    }
-
-    u1_t_status = (U1)DATESI_CAL_STSBIT_VALID; /* BEV BSW provisionally */
+    u1_t_status = (U1)DATESI_CAL_STSBIT_VALID;
 
     return(u1_t_status);
 }
@@ -276,6 +255,22 @@ U1              u1_g_DateSICalCfgEsichk(void)
 #else
     return ((U1)0U);
 #endif
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_DateSICalCfgRxUpdtdate(ST_DATESI_CAL_RX * stp_a_rx)                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      * stp_a_rx : Receive signal                                                                                      */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_DateSICalCfgRxUpdtdate(ST_DATESI_CAL_RX * stp_a_rx)
+{
+    ST_DATESI_COMMAND_DATA  st_t_command_data;
+
+    st_t_command_data = st_g_DateSIComRx();
+    stp_a_rx->u1p_date[YYMMDD_DATE_DA] = st_t_command_data.u1_clk_day_updt;
+    stp_a_rx->u1p_date[YYMMDD_DATE_MO] = st_t_command_data.u1_clk_mont_updt;
+    stp_a_rx->u1p_date[YYMMDD_DATE_YR] = st_t_command_data.u1_clk_year_updt;
 }
 
 /*===================================================================================================================================*/

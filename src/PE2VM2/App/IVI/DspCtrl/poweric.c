@@ -54,7 +54,7 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* デバイス起動用カウンタ */
-static U4       u4_t_PowerIc_Polling_POn;
+static U4       u4_t_PowerIc_Polling;
 
 /* Power-IC Wati処理用タイマ */
 static U4       u4_s_PowerIc_LinkTimer;
@@ -93,7 +93,7 @@ static void     vd_s_PowerIcOffFlow(void);
 /*===================================================================================================================================*/
 void            vd_g_PowerIcInit(void)
 {
-    u4_t_PowerIc_Polling_POn        = (U4)0U;
+    u4_t_PowerIc_Polling            = (U4)0U;
     u1_s_PowerIc_MUTE_Hook          = (U1)FALSE;
     
     vd_s_PowerIcLocalInit();
@@ -148,14 +148,14 @@ static void     vd_s_PowerIcPollingPon(void)
 {
     U1  u1_t_dio;
 
-    u1_t_dio =   Dio_ReadChannel(POWERIC_PORT_P_ON);
+    u1_t_dio =   Dio_ReadChannel(POWERIC_PORT_PIC_POFF);
 
     if((u1_t_dio  ==  (U1)POWERIC_DIO_HIGH) &&
-       (u4_t_PowerIc_Polling_POn < (U4)POWERIC_COUNTTIME_FIN)){
-        u4_t_PowerIc_Polling_POn++;
+       (u4_t_PowerIc_Polling < (U4)POWERIC_COUNTTIME_FIN)){
+        u4_t_PowerIc_Polling++;
     }
     else{
-        u4_t_PowerIc_Polling_POn = (U4)0U;
+        u4_t_PowerIc_Polling = (U4)0U;
     }
 }
 
@@ -170,7 +170,7 @@ static void     vd_s_PowerIcFlow(void)
 {
     U1  u1_t_timechk;
 
-    u1_t_timechk    = u1_s_PowerIcTimChk(u4_t_PowerIc_Polling_POn, (U4)POWERIC_WAIT_PON);
+    u1_t_timechk    = u1_s_PowerIcTimChk(u4_t_PowerIc_Polling, (U4)POWERIC_WAIT_PON);
 
     if(u1_s_PowerIc_MUTE_Hook == (U1)TRUE){
         /* 通常終了処理 */
@@ -245,6 +245,12 @@ static void     vd_s_PowerIcOnFlow(void)
 
     switch (u1_s_PowerIc_OnStep_OverAll) {
         case POWERIC_ONSTEP_OVERALL_1:
+            /* ToDo：ポート操作条件に「[P-IC起動状態](3章参照)をSiPに通知しているか？ 」を追加する */
+            Dio_WriteChannel((Dio_ChannelType)POWERIC_PORT_P_ON, (Dio_LevelType)STD_HIGH);
+            u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_2;
+            break;
+
+        case POWERIC_ONSTEP_OVERALL_2:
             /* 1ms待機は本caseに到達した時点で満たしていると判断するためwait処理は実施しない */
             /* レジスタ書込み処理 */
             u1_t_sts = Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_POWER, &u2_s_PowerIc_RegStep, (U2)POWERIC_WRINUM_INISET,
@@ -253,11 +259,11 @@ static void     vd_s_PowerIcOnFlow(void)
 
             if(u1_t_sts == (U1)TRUE){
                 /* 全書込み完了 次状態に遷移 */
-                u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_2;
+                u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_3;
             }
             break;
 
-        case POWERIC_ONSTEP_OVERALL_2:
+        case POWERIC_ONSTEP_OVERALL_3:
             /* レジスタ書込み処理 */
             u1_t_sts = Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_POWER, &u2_s_PowerIc_RegStep, (U2)POWERIC_WRINUM_AMPON,
                                                 (U1)GP_I2C_MA_SLA_4_POWER, st_sp_POWERIC_AMPON, &u4_s_PowerIc_AckTime,
@@ -265,22 +271,22 @@ static void     vd_s_PowerIcOnFlow(void)
 
             if(u1_t_sts == (U1)TRUE){
                 /* 全書込み完了 次状態に遷移 */
-                u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_3;
+                u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_4;
             }
             break;
 
-        case POWERIC_ONSTEP_OVERALL_3:
+        case POWERIC_ONSTEP_OVERALL_4:
             if(u4_s_PowerIc_LinkTimer < (U4)POWERIC_COUNTTIME_FIN){
                 u4_s_PowerIc_LinkTimer++;
             }
             u1_t_timchk = u1_s_PowerIcTimChk(u4_s_PowerIc_LinkTimer, (U4)POWERIC_WAIT_60MS);
             if(u1_t_timchk == (U1)TRUE){
-                u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_4;         /* 次状態に遷移 */
+                u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_5;         /* 次状態に遷移 */
                 u4_s_PowerIc_LinkTimer      = (U4)0U;
             }
             break;
 
-        case POWERIC_ONSTEP_OVERALL_4:
+        case POWERIC_ONSTEP_OVERALL_5:
             /* レジスタ書込み処理 */
             u1_t_sts = Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_POWER, &u2_s_PowerIc_RegStep, (U2)POWERIC_WRINUM_DIAGACT,
                                                 (U1)GP_I2C_MA_SLA_4_POWER, st_sp_POWERIC_DIAGACT, &u4_s_PowerIc_AckTime,
@@ -288,11 +294,11 @@ static void     vd_s_PowerIcOnFlow(void)
 
             if(u1_t_sts == (U1)TRUE){
                 /* 全書込み完了 次状態に遷移 */
-                u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_5;
+                u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_6;
             }
             break;
 
-        case POWERIC_ONSTEP_OVERALL_5:
+        case POWERIC_ONSTEP_OVERALL_6:
             /* レジスタ書込み処理 */
             u1_t_sts = Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_POWER, &u2_s_PowerIc_RegStep, (U2)POWERIC_WRINUM_MUTEOFF,
                                                 (U1)GP_I2C_MA_SLA_4_POWER, st_sp_POWERIC_MUTEOFF, &u4_s_PowerIc_AckTime,
@@ -440,6 +446,10 @@ static void     vd_s_PowerIcOffFlow(void)
             break;
 
         case POWERIC_OFFSTEP_OVERALL_8:
+/* VM3の終了処理順がアプリ電源OFF→SYS電源OFFとなっており、アプリOFF処理中にV33PERIONがLoになることがない */
+/* 暫定措置としてアプリでのPIC_POFF=Low処理をスキップし、終了処理完了とする */
+/* PIC_POFFはSYS電源OFF処理中にてLowに変更している */
+#if 0   
             if(u4_s_PowerIc_LinkTimer < (U4)POWERIC_COUNTTIME_FIN){
                 u4_s_PowerIc_LinkTimer++;
             }
@@ -457,7 +467,10 @@ static void     vd_s_PowerIcOffFlow(void)
                 u1_s_PowerIc_MUTE_Hook          = (U1)FALSE;                                /* 通常終了処理起動フックのクリア */
             }
             break;
-
+#else
+            u1_s_PowerIc_OffStep_OverAll    = (U1)POWERIC_OFFSTEP_OVERALL_FIN;
+            break;
+#endif
         case POWERIC_OFFSTEP_OVERALL_FIN:
             /* do nothing */
             break;

@@ -1,4 +1,4 @@
-/* 5.2.0 */
+/* 5.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_RSA_C_MAJOR                      (5)
-#define ALERT_S_RSA_C_MINOR                      (2)
+#define ALERT_S_RSA_C_MINOR                      (3)
 #define ALERT_S_RSA_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -37,7 +37,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_RSA_BC_SGN_NUM_DST               (16U)
 #define ALERT_S_RSA_BC_LMT_NUM_DST               (8U)
-#define ALERT_S_RSA_RWRN_NUM_DST                 (8U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -54,8 +53,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertS_rsaBcSgnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertS_rsaBcLmtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static U4      u4_s_AlertS_rsaRwrnSrcchk (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static void    vd_s_AlertS_rsaRwrnRwTx   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -90,19 +87,8 @@ static const U1  u1_sp_ALERT_S_RSA_BC_LMT_DST[ALERT_S_RSA_BC_LMT_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN                                                      /* 07 UNKNOWN                                         */
 };
 
-static const U1  u1_sp_ALERT_S_RSA_RWRN_DST[ALERT_S_RSA_RWRN_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_RSA_RWRN_RSAWREQ,                                          /* 01 RSAWREQ                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 07 UNKNOWN                                         */
-};
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_S_RSA_MTRX[3] = {
+const ST_ALERT_MTRX st_gp_ALERT_S_RSA_MTRX[2] = {
     {
         &u4_s_AlertS_rsaBcSgnSrcchk,                                           /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
@@ -123,17 +109,6 @@ const ST_ALERT_MTRX st_gp_ALERT_S_RSA_MTRX[3] = {
 
         &u1_sp_ALERT_S_RSA_BC_LMT_DST[0],                                      /* u1p_DST                                            */
         (U2)ALERT_S_RSA_BC_LMT_NUM_DST,                                        /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
-        &u4_s_AlertS_rsaRwrnSrcchk,                                            /* fp_u4_SRC_CHK                                      */
-        &vd_s_AlertS_rsaRwrnRwTx,                                              /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_S_RSA_RWRN_DST[0],                                        /* u1p_DST                                            */
-        (U2)ALERT_S_RSA_RWRN_NUM_DST,                                          /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
@@ -202,6 +177,9 @@ static U4      u4_s_AlertS_rsaBcLmtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 }
 
+#warning "BEVCDCFD-1483"
+#if 0 /* BEVCDCFD-1483 */
+#else /* BEVCDCFD-1483 */
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertS_rsaRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -252,6 +230,7 @@ static void    vd_s_AlertS_rsaRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     (void)Com_SendSignal(ComConf_ComSignal_RSAW, &u1_t_sgnl);    /* COM Tx STUB delete */
 #endif
 }
+#endif /* BEVCDCFD-1483 */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -264,6 +243,7 @@ static void    vd_s_AlertS_rsaRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  5.0.0     12/26/2023  SW       New.                                                                                              */
 /*  5.1.0      4/ 5/2024  AA       Added remote warning (RSAW)                                                                       */
 /*  5.2.0      5/14/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-02-A-C0)                                */
+/*  5.3.0      6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0,MET-S_ADTT-CSTD-0-02-A-C0)      */
 /*                                                                                                                                   */
 /*  * SW   = Shun Watanabe, Denso Techno                                                                                             */
 /*  * AA   = Anna Asuncion, Denso Techno                                                                                             */

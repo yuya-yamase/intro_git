@@ -1,4 +1,4 @@
-/* 1.8.0 */
+/* 1.9.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMITT_CFG_C_MAJOR                     (1)
-#define HMITT_CFG_C_MINOR                     (8)
+#define HMITT_CFG_C_MINOR                     (9)
 #define HMITT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -304,19 +304,12 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
         {  (U1)1U,    (U1)12U,    (U2)VDF_ESO_CH_VSC,           (U2)ALERT_CH_C_SLIP,               (U1)ALERT_REQ_C_SLIP_MALFUNC_RW              },
         {  (U1)2U,    (U1)28U,    (U2)VDF_ESO_CH_BRPADW,        (U2)ALERT_CH_C_BRPADW,             (U1)ALERT_REQ_C_BRPADW_MALFUNC               },
         {  (U1)3U,    (U1)4U,     (U2)VDF_ESO_CH_BRKHLD,        (U2)ALERT_CH_C_BRKHLD_HLD,         (U1)ALERT_REQ_C_BRKHLD_HLD_FLASH             },
-        {  (U1)4U,    (U1)24U,    (U2)VDF_ESO_CH_PCS,           (U2)ALERT_CH_S_PCS1_TT,            (U1)ALERT_REQ_S_PCS1_TT_MALFUNC              },
-        {  (U1)5U,    (U1)8U,     (U2)VDF_ESO_CH_LTA,           (U2)ALERT_CH_S_LTA_2_TT,           (U1)ALERT_REQ_S_LTA_2_TT_MLFNC               },
-        {  (U1)5U,    (U1)20U,    (U2)VDF_ESO_CH_DS1_LDA,       (U2)ALERT_CH_S_LDA_TT_LDA,         (U1)ALERT_REQ_S_LDA_TT_LDA_ON_A              },
-        {  (U1)6U,    (U1)20U,    (U2)VDF_ESO_CH_CSR_TTR,       (U2)ALERT_CH_S_CLESON_TT,          (U1)ALERT_REQ_S_CLESON_TT_ON                 },
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_ON                    },
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_ON_RW                 },
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_REDUCE          },
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_READY           },
         {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_4HZ             },
-        {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_EUREADY         },
-        {  (U1)12U,   (U1)16U,    (U2)VDF_ESO_CH_ICS,           (U2)ALERT_CH_S_PKSB_TT,            (U1)ALERT_REQ_S_PKSB_TT_ON                   },
-        {  (U1)20U,   (U1)16U,    (U2)VDF_ESO_CH_ADIEXIST,      (U2)ALERT_CH_S_ADASTT_TT,          (U1)ALERT_REQ_S_ADASTT_TT_A_ABN              },
-        {  (U1)22U,   (U1)24U,    (U2)VDF_ESO_CH_DMC,           (U2)ALERT_CH_S_DMC_TT,             (U1)ALERT_REQ_S_DMC_TT_MAL_DMC               }
+        {  (U1)9U,    (U1)28U,    (U2)VDF_ESO_CH_PTS_MILREQ,    (U2)ALERT_CH_P_MILREQ,             (U1)ALERT_REQ_P_MILREQ_FLASH_EUREADY         }
     };
 
     U4  u4_t_loop;
@@ -396,6 +389,7 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  1.6.0    02/02/2024  DR       Setting for 19PFv3 (add ECOLP2)                                                                    */
 /*  1.7.0    06/21/2024  JMH      Setting for 19PFv3 (add LBW)                                                                       */
 /*  1.8.0    10/15/2024  KO       hmitt_if_cfg.c v1.6.0 -> v1.8.0. (Setting for BEV System_Consideration_1.)                         */
+/*  1.9.0    06/23/2025  HY       hmitt_if_cfg.c v1.8.0 -> v1.9.0. (Setting for BEV System_Consideration_2.)                         */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -406,6 +400,7 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  BEV-2    12/23/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0)                               */
 /*  BEV-3    02/10/2025  RO       Change for BEV System_Consideration_1.(MET-S_ADTT-CSTD-0-)                                         */
 /*  BEV-4    02/10/2025  SF       Change for BEV System_Consideration_1.(MET-M_ONOFF-CSTD-1-02-A-C0)                                 */
+/*  BEV-5    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -417,5 +412,6 @@ void    vd_g_HmiTtCfgDestmask(U4* u4_ap_varmask)
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

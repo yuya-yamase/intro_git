@@ -1,4 +1,4 @@
-/* 5.2.4 */
+/* 5.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,8 +10,8 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_CLESON_C_MAJOR                   (5)
-#define ALERT_S_CLESON_C_MINOR                   (2)
-#define ALERT_S_CLESON_C_PATCH                   (4)
+#define ALERT_S_CLESON_C_MINOR                   (3)
+#define ALERT_S_CLESON_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -35,12 +35,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_S_CLESON_TT_NUM_DST                (16U)
 #define ALERT_S_CLESON_BZ_NUM_DST                (64U)
 #define ALERT_S_CLESON_VOL_NUM_DST               (16U)
-#define ALERT_S_CLESON_CUTIN_NUM_DST             (8U)
-
-#define ALERT_S_CLESON_CI_NUM_CSR1S07            (10U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -48,25 +44,26 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct {
-    U1        (* const fp_u1_SGNL)(void);
-    U1        u1_crit;
-    U1        u1_mask;
-}ST_ALERT_S_CLESON_SGNLCFG;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#warning "BEVCDCFD-1483"
+#if 0 /* BEVCDCFD-1483 */
+#else /* BEVCDCFD-1483 */
 #if defined(OXCAN_RXD_PDU_CAN_CSR1S07_CH0)
 static U1      u1_sp_alert_s_cleson_csr1s07[ALERT_S_CLESON_CI_NUM_CSR1S07];
 #endif /* defined(OXCAN_RXD_PDU_CAN_CSR1S07_CH0) */
+#endif /* BEVCDCFD-1483 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertS_clesonTtSrcchk   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertS_clesonBzSrcchk   (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 static U4      u4_s_AlertS_clesonVolSrcchk  (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+#warning "BEVCDCFD-1483"
+#if 0 /* BEVCDCFD-1483 */
+#else /* BEVCDCFD-1483 */
 static U4      u4_s_AlertS_clesonCutinSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 #if defined(OXCAN_RXD_PDU_CAN_CSR1S07_CH0)
 static U1      u1_s_AlertS_clesonDispChg    (void);
@@ -101,28 +98,11 @@ static U1      u1_s_AlertS_clesonRR_POS     (void);
 #if defined(OXCAN_RXD_PDU_CAN_CSR1S07_CH0)
 static U1      u1_s_AlertS_clesonCSMUTESW   (void);
 #endif /* defined(OXCAN_RXD_PDU_CAN_CSR1S07_CH0) */
+#endif /* BEVCDCFD-1483 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_S_CLESON_TT_DST[ALERT_S_CLESON_TT_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_CLESON_TT_ON,                                              /* 01 ON                                              */
-    (U1)ALERT_REQ_S_CLESON_TT_FLASH,                                           /* 02 FLASH                                           */
-    (U1)ALERT_REQ_S_CLESON_TT_INDI_ON,                                         /* 03 INDI_ON                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_CLESON_TT_ON,                                              /* 08 ON                                              */
-    (U1)ALERT_REQ_S_CLESON_TT_ON,                                              /* 09 ON                                              */
-    (U1)ALERT_REQ_S_CLESON_TT_ON,                                              /* 10 ON                                              */
-    (U1)ALERT_REQ_S_CLESON_TT_ON,                                              /* 11 ON                                              */
-    (U1)ALERT_REQ_S_CLESON_TT_ON,                                              /* 12 ON                                              */
-    (U1)ALERT_REQ_S_CLESON_TT_ON,                                              /* 13 ON                                              */
-    (U1)ALERT_REQ_S_CLESON_TT_ON,                                              /* 14 ON                                              */
-    (U1)ALERT_REQ_S_CLESON_TT_ON                                               /* 15 ON                                              */
-};
 static const U1  u1_sp_ALERT_S_CLESON_BZ_DST[ALERT_S_CLESON_BZ_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
     (U1)ALERT_REQ_S_CLESON_BZ_RCTA,                                            /* 01 RCTA                                            */
@@ -207,30 +187,9 @@ static const U1  u1_sp_ALERT_S_CLESON_VOL_DST[ALERT_S_CLESON_VOL_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
     (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
 };
-static const U1  u1_sp_ALERT_S_CLESON_CUTIN_DST[ALERT_S_CLESON_CUTIN_NUM_DST] = {
-    (U1)ALERT_REQ_S_CLESON_CUTIN_DISPA_V,                                      /* 00 DISPA_V                                         */
-    (U1)ALERT_REQ_S_CLESON_CUTIN_DISPB_V,                                      /* 01 DISPB_V                                         */
-    (U1)ALERT_REQ_S_CLESON_CUTIN_DISPB_V,                                      /* 02 DISPB_V                                         */
-    (U1)ALERT_REQ_S_CLESON_CUTIN_DISPA_V,                                      /* 03 DISPA_V                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_CLESON_CUTIN_DISPA_V,                                      /* 05 DISPA_V                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_CLESON_CUTIN_DISPA_V                                       /* 07 DISPA_V                                         */
-};
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_S_CLESON_MTRX[4] = {
-    {
-        &u4_s_AlertS_clesonTtSrcchk,                                           /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_S_CLESON_TT_DST[0],                                       /* u1p_DST                                            */
-        (U2)ALERT_S_CLESON_TT_NUM_DST,                                         /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
+const ST_ALERT_MTRX st_gp_ALERT_S_CLESON_MTRX[2] = {
     {
         &u4_s_AlertS_clesonBzSrcchk,                                           /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
@@ -252,23 +211,15 @@ const ST_ALERT_MTRX st_gp_ALERT_S_CLESON_MTRX[4] = {
         &u1_sp_ALERT_S_CLESON_VOL_DST[0],                                      /* u1p_DST                                            */
         (U2)ALERT_S_CLESON_VOL_NUM_DST,                                        /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
-        &u4_s_AlertS_clesonCutinSrcchk,                                        /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_S_CLESON_CUTIN_DST[0],                                    /* u1p_DST                                            */
-        (U2)ALERT_S_CLESON_CUTIN_NUM_DST,                                      /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#warning "BEVCDCFD-1483"
+#if 0 /* BEVCDCFD-1483 */
+#else /* BEVCDCFD-1483 */
 /*===================================================================================================================================*/
 /*  void    vd_g_AlertS_clesonInit(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -314,6 +265,7 @@ static U4      u4_s_AlertS_clesonTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return((U4)0U);
 #endif /* defined(OXCAN_RXD_PDU_CAN_CSR1S07_CH0) && defined(ComConf_ComSignal_CS_LAMP) */
 }
+#endif /* BEVCDCFD-1483 */
 
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertS_clesonBzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
@@ -372,6 +324,9 @@ static U4      u4_s_AlertS_clesonVolSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #endif /* defined(OXCAN_RXD_PDU_CAN_CSR1S08_CH0) && defined(ComConf_ComSignal_CSR_VOL) */
 }
 
+#warning "BEVCDCFD-1483"
+#if 0 /* BEVCDCFD-1483 */
+#else /* BEVCDCFD-1483 */
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertS_clesonCutinSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -648,6 +603,7 @@ static  U1      u1_s_AlertS_clesonCSMUTESW(void)
     return (u1_t_sgnl);
 }
 #endif /* defined(OXCAN_RXD_PDU_CAN_CSR1S07_CH0) */
+#endif /* BEVCDCFD-1483 */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -667,6 +623,7 @@ static  U1      u1_s_AlertS_clesonCSMUTESW(void)
 /*  5.2.2     5/14/2021  TN       Fix 800B Bug.                                                                                      */
 /*  5.2.3    11/16/2021  TM       Fix QAC Warning.                                                                                   */
 /*  5.2.4     2/ 3/2022  TM       Add Control of ON TT.                                                                              */
+/*  5.3.0     6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0,MET-S_ADTT-CSTD-0-02-A-C0)       */
 /*                                                                                                                                   */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
 /*  * RI   = Ren Ito, NTTD MSE                                                                                                       */
@@ -676,5 +633,6 @@ static  U1      u1_s_AlertS_clesonCSMUTESW(void)
 /*  * KT   = Kenichi Takahashi, NTTD MSE                                                                                             */
 /*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
 /*  * TM   = Tatsuya Mori, NTTD MSE                                                                                                  */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

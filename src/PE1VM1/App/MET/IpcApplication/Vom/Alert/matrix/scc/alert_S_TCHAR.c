@@ -1,4 +1,4 @@
-/* 5.0.0 */
+/* 5.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_TCHAR_C_MAJOR                    (5)
-#define ALERT_S_TCHAR_C_MINOR                    (0)
+#define ALERT_S_TCHAR_C_MINOR                    (1)
 #define ALERT_S_TCHAR_C_PATCH                    (0)
 
 
@@ -37,7 +37,6 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_S_TCHAR_BC_NUM_DST                 (16U)
-#define ALERT_S_TCHAR_PD_NUM_DST                 (32U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -53,7 +52,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_AlertS_tcharBcSrcchk    (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static U4      u4_s_AlertS_tcharPdSrcchk    (const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -77,43 +75,8 @@ static const U1  u1_sp_ALERT_S_TCHAR_BC_DST[ALERT_S_TCHAR_BC_NUM_DST] = {
     (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
 };
 
-static const U1  u1_sp_ALERT_S_TCHAR_PD_DST[ALERT_S_TCHAR_PD_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_TCHAR_PD_WRN1,                                             /* 01 WRN1                                            */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_TCHAR_PD_WRN2,                                             /* 03 WRN2                                            */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_TCHAR_PD_WRN3,                                             /* 05 WRN3                                            */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
-    (U1)ALERT_REQ_S_TCHAR_PD_WRN4,                                             /* 08 WRN4                                            */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 15 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 16 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 17 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 18 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 19 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 20 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 21 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 22 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 23 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 24 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 25 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 26 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 27 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 28 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 29 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 30 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 31 UNKNOWN                                         */
-};
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_S_TCHAR_MTRX[2] = {
+const ST_ALERT_MTRX st_gp_ALERT_S_TCHAR_MTRX[1] = {
     {
         &u4_s_AlertS_tcharBcSrcchk,                                            /* fp_u4_SRC_CHK                                      */
         vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
@@ -123,17 +86,6 @@ const ST_ALERT_MTRX st_gp_ALERT_S_TCHAR_MTRX[2] = {
 
         &u1_sp_ALERT_S_TCHAR_BC_DST[0],                                        /* u1p_DST                                            */
         (U2)ALERT_S_TCHAR_BC_NUM_DST,                                          /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
-        &u4_s_AlertS_tcharPdSrcchk,                                            /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_S_TCHAR_PD_DST[0],                                        /* u1p_DST                                            */
-        (U2)ALERT_S_TCHAR_PD_NUM_DST,                                          /* u2_num_srch                                        */
         (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
     }
 };
@@ -168,6 +120,9 @@ static U4      u4_s_AlertS_tcharBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     return(u4_t_src_chk);
 }
 
+#warning "BEVCDCFD-1483"
+#if 0 /* BEVCDCFD-1483 */
+#else /* BEVCDCFD-1483 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -196,6 +151,7 @@ static U4      u4_s_AlertS_tcharPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 
     return(u4_t_src_chk);
 }
+#endif /* BEVCDCFD-1483 */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -206,7 +162,9 @@ static U4      u4_s_AlertS_tcharPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  5.0.0    12/27/2023  AA       New.                                                                                               */
+/*  5.1.0     6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0,MET-S_ADTT-CSTD-0-02-A-C0)       */
 /*                                                                                                                                   */
 /*  * AA   = Anna Asuncion, DT                                                                                                       */
+/*  * HY   = Haruki Yagi, KSE                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
