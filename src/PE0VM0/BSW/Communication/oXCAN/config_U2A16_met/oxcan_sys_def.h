@@ -37,11 +37,11 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_SYS_NUM_NET                        (4U)
-#define OXCAN_SYS_G2M_1                          (0x010000000U)
-#define OXCAN_SYS_G2M_2                          (0x020000000U)
-#define OXCAN_SYS_VIR_0                          (0x040000000U)
-#define OXCAN_SYS_G5M                            (0x080000000U)
-#define OXCAN_SYS_LOCA                           (0x100000000U)
+#define OXCAN_SYS_G2M_1                          (0x01000000U)
+#define OXCAN_SYS_G2M_2                          (0x02000000U)
+#define OXCAN_SYS_VIR_0                          (0x04000000U)
+#define OXCAN_SYS_G5M                            (0x08000000U)
+#define OXCAN_SYS_LOCA                           (0x10000000U)
 
 #define OXCAN_SYS_NUM_PNC                        (4U)
 #define OXCAN_SYS_PNC_16                         (0x00010000U)    /* All ECUs         */
