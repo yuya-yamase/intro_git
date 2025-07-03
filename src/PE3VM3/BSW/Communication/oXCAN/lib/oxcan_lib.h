@@ -123,9 +123,10 @@ U4      u4_g_oXCANWrhWrqAct(void);                                           /* 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((defined(OXCAN_C_MAJOR)            ) || \
-     (defined(OXCAN_WRH_C_MAJOR)        ) || \
+     (defined(OXCAN_NMC_C_MAJOR)        ) || \
      (defined(OXCAN_RXD_C_MAJOR)        ) || \
      (defined(OXCAN_SYSEA_C_MAJOR)      ) || \
+     (defined(OXCAN_WRH_C_MAJOR)        ) || \
      (defined(OXCAN_AUBIF_COM_C_MAJOR)  ) || \
      (defined(OXCAN_AUBIF_CANNM_C_MAJOR)) || \
      (defined(OXCAN_AUBIF_VCAN_C_MAJOR) ))

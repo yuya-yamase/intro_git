@@ -12,9 +12,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_NMC_CFG_H_MAJOR                   (2U)
-#define OXCAN_NMC_CFG_H_MINOR                   (0U)
-#define OXCAN_NMC_CFG_H_PATCH                   (0U)
+#define OXCAN_NMC_CFG_H_MAJOR                    (2U)
+#define OXCAN_NMC_CFG_H_MINOR                    (0U)
+#define OXCAN_NMC_CFG_H_PATCH                    (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -29,12 +29,25 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_NMC_LOG_RX_NWORD                  (2U)
-#define OXCAN_NMC_LOG_RX_B03                    (0U)        /* Byte #0/#1/#2/#3    */
-#define OXCAN_NMC_LOG_RX_B47                    (1U)        /* Byte #4/#5/#6/#7    */
+#define OXCAN_NMC_RXTO_MAX                       (0xfffeU)
+#define OXCAN_NMC_RXTO_INI                       (0xffffU)
 
-#define OXCAN_NMC_TYPE__PN                      (0x0000U)   /*     Partial Network */
-#define OXCAN_NMC_TYPE_NPN                      (0xffffU)   /* Non-Partial Network */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define OXCAN_NMC_LOG_RX_NWORD                   (5U)
+#define OXCAN_NMC_LOG_RX_TOCNT                   (0U)
+#define OXCAN_NMC_LOG_RX_INS_L                   (1U)        /* Byte #0/#1/#2/#3    */
+#define OXCAN_NMC_LOG_RX_INS_H                   (2U)        /* Byte #4/#5/#6/#7    */
+#define OXCAN_NMC_LOG_RX_LAS_L                   (3U)        /* Byte #0/#1/#2/#3    */
+#define OXCAN_NMC_LOG_RX_LAS_H                   (4U)        /* Byte #4/#5/#6/#7    */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define OXCAN_NMC_PNC_RX_NWORD                   (2U)
+#define OXCAN_NMC_PNC_RX_L                       (0U)        /* Byte #0/#1/#2/#3    */
+#define OXCAN_NMC_PNC_RX_H                       (1U)        /* Byte #4/#5/#6/#7    */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define OXCAN_NMC_TYPE__PN                       (0U)        /*     Partial Network */
+#define OXCAN_NMC_TYPE_NPN                       (1U)        /* Non-Partial Network */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -44,11 +57,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct{
     const U4 *     u4p_PNC_RX;
-    const U1 *     u1p_COCH;          /* Coordicaiton Channel                 */
+    const U1 *     u1p_COCH;          /* Coordicaiton Channel                               */
     U4 *           u4p_log_rx;
+    U2             u2_rx_tout;
     U2             u2_type;
-    U1             u1_npnwk;          /* 1st parameter of ComM_RequestComMode */
-    U1             u1_num_coch;       /* Number of Coordicaiton Channels      */
+    U2             u2_npn_uh;         /* 1st parameter "User Handle" of ComM_RequestComMode */
+    U2             u2_num_coch;       /* Number of Coordicaiton Channels                    */
 }ST_OXCAN_NMC_CH;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

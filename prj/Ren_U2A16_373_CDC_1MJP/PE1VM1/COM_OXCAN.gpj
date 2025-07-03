@@ -4,6 +4,7 @@
 
     -I${LIB_DIR}
 
+    -I${CAN_DIR}/CanIf/inc
     -I${CAN_DIR}/CS/inc
     -I${CAN_DIR}/Com/inc
     -I${CAN_DIR}/CanNm/inc/common

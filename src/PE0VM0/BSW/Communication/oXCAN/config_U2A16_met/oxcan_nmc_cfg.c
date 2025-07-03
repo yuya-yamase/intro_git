@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_NMC_CFG_C_MAJOR                   (2U)
-#define OXCAN_NMC_CFG_C_MINOR                   (0U)
-#define OXCAN_NMC_CFG_C_PATCH                   (0U)
+#define OXCAN_NMC_CFG_C_MAJOR                    (2U)
+#define OXCAN_NMC_CFG_C_MINOR                    (0U)
+#define OXCAN_NMC_CFG_C_PATCH                    (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -53,12 +53,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4                 u4_sp_oxcan_nmc_log_rx[OXCAN_NMC_NUM_CH * OXCAN_NMC_LOG_RX_NWORD];
+static U4                 u4_sp_oxcan_nmc_log_rx_0[OXCAN_NMC_LOG_RX_NWORD];
+static U4                 u4_sp_oxcan_nmc_log_rx_1[OXCAN_NMC_LOG_RX_NWORD];
+static U4                 u4_sp_oxcan_nmc_log_rx_2[OXCAN_NMC_LOG_RX_NWORD];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U4           u4_sp_OXCAN_NMC_PNC_RX[] = {
+static const U4           u4_sp_OXCAN_NMC_PNC_RX[OXCAN_NMC_PNC_RX_NWORD] = {
     (U4)0x00010000U,
     (U4)0x00001900U
 };
@@ -72,30 +74,42 @@ static const U1           u1_sp_OXCAN_NMC_COCH[] = {
 const ST_OXCAN_NMC_CH     st_gp_OXCAN_NMC_CH[OXCAN_NMC_NUM_CH] = {
     /* #define ComMConf_ComMChannel_CANFD_G2M_1_BUS (0U) */
     {
-        &u4_sp_OXCAN_NMC_PNC_RX[0U],           /* u4p_PNC_RX  */
-        &u1_sp_OXCAN_NMC_COCH[0U],             /* u1p_COCH    */
-        &u4_sp_oxcan_nmc_log_rx[0U],           /* u4p_log_rx  */
-        (U2)OXCAN_NMC_TYPE__PN,                /* u2_type     */
-        (U1)0xffU,                             /* u1_npnwk    */
-        (U1)1U                                 /* u1_num_coch */
+        &u4_sp_OXCAN_NMC_PNC_RX[0U],                                   /* u4p_PNC_RX  */
+        &u1_sp_OXCAN_NMC_COCH[0U],                                     /* u1p_COCH    */
+        &u4_sp_oxcan_nmc_log_rx_0[0U],                                 /* u4p_log_rx  */
+        /* Aubist/CanNm/cfg/y/CanNm_Y_Cfg.h                                           */
+        /* #define BSW_CANNM_Y_CFG_CYCLE_TIME_CH0                   (500U)            */
+        /* u2_rx_tout = 500 * 1.2 = 600 milliseconds                                  */
+        (U2)600U / (U2)OXCAN_MAIN_TICK,                                /* u2_rx_tout  */
+        (U2)OXCAN_NMC_TYPE__PN,                                        /* u2_type     */
+        (U2)0xffffU,                                                   /* u2_npn_uh   */
+        (U2)1U                                                         /* u2_num_coch */
     },
     /* #define ComMConf_ComMChannel_CANFD_G2M_2_BUS (1U) */
     {
-        &u4_sp_OXCAN_NMC_PNC_RX[0U],           /* u4p_PNC_RX  */
-        &u1_sp_OXCAN_NMC_COCH[0U],             /* u1p_COCH    */
-        &u4_sp_oxcan_nmc_log_rx[2U],           /* u4p_log_rx  */
-        (U2)OXCAN_NMC_TYPE__PN,                /* u2_type     */
-        (U1)0xffU,                             /* u1_npnwk    */
-        (U1)1U                                 /* u1_num_coch */
+        &u4_sp_OXCAN_NMC_PNC_RX[0U],                                   /* u4p_PNC_RX  */
+        &u1_sp_OXCAN_NMC_COCH[0U],                                     /* u1p_COCH    */
+        &u4_sp_oxcan_nmc_log_rx_1[0U],                                 /* u4p_log_rx  */ 
+        /* Aubist/CanNm/cfg/y/CanNm_Y_Cfg.h                                           */
+        /* #define BSW_CANNM_Y_CFG_CYCLE_TIME_CH1                   (500U)            */
+        /* u2_rx_tout = 500 * 1.2 = 600 milliseconds                                  */
+        (U2)600U / (U2)OXCAN_MAIN_TICK,                                /* u2_rx_tout  */
+        (U2)OXCAN_NMC_TYPE__PN,                                        /* u2_type     */
+        (U2)0xffffU,                                                   /* u2_npn_uh   */
+        (U2)1U                                                         /* u2_num_coch */
     },
     /* #define ComMConf_ComMChannel_CDC_VCAN_BUS    (2U) */
     {
-        &u4_sp_OXCAN_NMC_PNC_RX[0U],           /* u4p_PNC_RX  */
-        &u1_sp_OXCAN_NMC_COCH[1U],             /* u1p_COCH    */
-        &u4_sp_oxcan_nmc_log_rx[4U],           /* u4p_log_rx  */
-        (U2)OXCAN_NMC_TYPE__PN,                /* u2_type     */
-        (U1)0xffU,                             /* u1_npnwk    */
-        (U1)2U                                 /* u1_num_coch */
+        &u4_sp_OXCAN_NMC_PNC_RX[0U],                                   /* u4p_PNC_RX  */
+        &u1_sp_OXCAN_NMC_COCH[1U],                                     /* u1p_COCH    */
+        &u4_sp_oxcan_nmc_log_rx_2[0U],                                 /* u4p_log_rx  */
+        /* Aubist/CanNm/cfg/y/CanNm_Y_Cfg.h                                           */
+        /* #define BSW_CANNM_Y_CFG_CYCLE_TIME_CH2                   (500U)            */
+        /* u2_rx_tout = 500 * 1.2 = 600 milliseconds                                  */
+        (U2)600U / (U2)OXCAN_MAIN_TICK,                                /* u2_rx_tout  */
+        (U2)OXCAN_NMC_TYPE__PN,                                        /* u2_type     */
+        (U2)0xffffU,                                                   /* u2_npn_uh   */
+        (U2)2U                                                         /* u2_num_coch */
     }
 };
 const U1                  u1_g_OXCAN_NMC_NUM_CH   = (U1)OXCAN_NMC_NUM_CH;

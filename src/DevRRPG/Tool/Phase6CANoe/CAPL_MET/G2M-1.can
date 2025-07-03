@@ -1,0 +1,176 @@
+/*@!Encoding:932*/
+includes
+{
+  #include "E2E_Functions.cin"
+}
+
+variables
+{
+  message BDC1S81 msg_bdc1s81;
+  msTimer Sndbdc1s81; 
+  int bdc1s81_cnt = 0;
+  int bdc1s81_sts = 0;
+
+}
+
+on key 'r'
+{
+  resetCan();
+}
+
+/*
+on key 'q'
+{
+    msg_bdc1s81.VPSINFO7 = 1;
+    msg_bdc1s81.VPSINFO6 = 1;
+    msg_bdc1s81.VPSINFO5 = 1;
+    msg_bdc1s81.VPSINFO4 = 0;
+    msg_bdc1s81.VPSINFO3 = 1;
+    msg_bdc1s81.VPSINFO2 = 1;
+    msg_bdc1s81.VPSINFO1 = 0;
+    Write("PowerONãŸã}í‚é~Å@ON");
+}
+
+on key 'a'
+{
+    msg_bdc1s81.VPSINFO7 = 1;
+    msg_bdc1s81.VPSINFO6 = 1;
+    msg_bdc1s81.VPSINFO5 = 0;
+    msg_bdc1s81.VPSINFO4 = 0;
+    msg_bdc1s81.VPSINFO3 = 1;
+    msg_bdc1s81.VPSINFO2 = 1;
+    msg_bdc1s81.VPSINFO1 = 0;
+    Write("èÊé‘íÜ ON");
+}
+
+on key 'z'
+{
+    msg_bdc1s81.VPSINFO7 = 1;
+    msg_bdc1s81.VPSINFO6 = 1;
+    msg_bdc1s81.VPSINFO5 = 1;
+    msg_bdc1s81.VPSINFO4 = 1;
+    msg_bdc1s81.VPSINFO3 = 1;
+    msg_bdc1s81.VPSINFO2 = 1;
+    msg_bdc1s81.VPSINFO1 = 0;
+    Write("PowerONí èÌÅ@ON");
+}
+
+on key 'x'
+{
+    msg_bdc1s81.VPSINFO7 = 0;
+    msg_bdc1s81.VPSINFO6 = 1;
+    msg_bdc1s81.VPSINFO5 = 0;
+    msg_bdc1s81.VPSINFO4 = 0;
+    msg_bdc1s81.VPSINFO3 = 0;
+    msg_bdc1s81.VPSINFO2 = 1;
+    msg_bdc1s81.VPSINFO1 = 0;
+    Write("íìé‘íÜçÇà≥èÛë‘ ON");
+}
+
+on key 's'
+{
+    msg_bdc1s81.VPSINFO7 = 1;
+    msg_bdc1s81.VPSINFO6 = 1;
+    msg_bdc1s81.VPSINFO5 = 0;
+    msg_bdc1s81.VPSINFO4 = 0;
+    msg_bdc1s81.VPSINFO3 = 0;
+    msg_bdc1s81.VPSINFO2 = 1;
+    msg_bdc1s81.VPSINFO1 = 0;
+    Write("íìé‘íÜçÇà≥â∑í≤èÛë‘ ON");
+}
+
+on key 'c'
+{
+  canceltimer(Sndbdc1s81);
+}
+
+on key 'd'
+{
+  settimer(Sndbdc1s81,300);
+}
+
+on key 'e'
+{
+    msg_bdc1s81.VPSINFO7 = 0;
+    msg_bdc1s81.VPSINFO6 = 0;
+    msg_bdc1s81.VPSINFO5 = 0;
+    msg_bdc1s81.VPSINFO4 = 0;
+    msg_bdc1s81.VPSINFO3 = 0;
+    msg_bdc1s81.VPSINFO2 = 0;
+    msg_bdc1s81.VPSINFO1 = 1;
+    Write("îªíËíÜ ON");
+}
+*/
+
+on key 'y'
+{
+	if(bdc1s81_sts == 1){
+		canceltimer(Sndbdc1s81);
+    bdc1s81_sts = 0;
+		write("********************************");
+		write(" BDC1S81 Send STOP!! ");
+    Write(" Press 'y' to send start BDC1S81");
+		write("********************************");
+	}
+	else{
+    bdc1s81_sts = 1;
+		Settimer(Sndbdc1s81,300);
+		write("*********************************");
+		write(" BDC1S81 Send START!!");
+    Write(" Press 'y' to send stop BDC1S81");
+		write("*********************************");
+	}
+}
+
+on key 'w'
+{
+    SetParking();
+}
+
+on start
+{
+    SetPowOnNml();
+    Write(" Press 'y' to send start BDC1S81");
+//  Settimer(Sndbdc1s81,300);
+}
+
+on timer Sndbdc1s81
+{
+  Settimer(Sndbdc1s81,300);
+  
+  if(bdc1s81_cnt < 255){
+    bdc1s81_cnt++;
+  } else {
+    bdc1s81_cnt = 0;
+  }
+  
+  msg_bdc1s81.byte(2) = bdc1s81_cnt;
+  E2E_CrcCalcP5(msg_bdc1s81);
+  
+  output(msg_bdc1s81);
+}
+
+void SetPowOnNml()
+{
+    msg_bdc1s81.VPSINFO7 = 1;
+    msg_bdc1s81.VPSINFO6 = 1;
+    msg_bdc1s81.VPSINFO5 = 1;
+    msg_bdc1s81.VPSINFO4 = 1;
+    msg_bdc1s81.VPSINFO3 = 1;
+    msg_bdc1s81.VPSINFO2 = 1;
+    msg_bdc1s81.VPSINFO1 = 0; 
+    Write(" PowerON Normal ON");
+}
+
+void SetParking()
+{
+    msg_bdc1s81.VPSINFO7 = 0;
+    msg_bdc1s81.VPSINFO6 = 0;
+    msg_bdc1s81.VPSINFO5 = 0;
+    msg_bdc1s81.VPSINFO4 = 0;
+    msg_bdc1s81.VPSINFO3 = 0;
+    msg_bdc1s81.VPSINFO2 = 1;
+    msg_bdc1s81.VPSINFO1 = 0;
+    Write("Parking ON");
+}
+

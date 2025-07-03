@@ -101,8 +101,8 @@
 #define OXDC_REBYADR_RB_MAX                      (0xFFFFFFFFU)
 #endif
 
-/*#define OXDC_SUPPORT_SES_NUM                     (4U)*/   /* @todo T.inoue start: 20250415 Not yet supported. */
-#define OXDC_SUPPORT_SES_NUM                     (2U)       /* @todo T.inoue end: 20250415 Not yet supported. */
+#define OXDC_SUPPORT_SES_NUM                     (3U)
+#define OXDC_DUMMY_SESSION                       (0xffU)
 
 #ifdef OXDC_FUNC_RPG_RESET
 #define OXDC_MR_RA_WORD_RESF                     (0xfff80760U)
@@ -771,9 +771,8 @@ U1      u1_g_oXDoCANCfgDidSessionBitChk(const U1 u1_a_CUR_SES, const U2 u2_a_CON
 {
     static const U1          u1_sp_OXDC_SES_TBL[OXDC_SUPPORT_SES_NUM] = {
         (U1)DCM_DEFAULT_SESSION,
-/*        (U1)DCM_RkDcmDspSessionRow_Reprog, */
-        (U1)DCM_EXTENDED_DIAGNOSTIC_SESSION,
-/*        (U1)DCM_RkDcmDspSessionRow_Ota*/  /* @todo T.inoue: 20250415 Not yet supported. */
+        (U1)OXDC_DUMMY_SESSION,         /* programmingSession */
+        (U1)DCM_EXTENDED_DIAGNOSTIC_SESSION
     };
 
     U1                       u1_t_ret;

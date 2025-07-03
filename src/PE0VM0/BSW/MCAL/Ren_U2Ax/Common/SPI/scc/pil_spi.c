@@ -34,7 +34,6 @@ extern void Esr_Ap_Pil_Spi_SyncReceiveWait_TimeOutError( void );
 /*	defines / data types / structs / unions	/ macros											*/
 /*==============================================================================================*/
 #define	u2PIL_SPI_CFSET_SYNC_COM		((U2)1)
-#define	u1PIL_SPI_TGCTL_JDG_NO			((U1)8)
 #define	u1PIL_SPI_TGCTL_SHIFT			((U1)4)
 #define	s4PIL_SPI_CTL0_DUMMY_READ_COUNT	((S4)12)
 
@@ -67,7 +66,7 @@ extern void Esr_Ap_Pil_Spi_SyncReceiveWait_TimeOutError( void );
 /*	SPI Communication Mode Set Function															*/
 /*	return		: none																			*/
 /*	parameters	: HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )						*/
-/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )				*/
+/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )				*/
 /*				: PilChannelConfig - Channel Configuration										*/
 /*----------------------------------------------------------------------------------------------*/
 /* CTL1はPort_Init前の設定が必要 他レジスタはPort_Init後の設定でよいが、一括してPort_Init前に実施する */
@@ -130,7 +129,7 @@ void	Pil_Spi_SetComMode( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t_
 /*	SPI Communication Mode Check Function														*/
 /*	return		: RegError - Register Error 													*/
 /*	parameters	: HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )						*/
-/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )				*/
+/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )				*/
 /*				: PilChannelConfig - Channel Configuration										*/
 /*----------------------------------------------------------------------------------------------*/
 U1	Pil_Spi_CheckComMode( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t_pcstPilChannelConfig )
@@ -220,7 +219,7 @@ U1	Pil_Spi_CheckComMode( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t_
 /*	SPI Disable Communication Function															*/
 /*	return		: none																			*/
 /*	parameters	: HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )						*/
-/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )				*/
+/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )				*/
 /*----------------------------------------------------------------------------------------------*/
 void	Pil_Spi_DisableCommunication( U1 t_u1HwChannelID )
 {
@@ -233,9 +232,10 @@ void	Pil_Spi_DisableCommunication( U1 t_u1HwChannelID )
 	cpstReg_Mspi[t_u1UnitNo]->unCTL0.u1Data = 
 		( (U1)MSPI_CTL0_EN		* (U1)MSPI_CTL0_EN_DISABLE );
 
-	/* @notice CTL0 ENは1→0としてから再度1にするまでMSPInCLK * 4以上 or PCLK * 4以上空ける必要があるためウェイトする。 */
+	/* @notice CTL0 ENは1→0としてから再度1にするまでMSPInCLK * 4以上 + PCLK * 4以上空ける必要があるためウェイトする。 */
 	/*         ENへの0書き込み後にEN=0となるまではPCLK * 2であり、DeInit時等での通信停止のみの場合は2クロック分余分なウェイトとなるが */
 	/*         処理共通化のためここでは4クロック分のウェイトとする。 */
+	/*         下記の待ち処理はルネサスからの回答に従った実装である。(Jira:BSWPKG27-1059参照) */
 	for ( i = (S4)0 ; i < s4PIL_SPI_CTL0_DUMMY_READ_COUNT ; i++ )
 	{
 		t_u1Dummy = cpstReg_Mspi[t_u1UnitNo]->unCTL0.u1Data;			/* CTL0をダミーリード */
@@ -247,7 +247,7 @@ void	Pil_Spi_DisableCommunication( U1 t_u1HwChannelID )
 /*	SPI Set Frame Number Function																*/
 /*	return		: none																			*/
 /*	parameters	: HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )						*/
-/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )				*/
+/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )				*/
 /*				:	Length - Frame Number														*/
 /*----------------------------------------------------------------------------------------------*/
 void	Pil_Spi_SetFrameNumber( U1 t_u1HwChannelID, U2 t_u2Length )
@@ -265,7 +265,7 @@ void	Pil_Spi_SetFrameNumber( U1 t_u1HwChannelID, U2 t_u2Length )
 /*	SPI Data Send Function																		*/
 /*	return		: Receive Data																	*/
 /*	parameters	: HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )						*/
-/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )				*/
+/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )				*/
 /*				: TxData - Send Data															*/
 /*				: PilChannelConfig(Sync)														*/
 /*----------------------------------------------------------------------------------------------*/
@@ -365,7 +365,7 @@ U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_Ch
 /*	SPI AsyncSend Start Function																*/
 /*	return		: none																			*/
 /*	parameters	: HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )						*/
-/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )				*/
+/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )				*/
 /*				: PilChannelConfig - Communication Information									*/
 /*				: Times - Send Receive Data Times (1 - 0xFFFF(1 times = 2byte))					*/
 /*----------------------------------------------------------------------------------------------*/
@@ -408,30 +408,15 @@ void	Pil_Spi_StartAsync( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t_
 	cpstReg_Mspi[t_u1UnitNo]->stCH[t_u1ChNo].unSSEL.u2Data = t_pcstPilChannelConfig->u2SSEL;
 
 	/* DMA/DTS転送要因選択、DMA/DTS使用設定 */
-	if ( t_u1ChNo < u1PIL_SPI_TGCTL_JDG_NO )													/* チャネル0-7と8-11で設定するレジスタが異なるため、チャネル番号の判定を行う */
-	{
-		t_u4Data = REG_MSPITG.unTGCTLN[t_u1UnitNo].u4Data;
-		t_u1BitShiftNum = t_u1ChNo * u1PIL_SPI_TGCTL_SHIFT;
-		t_u4Mask = ( (U4)MSPI_TGCTLN_TRGSEL0 | (U4)MSPI_TGCTLN_SRCSEL0 ) << (U4)t_u1BitShiftNum;
-		t_u4Data &= (U4)~t_u4Mask;																/* 該当CHのみ0でクリア */
-		t_u4SetData = ( (U4)MSPI_TGCTLN_TRGSEL0		* (U4)t_pcstPilChannelConfig->u1TrgSelDmaDts )		+
-					  ( (U4)MSPI_TGCTLN_SRCSEL0_0	* (U4)MSPI_TGCTL_SRCSEL_TX_RX );
-		t_u4SetData = t_u4SetData << (U4)t_u1BitShiftNum;
-		t_u4Data |= t_u4SetData; 
-		REG_MSPITG.unTGCTLN[t_u1UnitNo].u4Data = t_u4Data;
-	}
-	else
-	{
-		t_u4Data = REG_MSPITG.unTGCTLI[t_u1UnitNo].u4Data;
-		t_u1BitShiftNum = ( t_u1ChNo - u1PIL_SPI_TGCTL_JDG_NO ) * u1PIL_SPI_TGCTL_SHIFT;		/* 格納先を合わせる処理が必要となる */
-		t_u4Mask = ( (U4)MSPI_TGCTLI_TRGSEL8 | (U4)MSPI_TGCTLI_SRCSEL8 ) << (U4)t_u1BitShiftNum;
-		t_u4Data &= (U4)~t_u4Mask;																/* 該当CHのみ0でクリア */
-		t_u4SetData = ( (U4)MSPI_TGCTLI_TRGSEL8		* (U4)t_pcstPilChannelConfig->u1TrgSelDmaDts )		+
-					  ( (U4)MSPI_TGCTLI_SRCSEL8_0	* (U4)MSPI_TGCTL_SRCSEL_TX_RX );
-		t_u4SetData = t_u4SetData << (U4)t_u1BitShiftNum;
-		t_u4Data |= t_u4SetData; 
-		REG_MSPITG.unTGCTLI[t_u1UnitNo].u4Data = t_u4Data;
-	}
+	t_u4Data = REG_MSPITG.unTGCTLN[t_u1UnitNo].u4Data;
+	t_u1BitShiftNum = t_u1ChNo * u1PIL_SPI_TGCTL_SHIFT;
+	t_u4Mask = ( (U4)MSPI_TGCTLN_TRGSEL0 | (U4)MSPI_TGCTLN_SRCSEL0 ) << (U4)t_u1BitShiftNum;
+	t_u4Data &= (U4)~t_u4Mask;																/* 該当CHのみ0でクリア */
+	t_u4SetData = ( (U4)MSPI_TGCTLN_TRGSEL0		* (U4)t_pcstPilChannelConfig->u1TrgSelDmaDts )	+
+				  ( (U4)MSPI_TGCTLN_SRCSEL0_0	* (U4)MSPI_TGCTL_SRCSEL_TX_RX );
+	t_u4SetData = t_u4SetData << (U4)t_u1BitShiftNum;
+	t_u4Data |= t_u4SetData; 
+	REG_MSPITG.unTGCTLN[t_u1UnitNo].u4Data = t_u4Data;
 
 	/* チャネル有効化、チャネルアクティブ */
 	cpstReg_Mspi[t_u1UnitNo]->stCH[t_u1ChNo].unCSTS.u1Data = 
@@ -461,7 +446,7 @@ void	Pil_Spi_EnableUnit( U1 t_u1UnitNo )
 /*	SPI Overrun Error Status Get Function														*/
 /*	return		: Overrun Error Status															*/
 /*	parameters	: HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )						*/
-/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )				*/
+/*				:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )				*/
 /*----------------------------------------------------------------------------------------------*/
 ZORN	Pil_Spi_GetOvrunErrStatus( U1 t_u1HwChannelID )
 {

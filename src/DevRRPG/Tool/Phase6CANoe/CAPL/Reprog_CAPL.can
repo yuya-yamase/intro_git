@@ -1264,6 +1264,13 @@ void CANoe_Seqence_Request_Update( void )
     /* SID 0x10 DiagnosticSessionControl(defaultSession) 送信 */
     G_Reprog_General_Data.G_Info.pp1_process = E_PP1_SID_0x10_def_posres;
   }
+// @@@
+  else if( G_Reprog_General_Data.G_Info.pp1_process == E_PP2_SID_0x22_swi_req )
+  {
+    /* SID 0x22 vehicleManufacturerECUSoftwareNumberDataIdentifier 送信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP2_SID_0x22_swi_posres;
+  }
+// @@@
   else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_Seqence_Normal_End )
   {
     /* 正常終了状態 */
@@ -1507,6 +1514,13 @@ void CANoe_Seqence_Response_Update( void )
     /* SID 0x10 DiagnosticSessionControl(defaultSession) ポジティブレスポンス受信完了 */
     G_Reprog_General_Data.G_Info.pp1_process = E_PP1_Seqence_Normal_End;
   }
+// @@@
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP2_SID_0x22_swi_posres )
+  {
+    /* SID 0x22 vehicleManufacturerECUSoftwareNumberDataIdentifier ポジティブレスポンス受信完了 */
+    G_Reprog_General_Data.G_Info.pp1_process = E_PP1_Seqence_Normal_End;
+  }
+// @@@
   else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_Seqence_Normal_End )
   {
     /* CANoeシナリオ正常終了後に謎のポジティブレスポンス受信 */
@@ -2753,6 +2767,19 @@ void Request_sender(void)
         Error_Log_output("Request_sender: Request Send Error. E_PP1_SID_0x10_def_req.");
       }
     }
+// @@@
+    else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP2_SID_0x22_swi_req )
+    {
+      /* リクエスト送信(ReadDataByIdentifier) */
+      ret = ReadDataByIdentifier_req_distribution( E_dataIdentifier_SWIdentification, E_Flag_OFF );
+      if ( ret == E_Return_OK )
+      {
+        /* リクエスト送信成功 */
+        /* シーケンス位置を更新し、「レスポンス受信」か「タイムアウト検出」まで待機 */
+        CANoe_Seqence_Request_Update();
+      }
+    }
+// @@@
     else if (  G_Reprog_General_Data.G_Info.pp1_process == E_PP1_Seqence_Normal_End )
     {
       /* CANoeシーケンス正常終了 */
@@ -3087,6 +3114,18 @@ int Response_Receiver( diagResponse *res_msg )
     /* CANoeシナリオの最後のシーケンスはSID 0x10かSID 0x11なので両方に処理を追加 */
     G_Timespec_Array[E_Timespec_Seqence_End] = timeNowInt64();
   }
+// @@@
+  else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP2_SID_0x22_swi_posres )
+  {
+    /* SID 0x22 ReadDataByIdentifier(SWIdentification) ポジティブレスポンス受信完了 */
+    ret = ReadDataByIdentifier_res_distribution(res_msg);
+    if( ret != E_Return_OK )
+    {
+      /* エラーの場合はどうすればいいんだろうね？ */
+      Error_Log_output("Response_Receiver: Response Error. E_PP2_SID_0x22_swi_posres.");
+    }
+  }
+// @@@
   else if ( G_Reprog_General_Data.G_Info.pp1_process == E_PP1_Seqence_Normal_End )
   {
     /* CANoeシナリオ正常終了後に謎のポジティブレスポンス受信 */
@@ -3357,8 +3396,16 @@ int Response_After_Receiver( int before_seqence, diagResponse *res_msg )
   {
     /* SID 0x11 EcuResetとSID 0x10 DiagnosticSessionControl(defaultSession)はどちらかを実行すれば良いので、 */
     /* SID 0x11 EcuResetの次のシーケンスは、SID 0x10 DiagnosticSessionControl(defaultSession)の次のシーケンスと同じ */
-    CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+//    CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    CANoe_Seqence_Direct_Update(E_PP2_SID_0x22_swi_req);	// @@@
   }
+// @@@
+  else if ( before_seqence == E_PP2_SID_0x22_swi_posres )
+  {
+    CANoe_Seqence_Direct_Update(E_PP1_Seqence_Normal_End);
+    write(" ***** Re-programming is Complete! *****");
+  }
+// @@@
   else
   {
     /* 事後処理が必要でないシーケンスはここを通る */
@@ -3440,6 +3487,13 @@ void Diag_Response_handler(diagResponse *res_msg)
           {
             setTimer(TwaitTimer, 1 * 1000); // 1 秒待ち
           }
+// @@@
+          /* 開発リプロは最後にSW No.をリード、SID 0x22(SW No.) 前に、Wait 入れる */
+          else if( G_Reprog_General_Data.G_Info.pp1_process == E_PP2_SID_0x22_swi_req )
+          {
+            setTimer(TwaitTimer, 1 * 1000); // 1 秒待ち
+          }
+// @@@
           else
           {
             /* 次のリクエストの送信を実施 */

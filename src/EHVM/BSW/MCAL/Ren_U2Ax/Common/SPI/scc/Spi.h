@@ -26,10 +26,6 @@
 #define		u1SPI_IDLE						((U1)0)
 #define		u1SPI_BUSY						((U1)1)
 
-/* 従来ソフトとの互換性のための定義 */
-#define		SPI_IDLE						(0)
-#define		SPI_BUSY						(1)
-
 /* SPI functional safety level */
 #define		SPI_QM							(0)
 #define		SPI_ASIL						(1)

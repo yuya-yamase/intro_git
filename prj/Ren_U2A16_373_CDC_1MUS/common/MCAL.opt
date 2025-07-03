@@ -37,7 +37,7 @@
     :macro=MCAL_TYPORT_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/tyPORT/config_CDC
     :macro=MCAL_PWM_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Pwm/config_CDC
     :macro=MCAL_SPI_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/SPI/config_CDC
-    :macro=MCAL_UART_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Uart/config_CDC_1M
+    :macro=MCAL_UART_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Uart/config_CDC
     :macro=MCAL_WDG_CFG_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/Wdg/config_CDC
     
     :macro=MCAL_SECTION_DIR=${MCAL_DIR}/Ren_U2Ax/A16_373/SECTION/config_CDC

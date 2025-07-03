@@ -17,7 +17,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "ivdsh_cfg_private.h"
-#include "ehvm.h"
+#include "ehvm_cfg_pe2_vm0.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -37,7 +37,20 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WORD_LEN                           (4U)       /* 4byte */
+#define IVDSH_NUM_FQ_CH                          (4U)
+#define IVDSH_NUM_FQ_REA                         (3U)
+#define IVDSH_FQ_CH_REA_0                        (0U)
+#define IVDSH_FQ_CH_REA_1                        (1U)
+#define IVDSH_FQ_CH_REA_2                        (2U)
+#define IVDSH_FQ_CH_WRI                          (3U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define IVDSH_WA_NWORD_WRI                       (13U)
+#define IVDSH_WA_NWORD_REA_0                     (6U)
+#define IVDSH_WA_NWORD_REA_1                     (14U)
+#define IVDSH_WA_NWORD_REA_2                     (4U)
+
+#define IVDSH_WA_NWORD                           (61U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -48,10 +61,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U4                          u4_gp_ivdsh_buf[IVDSH_DID_BUFLEN_TX + (IVDSH_DID_BUFLEN_RX * IVDSH_NUM_RXBUF)];
+U4                          u4_gp_ivdsh_buf_wa[IVDSH_WA_NWORD];
 
-U1                          u1_gp_ivdsh_rcvd[IVDSH_NUM_RX];
-U1                          u1_gp_ivdsh_buf_rd[IVDSH_NUM_RX];
+#if(IVDSH_NUM_FQ_REA > 0U)
+ST_IVDSH_FQ_REA             st_gp_ivdsh_fq_rea[IVDSH_NUM_FQ_REA];
+#else
+ST_IVDSH_FQ_REA             st_gp_ivdsh_fq_rea[];
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -59,198 +75,101 @@ U1                          u1_gp_ivdsh_buf_rd[IVDSH_NUM_RX];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_IVDSH_DID          st_gp_IVDSH_CFG_DID[IVDSH_DID_NUM_TX + IVDSH_DID_NUM_RX] =
-{
-    /* u2_offset,    u2_nword   */
-    /*--------------------------*/
-    /* Transmit                 */
-    /*--------------------------*/
-    {(U2)0U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_003 */
-    {(U2)1U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_009 */
-    {(U2)2U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_011 */
-    {(U2)3U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_013 */
-    {(U2)4U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_015 */
-    {(U2)5U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_017 */
-    {(U2)6U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_019 */
-    {(U2)7U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_020 */
-    {(U2)8U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_024 */
-    {(U2)9U,         (U2)1U     },      /* IVDSH_DID_TX_CPREQ_025 */
-    {(U2)10U,        (U2)1U     },      /* IVDSH_DID_TX_CPREQ_027 */
-    {(U2)11U,        (U2)1U     },      /* IVDSH_DID_TX_CPREQ_042 */
-    {(U2)12U,        (U2)1U     },      /* IVDSH_DID_TX_CPREQ_046 */
-    /*--------------------------*/
-    /* Recieve from VM#0        */
-    /*--------------------------*/
-    {(U2)13U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_006 */
-    {(U2)14U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_008 */
-    {(U2)15U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_029 */
-    {(U2)16U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_032 */
-    {(U2)17U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_035 */
-    {(U2)18U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_038 */
-    /*--------------------------*/
-    /* Recieve from VM#1        */
-    /*--------------------------*/
-    {(U2)20U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_004 */
-    {(U2)21U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_010 */
-    {(U2)22U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_012 */
-    {(U2)23U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_014 */
-    {(U2)24U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_016 */
-    {(U2)25U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_018 */
-    {(U2)26U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_021 */
-    {(U2)27U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_022 */
-    {(U2)29U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_026 */
-    {(U2)30U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_028 */
-    {(U2)31U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_041 */
-    {(U2)32U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_044 */
-    /*--------------------------*/
-    /* Recieve from VM#3        */
-    /*--------------------------*/
-    {(U2)33U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_005 */
-    {(U2)34U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_007 */
-    {(U2)35U,       (U2)1U      },      /* IVDSH_DID_RX_CPREQ_043 */
-    {(U2)36U,       (U2)1U      }       /* IVDSH_DID_RX_CPREQ_045 */
-};
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U1                    u1_gp_IVDSH_RX_BY_DID[IVDSH_DID_NUM_TX + IVDSH_DID_NUM_RX] =
-{
-    /*--------------------------*/
-    /* Transmit                 */
-    /*--------------------------*/
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_003 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_009 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_011 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_013 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_015 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_017 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_019 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_020 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_024 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_025 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_027 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_042 */
-    (U1)U1_MAX,                         /* IVDSH_DID_TX_CPREQ_046 */
-    /*--------------------------*/
-    /* Recieve from VM#0        */
-    /*--------------------------*/
-    (U1)0U,                             /* IVDSH_DID_RX_CPREQ_006 */
-    (U1)0U,                             /* IVDSH_DID_RX_CPREQ_008 */
-    (U1)0U,                             /* IVDSH_DID_RX_CPREQ_029 */
-    (U1)0U,                             /* IVDSH_DID_RX_CPREQ_032 */
-    (U1)0U,                             /* IVDSH_DID_RX_CPREQ_035 */
-    (U1)0U,                             /* IVDSH_DID_RX_CPREQ_038 */
-    /*--------------------------*/
-    /* Recieve from VM#1        */
-    /*--------------------------*/
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_004 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_010 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_012 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_014 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_016 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_018 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_021 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_022 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_026 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_028 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_041 */
-    (U1)1U,                             /* IVDSH_DID_RX_CPREQ_044 */
-    /*--------------------------*/
-    /* Recieve from VM#3        */
-    /*--------------------------*/
-    (U1)2U,                             /* IVDSH_DID_RX_CPREQ_005 */
-    (U1)2U,                             /* IVDSH_DID_RX_CPREQ_007 */
-    (U1)2U,                             /* IVDSH_DID_RX_CPREQ_043 */
-    (U1)2U                              /* IVDSH_DID_RX_CPREQ_045 */
-};
-const U2                    u2_g_IVDSH_DID_NUM_TX = (U2)IVDSH_DID_NUM_TX;
-const U2                    u2_g_IVDSH_DID_NUM_RX = (U2)IVDSH_DID_NUM_RX;
+const U4                    u4_g_IVDSH_WA_NWORD = (U4)IVDSH_WA_NWORD;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                    u2_g_IVDSH_CH_TX = (U2)18U;     /* TX  = VCC Ch.18 : VM2 Inter-VM Sharing Data Tx */
-const ST_IVDSH_RX           st_gp_IVDSH_CFG_RX[IVDSH_NUM_RX] = {
-    /* u2_ch,       u2_nword                   */
-    {(U2)16U,       (U2)IVDSH_DID_BUFLEN_RX0   },           /* RX0 = VCC Ch.16 : VM0 Inter-VM Sharing Data Tx */
-    {(U2)17U,       (U2)IVDSH_DID_BUFLEN_RX1   },           /* RX1 = VCC Ch.17 : VM1 Inter-VM Sharing Data Tx */
-    {(U2)19U,       (U2)IVDSH_DID_BUFLEN_RX2   }            /* RX2 = VCC Ch.19 : VM3 Inter-VM Sharing Data Tx */
+const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
+{
+    /* u2_begin,    u2_nword,       u2_fq_ch : FIFO/Queue Channel       */
+    /*------------------------------------------------------------------*/
+    /* Write                                                            */
+    /*------------------------------------------------------------------*/
+    {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_003         */
+    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_009         */
+    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_011         */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_013         */
+    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_015         */
+    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_017         */
+    {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_019         */
+    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_020         */
+    {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_024         */
+    {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_025         */
+    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_027         */
+    {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_042         */
+    {(U2)12U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_046         */
+    /*------------------------------------------------------------------*/
+    /* Read from VM#0                                                   */
+    /*------------------------------------------------------------------*/
+    {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_006         */
+    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_008         */
+    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_029         */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_032         */
+    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_035         */
+    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_038         */
+    /*------------------------------------------------------------------*/
+    /* Read from VM#1                                                   */
+    /*------------------------------------------------------------------*/
+    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_004         */
+    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_010         */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_012         */
+    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_014         */
+    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_016         */
+    {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_018         */
+    {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_021         */
+    {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_022         */
+    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_026         */
+    {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_028         */
+    {(U2)12U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_VM1TO2_FLYNOP     */
+    {(U2)13U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_044         */
+    /*------------------------------------------------------------------*/
+    /* Read from VM#3                                                   */
+    /*------------------------------------------------------------------*/
+    {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_005         */
+    {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_007         */
+    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_043         */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2}      /* IVDSH_DID_REA_CPREQ_045         */
 };
-const U1                    u1_g_IVDSH_NUM_RX = (U1)IVDSH_NUM_RX;
+const U2                    u2_g_IVDSH_NUM_DID = (U2)IVDSH_NUM_DID;
 
-const U2                    u2_g_IVDSH_BUFLEN_RX = (U2)IVDSH_DID_BUFLEN_RX;
-const U2                    u2_g_IVDSH_BUFLEN_TX = (U2)IVDSH_DID_BUFLEN_TX;
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static const ST_IVDSH_WA    st_sp_IVDSH_FQ_CH[IVDSH_NUM_FQ_CH] = {
+    /* IVDSH_FQ_CH_REA_0 */
+    {
+        (U2)IVDSH_WA_NWORD_WRI,                                   /* u2_begin */
+        (U2)IVDSH_WA_NWORD_REA_0,                                 /* u2_nword */
+        (U2)EHVM_RX_VCCID_VCC_SHARED_TX_VM0                       /* u2_fq_ch */
+    },
+    /* IVDSH_FQ_CH_REA_1 */
+    {
+        ((U2)IVDSH_WA_NWORD_WRI          +                        /* u2_begin */
+         ((U2)IVDSH_WA_NWORD_REA_0 << 1)),
+        (U2)IVDSH_WA_NWORD_REA_1,                                 /* u2_nword */
+        (U2)EHVM_RX_VCCID_VCC_SHARED_TX_VM1                       /* u2_fq_ch */
+    },
+    /* IVDSH_FQ_CH_REA_2 */
+    {
+        ((U2)IVDSH_WA_NWORD_WRI          +                        /* u2_begin */
+         ((U2)IVDSH_WA_NWORD_REA_0 << 1) +
+         ((U2)IVDSH_WA_NWORD_REA_1 << 1)),
+        (U2)IVDSH_WA_NWORD_REA_2,                                 /* u2_nword */
+        (U2)EHVM_RX_VCCID_VCC_SHARED_TX_VM3                       /* u2_fq_ch */
+    },
+    /* IVDSH_FQ_CH_WRI   */
+    {
+        (U2)0U,                                                   /* u2_begin */
+        (U2)IVDSH_WA_NWORD_WRI,                                   /* u2_nword */
+        (U2)EHVM_TX_VCCID_VCC_SHARED_TX_VM2                       /* u2_fq_ch */
+    }
+};
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const ST_IVDSH_WA * const   stp_g_IVDSH_FQ_WRI    = &st_sp_IVDSH_FQ_CH[IVDSH_FQ_CH_WRI];
+const ST_IVDSH_WA * const   stp_g_IVDSH_FQ_REA    = &st_sp_IVDSH_FQ_CH[IVDSH_FQ_CH_REA_0];
+const U1                    u1_g_IVDSH_NUM_FQ_REA = (U1)IVDSH_NUM_FQ_REA;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  void    vd_g_iVDshMainRx(void)                                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_iVDshCfgInit(void)
-{
-    U4        u4_t_lpcnt;
-
-    /* @todo A.Motomatsu start: VCC may be lost or corrupted if sent before clear; VCC clear timing must be redesigned  */
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_IVDSH_NUM_RX; u4_t_lpcnt++){
-        (void)ehvm_vcc_clear_channel((U4)st_gp_IVDSH_CFG_RX[u4_t_lpcnt].u2_ch);
-    }
-    /* @todo A.Motomatsu end: VCC may be lost or corrupted if sent before clear; VCC clear timing must be redesigned  */
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)IVDSH_DID_BUFLEN_TX; u4_t_lpcnt++){
-        u4_gp_ivdsh_buf[u4_t_lpcnt] = (U4)0U;
-    }
-    for(; u4_t_lpcnt < (U4)IVDSH_DID_BUFLEN_RX; u4_t_lpcnt++){
-        u4_gp_ivdsh_buf[                                    u4_t_lpcnt] = (U4)0U;     /* Initialize IVDSH_RXBUF_0 */
-        u4_gp_ivdsh_buf[(IVDSH_NUM_RXBUF * IVDSH_RXBUF_1) + u4_t_lpcnt] = (U4)0U;
-    }
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_iVDshMainRx(void)                                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_iVDshCfgTransmit(const U4 u4_a_CH, const U4 * u4_ap_TXBUF, const U2 u2_a_NWORD)
-{
-    (void)ehvm_vcc_transmit(u4_a_CH, u4_ap_TXBUF, (U4)(u2_a_NWORD * (U2)IVDSH_WORD_LEN));
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_iVDshCfgReceive(const U4 u4_a_CH, U4 * u4_ap_rxbuf, const U2 u2_a_NWORD)                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_iVDshCfgReceive(const U4 u4_a_CH, U4 * u4_ap_rxbuf, const U2 u2_a_NWORD)
-{
-    static const U1     u1_sp_IVDSH_RCVCNT_MAX = (U1)2U;    /* VCC Ring Element Count = 2 */
-
-    U4                  u4_t_lpcnt;
-    U4                  u4_t_ack;
-
-    U1                  u1_t_vcc_ret;
-    U1                  u1_t_act;
-
-    u1_t_act = (U1)FALSE;
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_sp_IVDSH_RCVCNT_MAX; u4_t_lpcnt++)
-    {
-        u1_t_vcc_ret = ehvm_vcc_receive(u4_a_CH, &u4_ap_rxbuf[0U], (u2_a_NWORD * (U2)IVDSH_WORD_LEN), &u4_t_ack);
-        if((u1_t_vcc_ret == (U1)E_EHVM_RECEIVE_QUEUE_EMPTY      ) ||
-           (u4_t_ack     != (U4)(u2_a_NWORD * (U2)IVDSH_WORD_LEN))){
-            break;
-        }else{
-            u1_t_act = (U1)TRUE;
-        }
-    }
-
-    return(u1_t_act);
-}
-
-/*===================================================================================================================================*/
-/*                                                                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -259,12 +178,12 @@ U1      u1_g_iVDshCfgReceive(const U4 u4_a_CH, U4 * u4_ap_rxbuf, const U2 u2_a_N
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    06/13/2025  AM       New.                                                                                               */
-/*                                                                                                                                   */
+/*  1.0.0     6/23/2025  TN       New.                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
-/*  * AM   = Akira Motomatsu, Denso                                                                                                  */
+/*                                                                                                                                   */
+/*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

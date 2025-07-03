@@ -67,7 +67,7 @@ def analysis_file(base_path, existing_json_file, include_pattern, options, VM_ke
     f.close()
 
 ## GUI 選択ターブル
-options = ["CDC_1SUS", "CDC_1SJP", "CDC_1SOT", "CDC_1MUS", "CDC_1MJP", "CDC_1MOT"]
+options = ["CDC_1MUS", "CDC_1MJP", "CDC_1MOT"]
 include_pattern = []
 selected_variation = ""
 if len(sys.argv) == 1:

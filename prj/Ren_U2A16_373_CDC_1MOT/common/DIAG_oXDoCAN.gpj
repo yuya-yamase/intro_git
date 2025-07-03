@@ -22,6 +22,7 @@
     -I${CAN_DIR}/Dem/usr
 
     -I${CAN_DIR}/CS/inc
+    -I${CAN_DIR}/ComM/inc
 
     -I${OXCAN_DIR}/config_U2A16_met
     -I${OXCAN_DIR}/lib

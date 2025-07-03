@@ -3654,7 +3654,7 @@ BswConst PduIdType bsw_com_u2DataHdl2MsgHdl[BSW_COM_HANDLE_NUM] = {
 };
 
 BswConst Bsw_Com_MsgInfoType bsw_com_stMsgInfoTbl[BSW_COM_MSG_NUM] = {
-     { BSW_COM_u2MILSEC(    0U), BSW_COM_u1CH00, (BswU1)(BSW_COM_VPS_NOUSE), (BswU2)8U   /* [0] MSG_ABG1D50_RXCH0 */
+     { BSW_COM_u2MILSEC( 1500U), BSW_COM_u1CH00, (BswU1)(BSW_COM_VPS_NOUSE), (BswU2)8U   /* [0] MSG_ABG1D50_RXCH0 */
       ,(BswU1)( BSW_COM_EVENTDELAY_NOUSE | BSW_COM_EVTAWAKE_NOUSE | BSW_COM_PREPRDTXRTRG_NOUSE | BSW_COM_SENDNTIMES_NOUSE | BSW_COM_CHGPRDIPDU_NOUSE | BSW_COM_EVTWAKEUPTX_NOUSE )
       ,(BswU1)( BSW_COM_TXREQCONF_NOUSE | BSW_COM_TXCONF_NOUSE | BSW_COM_RXMSG_USE   | BSW_COM_PRESTORE_USE   | BSW_COM_ALIVECOUNTER_NOUSE | BSW_COM_PRETX_NOUSE ) }
     ,{ BSW_COM_u2MILSEC( 1500U), BSW_COM_u1CH00, (BswU1)(BSW_COM_VPS_NOUSE), (BswU2)8U   /* [1] MSG_ABG1D51_RXCH0 */
@@ -4599,7 +4599,7 @@ BswConst Bsw_Com_AlvCnt3RxInfoType bsw_com_AlvCnt3RxInfo[BSW_COM_RX_MSG_NUM] =
 #if (BSW_COM_RX_MSG_NUM != 0U)
 BswConst Bsw_Com_TickTimeType bsw_com_u2PwonMsk[BSW_COM_RX_MSG_NUM] = {
 
-     BSW_COM_u2MILSEC(0U)                                                       /* [0] MSG_ABG1D50_RXCH0 */
+     BSW_COM_u2MILSEC(3000U)                                                    /* [0] MSG_ABG1D50_RXCH0 */
     ,BSW_COM_u2MILSEC(3000U)                                                    /* [1] MSG_ABG1D51_RXCH0 */
     ,BSW_COM_u2MILSEC(0U)                                                       /* [2] MSG_ABG1S09_RXCH0 */
     ,BSW_COM_u2MILSEC(3000U)                                                    /* [3] MSG_ACN1D50_RXCH0 */
@@ -4711,7 +4711,7 @@ BswConst Bsw_Com_TickTimeType bsw_com_u2PwonMsk[BSW_COM_RX_MSG_NUM] = {
 
 BswConst Bsw_Com_TickTimeType bsw_com_u2WakeupMsk[BSW_COM_RX_MSG_NUM] = {
 
-     BSW_COM_u2MILSEC(0U)                                                       /* [0] MSG_ABG1D50_RXCH0 */
+     BSW_COM_u2MILSEC(3000U)                                                    /* [0] MSG_ABG1D50_RXCH0 */
     ,BSW_COM_u2MILSEC(3000U)                                                    /* [1] MSG_ABG1D51_RXCH0 */
     ,BSW_COM_u2MILSEC(0U)                                                       /* [2] MSG_ABG1S09_RXCH0 */
     ,BSW_COM_u2MILSEC(3000U)                                                    /* [3] MSG_ACN1D50_RXCH0 */
@@ -5282,7 +5282,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
 #if (BSW_COM_RX_MSG_NUM != 0U)
 BswConst Bsw_Com_TickTimeType bsw_com_u2PnconMsk[BSW_COM_RX_MSG_NUM] = {
 
-     BSW_COM_u2MILSEC(0U)                                                       /* [0] MSG_ABG1D50_RXCH0 */
+     BSW_COM_u2MILSEC(3000U)                                                    /* [0] MSG_ABG1D50_RXCH0 */
     ,BSW_COM_u2MILSEC(3000U)                                                    /* [1] MSG_ABG1D51_RXCH0 */
     ,BSW_COM_u2MILSEC(0U)                                                       /* [2] MSG_ABG1S09_RXCH0 */
     ,BSW_COM_u2MILSEC(3000U)                                                    /* [3] MSG_ACN1D50_RXCH0 */

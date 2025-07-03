@@ -79,7 +79,7 @@ const U2                        u2_g_OXDC_NUM_IOC = (U2)0U;
 const ST_OXDC_DID               st_gp_OXDC_DATA_XID[] = {
 /*   fp_u1_SUP                      u2_xid          u2_rd_ses          fp_u1_RDSEC_CHK    u2_wr_ses          fp_u1_WRSEC_CHK */
     {vdp_PTR_NA,                    (U2)0xF186U,    (U2)0x0005U,       vdp_PTR_NA,       (U2)0x0000U,        vdp_PTR_NA},
-    {vdp_PTR_NA,                    (U2)0xF188U,    (U2)0x0001U,       vdp_PTR_NA,       (U2)0x0000U,        vdp_PTR_NA},
+    {vdp_PTR_NA,                    (U2)0xF188U,    (U2)0x0005U,       vdp_PTR_NA,       (U2)0x0000U,        vdp_PTR_NA},
     {vdp_PTR_NA,                    (U2)0xF191U,    (U2)0x0005U,       vdp_PTR_NA,       (U2)0x0000U,        vdp_PTR_NA}
 };
 

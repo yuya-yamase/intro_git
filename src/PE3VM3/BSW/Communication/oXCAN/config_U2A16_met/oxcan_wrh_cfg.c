@@ -57,8 +57,8 @@ ST_OXCAN_WRH_HCH            st_gp_oxcan_wrh_hch[OXCAN_WRH_NUM_RQH];
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U4                    u4_g_OXCAN_WRH_TOR_BY_VOM = (U4)OXCAN_SYS_IGR;                    /* TimeOut count Restart Condition     */
-const U4                    u4_g_OXCAN_WRH_REQ_BY_VOM = (U4)OXCAN_SYS_PNC_16;
-const U2                    u2_g_OXCAN_WRH_VOM_TOUT   = (U2)13000U / (U2)OXCAN_MAIN_TICK;
+const U4                    u4_g_OXCAN_WRH_REQ_BY_VOM = (U4)0x00000000U;
+const U2                    u2_g_OXCAN_WRH_VOM_TOUT   = (U2)0U;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_OXCAN_WRH_RQH      st_gp_OXCAN_WRH_RQH[OXCAN_WRH_NUM_RQH] = {
