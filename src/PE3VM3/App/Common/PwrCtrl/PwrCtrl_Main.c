@@ -280,7 +280,7 @@ static void vd_s_PwrCtrlMainSipOffMcuStandbySysDevReq( void )
 {
     u1_s_PwrCtrl_Main_Sts           = (U1)PWRCTRL_MAIN_SIPOFF_MCUSTANDBY_REQ;
     vd_s_PwrCtrlMainStartSet();
-    EthSW_PowerOff_Req();                                               /* 暫定_EtherSW終了要求 */
+    EthSwt_SWIC_PowerOff();                                             /* EtherSW終了要求 */
 
     u1_s_PwrCtrl_Main_BusSleepFlag  = (U1)PWRCTRL_COMMON_SYS_PWR_OFF;
     u1_s_PwrCtrl_Main_SipPwrSts     = (U1)PWRCTRL_MAIN_SIP_STS_COMP;    /* SIP電源状態：実行中→完了 */

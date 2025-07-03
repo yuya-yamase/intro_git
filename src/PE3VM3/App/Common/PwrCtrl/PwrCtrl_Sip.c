@@ -402,7 +402,7 @@ void vd_g_PwrCtrlSipEthReqJudge( void )
         
         if(u1_t_readlv == (U1)MCU_DIO_HIGH){
             /* Hiを検知したらEtherSW起動要求を通知 */
-            EthSW_PowerON_Req_Bon(); /* 暫定_EtherSW起動要求 */
+            EthSwt_SWIC_PowerOn(); /* EtherSW起動要求 */
             
             /* EtherSWPowerON通知制御開始要求を無しに設定 */
             u1_s_PwrCtrl_Sip_EthReq_Sts = (U1)PWRCTRL_ETH_REQ_NON;
@@ -416,7 +416,7 @@ void vd_g_PwrCtrlSipEthReqJudge( void )
         
         if(u1_t_readlv == (U1)MCU_DIO_LOW){
             /* Loを検知したらEtherSW終了要求を通知 */
-            EthSW_PowerOff_Req(); /* 暫定_EtherSW終了要求 */
+            EthSwt_SWIC_PowerOff(); /* EtherSW終了要求 */
             
             /* EtherSWPowerON通知制御開始要求を無しに設定 */
             u1_s_PwrCtrl_Sip_EthReq_Sts = (U1)PWRCTRL_ETH_REQ_NON;
