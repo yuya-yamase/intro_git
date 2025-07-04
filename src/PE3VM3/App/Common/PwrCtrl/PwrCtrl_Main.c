@@ -612,6 +612,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
     U1 u1_t_read_lv;                                                                                       /* MCU端子状態取得結果 */
     U1 u1_t_foff_req;                                                                                      /* SIP電源強制OFFシーケンス要求確認結果 */
 
+    u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_INIT;
 /* /BU-DET =Hi? */
     if ( u1_s_PwrCtrl_Main_SysPwrSts == (U1)PWRCTRL_MAIN_SYS_STS_BUDET )
     {
