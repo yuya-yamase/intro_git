@@ -963,7 +963,7 @@ static void vd_s_PwrCtrlMainForcedOffSeq( void )
 
         /* 【todo】起動要因の取得 */
         /* 暫定対応(CANスリープ要否の確認、Bootチェック) */
-        u1_t_wake_factor = u1_g_oXCANEcuShtdwnOk();
+        u1_t_wake_factor = u1_g_oXCANShtdwnOk();
         u1_t_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BOOT);
         
         /* 【todo】起動要因が成立しているかの判定 */
