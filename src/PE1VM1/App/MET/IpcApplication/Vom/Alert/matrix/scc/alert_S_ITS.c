@@ -108,44 +108,6 @@ const ST_ALERT_MTRX st_gp_ALERT_S_ITS_MTRX[1] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_itsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_itsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-#if defined(OXCAN_RXD_PDU_CAN_ITS1S01_CH0) && defined(ComConf_ComSignal_ICON_V2R) && defined(ComConf_ComSignal_ICON_V2V)
-    static const U2 u2_s_ALERT_S_ITS_TT_TO_THRESH    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_S_ITS_TT_LSB_ICON_V2V = (U1)1U;
-    static const U1 u1_s_ALERT_S_ITS_TT_LSB_MSGSTS   = (U1)2U;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-    U4              u4_t_src_chk;
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ITS1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_S_ITS_TT_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ICON_V2R, &u1_t_sgnl);
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_ICON_V2V, &u1_t_sgnl);
-    u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_S_ITS_TT_LSB_ICON_V2V);
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ITS_TT_LSB_MSGSTS);
-
-    return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_ITS1S01_CH0) && defined(ComConf_ComSignal_ICON_V2R) && defined(ComConf_ComSignal_ICON_V2V) */
-}
-#endif /* BEVCDCFD-1483 */
-
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertS_itsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -175,92 +137,6 @@ static U4      u4_s_AlertS_itsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     return((U4)0U);
 #endif /* defined(OXCAN_RXD_PDU_CAN_ITS1S01_CH0) && defined(ComConf_ComSignal_IC_BZR) */
 }
-
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_itsAplSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_itsAplSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-#if defined(OXCAN_RXD_PDU_CAN_ITS1S01_CH0) && defined(ComConf_ComSignal_IC_APL)
-    static const U2 u2_s_ALERT_S_ITS_PD_APL_TRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_S_ITS_PD_APL_MSTS = (U1)5U;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-    U4              u4_t_src_chk;
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ITS1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_S_ITS_PD_APL_TRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_IC_APL, &u1_t_sgnl);
-
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ITS_PD_APL_MSTS);
-
-    return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_ITS1S01_CH0) && defined(ComConf_ComSignal_IC_APL) */
-}
-
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_itsWngSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_itsWngSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-#if defined(OXCAN_RXD_PDU_CAN_ITS1S01_CH0) && defined(ComConf_ComSignal_IC_WNG)
-    static const U1 u1_s_ALERT_S_ITS_PD_WNG_LSB_MSGSTS = (U1)2U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ITS1S01_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_IC_WNG, &u1_t_sgnl);
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ITS_PD_WNG_LSB_MSGSTS);
-
-    return(u4_t_src_chk);
-#else
-    return((U4)0U);
-#endif /* defined(OXCAN_RXD_PDU_CAN_ITS1S01_CH0) && defined(ComConf_ComSignal_IC_WNG) */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertS_itsWngRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertS_itsWngRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    U1              u1_t_sgnl;
-
-    if (((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                         ) &&
-        (u1_a_DST                          == (U1)ALERT_REQ_S_ITS_WNG_MALFUNC)) {
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else {
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_ITSW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
-}
-#endif /* BEVCDCFD-1483 */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

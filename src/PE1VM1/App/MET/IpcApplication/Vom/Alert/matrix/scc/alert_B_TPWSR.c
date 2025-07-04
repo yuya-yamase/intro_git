@@ -131,7 +131,7 @@ static U4      u4_s_AlertB_tpwsrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1               u1_t_msgsts;
 
     u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
-                                        (U4)OXCAN_SYS_PNC_ALL,
+                                        (U4)ALERT_CAN_SYS_PNC_ALL,
                                         (U2)U2_MAX) & (U1)COM_NO_RX;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_tpwsr_msgsts, u1_t_msgsts);
 

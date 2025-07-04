@@ -104,7 +104,7 @@ U1              u1_g_BattpowCfgSOCDSP(U1 * const u1p_a_socdsp)
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_SOC_DSP, u1p_a_socdsp);
     u1_t_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PLG1S06_CH0,
-                                (U4)OXCAN_SYS_PNC_ALL,
+                                (U4)BATTPOW_CAN_SYS_PNC_ALL,
                                 u2_OXCAN_RXTO_THRSH(5000U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     return(u1_t_sts);
 }
@@ -121,7 +121,7 @@ U1              u1_g_BattpowCfgSOCINDLL(U1 * const u1p_a_socindll)
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_SOCINDLL, u1p_a_socindll);
     u1_t_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                (U4)OXCAN_SYS_PNC_ALL,
+                                (U4)BATTPOW_CAN_SYS_PNC_ALL,
                                 u2_OXCAN_RXTO_THRSH(5000U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_sts);

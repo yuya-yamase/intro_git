@@ -106,16 +106,9 @@ static U4      u4_s_AlertS_scbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ABG1S01_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
-                                     u2_s_ALERT_S_SCB_THRESH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-#else /* BEVCDCFD-1483 */
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ABG1S01_CH0,
                                           (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_S_SCB_THRESH_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-#endif /* BEVCDCFD-1483 */
 
     u1_t_sgnl     = (U1)0U;
 #ifdef ComConf_ComSignal_SCSBZR

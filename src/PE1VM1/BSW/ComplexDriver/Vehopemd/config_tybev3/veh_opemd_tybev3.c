@@ -35,13 +35,11 @@
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_MDLSB_NM_0                     (31U)
-#if 1  /* BEVCDCFD-1405 */ /* 下記コードの位置が問題ないかご確認ください */
 #define VEH_OPEMD_COMRX_VALID                    (0x00U)
 #define VEH_OPEMD_COMRX_UNKNOWN                  (0x01U)
 #define VEH_OPEMD_COMRX_INVALID                  (0x02U)
 
 #define VEH_OPEMD_PTS_CHK_ON                     (0x04U)
-#endif /* BEVCDCFD-1405 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -65,10 +63,8 @@ static U1                       u1_s_veh_opemd_pts_chk;
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static inline U2      u2_s_VehopemdVpschk(const U2 u2_a_RX, const ST_VEH_OPEMD_VPS_CHK * st_ap_CHK, const U2 u2_a_NUM_CHK);
-#if 1  /* BEVCDCFD-1405 */ /* 下記コードの位置が問題ないかご確認ください */
 static        void     vd_s_VehopemdPtschk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
 static        U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
-#endif /* BEVCDCFD-1405 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -85,9 +81,7 @@ static        U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 
 void    vd_g_VehopemdCfgRstInit(void)
 {
     u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
-    #if 1  /* BEVCDCFD-1405 */ /* 下記コードの位置が問題ないかご確認ください */
     u1_s_veh_opemd_pts_chk       = (U1)VEH_OPEMD_COMRX_UNKNOWN;
-    #endif /* BEVCDCFD-1405 */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VehopemdCfgWkupInit(void)                                                                                           */
@@ -98,9 +92,7 @@ void    vd_g_VehopemdCfgRstInit(void)
 void    vd_g_VehopemdCfgWkupInit(void)
 {
     u2_s_veh_opemd_unk_tocnt = (U2)U2_MAX;
-    #if 1  /* BEVCDCFD-1405 */ /* 下記コードの位置が問題ないかご確認ください */
     u1_s_veh_opemd_pts_chk       = (U1)VEH_OPEMD_COMRX_UNKNOWN;
-    #endif /* BEVCDCFD-1405 */
 }
 /*===================================================================================================================================*/
 /*  U4      u4_g_VehopemdCfgMdupdt(const U4 u4_a_MDBIT, U4 * u4_ap_evbit)                                                            */
@@ -204,7 +196,6 @@ static inline U2      u2_s_VehopemdVpschk(const U2 u2_a_RX, const ST_VEH_OPEMD_V
 
     return(u2_t_chk);
 }
-#if 1  /* BEVCDCFD-1405 */ /* 下記コードの位置が問題ないかご確認ください */
 /*===================================================================================================================================*/
 /*  U1      u1_g_VehopemdPtsOn(const U1 u1_a_INV)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -281,7 +272,6 @@ static U1       u1_s_VehopemdPtschk_RDYIND(const U4 u4_a_MDBIT, const U4 u4_a_EV
 
     return(u1_t_pts_chk);
 }
-#endif /* BEVCDCFD-1405 */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

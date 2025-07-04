@@ -120,39 +120,6 @@ static U4      u4_s_AlertS_tcharBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     return(u4_t_src_chk);
 }
 
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Function Definitions                                                                                                             */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_tcharPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_tcharPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U1 u1_s_ALERT_CH_S_TCHAR_PD_LSB_STS = (U1)4U;
-    U4              u4_t_src_chk;
-    U1              u1_t_sgnl;
-    U1              u1_t_msgsts;
-
-    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BSR1S03_CH0,
-                                   (U4)OXCAN_SYS_IGR,
-                                   (U2)U2_MAX) & (U1)COM_NO_RX;
-
-    u1_t_sgnl = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_TBSM_POP, &u1_t_sgnl);
-
-    u4_t_src_chk = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_TCHAR_PD_LSB_STS);
-
-    return(u4_t_src_chk);
-}
-#endif /* BEVCDCFD-1483 */
-
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

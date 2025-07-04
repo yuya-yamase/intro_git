@@ -359,7 +359,7 @@ U1              u1_g_TripsnsrCfgEvDteBatSts(void)
     u1_t_ret = (U1)TRIPSNSR_EVDTE_VALID;
 
     u1_t_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PLG1S06_CH0,
-                                (U4)OXCAN_SYS_PNC_ALL,
+                                (U4)TRIPSNSR_CAN_SYS_PNC_ALL,
                                 (U2)TRIPSNSR_PLG1S06_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_t_sts & (U1)COM_TIMEOUT) != (U1)0U){

@@ -233,7 +233,7 @@ static U4      u4_s_AlertB_eswuocBcbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S05_CH0,
-                                     (U4)OXCAN_SYS_PNC_ALL,
+                                     (U4)ALERT_CAN_SYS_PNC_ALL,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_eswuoc_bcb_msgsts, u1_t_msgsts);
 
@@ -326,7 +326,7 @@ static U4      u4_s_AlertB_eswuocPdbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     U1              u1_t_trns_fact;
 
     u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S05_CH0,
-                                      (U4)OXCAN_SYS_PNC_ALL,
+                                      (U4)ALERT_CAN_SYS_PNC_ALL,
                                       u2_s_ALERT_B_ESWUOC_PDB_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){

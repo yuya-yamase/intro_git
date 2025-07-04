@@ -287,10 +287,10 @@ static U1      u1_s_AlertB_tdoorSgnl(const U1 u1_a_FACT)
     U1              u1_t_hdcy_bdb;
 
     u1_t_fact_bdb1s01  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S01_CH0,
-                                               (U4)OXCAN_SYS_PNC_ALL,
+                                               (U4)ALERT_CAN_SYS_PNC_ALL,
                                                u2_s_ALERT_B_TDOOR_TO_BDB1S01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_bdb1f01  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1F01_CH0,
-                                               (U4)OXCAN_SYS_PNC_ALL,
+                                               (U4)ALERT_CAN_SYS_PNC_ALL,
                                                u2_s_ALERT_B_TDOOR_TO_BDB1F01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_bdb1s01 |= u1_a_FACT;
     u1_t_fact_bdb1f01 |= u1_a_FACT;
@@ -374,14 +374,14 @@ static U1      u1_s_AlertB_tdoorPsdSgnl(const U1 u1_a_FACT)
 
 #if (ALERT_CFG_B_TDOOR_LPSDWARN == TRUE)
     u1_t_fact_drl1s03  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DRL1S03_CH0,
-                                          (U4)OXCAN_SYS_PNC_ALL,
+                                          (U4)ALERT_CAN_SYS_PNC_ALL,
                                                u2_s_ALERT_B_TDOOR_TO_DRL1S03) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_drl1s03 |= u1_a_FACT;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_tdoor_drl1s03_sts, u1_t_fact_drl1s03);
 #endif /* (ALERT_CFG_B_TDOOR_LPSDWARN == TRUE) */
 #if (ALERT_CFG_B_TDOOR_RPSDWARN == TRUE)
     u1_t_fact_drr1s03  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DRR1S03_CH0,
-                                          (U4)OXCAN_SYS_PNC_ALL,
+                                          (U4)ALERT_CAN_SYS_PNC_ALL,
                                                u2_s_ALERT_B_TDOOR_TO_DRR1S03) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_drr1s03 |= u1_a_FACT;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_tdoor_drr1s03_sts, u1_t_fact_drr1s03);
@@ -429,7 +429,7 @@ static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
 
 #if (ALERT_CFG_B_TDOOR_SLP_POS == TRUE)
     u1_t_fact_slp1s01  = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_SLP1S01,
-                                          (U4)OXCAN_SYS_PNC_ALL,
+                                          (U4)ALERT_CAN_SYS_PNC_ALL,
                                           u2_s_ALERT_B_TDOOR_TO_SLP1S01) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u1_t_fact_slp1s01 |= u1_a_FACT;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_b_tdoor_slp1s01_sts, u1_t_fact_slp1s01);

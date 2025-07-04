@@ -116,37 +116,6 @@ const ST_ALERT_MTRX st_gp_ALERT_S_LDA_MTRX[2] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_ldaTtLdaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_ldaTtLdaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U2 u2_s_ALERT_S_LDA_TT_LDA_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_S_LDA_TT_LDA_LSB_STS = (U1)4U;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-    U4              u4_t_src_chk;
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F03_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_S_LDA_TT_LDA_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_LDAINDI, &u1_t_sgnl);
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_LDA_TT_LDA_LSB_STS);
-
-    return(u4_t_src_chk);
-}
-#endif /* BEVCDCFD-1483 */
-
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertS_ldaBcLdwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -200,37 +169,6 @@ static U4      u4_s_AlertS_ldaBcCsfSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
     return(u4_t_src_chk);
 }
-
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_ldaPdLdaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_ldaPdLdaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U2 u2_s_ALERT_S_LDA_PD_LDA_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_S_LDA_PD_LDA_LSB_STS = (U1)4U;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-    U4              u4_t_src_chk;
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_DS12F03_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_S_LDA_PD_LDA_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_LDAMSG, &u1_t_sgnl);
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_LDA_PD_LDA_LSB_STS);
-
-    return(u4_t_src_chk);
-}
-#endif /* BEVCDCFD-1483 */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
