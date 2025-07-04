@@ -162,7 +162,7 @@ static U4      u4_s_AlertO_pdsmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_BDC1S46_RXCH0,
-                                          (U4)OXCAN_SYS_PNC_ALL,
+                                          (U4)ALERT_CAN_SYS_PNC_ALL,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_o_pdsmal_cycl_sts, u1_t_msgsts);
 
@@ -198,7 +198,7 @@ static U4      u4_s_AlertO_pdsmalPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_BDC1S46_RXCH0,
-                                          (U4)OXCAN_SYS_PNC_ALL,
+                                          (U4)ALERT_CAN_SYS_PNC_ALL,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
     vd_g_AlertBRxTrnsSts(&u1_s_alert_o_pdsmal_mulfunc_sts, u1_t_msgsts);
 

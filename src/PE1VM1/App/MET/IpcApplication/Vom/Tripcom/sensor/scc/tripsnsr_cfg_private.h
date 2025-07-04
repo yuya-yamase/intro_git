@@ -49,7 +49,7 @@
 #define TRIPSNSR_EVDTE_INVALID                  (0x02U)
 
 /* PNC check */
-#define OXCAN_SYS_PNC_ALL                        (OXCAN_SYS_PNC_16 | OXCAN_SYS_PNC_40 | OXCAN_SYS_PNC_43 | OXCAN_SYS_PNC_44)
+#define TRIPSNSR_CAN_SYS_PNC_ALL                        (OXCAN_SYS_PNC_16 | OXCAN_SYS_PNC_40 | OXCAN_SYS_PNC_43 | OXCAN_SYS_PNC_44)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

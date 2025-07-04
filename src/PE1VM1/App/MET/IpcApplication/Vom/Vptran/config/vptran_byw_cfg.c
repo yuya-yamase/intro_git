@@ -76,7 +76,7 @@
 U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 {
     return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                             ((U4)OXCAN_SYS_PNC_ALL),
+                             ((U4)VPTRAN_CAN_SYS_PNC_ALL),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
@@ -115,7 +115,7 @@ U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 U1              u1_g_VptranBywCfgGetMsgStsSftBlks(void)
 {
     return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
-                             ((U4)OXCAN_SYS_PNC_ALL),
+                             ((U4)VPTRAN_CAN_SYS_PNC_ALL),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
