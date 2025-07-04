@@ -403,7 +403,7 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
     vd_g_XSpiMETCANGWPushPDU(u2_a_IPDU_RX);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_MSG)                                                                      */
+/*  static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_IPDU_RX)                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      --> u2_a_MSG : Message Handler                                                                                   */
 /*  Return:         -                                                                                                                */
