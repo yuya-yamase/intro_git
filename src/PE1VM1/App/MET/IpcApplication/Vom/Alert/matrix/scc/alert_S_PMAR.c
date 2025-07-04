@@ -111,66 +111,6 @@ static U4      u4_s_AlertS_pmarBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     return(u4_t_src_chk);
 }
 
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_pmarPdWacspSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_pmarPdWacspSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U2 u2_s_ALERT_WACSPMID_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_WACSPMID_LSB_MSGSTS = (U1)1U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_CSR1S04_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_WACSPMID_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_WACSPMID, &u1_t_sgnl);
-
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_WACSPMID_LSB_MSGSTS);
-
-    return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_pmarPdDispSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_pmarPdDispSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U2 u2_s_ALERT_PMARDISP_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_PMARDISP_LSB_MSGSTS = (U1)2U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_CSR1S04_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     u2_s_ALERT_PMARDISP_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PMARDISP, &u1_t_sgnl);
-
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_PMARDISP_LSB_MSGSTS);
-
-    return(u4_t_src_chk);
-}
-#endif /* BEVCDCFD-1483 */
-
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */

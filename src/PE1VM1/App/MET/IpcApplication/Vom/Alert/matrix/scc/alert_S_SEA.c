@@ -171,14 +171,8 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u1_t_sgnl     = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_DOA_BUZ, &u1_t_sgnl);
 
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BSR1S01_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_ACC | (U2)OXCAN_RX_SYS_TOE_ACC,
-#else /* BEVCDCFD-1483 */
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BSR1S01_CH0,
-                                     (U4)OXCAN_SYS_PNC_ALL,
-#endif /* BEVCDCFD-1483 */
+                                     (U4)OXCAN_SYS_ACC,
                                      u2_s_ALERT_S_SEA_BC_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     vd_g_AlertBRxTrnsSts(&u1_s_alert_s_sea_msgsts_doa_buz, u1_t_msgsts);
@@ -192,49 +186,6 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
     return(u4_t_src_chk);
 }
-
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_seaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_seaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U2 u2_s_ALERT_S_SEA_PD_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_S_SEA_PD_LSB_MSGSTS = (U1)1U;
-    static const U4 u4_s_ALERT_S_SEA_PD_BIT_IGN_ON = (U4)0x00000008U;
-    static const U4 u4_s_ALERT_S_SEA_PD_BIT_BAT_WT = (U4)0x00000010U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
-
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_DOAM_MSG, &u1_t_sgnl);
-
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BSR1S02_CH0,
-                                     (U4)OXCAN_SYS_PNC_ALL,
-                                     u2_s_ALERT_S_SEA_PD_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    vd_g_AlertBRxTrnsSts(&u1_s_alert_s_sea_msgsts_doam_msg, u1_t_msgsts);
-
-    u4_t_src_chk  = (U4)u1_t_sgnl;
-    u4_t_src_chk |= ((U4)u1_s_alert_s_sea_msgsts_doam_msg << u1_s_ALERT_S_SEA_PD_LSB_MSGSTS);
-
-    if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U){
-        u4_t_src_chk |= u4_s_ALERT_S_SEA_PD_BIT_IGN_ON;
-    }
-
-    if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){
-        u4_t_src_chk |= u4_s_ALERT_S_SEA_PD_BIT_BAT_WT;
-    }
-
-    return(u4_t_src_chk);
-}
-#endif /* BEVCDCFD-1483 */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

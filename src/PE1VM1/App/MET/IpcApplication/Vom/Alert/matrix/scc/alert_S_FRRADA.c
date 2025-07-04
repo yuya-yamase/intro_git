@@ -221,51 +221,6 @@ const ST_ALERT_MTRX st_gp_ALERT_S_FRRADA_MTRX[2] = {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_frradaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_frradaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_FSR    = (U1)1U;
-    static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_RSL    = (U1)2U;
-    static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_RSR    = (U1)3U;
-    static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_MSGSTS = (U1)4U;
-    U4              u4_t_src_chk;
-    U1              u1_t_sgnl;
-    U1              u1_t_msgsts;
-    
-    u1_t_msgsts  = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ADU1S07_CH0,
-                                    (U4)OXCAN_SYS_IGR,
-                                    (U2)U2_MAX) & (U1)COM_NO_RX;
-
-    u1_t_sgnl    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_FSL_PLRQ, &u1_t_sgnl);
-    u4_t_src_chk = (U4)u1_t_sgnl;
-    
-    u1_t_sgnl    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_FSR_PLRQ, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl << u1_s_ALERT_CH_S_FRRADA_LSB_FSR;
-
-    u1_t_sgnl    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RSL_PLRQ, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl << u1_s_ALERT_CH_S_FRRADA_LSB_RSL;
-
-    u1_t_sgnl    = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_RSR_PLRQ, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl << u1_s_ALERT_CH_S_FRRADA_LSB_RSR;
-
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_FRRADA_LSB_MSGSTS);
-
-    return(u4_t_src_chk);
-}
-#endif /* BEVCDCFD-1483 */
-
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertS_frradaBzCmpSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */

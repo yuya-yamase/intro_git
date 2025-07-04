@@ -177,61 +177,6 @@ static U4      u4_s_AlertS_rsaBcLmtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     return(u4_t_src_chk);
 }
 
-#warning "BEVCDCFD-1483"
-#if 0 /* BEVCDCFD-1483 */
-#else /* BEVCDCFD-1483 */
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertS_rsaRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertS_rsaRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U1 u1_s_ALERT_S_RSA_RW_LSB_MSGSTS = (U1)2U;
-    U4              u4_t_src_chk;
-    U1              u1_t_sgnl;
-    U1              u1_t_msgsts;
-
-    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_FCM1S11,
-                                   (U4)OXCAN_SYS_IGR,
-                                   (U2)U2_MAX) & (U1)COM_NO_RX;
-
-    u1_t_sgnl = (U1)0U;
-#if 0   /* BEV BSW provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_TSRWMSG, &u1_t_sgnl);
-#endif
-    u4_t_src_chk = (U4)u1_t_sgnl;
-
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_RSA_RW_LSB_MSGSTS);
-
-    return(u4_t_src_chk);
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_AlertS_rsaRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_AlertS_rsaRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
-{
-    U1              u1_t_sgnl;
-
-    if (((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                          ) &&
-        (u1_a_DST                          == (U1)ALERT_REQ_S_RSA_RWRN_RSAWREQ)) {
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_ON;
-    }
-    else {
-        u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
-    }
-
-#if 0   /* BEV BSW provisionally */
-    (void)Com_SendSignal(ComConf_ComSignal_RSAW, &u1_t_sgnl);    /* COM Tx STUB delete */
-#endif
-}
-#endif /* BEVCDCFD-1483 */
-
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
