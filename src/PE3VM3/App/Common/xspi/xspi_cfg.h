@@ -27,7 +27,7 @@
 #define XSPI_SCLK_MODE_CFG 		(PORT_MODE_CFG_P21_0_MSPI4SC)	/* SCLKポート設定値（MCAL/PORT） */
 #define XSPI_TXD_MODE_CFG 		(PORT_MODE_CFG_P21_1_MSPI4SI)	/* TXDポート設定値（MCAL/PORT） */
 #define XSPI_RXD_MODE_CFG 		(PORT_MODE_CFG_P21_2_MSPI4SO)	/* RXDポート設定値（MCAL/PORT） */
-#define XSPI_OST_CH				(GPT_OST_CH_03)				/* OSTMチャネル（MCAL/GPT） */
+#define XSPI_OST_CH				(GPT_OST_CH_03_SPI_TICK_CEN)	/* OSTMチャネル（MCAL/GPT） */
 
 /*------------------------------------------*/
 /*	有効フレームサイズ						*/

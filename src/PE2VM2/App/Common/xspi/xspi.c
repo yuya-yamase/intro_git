@@ -434,7 +434,7 @@ void	xspi_Main(
 			{
 				/* SPI通信状態の取得 */
 				spi_stat = Spi_GetStatus( XSPI_COMC_ID );
-				if( spi_stat == SPI_IDLE )
+				if( spi_stat == u1SPI_IDLE )
 				{
 					/* 通信終了 */
 					event = CMDRV_EVT_COMEND;
