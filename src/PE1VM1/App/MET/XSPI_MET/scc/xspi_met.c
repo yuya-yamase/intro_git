@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_MET_C_MAJOR                     (0U)
-#define XSPI_MET_C_MINOR                     (1U)
+#define XSPI_MET_C_MINOR                     (2U)
 #define XSPI_MET_C_PATCH                     (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -127,10 +127,10 @@ void    vd_g_XSpiMETPduTx(void)
 {
     static const ST_XSPIMET_CAN_TXCFG st_sp_XSPIMET_CAN_TXCFG[XSPIMETCANGW_NUM_BLOCK] = {
         {
-            (U2)0U,     /* BUFFER POS 670  */
-            (U2)9U,     /* BUFFER POS 679  */
-            (U2)15U,    /* BUFFER POS 685  */
-            (U2)698U    /* BUFFER POS 1368 */
+            (U2)0U,     /* BUFFER POS 670    */
+            (U2)9U,     /* BUFFER POS 679    */
+            (U2)15U,    /* BUFFER POS 685    */
+            (U2)564U    /* BUFFER POS 1234   */
         }
     };
 
@@ -169,6 +169,7 @@ void    vd_g_XSpiMETPduTx(void)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  0.0.0    12/18/2024  KT       New.                                                                                               */
 /*  0.1.0    06/09/2025  KT       Change for xspi IF.(1byte -> 4byte)                                                                */
+/*  0.2.0    07/07/2025  KT       Change for BEV System_Consideration_1.(CAN V7.3)                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

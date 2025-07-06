@@ -60,7 +60,7 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_MMCUS_NUM_TXSIGNAL     (4U)
-#define XSPI_METCUS_NUM_TXSIGNAL    (16U)
+#define XSPI_METCUS_NUM_TXSIGNAL    (15U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -88,7 +88,6 @@ static U1             u1_s_xspi_mm2c118n_rxcnt;
 static U1             u1_s_xspi_mm2c124n_rxcnt;
 static U1             u1_s_prebsmope;
 static U1             u1_s_precsrmope;
-static U1             u1_s_preacinvope;
 static U1             u1_s_prekmmileope;
 static U1             u1_s_prepfmautoope;
 static U1             u1_s_prekpvclope;
@@ -130,14 +129,12 @@ static U1             u1_s_pretpinsel;            /* TPINSEL Previous RxValue  *
 static U1             u1_s_pretpinself;           /* TPINSELF Previous RxValue */
 static U1             u1_s_pretpinselr;           /* TPINSELR Previous RxValue */
 static U1             u1_s_prersrmsw;             /* RSRMSW Previous RxValue   */
-static U1             u1_s_prerscsw_op;           /* RSCSW_OP Previous RxValue */
 static U1             u1_s_premintrsof;           /* MINTRSOF Previous RxValue */
 static U1             u1_s_precsr_mute;           /* CSR_MUTE Previous RxValue */
 static U1             u1_s_pretbwsw;              /* TBWSW Previous RxValue    */
 static U1             u1_s_presrpmsw;             /* SRPMSW Previous RxValue   */
 static U1             u1_s_preulkmsw;             /* ULKMSW Previous RxValue   */
 static U1             u1_s_prelkmsw;              /* LKMSW Previous RxValue    */
-static U1             u1_s_prergmdsw;             /* RG_MD_SW Previous RxValue */
 static U1             u1_s_prerngmsw;             /* RNGMSW Previous RxValue   */
 static U1             u1_sp_xspi_mmcus_pretxsig[XSPI_MMCUS_NUM_TXSIGNAL];
 static U1             u1_sp_xspi_metcus_pretxsig[XSPI_METCUS_NUM_TXSIGNAL];
@@ -204,7 +201,6 @@ static inline void    vd_s_XSpiCanTx_LCASGAPR(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_BSMMSW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_CSRMSW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_VRESTPSW(const U4 * u4_ap_pck_rx);
-static inline void    vd_s_XSpiCanTx_ACINVSW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_PLUSSW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_METMDREJ(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_LDASW(const U4 * u4_ap_pck_rx);
@@ -239,14 +235,12 @@ static inline void    vd_s_XSpiCanTx_TPINSEL(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_TPINSELF(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_TPINSELR(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_RSRMSW(const U4 * u4_ap_pck_rx);
-static inline void    vd_s_XSpiCanTx_RSCSW_OP(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_MINTRSOF(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_CSR_MUTE(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_TBWSW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_SRPMSW(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_ULKMSW(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_LKMSW(const U4* u4_ap_pck_rx);
-static inline void    vd_s_XSpiCanTx_RG_MD_SW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_RNGMSW(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_CANSignal(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_DOAM_TIM(const U4 * u4_ap_pck_rx);
@@ -322,7 +316,6 @@ void    vd_g_XSpiCfgInitCh1(void)
     u1_s_xspi_mm2c124n_rxcnt = (U1)0U;
     u1_s_prebsmope = (U1)0U;
     u1_s_precsrmope = (U1)0U;
-    u1_s_preacinvope = (U1)0U;
     u1_s_prekmmileope = (U1)0U;
     u1_s_prepfmautoope = (U1)0U;
     u1_s_prekpvclope = (U1)0U;
@@ -364,14 +357,12 @@ void    vd_g_XSpiCfgInitCh1(void)
     u1_s_pretpinself = (U1)0U;
     u1_s_pretpinselr = (U1)0U;
     u1_s_prersrmsw = (U1)0U;
-    u1_s_prerscsw_op = (U1)0U;
     u1_s_premintrsof = (U1)0U;
     u1_s_precsr_mute = (U1)0U;
     u1_s_pretbwsw = (U1)0U;
     u1_s_presrpmsw   = (U1)0U;
     u1_s_preulkmsw = (U1)0U;
     u1_s_prelkmsw = (U1)0U;
-    u1_s_prergmdsw = (U1)0U;
     u1_s_prerngmsw = (U1)0U;
     u1_s_prersa_nem = (U1)0U;
     u1_s_prersa_lsm = (U1)0U;
@@ -442,107 +433,104 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCfgRxEther(&u4_ap_PDU_RX[100]);
 
     vd_s_XSpiCanTx_CANSignal(&u4_ap_PDU_RX[15]);
-    vd_s_XSpiCanTx_ASD_CONT(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_ASD_CANC(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_METSPDIS(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_FCMUSER(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_LCASGAPR(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_BSMMSW(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_CSRMSW(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_VRESTPSW(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_ACINVSW(&u4_ap_PDU_RX[31]);
-    vd_s_XSpiCanTx_PLUSSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_METMDREJ(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_LDASW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_LDA_SFB(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_LDAMCUS(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_FCMMSW(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_RSR_TIM(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_BSMM_ILV(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_PCSMSW(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_IDASESW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_PKSSVOL(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_RCTAMSW(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_SW_RCD01(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_ICSMSW(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_DOAM_TIM(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_DOAM_SW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_TRLC_YN(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_RTAN_TIM(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_RTAN_MSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_SW_LTC01(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_LCASGMSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_SW_ITS04(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_ACCRACSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_ACCSSOSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_ACCROSSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_ACCACLSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_CTAMSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_PBDBZMVL(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_PBDMSW(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_PBDKSW(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_PBDMCUS(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_TPUNTSET(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_TPINSEL(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_TPINSELF(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_TPINSELR(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_RG_MD_SW(&u4_ap_PDU_RX[23]);
-    vd_s_XSpiCanTx_RNGMSW(&u4_ap_PDU_RX[49]);
-    vd_s_XSpiCanTx_RSRMSW(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_MINTRSOF(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_CSR_MUTE(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_TBWSW(&u4_ap_PDU_RX[49]);
-    vd_s_XSpiCanTx_SRPMSW(&u4_ap_PDU_RX[35]);	
-    vd_s_XSpiCanTx_ULKMSW(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_LKMSW(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_LDAAMSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_RSA_NEM(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_RSA_LSM(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_TRA_SW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_ERMSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_ACCSPMSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_ACCGCRSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_CCSMDMSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_SLSSOSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_PMARSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_TMNVSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_TMNSSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_ITSSETSW(&u4_ap_PDU_RX[29]);
-    vd_s_XSpiCanTx_DISSUISW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_DM_SW_A2(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_AHSSWVSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_AHSSDESW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_RSCSW_OP(&u4_ap_PDU_RX[31]);
-    vd_s_XSpiCanTx_M_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_MLR_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_RLM_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_MRT_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_ART_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_PWLSW(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_WVRD_BB(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_WVRU_BB(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_WROF_BB(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_WRLO_BB(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_WRIN_BB(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_WRSW_BB(&u4_ap_PDU_RX[33]);
-    vd_s_XSpiCanTx_WSVS_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_TRNBBSW(&u4_ap_PDU_RX[47]);
-    vd_s_XSpiCanTx_LSW_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_FOG_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_RFG_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_METMDSEL(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_AECOSWBB(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_MW_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_WDI_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_HCSUPEN(&u4_ap_PDU_RX[87]);
-    vd_s_XSpiCanTx_HCSDWEN(&u4_ap_PDU_RX[87]);
-    vd_s_XSpiCanTx_HCSMNSW(&u4_ap_PDU_RX[87]);
-    vd_s_XSpiCanTx_HCSSTPOP(&u4_ap_PDU_RX[87]);
-    vd_s_XSpiCanTx_TITE_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_ADSEGDSW(&u4_ap_PDU_RX[51]);
-    vd_s_XSpiCanTx_DPMS_BB(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_POS_CALL(&u4_ap_PDU_RX[35]);
-    vd_s_XSpiCanTx_POS_REG(&u4_ap_PDU_RX[35]);
+    vd_s_XSpiCanTx_ASD_CONT(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_ASD_CANC(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_METSPDIS(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_FCMUSER(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_LCASGAPR(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_BSMMSW(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_CSRMSW(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_VRESTPSW(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_PLUSSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_METMDREJ(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_LDASW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_LDA_SFB(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_LDAMCUS(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_FCMMSW(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_RSR_TIM(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_BSMM_ILV(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_PCSMSW(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_IDASESW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_PKSSVOL(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_RCTAMSW(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_SW_RCD01(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_ICSMSW(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_DOAM_TIM(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_DOAM_SW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_TRLC_YN(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_RTAN_TIM(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_RTAN_MSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_SW_LTC01(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_LCASGMSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_SW_ITS04(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_ACCRACSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_ACCSSOSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_ACCROSSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_ACCACLSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_CTAMSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_PBDBZMVL(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_PBDMSW(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_PBDKSW(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_PBDMCUS(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_TPUNTSET(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_TPINSEL(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_TPINSELF(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_TPINSELR(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_RNGMSW(&u4_ap_PDU_RX[37]);
+    vd_s_XSpiCanTx_RSRMSW(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_MINTRSOF(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_CSR_MUTE(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_TBWSW(&u4_ap_PDU_RX[37]);
+    vd_s_XSpiCanTx_SRPMSW(&u4_ap_PDU_RX[91]);	
+    vd_s_XSpiCanTx_ULKMSW(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_LKMSW(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_LDAAMSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_RSA_NEM(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_RSA_LSM(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_TRA_SW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_ERMSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_ACCSPMSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_ACCGCRSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_CCSMDMSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_SLSSOSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_PMARSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_TMNVSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_TMNSSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_ITSSETSW(&u4_ap_PDU_RX[21]);
+    vd_s_XSpiCanTx_DISSUISW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_DM_SW_A2(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_AHSSWVSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_AHSSDESW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_M_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_MLR_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_RLM_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_MRT_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_ART_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_PWLSW(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_WVRD_BB(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_WVRU_BB(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_WROF_BB(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_WRLO_BB(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_WRIN_BB(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_WRSW_BB(&u4_ap_PDU_RX[23]);
+    vd_s_XSpiCanTx_WSVS_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_TRNBBSW(&u4_ap_PDU_RX[35]);
+    vd_s_XSpiCanTx_LSW_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_FOG_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_RFG_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_METMDSEL(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_AECOSWBB(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_MW_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_WDI_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_HCSUPEN(&u4_ap_PDU_RX[69]);
+    vd_s_XSpiCanTx_HCSDWEN(&u4_ap_PDU_RX[69]);
+    vd_s_XSpiCanTx_HCSMNSW(&u4_ap_PDU_RX[69]);
+    vd_s_XSpiCanTx_HCSSTPOP(&u4_ap_PDU_RX[69]);
+    vd_s_XSpiCanTx_TITE_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_ADSEGDSW(&u4_ap_PDU_RX[39]);
+    vd_s_XSpiCanTx_DPMS_BB(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_POS_CALL(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_POS_REG(&u4_ap_PDU_RX[91]);
 
 }
 
@@ -847,43 +835,6 @@ static inline void    vd_s_XSpiCanTx_VRESTPSW(const U4 * u4_ap_pck_rx)
         /* Do Nothing */
     }
     u1_s_prevrctrlcanope = u1_t_rxdata;
-}
-
-/*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_ACINVSW(U4 * u4_ap_pdu_tx)                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_ACINVSW(const U4 * u4_ap_pck_rx)
-{
-    U1 u1_t_rxdata;
-    U1 u1_t_mmsup;
-
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)31U, (U1)1U);
-#if 0   /* BEV provisionally */
-    u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
-#else
-    u1_t_mmsup = (U1)FALSE;
-#endif
-
-    if(u1_t_mmsup == (U1)TRUE){
-        if((u1_t_rxdata == (U1)1U) && (u1_t_rxdata != u1_s_preacinvope)){
-            vd_g_GatewaymmDrvmdPut((U1)GATEWAY_MM_ACINV_SW, (U1)1U);
-        } else if ((u1_t_rxdata == (U1)0U) && (u1_t_rxdata != u1_s_preacinvope)) {
-            vd_g_GatewaymmDrvmdPut((U1)GATEWAY_MM_ACINV_SW, (U1)0U);
-        } else {
-            /* Do Nothing */
-        }
-    }
-    else{
-        if(u1_t_rxdata != u1_s_preacinvope){
-            if(u1_t_rxdata <= (U1)1U){
-                vd_g_VdsCIReqTx((U1)VDS_CI_SW_ACINV_SW, u1_t_rxdata);
-            }
-        }
-    }
-    u1_s_preacinvope = u1_t_rxdata;
 }
 
 /*===================================================================================================================================*/
@@ -1775,34 +1726,6 @@ static inline void    vd_s_XSpiCanTx_RSRMSW(const U4 * u4_ap_pck_rx)
 }
 
 /*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_RSCSW_OP(const U4 * u4_ap_pdu_rx)                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_RSCSW_OP(const U4 * u4_ap_pck_rx)
-{
-    U1 u1_t_mmsup;
-    U1 u1_t_rxdata;
-
-#if 0   /* BEV provisionally */
-    u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
-#else
-    u1_t_mmsup = (U1)FALSE;
-#endif
-    if(u1_t_mmsup == (U1)FALSE){
-        u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)16U, (U1)1U);
-
-        if(u1_t_rxdata != u1_s_prerscsw_op){
-            if(u1_t_rxdata <= (U1)1U){
-                vd_g_VdsCIReqTx((U1)VDS_CI_SW_RSCSW_OP, u1_t_rxdata);
-            }
-        }
-        u1_s_prerscsw_op = u1_t_rxdata;
-    }
-}
-
-/*===================================================================================================================================*/
 /*  static inline void    vd_s_XSpiCanTx_MINTRSOF(const U4 * u4_ap_pdu_rx)                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -1944,43 +1867,6 @@ static inline void    vd_s_XSpiCanTx_LKMSW(const U4* u4_ap_pck_rx)
         }
     }
     u1_s_prelkmsw = u1_t_rxdata;
-}
-
-/*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCanTx_RG_MD_SW(U4 * u4_ap_pdu_tx)                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCanTx_RG_MD_SW(const U4 * u4_ap_pck_rx)
-{
-    U1 u1_t_rxdata;
-    U1 u1_t_mmsup;
-
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)2U, (U1)1U);
-#if 0   /* BEV provisionally */
-    u1_t_mmsup  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_MOP);
-#else
-    u1_t_mmsup = (U1)FALSE;
-#endif
-
-    if(u1_t_mmsup == (U1)TRUE){
-        if((u1_t_rxdata == (U1)1U) && (u1_t_rxdata != u1_s_prergmdsw)){
-            vd_g_GatewaymmDrvmdPut((U1)GATEWAY_MM_RG_MD_SW, (U1)1U);
-        } else if ((u1_t_rxdata == (U1)0U) && (u1_t_rxdata != u1_s_prergmdsw)) {
-            vd_g_GatewaymmDrvmdPut((U1)GATEWAY_MM_RG_MD_SW, (U1)0U);
-        } else {
-            /* Do Nothing */
-        }
-    }
-    else{
-        if (u1_t_rxdata != u1_s_prergmdsw) {
-            if (u1_t_rxdata <= (U1)1U) {
-                vd_g_VdsCIReqTx((U1)VDS_CI_SW_RG_MD_SW, u1_t_rxdata);
-            }
-        }
-    }
-    u1_s_prergmdsw = u1_t_rxdata;
 }
 
 /*===================================================================================================================================*/
@@ -2525,29 +2411,28 @@ static inline void    vd_s_XSpiCanTx_AHSSDESW(const U4 * u4_ap_pck_rx)
 static inline void vd_s_XSpiCanTx_CANSignal(const U4 * u4_ap_pck_rx){
     static const ST_XSPI_TXSIG st_sp_XSPI_MMCUS_TXSIG[XSPI_MMCUS_NUM_TXSIGNAL] = {
     /* u1_xspiid,  u1_bitpos,  u1_datalen, u1_maxvalue, u1_vdsci_id */
-        {(U1)20U,   (U1)21U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_RSRCANSW   },    /* MET1S30->RSRCANSW */
-        {(U1)21U,   (U1)6U,    (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_VRAPRMSW   },    /* MET1S30->VRAPRMSW */
-        {(U1)24U,   (U1)12U,   (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_VRAPMSWS   },    /* MET1S44->VRAPMSWS */
-        {(U1)20U,   (U1)20U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_VRAPRDIS   }     /* MET1S30->VRAPRDIS */
+        {(U1)76U,   (U1)21U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_RSRCANSW   },    /* MET1S30->RSRCANSW */
+        {(U1)77U,   (U1)6U,    (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_VRAPRMSW   },    /* MET1S30->VRAPRMSW */
+        {(U1)12U,   (U1)12U,   (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_VRAPMSWS   },    /* MET1S44->VRAPMSWS */
+        {(U1)76U,   (U1)20U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_VRAPRDIS   }     /* MET1S30->VRAPRDIS */
     };
     static const ST_XSPI_TXSIG st_sp_XSPI_METCUS_TXSIG[XSPI_METCUS_NUM_TXSIGNAL] = {
     /* u1_xspiid,  u1_bitpos,  u1_datalen, u1_maxvalue, u1_vdsci_id */
-        {(U1)14U,   (U1)9U,    (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_TSR_SNM    },    /* MET1S27->TSR_SNM  */
-        {(U1)15U,   (U1)24U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_TSR_MAIN   },    /* MET1S27->TSR_MAIN */
-        {(U1)14U,   (U1)19U,   (U1)3U,    (U1)7U,    (U1)VDS_CI_SW_TSR_OSL    },    /* MET1S27->TSR_OSL  */
-        {(U1)37U,   (U1)25U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_SDGMSW     },    /* MET1S70->SDGMSW   */
-        {(U1)40U,   (U1)4U,    (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_USMMAIN    },    /* MET1S70->USMMAIN  */
-        {(U1)37U,   (U1)24U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_PDAMSW     },    /* MET1S70->PDAMSW   */
-        {(U1)36U,   (U1)16U,   (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_BSD_SMSS   },    /* MET1S70->BSD_SMSS */
-        {(U1)36U,   (U1)18U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_BSD_SMSB   },    /* MET1S70->BSD_SMSB */
-        {(U1)37U,   (U1)16U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_ADDS_MSW   },    /* MET1S70->ADDS_MSW */
-        {(U1)22U,   (U1)7U,    (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_SPBZ_OPE   },    /* MET1S43->SPBZ_OPE */
-        {(U1)20U,   (U1)21U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_RSRCANSW   },    /* MET1S30->RSRCANSW */
-        {(U1)21U,   (U1)6U,    (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_VRAPRMSW   },    /* MET1S30->VRAPRMSW */
-        {(U1)24U,   (U1)12U,   (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_VRAPMSWS   },    /* MET1S44->VRAPMSWS */
-        {(U1)20U,   (U1)20U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_VRAPRDIS   },    /* MET1S30->VRAPRDIS */
-        {(U1)41U,   (U1)18U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_RTWMSW     },    /* MET1S71->RTWMSW   */
-        {(U1)35U,   (U1)17U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_TBCSW      }     /* MET1S62->TBCSW    */
+        {(U1)6U,    (U1)9U,    (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_TSR_SNM    },    /* MET1S27->TSR_SNM  */
+        {(U1)7U,    (U1)24U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_TSR_MAIN   },    /* MET1S27->TSR_MAIN */
+        {(U1)6U,    (U1)19U,   (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_TSR_OSL    },    /* MET1S27->TSR_OSL  */
+        {(U1)25U,   (U1)25U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_SDGMSW     },    /* MET1S70->SDGMSW   */
+        {(U1)28U,   (U1)4U,    (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_USMMAIN    },    /* MET1S70->USMMAIN  */
+        {(U1)25U,   (U1)24U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_PDAMSW     },    /* MET1S70->PDAMSW   */
+        {(U1)24U,   (U1)16U,   (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_BSD_SMSS   },    /* MET1S70->BSD_SMSS */
+        {(U1)24U,   (U1)18U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_BSD_SMSB   },    /* MET1S70->BSD_SMSB */
+        {(U1)25U,   (U1)16U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_ADDS_MSW   },    /* MET1S70->ADDS_MSW */
+        {(U1)76U,   (U1)21U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_RSRCANSW   },    /* MET1S30->RSRCANSW */
+        {(U1)77U,   (U1)6U,    (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_VRAPRMSW   },    /* MET1S30->VRAPRMSW */
+        {(U1)12U,   (U1)12U,   (U1)2U,    (U1)3U,    (U1)VDS_CI_SW_VRAPMSWS   },    /* MET1S44->VRAPMSWS */
+        {(U1)76U,   (U1)20U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_VRAPRDIS   },    /* MET1S30->VRAPRDIS */
+        {(U1)29U,   (U1)18U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_RTWMSW     },    /* MET1S71->RTWMSW   */
+        {(U1)23U,   (U1)17U,   (U1)1U,    (U1)1U,    (U1)VDS_CI_SW_TBCSW      }     /* MET1S62->TBCSW    */
     };
 
     U1 u1_t_mmsup;
@@ -3037,7 +2922,7 @@ static inline void    vd_s_XSpiCanTx_HCSUPEN(const U4 * u4_ap_pck_rx)
     static const U1 u1_s_XSPI_MET_HCSUPEN_MAX = (U1)0x01U;
     U1 u1_t_rxdata;
 
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)31U, (U1)1U);
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)28U, (U1)1U);
 
     if (u1_t_rxdata != u1_s_prehcsupen) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_HCSUPEN_MAX) {
@@ -3058,7 +2943,7 @@ static inline void    vd_s_XSpiCanTx_HCSDWEN(const U4 * u4_ap_pck_rx)
     static const U1 u1_s_XSPI_MET_HCSDWEN_MAX = (U1)0x01U;
     U1 u1_t_rxdata;
 
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)30U, (U1)1U);
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)27U, (U1)1U);
 
     if (u1_t_rxdata != u1_s_prehcsdwen) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_HCSDWEN_MAX) {
@@ -3079,7 +2964,7 @@ static inline void    vd_s_XSpiCanTx_HCSMNSW(const U4 * u4_ap_pck_rx)
     static const U1 u1_s_XSPI_MET_HCSMNSW_MAX = (U1)0x01U;
     U1 u1_t_rxdata;
 
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)29U, (U1)1U);
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)26U, (U1)1U);
 
     if (u1_t_rxdata != u1_s_prehcsmnsw) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_HCSMNSW_MAX) {
@@ -3100,7 +2985,7 @@ static inline void    vd_s_XSpiCanTx_HCSSTPOP(const U4 * u4_ap_pck_rx)
     static const U1 u1_s_XSPI_MET_HCSSTPOP_MAX = (U1)0x01U;
     U1 u1_t_rxdata;
 
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)27U, (U1)1U);
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)24U, (U1)1U);
 
     if (u1_t_rxdata != u1_s_prehcsstpop) {
         if (u1_t_rxdata <= u1_s_XSPI_MET_HCSSTPOP_MAX) {
@@ -3265,6 +3150,7 @@ static inline void    vd_s_XSpiCanTx_POS_REG(const U4 * u4_ap_pck_rx)
 /*           05/30/2025  SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*           06/13/2025  KO       Change for BEV System_Consideration_2.(MET-B_DRPBB-CSTD-0-01-A-C0)                                 */
 /*           06/30/2025  KT       Change for BEV System_Consideration_2.(BEV3CDCMET-547/BEV3CDCMET-549)                              */
+/*           07/07/2025  KT       Change for BEV System_Consideration_2.(CAN V7.3)                                                   */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
