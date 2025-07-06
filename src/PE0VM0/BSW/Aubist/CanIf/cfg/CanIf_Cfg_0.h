@@ -50,7 +50,7 @@
 /******************************************/
 /* Send-Queue Size */
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE000          (20U)
-#define BSW_CANIF_CFG_0_SIZE_SNDQUE001          (200U)
+#define BSW_CANIF_CFG_0_SIZE_SNDQUE001          (400U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE002          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE003          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE004          (0U)
@@ -301,8 +301,8 @@
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE249          (0U)
 
 /* Send-Queue HOH */
-#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (0x00F0U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE001           (0x00F1U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (0x00F4U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE001           (0x00F5U)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE002           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE003           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE004           (BSW_CANIF_HOH_NOUSE)
@@ -1065,7 +1065,7 @@
 /******************************************/
 /******************************************/
 /* Receive-Queue Size */
-#define BSW_CANIF_CFG_0_SIZE_RCVQUE             (10184U)
+#define BSW_CANIF_CFG_0_SIZE_RCVQUE             (3384U)
 
 
 /******************************************/
@@ -1113,7 +1113,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

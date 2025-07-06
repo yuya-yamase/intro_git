@@ -19,16 +19,9 @@
 #if (ADC_CFG_DEM_SET_EVENT==STD_ON)
 #include "Rte_Dem_Type.h"
 #endif
-#if (ADC_CFG_HW_TRG_API==STD_ON)
-#include "Reg_Pic2.h"
-#endif
 
 /*==============================================================================================*/
-/* prototypes																					*/
-/*==============================================================================================*/
-
-/*==============================================================================================*/
-/* defines / data types / structs / unions	/ macros											*/
+/* defines / data types / structs / unions / macros												*/
 /*==============================================================================================*/
 
 /*--------------------------------------------------------------------------*/
@@ -60,27 +53,33 @@
 			(ADC_SGTSELX_TXSEL_HARD	* ADC_SGTSELX_TXSEL_0) :									\
 			(ADC_SGTSELX_TXSEL_SOFT	* ADC_SGTSELX_TXSEL_0) )									\
 	))
+
+/* VCR Normal Mode Setting	*/
+/*#if	(MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )															*/
+/*	#define ADC_DFGTMENT		(uint32)(ADC_VCR_GTMENT_DISABLED * ADC_VCR_GTMENT)		* GTMENT	(U2A)	*/
+/*	#define ADC_DFEGTMTAG		(uint32)((uint32)ADC_ZERO		 * ADC_VCR_GTMTAG_0)	* GTMTAG	(U2A)	*/
+/*#else																										*/
+/*	#define ADC_DFGTMENT		(uint32)(ADC_VCR_DFENT_DISABLED * ADC_VCR_DFENT)		* DFENT		(U2B)	*/
+/*	#define ADC_DFEGTMTAG		(uint32)(ADC_ZERO				* ADC_VCR_DFETAG_0) 	* DFETAG	(U2B)	*/
+/*#endif																									*/
+/*#define	ADC_VCR_NORMAL 																				\	*/
+/*	((uint32) 																							\	*/
+/*		 ((uint32)((uint32)ADC_VCR_VCULLMTBS_DISABLED * ADC_VCR_VCULLMTBS_0)	* VCULLMTBS:31 - 28		\	*/
+/*		+(uint32)((uint32)ADC_VCR_WTTS_DISABLED * ADC_VCR_WTTS_0)				* WTTS		:27 - 24	\	*/
+/*		+ADC_DFGTMENT															*			:20			\	*/
+/*		+ADC_DFEGTMTAG															*			:19 - 16	\	*/
+/*		+(uint32)((uint32)ADC_VCR_CNVCLS_NORMAL * ADC_VCR_CNVCLS_0)				* CNVCLSL	:14 - 11	\	*/
+/*		+(uint32)((uint32)ADC_ZERO * ADC_VCR_MPXV_0)							* MPXV		:10 -  8	\	*/
+/*		+(uint32)((uint32)ADC_VCR_ADIE_NOTOUTPUT * ADC_VCR_ADIE)				* ADIE		: 7			\	*/
+/*	))																										*/
+
 #if	(MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
-	/*#define ADC_DFGTMENT		(uint32)(ADC_VCR_GTMENT_DISABLED * ADC_VCR_GTMENT)				* GTMENT	(U2A)				*/
-	/*#define ADC_DFEGTMTAG		(uint32)((uint32)ADC_ZERO		 * ADC_VCR_GTMTAG_0)			* GTMTAG	(U2A)				*/
 	#define	ADC_SPECIFIC_HWUNIT	(ADC_HWUNIT2)
 #else
-	/* #define ADC_DFGTMENT		(uint32)(ADC_VCR_DFENT_DISABLED * ADC_VCR_DFENT)				* DFENT	(U2B)					*/
-	/* #define ADC_DFEGTMTAG		(uint32)(ADC_ZERO				* ADC_VCR_DFETAG_0) 		* DFETAG	(U2B)				*/
 	#define	ADC_SPECIFIC_HWUNIT	(ADC_HWUNITA)
 #endif
-/*#define	ADC_VCR_NORMAL 																									\	*/
-/*	((uint32) 																												\	*/
-/*		 ((uint32)((uint32)ADC_VCR_VCULLMTBS_DISABLED * ADC_VCR_VCULLMTBS_0)					* VCULLMTBS :31 - 28		\	*/
-/*		+(uint32)((uint32)ADC_VCR_WTTS_DISABLED * ADC_VCR_WTTS_0)								* WTTS		:27 - 24		\	*/
-/*		+ADC_DFGTMENT																			*			:20				\	*/
-/*		+ADC_DFEGTMTAG																			*			:19 - 16		\	*/
-/*		 (uint32)((uint32)ADC_VCR_CNVCLS_NORMAL * ADC_VCR_CNVCLS_0)								* CNVCLSL	:14 - 11		\	*/
-/*		+(uint32)((uint32)ADC_ZERO * ADC_VCR_MPXV_0)											* MPXV		:10 -  8		\	*/
-/*		+(uint32)((uint32)ADC_VCR_ADIE_NOTOUTPUT * ADC_VCR_ADIE)								* ADIE		: 7				\	*/
-/*	))	*/
-#define	ADC_SGMCYCR	(uint8)(ADC_ZERO * ADC_SGMCYCR_MCYC_0)
 
+#define	ADC_SGMCYCR	(uint8)(ADC_ZERO * ADC_SGMCYCR_MCYC_0)
 #if	(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A )
 	#define	ADC_PWDCR	(uint8)(ADC_PWDCR_PWE_DISABLE * ADC_PWDCR_PWE)
 #endif
@@ -123,16 +122,28 @@
 #ifdef ADC_USE_TH
 #define	ADC_VCR_TH					(uint32)((uint32)ADC_VCR_CNVCLS_HOLD * ADC_VCR_CNVCLS_0)		/* CNVCLSL	:14 - 11						*/
 #define ADC_TH_SAMPLING_START		(uint8)(ADC_THSMPSTCR_SMPST_START * ADC_THSMPSTCR_SMPST)
+#define ADC_TH_HOLD_TRG_DISABLE 	(uint8)(~ADC_THACR_HLDTE)       								/* Group A and B common						*/
 #endif
-#define	ADC_ODD_EVE_JUDGE_MASK		((uint16)1U)													/* 15 - 2bit Mask							*/
+#define	ADC_ODD_EVE_JUDGE_MASK		((uint16)1U)													/* 15 - 1bit Mask							*/
 #define	ADC_SGVCPR_EVENSET			((uint16)1U)													/* VCSP setting of SGVCPR for even channels	*/
 #define	ADC_SGVCPR_ODDSET			((uint16)2U)													/* VCSP setting of SGVCPR for odd channels	*/
 
-#if	(MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
+#if	((ADC_CFG_GLOBAL_REG_CONTROL == STD_ON) && (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B))
 #define	ADC_AIRISELR0_INIT_VALUE	((uint32)0x00000000u)
 #define	ADC_AIRISELR1_INIT_VALUE	((uint32)0xff800000u)
 #define	ADC_AIRDSELR0_INIT_VALUE	((uint32)0x0f000000u)
 #define	ADC_AIRDSELR1_INIT_VALUE	((uint32)0xff800000u)
+#endif
+
+#if (ADC_CFG_DEINIT_API==STD_ON)
+#define		ADC_HALT	(uint8)(ADC_ADHALTR_HALT_SCAN_HALT * ADC_ADHALTR_HALT)
+#ifdef ADC_USE_TH
+#define		ADC_STOP_TH				(uint8)(ADC_THSTPCR_THSTP_STOP * ADC_THSTPCR_THSTP)
+#define		ADC_TH_GRPA_TRG_MASK	(uint8)(~ADC_THACR_HLDTE)
+#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+#define		ADC_TH_GRPB_TRG_MASK	(uint8)(~ADC_THBCR_HLDTE)
+#endif
+#endif
 #endif
 
 /*--------------------------------------------------------------------------*/
@@ -144,9 +155,9 @@
 /* constants																					*/
 /*==============================================================================================*/
 /* config to register set value convert table	*/
-#ifdef ADC_USE_TH
 #define ADC_START_SEC_CONST_8
 #include "Adc_MemMap.h"
+#ifdef ADC_USE_TH
 static CONST(uint8, ADC_CONST) s_cu1THCnvSGTbl[ADC_SG_NUM] = {
 	/* same as Group A and B		*/
 	(ADC_THACR_SGS_SG1*ADC_THACR_SGS_0),							/* ADC_SG0	dummy(not use)	*/
@@ -155,9 +166,14 @@ static CONST(uint8, ADC_CONST) s_cu1THCnvSGTbl[ADC_SG_NUM] = {
 	(ADC_THACR_SGS_SG3*ADC_THACR_SGS_0),							/* ADC_SG3					*/
 	(ADC_THACR_SGS_SG4*ADC_THACR_SGS_0)								/* ADC_SG4					*/
 };
+#endif
+static CONST(uint8, ADC_CONST) s_cu1HWUnitUseTbl[ADC_HWUNIT_NUM] = {
+	(uint8)ADC_HWUNIT0_USE,
+	(uint8)ADC_HWUNIT1_USE,
+	(uint8)ADC_HWUNIT2_USE
+};
 #define ADC_STOP_SEC_CONST_8
 #include "Adc_MemMap.h"
-#endif
 
 #if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
 	#ifdef ADC_USE_TH
@@ -261,6 +277,9 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixADCR1(
 static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixADCR2(
 	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
 );
+static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixSFTCR(
+	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
+);
 static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixSMPCR(
 	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
 );
@@ -361,7 +380,7 @@ FUNC(void, ADC_CODE) Adc_Pil_Init(void)
 	volatile	VAR(uint32,								ADC_VAR_NO_INIT)	t_u4DIR;
 				VAR(uint16,								ADC_VAR_NO_INIT)	t_u2SGVCPR[ADC_HWUNIT_NUM][ADC_SG_NUM];
 				VAR(uint8, 								ADC_VAR_NO_INIT)	t_u1SGCR[ADC_HWUNIT_NUM][ADC_SG_NUM];
-				#if	(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+				#if	((MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A) && (ADC_HWUNIT2_USE==STD_ON))
 	volatile	P2VAR(Reg_Adc_SELB_Type,	AUTOMATIC,	ADC_VAR_NO_INIT)	t_pstSELBReg;
 				#endif
 				#ifdef ADC_USE_TH
@@ -389,82 +408,84 @@ FUNC(void, ADC_CODE) Adc_Pil_Init(void)
 		#endif
 	);
 	for (t_udHWUnit=ADC_HWUNIT0;t_udHWUnit<(Adc_HWUnitType)ADC_HWUNIT_NUM;t_udHWUnit++) {
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADCR1	= Adc_cstUserConfig.cpstHWConfig->cu1ADCR1[t_udHWUnit];
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADCR2	= Adc_cstUserConfig.cpstHWConfig->cu1ADCR2[t_udHWUnit];
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u4SMPCR	= Adc_cstUserConfig.cpstHWConfig->cu4SMPCR[t_udHWUnit];
-		#if !((MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B) && ((MCAL_PKG_TARGET==MCAL_PKG_U2B10_292PIN) || (MCAL_PKG_TARGET==MCAL_PKG_U2B6_292PIN)))
-		if (t_udHWUnit<ADC_HWUNIT_WTH_NUM) {
-		#endif
-			#ifdef ADC_USE_TH
-		 		cpstReg_Adc[t_udHWUnit]->stMODULE.u1THCR	= ADC_TH_AUTOSAMPLING;
-				#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-				cpstReg_Adc[t_udHWUnit]->stMODULE.u2THGSR	= t_u2THGSR[t_udHWUnit];
-				#endif
-				cpstReg_Adc[t_udHWUnit]->stMODULE.u1THER	= Adc_cstUserConfig.cpstHWConfig->cu1THER[t_udHWUnit];
-			#else
-				cpstReg_Adc[t_udHWUnit]->stMODULE.u1THER	= ADC_TH_DISABLE;
+		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADCR1	= Adc_cstUserConfig.cpstHWConfig->cu1ADCR1[t_udHWUnit];
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADCR2	= Adc_cstUserConfig.cpstHWConfig->cu1ADCR2[t_udHWUnit];
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1SFTCR  &= ~ADC_SFTCR_RDCLRE;										/* READ & CLEAR : Disable	*/
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u4SMPCR	= Adc_cstUserConfig.cpstHWConfig->cu4SMPCR[t_udHWUnit];
+			#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+			if (t_udHWUnit<ADC_HWUNIT_WTH_NUM) {
 			#endif
-		#if !((MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B) && ((MCAL_PKG_TARGET==MCAL_PKG_U2B10_292PIN) || (MCAL_PKG_TARGET==MCAL_PKG_U2B6_292PIN)))
-		}
-		#endif
-		/* SGVCPR, SGMCYCR	*/
-		for (t_udSG=ADC_SG0;t_udSG<(Adc_SGType)ADC_SG_NUM;t_udSG++) {
-			cpstReg_Adc[t_udHWUnit]->stMODULE.stSG[t_udSG].u2SGVCPR		= t_u2SGVCPR[t_udHWUnit][t_udSG];
-			cpstReg_Adc[t_udHWUnit]->stMODULE.stSG[t_udSG].u1SGMCYCR	= ADC_SGMCYCR;
-		}
-		/* VCR, DIR	*/
-		for ( t_s4VChNbr=0; t_s4VChNbr < (sint32)ADC_CHANNEL_NUM; t_s4VChNbr++ ) {
-			cpstReg_Adc[t_udHWUnit]->stMODULE.u4VCR[t_s4VChNbr] = t_u4VCR[t_udHWUnit][t_s4VChNbr];
-			t_u4DIR = cpstReg_Adc[t_udHWUnit]->stMODULE.u4DIR[t_s4VChNbr];
-		}
-		/* THxCR*/
-		#if !((MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B) && ((MCAL_PKG_TARGET==MCAL_PKG_U2B10_292PIN) || (MCAL_PKG_TARGET==MCAL_PKG_U2B6_292PIN)))
-		if (t_udHWUnit<ADC_HWUNIT_WTH_NUM) {
-		#endif
-			#ifdef ADC_USE_TH
+				#ifdef ADC_USE_TH
+			 	cpstReg_Adc[t_udHWUnit]->stMODULE.u1THCR		= ADC_TH_AUTOSAMPLING;
+					#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+					cpstReg_Adc[t_udHWUnit]->stMODULE.u2THGSR	= t_u2THGSR[t_udHWUnit];
+					#endif
+				cpstReg_Adc[t_udHWUnit]->stMODULE.u1THER 		= Adc_cstUserConfig.cpstHWConfig->cu1THER[t_udHWUnit];
+				#else
+				cpstReg_Adc[t_udHWUnit]->stMODULE.u1THER		= ADC_TH_DISABLE;
+				#endif
+			#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+			}
+			#endif
+			/* SGVCPR, SGMCYCR	*/
+			for (t_udSG=ADC_SG0;t_udSG<(Adc_SGType)ADC_SG_NUM;t_udSG++) {
+				cpstReg_Adc[t_udHWUnit]->stMODULE.stSG[t_udSG].u2SGVCPR		= t_u2SGVCPR[t_udHWUnit][t_udSG];
+				cpstReg_Adc[t_udHWUnit]->stMODULE.stSG[t_udSG].u1SGMCYCR	= ADC_SGMCYCR;
+			}
+			/* VCR, DIR	*/
+			for ( t_s4VChNbr=0; t_s4VChNbr < (sint32)ADC_CHANNEL_NUM; t_s4VChNbr++ ) {
+				cpstReg_Adc[t_udHWUnit]->stMODULE.u4VCR[t_s4VChNbr] = t_u4VCR[t_udHWUnit][t_s4VChNbr];
+				t_u4DIR = cpstReg_Adc[t_udHWUnit]->stMODULE.u4DIR[t_s4VChNbr];	/* WFLAG clear	*/
+			}
+			/* THxCR*/
+			#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+			if (t_udHWUnit<ADC_HWUNIT_WTH_NUM) {
+			#endif
+				#ifdef ADC_USE_TH
 				cpstReg_Adc[t_udHWUnit]->stMODULE.u1THACR	= Adc_cstUserConfig.cpstHWConfig->cu1THACR[t_udHWUnit] | t_u1THxCR[t_udHWUnit][ADC_TH_GRP_A];
-				#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-				cpstReg_Adc[t_udHWUnit]->stMODULE.u1THBCR	= Adc_cstUserConfig.cpstHWConfig->cu1THBCR[t_udHWUnit] | t_u1THxCR[t_udHWUnit][ADC_TH_GRP_B];
-				#endif
-			#else	/* #ifdef ADC_USE_TH	*/
+					#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+					cpstReg_Adc[t_udHWUnit]->stMODULE.u1THBCR	= Adc_cstUserConfig.cpstHWConfig->cu1THBCR[t_udHWUnit] | t_u1THxCR[t_udHWUnit][ADC_TH_GRP_B];
+					#endif
+				#else	/* #ifdef ADC_USE_TH	*/
 				cpstReg_Adc[t_udHWUnit]->stMODULE.u1THACR	= ADC_TH_DISABLE_GRPA;
-				#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-				cpstReg_Adc[t_udHWUnit]->stMODULE.u1THBCR	= ADC_TH_DISABLE_GRPB;
+					#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+					cpstReg_Adc[t_udHWUnit]->stMODULE.u1THBCR	= ADC_TH_DISABLE_GRPB;
+					#endif
 				#endif
+			#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+			}
 			#endif
-		#if !((MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B) && ((MCAL_PKG_TARGET==MCAL_PKG_U2B10_292PIN) || (MCAL_PKG_TARGET==MCAL_PKG_U2B6_292PIN)))
-		}
-		#endif
-		/* PWDCR	*/
-		#if	(MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u1PWDCR	= ADC_PWDCR;
-		#endif
-		/* SGCR	*/
-		for (t_udSG=ADC_SG0;t_udSG<(Adc_SGType)ADC_SG_NUM;t_udSG++) {
-			cpstReg_Adc[t_udHWUnit]->stMODULE.stSG[t_udSG].u1SGCR		= t_u1SGCR[t_udHWUnit][t_udSG];
-		}
+			/* PWDCR	*/
+			#if	(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1PWDCR	= ADC_PWDCR;
+			#endif
+			/* SGCR	*/
+			for (t_udSG=ADC_SG0;t_udSG<(Adc_SGType)ADC_SG_NUM;t_udSG++) {
+				cpstReg_Adc[t_udHWUnit]->stMODULE.stSG[t_udSG].u1SGCR		= t_u1SGCR[t_udHWUnit][t_udSG];
+			}
 
-		/* THSMPSTCR	@notice First conversion (including after selfdiagnosis) 10us */
-		#ifdef ADC_USE_TH
-		#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
-		if (t_udHWUnit<ADC_HWUNIT_WTH_NUM) {
-		#endif
-			cpstReg_Adc[t_udHWUnit]->stMODULE.u1THSMPSTCR =  t_u1THSMPSTCR[t_udHWUnit];
-		#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+			/* THSMPSTCR	@notice First conversion (including after selfdiagnosis) 10us */
+			#ifdef ADC_USE_TH
+				#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+				if (t_udHWUnit<ADC_HWUNIT_WTH_NUM) {
+				#endif
+					cpstReg_Adc[t_udHWUnit]->stMODULE.u1THSMPSTCR =  t_u1THSMPSTCR[t_udHWUnit];
+				#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
+				}
+			#endif
+			#endif
 		}
-		#endif
-		#endif
 	}
 
-	#if	(MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
+	#if	((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A) && (ADC_HWUNIT2_USE == STD_ON))
 	/* SGTSEL	*/
 	t_pstSELBReg = cpstReg_SELB_Adc[ADC_ZERO];
 	for (t_udSG=ADC_SG0;t_udSG<(Adc_SGType)ADC_SG_NUM;t_udSG++) {
 		t_pstSELBReg->u4SGTSEL[t_udSG]	= t_u4SGTSEL[t_udSG];
 	}
 	#endif
-
-	#if	(MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B )
+	#if	((ADC_CFG_GLOBAL_REG_CONTROL == STD_ON) && (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B))
 	/* AIR interrupt	*/
 	Reg_AIR.u4AIRISELR0 = ADC_AIRISELR0_INIT_VALUE;
 	Reg_AIR.u4AIRISELR1 = ADC_AIRISELR1_INIT_VALUE;
@@ -637,7 +658,7 @@ FUNC(void, ADC_CODE) Adc_Pil_GetCnvData(
 /* Parameters (in)		: 																		*/
 /* 		Adc_HWUnitType	: HW Unit Number														*/
 /* 		Adc_SGType		: Scan Group Number														*/
-/* 		uin8			: convert channel size													*/
+/* 		uint8			: convert channel size													*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: conversion status														*/
@@ -695,7 +716,6 @@ FUNC(void, ADC_CODE) Adc_Pil_SetHardwareTrigger(
 }
 #endif
 
-
 /************************************************************************************************/
 /* Service name			: Adc_Pil_ClearDIR														*/
 /* Sync/Async			: Synchronous															*/
@@ -736,7 +756,7 @@ FUNC(void, ADC_CODE) Adc_Pil_ClearDIR(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Disable Track & Hpld Sampling (call by DeInit only)					*/
+/* Description			: Disable all Scan Group HW Trigger (call by DeInit only)				*/
 /************************************************************************************************/
 #if (ADC_CFG_DEINIT_API==STD_ON)
 FUNC(void, ADC_CODE) Adc_Pil_DisableSGHWTrigger(void)
@@ -745,8 +765,10 @@ FUNC(void, ADC_CODE) Adc_Pil_DisableSGHWTrigger(void)
 	VAR(Adc_SGType,		ADC_VAR_NO_INIT)		t_udSG;
 
 	for (t_udHWUnit=ADC_HWUNIT0;t_udHWUnit<(Adc_HWUnitType)ADC_HWUNIT_NUM;t_udHWUnit++) {
-		for (t_udSG=ADC_SG0;t_udSG<ADC_SG_NUM;t_udSG++) {
-			cpstReg_Adc[t_udHWUnit]->stMODULE.stSG[t_udSG].u1SGCR &= ADC_TRGMD_MASK;
+		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
+			for (t_udSG=ADC_SG0;t_udSG<ADC_SG_NUM;t_udSG++) {
+				cpstReg_Adc[t_udHWUnit]->stMODULE.stSG[t_udSG].u1SGCR &= ADC_TRGMD_MASK;
+			}
 		}
 	}
 }
@@ -761,7 +783,7 @@ FUNC(void, ADC_CODE) Adc_Pil_DisableSGHWTrigger(void)
 /* 		Adc_SGType		: Scan Group Number														*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
-/* Return value			: DR register adress													*/
+/* Return value			: DR register address													*/
 /* Description			: get the start data register address									*/
 /************************************************************************************************/
 #ifdef ADC_USE_DMA
@@ -787,7 +809,7 @@ volatile FUNC_P2VAR(uint16, AUTOMATIC, ADC_CODE) Adc_Pil_GetDRAdr(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Start Track & Hpld Sampling											*/
+/* Description			: Start Track & Hold Sampling											*/
 /************************************************************************************************/
 #ifdef ADC_USE_TH
 FUNC(void, ADC_CODE) Adc_Pil_StartTrackHold(
@@ -821,7 +843,7 @@ FUNC(void, ADC_CODE) Adc_Pil_StartTrackHold(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Stop Track & Hpld Sampling											*/
+/* Description			: Stop Track & Hold Sampling											*/
 /************************************************************************************************/
 #ifdef ADC_USE_TH
 FUNC(void, ADC_CODE) Adc_Pil_StopTrackHold(
@@ -829,7 +851,6 @@ FUNC(void, ADC_CODE) Adc_Pil_StopTrackHold(
     CONST(Adc_TrackHoldGroupType,   ADC_CONST)  t_cudTHGrp
 )
 {
-    #define     ADC_TH_HOLD_TRG_DISABLE (uint8)(~ADC_THACR_HLDTE)       /* Group A and B common */
     volatile    P2VAR(uint8,    AUTOMATIC,  ADC_VAR_NO_INIT)        t_pu1THxCR;
                 VAR(uint8,                  ADC_VAR_NO_INIT)        t_u1THxCR;
 
@@ -854,31 +875,28 @@ FUNC(void, ADC_CODE) Adc_Pil_StopTrackHold(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Disable Track & Hpld Trigger (call by DeInit only)					*/
+/* Description			: Disable Track & Hold Trigger (call by DeInit only)					*/
 /************************************************************************************************/
 #if (ADC_CFG_DEINIT_API==STD_ON)
 #ifdef ADC_USE_TH
 FUNC(void, ADC_CODE) Adc_Pil_DisableAllTHTrigger(void)
 {
-	#define		ADC_TH_GRPA_TRG_MASK			(uint8)(~ADC_THACR_HLDTE)
-	#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-	#define		ADC_TH_GRPB_TRG_MASK			(uint8)(~ADC_THBCR_HLDTE)
-	#endif
-
 	VAR(Adc_HWUnitType,				ADC_VAR_NO_INIT)	t_udHWUnit;
 	VAR(uint8,						ADC_VAR_NO_INIT)	t_u1THxCR;
 
 	for (t_udHWUnit=ADC_HWUNIT0;t_udHWUnit<ADC_HWUNIT_WTH_NUM;t_udHWUnit++) {
-		/* Group A	*/
-		t_u1THxCR = cpstReg_Adc[t_udHWUnit]->stMODULE.u1THACR;
-		t_u1THxCR  &= ADC_TH_GRPA_TRG_MASK;
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u1THACR = t_u1THxCR;
-		#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-		/* Group B	*/
-		t_u1THxCR = cpstReg_Adc[t_udHWUnit]->stMODULE.u1THBCR;
-		t_u1THxCR  &= ADC_TH_GRPB_TRG_MASK;
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u1THBCR = t_u1THxCR;
-		#endif
+		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
+			/* Group A	*/
+			t_u1THxCR = cpstReg_Adc[t_udHWUnit]->stMODULE.u1THACR;
+			t_u1THxCR  &= ADC_TH_GRPA_TRG_MASK;
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1THACR = t_u1THxCR;
+			#if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+			/* Group B	*/
+			t_u1THxCR = cpstReg_Adc[t_udHWUnit]->stMODULE.u1THBCR;
+			t_u1THxCR  &= ADC_TH_GRPB_TRG_MASK;
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1THBCR = t_u1THxCR;
+			#endif
+		}
 	}
 }
 #endif
@@ -892,18 +910,18 @@ FUNC(void, ADC_CODE) Adc_Pil_DisableAllTHTrigger(void)
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Stop Track & Hpld Sampling (call by DeInit only)						*/
+/* Description			: Stop Track & Hold Sampling (call by DeInit only)						*/
 /************************************************************************************************/
 #if (ADC_CFG_DEINIT_API==STD_ON)
 #ifdef ADC_USE_TH
 FUNC(void, ADC_CODE) Adc_Pil_StopAllTrackHold(void)
 {
-	#define	ADC_STOP_TH		(uint8)(ADC_THSTPCR_THSTP_STOP * ADC_THSTPCR_THSTP)
-
 	VAR(Adc_HWUnitType, ADC_VAR_NO_INIT)	t_udHWUnit;
 
 	for ( t_udHWUnit=ADC_HWUNIT0;t_udHWUnit<(Adc_HWUnitType)ADC_HWUNIT_WTH_NUM; t_udHWUnit++) {
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u1THSTPCR = ADC_STOP_TH;
+		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1THSTPCR = ADC_STOP_TH;
+		}
 	}
 }
 #endif
@@ -917,7 +935,7 @@ FUNC(void, ADC_CODE) Adc_Pil_StopAllTrackHold(void)
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Stop Track & Hpld Sampling (call by DeInit only)						*/
+/* Description			: Stop Track & Hold Sampling (call by DeInit only)						*/
 /************************************************************************************************/
 #if (ADC_CFG_DEINIT_API==STD_ON)
 #ifdef ADC_USE_TH
@@ -926,7 +944,9 @@ FUNC(void, ADC_CODE) Adc_Pil_DisableAllTHOperation(void)
 	VAR(Adc_HWUnitType, ADC_VAR_NO_INIT)	t_udHWUnit;
 
 	for ( t_udHWUnit=ADC_HWUNIT0;t_udHWUnit<(Adc_HWUnitType)ADC_HWUNIT_WTH_NUM; t_udHWUnit++) {
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u1THER = ADC_TH_DISABLE;
+		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1THER = ADC_TH_DISABLE;
+		}
 	}
 }
 #endif
@@ -945,12 +965,11 @@ FUNC(void, ADC_CODE) Adc_Pil_DisableAllTHOperation(void)
 #if (ADC_CFG_DEINIT_API==STD_ON)
 FUNC(void, ADC_CODE) Adc_Pil_ForcedTermination(void)
 {
-	#define		ADC_HALT	(uint8)(ADC_ADHALTR_HALT_SCAN_HALT * ADC_ADHALTR_HALT)
-
 	VAR(Adc_HWUnitType, ADC_VAR_NO_INIT)	t_udHWUnit;
-
 	for (t_udHWUnit=ADC_HWUNIT0;t_udHWUnit<(Adc_HWUnitType)ADC_HWUNIT_NUM;t_udHWUnit++) {
-		cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADHALTR = ADC_HALT;
+		if (s_cu1HWUnitUseTbl[t_udHWUnit]==(uint8)STD_ON) {
+			cpstReg_Adc[t_udHWUnit]->stMODULE.u1ADHALTR = ADC_HALT;
+		}
 	}
 }
 #endif
@@ -969,11 +988,11 @@ FUNC(void, ADC_CODE) Adc_Pil_ForcedTermination(void)
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check all registers and refresh ones w expected value.				*/
+/* Description			: Check all registers and refresh ones with expected value.				*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_All(void)
 {
@@ -1026,7 +1045,7 @@ FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_All(void)
 /************************************************************************************************/
 /* Service name			: Adc_Pil_Regchk_Grp													*/
 /* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
+/* Reentrancy			: Reentrant																*/
 /* Parameters (in)		: 																		*/
 /*		Group			: Numeric ID of requested ADC channel group.							*/
 /* Parameters (inout)	: None																	*/
@@ -1034,11 +1053,11 @@ FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_All(void)
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group related registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_Grp(
 	CONST(Adc_GroupType,	ADC_CONST)	t_cudGrp
@@ -1099,7 +1118,7 @@ FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_Grp(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1118,11 +1137,12 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFix(
 
 	t_u4ChkResult  = Adc_Pil_RegchkPreFixADCR1(t_cudHWUnit);
 	t_u4ChkResult |= Adc_Pil_RegchkPreFixADCR2(t_cudHWUnit);
+	t_u4ChkResult |= Adc_Pil_RegchkPreFixSFTCR(t_cudHWUnit);
 	t_u4ChkResult |= Adc_Pil_RegchkPreFixSMPCR(t_cudHWUnit);
 	t_u4ChkResult |= Adc_Pil_RegchkPreFixSGMCYCR(t_cudGrp,t_cudHWUnit,t_cudSG);
 	t_u4ChkResult |= Adc_Pil_RegchkPreFixTHER(t_cudHWUnit);
 
-	#if	(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
+	#if	((ADC_CFG_GLOBAL_REG_CONTROL == STD_ON) && (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B))
 	/* t_u4ChkResult is updated in ADC_RegValueCheckByAllUnits	*/
 	ADC_RegValueCheckByAllUnits(uint32, Reg_AIR.u4AIRISELR0, ADC_AIRISELR0_INIT_VALUE, ADC_AIRISELR0_DEFBIT);
 	/* AIRISELR1	not using	*/
@@ -1152,7 +1172,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFix(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1182,7 +1202,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixADCR1(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1202,6 +1222,38 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixADCR2(
 	return(t_u4ChkResult);
 }
 /************************************************************************************************/
+/* Service name			: Adc_Pil_RegchkPreFixSFTCR												*/
+/* Sync/Async			: Synchronous															*/
+/* Reentrancy			: Non Reentrant															*/
+/* Parameters (in)		: 																		*/
+/* 		Adc_HWUnitType	: HW Unit Number														*/
+/* Parameters (inout)	: None																	*/
+/* Parameters (out)		: None																	*/
+/* Return value			: uint32																*/
+/* 		ADC_REGCHK_OK					: No Error detected										*/
+/* 		ADC_REGCHK_NG					: Error detected										*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
+/* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
+/* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
+/* Description			: Check SFTCR															*/
+/************************************************************************************************/
+static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixSFTCR(
+	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
+)
+{
+	VAR(uint32,			ADC_VAR_NO_INIT)	t_u4ChkResult;
+	VAR(uint8,			ADC_VAR_NO_INIT)	t_u1ExpectedValue;
+
+	t_u4ChkResult = ADC_REGCHK_OK;
+	if (t_cudHWUnit<ADC_HWUNIT_NUM) {
+		/* t_u4ChkResult is updated in ADC_RegValueCheckByHWUnit	*/
+		t_u1ExpectedValue = (uint8)(ADC_SFTCR_RDCLRE_DR_NOCLR * ADC_SFTCR_RDCLRE);
+		ADC_RegValueCheckByHWUnit(uint8, cpstReg_Adc[t_cudHWUnit]->stMODULE.u1SFTCR, t_u1ExpectedValue, ADC_SFTCR_DEFBIT, t_cudHWUnit);
+	}
+	return(t_u4ChkResult);
+}
+/************************************************************************************************/
 /* Service name			: Adc_Pil_RegchkPreFixSMPCR												*/
 /* Sync/Async			: Synchronous															*/
 /* Reentrancy			: Non Reentrant															*/
@@ -1212,7 +1264,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixADCR2(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1244,7 +1296,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixSMPCR(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1276,7 +1328,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixSGMCYCR(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1290,9 +1342,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixTHER(
 	VAR(uint8,					ADC_VAR_NO_INIT)	t_u1RegValue;
 	VAR(uint8,					ADC_VAR_NO_INIT)	t_u1ExpectedValue;
 	#if (ADC_CFG_REG_REFRESH==STD_ON)
-	#ifdef ADC_USE_TH
 	VAR(boolean,				ADC_VAR_NO_INIT)	t_b1isRunning;
-	#endif
 	#endif
 
 	t_u4ChkResult	= ADC_REGCHK_OK;
@@ -1307,12 +1357,10 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixTHER(
 		t_u1RegValue		= cpstReg_Adc[t_cudHWUnit]->stMODULE.u1THER  & (uint8)ADC_THER_DEFBIT;
 		if (t_u1RegValue!=t_u1ExpectedValue) {
 			#if (ADC_CFG_REG_REFRESH==STD_ON)
-			#ifdef ADC_USE_TH
 			t_b1isRunning	= Adc_IsTHinHWUnitRunning(t_cudHWUnit);
 			if (t_b1isRunning==TRUE) {
 				t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;
 			} else {
-			#endif
 				cpstReg_Adc[t_cudHWUnit]->stMODULE.u1THER	= t_u1ExpectedValue;
 				t_u1RegValue								= cpstReg_Adc[t_cudHWUnit]->stMODULE.u1THER  & (uint8)ADC_THER_DEFBIT;
 				if (t_u1RegValue==t_u1ExpectedValue) {
@@ -1320,11 +1368,9 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixTHER(
 				} else {
 					t_u4ChkResult	|= ADC_REGCHK_REFRESH_FAILED;
 				}
-			#ifdef ADC_USE_TH
 			}
-			#endif
 			#else
-				t_u4ChkResult  |= ADC_REGCHK_NG;
+			t_u4ChkResult  |= ADC_REGCHK_NG;
 			#endif
 		}
 		ADC_EXIT_CRITICAL_SECTION(ADC_CODE);
@@ -1348,7 +1394,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPreFixTHER(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1432,7 +1478,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkPostFix(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1469,7 +1515,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkDynamic(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1550,7 +1596,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkDynamicSGCR(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
@@ -1646,7 +1692,7 @@ static FUNC(uint32, ADC_CODE) Adc_Pil_RegchkDynamicTHxCR(
 /*		THGSR			: Async: THGSR			register setting value							*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: calcuate the register setting value									*/
+/* Description			: calculate the register setting value									*/
 /************************************************************************************************/
 static FUNC(void, ADC_CODE) Adc_Pil_RegchkCalExpctValue(
 	CONST(boolean,			ADC_CONST)			t_cblisAllRegCheck,
@@ -1695,13 +1741,14 @@ static FUNC(void, ADC_CODE) Adc_Pil_RegchkCalExpctValue(
 	for (t_udGrp=ADC_GRP00;t_udGrp<(Adc_GroupType)ADC_CFG_GRP_SIZE;t_udGrp++) {
 		t_udHWUnit			= Adc_GetHWUnitID(t_udGrp);
 		if ((t_cudHWUnit==t_udHWUnit)||(t_cblisAllRegCheck==TRUE)) {
-			t_u2CnvChSize	= Adc_GetCnvChSize(t_udGrp);
-			t_u2VCSP		= t_u2CrntVChNbr[t_udHWUnit];				/* virtual pointer start	*/	
-			t_u2VCEP		= t_u2VCSP + t_u2CnvChSize - ADC_VCEP_CAL;	/* virtual pointer end		*/	
-			Adc_Pil_SetSGVCPR(t_u2SGVCPR,t_udGrp,t_u2VCSP,t_u2VCEP);	/* SGVCPR					*/
-			Adc_Pil_SetVCR(t_u4VCR,t_udGrp,t_u2VCSP);					/* VCR						*/
-			Adc_Pil_CrctVCEP(t_u2CrntVChNbr,t_udGrp,t_u2VCEP);			/* correct VCEP				*/
-
+			if (t_udHWUnit<ADC_HWUNIT_NUM) {
+				t_u2CnvChSize	= Adc_GetCnvChSize(t_udGrp);
+				t_u2VCSP		= t_u2CrntVChNbr[t_udHWUnit];				/* virtual pointer start	*/	
+				t_u2VCEP		= t_u2VCSP + t_u2CnvChSize - ADC_VCEP_CAL;	/* virtual pointer end		*/	
+				Adc_Pil_SetSGVCPR(t_u2SGVCPR,t_udGrp,t_u2VCSP,t_u2VCEP);	/* SGVCPR					*/
+				Adc_Pil_SetVCR(t_u4VCR,t_udGrp,t_u2VCSP);					/* VCR						*/
+				Adc_Pil_CrctVCEP(t_u2CrntVChNbr,t_udGrp,t_u2VCEP);			/* correct VCEP				*/
+			}
 			#ifdef ADC_USE_TH
 			/* THxCR	*/
 			if (t_udHWUnit<ADC_HWUNIT_WTH_NUM) {
@@ -1734,7 +1781,9 @@ static FUNC(void, ADC_CODE) Adc_Pil_RegchkCalExpctValue(
 			Adc_Pil_SetSGTSEL(t_u4SGTSEL,t_udGrp);									/* SGTSEL:Unit2(U2A),UnitA(U2B)	*/
 			/* Adc_CnvInfoType	*/
 			#ifdef ADC_USE_TH
-			t_u2VCStartPos[t_udGrp]	= t_u2VCSP;
+			if (t_udHWUnit<ADC_HWUNIT_NUM) {
+				t_u2VCStartPos[t_udGrp]	= t_u2VCSP;
+			}
 			#endif
 		}
 	}
@@ -1783,8 +1832,8 @@ static FUNC(void, ADC_CODE) Adc_Pil_RegchkCalExpctValue(
 /* 		isAllRegCheck	: TRUE : check all registers											*/
 /*						  FALSE: check Group related registers 									*/
 /* 		Adc_HWUnitType	: HW Unit Number														*/
-/*		CrntVChNbr		: current VCR number													*/
 /* Parameters (inout)	: 																		*/
+/*		CrntVChNbr		: current VCR number													*/
 /*		VCStartPos		: VCR Start Position													*/
 /*		THGrpId			: T&H Group ID															*/
 /*		THGrpCount		: T&H Group Count														*/
@@ -1831,15 +1880,17 @@ static FUNC(void, ADC_CODE) Adc_Pil_RegchkVarInit(
 		}
 		#endif
 	} else {
-		if (t_cudHWUnit<ADC_HWUNIT_WTH_NUM) {
+		if (t_cudHWUnit<ADC_HWUNIT_NUM) {
 			t_u2CrntVChNbr[t_cudHWUnit]		= (uint16)ADC_ZERO;
-			#ifdef ADC_USE_TH
+		}
+		#ifdef ADC_USE_TH
+		if (t_cudHWUnit<ADC_HWUNIT_WTH_NUM) {
 			t_u1THGrpCount[t_cudHWUnit] = (uint8)ADC_ZERO;
 			for(i=0;i<(uint32)ADC_TH_GRP_NUM;i++) {
 				t_udTHGrpId[t_cudHWUnit][i]	= ADC_GRP_NONE;		/* Undefined group ID	*/
 			}
-			#endif
 		}
+		#endif
 	}
 }
 
@@ -1980,18 +2031,23 @@ static FUNC(void, ADC_CODE) Adc_Pil_DataInit(
 			t_udTHGrpId[t_udHWUnitwTH][i]	= ADC_GRP_NONE;		/* Undefined group ID	*/
 		}
 	}
+	for (t_udGrp=ADC_GRP00;t_udGrp<(Adc_GroupType)ADC_CFG_GRP_SIZE;t_udGrp++) {
+		t_u2VCStartPos[t_udGrp]	= (uint16)ADC_ZERO;
+	}
 	#endif
 
 	/* Convert config data to register data	*/
 	for (t_udGrp=ADC_GRP00;t_udGrp<(Adc_GroupType)ADC_CFG_GRP_SIZE;t_udGrp++ ) {
 		t_udHWUnit		= Adc_GetHWUnitID(t_udGrp);
 		t_u2CnvChSize	= Adc_GetCnvChSize(t_udGrp);
-		t_u2VCSP		= t_u2CrntVChNbr[t_udHWUnit];				/* virtual pointer start	*/	
-		t_u2VCEP		= t_u2VCSP + t_u2CnvChSize - ADC_VCEP_CAL;	/* virtual pointer end		*/	
-		Adc_Pil_SetSGVCPR(t_u2SGVCPR,t_udGrp,t_u2VCSP,t_u2VCEP);	/* SGVCPR					*/
-		Adc_Pil_SetSGCR(t_u1SGCR,t_udGrp);							/* SGCR						*/
-		Adc_Pil_SetVCR(t_u4VCR,t_udGrp,t_u2VCSP);					/* VCR						*/
-		Adc_Pil_CrctVCEP(t_u2CrntVChNbr,t_udGrp,t_u2VCEP);			/* correct VCEP				*/
+		if (t_udHWUnit<ADC_HWUNIT_NUM) {
+			t_u2VCSP		= t_u2CrntVChNbr[t_udHWUnit];				/* virtual pointer start	*/	
+			t_u2VCEP		= t_u2VCSP + t_u2CnvChSize - ADC_VCEP_CAL;	/* virtual pointer end		*/	
+			Adc_Pil_SetSGVCPR(t_u2SGVCPR,t_udGrp,t_u2VCSP,t_u2VCEP);	/* SGVCPR					*/
+			Adc_Pil_SetSGCR(t_u1SGCR,t_udGrp);							/* SGCR						*/
+			Adc_Pil_SetVCR(t_u4VCR,t_udGrp,t_u2VCSP);					/* VCR						*/
+			Adc_Pil_CrctVCEP(t_u2CrntVChNbr,t_udGrp,t_u2VCEP);			/* correct VCEP				*/
+		}
 
 		#ifdef ADC_USE_TH
 		/* THxCR	*/
@@ -2025,10 +2081,11 @@ static FUNC(void, ADC_CODE) Adc_Pil_DataInit(
 		}
 		#endif
 		Adc_Pil_SetSGTSEL(t_u4SGTSEL,t_udGrp);									/* SGTSEL:Unit2(U2A),UnitA(U2B)	*/
-		/* Adc_CnvInfoType	*/
 		#ifdef ADC_USE_TH
-		t_u2VCStartPos[t_udGrp]	= t_u2VCSP;
-		t_udTHGrp[t_udGrp]		= t_udTHGrpTmp;
+		if (t_udHWUnit<ADC_HWUNIT_NUM) {
+			t_u2VCStartPos[t_udGrp]	= t_u2VCSP;
+			t_udTHGrp[t_udGrp]		= t_udTHGrpTmp;
+		}
 		#endif
 	}
 	#ifdef ADC_USE_TH
@@ -2083,7 +2140,7 @@ static FUNC(void, ADC_CODE) Adc_Pil_DataInit(
 /*		SGVCPR			: Async: SGVCPR		register setting value								*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: calcuate the SGVCPR register setting value							*/
+/* Description			: calculate the SGVCPR register setting value							*/
 /************************************************************************************************/
 static FUNC(void, ADC_CODE) Adc_Pil_SetSGVCPR(
 	VAR(uint16,				ADC_VAR_NO_INIT)	t_u2SGVCPR[ADC_HWUNIT_NUM][ADC_SG_NUM],
@@ -2113,7 +2170,7 @@ static FUNC(void, ADC_CODE) Adc_Pil_SetSGVCPR(
 /*		SGCR			: Async: SGCR		register setting value								*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: calcuate the SGCR register setting value								*/
+/* Description			: calculate the SGCR register setting value								*/
 /************************************************************************************************/
 static FUNC(void, ADC_CODE) Adc_Pil_SetSGCR(
 	VAR(uint8,				ADC_VAR_NO_INIT)	t_u1SGCR[ADC_HWUNIT_NUM][ADC_SG_NUM],
@@ -2141,7 +2198,7 @@ static FUNC(void, ADC_CODE) Adc_Pil_SetSGCR(
 /*		VCR				: Async: VCR	register setting value									*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: calcuate the VCR register setting value								*/
+/* Description			: calculate the VCR register setting value								*/
 /************************************************************************************************/
 static FUNC(void, ADC_CODE) Adc_Pil_SetVCR(
 	VAR(uint32,				ADC_VAR_NO_INIT)	t_u4VCR[ADC_HWUNIT_NUM][ADC_CHANNEL_NUM],
@@ -2161,7 +2218,7 @@ static FUNC(void, ADC_CODE) Adc_Pil_SetVCR(
 	for (t_u2CnvCh=0;t_u2CnvCh<t_u2CnvChSize;t_u2CnvCh++) {
 		if ((t_udHWUnit<ADC_HWUNIT_NUM) && (t_udSG<ADC_SG_NUM)) {
 			t_u4VCR[t_udHWUnit][t_cu2VCSP+t_u2CnvCh]
-				= (uint32)(Adc_cstUserConfig.cpstHWConfig->cpstGrpHWInfo[t_cudGrp].cudCnvChTbl[t_u2CnvCh]);
+				= (uint32)(Adc_cstUserConfig.cpstHWConfig->cpstGrpHWInfo[t_cudGrp].cudCnvChTbl[t_u2CnvCh]);	/* + ADC_VCR_NORMAL:delete for QAC warning	*/ 
 		}
 	}
 }
@@ -2210,7 +2267,7 @@ static FUNC(void, ADC_CODE) Adc_Pil_CrctVCEP(
 /*		SGTSEL			: Async: SGTSEL		register setting value								*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: calcuate the SGTSEL register setting value(U2A:Unit2,U2B:UnitA		*/
+/* Description			: calculate the SGTSEL register setting value(U2A:Unit2,U2B:UnitA)		*/
 /************************************************************************************************/
 static FUNC(void, ADC_CODE) Adc_Pil_SetSGTSEL(
 	VAR(uint32,				ADC_VAR_NO_INIT)	t_u4SGTSEL[ADC_SG_NUM],
@@ -2252,7 +2309,7 @@ static FUNC(void, ADC_CODE) Adc_Pil_SetSGTSEL(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: Start Pos																*/
-/* Description			: get the virtaul channel start position								*/
+/* Description			: get the virtual channel start position								*/
 /************************************************************************************************/
 #if ((ADC_CFG_START_STOP_GRP_API==STD_ON) || (ADC_CFG_READ_GRP_API==STD_ON) || (ADC_CFG_HW_TRG_API==STD_ON) || defined (ADC_USE_DMA))
 static FUNC(uint16, ADC_CODE) Adc_Pil_GetVCStartPos(
@@ -2260,7 +2317,7 @@ static FUNC(uint16, ADC_CODE) Adc_Pil_GetVCStartPos(
 	CONST(Adc_SGType,		ADC_CONST)	t_cudSG
 )
 {
-	return (uint16)(cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u2SGVCPR & (uint16)ADC_SGVCPR_VCSP);
+	return (cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u2SGVCPR & (uint16)ADC_SGVCPR_VCSP);
 }
 #endif
 
@@ -2274,14 +2331,14 @@ static FUNC(uint16, ADC_CODE) Adc_Pil_GetVCStartPos(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: End Pos																*/
-/* Description			: get the virtaul channel end position									*/
+/* Description			: get the virtual channel end position									*/
 /************************************************************************************************/
 static FUNC(uint16, ADC_CODE) Adc_Pil_GetVCEndPos(
 	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit,
 	CONST(Adc_SGType,		ADC_CONST)	t_cudSG
 )
 {
-	return (uint16)((cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u2SGVCPR & (uint16)ADC_SGVCPR_VCEP)>>ADC_SGVCPR_VCEP_BITPOS);
+	return ((cpstReg_Adc[t_cudHWUnit]->stMODULE.stSG[t_cudSG].u2SGVCPR & (uint16)ADC_SGVCPR_VCEP)>>ADC_SGVCPR_VCEP_BITPOS);
 }
 
 #define ADC_STOP_SEC_CODE_GLOBAL

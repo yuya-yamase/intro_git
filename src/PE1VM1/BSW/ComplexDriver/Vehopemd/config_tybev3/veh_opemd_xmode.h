@@ -31,13 +31,10 @@
 #define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                                 0x7e */
 #define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x22 or 0x62 or 0x66 or 0x76 or 0x7e */
 #define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                         0x76 or 0x7e */
-#define VEH_OPEMD_MDBIT_IGCT                     (0x00000020U)  /* BDC1S81.VPSINFOx = 0x22                                 */
+#define VEH_OPEMD_MDBIT_IGCT                     (0x00000020U)  /* BDC1S81.VPSINFOx = 0x22 or 0x62                         */
 #define VEH_OPEMD_MDBIT_IGBD                     (0x00000040U)  /* BDC1S81.VPSINFOx =         0x62                         */
 
 #define VEH_OPEMD_MDBIT_FIELDS                   (0x0000007eU)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_EXBIT_NM_0                     (0x80000000U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VEH_OPEMD_EVBIT_ACC_TO_ON                (0x00000002U)
@@ -65,7 +62,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u1_g_VehopemdAccOn()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_ACC,  (U4)VEH_OPEMD_MDBIT_ACC ))
 #define u1_g_VehopemdIgnOn()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_IG_R, (U4)VEH_OPEMD_MDBIT_IG_R))
-#define u1_g_VehopemdNmAwk()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_EXBIT_NM_0, (U4)VEH_OPEMD_EXBIT_NM_0))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */

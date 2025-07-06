@@ -53,6 +53,7 @@
 /* #include "oxcan.h"                oxcan.h is included in oxdocan_cfg_private.h                 */
 
 #include "veh_opemd.h"
+#include "can_lpr.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Application Headers */
@@ -343,12 +344,12 @@ void    vd_g_oXDoCANCfgMainStart(const ST_OXDC_REQ * st_ap_REQ, const U2 u2_a_TS
     }
 #endif /* #ifdef TYDOCAN_DTC_MA_CFG_H */
 
-    if(st_ap_REQ->u1_eom_aft == (U1)OXDC_SESSION_DEF){
+    if(st_ap_REQ->u1_ses_aft == (U1)OXDC_SESSION_DEF){
         for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)DCM_P_COMCTRL_ALLCH_N; u4_t_lpcnt++){
             u1_t_ch = Dcm_P_SID28_stComCtrl_Tbl.ptAllCh[u4_t_lpcnt].u1ComMChannel;
             (void)BswM_CS_ResumeTxPdu(u1_t_ch);
-        } 
-        vd_g_VehopemdDiagSid28((U1)TRUE);
+        }
+         vd_g_CANLpRDs28PhyTxEN((U1)TRUE);
     }
 
 #ifdef TYDOCAN_DTC_MM_H
@@ -485,11 +486,11 @@ void    vd_g_oXDoCANCfgComTREOvrrd(const U1 u1_a_COM_CH, const U1 u1_a_MODE)
     if((u1_a_MODE == (U1)DCM_ENABLE_RX_TX_NORM) ||
        (u1_a_MODE == (U1)DCM_ENABLE_RX_TX_NORM_NM)){
         (void)BswM_CS_ResumeTxPdu(u1_a_COM_CH);
-        vd_g_VehopemdDiagSid28((U1)TRUE);
+        vd_g_CANLpRDs28PhyTxEN((U1)TRUE);
     }
     else if(u1_a_MODE == (U1)DCM_DISABLE_RX_TX_NORMAL){
         (void)BswM_CS_StopTxPdu(u1_a_COM_CH);
-        vd_g_VehopemdDiagSid28((U1)FALSE);
+        vd_g_CANLpRDs28PhyTxEN((U1)FALSE);
     }
     else{
         /* Do Nothing */
@@ -527,7 +528,6 @@ void    vd_g_oXDoCANCfgRpgPrepToRun(const U2 u2_a_ELPSD)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgRpgSwReset(void)
 {
-/* リプ�搗J移用リセット @@@ */
     vd_s_oXdcPrepSwReset();
     vd_g_RprgIfRequestReprog();
 }

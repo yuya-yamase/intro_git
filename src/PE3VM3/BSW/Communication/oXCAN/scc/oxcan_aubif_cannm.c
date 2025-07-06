@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_AUBIF_CANNM_C_MAJOR                (1U)
-#define OXCAN_AUBIF_CANNM_C_MINOR                (3U)
+#define OXCAN_AUBIF_CANNM_C_MAJOR                (2U)
+#define OXCAN_AUBIF_CANNM_C_MINOR                (0U)
 #define OXCAN_AUBIF_CANNM_C_PATCH                (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -20,7 +20,9 @@
 #include "oxcan_aubif.h"
 
 #include "CanNm.h"
-
+#if (OXCAN_LIB_CFG_NWC_EN == 1U)
+#include "oxcan_nwc_cfg_private.h"
+#endif /* #if (OXCAN_LIB_CFG_NWC_EN == 1U) */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -69,7 +71,11 @@
 /*===================================================================================================================================*/
 Std_ReturnType CanNm_CbkGetPwonBusAwake(NetworkHandleType nmChannelHandle)
 {
-    return (u1_g_oXCANUsrhkPwonBusAwake());
+#if (OXCAN_AUBIF_NET_WK_AT_RST == 1U)
+    return(E_OK);
+#else
+    return(E_NOT_OK);
+#endif
 }
 /*===================================================================================================================================*/
 /*  Std_ReturnType CanTrcv_SetOpMode(uint8 Transceiver, CanTrcv_TrcvModeType OpMode)                                                 */
@@ -85,40 +91,46 @@ Std_ReturnType CanNm_CbkGetPwonBusAwake(NetworkHandleType nmChannelHandle)
 Std_ReturnType CanTrcv_SetOpMode(uint8 Transceiver, CanTrcv_TrcvModeType OpMode)
 {
     if(OpMode == (CanTrcv_TrcvModeType)CANTRCV_TRCVMODE_STANDBY){
-        vd_g_oXCANUsrhkTrcvToInact(Transceiver);
+        vd_g_oXCANUsrhkTrcvToIna(Transceiver);
     }else{
         /* Out of range value -> NORMAL, to make sleep possibility surely. */
         vd_g_oXCANUsrhkTrcvToAct(Transceiver);
     }
     return((Std_ReturnType)E_OK);
 }
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-#ifdef L3R_FAIL_H
-
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    CanNm_CbkBusWakeup( NetworkHandleType nmChannelHandle, uint8 WkupKind )                                                  */
+
+#if (OXCAN_LIB_CFG_EN_NMC == 1U)
+
+/*===================================================================================================================================*/
+/*  void    Nm_CbkTRxIndication(PduIdType PduId, NetworkHandleType nmNetworkHandle,                                                  */
+/*                              BswConstR PduInfoType* PduInfoPtr, Nm_DirectionType nmDir)                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Aubist/cs Type Definitions                                                                                                       */
-/*                  NetworkHandleType:  typedef unsigned char                                                                        */
 /*===================================================================================================================================*/
-void    CanNm_CbkBusWakeup( NetworkHandleType nmChannelHandle, uint8 WkupKind )
+void    Nm_CbkTRxIndication(PduIdType PduId, NetworkHandleType nmNetworkHandle,
+                            BswConstR PduInfoType* PduInfoPtr, Nm_DirectionType nmDir)
 {
-    L3R_GateM_NmWakeup(nmChannelHandle);
+    if(nmDir == (Nm_DirectionType)NM_DIRECTION_RX){
+        vd_g_oXCANNmcRxAck(nmNetworkHandle, PduInfoPtr->SduDataPtr, PduInfoPtr->SduLength);
+    }
+ /* else if(nmDir == (Nm_DirectionType)NM_DIRECTION_TX){ */
+ /* }                                                    */
+ /* else{                                                */
+ /* }                                                    */
 }
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-#endif /* #ifdef L3R_FAIL_H */
-
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/*  void    Nm_CbkCtrlCoBusAwake( void )                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    Nm_CbkCtrlCoBusAwake(void)
+{
+    vd_g_oXCANNmcCoord();
+}
+#endif /* #if (OXCAN_LIB_CFG_EN_NMC == 1U) */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -127,7 +139,7 @@ void    CanNm_CbkBusWakeup( NetworkHandleType nmChannelHandle, uint8 WkupKind )
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.3.0    12/20/2024  TN       oxcan_aubif.c was divided by Aubist/Com component.                                                 */
+/*  2.0.0     2/21/2025  TN       oxcan_aubif.c v1.2.0 -> v2.0.0 was redesigned for Toyota BEVStep3.                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*                                                                                                                                   */

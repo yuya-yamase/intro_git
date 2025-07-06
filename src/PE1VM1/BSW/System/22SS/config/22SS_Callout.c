@@ -20,6 +20,7 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
+#include "ivdsh.h"
 
 /* Memory               */
 #include "rim_ctl.h"
@@ -178,6 +179,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     vd_g_NWCMBonInit();
@@ -267,6 +269,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     vd_g_NWCMWkupInit();
@@ -356,6 +359,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
 
     vd_g_oXCANWkupInit();
     vd_g_VehopemdWkupInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     vd_g_NWCMWkupInit();

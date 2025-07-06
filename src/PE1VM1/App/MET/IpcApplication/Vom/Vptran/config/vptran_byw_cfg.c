@@ -75,8 +75,8 @@
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 {
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
-                             ((U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA),
+    return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                             ((U4)VPTRAN_CAN_SYS_PNC_ALL),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
@@ -88,8 +88,8 @@ U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 {
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
-                             ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
+    return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                             ((U4)OXCAN_SYS_IGR),
                              (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
@@ -101,8 +101,8 @@ U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 {
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
-                             ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
+    return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ECT1G92_CH0,
+                             ((U4)OXCAN_SYS_IGR),
                              (U2)VPTRAN_TIM_ECT1G92_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 
@@ -114,8 +114,8 @@ U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsSftBlks(void)
 {
-    return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01_RXCH0,
-                             ((U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA),
+    return (u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PCN1S01_CH0,
+                             ((U4)VPTRAN_CAN_SYS_PNC_ALL),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
 }
 

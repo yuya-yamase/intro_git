@@ -247,8 +247,8 @@ U1  u1_g_MmlangCfgMsgsts(void)
 
     U1  u1_t_msg_sts;
 
-    u1_t_msg_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S20,
-                                         (U2)OXCAN_RX_SYS_NRX_ACC | (U2)OXCAN_RX_SYS_TOE_ACC,
+    u1_t_msg_sts = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_AVN1S20,
+                                         (U4)OXCAN_SYS_ACC,
                                          u2_s_MMLANG_AVN1S20_TOTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_msg_sts);

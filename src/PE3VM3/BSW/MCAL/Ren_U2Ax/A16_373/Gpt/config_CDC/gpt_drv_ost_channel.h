@@ -30,7 +30,7 @@
 #define GPT_OST_NUM_CH                           (2U)
 
 #define GPT_OST_CH_02_SCHDLR_TICK                (0U)   /* Reserved SchdM   */
-#define GPT_OST_CH_03                            (1U)   /* RH850-QC SPI 10 milliseconds Tick/Timer CEN */
+#define GPT_OST_CH_03_SPI_TICK_CEN               (1U)   /* RH850-QC SPI 10 milliseconds Tick/Timer CEN */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GPT_OST_1US                              (80U)

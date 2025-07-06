@@ -118,8 +118,8 @@ static U4      u4_s_AlertC_sbrdmbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_sgnl;                                                 /* Request status from signal edge check              */
     U1              u1_t_alert_c_sbrdmb_dmode_curr;                            /* Current Drive Mode data                            */
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G90_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ENG1G90_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl                      = u1_s_ALERT_C_SBRDMB_REQ_NONE;

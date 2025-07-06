@@ -31,7 +31,7 @@
 #ifdef ADC_USE_DMA
 #define	ADC_DMA_TRANSACTION_SIZE			(u1DMA_TRANSSIZE_2)				/* DR register size						*/
 #define	ADC_DMA_MODE_SINGLE					((uint8)DMA_DMAMODE3)			/* mode=3 : single transfer wo reload	*/
-#define	ADC_DMA_MODE_STREAMING				((uint8)DMA_DMAMODE5)			/* mode=5 : block transfer w Reload		*/
+#define	ADC_DMA_MODE_STREAMING				((uint8)DMA_DMAMODE5)			/* mode=5 : block transfer with Reload	*/
 #define	ADC_DMA_TRANS_STATUS_IDLE			(u1DMA_TRANS_STATUS_IDLE)		/* trans status	: idle					*/
 #define	ADC_DMA_TRANS_STATUS_BUSY			(u1DMA_TRANS_STATUS_BUSY)		/* trans status : busy	 				*/
 #endif
@@ -55,9 +55,9 @@ typedef struct {
 	boolean						blisNotifyOn;			/* Conversion End Notification On				*/
 	#endif
 	#ifdef ADC_USE_DMA
-	Adc_ValueGroupType*			pu2DataBuffer;			/* pointer to result data buffer				*/
+	Adc_ValueGroupType*			pudDataBuffer;			/* pointer to result data buffer				*/
 	#endif
-	#ifdef ADC_USE_TH
+	#if (defined(ADC_USE_TH))
 	Adc_TrackHoldGroupType		udTHGrp;				/* Track and Hold Setting						*/
 	#endif
 	#ifdef ADC_USE_STREAMING_ACCESS
@@ -74,7 +74,7 @@ typedef struct {
 #define ADC_START_SEC_VAR_NO_INIT_GLOBAL_UNSPECIFIED
 #include "Adc_MemMap.h"
 /* Adc Group information */
-static 	VAR(Adc_GrpInfoType, ADC_VAR_INIT) s_stAdcGrpInfo[ADC_CFG_GRP_SIZE];
+static 	VAR(Adc_GrpInfoType, ADC_VAR_NO_INIT) s_stAdcGrpInfo[ADC_CFG_GRP_SIZE];
 #define ADC_STOP_SEC_VAR_NO_INIT_GLOBAL_UNSPECIFIED
 #include "Adc_MemMap.h"
 
@@ -185,14 +185,15 @@ static FUNC(void, ADC_CODE) Adc_Intrpt_HWUnit2_SG4(void);
 /* only when DMA is available												*/
 /*--------------------------------------------------------------------------*/
 #ifdef ADC_USE_DMA
+#define ADC_START_SEC_CODE_GLOBAL
+#include "Adc_MemMap.h"
 static FUNC(void, ADC_CODE) Adc_SetDataBuffer(
 	CONST(Adc_GroupType,					ADC_CONST)		t_cudGrp,
-	P2VAR(Adc_ValueGroupType, AUTOMATIC,	ADC_VAR_INIT)	t_pu2DataBuffer
+	P2VAR(Adc_ValueGroupType, AUTOMATIC,	ADC_VAR_INIT)	t_pudDataBuffer
 );
 static FUNC_P2VAR(Adc_ValueGroupType, AUTOMATIC, ADC_CODE) Adc_GetDataBuffer(
 	CONST(Adc_GroupType, ADC_CONST) t_cudGrp
 );
-#endif
 
 /*--------------------------------------------------------------------------*/
 /* only when Streaming Access is available									*/
@@ -201,6 +202,10 @@ static FUNC_P2VAR(Adc_ValueGroupType, AUTOMATIC, ADC_CODE) Adc_GetDataBuffer(
 static FUNC(Adc_StreamNumSampleType, ADC_CODE) Adc_GetCurrentStreamingNum(
 	CONST(Adc_GroupType,  ADC_CONST) t_cudGrp
 );
+#endif
+
+#define ADC_STOP_SEC_CODE_GLOBAL
+#include "Adc_MemMap.h"
 #endif
 
 /*----------------------------------------------------------------------------------------------*/
@@ -226,7 +231,9 @@ FUNC(void, ADC_CODE) Adc_Init(
 {
 	(void)ConfigPtr;			/* avoid warning	*/
 	Adc_Pil_Init();				/* HW Initialize	*/
+	#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 	Pic2_Init();				/* PIC2 Initialize	*/
+	#endif
 	Adc_DataInit();				/* SW Initialize	*/
 }
 
@@ -577,7 +584,7 @@ FUNC(void, ADC_CODE) Adc_EnableHardwareTrigger(
 				VAR(Adc_TrackHoldGroupType,				ADC_VAR_NO_INIT)	t_udTHGrp;
 	#endif
 	#ifdef ADC_USE_DMA
-				P2VAR(Adc_ValueGroupType,	AUTOMATIC,	ADC_VAR_NO_INIT)	t_pvdDMADstAdr;
+	volatile	P2VAR(Adc_ValueGroupType,	AUTOMATIC,	ADC_VAR_NO_INIT)	t_pvdDMADstAdr;
 				VAR(uint8,								ADC_VAR_NO_INIT)	t_u1DMAID;
 	volatile	P2VAR(uint16,				AUTOMATIC,	ADC_VAR_NO_INIT)	t_pu2DMASrcAdr;
 				VAR(uint16,								ADC_VAR_NO_INIT)	t_u2TransNum;
@@ -658,7 +665,9 @@ FUNC(void, ADC_CODE) Adc_EnableHardwareTrigger(
 			t_blisHWTriggerOn = TRUE;
 			Adc_Pil_ClearDIR(t_udHWUnit,t_udSG);
 			Adc_Pil_SetCnvEndIntrpt(t_udHWUnit,t_udSG,t_u1IntrptUse,t_u1DMAOn,t_u1StreamingAcces);
+			#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 			Pic2_SetHardwareTrigger(Group,t_blisHWTriggerOn);
+			#endif
 			#ifdef ADC_USE_TH
 			t_udTHGrp = Adc_GetTHGrp(Group);
 			if (t_udTHGrp!=ADC_TH_GRP_NONE) {
@@ -735,7 +744,9 @@ FUNC(void, ADC_CODE) Adc_DisableHardwareTrigger(
 			t_blisHWTriggerOn	= FALSE;
 			t_udHWUnit			= Adc_GetHWUnitID(Group);
 			t_udSG				= Adc_GetSGID(Group);
+			#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 			Pic2_SetHardwareTrigger(Group,t_blisHWTriggerOn);
+			#endif
 			Adc_Pil_SetHardwareTrigger(t_udHWUnit,t_udSG,t_blisHWTriggerOn);
 			#ifdef ADC_USE_TH
 			t_udTHGrp = Adc_GetTHGrp(Group);
@@ -809,8 +820,7 @@ FUNC(void, ADC_CODE) Adc_DisableGroupNotification(
 /*		Group			: Numeric ID of requested ADC channel group.							*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
-/* Return value			: 																		*/
-/*		Adc_StatusType	: Conversion status for the requested group.							*/
+/* Return value			: Adc_StatusType : Conversion status for the requested group.			*/
 /* Description			: Returns the conversion status of the requested ADC Channel group.		*/
 /************************************************************************************************/
 FUNC(Adc_StatusType, ADC_CODE) Adc_GetGroupStatus(
@@ -900,6 +910,9 @@ FUNC(void, ADC_CODE) Adc_SetStreamingNum(
 }
 #endif
 
+#define ADC_STOP_SEC_CODE_GLOBAL
+#include "Adc_MemMap.h"
+
 /*----------------------------------------------------------------------------------------------*/
 /* function from ISR																			*/
 /*----------------------------------------------------------------------------------------------*/
@@ -913,6 +926,8 @@ FUNC(void, ADC_CODE) Adc_SetStreamingNum(
 /* Return value			: None																	*/
 /* Description			: function from each ISR (Interrupt Service Routines)					*/
 /************************************************************************************************/
+#define ADC_START_SEC_CODE_FAST_GLOBAL
+#include "Adc_MemMap.h"
 
 /* ISR(ADC) */
 #ifdef ADC_USE_ISR_ADC_HWUNIT0_SG0
@@ -1007,9 +1022,15 @@ FUNC(void, ADC_CODE) Adc_DMA_HWUnit2_SG3(void) {Adc_Intrpt_HWUnit2_SG3();}	/* IS
 #ifdef ADC_USE_ISR_DMA_HWUNIT2_SG4
 FUNC(void, ADC_CODE) Adc_DMA_HWUnit2_SG4(void) {Adc_Intrpt_HWUnit2_SG4();}	/* ISR(DMA) HWUnit2 SG4	*/
 #endif
+
+#define ADC_STOP_SEC_CODE_FAST_GLOBAL
+#include "Adc_MemMap.h"
+
 /*--------------------------------------------------------------------------*/
 /* only when register check is available  									*/
 /*--------------------------------------------------------------------------*/
+#define ADC_START_SEC_CODE_GLOBAL
+#include "Adc_MemMap.h"
 #if (ADC_CFG_REG_CHK==STD_ON)
 /************************************************************************************************/
 /* Service name			: Adc_Regchk_All														*/
@@ -1021,18 +1042,20 @@ FUNC(void, ADC_CODE) Adc_DMA_HWUnit2_SG4(void) {Adc_Intrpt_HWUnit2_SG4();}	/* IS
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check all registers and refresh ones w expected value.				*/
+/* Description			: Check all registers and refresh ones with expected value.				*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Adc_Regchk_All(void)
 {
 	VAR(uint32,	ADC_VAR_NO_INIT)	t_u4ChkResult;
 
 	t_u4ChkResult  = Adc_Pil_Regchk_All();
+	#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 	t_u4ChkResult |= Pic2_Regchk_All();
+	#endif
 	return (t_u4ChkResult);
 }
 
@@ -1047,11 +1070,11 @@ FUNC(uint32, ADC_CODE) Adc_Regchk_All(void)
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group related registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Adc_Regchk_Grp(
 	VAR(Adc_GroupType,	ADC_VAR_INIT) Group
@@ -1060,7 +1083,9 @@ FUNC(uint32, ADC_CODE) Adc_Regchk_Grp(
 	VAR(uint32,	ADC_VAR_NO_INIT)	t_u4ChkResult;
 
 	t_u4ChkResult  = Adc_Pil_Regchk_Grp(Group);
+	#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 	t_u4ChkResult |= Pic2_Regchk_Grp(Group);
+	#endif
 	return (t_u4ChkResult);
 }
 #endif
@@ -1092,7 +1117,7 @@ static FUNC(void, ADC_CODE) Adc_DataInit(void)
 		s_stAdcGrpInfo[t_udGrp].blisNotifyOn			= FALSE;
 		#endif	
 		#ifdef ADC_USE_DMA
-		s_stAdcGrpInfo[t_udGrp].pu2DataBuffer			= (Adc_ValueGroupType*)NULL_PTR;
+		s_stAdcGrpInfo[t_udGrp].pudDataBuffer			= (Adc_ValueGroupType*)NULL_PTR;
 		#endif
 		#ifdef ADC_USE_STREAMING_ACCESS
 		s_stAdcGrpInfo[t_udGrp].udStreamingNum			= Adc_GetStreamingNum(t_udGrp);
@@ -1110,8 +1135,8 @@ static FUNC(void, ADC_CODE) Adc_DataInit(void)
 /*		Adc_StatusType	: next Group conversion status											*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
-/* Return value			: 																		*/
-/* Description			: set the group conersion status										*/
+/* Return value			: None																	*/
+/* Description			: set the group conversion status										*/
 /************************************************************************************************/
 static FUNC(void, ADC_CODE) Adc_SetGrpStatus(
 	CONST(Adc_GroupType,  ADC_CONST) t_cudGrp,
@@ -1184,10 +1209,10 @@ static FUNC(void, ADC_CODE) Adc_CnvEndIntrptDisable(
 /* Reentrancy			: Non Reentrant															*/
 /* Parameters (in)		: 																		*/
 /*		Group			: Numeric ID of requested ADC channel group.							*/
-/*		boolean			: TRUE:Notify on, FALSE:Notify off 										*/
+/*		Notify			: TRUE:Notify on, FALSE:Notify off 										*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
-/* Return value			: 																		*/
+/* Return value			: None																	*/
 /* Description			: set the Notify flag													*/
 /************************************************************************************************/
 static FUNC(void, ADC_CODE) Adc_SetNotifyFlag(
@@ -1273,32 +1298,24 @@ static  FUNC(void, ADC_CODE) Adc_ISR_CnvEnd(
 	VAR(Adc_StatusType, 			ADC_VAR_NO_INIT)	t_udNextStatus;
 	VAR(uint8,						ADC_VAR_NO_INIT)	t_u1IntrptUse;
 	VAR(Adc_TriggerSourceType,		ADC_VAR_NO_INIT)	t_udTrgMode;
-	#ifdef ADC_USE_STREAMING_ACCESS
+	#if (defined(ADC_USE_STREAMING_ACCESS) && defined(ADC_USE_DMA))
 	VAR(Adc_GroupAccessModeType,	ADC_VAR_NO_INIT)	t_udAccessMode;
-	#endif
-	#ifdef ADC_USE_DMA
 	VAR(uint8,						ADC_VAR_NO_INIT)	t_u1DMAOn;
 	#endif
 
 	t_u1IntrptUse = Adc_GetIntrptUse(t_cudGrp);
 	#if (defined(ADC_USE_STREAMING_ACCESS) && defined(ADC_USE_DMA))
 	if (t_u1IntrptUse==STD_OFF) {
-		#ifdef ADC_USE_STREAMING_ACCESS
 		t_udAccessMode	= Adc_GetGrpAccessMode(t_cudGrp);
 		if (t_udAccessMode==ADC_ACCESS_MODE_STREAMING) {
 			t_u1IntrptUse		= (uint8)STD_ON;
 		} else {
-		#endif
 			/* single access	*/
-			#ifdef ADC_USE_DMA
 			t_u1DMAOn	= Adc_IsDMAOn(t_cudGrp);
 			if (t_u1DMAOn==STD_ON) {
 				t_u1IntrptUse	= (uint8)STD_ON;
 			}
-			#endif
-		#ifdef ADC_USE_STREAMING_ACCESS
 		}
-		#endif
 	}
 	#endif
 
@@ -1930,10 +1947,10 @@ static FUNC(void, ADC_CODE) Adc_Intrpt_HWUnit2_SG4(void)
 /************************************************************************************************/
 static FUNC(void, ADC_CODE) Adc_SetDataBuffer(
 	CONST(Adc_GroupType,					ADC_CONST)		t_cudGrp,
-	P2VAR(Adc_ValueGroupType, AUTOMATIC,	ADC_VAR_INIT)	t_pu2DataBuffer
+	P2VAR(Adc_ValueGroupType, AUTOMATIC,	ADC_VAR_INIT)	t_pudDataBuffer
 )
 {
-	s_stAdcGrpInfo[t_cudGrp].pu2DataBuffer		= t_pu2DataBuffer;		/* pointer to result data buffer		*/
+	s_stAdcGrpInfo[t_cudGrp].pudDataBuffer		= t_pudDataBuffer;		/* pointer to result data buffer		*/
 }
 
 /************************************************************************************************/
@@ -1944,16 +1961,15 @@ static FUNC(void, ADC_CODE) Adc_SetDataBuffer(
 /*		Group			: Numeric ID of requested ADC channel group.							*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
-/* Return value			: None																	*/
+/* Return value			: Adc_ValueGroupType*	: pointer to result data buffer					*/
 /* Description			: get the top of data buffer address.									*/
 /************************************************************************************************/
 static FUNC_P2VAR(Adc_ValueGroupType, AUTOMATIC, ADC_CODE) Adc_GetDataBuffer(
 	CONST(Adc_GroupType, ADC_CONST) t_cudGrp
 )
 {
-	return(s_stAdcGrpInfo[t_cudGrp].pu2DataBuffer);
+	return(s_stAdcGrpInfo[t_cudGrp].pudDataBuffer);
 }
-#endif
 
 /*--------------------------------------------------------------------------*/
 /* only when Streaming Access is available									*/
@@ -1977,19 +1993,16 @@ static FUNC(Adc_StreamNumSampleType, ADC_CODE) Adc_GetCurrentStreamingNum(
 	return(s_stAdcGrpInfo[t_cudGrp].udStreamingNum);
 }
 #endif
+#endif
 
 /*----------------------------------------------------------------------------------------------*/
 /* Private API (public API in ADC module) 														*/
 /*----------------------------------------------------------------------------------------------*/
-
-/*--------------------------------------------------------------------------*/
-/* only when DEINIT or Regcheck w refresh is available						*/
-/*--------------------------------------------------------------------------*/
 #if ((ADC_CFG_DEINIT_API==STD_ON)||((ADC_CFG_REG_CHK==STD_ON)&&(ADC_CFG_REG_REFRESH==STD_ON)&&(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)))
 /************************************************************************************************/
 /* Service name			: Adc_IsRunning															*/
 /* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
+/* Reentrancy			: Reentrant																*/
 /* Parameters (in)		: None																	*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
@@ -2012,9 +2025,7 @@ FUNC(boolean, ADC_CODE) Adc_IsRunning(void)
 	return(t_b1isRunning);
 }
 #endif
-/*--------------------------------------------------------------------------*/
-/* only when Regcheck and (refresh or TH) is available						*/
-/*--------------------------------------------------------------------------*/
+
 #if ((ADC_CFG_REG_CHK==STD_ON)&&((ADC_CFG_REG_REFRESH==STD_ON)||(defined(ADC_USE_TH))))
 /************************************************************************************************/
 /* Service name			: Adc_IsHWUnitRunning													*/
@@ -2047,11 +2058,7 @@ FUNC(boolean, ADC_CODE) Adc_IsHWUnitRunning(
 	return(t_b1isRunning);
 }
 #endif
-/*--------------------------------------------------------------------------*/
-/* only when Regcheck, refresh and TH is available							*/
-/*--------------------------------------------------------------------------*/
-#if ((ADC_CFG_REG_CHK==STD_ON)&&(ADC_CFG_REG_REFRESH==STD_ON))
-#ifdef ADC_USE_TH
+
 /************************************************************************************************/
 /* Service name			: Adc_IsTHinHWUnitRunning												*/
 /* Sync/Async			: Synchronous															*/
@@ -2064,34 +2071,37 @@ FUNC(boolean, ADC_CODE) Adc_IsHWUnitRunning(
 /*		Adc status		: TRUE: some conversion is active, FALSE:no conversion is active		*/
 /* Description			: return the T&H conversion status in the designated HW Unit			*/
 /************************************************************************************************/
+#if ((ADC_CFG_REG_CHK==STD_ON)&&(ADC_CFG_REG_REFRESH==STD_ON))
 FUNC(boolean, ADC_CODE) Adc_IsTHinHWUnitRunning(
 	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
 )
 {
 	VAR(boolean,				ADC_VAR_NO_INIT)	t_b1isRunning;
 	VAR(Adc_GroupType,			ADC_VAR_NO_INIT)	t_udGrp;
+	#if (defined(ADC_USE_TH))
 	VAR(Adc_TrackHoldGroupType,	ADC_VAR_NO_INIT)	t_udTHGrp;
+	#endif
 
 	t_b1isRunning = FALSE;
 	for (t_udGrp=ADC_GRP00;t_udGrp<(Adc_GroupType)ADC_CFG_GRP_SIZE;t_udGrp++) {
 		if (t_cudHWUnit==Adc_GetHWUnitID(t_udGrp)) {
+			#if (defined(ADC_USE_TH))
 			t_udTHGrp = Adc_GetTHGrp(t_udGrp);
 			if (t_udTHGrp!=ADC_TH_GRP_NONE) {
+			#endif
 				if (Adc_GetGrpStatus(t_udGrp)!=ADC_IDLE) {
 					t_b1isRunning = TRUE;
 					break;
 				}
+			#if (defined(ADC_USE_TH))
 			}
+			#endif
 		}
 	}
 	return(t_b1isRunning);
 }
 #endif
-#endif
 
-/*--------------------------------------------------------------------------*/
-/* only when T&H is available												*/
-/*--------------------------------------------------------------------------*/
 #ifdef ADC_USE_TH
 /************************************************************************************************/
 /* Service name			: Adc_SetTHGrp															*/
@@ -2130,8 +2140,7 @@ FUNC(void, ADC_CODE) Adc_SetTHGrp(
 /* Return value			: Track and Hold Group (None/Grp A/Grp B)								*/
 /* Description			: get Track and Hold Group												*/
 /************************************************************************************************/
-#if ((ADC_CFG_REG_CHK==STD_ON)||(ADC_CFG_HW_TRG_API==STD_ON))
-#ifdef ADC_USE_TH
+#if (((ADC_CFG_REG_CHK==STD_ON) && (defined(ADC_USE_TH))) || ((ADC_CFG_HW_TRG_API==STD_ON) && (defined(ADC_USE_TH))))
 FUNC(Adc_TrackHoldGroupType, ADC_CODE) Adc_GetTHGrp(
 	CONST(Adc_GroupType, ADC_CONST) t_cudGrp
 )
@@ -2144,7 +2153,6 @@ FUNC(Adc_TrackHoldGroupType, ADC_CODE) Adc_GetTHGrp(
 	}
 	return(t_udTHGrp);
 }
-#endif
 #endif
 
 #define ADC_STOP_SEC_CODE_GLOBAL

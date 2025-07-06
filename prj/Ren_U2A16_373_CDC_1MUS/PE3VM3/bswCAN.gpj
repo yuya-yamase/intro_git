@@ -3,7 +3,7 @@
     :sourceDir=${CAN_DIR}
 
     -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/lib
     -I${OXCAN_DIR}/scc
 
 ab_lib/libbswcs.a
@@ -149,6 +149,7 @@ CanIf/src/bsw_canif_config.c
 CanIf/src/bsw_canif_rx_xcp.c
 CanIf/src/bsw_canif_tx_xcp.c
 
+CanNm/cfg/y/CanNm_Y_PBcfg.c
 CanNm/src/a/bsw_cannm_a_config.c
 CanNm/src/a2/bsw_cannm_a2_config.c
 CanNm/src/b/bsw_cannm_b_config.c

@@ -52,7 +52,7 @@
 /* communication Activated System Status per channel */
 BswConst BswU4 bsw_comm_ctrl_u4SysStsPerCh[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNUM] = {
     {    /* ComMConf_ComMChannel_CDC_VCAN_BUS */
-        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR|ComMConf_SysStatusName_NM_0)
+        (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
 };
@@ -60,7 +60,7 @@ BswConst BswU4 bsw_comm_ctrl_u4SysStsPerCh[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
 /* Channel power per channel */
 BswConst BswU4 bsw_comm_ctrl_u4CHPowSupply[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNUM] = {
     {    /* ComMConf_ComMChannel_CDC_VCAN_BUS */
-        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR|ComMConf_SysStatusName_NM_0)
+        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
 };
@@ -70,6 +70,18 @@ BswConst BswU4 bsw_comm_ctrl_u4CHPowSupply[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
 #if ( BSW_COMM_CFG_CHNUM > 0U )
 #if ( BSW_COMM_CH_PNCNUM_0 > 0U )
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_0[BSW_COMM_CH_PNAWKPW_NUM_0] = {
+    /* ComMConf_ComMPnc_Awake_16 */
+    (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_40 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_43 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_44 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
 };
 #endif /* ( BSW_COMM_CH_PNCNUM_0 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 0U ) */
@@ -270,7 +282,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_31[BSW_COMM_CH_PNAWKPW_NUM_31] = {
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

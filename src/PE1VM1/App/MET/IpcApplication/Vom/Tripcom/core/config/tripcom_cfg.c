@@ -507,8 +507,8 @@ U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts)
     if((u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU)
     || (u1_t_ptsys == (U1)VDF_PTS_RX_05_ELE_BAT)){
 #ifdef ComConf_ComSignal_PIEVSTS
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
-                                       (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),
+        u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
+                                       (U4)OXCAN_SYS_IGP,
                                        (U2)TRIPCOM_EHV1S94_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         (void)Com_ReceiveSignal(ComConf_ComSignal_PIEVSTS, u1p_a_pievsts);
 #endif /* ComConf_ComSignal_PIEVSTS */

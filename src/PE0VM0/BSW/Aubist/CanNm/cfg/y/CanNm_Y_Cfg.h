@@ -56,9 +56,9 @@
 #define BSW_CANNM_Y_CFG_ACTWKUP_CH31                     (BSW_NOUSE)
 
 /* Cycle time of NM Message for Immidiate Transmit(LSB:ms) */
-#define BSW_CANNM_Y_CFG_IMM_CYCLE_CH0                    (0U)
-#define BSW_CANNM_Y_CFG_IMM_CYCLE_CH1                    (0U)
-#define BSW_CANNM_Y_CFG_IMM_CYCLE_CH2                    (0U)
+#define BSW_CANNM_Y_CFG_IMM_CYCLE_CH0                    (10U)
+#define BSW_CANNM_Y_CFG_IMM_CYCLE_CH1                    (10U)
+#define BSW_CANNM_Y_CFG_IMM_CYCLE_CH2                    (10U)
 #define BSW_CANNM_Y_CFG_IMM_CYCLE_CH3                    (0U)
 #define BSW_CANNM_Y_CFG_IMM_CYCLE_CH4                    (0U)
 #define BSW_CANNM_Y_CFG_IMM_CYCLE_CH5                    (0U)
@@ -90,9 +90,9 @@
 #define BSW_CANNM_Y_CFG_IMM_CYCLE_CH31                   (0U)
 
 /* Count of NM Message for Immidiate Transmit */
-#define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH0                   (0U)
-#define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH1                   (0U)
-#define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH2                   (0U)
+#define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH0                   (10U)
+#define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH1                   (10U)
+#define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH2                   (10U)
 #define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH3                   (0U)
 #define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH4                   (0U)
 #define BSW_CANNM_Y_CFG_IMM_TR_NUM_CH5                   (0U)
@@ -158,9 +158,9 @@
 #define BSW_CANNM_Y_CFG_CYC_OFFSET_CH31                  (0U)
 
 /* NM_MSGCYCLE(LSB:ms) */
-#define BSW_CANNM_Y_CFG_CYCLE_TIME_CH0                   (1000U)
-#define BSW_CANNM_Y_CFG_CYCLE_TIME_CH1                   (1U)
-#define BSW_CANNM_Y_CFG_CYCLE_TIME_CH2                   (1U)
+#define BSW_CANNM_Y_CFG_CYCLE_TIME_CH0                   (500U)
+#define BSW_CANNM_Y_CFG_CYCLE_TIME_CH1                   (500U)
+#define BSW_CANNM_Y_CFG_CYCLE_TIME_CH2                   (500U)
 #define BSW_CANNM_Y_CFG_CYCLE_TIME_CH3                   (1U)
 #define BSW_CANNM_Y_CFG_CYCLE_TIME_CH4                   (1U)
 #define BSW_CANNM_Y_CFG_CYCLE_TIME_CH5                   (1U)
@@ -227,8 +227,8 @@
 
 /* SourceNodeIdentifer */
 #define BSW_CANNM_Y_CFG_NODE_ID_CH0                      (0x42U)
-#define BSW_CANNM_Y_CFG_NODE_ID_CH1                      (0x00U)
-#define BSW_CANNM_Y_CFG_NODE_ID_CH2                      (0x00U)
+#define BSW_CANNM_Y_CFG_NODE_ID_CH1                      (0x42U)
+#define BSW_CANNM_Y_CFG_NODE_ID_CH2                      (0x42U)
 #define BSW_CANNM_Y_CFG_NODE_ID_CH3                      (0x00U)
 #define BSW_CANNM_Y_CFG_NODE_ID_CH4                      (0x00U)
 #define BSW_CANNM_Y_CFG_NODE_ID_CH5                      (0x00U)
@@ -261,8 +261,8 @@
 
 /* Position of SourceNodeIdentifer in NM Message */
 #define BSW_CANNM_Y_CFG_PDU_NIDPOS_CH0                   (BSW_CANNM_PDU_BYTE_0)
-#define BSW_CANNM_Y_CFG_PDU_NIDPOS_CH1                   (BSW_CANNM_PDU_OFF)
-#define BSW_CANNM_Y_CFG_PDU_NIDPOS_CH2                   (BSW_CANNM_PDU_OFF)
+#define BSW_CANNM_Y_CFG_PDU_NIDPOS_CH1                   (BSW_CANNM_PDU_BYTE_0)
+#define BSW_CANNM_Y_CFG_PDU_NIDPOS_CH2                   (BSW_CANNM_PDU_BYTE_0)
 #define BSW_CANNM_Y_CFG_PDU_NIDPOS_CH3                   (BSW_CANNM_PDU_OFF)
 #define BSW_CANNM_Y_CFG_PDU_NIDPOS_CH4                   (BSW_CANNM_PDU_OFF)
 #define BSW_CANNM_Y_CFG_PDU_NIDPOS_CH5                   (BSW_CANNM_PDU_OFF)
@@ -295,8 +295,8 @@
 
 /* Position of CBV in NM Message */
 #define BSW_CANNM_Y_CFG_PDU_CBVPOS_CH0                   (BSW_CANNM_PDU_BYTE_1)
-#define BSW_CANNM_Y_CFG_PDU_CBVPOS_CH1                   (BSW_CANNM_PDU_OFF)
-#define BSW_CANNM_Y_CFG_PDU_CBVPOS_CH2                   (BSW_CANNM_PDU_OFF)
+#define BSW_CANNM_Y_CFG_PDU_CBVPOS_CH1                   (BSW_CANNM_PDU_BYTE_1)
+#define BSW_CANNM_Y_CFG_PDU_CBVPOS_CH2                   (BSW_CANNM_PDU_BYTE_1)
 #define BSW_CANNM_Y_CFG_PDU_CBVPOS_CH3                   (BSW_CANNM_PDU_OFF)
 #define BSW_CANNM_Y_CFG_PDU_CBVPOS_CH4                   (BSW_CANNM_PDU_OFF)
 #define BSW_CANNM_Y_CFG_PDU_CBVPOS_CH5                   (BSW_CANNM_PDU_OFF)
@@ -329,8 +329,8 @@
 
 /* NM_REPEATMSGTIME(LSB:ms) */
 #define BSW_CANNM_Y_CFG_RPTMSGTIME_CH0                   (2500U)
-#define BSW_CANNM_Y_CFG_RPTMSGTIME_CH1                   (1U)
-#define BSW_CANNM_Y_CFG_RPTMSGTIME_CH2                   (1U)
+#define BSW_CANNM_Y_CFG_RPTMSGTIME_CH1                   (2500U)
+#define BSW_CANNM_Y_CFG_RPTMSGTIME_CH2                   (2500U)
 #define BSW_CANNM_Y_CFG_RPTMSGTIME_CH3                   (1U)
 #define BSW_CANNM_Y_CFG_RPTMSGTIME_CH4                   (1U)
 #define BSW_CANNM_Y_CFG_RPTMSGTIME_CH5                   (1U)
@@ -362,9 +362,9 @@
 #define BSW_CANNM_Y_CFG_RPTMSGTIME_CH31                  (1U)
 
 /* NM_TIMEOUTTIME(LSB:ms) */
-#define BSW_CANNM_Y_CFG_NMTOUTTIME_CH0                   (3000U)
-#define BSW_CANNM_Y_CFG_NMTOUTTIME_CH1                   (1U)
-#define BSW_CANNM_Y_CFG_NMTOUTTIME_CH2                   (1U)
+#define BSW_CANNM_Y_CFG_NMTOUTTIME_CH0                   (7000U)
+#define BSW_CANNM_Y_CFG_NMTOUTTIME_CH1                   (7000U)
+#define BSW_CANNM_Y_CFG_NMTOUTTIME_CH2                   (7000U)
 #define BSW_CANNM_Y_CFG_NMTOUTTIME_CH3                   (1U)
 #define BSW_CANNM_Y_CFG_NMTOUTTIME_CH4                   (1U)
 #define BSW_CANNM_Y_CFG_NMTOUTTIME_CH5                   (1U)
@@ -396,9 +396,9 @@
 #define BSW_CANNM_Y_CFG_NMTOUTTIME_CH31                  (1U)
 
 /* NM_WAITBUSSLEEP(LSB:ms) */
-#define BSW_CANNM_Y_CFG_WTSLPTIME_CH0                    (60000U)
-#define BSW_CANNM_Y_CFG_WTSLPTIME_CH1                    (20U)
-#define BSW_CANNM_Y_CFG_WTSLPTIME_CH2                    (20U)
+#define BSW_CANNM_Y_CFG_WTSLPTIME_CH0                    (9000U)
+#define BSW_CANNM_Y_CFG_WTSLPTIME_CH1                    (9000U)
+#define BSW_CANNM_Y_CFG_WTSLPTIME_CH2                    (9000U)
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH3                    (20U)
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH4                    (20U)
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH5                    (20U)
@@ -430,9 +430,9 @@
 #define BSW_CANNM_Y_CFG_WTSLPTIME_CH31                   (20U)
 
 /* Use of PNC */
-#define BSW_CANNM_Y_CFG_PNC_CH0                          (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_PNC_CH1                          (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_PNC_CH2                          (BSW_NOUSE)
+#define BSW_CANNM_Y_CFG_PNC_CH0                          (BSW_USE)
+#define BSW_CANNM_Y_CFG_PNC_CH1                          (BSW_USE)
+#define BSW_CANNM_Y_CFG_PNC_CH2                          (BSW_USE)
 #define BSW_CANNM_Y_CFG_PNC_CH3                          (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_PNC_CH4                          (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_PNC_CH5                          (BSW_NOUSE)
@@ -465,8 +465,8 @@
 
 /* TBWDisableSend(LSB:ms) */
 #define BSW_CANNM_Y_CFG_DISABLESND_CH0                   (90U)
-#define BSW_CANNM_Y_CFG_DISABLESND_CH1                   (0U)
-#define BSW_CANNM_Y_CFG_DISABLESND_CH2                   (0U)
+#define BSW_CANNM_Y_CFG_DISABLESND_CH1                   (90U)
+#define BSW_CANNM_Y_CFG_DISABLESND_CH2                   (90U)
 #define BSW_CANNM_Y_CFG_DISABLESND_CH3                   (0U)
 #define BSW_CANNM_Y_CFG_DISABLESND_CH4                   (0U)
 #define BSW_CANNM_Y_CFG_DISABLESND_CH5                   (0U)
@@ -499,8 +499,8 @@
 
 /* TBWEnablePeriodic(LSB:ms) */
 #define BSW_CANNM_Y_CFG_ENABLEPERI_CH0                   (300U)
-#define BSW_CANNM_Y_CFG_ENABLEPERI_CH1                   (0U)
-#define BSW_CANNM_Y_CFG_ENABLEPERI_CH2                   (0U)
+#define BSW_CANNM_Y_CFG_ENABLEPERI_CH1                   (300U)
+#define BSW_CANNM_Y_CFG_ENABLEPERI_CH2                   (300U)
 #define BSW_CANNM_Y_CFG_ENABLEPERI_CH3                   (0U)
 #define BSW_CANNM_Y_CFG_ENABLEPERI_CH4                   (0U)
 #define BSW_CANNM_Y_CFG_ENABLEPERI_CH5                   (0U)
@@ -533,8 +533,8 @@
 
 /* Time of Power On WakeCheck State(LSB:ms) */
 #define BSW_CANNM_Y_CFG_PWOWKCHKTM_CH0                   (3500U)
-#define BSW_CANNM_Y_CFG_PWOWKCHKTM_CH1                   (1U)
-#define BSW_CANNM_Y_CFG_PWOWKCHKTM_CH2                   (1U)
+#define BSW_CANNM_Y_CFG_PWOWKCHKTM_CH1                   (3500U)
+#define BSW_CANNM_Y_CFG_PWOWKCHKTM_CH2                   (3500U)
 #define BSW_CANNM_Y_CFG_PWOWKCHKTM_CH3                   (1U)
 #define BSW_CANNM_Y_CFG_PWOWKCHKTM_CH4                   (1U)
 #define BSW_CANNM_Y_CFG_PWOWKCHKTM_CH5                   (1U)
@@ -635,8 +635,8 @@
 
 /* Use of TimeoutTimer Restart when RepeatMessage State & NormalOperation State */
 #define BSW_CANNM_Y_CFG_NMTO_RSTRT_CH0                   (BSW_USE)
-#define BSW_CANNM_Y_CFG_NMTO_RSTRT_CH1                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_NMTO_RSTRT_CH2                   (BSW_NOUSE)
+#define BSW_CANNM_Y_CFG_NMTO_RSTRT_CH1                   (BSW_USE)
+#define BSW_CANNM_Y_CFG_NMTO_RSTRT_CH2                   (BSW_USE)
 #define BSW_CANNM_Y_CFG_NMTO_RSTRT_CH3                   (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_NMTO_RSTRT_CH4                   (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_NMTO_RSTRT_CH5                   (BSW_NOUSE)
@@ -703,8 +703,8 @@
 
 /* Waiting time for After Transmitting EventWakeup Frame */
 #define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH0                   (90U)
-#define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH1                   (0U)
-#define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH2                   (0U)
+#define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH1                   (90U)
+#define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH2                   (90U)
 #define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH3                   (0U)
 #define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH4                   (0U)
 #define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH5                   (0U)
@@ -736,9 +736,9 @@
 #define BSW_CANNM_Y_CFG_EVTWKUP_WT_CH31                  (0U)
 
 /* Check TxConf for Judge Tx Com */
-#define BSW_CANNM_Y_CFG_CHK_TXCONF_CH0                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_CHK_TXCONF_CH1                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_CHK_TXCONF_CH2                   (BSW_NOUSE)
+#define BSW_CANNM_Y_CFG_CHK_TXCONF_CH0                   (BSW_USE)
+#define BSW_CANNM_Y_CFG_CHK_TXCONF_CH1                   (BSW_USE)
+#define BSW_CANNM_Y_CFG_CHK_TXCONF_CH2                   (BSW_USE)
 #define BSW_CANNM_Y_CFG_CHK_TXCONF_CH3                   (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_CHK_TXCONF_CH4                   (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_CHK_TXCONF_CH5                   (BSW_NOUSE)
@@ -804,9 +804,9 @@
 #define BSW_CANNM_Y_CFG_SLPRDYRTRG_CH31                  (BSW_NOUSE)
 
 /* Use of Non-Partial NM Message Receive when Using Partial Network Function */
-#define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH0                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH1                   (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH2                   (BSW_NOUSE)
+#define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH0                   (BSW_USE)
+#define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH1                   (BSW_USE)
+#define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH2                   (BSW_USE)
 #define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH3                   (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH4                   (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH5                   (BSW_NOUSE)
@@ -838,9 +838,9 @@
 #define BSW_CANNM_Y_CFG_RX_NOPNMSG_CH31                  (BSW_NOUSE)
 
 /* Use of Immediate Transmission when Own-Node Awake Occurs */
-#define BSW_CANNM_Y_CFG_IMM_NWREQ_CH0                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_IMM_NWREQ_CH1                    (BSW_NOUSE)
-#define BSW_CANNM_Y_CFG_IMM_NWREQ_CH2                    (BSW_NOUSE)
+#define BSW_CANNM_Y_CFG_IMM_NWREQ_CH0                    (BSW_USE)
+#define BSW_CANNM_Y_CFG_IMM_NWREQ_CH1                    (BSW_USE)
+#define BSW_CANNM_Y_CFG_IMM_NWREQ_CH2                    (BSW_USE)
 #define BSW_CANNM_Y_CFG_IMM_NWREQ_CH3                    (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_IMM_NWREQ_CH4                    (BSW_NOUSE)
 #define BSW_CANNM_Y_CFG_IMM_NWREQ_CH5                    (BSW_NOUSE)
@@ -873,8 +873,8 @@
 
 /* Kind of Waiting Time to Start Transmission when Power is Turned ON */
 #define BSW_CANNM_Y_CFG_PWON_WTTX_CH0                    (BSW_CANNM_Y_SENDSTART)
-#define BSW_CANNM_Y_CFG_PWON_WTTX_CH1                    (BSW_CANNM_Y_DISABLESND)
-#define BSW_CANNM_Y_CFG_PWON_WTTX_CH2                    (BSW_CANNM_Y_DISABLESND)
+#define BSW_CANNM_Y_CFG_PWON_WTTX_CH1                    (BSW_CANNM_Y_SENDSTART)
+#define BSW_CANNM_Y_CFG_PWON_WTTX_CH2                    (BSW_CANNM_Y_SENDSTART)
 #define BSW_CANNM_Y_CFG_PWON_WTTX_CH3                    (BSW_CANNM_Y_DISABLESND)
 #define BSW_CANNM_Y_CFG_PWON_WTTX_CH4                    (BSW_CANNM_Y_DISABLESND)
 #define BSW_CANNM_Y_CFG_PWON_WTTX_CH5                    (BSW_CANNM_Y_DISABLESND)
@@ -963,7 +963,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

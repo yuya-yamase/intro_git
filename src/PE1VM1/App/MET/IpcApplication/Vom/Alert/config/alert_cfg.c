@@ -1,4 +1,4 @@
-/* 5.5.0 */
+/* 5.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_CFG_C_MAJOR                        (5)
-#define ALERT_CFG_C_MINOR                        (5)
+#define ALERT_CFG_C_MINOR                        (6)
 #define ALERT_CFG_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -79,7 +79,7 @@ static inline U1      u1_s_AlertCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U4                    u4_g_ALERT_IGN_OFF_TOUT    = (U4)150000U; /* 25 minutes */
-const U1                    u1_g_ALERT_BUS_CH          = (U1)OXCAN_CH_0_VCAN;
+const U4                    u4_g_ALERT_BUS_CH_MSK      = ((U4)OXCAN_SYS_PNC_16 | (U4)OXCAN_SYS_PNC_40 | (U4)OXCAN_SYS_PNC_43 | (U4)OXCAN_SYS_PNC_44);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -193,8 +193,8 @@ U1    u1_g_AlertCfgS_cvrsAdds(U1 * u1p_a_rprt, U1 * u1p_a_sfty)
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVNMS73,
-                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_AVNMS73,
+                                   (U4)OXCAN_SYS_IGR,
                                    u2_s_ALERT_S_CVRS_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl   = (U1)0U;
@@ -266,8 +266,8 @@ U2 u2_g_AlertCfgC_brk_0EngineRPMVal(void)
     u4_t_egrt_val = (U4)0U;
     u2_t_ret      = (U2)0U;
 
-    u1_t_stsbit   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G02,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_stsbit   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ENG1G02,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_C_BRK_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
 #if 0   /* BEV BSW provisionally */
@@ -418,8 +418,8 @@ U1    u1_g_AlertCfgEcomodeOn(void)
     U1              u1_t_pts_on;
 
     u1_t_pts_on = (U1)FALSE;
-    u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
-                                   (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
+                                   (U4)OXCAN_SYS_IGR,
                                    u2_s_ALERT_ECOMODE3_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if(u1_t_msgsts == (U1)0U){
@@ -448,6 +448,7 @@ U1    u1_g_AlertCfgEcomodeOn(void)
 /*  5.3.0     5/10/2019  YI       alert v5.2.0 -> v5.3.0.                                                                            */
 /*  5.4.0     9/20/2019  YI       alert v5.3.0 -> v5.4.0.                                                                            */
 /*  5.5.0    10/31/2019  DS       alert v5.4.0 -> v5.5.0.                                                                            */
+/*  5.6.0     6/30/2025  SF       alert v5.5.0 -> v5.6.0.                                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -459,6 +460,7 @@ U1    u1_g_AlertCfgEcomodeOn(void)
 /*  19PFv3-5 05/06/2024  YR       Added config for ECOMODE3                                                                          */
 /*  19PFv3-6 06/27/2024  TN(DT)   Delete Calibration Guard Process.                                                                  */
 /*  19PFv3-7 07/12/2024  TN(DT)   Add Calibration Guard to Unify Vehicle Operation.                                                  */
+/*  BEV-1    06/30/2025  SF       BSW Update:CAN BUS CH definition was modified                                                      */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
@@ -469,5 +471,6 @@ U1    u1_g_AlertCfgEcomodeOn(void)
 /*  * DR     = Dyan Reyes, DTPH                                                                                                      */
 /*  * YR     = Yhana Regalario, DTPH                                                                                                 */
 /*  * TN(DT) = Tetsushi Nakano, Denso Techno                                                                                         */
+/*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

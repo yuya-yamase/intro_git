@@ -19,11 +19,9 @@
 /* MCAL */
 #include "gpt_drv_frt.h"
 #include "Port.h"
-#include "Port_PIC.h"
-#include "Port_Ext.h"
+#include "typort.h"
 #include "Spi.h"
 #include "Dma.h"
-#include "Dio.h"
 #include "icu_drv_wk.h"
 #include "ErrH.h"
 
@@ -42,7 +40,6 @@
 #endif /* ECU_SAMPLE_ON */
 /* ^^ include end ^^ */
 /* vv extern start vv */
-extern void __SYNCP(void);
 /* ^^ extern end ^^ */
 
 /* vv include start vv */
@@ -181,26 +178,16 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
         (void)SS_Memory_set(__ghsbegin_cluster2_share_ramtop, 0UL, (uintptr_t)BSW_SHARE_DATA_SIZE);
 
         Spi_PrePortInit();
-        /* 以降、IoBufferHoldの解除(REG_STBC_STBCKCPROTの操作)までは一連の処理 */
+        vd_g_tyPortPreInit();
         Port_Init( &cstPort_Config[0] );
-        Port_InitPic();
         if (u4_BootSource == SS_PM_BOOT_SUP)
         {
-            Port_SetPinMode(PORT_ID_PORT8_PIN0, PORT_MODE_CFG_P8_0_DO_LO);
-            Port_SetPinMode(PORT_ID_PORT8_PIN2, PORT_MODE_CFG_P8_2_DO_LO);
-            Port_SetPinMode(PORT_ID_APORT5_PIN1, PORT_MODE_CFG_AP5_1_DO_LO);
+            vd_g_tyPortInit((U1)TYPORT_CFG_STA_BY_RST);
         }
         else
         {
-            /* WakeUp時にP10_5の出力を保持するための処理 */
-            Dio_LevelType u1_PinLv;
-            volatile Dio_PortLevelType u1_PortLv;
-            u1_PinLv = Dio_ReadChannel(DIO_ID_PORT10_CH5);
-            Dio_WriteChannel(DIO_ID_PORT10_CH5, u1_PinLv);
-            u1_PortLv = Dio_ReadPort(DIO_ID_PORT10); /* DummyRead */
-            __SYNCP();
+            vd_g_tyPortInit((U1)TYPORT_CFG_STA_BY_WK);
         }
-        Port_Release_IOHOLD();
 
         if((u4BootCause == ECU_INTG_u4BTCAUSE_PON  ) ||
            (u4BootCause == ECU_INTG_u4BTCAUSE_RESET)){

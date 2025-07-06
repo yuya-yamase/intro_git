@@ -29,7 +29,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define GPT_OST_NUM_CH                           (2U)
 
-#define GPT_OST_CH_01                            (0U)   /* RH850-QC SPI 10 milliseconds Tick/Timer IVI */
+#define GPT_OST_CH_01_SPI_TICK_IVI               (0U)   /* RH850-QC SPI 10 milliseconds Tick/Timer IVI */
 #define GPT_OST_CH_08_SCHDLR_TICK                (1U)   /* Reserved SchdM   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

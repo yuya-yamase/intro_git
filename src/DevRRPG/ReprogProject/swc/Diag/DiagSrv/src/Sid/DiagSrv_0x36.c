@@ -687,6 +687,7 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_Time_DecmpWrite (void)
 /******************************************************************************/
 static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_Time_SigVerify (void)
 {
+#if 0	/* @@@ */
     VAR(uint8, AUTOMATIC) Status;
     VAR(uint8, AUTOMATIC) JobResult;
     VAR(uint8, AUTOMATIC) Nrc;
@@ -705,7 +706,8 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_Time_SigVerify (void)
         }
     }
 
-    return Nrc;
+#endif	/* @@@ */
+    return DIAG_NRC_PR;	/* @@@ */
 }
 
 /******************************************************************************/
@@ -1542,6 +1544,7 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_SigVerify (void)
 {
     VAR(uint8, AUTOMATIC) Nrc;
 
+#if 0	/* @@@ */
     Nrc = DIAG_NRC_PR;
 
     if( DiagSrv_0x36_VerifyInfo.AvailableSize > (uint32)0UL )
@@ -1554,6 +1557,9 @@ static FUNC(uint8, DIAGSRV_CODE_FAST) DiagSrv_0x36_SigVerify (void)
         DiagSrv_0x36_Status = DIAGSRV_0X36_STAT_WAIT_SIGVERIFY;
         Nrc = DIAG_NRC_RCRRP;
     }
+#endif	/* @@@ */
+    DiagSrv_0x36_Status = DIAGSRV_0X36_STAT_WAIT_SIGVERIFY;	/* @@@ */
+    Nrc = DIAG_NRC_RCRRP;	/* @@@ */
 
     return Nrc;
 }

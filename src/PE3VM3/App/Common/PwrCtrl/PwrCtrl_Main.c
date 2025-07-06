@@ -434,7 +434,7 @@ static void vd_s_PwrCtrlMainSleepJudge( void )
     u1_t_boot = (U1)STD_LOW;
     u1_t_chk  = (U1)FALSE;
 
-    u1_t_chk = u1_g_oXCANEcuShtdwnOk();
+    u1_t_chk = u1_g_oXCANShtdwnOk();
 
     if ( u1_t_chk == (U1)TRUE )
     {
@@ -963,7 +963,7 @@ static void vd_s_PwrCtrlMainForcedOffSeq( void )
 
         /* 【todo】起動要因の取得 */
         /* 暫定対応(CANスリープ要否の確認、Bootチェック) */
-        u1_t_wake_factor = u1_g_oXCANEcuShtdwnOk();
+        u1_t_wake_factor = u1_g_oXCANShtdwnOk();
         u1_t_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BOOT);
         
         /* 【todo】起動要因が成立しているかの判定 */

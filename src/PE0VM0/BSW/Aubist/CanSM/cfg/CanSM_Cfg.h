@@ -22,7 +22,7 @@
 #define BSW_CANSM_CFG_TXRX_INDSTATE                  (BSW_NOUSE)
 
 #define BSW_CANSM_CFG_ICOM                           (BSW_NOUSE)
-#define BSW_CANSM_CFG_PNC                            (BSW_NOUSE)
+#define BSW_CANSM_CFG_PNC                            (BSW_USE)
 #define BSW_CANSM_CFG_SET_BAUDRATE                   (BSW_NOUSE)
 #define BSW_CANSM_CFG_ECU_PASSIVE                    (BSW_NOUSE)
 
@@ -32,8 +32,8 @@
 /* BusOff Recovery Time */
 #define BSW_CANSM_CFG_BOR_TIME_L1_0                  (35U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_1                  (35U)
-#define BSW_CANSM_CFG_BOR_TIME_L1_2                  (35U)
-#define BSW_CANSM_CFG_BOR_TIME_L1_3                  (0U)
+#define BSW_CANSM_CFG_BOR_TIME_L1_2                  (0U)
+#define BSW_CANSM_CFG_BOR_TIME_L1_3                  (35U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_4                  (0U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_5                  (0U)
 #define BSW_CANSM_CFG_BOR_TIME_L1_6                  (0U)
@@ -64,10 +64,10 @@
 #define BSW_CANSM_CFG_BOR_TIME_L1_31                 (0U)
 
 /* Send Lock Recovery Time */
-#define BSW_CANSM_CFG_SNDLCK_RESTART_0               (0U)
-#define BSW_CANSM_CFG_SNDLCK_RESTART_1               (0U)
-#define BSW_CANSM_CFG_SNDLCK_RESTART_2               (0U)
-#define BSW_CANSM_CFG_SNDLCK_RESTART_3               (0U)
+#define BSW_CANSM_CFG_SNDLCK_RESTART_0               (5U)
+#define BSW_CANSM_CFG_SNDLCK_RESTART_1               (5U)
+#define BSW_CANSM_CFG_SNDLCK_RESTART_2               (5U)
+#define BSW_CANSM_CFG_SNDLCK_RESTART_3               (5U)
 #define BSW_CANSM_CFG_SNDLCK_RESTART_4               (0U)
 #define BSW_CANSM_CFG_SNDLCK_RESTART_5               (0U)
 #define BSW_CANSM_CFG_SNDLCK_RESTART_6               (0U)
@@ -132,8 +132,8 @@
 #define BSW_CANSM_CFG_BUSOFF_RECOVERY_31             (BSW_CANSM_BUSOFF_RESET)
 
 /* Transceiver Transition Wait Time */
-#define BSW_CANSM_CFG_TRCV_WAITTIME_0                (0U)
-#define BSW_CANSM_CFG_TRCV_WAITTIME_1                (0U)
+#define BSW_CANSM_CFG_TRCV_WAITTIME_0                (1U)
+#define BSW_CANSM_CFG_TRCV_WAITTIME_1                (1U)
 #define BSW_CANSM_CFG_TRCV_WAITTIME_2                (0U)
 #define BSW_CANSM_CFG_TRCV_WAITTIME_3                (0U)
 #define BSW_CANSM_CFG_TRCV_WAITTIME_4                (0U)
@@ -229,7 +229,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

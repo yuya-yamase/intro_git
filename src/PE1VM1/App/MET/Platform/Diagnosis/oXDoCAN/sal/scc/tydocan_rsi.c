@@ -98,7 +98,7 @@ static void    vd_s_TyDoCANRsiFinInit(void)
 {
     st_s_tydc_rsi_buf.u1_rx_inc     = (U1)0U;
     st_s_tydc_rsi_buf.u4_rx_last    = (U4)U4_MAX;
-    u1_s_tydc_rsi_rxev_last         = (U1)OXCAN_RX_RXEV_CNT_MAX;
+    u1_s_tydc_rsi_rxev_last         = (U1)OXCAN_RXD_EVC_MAX;
 
     u2_s_tydc_rsi_tm_elpsd          = (U2)0U;
     u2_s_tydc_rsi_tm_wri_sta        = (U2)0U;
@@ -342,9 +342,9 @@ static void      vd_s_TyDoCANRsiPduRx(void)
     u2_t_rx_tout = st_gp_TYDC_RSI.u2_rx_tout;
 
 
-    u1_t_rx_stat  = u1_g_oXCANRxStat(u2_t_pdu_idx, u2_t_sys_chk, u2_t_rx_tout) & ((U1)COM_NO_RX | (U1)COM_TIMEOUT); 
-    u1_t_rxc_nex  = u1_g_oXCANRxEvcnt(u2_t_pdu_idx);
-    u1_t_rxc_inc  = (U1)(u1_t_rxc_nex - u1_s_tydc_rsi_rxev_last) & (U1)OXCAN_RX_RXEV_CNT_MAX;
+    u1_t_rx_stat  = u1_g_oXCANRxdStat(u2_t_pdu_idx, u2_t_sys_chk, u2_t_rx_tout) & ((U1)COM_NO_RX | (U1)COM_TIMEOUT); 
+    u1_t_rxc_nex  = u1_g_oXCANRxdEvcnt(u2_t_pdu_idx);
+    u1_t_rxc_inc  = (U1)(u1_t_rxc_nex - u1_s_tydc_rsi_rxev_last) & (U1)OXCAN_RXD_EVC_MAX;
 
     if(fp_u4_t_sig != vdp_PTR_NA){
 
@@ -356,8 +356,8 @@ static void      vd_s_TyDoCANRsiPduRx(void)
     }
 
     if((u1_t_rx_stat              ==  (U1)0U                       ) &&
-        (u1_t_rxc_nex             <=  (U1)OXCAN_RX_RXEV_CNT_MAX    ) &&
-        (u1_s_tydc_rsi_rxev_last  <=  (U1)OXCAN_RX_RXEV_CNT_MAX    ) &&
+        (u1_t_rxc_nex             <=  (U1)OXCAN_RXD_EVC_MAX    ) &&
+        (u1_s_tydc_rsi_rxev_last  <=  (U1)OXCAN_RXD_EVC_MAX    ) &&
         (u1_t_rxc_inc             !=  (U1)0U                       )){
 
         if(st_s_tydc_rsi_buf.u4_rx_last == u4_t_sig){

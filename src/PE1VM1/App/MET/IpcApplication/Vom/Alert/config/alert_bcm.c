@@ -1,4 +1,4 @@
-/* 5.5.0 */
+/* 5.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_BCM_C_MAJOR                        (5)
-#define ALERT_BCM_C_MINOR                        (5)
+#define ALERT_BCM_C_MINOR                        (6)
 #define ALERT_BCM_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -151,8 +151,8 @@ void        vd_g_AlertBcmTask(const U1 u1_a_VOM)
         }
 
         u1_t_rdyind = (U1)0U;
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G90_RXCH0,
-                                            (U2)OXCAN_RX_SYS_NRX_IGR,
+        u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ENG1G90_CH0,
+                                            (U4)OXCAN_SYS_IGR,
                                             (U2)U2_MAX) & (U1)COM_NO_RX;
         if(u1_t_msgsts != (U1)COM_NO_RX){
             (void)Com_ReceiveSignal(ComConf_ComSignal_RDYIND, &u1_t_rdyind);
@@ -279,6 +279,7 @@ static U2   u2_s_AlertBcmActChk(const U2 u2_a_SRC)
 /*  5.3.0     5/10/2019  YI       alert v5.2.0 -> v5.3.0.                                                                            */
 /*  5.4.0     9/20/2019  YI       alert v5.3.0 -> v5.4.0.                                                                            */
 /*  5.5.0    10/31/2019  DS       alert v5.4.0 -> v5.5.0.                                                                            */
+/*  5.6.0    06/30/2025  KO       alert v5.5.0 -> v5.6.0.                                                                            */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -288,5 +289,6 @@ static U2   u2_s_AlertBcmActChk(const U2 u2_a_SRC)
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * SN   = Shinichiro Naito, NTTD MSE                                                                                              */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

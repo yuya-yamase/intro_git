@@ -19,6 +19,7 @@
 /*==============================================================================================*/
 /* defines / data types / structs / unions	/ macros											*/
 /*==============================================================================================*/
+#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 /*==============================================================================================*/
 /* constants																					*/
 /*==============================================================================================*/
@@ -112,7 +113,7 @@ FUNC(void, PIC2_CODE) Pic2_SetHardwareTrigger(
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check all registers and refresh ones w expected value.				*/
+/* Description			: Check all registers and refresh ones with expected value.				*/
 /************************************************************************************************/
 FUNC(uint32, PIC2_CODE) Pic2_Regchk_All(void)
 {
@@ -125,7 +126,7 @@ FUNC(uint32, PIC2_CODE) Pic2_Regchk_All(void)
 /************************************************************************************************/
 /* Service name			: Pic2_Regchk_Grp														*/
 /* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
+/* Reentrancy			: Reentrant																*/
 /* Parameters (in)		: 																		*/
 /*		Group			: Numeric ID of requested ADC channel group.							*/
 /* Parameters (inout)	: None																	*/
@@ -137,7 +138,7 @@ FUNC(uint32, PIC2_CODE) Pic2_Regchk_All(void)
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group related registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, PIC2_CODE) Pic2_Regchk_Grp(
 	CONST(Pic2_GroupType,	PIC2_CONST)	t_cudGrp
@@ -153,4 +154,5 @@ FUNC(uint32, PIC2_CODE) Pic2_Regchk_Grp(
 #define ADC_STOP_SEC_CODE_GLOBAL
 #include "Adc_MemMap.h"
 
+#endif
 /*-- End Of File -------------------------------------------------------------------------------*/

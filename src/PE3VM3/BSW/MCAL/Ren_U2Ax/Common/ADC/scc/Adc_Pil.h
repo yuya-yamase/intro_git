@@ -135,7 +135,6 @@ FUNC(void, ADC_CODE) Adc_Pil_GetCnvData(
 /* Parameters (in)		: 																		*/
 /* 		Adc_HWUnitType	: HW Unit Number														*/
 /* 		Adc_SGType		: Scan Group Number														*/
-/* 		uin8			: convert channel size													*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: conversion status														*/
@@ -196,7 +195,7 @@ FUNC(void, ADC_CODE) Adc_Pil_ClearDIR(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Disable Track & Hpld Sampling (call by DeInit only)					*/
+/* Description			: Disable all Scan Group HW Trigger (call by DeInit only)				*/
 /************************************************************************************************/
 #if (ADC_CFG_DEINIT_API==STD_ON)
 FUNC(void, ADC_CODE) Adc_Pil_DisableSGHWTrigger(void);
@@ -231,7 +230,7 @@ volatile FUNC_P2VAR(uint16, AUTOMATIC, ADC_CODE) Adc_Pil_GetDRAdr(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Start Track & Hpld Sampling											*/
+/* Description			: Start Track & Hold Sampling											*/
 /************************************************************************************************/
 #ifdef ADC_USE_TH
 FUNC(void, ADC_CODE) Adc_Pil_StartTrackHold(
@@ -250,7 +249,7 @@ FUNC(void, ADC_CODE) Adc_Pil_StartTrackHold(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Stop Track & Hpld Sampling											*/
+/* Description			: Stop Track & Hold Sampling											*/
 /************************************************************************************************/
 #ifdef ADC_USE_TH
 FUNC(void, ADC_CODE) Adc_Pil_StopTrackHold(
@@ -267,7 +266,7 @@ FUNC(void, ADC_CODE) Adc_Pil_StopTrackHold(
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Disable Track & Hpld Trigger (call by DeInit only)					*/
+/* Description			: Disable Track & Hold Trigger (call by DeInit only)					*/
 /************************************************************************************************/
 #if (ADC_CFG_DEINIT_API==STD_ON)
 #ifdef ADC_USE_TH
@@ -283,7 +282,7 @@ FUNC(void, ADC_CODE) Adc_Pil_DisableAllTHTrigger(void);
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Stop Track & Hpld Sampling (call by DeInit only)						*/
+/* Description			: Stop Track & Hold Sampling (call by DeInit only)						*/
 /************************************************************************************************/
 #if (ADC_CFG_DEINIT_API==STD_ON)
 #ifdef ADC_USE_TH
@@ -299,7 +298,7 @@ FUNC(void, ADC_CODE) Adc_Pil_StopAllTrackHold(void);
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
 /* Return value			: None																	*/
-/* Description			: Stop Track & Hpld Sampling (call by DeInit only)						*/
+/* Description			: Stop Track & Hold Sampling (call by DeInit only)						*/
 /************************************************************************************************/
 #if (ADC_CFG_DEINIT_API==STD_ON)
 #ifdef ADC_USE_TH
@@ -335,18 +334,18 @@ FUNC(void, ADC_CODE) Adc_Pil_ForcedTermination(void);
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check all registers and refresh ones w expected value.				*/
+/* Description			: Check all registers and refresh ones with expected value.				*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_All(void);
 
 /************************************************************************************************/
 /* Service name			: Adc_Pil_Regchk_Grp													*/
 /* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
+/* Reentrancy			: Reentrant																*/
 /* Parameters (in)		: 																		*/
 /*		Group			: Numeric ID of requested ADC channel group.							*/
 /* Parameters (inout)	: None																	*/
@@ -354,11 +353,11 @@ FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_All(void);
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group related registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_Grp(
 	CONST(Adc_GroupType,	ADC_CONST)	t_cudGrp
@@ -366,7 +365,7 @@ FUNC(uint32, ADC_CODE) Adc_Pil_Regchk_Grp(
 
 #endif
 
-#define ADC_START_SEC_CODE_GLOBAL
+#define ADC_STOP_SEC_CODE_GLOBAL
 #include "Adc_MemMap.h"
 
 #endif

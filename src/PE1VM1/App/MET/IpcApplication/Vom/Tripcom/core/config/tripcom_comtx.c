@@ -362,8 +362,9 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
     (void)Com_SendSignal(ComConf_ComSignal_AS_SP,   &u2_sp_tripcom_tx_value[18]);
 
     (void)Com_SendSignal(ComConf_ComSignal_AS_TM,   &u2_sp_tripcom_tx_value[20]);
-
+#if 0   /* BEV BSW provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_AS_DT,   &u2_sp_tripcom_tx_value[27]);
+#endif
 
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_6,  &u1_sp_tripcom_tx_unit[TRIPCOM_CANTXUNIT_XECON]);
 
@@ -406,7 +407,9 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
     }
     if (u1_s_tripcom_tx_ptson_elpsd == (U1)TRIPCOM_COMTX_PTSON_250MS) {
         (void)Com_TriggerIPDUSend(MSG_MET1S01_TXCH0);
+#if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S03_TXCH0);
+#endif
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
 #if 0   /* BEV BSW provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
@@ -890,7 +893,7 @@ static  void    vd_s_TripcomCfgCanTxASTM(const U2 u2_a_VALUE)
 /*===================================================================================================================================*/
 static  void    vd_s_TripcomCfgCanTxASDT(const U2 u2_a_VALUE)
 {
-
+#if 0   /* BEV BSW provisionally */
     U2          u2_t_presndval;
 
 
@@ -900,6 +903,7 @@ static  void    vd_s_TripcomCfgCanTxASDT(const U2 u2_a_VALUE)
         (void)Com_SendSignal(ComConf_ComSignal_AS_DT, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S03_TXCH0);
     }
+#endif
 }
 
 /*===================================================================================================================================*/
