@@ -9,9 +9,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VARDEF_ESOPT_VSC1S96_C_MAJOR             (2)
-#define VARDEF_ESOPT_VSC1S96_C_MINOR             (6)
-#define VARDEF_ESOPT_VSC1S96_C_PATCH             (0)
+#define VARDEF_ESOPT_VSC1G96_C_MAJOR             (2)
+#define VARDEF_ESOPT_VSC1G96_C_MINOR             (6)
+#define VARDEF_ESOPT_VSC1G96_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -22,10 +22,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((VARDEF_ESOPT_VSC1S96_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
-     (VARDEF_ESOPT_VSC1S96_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
-     (VARDEF_ESOPT_VSC1S96_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
-#error "vardef_esopt_VSC1S96.c and vardef_esopt_rx.h : source and header files are inconsistent!"
+#if ((VARDEF_ESOPT_VSC1G96_C_MAJOR != VARDEF_ESOPT_RX_H_MAJOR) || \
+     (VARDEF_ESOPT_VSC1G96_C_MINOR != VARDEF_ESOPT_RX_H_MINOR) || \
+     (VARDEF_ESOPT_VSC1G96_C_PATCH != VARDEF_ESOPT_RX_H_PATCH))
+#error "vardef_esopt_VSC1G96.c and vardef_esopt_rx.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -88,6 +88,7 @@ U1      u1_g_VdfEsoRx_BRPADW(void)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  19PFv3   07/02/2024   JMH     Added function of BRPADW for 19PFv3                                                                */
+/*  BEV      07/04/2025   KO      Change config for BEV System_Consideration_2.(MET-C_BRPADW-CSTD-A0-)                               */
 /*                                                                                                                                   */
 /*  * JMH = James Michael D. Hilarion, DTPH                                                                                          */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
