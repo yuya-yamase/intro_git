@@ -78,11 +78,6 @@
 
 /* Year Offset */
 #define DATESI_COM_YEAR_OFFSET              (2000U)                                      /* Year Offset                          */
-#if 0
-#define DATESI_COM_CAL_MIN                  (u2_CALIB_MCUID0575_CAL_MIN)                 /* Min year                             */
-#else
-#define DATESI_COM_CAL_MIN                  (2021U)                                      /* Min year                             */
-#endif
 
 /* RTC Week Information */
 #define DATESI_COM_RTC_WEEK_NUM             (7U)                                         /* Week Num                             */
@@ -287,25 +282,25 @@ void            vd_g_DateSIComCommandTx(void)
         st_t_clock_rtc_data = st_s_DateSIComRtcSet();
         vd_g_XspiIviSub1ClockRTCSend(st_t_clock_rtc_data);
         
-        /* Send Setting Status to XSPI*/
-        if(u1_s_datesi_com_req_act == (U1)TRUE){
-            vd_g_XspiIviSub1ClockSettingSend(u1_s_setting_sts);
-            u1_s_setting_sts        = (U1)DATESI_COM_SET_NG;
-            u1_s_datesi_com_req_act = (U1)FALSE;
-        }
+        u1_s_datesi_com_send_act = (U1)FALSE;
     }
 
-    u1_s_datesi_com_send_act = (U1)FALSE;
+    if(u1_s_datesi_com_req_act == (U1)TRUE){
+        /* Send Setting Status to XSPI*/
+        vd_g_XspiIviSub1ClockSettingSend(u1_s_setting_sts);
+        u1_s_setting_sts        = (U1)DATESI_COM_SET_NG;
+        u1_s_datesi_com_req_act = (U1)FALSE;
+    }
 
 }
 
 /*===================================================================================================================================*/
-/* ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)                                                                            */
+/* static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         st_t_clock_rtc_data                                                                                              */
 /*===================================================================================================================================*/
-ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
+static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
 {
     static  const U1                                u1_sp_DATESI_COM_WEEK_TX_VAL[DATESI_COM_RTC_WEEK_NUM] = {
         (U1)DATESI_COM_RTC_WEEK_SUN,
@@ -400,20 +395,6 @@ void            vd_g_DateSIComSetCmp(void)
 {
     u1_s_setting_sts = (U1)DATESI_COM_SET_OK;
 }
-
-/*===================================================================================================================================*/
-/* ST_XSPI_IVI_CLOCK_DISP_DATA  st_g_DateSIComPreTx(void)                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         st_s_clock_disp_data                                                                                             */
-/*===================================================================================================================================*/
-#if 0  /* BEV provisionally */
-#else
-ST_XSPI_IVI_CLOCK_DISP_DATA  st_g_DateSIComPreTx(void)
-{
-    return(st_s_clock_disp_data);
-}
-#endif
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
