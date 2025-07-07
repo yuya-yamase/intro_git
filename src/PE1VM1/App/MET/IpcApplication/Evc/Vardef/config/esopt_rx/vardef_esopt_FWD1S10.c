@@ -68,8 +68,8 @@ U1      u1_g_VdfEsoRx_4WDSYS(void)
     u1_t_wrg = (U1)0U;
     u1_t_rx = (U1)0U;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGP,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                     (U4)OXCAN_SYS_IGP,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_HV4WNG, &u1_t_wrg);

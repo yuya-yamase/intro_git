@@ -38,8 +38,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct{
     U2                      u2_pdu_idx;               /* Aubist/Com    PDU Index defined in Com_Cfg.h                      */
-    U2                      u2_sys_chk;               /* See oxcan.h/u1_g_oXCANRxStat.                                     */
-    U2                      u2_rx_tout;               /* Rx Timeout Thresh  See oxcan.h/u1_g_oXCANRxStat.                  */
+    U2                      u2_sys_chk;               /* See oxcan.h/u1_g_oXCANRxdStat.                                     */
+    U2                      u2_rx_tout;               /* Rx Timeout Thresh  See oxcan.h/u1_g_oXCANRxdStat.                  */
     U2                      u2_rxc_cyc;
     U2                      u2_rxc_min;
 }ST_TYDC_DTC_PDU_RX;

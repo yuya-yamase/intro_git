@@ -55,7 +55,7 @@ const ST_GPT_OST       st_gp_GPT_OST_CFG[GPT_OST_NUM_CH] = {
         (U2)0x0081U,                                                /* u2_tmr_ctrl */
         (U2)201U                                                    /* u2_irq_ch   */
     },
-    /* GPT_OST_CH_03                  */
+    /* GPT_OST_CH_03_SPI_TICK_CEN     */
     {
         (volatile U4 *)0xffbf0300U,                                 /* u4p_base    */
         (U4)U4_MAX,                                                 /* u4_select   */

@@ -28,17 +28,17 @@
 /*--------------------------------------------------------------------------*/
 /* Message Number */
 /* Upper Component */
-#define BSW_PDUR_CFG_MSGCOM_NUM            (446U)
-#define BSW_PDUR_CFG_MSGDCM_NUM            (0U)
+#define BSW_PDUR_CFG_MSGCOM_NUM            (470U)
+#define BSW_PDUR_CFG_MSGDCM_NUM            (12U)
 #define BSW_PDUR_CFG_MSGLDCOM_NUM          (0U)
 #define BSW_PDUR_CFG_MSGCDD1_NUM           (0U)
 #define BSW_PDUR_CFG_MSGCDD2_NUM           (0U)
 /* Lower Component */
-#define BSW_PDUR_CFG_MSGCANIF_NUM          (446U)
+#define BSW_PDUR_CFG_MSGCANIF_NUM          (470U)
 #define BSW_PDUR_CFG_MSGLINIF_NUM          (0U)
 #define BSW_PDUR_CFG_MSGSOADIF_NUM         (0U)
 #define BSW_PDUR_CFG_MSGDOIPIF_NUM         (0U)
-#define BSW_PDUR_CFG_MSGCANTP_NUM          (0U)
+#define BSW_PDUR_CFG_MSGCANTP_NUM          (12U)
 #define BSW_PDUR_CFG_MSGLINTP_NUM          (0U)
 #define BSW_PDUR_CFG_MSGSOADTP_NUM         (0U)
 #define BSW_PDUR_CFG_MSGDOIPTP_NUM         (0U)
@@ -89,7 +89,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

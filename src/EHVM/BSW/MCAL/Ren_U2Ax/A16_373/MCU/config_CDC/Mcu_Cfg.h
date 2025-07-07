@@ -1,4 +1,4 @@
-/* MCU-r04-307 */
+/* MCU-r04-303 */
 /************************************************************************************************/
 /*																								*/
 /*		MCU Driver																				*/
@@ -10,6 +10,20 @@
 #ifndef MCU_CFG_H
 #define	MCU_CFG_H
 
+
+/*==============================================================================================*/
+/* Callout specification																		*/
+/*==============================================================================================*/
+#define	MCU_CFG_USE_SLEEP_READY_CALLOUT		( STD_OFF )
+#define	MCU_CFG_SLEEP_READY_CALLOUT			NULL_PTR
+
+/*==============================================================================================*/
+/* include files																				*/
+/*==============================================================================================*/
+/* The include of Mcu_Externals.h depends on whether Callout notifications is used. */
+#if	( MCU_CFG_USE_SLEEP_READY_CALLOUT == STD_ON )
+#include	"Mcu_Externals.h"
+#endif	/* ( MCU_CFG_USE_SLEEP_READY_CALLOUT == STD_ON ) */
 
 /*==============================================================================================*/
 /* defines / data types / structs / unions / macros												*/
@@ -162,10 +176,10 @@
 #define	MCU_CFG_MS_ADCK_ISO_5_TYPE_0	( MCU_MS_CLOCK_STOPPED )
 #define	MCU_CFG_MS_ADCK_ISO_6_TYPE_0	( MCU_MS_CLOCK_STOPPED )
 #define	MCU_CFG_MS_ADCK_ISO_7_TYPE_0	( MCU_MS_CLOCK_STOPPED )
-#define	MCU_CFG_MS_DSADC_CADC_0_TYPE_0	( MCU_MS_CLOCK_STOPPED )
-#define	MCU_CFG_MS_DSADC_CADC_1_TYPE_0	( MCU_MS_CLOCK_STOPPED )
-#define	MCU_CFG_MS_DSADC_CADC_2_TYPE_0	( MCU_MS_CLOCK_STOPPED )
-#define	MCU_CFG_MS_DSADC_CADC_3_TYPE_0	( MCU_MS_CLOCK_STOPPED )
+#define	MCU_CFG_MS_DSADC_CADC_0_TYPE_0	( MCU_MS_CLOCK_SUPPLIED )
+#define	MCU_CFG_MS_DSADC_CADC_1_TYPE_0	( MCU_MS_CLOCK_SUPPLIED )
+#define	MCU_CFG_MS_DSADC_CADC_2_TYPE_0	( MCU_MS_CLOCK_SUPPLIED )
+#define	MCU_CFG_MS_DSADC_CADC_3_TYPE_0	( MCU_MS_CLOCK_SUPPLIED )
 #define	MCU_CFG_MS_DFE_0_TYPE_0			( MCU_MS_CLOCK_STOPPED )
 #define	MCU_CFG_MS_EMU_0_TYPE_0			( MCU_MS_CLOCK_STOPPED )
 #define	MCU_CFG_MS_EMU_1_TYPE_0			( MCU_MS_CLOCK_STOPPED )
@@ -203,11 +217,11 @@
 #define	MCU_CFG_CLK_SSCG_SSMODE1_TYPE_0	( STD_OFF )
 #define	MCU_CFG_CLK_SSCG_FREQ_TYPE_0	( MCU_CLK_SSCG_30 )
 #define	MCU_CFG_CLK_SSCG_PERCENT_TYPE_0	( MCU_CLK_SSCG_DITHERED_1 )
-#define	MCU_CFG_CLK_RLIN3_TYPE_0		( MCU_CLK_RLIN3_EMG_1 )
-#define	MCU_CFG_CLK_RLIN3_CH23_TYPE_0	( MCU_CLK_RLIN3_CH23_EMG_1 )
-#define	MCU_CFG_CLK_CANFD_XIN_TYPE_0	( MCU_CLK_CANFD_XIN_EMG_1 )
-#define	MCU_CFG_CLK_CANFD_C_TYPE_0		( MCU_CLK_CANFD_C_EMG_1 )
-#define	MCU_CFG_CLK_MSPI_B_TYPE_0		( MCU_CLK_MSPI_B_EMG_1 )
+#define	MCU_CFG_CLK_RLIN3_TYPE_0		( MCU_CLK_RLIN3_HSBC_1 )
+#define	MCU_CFG_CLK_RLIN3_CH23_TYPE_0	( MCU_CLK_RLIN3_CH23_HBUSC_1 )
+#define	MCU_CFG_CLK_CANFD_XIN_TYPE_0	( MCU_CLK_CANFD_XIN_MOSC_1 )
+#define	MCU_CFG_CLK_CANFD_C_TYPE_0		( MCU_CLK_CANFD_C_HSBC_1 )
+#define	MCU_CFG_CLK_MSPI_B_TYPE_0		( MCU_CLK_MSPI_B_MOSC_1 )
 #define	MCU_CFG_CLK_WDTC_B_TYPE_0 		( MCU_CLK_WDTC_B_HSIOSC_640 )
 #define	MCU_CFG_CLK_SWDT_TYPE_0 		( MCU_CLK_SWDT_HSIOSC_20 )
 
@@ -269,7 +283,6 @@
 #define	MCU_CFG_CLMABCE					( STD_OFF )
 
 #define	MCU_CFG_DEM_SET_EVENT			( STD_OFF )
-#define	MCU_CFG_E_CLOCK_FAILURE			( 1U )
 
 /*--------------------*/
 /* Standby Controller */

@@ -25,8 +25,8 @@
 /******************************************/
 /******************************************/
 /* Send-Queue Number */
-#define BSW_CANIF_CFG_0_QUENUM_PDUR             (20U)
-#define BSW_CANIF_CFG_0_QUENUM_CANNM            (0U)
+#define BSW_CANIF_CFG_0_QUENUM_PDUR             (19U)
+#define BSW_CANIF_CFG_0_QUENUM_CANNM            (1U)
 #define BSW_CANIF_CFG_0_QUENUM_CANTP            (0U)
 #define BSW_CANIF_CFG_0_QUENUM_CDD1             (0U)
 #define BSW_CANIF_CFG_0_QUENUM_CDD2             (0U)
@@ -34,7 +34,7 @@
 
 /* Send-Queue Offset */
 #define BSW_CANIF_CFG_0_QUEOFFSET_PDUR          (0U)
-#define BSW_CANIF_CFG_0_QUEOFFSET_CANNM         (BSW_CANIF_NOUSE)
+#define BSW_CANIF_CFG_0_QUEOFFSET_CANNM         (19U)
 #define BSW_CANIF_CFG_0_QUEOFFSET_CANTP         (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_0_QUEOFFSET_CDD1          (BSW_CANIF_NOUSE)
 #define BSW_CANIF_CFG_0_QUEOFFSET_CDD2          (BSW_CANIF_NOUSE)
@@ -59,7 +59,7 @@
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE007          (352U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE008          (160U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE009          (160U)
-#define BSW_CANIF_CFG_0_SIZE_SNDQUE010          (160U)
+#define BSW_CANIF_CFG_0_SIZE_SNDQUE010          (352U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE011          (160U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE012          (160U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE013          (352U)
@@ -68,7 +68,7 @@
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE016          (160U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE017          (160U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE018          (160U)
-#define BSW_CANIF_CFG_0_SIZE_SNDQUE019          (160U)
+#define BSW_CANIF_CFG_0_SIZE_SNDQUE019          (20U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE020          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE021          (0U)
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE022          (0U)
@@ -301,26 +301,26 @@
 #define BSW_CANIF_CFG_0_SIZE_SNDQUE249          (0U)
 
 /* Send-Queue HOH */
-#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (BSW_CANIF_HOH_VIRTUAL | 0x0002U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE001           (BSW_CANIF_HOH_VIRTUAL | 0x0003U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE002           (BSW_CANIF_HOH_VIRTUAL | 0x0004U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE003           (BSW_CANIF_HOH_VIRTUAL | 0x0005U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE004           (BSW_CANIF_HOH_VIRTUAL | 0x0006U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE005           (BSW_CANIF_HOH_VIRTUAL | 0x0007U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE006           (BSW_CANIF_HOH_VIRTUAL | 0x0008U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE007           (BSW_CANIF_HOH_VIRTUAL | 0x0009U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE008           (BSW_CANIF_HOH_VIRTUAL | 0x000AU)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE009           (BSW_CANIF_HOH_VIRTUAL | 0x000BU)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE010           (BSW_CANIF_HOH_VIRTUAL | 0x000CU)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE011           (BSW_CANIF_HOH_VIRTUAL | 0x000DU)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE012           (BSW_CANIF_HOH_VIRTUAL | 0x000EU)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE013           (BSW_CANIF_HOH_VIRTUAL | 0x000FU)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE014           (BSW_CANIF_HOH_VIRTUAL | 0x0010U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE015           (BSW_CANIF_HOH_VIRTUAL | 0x0011U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE016           (BSW_CANIF_HOH_VIRTUAL | 0x0012U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE017           (BSW_CANIF_HOH_VIRTUAL | 0x0013U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE018           (BSW_CANIF_HOH_VIRTUAL | 0x0014U)
-#define BSW_CANIF_CFG_0_HOH_SNDQUE019           (BSW_CANIF_HOH_VIRTUAL | 0x0015U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE000           (BSW_CANIF_HOH_VIRTUAL | 0x0004U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE001           (BSW_CANIF_HOH_VIRTUAL | 0x0005U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE002           (BSW_CANIF_HOH_VIRTUAL | 0x0006U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE003           (BSW_CANIF_HOH_VIRTUAL | 0x0007U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE004           (BSW_CANIF_HOH_VIRTUAL | 0x0008U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE005           (BSW_CANIF_HOH_VIRTUAL | 0x0009U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE006           (BSW_CANIF_HOH_VIRTUAL | 0x000AU)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE007           (BSW_CANIF_HOH_VIRTUAL | 0x000BU)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE008           (BSW_CANIF_HOH_VIRTUAL | 0x000CU)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE009           (BSW_CANIF_HOH_VIRTUAL | 0x000DU)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE010           (BSW_CANIF_HOH_VIRTUAL | 0x000EU)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE011           (BSW_CANIF_HOH_VIRTUAL | 0x000FU)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE012           (BSW_CANIF_HOH_VIRTUAL | 0x0010U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE013           (BSW_CANIF_HOH_VIRTUAL | 0x0011U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE014           (BSW_CANIF_HOH_VIRTUAL | 0x0012U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE015           (BSW_CANIF_HOH_VIRTUAL | 0x0013U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE016           (BSW_CANIF_HOH_VIRTUAL | 0x0014U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE017           (BSW_CANIF_HOH_VIRTUAL | 0x0015U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE018           (BSW_CANIF_HOH_VIRTUAL | 0x0016U)
+#define BSW_CANIF_CFG_0_HOH_SNDQUE019           (BSW_CANIF_HOH_VIRTUAL | 0x0017U)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE020           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE021           (BSW_CANIF_HOH_NOUSE)
 #define BSW_CANIF_CFG_0_HOH_SNDQUE022           (BSW_CANIF_HOH_NOUSE)
@@ -1113,7 +1113,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

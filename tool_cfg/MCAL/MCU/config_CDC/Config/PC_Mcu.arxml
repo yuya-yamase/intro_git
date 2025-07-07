@@ -152,7 +152,7 @@
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceRTCA_A</DEFINITION-REF>
-                          <VALUE>MCU_CLK_ARTCAC_A_LSIOSC_1</VALUE>
+                          <VALUE>MCU_CLK_ARTCAC_A_MOSC_16</VALUE>
                         </ECUC-TEXTUAL-PARAM-VALUE>
                         <ECUC-TEXTUAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockSettingConfig/McuClockConf/McuClockSourceFOUT0</DEFINITION-REF>
@@ -1789,10 +1789,6 @@
                           <VALUE>1</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit4</DEFINITION-REF>
-                          <VALUE>1</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterLowerLimitConf/McuClockMoniterLowerLimit5</DEFINITION-REF>
                           <VALUE>1</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
@@ -1852,10 +1848,6 @@
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
                           <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit3</DEFINITION-REF>
-                          <VALUE>1023</VALUE>
-                        </ECUC-NUMERICAL-PARAM-VALUE>
-                        <ECUC-NUMERICAL-PARAM-VALUE>
-                          <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuClockMoniterConfig/McuClockMoniterHigherLimitConf/McuClockMoniterHigherLimit4</DEFINITION-REF>
                           <VALUE>1023</VALUE>
                         </ECUC-NUMERICAL-PARAM-VALUE>
                         <ECUC-NUMERICAL-PARAM-VALUE>
@@ -1950,6 +1942,14 @@
                       <DEFINITION-REF DEST="ECUC-INTEGER-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuStabilizationTimeISOVDD</DEFINITION-REF>
                       <VALUE>4200</VALUE>
                     </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-NUMERICAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuUseSleepReadyCallout</DEFINITION-REF>
+                      <VALUE>false</VALUE>
+                    </ECUC-NUMERICAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-FUNCTION-NAME-DEF">/Mcu/Mcu/McuModuleConfiguration/McuPowerSaveConfig/McuSleepReadyCallout</DEFINITION-REF>
+                      <VALUE>NULL_PTR</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                 </ECUC-CONTAINER-VALUE>
               </SUB-CONTAINERS>

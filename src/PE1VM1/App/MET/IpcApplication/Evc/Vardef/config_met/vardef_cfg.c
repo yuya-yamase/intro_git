@@ -93,16 +93,16 @@
 #ifdef VARDEF_PTS_RX_MILREQ_H
 const U2                u2_g_VDF_PTS_RX_MILREQ_RIM_U1 = (U2)RIMID_U1_VDF_PTSYS_MILREQ;
 
-const U1                u1_g_VDF_PTS_RX_MILREQ_RXC_INT = (U1)OXCAN_RX_RXEV_CNT_UNK;
-const U1                u1_g_VDF_PTS_RX_MILREQ_RXC_MAX = (U1)OXCAN_RX_RXEV_CNT_MAX;
+const U1                u1_g_VDF_PTS_RX_MILREQ_RXC_INT = (U1)OXCAN_RXD_EVC_UNK;
+const U1                u1_g_VDF_PTS_RX_MILREQ_RXC_MAX = (U1)OXCAN_RXD_EVC_MAX;
 #endif /* #ifdef VARDEF_PTS_RX_MILREQ_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef VARDEF_HCS_H
 const U2               u2_g_VDF_HCS_ASCEXT_RIM_U1  = (U2)RIMID_U1_VDF_HCS_ASCEXT;
 
-const U1               u1_g_VDF_HCS_ASCEXT_RXC_INT = (U1)OXCAN_RX_RXEV_CNT_UNK;
-const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RX_RXEV_CNT_MAX;
+const U1               u1_g_VDF_HCS_ASCEXT_RXC_INT = (U1)OXCAN_RXD_EVC_UNK;
+const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RXD_EVC_MAX;
 #endif /* #ifdef VARDEF_HCS_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -235,10 +235,10 @@ U1      u1_g_VardefPtsRxMlrqCfgPtsyschk(U1* u1_ap_ptsys_rx)
 {
 #ifdef ComConf_ComSignal_PTSYS
     (void)Com_ReceiveSignal(ComConf_ComSignal_PTSYS, u1_ap_ptsys_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13_RXCH0));
+    return(u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_ENG1G13_CH0));
 #else
     (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_MILREQ_1F_NRX;
-    return((U1)OXCAN_RX_RXEV_CNT_UNK);
+    return((U1)OXCAN_RXD_EVC_UNK);
 #endif
 }
 /*===================================================================================================================================*/
@@ -319,7 +319,7 @@ void    vd_g_VardefCfgSendMmcProt(const U1 u1_a_SIG)
 U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 {
     (void)Com_ReceiveSignal(ComConf_ComSignal_ASCEXT, u1_ap_ascext_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_SCS1S11_RXCH0));
+    return(u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_SCS1S11_CH0));
 }
 
 /*===================================================================================================================================*/

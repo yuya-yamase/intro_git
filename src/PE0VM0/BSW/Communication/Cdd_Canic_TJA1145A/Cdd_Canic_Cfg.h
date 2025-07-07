@@ -19,7 +19,7 @@
 /* defines / data types / structs / unions / macros												*/
 /*==============================================================================================*/
 
-#define		CDD_CANIC_CFG_IC_NUM				(1)
+#define		CDD_CANIC_CFG_IC_NUM				(2)
 
 #define		CDD_CANIC_CFG_SEC_RAM0				(CDD_SEC_B_LRAM0_CPU0)
 #define		CDD_CANIC_CFG_SEC_ROM0				(CDD_SEC_C_LROM0_CPU0_CFG)

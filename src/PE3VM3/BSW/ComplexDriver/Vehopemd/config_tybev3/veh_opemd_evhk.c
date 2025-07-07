@@ -75,7 +75,7 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
     U4                                u4_t_bit;
 
     vd_g_IoHwDifltSgnlInit(); /* DO NOT REMOVED */
-    vd_g_oXCANSysEvhk();
+    vd_g_oXCANVomEvhk();
 
     for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)VEH_OPEMD_NUM_EVHK; u4_t_cnt++){
         u4_t_bit = u4_a_EVBIT & st_sp_VEH_OPEMD_EVHK[u4_t_cnt].u4_evbit;
@@ -85,7 +85,7 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
     }
 #else
     vd_g_IoHwDifltSgnlInit(); /* DO NOT REMOVED */
-    vd_g_oXCANSysEvhk();
+    vd_g_oXCANVomEvhk();
 #endif /* #if (VEH_OPEMD_NUM_EVHK > 0) */
 }
 /*===================================================================================================================================*/

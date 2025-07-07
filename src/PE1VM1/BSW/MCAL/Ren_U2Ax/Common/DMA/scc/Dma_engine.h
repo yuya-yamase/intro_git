@@ -19,7 +19,7 @@
 extern	unsigned int	__SCH1R(unsigned int val);
 
 /* Excerpt from BswLib.h */
-#define		Bswlib_SearchOneFromRight(data)		((U1)__SCH1R(data) - (U1)1U)
+#define		Bswlib_SearchOneFromRight(data)		((uint8)__SCH1R(data) - (uint8)1U)
 
 extern void __SYNCP(void);
 /************************************************************************************************/
@@ -27,21 +27,22 @@ extern void __SYNCP(void);
 /*	Reentrancy		:	Concurrency safe														*/
 /*	Parameters(in)	:	Register																*/
 /*	Return value	:	none																	*/
-/*	Caveat			:	Only U1, U2 and U4 type registers are supported. No other use allowed.					*/
+/*	Caveat			:	Only uint8, uint16 and uint32 type registers are supported. 			*/
+/*						No other use allowed.													*/
 /************************************************************************************************/
 #define		Bswlib_Sync_Pipeline( data )														\
 	do																							\
 	{																							\
 		if(sizeof(data) != 1){																	\
 			if(sizeof(data) != 2){																\
-				volatile	U4	t_u4BswLibDummy;												\
+				volatile	uint32	t_u4BswLibDummy;											\
 				t_u4BswLibDummy = (data);														\
 			}else{																				\
-				volatile	U2	t_u2BswLibDummy;												\
+				volatile	uint16	t_u2BswLibDummy;											\
 				t_u2BswLibDummy = (data);														\
 			}																					\
 		}else{																					\
-			volatile	U1	t_u1BswLibDummy;													\
+			volatile	uint8	t_u1BswLibDummy;												\
 			t_u1BswLibDummy = (data);															\
 		}																						\
 		__SYNCP();																				\
@@ -52,12 +53,12 @@ extern void __SYNCP(void);
 /*	Reentrancy		:	Concurrency safe														*/
 /*	Parameters(in)	:	Register																*/
 /*	Return value	:	none																	*/
-/*	Caveat			:	Only U2-type registers are supported. No other use allowed.							*/
+/*	Caveat			:	Only uint16-type registers are supported. No other use allowed.			*/
 /************************************************************************************************/
 #define		Bswlib_Sync_Pipeline_2( data )														\
 	do																							\
 	{																							\
-		volatile	U2	t_u2BswLibDummy;														\
+		volatile	uint16	t_u2BswLibDummy;													\
 		t_u2BswLibDummy = (data);																\
 		__SYNCP();																				\
 	}	while(0)
@@ -67,12 +68,12 @@ extern void __SYNCP(void);
 /*	Reentrancy		:	Concurrency safe														*/
 /*	Parameters(in)	:	Register																*/
 /*	Return value	:	none																	*/
-/*	Caveat			:	Only U4-type registers are supported. No other use allowed.							*/
+/*	Caveat			:	Only uint32-type registers are supported. No other use allowed.			*/
 /************************************************************************************************/
 #define		Bswlib_Sync_Pipeline_4( data )														\
 	do																							\
 	{																							\
-		volatile	U4	t_u4BswLibDummy;														\
+		volatile	uint32	t_u4BswLibDummy;													\
 		t_u4BswLibDummy = (data);																\
 		__SYNCP();																				\
 	}	while(0)

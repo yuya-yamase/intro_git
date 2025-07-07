@@ -4520,7 +4520,7 @@ static void    vd_s_VdsCIReqTx_HCSUPEN(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 
     (void)Com_SendSignal(ComConf_ComSignal_HCSUPEN, &u1_t_tx);
     if(u1_t_pre_tx != u1_t_tx){
-        (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
+        (void)Com_TriggerIPDUSend(MSG_MET1S02_TXCH0);
     }
 #endif /* ComConf_ComSignal_HCSUPEN */
 }
@@ -4549,7 +4549,7 @@ static void    vd_s_VdsCIReqTx_HCSDWEN(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 
     (void)Com_SendSignal(ComConf_ComSignal_HCSDWEN, &u1_t_tx);
     if(u1_t_pre_tx != u1_t_tx){
-        (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
+        (void)Com_TriggerIPDUSend(MSG_MET1S02_TXCH0);
     }
 #endif /* ComConf_ComSignal_HCSDWEN */
 }
@@ -4578,7 +4578,7 @@ static void    vd_s_VdsCIReqTx_HCSMNSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 
     (void)Com_SendSignal(ComConf_ComSignal_HCSMNSW, &u1_t_tx);
     if(u1_t_pre_tx != u1_t_tx){
-        (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
+        (void)Com_TriggerIPDUSend(MSG_MET1S02_TXCH0);
     }
 #endif /* ComConf_ComSignal_HCSMNSW */
 }
@@ -4607,7 +4607,7 @@ static void    vd_s_VdsCIReqTx_HCSSTPOP(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 
     (void)Com_SendSignal(ComConf_ComSignal_HCSSTPOP, &u1_t_tx);
     if(u1_t_pre_tx != u1_t_tx){
-        (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
+        (void)Com_TriggerIPDUSend(MSG_MET1S02_TXCH0);
     }
 #endif /* ComConf_ComSignal_HCSSTPOP */
 }

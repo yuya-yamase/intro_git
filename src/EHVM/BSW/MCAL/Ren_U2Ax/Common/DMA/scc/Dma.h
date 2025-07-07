@@ -20,18 +20,6 @@
 /*==============================================================================================*/
 /*	defines / data types / structs / unions	/ macros											*/
 /*==============================================================================================*/
-/* To build through engine MCALs in a standard MCAL environment */
-#ifndef PLATFORM_EXTDEFS_H
-typedef		unsigned char		U1;
-typedef		unsigned short		U2;
-typedef		unsigned long		U4;
-typedef		signed char			S1;
-typedef		signed short		S2;
-typedef		signed long			S4;
-typedef		signed long			ZORN;
-typedef		float				PL;			/* Physical (floating point) */
-#endif
-typedef		float				F4;
 
 /*==============================================================================================*/
 /*		Bit data name definition																		*/
@@ -236,20 +224,20 @@ typedef		float				F4;
 #define    DMA_OFF      (0)
 
 /* Trans Status */
-#define		u1DMA_TRANS_STATUS_IDLE		((U1)0U)
-#define		u1DMA_TRANS_STATUS_BUSY		((U1)1U)
+#define		u1DMA_TRANS_STATUS_IDLE		((uint8)0U)
+#define		u1DMA_TRANS_STATUS_BUSY		((uint8)1U)
 
 /* Trans Size */
-#define		u1DMA_TRANSSIZE_1			((U1)0U)	/* 1byte  */
-#define		u1DMA_TRANSSIZE_2			((U1)1U)	/* 2byte  */
-#define		u1DMA_TRANSSIZE_4			((U1)2U)	/* 4byte  */
-#define		u1DMA_TRANSSIZE_8			((U1)3U)	/* 8byte  */
-#define		u1DMA_TRANSSIZE_16			((U1)4U)	/* 16byte */
-#define		u1DMA_TRANSSIZE_32			((U1)5U)	/* 32byte */
-#define		u1DMA_TRANSSIZE_64			((U1)6U)	/* 64byte */
+#define		u1DMA_TRANSSIZE_1			((uint8)0U)	/* 1byte  */
+#define		u1DMA_TRANSSIZE_2			((uint8)1U)	/* 2byte  */
+#define		u1DMA_TRANSSIZE_4			((uint8)2U)	/* 4byte  */
+#define		u1DMA_TRANSSIZE_8			((uint8)3U)	/* 8byte  */
+#define		u1DMA_TRANSSIZE_16			((uint8)4U)	/* 16byte */
+#define		u1DMA_TRANSSIZE_32			((uint8)5U)	/* 32byte */
+#define		u1DMA_TRANSSIZE_64			((uint8)6U)	/* 64byte */
 
-#define	u2DMA_DTS_GROUP_REQ_MASK   ((U2)0x007FU)
-#define	u2DMA_DMAC_GROUP_REQ_MASK	((U2)0x00FFU)
+#define	u2DMA_DTS_GROUP_REQ_MASK   ((uint16)0x007FU)
+#define	u2DMA_DMAC_GROUP_REQ_MASK	((uint16)0x00FFU)
 
 /* DMA Type */
 #if ((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A) || ((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B) && (MCAL_PKG_TARGET != MCAL_PKG_U2B6_292PIN)))
@@ -280,34 +268,42 @@ typedef		float				F4;
 /* No applicable logical CH */
 #define		DMA_DTS_CH_NOUSE			(255)	/* Used in DTS logical channel reverse tables */
 
-#if ( DMA_CFG_REG_CHK == STD_ON ) 
+#if ( DMA_CFG_REG_CHK == STD_ON )
 /* Register Check */
-#define DMA_REGCHK_OK						((U4)0x00000000U)	/* Register Failure Not Detect */
-#define DMA_REGCHK_NG						((U4)0x00000001U)	/* Register Failure Detect */
-#define DMA_REGCHK_REFRESH_SUCCESS			((U4)0x00000002U)	/* Register Refresh Success */
-#define DMA_REGCHK_REFRESH_IMPOSSIBLE		((U4)0x00000004U)	/* Register Refresh Impossible */
-#define DMA_REGCHK_REFRESH_FAILED			((U4)0x00000008U)	/* Register Refresh Failed */
+#define DMA_REGCHK_OK						((uint32)0x00000000U)	/* Register Failure Not Detect */
+#define DMA_REGCHK_NG						((uint32)0x00000001U)	/* Register Failure Detect */
+#define DMA_REGCHK_REFRESH_SUCCESS			((uint32)0x00000002U)	/* Register Refresh Success */
+#define DMA_REGCHK_REFRESH_IMPOSSIBLE		((uint32)0x00000004U)	/* Register Refresh Impossible */
+#define DMA_REGCHK_REFRESH_FAILED			((uint32)0x00000008U)	/* Register Refresh Failed */
 #endif
 
 typedef	struct {
-	U1		u1DmaNotificationRequest;	/* Whether there is a Dma Notification(0:Notify None / 1:Notify Yes) */
+	uint8		u1DmaNotificationRequest;	/* Whether there is a Dma Notification(0:Notify None / 1:Notify Yes) */
 }Dma_ChannelDataType;
 
 /* DMA logical channels */
 typedef	struct {
 	void (*pvdNotification)(void);				/* Callback function	*/
 	Dma_ChannelDataType*	pstChDataType;		/* Pointer for notification request structure */
-	U2						u2HwCh;				/* DMA channel			*/
-	U2						u2DmaReq;			/* DMA factor			*/
-	U1						u1DmaType;			/* DMA Type				*/
-	U1						u1PriLevel;			/* DTS Priority			*/
+	uint16						u2HwCh;				/* DMA channel			*/
+	uint16						u2DmaReq;			/* DMA factor			*/
+	uint8						u1DmaType;			/* DMA Type				*/
+	uint8						u1PriLevel;			/* DTS Priority			*/
 }Dma_ChDataDefType;
 
 /* Dma UserConfigType */
 typedef	struct{
 	const	Dma_ChDataDefType*	pstChDataConfig;
-	U1								u1ChDataNum;
+	uint8								u1ChDataNum;
 }Dma_UserConfigType;
+
+#define DMA_START_SEC_RODATA_CONST
+#include "Dma_MemMap.h"
+
+extern	const	Dma_UserConfigType	cstDma_UcfgData;
+
+#define DMA_STOP_SEC_RODATA_CONST
+#include "Dma_MemMap.h"
 
 /*==============================================================================================*/
 /* functions																					*/
@@ -323,7 +319,7 @@ typedef	struct{
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Dma_EnableTrans( U1 t_u1ChDataID );
+void	Dma_EnableTrans( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	DisableTrans															*/
@@ -333,7 +329,7 @@ void	Dma_EnableTrans( U1 t_u1ChDataID );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Dma_DisableTrans( U1 t_u1ChDataID );
+void	Dma_DisableTrans( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	SetTransMode															*/
@@ -352,7 +348,7 @@ void	Dma_DisableTrans( U1 t_u1ChDataID );
 /*					:	When using the reload feature, use SetTransModeTwoStepReload.			*/
 /*					:	sDMAC only supports mode = 3, so calls to this interface are prohibited.*/
 /************************************************************************************************/
-void	Dma_SetTransMode( U1 t_u1ChDataID, U1 t_u1TransSize, U1 t_u1DmaMode, volatile  const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, U2 t_u2TransNum );
+void	Dma_SetTransMode( uint8 t_u1ChDataID, uint8 t_u1TransSize, uint8 t_u1DmaMode, volatile  const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, uint16 t_u2TransNum );
 
 /************************************************************************************************/
 /*	Service name	:	SetTransModeTwoStepReload												*/
@@ -374,7 +370,7 @@ void	Dma_SetTransMode( U1 t_u1ChDataID, U1 t_u1TransSize, U1 t_u1DmaMode, volati
 /*					:	When using sDMAC, setting mode to anything other than 3 is not			*/
 /*					:	 guaranteed.															*/
 /************************************************************************************************/
-void	Dma_SetTransModeTwoStepReload( U1 t_u1ChDataID, U1 t_u1TransSize, U1 t_u1DmaMode, volatile const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, U2 t_u2TransNum, U2 t_u2AddrReloadCnt );
+void	Dma_SetTransModeTwoStepReload( uint8 t_u1ChDataID, uint8 t_u1TransSize, uint8 t_u1DmaMode, volatile const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, uint16 t_u2TransNum, uint16 t_u2AddrReloadCnt );
 
 /************************************************************************************************/
 /*	Function		:	SetInterrupt															*/
@@ -388,7 +384,7 @@ void	Dma_SetTransModeTwoStepReload( U1 t_u1ChDataID, U1 t_u1TransSize, U1 t_u1Dm
 /*					:	 the same channel.														*/
 /*					:	Half-interrupts are not supported when using sDMAC.						*/
 /************************************************************************************************/
-void	Dma_SetInterrupt( U1 t_u1ChDataID, U1 t_u1HalfIe, U1 t_u1EndIe );
+void	Dma_SetInterrupt( uint8 t_u1ChDataID, uint8 t_u1HalfIe, uint8 t_u1EndIe );
 
 /************************************************************************************************/
 /*	Service name	:	GetDestinationAddress													*/
@@ -397,7 +393,7 @@ void	Dma_SetInterrupt( U1 t_u1ChDataID, U1 t_u1HalfIe, U1 t_u1EndIe );
 /*	Return value	:	Destination Address - pointer to destination							*/
 /*	caveat			:	Do not call before Dma_SetTransMode and Dma_SetTransModeTwoStepReload.	*/
 /************************************************************************************************/
-void*	Dma_GetDestinationAddress( U1 t_u1ChDataID );
+void*	Dma_GetDestinationAddress( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	GetTransCount															*/
@@ -407,7 +403,7 @@ void*	Dma_GetDestinationAddress( U1 t_u1ChDataID );
 /*	caveat			:	Prohibited calls before Dma_SetTransMode and Dma_SetTransModeTwoStepReload	*/
 /*						If sDMAC has 0 transfers left, returns 1 if in transit						*/
 /************************************************************************************************/
-U2		Dma_GetTransCount( U1 t_u1ChDataID );
+uint16		Dma_GetTransCount( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	ResetTransCount															*/
@@ -416,7 +412,7 @@ U2		Dma_GetTransCount( U1 t_u1ChDataID );
 /*	Return value	:	none																	*/
 /*	caveat			:	Disallow calling this interface during DMA transfer						*/
 /************************************************************************************************/
-void	Dma_ResetTransCount( U1 t_u1ChDataID );
+void	Dma_ResetTransCount( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	GetTransStatus															*/
@@ -426,7 +422,7 @@ void	Dma_ResetTransCount( U1 t_u1ChDataID );
 /*							( DMA_TRANS_STATUS_IDLE(=0) / DMA_TRANS_STATUS_BUSY(=1) )			*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U1		Dma_GetTransStatus( U1 t_u1ChDataID );
+uint8		Dma_GetTransStatus( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	CheckDmaError															*/
@@ -440,7 +436,7 @@ U1		Dma_GetTransStatus( U1 t_u1ChDataID );
 /*						For sDMAC, if an error occurred in the specified logical CH, return		*/
 /*						 with an error.															*/
 /************************************************************************************************/
-ZORN	Dma_CheckDmaError( U1 t_u1ChDataID );
+sint32	Dma_CheckDmaError( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	ClearDmaError															*/
@@ -456,7 +452,7 @@ ZORN	Dma_CheckDmaError( U1 t_u1ChDataID );
 /*						For sDMAC, set the DMA enable flag to disable DMA transfers				*/
 /*						 for clearing.															*/
 /************************************************************************************************/
-void	Dma_ClearDmaError( U1 t_u1ChDataID );
+void	Dma_ClearDmaError( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	GetReloadStatus															*/
@@ -465,9 +461,9 @@ void	Dma_ClearDmaError( U1 t_u1ChDataID );
 /*	Return value	:	Descriptor Status														*/
 /*							( DMA_CHSTA_DSE_RUNNING(=0) / DMA_CHSTA_DSE_STOP(=1) )				*/
 /*	caveat			:	Regular AD SCAN only(Available when using sDMAC)						*/
-/*					:	※Use only for interrupt-prohibited CHs when using mode 3 (AD Multi)	*/
+/*					:	Use only for interrupt-prohibited CHs when using mode 3 (AD Multi)		*/
 /************************************************************************************************/
-U1		Dma_GetReloadStatus( U1 t_u1ChDataID );
+uint8		Dma_GetReloadStatus( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	ClearDescriptorStatus													*/
@@ -476,9 +472,9 @@ U1		Dma_GetReloadStatus( U1 t_u1ChDataID );
 /*	Parameters (in)	:	ChDataID - ChannelDataID												*/
 /*	Return value	:	none																	*/
 /*	caveat			:	Regular AD SCAN only(Available when using sDMAC)						*/
-/*					:	※Use only for interrupt-prohibited CHs when using mode 3 (AD Mulit)	*/
+/*					:	Use only for interrupt-prohibited CHs when using mode 3 (AD Mulit)		*/
 /************************************************************************************************/
-void	Dma_ClearReloadStatus( U1 t_u1ChDataID );
+void	Dma_ClearReloadStatus( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	IsTransferCompleted														*/
@@ -487,7 +483,7 @@ void	Dma_ClearReloadStatus( U1 t_u1ChDataID );
 /*	Return value	:	Trans Completed Status (TRUE / FALSE)									*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U1		Dma_IsTransferCompleted( U1 t_u1ChDataID );
+uint8		Dma_IsTransferCompleted( uint8 t_u1ChDataID );
 
 /************************************************************************************************/
 /*	Service name	:	ClearTransferEndFlag													*/
@@ -496,7 +492,7 @@ U1		Dma_IsTransferCompleted( U1 t_u1ChDataID );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Dma_ClearTransferEndFlag( U1 t_u1ChDataID );
+void	Dma_ClearTransferEndFlag( uint8 t_u1ChDataID );
 
 /*----------------------------------------------------------------------------------------------*/
 /* Scheduled / Event Functions																	*/
@@ -517,7 +513,8 @@ void	Dma_Init( void );
 /************************************************************************************************/
 void	Dma_DeInit( void );
 
-#if ( DMA_CFG_REG_CHK == STD_ON ) 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
+#if ( DMA_CFG_REG_CHK == STD_ON )
 /************************************************************************************************/
 /*	Function		:	Dma_Regchk_All															*/
 /*	Schedule		:	Regchk																	*/
@@ -525,7 +522,8 @@ void	Dma_DeInit( void );
 /*	Return value	:	Check Result															*/
 /*	Relation Module	:	none																	*/
 /************************************************************************************************/
-U4	Dma_Regchk_All( void );
+uint32	Dma_Regchk_All( void );
+#endif
 #endif
 
 /************************************************************************************************/
@@ -534,8 +532,9 @@ U4	Dma_Regchk_All( void );
 /*	Parameters (in)	:	ChDataID - ChannelDataID												*/
 /*	Relation Module	:	none																	*/
 /************************************************************************************************/
-void	Dma_Interrupt( U1 t_u1ChDataID );
+void	Dma_Interrupt( uint8 t_u1ChDataID );
 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 /************************************************************************************************/
 /*	Function		:	Set Master Channel														*/
 /*	Schedule		:	EcuM_AL_DriverInitOne_Core0, EcuM_AL_DriverInitOne_Core1				*/
@@ -548,6 +547,7 @@ void	Dma_Interrupt( U1 t_u1ChDataID );
 /*					:	Disallow calling this interface during a DMA transfer.					*/
 /************************************************************************************************/
 void	Dma_SetMasterCh( void );
+#endif
 
 /*----------------------------------------------------------------------------------------------*/
 /* ISR Functions																				*/

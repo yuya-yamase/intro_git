@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_AUBIF_C_MAJOR                      (1U)
-#define OXCAN_AUBIF_C_MINOR                      (3U)
+#define OXCAN_AUBIF_C_MAJOR                      (2U)
+#define OXCAN_AUBIF_C_MINOR                      (0U)
 #define OXCAN_AUBIF_C_PATCH                      (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -19,6 +19,8 @@
 #include "oxcan_aubif_cfg_private.h"
 #include "oxcan_aubif.h"
 
+#include "Os.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS   )  ) && \
      (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
@@ -26,36 +28,25 @@
      (BSW_BSWM_CS_CFG_FUNC_SECOC == BSW_USE))
 
 #include "SchM_SecOC.h"
-#include "oxdocan_aubif_ma.h"
-
-#define OXCAN_AUBIF_PLM                      (1U)
 
 #else
 
-#define OXCAN_AUBIF_PLM                      (0U)
+#ifdef CAN_LPR_H
+#if ((CAN_LPR_RR_EN_SECOC_TX == 1U) || (CAN_LPR_RR_EN_SECOC_TX == 2U) || \
+     (CAN_LPR_RR_EN_SECOC_RX == 1U) || (CAN_LPR_RR_EN_SECOC_RX == 2U))
+
+#include "SchM_SecOC.h"
+
+#endif /* #if ((CAN_LPR_RR_EN_SECOC_TX == 1U) || (CAN_LPR_RR_EN_SECOC_TX == 2U) || \ */
+#endif /* #ifdef CAN_LPR_H */
 
 #endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && ... */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if OXCAN_AUB_CSM_SUP
-
-#if (OXCAN_AUBIF_PLM == 0U)
-#undef  OXCAN_AUBIF_PLM
-#define OXCAN_AUBIF_PLM                      (1U)
-#endif /* #if (OXCAN_AUBIF_PLM == 0U) */
-
-#endif /* #if OXCAN_AUB_CSM_SUP */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if ((defined(BSW_BSWM_CS_CFG_FUNC_DCM)  ) && \
      (BSW_BSWM_CS_CFG_FUNC_DCM == BSW_USE))
 
 #include "SchM_Dcm.h"
-
-#if (OXCAN_AUBIF_PLM == 0U)
-#undef  OXCAN_AUBIF_PLM
-#define OXCAN_AUBIF_PLM                      (1U)
-#endif /* #if (OXCAN_AUBIF_PLM == 0U) */
 
 #endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_DCM)  ) && ... */
 
@@ -90,16 +81,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4                           u4_s_oxcan_aubif_wksrc;
 
-#if (OXCAN_AUBIF_PLM == 1U)
-static U4                           u4_s_oxcan_aubif_plm_bak;
-static U2                           u2_s_oxcan_aubif_plm_cnt;
-#endif /* #if (OXCAN_AUBIF_PLM == 1U) */
-
-#ifdef CXPICDD_H
-static U4                           u4_s_oxcan_aubif_gli_bak;
-static U2                           u2_s_oxcan_aubif_gli_cnt;
-#endif /* #ifdef CXPICDD_H */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -117,17 +98,7 @@ static U2                           u2_s_oxcan_aubif_gli_cnt;
 /*===================================================================================================================================*/
 void    vd_g_oXCANAubIfInit(void)
 {
-    u4_s_oxcan_aubif_wksrc   = (U4)0U;
-
-#if (OXCAN_AUBIF_PLM == 1U)
-    u4_s_oxcan_aubif_plm_bak = (U4)INT_DRV_PLM_LO_EI;
-    u2_s_oxcan_aubif_plm_cnt = (U2)0U;
-#endif /* #if (OXCAN_AUBIF_PLM == 1U) */
-
-#ifdef CXPICDD_H
-    u4_s_oxcan_aubif_gli_bak = (U4)INT_DRV_IRQ_PRI_EI;
-    u2_s_oxcan_aubif_gli_cnt = (U2)0U;
-#endif /* #ifdef CXPICDD_H */
+    u4_s_oxcan_aubif_wksrc = (U4)0U;
 
 #if ((OXCAN_E2E_NUM_TRA > 0U) || (OXCAN_E2E_NUM_REC > 0U))
     vd_g_oXCANAubIfE2eInit();
@@ -144,7 +115,9 @@ void    vd_g_oXCANAubIfInit(void)
 /*===================================================================================================================================*/
 BswU4   bsw_cs_system_DI(void)
 {
-    return(u4_g_PLM_DI((U4)OXCAN_AUBIF_CAN_IRQPL));
+    SuspendAllInterrupts();
+
+    return((U4)0U);
 }
 /*===================================================================================================================================*/
 /*  void   bsw_cs_system_EI(BswU4 u4PreStat)                                                                                         */
@@ -157,7 +130,7 @@ BswU4   bsw_cs_system_DI(void)
 /*===================================================================================================================================*/
 void    bsw_cs_system_EI(BswU4 u4PreStat)
 {
-    vd_g_PLM_EI(u4PreStat);
+    ResumeAllInterrupts();
 }
 /*===================================================================================================================================*/
 /*  BswU4   bsw_cs_system_ImmDI(void)                                                                                                */
@@ -170,7 +143,9 @@ void    bsw_cs_system_EI(BswU4 u4PreStat)
 /*===================================================================================================================================*/
 BswU4   bsw_cs_system_ImmDI(void)
 {
-    return(u4_g_PLM_DI((U4)OXCAN_AUBIF_CAN_IRQPL));
+    SuspendAllInterrupts();
+
+    return((U4)0U);
 }
 /*===================================================================================================================================*/
 /*  void    bsw_cs_system_ImmEI(BswU4 u4PreStat)                                                                                     */
@@ -183,7 +158,7 @@ BswU4   bsw_cs_system_ImmDI(void)
 /*===================================================================================================================================*/
 void    bsw_cs_system_ImmEI(BswU4 u4PreStat)
 {
-    vd_g_PLM_EI(u4PreStat);
+    ResumeAllInterrupts();
 }
 /*===================================================================================================================================*/
 /*  void            Aubist_UsrSetWakeupEvent(const uint32 u4_a_SRC)                                                                  */
@@ -198,98 +173,8 @@ void    Aubist_UsrSetWakeupEvent(const uint32 u4_a_SRC)
     /* The bit0-bit4 for u4_a_SRC is reserved by Aubist. The bit31-bit5 can be used as  */
     /* user wakeup source. Thus, u4_a_WKUP_SRC is right-shifted.                        */
     /* -------------------------------------------------------------------------------- */
-    u4_s_oxcan_aubif_wksrc = u4_a_SRC >> OXCAN_AUBIF_LSB_WKUPSRC;
+    u4_s_oxcan_aubif_wksrc |= (u4_a_SRC >> OXCAN_AUBIF_LSB_WKUPSRC);
 }
-/*===================================================================================================================================*/
-/*  uint8   u1_g_oXCANAubIfGicUnk(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-uint8   u1_g_oXCANAubIfGicUnk(void)
-{
-#if ((OXCAN_AUBIF_PLM != 1U) && (!defined(CXPICDD_H)))
-    return((U1)FALSE);
-#else
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-    U1          u1_t_unk;
-
-    if(
-#if (OXCAN_AUBIF_PLM == 1U)
-        (u2_s_oxcan_aubif_plm_cnt > (U2)0U)
-#endif /* #if (OXCAN_AUBIF_PLM == 1U)                            */
-
-#if ((OXCAN_AUBIF_PLM == 1U) && (defined(CXPICDD_H)))
-        ||
-#endif /* #if ((OXCAN_AUBIF_PLM == 1U) && (defined(CXPICDD_H)))  */
-
-#if (defined(CXPICDD_H))
-        (u2_s_oxcan_aubif_gli_cnt > (U2)0U)
-#endif /* #if (defined(CXPICDD_H))                                  */
-        ){
-
-#if (OXCAN_AUBIF_PLM == 1U)
-        u2_s_oxcan_aubif_plm_cnt = (U2)0U;
-#endif /* #if (OXCAN_AUBIF_PLM == 1U) */
-
-#ifdef CXPICDD_H
-        u2_s_oxcan_aubif_gli_cnt = (U2)0U;
-#endif /* #ifdef CXPICDD_H */
-
-        u1_t_unk = (U1)TRUE;
-    }
-    else{
-        u1_t_unk = (U1)FALSE;
-    }
-
-    return(u1_t_unk);
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-#endif /* #if ((OXCAN_AUBIF_PLM != 1U) && (!defined(CXPICDD_H))) */
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-#if (OXCAN_AUBIF_PLM == 1U)
-
-
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  void    vd_g_oXCANAubIf_PLM_DI(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_oXCANAubIf_PLM_DI(void)
-{
-    if(u2_s_oxcan_aubif_plm_cnt == (U2)0U){
-        u4_s_oxcan_aubif_plm_bak = u4_g_PLM_DI((U4)OXCAN_AUBIF_CAN_IRQPL);
-    }
-    u2_s_oxcan_aubif_plm_cnt++;
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_oXCANAubIf_PLM_EI(void)                                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_oXCANAubIf_PLM_EI(void)
-{
-    u2_s_oxcan_aubif_plm_cnt--;
-    if(u2_s_oxcan_aubif_plm_cnt == (U2)0U){
-        vd_g_PLM_EI(u4_s_oxcan_aubif_plm_bak);
-    }
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-#endif /* #if (OXCAN_AUBIF_PLM == 1U) */
-
-
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
 /*  void BswM_CS_CbkChkWkupSrcInd(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -384,6 +269,48 @@ void    BswM_CS_CbkDcmMainFunction(void)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
+
+#ifdef VCAN_TX_ACK_H
+
+/*===================================================================================================================================*/
+/*  void    BswM_CS_CbkPreMainFunctionHi(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    BswM_CS_CbkPreMainFunctionHi(void)
+{
+    vd_g_vCANTxAckPreHigh();
+}
+#endif /* #ifdef VCAN_TX_ACK_H */
+/*===================================================================================================================================*/
+
+#ifdef CAN_LPR_H
+
+/*===================================================================================================================================*/
+/*  void    BswM_CS_CbkPostMainFunctionHi(void)                                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    BswM_CS_CbkPostMainFunctionHi(void)
+{
+#if ((CAN_LPR_RR_EN_SECOC_TX == 2U) || (CAN_LPR_RR_EN_SECOC_RX == 2U))
+    vd_g_CANLpRSecOCTRxPosHigh();
+#endif /* #if ((CAN_LPR_RR_EN_SECOC_TX == 2U) || (CAN_LPR_RR_EN_SECOC_RX == 2U)) */
+
+#if ((CAN_LPR_RR_EN_SECOC_RX == 1U) || (CAN_LPR_RR_EN_SECOC_RX == 2U))
+    SecOC_MainFunctionRx(); /* ->u1_g_CANLpRIngSecOCTRx is being invoked at here */
+#endif /* #if ((CAN_LPR_RR_EN_SECOC_RX == 1U) || (CAN_LPR_RR_EN_SECOC_RX == 2U)) */
+
+#if ((CAN_LPR_RR_EN_SECOC_TX == 1U) || (CAN_LPR_RR_EN_SECOC_TX == 2U))
+    SecOC_MainFunctionTx(); /* ->u1_g_CANLpRIngSecOCTRx is being invoked at here */
+#endif /* #if ((CAN_LPR_RR_EN_SECOC_TX == 1U) || (CAN_LPR_RR_EN_SECOC_TX == 2U)) */
+
+    vd_g_CANLpRPhyTxPosHigh();
+}
+#endif /* #ifdef CAN_LPR_H */
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -391,23 +318,8 @@ void    BswM_CS_CbkDcmMainFunction(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     2/22/2022  HU       ty19epf_ren_d1x_v220_r009 -> ox25epf_ren_d1x_v100_r000, module Name tycan_aubif -> oxcan_aubif.    */
-/*  1.0.1     9/27/2022  TM       Support E2E.                                                                                       */
-/*  1.0.2    10/26/2022  HU       Com_CbkCounterErr and CanIf_CbkSumErr were updated.                                                */
-/*  1.1.0    11/29/2022  SY       Aubist/CXPI(forTMC) Gen1 -> Gen2.                                                                  */
-/*  1.1.1    12/13/2022  TM       Aubist/SEC Gen1 -> Gen2.                                                                           */
-/*  1.1.2     2/07/2022  TM       CanIf_CbkLengthErr was updated.                                                                    */
-/*  1.1.3     6/08/2023  MI       Aubist/SEC was updated.                                                                            */
-/*  1.2.0     7/05/2023  SY       EcuM_SetWakeupEvent was deleted.                                                                   */
-/*           12/20/2023  TM       QAC warnigs were fixed.                                                                            */
-/*  1.2.1     1/10/2024  TI       Added CanIf_CbkPreStoreMsg and OXCAN_AUB_PRESTORE_SUP in oxcan_channel.h.                          */
-/*  1.3.0    12/20/2024  TN       oxcan_aubif.c was divided by Aubist/Com component.                                                 */
+/*  2.0.0     2/21/2025  TN       oxcan_aubif.c v1.2.0 -> v2.0.0 was redesigned for Toyota BEVStep3.                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
-/*  * HU   = Hayato Usui, DENSO                                                                                                      */
-/*  * TM   = Takanori Maruyama, DENSO                                                                                                */
-/*  * SY   = Satoshi Yamada, DENSO                                                                                                   */
-/*  * MI   = Masahiko Izumi, DENSO                                                                                                   */
-/*  * TI   = Tomoko Inuzuka, DENSO                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

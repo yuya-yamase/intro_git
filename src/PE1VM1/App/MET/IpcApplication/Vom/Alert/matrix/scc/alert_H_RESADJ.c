@@ -125,8 +125,8 @@ static U4      u4_s_AlertH_resadjSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U4              u4_t_src_chk;
 
 #if defined(OXCAN_PDU_RX_CAN_MGC1S03)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_MGC1S03,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_MGC1S03,
+                                          (U4)OXCAN_SYS_IGR,
                                           u2_s_ALERT_H_RESADJ_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;

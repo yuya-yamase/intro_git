@@ -87,11 +87,9 @@ U1      u1_g_DrvIndPwrCfgComRxPMEVCR(S2 * const s2p_a_pct)
     U1                  u1_t_sts;                                               /* Receiving Status                                  */
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_PMEVCR, s2p_a_pct);
-    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV2G02_RXCH0,
-                               ((U2)OXCAN_RX_SYS_NRX_IGP |
-                                (U2)OXCAN_RX_SYS_NRX_IGR |
-                                (U2)OXCAN_RX_SYS_TOE_IGP |
-                                (U2)OXCAN_RX_SYS_TOE_IGR),
+    u1_t_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV2G02_CH0,
+                               ((U4)OXCAN_SYS_IGP |
+                                (U4)OXCAN_SYS_IGR),
                                 u2_OXCAN_RXTO_THRSH(3600U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if(*s2p_a_pct == (S2)DRVIND_PWR_PCT_INIT){
@@ -115,11 +113,9 @@ U1      u1_g_DrvIndPwrCfgComRxPMCHGTH(S1 * const s1p_a_pct)
     U1                  u1_t_sts;                                               /* Receiving Status                                  */
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_PMCHGTH, s1p_a_pct);
-    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV2G02_RXCH0,
-                               ((U2)OXCAN_RX_SYS_NRX_IGP |
-                                (U2)OXCAN_RX_SYS_NRX_IGR |
-                                (U2)OXCAN_RX_SYS_TOE_IGP |
-                                (U2)OXCAN_RX_SYS_TOE_IGR),
+    u1_t_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV2G02_CH0,
+                               ((U4)OXCAN_SYS_IGP |
+                                (U4)OXCAN_SYS_IGR),
                                 u2_OXCAN_RXTO_THRSH(3600U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_sts);
@@ -140,11 +136,9 @@ U1      u1_g_DrvIndPwrCfgComRxPMPWRTH(U2 * const u2p_a_pct)
     U1                  u1_t_sts;                                               /* Receiving Status                                  */
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_PMPWRTH, u2p_a_pct);
-    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV2G02_RXCH0,
-                               ((U2)OXCAN_RX_SYS_NRX_IGP |
-                                (U2)OXCAN_RX_SYS_NRX_IGR |
-                                (U2)OXCAN_RX_SYS_TOE_IGP |
-                                (U2)OXCAN_RX_SYS_TOE_IGR),
+    u1_t_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV2G02_CH0,
+                               ((U4)OXCAN_SYS_IGP |
+                                (U4)OXCAN_SYS_IGR),
                                 u2_OXCAN_RXTO_THRSH(3600U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_sts);

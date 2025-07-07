@@ -40,10 +40,6 @@
 #define		PIL_SPI_CH0_5		Pil_Spi_SetCH( 0 , 5 )
 #define		PIL_SPI_CH0_6		Pil_Spi_SetCH( 0 , 6 )
 #define		PIL_SPI_CH0_7		Pil_Spi_SetCH( 0 , 7 )
-#define		PIL_SPI_CH0_8		Pil_Spi_SetCH( 0 , 8 )
-#define		PIL_SPI_CH0_9		Pil_Spi_SetCH( 0 , 9 )
-#define		PIL_SPI_CH0_10		Pil_Spi_SetCH( 0 , 10 )
-#define		PIL_SPI_CH0_11		Pil_Spi_SetCH( 0 , 11 )
 #define		PIL_SPI_CH1_0		Pil_Spi_SetCH( 1 , 0 )
 #define		PIL_SPI_CH1_1		Pil_Spi_SetCH( 1 , 1 )
 #define		PIL_SPI_CH1_2		Pil_Spi_SetCH( 1 , 2 )
@@ -52,10 +48,6 @@
 #define		PIL_SPI_CH1_5		Pil_Spi_SetCH( 1 , 5 )
 #define		PIL_SPI_CH1_6		Pil_Spi_SetCH( 1 , 6 )
 #define		PIL_SPI_CH1_7		Pil_Spi_SetCH( 1 , 7 )
-#define		PIL_SPI_CH1_8		Pil_Spi_SetCH( 1 , 8 )
-#define		PIL_SPI_CH1_9		Pil_Spi_SetCH( 1 , 9 )
-#define		PIL_SPI_CH1_10		Pil_Spi_SetCH( 1 , 10 )
-#define		PIL_SPI_CH1_11		Pil_Spi_SetCH( 1 , 11 )
 #define		PIL_SPI_CH2_0		Pil_Spi_SetCH( 2 , 0 )
 #define		PIL_SPI_CH2_1		Pil_Spi_SetCH( 2 , 1 )
 #define		PIL_SPI_CH2_2		Pil_Spi_SetCH( 2 , 2 )
@@ -64,23 +56,30 @@
 #define		PIL_SPI_CH2_5		Pil_Spi_SetCH( 2 , 5 )
 #define		PIL_SPI_CH2_6		Pil_Spi_SetCH( 2 , 6 )
 #define		PIL_SPI_CH2_7		Pil_Spi_SetCH( 2 , 7 )
-#define		PIL_SPI_CH2_8		Pil_Spi_SetCH( 2 , 8 )
-#define		PIL_SPI_CH2_9		Pil_Spi_SetCH( 2 , 9 )
-#define		PIL_SPI_CH2_10		Pil_Spi_SetCH( 2 , 10 )
-#define		PIL_SPI_CH2_11		Pil_Spi_SetCH( 2 , 11 )
 #define		PIL_SPI_CH3_0		Pil_Spi_SetCH( 3 , 0 )
 #define		PIL_SPI_CH3_1		Pil_Spi_SetCH( 3 , 1 )
 #define		PIL_SPI_CH3_2		Pil_Spi_SetCH( 3 , 2 )
 #define		PIL_SPI_CH3_3		Pil_Spi_SetCH( 3 , 3 )
+#define		PIL_SPI_CH3_4		Pil_Spi_SetCH( 3 , 4 )
+#define		PIL_SPI_CH3_5		Pil_Spi_SetCH( 3 , 5 )
+#define		PIL_SPI_CH3_6		Pil_Spi_SetCH( 3 , 6 )
+#define		PIL_SPI_CH3_7		Pil_Spi_SetCH( 3 , 7 )
 #define		PIL_SPI_CH4_0		Pil_Spi_SetCH( 4 , 0 )
 #define		PIL_SPI_CH4_1		Pil_Spi_SetCH( 4 , 1 )
 #define		PIL_SPI_CH4_2		Pil_Spi_SetCH( 4 , 2 )
 #define		PIL_SPI_CH4_3		Pil_Spi_SetCH( 4 , 3 )
+#define		PIL_SPI_CH4_4		Pil_Spi_SetCH( 4 , 4 )
+#define		PIL_SPI_CH4_5		Pil_Spi_SetCH( 4 , 5 )
+#define		PIL_SPI_CH4_6		Pil_Spi_SetCH( 4 , 6 )
+#define		PIL_SPI_CH4_7		Pil_Spi_SetCH( 4 , 7 )
 #define		PIL_SPI_CH5_0		Pil_Spi_SetCH( 5 , 0 )
 #define		PIL_SPI_CH5_1		Pil_Spi_SetCH( 5 , 1 )
 #define		PIL_SPI_CH5_2		Pil_Spi_SetCH( 5 , 2 )
 #define		PIL_SPI_CH5_3		Pil_Spi_SetCH( 5 , 3 )
 #define		PIL_SPI_CH6_0		Pil_Spi_SetCH( 6 , 0 )
+#define		PIL_SPI_CH6_1		Pil_Spi_SetCH( 6 , 1 )
+#define		PIL_SPI_CH6_2		Pil_Spi_SetCH( 6 , 2 )
+#define		PIL_SPI_CH6_3		Pil_Spi_SetCH( 6 , 3 )
 #define		PIL_SPI_CH7_0		Pil_Spi_SetCH( 7 , 0 )
 #define		PIL_SPI_CH7_1		Pil_Spi_SetCH( 7 , 1 )
 #define		PIL_SPI_CH7_2		Pil_Spi_SetCH( 7 , 2 )
@@ -90,6 +89,9 @@
 #define		PIL_SPI_CH8_2		Pil_Spi_SetCH( 8 , 2 )
 #define		PIL_SPI_CH8_3		Pil_Spi_SetCH( 8 , 3 )
 #define		PIL_SPI_CH9_0		Pil_Spi_SetCH( 9 , 0 )
+#define		PIL_SPI_CH9_1		Pil_Spi_SetCH( 9 , 1 )
+#define		PIL_SPI_CH9_2		Pil_Spi_SetCH( 9 , 2 )
+#define		PIL_SPI_CH9_3		Pil_Spi_SetCH( 9 , 3 )
 
 /* DataSize */
 #define		PIL_SPI_LENGTH_8BIT			(8)
@@ -128,10 +130,6 @@
 #define		PIL_SPI_CSID_5				(5)
 #define		PIL_SPI_CSID_6				(6)
 #define		PIL_SPI_CSID_7				(7)
-#define		PIL_SPI_CSID_8				(8)
-#define		PIL_SPI_CSID_9				(9)
-#define		PIL_SPI_CSID_10				(10)
-#define		PIL_SPI_CSID_11				(11)
 
 /* Master Slave Mode */
 #define		PIL_SPI_MASTERSLAVE_MASTER	(0)
@@ -163,9 +161,35 @@
 #define		PIL_SPI_SOLS_HIGH_HOLD		(MSPI_CTL1_SOLS_HIGH_HOLD)
 #define		PIL_SPI_SOLS_HIGH			(MSPI_CTL1_SOLS_HIGH)
 
+/* MSPITGCTLn.TRGSELn: This bit selects the trigger (DMA or DTS) for each channel */
+#define		PIL_SPI_TGCTL_TRGSEL_DMA	(MSPI_TGCTL_TRGSEL_DMA)
+#define		PIL_SPI_TGCTL_TRGSEL_DTS	(MSPI_TGCTL_TRGSEL_DTS)
+
 /* タイムアウト設定値 */
 #define PIL_SPI_WAIT_MAX				(0xFFFFFFFFU)			/* 設定最大値 */
 #define u4PIL_SPI_WAIT_1US				((U4)1)					/* LIB_WaitによるWait時間 */
+
+/*==============================================================================================*/
+#if ((defined(HI)          ) || \
+     (defined(LO)          ) || \
+     (defined(ON)          ) || \
+     (defined(OFF)         ) || \
+     (defined(OK)          ) || \
+     (defined(NG)          ) || \
+     (defined(UNFIX)       ) || \
+     (defined(NULL_POINTER)))
+#error "pil_spi.h : #defines are already defined."
+#endif
+
+#define     HI                      (1U)
+#define     LO                      (0U)
+#define     ON                      (HI)
+#define     OFF                     (LO)
+#define     OK                      (0U)
+#define     NG                      (1U)
+#define     UNFIX                   (3U)
+#define     NULL_POINTER            ((void*)0)
+/*==============================================================================================*/
 
 /* User Config Data Type Definition */
 typedef struct
@@ -187,6 +211,7 @@ typedef struct{
 	U1									u1CsID; 			/* Chip Select ID					*/
 	U1									u1CsActiveLevel;	/* Chip Select ActiveLevel			*/
 	U1									u1MasterSlave;		/* Master mode / Slave mode 		*/
+	U1									u1TrgSelDmaDts;		/* Trigger Select DMA / DTS 		*/
 }Pil_Spi_ChannelConfigType;
 
 /* Pil Spi ModeC Data Type */
@@ -205,7 +230,7 @@ typedef	struct{
 /*	Reentrancy		:	Concurrency Safe for different unit numbers								*/
 /*						Non Re-entrant for the same unit numbers								*/
 /*	Parameters (in)	:	HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )				*/
-/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )			*/
+/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )			*/
 /*					:	PilChannelConfig - Channel Configuration(Sync)							*/
 /*	Return value	:	none																	*/
 /*	Caveat			:	・同一ハードユニットは全て同一コアで使用すること						*/
@@ -220,7 +245,7 @@ void	Pil_Spi_SetComMode( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t_
 /*	Service name	:	CheckComMode															*/
 /*	Reentrancy		:	Concurrency Safe														*/
 /*	Parameters (in)	:	HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )				*/
-/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )			*/
+/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )			*/
 /*					:	PilChannelConfig - Channel Configuration(Sync)							*/
 /*	Return value	:	RegError - Register Error (OK / NG)										*/
 /*	Caveat			:	-													 					*/
@@ -232,7 +257,7 @@ U1		Pil_Spi_CheckComMode( U1 t_u1HwChannelID, const Pil_Spi_ChannelConfigType* t
 /*	Service name	:	DisableCommunication													*/
 /*	Reentrancy		:	Concurrency Safe														*/
 /*	Parameters (in)	:	HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )				*/
-/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )			*/
+/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )			*/
 /*	Return value	:	none																	*/
 /*	Caveat			:	・同一ハードユニットは全て同一コアで使用すること						*/
 /************************************************************************************************/
@@ -244,7 +269,7 @@ void	Pil_Spi_DisableCommunication( U1 t_u1HwChannelID );
 /*	Reentrancy		:	Concurrency Safe for different unit numbers								*/
 /*					:	Re-entrant for the same unit numbers									*/
 /*	Parameters (in)	:	HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )				*/
-/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )			*/
+/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )			*/
 /*					:	Length - Frame Number													*/
 /*	Return value	:	none																	*/
 /*	Caveat			:	・同一ハードユニットは全て同一コアで使用すること						*/
@@ -256,7 +281,7 @@ void	Pil_Spi_SetFrameNumber( U1 t_u1HwChannelID, U2 t_u2Length );
 /*	Reentrancy		:	Concurrency Safe for different unit numbers								*/
 /*					:	Re-entrant for the same unit numbers									*/
 /*	Parameters (in)	:	HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )				*/
-/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )			*/
+/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )			*/
 /*					:	TxData - Send Data(32bit)												*/
 /*					:	PilChannelConfig - Channel Configuration(Sync)							*/
 /*	Return value	:	Receive Data(32bit)														*/
@@ -271,7 +296,7 @@ U4		Pil_Spi_SendReceiveData( U1 t_u1HwChannelID, U4 t_u4TxData, const Pil_Spi_Ch
 /*	Reentrancy		:	Concurrency Safe for different unit numbers								*/
 /*						Non Re-entrant for the same unit numbers								*/
 /*	Parameters (in)	:	HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )				*/
-/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )			*/
+/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )			*/
 /*					:	PilChannelConfig - Channel Configuration(Sync)							*/
 /*					:	Times - Send Receive Data Times (1 - 0xFFFF(1 times = 2byte))			*/
 /*	Return value	:	none																	*/
@@ -296,7 +321,7 @@ void	Pil_Spi_EnableUnit( U1 t_u1UnitNo );
 /*	Service name	:	GetOvrunErrStatus														*/
 /*	Reentrancy		:	Concurrency Safe														*/
 /*	parameters (in)	:	HwChannelID - ID of SPI Unit & Channel ( PIL_SPI_CH*_# )				*/
-/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 11 ) )			*/
+/*					:				( * : Unit No( 0 - 9 ) , # : Channel No( 0 - 7 ) )			*/
 /*	Return value	:	Overrun Error Status( No Error(==0) or Error(!=0) )						*/
 /*	Caveat			:	・オーバーランエラーはスレーブモード時のみ検出する						*/
 /************************************************************************************************/

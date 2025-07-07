@@ -34,6 +34,8 @@
  *--------------------------------------------------------------------------*/
 ISR(eMCOS_ISR_INTOSTM5TINT);
 ISR(eMCOS_ISR_INTTAUD0I14);
+ISR(eMCOS_ISR_INTRCAN3REC);
+ISR(eMCOS_ISR_INTRCAN3TRX);
 ISR(eMCOS_ISR_INTRCAN5REC);
 ISR(eMCOS_ISR_INTRCAN5TRX);
 ISR(eMCOS_ISR_INTRCAN7REC);
@@ -67,6 +69,36 @@ ISR(eMCOS_ISR_INTOSTM5TINT)
 ISR(eMCOS_ISR_INTTAUD0I14)
 {
     /*    INTTAUD0CH14;*/
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN3REC)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN3REC)
+{
+    /*    INTRCAN3REC_ISR;*/
+#if (CAN_CFG_RX_PROCESSING_3 == CAN_INTERRUPT)
+    Can_RxFinish_3();
+#endif
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN3TRX)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN3TRX)
+{
+    /*    INTRCAN3TRX_ISR;*/
+#if (CAN_CFG_TX_PROCESSING_3 == CAN_INTERRUPT)
+    Can_TxFinish_3();
+#endif
 }
 
 /**---------------------------------------------------------------------------

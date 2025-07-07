@@ -3,8 +3,19 @@
     :sourceDir=${CAN_DIR}
 
     -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/lib
     -I${OXCAN_DIR}/scc
+
+    -I${CAN_DIR}/inc
+    -I${CAN_DIR}/inc/Dcm
+    -I${CAN_DIR}/inc/Dem
+    -I${CAN_DIR}/Dcm/Dsd/cfg
+    -I${CAN_DIR}/Dcm/Dsp/cfg
+    -I${CAN_DIR}/Dem/cfg
+    -I${CAN_DIR}/Dem/usr
+    -I${OXDOCAN_DIR}/lib/config_U2A16_met
+    -I${OXDOCAN_DIR}/lib/scc
+
 
 ab_lib/libbswcs.a
 
@@ -149,6 +160,7 @@ CanIf/src/bsw_canif_config.c
 CanIf/src/bsw_canif_rx_xcp.c
 CanIf/src/bsw_canif_tx_xcp.c
 
+CanNm/cfg/y/CanNm_Y_PBcfg.c
 CanNm/src/a/bsw_cannm_a_config.c
 CanNm/src/a2/bsw_cannm_a2_config.c
 CanNm/src/b/bsw_cannm_b_config.c
@@ -203,3 +215,112 @@ VDat/cfg/VDat_PBcfg.c
 VDat/src/bsw_vdat_config.c
 VDat/src/bsw_vdat_ipc.c
 VDat/src/bsw_vdat_vcc.c
+
+Dcm/Dsd/cfg/Dcm_Dsd_Main_Cfg.c
+Dcm/Dsd/src/Dcm_Dsd_Main.c
+Dcm/Dsd/src/Dcm_Dsd_MsgChk.c
+Dcm/Dsd/src/Dcm_Dsd_SendMng.c
+Dcm/Dsd/src/Dcm_Dsd_ServiceMng.c
+Dcm/Dsd/usr/Dcm_Dsd_Main_Callout.c
+Dcm/Dsl/cfg/Dcm_Dsl_Main_Cfg.c
+Dcm/Dsl/cfg/Dcm_Dsl_Main_Connector_Cfg.c
+Dcm/Dsl/src/Dcm_Dsl_AuthMng.c
+Dcm/Dsl/src/Dcm_Dsl_CommHandling.c
+Dcm/Dsl/src/Dcm_Dsl_Ctrl_ComSrv.c
+Dcm/Dsl/src/Dcm_Dsl_Ctrl_ConfigSrv.c
+Dcm/Dsl/src/Dcm_Dsl_Ctrl_PrtSrv.c
+Dcm/Dsl/src/Dcm_Dsl_Ctrl_SecSrv.c
+Dcm/Dsl/src/Dcm_Dsl_Ctrl_SesSrv.c
+Dcm/Dsl/src/Dcm_Dsl_Ctrl_SysSrv.c
+Dcm/Dsl/src/Dcm_Dsl_Ctrl_TxSrv.c
+Dcm/Dsl/src/Dcm_Dsl_Main.c
+Dcm/Dsl/src/Dcm_Dsl_RxAbt.c
+Dcm/Dsl/src/Dcm_Dsl_RxMsg.c
+Dcm/Dsl/src/Dcm_Dsl_SecurityMng.c
+Dcm/Dsl/src/Dcm_Dsl_SessionMng.c
+Dcm/Dsl/src/Dcm_Dsl_TxAbt.c
+Dcm/Dsl/src/Dcm_Dsl_TxIf.c
+Dcm/Dsl/src/Dcm_Dsl_TxMsg.c
+Dcm/Dsl/usr/Dcm_Dsl_AuthMng_Connector.c
+Dcm/Dsl/usr/Dcm_Dsl_CommHandling_Connector.c
+Dcm/Dsl/usr/Dcm_Dsl_Main_Callout.c
+Dcm/Dsl/usr/Dcm_Dsl_RxMsg_Connector.c
+Dcm/Dsl/usr/Dcm_Dsl_SecurityMng_Connector.c
+Dcm/Dsl/usr/Dcm_Dsl_SessionMng_Connector.c
+Dcm/Dsl/usr/Dcm_Dsl_TxMsg_Connector.c
+Dcm/Dsp/cfg/Dcm_Dsp_DataTfrMng_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_DidMng_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_DidMng_OBD_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_Main_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_MemMng_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_MsgMaker_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_PeriodicMng_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID10_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID11_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID14_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID19_Sub03_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID19_Sub04_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID19_Sub18_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID27_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID28_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID85_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID34_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID36_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID37_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_SID86_Cfg.c
+Dcm/Dsp/cfg/Dcm_Dsp_StorageMng_Cfg.c
+Dcm/Dsp/src/Dcm_Dsp_DataTfrMng.c
+Dcm/Dsp/src/Dcm_Dsp_DidMng.c
+Dcm/Dsp/src/Dcm_Dsp_DidMng_OBD.c
+Dcm/Dsp/src/Dcm_Dsp_Main.c
+Dcm/Dsp/src/Dcm_Dsp_MemMng.c
+Dcm/Dsp/src/Dcm_Dsp_MsgMaker.c
+Dcm/Dsp/src/Dcm_Dsp_PeriodicMng.c
+Dcm/Dsp/src/Dcm_Dsp_SID10.c
+Dcm/Dsp/src/Dcm_Dsp_SID14.c
+Dcm/Dsp/src/Dcm_Dsp_SID19_Sub02.c
+Dcm/Dsp/src/Dcm_Dsp_SID19_Sub03.c
+Dcm/Dsp/src/Dcm_Dsp_SID19_Sub04.c
+Dcm/Dsp/src/Dcm_Dsp_SID19_Sub17.c
+Dcm/Dsp/src/Dcm_Dsp_SID19_Sub18.c
+Dcm/Dsp/src/Dcm_Dsp_SID27.c
+Dcm/Dsp/src/Dcm_Dsp_SID27_TypeB.c
+Dcm/Dsp/src/Dcm_Dsp_SID27_TypeG.c
+Dcm/Dsp/src/Dcm_Dsp_SID27_TypeR.c
+Dcm/Dsp/src/Dcm_Dsp_SID28.c
+Dcm/Dsp/src/Dcm_Dsp_SID3E.c
+Dcm/Dsp/src/Dcm_Dsp_SID85.c
+Dcm/Dsp/src/Dcm_Dsp_SID34.c
+Dcm/Dsp/src/Dcm_Dsp_SID36.c
+Dcm/Dsp/src/Dcm_Dsp_SID37.c
+Dcm/Dsp/src/Dcm_Dsp_SID86.c
+Dcm/Dsp/src/Dcm_Dsp_StorageMng.c
+Dcm/Dsp/usr/Dcm_Dsp_DataTfrMng_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_DidMng_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_DidMng_ChkSuptDid_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_Main_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_MemMng_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_OBDIf_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID10_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID10_Connector.c
+Dcm/Dsp/usr/Dcm_Dsp_SID14_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID27_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID28_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID28_Connector.c
+Dcm/Dsp/usr/Dcm_Dsp_SID85_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID85_Connector.c
+Dcm/Dsp/usr/Dcm_Dsp_SID34_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID36_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID37_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID86_Callout.c
+Dcm/Dsp/usr/Dcm_Dsp_SID86_Connector.c
+Dcm/Dsp/usr/Dcm_Dsp_StorageMng_Connector.c
+Dcm/Main/cfg/Dcm_Main_Common_Cfg.c
+Dcm/Main/cfg/Dcm_Main_EvtDistr_Cfg.c
+Dcm/Main/cfg/Dcm_Main_TmrSrv_Cfg.c
+Dcm/Main/src/Dcm_Main_Common.c
+Dcm/Main/src/Dcm_Main_EvtDistr.c
+Dcm/Main/src/Dcm_Main_TmrSrv.c
+Dcm/Main/usr/Dcm_Main_Common_Callout.c
+Dcm/Main/usr/Dcm_Main_Common_Connector.c
+SchM/usr/SchM_Dcm.c

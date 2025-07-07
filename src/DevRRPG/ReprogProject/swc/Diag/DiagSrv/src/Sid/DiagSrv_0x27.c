@@ -195,7 +195,8 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Init (void)
         DiagSrv_0x27_SaveInfo[Index].KeyInfo.Key = DiagSrv_0x27_SecLevelConfig.InfoPtr[Index].KeyPtr;
         DiagSrv_0x27_SaveInfo[Index].KeyInfo.KeySize = DiagSrv_0x27_SecLevelConfig.InfoPtr[Index].KeySize;
 
-        Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].SeedInfo.Seed, 0U, (uint32)DiagSrv_0x27_SaveInfo[Index].SeedInfo.SeedSize);
+/*      Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].SeedInfo.Seed, 0U, (uint32)DiagSrv_0x27_SaveInfo[Index].SeedInfo.SeedSize); */ /* @@@ */
+        Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].SeedInfo.Seed, 0x5aU, (uint32)DiagSrv_0x27_SaveInfo[Index].SeedInfo.SeedSize); /* @@@ */
         Rte_Rpg_MemSet(DiagSrv_0x27_SaveInfo[Index].KeyInfo.Key, 0U, (uint32)DiagSrv_0x27_SaveInfo[Index].KeyInfo.KeySize);
 
         if( DiagSrv_0x27_SecLevelConfig.InfoPtr[Index].DelayTimer != DIAGSRV_0X27_DLYTM_NOT_SUPPORT )
@@ -256,6 +257,7 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
         Ret = DIAGSRV_0X27_E_PENDING;
         Nrc = DIAG_NRC_PR;
 
+#if 0	/* @@@ */
         SecStatus = Sec_GetStatus();
         if( SecStatus == SEC_IDLE )
         {
@@ -267,9 +269,12 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
             }
             else
             {
+#endif	/* @@@ */
                 if( DiagSrv_0x27_JobStatus == DIAGSRV_0X27_JOB_STAT_PRE_SEED )
                 {
-                    Ret = DiagSrv_0x27_Time_PreGenerateSeed(&Nrc);
+/*                    Ret = DiagSrv_0x27_Time_PreGenerateSeed(&Nrc);*//* @@@ */
+                    DiagSrv_0x27_Time_PostGenerateSeed(); /* @@@ */
+                    Ret = E_OK; /* @@@ */
                 }
                 else if( DiagSrv_0x27_JobStatus == DIAGSRV_0X27_JOB_STAT_SEED )
                 {
@@ -282,7 +287,8 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
                 }
                 else if( DiagSrv_0x27_JobStatus == DIAGSRV_0X27_JOB_STAT_PRE_KEY )
                 {
-                    Ret = DiagSrv_0x27_Time_PreGenerateKey(&Nrc);
+/*                    Ret = DiagSrv_0x27_Time_PreGenerateKey(&Nrc);*//* @@@ */
+                    Ret = DiagSrv_0x27_Time_PostGenerateKey(&Nrc); /* @@@ */
                 }
                 else if( DiagSrv_0x27_JobStatus == DIAGSRV_0X27_JOB_STAT_KEY )
                 {
@@ -292,8 +298,10 @@ FUNC(void, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time (void)
                 {
                     Ret = DiagSrv_0x27_Time_PostGenerateKey(&Nrc);
                 }
+#if 0 /* @@@ */
             }
         }
+#endif /* @@@ */
 
         if( Ret == (Std_ReturnType)E_OK )
         {
@@ -490,6 +498,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_requestSe
 
             if( Ret == DIAGSRV_0X27_E_PENDING )
             {
+#if 0	/* @@@ */
                 SecRet = Sec_ReqPreGenSeed(DIAGSRV_0X27_CURRENT_SECLEVEL);
                 if( SecRet != (Std_ReturnType)E_OK )
                 {
@@ -500,6 +509,9 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_requestSe
                 {
                     DiagSrv_0x27_JobStatus = DIAGSRV_0X27_JOB_STAT_PRE_SEED;
                 }
+#else	/* @@@ */
+                DiagSrv_0x27_JobStatus = DIAGSRV_0X27_JOB_STAT_PRE_SEED; /* @@@ */
+#endif	/* @@@ */
             }
             else /* ( Ret == (Std_ReturnType)E_OK ) */
             {
@@ -571,6 +583,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_sendKey
     {
         Ret = DIAGSRV_0X27_E_PENDING;
 
+#if 0	/* @@@ */
         SecRet = Sec_ReqPreGenKey(DIAGSRV_0X27_CURRENT_SECLEVEL);
         if( SecRet != (Std_ReturnType)E_OK )
         {
@@ -581,6 +594,9 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Processing_sendKey
         {
             DiagSrv_0x27_JobStatus = DIAGSRV_0X27_JOB_STAT_PRE_KEY;
         }
+#else	/* @@@ */
+        DiagSrv_0x27_JobStatus = DIAGSRV_0X27_JOB_STAT_PRE_KEY; /* @@@ */
+#endif	/* @@@ */
     }
     else
     {
@@ -768,6 +784,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PostGenerateKey
     *Nrc = DIAG_NRC_PR;
     Ret = E_OK;
     SaveInfoPtr = &DiagSrv_0x27_SaveInfo[DiagSrv_0x27_SecLevInfoIndex];
+#if 0	/* @@@ */
     for( Index = 0U; Index < SaveInfoPtr->KeyInfo.KeySize; Index++ )
     {
         if( SaveInfoPtr->KeyInfo.Key[Index] != DiagSrv_0x27_Msg->ReqData[DIAGSRV_0X27_REQ_KEY_POS+Index] )
@@ -776,6 +793,7 @@ static FUNC(Std_ReturnType, DIAGSRV_CODE_FAST) DiagSrv_0x27_Time_PostGenerateKey
             break;
         }
     }
+#endif	/* @@@ */
 
     Rte_Rpg_MemSet(SaveInfoPtr->KeyInfo.Key, 0U, (uint32)SaveInfoPtr->KeyInfo.KeySize);
 
