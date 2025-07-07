@@ -1,4 +1,4 @@
-/* 1.2.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMILOCALE_C_MAJOR                         (1)
-#define HMILOCALE_C_MINOR                         (2)
+#define HMILOCALE_C_MINOR                         (3)
 #define HMILOCALE_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -122,9 +122,9 @@ void    vd_g_HmiLocaleMainTask(void)
     if (st_s_hmilocale_put.u1_unit_ambtmp <= (U1)HMILOCALE_AMBTMP){
         vd_g_UnitPut((U1)UNIT_IDX_AMBTMP, st_s_hmilocale_put.u1_unit_ambtmp);
     }
-    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){
-        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat);
-    }
+/*    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){ */
+/*        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat); */
+/*    } */
 }
 
 /*===================================================================================================================================*/
@@ -157,8 +157,10 @@ void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
 /*  1.0.0    07/16/2019  TA       New.                                                                                               */
 /*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
 /*  1.2.0    02/28/2025  RS       Change for BEV System_Consideration_1.(Requests from the SOC team for electricity cost units)      */
+/*  1.3.0    07/07/2025  MN       Change for BEV PreCV.(Delete timeformat)                                                           */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
