@@ -83,6 +83,7 @@
 #include "evschg.h"
 #include "batcare.h"
 #include "xspi_met.h"
+#include "datesi_met.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -158,6 +159,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareBonInit,
+        &vd_g_DateSIMETInit
     };
 
     U1    u1_t_rslt;
@@ -248,6 +250,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareRstwkInit,
+        &vd_g_DateSIMETInit
     };
 
     U1    u1_t_rslt;
@@ -338,6 +341,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareRstwkInit,
+        &vd_g_DateSIMETInit
     };
 
     U1    u1_t_rslt;
