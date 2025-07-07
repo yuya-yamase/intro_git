@@ -207,6 +207,7 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  5.6.1     6/28/2022  YN       Update for 840B#2 1A(Version update).                                                              */
 /*  5.7.0     1/09/2024  RO       Update for 19PFv3.                                                                                 */
 /*  5.8.0     6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0,MET-S_ADTT-CSTD-0-02-A-C0)       */
+/*  5.8.0     6/23/2025  JS       Change for BEV System_Consideration_2.(MET-S_ADBZR-CSTD-0-05-A-C0)                                 */
 /*                                                                                                                                   */
 /*  * ZS   = Zenjiro Shamoto, NTTD MSE                                                                                               */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
@@ -218,5 +219,6 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*  * YN   = Yuma Nagahara, NTTD MSE                                                                                                 */
 /*  * RO   = Ryo Oohashi, KSE                                                                                                        */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
