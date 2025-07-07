@@ -56,8 +56,8 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  U1                                      u1_sp_xspi_ivi_queue_cmsdata[MAX_CMS_QUEUE_SIZE];                     /* CMS向け */
 static  U1                                      u1_sp_xspi_ivi_queue_candata[MAX_CANDATA_QUEUE_SIZE];                 /* CANメッセージ向け */
-static  U1                                      u1_sp_xspi_ivi_queue_cancommand[MAX_CANCOMMANDDATA_QUEUE_SIZE];       /* MISCデータサイズ向け */
-static  U1                                      u1_sp_xspi_ivi_queue_cancommandsize[MAX_CANCOMMANDSIZE_QUEUE_SIZE];   /* MISCデータ向け */
+static  U1                                      u1_sp_xspi_ivi_queue_cancommand[MAX_CANCOMMANDDATA_QUEUE_SIZE];       /* CANコマンド向け */
+static  U1                                      u1_sp_xspi_ivi_queue_cancommandsize[MAX_CANCOMMANDSIZE_QUEUE_SIZE];   /* CANコマンドサイズ向け */
 static  U1                                      u1_sp_xspi_ivi_queue_miscsize[MAX_MISCSIZE_QUEUE_SIZE];               /* MISCデータサイズ向け */
 static  U1                                      u1_sp_xspi_ivi_queue_miscdata[MAX_MISCDATA_QUEUE_SIZE];               /* MISCデータ向け */
 
@@ -359,7 +359,7 @@ U1              u1_g_XspiIviQueueWriChkCanCommand(const U1 u1_a_NUM)
     u2_t_cancommandsize_num = u2_s_XspiIviQueueFreeSpace(&st_sp_XSPI_IVI_QUEUE_CANCOMMANDSIZE);
 
     /* CMSバッファに1つ以上空きがあり、かつCANデータバッファに書込みデータサイズより大きい空きがあるかチェック */
-    if ((u2_t_cancommandsize_num > (U2)0U) && (u2_t_cancommand_num > (U1)u1_a_NUM)) {
+    if ((u2_t_cancommandsize_num > (U2)0U) && (u2_t_cancommand_num > (U2)u1_a_NUM)) {
         u1_t_return = (U1)TRUE;
     }
     else {

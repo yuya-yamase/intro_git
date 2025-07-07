@@ -28,6 +28,8 @@
     
     -I${MCAL_DIR}/GPT
 
+    -I${APP_DIR}/iVCBsh/scc
+
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
 ${SS_DIR}/RunM/scc/run_m.c
@@ -37,3 +39,6 @@ ${SS_DIR}/SchdM/config/scheduler_cfg.c
 ${SS_DIR}/RprgIf/config/rprg_if_request.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
+
+${APP_DIR}/iVCBsh/scc/ivcbsh.c
+${APP_DIR}/iVCBsh/config/ivcbsh_cfg.c
