@@ -37,6 +37,7 @@
 #include "IVI_GyrCtrl_Main.h"
 #include "IVI_DspCtrl_Main.h"
 #include "IVI_DrcCtrl_Main.h"
+#include "IVI_CanCtrl_Main.h"
 
 /* ClkCtrl */
 #include "RtcIc_drv.h"
@@ -103,6 +104,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_Ivi_GyrCtrl_Main_Bon_init();
     vd_g_Ivi_DspCtrl_Main_Bon_init();
 	vd_g_Ivi_DrcCtrl_Main_Bon_init();
+    vd_g_Ivi_CanCtrl_Main_Bon_init();
 
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();
@@ -156,6 +158,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_Ivi_PictCtrl_Main_Rst_init();
     vd_g_Ivi_GyrCtrl_Main_Rst_init();
     vd_g_Ivi_DspCtrl_Main_Rst_init();
+    vd_g_Ivi_CanCtrl_Main_Rst_init();
 
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();
@@ -212,6 +215,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_Ivi_GyrCtrl_Main_Wkup_init();
     vd_g_Ivi_DspCtrl_Main_Wkup_init();
     vd_g_Ivi_DrcCtrl_Main_Wkup_init();
+    vd_g_Ivi_CanCtrl_Main_Wkup_init();
 
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();

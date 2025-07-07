@@ -56,6 +56,8 @@
 #define XSPI_IVI_CANCOMMAND_ID              (0x434E4454U)
 #define XSPI_IVI_CANCOMMAND_BUS_REQ         (0x03U)
 #define XSPI_IVI_CANCOMMAND_SEND            (0x04U)
+#define XSPI_IVI_CANCOMMAND_PARNMSEND_REQ   (0x10U)
+#define XSPI_IVI_CANCOMMAND_PARNM_STS       (0x11U)
 #define XSPI_IVI_CANCOMMAND_UTC_SEND        (0x21U)
 
 #define XSPI_IVI_CAN_COMMNDDATA_SIZE        (24U)
@@ -69,6 +71,9 @@
 #define XSPI_IVI_CLOCKUTC_DATA_SIZE         (9U)
 #define XSPI_IVI_WEEK_SUNDAY_RTC            (7U)
 #define XSPI_IVI_WEEK_SUNDAY_UTC            (0U)
+
+/*PartialNM*/
+#define XSPI_IVI_PARTIALNM_DATASIZE         (7U)
 
 #define XSPI_IVI_MASK_04                    (0x0FU)
 
@@ -227,6 +232,9 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
     U2          u2_t_cancommandsize;                    /* CAN Command データサイズ*/
     U1          u1_t_cd_size;
 
+    U1          u1_t_parnm_sts;                         /* PartialNM用ステータスデータ格納用*/
+    U1          u1_tp_parnm_data[XSPI_IVI_PARTIALNM_DATASIZE];                     /* PartialNM用PNCIDデータ格納用*/
+
     /* CAN Command Header Field 解析処理 */
     //u4_t_com_ID     = (U4)((u1_ap_SUB4_ADD[0] << XSPI_IVI_SFT_24) | (u1_ap_SUB4_ADD[1] << XSPI_IVI_SFT_16) | (u1_ap_SUB4_ADD[2] << XSPI_IVI_SFT_08) | u1_ap_SUB4_ADD[3]);
     //u2_t_com_num    = (U2)((u1_ap_SUB4_ADD[4] << XSPI_IVI_SFT_08) | u1_ap_SUB4_ADD[5]);
@@ -245,6 +253,14 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         case XSPI_IVI_CANCOMMAND_BUS_REQ:
             /* BUSステータス要求に対する応答 */
             vd_g_XspiIviCANBusSend();
+            break;
+        case XSPI_IVI_CANCOMMAND_PARNMSEND_REQ:
+            vd_g_MemcpyU1(&u1_tp_parnm_data[0], &u1_tp_CNDT[u2_t_cancommandbuf + 9U], (U4)XSPI_IVI_PARTIALNM_DATASIZE);
+            vd_g_PncReqctl_PartialNMSendReq(&u1_tp_parnm_data[0]);
+            break;
+        case XSPI_IVI_CANCOMMAND_PARNM_STS:
+            u1_t_parnm_sts = u1_tp_CNDT[u2_t_cancommandbuf + 9U];
+            vd_g_PncReqctl_PartialNMGetSts(u1_t_parnm_sts);
             break;
         default:
             break;
