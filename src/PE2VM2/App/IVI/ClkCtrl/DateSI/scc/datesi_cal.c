@@ -513,12 +513,10 @@ static U4       u4_s_DateSICalAddDay(const U4 u4_a_YYMMDD_RAW, const U4 u4_a_HHM
 /*===================================================================================================================================*/
 static void     vd_s_DateSICalWriteRtcDate(void)
 {
-    U1  u1_t_ig_is_on;
     U4  u4_t_daycnt_now;
     U4  u4_t_daycnt_write;
     U1  u1_t_esi_chk;
 
-    u1_t_ig_is_on     = u1_g_DateSI_IgOn();
     u4_t_daycnt_now   = u4_g_YymmddToDaycnt(u4_s_datesi_cal_now);
     u1_t_esi_chk      = u1_g_DateSICalCfgEsichk();
 
@@ -530,10 +528,9 @@ static void     vd_s_DateSICalWriteRtcDate(void)
         u4_t_daycnt_write = (U4)U4_MAX;
     }
 
-    if((u1_t_ig_is_on               == (U1)TRUE       ) &&
-      ((u1_t_esi_chk                == (U1)0U         ) &&
+    if((u1_t_esi_chk                == (U1)0U         ) &&
       ((u4_s_datesi_cal_daycnt_last != u4_t_daycnt_now) &&
-       (u4_t_daycnt_write           != (U4)U4_MAX     )))){
+       (u4_t_daycnt_write           != (U4)U4_MAX     ))){
         vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_019, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
         u4_s_datesi_cal_daycnt_last = u4_t_daycnt_now;
     }
