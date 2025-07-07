@@ -36,7 +36,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
+#define AVGGRPH_VM_1WORD                (1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -195,10 +195,9 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
     U1                          u1_t_next;
     const ST_AVGGRPH_CNTT *     st_tp_cfg;
     U1                          u1_t_msid;
-    U1                          u1_t_rx;
-    U2                          u2_t_mmdd;
+    U1                          u1_t_read_sts;
+    U4                          u4_t_yymmddwk;
 
-    u1_t_rx = (U1)0U;
     if(u1_a_CNTTID < (U1)AVGGRPH_NUM_CNTT){
         st_tp_cfg = &st_sp_AVGGRPH_CNTTS_CFG[u1_a_CNTTID];
         if((*(st_tp_cfg->u1p_latest) + (U1)1U) < st_tp_cfg->u1_size){
@@ -218,11 +217,12 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
             vd_g_TripcomMsSetNvmRqst(u1_t_msid);
         }
         if(st_tp_cfg->u2p_date != vdp_PTR_NA){
-            (void)Com_ReceiveSignal(ComConf_ComSignal_M_DAY, &u1_t_rx);
-            u2_t_mmdd = (((U2)u1_t_rx << YYMMDDWK_LSB_DA) & (U2)YYMMDDWK_BIT_DA);
-            (void)Com_ReceiveSignal(ComConf_ComSignal_M_MONTH, &u1_t_rx);
-            u2_t_mmdd |= (((U2)u1_t_rx << YYMMDDWK_LSB_MO) & (U2)YYMMDDWK_BIT_MO);
-            st_tp_cfg->u2p_date[u1_t_next] = u2_t_mmdd >> YYMMDDWK_LSB_DA;
+            u4_t_yymmddwk = (U4)0U;  
+            u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_015, &u4_t_yymmddwk, (U2)AVGGRPH_VM_1WORD);
+            if(u1_t_read_sts == (U1)IVDSH_NO_REA){
+                u4_t_yymmddwk = (U4)0U;
+            }
+            st_tp_cfg->u2p_date[u1_t_next] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
             u1_t_msid = st_tp_cfg->u1_msid_date + u1_t_next;
             vd_g_TripcomMsSetAccmltVal(u1_t_msid, (U4)(st_tp_cfg->u2p_date[u1_t_next]));
             if(u1_a_rwrqst == (U1)TRUE){

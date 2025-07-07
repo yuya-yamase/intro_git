@@ -56,6 +56,7 @@
 #else
 #include "veh_opemd_xmode_STUB.h"
 #endif
+#include "ivdsh.h"
 
 /* VOM */
 #include "dimmer.h"
@@ -278,9 +279,9 @@
 
 #define XSPI_VDF_AREA_SIZE                  (9U)
 
-#define XSPI_CLOCK_AM                       (1U)
-#define XSPI_CLOCK_PM                       (2U)
-#define XSPI_CLOCK_12H                      (12U)
+#define XSPI_CLOCK_UNKNOWN                  (0x1EFBEU)
+
+#define XSPI_VM_1WORD                       (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -1034,34 +1035,17 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx) {
-    U1  u1_t_rx;
-    U1  u1_t_rx_ampm;
-    U1  u1_t_fmt_is12h;
 
-    u1_t_rx = (U1)0U;
-    u1_t_rx_ampm = (U1)0U;
+    U4  u4_t_disp_tim_now;
+    U1  u1_t_read_sts;
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_SEC, &u1_t_rx);
-    u4_ap_pdu_tx[0]  = (U4)u1_t_rx & (U4)XSPI_MSK_06BIT;           /* CLOCK_SEC */
+    u4_t_disp_tim_now = (U4)0U;  
+    u1_t_read_sts     = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_013, &u4_t_disp_tim_now, (U2)XSPI_VM_1WORD);
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_MIN, &u1_t_rx);
-    u4_ap_pdu_tx[0] |= ((U4)u1_t_rx & (U4)XSPI_MSK_06BIT) << 6U;   /* CLOCK_MIN */
-
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_HOUR, &u1_t_rx);
-    u1_t_fmt_is12h = u1_g_TimeFormat12H24H();
-    if(u1_t_fmt_is12h == (U1)TIMEFMT_VAL_12H){
-        (void)Com_ReceiveSignal(ComConf_ComSignal_CL_AMPM, &u1_t_rx_ampm);
-        if((u1_t_rx_ampm == (U1)XSPI_CLOCK_PM) && (u1_t_rx != (U1)XSPI_CLOCK_12H)) {
-            u1_t_rx += (U1)XSPI_CLOCK_12H;
-        }
-        else if((u1_t_rx_ampm == (U1)XSPI_CLOCK_AM) && (u1_t_rx == (U1)XSPI_CLOCK_12H)) {
-            u1_t_rx = (U1)0U;
-        }
-        else {
-            /* Do Nothing */
-        }
+    if(u1_t_read_sts == (U1)IVDSH_NO_REA){
+        u4_t_disp_tim_now = (U4)XSPI_CLOCK_UNKNOWN;
     }
-    u4_ap_pdu_tx[0] |= ((U4)u1_t_rx & (U4)XSPI_MSK_05BIT) << 12U;   /* CLOCK_HOUR */
+    u4_ap_pdu_tx[0] = u4_t_disp_tim_now;
 }
 
 /*===================================================================================================================================*/

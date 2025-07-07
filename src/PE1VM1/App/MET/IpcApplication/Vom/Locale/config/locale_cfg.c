@@ -1,4 +1,4 @@
-/* 2.0.1 */
+/* 2.0.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define LOCALE_CFG_C_MAJOR                     (2)
 #define LOCALE_CFG_C_MINOR                     (0)
-#define LOCALE_CFG_C_PATCH                     (1)
+#define LOCALE_CFG_C_PATCH                     (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -71,6 +71,10 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0  /* BEV PreCV provisionally */
+#else
+static  U1                                      u1_s_locale_timfmt;
+#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -270,6 +274,21 @@ void  vd_g_LocaleComTxInit(void)
         u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
     }
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
+
+#if 0  /* BEV PreCV provisionally */
+#else
+    U1  u1_t_nvm_sts;
+    U2  u2_t_nvmc_frmt;
+
+    u2_t_nvmc_frmt = (U2)0U;
+    u1_t_nvm_sts   = u1_g_Nvmc_ReadStrValU2withSts((U2)NVMCID_U2_DATESI_TIMEFMT, &u2_t_nvmc_frmt);
+    if((u1_t_nvm_sts == NVMC_STATUS_COMP) && (u2_t_nvmc_frmt <= (U2)U1_MAX)){
+        u1_s_locale_timfmt = (U1)u2_t_nvmc_frmt;
+    }
+    else{
+        u1_s_locale_timfmt = (U1)TIMEFMT_NUM_VAL;
+    }
+#endif
 }
 /*===================================================================================================================================*/
 /*  void  vd_g_LocaleComTxTask(void)                                                                                                 */
@@ -486,7 +505,14 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 /*===================================================================================================================================*/
 void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 {
+#if 0  /* BEV PreCV provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_TIMEFMT, u1_a_FRMT);
+#else
+    if(u1_a_FRMT != u1_s_locale_timfmt){
+        vd_g_Nvmc_WriteU2((U2)NVMCID_U2_DATESI_TIMEFMT, (U2)u1_a_FRMT);
+        u1_s_locale_timfmt = u1_a_FRMT;
+    }
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -497,7 +523,11 @@ void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgTfm(void)
 {
+#if 0  /* BEV PreCV provisionally */
     return(u1_g_McstBf((U1)MCST_BFI_TIMEFMT));
+#else
+    return(u1_s_locale_timfmt);
+#endif
 }
 
 /*===================================================================================================================================*/
@@ -531,6 +561,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  1.5.0    01/25/2021  SF       See locale.c v1.5.0                                                                                */
 /*  2.0.0    07/09/2021  TA       See locale.c v2.0.0.                                                                               */
 /*  2.0.1    12/08/2022  TA(M)    See locale.c v2.0.1                                                                                */
+/*  2.0.2    07/04/2025  MN       See locale.c v2.0.2                                                                                */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -544,6 +575,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  025D182D-1 4/14/2022 SK       Change config for 025D182D 1A                                                                      */
 /*  296D235D 11/28/2022  TX       Add Lang Type18 and Type19                                                                         */
 /*  19PFv3-1 08/21/2023  SH       config merge                                                                                       */
+/*  BEV-1    07/04/2025  MN       BEV PreCV provisionally                                                                            */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
@@ -553,5 +585,6 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  * TX   = Xinyuan Tong, DNST                                                                                                      */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
