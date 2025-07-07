@@ -23,7 +23,7 @@
 #include "date.h"
 #include "tripcom_ms.h"
 #include "avggrph.h"
-#include "oxcan.h"
+#include "ivdsh.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */

@@ -29,7 +29,7 @@
 #define VDF_ESO_NUM_CH                           (267U)
 
 #define VDF_ESO_CH_INDSPDALT                     (  0U)
-#define VDF_ESO_CH_CNTR_DISP                     (  1U)
+#define VDF_ESO_CH_SYS_NOT_USED52                (  1U)
 #define VDF_ESO_CH_AUDIO                         (  2U)
 #define VDF_ESO_CH_RARCLCK                       (  3U)
 #define VDF_ESO_CH_D_DPTZ                        (  4U)
