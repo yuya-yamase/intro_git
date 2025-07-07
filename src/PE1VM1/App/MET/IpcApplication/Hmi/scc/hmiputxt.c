@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_C_MAJOR                         (1)
-#define HMIPUTXT_C_MINOR                         (7)
+#define HMIPUTXT_C_MINOR                         (8)
 #define HMIPUTXT_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -91,7 +91,6 @@ void    vd_g_HmiPuTxtMainTask(void)
         u4_t_mask[u4_t_loop] = (U4)U4_MAX;
     }
     vd_g_HmiPuTxtCfgVarmask(&u4_t_mask[0]);
-    vd_g_HmiPuTxtCfgThevmHidmask(&u4_t_mask[0]);
     vd_g_HmiPuTxtCfgCstmask(&u4_t_mask[0]);
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIPUTXT_NWORD ; u4_t_loop++){
@@ -135,11 +134,13 @@ void    vd_g_HmiPuTxt(U4 * u4_ap_req , const U1 u1_a_NWORD)
 /*  1.5.0    04/23/2024  TR       Deleted 2 variation mask function call for 19PFV3 CV.                                              */
 /*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1 (hmiputxt_if_cfg.c v1.5.0 -> v1.6.0)                        */
 /*  1.7.0    06/23/2025  HY       Setting for BEV System_Consideration_2 (hmiputxt_if_cfg.c v1.6.0 -> v1.7.0)                        */
+/*  1.8.0    07/07/2025  KT       Setting for BEV System_Consideration_2 (Delete for CONTDISP2)                                      */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*  * TR   = Tebs Ramos,      DTPH                                                                                                   */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
 /*  * HY   = Haruki Yagi,     KSE                                                                                                    */
+/*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -140,9 +140,6 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
     {  (U2)ALERT_CH_P_MILREQ,         (U1)ALERT_REQ_P_MILREQ_FLASH_4HZ,         (U1)9U,    u4_HMITT_HB7(HMITT_BLINK_CO_4P00HZ__50P)                    },
     {  (U2)ALERT_CH_P_MILREQ,         (U1)ALERT_REQ_P_MILREQ_FLASH_EUREADY,     (U1)9U,    u4_HMITT_HB7(HMITT_BLINK_SI_1P00HZ__50P_5TIMS_E_OFF)        },
     {  (U2)ALERT_CH_H_TEVRN,          (U1)ALERT_REQ_H_TEVRN_ON,                 (U1)10U,   u4_HMITT_HB0(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_OFRMDL,         (U1)ALERT_REQ_C_OFRMDL_MUDSAND,           (U1)10U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_OFRMDL,         (U1)ALERT_REQ_C_OFRMDL_ROCKDIRT,          (U1)10U,   u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_OFRMDL,         (U1)ALERT_REQ_C_OFRMDL_TRAILMODE,         (U1)11U,   u4_HMITT_HB0(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_DRIMOD_TT,      (U1)ALERT_REQ_C_DRIMOD_TT_SNOW,           (U1)11U,   u4_HMITT_HB1(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_H_THEVM_TT,       (U1)ALERT_REQ_H_THEVM_TT_EVM_ON,          (U1)11U,   u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_H_THEVM_TT,       (U1)ALERT_REQ_H_THEVM_TT_EVM_FLS_OFF,     (U1)11U,   u4_HMITT_HB4(HMITT_BLINK_SI_1P67HZ__50P_3TIMS_E_OFF_THEVM)  },
@@ -160,19 +157,13 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
     {  (U2)ALERT_CH_C_DRIMOD_TT,      (U1)ALERT_REQ_C_DRIMOD_TT_SPORT,          (U1)12U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_DRIMOD_TT,      (U1)ALERT_REQ_C_DRIMOD_TT_ECO,            (U1)13U,   u4_HMITT_HB2(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_DRIMOD_TT,      (U1)ALERT_REQ_C_DRIMOD_TT_CUSTOM,         (U1)13U,   u4_HMITT_HB3(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_DAC_TT,         (U1)ALERT_REQ_C_DAC_TT_GRN_ON,            (U1)13U,   u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_DAC_TT,         (U1)ALERT_REQ_C_DAC_TT_GRN_FLASH,         (U1)13U,   u4_HMITT_HB4(HMITT_BLINK_CO_2P00HZ__50P)                    },
-    {  (U2)ALERT_CH_H_QUICHA_TT,      (U1)ALERT_REQ_H_QUICHA_TT_ON,             (U1)15U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_DRIMOD_TT,      (U1)ALERT_REQ_C_DRIMOD_TT_REAR_COMF,      (U1)15U,   u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_C_DRIMOD_TT,      (U1)ALERT_REQ_C_DRIMOD_TT_RANGE,          (U1)16U,   u4_HMITT_HB0(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_D_TATLSD,         (U1)ALERT_REQ_D_TATLSD_ON,                (U1)18U,   u4_HMITT_HB5(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_D_TATLSD,         (U1)ALERT_REQ_D_TATLSD_FLASH,             (U1)18U,   u4_HMITT_HB5(HMITT_BLINK_CO_2P00HZ__50P)                    },
     {  (U2)ALERT_CH_P_COOTEM_TT_BC,   (U1)ALERT_REQ_P_COOTEM_TT_BC_PREWRN,      (U1)21U,   u4_HMITT_HB3(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_P_COOTEM_TT_BC,   (U1)ALERT_REQ_P_COOTEM_TT_BC_WRN,         (U1)21U,   u4_HMITT_HB3(HMITT_BLINK_CO_0P50HZ__50P)                    },
     {  (U2)ALERT_CH_C_DRIMOD_TT,      (U1)ALERT_REQ_C_DRIMOD_TT_TRACK,          (U1)21U,   u4_HMITT_HB5(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_P_CIRMOD_TT_CM,   (U1)ALERT_REQ_P_CIRMOD_TT_CM_ON,          (U1)21U,   u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_P_CIRMOD_TT_ALC,  (U1)ALERT_REQ_P_CIRMOD_TT_ALC_ON,         (U1)21U,   u4_HMITT_HB7(HMITT_BLINK_CO_ON_____100P)                    },
-    {  (U2)ALERT_CH_C_DAC_TT,         (U1)ALERT_REQ_C_DAC_TT_WHT_ON,            (U1)22U,   u4_HMITT_HB0(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_H_XMGRIP_TT_IND,  (U1)ALERT_REQ_H_XMGRIP_TT_IND_STNDBY,     (U1)22U,   u4_HMITT_HB1(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_H_XMGRIP_TT_IND,  (U1)ALERT_REQ_H_XMGRIP_TT_IND_OPRTNG,     (U1)22U,   u4_HMITT_HB2(HMITT_BLINK_CO_ON_____100P)                    },
     {  (U2)ALERT_CH_H_XMGRIP_TT_SPD,  (U1)ALERT_REQ_H_XMGRIP_TT_SPD_FRSTLV,     (U1)22U,   u4_HMITT_HB3(HMITT_BLINK_CO_ON_____100P_XMGRIP_SPD1LVL)     },
@@ -243,6 +234,7 @@ U2 u2_g_HmittSizeReqbit(void){
 /*  BEV-4    12/23/2024  KO       Change for BEV System_Consideration_1.(MET-H_ZMILREQ-CSTD-1-00-A-C0                       )        */
 /*  BEV-5     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-C_BRK-CSTD-2-00-A-C0)                                   */
 /*  BEV-6    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
+/*  BEV-6     7/07/2025  KT       Delete for BEV System_Consideration_2.(MET-C_DAC-CSTD-2-00-B-C1 etc.)                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
@@ -252,5 +244,6 @@ U2 u2_g_HmittSizeReqbit(void){
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

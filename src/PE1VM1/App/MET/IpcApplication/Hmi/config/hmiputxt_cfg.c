@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define HMIPUTXT_CFG_C_MAJOR                     (1)
-#define HMIPUTXT_CFG_C_MINOR                     (7)
+#define HMIPUTXT_CFG_C_MINOR                     (8)
 #define HMIPUTXT_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -25,11 +25,7 @@
 #include "oxcan_channel_STUB.h"
 #endif
 #include "alert.h"
-#if 0   /* BEV BSW provisionally */
-#include "fuelvol_tau.h"
-#endif
 #include "ambtmp.h"
-#include "oilmil.h"
 #include "odo_om_rst_if.h"
 #include "vptran_sel_typ.h"
 #include "veh_opemd.h"
@@ -44,9 +40,6 @@
 #include "rim_ctl_cfg_STUB.h"
 #endif
 #include "calibration.h"
-#if (HMIPUTXT_TIMCHG_JDG == HMIPUTXT_JDG_ON)
-#include "evschg.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -70,16 +63,10 @@
 #define HMIPUTXT_REM_MSK                    (0x1FU)
 #define HMIPUTXT_ON_BIT                     (0x00000001U)
 
-#define HMIPUTXT_FUEL_IDX                   (465U)
 #define HMIPUTXT_ICEWRN_IDX                 (427U)
-#define HMIPUTXT_OILMILRST_OK               (181U)
-#define HMIPUTXT_OILMILRST_NG               (180U)
-#define HMIPUTXT_TIMCHG_IDX                 (542U)
-#define HMIPUTXT_FCTAHUD_IDX                (1087U)
 #define HMIPUTXT_SFTALT_IDX                 (1266U)
 
 #define HMIPUTXT_TASK_TIME                  (10U)
-#define HMIPUTXT_HID_CNT_MAX                (6000U / HMIPUTXT_TASK_TIME)
 #define HMIPUTXT_REQ_INIT                   (ALERT_REQ_UNKNOWN)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -101,13 +88,7 @@
 #define HMIPUTXT_11BIT_SHIFT                (11U)
 #define HMIPUTXT_12BIT_SHIFT                (12U)
 
-#define HMIPUTXT_TIMCHG_REQ_ON              (1U)
-#define HMIPUTXT_FCTAHUD_REQ_ON             (1U)
 #define HMIPUTXT_SFTALT_REQ_ON              (0U)
-
-#define HMIPUTXT_TIMCHG_P_NCDSP_PLANINFO    (0x01U)
-#define HMIPUTXT_TIMCHG_P_NCDSP_CHGNG       (0x02U)
-#define HMIPUTXT_TIMCHG_P_NCDSP_CHGSTART    (0x03U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -136,14 +117,6 @@ typedef struct{
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4      u4_s_HmiPuTxtIdx2Mask(const U2 u2_a_PUTXTIDX , U1 * u1p_a_bufpos);
-#if (HMIPUTXT_EVM_JDG == HMIPUTXT_JDG_ON)
-static U2      u2_s_hmiputxt_evmod_cnt;
-static U1      u1_s_hmiputxt_evmod_prereq;
-#endif
-#if (HMIPUTXT_THEVM_JDG == HMIPUTXT_JDG_ON)
-static U2      u2_s_hmiputxt_thevm_cnt;
-static U1      u1_s_hmiputxt_thevm_prereq;
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -154,12 +127,7 @@ static U1      u1_s_hmiputxt_thevm_prereq;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void           vd_s_HmiPuTxtCfgIGOffInit(void);
 static void           vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask);
-static void           vd_s_HmiPutTxtCfgGpfMidMask(U4* u4_ap_varmask);
-static U1             u1_s_HmiPuTxtCfgTimchgReq(void);
-static U1             u1_s_HmiPuTxtCfgFctahudReq(void);
-static void           vd_s_HmiPuTxtCfgEvmReq(U4* u4_ap_req);
 static U1             u1_s_HmiPuTxtCfgSftaltReq(void);
-static void           vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask);
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgInit(void)                                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -168,15 +136,6 @@ static void           vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask);
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgInit(void)
 {
-#if (HMIPUTXT_EVM_JDG == HMIPUTXT_JDG_ON)
-    u2_s_hmiputxt_evmod_cnt       = (U2)U2_MAX;
-    u1_s_hmiputxt_evmod_prereq = (U1)HMIPUTXT_REQ_INIT;
-#endif
-#if (HMIPUTXT_THEVM_JDG == HMIPUTXT_JDG_ON)
-    u2_s_hmiputxt_thevm_cnt       = (U2)U2_MAX;
-    u1_s_hmiputxt_thevm_prereq = (U1)HMIPUTXT_REQ_INIT;
-#endif
-
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_HmiPuTxtCfgIGoffInit(void)                                                                                   */
@@ -186,15 +145,6 @@ void    vd_g_HmiPuTxtCfgInit(void)
 /*===================================================================================================================================*/
 static void    vd_s_HmiPuTxtCfgIGOffInit(void)
 {
-#if (HMIPUTXT_EVM_JDG == HMIPUTXT_JDG_ON)
-    u2_s_hmiputxt_evmod_cnt       = (U2)U2_MAX;
-    u1_s_hmiputxt_evmod_prereq = (U1)HMIPUTXT_REQ_INIT;
-#endif
-#if (HMIPUTXT_THEVM_JDG == HMIPUTXT_JDG_ON)
-    u2_s_hmiputxt_thevm_cnt       = (U2)U2_MAX;
-    u1_s_hmiputxt_thevm_prereq = (U1)HMIPUTXT_REQ_INIT;
-#endif
-
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)                                                                                      */
@@ -220,8 +170,6 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     U1              u1_t_exist;
     U1              u1_t_icewrn;
     U1              u1_t_oilrststs;
-    U1              u1_t_timchg;
-    U1              u1_t_fctahud;
     U1              u1_t_sftalt;
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)HMIPUTXT_NWORD; u4_t_loop++ ){
@@ -232,55 +180,11 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     u2_t_num_reqbit = u2_g_HmiputxtSizeReqbit();
     vd_g_AlertReqToBit(st_gp_HMIPUTXTREQBIT, u2_t_num_reqbit, u4_ap_req, (U1)HMIPUTXT_NWORD);
 
-    /*  LoFuel  */
-#if 0   /* BEV BSW provisionally */
-    u1_t_sts = u1_g_FuelvolTauLwAct();
-#else
-    u1_t_sts = (U1)FALSE;
-#endif
-    if(u1_t_sts == (U1)TRUE){
-        u2_t_blkpos             = (U2)HMIPUTXT_FUEL_IDX >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos             = (U2)HMIPUTXT_FUEL_IDX &  (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-
     /* IceWrn */
     u1_t_icewrn = u1_g_AmbtmpIcyraWrnAct();
     if(u1_t_icewrn == (U1)TRUE){
         u2_t_blkpos             = (U2)HMIPUTXT_ICEWRN_IDX >> HMIPUTXT_IDX_SFT;
         u2_t_bitpos             = (U2)HMIPUTXT_ICEWRN_IDX &  (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-
-    /* Oilmil */
-    u1_t_oilrststs = u1_g_OilmilGetRstSts();
-    if(u1_t_oilrststs == (U1)OILMIL_RSTSTS_COMP) {
-        u2_t_blkpos = (U2)HMIPUTXT_OILMILRST_OK >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos = (U2)HMIPUTXT_OILMILRST_OK & (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-    else if (u1_t_oilrststs == (U1)OILMIL_RSTSTS_FAIL) {
-        u2_t_blkpos = (U2)HMIPUTXT_OILMILRST_NG >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos = (U2)HMIPUTXT_OILMILRST_NG & (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-    else {
-        /* Do Nothing */
-    }
-
-    /* Timchg */
-    u1_t_timchg = u1_s_HmiPuTxtCfgTimchgReq();
-    if(u1_t_timchg == (U1)TRUE){
-        u2_t_blkpos             = (U2)HMIPUTXT_TIMCHG_IDX >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos             = (U2)HMIPUTXT_TIMCHG_IDX &  (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-
-    /* FCTA(HUD) */
-    u1_t_fctahud = u1_s_HmiPuTxtCfgFctahudReq();
-    if(u1_t_fctahud == (U1)TRUE){
-        u2_t_blkpos             = (U2)HMIPUTXT_FCTAHUD_IDX >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos             = (U2)HMIPUTXT_FCTAHUD_IDX &  (U2)HMIPUTXT_REM_MSK;
         u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
     }
 
@@ -291,9 +195,6 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u2_t_bitpos             = (U2)HMIPUTXT_SFTALT_IDX &  (U2)HMIPUTXT_REM_MSK;
         u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
     }
-
-    /* Evmod */
-    vd_s_HmiPuTxtCfgEvmReq(&u4_ap_req[0]);
 
     /* Head lamp */
     u4_t_num_tbl = sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP) / sizeof(st_sp_HMIPUTXT_REQ_W_ESOPT_HEADLAMP[0]);
@@ -371,18 +272,14 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
 {
     static const ST_HMIPUTXT_ESOPT st_sp_HMIPUTXT_ESOPT[] = {
-        {    (U2)394U,    (U2)VDF_ESO_CH_OILMNT   },
-        {    (U2)539U,    (U2)VDF_ESO_CH_OILMNT   },
         {    (U2)597U,    (U2)VDF_ESO_CH_AVSEXT   },
         {    (U2)678U,    (U2)VDF_ESO_CH_BRPADW   },
-        {    (U2)685U,    (U2)VDF_ESO_CH_AVSEXT   },
+        {    (U2)824U,    (U2)VDF_ESO_CH_AVSEXT   },
         {    (U2)1025U,   (U2)VDF_ESO_CH_PEDPRO   },
         {    (U2)1179U,   (U2)VDF_ESO_CH_DRS      }
     };
 
     static const U2 u2_s_HMIPUTXT_ID_T120 = (U2)306U;
-    static const U2 u2_s_HMIPUTXT_ID_TMNT_15 = (U2)486U;
-    static const U2 u2_s_HMIPUTXT_ID_TMNT_16 = (U2)386U;
 
     U1              u1_t_dest;
     U1              u1_t_bufpos;
@@ -390,7 +287,6 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
     U4              u4_t_loop;
     U4              u4_t_num;
     U1              u1_t_exist;
-    U1              u1_t_tmnt;
 
     /* Esopt*/  
     u4_t_num = (U4)(sizeof(st_sp_HMIPUTXT_ESOPT) / sizeof(st_sp_HMIPUTXT_ESOPT[0]));
@@ -411,24 +307,8 @@ void    vd_g_HmiPuTxtCfgVarmask(U4 * u4_ap_varmask)
         u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
     }
 
-    /* TMNT */
-    u1_t_tmnt = u1_g_VardefTmntOpt();
-    if(u1_t_tmnt == (U1)FALSE){
-        u1_t_bufpos = (U1)0U;
-        u4_t_mask   = u4_s_HmiPuTxtIdx2Mask(u2_s_HMIPUTXT_ID_TMNT_15, &u1_t_bufpos);
-        u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
-
-        u1_t_bufpos = (U1)0U;
-        u4_t_mask   = u4_s_HmiPuTxtIdx2Mask(u2_s_HMIPUTXT_ID_TMNT_16, &u1_t_bufpos);
-        u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
-    }
-
     /* SYSMAL */
     vd_s_HmiPutTxtCfgSysmalMask(&u4_ap_varmask[0]);
-    /* GPF(MID) */
-    vd_s_HmiPutTxtCfgGpfMidMask(&u4_ap_varmask[0]);
-    /* LBW */
-    vd_s_HmiPutTxtCfgLbwMask(&u4_ap_varmask[0]);
 
 }
 
@@ -503,269 +383,6 @@ static void vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask) {
 }
 
 /*===================================================================================================================================*/
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiPutTxtCfgGpfMidMask(U4 * u4_ap_varmask)                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      * u4_ap_varmask : mask array                                                                                     */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void vd_s_HmiPutTxtCfgGpfMidMask(U4* u4_ap_varmask) {
-    static const U2 u2_sp_HMIPUTXT_GPFMID[] = {
-        (U2)1112U,
-        (U2)1175U,
-        (U2)1193U,
-        (U2)1195U
-    };
-
-    U4              u4_t_num;
-    U1              u1_t_bufpos;
-    U4              u4_t_mask;
-    U4              u4_t_loop;
-    U1              u1_t_exist;
-
-    u4_t_num = (U4)(sizeof(u2_sp_HMIPUTXT_GPFMID) / sizeof(u2_sp_HMIPUTXT_GPFMID[0]));
-    u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_GPF);
-
-    if (u1_t_exist == (U1)TRUE) {
-        for (u4_t_loop = (U4)0U; u4_t_loop < u4_t_num; u4_t_loop++) {
-            u1_t_bufpos = (U1)0U;
-            u4_t_mask = u4_s_HmiPuTxtIdx2Mask(u2_sp_HMIPUTXT_GPFMID[u4_t_loop], &u1_t_bufpos);
-            u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
-        }
-    }
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      * u4_ap_req : mask array                                                                                         */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
-{
-#if (HMIPUTXT_EVM_JDG == HMIPUTXT_JDG_ON)
-    static const U2 u2_sp_HMIPUTXT_EVMOD[] = {
-        (U2)521U,
-        (U2)522U,
-        (U2)523U,
-        (U2)524U,
-        (U2)525U,
-        (U2)526U,
-        (U2)527U,
-        (U2)528U,
-        (U2)529U
-    };
-
-    U4              u4_t_num;
-    U1              u1_t_evmod_reqid;
-    U1              u1_t_igsts;
-    U2              u2_t_blkpos;
-    U2              u2_t_bitpos;
-    U4              u4_t_loop;
-
-    u1_t_igsts = u1_g_VehopemdIgnOn();
-    if(u1_t_igsts == (U1)TRUE) {
-
-        if(u2_s_hmiputxt_evmod_cnt < (U2)U2_MAX) {
-            u2_s_hmiputxt_evmod_cnt++;
-        }
-
-        u4_t_num = (U4)(sizeof(u2_sp_HMIPUTXT_EVMOD) / sizeof(u2_sp_HMIPUTXT_EVMOD[0]));
-        u1_t_evmod_reqid = u1_g_AlertReqByCh((U2)ALERT_CH_H_EVMOD_PD);
-
-        if(u1_t_evmod_reqid != (U1)HMIPUTXT_REQ_INIT){
-            if(u1_t_evmod_reqid != u1_s_hmiputxt_evmod_prereq){
-                u2_s_hmiputxt_evmod_cnt = (U2)0U;
-            }
-            u1_s_hmiputxt_evmod_prereq = u1_t_evmod_reqid;
-        }
-
-        if((u2_s_hmiputxt_evmod_cnt <= (U2)HMIPUTXT_HID_CNT_MAX) && 
-            (u1_t_evmod_reqid != (U1)ALERT_REQ_H_EVMOD_PD_OFF) &&
-            (u1_s_hmiputxt_evmod_prereq < (U1)u4_t_num)) {
-                u2_t_blkpos             = u2_sp_HMIPUTXT_EVMOD[u1_s_hmiputxt_evmod_prereq] >> HMIPUTXT_IDX_SFT;
-                u2_t_bitpos             = u2_sp_HMIPUTXT_EVMOD[u1_s_hmiputxt_evmod_prereq] &  (U2)HMIPUTXT_REM_MSK;
-                u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-        }
-        else {
-            if(u1_t_evmod_reqid == (U1)HMIPUTXT_REQ_INIT) {
-                u1_s_hmiputxt_evmod_prereq = u1_t_evmod_reqid;
-            }
-            u2_s_hmiputxt_evmod_cnt = (U2)U2_MAX;
-
-            for (u4_t_loop = (U4)0U; u4_t_loop < u4_t_num; u4_t_loop++){
-                u2_t_blkpos             = u2_sp_HMIPUTXT_EVMOD[u4_t_loop] >> HMIPUTXT_IDX_SFT;
-                u2_t_bitpos             = u2_sp_HMIPUTXT_EVMOD[u4_t_loop] &  (U2)HMIPUTXT_REM_MSK;
-                u4_ap_req[u2_t_blkpos]  &= ~((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-            }
-        }
-
-    }else{
-        vd_s_HmiPuTxtCfgIGOffInit();
-    }
-
-#else
-    /* Do Nothing */
-#endif
-
-}
-
-/*===================================================================================================================================*/
-/*  void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      * u4_ap_varmask : mask array                                                                                     */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
-{
-#if (HMIPUTXT_THEVM_JDG == HMIPUTXT_JDG_ON)
-    static const U2 u2_sp_HMIPUTXT_THEVM[] = {
-        (U2)166U,
-        (U2)202U,
-        (U2)205U,
-        (U2)206U,
-        (U2)207U
-    };
-
-    U1              u1_t_bufpos;
-    U4              u4_t_mask;
-    U4              u4_t_loop;
-    U4              u4_t_num;
-    U1              u1_t_thevm_reqid;
-    U1              u1_t_igsts;
-
-    u1_t_igsts = u1_g_VehopemdIgnOn();
-    if (u1_t_igsts == (U1)TRUE) {
-
-        if (u2_s_hmiputxt_thevm_cnt < (U2)U2_MAX) {
-            u2_s_hmiputxt_thevm_cnt++;
-        }
-
-        u4_t_num = (U4)(sizeof(u2_sp_HMIPUTXT_THEVM) / sizeof(u2_sp_HMIPUTXT_THEVM[0]));
-        u1_t_thevm_reqid = u1_g_AlertReqByCh((U2)ALERT_CH_H_THEVM_PD);
-
-        if(u1_t_thevm_reqid != (U1)HMIPUTXT_REQ_INIT){
-            if(u1_t_thevm_reqid != u1_s_hmiputxt_thevm_prereq) {
-                u2_s_hmiputxt_thevm_cnt = (U2)0U;
-            }
-        }
-
-        if((u2_s_hmiputxt_thevm_cnt > (U2)HMIPUTXT_HID_CNT_MAX)  ||
-           (u1_t_thevm_reqid == (U1)ALERT_REQ_H_THEVM_PD_OFF  )) {
-            for(u4_t_loop = (U4)0U ; u4_t_loop < u4_t_num ; u4_t_loop++){
-                u1_t_bufpos = (U1)0U;
-                u4_t_mask   = u4_s_HmiPuTxtIdx2Mask(u2_sp_HMIPUTXT_THEVM[u4_t_loop], &u1_t_bufpos);
-                u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
-            }
-            u2_s_hmiputxt_thevm_cnt = (U2)U2_MAX;
-        }
-        u1_s_hmiputxt_thevm_prereq = u1_t_thevm_reqid;
-
-    }
-    else {
-        vd_s_HmiPuTxtCfgIGOffInit();
-    }
-
-#else
-    /* Do Nothing */
-#endif
-
-}
-
-/*===================================================================================================================================*/
-/*  static U1 u1_s_HmiPuTxtCfgTimchgReq(void)                                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         Request (TRUE / FALSE)                                                                                           */
-/*===================================================================================================================================*/
-static U1 u1_s_HmiPuTxtCfgTimchgReq(void)
-{
-#if (HMIPUTXT_TIMCHG_JDG == HMIPUTXT_JDG_ON)
-    U1 u1_t_ret;             /* Requeset       */
-    U1 u1_t_igon;            /* IG-ON State    */
-    U1 u1_t_baon;            /* BA-ON State    */
-    U1 u1_t_msgsts;          /* Message State  */
-    U1 u1_t_signal;          /* Signal Varlue  */
-    U1 u1_t_timchg_pncdsp;   /* P_NCDSPVarlue  */
-
-    u1_t_igon = u1_g_VehopemdIgnOn();
-    u1_t_baon = u1_g_VehopemdBaOn();
-    u1_t_timchg_pncdsp = (U1)0U;
-
-#if 0   /* BEV BSW provisionally */
-    u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_PLG1G10_RXCH0);
-    u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
-#else
-    u1_t_msgsts = (U1)COM_NO_RX;
-#endif
-    u1_t_signal = (U1)0U;
-    if(u1_t_msgsts == (U1)0x00U){
-        (void)Com_ReceiveSignal(ComConf_ComSignal_PSDSPRQ, &u1_t_signal);
-    }
-
-    u1_t_timchg_pncdsp = (U1)u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_NCDSP);
-
-    u1_t_ret = (U1)FALSE;
-    if((u1_t_igon == (U1)FALSE) &&
-       (u1_t_baon == (U1)TRUE ))  {
-        if(u1_t_signal == (U1)HMIPUTXT_TIMCHG_REQ_ON){
-            switch(u1_t_timchg_pncdsp)
-            {
-                case (U1)HMIPUTXT_TIMCHG_P_NCDSP_PLANINFO:                        /* P_NCDSP=01b */
-                case (U1)HMIPUTXT_TIMCHG_P_NCDSP_CHGSTART:                        /* P_NCDSP=11b */
-                    u1_t_ret = (U1)TRUE;
-                    break;
-                default:
-                    /* Do Nothing */
-                    break;
-            }
-        }
-    }
-
-    return(u1_t_ret);
-#else
-    return((U1)FALSE);
-#endif
-}
-/*===================================================================================================================================*/
-/*  static U1 u1_s_HmiPuTxtCfgFctahudReq(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         Request (TRUE / FALSE)                                                                                           */
-/*===================================================================================================================================*/
-static U1 u1_s_HmiPuTxtCfgFctahudReq(void)
-{
-    U1 u1_t_ret;             /* Requeset       */
-    U1 u1_t_igon;            /* IG-ON State    */
-    U1 u1_t_msgsts;          /* Message State  */
-    U1 u1_t_ctahr_sig;       /* Signal Varlue  */
-    U1 u1_t_ctahl_sig;       /* Signal Varlue  */
-
-    u1_t_igon = u1_g_VehopemdIgnOn();
-    u1_t_ctahr_sig = (U1)0U;
-    u1_t_ctahl_sig = (U1)0U;
-
-    u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_DS11S40_RXCH0);
-    u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
-
-    if(u1_t_msgsts == (U1)0x00U){
-        (void)Com_ReceiveSignal(ComConf_ComSignal_CTAHR, &u1_t_ctahr_sig);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_CTAHL, &u1_t_ctahl_sig);
-    }
-
-    u1_t_ret = (U1)FALSE;
-    if(u1_t_igon == (U1)TRUE){
-        if((u1_t_ctahr_sig == (U1)HMIPUTXT_FCTAHUD_REQ_ON) ||
-           (u1_t_ctahl_sig == (U1)HMIPUTXT_FCTAHUD_REQ_ON)) {
-            u1_t_ret = (U1)TRUE;
-        }
-    }
-
-    return(u1_t_ret);
-
-}
-
-/*===================================================================================================================================*/
 /*  static U1 u1_s_HmiPuTxtCfgSftaltReq(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -799,36 +416,6 @@ static U1 u1_s_HmiPuTxtCfgSftaltReq(void)
 void    vd_g_HmiPuTxtCfgCstmask(U4 * u4_ap_varmask)
 {
 }
-/*===================================================================================================================================*/
-/*  static  void    vd_s_HmiPuTxtCfgLbwMask(U4 * u4_ap_req)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
-{
-    U1  u1_t_ptsys;
-    U1  u1_t_bufpos;
-    U4  u4_t_mask;
-
-    static const U2 u2_s_HMIPUTXT_ID_LBW = (U2)873U;
-
-    u1_t_ptsys = u1_g_VardefPtsRxRim();
-    if (
-           (u1_t_ptsys == (U1)VDF_PTS_RX_05_ELE_BAT) ||
-           (u1_t_ptsys == (U1)VDF_PTS_RX_1F_NRX)
-        )
-
-    {
-        /* Do nothing*/
-    }
-    else
-    {
-        u1_t_bufpos = (U1)0U; 
-        u4_t_mask = u4_s_HmiPuTxtIdx2Mask(u2_s_HMIPUTXT_ID_LBW, &u1_t_bufpos);
-        u4_ap_varmask[u1_t_bufpos] &= u4_t_mask;
-    }
-}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -845,6 +432,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  1.4.0    06/04/2021  TH       Setting for 22-24FGM CV.                                                                           */
 /*  1.6.0    10/25/2024  RS       Setting for BEV System_Consideration_1                                                             */
 /*  1.7.0    06/23/2025  HY       Setting for BEV System_Consideration_2                                                             */
+/*  1.8.0    07/07/2025  KT       Setting for BEV System_Consideration_2 (Delete for CONTDISP2)                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -860,6 +448,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  BEV-2    12/23/2024  MN       Change for BEV System_Consideration_1.(MET-B_LEDHEA-CSTD-1-01-A-C0)                                */
 /*  BEV-3     2/10/2025  HF       Change for BEV System_Consideration_1.(MET-D_SBW-CSTD-3-00-A-C0)                                   */
 /*  BEV-4    06/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
+/*  BEV-5     7/07/2025  KT       Change for BEV System_Consideration_2.(MET-M_CONTDISP2-CSTD-0010-C0)                               */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
@@ -874,5 +463,6 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*  * MN   = Mikiya Negishi,  KSE                                                                                                    */
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
