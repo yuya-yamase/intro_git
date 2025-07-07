@@ -19,8 +19,6 @@
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 #define RIMID_U1_RESERVE_BBB                     (U2_MAX)
 #define RIMID_U1_FUEL_RNW_COND                   (U2_MAX)
-#define RIMID_U1_VDF_DEST_BDB                    (U2_MAX)
-#define RIMID_U1_VDF_STRG_WHL                    (U2_MAX)
 #define RIMID_U1_VDF_PTSYS                       (U2_MAX)
 #define RIMID_U1_VDF_MM_STS                      (U2_MAX)
 #define RIMID_U1_VDFDST_DEST                     (U2_MAX)
@@ -137,7 +135,6 @@
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_RESERVE_BBB                     (U2_MAX)
-#define RIMID_U2_VDF_C_CODE                      (U2_MAX)
 #define RIMID_U2_DREC_TX                         (U2_MAX)
 #define RIMID_U2_DSP_ODO_NVMSTS                  (U2_MAX)
 #define RIMID_U2_DSP_MNSCRL_TAB                  (U2_MAX)
