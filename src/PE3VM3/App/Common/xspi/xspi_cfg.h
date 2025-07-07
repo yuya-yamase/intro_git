@@ -14,6 +14,7 @@
 /*	XSPIデバッグ用コンパイルSW 				*/
 /*------------------------------------------*/
 #define XSPI_DEBUG
+#define XSPI_CHECK_SUM_CENTRAL		/* ※暫定対応：CENTRAL用チェックサム */
 
 /*------------------------------------------*/
 /*	MCAL関連								*/
@@ -60,7 +61,7 @@
 #define XSPI_DATA_CHECK_NONE	(0)
 #define XSPI_DATA_CHECK_FCC		(1)
 #define XSPI_DATA_CHECK_SUM		(2)
-#define XSPI_DATA_CHECK			(XSPI_DATA_CHECK_FCC)		/* データチェックあり（FCC） */
+#define XSPI_DATA_CHECK			(XSPI_DATA_CHECK_SUM)		/* データチェックあり（全領域チェックサム） */
 
 /*----------------------------------------------*/
 /*	通信周期（ms）								*/

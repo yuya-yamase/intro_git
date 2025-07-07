@@ -117,11 +117,17 @@ enum {
 #define XSPI_FCC_LONG_OFFSET	(XSPI_FCC_OFFSET / 4)	/* XSPI FCC Offset(LONG) */
 
 #elif (XSPI_DATA_CHECK == XSPI_DATA_CHECK_SUM)
-#define	XSPI_PAYLOAD_NUM		(3)						/* Payload数 */
-#define	XSPI_HEADER_SIZE		(8)						/* header size */
-#define	XSPI_PAYLOAD1_SIZE		(2000)					/* payload1 size */
-#define	XSPI_PAYLOAD2_SIZE		(2000)					/* payload2 size */
-#define	XSPI_PAYLOAD3_SIZE		(1600)					/* payload3 size */
+#ifdef XSPI_CHECK_SUM_CENTRAL
+	#define	XSPI_PAYLOAD_NUM		(1)						/* Payload数 */
+	#define	XSPI_HEADER_SIZE		(8)						/* header size */
+	#define	XSPI_PAYLOAD1_SIZE		(1048)					/* payload1 size */
+#else
+	#define	XSPI_PAYLOAD_NUM		(3)						/* Payload数 */
+	#define	XSPI_HEADER_SIZE		(8)						/* header size */
+	#define	XSPI_PAYLOAD1_SIZE		(2000)					/* payload1 size */
+	#define	XSPI_PAYLOAD2_SIZE		(2000)					/* payload2 size */
+	#define	XSPI_PAYLOAD3_SIZE		(1600)					/* payload3 size */
+#endif	/* XSPI_CHECK_SUM_CENTRAL */
 
 #define XSPI_CHKSUM_OFFSET		(XSPI_FRAME_SIZE - (XSPI_PAYLOAD_NUM * 4))	/* XSPI CheckSum Offset */
 #define XSPI_CHKSUM_LONG_OFFSET	(XSPI_CHKSUM_OFFSET / 4)	/* XSPI CheckSum Offset(LONG) */
