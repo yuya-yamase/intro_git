@@ -86,6 +86,8 @@
 #define DATESI_TIM_ADJ_NON                      (0U)
 #define DATESI_TIM_ADJ_ACT                      (1U)
 
+#define DATESI_TIM_OFFSET_INIT                  (0U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -113,6 +115,7 @@ static  U2                                      u2_s_datesi_tim_diagcnt;
 static  U1                                      u1_s_datesi_tim_diagact;
 static  U1                                      u1_s_datesi_tim_diagsts;
 static  U4                                      u4_s_datesi_tim_diaginfo[DATESI_TIM_DIAG_INFO_NUM];
+static  U1                                      u1_s_datesi_tim_init_read_fin;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -137,6 +140,7 @@ static const U4                                 u4_s_DATESI_TIM_INFO_INIT[DATESI
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  void    vd_s_DateSITimSwCtlInit(void);
+static  U1      u1_s_DateSITimInitReadiVDsh(void);
 static  void    vd_s_DateSITimSwCtlRoutine(void);
 static  U1      u1_s_DateSITimSyncRoutine(U4 * u4p_a_offstd_now);
 static  U1      u1_s_DateSITimClkRangeCheck(const ST_DATESI_TIM_RX st_a_TIM_RX);
@@ -176,15 +180,13 @@ static void     vd_s_DateSITimDiagClkNewBak(const U4 u4_a_HHMMSS_NEW);
 /*===================================================================================================================================*/
 void            vd_g_DateSITimAvnBonInit(void)
 {
-    S4  s4_t_offset_time;
-
     vd_g_TimeZoneBonInit();
-    s4_t_offset_time          = s4_g_DateSITimCfgBonOfstTime();
-    s4_s_datesi_tim_ofst      = s4_s_DateSITimChkOfstTime(s4_t_offset_time);
-    u1_s_datesi_tim_sync      = (U1)FALSE;
-    u1_s_datesi_tim_prv_hr    = (U1)0U;
-    u4_s_datesi_tim_adj_clock = (U4)HHMMSS_UNKNWN;
-    u1_s_datesi_tim_adj_sts   = (U1)DATESI_TIM_ADJ_NON;
+    s4_s_datesi_tim_ofst          = (S4)DATESI_TIM_OFFSET_INIT;
+    u1_s_datesi_tim_sync          = (U1)FALSE;
+    u1_s_datesi_tim_prv_hr        = (U1)0U;
+    u4_s_datesi_tim_adj_clock     = (U4)HHMMSS_UNKNWN;
+    u1_s_datesi_tim_adj_sts       = (U1)DATESI_TIM_ADJ_NON;
+    u1_s_datesi_tim_init_read_fin = (U1)FALSE;
 
     vd_s_DateSITimSwCtlInit();
     vd_g_DateSITimCfgCanTxOffst(s4_s_datesi_tim_ofst, (U1)FALSE);
@@ -200,23 +202,16 @@ void            vd_g_DateSITimAvnBonInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimAvnWkupInit(void)
 {
-    S4  s4_t_offset_time;
-    S4  s4_t_time_zone;
-
     vd_g_TimeZoneRstWkupInit();
-    s4_t_offset_time          = s4_g_DateSITimCfgWkupOfstTime();
-    s4_t_offset_time          = s4_s_DateSITimChkOfstTime(s4_t_offset_time);
-    s4_t_time_zone            = s4_g_TimeZoneUtcDiffSec();
-    s4_t_time_zone            = s4_s_DateSITimChkTimZn(s4_t_time_zone);
-    s4_s_datesi_tim_ofst      = s4_t_offset_time + s4_t_time_zone;
-
-    u1_s_datesi_tim_sync      = (U1)FALSE;
-    u1_s_datesi_tim_prv_hr    = (U1)0U;
-    u4_s_datesi_tim_adj_clock = (U4)HHMMSS_UNKNWN;
-    u1_s_datesi_tim_adj_sts   = (U1)DATESI_TIM_ADJ_NON;
+    s4_s_datesi_tim_ofst          = (S4)DATESI_TIM_OFFSET_INIT;
+    u1_s_datesi_tim_sync          = (U1)FALSE;
+    u1_s_datesi_tim_prv_hr        = (U1)0U;
+    u4_s_datesi_tim_adj_clock     = (U4)HHMMSS_UNKNWN;
+    u1_s_datesi_tim_adj_sts       = (U1)DATESI_TIM_ADJ_NON;
+    u1_s_datesi_tim_init_read_fin = (U1)FALSE;
 
     vd_s_DateSITimSwCtlInit();
-    vd_g_DateSITimCfgCanTxOffst(s4_t_offset_time, (U1)FALSE);
+    vd_g_DateSITimCfgCanTxOffst(s4_s_datesi_tim_ofst, (U1)FALSE);
     vd_s_DateSITimDiagAdjClear();
     vd_s_DateSITimDiagItemClear();
 }
@@ -242,7 +237,15 @@ static void     vd_s_DateSITimSwCtlInit(void)
 /*===================================================================================================================================*/
 U1              u1_g_DateSITimMainAvnTask(U4 * u4p_a_offstd_now)
 {
+    U1  u1_t_read_sts;
     U1  u1_t_adj_act;
+
+    if(u1_s_datesi_tim_init_read_fin != (U1)TRUE){
+        u1_t_read_sts = u1_s_DateSITimInitReadiVDsh();
+        if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+            u1_s_datesi_tim_init_read_fin = (U1)TRUE;
+        }
+    }
 
     vd_g_TimeZoneMainTask();
     vd_s_DateSITimSwCtlRoutine();
@@ -254,6 +257,26 @@ U1              u1_g_DateSITimMainAvnTask(U4 * u4p_a_offstd_now)
     vd_g_DateSITimCfgOfstRoutine();
 
     return(u1_t_adj_act);
+}
+
+/*===================================================================================================================================*/
+/* u1              u1_s_DateSITimInitReadiVDsh(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_read_sts : TRUE/FALSE                                                                                       */
+/*===================================================================================================================================*/
+static U1       u1_s_DateSITimInitReadiVDsh()
+{
+    U1  u1_t_read_sts;
+    S4  s4_t_offset_time;
+
+    s4_t_offset_time     = (S4)DATESI_TIM_OFFSET_INIT;
+    u1_t_read_sts        = u1_g_DateSITimCfgInitOfstTime(&s4_t_offset_time);
+    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+        s4_s_datesi_tim_ofst = s4_s_DateSITimChkOfstTime(s4_t_offset_time);
+    }
+
+    return(u1_t_read_sts);
 }
 
 /*===================================================================================================================================*/
@@ -692,7 +715,6 @@ void            vd_g_DateSITimExecTmSet(void)
 static void     vd_s_DateSITimExecOffsMD(void)
 {
     vd_s_DateSITimAddOfstTime((U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_MINUS);
-    vd_g_DateSIComSetCmp();
 }
 
 /*===================================================================================================================================*/
@@ -704,7 +726,6 @@ static void     vd_s_DateSITimExecOffsMD(void)
 static void     vd_s_DateSITimExecOffsMU(void)
 {
     vd_s_DateSITimAddOfstTime((U1)DATESI_TIM_ADJ_VAL_1, (U1)DATESI_TIM_ADJ_PLUS);
-    vd_g_DateSIComSetCmp();
 }
 
 /*===================================================================================================================================*/

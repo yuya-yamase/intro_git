@@ -23,10 +23,7 @@
 #include "datesi_cal.h"
 #include "date.h"
 #include "datesi_tim.h"
-#if 0   /* BEV BSW provisionally */
-#include "nvmc_mgr.h"
-#include "calibration.h"
-#endif
+#include "ivdsh.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -35,6 +32,8 @@
 #define DATESI_CAL_OFFSET_2000DAYCUNT           (730485U)                               /* 2000/01/01                                */
 
 #define DATESI_CAL_YEAR_MAX                     (2099U)                                 /* Disp Max Year                             */
+
+#define DATESI_CAL_VM_1WORD                     (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -71,6 +70,7 @@ void            vd_g_DateSICalSyncAct(void);
 void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD);
 void            vd_g_DateSICalClockUpdate(void);
 
+void            vd_g_DateSICalCfgInit(void);
 U1              u1_g_DateSICalCfgCanRx(ST_DATESI_CAL_RX * stp_a_rx);
 void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVENT_EI);
 U1              u1_g_DateSICalCfgEsichk(void);
