@@ -50,8 +50,10 @@ void	fc_drv_AddIntegrityData( uint32* p_frame );			/* 整合性データ付加 *
 #if (XSPI_DATA_CHECK == XSPI_DATA_CHECK_SUM)
 static const uint32 tb_drv_payload_size[XSPI_PAYLOAD_NUM] = {
 	XSPI_HEADER_SIZE + XSPI_PAYLOAD1_SIZE,	/* size header + payload1 */
+#ifndef XSPI_CHECK_SUM_CENTRAL
 	XSPI_PAYLOAD2_SIZE,						/* size payload2 */
 	XSPI_PAYLOAD3_SIZE						/* size payload3 */
+#endif	/* XSPI_CHECK_SUM_CENTRAL */
 };
 #endif	/* XSPI_DATA_CHECK */
 
