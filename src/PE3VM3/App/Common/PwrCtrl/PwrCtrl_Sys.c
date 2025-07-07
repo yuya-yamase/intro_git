@@ -54,7 +54,7 @@ static void vd_s_PwrCtrlSysPwrOnV18Asil( void );
 static void vd_s_PwrCtrlSysPwrOnAudio( void );
 static void vd_s_PwrCtrlSysPwrOnV11Asil( void );
 static void vd_s_PwrCtrlSysPwrOnEizo( void );
-static void vd_s_PwrCtrlSysPwrOffflw( void );
+static void vd_s_PwrCtrlSysPwrOffFlw( void );
 
 /* デバイスON制御 */
 static U1       u1_t_Pwron_TimChk(const U4 u1_a_TIMCNT, const U4 u1_a_TIMFIN);
@@ -453,7 +453,7 @@ void vd_g_PwrCtrlSysPwrOffMainFunction( void )
         switch ( u1_s_PwrCtrl_Sys_PwrOff_Step )
         {
             case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
-                vd_s_PwrCtrlSysPwrOffflw();
+                vd_s_PwrCtrlSysPwrOffFlw();
 
                 /* STEP1が完了していれば正常起動を設定 */
                 if ( u1_s_PwrCtrl_Sys_Off_SubStep == (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT )
@@ -779,13 +779,13 @@ static void vd_s_PwrCtrlSysPwrOnEizo( void )
 }
 
 /*****************************************************************************
-  Function      : vd_s_PwrCtrlSysPwrOffflw
+  Function      : vd_s_PwrCtrlSysPwrOffFlw
   Description   : 
   param[in/out] : none
   return        : none
   Note          : none
 *****************************************************************************/
-static void vd_s_PwrCtrlSysPwrOffflw( void )
+static void vd_s_PwrCtrlSysPwrOffFlw( void )
 {
     switch (u1_s_PwrCtrl_Sys_Off_SubStep)
     {

@@ -25,7 +25,7 @@
 #include "Dio.h"
 #include "Dio_Symbols.h"
 
-#include "EthSW_Task.h"
+#include "EthSwt_SWIC.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
