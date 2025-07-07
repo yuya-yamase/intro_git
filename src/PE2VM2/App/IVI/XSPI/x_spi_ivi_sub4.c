@@ -1142,6 +1142,9 @@ void            vd_g_XspiIviCANBusGet2M(void)
             u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x03U;      /* 通常動作状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_LOCK,   (U1)TRUE);
             break;
 
         case XSPI_IVI_CANBUS_RSV_REGSTUCK:
@@ -1149,6 +1152,9 @@ void            vd_g_XspiIviCANBusGet2M(void)
             u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_REGERR, (U1)FALSE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_LOCK,   (U1)TRUE);
             break;
 
         case XSPI_IVI_CANBUS_RSV_BUSOFF:
@@ -1156,6 +1162,9 @@ void            vd_g_XspiIviCANBusGet2M(void)
             u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x01U;      /* 通信不能状態要因 バス OFF */
             u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_BUSOFF, (U1)FALSE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_LOCK,   (U1)TRUE);
             break;
 
         case XSPI_IVI_CANBUS_RSV_NOCONNECT:
@@ -1163,6 +1172,9 @@ void            vd_g_XspiIviCANBusGet2M(void)
             u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x01U;      /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
             u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_LOCK,   (U1)FALSE);
             break;
         
         default:
@@ -1207,6 +1219,9 @@ void            vd_g_XspiIviCANBusGet5M(void)
             u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x03U;      /* 通常動作状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_LOCK,   (U1)TRUE);
             break;
 
         case (U4)XSPI_IVI_CANBUS_RSV_REGSTUCK:
@@ -1214,6 +1229,9 @@ void            vd_g_XspiIviCANBusGet5M(void)
             u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_REGERR, (U1)FALSE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_LOCK,   (U1)TRUE);
             break;
 
         case (U4)XSPI_IVI_CANBUS_RSV_BUSOFF:
@@ -1221,6 +1239,9 @@ void            vd_g_XspiIviCANBusGet5M(void)
             u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x01U;      /* 通信不能状態要因 バス OFF */
             u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_BUSOFF, (U1)FALSE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_LOCK,   (U1)TRUE);
             break;
 
         case (U4)XSPI_IVI_CANBUS_RSV_NOCONNECT:
@@ -1228,6 +1249,9 @@ void            vd_g_XspiIviCANBusGet5M(void)
             u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
             u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x01U;      /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
             u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_LOCK,   (U1)FALSE);
             break;
         
         default:
