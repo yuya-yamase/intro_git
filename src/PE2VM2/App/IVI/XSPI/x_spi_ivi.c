@@ -18,6 +18,7 @@
 #include    "x_spi_ivi_private.h"
 #include    "x_spi_ivi_sub1_private.h"
 #include    "x_spi_ivi_sub2_private.h"
+#include    "x_spi_ivi_sub4_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -56,6 +57,7 @@ U4              u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_NUM];                 /* �
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void     vd_s_XspiIviRoutine(void);
 static void     vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add);
 static void     vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add);
 static void     vd_s_XspiIviTaskCnt(void);
@@ -142,6 +144,9 @@ void            vd_g_XspiIviMain2nd(void)
     u1_t_buf_rslt   = (U1)XSPI_NG;
 
     vd_g_MemfillU4(&u4_tp_tra_data[0], (U4)0U, (U4)XSPI_FRM_MAX_WORD);
+
+    /* 定期監視処理 */
+    vd_s_XspiIviRoutine();
     
     /* 次回送信データ作成処理 */
     if(u1_g_XspiIviSnd_flg == (U1)TRUE) {
@@ -170,6 +175,20 @@ void            vd_g_XspiIviMain2nd(void)
         /* 送信データ受け渡し失敗 次回タスクで同じデータを再送するためフラグ更新はしない */
     }
     vd_s_XspiIviTaskCnt();
+}
+
+/*===================================================================================================================================*/
+/*  static void     vd_s_XspiIviRoutine(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    XSPI通信送信 定期監視                                                                                             */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_XspiIviRoutine(void)
+{
+    vd_g_XspiIviCANBusGet2M();
+    vd_g_XspiIviCANBusGet5M();
+    vd_g_XspiIviCANBusEventJdg();
 }
 
 /*===================================================================================================================================*/

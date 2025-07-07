@@ -1,63 +1,67 @@
-/* 0.0.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
-/*  Copyright DENSO TECHNO Corporation                                                                                               */
+/*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Transmission and reception processing of subframe 4 in XSPI communication.                                                       */
-/*  Handled data: CAN Data/Repro/LCAN Data                                                                                           */
+/*  inter-Virtual Machine CAN Bus status SHaring                                                                                     */
+/*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_SUB1_CONTROL_C_MAJOR                   (0)
-#define XSPI_IVI_SUB1_CONTROL_C_MINOR                   (0)
-#define XSPI_IVI_SUB1_CONTROL_C_PATCH                   (0)
+#define IVCBSH_C_MAJOR                           (1)
+#define IVCBSH_C_MINOR                           (0)
+#define IVCBSH_C_PATCH                           (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include    "x_spi_ivi_sub1_private.h"
-#include    "x_spi_ivi_sub1_control.h"
-#include    "x_spi_ivi_sub1_power.h"
-#include    "x_spi_ivi_sub1_system.h"
-#include    "x_spi_ivi_sub4_private.h"
+#include "ivcbsh_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((XSPI_IVI_SUB1_CONTROL_C_MAJOR != XSPI_IVI_SUB1_CONTROL_H_MAJOR) || \
-     (XSPI_IVI_SUB1_CONTROL_C_MINOR != XSPI_IVI_SUB1_CONTROL_H_MINOR) || \
-     (XSPI_IVI_SUB1_CONTROL_C_PATCH != XSPI_IVI_SUB1_CONTROL_H_PATCH))
-#error "x_spi_ivi_sub1_control.c and x_spi_ivi_sub1.h : source and header files are inconsistent!"
+#if ((IVCBSH_C_MAJOR != IVCBSH_H_MAJOR) || \
+     (IVCBSH_C_MINOR != IVCBSH_H_MINOR) || \
+     (IVCBSH_C_PATCH != IVCBSH_H_PATCH))
+#error "ivcbsh.c and ivcbsh.h : source and header files are inconsistent!"
 #endif
-#if ((XSPI_IVI_SUB1_CONTROL_C_MAJOR != XSPI_IVI_SUB1_PRIVATE_H_MAJOR) || \
-     (XSPI_IVI_SUB1_CONTROL_C_MINOR != XSPI_IVI_SUB1_PRIVATE_H_MINOR) || \
-     (XSPI_IVI_SUB1_CONTROL_C_PATCH != XSPI_IVI_SUB1_PRIVATE_H_PATCH))
-#error "x_spi_ivi_sub1_control.c and x_spi_ivi_sub1_private.h : source and header files are inconsistent!"
+
+#if ((IVCBSH_C_MAJOR != IVCBSH_CFG_H_MAJOR) || \
+     (IVCBSH_C_MINOR != IVCBSH_CFG_H_MINOR) || \
+     (IVCBSH_C_PATCH != IVCBSH_CFG_H_PATCH))
+#error "ivcbsh.c and ivcbsh_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
+#define IVCBSH_SYCTIM                           (5U)    /* 5ms */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define    XSPI_IVI_CONTRL_ID     (0x01U)
-#define    XSPI_IVI_OS_WAKE       (0x11U)
-#define    XSPI_IVI_OS_WAKE_SEND  (0x12U)
+#define IVCBSH_TIM_NOCONNECT                    (5000U / IVCBSH_SYCTIM)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct
+{
+    U2              u2_fail;
+    U4              u4_wri_pre;
+    U4              u4_tim;         /* No Connect Timer */
+}ST_IVCBSH_STS;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static ST_IVCBSH_STS    u1_s_ivcbsh_sts[IVCBSH_SYS_NUM_NET];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size);
-void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD);
+static void     vd_s_iVCBshInitPrm(const U4 u1_a_POS);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -65,96 +69,113 @@ void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD);
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1ControlInit(void)                                                                                */
+/*  void    vd_g_iVCBshInit(void)                                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    初期化処理                                                                                                        */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1ControlInit(void)
+void            vd_g_iVCBshInit(void)
 {
+    U4      u4_t_lpcnt;
 
-}
-
-/*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1ControlMainTask(void)                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    初期化処理                                                                                                        */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_XspiIviSub1ControlMainTask(void)
-{
-    /*定期送信などのデータ作成をここで行う*/
-}
-
-/*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1ControlAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
-/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
-/*                  u2_a_data_size : Data Size                                                                                       */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_g_XspiIviSub1ControlAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)
-{
-    U1 u1_t_subtype;
-
-    u1_t_subtype = u1_ap_XSPI_ADD[0];
-
-    switch (u1_t_subtype)
-    {
-    case XSPI_IVI_OS_WAKE:
-        vd_s_XspiIviSub1_ControlOSWake(u1_ap_XSPI_ADD,u2_a_data_size);
-        break;
-    
-    default:
-        break;
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)IVCBSH_SYS_NUM_NET; u4_t_lpcnt++){
+        u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  = (U4)IVCBSH_STS_OTH;
+        vd_s_iVCBshInitPrm(u4_t_lpcnt);
     }
 }
-
 /*===================================================================================================================================*/
-/*  void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)                               */
+/*  static void     vd_s_iVCBshInitPrm(const U4 u1_a_POS)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
-/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
-/*                  u2_a_data_size : Data Size                                                                                       */
+/*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)
+static void     vd_s_iVCBshInitPrm(const U4 u1_a_POS)
 {
-    /*OS起動通知をトリガーに動くIFを登録*/
-    vd_s_XspiIviSub1_ControlOsWakeToQueue(u1_ap_XSPI_ADD[1]);
-    vd_g_XspiIviSub1_PowerState1stSend();
-    vd_g_XspiIviCANBusSend();
-    vd_g_XspiIviSub1GpsStsSend();
-    vd_g_XspiIviSub1ExtSiGSend();
-    vd_g_XspiIviSub1VehspdCntSend();
-    vd_g_XspiIviSub1TmuteSend();
-    vd_g_XspiIviSub1PowerBmoniVolSend();
+    if(u1_a_POS < (U4)IVCBSH_SYS_NUM_NET){
+        u1_s_ivcbsh_sts[u1_a_POS].u2_fail   = (U2)BSWM_CAN_CHFAILST_NONE;
+        u1_s_ivcbsh_sts[u1_a_POS].u4_tim    = (U4)U4_MAX;
+    }
 }
-
 /*===================================================================================================================================*/
-/*  void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD)                                                    */
+/*  void    vd_g_iVCBshMainTask(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
-/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
-/*                  u2_a_data_size : Data Size                                                                                       */
+/*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD)
+void            vd_g_iVCBshMainTask(void)
 {
-    U2     u2_s_MISC_CONTROL_SIZE = (U2)2U;
+    static U2   u2_st_NWORD     = (U2)1U;
 
-    U1     u1_tp_data[2];
-    U1     u1_t_id;
+    U4      u4_t_lpcnt;
+    U2      u2_t_can;
+    U1      u1_t_buserr;
+    U4      u4_t_wri;
 
-    u1_t_id = (U1)XSPI_IVI_CONTRL_ID;
-    u1_tp_data[0] = (U1)XSPI_IVI_OS_WAKE_SEND;
-    u1_tp_data[1] = u1_a_XSPI_ADD;
+    u2_t_can        = (U2)BSWM_CAN_CHFAILST_NONE;
+    u1_t_buserr     = (U1)BSWM_CAN_CTRERRST_NONE;
+    u4_t_wri        = (U4)IVCBSH_STS_OTH;
 
-    /*キューの関数呼び出し*/
-    vd_g_XspiIviSub1MISCStuckBuff(u1_t_id,u2_s_MISC_CONTROL_SIZE,u1_tp_data);
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)IVCBSH_SYS_NUM_NET; u4_t_lpcnt++){
+        /* Active-Fail Judge */
+        /* ----------------------------------------------------------------------------------------------------- */
+        /* Attention :                                                                                           */
+        /* ----------------------------------------------------------------------------------------------------- */
+        /* The return of BswM_Can_GetChFailStatus is intentionally discarded because the API returns E_NOT_OK    */
+        /* only if the 1st parameter "NetworkHandleType network" is greater than or equal to BSW_COM_CFG_CHNUM.  */
+        /* ----------------------------------------------------------------------------------------------------- */
+        (void)BswM_Can_GetChFailStatus(st_sp_IVCBSH_PRM[u4_t_lpcnt].u1_COM_CH, &u2_t_can);
+        (void)BswM_Can_GetControllerErrStatus(st_sp_IVCBSH_PRM[u4_t_lpcnt].u1_COM_CH, &u1_t_buserr);
+
+        /* Fail Timer Start */
+        if(((u2_t_can & (U2)(BSWM_CAN_CHFAILST_SNDLOCK | BSWM_CAN_CHFAILST_USER)) != (U2)0U) &&
+           (u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  == (U4)U4_MAX)){
+            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  = (U4)0U;
+        }
+        else{
+            /* do nothing */
+        }
+
+        /* Failure Status Update */
+        if(u2_t_can != (U2)BSWM_CAN_CHFAILST_NONE){
+            u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail = u2_t_can;
+        }
+
+        /* Failure Causes Judge */
+        if(u1_t_buserr == (U1)BSWM_CAN_CTRERRST_NONE){
+            /* Active */
+            u4_t_wri    = (U4)IVCBSH_STS_ACTIVE;
+            vd_s_iVCBshInitPrm(u4_t_lpcnt);
+        }
+        else if((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail & (U2)BSWM_CAN_CHFAILST_REGCHECK) != (U2)0U){
+            u4_t_wri    = (U4)IVCBSH_STS_REGSTUCK;
+        }
+        else if((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail    & (U2)BSWM_CAN_CHFAILST_BUSOFF) != (U2)0U){
+            u4_t_wri    = (U4)IVCBSH_STS_BUSOFF;
+        }
+        else if(((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail & (U2)(BSWM_CAN_CHFAILST_SNDLOCK | BSWM_CAN_CHFAILST_USER)) != (U2)0U) &&
+                u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim >= (U4)IVCBSH_TIM_NOCONNECT){
+                u4_t_wri    = (U4)IVCBSH_STS_NOCONNECT;
+                u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  = (U4)U4_MAX;
+        }
+        else{
+            /* Previous state retention */
+            u4_t_wri    = u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre;
+        }
+
+        /* inter-VM Sharing */
+        if(u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  != u4_t_wri){
+            vd_g_iVDshWribyDid(st_sp_IVCBSH_PRM[u4_t_lpcnt].u2_IVDSH_ID, &u4_t_wri, u2_st_NWORD);
+            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  = u4_t_wri;
+        }
+
+        /* Fail Timer Count */
+        if(u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim   < (U4)U4_MAX){
+            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim++;
+        }
+        else{
+            /* do nothing */
+        }
+    }
 }
 
 /*===================================================================================================================================*/
@@ -165,12 +186,8 @@ void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  0.0.0    01/20/2025  KT       New.                                                                                               */
+/*  1.0.0     7/07/2025  TN       New.                                                                                               */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
+/*  * TN   = Tetsu Naruse, DensoTechno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
