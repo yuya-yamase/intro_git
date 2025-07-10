@@ -44,16 +44,19 @@
 #include "rim_ctl.h"
 #include "run_m.h"
 #include "oxcan.h"
+#include "ivdsh.h"
 
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
 
 #include "EthSW_Task.h"
 #include "PwrCtrl_Main.h"
-#include "PwrCtrl_Sys.h" /* Žb’è */
+#include "PwrCtrl_Sys.h"        /* for VM2 PowerControl */
+#include "PwrCtrl_NoRedun.h"    /* for VM2 PowerControl */
 #include "VIS.h"
 
 #include "chipcom.h"
+#include "PwrCtlSup.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -143,6 +146,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Pre Task                                           */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_iVDshMainReaTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
@@ -153,8 +157,10 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Task                                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_PowerSup_Routine,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_PwrCtrlMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
-    {&Mcu_Dev_Pwron,                    (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_McuDev_Pwron,                (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_McuDev_Pwroff,               (U4)SCHDLR_TASKBIT___5MS    },
     {&EthSW_MediumTask,                 (U4)SCHDLR_TASKBIT___5MS    },
     {&ChipCom_Main	,                   (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VISMidCycle	,               (U4)SCHDLR_TASKBIT___5MS    },
@@ -177,7 +183,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Post Task                                          */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_oXCANMainPostTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXCANMainPosTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_iVDshMainWriTask,           (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

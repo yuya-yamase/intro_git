@@ -41,6 +41,7 @@
 #include "IVI_GyrCtrl_Main.h"
 #include "IVI_DspCtrl_Main.h"
 #include "IVI_DrcCtrl_Main.h"
+#include "IVI_CanCtrl_Main.h"
 
 /* ClkCtrl */
 #include "date_clk.h"
@@ -62,6 +63,8 @@
 #include "rim_ctl.h"
 #include "run_m.h"
 #include "oxcan.h"
+#include "oxdocan.h"
+#include "ivdsh.h"
 
 #include "gpt_drv_ost.h"
 #include "wdg_drv.h"
@@ -158,11 +161,13 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Pre Task                                           */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_iVDshMainReaTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
 
 //    {&vd_g_Nvmc_Task,                   (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXDoCANMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -215,6 +220,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_Ivi_CanCtrl_Main,            (U4)SCHDLR_TASKBIT__20MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -235,7 +241,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Post Task                                          */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_oXCANMainPostTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXCANMainPosTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_iVDshMainWriTask,           (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

@@ -20,6 +20,7 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
+#include "ivdsh.h"
 
 /* Memory               */
 #include "rim_ctl.h"
@@ -82,6 +83,7 @@
 #include "evschg.h"
 #include "batcare.h"
 #include "xspi_met.h"
+#include "datesi_met.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -157,6 +159,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareBonInit,
+        &vd_g_DateSIMETInit
     };
 
     U1    u1_t_rslt;
@@ -178,6 +181,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     vd_g_NWCMBonInit();
@@ -246,6 +250,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareRstwkInit,
+        &vd_g_DateSIMETInit
     };
 
     U1    u1_t_rslt;
@@ -267,6 +272,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 
     vd_g_oXCANRstInit();
     vd_g_VehopemdRstInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     vd_g_NWCMWkupInit();
@@ -335,6 +341,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareRstwkInit,
+        &vd_g_DateSIMETInit
     };
 
     U1    u1_t_rslt;
@@ -356,6 +363,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
 
     vd_g_oXCANWkupInit();
     vd_g_VehopemdWkupInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     vd_g_NWCMWkupInit();

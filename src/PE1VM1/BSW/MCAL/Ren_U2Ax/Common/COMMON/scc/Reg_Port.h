@@ -1698,7 +1698,9 @@ typedef struct {
 #define PORT_PWE_TARGET_AP4					((uint32)0x02000000U)	/* Write-protected: AP4 */
 #define PORT_PWE_TARGET_AP5					((uint32)0x04000000U)	/* Write-protected: AP5 */
 
-#if ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN )
+#if ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_144PIN )
+#define PORT_WRITE_ENABLE					((uint32)0x00B124F8U)	/* PORT Register Protection Disabled (144pin) */
+#elif ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A6_292PIN ) || ( MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A8_292PIN )
 #define PORT_WRITE_ENABLE					((uint32)0x0BF724F8U)	/* PORT Register Protection Disabled (292pin) */
 #elif MCAL_PKG_U2A_TARGET == MCAL_PKG_U2A16_373PIN
 #define PORT_WRITE_ENABLE					((uint32)0x0FF72DFAU)	/* PORT Register Protection Disabled (373pin) */
@@ -1727,6 +1729,15 @@ typedef struct {
 #endif
 #define PORT_PWE_TARGET_NOT					((uint32)0x00000000U)	/* Do not treat as write-protected */
 #define PORT_WRITE_DISABLE					((uint32)0x00000000U)	/* PORT register protection enabled */
+
+/*==============================================================================================*/
+/*	register BIT definition																		*/
+/*==============================================================================================*/
+/* FCLACTLm */
+#define PORT_FCLACTL_INTR					((uint8)BIT0)
+#define PORT_FCLACTL_INTF					((uint8)BIT1)
+#define PORT_FCLACTL_INTL					((uint8)BIT2)
+#define PORT_FCLACTL_BYPS					((uint8)BIT7)
 
 #endif /* PORT_REG_RH850_H */
 /*-- End Of File -------------------------------------------------------------------------------*/

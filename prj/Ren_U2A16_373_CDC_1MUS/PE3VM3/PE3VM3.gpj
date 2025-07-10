@@ -13,6 +13,7 @@ primaryTarget=v800_standalone.tgt
     :macro=SS_DIR=${ROOT_DIR}/BSW/System
     :macro=CAN_DIR=${ROOT_DIR}/BSW/Aubist
     :macro=OXCAN_DIR=${ROOT_DIR}/BSW/Communication/oXCAN
+    :macro=IVDSH_DIR=${ROOT_DIR}/BSW/Communication/iVDsh
     :macro=VEHOPE_DIR=${ROOT_DIR}/BSW/ComplexDriver/Vehopemd
     :macro=MCAL_DIR=${ROOT_DIR}/BSW/MCAL
 	:macro=MS_DIR=${ROOT_DIR}/BSW/Memory
@@ -62,10 +63,13 @@ primaryTarget=v800_standalone.tgt
     -I${VEHOPE_DIR}/scc
 
     -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/lib
     -I${OXCAN_DIR}/scc
     -I${LIB_DIR}/Ren_G4MH/scc
     -I${LIB_DIR}/Common/scc
+
+    -I${IVDSH_DIR}/config
+    -I${IVDSH_DIR}/scc
 
     -T ${MCAL_SECTION_DIR}/memory_map_VM3.ld
     -T ${MCAL_SECTION_DIR}/section.ld
@@ -106,3 +110,4 @@ ${CMN_DIR}/LIB.gpj
 ${PRJ_DIR}/App.gpj
 ${PRJ_DIR}/COM_OXCAN.gpj
 ${CMN_DIR}/VEHOPE.gpj
+${CMN_DIR}/IVDSH.gpj

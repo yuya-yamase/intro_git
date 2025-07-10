@@ -18,7 +18,7 @@
 /*==============================================================================================*/
 /*	defines / data types / structs / unions	/ macros											*/
 /*==============================================================================================*/
-#if	(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A) 
+#if	(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2A)
 /* U2A */
 /* sDMAC transfer request definition group 0 */
 #define    PIL_DMAC_GR0_INTADCJ0I0        (0)    /* ADCJ INTADCJ0I0 */
@@ -1618,7 +1618,7 @@
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dmac_EnableTrans( U1 t_u1ChannelID, U1 t_u1DmaType );
+void	Pil_Dmac_EnableTrans( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	DisableTrans															*/
@@ -1629,7 +1629,7 @@ void	Pil_Dmac_EnableTrans( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dmac_DisableTrans( U1 t_u1ChannelID, U1 t_u1DmaType );
+void	Pil_Dmac_DisableTrans( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	SetTransMode															*/
@@ -1647,7 +1647,7 @@ void	Pil_Dmac_DisableTrans( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	caveat			:	Currently, settings other than mode = 3 are not guaranteed to work, 	*/
 /*						 and settings from mode = 0 to 2 are not available						*/
 /************************************************************************************************/
-void	Pil_Dmac_SetTransMode( U1 t_u1ChannelID, U1 t_u1DmaType, U1 t_u1TransSize, U1 t_u1DmaMode, volatile  const void* t_pcvdSrcAdr, volatile  const void* t_pcvdDestAdr, U2 t_u2TransNum, U1 t_u1DmaReqNum );
+void	Pil_Dmac_SetTransMode( uint8 t_u1ChannelID, uint8 t_u1DmaType, uint8 t_u1TransSize, uint8 t_u1DmaMode, volatile  const void* t_pcvdSrcAdr, volatile  const void* t_pcvdDestAdr, uint16 t_u2TransNum, uint8 t_u1DmaReqNum );
 
 /************************************************************************************************/
 /*	Service name	:	SetTransModeTwoStepReload												*/
@@ -1666,7 +1666,7 @@ void	Pil_Dmac_SetTransMode( U1 t_u1ChannelID, U1 t_u1DmaType, U1 t_u1TransSize, 
 /*	caveat			:	Currently any setting other than mode = 3 is not certified and			*/
 /*						 the argument AddrReloadCnt is not used.								*/
 /************************************************************************************************/
-void	Pil_Dmac_SetTransModeTwoStepReload( U1 t_u1ChannelID, U1 t_u1DmaType, U1 t_u1TransSize, U1 t_u1DmaMode, volatile const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, U2 t_u2TransNum, U2 t_u2AddrReloadCnt, U1 t_u1DmaReqNum );
+void	Pil_Dmac_SetTransModeTwoStepReload( uint8 t_u1ChannelID, uint8 t_u1DmaType, uint8 t_u1TransSize, uint8 t_u1DmaMode, volatile const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, uint16 t_u2TransNum, uint16 t_u2AddrReloadCnt, uint8 t_u1DmaReqNum );
 
 /************************************************************************************************/
 /*	Function		:	SetInterrupt															*/
@@ -1677,7 +1677,7 @@ void	Pil_Dmac_SetTransModeTwoStepReload( U1 t_u1ChannelID, U1 t_u1DmaType, U1 t_
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dmac_SetInterrupt( U1 t_u1ChannelID, U1 t_u1DmaType, U1 t_u1EndIe );
+void	Pil_Dmac_SetInterrupt( uint8 t_u1ChannelID, uint8 t_u1DmaType, uint8 t_u1EndIe );
 
 /************************************************************************************************/
 /*	Service name	:	IsTransferCompleted														*/
@@ -1687,7 +1687,7 @@ void	Pil_Dmac_SetInterrupt( U1 t_u1ChannelID, U1 t_u1DmaType, U1 t_u1EndIe );
 /*	Return value	:	Trans Completed Status (TRUE / FALSE)									*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U1		Pil_Dmac_IsTransferCompleted( U1 t_u1ChannelID, U1 t_u1DmaType );
+uint8		Pil_Dmac_IsTransferCompleted( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	ClearMatchStatus														*/
@@ -1698,7 +1698,7 @@ U1		Pil_Dmac_IsTransferCompleted( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dmac_ClearMatchStatus( U1 t_u1ChannelID, U1 t_u1DmaType);
+void	Pil_Dmac_ClearMatchStatus( uint8 t_u1ChannelID, uint8 t_u1DmaType);
 
 /************************************************************************************************/
 /*	Service name	:	GetDestinationAddress													*/
@@ -1708,7 +1708,7 @@ void	Pil_Dmac_ClearMatchStatus( U1 t_u1ChannelID, U1 t_u1DmaType);
 /*	Return value	:	Destination Address - pointer to destination							*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void*	Pil_Dmac_GetDestinationAddress( U1 t_u1ChannelID, U1 t_u1DmaType );
+void*	Pil_Dmac_GetDestinationAddress( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	GetTransCount															*/
@@ -1718,7 +1718,7 @@ void*	Pil_Dmac_GetDestinationAddress( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	Return value	:	Trans Count																*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U2		Pil_Dmac_GetTransCount( U1 t_u1ChannelID, U1 t_u1DmaType );
+uint16		Pil_Dmac_GetTransCount( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	ResetTransCount															*/
@@ -1728,7 +1728,7 @@ U2		Pil_Dmac_GetTransCount( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dmac_ResetTransCount( U1 t_u1ChannelID, U1 t_u1DmaType );
+void	Pil_Dmac_ResetTransCount( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	GetTransStatus															*/
@@ -1739,7 +1739,7 @@ void	Pil_Dmac_ResetTransCount( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*							( DMA_CHSTA_BUSY_IDLE(=0) / DMA_CHSTA_BUSY_BUSY(=1) )				*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U1		Pil_Dmac_GetTransStatus( U1 t_u1ChannelID, U1 t_u1DmaType );
+uint8		Pil_Dmac_GetTransStatus( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	CheckDmaError															*/
@@ -1749,7 +1749,7 @@ U1		Pil_Dmac_GetTransStatus( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	Return value	:	Error Status(With error(!=0) / No error(==0))							*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-ZORN	Pil_Dmac_CheckDmaError( U1 t_u1ChannelID, U1 t_u1DmaType );
+sint32	Pil_Dmac_CheckDmaError( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	ClearDmaError															*/
@@ -1760,7 +1760,7 @@ ZORN	Pil_Dmac_CheckDmaError( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dmac_ClearDmaError( U1 t_u1ChannelID, U1 t_u1DmaType );
+void	Pil_Dmac_ClearDmaError( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	GetReloadStatus															*/
@@ -1771,7 +1771,7 @@ void	Pil_Dmac_ClearDmaError( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*							( DMA_CHSTA_DSE_RUNNING(=0) / DMA_CHSTA_DSE_STOP(=1) )				*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U1		Pil_Dmac_GetReloadStatus( U1 t_u1ChannelID, U1 t_u1DmaType );
+uint8		Pil_Dmac_GetReloadStatus( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
 /************************************************************************************************/
 /*	Service name	:	ClearReloadStatus														*/
@@ -1782,8 +1782,9 @@ U1		Pil_Dmac_GetReloadStatus( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dmac_ClearReloadStatus( U1 t_u1ChannelID, U1 t_u1DmaType );
+void	Pil_Dmac_ClearReloadStatus( uint8 t_u1ChannelID, uint8 t_u1DmaType );
 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 /************************************************************************************************/
 /*	Service name	:	SetTransReqGroup														*/
 /*	Reentrancy		:	Concurrency Safe for different channel numbers							*/
@@ -1793,9 +1794,11 @@ void	Pil_Dmac_ClearReloadStatus( U1 t_u1ChannelID, U1 t_u1DmaType );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dmac_SetTransReqGroup( U2 t_u2RequestGroup, U1 t_u1DmaType);
+void	Pil_Dmac_SetTransReqGroup( uint16 t_u2RequestGroup, uint8 t_u1DmaType);
+#endif
 
-#if ( DMA_CFG_REG_CHK == STD_ON ) 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
+#if ( DMA_CFG_REG_CHK == STD_ON )
 /************************************************************************************************/
 /*	Service name	:	CheckTransReqGroup														*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -1804,7 +1807,7 @@ void	Pil_Dmac_SetTransReqGroup( U2 t_u2RequestGroup, U1 t_u1DmaType);
 /*	Return value	:	Register error Status													*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U4		Pil_Dmac_CheckTransReqGroup( U2 t_u2RequestGroup, U1 t_u1DmaType);
+uint32		Pil_Dmac_CheckTransReqGroup( uint16 t_u2RequestGroup, uint8 t_u1DmaType);
 
 #if (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B)
 /************************************************************************************************/
@@ -1814,7 +1817,8 @@ U4		Pil_Dmac_CheckTransReqGroup( U2 t_u2RequestGroup, U1 t_u1DmaType);
 /*	Return value	:	Register error Status													*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U4		Pil_Dmac_CheckRCHSReg( void );
+uint32		Pil_Dmac_CheckRCHSReg( void );
+#endif
 #endif
 #endif
 
@@ -1837,8 +1841,9 @@ U4		Pil_Dmac_CheckRCHSReg( void );
 /*						 disabled setting														*/
 /*					:	The process is commented out.											*/
 /************************************************************************************************/
-/* void	Pil_Dmac_SetMasterCh( U1 t_u1ChannelID )";" */
+/* void	Pil_Dmac_SetMasterCh( uint8 t_u1ChannelID )";" */
 
+#if (( DMA_CFG_DMA0_ACCESS == STD_ON ) || ( DMA_CFG_DMA1_ACCESS == STD_ON ))
 /************************************************************************************************/
 /*	Service name	:	DisableTransAll															*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -1847,6 +1852,7 @@ U4		Pil_Dmac_CheckRCHSReg( void );
 /*	caveat			:	---																		*/
 /************************************************************************************************/
 void	Pil_Dmac_DisableTransAll( void );
+#endif
 
 #endif /* PIL_DMAC_H */
 /*-- End Of File -------------------------------------------------------*/

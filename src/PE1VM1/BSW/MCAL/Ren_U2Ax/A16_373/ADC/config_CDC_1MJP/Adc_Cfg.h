@@ -41,6 +41,7 @@
 #define ADC_CFG_PROCESS_TIMEOUT				(2000U)								/* Repeated judgment timeout value				*/
 #define ADC_CFG_REG_CHK						(STD_OFF)							/* Register Check function Use					*/
 #define ADC_CFG_REG_REFRESH					(STD_OFF)							/* Register Refresh Use							*/
+#define ADC_CFG_GLOBAL_REG_CONTROL			(STD_ON)							/* Global Register Setting Use					*/
 
 /*--------------------------------------------------------------------------------------*/
 /*  	HW Unit Setting																	*/

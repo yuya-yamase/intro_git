@@ -21,6 +21,7 @@
 /*	defines / data types / structs / unions	/ macros											*/
 /*==============================================================================================*/
 
+#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 /*==============================================================================================*/
 /* functions																					*/
 /*==============================================================================================*/
@@ -78,11 +79,11 @@ FUNC(void, PIC2_CODE) Pic2_Pil_SetHardwareTrigger(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group rerated registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_All(void);
 
@@ -97,11 +98,11 @@ FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_All(void);
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group rerated registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_Grp(
 	CONST(Adc_GroupType,	ADC_CONST)	t_cudGrp
@@ -111,5 +112,6 @@ FUNC(uint32, ADC_CODE) Pic2_Pil_Regchk_Grp(
 #define ADC_STOP_SEC_CODE_GLOBAL
 #include "Adc_MemMap.h"
 
+#endif
 #endif
 /*-- End Of File -------------------------------------------------------------------------------*/

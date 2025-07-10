@@ -56,15 +56,15 @@ BswConst BswU4 bsw_comm_ctrl_u4SysStsPerCh[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CANFD_G2M_2_BUS */
-        (BswU4)(ComMConf_SysStatusName_IGR)
+        (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+       ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    }
+   ,{    /* ComMConf_ComMChannel_CDC_VCAN_BUS */
+        (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CANFD_G5M_BUS */
         (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
-       ,(BswU4)(BSW_COMM_PWSTAT_NONE)
-    }
-   ,{    /* ComMConf_ComMChannel_VCAN_VCC_1_BUS */
-        (BswU4)(ComMConf_SysStatusName_VCAN)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
 };
@@ -76,15 +76,15 @@ BswConst BswU4 bsw_comm_ctrl_u4CHPowSupply[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CANFD_G2M_2_BUS */
-        (BswU4)(ComMConf_SysStatusName_IGR)
+        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR)
+       ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    }
+   ,{    /* ComMConf_ComMChannel_CDC_VCAN_BUS */
+        (BswU4)(BSW_COMM_PWSTAT_BAT|BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_PBA|ComMConf_SysStatusName_IGR)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
    ,{    /* ComMConf_ComMChannel_CANFD_G5M_BUS */
         (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
-       ,(BswU4)(BSW_COMM_PWSTAT_NONE)
-    }
-   ,{    /* ComMConf_ComMChannel_VCAN_VCC_1_BUS */
-        (BswU4)(ComMConf_SysStatusName_VCAN)
        ,(BswU4)(BSW_COMM_PWSTAT_NONE)
     }
 };
@@ -94,18 +94,57 @@ BswConst BswU4 bsw_comm_ctrl_u4CHPowSupply[BSW_COMM_CHNUM][BSW_COMM_SYSSTATTBLNU
 #if ( BSW_COMM_CFG_CHNUM > 0U )
 #if ( BSW_COMM_CH_PNCNUM_0 > 0U )
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_0[BSW_COMM_CH_PNAWKPW_NUM_0] = {
+    /* ComMConf_ComMPnc_Awake_16 */
+    (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_40 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_43 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_44 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
 };
 #endif /* ( BSW_COMM_CH_PNCNUM_0 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 0U ) */
 #if ( BSW_COMM_CFG_CHNUM > 1U )
 #if ( BSW_COMM_CH_PNCNUM_1 > 0U )
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_1[BSW_COMM_CH_PNAWKPW_NUM_1] = {
+    /* ComMConf_ComMPnc_Awake_16 */
+    (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_40 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_43 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_44 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
 };
 #endif /* ( BSW_COMM_CH_PNCNUM_1 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 1U ) */
 #if ( BSW_COMM_CFG_CHNUM > 2U )
 #if ( BSW_COMM_CH_PNCNUM_2 > 0U )
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_2[BSW_COMM_CH_PNAWKPW_NUM_2] = {
+    /* ComMConf_ComMPnc_Awake_16 */
+    (BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_40 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_43 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_44 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
+    /* ComMConf_ComMPnc_Awake_60 */
+   ,(BswU4)(BSW_COMM_PWSTAT_ACC|BSW_COMM_PWSTAT_IG|ComMConf_SysStatusName_IGR)
+   ,(BswU4)(BSW_COMM_PWSTAT_NONE)
 };
 #endif /* ( BSW_COMM_CH_PNCNUM_2 > 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 2U ) */
@@ -294,7 +333,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_31[BSW_COMM_CH_PNAWKPW_NUM_31] = {
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

@@ -1,4 +1,4 @@
-/* 1.1.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_CFG_C_MAJOR                      (1)
-#define RCMMUI_CFG_C_MINOR                      (1)
+#define RCMMUI_CFG_C_MINOR                      (3)
 #define RCMMUI_CFG_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -43,7 +43,6 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_RCMM_MKSFT                       (8U)
-#define RCMMUI_POWREQ_SFT                       (5U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -73,8 +72,8 @@ static  U1                                      u1_s_rcmmui_prereq;
 /*===================================================================================================================================*/
 void            vd_g_RcmmUIInitCfg(void)
 {
-#ifdef OXCAN_PDU_RX_CAN_BDB1S13_RXCH0
-    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13_RXCH0);
+#ifdef OXCAN_RXD_PDU_CAN_BDB1S13_CH0
+    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
 #else
 	u1_s_rcmmui_rxcnt  = (U1)0U;
 #endif
@@ -87,34 +86,22 @@ void            vd_g_RcmmUIInitCfg(void)
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm, U1 * u1p_a_powreq)
+void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm)
 {
     U1          u1_t_rx_cnt;
     U1          u1_t_req1;
     U1          u1_t_req2;
-    U1          u1_t_req3;
 
-#ifdef OXCAN_PDU_RX_CAN_BDB1S13_RXCH0
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13_RXCH0);
-#else
-	u1_t_rx_cnt = (U1)0U;
-#endif
+u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
+
     if (u1_t_rx_cnt != u1_s_rcmmui_rxcnt) {
         u1_t_req1 = (U1)0U;
         u1_t_req2 = (U1)0U;
-        u1_t_req3 = (U1)0U;
-		#ifdef ComConf_ComSignal_PSREQ1
+
         (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ1, &u1_t_req1);
-		#endif
-		#ifdef ComConf_ComSignal_PSREQ2
         (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ2, &u1_t_req2);
-		#endif
-		#ifdef ComConf_ComSignal_PSREQ3
-        (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ3, &u1_t_req3);
-		#endif
 
         (*u2p_a_rcmm)   = (U2)((U2)u1_t_req1 << RCMMUI_RCMM_MKSFT) | (U2)u1_t_req2;
-        (*u1p_a_powreq) = (U1)(u1_t_req3 >> RCMMUI_POWREQ_SFT);
     }
     u1_s_rcmmui_rxcnt   = u1_t_rx_cnt;
 }
@@ -159,6 +146,75 @@ void    vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT)
     }
     u1_s_rcmmui_prereq = u1_a_OPT;
 }
+
+/*===================================================================================================================================*/
+/*  U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_REQID                                                                                                       */
+/*  Return:         u1_t_chk                                                                                                         */
+/*===================================================================================================================================*/
+U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
+{
+    U1 u1_t_chk;
+    U1 u1_t_ba_sts;
+    U1 u1_t_acc_sts;
+    U1 u1_t_igr_sts;
+    U1 u1_t_igp_sts;
+
+    u1_t_chk     = (U1)TRUE;
+    u1_t_ba_sts  = u1_g_RcmmUIBaOn();
+    u1_t_acc_sts = u1_g_RcmmUIAccOn();
+    u1_t_igr_sts = u1_g_RcmmUIIgnOn();
+    u1_t_igp_sts = u1_g_RcmmUIIgnpOn();
+
+    switch(u1_a_REQID){
+        case (U1)RCMMUI_STREQ_1_1:
+        case (U1)RCMMUI_STREQ_1_3:
+        case (U1)RCMMUI_STREQ_11_1:
+        case (U1)RCMMUI_STREQ_11_3:
+        case (U1)RCMMUI_STREQ_12_1:
+        case (U1)RCMMUI_STREQ_12_3:
+            if ((u1_t_ba_sts  == (U1)TRUE) ||
+                (u1_t_acc_sts == (U1)TRUE) ||
+                (u1_t_igr_sts == (U1)TRUE) ||
+                (u1_t_igp_sts == (U1)TRUE))
+            {
+                u1_t_chk = (U1)TRUE;
+            }
+            else{
+                u1_t_chk = (U1)FALSE;
+            }        
+            break;
+        case (U1)RCMMUI_STREQ_2_1:
+        case (U1)RCMMUI_STREQ_8_1:
+        case (U1)RCMMUI_STREQ_8_2:
+        case (U1)RCMMUI_STREQ_8_3:
+            if (u1_t_igr_sts  == (U1)TRUE)
+            {
+                u1_t_chk = (U1)TRUE;
+            }
+            else{
+                u1_t_chk = (U1)FALSE;
+            }
+            break;
+        case (U1)RCMMUI_STREQ_3_1_1:
+        case (U1)RCMMUI_STREQ_3_1_2:
+            if (u1_t_igr_sts  == (U1)FALSE)
+            {
+                u1_t_chk = (U1)TRUE;
+            }
+            else{
+                u1_t_chk = (U1)FALSE;
+            }
+            break;
+        default:
+            /* Do nothing */
+            break;
+    }
+
+    return(u1_t_chk);
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -169,6 +225,8 @@ void    vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    02/18/2018  HY       New.                                                                                               */
 /*  1.1.0    10/07/2020  TH       Change config for 800B CV-R.                                                                       */
+/*  1.2.0    10/01/2025  YR       Change config for 19PFv3                                                                           */
+/*  1.3.0    07/03/2025  KO       Change config for BEV System_Consideration_2.                                                      */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
@@ -177,5 +235,7 @@ void    vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT)
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * TH   = Takahiro Hirano,  Denso Techno                                                                                          */
+/*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

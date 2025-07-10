@@ -1,4 +1,4 @@
-/* MCU-r04-307 */
+/* MCU-r04-303 */
 /************************************************************************************************/
 /*																								*/
 /*		MCU Driver																				*/
@@ -20,7 +20,7 @@
 /*==============================================================================================*/
 /* defines																						*/
 /*==============================================================================================*/
-#if ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define	MCU_CLK_RLIN_MOSC_1 			( CLOCK_CKSC_RLINC_RLINSCSID_MOSC )			/* RLIN clock source is MOSC/1 */
 #define	MCU_CLK_RLIN_HSB_1				( CLOCK_CKSC_RLINC_RLINSCSID_HSB )			/* RLIN clock source is HSB/1 */
 #define	MCU_CLK_RLIN_MOSC_4				( CLOCK_CKSC_RLINC_RLINSCSID_1_4_MOSC )		/* RLIN clock source is MOSC/4 */
@@ -32,9 +32,7 @@
 
 #define	MCU_CLK_MSPI_A_MOSC_1			( CLOCK_CKSC_MSPIC_MSPISCSID_MOSC )			/* MSPI clock source is MOSC/1 */
 #define	MCU_CLK_MSPI_A_HSB_1			( CLOCK_CKSC_MSPIC_MSPISCSID_HSB )			/* MSPI clock source is HSB/1 */
-#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) */
 
-#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define	MCU_CLK_ADCJ_LSB_1				( CLOCK_CKSC_ADCC_ADCSCSID_LSB )			/* ADCJ clock source is LSB */
 #define	MCU_CLK_ADCJ_LSB_2				( CLOCK_CKSC_ADCC_ADCSCSID_1_2_LSB )		/* ADCJ clock source is LSB/2 */
 #endif	/* MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A */
@@ -79,7 +77,7 @@
 
 #endif	/* MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B */
 
-#if ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define	MCU_CLK_ATAUJC_A_LSIOSC_1		( CLOCK_CKSC_ATAUJC_ATAUJSCSID_LSIOSC )		/* TAUJ clock source is LSIOSC/1 */
 #define	MCU_CLK_ATAUJC_A_HSIOSC_20		( CLOCK_CKSC_ATAUJC_ATAUJSCSID_1_20_HSIOSC )/* TAUJ clock source is HSIOSC/20 */
 #define	MCU_CLK_ATAUJC_A_MOSC_1			( CLOCK_CKSC_ATAUJC_ATAUJSCSID_MOSC )		/* TAUJ clock source is MOSC/1 */
@@ -95,9 +93,7 @@
 
 #define	MCU_CLK_WDTC_A_HSIOSC_20		( CLOCK_CKSC_WDTC_WDTSCSID_1_20_HSIOSC )	/* WDTBA clock source is HSIOSC/20 */
 #define	MCU_CLK_WDTC_A_HSIOSC_640		( CLOCK_CKSC_WDTC_WDTSCSID_1_640_HSIOSC )	/* WDTBA clock source is HSIOSC/640 */
-#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) */
 
-#if ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 #define	MCU_CLK_WDTBA_A_LSIOSC_1		( CLOCK_CKSC_AWDTC_AWDTSCSID_LSIOSC )		/* WDTB clock source is LSIOSC/1 */
 #define	MCU_CLK_WDTBA_A_LSIOSC_128		( CLOCK_CKSC_AWDTC_AWDTSCSID_1_128_LSIOSC )	/* WDTB clock source is LSIOSC/128 */
 
@@ -295,19 +291,17 @@ FUNC( Std_ReturnType, MCU_CODE ) Mcu_DistributePllClock( void );
 /************************************************************************************************/
 FUNC( Mcu_PllStatusType, MCU_CODE ) Mcu_GetPllStatus( void );
 
-#if( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) )
+#if	( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A )
 /************************************************************************************************/
 /* Service name		:	Switch to Chip Standby Mode												*/
 /* Reentrancy		:	Non Re-entrant															*/
 /* Parameters(in)	:	McuMode - Chip Standby Mode configuration								*/
 /* Return value		:	None																	*/
-/* Limitation		:	For R-CarS4 G4MH, set Cortex-R52 to Sleep mode and Cortex-A55 CPU core	*/
-/*					:	and cluster to OFF mode before calling this API							*/
-/*					:	DeepSTOP mode is not supported for U2B6 and U2B10						*/
+/* Limitation		:	DeepSTOP mode is not supported for U2B6 and U2B10						*/
 /*					:	Call Mcu_Init before calling this API									*/
 /************************************************************************************************/
 FUNC( void, MCU_CODE ) Mcu_SetMode( Mcu_ModeType McuMode );
-#endif	/* ( ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) || ( MCAL_SPAL_TARGET == MCAL_TARGET_RCARS4_G4MH ) ) */
+#endif	/* ( MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A ) */
 
 #if	( MCU_CFG_PERFORM_RESET == STD_ON )
 /************************************************************************************************/

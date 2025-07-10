@@ -1377,7 +1377,7 @@
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_EnableTrans( U1 t_u1ChannelID );
+void	Pil_Dts_EnableTrans( uint8 t_u1ChannelID );
 
 /************************************************************************************************/
 /*	Service name	:	DisableTrans															*/
@@ -1387,7 +1387,7 @@ void	Pil_Dts_EnableTrans( U1 t_u1ChannelID );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_DisableTrans( U1 t_u1ChannelID );
+void	Pil_Dts_DisableTrans( uint8 t_u1ChannelID );
 
 /************************************************************************************************/
 /*	Service name	:	SetTransMode															*/
@@ -1402,7 +1402,7 @@ void	Pil_Dts_DisableTrans( U1 t_u1ChannelID );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_SetTransMode( U1 t_u1ChannelID, U1 t_u1TransSize, U1 t_u1DmaMode, volatile const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, U2 t_u2TransNum );
+void	Pil_Dts_SetTransMode( uint8 t_u1ChannelID, uint8 t_u1TransSize, uint8 t_u1DmaMode, volatile const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, uint16 t_u2TransNum );
 
 /************************************************************************************************/
 /*	Service name	:	SetTransModeTwoStepReload												*/
@@ -1418,7 +1418,7 @@ void	Pil_Dts_SetTransMode( U1 t_u1ChannelID, U1 t_u1TransSize, U1 t_u1DmaMode, v
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_SetTransModeTwoStepReload( U1 t_u1ChannelID, U1 t_u1TransSize, U1 t_u1DmaMode, volatile const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, U2 t_u2TransNum, U2 t_u2AddrReloadCnt );
+void	Pil_Dts_SetTransModeTwoStepReload( uint8 t_u1ChannelID, uint8 t_u1TransSize, uint8 t_u1DmaMode, volatile const void* t_pcvdSrcAdr, volatile const void* t_pcvdDestAdr, uint16 t_u2TransNum, uint16 t_u2AddrReloadCnt );
 
 /************************************************************************************************/
 /*	Function		:	SetInterrupt															*/
@@ -1430,8 +1430,9 @@ void	Pil_Dts_SetTransModeTwoStepReload( U1 t_u1ChannelID, U1 t_u1TransSize, U1 t
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_SetInterrupt( U1 t_u1ChannelID, U1 t_u1HalfIe, U1 t_u1EndIe );
+void	Pil_Dts_SetInterrupt( uint8 t_u1ChannelID, uint8 t_u1HalfIe, uint8 t_u1EndIe );
 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 /************************************************************************************************/
 /*	Function		:	EnableIntcInterrupt														*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -1440,7 +1441,9 @@ void	Pil_Dts_SetInterrupt( U1 t_u1ChannelID, U1 t_u1HalfIe, U1 t_u1EndIe );
 /*	caveat			:	Prohibited for use other than during Init								*/
 /************************************************************************************************/
 void	Pil_Dts_EnableIntcInterrupt( void );
+#endif
 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 /************************************************************************************************/
 /*	Function		:	DisableIntcInterrupt													*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -1449,6 +1452,7 @@ void	Pil_Dts_EnableIntcInterrupt( void );
 /*	caveat			:	Use is prohibited except during DeInit.									*/
 /************************************************************************************************/
 void	Pil_Dts_DisableIntcInterrupt( void );
+#endif
 
 /************************************************************************************************/
 /*	Service name	:	IsTransferCompleted														*/
@@ -1457,7 +1461,7 @@ void	Pil_Dts_DisableIntcInterrupt( void );
 /*	Return value	:	Trans Completed Status (TRUE / FALSE)									*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U1		Pil_Dts_IsTransferCompleted( U1 t_u1ChannelID );
+uint8		Pil_Dts_IsTransferCompleted( uint8 t_u1ChannelID );
 
 /************************************************************************************************/
 /*	Service name	:	ClearMatchStatus														*/
@@ -1467,7 +1471,7 @@ U1		Pil_Dts_IsTransferCompleted( U1 t_u1ChannelID );
 /*	Return value	:	none																	*/
 /*	caveat			:	Use is prohibited except during DeInit.									*/
 /************************************************************************************************/
-void	Pil_Dts_ClearMatchStatus( U1 t_u1ChannelID );
+void	Pil_Dts_ClearMatchStatus( uint8 t_u1ChannelID );
 
 /************************************************************************************************/
 /*	Service name	:	GetDestinationAddress													*/
@@ -1476,7 +1480,7 @@ void	Pil_Dts_ClearMatchStatus( U1 t_u1ChannelID );
 /*	Return value	:	Destination Address - pointer to destination							*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void*	Pil_Dts_GetDestinationAddress( U1 t_u1ChannelID );
+void*	Pil_Dts_GetDestinationAddress( uint8 t_u1ChannelID );
 
 /************************************************************************************************/
 /*	Service name	:	GetTransCount															*/
@@ -1485,7 +1489,7 @@ void*	Pil_Dts_GetDestinationAddress( U1 t_u1ChannelID );
 /*	Return value	:	Trans Count																*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U2		Pil_Dts_GetTransCount( U1 t_u1ChannelID );
+uint16		Pil_Dts_GetTransCount( uint8 t_u1ChannelID );
 
 /************************************************************************************************/
 /*	Service name	:	ResetTransCount															*/
@@ -1494,7 +1498,7 @@ U2		Pil_Dts_GetTransCount( U1 t_u1ChannelID );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_ResetTransCount( U1 t_u1ChannelID );
+void	Pil_Dts_ResetTransCount( uint8 t_u1ChannelID );
 
 /************************************************************************************************/
 /*	Service name	:	GetTransStatus															*/
@@ -1504,7 +1508,7 @@ void	Pil_Dts_ResetTransCount( U1 t_u1ChannelID );
 /*							( DMA_TRANS_STATUS_IDLE(=0) / DMA_TRANS_STATUS_BUSY(=1) )			*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U1		Pil_Dts_GetTransStatus( U1 t_u1ChannelID );
+uint8		Pil_Dts_GetTransStatus( uint8 t_u1ChannelID );
 
 /************************************************************************************************/
 /*	Service name	:	CheckDmaError															*/
@@ -1513,7 +1517,7 @@ U1		Pil_Dts_GetTransStatus( U1 t_u1ChannelID );
 /*	Return value	:	Error Status(With error(!=0) / No error(==0))							*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-ZORN	Pil_Dts_CheckDmaError( void );
+sint32	Pil_Dts_CheckDmaError( void );
 
 /************************************************************************************************/
 /*	Service name	:	ClearDmaError															*/
@@ -1523,8 +1527,9 @@ ZORN	Pil_Dts_CheckDmaError( void );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_ClearDmaError( U1 t_u1ChannelID );
+void	Pil_Dts_ClearDmaError( uint8 t_u1ChannelID );
 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 /************************************************************************************************/
 /*	Service name	:	SetTransReqGroup														*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -1532,9 +1537,11 @@ void	Pil_Dts_ClearDmaError( U1 t_u1ChannelID );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_SetTransReqGroup( U2 t_u2RequestGroup );
+void	Pil_Dts_SetTransReqGroup( uint16 t_u2RequestGroup );
+#endif
 
-#if ( DMA_CFG_REG_CHK == STD_ON ) 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
+#if ( DMA_CFG_REG_CHK == STD_ON )
 /************************************************************************************************/
 /*	Service name	:	CheckTransReqGroup														*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -1542,7 +1549,7 @@ void	Pil_Dts_SetTransReqGroup( U2 t_u2RequestGroup );
 /*	Return value	:	Register error Status													*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U4	Pil_Dts_CheckTransReqGroup( U2 t_u2RequestGroup );
+uint32	Pil_Dts_CheckTransReqGroup( uint16 t_u2RequestGroup );
 
 /************************************************************************************************/
 /*	Service name	:	Check DTS INTC Register for interrupt enabling							*/
@@ -1551,7 +1558,8 @@ U4	Pil_Dts_CheckTransReqGroup( U2 t_u2RequestGroup );
 /*	Return value	:	Register error Status													*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-U4	Pil_Dts_CheckIntcReg( void );
+uint32	Pil_Dts_CheckIntcReg( void );
+#endif
 #endif
 
 /************************************************************************************************/
@@ -1562,8 +1570,9 @@ U4	Pil_Dts_CheckIntcReg( void );
 /*	caveat			:	Processing is commented out in the hope that DTSRAM will be  			*/
 /*					:	 initialized with a flash option byte.									*/
 /************************************************************************************************/
-/* void	Pil_Dts_ClearRam( U1 t_u1ChannelID )";" */
+/* void	Pil_Dts_ClearRam( uint8 t_u1ChannelID )";" */
 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 /************************************************************************************************/
 /*	Service name	:	SetMasterCh																*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -1575,7 +1584,9 @@ U4	Pil_Dts_CheckIntcReg( void );
 /*						 of functional safety.													*/
 /************************************************************************************************/
 void	Pil_Dts_SetMasterCh( void );
+#endif
 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 /************************************************************************************************/
 /*	Service name	:	SetPriority																*/
 /*	Reentrancy		:	Non Re-entrant															*/
@@ -1584,7 +1595,8 @@ void	Pil_Dts_SetMasterCh( void );
 /*	Return value	:	none																	*/
 /*	caveat			:	---																		*/
 /************************************************************************************************/
-void	Pil_Dts_SetPriority( U1 t_u1ChannelID, U1 t_u1PriLevel );
+void	Pil_Dts_SetPriority( uint8 t_u1ChannelID, uint8 t_u1PriLevel );
+#endif
 
 /************************************************************************************************/
 /*	Service name	:	SetInitPriorityAllCh													*/
@@ -1596,6 +1608,7 @@ void	Pil_Dts_SetPriority( U1 t_u1ChannelID, U1 t_u1PriLevel );
 /************************************************************************************************/
 /* void	Pil_Dts_SetInitPriorityAllCh( void )";" */
 
+#if ( DMA_CFG_GLOBAL_REG_CONTROL == STD_ON )
 /************************************************************************************************/
 /*	Service name	:	DisableTransAll															*/
 /*	Reentrancy		:	Concurrency Safe														*/
@@ -1604,6 +1617,7 @@ void	Pil_Dts_SetPriority( U1 t_u1ChannelID, U1 t_u1PriLevel );
 /*	caveat			:	---																		*/
 /************************************************************************************************/
 void	Pil_Dts_DisableTransAll( void );
+#endif
 
 #endif /* PIL_DTS_H */
 /*-- End Of File -------------------------------------------------------*/

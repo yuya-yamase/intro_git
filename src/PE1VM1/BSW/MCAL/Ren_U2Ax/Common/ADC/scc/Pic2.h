@@ -34,6 +34,7 @@
 /* A/D Converter Trigger Output Select								*/
 /*------------------------------------------------------------------*/
 /* U2A:PIC2ADTEN4kj(k=0-1,j=0-4),	U2B:PIC20ADTEN4nj(n=0-1,j=0-5)	*/
+/* 									U2B:PIC21ADTEN4nj(n=0-1,j=0-5)	*/
 #define PIC2_TAUX_TRG_OFF		((uint16)PIC2_ZERO)
 #define PIC2_TAUX_TRG_CH00		((uint16)PIC2_PIC2xADTEN_TRG_TAUD00)
 #define PIC2_TAUX_TRG_CH01		((uint16)PIC2_PIC2xADTEN_TRG_TAUD01)
@@ -86,29 +87,6 @@ typedef enum {
 	PIC2_EDG_DIRECT_BOTH	= PIC2_ADCXnEDGSEL_BOTH
 } Pic2_EDGSELType;
 
-/*------------------------------------------------------------------*/
-/* A/D Converter Trigger Output Select								*/
-/*------------------------------------------------------------------*/
-/* U2A:PIC2ADTEN4kj(k=2,j=0-4),				U2B:PIC20ADTEN4nj(n=2,j=0-5)		*/
-/* ENCA not supported															*/
-/* U2A:PIC2ADTEN5nj(n=0-1,j=0-4)												*/
-/* U2B:PIC20ADTEN5nj(n=0-3,j=0-5)												*/
-/* U2A:PIC2ADTEN6nj(n=0,1,j=0-4),			U2B:-								*/
-/* U2A:PIC2ADTEN7nj(n=0,1,j=0-4)												*/
-/* U2B:PIC20ADTEN7nj(n=0-3,j=0-5)												*/
-/* U2A:PIC2ADTEN8nj(n=0,1,j=0-4)												*/
-/* U2B:PIC20ADTEN8nj(n=0-3,j=0-5)												*/
-/* U2B:PIC2ADTCFGk(k=0-9)														*/
-/*   1-  80 : TOMi OUTx		(i = 0 to 4,	x = 0 to 15)	*/
-/*  81-  96 : undefeine										*/
-/*  97- 176 : ATOMi OUTx	(i = 0 to 9,	x = 0 to 7),	*/
-/* 177- 240 : TIOi OUTx		(i = 1-4,6-9,	x = 0 to 7),	*/
-/* 241- 280 : TOMi OUTx_N	(i = 0 to 4, 	x = 0 to 7),	*/
-/* 281- 336 : ATOMi OUTx_N	(i = 0 to 6, 	x = 0 to 7),	*/
-/* 337- 344 : TIOi OUTx_N	(i = 1,		 	x = 0 to 7),	*/
-/* 345- 424 : MCSi IRQx		(i = 0 to 9, 	x = 0 to 7),	*/
-/* 425- 480 : TIMi IRQx		(i = 0 to 6, 	x = 0 to 7),	*/
-
 /*--------------------------------------------------------------------------*/
 /* structs																	*/
 /*--------------------------------------------------------------------------*/
@@ -116,15 +94,16 @@ typedef enum {
 typedef struct {
 	const	uint32*				cpu4Pic20TSEL;							/* ADC Trigger Selection (PIC20)	ADC_CFG_GRP_SIZE		*/
 	const	Pic2_EDGSELType*	cpudEDGSEL;								/* ADC Trigger Edge Direction		ADC_CFG_GRP_SIZE		*/
-	const	uint16*				cpu2Pic20ADTEN40;						/* Trigger Output TAUD0 (PIC20)		PIC2_TSEL_SG_MAXSIZE		*/
-	const	uint16*				cpu2Pic20ADTEN41;						/* Trigger Output TAUD1 (PIC20)		PIC2_TSEL_SG_MAXSIZE		*/
+	const	uint16*				cpu2Pic20ADTEN40;						/* Trigger Output TAUD0  (PIC20)	PIC2_TSEL_SG_MAXSIZE	*/
+	const	uint16*				cpu2Pic20ADTEN41;						/* Trigger Output TAUD1  (PIC20)	PIC2_TSEL_SG_MAXSIZE	*/
 #if (MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
-	const	uint32*				cpu4Pic21TSEL;							/* ADC Trigger Selection (PIC21)	PIC2_TSEL_SG_MAXSIZE		*/
-	const	uint16*				cpu2Pic21ADTEN40;						/* Trigger Output TAUD0 (PIC21)		PIC2_TSEL_SG_MAXSIZE		*/
-	const	uint16*				cpu2Pic21ADTEN41;						/* Trigger Output TAUD1 (PIC21)		PIC2_TSEL_SG_MAXSIZE		*/
+	const	uint32*				cpu4Pic21TSEL;							/* ADC Trigger Selection (PIC21)	ADC_CFG_GRP_SIZE		*/
+	const	uint16*				cpu2Pic21ADTEN40;						/* Trigger Output TAUD2  (PIC21)	PIC2_TSEL_SG_MAXSIZE	*/
+	const	uint16*				cpu2Pic21ADTEN41;						/* Trigger Output TAUD3  (PIC21)	PIC2_TSEL_SG_MAXSIZE	*/
 #endif
 } Pic2_ConfigType;
 
+#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 /*==============================================================================================*/
 /* external symbols																				*/
 /*==============================================================================================*/
@@ -138,9 +117,6 @@ typedef struct {
 /*----------------------------------------------------------------------------------------------*/
 /*----------------------------------------------------------------------------------------------*/
 /* Public API 																					*/
-/*----------------------------------------------------------------------------------------------*/
-/*----------------------------------------------------------------------------------------------*/
-/* Private API (public API in ADC module) 														*/
 /*----------------------------------------------------------------------------------------------*/
 
 /************************************************************************************************/
@@ -175,7 +151,7 @@ FUNC(void, PIC2_CODE) Pic2_SetHardwareTrigger(
 #endif
 
 /*--------------------------------------------------------------------------*/
-/* only register check is  available										*/
+/* only when register check is  available									*/
 /*--------------------------------------------------------------------------*/
 #if (ADC_CFG_REG_CHK==STD_ON)
 /************************************************************************************************/
@@ -188,18 +164,18 @@ FUNC(void, PIC2_CODE) Pic2_SetHardwareTrigger(
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check all registers and refresh ones w expected value.				*/
+/* Description			: Check all registers and refresh ones with expected value.				*/
 /************************************************************************************************/
 FUNC(uint32, PIC2_CODE) Pic2_Regchk_All(void);
 
 /************************************************************************************************/
 /* Service name			: Pic2_Regchk_Grp														*/
 /* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
+/* Reentrancy			: Reentrant																*/
 /* Parameters (in)		: 																		*/
 /*		Group			: Numeric ID of requested ADC channel group.							*/
 /* Parameters (inout)	: None																	*/
@@ -207,11 +183,11 @@ FUNC(uint32, PIC2_CODE) Pic2_Regchk_All(void);
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group rerated registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, PIC2_CODE) Pic2_Regchk_Grp(
 	CONST(Pic2_GroupType,	PIC2_CONST)	t_cudGrp
@@ -221,5 +197,6 @@ FUNC(uint32, PIC2_CODE) Pic2_Regchk_Grp(
 #define ADC_STOP_SEC_CODE_GLOBAL
 #include "Adc_MemMap.h"
 
+#endif
 #endif
 /*-- End Of File -------------------------------------------------------------------------------*/

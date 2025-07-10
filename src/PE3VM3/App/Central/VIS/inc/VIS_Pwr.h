@@ -35,7 +35,6 @@
 #define VIS_PWR_TRANSREQ_DATA_RETURNVAL         ((U1)1U)        /* チップ間通信：受信状態格納領域 */
 #define VIS_PWR_TRANSREQ_DATA_LENGTH_1          ((U2)1U)        /* チップ間通信：データ長(1byte) */
 #define VIS_PWR_TRANSREQ_DATA_LENGTH_2          ((U2)2U)        /* チップ間通信：データ長(2byte) */
-#define VIS_PWR_TRANSREQ_DATA_LENGTH_18         ((U2)18U)       /* チップ間通信：データ長(18byte) */
 #define VIS_PWR_COM_IPDUST_OK                   ((U1)0U)        /* CANメッセージ受信状態：正常受信 */
 /* -------------------------------------------------------------------------- */
 void vd_g_VISPwrInit(void);

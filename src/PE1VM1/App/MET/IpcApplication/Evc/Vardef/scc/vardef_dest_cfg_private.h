@@ -1,4 +1,4 @@
-/* 2.0.0 */
+/* 2.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_DEST_CFG_H_MAJOR                 (2)
-#define VARDEF_DEST_CFG_H_MINOR                 (0)
+#define VARDEF_DEST_CFG_H_MINOR                 (1)
 #define VARDEF_DEST_CFG_H_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -21,6 +21,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "vardef.h"
+
+#include "calibration.h"
 /* #include "vardef_dest.h" */ /* vardef_dest.h is included in vardef_dbf.h" */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -36,6 +38,11 @@ typedef struct{
     U2          u2_dest_bdb_val;
     U2          u2_dest_bdb_mask;
 }ST_VDF_DST_DEST_BDB_JDGIDX;
+
+typedef struct {
+    U2          u2_t_c_code;
+    U1          u1_t_c_code_idx;
+}ST_VDF_DST_C_CODE;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
@@ -67,12 +74,17 @@ extern const U1                            u1_g_VDF_DST_HDSIDE_DEF;
 
 extern const U1                            u1_g_VDF_DST_NUM_C_CODE;
 extern const U1                            u1_g_VDF_DST_NUM_DEST_BDB;
-extern const U2                            u2_gp_VDF_DST_C_CODE[];
+extern const ST_VDF_DST_C_CODE             st_gp_VDF_DST_C_CODE[];
 extern const ST_VDF_DST_DEST_BDB_JDGIDX    st_gp_VDF_DST_DEST_BDB_JDGIDX[];
 extern const U1                            u1_g_VDF_LANG_DST_NUM_C_CODE;
 extern const U1                            u1_g_VDF_LANG_DST_NUM_DEST_BDB;
 extern const U2                            u2_gp_VDF_LANG_DST_C_CODE[];
 extern const ST_VDF_DST_DEST_BDB_JDGIDX    st_gp_VDF_LANG_DST_DEST_BDB_JDGIDX[];
+
+extern const U1                            u1_g_VDF_DST_C_CODE_KOR;
+extern const U1                            u1_g_VDF_DST_C_CODE_MEX;
+extern const U1                            u1_g_VDF_DST_C_CODE_KOR_FMVSS;
+extern const U1                            u1_g_VDF_DST_C_CODE_MEX_FMVSS;
 
 #endif /* VARDEF_DEST_CFG_H */
 

@@ -39,7 +39,7 @@
 /******************************************/
 /*   Tx Limit                             */
 /******************************************/
-#define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR0          (250U)
+#define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR0          (10U)
 #define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR1          (0U)
 #define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR2          (0U)
 #define BSW_VCAN_CFG_TX_LIMIT_VCTRLLR3          (0U)
@@ -59,7 +59,7 @@
 /******************************************/
 /*   Continuous Tx Mode for User Tx       */
 /******************************************/
-#define BSW_VCAN_CFG_USER_CONTINUE_TX0          (BSW_USE)
+#define BSW_VCAN_CFG_USER_CONTINUE_TX0          (BSW_NOUSE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX1          (BSW_NOUSE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX2          (BSW_NOUSE)
 #define BSW_VCAN_CFG_USER_CONTINUE_TX3          (BSW_NOUSE)
@@ -159,7 +159,7 @@
 #define BSW_VCAN_CFG_VHTHNUM_15                 (0U)
 
 /* First Virtual MBOX Number for VHTH */
-#define BSW_VCAN_CFG_VMBOX_TXOFFSET_0           (2U)
+#define BSW_VCAN_CFG_VMBOX_TXOFFSET_0           (4U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_1           (0U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_2           (0U)
 #define BSW_VCAN_CFG_VMBOX_TXOFFSET_3           (0U)
@@ -221,7 +221,7 @@
 /*  (Each Virtual Controller)             */
 /******************************************/
 /* Rx VHOH(VHRH) Number */
-#define BSW_VCAN_CFG_VHRHNUM_0                  (2U)
+#define BSW_VCAN_CFG_VHRHNUM_0                  (4U)
 #define BSW_VCAN_CFG_VHRHNUM_1                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_2                  (0U)
 #define BSW_VCAN_CFG_VHRHNUM_3                  (0U)
@@ -286,7 +286,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

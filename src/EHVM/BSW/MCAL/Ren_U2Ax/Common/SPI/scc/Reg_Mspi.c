@@ -1,7 +1,7 @@
 /* Reg_Mspi-r04-3000-0100-a-v00 */
 /************************************************************************************************/
 /*																								*/
-/*		MSPI register definition (for RH850U2B)													*/
+/*		MSPI register definition (for RH850U2A)													*/
 /*																								*/
 /*		Copyright : DENSO CORPORATION															*/
 /*																								*/

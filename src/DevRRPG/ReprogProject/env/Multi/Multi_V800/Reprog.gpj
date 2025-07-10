@@ -26,12 +26,13 @@
 	-l$TOP_DIR/parts/Crc/obj/Crc.rel.o
 	-l$TOP_DIR/parts/Csm/CryIf/obj/CryIf.rel.o
 	-l$TOP_DIR/parts/Csm/Csm/obj/Csm.rel.o
-	-l$TOP_DIR/parts/Csm/Crypto_83_sw/AES128/obj/micon/$MICON_NAME/Crypto_83_sw_AES128.a
-	-l$TOP_DIR/parts/Csm/Crypto_83_sw/Crypto/obj/Crypto_83_sw_Crypto.rel.o
-	-l$TOP_DIR/parts/Csm/Crypto_83_sw/RSA/obj/micon/$MICON_NAME/Crypto_83_sw_RSA.a
-	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SecStd/obj/Crypto_83_sw_SecStd.rel.o
-	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SHA256/obj/micon/$MICON_NAME/Crypto_83_sw_SHA256.a
-	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SWSHE/obj/Crypto_83_sw_SWSHE.rel.o
+#	-l$TOP_DIR/parts/Csm/Crypto_83_sw/AES128/obj/micon/$MICON_NAME/Crypto_83_sw_AES128.a
+#	-l$TOP_DIR/parts/Csm/Crypto_83_sw/Crypto/obj/Crypto_83_sw_Crypto.rel.o
+#	-l$TOP_DIR/parts/Csm/Crypto_83_sw/RSA/obj/micon/$MICON_NAME/Crypto_83_sw_RSA.a
+#	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SecStd/obj/Crypto_83_sw_SecStd.rel.o
+#	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SHA256/obj/micon/$MICON_NAME/Crypto_83_sw_SHA256.a
+#	-l$TOP_DIR/parts/Csm/Crypto_83_sw/SWSHE/obj/Crypto_83_sw_SWSHE.rel.o
+	-l$TOP_DIR/parts/Csm/Crypto_83_sw_Dummy/obj/Crypto_83_sw_Dummy.rel.o
 
 	# usr
 	-l$TOP_DIR/parts/Csm/SchM/obj/SchM_usr.rel.o

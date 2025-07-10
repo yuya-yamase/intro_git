@@ -70,7 +70,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U1 u1_g_ECOJDG_RXCNT_MAX    = (U1)OXCAN_RX_RXEV_CNT_MAX;
+const U1 u1_g_ECOJDG_RXCNT_MAX    = (U1)OXCAN_RXD_EVC_MAX;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -112,15 +112,15 @@ U1          u1_g_EcoJdgCfgScrInst(U1 * u1p_a_id, U1 * u1p_a_scr, U1 * u1p_a_cnt)
 #endif
 #endif/* >>ComConf_ComSignal_ESPOHVVL */
 
-#if defined(OXCAN_PDU_RX_CAN_EHV1S23_RXCH0)
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0);
-    u1_t_rx_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0,
-                                   (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),
+#if defined(OXCAN_RXD_PDU_CAN_EHV1S23_CH0)
+    u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_EHV1S23_CH0);
+    u1_t_rx_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S23_CH0,
+                                   (U4)OXCAN_SYS_IGP,
                                    (U2)ECOJDG_EHV1S23_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
-    u1_t_rx_cnt = (U1)OXCAN_RX_RXEV_CNT_UNK;
+    u1_t_rx_cnt = (U1)OXCAN_RXD_EVC_UNK;
     u1_t_rx_sts = (U1)COM_NO_RX;
-#endif/* >>OXCAN_PDU_RX_CAN_EHV1S23_RXCH0 */
+#endif/* >>OXCAN_RXD_PDU_CAN_EHV1S23_CH0 */
     if(u1_t_espohvid < (U1)ECOJDG_ESPOHVID_NUM){
         *u1p_a_id = u1_sp_ECOJDG_ID_CHK[u1_t_espohvid];
     }
@@ -137,11 +137,11 @@ U1          u1_g_EcoJdgCfgScrInst(U1 * u1p_a_id, U1 * u1p_a_scr, U1 * u1p_a_cnt)
 /*===================================================================================================================================*/
 U1          u1_g_EcoJdgCfgRxCnt(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_EHV1S23_RXCH0)
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1S23_RXCH0));
+#if defined(OXCAN_RXD_PDU_CAN_EHV1S23_CH0)
+    return(u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_EHV1S23_CH0));
 #else
-    return((U1)OXCAN_RX_RXEV_CNT_UNK);
-#endif/* >>OXCAN_PDU_RX_CAN_EHV1S23_RXCH0 */
+    return((U1)OXCAN_RXD_EVC_UNK);
+#endif/* >>OXCAN_RXD_PDU_CAN_EHV1S23_CH0 */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

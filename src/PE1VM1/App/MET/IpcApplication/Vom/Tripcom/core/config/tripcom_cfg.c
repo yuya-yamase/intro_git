@@ -1,4 +1,4 @@
-/* 2.3.0 */
+/* 2.4.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define TRIPCOM_CFG_C_MAJOR                     (2)
-#define TRIPCOM_CFG_C_MINOR                     (3)
+#define TRIPCOM_CFG_C_MINOR                     (4)
 #define TRIPCOM_CFG_C_PATCH                     (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -507,8 +507,8 @@ U1              u1_g_TripcomCfgGetPIEVSTS(U1 * u1p_a_pievsts)
     if((u1_t_ptsys == (U1)VDF_PTS_RX_04_HYB_PLU)
     || (u1_t_ptsys == (U1)VDF_PTS_RX_05_ELE_BAT)){
 #ifdef ComConf_ComSignal_PIEVSTS
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S94_RXCH0,
-                                       (U2)(OXCAN_RX_SYS_NRX_IGP | OXCAN_RX_SYS_TOE_IGP),
+        u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
+                                       (U4)OXCAN_SYS_IGP,
                                        (U2)TRIPCOM_EHV1S94_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         (void)Com_ReceiveSignal(ComConf_ComSignal_PIEVSTS, u1p_a_pievsts);
 #endif /* ComConf_ComSignal_PIEVSTS */
@@ -765,6 +765,7 @@ static U1       u1_s_TripcomCfgJdgEvDteSts(void)
 /*  2.2.2     07/28/2022  YI       tripcom.c v2.2.1 -> v2.2.2.                                                                       */
 /*  2.2.3     08/08/2022  YI       tripcom.c v2.2.2 -> v2.2.3.                                                                       */
 /*  2.3.0     01/10/2024  TH       tripcom.c v2.2.3 -> v2.3.0.                                                                       */
+/*  2.4.0     06/23/2025  RS       tripcom_comtx.c v2.3.0 -> v2.4.0.(Change for BEV System_Consideration_2)                          */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  Revision  Date        Author   Change Description                                                                                */
@@ -803,5 +804,6 @@ static U1       u1_s_TripcomCfgJdgEvDteSts(void)
 /*  * DR   = Dyan Reyes, DTPH                                                                                                        */
 /*  * SM   = Shota Maegawa, Denso Techno                                                                                             */
 /*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

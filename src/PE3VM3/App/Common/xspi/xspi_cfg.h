@@ -14,6 +14,7 @@
 /*	XSPIデバッグ用コンパイルSW 				*/
 /*------------------------------------------*/
 #define XSPI_DEBUG
+#define XSPI_CHECK_SUM_CENTRAL		/* ※暫定対応：CENTRAL用チェックサム */
 
 /*------------------------------------------*/
 /*	MCAL関連								*/
@@ -27,7 +28,7 @@
 #define XSPI_SCLK_MODE_CFG 		(PORT_MODE_CFG_P21_0_MSPI4SC)	/* SCLKポート設定値（MCAL/PORT） */
 #define XSPI_TXD_MODE_CFG 		(PORT_MODE_CFG_P21_1_MSPI4SI)	/* TXDポート設定値（MCAL/PORT） */
 #define XSPI_RXD_MODE_CFG 		(PORT_MODE_CFG_P21_2_MSPI4SO)	/* RXDポート設定値（MCAL/PORT） */
-#define XSPI_OST_CH				(GPT_OST_CH_03)				/* OSTMチャネル（MCAL/GPT） */
+#define XSPI_OST_CH				(GPT_OST_CH_03_SPI_TICK_CEN)	/* OSTMチャネル（MCAL/GPT） */
 
 /*------------------------------------------*/
 /*	有効フレームサイズ						*/
@@ -60,7 +61,7 @@
 #define XSPI_DATA_CHECK_NONE	(0)
 #define XSPI_DATA_CHECK_FCC		(1)
 #define XSPI_DATA_CHECK_SUM		(2)
-#define XSPI_DATA_CHECK			(XSPI_DATA_CHECK_FCC)		/* データチェックあり（FCC） */
+#define XSPI_DATA_CHECK			(XSPI_DATA_CHECK_SUM)		/* データチェックあり（全領域チェックサム） */
 
 /*----------------------------------------------*/
 /*	通信周期（ms）								*/

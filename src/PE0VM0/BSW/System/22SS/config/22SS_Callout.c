@@ -20,10 +20,13 @@
 #include "veh_opemd.h"
 #include "oxcan.h"
 #include "oxdocan.h"
+#include "ivdsh.h"
 
 /* Memory               */
 #include "rim_ctl.h"
 /* #include "nvmc_mgr.h" */
+
+#include "ivcbsh.h"
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -72,6 +75,8 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_oXCANRstInit();
     vd_g_oXDoCANBonInit();
     vd_g_VehopemdRstInit();
+    vd_g_iVDshInit();
+    vd_g_iVCBshInit();
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
@@ -110,6 +115,8 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_oXCANRstInit();
     vd_g_oXDoCANRstInit();
     vd_g_VehopemdRstInit();
+    vd_g_iVDshInit();
+    vd_g_iVCBshInit();
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */
@@ -148,6 +155,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_oXCANWkupInit();
     vd_g_oXDoCANWkupInit();
     vd_g_VehopemdWkupInit();
+    vd_g_iVDshInit();
+    vd_g_iVCBshInit();
 
     /* vv User Hook start vv */
     /* ^^ User Hook end   ^^ */

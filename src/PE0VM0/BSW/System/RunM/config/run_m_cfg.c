@@ -88,7 +88,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 {
 #if (__RUN_M_CHK_1ST__ == 1)
     static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
-        &u1_g_oXCANEcuShtdwnOk,
+        &u1_g_oXCANShtdwnOk,
         &u1_g_oXDoCANShtdwnOk
         /*& u1_g_Nvmc_IsShtdwnOk */
     };
@@ -144,17 +144,6 @@ U1      u1_g_RunMCfgWksrcIrqchk(void)
 /*===================================================================================================================================*/
 void    vd_g_RunMCfgWksrcCfgRefresh(void)
 {
-    /* ----------------------------------------------------------------------------------- */
-    /* Warning :                                                                           */
-    /* ----------------------------------------------------------------------------------- */
-    /* DO NOT CALL vd_g_IcuWkSetCh with the parameter "ICU_WK_CFGBIT_WRQ_CLR".             */
-    /* If vd_g_IcuWkSetCh is called with the parameter "ICU_WK_CFGBIT_WRQ_CLR",            */
-    /* wakeup sources could be lost and discarded.                                         */
-    /* ----------------------------------------------------------------------------------- */
-#if 0
-    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP_5,  (U1)ICU_WK_CFGBIT_ELC_HI | (U1)ICU_WK_CFGBIT_WRQ_ENA);
-    vd_g_IcuWkSetCh((U1)ICU_WK_CH_INTP_15, (U1)ICU_WK_CFGBIT_ELC_HI | (U1)ICU_WK_CFGBIT_WRQ_ENA);
-#endif
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)                                                    */

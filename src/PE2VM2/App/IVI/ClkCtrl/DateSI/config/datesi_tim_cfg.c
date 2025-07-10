@@ -20,14 +20,7 @@
 #include "datesi_cfg_private.h"
 #include "datesi_com.h"
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#include "vardef.h"
-#endif
 #include "rim_ctl.h"
-#if 0   /* BEV BSW provisionally */
-#include "locale.h"
-#include "mcst.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -63,9 +56,6 @@
 #define DATESI_TIM_SHIFT_OFFSETUP               (1U)
 #define DATESI_TIM_SHIFT_OFFSETDW               (0U)
 
-#define DATESI_TIM_OFST_RIM                     (0U)
-#define DATESI_TIM_OFST_MCST                    (1U)
-
 #define DATESI_TIM_OFST_INIT                    (0)
 
 #define DATESI_TIM_OFST_CNT_INIT                (0U)
@@ -75,12 +65,9 @@
 
 #define DATESI_TIM_HALF_HOUR                    (HHMMSS_HR_TO_SE / 2U)
 
-#if 0   /* BEV provisionally */
-#else
-#define TIMEFMT_NUM_VAL                         (2U)
-#define TIMEFMT_VAL_24H                         (0U)
-#define TIMEFMT_VAL_12H                         (1U)
-#endif
+#define DATESI_TIM_FMT_NUM_VAL                  (2U)
+#define DATESI_TIM_FMT_VAL_24H                  (0U)
+#define DATESI_TIM_FMT_VAL_12H                  (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -96,6 +83,7 @@ static  U2                                      u2_s_datesi_tim_bus_sts_old;
 static  U2                                      u2_s_datesi_tim_ofstcnt;
 static  U1                                      u1_s_datesi_tim_ofststs;
 static  S4                                      s4_s_datesi_tim_ofsttime;
+static  U1                                      u1_s_datesi_tim_fmt;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -105,19 +93,16 @@ static  void    vd_s_DateSITimCfgCxpiTx(const U1 u1_a_CXPI_TRIG, const U1 * u1_a
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const   U1                               u1_s_DATESI_TIM_OFST_DEST         = (U1)DATESI_TIM_OFST_MCST;
 const   S4                                      s4_g_DATESI_TIM_OFFSET_MIN        = ((S4)HHMMSS_HR_TO_SE * (S4)(-6));
 const   S4                                      s4_g_DATESI_TIM_OFFSET_MAX        = ((S4)HHMMSS_HR_TO_SE * (S4)6);
 const   S4                                      s4_g_DATESI_TIM_TIMZN_MIN         = (((S4)HHMMSS_HR_TO_SE * (S4)(-15)) - (S4)DATESI_TIM_HALF_HOUR);
 const   S4                                      s4_g_DATESI_TIM_TIMZN_MAX         = (((S4)HHMMSS_HR_TO_SE * (S4)16) + (S4)DATESI_TIM_HALF_HOUR);
 
-#if 0   /* BEV provisionally */
 const   U2                                      u2_gp_TIMEZONE_RIMID[TIMEZONE_NUM_RX] = {
     (U2)RIMID_U1_TIMEZONE_TZ,                   /* TIMEZONE_RX_TZ                    (0U) */
     (U2)RIMID_U1_TIMEZONE_TZ_SIGN,              /* TIMEZONE_RX_TZ_SIGN               (1U) */
     (U2)RIMID_U1_TIMEZONE_DST_S30               /* TIMEZONE_RX_DST_S30               (2U) */
 };
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -138,42 +123,8 @@ void            vd_g_DateSITimCfgBonInit(void)
     u2_s_datesi_tim_bus_sts_old  = (U2)DATESI_TIM_NM_STS_UNINIT;
     u2_s_datesi_tim_ofstcnt      = (U2)DATESI_TIM_OFST_CNT_INIT;
     u1_s_datesi_tim_ofststs      = (U1)DATESI_TIM_OFST_STS_NON;
-}
-
-/*===================================================================================================================================*/
-/* S4              s4_g_DateSITimCfgBonOfstTime(void)                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-S4              s4_g_DateSITimCfgBonOfstTime(void)
-{
-#if 0   /* BEV provisionally */
-    U2  u2_t_read;
-    S2  s2_t_ofsttime;
-#endif
-    S4  s4_t_offset_time;
-
-    s4_t_offset_time = (S4)DATESI_TIM_OFST_INIT;
-
-#if 0   /* BEV provisionally */
-    if(u1_s_DATESI_TIM_OFST_DEST == (U1)DATESI_TIM_OFST_MCST){
-        u2_t_read        = (U2)u4_g_McstBfU4((U1)MCST_BFI_OFFSET_TIME);
-        s2_t_ofsttime    = (S2)u2_t_read;
-        s4_t_offset_time = (S4)s2_t_ofsttime;
-    }
-    else{
-        /* ========================================================================================================================= */
-        /* Caution!!                                                                                                                 */
-        /* In MET-M_CLKCTL-CSTD-0-03-A-C1, the description has been changed so that the offset time is held in non-volatile memory,  */
-        /* so specify the NVMC "Read" IF as necessary.                                                                               */
-        /* ========================================================================================================================= */
-        vd_g_Rim_WriteU4((U2)RIMID_U4_DATESI_OFFSET_TIME, (U4)s4_t_offset_time);
-    }
-#endif
-    s4_s_datesi_tim_ofsttime = s4_t_offset_time;
-
-    return(s4_t_offset_time);
+    s4_s_datesi_tim_ofsttime     = (S4)DATESI_TIM_OFST_INIT;
+    u1_s_datesi_tim_fmt          = (U1)DATESI_TIM_FMT_VAL_12H;
 }
 
 /*===================================================================================================================================*/
@@ -188,48 +139,33 @@ void            vd_g_DateSITimCfgRstWkupInit(void)
     u2_s_datesi_tim_bus_sts_old  = (U2)DATESI_TIM_NM_STS_UNINIT;
     u2_s_datesi_tim_ofstcnt      = (U2)DATESI_TIM_OFST_CNT_INIT;
     u1_s_datesi_tim_ofststs      = (U1)DATESI_TIM_OFST_STS_NON;
+    s4_s_datesi_tim_ofsttime     = (S4)DATESI_TIM_OFST_INIT;
+    u1_s_datesi_tim_fmt          = (U1)DATESI_TIM_FMT_VAL_12H;
 }
 
 /*===================================================================================================================================*/
-/* S4              s4_g_DateSITimCfgWkupOfstTime(void)                                                                               */
+/* U1              U1_g_DateSITimCfgInitOfstTime(S4 * s4p_a_offset_time)                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-S4              s4_g_DateSITimCfgWkupOfstTime(void)
+U1              u1_g_DateSITimCfgInitOfstTime(S4 * s4p_a_offset_time)
 {
-#if 0   /* BEV provisionally */
-    U1  u1_t_rim_sts;
-    U4  u4_t_rim_data;
-    U2  u2_t_read;
-    S2  s2_t_ofsttime;
-#endif
-    S4  s4_t_offset_time;
+    U4  u4_t_read;
+    U2  u2_t_ofsttime;
+    S2  s2_t_offset_time;
+    U1  u1_t_read_sts;
 
-    s4_t_offset_time = (S4)DATESI_TIM_OFST_INIT;
-
-#if 0   /* BEV provisionally */
-    if(u1_s_DATESI_TIM_OFST_DEST == (U1)DATESI_TIM_OFST_MCST){
-        u2_t_read        = (U2)u4_g_McstBfU4((U1)MCST_BFI_OFFSET_TIME);
-        s2_t_ofsttime    = (S2)u2_t_read;
-        s4_t_offset_time = (S4)s2_t_ofsttime;
+    u4_t_read        = (U4)0U;
+    u1_t_read_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_004, &u4_t_read, (U2)DATESI_TIME_VM_1WORD);
+    if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_read <= (U4)U2_MAX)){
+        u2_t_ofsttime            = (U2)u4_t_read;
+        s2_t_offset_time         = (S2)u2_t_ofsttime;
+        (*s4p_a_offset_time)     = (S4)s2_t_offset_time;
+        s4_s_datesi_tim_ofsttime = (S4)s2_t_offset_time;
     }
-    else{
-        /* ========================================================================================================================= */
-        /* Caution!!                                                                                                                 */
-        /* In MET-M_CLKCTL-CSTD-0-03-A-C1, the description has been changed so that the offset time is held in non-volatile memory,  */
-        /* so specify the the NVMC "Read" IF as necessary.                                                                           */
-        /* ========================================================================================================================= */
-        u4_t_rim_data = (U4)0U;
-        u1_t_rim_sts  = u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_DATESI_OFFSET_TIME, &u4_t_rim_data);
-        if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-            s4_t_offset_time = (S4)u4_t_rim_data;
-        }
-    }
-#endif
-    s4_s_datesi_tim_ofsttime = s4_t_offset_time;
 
-    return(s4_t_offset_time);
+    return(u1_t_read_sts);
 }
 
 /*===================================================================================================================================*/
@@ -253,7 +189,7 @@ U1              u1_g_DateSITimCfgRxMsgSts(void)
 {
     U1  u1_t_status;
 
-    u1_t_status = (U1)DATESI_TIM_STSBIT_VALID; /* BEV BSW provisionally */
+    u1_t_status = (U1)DATESI_TIM_STSBIT_VALID;
 
     return(u1_t_status);
 }
@@ -269,7 +205,7 @@ U1              u1_g_DateSITimCfgCanRx(ST_DATESI_TIM_RX * stp_a_rx)
     ST_DATESI_COMMAND_DATA  st_t_command_data;
     U1                      u1_t_status;
 
-    u1_t_status = (U1)0U; /* BEV provisionally */
+    u1_t_status = (U1)DATESI_TIM_STSBIT_VALID;
 
     st_t_command_data = st_g_DateSIComRx();
     stp_a_rx->u1p_time[HHMMSS_24H_TIME_SE] = st_t_command_data.u1_clk_sec;
@@ -290,14 +226,11 @@ U1              u1_g_DateSITimCfgCanRx(ST_DATESI_TIM_RX * stp_a_rx)
 void            vd_g_DateSITimCfgCanTx(const U4 u4_a_HHMMSS_24H, const U1 u1_a_EVENT_EI)
 {
     U4  u4_t_hhmmss;
-    U1  u1_t_fmt_is12h;
+    U4  u4_t_fmt_is12h;
+    U1  u1_t_read_sts;
     U1  u1_t_ampm;
     U1  u1_t_timeset;
-#if 0   /* BEV provisionally */
     U1  u1_t_pretx;
-#else
-    ST_XSPI_IVI_CLOCK_DISP_DATA st_t_pre_tx;
-#endif
     U1  u1_t_can_trig;
     U1  u1_t_cxpi_trig;
     U1  u1_tp_time[HHMMSS_24H_TIME_SIZE];
@@ -308,15 +241,15 @@ void            vd_g_DateSITimCfgCanTx(const U4 u4_a_HHMMSS_24H, const U1 u1_a_E
     U1  u1_t_acc_is_on;
     U1  u1_t_ig_is_on;
 
-#if 0   /* BEV provisionally */
-    u1_t_fmt_is12h = u1_g_TimeFormat12H24H();
-#else
-    u1_t_fmt_is12h = TIMEFMT_VAL_12H;
-#endif
+    u4_t_fmt_is12h = (U4)0U;
+    u1_t_read_sts  = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_010, &u4_t_fmt_is12h, (U2)DATESI_TIME_VM_1WORD);
+    if((u1_t_read_sts != IVDSH_NO_REA) && (u4_t_fmt_is12h <= (U4)U1_MAX)){
+        u1_s_datesi_tim_fmt = (U1)u4_t_fmt_is12h;
+    }
     u4_t_hhmmss    = u4_a_HHMMSS_24H;
     u1_t_timeset   = (U1)DATESI_TIM_SET_24H;
 
-    if(u1_t_fmt_is12h == (U1)TIMEFMT_VAL_12H){
+    if(u1_s_datesi_tim_fmt == (U1)DATESI_TIM_FMT_VAL_12H){
         u4_t_hhmmss  = u4_g_Hhmmss24hTo12h(u4_a_HHMMSS_24H);
         u1_t_timeset = (U1)DATESI_TIM_SET_12H;
     }
@@ -327,12 +260,7 @@ void            vd_g_DateSITimCfgCanTx(const U4 u4_a_HHMMSS_24H, const U1 u1_a_E
     u1_tp_time[HHMMSS_24H_TIME_MI] = (U1)((u4_t_hhmmss & (U4)HHMMSS_BIT_MI) >> HHMMSS_LSB_MI);
     u1_tp_time[HHMMSS_24H_TIME_HR] = (U1)((u4_t_hhmmss & (U4)HHMMSS_BIT_HR) >> HHMMSS_LSB_HR);
 
-
-#if 0   /* BEV provisionally */
     u1_t_pretx       = (U1)0U;
-#else
-    st_t_pre_tx = st_g_DateSIComPreTx();
-#endif
     u1_t_can_trig    = (U1)FALSE;
     u1_t_cxpi_trig   = (U1)FALSE;
     u1_t_ba_is_on    = u1_g_DateSI_Baon();
@@ -347,66 +275,36 @@ void            vd_g_DateSITimCfgCanTx(const U4 u4_a_HHMMSS_24H, const U1 u1_a_E
     }
     u2_s_datesi_tim_bus_sts_old = u2_t_bus_sts;
 
-#if 0   /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CL_AMPM, &u1_t_pretx);
     if(u1_t_pretx != u1_t_ampm){
-#else
-    if(st_t_pre_tx.u1_ampm_disp != u1_t_ampm){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_ampm, DATESI_COM_CL_AMPM, u1_a_EVENT_EI);
-#if 0   /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_CL_AMPM, &u1_t_ampm);
-#endif
         u1_t_can_trig = (U1)TRUE;
     }
-#if 0   /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TIME_SET, &u1_t_pretx);
     if(u1_t_pretx != u1_t_timeset){
-#else
-    if(st_t_pre_tx.u1_1224format_disp != u1_t_timeset){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_timeset, DATESI_COM_TIME_SET, u1_a_EVENT_EI);
-#if 0   /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TIME_SET, &u1_t_timeset);
-#endif
         u1_t_can_trig = (U1)TRUE;
     }
-#if 0   /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CL_MIN, &u1_t_pretx);
     if(u1_t_pretx != u1_tp_time[HHMMSS_24H_TIME_MI]){
-#else
-    if(st_t_pre_tx.u1_minute_disp != u1_tp_time[HHMMSS_24H_TIME_MI]){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_tp_time[HHMMSS_24H_TIME_MI], DATESI_COM_CL_MIN, u1_a_EVENT_EI);
-#if 0   /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_CL_MIN, &u1_tp_time[HHMMSS_24H_TIME_MI]);
-#endif
         u1_t_cxpi_trig = (U1)TRUE; /* Minute Update Event */
         u1_t_can_trig  = (U1)TRUE;
     }
-#if 0   /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CL_HOUR, &u1_t_pretx);
     if(u1_t_pretx != u1_tp_time[HHMMSS_24H_TIME_HR]){
-#else
-    if(st_t_pre_tx.u1_hour_disp != u1_tp_time[HHMMSS_24H_TIME_HR]){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_tp_time[HHMMSS_24H_TIME_HR], DATESI_COM_CL_HOUR, u1_a_EVENT_EI);
-#if 0   /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_CL_HOUR, &u1_tp_time[HHMMSS_24H_TIME_HR]);
-#endif
         u1_t_cxpi_trig = (U1)TRUE; /* Hour Update Event */
         u1_t_can_trig  = (U1)TRUE;
     }
-#if 0   /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CL_SEC, &u1_t_pretx);
     if(u1_t_pretx != u1_tp_time[HHMMSS_24H_TIME_SE]){
-#else
-    if(st_t_pre_tx.u1_second_disp != u1_tp_time[HHMMSS_24H_TIME_SE]){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_tp_time[HHMMSS_24H_TIME_SE], DATESI_COM_CL_SEC, u1_a_EVENT_EI);
-#if 0   /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_CL_SEC, &u1_tp_time[HHMMSS_24H_TIME_SE]);
-#endif
         if(((u1_t_ba_is_on                == (U1)FALSE                )  &&
             (u1_t_acc_is_on               == (U1)FALSE                )  &&
             (u1_t_ig_is_on                == (U1)FALSE                )) &&
@@ -419,9 +317,7 @@ void            vd_g_DateSITimCfgCanTx(const U4 u4_a_HHMMSS_24H, const U1 u1_a_E
     }
     if((u1_t_can_trig == (U1)TRUE) &&
        (u1_a_EVENT_EI == (U1)TRUE)){
-#if 0   /* BEV provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S33_TXCH0);
-#endif
     }
 
     vd_s_DateSITimCfgCxpiTx(u1_t_cxpi_trig, &u1_tp_time[HHMMSS_24H_TIME_SE], u1_a_EVENT_EI);
@@ -468,11 +364,7 @@ void            vd_g_DateSITimCfgCanTxOffst(const S4 s4_a_SEC, const U1 u1_a_EVE
 {
     S4  s4_t_sec;
     U4  u4_t_sec_abs;
-#if 0   /* BEV provisionally */
     U1  u1_t_pretx;
-#else
-    ST_XSPI_IVI_CLOCK_DISP_DATA  st_t_pre_tx;
-#endif
     U1  u1_t_trig;
     U1  u1_t_sign;
     U1  u1_t_mi;
@@ -493,46 +385,24 @@ void            vd_g_DateSITimCfgCanTxOffst(const S4 s4_a_SEC, const U1 u1_a_EVE
     u1_t_mi = (U1)((u4_t_sec_abs % (U4)HHMMSS_HR_TO_SE) / (U4)HHMMSS_MI_TO_SE);
     u1_t_hr = (U1)(u4_t_sec_abs  / (U4)HHMMSS_HR_TO_SE);
 
-#if 0   /* BEV provisionally */
     u1_t_pretx = (U1)0U;
-#else
-    st_t_pre_tx = st_g_DateSIComPreTx();
-#endif
     u1_t_trig  = (U1)FALSE;
-#if 0   /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_OFST_M, &u1_t_pretx);
     if(u1_t_pretx != u1_t_mi){
-#else
-    if(st_t_pre_tx.u1_minute_offset_disp != u1_t_mi){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_mi, DATESI_COM_OFST_M, u1_a_EVENT_EI);
-#if 0   /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_OFST_M, &u1_t_mi);
-#endif
         u1_t_trig = (U1)TRUE;
     }
-#if 0   /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_OFST_H, &u1_t_pretx);
     if(u1_t_pretx != u1_t_hr){
-#else
-    if(st_t_pre_tx.u1_hour_offset_disp != u1_t_hr){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_hr, DATESI_COM_OFST_H, u1_a_EVENT_EI);
-#if 0   /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_OFST_H, &u1_t_hr);
-#endif
         u1_t_trig = (U1)TRUE;
     }
-#if 0   /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_OFSTSIGN, &u1_t_pretx);
     if(u1_t_pretx != u1_t_sign){
-#else
-    if(st_t_pre_tx.u1_sign_offset_disp != u1_t_sign){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_sign, DATESI_COM_OFSTSIGN, u1_a_EVENT_EI);
-#if 0   /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_OFSTSIGN, &u1_t_sign);
-#endif
         u1_t_trig = (U1)TRUE;
     }
     
@@ -544,9 +414,7 @@ void            vd_g_DateSITimCfgCanTxOffst(const S4 s4_a_SEC, const U1 u1_a_EVE
        (u1_t_ig_is_on  == (U1)TRUE)){
         if((u1_t_trig     == (U1)TRUE) &&
            (u1_a_EVENT_EI == (U1)TRUE)){
-#if 0   /* BEV provisionally */
             (void)Com_TriggerIPDUSend(MSG_MET1S33_TXCH0);
-#endif
         }
    }
 }
@@ -627,20 +495,23 @@ U1              u1_g_DateSITimCfgCanRxHk(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimCfgExec24(void)
 {
-#if 0   /* BEV provisionally */
-    U1  u1_t_24h_fmt;    /* 24H Format           */
-    U1  u1_t_24h_ind;    /* Indicator 24H Format */
+    U4  u4_t_24h_fmt;    /* 24H Format           */
+    U4  u4_t_24h_ind;    /* Indicator 24H Format */
+    U1  u1_t_read_sts;
 
-    u1_t_24h_ind = u1_g_TimeFormat12H24H();
+    u4_t_24h_ind  = (U4)0U;
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_010, &u4_t_24h_ind, (U2)DATESI_TIME_VM_1WORD);
 
-    if(u1_t_24h_ind == (U1)TIMEFMT_VAL_24H){
-        u1_t_24h_fmt = (U1)TIMEFMT_VAL_12H;
+    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+        if(u4_t_24h_ind == (U4)DATESI_TIM_FMT_VAL_24H){
+            u4_t_24h_fmt = (U4)DATESI_TIM_FMT_VAL_12H;
+        }
+        else{
+            u4_t_24h_fmt = (U4)DATESI_TIM_FMT_VAL_24H;
+        }
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_011, &u4_t_24h_fmt, (U2)DATESI_TIME_VM_1WORD);
+        vd_g_DateSIComSetCmp();
     }
-    else{
-        u1_t_24h_fmt = (U1)TIMEFMT_VAL_24H;
-    }
-    vd_g_TimeFormat12H24HPut(u1_t_24h_fmt);
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -655,22 +526,19 @@ void            vd_g_DateSITimCfgOfstRoutine(void)
 
     u4_t_ofsttime = (U4)0U;
 
-    if(u1_s_DATESI_TIM_OFST_DEST == (U1)DATESI_TIM_OFST_MCST){
-        if(u2_s_datesi_tim_ofstcnt < (U2)U2_MAX) {
-            u2_s_datesi_tim_ofstcnt++;
-        }
-        else{
-            u2_s_datesi_tim_ofstcnt = (U2)U2_MAX;
-        }
-        if(u2_s_datesi_tim_ofstcnt > (U2)DATESI_TIM_OFST_CNT_END){
-            if(u1_s_datesi_tim_ofststs == (U1)DATESI_TIM_OFST_STS_ADJ){
-                u4_t_ofsttime = (U4)s4_s_datesi_tim_ofsttime;
-                u4_t_ofsttime = (u4_t_ofsttime & (U4)U2_MAX);
-#if 0   /* BEV provisionally */
-                vd_g_McstBfPutU4((U1)MCST_BFI_OFFSET_TIME, u4_t_ofsttime);
-#endif
-                u1_s_datesi_tim_ofststs = (U1)DATESI_TIM_OFST_STS_NON;
-            }
+
+    if(u2_s_datesi_tim_ofstcnt < (U2)U2_MAX) {
+        u2_s_datesi_tim_ofstcnt++;
+    }
+    else{
+        u2_s_datesi_tim_ofstcnt = (U2)U2_MAX;
+    }
+    if(u2_s_datesi_tim_ofstcnt > (U2)DATESI_TIM_OFST_CNT_END){
+        if(u1_s_datesi_tim_ofststs == (U1)DATESI_TIM_OFST_STS_ADJ){
+            u4_t_ofsttime = (U4)s4_s_datesi_tim_ofsttime;
+            u4_t_ofsttime = (u4_t_ofsttime & (U4)U2_MAX);
+            vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_009, &u4_t_ofsttime, (U2)DATESI_TIME_VM_1WORD);
+            u1_s_datesi_tim_ofststs = (U1)DATESI_TIM_OFST_STS_NON;
         }
     }
 }
@@ -683,19 +551,20 @@ void            vd_g_DateSITimCfgOfstRoutine(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimCfgOfstAdjStart(void)
 {
-#if 0   /* BEV provisionally */
-    U2  u2_t_read;
-    S2  s2_t_ofsttime;
-#endif
+    U4  u4_t_read;
+    U2  u2_t_ofsttime;
+    S2  s2_t_offset_time;
+    U1  u1_t_read_sts;
 
-    if((u1_s_DATESI_TIM_OFST_DEST == (U1)DATESI_TIM_OFST_MCST)  &&
-       (u1_s_datesi_tim_ofststs != (U1)DATESI_TIM_OFST_STS_ADJ)){
-#if 0   /* BEV provisionally */
-        u2_t_read                = (U2)u4_g_McstBfU4((U1)MCST_BFI_OFFSET_TIME);
-        s2_t_ofsttime            = (S2)u2_t_read;
-        s4_s_datesi_tim_ofsttime = (S4)s2_t_ofsttime;
-#endif
-        u1_s_datesi_tim_ofststs  = (U1)DATESI_TIM_OFST_STS_ADJ;
+    if(u1_s_datesi_tim_ofststs != (U1)DATESI_TIM_OFST_STS_ADJ){
+        u4_t_read     = (U4)0U;        
+        u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_004, &u4_t_read, (U2)DATESI_TIME_VM_1WORD);
+        if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_read <= (U4)U2_MAX)){
+            u2_t_ofsttime            = (U2)u4_t_read;
+            s2_t_offset_time         = (S2)u2_t_ofsttime;
+            s4_s_datesi_tim_ofsttime = (S4)s2_t_offset_time;
+            u1_s_datesi_tim_ofststs  = (U1)DATESI_TIM_OFST_STS_ADJ;
+        }
     }
 }
 
@@ -707,31 +576,9 @@ void            vd_g_DateSITimCfgOfstAdjStart(void)
 /*===================================================================================================================================*/
 S4              s4_g_DateSITimCfgGetOfstTime(void)
 {
-#if 0   /* BEV provisionally */
-    U1  u1_t_rim_sts;
-    U4  u4_t_rim_data;
-#endif
     S4  s4_t_offset_time;
 
-    s4_t_offset_time = (S4)DATESI_TIM_OFST_INIT;
-
-    if(u1_s_DATESI_TIM_OFST_DEST == (U1)DATESI_TIM_OFST_MCST){
-        s4_t_offset_time = s4_s_datesi_tim_ofsttime;
-    }
-    else{
-#if 0   /* BEV provisionally */
-        /* ========================================================================================================================= */
-        /* Caution!!                                                                                                                 */
-        /* In MET-M_CLKCTL-CSTD-0-03-A-C1, the description has been changed so that the offset time is held in non-volatile memory,  */
-        /* so specify the the NVMC "Read" IF as necessary.                                                                           */
-        /* ========================================================================================================================= */
-        u4_t_rim_data = (U4)0U;
-        u1_t_rim_sts  = u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_DATESI_OFFSET_TIME, &u4_t_rim_data);
-        if((u1_t_rim_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
-            s4_t_offset_time = (S4)u4_t_rim_data;
-        }
-#endif
-    }
+    s4_t_offset_time = s4_s_datesi_tim_ofsttime;
 
     return(s4_t_offset_time);
 }
@@ -744,20 +591,10 @@ S4              s4_g_DateSITimCfgGetOfstTime(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimCfgSetOfstTime(const S4 s4_a_OFST)
 {
-    if(u1_s_DATESI_TIM_OFST_DEST == (U1)DATESI_TIM_OFST_MCST){
+    if(u1_s_datesi_tim_ofststs == (U1)DATESI_TIM_OFST_STS_ADJ){
         s4_s_datesi_tim_ofsttime = s4_a_OFST;
         u2_s_datesi_tim_ofstcnt  = (U2)DATESI_TIM_OFST_CNT_INIT;
-        u1_s_datesi_tim_ofststs  = (U1)DATESI_TIM_OFST_STS_ADJ;
-    }
-    else{
-#if 0   /* BEV provisionally */
-        /* ========================================================================================================================= */
-        /* Caution!!                                                                                                                 */
-        /* In MET-M_CLKCTL-CSTD-0-03-A-C1, the description has been changed so that the offset time is held in non-volatile memory,  */
-        /* so specify the the NVMC "Write" IF as necessary.                                                                          */
-        /* ========================================================================================================================= */
-        vd_g_Rim_WriteU4((U2)RIMID_U4_DATESI_OFFSET_TIME, (U4)s4_a_OFST);
-#endif
+        vd_g_DateSIComSetCmp();
     }
 }
 
@@ -769,7 +606,7 @@ void            vd_g_DateSITimCfgSetOfstTime(const S4 s4_a_OFST)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimCfgOfstReadHook(void)
 {
-#if 0   /* BEV provisionally */
+#if 0   /* B_PERMEM Not applicable */
     U2  u2_t_read;
     S2  s2_t_readtime;
     U4  u4_t_ofsttime;
@@ -793,7 +630,7 @@ void            vd_g_DateSITimCfgOfstReadHook(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSITimCfgOfstDelHook(void)
 {
-#if 0   /* BEV provisionally */
+#if 0   /* B_PERMEM Not applicable */
     U2  u2_t_read;
     S2  s2_t_readtime;
 
@@ -817,7 +654,7 @@ U1      u1_g_TimeZoneCfgRxTZ(U1 * u1p_a_rx)
     st_t_command_data = st_g_DateSIComRx();
     (*u1p_a_rx) = st_t_command_data.u1_tz;
 
-    return((U1)DATESI_TIM_STSBIT_VALID); /* BEV BSW provisionally */
+    return((U1)DATESI_TIM_STSBIT_VALID);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)                                                                                 */
@@ -832,7 +669,7 @@ U1      u1_g_TimeZoneCfgRxTZ_SIGN(U1 * u1p_a_rx)
     st_t_command_data = st_g_DateSIComRx();
     (*u1p_a_rx) = st_t_command_data.u1_tz_sign;
 
-    return((U1)DATESI_TIM_STSBIT_VALID); /* BEV BSW provisionally */
+    return((U1)DATESI_TIM_STSBIT_VALID);
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)                                                                                 */
@@ -847,7 +684,7 @@ U1      u1_g_TimeZoneCfgRxDST_S30(U1 * u1p_a_rx)
     st_t_command_data = st_g_DateSIComRx();
     (*u1p_a_rx) = st_t_command_data.u1_dst_s30;
 
-    return((U1)DATESI_TIM_STSBIT_VALID); /* BEV BSW provisionally */
+    return((U1)DATESI_TIM_STSBIT_VALID);
 }
 
 /*===================================================================================================================================*/

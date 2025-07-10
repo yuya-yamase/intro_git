@@ -1,4 +1,4 @@
-/* 2.5.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_ESOPT_FWD1S10_C_MAJOR             (2)
-#define VARDEF_ESOPT_FWD1S10_C_MINOR             (5)
+#define VARDEF_ESOPT_FWD1S10_C_MINOR             (6)
 #define VARDEF_ESOPT_FWD1S10_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -68,8 +68,8 @@ U1      u1_g_VdfEsoRx_4WDSYS(void)
     u1_t_wrg = (U1)0U;
     u1_t_rx = (U1)0U;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGP,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                     (U4)OXCAN_SYS_IGP,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_HV4WNG, &u1_t_wrg);
@@ -104,6 +104,7 @@ U1      u1_g_VdfEsoRx_4WDSYS(void)
 /*  2.3.0    11/15/2021  RO       vardef_esopt.c v2.2.0 -> v2.3.0                                                                    */
 /*  2.4.0     3/15/2022  RO       vardef_esopt.c v2.3.0 -> v2.4.0                                                                    */
 /*  2.5.0    11/25/2024  KO       vardef_esopt.c v2.4.0 -> v2.5.0                                                                    */
+/*  2.6.0     5/30/2025  SN       vardef_esopt.c v2.5.0 -> v2.6.0                                                                    */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -113,5 +114,6 @@ U1      u1_g_VdfEsoRx_4WDSYS(void)
 /*  * RO = Reiya Okuda, KSE                                                                                                          */
 /*  * RO = Ryo Oohashi, KSE                                                                                                          */
 /*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
+/*  * SN = Shizuka Nakajima, KSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

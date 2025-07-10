@@ -11,5 +11,3 @@ Port_ModeCfg.c
 Port_RegChk.c
 Port_RegChkCfg.c
 Port_RegChkModeCfg.c
-Port_Ext.c
-Port_PIC.c

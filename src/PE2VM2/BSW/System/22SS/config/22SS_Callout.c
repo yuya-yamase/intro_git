@@ -20,6 +20,8 @@
 
 #include "veh_opemd.h"
 #include "oxcan.h"
+#include "oxdocan.h"
+#include "ivdsh.h"
 
 /* Memory               */
 #include "rim_ctl.h"
@@ -35,6 +37,7 @@
 #include "IVI_GyrCtrl_Main.h"
 #include "IVI_DspCtrl_Main.h"
 #include "IVI_DrcCtrl_Main.h"
+#include "IVI_CanCtrl_Main.h"
 
 /* ClkCtrl */
 #include "RtcIc_drv.h"
@@ -84,8 +87,11 @@ void vd_g_22SSCallout_StaBonInit(void)
 /*        u1_t_rslt = u1_g_Nvmc_BonRead(); */
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
+    vd_g_oXDoCANBonInit();
     vd_g_VehopemdRstInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     ExtSigCtrl_Init();
@@ -98,6 +104,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_Ivi_GyrCtrl_Main_Bon_init();
     vd_g_Ivi_DspCtrl_Main_Bon_init();
 	vd_g_Ivi_DrcCtrl_Main_Bon_init();
+    vd_g_Ivi_CanCtrl_Main_Bon_init();
 
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();
@@ -135,8 +142,11 @@ void vd_g_22SSCallout_StaRstInit(void)
 /*        u1_t_rslt = u1_g_Nvmc_BonRead(); */
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
+    vd_g_oXDoCANRstInit();
     vd_g_VehopemdRstInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     ExtSigCtrl_Init();
@@ -148,6 +158,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_Ivi_PictCtrl_Main_Rst_init();
     vd_g_Ivi_GyrCtrl_Main_Rst_init();
     vd_g_Ivi_DspCtrl_Main_Rst_init();
+    vd_g_Ivi_CanCtrl_Main_Rst_init();
 
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();
@@ -187,8 +198,11 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
+    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
     vd_g_oXCANWkupInit();
+    vd_g_oXDoCANWkupInit();
     vd_g_VehopemdWkupInit();
+    vd_g_iVDshInit();
 
     /* vv User Hook start vv */
     ExtSigCtrl_Init();
@@ -201,6 +215,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_Ivi_GyrCtrl_Main_Wkup_init();
     vd_g_Ivi_DspCtrl_Main_Wkup_init();
     vd_g_Ivi_DrcCtrl_Main_Wkup_init();
+    vd_g_Ivi_CanCtrl_Main_Wkup_init();
 
     /* ClkCtrl */
     vd_g_RtcIc_MainInitial();

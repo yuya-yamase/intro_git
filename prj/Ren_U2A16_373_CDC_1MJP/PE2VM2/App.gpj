@@ -25,6 +25,7 @@
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/Common/scc
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/STUB/config
     :sourceDir=${APP_DIR}/IVI/DrcCtrl
+    :sourceDir=${APP_DIR}/IVI/CanCtrl
 
     -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
@@ -38,10 +39,14 @@
     -I${CAN_DIR}/Can/cfg/rscf4
 
     -I${OXCAN_DIR}/config_U2A16_met
-    -I${OXCAN_DIR}/libc
+    -I${OXCAN_DIR}/lib
     -I${OXCAN_DIR}/scc
     -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
+
+    -I${OXDOCAN_DIR}/lib/config_U2A16_met
+    -I${OXDOCAN_DIR}/lib/scc
+
     -I${LIB_DIR}
     
     -I${MCAL_PWM_SCC_DIR}
@@ -61,6 +66,7 @@
     -I${APP_DIR}/IVI/DspCtrl/VolumeMute
     -I${APP_DIR}/IVI/DspCtrl/config
     -I${APP_DIR}/IVI/DrcCtrl
+    -I${APP_DIR}/IVI/CanCtrl
 
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
@@ -147,6 +153,7 @@ datesi_time_zone.c
 datesi_com.c
 datesi.c
 PowerIcCtl.c
+PwrCtl.c
 
 volmute.c
 volmute_cfg.c
@@ -154,3 +161,5 @@ IVI_DrcCtrl_Main.c
 SysEcDrc.c
 DtcCtl.c
 RobCtl.c
+IVI_CanCtrl_Main.c
+PncreqCtl.c

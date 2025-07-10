@@ -44,112 +44,112 @@ typedef	struct
 
 	union												/* DMACSELj_m 0xFF090400   */
 	{
-		U1	u1Data[4];									/* 8-bit Access            */
-		U2	u2Data[2];									/* 16-bit Access           */
-		U4	u4Data;										/* 32-bit Access           */
+		uint8	u1Data[4];								/* 8-bit Access            */
+		uint16	u2Data[2];								/* 16-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
 #if (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A)
-			U4	xSEL0					:1;				/* SEL0                    */
-			U4	xDummy1					:1;				/* Reserved Bits           */
-			U4	xSEL1					:1;				/* SEL1                    */
-			U4	xDummy2					:1;				/* Reserved Bits           */
-			U4	xSEL2					:1;				/* SEL2                    */
-			U4	xDummy3					:1;				/* Reserved Bits           */
-			U4	xSEL3					:1;				/* SEL3                    */
-			U4	xDummy4					:1;				/* Reserved Bits           */
-			U4	xSEL4					:1;				/* SEL4                    */
-			U4	xDummy5					:1;				/* Reserved Bits           */
-			U4	xSEL5					:1;				/* SEL5                    */
-			U4	xDummy6					:1;				/* Reserved Bits           */
-			U4	xSEL6					:1;				/* SEL6                    */
-			U4	xDummy7					:1;				/* Reserved Bits           */
-			U4	xSEL7					:1;				/* SEL7                    */
-			U4	xDummy8					:1;				/* Reserved Bits           */
-			U4	xSEL8					:1;				/* SEL8                    */
-			U4	xDummy9					:1;				/* Reserved Bits           */
-			U4	xSEL9					:1;				/* SEL9                    */
-			U4	xDummy10				:1;				/* Reserved Bits           */
-			U4	xSEL10					:1;				/* SEL10                   */
-			U4	xDummy11				:1;				/* Reserved Bits           */
-			U4	xSEL11					:1;				/* SEL11                   */
-			U4	xDummy12				:1;				/* Reserved Bits           */
-			U4	xSEL12					:1;				/* SEL12                   */
-			U4	xDummy13				:1;				/* Reserved Bits           */
-			U4	xSEL13					:1;				/* SEL13                   */
-			U4	xDummy14				:1;				/* Reserved Bits           */
-			U4	xSEL14					:1;				/* SEL14                   */
-			U4	xDummy15				:1;				/* Reserved Bits           */
-			U4	xSEL15					:1;				/* SEL15                   */
-			U4	xDummy16				:1;				/* Reserved Bits           */
+			uint32	xSEL0					:1;			/* SEL0                    */
+			uint32	xDummy1					:1;			/* Reserved Bits           */
+			uint32	xSEL1					:1;			/* SEL1                    */
+			uint32	xDummy2					:1;			/* Reserved Bits           */
+			uint32	xSEL2					:1;			/* SEL2                    */
+			uint32	xDummy3					:1;			/* Reserved Bits           */
+			uint32	xSEL3					:1;			/* SEL3                    */
+			uint32	xDummy4					:1;			/* Reserved Bits           */
+			uint32	xSEL4					:1;			/* SEL4                    */
+			uint32	xDummy5					:1;			/* Reserved Bits           */
+			uint32	xSEL5					:1;			/* SEL5                    */
+			uint32	xDummy6					:1;			/* Reserved Bits           */
+			uint32	xSEL6					:1;			/* SEL6                    */
+			uint32	xDummy7					:1;			/* Reserved Bits           */
+			uint32	xSEL7					:1;			/* SEL7                    */
+			uint32	xDummy8					:1;			/* Reserved Bits           */
+			uint32	xSEL8					:1;			/* SEL8                    */
+			uint32	xDummy9					:1;			/* Reserved Bits           */
+			uint32	xSEL9					:1;			/* SEL9                    */
+			uint32	xDummy10				:1;			/* Reserved Bits           */
+			uint32	xSEL10					:1;			/* SEL10                   */
+			uint32	xDummy11				:1;			/* Reserved Bits           */
+			uint32	xSEL11					:1;			/* SEL11                   */
+			uint32	xDummy12				:1;			/* Reserved Bits           */
+			uint32	xSEL12					:1;			/* SEL12                   */
+			uint32	xDummy13				:1;			/* Reserved Bits           */
+			uint32	xSEL13					:1;			/* SEL13                   */
+			uint32	xDummy14				:1;			/* Reserved Bits           */
+			uint32	xSEL14					:1;			/* SEL14                   */
+			uint32	xDummy15				:1;			/* Reserved Bits           */
+			uint32	xSEL15					:1;			/* SEL15                   */
+			uint32	xDummy16				:1;			/* Reserved Bits           */
 #elif (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B)
-			U4	b2SEL0					:2;				/* SEL0                    */
-			U4	b2SEL1					:2;				/* SEL1                    */
-			U4	b2SEL2					:2;				/* SEL2                    */
-			U4	b2SEL3					:2;				/* SEL3                    */
-			U4	b2SEL4					:2;				/* SEL4                    */
-			U4	b2SEL5					:2;				/* SEL5                    */
-			U4	b2SEL6					:2;				/* SEL6                    */
-			U4	b2SEL7					:2;				/* SEL7                    */
-			U4	b2SEL8					:2;				/* SEL8                    */
-			U4	b2SEL9					:2;				/* SEL9                    */
-			U4	b2SEL10					:2;				/* SEL10                   */
-			U4	b2SEL11					:2;				/* SEL11                   */
-			U4	b2SEL12					:2;				/* SEL12                   */
-			U4	b2SEL13					:2;				/* SEL13                   */
-			U4	b2SEL14					:2;				/* SEL14                   */
-			U4	b2SEL15					:2;				/* SEL15                   */
+			uint32	b2SEL0					:2;			/* SEL0                    */
+			uint32	b2SEL1					:2;			/* SEL1                    */
+			uint32	b2SEL2					:2;			/* SEL2                    */
+			uint32	b2SEL3					:2;			/* SEL3                    */
+			uint32	b2SEL4					:2;			/* SEL4                    */
+			uint32	b2SEL5					:2;			/* SEL5                    */
+			uint32	b2SEL6					:2;			/* SEL6                    */
+			uint32	b2SEL7					:2;			/* SEL7                    */
+			uint32	b2SEL8					:2;			/* SEL8                    */
+			uint32	b2SEL9					:2;			/* SEL9                    */
+			uint32	b2SEL10					:2;			/* SEL10                   */
+			uint32	b2SEL11					:2;			/* SEL11                   */
+			uint32	b2SEL12					:2;			/* SEL12                   */
+			uint32	b2SEL13					:2;			/* SEL13                   */
+			uint32	b2SEL14					:2;			/* SEL14                   */
+			uint32	b2SEL15					:2;			/* SEL15                   */
 #endif /* MCAL_SPAL_TARGET */
 		} stBit;
 	} unDMACSEL[DMA_DMAC_UNIT_NUM][DMA_DMAC_CH_NUM];
 
 #if ((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A) || ((MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B) && (MCAL_PKG_TARGET != MCAL_PKG_U2B6_292PIN)))
-	U1	u1Dummy1[384];									/* 0xFF090480 - 0xFF0905FF */
+	uint8	u1Dummy1[384];								/* 0xFF090480 - 0xFF0905FF */
 #else
-	U1	u1Dummy1[448];									/* 0xFF090440 - 0xFF0905FF */
+	uint8	u1Dummy1[448];								/* 0xFF090440 - 0xFF0905FF */
 #endif
 
 	union												/* DTSSELm 0xFF090600      */
 	{
-		U1	u1Data[4];									/* 8-bit Access            */
-		U2	u2Data[2];									/* 16-bit Access           */
-		U4	u4Data;										/* 32-bit Access           */
+		uint8	u1Data[4];								/* 8-bit Access            */
+		uint16	u2Data[2];								/* 16-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
 #if (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A)
-			U4	b2SEL0					:2;				/* SEL0                    */
-			U4	b2Dummy1				:2;				/* Reserved Bits           */
-			U4	b2SEL1					:2;				/* SEL1                    */
-			U4	b2Dummy2				:2;				/* Reserved Bits           */
-			U4	b2SEL2					:2;				/* SEL2                    */
-			U4	b2Dummy3				:2;				/* Reserved Bits           */
-			U4	b2SEL3					:2;				/* SEL3                    */
-			U4	b2Dummy4				:2;				/* Reserved Bits           */
-			U4	b2SEL4					:2;				/* SEL4                    */
-			U4	b2Dummy5				:2;				/* Reserved Bits           */
-			U4	b2SEL5					:2;				/* SEL5                    */
-			U4	b2Dummy6				:2;				/* Reserved Bits           */
-			U4	b2SEL6					:2;				/* SEL6                    */
-			U4	b2Dummy7				:2;				/* Reserved Bits           */
-			U4	b2SEL7					:2;				/* SEL7                    */
-			U4	b2Dummy8				:2;				/* Reserved Bits           */
+			uint32	b2SEL0					:2;			/* SEL0                    */
+			uint32	b2Dummy1				:2;			/* Reserved Bits           */
+			uint32	b2SEL1					:2;			/* SEL1                    */
+			uint32	b2Dummy2				:2;			/* Reserved Bits           */
+			uint32	b2SEL2					:2;			/* SEL2                    */
+			uint32	b2Dummy3				:2;			/* Reserved Bits           */
+			uint32	b2SEL3					:2;			/* SEL3                    */
+			uint32	b2Dummy4				:2;			/* Reserved Bits           */
+			uint32	b2SEL4					:2;			/* SEL4                    */
+			uint32	b2Dummy5				:2;			/* Reserved Bits           */
+			uint32	b2SEL5					:2;			/* SEL5                    */
+			uint32	b2Dummy6				:2;			/* Reserved Bits           */
+			uint32	b2SEL6					:2;			/* SEL6                    */
+			uint32	b2Dummy7				:2;			/* Reserved Bits           */
+			uint32	b2SEL7					:2;			/* SEL7                    */
+			uint32	b2Dummy8				:2;			/* Reserved Bits           */
 #elif (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B)
-			U4	b3SEL0					:3;				/* SEL0                    */
-			U4	xDummy1					:1;				/* Reserved Bits           */
-			U4	b3SEL1					:3;				/* SEL1                    */
-			U4	xDummy2					:1;				/* Reserved Bits           */
-			U4	b3SEL2					:3;				/* SEL2                    */
-			U4	xDummy3					:1;				/* Reserved Bits           */
-			U4	b3SEL3					:3;				/* SEL3                    */
-			U4	xDummy4					:1;				/* Reserved Bits           */
-			U4	b3SEL4					:3;				/* SEL4                    */
-			U4	xDummy5					:1;				/* Reserved Bits           */
-			U4	b3SEL5					:3;				/* SEL5                    */
-			U4	xDummy6					:1;				/* Reserved Bits           */
-			U4	b3SEL6					:3;				/* SEL6                    */
-			U4	xDummy7					:1;				/* Reserved Bits           */
-			U4	b3SEL7					:3;				/* SEL7                    */
-			U4	xDummy8					:1;				/* Reserved Bits           */
+			uint32	b3SEL0					:3;			/* SEL0                    */
+			uint32	xDummy1					:1;			/* Reserved Bits           */
+			uint32	b3SEL1					:3;			/* SEL1                    */
+			uint32	xDummy2					:1;			/* Reserved Bits           */
+			uint32	b3SEL2					:3;			/* SEL2                    */
+			uint32	xDummy3					:1;			/* Reserved Bits           */
+			uint32	b3SEL3					:3;			/* SEL3                    */
+			uint32	xDummy4					:1;			/* Reserved Bits           */
+			uint32	b3SEL4					:3;			/* SEL4                    */
+			uint32	xDummy5					:1;			/* Reserved Bits           */
+			uint32	b3SEL5					:3;			/* SEL5                    */
+			uint32	xDummy6					:1;			/* Reserved Bits           */
+			uint32	b3SEL6					:3;			/* SEL6                    */
+			uint32	xDummy7					:1;			/* Reserved Bits           */
+			uint32	b3SEL7					:3;			/* SEL7                    */
+			uint32	xDummy8					:1;			/* Reserved Bits           */
 #endif /* MCAL_SPAL_TARGET */
 		} stBit;
 	} unDTSSEL[DMA_DTS_REQ_NUM];
@@ -164,100 +164,100 @@ typedef	struct
 	/*			Global Register			*/
 	/************************************/
 	/* 0xFFF88000 - 0xFFF88FFF */
-	U1	u1Dummy1[16];									/* 0xFFF88000 - 0xFFF8800F */
+	uint8	u1Dummy1[16];								/* 0xFFF88000 - 0xFFF8800F */
 
 	union												/* DTSCTL1 0xFFF88010      */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	xDTSUST					:1;				/* DTSUST                  */
-			U4	b31Dummy1				:31;			/* Reserved Bits           */
+			uint32	xDTSUST					:1;			/* DTSUST                  */
+			uint32	b31Dummy1				:31;		/* Reserved Bits           */
 		} stBit;
 	} unDTSCTL1;
 
 	union												/* DTSCTL2 0xFFF88014      */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	xDTSTIT					:1;				/* DTSTIT                  */
-			U4	b31Dummy1				:31;			/* Reserved Bits           */
+			uint32	xDTSTIT					:1;			/* DTSTIT                  */
+			uint32	b31Dummy1				:31;		/* Reserved Bits           */
 		} stBit;
 	} unDTSCTL2;
 
 	union												/* DTSSTS 0xFFF88018       */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	xDTSACT					:1;				/* DTSACT                  */
-			U4	b7DTSACH				:7;				/* DTSACH                  */
-			U4	xDTSCYC					:1;				/* DTSCYC                  */
-			U4	b23Dummy1				:23;			/* Reserved Bits           */
+			uint32	xDTSACT					:1;			/* DTSACT                  */
+			uint32	b7DTSACH				:7;			/* DTSACH                  */
+			uint32	xDTSCYC					:1;			/* DTSCYC                  */
+			uint32	b23Dummy1				:23;		/* Reserved Bits           */
 		} stBit;
 	} unDTSSTS;
 
-	U1	u1Dummy2[8];									/* 0xFFF8801C - 0xFFF88023 */
+	uint8	u1Dummy2[8];								/* 0xFFF8801C - 0xFFF88023 */
 
 	union												/* DTSER 0xFFF88024        */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	xDTSER					:1;				/* DTSER                   */
-			U4	xDTSERWR				:1;				/* DTSERWR                 */
-			U4	b6Dummy1				:6;				/* Reserved Bits           */
-			U4	b7DTSERCH				:7;				/* DTSERCH                 */
-			U4	b17Dummy2				:17;			/* Reserved Bits           */
+			uint32	xDTSER					:1;			/* DTSER                   */
+			uint32	xDTSERWR				:1;			/* DTSERWR                 */
+			uint32	b6Dummy1				:6;			/* Reserved Bits           */
+			uint32	b7DTSERCH				:7;			/* DTSERCH                 */
+			uint32	b17Dummy2				:17;		/* Reserved Bits           */
 		} stBit;
 	} unDTSER;
 
-	U1	u1Dummy3[56];									/* 0xFFF88028 - 0xFFF8805F */
+	uint8	u1Dummy3[56];								/* 0xFFF88028 - 0xFFF8805F */
 
 	union												/* DTSPR0-7 0xFFF88060-07C */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	b2DTS0PR				:2;				/* DTS0PR                  */
-			U4	b2DTS1PR				:2;				/* DTS1PR                  */
-			U4	b2DTS2PR				:2;				/* DTS2PR                  */
-			U4	b2DTS3PR				:2;				/* DTS3PR                  */
-			U4	b2DTS4PR				:2;				/* DTS4PR                  */
-			U4	b2DTS5PR				:2;				/* DTS5PR                  */
-			U4	b2DTS6PR				:2;				/* DTS6PR                  */
-			U4	b2DTS7PR				:2;				/* DTS7PR                  */
-			U4	b2DTS8PR				:2;				/* DTS8PR                  */
-			U4	b2DTS9PR				:2;				/* DTS9PR                  */
-			U4	b2DTS10PR				:2;				/* DTS10PR                 */
-			U4	b2DTS11PR				:2;				/* DTS11PR                 */
-			U4	b2DTS12PR				:2;				/* DTS12PR                 */
-			U4	b2DTS13PR				:2;				/* DTS13PR                 */
-			U4	b2DTS14PR				:2;				/* DTS14PR                 */
-			U4	b2DTS15PR				:2;				/* DTS15PR                 */
+			uint32	b2DTS0PR				:2;			/* DTS0PR                  */
+			uint32	b2DTS1PR				:2;			/* DTS1PR                  */
+			uint32	b2DTS2PR				:2;			/* DTS2PR                  */
+			uint32	b2DTS3PR				:2;			/* DTS3PR                  */
+			uint32	b2DTS4PR				:2;			/* DTS4PR                  */
+			uint32	b2DTS5PR				:2;			/* DTS5PR                  */
+			uint32	b2DTS6PR				:2;			/* DTS6PR                  */
+			uint32	b2DTS7PR				:2;			/* DTS7PR                  */
+			uint32	b2DTS8PR				:2;			/* DTS8PR                  */
+			uint32	b2DTS9PR				:2;			/* DTS9PR                  */
+			uint32	b2DTS10PR				:2;			/* DTS10PR                 */
+			uint32	b2DTS11PR				:2;			/* DTS11PR                 */
+			uint32	b2DTS12PR				:2;			/* DTS12PR                 */
+			uint32	b2DTS13PR				:2;			/* DTS13PR                 */
+			uint32	b2DTS14PR				:2;			/* DTS14PR                 */
+			uint32	b2DTS15PR				:2;			/* DTS15PR                 */
 		} stBit;
 	} unDTSPR[DMA_DTS_PRI_NUM];
 
-	U1	u1Dummy4[384];									/* 0xFFF88080 - 0xFFF881FF */
+	uint8	u1Dummy4[384];								/* 0xFFF88080 - 0xFFF881FF */
 
 	union												/* DTSnnnCM 0xFFF88200     */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	b16CMC					:16;			/* CMC                     */
-			U4	xDummy1					:1;				/* Reserved Bits           */
-			U4	xUM						:1;				/* UM                      */
-			U4	b5SPID					:5;				/* SPID                    */
-			U4	b2Dummy2				:2;				/* Reserved Bits           */
-			U4	xCHAIN_UM				:1;				/* CHAIN_UM                */
-			U4	b5CHAIN_SPID			:5;				/* CHAIN_SPID              */
-			U4	xCHAIN_RESTRICT			:1;				/* CHAIN_RESTRICT          */
+			uint32	b16CMC					:16;		/* CMC                     */
+			uint32	xDummy1					:1;			/* Reserved Bits           */
+			uint32	xUM						:1;			/* UM                      */
+			uint32	b5SPID					:5;			/* SPID                    */
+			uint32	b2Dummy2				:2;			/* Reserved Bits           */
+			uint32	xCHAIN_UM				:1;			/* CHAIN_UM                */
+			uint32	b5CHAIN_SPID			:5;			/* CHAIN_SPID              */
+			uint32	xCHAIN_RESTRICT			:1;			/* CHAIN_RESTRICT          */
 		} stBit;
 	} unDTSCM[DMA_DTS_CH_NUM];
 
-	U1	u1Dummy5[3072];									/* 0xFFF88400 - 0xFFF88FFF */
+	uint8	u1Dummy5[3072];								/* 0xFFF88400 - 0xFFF88FFF */
 
 	/************************************/
 	/*		 DTS Channel Register		*/
@@ -265,121 +265,121 @@ typedef	struct
 	/* 0xFFF89000 - 0xFFF8AFEF */
 	struct
 	{
-		U4	u4DTSA;										/* DTSAnnn OFFSET 0x1000   */
+		uint32	u4DTSA;									/* DTSAnnn OFFSET 0x1000   */
 
-		U4	u4DTDA;										/* DTDAnnn OFFSET 0x1004   */
+		uint32	u4DTDA;									/* DTDAnnn OFFSET 0x1004   */
 
 		union											/* DTTCnnn OFFSET 0x1008   */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4		b16TRC			:16;			/* TRC                     */
-				U4		b16ARC			:16;			/* ARC                     */
+				uint32		b16TRC			:16;		/* TRC                     */
+				uint32		b16ARC			:16;		/* ARC                     */
 			} stBit;
 		} unDTTC;
 
 		union											/* DTTCTnnn OFFSET 0x100C  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4		b2TRM			:2;				/* TRM                     */
-				U4		b3DS			:3;				/* DS                      */
-				U4		b2SACM			:2;				/* SACM                    */
-				U4		b2DACM			:2;				/* DACM                    */
-				U4		b2RLD1M			:2;				/* RLD1M                   */
-				U4		b2RLD2M			:2;				/* RLD2M                   */
-				U4		xDummy1			:1;				/* Reserved Bits           */
-				U4		xTCE			:1;				/* TCE                     */
-				U4		xCCE			:1;				/* CCE                     */
-				U4		b2CHNE			:2;				/* CHNE                    */
-				U4		b7CHNSEL		:7;				/* CHNSEL                  */
-				U4		b2Dummy2		:2;				/* Reserved Bits           */
-				U4		xESE			:1;				/* ESE                     */
-				U4		b4Dummy3		:4;				/* Reserved Bits           */
+				uint32		b2TRM			:2;			/* TRM                     */
+				uint32		b3DS			:3;			/* DS                      */
+				uint32		b2SACM			:2;			/* SACM                    */
+				uint32		b2DACM			:2;			/* DACM                    */
+				uint32		b2RLD1M			:2;			/* RLD1M                   */
+				uint32		b2RLD2M			:2;			/* RLD2M                   */
+				uint32		xDummy1			:1;			/* Reserved Bits           */
+				uint32		xTCE			:1;			/* TCE                     */
+				uint32		xCCE			:1;			/* CCE                     */
+				uint32		b2CHNE			:2;			/* CHNE                    */
+				uint32		b7CHNSEL		:7;			/* CHNSEL                  */
+				uint32		b2Dummy2		:2;			/* Reserved Bits           */
+				uint32		xESE			:1;			/* ESE                     */
+				uint32		b4Dummy3		:4;			/* Reserved Bits           */
 			} stBit;
 		} unDTTCT;
 
-		U4	u4DTRSA;									/* DTRSAnnn OFFSET 0x1010  */
+		uint32	u4DTRSA;								/* DTRSAnnn OFFSET 0x1010  */
 
-		U4	u4DTRDA;									/* DTRDAnnn OFFSET 0x1014  */
+		uint32	u4DTRDA;								/* DTRDAnnn OFFSET 0x1014  */
 
 		union											/* DTRTCnnn OFFSET 0x1018  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4		b16RTRC			:16;			/* RTRC                    */
-				U4		b16RARC			:16;			/* RARC                    */
+				uint32		b16RTRC			:16;		/* RTRC                    */
+				uint32		b16RARC			:16;		/* RARC                    */
 			} stBit;
 		} unDTRTC;
 
 		union											/* DTTCCnnn OFFSET 0x101C  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4		b16CMC			:16;			/* CMC                     */
-				U4		b16Dummy1		:16;			/* Reserved Bits           */
+				uint32		b16CMC			:16;		/* CMC                     */
+				uint32		b16Dummy1		:16;		/* Reserved Bits           */
 			} stBit;
 		} unDTTCC;
 
 		union											/* DTFSLnnn OFFSET 0x1020  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4		xREQEN			:1;				/* REQEN                   */
-				U4		b31Dummy1		:31;			/* Reserved Bits           */
+				uint32		xREQEN			:1;			/* REQEN                   */
+				uint32		b31Dummy1		:31;		/* Reserved Bits           */
 			} stBit;
 		} unDTFSL;
 
 		union											/* DTFSTnnn OFFSET 0x1024  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4		xDRQ			:1;				/* DRQ                     */
-				U4		xOVF			:1;				/* OVF                     */
-				U4		b2Dummy1		:2;				/* Reserved Bits           */
-				U4		xTC				:1;				/* TC                      */
-				U4		xCC				:1;				/* CC                      */
-				U4		xDummy2			:1;				/* Reserved Bits           */
-				U4		xER				:1;				/* ER                      */
-				U4		b3Dummy3		:3;				/* Reserved Bits           */
-				U4		xERWR			:1;				/* ERWR                    */
-				U4		b20Dummy4		:20;			/* Reserved Bits           */
+				uint32		xDRQ			:1;			/* DRQ                     */
+				uint32		xOVF			:1;			/* OVF                     */
+				uint32		b2Dummy1		:2;			/* Reserved Bits           */
+				uint32		xTC				:1;			/* TC                      */
+				uint32		xCC				:1;			/* CC                      */
+				uint32		xDummy2			:1;			/* Reserved Bits           */
+				uint32		xER				:1;			/* ER                      */
+				uint32		b3Dummy3		:3;			/* Reserved Bits           */
+				uint32		xERWR			:1;			/* ERWR                    */
+				uint32		b20Dummy4		:20;		/* Reserved Bits           */
 			} stBit;
 		} unDTFST;
 
 		union											/* DTFSSnnn OFFSET 0x1028  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4		xDRQS			:1;				/* DRQS                    */
-				U4		b31Dummy1		:31;			/* Reserved Bits           */
+				uint32		xDRQS			:1;			/* DRQS                    */
+				uint32		b31Dummy1		:31;		/* Reserved Bits           */
 			} stBit;
 		} unDTFSS;
 
 		union											/* DTFSCnnn OFFSET 0x102C  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4		xDRQC			:1;				/* DRQC                    */
-				U4		xOVFC			:1;				/* OVFC                    */
-				U4		b2Dummy1		:2;				/* Reserved Bits           */
-				U4		xTCC			:1;				/* TCC                     */
-				U4		xCCC			:1;				/* CCC                     */
-				U4		xDummy2			:1;				/* Reserved Bits           */
-				U4		xERC			:1;				/* ERC                     */
-				U4		b24Dummy3		:24;			/* Reserved Bits           */
+				uint32		xDRQC			:1;			/* DRQC                    */
+				uint32		xOVFC			:1;			/* OVFC                    */
+				uint32		b2Dummy1		:2;			/* Reserved Bits           */
+				uint32		xTCC			:1;			/* TCC                     */
+				uint32		xCCC			:1;			/* CCC                     */
+				uint32		xDummy2			:1;			/* Reserved Bits           */
+				uint32		xERC			:1;			/* ERC                     */
+				uint32		b24Dummy3		:24;		/* Reserved Bits           */
 			} stBit;
 		} unDTFSC;
 
-		U1	u1Dummy6[16];								/* OFFSET 0x1030 - 0x103F */
+		uint8	u1Dummy6[16];							/* OFFSET 0x1030 - 0x103F */
 
 	} stDTS_CH[DMA_DTS_CH_NUM];
 
@@ -389,291 +389,291 @@ typedef	struct
 typedef	struct
 {
 
-	U1	u1Dummy1[16];									/* OFFSET 0x00 - 0x0F      */
+	uint8	u1Dummy1[16];								/* OFFSET 0x00 - 0x0F      */
 
 	union												/* DMAjESTA OFFSET 0x10    */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	b16AEN					:16;			/* AEN                     */
-			U4	b16Dummy1				:16;			/* Reserved Bits           */
+			uint32	b16AEN					:16;		/* AEN                     */
+			uint32	b16Dummy1				:16;		/* Reserved Bits           */
 		} stBit;
 	} unESTA;
 
-	U1	u1Dummy2[12];									/* OFFSET 0x14 - 0x1F      */
+	uint8	u1Dummy2[12];								/* OFFSET 0x14 - 0x1F      */
 
 	union												/* DMAjISTA OFFSET 0x20    */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	b16INT					:16;			/* INT                     */
-			U4	b16Dummy1				:16;			/* Reserved Bits           */
+			uint32	b16INT					:16;		/* INT                     */
+			uint32	b16Dummy1				:16;		/* Reserved Bits           */
 		} stBit;
 	} unISTA;
 
-	U1	u1Dummy3[28];									/* OFFSET 0x24 - 0x3F      */
+	uint8	u1Dummy3[28];								/* OFFSET 0x24 - 0x3F      */
 
 	union												/* DMAjCHPRI OFFSET 0x40   */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	b16PRICNT				:16;			/* PRICNT                  */
-			U4	b16Dummy1				:16;			/* Reserved Bits           */
+			uint32	b16PRICNT				:16;		/* PRICNT                  */
+			uint32	b16Dummy1				:16;		/* Reserved Bits           */
 		} stBit;
 	} unCHPRI;
 
-	U1	u1Dummy4[28];									/* OFFSET 0x44 - 0x5F      */
+	uint8	u1Dummy4[28];								/* OFFSET 0x44 - 0x5F      */
 
 	union												/* DMAjOR OFFSET 0x60      */
 	{
-		U2	u2Data;										/* 16-bit Access           */
+		uint16	u2Data;									/* 16-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U2	xDME					:1;				/* DME                     */
-			U2	b7Dummy1				:7;				/* Reserved Bits           */
-			U2	b2PR					:2;				/* PR                      */
-			U2	b6Dummy2				:6;				/* Reserved Bits           */
+			uint16	xDME					:1;			/* DME                     */
+			uint16	b7Dummy1				:7;			/* Reserved Bits           */
+			uint16	b2PR					:2;			/* PR                      */
+			uint16	b6Dummy2				:6;			/* Reserved Bits           */
 		} stBit;
 	} unOR;
 
-	U1	u1Dummy5[30];									/* OFFSET 0x62 - 0x7F      */
+	uint8	u1Dummy5[30];								/* OFFSET 0x62 - 0x7F      */
 
 	union												/* DMAjCHRST OFFSET 0x80   */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	b16CLR					:16;			/* CLR                     */
-			U4	b16Dummy1				:16;			/* Reserved Bits           */
+			uint32	b16CLR					:16;		/* CLR                     */
+			uint32	b16Dummy1				:16;		/* Reserved Bits           */
 		} stBit;
 	} unCHRST;
 
-	U1	u1Dummy6[124];									/* OFFSET 0x84 - 0xFF      */
+	uint8	u1Dummy6[124];								/* OFFSET 0x84 - 0xFF      */
 
 	union												/* DMAjCM_n OFFSET 0x100   */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	xUM						:1;				/* UM                      */
-			U4	b7Dummy1				:7;				/* Reserved Bits           */
-			U4	b5SPID					:5;				/* SPID                    */
-			U4	b19Dummy2				:19;			/* Reserved Bits           */
+			uint32	xUM						:1;			/* UM                      */
+			uint32	b7Dummy1				:7;			/* Reserved Bits           */
+			uint32	b5SPID					:5;			/* SPID                    */
+			uint32	b19Dummy2				:19;		/* Reserved Bits           */
 		} stBit;
 	} unCM[DMA_DMAC_CH_NUM];
 
-	U1	u1Dummy7[3776];									/* OFFSET 0x140 - 0x0FFF   */
+	uint8	u1Dummy7[3776];								/* OFFSET 0x140 - 0x0FFF   */
 	
 #if (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A)
-	U1	u1Dummy8[4096];									/* OFFSET 0x1000 - 0x1FFF   */
+	uint8	u1Dummy8[4096];								/* OFFSET 0x1000 - 0x1FFF   */
 #elif (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B)
 	union												/* DMAjRCHS 0x1000 */
 	{
-		U4	u4Data;										/* 32-bit Access           */
+		uint32	u4Data;									/* 32-bit Access           */
 		struct											/* Bit Access              */
 		{
-			U4	b8RCHS					:8;				/* RCHS                    */
-			U4	b24Dummy1				:24;			/* Reserved Bits           */
+			uint32	b8RCHS					:8;			/* RCHS                    */
+			uint32	b24Dummy1				:24;		/* Reserved Bits           */
 		} stBit;
 	} unRCHS;
 	
-	U1	u1Dummy8[4092];									/* OFFSET 0x1004 - 0x1FFF   */
+	uint8	u1Dummy8[4092];								/* OFFSET 0x1004 - 0x1FFF   */
 #endif /* MCAL_SPAL_TARGET */
 
 	struct												/* OFFSET 0x2000 - 0x27D8  */
 	{
-		U4	u4SAR;										/* DMAjSAR_n OFFSET 0x00   */
+		uint32	u4SAR;									/* DMAjSAR_n OFFSET 0x00   */
 
-		U4	u4DAR;										/* DMAjDAR_n OFFSET 0x04   */
+		uint32	u4DAR;									/* DMAjDAR_n OFFSET 0x04   */
 
-		U4	u4TSR;										/* DMAjTSR_n OFFSET 0x08   */
+		uint32	u4TSR;									/* DMAjTSR_n OFFSET 0x08   */
 
-		U4	u4TSRB;										/* DMAjTSRB_n OFFSET 0x0C  */
+		uint32	u4TSRB;									/* DMAjTSRB_n OFFSET 0x0C  */
 
 		union											/* DMAjTMR_n OFFSET 0x10   */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
 #if (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2A)
-				U4	b4STS				:4;				/* STS                     */
-				U4	b4DTS				:4;				/* DTS                     */
-				U4	b2SM				:2;				/* SM                      */
-				U4	b2DM				:2;				/* DM                      */
-				U4	xTRS				:1;				/* TRS                     */
-				U4	b3Dummy1			:3;				/* Reserved Bits           */
-				U4	b4PRI				:4;				/* PRI                     */
-				U4	b4SLM				:4;				/* SLM                     */
-				U4	b8Dummy2			:8;				/* Reserved Bits           */
+				uint32	b4STS				:4;			/* STS                     */
+				uint32	b4DTS				:4;			/* DTS                     */
+				uint32	b2SM				:2;			/* SM                      */
+				uint32	b2DM				:2;			/* DM                      */
+				uint32	xTRS				:1;			/* TRS                     */
+				uint32	b3Dummy1			:3;			/* Reserved Bits           */
+				uint32	b4PRI				:4;			/* PRI                     */
+				uint32	b4SLM				:4;			/* SLM                     */
+				uint32	b8Dummy2			:8;			/* Reserved Bits           */
 #elif (MCAL_SPAL_TARGET == MCAL_TARGET_RH850U2B)
-				U4	b4STS				:4;				/* STS                     */
-				U4	b4DTS				:4;				/* DTS                     */
-				U4	xSM				    :1;				/* SM                      */
-				U4	xDummy1			    :1;				/* Reserved Bit            */
-				U4	xDM				    :1;				/* DM                      */
-				U4	xDummy2			    :1;				/* Reserved Bit            */
-				U4	xTRS				:1;				/* TRS                     */
-				U4	b3Dummy3			:3;				/* Reserved Bits           */
-				U4	b4PRI				:4;				/* PRI                     */
-				U4	b4SLM				:4;				/* SLM                     */
-				U4	b8Dummy4			:8;				/* Reserved Bits           */
+				uint32	b4STS				:4;			/* STS                     */
+				uint32	b4DTS				:4;			/* DTS                     */
+				uint32	xSM				    :1;			/* SM                      */
+				uint32	xDummy1			    :1;			/* Reserved Bit            */
+				uint32	xDM				    :1;			/* DM                      */
+				uint32	xDummy2			    :1;			/* Reserved Bit            */
+				uint32	xTRS				:1;			/* TRS                     */
+				uint32	b3Dummy3			:3;			/* Reserved Bits           */
+				uint32	b4PRI				:4;			/* PRI                     */
+				uint32	b4SLM				:4;			/* SLM                     */
+				uint32	b8Dummy4			:8;			/* Reserved Bits           */
 #endif /* MCAL_SPAL_TARGET */
 			} stBit;
 		} unTMR;
 
 		union											/* DMAjCHCR_n OFFSET 0x14  */
 		{
-			U2	u2Data;									/* 16-bit Access           */
+			uint16	u2Data;								/* 16-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U2	xDE					:1;				/* DE                      */
-				U2	xIE					:1;				/* IE                      */
-				U2	xDSIE				:1;				/* DSIE                    */
-				U2	xCAIE				:1;				/* CAIE                    */
-				U2	xCAEE				:1;				/* CAEE                    */
-				U2	b3Dummy1			:3;				/* Reserved Bits           */
-				U2	xDPB				:1;				/* DPB                     */
-				U2	xDPE				:1;				/* DPE                     */
-				U2	b6Dummy2			:6;				/* Reserved Bits           */
+				uint16	xDE					:1;			/* DE                      */
+				uint16	xIE					:1;			/* IE                      */
+				uint16	xDSIE				:1;			/* DSIE                    */
+				uint16	xCAIE				:1;			/* CAIE                    */
+				uint16	xCAEE				:1;			/* CAEE                    */
+				uint16	b3Dummy1			:3;			/* Reserved Bits           */
+				uint16	xDPB				:1;			/* DPB                     */
+				uint16	xDPE				:1;			/* DPE                     */
+				uint16	b6Dummy2			:6;			/* Reserved Bits           */
 			} stBit;
 		} unCHCR;
 
 		union											/* DMAjCHSTP_n OFFSET 0x16 */
 		{
-			U2	u2Data;									/* 16-bit Access           */
+			uint16	u2Data;								/* 16-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U2	xSTP				:1;				/* STP                     */
-				U2	b15Dummy1			:15;			/* Reserved Bits           */
+				uint16	xSTP				:1;			/* STP                     */
+				uint16	b15Dummy1			:15;		/* Reserved Bits           */
 			} stBit;
 		} unCHSTP;
 
 		union											/* DMAjCHSTA_n OFFSET 0x18 */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4	xBUSY				:1;				/* BUSY                    */
-				U4	xTE					:1;				/* TE                      */
-				U4	xDSE				:1;				/* DSE                     */
-				U4	xCAE				:1;				/* CAE                     */
-				U4	b8Dummy1			:8;				/* Reserved Bits           */
-				U4	xDRQ				:1;				/* DRQ                     */
-				U4	xOVF				:1;				/* OVF                     */
-				U4	b18Dummy2			:18;			/* Reserved Bits           */
+				uint32	xBUSY				:1;			/* BUSY                    */
+				uint32	xTE					:1;			/* TE                      */
+				uint32	xDSE				:1;			/* DSE                     */
+				uint32	xCAE				:1;			/* CAE                     */
+				uint32	b8Dummy1			:8;			/* Reserved Bits           */
+				uint32	xDRQ				:1;			/* DRQ                     */
+				uint32	xOVF				:1;			/* OVF                     */
+				uint32	b18Dummy2			:18;		/* Reserved Bits           */
 			} stBit;
 		} unCHSTA;
 
 		union											/* DMAjCHFCR_n OFFSET 0x1C */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4	xDEC				:1;				/* DEC                     */
-				U4	xTEC				:1;				/* TEC                     */
-				U4	xDSEC				:1;				/* DSEC                    */
-				U4	xCAEC				:1;				/* CAEC                    */
-				U4	b5Dummy1			:5;				/* Reserved Bits           */
-				U4	xDPEC				:1;				/* DPEC                    */
-				U4	b2Dummy2			:2;				/* Reserved Bits           */
-				U4	xDRQC				:1;				/* DRQC                    */
-				U4	xOVFC				:1;				/* OVFC                    */
-				U4	b18Dummy3			:18;			/* Reserved Bits           */
+				uint32	xDEC				:1;			/* DEC                     */
+				uint32	xTEC				:1;			/* TEC                     */
+				uint32	xDSEC				:1;			/* DSEC                    */
+				uint32	xCAEC				:1;			/* CAEC                    */
+				uint32	b5Dummy1			:5;			/* Reserved Bits           */
+				uint32	xDPEC				:1;			/* DPEC                    */
+				uint32	b2Dummy2			:2;			/* Reserved Bits           */
+				uint32	xDRQC				:1;			/* DRQC                    */
+				uint32	xOVFC				:1;			/* OVFC                    */
+				uint32	b18Dummy3			:18;		/* Reserved Bits           */
 			} stBit;
 		} unCHFCR;
 
-		U4	u4GIAI;										/* DMAjGIAI_n OFFSET 0x20  */
+		uint32	u4GIAI;									/* DMAjGIAI_n OFFSET 0x20  */
 
-		U4	u4GOAI;										/* DMAjGOAI_n OFFSET 0x24  */
+		uint32	u4GOAI;									/* DMAjGOAI_n OFFSET 0x24  */
 
-		U4	u4SIAI;										/* DMAjSIAI_n OFFSET 0x28  */
+		uint32	u4SIAI;									/* DMAjSIAI_n OFFSET 0x28  */
 
-		U4	u4SOAI;										/* DMAjSOAI_n OFFSET 0x2C  */
+		uint32	u4SOAI;									/* DMAjSOAI_n OFFSET 0x2C  */
 
-		U1	u1Dummy1[8];								/* OFFSET 0x30 - 0x37      */
+		uint8	u1Dummy1[8];							/* OFFSET 0x30 - 0x37      */
 
 		union											/* DMAjSGST_n OFFSET 0x38  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4	b14GICNT			:14;			/* GICNT                   */
-				U4	b2Dummy1			:2;				/* Reserved Bits           */
-				U4	b14SICNT			:14;			/* SICNT                   */
-				U4	b2Dummy2			:2;				/* Reserved Bits           */
+				uint32	b14GICNT			:14;		/* GICNT                   */
+				uint32	b2Dummy1			:2;			/* Reserved Bits           */
+				uint32	b14SICNT			:14;		/* SICNT                   */
+				uint32	b2Dummy2			:2;			/* Reserved Bits           */
 			} stBit;
 		} unSGST;
 
 		union											/* DMAjSGCR_n OFFSET 0x3C  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4	b14GIRPT			:14;			/* GIRPT                   */
-				U4	xDummy1				:1;				/* Reserved Bits           */
-				U4	xGEN				:1;				/* GEN                     */
-				U4	b14SIRPT			:14;			/* SICNT                   */
-				U4	xZF					:1;				/* ZF                      */
-				U4	xSEN				:1;				/* SEN                     */
+				uint32	b14GIRPT			:14;		/* GIRPT                   */
+				uint32	xDummy1				:1;			/* Reserved Bits           */
+				uint32	xGEN				:1;			/* GEN                     */
+				uint32	b14SIRPT			:14;		/* SICNT                   */
+				uint32	xZF					:1;			/* ZF                      */
+				uint32	xSEN				:1;			/* SEN                     */
 			} stBit;
 		} unSGCR;
 
 		union											/* DMAjRS_n OFFSET 0x40    */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4	b8RS				:8;				/* RS                      */
-				U4	xDummy1				:1;				/* Reserved Bits           */
-				U4	xDRQI				:1;				/* DRQI                    */
-				U4	xPLE				:1;				/* PLE                     */
-				U4	xFPT				:1;				/* FPT                     */
-				U4	b3TL				:3;				/* TL                      */
-				U4	xDummy2				:1;				/* Reserved Bits           */
-				U4	b16TC				:16;			/* TC                      */
+				uint32	b8RS				:8;			/* RS                      */
+				uint32	xDummy1				:1;			/* Reserved Bits           */
+				uint32	xDRQI				:1;			/* DRQI                    */
+				uint32	xPLE				:1;			/* PLE                     */
+				uint32	xFPT				:1;			/* FPT                     */
+				uint32	b3TL				:3;			/* TL                      */
+				uint32	xDummy2				:1;			/* Reserved Bits           */
+				uint32	b16TC				:16;		/* TC                      */
 			} stBit;
 		} unRS;
 
-		U1	u1Dummy2[4];								/* OFFSET 0x44 - 0x47      */
+		uint8	u1Dummy2[4];							/* OFFSET 0x44 - 0x47      */
 
 		union											/* DMAjBUFCR_n OFFSET 0x48 */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4	b8ULB				:8;				/* ULB                     */
-				U4	b24Dummy1			:24;			/* Reserved Bits           */
+				uint32	b8ULB				:8;			/* ULB                     */
+				uint32	b24Dummy1			:24;		/* Reserved Bits           */
 			} stBit;
 		} unBUFCR;
 
-		U1	u1Dummy3[4];								/* OFFSET 0x4C - 0x4F      */
+		uint8	u1Dummy3[4];							/* OFFSET 0x4C - 0x4F      */
 
 		union											/* DMAjDPPTR_n OFFSET 0x50 */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4	xCF					:1;				/* CF                      */
-				U4	xDIE				:1;				/* DIE                     */
-				U4	b10PTR				:10;			/* PTR                     */
-				U4	b20Dummy1			:20;			/* Reserved Bits           */
+				uint32	xCF					:1;			/* CF                      */
+				uint32	xDIE				:1;			/* DIE                     */
+				uint32	b10PTR				:10;		/* PTR                     */
+				uint32	b20Dummy1			:20;		/* Reserved Bits           */
 			} stBit;
 		} unDPPTR;
 
 		union											/* DMAjDPCR_n OFFSET 0x54  */
 		{
-			U4	u4Data;									/* 32-bit Access           */
+			uint32	u4Data;								/* 32-bit Access           */
 			struct										/* Bit Access              */
 			{
-				U4	b11UPF				:11;			/* UPF                     */
-				U4	b21Dummy1			:21;			/* Reserved Bits           */
+				uint32	b11UPF				:11;		/* UPF                     */
+				uint32	b21Dummy1			:21;		/* Reserved Bits           */
 			} stBit;
 		} unDPCR;
 
-		U1	u1Dummy4[40];								/* OFFSET 0x58 - 0x7F      */
+		uint8	u1Dummy4[40];							/* OFFSET 0x58 - 0x7F      */
 
 	} stDMAC_CH[DMA_DMAC_CH_NUM];
 
@@ -681,7 +681,7 @@ typedef	struct
 
 typedef	struct
 {
-	U4	u4DesRAM[DMA_DMAC_DESCRIPTOR_NUM];		/* Descriptor RAM */
+	uint32	u4DesRAM[DMA_DMAC_DESCRIPTOR_NUM];			/* Descriptor RAM */
 } Reg_Dram_Type;
 
 /*==============================================================================================*/

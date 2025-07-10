@@ -22,7 +22,7 @@
 /* defines																						*/
 /*==============================================================================================*/
 /*--------------------------------------------------------------------------*/
-/* defines - intenal use													*/
+/* defines - internal use													*/
 /*--------------------------------------------------------------------------*/
 #define	ADC_ZERO			(0U)
 #define ADC_DMA_OFF			(0U)
@@ -681,6 +681,70 @@
  ||  ((ADC_CFG_GRP_SIZE>=15U) && (ADC_CFG_GRP14_USE_CNV_INT==STD_ON) && (ADC_CFG_GRP14_USE_DMA==STD_ON) && (ADC_CFG_GRP14_HWUNIT==ADC_HWUNIT2) && (ADC_CFG_GRP14_SG==ADC_SG4)))
 	#define ADC_USE_ISR_DMA_HWUNIT2_SG4
 #endif
+
+/* HW Unit0 Use */
+#if (((ADC_CFG_GRP_SIZE>= 1U) && (ADC_CFG_GRP00_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 2U) && (ADC_CFG_GRP01_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 3U) && (ADC_CFG_GRP02_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 4U) && (ADC_CFG_GRP03_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 5U) && (ADC_CFG_GRP04_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 6U) && (ADC_CFG_GRP05_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 7U) && (ADC_CFG_GRP06_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 8U) && (ADC_CFG_GRP07_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 9U) && (ADC_CFG_GRP08_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>=10U) && (ADC_CFG_GRP09_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>=11U) && (ADC_CFG_GRP10_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>=12U) && (ADC_CFG_GRP11_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>=13U) && (ADC_CFG_GRP12_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>=14U) && (ADC_CFG_GRP13_HWUNIT==ADC_HWUNIT0))	\
+ ||  ((ADC_CFG_GRP_SIZE>=15U) && (ADC_CFG_GRP14_HWUNIT==ADC_HWUNIT0)))
+	#define ADC_HWUNIT0_USE		(STD_ON)
+#else
+	#define ADC_HWUNIT0_USE		(STD_OFF)
+#endif
+
+/* HW Unit1 Use */
+#if (((ADC_CFG_GRP_SIZE>= 1U) && (ADC_CFG_GRP00_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 2U) && (ADC_CFG_GRP01_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 3U) && (ADC_CFG_GRP02_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 4U) && (ADC_CFG_GRP03_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 5U) && (ADC_CFG_GRP04_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 6U) && (ADC_CFG_GRP05_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 7U) && (ADC_CFG_GRP06_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 8U) && (ADC_CFG_GRP07_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 9U) && (ADC_CFG_GRP08_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>=10U) && (ADC_CFG_GRP09_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>=11U) && (ADC_CFG_GRP10_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>=12U) && (ADC_CFG_GRP11_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>=13U) && (ADC_CFG_GRP12_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>=14U) && (ADC_CFG_GRP13_HWUNIT==ADC_HWUNIT1))	\
+ ||  ((ADC_CFG_GRP_SIZE>=15U) && (ADC_CFG_GRP14_HWUNIT==ADC_HWUNIT1)))
+	#define ADC_HWUNIT1_USE		(STD_ON)
+#else
+	#define ADC_HWUNIT1_USE		(STD_OFF)
+#endif
+
+/* HW Unit2 Use */
+#if (((ADC_CFG_GRP_SIZE>= 1U) && (ADC_CFG_GRP00_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 2U) && (ADC_CFG_GRP01_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 3U) && (ADC_CFG_GRP02_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 4U) && (ADC_CFG_GRP03_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 5U) && (ADC_CFG_GRP04_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 6U) && (ADC_CFG_GRP05_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 7U) && (ADC_CFG_GRP06_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 8U) && (ADC_CFG_GRP07_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>= 9U) && (ADC_CFG_GRP08_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>=10U) && (ADC_CFG_GRP09_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>=11U) && (ADC_CFG_GRP10_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>=12U) && (ADC_CFG_GRP11_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>=13U) && (ADC_CFG_GRP12_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>=14U) && (ADC_CFG_GRP13_HWUNIT==ADC_HWUNIT2))	\
+ ||  ((ADC_CFG_GRP_SIZE>=15U) && (ADC_CFG_GRP14_HWUNIT==ADC_HWUNIT2)))
+	#define ADC_HWUNIT2_USE		(STD_ON)
+#else
+	#define ADC_HWUNIT2_USE		(STD_OFF)
+#endif
+
 /*--------------------------------------------------------------------------*/
 /* defines - config data access												*/
 /*--------------------------------------------------------------------------*/
@@ -704,7 +768,7 @@
 /* Module ID:defined in AUTOSAR_TR_BSWModuleList.pdf					*/
 #define	MCAL_ADC_MODULE_ID					((uint16)(123U))
 
-/* Instance ID:The identifier of the index based instance of a module,	*/
+/* Instance ID:The identifier of the index based instance of a module	*/
 #define	ADC_INSTANCE_ID						((uint8)(0U))					/* Multi core not support					*/
 
 /* Api ID :API Service ID */
@@ -744,18 +808,23 @@
 #define	ADC_RegValueCheckByScanGroup(size,reg,expt,mask)			\
 {																	\
 	VAR(size,			ADC_VAR_NO_INIT)	t_uxRegValue;			\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxRegValuewMask;		\
 	VAR(size,			ADC_VAR_NO_INIT)	t_uxExpectedValue;		\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxMask;				\
 	VAR(Adc_StatusType,	ADC_VAR_NO_INIT)	t_udStatus;				\
 																	\
-	t_uxRegValue		= (reg)  & (size)(mask);					\
-	t_uxExpectedValue	= (expt) & (size)(mask);					\
-	if (t_uxRegValue!=t_uxExpectedValue) {							\
-		ADC_ENTER_CRITICAL_SECTION(ADC_CODE);						\
+	t_uxMask			= (size)(mask);								\
+	t_uxExpectedValue	= (expt) & t_uxMask;						\
+	ADC_ENTER_CRITICAL_SECTION(ADC_CODE);							\
+	t_uxRegValue		= (reg);									\
+	t_uxRegValuewMask	= t_uxRegValue & t_uxMask;					\
+	if (t_uxRegValuewMask!=t_uxExpectedValue) {						\
 		t_udStatus	= Adc_GetGroupStatus(t_cudGrp);					\
 		if (t_udStatus==ADC_IDLE) {									\
-			(reg) = (expt);											\
-			t_uxRegValue = (reg) & (size)(mask);					\
-			if (t_uxRegValue==t_uxExpectedValue) {					\
+			(reg) = ((t_uxRegValue&(~t_uxMask))|t_uxExpectedValue);	\
+			t_uxRegValue		= (reg);							\
+			t_uxRegValuewMask	= t_uxRegValue & t_uxMask;			\
+			if (t_uxRegValuewMask==t_uxExpectedValue) {				\
 				t_u4ChkResult	|= ADC_REGCHK_REFRESH_SUCCESS;		\
 			} else {												\
 				t_u4ChkResult	|= ADC_REGCHK_REFRESH_FAILED;		\
@@ -763,8 +832,8 @@
 		} else {													\
 			t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;			\
 		}															\
-		ADC_EXIT_CRITICAL_SECTION(ADC_CODE);						\
 	}																\
+	ADC_EXIT_CRITICAL_SECTION(ADC_CODE);							\
 }
 #else
 #define	ADC_RegValueCheckByScanGroup(size,reg,expt,mask)			\
@@ -825,20 +894,25 @@
 #define	ADC_RegValueCheckByHWUnit(size,reg,expt,mask,unit)			\
 {																	\
 	VAR(size,			ADC_VAR_NO_INIT)	t_uxRegValue;			\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxRegValuewMask;		\
 	VAR(size,			ADC_VAR_NO_INIT)	t_uxExpectedValue;		\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxMask;				\
 	VAR(boolean,		ADC_VAR_NO_INIT)	t_b1isRunning;			\
 																	\
+	t_uxMask			= (size)(mask);								\
+	t_uxExpectedValue	= (expt) & t_uxMask;						\
 	ADC_ENTER_CRITICAL_SECTION(ADC_CODE);							\
-	t_uxRegValue		= (reg)  & (size)(mask);					\
-	t_uxExpectedValue	= (expt) & (size)(mask);					\
-	if (t_uxRegValue!=t_uxExpectedValue) {							\
+	t_uxRegValue		= (reg);									\
+	t_uxRegValuewMask	= t_uxRegValue & t_uxMask;					\
+	if (t_uxRegValuewMask!=t_uxExpectedValue) {						\
 		t_b1isRunning 	= Adc_IsHWUnitRunning(unit);				\
 		if (t_b1isRunning==TRUE) {									\
 			t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;			\
 		} else {													\
-			(reg) = (expt);											\
-			t_uxRegValue = (reg) & (size)(mask);					\
-			if (t_uxRegValue==t_uxExpectedValue) {					\
+			(reg) = ((t_uxRegValue&(~t_uxMask))|t_uxExpectedValue);	\
+			t_uxRegValue		= (reg);							\
+			t_uxRegValuewMask	= t_uxRegValue & t_uxMask;			\
+			if (t_uxRegValuewMask==t_uxExpectedValue) {				\
 				t_u4ChkResult	|= ADC_REGCHK_REFRESH_SUCCESS;		\
 			} else {												\
 				t_u4ChkResult	|= ADC_REGCHK_REFRESH_FAILED;		\
@@ -856,20 +930,25 @@
 #define	ADC_RegValueCheckByAllUnits(size,reg,expt,mask)				\
 {																	\
 	VAR(size,			ADC_VAR_NO_INIT)	t_uxRegValue;			\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxRegValuewMask;		\
 	VAR(size,			ADC_VAR_NO_INIT)	t_uxExpectedValue;		\
+	VAR(size,			ADC_VAR_NO_INIT)	t_uxMask;				\
 	VAR(boolean,		ADC_VAR_NO_INIT)	t_b1isRunning;			\
 																	\
+	t_uxMask			= (size)(mask);								\
+	t_uxExpectedValue	= (expt) & t_uxMask;						\
 	ADC_ENTER_CRITICAL_SECTION(ADC_CODE);							\
-	t_uxRegValue		= (reg)  & (size)(mask);					\
-	t_uxExpectedValue	= (expt) & (size)(mask);					\
-	if (t_uxRegValue!=t_uxExpectedValue) {							\
+	t_uxRegValue		= (reg);									\
+	t_uxRegValuewMask	= t_uxRegValue & t_uxMask;					\
+	if (t_uxRegValuewMask!=t_uxExpectedValue) {						\
 		t_b1isRunning 	= Adc_IsRunning();							\
 		if (t_b1isRunning==TRUE) {									\
 			t_u4ChkResult |= ADC_REGCHK_REFRESH_IMPOSSIBLE;			\
 		} else {													\
-			(reg) = (expt);											\
-			t_uxRegValue = (reg) & (size)(mask);					\
-			if (t_uxRegValue==t_uxExpectedValue) {					\
+			(reg) = ((t_uxRegValue&(~t_uxMask))|t_uxExpectedValue);	\
+			t_uxRegValue		= (reg);							\
+			t_uxRegValuewMask	= t_uxRegValue & t_uxMask;			\
+			if (t_uxRegValuewMask==t_uxExpectedValue) {				\
 				t_u4ChkResult	|= ADC_REGCHK_REFRESH_SUCCESS;		\
 			} else {												\
 				t_u4ChkResult	|= ADC_REGCHK_REFRESH_FAILED;		\
@@ -1094,7 +1173,9 @@ typedef struct {
 typedef struct {
 	const Adc_SWConfigType*			cpstSWConfig;									/* SW Config : ADC_CFG_GRP_SIZE					*/
 	const Adc_HWConfigType*			cpstHWConfig;									/* HW Config									*/
+	#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 	const Pic2_ConfigType*			cpstPIC2Confg;									/* PIC2 Config									*/
+	#endif
 } Adc_ConfigType;
 
 /*==============================================================================================*/
@@ -1224,8 +1305,7 @@ FUNC(void, ADC_CODE) Adc_StopGroupConversion(
 /* Description			: Reads the group conversion result of the last completed conversion 	*/
 /*						  round of the requested group and stores the channel values starting	*/
 /*						  at the DataBufferPtr address. The group channel values are stored in 	*/
-/*						  ascending channel number order ( in contrast to the storage layout of	*/
-/*						  the result buffer if streaming access is configured).					*/
+/*						  ascending channel number order. 										*/
 /************************************************************************************************/
 #if (ADC_CFG_READ_GRP_API==STD_ON)
 FUNC(Std_ReturnType, ADC_CODE) Adc_ReadGroup(
@@ -1470,11 +1550,11 @@ FUNC(void, ADC_CODE) Adc_DMA_HWUnit2_SG4(void);		/* ISR(DMA) HWUnit2 SG4	*/
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check all registers and refresh ones w expected value.				*/
+/* Description			: Check all registers and refresh ones with expected value.				*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Adc_Regchk_All(void);
 
@@ -1489,11 +1569,11 @@ FUNC(uint32, ADC_CODE) Adc_Regchk_All(void);
 /* Return value			: uint32																*/
 /* 		ADC_REGCHK_OK					: No Error detected										*/
 /* 		ADC_REGCHK_NG					: Error detected										*/
-/*		(following is availabel when ADC_CFG_REG_REFRESH is STD_ON)								*/
+/*		(following is available when ADC_CFG_REG_REFRESH is STD_ON)								*/
 /* 		ADC_REGCHK_REFRESH_SUCCESS		: Error detected but refresh is success					*/
 /* 		ADC_REGCHK_REFRESH_IMPOSSIBLE	: Error detected for unrefreshable register	 			*/
 /* 		ADC_REGCHK_REFRESH_FAILED		: Error detected and refresh failed			 			*/
-/* Description			: Check Group related registers and refresh ones w expected value.		*/
+/* Description			: Check Group related registers and refresh ones with expected value.	*/
 /************************************************************************************************/
 FUNC(uint32, ADC_CODE) Adc_Regchk_Grp(
 	VAR(Adc_GroupType,	ADC_VAR_INIT) Group
@@ -1507,7 +1587,7 @@ FUNC(uint32, ADC_CODE) Adc_Regchk_Grp(
 /************************************************************************************************/
 /* Service name			: Adc_IsRunning															*/
 /* Sync/Async			: Synchronous															*/
-/* Reentrancy			: Non Reentrant															*/
+/* Reentrancy			: Reentrant																*/
 /* Parameters (in)		: None																	*/
 /* Parameters (inout)	: None																	*/
 /* Parameters (out)		: None																	*/
@@ -1548,11 +1628,9 @@ FUNC(boolean, ADC_CODE) Adc_IsHWUnitRunning(
 /* Description			: return the T&H in the designated HW Unit conversion status			*/
 /************************************************************************************************/
 #if ((ADC_CFG_REG_CHK==STD_ON)&&(ADC_CFG_REG_REFRESH==STD_ON))
-#ifdef ADC_USE_TH
 FUNC(boolean, ADC_CODE) Adc_IsTHinHWUnitRunning(
 	CONST(Adc_HWUnitType,	ADC_CONST)	t_cudHWUnit
 );
-#endif
 #endif
 /************************************************************************************************/
 /* Service name			: Adc_SetTHGrp															*/
@@ -1582,12 +1660,10 @@ FUNC(void, ADC_CODE) Adc_SetTHGrp(
 /* Return value			: Track and Hold Group (None/Grp A/Grp B)								*/
 /* Description			: get Track and Hold Group												*/
 /************************************************************************************************/
-#if ((ADC_CFG_REG_CHK==STD_ON)||(ADC_CFG_HW_TRG_API==STD_ON))
-#ifdef ADC_USE_TH
+#if (((ADC_CFG_REG_CHK==STD_ON) && (defined(ADC_USE_TH))) || ((ADC_CFG_HW_TRG_API==STD_ON) && (defined(ADC_USE_TH))))
 FUNC(Adc_TrackHoldGroupType, ADC_CODE) Adc_GetTHGrp(
 	CONST(Adc_GroupType, ADC_CONST) t_cudGrp
 );
-#endif
 #endif
 
 #define ADC_STOP_SEC_CODE_GLOBAL

@@ -47,9 +47,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S03_CH0) && defined(ComConf_ComSignal_HEDH)
 static U1      u1_s_alert_b_tbeam12_msgsts_bdb;
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S03_CH0) && defined(ComConf_ComSignal_HEDH) */
 #if defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND)
 static U1      u1_s_alert_b_tbeam12_msgsts_afs;
 #endif /* defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND) */
@@ -123,9 +123,9 @@ const ST_ALERT_MTRX st_gp_ALERT_B_TBEAM12_MTRX[1] = {
 /*===================================================================================================================================*/
 void    vd_g_AlertB_tbeam12Init(void)
 {
-#if defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S03_CH0) && defined(ComConf_ComSignal_HEDH)
     u1_s_alert_b_tbeam12_msgsts_bdb = (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S03_CH0) && defined(ComConf_ComSignal_HEDH) */
 #if defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND)
     u1_s_alert_b_tbeam12_msgsts_afs = (U1)COM_NO_RX;
 #endif /* defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND) */
@@ -144,19 +144,19 @@ static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     static const U1 u1_s_ALERT_B_TBEAM_LSB_AFSSTS   = (U1)1U;
     U1              u1_t_sgnl_azb;
 #endif /* defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND) */
-#if defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH)
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S03_CH0) && defined(ComConf_ComSignal_HEDH)
     static const U2 u2_s_ALERT_B_TBEAM_THRSH_TO_BDB = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_TBEAM_LSB_HEDH     = (U1)2U;
     static const U1 u1_s_ALERT_B_TBEAM_LSB_BDBSTS   = (U1)3U;
     U1              u1_t_sgnl_hedh;
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S03_CH0) && defined(ComConf_ComSignal_HEDH) */
     static const U4 u4_s_ALERT_B_TBEAM_BIT_BAT_WT   = (U4)0x00000010U;
     U1              u1_t_trns_fact;
     U4              u4_t_src_chk;
 
 #if defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND)
-    u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AFS1S01,
-                                           (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+    u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_AFS1S01,
+                                           (U4)ALERT_CAN_SYS_PNC_ALL,
                                            u2_s_ALERT_B_TBEAM_THRSH_TO_AFS) & (U1)(COM_TIMEOUT | COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
@@ -173,9 +173,9 @@ static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk   = (U4)0U;
 #endif /* defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND) */
 
-#if defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH)
-    u1_t_trns_fact = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_BDB1S03_RXCH0,
-                                           (U2)OXCAN_RX_SYS_NRX_PBA | (U2)OXCAN_RX_SYS_TOE_PBA,
+#if defined(OXCAN_RXD_PDU_CAN_BDB1S03_CH0) && defined(ComConf_ComSignal_HEDH)
+    u1_t_trns_fact = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_BDB1S03_CH0,
+                                           (U4)ALERT_CAN_SYS_PNC_ALL,
                                            u2_s_ALERT_B_TBEAM_THRSH_TO_BDB) & (U1)(COM_TIMEOUT | COM_NO_RX);
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) == (U1)0U){
@@ -188,7 +188,7 @@ static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 
     u4_t_src_chk  |= ((U4)u1_t_sgnl_hedh                                    << u1_s_ALERT_B_TBEAM_LSB_HEDH);
     u4_t_src_chk  |= (((U4)u1_s_alert_b_tbeam12_msgsts_bdb & (U4)COM_NO_RX) << u1_s_ALERT_B_TBEAM_LSB_BDBSTS);
-#endif /* defined(OXCAN_PDU_RX_CAN_BDB1S03_RXCH0) && defined(ComConf_ComSignal_HEDH) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_BDB1S03_CH0) && defined(ComConf_ComSignal_HEDH) */
 
     if((u1_a_VOM & (U1)ALERT_VOM_BAT_WT) != (U1)0U){
         u4_t_src_chk   |= u4_s_ALERT_B_TBEAM_BIT_BAT_WT;

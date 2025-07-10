@@ -244,8 +244,8 @@ static U4      u4_s_AlertP_stostaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
@@ -277,8 +277,8 @@ static U4      u4_s_AlertP_stostaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
+                                     (U4)OXCAN_SYS_IGR,
 									 u2_s_ALERT_P_STOSTA_BC_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -309,8 +309,8 @@ static U4      u4_s_AlertP_stostaPdFalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
-	                                 (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
+	                                 (U4)OXCAN_SYS_IGR,
 									 (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
@@ -343,8 +343,8 @@ static U4      u4_s_AlertP_stostaPdCoaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
-	                                 (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
+	                                 (U4)OXCAN_SYS_IGR,
 									 u2_s_ALERT_P_STOSTA_COA_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -382,8 +382,8 @@ static U4      u4_s_AlertP_stostaPdInhSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_P_STOSTA_INH_TO_THRS) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;

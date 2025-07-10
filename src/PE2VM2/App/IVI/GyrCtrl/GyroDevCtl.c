@@ -69,9 +69,6 @@
 #define GYRODEV_GSENS_NOTIFCOND_SET_NG      (1U)        /* "[API]G-Sensor INT Signal Notification Condition" Setting NG */
 #define GYRODEV_GSENS_NOTIFCOND_READ_OK     (0U)        /* "[API]G-Sensor INT Signal Notification Condition" Reading OK */
 #define GYRODEV_GSENS_NOTIFCOND_READ_NG     (1U)        /* "[API]G-Sensor INT Signal Notification Condition" Reading NG */
-#define GYRODEV_GSENS_NOTIFCOND_UNRCV       (0xFFU)     /* "[API]G-Sensor INT Signal Notification Condition" Unreceived Status */
-#define GYRODEV_GSENS_NOTIFCOND_WAIT        (0U)        /* "[API]G-Sensor INT Signal Notification Condition" Receive Wait Status */
-#define GYRODEV_GSENS_NOTIFCOND_RCV         (1U)        /* "[API]G-Sensor INT Signal Notification Condition" Received Status */
 #define GYRODEV_GSENS_INT_THD_LSB_MASK      (0xFFU)     /* G-Sensor INT_ANYMOT_TH Register anymot_th LSB Mask Value */
 #define GYRODEV_GSENS_INT_THD_MSB_MASK      (0x07U)     /* G-Sensor INT_ANYMOT_TH Register anymot_th MSB Mask Value */
 #define GYRODEV_GSENS_INT_THD_MAX           (100U)      /* "[API]G-Sensor INT Signal Notification Condition" Threshold Request Max Value */
@@ -83,7 +80,6 @@
 #define GYRODEV_GSENS_INT_LVL_MASK          (0x02U)     /* G-Sensor INT2_IO_CONF Register int2_lvl Mask Value */
 #define GYRODEV_GSENS_INT_LVL_ACT_HI        (0U)        /* "[API]G-Sensor INT Signal Notification Condition" Active Request Active High Value */
 #define GYRODEV_GSENS_INT_LVL_ACT_LOW       (1U)        /* "[API]G-Sensor INT Signal Notification Condition" Active Request Active Low Value */
-#define GYRODEV_GSENS_INT_LVL_UNDEF         (0xFFU)     /* "[API]G-Sensor INT Signal Notification Condition" Active Request Undefined Value */
 
 #define GYRODEV_CTRLOUTSET_STEP0            (0U)
 #define GYRODEV_CTRLOUTSET_STEP1            (1U)
@@ -105,9 +101,6 @@
 #define GYRODEV_GSENS_OUTCTRL_REQ_INI       (0xFFU)     /* "[API]G-Sensor INT Signal Output Control" Result Initial Value */
 #define GYRODEV_GSENS_OUTCTRL_SET_OK        (0U)        /* "[API]G-Sensor INT Signal Output Control" Setting OK */
 #define GYRODEV_GSENS_OUTCTRL_SET_NG        (1U)        /* "[API]G-Sensor INT Signal Output Control" Setting NG */
-#define GYRODEV_GSENS_OUTCTRL_UNRCV         (0xFFU)     /* "[API]G-Sensor INT Signal Output Control" Unreceived Status */
-#define GYRODEV_GSENS_OUTCTRL_WAIT          (0U)        /* "[API]G-Sensor INT Signal Output Control" Receive Wait Status */
-#define GYRODEV_GSENS_OUTCTRL_RCV           (1U)        /* "[API]G-Sensor INT Signal Output Control" Received Status */
 #define GYRODEV_GSENS_INT_EN_LSB_MASK       (0x00U)     /* G-Sensor INT_ANYMOT_TH Register anymot_en LSB Mask Value */
 #define GYRODEV_GSENS_INT_EN_MSB_MASK       (0x08U)     /* G-Sensor INT_ANYMOT_TH Register anymot_en MSB Mask Value */
 #define GYRODEV_GSENS_INT_EN_ON             (0U)        /* "[API]G-Sensor INT Signal Output Control" Type Request On Value */
@@ -116,7 +109,6 @@
 #define GYRODEV_GSENS_INT_OUT_MASK          (0x08U)     /* G-Sensor INT2_IO_CONF Register int2_out Mask Value */
 #define GYRODEV_GSENS_INT_STBY_ON           (0U)        /* "[API]G-Sensor INT Signal Output Control" Standby Request ON Value */
 #define GYRODEV_GSENS_INT_STBY_OFF          (1U)        /* "[API]G-Sensor INT Signal Output Control" Standby Request OFF Value */
-#define GYRODEV_GSENS_INT_STBY_UNDEF        (0xFFU)     /* "[API]G-Sensor INT Signal Output Control" Standby Request Undefined Value */
 
 #define GYRODEV_INT_ANYMOT_TH_SET1_WRINUM   (1U)
 #define GYRODEV_INT_ANYMOT_TH_SET2_WRINUM   (1U)
@@ -153,16 +145,18 @@ static U1 u1_s_gyrodev_pre_appon_sts;                           /* Previous APP-
 static U1 u1_s_gyrodev_dtcrec_a_flag;                           /* Gyro Device Read Data Check DTC Record(A) Flag */
 
 static U1 u1_s_gyrodev_notifcondset_sts;                        /* "[API]G-Sensor INT Signal Notification Condition" Function Status */
-static U1 u1_s_gyrodev_oscmd_notifcond_set_flag;                /* "[API]G-Sensor INT Signal Notification Condition" Setting Request Receive Flag */
+static U1 u1_s_gyrodev_oscmd_notifcond_rcv_flag;                /* "[API]G-Sensor INT Signal Notification Condition" Setting Request Receive Flag */
+static U1 u1_s_gyrodev_oscmd_notifcond_bak_flag;                /* "[API]G-Sensor INT Signal Notification Condition" Setting Request Backup Flag */
 static ST_GYRODEV_NOTIFCOND_SETDATA st_gyrodev_notifcond_setreq;    /* "[API]G-Sensor INT Signal Notification Condition" Setting Request Data */
-static U1 u1_s_gyrodev_oscmd_notifcond_act_req;                 /* "[API]G-Sensor INT Signal Notification Condition" uc_active Request */
+static ST_GYRODEV_NOTIFCOND_SETDATA st_gyrodev_notifcond_setbak;    /* "[API]G-Sensor INT Signal Notification Condition" Setting Request Backup Data *//* 暫定 +B-ON保持が必要 */
 static U1 u1_s_gyrodev_oscmd_notifcond_read_flag;               /* "[API]G-Sensor INT Signal Notification Condition" Reading Request Receive Flag */
 static ST_XSPI_IVI_GYRO_INT_DATA st_gyrodev_notifcond_readreq;  /* "[API]G-Sensor INT Signal Notification Condition" Readting Request Data */
 
 static U1 u1_s_gyrodev_ctrloutset_sts;                          /* "[API]G-Sensor INT Signal Output Control" Function Status */
-static U1 u1_s_gyrodev_oscmd_outctl_set_flag;                   /* "[API]G-Sensor INT Signal Output Control" Setting Request Receive Flag */
+static U1 u1_s_gyrodev_oscmd_outctl_rcv_flag;                   /* "[API]G-Sensor INT Signal Output Control" Setting Request Receive Flag */
+static U1 u1_s_gyrodev_oscmd_outctl_bak_flag;                   /* "[API]G-Sensor INT Signal Output Control" Setting Request Backup Flag */
 static ST_GYRODEV_CTRLOUT_SETDATA st_gyrodev_ctrlout_setreq;    /* "[API]G-Sensor INT Signal Output Control" Setting Request Data */
-static U1 u1_s_gyrodev_oscmd_outctl_stby_req;                   /* "[API]G-Sensor INT Signal Output Control" uc_type_standby Request */
+static ST_GYRODEV_CTRLOUT_SETDATA st_gyrodev_ctrlout_setbak;    /* "[API]G-Sensor INT Signal Output Control" Setting Request Backup Data *//* 暫定 +B-ON保持が必要 */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -494,16 +488,18 @@ void    vd_g_GyroDev_BonInit(void)
     u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
 
     u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP0;
-    u1_s_gyrodev_oscmd_notifcond_set_flag = (U1)GYRODEV_GSENS_NOTIFCOND_UNRCV;
+    u1_s_gyrodev_oscmd_notifcond_rcv_flag = (U1)FALSE;
+    u1_s_gyrodev_oscmd_notifcond_bak_flag = (U1)FALSE;
     vd_s_GyroDev_Memset(&st_gyrodev_notifcond_setreq, (U1)0U, sizeof(st_gyrodev_notifcond_setreq));
-    u1_s_gyrodev_oscmd_notifcond_act_req = (U1)GYRODEV_GSENS_INT_LVL_UNDEF;
+    vd_s_GyroDev_Memset(&st_gyrodev_notifcond_setbak, (U1)0U, sizeof(st_gyrodev_notifcond_setbak));
     u1_s_gyrodev_oscmd_notifcond_read_flag = (U1)FALSE;
     vd_s_GyroDev_Memset(&st_gyrodev_notifcond_readreq, (U1)0U, sizeof(st_gyrodev_notifcond_readreq));
 
     u1_s_gyrodev_ctrloutset_sts = (U1)GYRODEV_CTRLOUTSET_STEP0;
-    u1_s_gyrodev_oscmd_outctl_set_flag = (U1)GYRODEV_GSENS_OUTCTRL_UNRCV;
+    u1_s_gyrodev_oscmd_outctl_rcv_flag = (U1)FALSE;
+    u1_s_gyrodev_oscmd_outctl_bak_flag = (U1)FALSE;
     vd_s_GyroDev_Memset(&st_gyrodev_ctrlout_setreq, (U1)0U, sizeof(st_gyrodev_ctrlout_setreq));
-    u1_s_gyrodev_oscmd_outctl_stby_req = (U1)GYRODEV_GSENS_INT_STBY_UNDEF;
+    vd_s_GyroDev_Memset(&st_gyrodev_ctrlout_setbak, (U1)0U, sizeof(st_gyrodev_ctrlout_setbak));
 
     /*  データリード用テーブル(BurstRead)初期化 */
     u1_sp_GYRODEV_GYRODATA_RD_PDU2[0] = (U1)GYRODEV_GYRO_I2C_SLAVEADR_RD;    /* Slave Address */
@@ -578,16 +574,14 @@ void    vd_g_GyroDev_WkupInit(void)
     u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
 
     u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP0;
-    u1_s_gyrodev_oscmd_notifcond_set_flag = (U1)GYRODEV_GSENS_NOTIFCOND_UNRCV;
+    u1_s_gyrodev_oscmd_notifcond_rcv_flag = (U1)FALSE;
     vd_s_GyroDev_Memset(&st_gyrodev_notifcond_setreq, (U1)0U, sizeof(st_gyrodev_notifcond_setreq));
-    u1_s_gyrodev_oscmd_notifcond_act_req = (U1)GYRODEV_GSENS_INT_LVL_UNDEF;
     u1_s_gyrodev_oscmd_notifcond_read_flag = (U1)FALSE;
     vd_s_GyroDev_Memset(&st_gyrodev_notifcond_readreq, (U1)0U, sizeof(st_gyrodev_notifcond_readreq));
 
     u1_s_gyrodev_ctrloutset_sts = (U1)GYRODEV_CTRLOUTSET_STEP0;
-    u1_s_gyrodev_oscmd_outctl_set_flag = (U1)GYRODEV_GSENS_OUTCTRL_UNRCV;
+    u1_s_gyrodev_oscmd_outctl_rcv_flag = (U1)FALSE;
     vd_s_GyroDev_Memset(&st_gyrodev_ctrlout_setreq, (U1)0U, sizeof(st_gyrodev_ctrlout_setreq));
-    u1_s_gyrodev_oscmd_outctl_stby_req = (U1)GYRODEV_GSENS_INT_STBY_UNDEF;
 
     /*  データリード用テーブル(BurstRead)初期化 */
     u1_sp_GYRODEV_GYRODATA_RD_PDU2[0] = (U1)GYRODEV_GYRO_I2C_SLAVEADR_RD;    /* Slave Address */
@@ -1133,9 +1127,16 @@ static U1    u1_s_GyroDev_GSensNotifCondFunc(const U1 u1_a_type)
     switch (u1_s_gyrodev_notifcondset_sts){
         case GYRODEV_NOTIFCONDSET_STEP0:                            /* STEP0 */
             if(u1_a_type == (U1)GYRODEV_GSENS_NOTIFCONDFUNC_SETREQ){                    /* SiP -> MCU Setting Request */
-                if(u1_s_gyrodev_oscmd_notifcond_set_flag == (U1)GYRODEV_GSENS_NOTIFCOND_RCV){
+                if(u1_s_gyrodev_oscmd_notifcond_rcv_flag == (U1)TRUE){
                     /* Flag Clear */
-                    u1_s_gyrodev_oscmd_notifcond_set_flag = (U1)GYRODEV_GSENS_NOTIFCOND_WAIT;
+                    u1_s_gyrodev_oscmd_notifcond_rcv_flag = (U1)FALSE;
+                    /* Request Backup Check */
+                    if(st_gyrodev_notifcond_setreq.u1_active == (U1)GYRODEV_GSENS_INT_LVL_ACT_HI){  /* uc_active = LSDRV_GSNS_INT_COND_ACTIVE_HIGH */
+                        /* Backup Flag Set */
+                        u1_s_gyrodev_oscmd_notifcond_bak_flag = (U1)TRUE;
+                        /* Input Parameter Retention */
+                        st_gyrodev_notifcond_setbak = st_gyrodev_notifcond_setreq;
+                    }
                     /* Next Process */
                     u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP1;
                 }
@@ -1145,17 +1146,15 @@ static U1    u1_s_GyroDev_GSensNotifCondFunc(const U1 u1_a_type)
                 }
             }
             else if(u1_a_type == (U1)GYRODEV_GSENS_NOTIFCONDFUNC_BACKUP){               /* Power ON -> OFF Event Setting */
-                if(u1_s_gyrodev_oscmd_notifcond_set_flag != (U1)GYRODEV_GSENS_NOTIFCOND_UNRCV){
-                    if(u1_s_gyrodev_oscmd_notifcond_act_req == (U1)GYRODEV_GSENS_INT_LVL_ACT_HI){
-                        /* Next Process */
-                        u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP7;
-                    }
-                    else{
-                        /* Function Completion */
-                        u1_t_ret = (U1)TRUE;
-                    }
+                if(u1_s_gyrodev_oscmd_notifcond_bak_flag == (U1)TRUE){
+                    /* Backup Request Data Set */
+                    st_gyrodev_notifcond_setreq = st_gyrodev_notifcond_setbak;
+                    /* Next Process */
+                    u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP1;
                 }
                 else{
+                    /* Set uc_active = LSDRV_GSNS_INT_COND_ACTIVE_HIGH */
+                    st_gyrodev_notifcond_setreq.u1_active = (U1)GYRODEV_GSENS_INT_LVL_ACT_HI;
                     /* Next Process */
                     u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP7;
                 }
@@ -1258,31 +1257,28 @@ static U1    u1_s_GyroDev_GSensNotifCondFunc(const U1 u1_a_type)
                                                                 GYRODEV_INT_ANYMOT_EN_SET2, &u4_s_gyrodev_i2c_ack_wait_time,
                                                                 st_sp_GYRODEV_INT_ANYMOT_EN_SET2_TBL, &u2_s_gyrodev_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
-                if(st_gyrodev_notifcond_setreq.u1_active == (U1)GYRODEV_GSENS_INT_LVL_ACT_HI){       /* uc_active = LSDRV_GSNS_INT_COND_ACTIVE_HIGH */
-                    /* Input Parameter Retention */
-                    u1_s_gyrodev_oscmd_notifcond_act_req = st_gyrodev_notifcond_setreq.u1_active;    /* uc_active */
-                    /* Next Process */
-                    u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP7;
-                }
-                else{
-                    /* Function Completion */
-                    u1_t_ret = (U1)TRUE;
-                    /* Setting Result OK */
-                    u1_t_req_result = (U1)GYRODEV_GSENS_NOTIFCOND_SET_OK;
-                    /* Process Reset */
-                    u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP0;
-                }
+                /* Next Process */
+                u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP7;
             }
             break;
         case GYRODEV_NOTIFCONDSET_STEP7:                            /* STEP7 */
-        /* --------------- uc_active = LSDRV_GSNS_INT_COND_ACTIVE_HIGH --------------- */
+        /* --------------- uc_active Setting --------------- */
             /* Read Register G-Sensor */
             u1_t_reg_req_sts = u1_GYRODEV_GSENS_I2C_CTRL_REGREAD(&u2_s_gyrodev_regstep, &u4_s_gyrodev_i2c_ack_wait_time,
                                                                  st_sp_GYRODEV_INT2_IO_CONF_RD_TBL, &u2_s_gyrodev_reg_btwn_time);
             if(u1_t_reg_req_sts == (U1)TRUE){
                 u1_t_gsens_int2_io_conf_data = st_sp_GYRODEV_INT2_IO_CONF_RD_TBL[1].u1p_pdu[1];     /* INT2_IO_CONF bit[7:0] */
-                u1_t_gsens_int2_io_conf_data |= (U1)GYRODEV_REG_MASK_BIT_1;                         /* INT2_IO_CONF bit[1] = 0b1 */
+                if(st_gyrodev_notifcond_setreq.u1_active == (U1)GYRODEV_GSENS_INT_LVL_ACT_HI){      /* uc_active = LSDRV_GSNS_INT_COND_ACTIVE_HIGH */
+                    u1_t_gsens_int2_io_conf_data |= (U1)GYRODEV_REG_MASK_BIT_1;                     /* INT2_IO_CONF bit[1] = 0b1 */
+                }
+                else if(st_gyrodev_notifcond_setreq.u1_active == (U1)GYRODEV_GSENS_INT_LVL_ACT_LOW){    /* uc_active = LSDRV_GSNS_INT_COND_ACTIVE_LOW */
+                    u1_t_gsens_int2_io_conf_data &= ~(U1)GYRODEV_REG_MASK_BIT_1;                    /* INT2_IO_CONF bit[1] = 0b0 */
+                }
+                else{                                                                               /* uc_active = Invalid Value */
+                    /* Nothing */
+                }
                 st_sp_GYRODEV_INT2_IO_CONF_SET_TBL[0].u1p_pdu[2] = u1_t_gsens_int2_io_conf_data;    /* Register Write Data Set */
+
                 /* Next Process */
                 u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP8;
             }
@@ -1421,14 +1417,18 @@ static U1    u1_s_GyroDev_GSensCtrlOutFunc(const U1 u1_a_type)
     U1      u1_t_gsens_int2_io_conf_data;                           /* G-Sensor INT2_IO_CONF Register Data */
 
     u1_t_ret = (U1)FALSE;
-    u1_t_req_result = (U1)GYRODEV_GSENS_NOTIFCOND_REQ_INI;
+    u1_t_req_result = (U1)GYRODEV_GSENS_OUTCTRL_REQ_INI;
 
     switch (u1_s_gyrodev_ctrloutset_sts){
         case GYRODEV_CTRLOUTSET_STEP0:                              /* STEP0 */
             if(u1_a_type == (U1)GYRODEV_GSENS_CTRLOUTFUNC_SETREQ){                      /* SiP -> MCU Request Setting */
-                if(u1_s_gyrodev_oscmd_outctl_set_flag == (U1)GYRODEV_GSENS_OUTCTRL_RCV){
+                if(u1_s_gyrodev_oscmd_outctl_rcv_flag == (U1)TRUE){
                     /* Flag Clear */
-                    u1_s_gyrodev_oscmd_outctl_set_flag = (U1)GYRODEV_GSENS_OUTCTRL_WAIT;
+                    u1_s_gyrodev_oscmd_outctl_rcv_flag = (U1)FALSE;
+                    /* Backup Flag Set */
+                    u1_s_gyrodev_oscmd_outctl_bak_flag = (U1)TRUE;
+                    /* Input Parameter Retention */
+                    st_gyrodev_ctrlout_setbak = st_gyrodev_ctrlout_setreq;
                     if(st_gyrodev_ctrlout_setreq.u1_type == (U1)GYRODEV_GSENS_INT_EN_ON){           /* uc_type = LSDRV_GSNS_INT_CTRL_OUTPUT_ON */
                         /* Next Process */
                         u1_s_gyrodev_ctrloutset_sts = (U1)GYRODEV_CTRLOUTSET_STEP1;
@@ -1454,12 +1454,12 @@ static U1    u1_s_GyroDev_GSensCtrlOutFunc(const U1 u1_a_type)
                 }
             }
             else if(u1_a_type == (U1)GYRODEV_GSENS_CTRLOUTFUNC_BACKUP){                 /* Power ON -> OFF Event Setting */
-                if(u1_s_gyrodev_oscmd_outctl_set_flag != (U1)GYRODEV_GSENS_OUTCTRL_UNRCV){
-                    if(u1_s_gyrodev_oscmd_outctl_stby_req == (U1)GYRODEV_GSENS_INT_STBY_ON){
+                if(u1_s_gyrodev_oscmd_outctl_bak_flag == (U1)TRUE){
+                    if(st_gyrodev_ctrlout_setbak.u1_type_standby == (U1)GYRODEV_GSENS_INT_STBY_ON){
                         /* Next Process */
                         u1_s_gyrodev_ctrloutset_sts = (U1)GYRODEV_CTRLOUTSET_STEP1;
                     }
-                    else if(u1_s_gyrodev_oscmd_outctl_stby_req == (U1)GYRODEV_GSENS_INT_STBY_OFF){
+                    else if(st_gyrodev_ctrlout_setbak.u1_type_standby == (U1)GYRODEV_GSENS_INT_STBY_OFF){
                         /* Next Process */
                         u1_s_gyrodev_ctrloutset_sts = (U1)GYRODEV_CTRLOUTSET_STEP9;
                     }
@@ -1665,7 +1665,7 @@ static U1    u1_s_GyroDev_GSensCtrlOutFunc(const U1 u1_a_type)
     }
 
     if((u1_t_ret == (U1)TRUE)
-    && (u1_t_req_result != (U1)GYRODEV_GSENS_NOTIFCOND_REQ_INI)){
+    && (u1_t_req_result != (U1)GYRODEV_GSENS_OUTCTRL_REQ_INI)){
         if(u1_a_type == (U1)GYRODEV_GSENS_CTRLOUTFUNC_SETREQ){
             vd_GYRODEV_CTRLOUTSETSET_RESULT(u1_t_req_result);
         }
@@ -1683,7 +1683,7 @@ static U1    u1_s_GyroDev_GSensCtrlOutFunc(const U1 u1_a_type)
 /*===================================================================================================================================*/
 void    vd_g_GyroDev_NotifCond_SetReq(ST_GYRODEV_NOTIFCOND_SETDATA st_a_oscmd_data)
 {
-    u1_s_gyrodev_oscmd_notifcond_set_flag = (U1)GYRODEV_GSENS_NOTIFCOND_RCV;
+    u1_s_gyrodev_oscmd_notifcond_rcv_flag = (U1)TRUE;
     st_gyrodev_notifcond_setreq = st_a_oscmd_data;
 }
 
@@ -1706,9 +1706,8 @@ void    vd_g_GyroDev_NotifCond_ReadReq(void)
 /*===================================================================================================================================*/
 void    vd_g_GyroDev_OutCtl_SetReq(ST_GYRODEV_CTRLOUT_SETDATA st_a_oscmd_data)
 {
-    u1_s_gyrodev_oscmd_outctl_set_flag = (U1)GYRODEV_GSENS_OUTCTRL_RCV;
+    u1_s_gyrodev_oscmd_outctl_rcv_flag = (U1)TRUE;
     st_gyrodev_ctrlout_setreq = st_a_oscmd_data;
-    u1_s_gyrodev_oscmd_outctl_stby_req = (U1)st_a_oscmd_data.u1_type_standby;
 }
 
 /*===================================================================================================================================*/

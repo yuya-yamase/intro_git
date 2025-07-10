@@ -1,4 +1,4 @@
-/* 2.5.0 */
+/* 2.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VARDEF_ESOPT_CHANNEL_H_MAJOR             (2)
-#define VARDEF_ESOPT_CHANNEL_H_MINOR             (5)
+#define VARDEF_ESOPT_CHANNEL_H_MINOR             (6)
 #define VARDEF_ESOPT_CHANNEL_H_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -26,10 +26,10 @@
 #define VDF_ESO_CH_BIT_AVA_LSB                   (0x001fU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_ESO_NUM_CH                           (264U)
+#define VDF_ESO_NUM_CH                           (267U)
 
 #define VDF_ESO_CH_INDSPDALT                     (  0U)
-#define VDF_ESO_CH_CNTR_DISP                     (  1U)
+#define VDF_ESO_CH_SYS_NOT_USED52                (  1U)
 #define VDF_ESO_CH_AUDIO                         (  2U)
 #define VDF_ESO_CH_RARCLCK                       (  3U)
 #define VDF_ESO_CH_D_DPTZ                        (  4U)
@@ -260,7 +260,7 @@
 #define VDF_ESO_CH_SYS_NOT_USED15                (229U)
 #define VDF_ESO_CH_ADIEXIST                      (230U)
 #define VDF_ESO_CH_SYS_NOT_USED17                (231U)
-#define VDF_ESO_CH_SYS_NOT_USED18                (232U)
+#define VDF_ESO_CH_SW_TITE                       (232U)
 #define VDF_ESO_CH_SYS_NOT_USED19                (233U)
 #define VDF_ESO_CH_SW_HEDLMP_AUT                 (234U)
 #define VDF_ESO_CH_SW_HEDLMP_HED                 (235U)
@@ -281,17 +281,20 @@
 #define VDF_ESO_CH_SW_REAR_WASHER                (250U)
 #define VDF_ESO_CH_SW_SERVICE_POS                (251U)
 #define VDF_ESO_CH_SYS_NOT_USED38                (252U)
-#define VDF_ESO_CH_SYS_NOT_USED39                (253U)
+#define VDF_ESO_CH_SW_WIPER_DEICER               (253U)
 #define VDF_ESO_CH_SOLCHG                        (254U)
 #define VDF_ESO_CH_SW_OBBPWL                     (255U)
 #define VDF_ESO_CH_SYS_NOT_USED42                (256U)
-#define VDF_ESO_CH_SYS_NOT_USED43                (257U)
-#define VDF_ESO_CH_SYS_NOT_USED44                (258U)
-#define VDF_ESO_CH_SYS_NOT_USED45                (259U)
-#define VDF_ESO_CH_SYS_NOT_USED46                (260U)
+#define VDF_ESO_CH_VHCOBBSD                      (257U)
+#define VDF_ESO_CH_SW_OBBMODE                    (258U)
+#define VDF_ESO_CH_ERM_ADU                       (259U)
+#define VDF_ESO_CH_SW_OBBSAV                     (260U)
 #define VDF_ESO_CH_SYS_NOT_USED47                (261U)
 #define VDF_ESO_CH_SYS_NOT_USED48                (262U)
 #define VDF_ESO_CH_SYS_NOT_USED49                (263U)
+#define VDF_ESO_CH_SW_DPM1                       (264U)
+#define VDF_ESO_CH_SW_DPM2                       (265U)
+#define VDF_ESO_CH_SW_DPM3                       (266U)
 
 #define VDF_ESO_CH_DA                            (255U)
 #define VDF_ESO_CH_CXSWS1S01                     (255U)
@@ -323,8 +326,8 @@
 #define VDF_ESO_NVM_W4                           (0x507835FEU)
 #define VDF_ESO_NVM_W5                           (0xC030E76CU)
 #define VDF_ESO_NVM_W6                           (0x3F840FFFU)
-#define VDF_ESO_NVM_W7                           (0x8FEFFC40U)
-#define VDF_ESO_NVM_W8                           (0x00000000U)
+#define VDF_ESO_NVM_W7                           (0xAFEFFD40U)
+#define VDF_ESO_NVM_W8                           (0x0000071CU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

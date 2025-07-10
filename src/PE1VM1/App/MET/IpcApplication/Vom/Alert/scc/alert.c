@@ -1,4 +1,4 @@
-/* 5.5.0 */
+/* 5.6.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define ALERT_C_MAJOR                            (5)
-#define ALERT_C_MINOR                            (5)
+#define ALERT_C_MINOR                            (6)
 #define ALERT_C_PATCH                            (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -467,10 +467,10 @@ static U1      u1_s_AlertVomchk(void)
 static U1      u1_s_AlertToutchk(void)
 {
     U1                       u1_t_chk;
-    U1                       u1_t_wk;
+    U4                       u4_t_wk;
 
-    u1_t_wk = u1_g_oXCANRxEnabled(u1_g_ALERT_BUS_CH);
-    if(u1_t_wk == (U1)TRUE){
+    u4_t_wk = u4_g_oXCANSysActvtd() & u4_g_ALERT_BUS_CH_MSK;
+    if(u4_t_wk != (U4)0U){
         u4_s_alert_bslp_tm_elpsd = (U4)U4_MAX;
     }
     else if(u4_s_alert_bslp_tm_elpsd >= (U4)U4_MAX){
@@ -507,9 +507,11 @@ static U1      u1_s_AlertToutchk(void)
 /*  5.3.0     5/10/2019  YI       alert.c compile timing was changed to lib_alert build.                                             */
 /*  5.4.0     9/20/2019  YI       u1_g_AlertReqByVehopemd was updated.                                                               */
 /*  5.5.0    10/31/2019  DS       u1_g_AlertReqByVehopemd was removed.                                                               */
+/*  5.6.0     6/30/2025  SF       BSW Update:u1_s_AlertToutchk was modified for Toyota BEVStep3.                                     */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * DS   = Daisuke Suzuki, NTTD MSE                                                                                                */
+/*  * SF   = Seiya Fukutome, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

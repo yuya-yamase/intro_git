@@ -43,10 +43,6 @@
 #define     PWRCTRL_SYS_WAIT_V11_ASIL_TIME          (15U / PWRCTRL_CFG_TASK_TIME)
 #define     PWRCTRL_SYS_WAIT_EIZO_TIME              (15U / PWRCTRL_CFG_TASK_TIME)
 
-/* SYS電源OFF ウェイトタイム設定 */
-/* 仕様から全端子共通の時間設定のためウェイトタイム設定も共通とする */
-#define     PWRCTRL_SYS_WAIT_SYSOFF                 (0U)
-
 /* カウンタ最大値 */
 #define     PWRCTRL_SYS_COUNTTIME_FIN           (0xFFFFFFFFU)
 
@@ -74,7 +70,7 @@ void vd_g_PwrCtrlSysPwrOffStart( void );               /* SYS電源OFF要求 */
 U1   u1_g_PwrCtrlSysGetSts( void );                    /* SYS電源シーケンス状態問い合わせ */
 U1   u1_g_PwrCtrlSysShtdwnGetSts( void );              /* SYS系デバイス終了状態問い合わせ */
 
-void Mcu_Dev_Pwron( void );
+void            vd_g_McuDev_Pwron(void);
 
 #endif /* PWRCTRL_SYS_H */
 

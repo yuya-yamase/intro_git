@@ -56,6 +56,7 @@
 #else
 #include "veh_opemd_xmode_STUB.h"
 #endif
+#include "ivdsh.h"
 
 /* VOM */
 #include "dimmer.h"
@@ -278,9 +279,9 @@
 
 #define XSPI_VDF_AREA_SIZE                  (9U)
 
-#define XSPI_CLOCK_AM                       (1U)
-#define XSPI_CLOCK_PM                       (2U)
-#define XSPI_CLOCK_12H                      (12U)
+#define XSPI_CLOCK_UNKNOWN                  (0x1EFBEU)
+
+#define XSPI_VM_1WORD                       (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -580,17 +581,11 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[11] |= (U4)TRUE << 4;                                 /*  SYS_DMTOSP               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 5;                                 /*  SYS_DMINEC               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 7;                                 /*  SYS_PERSET               */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[11] |= (U4)TRUE << 8;                                 /*  SYS_SW_TITE              */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 9;                                 /*  SYS_EPS_EPSSBW           */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 20;                                /*  SYS_SW_MULTI_WEATHERLAMP */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[11] |= (U4)TRUE << 28;                                /*  SYS_SW_CAMERA_WASHER     */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[11] |= (U4)TRUE << 29;                                /*  SYS_SW_WIPER_DEICER      */ /* BEV SV1 provisionally */
 
     u4_ap_pdu_tx[12] |= (U4)TRUE;                                      /*  SYS_SW_OBBPBD            */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[12] |= (U4)TRUE << 1;                                 /*  SYS_VHCOBBSD             */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[12] |= (U4)TRUE << 2;                                 /*  SYS_SW_OBBMODE           */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[12] |= (U4)TRUE << 3;                                 /*  SYS_ERM_ADU              */ /* BEV SV1 provisionally */
-    u4_ap_pdu_tx[12] |= (U4)TRUE << 4;                                 /*  SYS_SW_OBBSAV            */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 5;                                 /*  SYS_DMEVRNGE             */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 6;                                 /*  SYS_DMTOEC               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 7;                                 /*  SYS_DMM1EC               */ /* BEV SV1 provisionally */
@@ -1040,34 +1035,17 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx) {
-    U1  u1_t_rx;
-    U1  u1_t_rx_ampm;
-    U1  u1_t_fmt_is12h;
 
-    u1_t_rx = (U1)0U;
-    u1_t_rx_ampm = (U1)0U;
+    U4  u4_t_disp_tim_now;
+    U1  u1_t_read_sts;
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_SEC, &u1_t_rx);
-    u4_ap_pdu_tx[0]  = (U4)u1_t_rx & (U4)XSPI_MSK_06BIT;           /* CLOCK_SEC */
+    u4_t_disp_tim_now = (U4)0U;  
+    u1_t_read_sts     = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_013, &u4_t_disp_tim_now, (U2)XSPI_VM_1WORD);
 
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_MIN, &u1_t_rx);
-    u4_ap_pdu_tx[0] |= ((U4)u1_t_rx & (U4)XSPI_MSK_06BIT) << 6U;   /* CLOCK_MIN */
-
-    (void)Com_ReceiveSignal(ComConf_ComSignal_CL_HOUR, &u1_t_rx);
-    u1_t_fmt_is12h = u1_g_TimeFormat12H24H();
-    if(u1_t_fmt_is12h == (U1)TIMEFMT_VAL_12H){
-        (void)Com_ReceiveSignal(ComConf_ComSignal_CL_AMPM, &u1_t_rx_ampm);
-        if((u1_t_rx_ampm == (U1)XSPI_CLOCK_PM) && (u1_t_rx != (U1)XSPI_CLOCK_12H)) {
-            u1_t_rx += (U1)XSPI_CLOCK_12H;
-        }
-        else if((u1_t_rx_ampm == (U1)XSPI_CLOCK_AM) && (u1_t_rx == (U1)XSPI_CLOCK_12H)) {
-            u1_t_rx = (U1)0U;
-        }
-        else {
-            /* Do Nothing */
-        }
+    if(u1_t_read_sts == (U1)IVDSH_NO_REA){
+        u4_t_disp_tim_now = (U4)XSPI_CLOCK_UNKNOWN;
     }
-    u4_ap_pdu_tx[0] |= ((U4)u1_t_rx & (U4)XSPI_MSK_05BIT) << 12U;   /* CLOCK_HOUR */
+    u4_ap_pdu_tx[0] = u4_t_disp_tim_now;
 }
 
 /*===================================================================================================================================*/
@@ -3050,6 +3028,10 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-3     02/26/2025 RS       Change for BEV System_Consideration_1.(Requests from the SOC team for electricity cost units)      */
 /*  BEV-4     03/06/2025 SF       Change for BEV System_Consideration_1.(Requests from the SOC team)                                 */
 /*  BEV-5     04/25/2025 MN       Change for BEV System_Consideration_1.(MET-M_CLKCTL-CSTD-0-06-A-C1)                                */
+/*  BEV-6     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-B_TITEBB-CSTD-0-00-A-C0)                                */
+/*  BEV-7     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
+/*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
+/*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -3067,5 +3049,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
+/*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
+/*  * JS   = Jun Sugiyama, KSE                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

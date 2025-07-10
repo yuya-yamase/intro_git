@@ -25,6 +25,7 @@
 
 #define DTCCTL_CTG_NAVI             (0x58U)
 #define DTCCTL_CTG_VOL              (0x74U)
+#define DTCCTL_CTG_CAN              (0x01U)
 
 #define DTCCTL_DIAG_GYR_ERR         (0x10U)
 #define DTCCTL_DIAG_GSNS_ERR        (0x18U)
@@ -36,6 +37,12 @@
 #define DTCCTL_DIAG_PWR_UNCN_LF     (0x51U)
 #define DTCCTL_DIAG_PWR_UNCN_RBD    (0x52U)
 #define DTCCTL_DIAG_PWR_UNCN_LBD    (0x53U)
+#define DTCCTL_DIAG_CAN_2M1_REGERR  (0x41U)
+#define DTCCTL_DIAG_CAN_2M1_BUSOFF  (0x43U)
+#define DTCCTL_DIAG_CAN_2M1_LOCK    (0x42U)
+#define DTCCTL_DIAG_CAN_5M_REGERR   (0x44U)
+#define DTCCTL_DIAG_CAN_5M_BUSOFF   (0x46U)
+#define DTCCTL_DIAG_CAN_5M_LOCK     (0x45U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -73,7 +80,13 @@ static const U1 u1_s_DTCCTL_DTCLIST[DTCCTL_DTCID_NUM][DTCCTL_DTCCODE_KIND] = {
         {(U1)DTCCTL_CTG_VOL,  (U1)DTCCTL_DIAG_PWR_UNCN_RF }, /* DTCCTL_DTCID_PWR_UNCN_RF  */
         {(U1)DTCCTL_CTG_VOL,  (U1)DTCCTL_DIAG_PWR_UNCN_LF }, /* DTCCTL_DTCID_PWR_UNCN_LF  */
         {(U1)DTCCTL_CTG_VOL,  (U1)DTCCTL_DIAG_PWR_UNCN_RBD}, /* DTCCTL_DTCID_PWR_UNCN_RBD */
-        {(U1)DTCCTL_CTG_VOL,  (U1)DTCCTL_DIAG_PWR_UNCN_LBD}  /* DTCCTL_DTCID_PWR_UNCN_LBD */
+        {(U1)DTCCTL_CTG_VOL,  (U1)DTCCTL_DIAG_PWR_UNCN_LBD},  /* DTCCTL_DTCID_PWR_UNCN_LBD */
+        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_2M1_REGERR},  /*  */
+        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_2M1_BUSOFF},  /*  */
+        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_2M1_LOCK},  /*  */
+        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_5M_REGERR},  /*  */
+        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_5M_BUSOFF},  /*  */
+        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_5M_LOCK}  /*  */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

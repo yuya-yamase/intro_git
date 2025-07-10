@@ -19,6 +19,7 @@
 #include "datesi_cal_cfg_private.h"
 #include "datesi_tim_cfg_private.h"
 #include "datesi_cfg_private.h"
+#include "datesi_com.h"
 #include "rtime.h"
 #include "date_clk.h"
 
@@ -82,6 +83,9 @@ static  U4                                      u4_s_datesi_cal_adj_date;
 static  U2                                      u2_s_datesi_cal_year_min;
 static  U4                                      u4_s_datesi_cal_daycnt_min;
 static  U4                                      u4_s_datesi_cal_daycnt_absmin;
+static  U1                                      u1_s_datesi_cal_init_read_fin;
+static  U1                                      u1_s_datesi_cal_bon_flg;
+static  U1                                      u1_s_datesi_cal_updt_flg;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -92,6 +96,7 @@ static  U4                                      u4_s_datesi_cal_daycnt_absmin;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static        void    vd_s_DateSICalInit(void);
+static        U1      u1_s_DateSICalInitReadiVDsh(void);
 static        void    vd_s_DateSICalSync(U4 * u4p_a_offstd_now);
 static        U1      u1_s_DateSICalAdjustOwnClk(const U4 u4_a_YYYYMMDD);
 static        U1      u1_s_DateSICalDateSyncChk(const ST_DATESI_CAL_RX st_a_CAL_RX, U4 * u4_ap_yymmdd);
@@ -116,6 +121,7 @@ void            vd_g_DateSICalBonInit(void)
     U4  u4_t_yymmddwk_update;
 
     vd_g_DateSICalRstWkupInit();
+    u1_s_datesi_cal_bon_flg = (U1)TRUE;
 
     u4_t_yymmddwk_update = u4_g_DaycntToYymmddwk(u4_s_datesi_cal_daycnt_last);
     (void)u1_s_DateSICalAdjustOwnClk(u4_t_yymmddwk_update);
@@ -129,30 +135,7 @@ void            vd_g_DateSICalBonInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSICalRstWkupInit(void)
 {
-#if 0   /* BEV provisionally */
-    U2  u2_t_date_calendar;
-    U4  u4_t_daycnt;
-    U1  u1_t_nvm_sts;
-#endif
-
     vd_s_DateSICalInit();
-
-#if 0   /* BEV provisionally */
-    u2_t_date_calendar = (U2)0U;
-
-    u1_t_nvm_sts       = u1_g_Nvmc_ReadStrValU2withSts(u2_g_DATESI_CAL_NVMCID_CALE, &u2_t_date_calendar);
-
-    if(u1_t_nvm_sts == (U1)NVMC_STATUS_COMP){
-        u4_t_daycnt = (U4)u2_t_date_calendar + (U4)DATESI_CAL_OFFSET_2000DAYCUNT;
-        /* The type of u2_t_date_calendar is U2, so max value of u2_t_date_calendar is 65535.        */
-        /* Therefor (u2_t_date_calendar + DATESI_CAL_OFFSET_2000DAYCUNT) is always lower than U4_MAX */
-        if((u4_t_daycnt >= u4_s_datesi_cal_daycnt_min) &&
-           (u4_t_daycnt <= u4_g_DATESI_CAL_DAYCNT_MAX)){
-            u4_s_datesi_cal_daycnt_last = u4_t_daycnt;
-        }
-    }
-#endif
-
     vd_g_DateSICalCfgCanTx(u4_s_datesi_cal_now, (U1)FALSE);
 }
 
@@ -168,6 +151,7 @@ static void     vd_s_DateSICalInit(void)
     U2  u2_t_cal_default;
     U4  u4_t_min_yymmdd;
     U4  u4_t_def_yymmdd;
+    U4  u4_t_daycnt_write;
 
     u2_t_cal_min                  = u2_DATESI_CAL_YEAR_MIN;
     u2_t_cal_default              = u2_DATESI_CAL_DEF;
@@ -185,6 +169,17 @@ static void     vd_s_DateSICalInit(void)
     u4_t_min_yymmdd              |= ((U4)u2_t_cal_min << YYMMDDWK_LSB_YR);
     u4_s_datesi_cal_daycnt_min    = u4_g_YymmddToDaycnt(u4_t_min_yymmdd);
     u4_s_datesi_cal_daycnt_absmin = u4_s_datesi_cal_daycnt_min - (U4)1U;
+
+    u1_s_datesi_cal_init_read_fin = (U1)FALSE;
+    u1_s_datesi_cal_bon_flg       = (U1)FALSE;
+    u1_s_datesi_cal_updt_flg      = (U1)FALSE;
+
+    vd_g_DateSICalCfgInit();
+
+    /* iVDsh Initial Value Transmit*/
+    u4_t_daycnt_write = (U4)U4_MAX;
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_015, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_019, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
 }
 
 /*===================================================================================================================================*/
@@ -195,19 +190,84 @@ static void     vd_s_DateSICalInit(void)
 /*===================================================================================================================================*/
 void            vd_g_DateSICalMainTask(void)
 {
+    U1  u1_t_read_sts;
     U1  u1_t_exsit;
+
+    if(u1_s_datesi_cal_init_read_fin != (U1)TRUE){
+        u1_t_read_sts = u1_s_DateSICalInitReadiVDsh();
+        if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+            u1_s_datesi_cal_init_read_fin = (U1)TRUE;
+        }
+    }
 
     u1_t_exsit = u1_g_DateSICfgCalExst();
     if(u1_t_exsit == (U1)DATESI_CALEXIST_ON){
         vd_s_DateSICalSync(&u4_s_datesi_cal_now);
         vd_s_DateSICalWriteRtcDate();
         vd_g_DateSICalCfgCanTx(u4_s_datesi_cal_now, (U1)TRUE);
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_015, &u4_s_datesi_cal_now, (U2)DATESI_CAL_VM_1WORD);
     }
     else{
         vd_s_DateSICalInit();
     }
 }
 
+/*===================================================================================================================================*/
+/* U1              u1_s_DateSICalInitReadiVDsh(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_read_sts : TRUE/FALSE                                                                                       */
+/*===================================================================================================================================*/
+static U1       u1_s_DateSICalInitReadiVDsh(void)
+{
+    U4  u4_t_cal_min;
+    U4  u4_t_cal_default;
+    U4  u4_t_date_calendar;
+    U4  u4_t_daycnt;
+    U4  u4_t_min_yymmdd;
+    U4  u4_t_def_yymmdd;
+    U4  u4_t_yymmddwk_update;
+    U1  u1_t_read_sts;
+
+    u4_t_cal_min  = (U4)0U;
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_022, &u4_t_cal_min, (U2)1U);
+    if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_cal_min <= (U4)U2_MAX)){
+        u2_s_datesi_cal_year_min      = (U2)u4_t_cal_min;
+        u4_t_min_yymmdd               = (U4)DATESI_CAL_MIN_MM_DD;
+        u4_t_min_yymmdd              |= (u4_t_cal_min << YYMMDDWK_LSB_YR);
+        u4_s_datesi_cal_daycnt_min    = u4_g_YymmddToDaycnt(u4_t_min_yymmdd);
+        u4_s_datesi_cal_daycnt_absmin = u4_s_datesi_cal_daycnt_min - (U4)1U;
+    }
+
+    if(u1_s_datesi_cal_updt_flg != (U1)TRUE){
+        u4_t_cal_default  = (U4)0U;
+        u1_t_read_sts     = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_021, &u4_t_cal_default, (U2)1U);
+        if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+            u4_t_def_yymmdd             = (U4)DATESI_CAL_DEF_MM_DD;
+            u4_t_def_yymmdd            |= (u4_t_cal_default << YYMMDDWK_LSB_YR);
+            u4_s_datesi_cal_daycnt_last = u4_g_YymmddToDaycnt(u4_t_def_yymmdd);
+        }
+
+        u4_t_date_calendar = (U4)0U;
+        u1_t_read_sts      = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_018, &u4_t_date_calendar, (U2)1U);
+        if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+            u4_t_daycnt = u4_t_date_calendar + (U4)DATESI_CAL_OFFSET_2000DAYCUNT;
+            /* The type of u2_t_date_calendar is U2, so max value of u2_t_date_calendar is 65535.        */
+            /* Therefor (u2_t_date_calendar + DATESI_CAL_OFFSET_2000DAYCUNT) is always lower than U4_MAX */
+            if((u4_t_daycnt >= u4_s_datesi_cal_daycnt_min) &&
+               (u4_t_daycnt <= u4_g_DATESI_CAL_DAYCNT_MAX)){
+                u4_s_datesi_cal_daycnt_last = u4_t_daycnt;
+            }
+            if(u1_s_datesi_cal_bon_flg == (U1)TRUE){
+                u4_t_yymmddwk_update = u4_g_DaycntToYymmddwk(u4_s_datesi_cal_daycnt_last);
+                (void)u1_s_DateSICalAdjustOwnClk(u4_t_yymmddwk_update);
+            }
+            u1_s_datesi_cal_updt_flg = (U1)TRUE;
+        }
+    }
+    
+    return(u1_t_read_sts);
+}
 /*===================================================================================================================================*/
 /* static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -220,6 +280,7 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     U4                u4_t_adj;
     U4                u4_t_yymmdd;
     U1                u1_t_calsync_act;
+    U1                u1_t_result;
     ST_DATESI_CAL_RX  st_t_cal_rx;
 
     u4_t_yymmdd                          = (U4)YYMMDDWK_UNKNWN;
@@ -244,7 +305,11 @@ static void     vd_s_DateSICalSync(U4 * u4p_a_offstd_now)
     (*u4p_a_offstd_now) = u4_s_DateSICalToUpdtDate(u4_t_now, (U1)DATESI_CAL_DISP_DATE);
 
     if(u4_t_adj != (U4)YYMMDDWK_UNKNWN){
-        (void)u1_s_DateSICalAdjustOwnClk(u4_t_adj);
+        u1_t_result = u1_s_DateSICalAdjustOwnClk(u4_t_adj);
+        if(u1_t_result == (U1)TRUE){
+            u1_s_datesi_cal_updt_flg = (U1)TRUE;
+            vd_g_DateSIComSetCmp();
+        }
     }
 
     u1_s_datesi_cal_timsync_act = (U1)FALSE;
@@ -321,6 +386,7 @@ void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD)
     U4  u4_t_yymmddwk_zerorst;
     U4  u4_t_daycnt_zerorst;
     U4  u4_t_abs_yymmdd;
+    U1  u1_t_result;
 
     u4_t_yymmddwk_zerorst = u4_s_datesi_cal_now;
     u4_t_daycnt_zerorst   = u4_g_YymmddToDaycnt(u4_t_yymmddwk_zerorst);
@@ -332,7 +398,10 @@ void            vd_g_DateSICalExecTmSet(const U1 u1_a_ADD)
 
     u4_t_yymmddwk_zerorst = u4_g_DaycntToYymmddwk(u4_t_daycnt_zerorst);
     u4_t_abs_yymmdd       = u4_s_DateSICalToUpdtDate(u4_t_yymmddwk_zerorst, (U1)DATESI_CAL_ABS_DATE);
-    (void)u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+    u1_t_result           = u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+    if(u1_t_result == (U1)TRUE){
+        vd_g_DateSIComSetCmp();
+    }
 }
 
 /*===================================================================================================================================*/
@@ -444,13 +513,10 @@ static U4       u4_s_DateSICalAddDay(const U4 u4_a_YYMMDD_RAW, const U4 u4_a_HHM
 /*===================================================================================================================================*/
 static void     vd_s_DateSICalWriteRtcDate(void)
 {
-    U1  u1_t_ig_is_on;
     U4  u4_t_daycnt_now;
     U4  u4_t_daycnt_write;
-    U2  u2_t_daycnt;
     U1  u1_t_esi_chk;
 
-    u1_t_ig_is_on     = u1_g_DateSI_IgOn();
     u4_t_daycnt_now   = u4_g_YymmddToDaycnt(u4_s_datesi_cal_now);
     u1_t_esi_chk      = u1_g_DateSICalCfgEsichk();
 
@@ -462,20 +528,10 @@ static void     vd_s_DateSICalWriteRtcDate(void)
         u4_t_daycnt_write = (U4)U4_MAX;
     }
 
-    if(u4_t_daycnt_write < (U4)U2_MAX){
-        u2_t_daycnt = (U2)u4_t_daycnt_write;
-    }
-    else{
-        u2_t_daycnt = (U2)U2_MAX;
-    }
-
-    if((u1_t_ig_is_on               == (U1)TRUE       ) &&
-      ((u1_t_esi_chk                == (U1)0U         ) &&
+    if((u1_t_esi_chk                == (U1)0U         ) &&
       ((u4_s_datesi_cal_daycnt_last != u4_t_daycnt_now) &&
-       (u2_t_daycnt                 != (U2)U2_MAX     )))){
-#if 0   /* BEV provisionally */
-        vd_g_Nvmc_WriteU2(u2_g_DATESI_CAL_NVMCID_CALE, u2_t_daycnt);
-#endif
+       (u4_t_daycnt_write           != (U4)U4_MAX     ))){
+        vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_CPREQ_019, &u4_t_daycnt_write, (U2)DATESI_CAL_VM_1WORD);
         u4_s_datesi_cal_daycnt_last = u4_t_daycnt_now;
     }
 }
@@ -784,6 +840,46 @@ U1              u1_g_DateSICalLimJdgYear(void)
     }
     return(u1_t_return);
 
+}
+
+/*===================================================================================================================================*/
+/* U1              vd_g_DateSICalAdjustdate(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_DateSICalAdjustdate(void)
+{
+    U1                u1_t_exsit;
+    U4                u4_t_abs_yymmdd;
+    U4                u4_t_yymmdd;
+    U1                u1_t_range_is_ok;
+    U1                u1_t_result;
+    ST_DATESI_CAL_RX  st_t_cal_rx;
+
+    u4_t_yymmdd                          = (U4)YYMMDDWK_UNKNWN;
+    st_t_cal_rx.u1_valid                 = (U1)FALSE;
+    st_t_cal_rx.u1_act                   = (U1)FALSE;
+    st_t_cal_rx.u1p_date[YYMMDD_DATE_DA] = (U1)U1_MAX;
+    st_t_cal_rx.u1p_date[YYMMDD_DATE_MO] = (U1)U1_MAX;
+    st_t_cal_rx.u1p_date[YYMMDD_DATE_YR] = (U1)U1_MAX;
+
+    u1_t_exsit = u1_g_DateSICfgCalExst();
+    if(u1_t_exsit == (U1)DATESI_CALEXIST_ON){
+        vd_g_DateSICalCfgRxUpdtdate(&st_t_cal_rx);
+        u1_t_range_is_ok = u1_s_DateSICalDateSyncChk(st_t_cal_rx, &u4_t_yymmdd);
+
+        if(u1_t_range_is_ok == (U1)TRUE){
+            u4_t_abs_yymmdd     = u4_s_DateSICalToUpdtDate(u4_t_yymmdd, (U1)DATESI_CAL_ABS_DATE);
+            u1_t_result         = u1_s_DateSICalAdjustOwnClk(u4_t_abs_yymmdd);
+            u4_t_abs_yymmdd     = u4_g_DateclkYymmddwk();
+            u4_s_datesi_cal_now = u4_s_DateSICalToUpdtDate(u4_t_abs_yymmdd, (U1)DATESI_CAL_DISP_DATE);
+            if(u1_t_result == (U1)TRUE){
+                u1_s_datesi_cal_updt_flg = (U1)TRUE;
+                vd_g_DateSIComSetCmp();
+            }
+        }
+    }
 }
 
 /*===================================================================================================================================*/

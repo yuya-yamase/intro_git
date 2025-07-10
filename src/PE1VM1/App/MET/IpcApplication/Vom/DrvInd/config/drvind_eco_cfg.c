@@ -79,11 +79,9 @@ U1      u1_g_DrvIndEcoCfgComRxBIECOCR(U1 * const u1p_a_pct)
 #if 0   /* BEV BSW provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_IECOCR, u1p_a_pct);
 #endif
-    u1_t_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G17_RXCH0,
-                                    ((U2)OXCAN_RX_SYS_NRX_IGP |
-                                     (U2)OXCAN_RX_SYS_NRX_IGR |
-                                     (U2)OXCAN_RX_SYS_TOE_IGP |
-                                     (U2)OXCAN_RX_SYS_TOE_IGR),
+    u1_t_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ENG1G17_CH0,
+                                ((U4)OXCAN_SYS_IGP |
+                                (U4)OXCAN_SYS_IGR),
                                      u2_OXCAN_RXTO_THRSH(3600U)) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return(u1_t_sts);

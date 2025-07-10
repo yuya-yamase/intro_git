@@ -227,8 +227,8 @@ static U1      u1_s_AlertB_waslevCanJdg(const U1 u1_a_VOM)
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U){
         u1_t_sgnl   = (U1)ALERT_B_WASLEV_WASHLVSW_SGNL_HI;
 
-        u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PDC1G02_RXCH0,
-                                            (U2)OXCAN_RX_SYS_NRX_IGR,
+        u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_PDC1G02_CH0,
+                                            (U4)OXCAN_SYS_IGR,
                                             (U2)U2_MAX) & (U1)COM_NO_RX;
 
         if(u1_t_msgsts != (U1)COM_NO_RX){

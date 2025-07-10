@@ -156,15 +156,15 @@ static U4      u4_s_AlertD_atmalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     U1              u1_t_sgnl;
     U4              u4_t_src_chk;
 
-#if defined(OXCAN_PDU_RX_CAN_ECT1G92_RXCH0)
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+#if defined(OXCAN_RXD_PDU_CAN_ECT1G92_CH0)
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ECT1G92_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1S93_RXCH0,
-                                          (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ECT1S93_CH0,
+                                          (U4)OXCAN_SYS_IGR,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
-#endif /* defined(OXCAN_PDU_RX_CAN_ECT1G92_RXCH0) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_ECT1G92_CH0) */
 
     u1_t_sgnl     = (U1)0U;
 #if defined(ComConf_ComSignal_TMSYS_WM)
@@ -176,8 +176,8 @@ static U4      u4_s_AlertD_atmalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_ATMAL_LSB_ECT1);
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1S99_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ENG1S99_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_ATMAL_LSB_EN99);
 

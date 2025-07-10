@@ -107,7 +107,7 @@ void    vd_g_TyDoCANDtcMMInit(const U1 u1_a_BR_INIT)
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_TYDC_DTC_MM_NUM_PDU_RX; u4_t_lpcnt++){
         u2_gp_tydc_dtc_mm_rxc_st[u4_t_lpcnt] = (U2)0U;
-        u1_gp_tydc_dtc_mm_rx_cnt[u4_t_lpcnt] = (U1)OXCAN_RX_RXEV_CNT_UNK;
+        u1_gp_tydc_dtc_mm_rx_cnt[u4_t_lpcnt] = (U1)OXCAN_RXD_EVC_UNK;
     }
 
     u4_s_tydc_dtc_mm_acc_elpsd  = (U4)0U;
@@ -221,17 +221,17 @@ static U1      u1_s_TydcDtcMMPduRx(const ST_TYDC_DTC_COM_RX * st_ap_COM_RX, cons
 
         st_tp_PDU_RX = &st_gp_TYDC_DTC_MM_PDU_RX[u4_t_lpcnt];
 
-        u1_t_rxc_nex = u1_g_oXCANRxEvcnt(st_tp_PDU_RX->u2_pdu_idx);
+        u1_t_rxc_nex = u1_g_oXCANRxdEvcnt(st_tp_PDU_RX->u2_pdu_idx);
         u1_t_rxc_las = u1_gp_tydc_dtc_mm_rx_cnt[u4_t_lpcnt];
-        if((u1_t_rxc_nex >  (U1)OXCAN_RX_RXEV_CNT_MAX) ||
-           (u1_t_rxc_las >  (U1)OXCAN_RX_RXEV_CNT_MAX)){
+        if((u1_t_rxc_nex >  (U1)OXCAN_RXD_EVC_MAX) ||
+           (u1_t_rxc_las >  (U1)OXCAN_RXD_EVC_MAX)){
 
             u2_gp_tydc_dtc_mm_rxc_st[u4_t_lpcnt] = u2_s_tydc_dtc_mm_cyctim;
             u1_gp_tydc_dtc_mm_rx_cnt[u4_t_lpcnt] = u1_t_rxc_nex;
         }
         else{
 
-            u2_t_rxc_inc = (U2)((U2)u1_t_rxc_nex - (U2)u1_t_rxc_las) & (U2)OXCAN_RX_RXEV_CNT_MAX;
+            u2_t_rxc_inc = (U2)((U2)u1_t_rxc_nex - (U2)u1_t_rxc_las) & (U2)OXCAN_RXD_EVC_MAX;
             if(u2_t_rxc_inc >= st_tp_PDU_RX->u2_rxc_min){
                 u4_s_tydc_dtc_mm_log_rx |= ((u4_t_log_bit << TYDC_DTC_MM_LSB_SUP_CHK) | u4_t_log_bit);
             }
@@ -243,7 +243,7 @@ static U1      u1_s_TydcDtcMMPduRx(const ST_TYDC_DTC_COM_RX * st_ap_COM_RX, cons
             }
         }
 
-        u1_t_rx_stat  = u1_g_oXCANRxStat(st_tp_PDU_RX->u2_pdu_idx, st_tp_PDU_RX->u2_sys_chk, st_tp_PDU_RX->u2_rx_tout);
+        u1_t_rx_stat  = u1_g_oXCANRxdStat(st_tp_PDU_RX->u2_pdu_idx, st_tp_PDU_RX->u2_sys_chk, st_tp_PDU_RX->u2_rx_tout);
         u4_t_aom_tout = (U4)st_tp_PDU_RX->u2_rx_tout + (U4)u2_a_AOM_TOUT;
         if((u1_t_rx_stat               < (U1)OXCAN_RX_RXST_TOE) ||
            (u4_s_tydc_dtc_mm_acc_elpsd < u4_t_aom_tout        )){

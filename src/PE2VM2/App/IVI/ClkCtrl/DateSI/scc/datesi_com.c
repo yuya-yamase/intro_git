@@ -18,6 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "datesi_com.h"
 #include "datesi_tim.h"
+#include "datesi_cal.h"
 #include "date_clk.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -77,11 +78,6 @@
 
 /* Year Offset */
 #define DATESI_COM_YEAR_OFFSET              (2000U)                                      /* Year Offset                          */
-#if 0
-#define DATESI_COM_CAL_MIN                  (u2_CALIB_MCUID0575_CAL_MIN)                 /* Min year                             */
-#else
-#define DATESI_COM_CAL_MIN                  (2021U)                                      /* Min year                             */
-#endif
 
 /* RTC Week Information */
 #define DATESI_COM_RTC_WEEK_NUM             (7U)                                         /* Week Num                             */
@@ -169,7 +165,7 @@ void           vd_g_DateSIComInit(void)
     st_s_clock_disp_data.u1_1224format_disp    = (U1)DATESI_COM_TIME_SET_INI;
 
     u1_s_datesi_com_send_act                   = (U1)FALSE;
-    u1_s_setting_sts                           = (U1)DATESI_COM_SET_OK;
+    u1_s_setting_sts                           = (U1)DATESI_COM_SET_NG;
 }
 
 
@@ -207,6 +203,7 @@ void            vd_g_DateSIComCommandRx(const ST_DATESI_COMMAND_DATA st_a_DATA)
     u1_s_datesi_com_req_act = (U1)TRUE;
 
     vd_g_DateSITimCanRxHk();
+    vd_g_DateSICalAdjustdate();
 
 }
 
@@ -285,25 +282,25 @@ void            vd_g_DateSIComCommandTx(void)
         st_t_clock_rtc_data = st_s_DateSIComRtcSet();
         vd_g_XspiIviSub1ClockRTCSend(st_t_clock_rtc_data);
         
-        /* Send Setting Status to XSPI*/
-        if(u1_s_datesi_com_req_act == (U1)TRUE){
-            vd_g_XspiIviSub1ClockSettingSend(u1_s_setting_sts);
-            u1_s_datesi_com_req_act = (U1)FALSE;
-        }
+        u1_s_datesi_com_send_act = (U1)FALSE;
     }
 
-    u1_s_datesi_com_send_act = (U1)FALSE;
-    u1_s_setting_sts         = (U1)DATESI_COM_SET_OK;
+    if(u1_s_datesi_com_req_act == (U1)TRUE){
+        /* Send Setting Status to XSPI*/
+        vd_g_XspiIviSub1ClockSettingSend(u1_s_setting_sts);
+        u1_s_setting_sts        = (U1)DATESI_COM_SET_NG;
+        u1_s_datesi_com_req_act = (U1)FALSE;
+    }
 
 }
 
 /*===================================================================================================================================*/
-/* ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)                                                                            */
+/* static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         st_t_clock_rtc_data                                                                                              */
 /*===================================================================================================================================*/
-ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
+static ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
 {
     static  const U1                                u1_sp_DATESI_COM_WEEK_TX_VAL[DATESI_COM_RTC_WEEK_NUM] = {
         (U1)DATESI_COM_RTC_WEEK_SUN,
@@ -354,7 +351,7 @@ ST_XSPI_IVI_CLOCK_RTC_DATA  st_s_DateSIComRtcSet(void)
                 st_t_clock_rtc_data.u1_year_rtc = (U1)(u2_tp_cal[YYMMDD_DATE_YR] - (U2)DATESI_COM_YEAR_OFFSET);
             }
             else{
-                st_t_clock_rtc_data.u1_year_rtc = (U1)((U2)DATESI_COM_CAL_MIN - (U2)DATESI_COM_YEAR_OFFSET);
+                st_t_clock_rtc_data.u1_clock_set_sts_rtc = (U1)FALSE;
             }
             st_t_clock_rtc_data.u1_month_rtc = (U1)u2_tp_cal[YYMMDD_DATE_MO];
             st_t_clock_rtc_data.u1_day_rtc   = (U1)u2_tp_cal[YYMMDD_DATE_DA];
@@ -389,18 +386,15 @@ ST_DATESI_COMMAND_DATA  st_g_DateSIComRx(void)
 }
 
 /*===================================================================================================================================*/
-/* ST_XSPI_IVI_CLOCK_DISP_DATA  st_g_DateSIComPreTx(void)                                                                            */
+/* void            vd_g_DateSIComSetCmp(void)                                                                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
-/*  Return:         st_s_clock_disp_data                                                                                             */
+/*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-#if 0  /* BEV provisionally */
-#else
-ST_XSPI_IVI_CLOCK_DISP_DATA  st_g_DateSIComPreTx(void)
+void            vd_g_DateSIComSetCmp(void)
 {
-    return(st_s_clock_disp_data);
+    u1_s_setting_sts = (U1)DATESI_COM_SET_OK;
 }
-#endif
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

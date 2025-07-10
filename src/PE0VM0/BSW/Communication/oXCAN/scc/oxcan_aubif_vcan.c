@@ -1,4 +1,4 @@
-/* 1.3.0 */
+/* 2.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_AUBIF_VCAN_C_MAJOR                 (1U)
-#define OXCAN_AUBIF_VCAN_C_MINOR                 (3U)
+#define OXCAN_AUBIF_VCAN_C_MAJOR                 (2U)
+#define OXCAN_AUBIF_VCAN_C_MINOR                 (0U)
 #define OXCAN_AUBIF_VCAN_C_PATCH                 (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -58,63 +58,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-#if (defined(CHM_CHCNVTR_H)    && \
-     defined(L3R_CANMBQ_CFG_H) && \
-     defined(L3R_CANMBQ_TX_H))
-
-
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    VCan_UTxConfirmation ( uint8 u1Controller, uint8 u1MsgBuffer )                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    VCan_UTxConfirmation ( uint8 u1Controller, uint8 u1MsgBuffer )
-{
-    uint8    u1LogicCh;
-    uint8    queId;
-
-    u1Controller = u1Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH);
-    if(u1Controller < CHM_VCAN_CONTROLLER_NUM) {
-
-        u1MsgBuffer -= bsw_vcan_tx_u1UTxVMboxVCtrlTop[u1Controller];
-        if(u1MsgBuffer < CANMBQ_MBOX_IDX_MAX_VCAN){
-
-            u1LogicCh = CHM_ChCnvtr_VCan_To_Log[u1Controller];
-            queId     = MBQ_MboxId2SendPriority_Tbl_VCAN[u1MsgBuffer];
-            if((u1LogicCh < CANMBQ_CHMAX ) &&
-               (queId     < CANMBQ_QUENUM)) {
-
-                TxChannel_TxFin(txChannelArray[u1LogicCh], queId);
-            }
-        }
-    }
-}
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 
-
-#endif /* #if (defined(CHM_CHCNVTR_H) && */
-
+#ifdef CAN_LPR_H
 
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-
-
-#if (defined(CHM_CHCNVTR_H) && \
-     defined(CID_SEARCH_H)  && \
-     defined(L3R_COMMON_H))
-
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
 /*  uint8   VCan_URxIndication ( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -123,28 +72,137 @@ void    VCan_UTxConfirmation ( uint8 u1Controller, uint8 u1MsgBuffer )
 /*===================================================================================================================================*/
 uint8   VCan_URxIndication ( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
 {
-    uint8     u1t_result;
+    uint8          u1_t_ing;
+    uint8          u1_t_ok;
 
-    u1Controller = u1Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH);
-    if(u1Controller < CHM_VCAN_CONTROLLER_NUM){
-        Cid_Search_ReceiveCanData(CHM_ChCnvtr_VCan_To_Log[u1Controller], ptMsg);
-        u1t_result = (uint8)CAN_PROC_OK;
+#ifdef VCAN_TX_ACK_H
+    vd_g_vCANTxAckRxInd(u1Controller, u1MsgBuffer, ptMsg);
+#endif
+
+#if (CAN_LPR_ING_VIR_CAN_MIN > 0U)
+    u1_t_ing = (u1Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH)) + (U1)CAN_LPR_ING_VIR_CAN_MIN;
+#else
+    u1_t_ing =  u1Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH);
+#endif
+
+    if(u1_t_ing <= (U1)CAN_LPR_ING_VIR_CAN_MAX){
+        u1_t_ok = u1_g_CANLpRIngCANRx(u1_t_ing, u1MsgBuffer, ptMsg);
     }
     else{
-        u1t_result = (uint8)CAN_PROC_NG;
+        u1_t_ok = (uint8)CAN_PROC_OK;
     }
 
-    return(u1t_result);
+    return(u1_t_ok);
 }
+/*===================================================================================================================================*/
+
+
+#else  /* #ifdef CAN_LPR_H */
+
+
+/*===================================================================================================================================*/
+#if ((defined(VCAN_TX_ACK_H)) || (defined(CAN_QSEV_RX_H)))
+uint8   VCan_URxIndication ( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR CanMsgType* ptMsg )
+{
+#ifdef VCAN_TX_ACK_H
+    vd_g_vCANTxAckRxInd(u1Controller, u1MsgBuffer, ptMsg);
+#endif /* #ifdef VCAN_TX_ACK_H */
+
+#if ((defined(CAN_QSEV_RX_H)) && (OXCAN_AUBIF_VIR_CAN_QSEV_RX == 1U))
+    return(u1_g_CANQSEvRxFqCAN((u1Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH)), u1MsgBuffer, ptMsg));
+#else
+    return((uint8)CAN_PROC_OK);
+#endif /* #if ((defined(CAN_QSEV_RX_H)) && (OXCAN_AUBIF_VIR_CAN_QSEV_RX == 1U)) */
+}
+#endif /* #if ((defined(VCAN_TX_ACK_H)) || (defined(CAN_QSEV_RX_H))) */
+/*===================================================================================================================================*/
+
+
+#endif /* #ifdef CAN_LPR_H */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
+/*===================================================================================================================================*/
+/*  void VCan_UEdgeInit ( uint8 Controller )                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void VCan_UEdgeInit ( uint8 Controller )
+{
+}
+/*===================================================================================================================================*/
+/*  void VCan_UEdgeEnableDetect ( uint8 Controller )                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void VCan_UEdgeEnableDetect ( uint8 Controller )
+{
+#if (OXCAN_LIB_CFG_EN_VCT == 1U)
+    uint8          u1_t_ctrlr;
 
+    u1_t_ctrlr = Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH);
+    vd_g_oXCANvCtWrqDet(u1_t_ctrlr, (U1)TRUE);
+#endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
+}
+/*===================================================================================================================================*/
+/*  void VCan_UEdgeDisableDetect ( uint8 Controller )                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void VCan_UEdgeDisableDetect ( uint8 Controller )
+{
+#if (OXCAN_LIB_CFG_EN_VCT == 1U)
+    uint8          u1_t_ctrlr;
 
-#endif /* #if (defined(CHM_CHCNVTR_H) && */
+    u1_t_ctrlr = Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH);
+    vd_g_oXCANvCtWrqDet(u1_t_ctrlr, (U1)FALSE);
+#endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
+}
+/*===================================================================================================================================*/
+/*  void VCan_UEdgeClearStatus ( uint8 Controller )                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void VCan_UEdgeClearStatus ( uint8 Controller )
+{
+#if (OXCAN_LIB_CFG_EN_VCT == 1U)
+    uint8          u1_t_ctrlr;
 
+    u1_t_ctrlr = Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH);
+    (void)u4_g_oXCANvCtWrqbyCt(u1_t_ctrlr, (U1)TRUE);
+#endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
+}
+/*===================================================================================================================================*/
+/*  Can_ReturnType VCan_UEdgeGetStatus ( uint8 Controller )                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+Can_ReturnType VCan_UEdgeGetStatus ( uint8 Controller )
+{
+#if (OXCAN_LIB_CFG_EN_VCT == 1U)
+    uint32            u4_t_wrq;
+    Can_ReturnType    u1_t_ok;
+    uint8             u1_t_ctrlr;
 
+    u1_t_ctrlr = Controller & ((uint8)U1_MAX ^ (uint8)VCAN_VIRTUAL_CH);
+    u4_t_wrq   = u4_g_oXCANvCtWrqbyCt(u1_t_ctrlr, (U1)FALSE);
+    if(u4_t_wrq != (U4)0U){
+        u1_t_ok = (Can_ReturnType)CAN_OK;
+    }
+    else{
+        u1_t_ok = (Can_ReturnType)CAN_NOT_OK;
+    }
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
+    return(u1_t_ok);
+#else
+    return((Can_ReturnType)CAN_NOT_OK);
+#endif /* #if (OXCAN_LIB_CFG_EN_VCT == 1U) */
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -153,7 +211,7 @@ uint8   VCan_URxIndication ( uint8 u1Controller, uint8 u1MsgBuffer, CanConstR Ca
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.3.0    12/20/2024  TN       oxcan_aubif.c was divided by Aubist/Com component.                                                 */
+/*  2.0.0     2/21/2025  TN       oxcan_aubif.c v1.2.0 -> v2.0.0 was redesigned for Toyota BEVStep3.                                 */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
 /*                                                                                                                                   */

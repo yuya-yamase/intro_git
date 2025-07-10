@@ -20,7 +20,7 @@
 #include    "x_spi_ivi_sub1_control.h"
 #include    "x_spi_ivi_sub1_power.h"
 #include    "x_spi_ivi_sub1_system.h"
-#include    "x_spi_ivi_sub4.h"
+#include    "x_spi_ivi_sub4_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */

@@ -22,7 +22,7 @@
 #include    "GNSSCtl.h"
 #include    "Dio.h"
 #include    "Dio_Symbols.h"
-
+#include    "ExtSigCtrl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -70,6 +70,7 @@
 #define    XSPI_IVI_EXTSIG_ID_GNSS         (0x50U)
 #define    XSPI_IVI_EXTSIG_ID_DAB          (0x60U)
 #define    XSPI_IVI_EXTSIG_ID_DAB2         (0x61U)
+#define    XSPI_IVI_EXTSIG_ID_PWR          (0x71U)
 
 #define    XSPI_IVI_SYSTEM_GPS_STBY        (0x00U)
 #define    XSPI_IVI_SYSTEM_GPS_NORMAL      (0x01U)
@@ -83,6 +84,9 @@
 #define    XSPI_IVI_TESTTERM_UNKNOWN       (0U)
 #define    XSPI_IVI_TESTTERM_OFF           (1U)
 #define    XSPI_IVI_TESTTERM_ON            (2U)
+
+#define    XSPI_IVI_PWR_OFF                (1U)
+#define    XSPI_IVI_PWR_ON                 (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -148,6 +152,8 @@ void            vd_g_XspiIviSub1SystemInit(void)
 
     u1_s_xspi_ivi_system_tmute_data = (U1)XSPI_IVI_TMUTE_UNDEF;
     u1_s_xspi_ivi_system_tmute_1stsend_flg = (U1)FALSE;
+
+    vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_PWR, (U1)XSPI_IVI_PWR_OFF);
 }
 
 /*===================================================================================================================================*/
@@ -163,6 +169,7 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
     U1    u1_t_test;
     U1    u1_t_perion;
     U1    u1_t_event_jdg;
+    U1    u1_t_exsig_pwr;
 
     /*定期送信などのデータ作成をここで行う*/
     /*TEST端子読み出し*/
@@ -203,6 +210,15 @@ void            vd_g_XspiIviSub1SystemMainTask(void)
             }
             u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_SYSTEM_TEST] = (U4)0U;
         }
+    }
+
+    /* PWR端子入力取得処理 */
+    u1_t_exsig_pwr  = ExtSigCtrl_GetSigSts(EXTSIGCTRL_KIND_EXT_PWR_SW);
+    if(u1_t_exsig_pwr   == (U1)U1_EXTSIGCTRL_SIG_STS_ON){
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_PWR, (U1)XSPI_IVI_PWR_ON);
+    }
+    else{
+        vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_PWR, (U1)XSPI_IVI_PWR_OFF);
     }
 
     /*外部信号状態の定期送信orイベント送信*/
@@ -332,8 +348,8 @@ void            vd_g_XspiIviSub1GpsStsPut(const U1 u1_a_DATA)
 /*===================================================================================================================================*/
 void            vd_g_XspiIviSub1ExtSiGSend(void)
 {
-    U2     u2_s_SYSTEM_EXTSIG_SIZE = (U2)32U;
-    U1     u1_tp_data[32];
+    static const U2     u2_s_SYSTEM_EXTSIG_SIZE = (U2)XSPI_IVI_EXTSIG_SNDSIZ;
+    U1     u1_tp_data[XSPI_IVI_EXTSIG_SNDSIZ];
     U4     u4_t_loop;
     U4     u4_t_hi;
     U4     u4_t_lo;
@@ -390,6 +406,9 @@ void            vd_g_XspiIviSub1ExtSiGSend(void)
             break;
         case 14:
             u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_DAB2;
+            break;
+        case 15:
+            u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_EXTSIG_ID_PWR;
             break;
         
         default:

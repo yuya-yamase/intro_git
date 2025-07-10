@@ -9,11 +9,13 @@
 #include "aip_common.h"
 
 #include "Dio.h"
-#include "PictCtl.h"
+#include "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define PICTMUTE_VEHPOWSTT_PARKING              (POWER_MODE_STATE_PARK)
+#define PICTMUTE_VEHPOWSTT_EDS                  (POWER_MODE_STATE_EDS)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -21,16 +23,12 @@
 #define PICTMUTE_IO_STS_LOW                     (0U)
 #define PICTMUTE_IO_STS_HIGH                    (1U)
 
-#define u1_PICTMUTE_GET_PM_V_MUTE()             (Dio_ReadChannel(DIO_ID_PORT24_CH9))
-#define u1_PICTMUTE_GET_DISP_REQ_GPIO0()        (Dio_ReadChannel(DIO_ID_PORT2_CH2))
+#define u1_PICTMUTE_GET_VEHPOWSTT()             (u1_g_Power_ModeState())
 #define u1_PICTMUTE_GET_PMA_PS_HOLD()           (Dio_ReadChannel(DIO_ID_PORT3_CH1))
-#define u1_PICTMUTE_GET_SAIL_ERR1()             (Dio_ReadChannel(DIO_ID_PORT6_CH2))
-#define u1_PICTMUTE_GET_SAIL_ERR2()             (Dio_ReadChannel(DIO_ID_PORT6_CH4))
-#define u1_PICTMUTE_GET_PORT_PM_PSAIL_ERR_N()   (Dio_ReadChannel(DIO_ID_PORT8_CH4))
 #define u1_PICTMUTE_GET_V_IC_RST()              (Dio_ReadChannel(DIO_ID_PORT3_CH3))
 
-#define u1_PICTMUTE_SET_PM_V_MUTE_L()           (Dio_WriteChannel(DIO_ID_PORT24_CH9, (Dio_LevelType)PICTMUTE_IO_STS_LOW))
-#define u1_PICTMUTE_SET_PM_V_MUTE_H()           (Dio_WriteChannel(DIO_ID_PORT24_CH9, (Dio_LevelType)PICTMUTE_IO_STS_HIGH))
+#define vd_PICTMUTE_SET_PM_V_MUTE_L()           (Dio_WriteChannel(DIO_ID_PORT24_CH9, (Dio_LevelType)PICTMUTE_IO_STS_LOW))
+#define vd_PICTMUTE_SET_PM_V_MUTE_H()           (Dio_WriteChannel(DIO_ID_PORT24_CH9, (Dio_LevelType)PICTMUTE_IO_STS_HIGH))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -46,6 +44,8 @@
 void    vd_g_PictMute_Init(void);
 void    vd_g_PictMute_Routine(void);
 void    vd_g_PictMute_CamMuteReq(const U1 u1_a_req_sts);
+void    vd_g_PictMute_SipErrorReq(const U1 u1_a_req_sts);
+void    vd_g_PictMute_OtaResetReq(const U1 u1_a_req_sts);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

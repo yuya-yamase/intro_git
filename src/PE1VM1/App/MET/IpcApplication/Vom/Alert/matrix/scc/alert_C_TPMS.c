@@ -167,7 +167,7 @@ const ST_ALERT_MTRX st_gp_ALERT_C_TPMS_MTRX[3] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_tpmsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_TPM1S02_RXCH0) && defined(ComConf_ComSignal_TPM_IND)
+#if defined(OXCAN_RXD_PDU_CAN_TPM1S02_CH0) && defined(ComConf_ComSignal_TPM_IND)
     static const U2 u2_s_ALERT_C_TPMS_TT_TO_THRSH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U4 u4_s_ALERT_C_TPMS_TT_BIT_DEST   = (U4)0x00000040U;
     static const U1 u1_s_ALERT_C_TPMS_TT_LSB_MSGSTS = (U1)4U;
@@ -176,8 +176,8 @@ static U4      u4_s_AlertC_tpmsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_msgsts;
     U1              u1_t_dest;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_TPM1S02_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_TPM1S02_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      u2_s_ALERT_C_TPMS_TT_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_sgnl     = (U1)0U;
@@ -193,7 +193,7 @@ static U4      u4_s_AlertC_tpmsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_TPM1S02_RXCH0) && defined(ComConf_ComSignal_TPM_IND) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_TPM1S02_CH0) && defined(ComConf_ComSignal_TPM_IND) */
 }
 
 /*===================================================================================================================================*/
@@ -204,14 +204,14 @@ static U4      u4_s_AlertC_tpmsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if defined(OXCAN_PDU_RX_CAN_TPM1S02_RXCH0) && defined(ComConf_ComSignal_TPM_BZR)
+#if defined(OXCAN_RXD_PDU_CAN_TPM1S02_CH0) && defined(ComConf_ComSignal_TPM_BZR)
     static const U1 u1_s_ALERT_C_TPMS_BC_LSB_MSGSTS = (U1)2U;
     U4              u4_t_src_chk;
     U1              u1_t_sgnl;
     U1              u1_t_msgsts;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_TPM1S02_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_TPM1S02_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u1_t_sgnl     = (U1)0U;
@@ -222,7 +222,7 @@ static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* defined(OXCAN_PDU_RX_CAN_TPM1S02_RXCH0) && defined(ComConf_ComSignal_TPM_BZR) */
+#endif /* defined(OXCAN_RXD_PDU_CAN_TPM1S02_CH0) && defined(ComConf_ComSignal_TPM_BZR) */
 }
 
 /*===================================================================================================================================*/
@@ -233,7 +233,7 @@ static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_tpmsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
-#if (defined(OXCAN_PDU_RX_CAN_TPM1S02_RXCH0) && defined(ComConf_ComSignal_TPM_DISP)) && (defined(OXCAN_PDU_RX_CAN_TPM1S03_RXCH0) && defined(ComConf_ComSignal_TPM_REQ0))
+#if (defined(OXCAN_RXD_PDU_CAN_TPM1S02_CH0) && defined(ComConf_ComSignal_TPM_DISP)) && (defined(OXCAN_RXD_PDU_CAN_TPM1S03_CH0) && defined(ComConf_ComSignal_TPM_REQ0))
     static const U2 u2_s_ALERT_C_TPMS_PD_TO_THRSH    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_TPMS_PD_LSB_TPM1S02 = (U1)7U;
     static const U1 u1_s_ALERT_C_TPMS_PD_LSB_TPMDISP = (U1)1U;
@@ -243,13 +243,13 @@ static U4      u4_s_AlertC_tpmsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     U1              u1_t_tpm1s02_sts;
     U1              u1_t_tpm1s03_sts;
 
-    u1_t_tpm1s02_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_TPM1S02_RXCH0,
-                                        (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_tpm1s02_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_TPM1S02_CH0,
+                                        (U4)OXCAN_SYS_IGR,
                                         u2_s_ALERT_C_TPMS_PD_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     u4_t_src_chk     = ((U4)u1_t_tpm1s02_sts << u1_s_ALERT_C_TPMS_PD_LSB_TPM1S02);
 
-    u1_t_tpm1s03_sts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_TPM1S03_RXCH0,
-                                        (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
+    u1_t_tpm1s03_sts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_TPM1S03_CH0,
+                                        (U4)OXCAN_SYS_IGR,
                                         (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk    |= ((U4)u1_t_tpm1s03_sts << u1_s_ALERT_C_TPMS_PD_LSB_TPM1S03);
 
@@ -264,8 +264,8 @@ static U4      u4_s_AlertC_tpmsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     return(u4_t_src_chk);
 #else
     return((U4)0U);
-#endif /* (defined(OXCAN_PDU_RX_CAN_TPM1S02_RXCH0) && defined(ComConf_ComSignal_TPM_DISP)) &&
-          (defined(OXCAN_PDU_RX_CAN_TPM1S03_RXCH0) && defined(ComConf_ComSignal_TPM_REQ0)) */
+#endif /* (defined(OXCAN_RXD_PDU_CAN_TPM1S02_CH0) && defined(ComConf_ComSignal_TPM_DISP)) &&
+          (defined(OXCAN_RXD_PDU_CAN_TPM1S03_CH0) && defined(ComConf_ComSignal_TPM_REQ0)) */
 }
 
 /*===================================================================================================================================*/

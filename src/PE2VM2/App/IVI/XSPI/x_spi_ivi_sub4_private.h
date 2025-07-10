@@ -25,6 +25,9 @@
 #include    "x_spi_ivi_private.h"
 #include    "x_spi_ivi_sub4.h"
 #include    "PictCtl.h"
+#include    "PncreqCtl.h"
+#include    "ivdsh.h"
+#include    "DtcCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -32,7 +35,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* ÉtÉäÅ[ÉâÉìÉ^ÉCÉ} 1ms */
+/* „Éï„É™„Éº„É©„É≥„Çø„Ç§„Éû 1ms */
 #define MCU_FRT_1MS                         (1000 * GPT_FRT_1US)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,6 +50,11 @@
 void            vd_g_XspiIviSub4Init(void);
 void            vd_g_XspiIviSub4Ana(const U1 * u1_ap_XSPI_ADD);
 void            vd_g_XspiIviSub4Send(U1 * u1_ap_xspi_add);
+void            vd_g_XspiIviCANBusSend(void);
+void            vd_g_XspiIviCANBusGet2M(void);
+void            vd_g_XspiIviCANBusGet5M(void);
+void            vd_g_XspiIviCANBusEventJdg(void);
+void            vd_g_XspiIviClockUTCPut(const U1* u1_ap_DATA);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

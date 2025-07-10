@@ -168,8 +168,8 @@ static U4      u4_s_AlertD_4wdsysTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_4WDSYS_LSB_EHV1S26);
@@ -178,8 +178,8 @@ static U4      u4_s_AlertD_4wdsysTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     (void)Com_ReceiveSignal(ComConf_ComSignal_HV4WNG, &u1_t_sgnl);
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_FWD1S90,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_FWD1S90,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_4WDSYS_LSB_FWD1S90);
 
@@ -205,8 +205,8 @@ static U4      u4_s_AlertD_4wdsysPdB4Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_FWD1S90,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_FWD1S90,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_4WDSYS_LSB_FWD1S90);
@@ -233,8 +233,8 @@ static U4      u4_s_AlertD_4wdsysPdH4Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
 
-    u1_t_msgsts   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_EHV1S26_RXCH0,
-                                     (U2)OXCAN_RX_SYS_NRX_IGR,
+    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S26_CH0,
+                                     (U4)OXCAN_SYS_IGR,
                                      (U2)U2_MAX) & (U1)COM_NO_RX;
 
     u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_D_4WDSYS_LSB_EHV1S26);

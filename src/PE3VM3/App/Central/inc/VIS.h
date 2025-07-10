@@ -30,16 +30,9 @@
 #define VIS_SPECIALSTATE_WIRED_REPRO                        ((U1)0x03U)     /* 有線リプロ */
 #define VIS_SPECIALSTATE_EMERGENCY_STOP                     ((U1)0x04U)     /* 縮退走行 */
 #define VIS_SPECIALSTATE_POWEROFF_ALL                       ((U1)0x05U)     /* 電源ALL OFF */
+#define VIS_SPECIALSTATE_SERVICE_LLC                        ((U1)0x06U)     /* WP注排水 */
 
-#define VIS_NORMAL_USERDRIVEN                               ((U1)0x00U)     /* 異常なし(手動運転中) */
-#define VIS_NORMAL_ADSUPPORT_NOTPOSSIBLE                    ((U1)0x01U)     /* 異常なし(高度運転支援実施不可) */
-#define VIS_NORMAL_ADSUPPORT_INPROGRESS                     ((U1)0x02U)     /* 異常なし(高度運転支援実施中) */
-#define VIS_EDS_DCDCFAILED_SYSTEMDRIVE                      ((U1)0x0AU)     /* 縮退走行中(DCDC側異常_システム駆動) */
-#define VIS_EDS_DCDCFAILED_USERDRIVE                        ((U1)0x0BU)     /* 縮退走行中(DCDC側異常_ユーザー駆動) */
-#define VIS_EDS_DCDCFAILED_STOP                             ((U1)0x0CU)     /* 縮退走行中(DCDC側異常_駆動力停止) */
-#define VIS_EDS_LIBFAILED_SYSTEMDRIVE                       ((U1)0x14U)     /* 縮退走行中(補機LiB側異常_システム駆動) */
-#define VIS_EDS_LIBFAILED_USERDRIVE                         ((U1)0x15U)     /* 縮退走行中(補機LiB側異常_ユーザー駆動) */
-#define VIS_EDS_LIBFAILED_STOP                              ((U1)0x16U)     /* 縮退走行中(補機LiB側異常_駆動力停止) */
+#define VIS_NORMAL_USERDRIVEN                               ((U1)0x00U)     /* 電源異常初期値：異常なし(手動運転中) */
 
 #define VIS_VIN_MAX_NM                                      ((U1)17U)       /* VIN情報要素数 */
 #define VIS_VIN_INIT_VAL                                    ((U1)0x3FU)     /* VIN初期値 */
@@ -68,5 +61,6 @@ U1 u1_g_VISPwrGetBasicState (U1 * const u1_a_BASICSTATE);
 U1 u1_g_VISPwrGetSpecialState (U1 * const u1_a_SPECIALSTATE);
 U1 u1_g_VISPwrGetTransFlg (U1 * const u1_a_TRANSFLG);
 U1 u1_g_VISPwrGetEthChPwr (void);
+U1 u1_g_VISPwrGetApofrq (void);
 /* -------------------------------------------------------------------------- */
 #endif/*VIS_H*/

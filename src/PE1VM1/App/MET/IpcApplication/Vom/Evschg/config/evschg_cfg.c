@@ -453,7 +453,6 @@ static void             vd_s_EvschgCfgTimchg(ST_EVSCHG_SGNL * st_ap_sig)
     /* P_NCDSP */
     st_ap_sig[EVSCHG_ID_P_NCDSP].u1_sts = u1_t_sts_plg1g11;
     u1_t_sig = (U1)EVSCHG_P_NCDSP_INIT;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_P_NCDSP, &u1_t_sig);
     st_ap_sig[EVSCHG_ID_P_NCDSP].u2_sig = (U2)u1_t_sig;
 
     /* P_TMPID */
@@ -465,31 +464,26 @@ static void             vd_s_EvschgCfgTimchg(ST_EVSCHG_SGNL * st_ap_sig)
     /* P_TMPTYP */
     st_ap_sig[EVSCHG_ID_P_TMPTYP].u1_sts = u1_t_sts_plg1g13;
     u1_t_sig = (U1)EVSCHG_P_TMPTYP_INIT;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_P_TMPTYP, &u1_t_sig);
     st_ap_sig[EVSCHG_ID_P_TMPTYP].u2_sig = (U2)u1_t_sig;
 
     /* P_TMPSTM */
     st_ap_sig[EVSCHG_ID_P_TMPSTM].u1_sts = u1_t_sts_plg1g13;
     u2_t_sig = (U2)EVSCHG_P_TMPSTM_INIT;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_P_TMPSTM, &u2_t_sig);
     st_ap_sig[EVSCHG_ID_P_TMPSTM].u2_sig = u2_t_sig;
 
     /* P_TMPFTM */
     st_ap_sig[EVSCHG_ID_P_TMPFTM].u1_sts = u1_t_sts_plg1g13;
     u2_t_sig = (U2)EVSCHG_P_TMPFTM_INIT;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_P_TMPFTM, &u2_t_sig);
     st_ap_sig[EVSCHG_ID_P_TMPFTM].u2_sig = u2_t_sig;
 
     /* P_TMPSWK */
     st_ap_sig[EVSCHG_ID_P_TMPSWK].u1_sts = u1_t_sts_plg1g13;
     u1_t_sig = (U1)EVSCHG_P_TMPSWK_INIT;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_P_TMPSWK, &u1_t_sig);
     st_ap_sig[EVSCHG_ID_P_TMPSWK].u2_sig = (U2)u1_t_sig;
 
     /* P_TMPNWK */
     st_ap_sig[EVSCHG_ID_P_TMPNWK].u1_sts = u1_t_sts_plg1g13;
     u1_t_sig = (U1)EVSCHG_P_TMPNWK_INIT;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_P_TMPNWK, &u1_t_sig);
     st_ap_sig[EVSCHG_ID_P_TMPNWK].u2_sig = (U2)u1_t_sig;
 
     /* PARK_S */

@@ -86,10 +86,7 @@ void                         vd_g_DateSIComCommandRx(const ST_DATESI_COMMAND_DAT
 void                         vd_g_DateSIComClockDispUpdate(const U1 u1_a_VAL, const U1 u1_a_SIGN, const U1 u1_a_EVENT_EI);
 void                         vd_g_DateSIComCommandTx(void);
 ST_DATESI_COMMAND_DATA       st_g_DateSIComRx(void);
-#if 0  /* BEV provisionally */
-#else
-ST_XSPI_IVI_CLOCK_DISP_DATA  st_g_DateSIComPreTx(void);
-#endif
+void                         vd_g_DateSIComSetCmp(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

@@ -25,6 +25,7 @@
 /*	defines / data types / structs / unions	/ macros											*/
 /*==============================================================================================*/
 
+#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
 /*----------------------------------------------------------------------------------*/
 /* HW Setting																		*/
 /*----------------------------------------------------------------------------------*/
@@ -80,15 +81,13 @@
 #elif(MCAL_SPAL_TARGET==MCAL_TARGET_RH850U2B)
 	#define		PIC2_SetPic20TSEL(gNbr)																				\
 		((uint32)(																									\
-			(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj28)				/* TSELj28	: 28		*/	\
+			(uint32)(PIC2_ADCXnTSEL_NOTSELECTED		* PIC2_PIC2xADCXnTSELj28)			/* TSELj28	: 28		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj27)			/* TSELj27	: 27		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj26)			/* TSELj26	: 26		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj25)			/* TSELj25	: 25		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj24)			/* TSELj24	: 24		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj23)			/* TSELj23	: 23		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj22)			/* TSELj22	: 22		*/	\
-			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj21)			/* TSELj21	: 21		*/	\
-			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj20)			/* TSELj20	: 20		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj19)			/* TSELj19	: 19		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj18)			/* TSELj18	: 18		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj17)			/* TSELj17	: 17		*/	\
@@ -108,8 +107,6 @@
 			+(uint32)((ADC_CFG_GRP##gNbr##_TSG30TG0==STD_OFF) ?							/* TSELj05	: 05		*/	\
 				(PIC2_ADCXnTSEL_NOTSELECTED			* PIC2_PIC2xADCXnTSELj05) :										\
 				(PIC2_ADCXnTSEL_SELECTED			* PIC2_PIC2xADCXnTSELj05) )										\
-			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj04)			/* TSELj04	: 04		*/	\
-			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj03)			/* TSELj03	: 03		*/	\
 			+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj02)			/* TSELj02	: 02		*/	\
 			+(uint32)((ADC_CFG_GRP##gNbr##_TAUD1==STD_OFF) ?							/* TSELj01	: 01		*/	\
 				(PIC2_ADCXnTSEL_NOTSELECTED			* PIC2_PIC2xADCXnTSELj01) :										\
@@ -134,7 +131,7 @@
 		+(uint32)((ADC_CFG_GRP##gNbr##_E3S0AD1==STD_OFF) ?							/* TSELj21	: 21		*/	\
 			(PIC2_ADCXnTSEL_NOTSELECTED			* PIC2_PIC2xADCXnTSELj21) :										\
 			(PIC2_ADCXnTSEL_SELECTED			* PIC2_PIC2xADCXnTSELj21) )										\
-		+(uint32)((ADC_CFG_GRP##gNbr##_E3S0AD==STD_OFF) ?							/* TSELj21	: 20		*/	\
+		+(uint32)((ADC_CFG_GRP##gNbr##_E3S0AD==STD_OFF) ?							/* TSELj20	: 20		*/	\
 			(PIC2_ADCXnTSEL_NOTSELECTED			* PIC2_PIC2xADCXnTSELj20) :										\
 			(PIC2_ADCXnTSEL_SELECTED			* PIC2_PIC2xADCXnTSELj20) )										\
 		+(uint32)(PIC2_ADCXnTSEL_NOTSELECTED	* PIC2_PIC2xADCXnTSELj19)			/* TSELj19	: 19		*/	\
@@ -369,6 +366,7 @@ static CONST(Pic2_ConfigType, ADC_CONST) s_cstPic2_Config = {
 
 #define ADC_STOP_SEC_CONST_PTR				/* ADC RODATA CONST Pointer Section End				*/
 #include "Adc_MemMap.h"
+#endif
 
 /*--------------------------------------------------------------------------------------*/
 /* Adc Configuration 																	*/
@@ -948,7 +946,6 @@ static CONST(Adc_HWConfigType, ADC_CONST) s_cstAdc_HWConfig = {
 
 /* Adc SW Configuration */
 
-/*static CONST(Adc_SWGrpCnvInfoType, ADC_CONST) s_cpstSWGrpCnvInfoTbl[ADC_CFG_GRP_SIZE] = {	*/
 static CONST(Adc_SWConfigType, ADC_CONST) s_cstSWConfig[ADC_CFG_GRP_SIZE] = {
 	#if (ADC_CFG_GRP_SIZE >=  1U)
 		{	ADC_CFG_GRP00_HWUNIT,
@@ -1161,12 +1158,14 @@ static CONST(Adc_SWConfigType, ADC_CONST) s_cstSWConfig[ADC_CFG_GRP_SIZE] = {
 			ADC_CFG_GRP14_STREAMING_NUM	}
 	#endif
 };
-	
-/* Adc_ConpCfigType	*/
+
+/* Adc_ConfigType	*/
 CONST(Adc_ConfigType, ADC_CONST) Adc_cstUserConfig = {
 	&s_cstSWConfig[ADC_ZERO],			/* ADC SW Configuration	*/
 	&s_cstAdc_HWConfig,					/* ADC HW Configuration	*/
-	&s_cstPic2_Config					/* PIC2 Configuration	*/
+	#if	(ADC_CFG_GLOBAL_REG_CONTROL == STD_ON)
+	&s_cstPic2_Config,					/* PIC2 Configuration	*/
+	#endif
 };
 
 #define ADC_STOP_SEC_CONST_UNSPECIFIED			/* ADC RODATA CONST UNSPECIFIED Section Stop	*/
