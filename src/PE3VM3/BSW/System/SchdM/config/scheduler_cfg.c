@@ -57,6 +57,7 @@
 
 #include "chipcom.h"
 #include "PwrCtlSup.h"
+#include "VSM.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -157,6 +158,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Task                                                        */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_VSM_SAILWrapper,             (U4)SCHDLR_TASKBIT___5MS    },
+    {&App_VSM_Main,                     (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_PowerSup_Routine,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_PwrCtrlMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_McuDev_Pwron,                (U4)SCHDLR_TASKBIT___5MS    },
