@@ -15,7 +15,6 @@
 /*--------------------------------------------------------------------------*/
 #include <Dcm/Dcm_Dsl_Main_Callout.h>
 
-#include "oxdocan_aubif.h"
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
@@ -69,7 +68,6 @@ FUNC(Std_ReturnType, DCM_CODE_CALLOUT) Dcm_IndicateSesCtrlChange
     const Dcm_SesCtrlType u1SesCtrlTypeNew
 )
 {
-    vd_g_oXDoCANCfgSesChange(u1SesCtrlTypeOld, u1SesCtrlTypeNew);
     return E_OK;
 }
 
