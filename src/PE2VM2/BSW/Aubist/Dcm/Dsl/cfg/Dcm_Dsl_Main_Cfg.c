@@ -408,7 +408,7 @@ CONST(AB_83_ConstV Dcm_Dsl_DiagRespType, DCM_CONFIG_DATA) Dcm_Dsl_stDiagResp[1] 
     {
         (boolean)TRUE,     /* bP4Server */
         (boolean)FALSE,    /* bDiagRespOnSecondDeclinedRequest */
-        (uint8)0x24U        /* u1RespMaxNumRespPend */
+        (uint8)0x06U        /* u1RespMaxNumRespPend */
     }
 };
 
@@ -416,7 +416,7 @@ CONST(AB_83_ConstV Dcm_Dsl_DiagRespType, DCM_CONFIG_DATA) Dcm_Dsl_stDiagResp[1] 
 CONST (AB_83_ConstV Dcm_Dsl_GeneralType, DCM_CONFIG_DATA) Dcm_Dsl_stGeneral[1] =
 {
     {
-        (uint32)181000UL    /* u4FailSafeTimeout */
+        (uint32)31000UL    /* u4FailSafeTimeout */
     }
 };
 

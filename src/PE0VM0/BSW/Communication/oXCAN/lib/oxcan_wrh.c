@@ -37,20 +37,15 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define OXCAN_WRQH_NUM_CTRL                      (3U)
-#define OXCAN_WRQH_CTRL_STA                      (0U)         /* network communication is being started and wait for net awaken */
-#define OXCAN_WRQH_CTRL_RUN                      (1U)         /* network communication is in run                                */
-#define OXCAN_WRQH_CTRL_WFR                      (2U)         /* wait for wake-up request                                       */
+#define OXCAN_WRQH_CTRL_STA                      (0U)           /* network communication is being started and wait for net awaken */
+#define OXCAN_WRQH_CTRL_RUN                      (1U)           /* network communication is in run                                */
+#define OXCAN_WRQH_CTRL_WFR                      (2U)           /* wait for wake-up request                                       */
 
 #define OXCAN_WRQH_EAS_REQ_WK                    (0x03U)
-#define OXCAN_WRQH_EAS_REQ_SS                    (0x01U)      /* Wakeup Request : Solid State    */
-#define OXCAN_WRQH_EAS_REQ_ET                    (0x02U)      /* Wakeup Request : Event Triggerd */
+#define OXCAN_WRQH_EAS_REQ_SS                    (0x01U)        /* Wakeup Request : Solid State    */
+#define OXCAN_WRQH_EAS_REQ_ET                    (0x02U)        /* Wakeup Request : Event Triggerd */
 #define OXCAN_WRQH_EAS_TIMEOUT                   (0x04U)
 #define OXCAN_WRQH_EAS_NET_RUN                   (0x08U)
-
-
-#if (OXCAN_WRQH_EAS_REQ_WK != OXCAN_WRH_REQ_WK)
-#error "oxcan_nwh.c : OXCAN_WRH_REQ_WK shall be equal to OXCAN_WRQH_EAS_REQ_WK (0x03U)."
-#endif
 
 #define OXCAN_WRQH_ACT_TO_STA                    (0U)
 #define OXCAN_WRQH_ACT_TO_RUN                    (1U)
@@ -79,7 +74,7 @@ static U4      u4_s_oXCANWrhReqbyVom(const U4 u4_a_SYS_ACT);
 
 static U4      u4_s_oXCANWrhReqbyRqh(const U4 u4_a_SYS_ACT, U4 * u4_ap_wrq_act);
 
-static U1      u1_s_oXCANWrhRqhTout(const ST_OXCAN_WRH_RQH * st_ap_RQH, const U2 u2_a_ELPSD, const U1 u1_a_CTRL);
+static U1      u1_s_oXCANWrhRqhTout(const ST_OXCAN_WRH_RQH * st_ap_RQH, const U2 u2_a_ELPSD, const U2 u2_a_CTRL);
 static U4      u4_s_oXCANWrhRqhAct(const U2 u2_a_ACT, ST_OXCAN_WRH_HCH * st_ap_hch);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -102,9 +97,9 @@ void    vd_g_oXCANWrhInit(void)
     u2_s_oxcan_wrh_vom_tocnt = (U2)U2_MAX;
 
     for(u4_t_hch = (U4)0U; u4_t_hch < (U4)u1_g_OXCAN_WRH_NUM_RQH; u4_t_hch++){
+        st_gp_oxcan_wrh_hch[u4_t_hch].u4_req   = (U4)0U;
         st_gp_oxcan_wrh_hch[u4_t_hch].u2_elpsd = (U2)U2_MAX;
-        st_gp_oxcan_wrh_hch[u4_t_hch].u1_ctrl  = (U1)OXCAN_WRQH_CTRL_WFR;
-        st_gp_oxcan_wrh_hch[u4_t_hch].u1_req   = (U1)0U;
+        st_gp_oxcan_wrh_hch[u4_t_hch].u2_ctrl  = (U2)OXCAN_WRQH_CTRL_WFR;
     }
 }
 /*===================================================================================================================================*/
@@ -157,15 +152,15 @@ U1      u1_g_oXCANWrhShtdwnOk(void)
     return(u1_t_ok);
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_oXCANWrhReqHch(const U1 u1_a_HCH, const U1 u1_a_REQ)                                                                */
+/*  void    vd_g_oXCANWrhReqHch(const U1 u1_a_HCH, const U4 u4_a_REQ)                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_oXCANWrhReqHch(const U1 u1_a_HCH, const U1 u1_a_REQ)
+void    vd_g_oXCANWrhReqHch(const U1 u1_a_HCH, const U4 u4_a_REQ)
 {
     if(u1_a_HCH < u1_g_OXCAN_WRH_NUM_RQH){
-        st_gp_oxcan_wrh_hch[u1_a_HCH].u1_req = u1_a_REQ;
+        st_gp_oxcan_wrh_hch[u1_a_HCH].u4_req = u4_a_REQ | u4_g_OXCAN_WRH_LOG_REQ_EX;
     }
 }
 /*===================================================================================================================================*/
@@ -245,15 +240,16 @@ static U4      u4_s_oXCANWrhReqbyRqh(const U4 u4_a_SYS_ACT, U4 * u4_ap_wrq_act)
     U4                          u4_t_req_by_net;
     U4                          u4_t_wrqbit;
     U4                          u4_t_hch;
+    U4                          u4_t_req;
     U4                          u4_t_net;
     U4                          u4_t_run;
     U4                          u4_t_req_by_hch;
 
     U2                          u2_t_elpsd;
+    U2                          u2_t_ctrl;
     U2                          u2_t_act;
 
     U1                          u1_t_eas;
-    U1                          u1_t_ctrl;
 
     u4_t_req_by_net = (U4)0U;
     u4_t_wrqbit     = (U4)0U;
@@ -261,10 +257,10 @@ static U4      u4_s_oXCANWrhReqbyRqh(const U4 u4_a_SYS_ACT, U4 * u4_ap_wrq_act)
 
         st_tp_RQH = &st_gp_OXCAN_WRH_RQH[u4_t_hch];
         st_tp_hch = &st_gp_oxcan_wrh_hch[u4_t_hch];
-
-        u1_t_ctrl = st_tp_hch->u1_ctrl;
         u4_t_net  = st_tp_RQH->u4_sys_net;
-        if(u1_t_ctrl >= (U1)OXCAN_WRQH_NUM_CTRL){
+
+        u2_t_ctrl = st_tp_hch->u2_ctrl;
+        if(u2_t_ctrl >= (U2)OXCAN_WRQH_NUM_CTRL){
 
             u2_t_act = (U2)OXCAN_WRQH_ACT_TO_WFR;
         }
@@ -273,12 +269,23 @@ static U4      u4_s_oXCANWrhReqbyRqh(const U4 u4_a_SYS_ACT, U4 * u4_ap_wrq_act)
             /* ------------------------------------------------------------------------------------- */
             u4_t_gli = u4_g_oXCANWrh_IRQ_DI();
 
-            u1_t_eas          = st_tp_hch->u1_req;
-            st_tp_hch->u1_req = u1_t_eas & (U1)OXCAN_WRQH_EAS_REQ_SS;
+            u4_t_req          = st_tp_hch->u4_req;
+            st_tp_hch->u4_req = u4_t_req & u4_t_net;
 
             vd_g_oXCANWrh_IRQ_EI(u4_t_gli);
             /* ------------------------------------------------------------------------------------- */
-            u1_t_eas &= (U1)OXCAN_WRQH_EAS_REQ_WK;
+
+            u4_t_net  = u4_t_req & u4_t_net;
+            u4_t_req &= u4_g_OXCAN_WRH_LOG_REQ_EX;
+            if(u4_t_net == (U4)0U){
+                u1_t_eas = (U1)0U;
+            }
+            else if(u4_t_req != (U4)0U){
+                u1_t_eas = (U1)OXCAN_WRQH_EAS_REQ_WK;
+            }
+            else{
+                u1_t_eas = (U1)OXCAN_WRQH_EAS_REQ_SS;
+            }
 
             u2_t_elpsd = st_tp_hch->u2_elpsd;
             if(u2_t_elpsd < (U2)U2_MAX){
@@ -286,13 +293,13 @@ static U4      u4_s_oXCANWrhReqbyRqh(const U4 u4_a_SYS_ACT, U4 * u4_ap_wrq_act)
                 st_tp_hch->u2_elpsd = u2_t_elpsd;
             }
 
-            u1_t_eas |= u1_s_oXCANWrhRqhTout(st_tp_RQH, u2_t_elpsd, u1_t_ctrl);
+            u1_t_eas |= u1_s_oXCANWrhRqhTout(st_tp_RQH, u2_t_elpsd, u2_t_ctrl);
             u4_t_run  = u4_a_SYS_ACT & u4_t_net;
             if(u4_t_run == u4_t_net){
                 u1_t_eas |= (U1)OXCAN_WRQH_EAS_NET_RUN;
             }
 
-            u2_t_act = ((U2)u1_t_ctrl << OXCAN_WRQH_ACT_LSB_CTRL) + (U2)u1_t_eas;
+            u2_t_act = (u2_t_ctrl << OXCAN_WRQH_ACT_LSB_CTRL) + (U2)u1_t_eas;
             u2_t_act = (U2)u1_sp_OXCAN_WRQH_ACT[u2_t_act];
         }
         u4_t_req_by_hch  = u4_s_oXCANWrhRqhAct(u2_t_act, st_tp_hch);
@@ -305,20 +312,20 @@ static U4      u4_s_oXCANWrhReqbyRqh(const U4 u4_a_SYS_ACT, U4 * u4_ap_wrq_act)
     return(u4_t_req_by_net);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_s_oXCANWrhRqhTout(const ST_OXCAN_WRH_RQH * st_ap_RQH, const U2 u2_a_ELPSD, const U1 u1_a_CTRL)                        */
+/*  U1      u1_s_oXCANWrhRqhTout(const ST_OXCAN_WRH_RQH * st_ap_RQH, const U2 u2_a_ELPSD, const U2 u2_a_CTRL)                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U1      u1_s_oXCANWrhRqhTout(const ST_OXCAN_WRH_RQH * st_ap_RQH, const U2 u2_a_ELPSD, const U1 u1_a_CTRL)
+static U1      u1_s_oXCANWrhRqhTout(const ST_OXCAN_WRH_RQH * st_ap_RQH, const U2 u2_a_ELPSD, const U2 u2_a_CTRL)
 {
     U2                          u2_t_tout;
     U1                          u1_t_eas;
 
-    if(u1_a_CTRL == (U1)OXCAN_WRQH_CTRL_STA){
+    if(u2_a_CTRL == (U2)OXCAN_WRQH_CTRL_STA){
         u2_t_tout = st_ap_RQH->u2_tout_sta;
     }
-    else if(u1_a_CTRL == (U1)OXCAN_WRQH_CTRL_RUN){
+    else if(u2_a_CTRL == (U2)OXCAN_WRQH_CTRL_RUN){
         u2_t_tout = st_ap_RQH->u2_tout_run;
     }
     else{
@@ -347,26 +354,26 @@ static U4      u4_s_oXCANWrhRqhAct(const U2 u2_a_ACT, ST_OXCAN_WRH_HCH * st_ap_h
     switch(u2_a_ACT){
         case OXCAN_WRQH_ACT_TO_STA:
             st_ap_hch->u2_elpsd = (U2)0U;
-            st_ap_hch->u1_ctrl  = (U1)OXCAN_WRQH_CTRL_STA;
+            st_ap_hch->u2_ctrl  = (U2)OXCAN_WRQH_CTRL_STA;
             u4_t_req            = (U4)U4_MAX;
             break;
         case OXCAN_WRQH_ACT_TO_RUN:
             st_ap_hch->u2_elpsd = (U2)1U;
-            st_ap_hch->u1_ctrl  = (U1)OXCAN_WRQH_CTRL_RUN;
+            st_ap_hch->u2_ctrl  = (U2)OXCAN_WRQH_CTRL_RUN;
             u4_t_req            = (U4)U4_MAX;
             break;
         case OXCAN_WRQH_ACT_STA:
-         /* st_ap_hch->u1_ctrl  = (U1)OXCAN_WRQH_CTRL_STA; */
+         /* st_ap_hch->u2_ctrl  = (U2)OXCAN_WRQH_CTRL_STA; */
             u4_t_req            = (U4)U4_MAX;
             break;
         case OXCAN_WRQH_ACT_RUN:
-         /* st_ap_hch->u1_ctrl  = (U1)OXCAN_WRQH_CTRL_RUN; */
+         /* st_ap_hch->u2_ctrl  = (U2)OXCAN_WRQH_CTRL_RUN; */
             u4_t_req            = (U4)U4_MAX;
             break;
         case OXCAN_WRQH_ACT_TO_WFR:
         default:
             st_ap_hch->u2_elpsd = (U2)U2_MAX;
-            st_ap_hch->u1_ctrl  = (U1)OXCAN_WRQH_CTRL_WFR;
+            st_ap_hch->u2_ctrl  = (U2)OXCAN_WRQH_CTRL_WFR;
             u4_t_req            = (U4)0U;
             break;
     }
