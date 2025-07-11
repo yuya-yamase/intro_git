@@ -188,6 +188,7 @@ static U1             u1_s_preadsegdsw;           /*  ADSEGDSW Previous RxValue*
 static U1             u1_s_predpms_bb;            /*  DPMS_BB Previous RxValue */
 static U1             u1_s_prepos_call;           /*  POS_CALL Previous RxValue*/
 static U1             u1_s_prepos_reg;            /*  POS_REG Previous RxValue */
+static U1             u1_s_preflynop;             /*  FLYNOP Previous RxValue  */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -292,6 +293,7 @@ static inline void    vd_s_XSpiCanTx_ADSEGDSW(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_DPMS_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_POS_CALL(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_POS_REG(const U4* u4_ap_pck_rx);
+static inline void    vd_s_XSpiCanTx_FLYNOP(const U4* u4_ap_pck_rx);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -413,6 +415,7 @@ void    vd_g_XSpiCfgInitCh1(void)
     u1_s_predpms_bb  = (U1)0U;
     u1_s_prepos_call = (U1)0U;
     u1_s_prepos_reg  = (U1)0U;
+    u1_s_preflynop   = (U1)0U;
 
     for (u1_t_loop = (U1)0U; u1_t_loop < (U1)XSPI_MMCUS_NUM_TXSIGNAL; u1_t_loop++) {
         u1_sp_xspi_mmcus_pretxsig[u1_t_loop] = (U1)0U;
@@ -531,6 +534,7 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCanTx_DPMS_BB(&u4_ap_PDU_RX[91]);
     vd_s_XSpiCanTx_POS_CALL(&u4_ap_PDU_RX[91]);
     vd_s_XSpiCanTx_POS_REG(&u4_ap_PDU_RX[91]);
+    vd_s_XSpiCanTx_FLYNOP(&u4_ap_PDU_RX[47]);
 
 }
 
@@ -3099,6 +3103,23 @@ static inline void    vd_s_XSpiCanTx_POS_REG(const U4 * u4_ap_pck_rx)
     }
     u1_s_prepos_reg = u1_t_rxdata;
 }
+/*===================================================================================================================================*/
+/*  static inline void    vd_s_XSpiCanTx_FLYNOP(U4 * u4_ap_pdu_tx)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:     u4_ap_pck_rx                                                                                                      */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static inline void    vd_s_XSpiCanTx_FLYNOP(const U4 * u4_ap_pck_rx)
+{
+    U1 u1_t_rxdata;
+
+    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)29U, (U1)2U);
+
+    if (u1_t_rxdata != u1_s_preflynop) {
+        vd_g_VdsCIReqTx((U1)VDS_CI_SW_FLYNOP, u1_t_rxdata);
+    }
+    u1_s_preflynop = u1_t_rxdata;
+}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -3151,6 +3172,7 @@ static inline void    vd_s_XSpiCanTx_POS_REG(const U4 * u4_ap_pck_rx)
 /*           06/13/2025  KO       Change for BEV System_Consideration_2.(MET-B_DRPBB-CSTD-0-01-A-C0)                                 */
 /*           06/30/2025  KT       Change for BEV System_Consideration_2.(BEV3CDCMET-547/BEV3CDCMET-549)                              */
 /*           07/07/2025  KT       Change for BEV System_Consideration_2.(CAN V7.3)                                                   */
+/*           07/08/2025  TH       Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-02-A-C0)                                */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -3170,5 +3192,6 @@ static inline void    vd_s_XSpiCanTx_POS_REG(const U4 * u4_ap_pck_rx)
 /*  * SF   = Shiro Furui, Denso Techno                                                                                               */
 /*  * HT   = Hibiki Tanii, KSE                                                                                                       */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
+/*  * TH   = Taisuke Hirakawa, KSE                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

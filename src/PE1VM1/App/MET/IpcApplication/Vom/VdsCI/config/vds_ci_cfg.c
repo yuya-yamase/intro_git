@@ -22,7 +22,7 @@
 #else
 #include "oxcan_channel_STUB.h"
 #endif
-
+#include "ivdsh.h"
 
 #include "veh_opemd.h"
 #if 0   /* BEV BSW provisionally */
@@ -58,6 +58,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define VDSCI_CFG_VM_1WORD      (1U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -238,6 +239,7 @@ static void vd_s_VdsCIReqTx_ADSEGDSW(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_DPMS_BB (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_POS_CALL(const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 static void vd_s_VdsCIReqTx_POS_REG (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
+static void vd_s_VdsCIReqTx_FLYNOP  (const U1 u1_a_OPT, const U2 u2_a_ELPSD);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -415,7 +417,8 @@ const ST_VDS_CI_TRX    st_gp_VDS_CI_TRX[VDS_CI_NUM_CH] = {
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_ADSEGDSW,    (U2)0xFFFFU, (U2)0x0008U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 163 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_DPMS_BB,     (U2)0xFFFFU, (U2)0x0010U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 164 */
     {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_POS_CALL,    (U2)0xFFFFU, (U2)0x0020U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 165 */
-    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_POS_REG,     (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 166 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_POS_REG,     (U2)0xFFFFU, (U2)0x0040U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }, /* 166 */
+    {&u1_s_VdsCISelRx_Unk,    &vd_s_VdsCIReqTx_FLYNOP,      (U2)0xFFFFU, (U2)0x0080U, (U2)VDS_CI_HOLD_TIME,    (U1)VDS_CI_TX_MASK_NON       }  /* 167 */
 };
 const U1               u1_g_VDS_CI_NUM_CH = (U1)VDS_CI_NUM_CH;
 
@@ -430,6 +433,8 @@ const U1               u1_g_VDS_CI_NUM_CH = (U1)VDS_CI_NUM_CH;
 /*===================================================================================================================================*/
 void    vd_g_VdsCICfgInit(void)
 {
+    U4                 u4_t_tx;
+
     st_gp_vds_ci_ch[VDS_CI_SW_M_SLMREQ].u1_req_tx = (U1)VDS_CI_M_SLMREQ_INIT;
 
     /* MET-H_TIMCHG Send Init Value   */
@@ -439,6 +444,10 @@ void    vd_g_VdsCICfgInit(void)
     st_gp_vds_ci_ch[VDS_CI_SW_M_CUR200].u1_req_tx = (U1)VDS_CI_M_CUR200_INIT;
     st_gp_vds_ci_ch[VDS_CI_SW_M_DPWREQ].u1_req_tx = (U1)VDS_CI_M_DPWREQ_INIT;
     st_gp_vds_ci_ch[VDS_CI_SW_M_LMTREQ].u1_req_tx = (U1)VDS_CI_M_LMTREQ_INIT;
+
+    /* MET-C_HCSBSW Send Init Value   */
+    u4_t_tx = (U4)VDS_CI_OPT_OFF;
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_tx, (U2)VDSCI_CFG_VM_1WORD);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VdsCICfgMainStart(void)                                                                                             */
@@ -4721,6 +4730,20 @@ static void    vd_s_VdsCIReqTx_POS_REG(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
     }
 #endif /* ComConf_ComSignal_POS_REG */
 }
+/*===================================================================================================================================*/
+/*  static void    vd_s_VdsCIReqTx_FLYNOP(const U1 u1_a_OPT, const U2 u2_a_ELPSD)                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*                  u2_a_ELPSD: elapsed time                                                                                         */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_VdsCIReqTx_FLYNOP(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
+{
+    U4                 u4_t_tx;
+
+    u4_t_tx = (U4)u1_a_OPT;
+    vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_VM1TO2_FLYNOP, &u4_t_tx, (U2)VDSCI_CFG_VM_1WORD);
+}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -4770,6 +4793,7 @@ static void    vd_s_VdsCIReqTx_POS_REG(const U1 u1_a_OPT, const U2 u2_a_ELPSD)
 /* BEV-14    03/14/2025  KT       Change for BEV System_Consideration_1.(Delete Signal for BitAssign6.5)                             */
 /* BEV-15    05/30/2025  SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /* BEV-16    06/13/2025  KO       Change for BEV System_Consideration_2.(MET-B_DRPBB-CSTD-0-)                                        */
+/* BEV-17    07/08/2025  TH(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-)                                       */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
