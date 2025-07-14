@@ -16,6 +16,7 @@
     :sourceDir=${APP_DIR}/Central/Pmic/src
     :sourceDir=${APP_DIR}/Central/chipcom/src
     :sourceDir=${APP_DIR}/Central/VIS/src
+    :sourceDir=${APP_DIR}/Central/VSM/src
 
 
     -I${APP_DIR}/Common/xspi
@@ -47,6 +48,7 @@
     -I${APP_DIR}/Central/inc
     -I${APP_DIR}/Central/chipcom/inc
     -I${APP_DIR}/Central/VIS/inc
+    -I${APP_DIR}/Central/VSM/inc
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
 ${SS_DIR}/eMCOS/config/eMCOS_ISR.c
@@ -95,3 +97,5 @@ VIS_Can.c
 VIS_Main.c
 VIS_Pwr.c
 VIS_Pwrcfg.c
+VSM.c
+VSM_SAILWrapper.c
