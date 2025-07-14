@@ -1230,7 +1230,8 @@ static void     vd_s_McuDev_Pwron_PowerIc(const U1 u1_a_PWR)
         case PWRCTRL_COMMON_PROCESS_STEP2:
             u1_t_timchk = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_V33PERI, u4_s_WAITTIME_POWERIC);  /* V33-PERI-ON=HI判定 */
 
-            if((u1_t_timchk == (U1)TRUE) && (u1_a_PWR == (U1)POWER_MODE_STATE_PARK)){
+            if((u1_t_timchk == (U1)TRUE) && 
+               ((u1_a_PWR == (U1)POWER_MODE_STATE_PARK) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPON))){
                 vd_g_McuDevPwronSetPort(MCU_PORT_PIC_POFF , MCU_DIO_HIGH);          /* P-IC電源制限解除 */
                 u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_POWERIC_BIT;
                 u1_s_PwrCtrl_PowerIc_OVRALL = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;     /* 次状態に遷移 */
