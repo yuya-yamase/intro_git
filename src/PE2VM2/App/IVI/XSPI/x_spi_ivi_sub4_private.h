@@ -28,6 +28,7 @@
 #include    "PncreqCtl.h"
 #include    "ivdsh.h"
 #include    "DtcCtl.h"
+#include    "CanCtlTx.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
