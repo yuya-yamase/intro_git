@@ -97,6 +97,7 @@
 #include "mmappctrl.h"
 #include "evschg.h"
 #include "batcare.h"
+#include "datesi_met.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
@@ -373,6 +374,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_MMVarTask,                   (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MMAppCtrlTask,               (U4)SCHDLR_TASKBIT__50MS_E  },
     {&vd_g_BatcareMainTask,             (U4)SCHDLR_TASKBIT__50MS_B  },
+    {&vd_g_DateSIMETMainTask,           (U4)SCHDLR_TASKBIT___5MS    },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */

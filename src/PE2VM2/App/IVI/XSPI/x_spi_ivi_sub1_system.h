@@ -25,7 +25,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_EXTSIG_NUM                  (15U)
+#define XSPI_IVI_EXTSIG_NUM                  (16U)
 #define XSPI_IVI_EXTSIG_TEST                 (0U)
 #define XSPI_IVI_EXTSIG_USB                  (1U)
 #define XSPI_IVI_EXTSIG_MIC                  (2U)
@@ -41,6 +41,8 @@
 #define XSPI_IVI_EXTSIG_GNSS                 (12U)
 #define XSPI_IVI_EXTSIG_DAB                  (13U)
 #define XSPI_IVI_EXTSIG_DAB2                 (14U)
+#define XSPI_IVI_EXTSIG_PWR                  (15U)
+#define XSPI_IVI_EXTSIG_SNDSIZ               (2 + XSPI_IVI_EXTSIG_NUM*2)
 
 #define XSPI_IVI_TMUTE_UNDEF                 (0U)
 #define XSPI_IVI_TMUTE_MUTE                  (1U)

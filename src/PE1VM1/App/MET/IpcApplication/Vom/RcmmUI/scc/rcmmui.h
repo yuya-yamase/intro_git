@@ -1,4 +1,4 @@
-/* 1.1.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -13,7 +13,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_H_MAJOR                          (1)
-#define RCMMUI_H_MINOR                          (1)
+#define RCMMUI_H_MINOR                          (3)
 #define RCMMUI_H_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -23,13 +23,13 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_REQ_NONE                         (U1_MAX)
-#define RCMMUI_NUM_STREQ                        (14U)
+#define RCMMUI_NUM_STREQ                        (16U)
 
 #define RCMMUI_STREQ_1_1                        ( 0U)
 #define RCMMUI_STREQ_1_3                        ( 1U)
 #define RCMMUI_STREQ_2_1                        ( 2U)
-#define RCMMUI_STREQ_3_1                        ( 3U)
-#define RCMMUI_STREQ_4_1                        ( 4U)
+#define RCMMUI_STREQ_3_1_1                      ( 3U)
+#define RCMMUI_STREQ_3_1_2                      ( 4U)
 #define RCMMUI_STREQ_4_3                        ( 5U)
 #define RCMMUI_STREQ_6_1                        ( 6U)
 #define RCMMUI_STREQ_6_2                        ( 7U)
@@ -39,6 +39,8 @@
 #define RCMMUI_STREQ_8_3                        (11U)
 #define RCMMUI_STREQ_11_1                       (12U)
 #define RCMMUI_STREQ_11_3                       (13U)
+#define RCMMUI_STREQ_12_1                       (14U)
+#define RCMMUI_STREQ_12_3                       (15U)
 
 #define RCMMUI_NUM_USRACT                       (5U)
 #define RCMMUI_USRACT_YES                       (0U)

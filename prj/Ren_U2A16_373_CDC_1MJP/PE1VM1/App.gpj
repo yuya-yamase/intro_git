@@ -63,6 +63,8 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Batcare/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Battpow/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Battpow/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/DrvInd/config
@@ -251,7 +253,7 @@ App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SCS1S14.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SW_BATCSW.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_TPM1S02.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_DDM1S17.c
-App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_VSC1S96.c
+App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_VSC1G96.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_SOL1S02.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ZN11S19.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ZN11S26.c
@@ -328,14 +330,12 @@ App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_BKEY.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_BLGT.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_BVOOPE.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_ESWUOC.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_EXTSEA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_FMSEAT.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_GRISHU.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_LEDHEA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_MLGT.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PBD.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PBDKS.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PCL.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PEDPRO.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_PERSET.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_B_RPWSEA.c
@@ -360,14 +360,12 @@ App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRKBZ.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRKHLD.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRLV.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_BRPADW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_DAC.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_DRIMOD.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_DRS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_ECB.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_EPB.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_HCS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_MCBW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_OFRMDL.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_PKBWAR.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_SBRDMB.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_C_SLIP.c
@@ -385,7 +383,6 @@ App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_CVTOIL.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_LAUNCH.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_SBW.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_SFTPOS.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_TATLSD.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_D_TMWRN.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ACCHOL.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ACDCSUP.c
@@ -395,23 +392,18 @@ App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATINS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATLOW.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BATREF.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_BEVR.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_CHGCON.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_DCLDSP.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_DRIPOW.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_EVMOD.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_EWMUP.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_FSIND.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_LBW.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_LEAUNF.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_MAICER.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_MANBEV.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_MYROOM.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_NLOCK.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ONACCN.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_ONACCP.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_PEXI.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_PRECON.c
-App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_QUICHA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_REASYS.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_REGBRA.c
 App/MET/IpcApplication/Vom/Alert/matrix/scc/alert_H_RESADJ.c
@@ -507,6 +499,8 @@ App/MET/IpcApplication/Vom/Attmp/scc/attmp_cel.c
 App/MET/IpcApplication/Vom/Batcare/scc/batcare.c
 App/MET/IpcApplication/Vom/Battpow/config/battpow_cfg.c
 App/MET/IpcApplication/Vom/Battpow/scc/battpow.c
+App/MET/IpcApplication/Vom/DateSI/config/datesi_met_cfg.c
+App/MET/IpcApplication/Vom/DateSI/scc/datesi_met.c
 App/MET/IpcApplication/Vom/Dimmer/config/dimmer_cfg.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_daynight.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_usadjbysw.c

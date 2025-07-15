@@ -1,42 +1,41 @@
-/* 5.0.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Alert B_PCL                                                                                                                      */
+/*  inter-Virtual Machine CAN Bus status SHaring                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_B_PCL_C_MAJOR                      (5)
-#define ALERT_B_PCL_C_MINOR                      (0)
-#define ALERT_B_PCL_C_PATCH                      (0)
+#define IVCBSH_CFG_C_MAJOR                        (1)
+#define IVCBSH_CFG_C_MINOR                        (0)
+#define IVCBSH_CFG_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "alert_cfg_private.h"
-#include "alert_mtrx_cfg_private.h"
-
-#include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
+#include "ivcbsh_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (ALERT_B_PCL_C_MAJOR != ALERT_CFG_H_MAJOR)
-#error "alert_B_PCL.c and alert_cfg_private.h : source and header files are inconsistent!"
+#if ((IVCBSH_CFG_C_MAJOR != IVCBSH_H_MAJOR) || \
+     (IVCBSH_CFG_C_MINOR != IVCBSH_H_MINOR) || \
+     (IVCBSH_CFG_C_PATCH != IVCBSH_H_PATCH))
+#error "ivcbsh_cfg.c and ivcbsh.h : source and header files are inconsistent!"
+#endif
+
+#if ((IVCBSH_CFG_C_MAJOR != IVCBSH_CFG_H_MAJOR) || \
+     (IVCBSH_CFG_C_MINOR != IVCBSH_CFG_H_MINOR) || \
+     (IVCBSH_CFG_C_PATCH != IVCBSH_CFG_H_PATCH))
+#error "ivcbsh_cfg.c and ivcbsh_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_B_PCL_NUM_DST                      (16U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -46,79 +45,33 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertB_pclSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_B_PCL_DST[ALERT_B_PCL_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_B_PCL_CHGLID_OPEN,                                           /* 01 CHGLID_OPEN                                     */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 03 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 04 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 05 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 06 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 07 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 08 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 09 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 10 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 11 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 12 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 13 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 14 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 15 UNKNOWN                                         */
-};
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_B_PCL_MTRX[1] = {
+const ST_IVCBSH_PRM    st_sp_IVCBSH_PRM[IVCBSH_SYS_NUM_NET] = {
+    /* CAN-FD Bus/G2M-1 */
     {
-        &u4_s_AlertB_pclSrcchk,                                                /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4*)vdp_PTR_NA,                                                 /* u4p_MASK                                           */
-        (const U4*)vdp_PTR_NA,                                                 /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_B_PCL_DST[0],                                             /* u1p_DST                                            */
-        (U2)ALERT_B_PCL_NUM_DST,                                               /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
+        (U1)BSW_CANIF_CFG_CH_CONTROLLER5,   /* CAN Physical Channel =  5 ch. */
+        (U2)IVDSH_DID_WRI_CPREQ_029
+    },
+    /* CAN-FD Bus/G5M */
+    {
+        (U1)BSW_CANIF_CFG_CH_CONTROLLER7,   /* CAN Physical Channel =  7 ch. */
+        (U2)IVDSH_DID_WRI_CPREQ_032
     }
 };
+/* u1_COM_CH            */
+/* 0 : CAN-FD Bus/G2M-1 */
+/* 1 : CAN-FD Bus/G2M-2 */
+/* 2 : Virtual CAN      */
+/* 3 : CAN-FD Bus/G5M   */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*===================================================================================================================================*/
-/*  static U4      u4_s_AlertB_pclSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U4      u4_s_AlertB_pclSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
-{
-    static const U2 u2_s_ALERT_CH_B_PCL_TO_THRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
-    static const U1 u1_s_ALERT_CH_B_PCL_LSB_STS = (U1)2U;
-    U4              u4_t_src_chk;
-    U1              u1_t_sgnl;
-    U1              u1_t_msgsts;
-
-    u1_t_msgsts = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_ZN11S26_CH0,
-                                   (U4)OXCAN_SYS_IGR,
-                                   u2_s_ALERT_CH_B_PCL_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
-
-    u1_t_sgnl = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PCLMTRCA, &u1_t_sgnl);
-    u4_t_src_chk = (U4)u1_t_sgnl;
-
-    u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_B_PCL_LSB_STS);
-
-    return(u4_t_src_chk);
-}
-
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -127,10 +80,12 @@ static U4      u4_s_AlertB_pclSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  5.0.0     02/29/2024  YR      Newly created for 19PFv3                                                                           */
+/*  1.0.0     7/07/2025  TN       New.                                                                                               */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * TN   = Tetsu Naruse, DensoTechno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -41,6 +41,7 @@
 #include "IVI_GyrCtrl_Main.h"
 #include "IVI_DspCtrl_Main.h"
 #include "IVI_DrcCtrl_Main.h"
+#include "IVI_CanCtrl_Main.h"
 
 /* ClkCtrl */
 #include "date_clk.h"
@@ -199,6 +200,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&ExtSigCtrl_MainFunction,          (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_Ivi_CanCtrl_Main5ms,         (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -219,6 +221,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_DateSIMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+    {&vd_g_Ivi_CanCtrl_Main,            (U4)SCHDLR_TASKBIT__20MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

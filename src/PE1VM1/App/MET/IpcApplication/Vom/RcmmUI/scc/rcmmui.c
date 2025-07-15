@@ -1,4 +1,4 @@
-/* 1.1.0 */
+/* 1.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_C_MAJOR                          (1)
-#define RCMMUI_C_MINOR                          (1)
+#define RCMMUI_C_MINOR                          (3)
 #define RCMMUI_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -38,7 +38,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RCMMUI_NEG_RESP                         (0xF0U)
 #define RCMMUI_USRACR_RESP                      (0x20U)
-#define RCMMUI_NUM_REQ                          (23U)
+#define RCMMUI_NUM_REQ                          (26U)
 
 #define RCMMUI_UACT_INIT                        (0xFEU)
 #define RCMMUI_UACT_INVLD                       (0xFFU)
@@ -69,7 +69,7 @@ static  U2                                      u2_s_rcmmui_reqelpsd;
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static  U1      u1_s_RcmmUISearchReq(const U2 u2_a_RCMM);
-static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_POWREQ);
+static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -90,6 +90,8 @@ static  const   ST_RCMMUI_REQUEST               st_sp_RCMMUI_REQUESTS[RCMMUI_NUM
     {   (U2)0x0819U,            (U1)0x10U,              (U1)0x18U       },      /* 11 RCMMUI_STREQ_8_3   */
     {   (U2)0x0B09U,            (U1)0x10U,              (U1)0x1BU       },      /* 12 RCMMUI_STREQ_11_1  */
     {   (U2)0x0B19U,            (U1)0x10U,              (U1)0x18U       },      /* 13 RCMMUI_STREQ_11_3  */
+    {   (U2)0x0C09U,            (U1)0x10U,              (U1)0x1BU       },      /* 14 RCMMUI_STREQ_12_1  */
+    {   (U2)0x0C19U,            (U1)0x10U,              (U1)0x18U       },      /* 15 RCMMUI_STREQ_12_3  */
     /* END REQUEST */
     {   (U2)0x0178U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0x0278U,            (U1)0x30U,              (U1)0x00U       },
@@ -98,6 +100,7 @@ static  const   ST_RCMMUI_REQUEST               st_sp_RCMMUI_REQUESTS[RCMMUI_NUM
     {   (U2)0x0678U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0x0878U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0x0B78U,            (U1)0x30U,              (U1)0x00U       },
+    {   (U2)0x0C78U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0xFF00U,            (U1)0x30U,              (U1)0x00U       },
     {   (U2)0xFF80U,            (U1)0x30U,              (U1)0x00U       }
 };
@@ -137,7 +140,6 @@ void            vd_g_RcmmUIMainTask(void)
     };
     const   ST_RCMMUI_REQUEST *                 stp_t_REQ;
     U2                                          u2_t_rcmm;
-    U1                                          u1_t_powreq;
     U1                                          u1_t_reqid;
     U1                                          u1_t_response;
     U1                                          u1_t_powchk;
@@ -155,8 +157,7 @@ void            vd_g_RcmmUIMainTask(void)
 
     /* Start end request */
     u2_t_rcmm   = (U2)0U;
-    u1_t_powreq = (U1)0U;
-    vd_g_RcmmUICfgCanRx(&u2_t_rcmm, &u1_t_powreq);
+    vd_g_RcmmUICfgCanRx(&u2_t_rcmm);
 
     u1_t_response =  (U1)0U;
 
@@ -169,7 +170,7 @@ void            vd_g_RcmmUIMainTask(void)
             u1_t_response        = st_sp_RCMMUI_REQUESTS[u1_t_reqid].u1_rxresp;
             u2_t_rcmm           &= (U2)RCMMUI_ITAB_MASK;
         }
-        u1_t_powchk = u1_s_RcmmUICheckPow(u1_t_powreq);
+        u1_t_powchk = u1_s_RcmmUICheckPow(u1_t_reqid);
         if ((u1_t_reqid  <  (U1)RCMMUI_NUM_STREQ) &&
             (u1_t_powchk == (U1)TRUE            )) {
 
@@ -225,8 +226,8 @@ void            vd_g_RcmmUIUserAct(const U1 u1_a_CID, const U1 u1_a_USRACT)
         if(u1_a_CID == u1_s_rcmmui_reqid    ){
             u1_s_rcmmui_usract = u1_a_USRACT;
         }
-        else if((u1_a_CID          == (U1)RCMMUI_STREQ_3_1) &&
-                (u1_s_rcmmui_reqid == (U1)RCMMUI_STREQ_4_1)){
+        else if((u1_a_CID          == (U1)RCMMUI_STREQ_3_1_1) &&
+                (u1_s_rcmmui_reqid == (U1)RCMMUI_STREQ_3_1_2)){
             u1_s_rcmmui_usract = u1_a_USRACT;
         }
         else{
@@ -267,31 +268,17 @@ static  U1      u1_s_RcmmUISearchReq(const U2 u2_a_RCMM)
 }
 
 /*===================================================================================================================================*/
-/* static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_POWREQ)                                                                         */
+/* static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_POWREQ)
+static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_REQID)
 {
-    static  const   U1                          u1_s_IGMSK_ON   = (U1)0x01U;
-    static  const   U1                          u1_s_IGMSK_OFF  = (U1)0x02U;
-    U1                                          u1_t_chk;
-    U1                                          u1_t_ig;
-    U1                                          u1_t_igmsk;
+    U1     u1_t_chk;
 
+    u1_t_chk = u1_g_RcmmUICfgCheckPow(u1_a_REQID);
 
-    u1_t_chk    = (U1)FALSE;
-    u1_t_igmsk  = u1_s_IGMSK_OFF;
-
-    u1_t_ig     = u1_g_RcmmUIIgnOn();
-    if (u1_t_ig == (U1)TRUE) {
-        u1_t_igmsk = u1_s_IGMSK_ON;
-    }
-
-    if ((u1_a_POWREQ & u1_t_igmsk) == (U1)0U) {
-        u1_t_chk = (U1)TRUE;
-    }
     return (u1_t_chk);
 }
 
@@ -305,6 +292,8 @@ static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_POWREQ)
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0    02/18/2018  HY       New.                                                                                               */
 /*  1.1.0    10/07/2020  TH       Add to send PBDMSW and getting elapsed time of rcmmui display start.                               */
+/*  1.2.0    10/01/2025  YR       Change config for 19PFv3                                                                           */
+/*  1.3.0    07/03/2025  KO       Change config for BEV System_Consideration_2.                                                      */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
@@ -314,5 +303,7 @@ static  U1      u1_s_RcmmUICheckPow(const U1 u1_a_POWREQ)
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * TH   = Takahiro Hirano,  Denso Techno                                                                                          */
 /*  * PG   = Patrick Garcia, DTPH                                                                                                    */
+/*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

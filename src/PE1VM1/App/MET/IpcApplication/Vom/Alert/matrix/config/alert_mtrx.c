@@ -124,9 +124,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_B_BKEY_MTRX[0],          (U2)ALERT_CH_B_BKEY,                   (U1)ALERT_B_BKEY_CH_NUM,            (U1)0U  },
     {  &st_gp_ALERT_H_TVPSOF_MTRX[0],        (U2)ALERT_CH_H_TVPSOF,                 (U1)ALERT_H_TVPSOF_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_B_RPWSEA_MTRX[0],        (U2)ALERT_CH_B_RPWSEA,                 (U1)ALERT_B_RPWSEA_CH_NUM,          (U1)0U  },
-    {  &st_gp_ALERT_B_PCL_MTRX[0],           (U2)ALERT_CH_B_PCL,                    (U1)ALERT_B_PCL_CH_NUM,             (U1)0U  },
     {  &st_gp_ALERT_C_VSCEXP_MTRX[0],        (U2)ALERT_CH_C_VSCEXP_NOSTEP,          (U1)ALERT_C_VSCEXP_CH_NUM,          (U1)0U  },
-    {  &st_gp_ALERT_H_PRECON_MTRX[0],        (U2)ALERT_CH_H_PRECON,                 (U1)ALERT_H_PRECON_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_C_BRPADW_MTRX[0],        (U2)ALERT_CH_C_BRPADW,                 (U1)ALERT_C_BRPADW_CH_NUM,          (U1)0U  },
     {  &st_gp_ALERT_C_HCS_MTRX[0],           (U2)ALERT_CH_C_HCS_TTB,                (U1)ALERT_C_HCS_CH_NUM,             (U1)0U  },
     {  &st_gp_ALERT_O_PDSMAL_MTRX[0],        (U2)ALERT_CH_O_PDSMAL_BC,              (U1)ALERT_O_PDSMAL_CH_NUM,          (U1)0U  },
@@ -144,7 +142,6 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_C_VSCOFF_MTRX[0],        (U2)ALERT_CH_C_VSCOFF,                 (U1)ALERT_C_VSCOFF_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_FMSEAT_MTRX[0],        (U2)ALERT_CH_B_FMSEAT,                 (U1)ALERT_B_FMSEAT_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_PBDKS_MTRX[0],         (U2)ALERT_CH_B_PBDKS_PD,               (U1)ALERT_B_PBDKS_CH_NUM,           (U1)1U  },
-    {  &st_gp_ALERT_D_TATLSD_MTRX[0],        (U2)ALERT_CH_D_TATLSD,                 (U1)ALERT_D_TATLSD_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_BDOOR_MTRX[0],         (U2)ALERT_CH_B_BDOOR,                  (U1)ALERT_B_BDOOR_CH_NUM,           (U1)1U  },
     {  &st_gp_ALERT_B_LEDHEA_MTRX[0],        (U2)ALERT_CH_B_LEDHEA,                 (U1)ALERT_B_LEDHEA_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_MLGT_MTRX[0],          (U2)ALERT_CH_B_MLGT,                   (U1)ALERT_B_MLGT_CH_NUM,            (U1)1U  },
@@ -181,11 +178,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_S_CLESON_MTRX[0],        (U2)ALERT_CH_S_CLESON_BZ,              (U1)ALERT_S_CLESON_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_S_PMAR_MTRX[0],          (U2)ALERT_CH_S_PMAR_BC,                (U1)ALERT_S_PMAR_CH_NUM,            (U1)1U  },
     {  &st_gp_ALERT_S_SEA_MTRX[0],           (U2)ALERT_CH_S_SEA_BC,                 (U1)ALERT_S_SEA_CH_NUM,             (U1)1U  },
-    {  &st_gp_ALERT_C_OFRMDL_MTRX[0],        (U2)ALERT_CH_C_OFRMDL,                 (U1)ALERT_C_OFRMDL_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_B_BKEY_MTRX[0],          (U2)ALERT_CH_B_BKEY,                   (U1)ALERT_B_BKEY_CH_NUM,            (U1)1U  },
-    {  &st_gp_ALERT_C_DAC_MTRX[0],           (U2)ALERT_CH_C_DAC_TT,                 (U1)ALERT_C_DAC_CH_NUM,             (U1)1U  },
-    {  &st_gp_ALERT_B_EXTSEA_MTRX[0],        (U2)ALERT_CH_B_EXTSEA,                 (U1)ALERT_B_EXTSEA_CH_NUM,          (U1)1U  },
-    {  &st_gp_ALERT_H_MANBEV_MTRX[0],        (U2)ALERT_CH_H_MANBEV,                 (U1)ALERT_H_MANBEV_CH_NUM,          (U1)1U  },
     {  &st_gp_ALERT_C_STABI_RWRN_MTRX[0],    (U2)ALERT_CH_C_STABI_RWRN,             (U1)ALERT_C_STABI_RWRN_CH_NUM,      (U1)1U  },
     {  &st_gp_ALERT_C_SDM_RWRN_MTRX[0],      (U2)ALERT_CH_C_SDM_RWRN,               (U1)ALERT_C_SDM_RWRN_CH_NUM,        (U1)1U  },
     {  &st_gp_ALERT_H_DCLDSP_MTRX[0],        (U2)ALERT_CH_H_DCLDSP,                 (U1)ALERT_H_DCLDSP_CH_NUM,          (U1)1U  },
@@ -203,7 +196,6 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_H_BEVR_MTRX[0],          (U2)ALERT_CH_H_BEVR,                   (U1)ALERT_H_BEVR_CH_NUM,            (U1)2U  },
     {  &st_gp_ALERT_H_DRIPOW_MTRX[0],        (U2)ALERT_CH_H_DRIPOW,                 (U1)ALERT_H_DRIPOW_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_H_FSIND_MTRX[0],         (U2)ALERT_CH_H_FSIND,                  (U1)ALERT_H_FSIND_CH_NUM,           (U1)2U  },
-    {  &st_gp_ALERT_H_LEAUNF_MTRX[0],        (U2)ALERT_CH_H_LEAUNF_PD_PWC,          (U1)ALERT_H_LEAUNF_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_H_MYROOM_MTRX[0],        (U2)ALERT_CH_H_MYROOM_PD_MSG,          (U1)ALERT_H_MYROOM_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_H_ONACCN_MTRX[0],        (U2)ALERT_CH_H_ONACCN,                 (U1)ALERT_H_ONACCN_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_H_ONACCP_MTRX[0],        (U2)ALERT_CH_H_ONACCP,                 (U1)ALERT_H_ONACCP_CH_NUM,          (U1)2U  },
@@ -246,9 +238,7 @@ const ST_ALERT_TASK         st_gp_ALERT_TASK_CFG[]   = {
     {  &st_gp_ALERT_S_PMAR_MTRX[0],          (U2)ALERT_CH_S_PMAR_BC,                (U1)ALERT_S_PMAR_CH_NUM,            (U1)2U  },
     {  &st_gp_ALERT_S_SEA_MTRX[0],           (U2)ALERT_CH_S_SEA_BC,                 (U1)ALERT_S_SEA_CH_NUM,             (U1)2U  },
     {  &st_gp_ALERT_B_BKEY_MTRX[0],          (U2)ALERT_CH_B_BKEY,                   (U1)ALERT_B_BKEY_CH_NUM,            (U1)2U  },
-    {  &st_gp_ALERT_H_CHGCON_MTRX[0],        (U2)ALERT_CH_H_CHGCON,                 (U1)ALERT_H_CHGCON_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_H_BATREF_MTRX[0],        (U2)ALERT_CH_H_BATREF,                 (U1)ALERT_H_BATREF_CH_NUM,          (U1)2U  },
-    {  &st_gp_ALERT_H_QUICHA_MTRX[0],        (U2)ALERT_CH_H_QUICHA_CHG,             (U1)ALERT_H_QUICHA_CH_NUM,          (U1)2U  },
     {  &st_gp_ALERT_H_SOLCHG_RWRN_MTRX[0],   (U2)ALERT_CH_H_SOLCHG_RWRN,            (U1)ALERT_H_SOLCHG_RWRN_CH_NUM,     (U1)2U  },
     {  &st_gp_ALERT_SLMD_MTRX[0],            (U2)ALERT_CH_SLMD,                     (U1)ALERT_SLMD_CH_NUM,              (U1)2U  },
     {  &st_gp_ALERT_H_PARLON_RWRN_MTRX[0],   (U2)ALERT_CH_H_PARLON_RWRN,            (U1)ALERT_H_PARLON_RWRN_CH_NUM,     (U1)2U  },
@@ -430,7 +420,6 @@ void    vd_g_AlertMtrxInit(void)
         &vd_g_AlertB_aloa2Init,
         &vd_g_AlertH_batrefInit,
         &vd_g_AlertP_cootemInit,
-        &vd_g_AlertH_quichaInit,
         &vd_g_AlertC_sbrdmbInit,
         &vd_g_AlertC_hcsInit,
         &vd_g_AlertO_pdsmalInit
@@ -464,6 +453,7 @@ void    vd_g_AlertMtrxInit(void)
 /*  BEV-10    6/17/2025  JS       Change for BEV System_Consideration_2.(MET-C_BRKBZ-CSTD-2-00-B-C0)                                 */
 /*  BEV-11    6/20/2025  KO       Change for BEV System_Consideration_2.(MET-O_PDSMAL-CSTD-0-00-A-C0)                                */
 /*  BEV-12    6/23/2025  HY       Change for BEV System_Consideration_2.(MET-S_ADMID-CSTD-0-02-A-C0 / MET-S_ADTT-CSTD-0-02-A-C0)     */
+/*  BEV-13    7/07/2025  KT       Delete for BEV System_Consideration_2.(MET-B_PCL-CSTD-A0-02-B-C0 etc.)                             */
 /*                                                                                                                                   */
 /*  * YI   = Yoshiki Iwata, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako,      Denso Techno                                                                                           */
@@ -471,5 +461,6 @@ void    vd_g_AlertMtrxInit(void)
 /*  * HF   = Hinari Fukamachi,KSE                                                                                                    */
 /*  * JS   = Jun Sugiyam,KSE                                                                                                         */
 /*  * HY   = Haruki Yagi, KSE                                                                                                        */
+/*  * KT   = Kenta Takaji,    Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

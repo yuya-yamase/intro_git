@@ -1,154 +1,181 @@
-/* 5.1.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Alert H_LEAUNF                                                                                                                   */
+/*  inter-Virtual Machine CAN Bus status SHaring                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_H_LEAUNF_C_MAJOR                   (5)
-#define ALERT_H_LEAUNF_C_MINOR                   (1)
-#define ALERT_H_LEAUNF_C_PATCH                   (0)
+#define IVCBSH_C_MAJOR                           (1)
+#define IVCBSH_C_MINOR                           (0)
+#define IVCBSH_C_PATCH                           (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "alert_cfg_private.h"
-#include "alert_mtrx_cfg_private.h"
-
-#include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
+#include "ivcbsh_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (ALERT_H_LEAUNF_C_MAJOR != ALERT_CFG_H_MAJOR)
-#error "alert_H_LEAUNF.c and alert_cfg_private.h : source and header files are inconsistent!"
+#if ((IVCBSH_C_MAJOR != IVCBSH_H_MAJOR) || \
+     (IVCBSH_C_MINOR != IVCBSH_H_MINOR) || \
+     (IVCBSH_C_PATCH != IVCBSH_H_PATCH))
+#error "ivcbsh.c and ivcbsh.h : source and header files are inconsistent!"
+#endif
+
+#if ((IVCBSH_C_MAJOR != IVCBSH_CFG_H_MAJOR) || \
+     (IVCBSH_C_MINOR != IVCBSH_CFG_H_MINOR) || \
+     (IVCBSH_C_PATCH != IVCBSH_CFG_H_PATCH))
+#error "ivcbsh.c and ivcbsh_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ALERT_H_LEAUNF_PD_PWC_NUM_DST            (4U)
-#define ALERT_H_LEAUNF_PD_EHV_NUM_DST            (4U)
-
+#define IVCBSH_SYCTIM                           (5U)    /* 5ms */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define IVCBSH_TIM_NOCONNECT                    (5000U / IVCBSH_SYCTIM)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct
+{
+    U2              u2_fail;
+    U4              u4_wri_pre;
+    U4              u4_tim;         /* No Connect Timer */
+}ST_IVCBSH_STS;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static ST_IVCBSH_STS    u1_s_ivcbsh_sts[IVCBSH_SYS_NUM_NET];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4      u4_s_AlertH_leaunfPdPwcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
-static U4      u4_s_AlertH_leaunfPdEhvSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS);
+static void     vd_s_iVCBshInitPrm(const U4 u1_a_POS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static const U1  u1_sp_ALERT_H_LEAUNF_PD_PWC_DST[ALERT_H_LEAUNF_PD_PWC_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_LEAUNF_PD_PWC_UNCOMP,                                      /* 01 UNCOMP                                          */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 03 UNKNOWN                                         */
-};
-static const U1  u1_sp_ALERT_H_LEAUNF_PD_EHV_DST[ALERT_H_LEAUNF_PD_EHV_NUM_DST] = {
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 00 UNKNOWN                                         */
-    (U1)ALERT_REQ_H_LEAUNF_PD_EHV_UNCOMP,                                      /* 01 UNCOMP                                          */
-    (U1)ALERT_REQ_UNKNOWN,                                                     /* 02 UNKNOWN                                         */
-    (U1)ALERT_REQ_UNKNOWN                                                      /* 03 UNKNOWN                                         */
-};
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const ST_ALERT_MTRX st_gp_ALERT_H_LEAUNF_MTRX[2] = {
-    {
-        &u4_s_AlertH_leaunfPdPwcSrcchk,                                        /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_H_LEAUNF_PD_PWC_DST[0],                                   /* u1p_DST                                            */
-        (U2)ALERT_H_LEAUNF_PD_PWC_NUM_DST,                                     /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    },
-    {
-        &u4_s_AlertH_leaunfPdEhvSrcchk,                                        /* fp_u4_SRC_CHK                                      */
-        vdp_PTR_NA,                                                            /* fp_vd_XDST                                         */
-
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_MASK                                           */
-        (const U4 *)vdp_PTR_NA,                                                /* u4p_CRIT                                           */
-
-        &u1_sp_ALERT_H_LEAUNF_PD_EHV_DST[0],                                   /* u1p_DST                                            */
-        (U2)ALERT_H_LEAUNF_PD_EHV_NUM_DST,                                     /* u2_num_srch                                        */
-        (U1)ALERT_VOM_IGN_ON                                                   /* u1_vom_act                                         */
-    }
-};
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertH_leaunfPdPwcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
+/*  void    vd_g_iVCBshInit(void)                                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertH_leaunfPdPwcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+void            vd_g_iVCBshInit(void)
 {
-    static const U1 u1_s_ALERT_H_LEAUNF_PDPWC_LSB_MS = (U1)1U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
+    U4      u4_t_lpcnt;
 
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_PDU_RX_CAN_PLG1G14,
-                                     (U4)OXCAN_SYS_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
-    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_LEAUNF_PDPWC_LSB_MS);
-
-    u1_t_sgnl     = (U1)0U;
-#if 0   /* BEV BSW provisionally */
-    (void)Com_ReceiveSignal(ComConf_ComSignal_SILUAPWC, &u1_t_sgnl);
-#endif
-    u4_t_src_chk |= (U4)u1_t_sgnl;
-
-    return(u4_t_src_chk);
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)IVCBSH_SYS_NUM_NET; u4_t_lpcnt++){
+        u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  = (U4)IVCBSH_STS_OTH;
+        vd_s_iVCBshInitPrm(u4_t_lpcnt);
+    }
 }
-
 /*===================================================================================================================================*/
-/*  static U4      u4_s_AlertH_leaunfPdEhvSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
+/*  static void     vd_s_iVCBshInitPrm(const U4 u1_a_POS)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static U4      u4_s_AlertH_leaunfPdEhvSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
+static void     vd_s_iVCBshInitPrm(const U4 u1_a_POS)
 {
-    static const U1 u1_s_ALERT_H_LEAUNF_PDEHV_LSB_MS = (U1)1U;
-    U4              u4_t_src_chk;
-    U1              u1_t_msgsts;
-    U1              u1_t_sgnl;
+    if(u1_a_POS < (U4)IVCBSH_SYS_NUM_NET){
+        u1_s_ivcbsh_sts[u1_a_POS].u2_fail   = (U2)BSWM_CAN_CHFAILST_NONE;
+        u1_s_ivcbsh_sts[u1_a_POS].u4_tim    = (U4)U4_MAX;
+    }
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_iVCBshMainTask(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_iVCBshMainTask(void)
+{
+    static U2   u2_st_NWORD     = (U2)1U;
 
-    u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S97_CH0,
-                                     (U4)OXCAN_SYS_IGR,
-                                     (U2)U2_MAX) & (U1)COM_NO_RX;
-    u4_t_src_chk  = ((U4)u1_t_msgsts << u1_s_ALERT_H_LEAUNF_PDEHV_LSB_MS);
+    U4      u4_t_lpcnt;
+    U2      u2_t_can;
+    U1      u1_t_buserr;
+    U4      u4_t_wri;
 
-    u1_t_sgnl     = (U1)0U;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_SILUAEHV, &u1_t_sgnl);
-    u4_t_src_chk |= (U4)u1_t_sgnl;
+    u2_t_can        = (U2)BSWM_CAN_CHFAILST_NONE;
+    u1_t_buserr     = (U1)BSWM_CAN_CTRERRST_NONE;
+    u4_t_wri        = (U4)IVCBSH_STS_OTH;
 
-    return(u4_t_src_chk);
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)IVCBSH_SYS_NUM_NET; u4_t_lpcnt++){
+        /* Active-Fail Judge */
+        /* ----------------------------------------------------------------------------------------------------- */
+        /* Attention :                                                                                           */
+        /* ----------------------------------------------------------------------------------------------------- */
+        /* The return of BswM_Can_GetChFailStatus is intentionally discarded because the API returns E_NOT_OK    */
+        /* only if the 1st parameter "NetworkHandleType network" is greater than or equal to BSW_COM_CFG_CHNUM.  */
+        /* ----------------------------------------------------------------------------------------------------- */
+        (void)BswM_Can_GetChFailStatus(st_sp_IVCBSH_PRM[u4_t_lpcnt].u1_COM_CH, &u2_t_can);
+        (void)BswM_Can_GetControllerErrStatus(st_sp_IVCBSH_PRM[u4_t_lpcnt].u1_COM_CH, &u1_t_buserr);
+
+        /* Fail Timer Start */
+        if(((u2_t_can & (U2)(BSWM_CAN_CHFAILST_SNDLOCK | BSWM_CAN_CHFAILST_USER)) != (U2)0U) &&
+           (u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  == (U4)U4_MAX)){
+            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  = (U4)0U;
+        }
+        else{
+            /* do nothing */
+        }
+
+        /* Failure Status Update */
+        if(u2_t_can != (U2)BSWM_CAN_CHFAILST_NONE){
+            u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail = u2_t_can;
+        }
+
+        /* Failure Causes Judge */
+        if(u1_t_buserr == (U1)BSWM_CAN_CTRERRST_NONE){
+            /* Active */
+            u4_t_wri    = (U4)IVCBSH_STS_ACTIVE;
+            vd_s_iVCBshInitPrm(u4_t_lpcnt);
+        }
+        else if((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail & (U2)BSWM_CAN_CHFAILST_REGCHECK) != (U2)0U){
+            u4_t_wri    = (U4)IVCBSH_STS_REGSTUCK;
+        }
+        else if((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail    & (U2)BSWM_CAN_CHFAILST_BUSOFF) != (U2)0U){
+            u4_t_wri    = (U4)IVCBSH_STS_BUSOFF;
+        }
+        else if(((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail & (U2)(BSWM_CAN_CHFAILST_SNDLOCK | BSWM_CAN_CHFAILST_USER)) != (U2)0U) &&
+                u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim >= (U4)IVCBSH_TIM_NOCONNECT){
+                u4_t_wri    = (U4)IVCBSH_STS_NOCONNECT;
+                u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  = (U4)U4_MAX;
+        }
+        else{
+            /* Previous state retention */
+            u4_t_wri    = u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre;
+        }
+
+        /* inter-VM Sharing */
+        if(u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  != u4_t_wri){
+            vd_g_iVDshWribyDid(st_sp_IVCBSH_PRM[u4_t_lpcnt].u2_IVDSH_ID, &u4_t_wri, u2_st_NWORD);
+            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  = u4_t_wri;
+        }
+
+        /* Fail Timer Count */
+        if(u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim   < (U4)U4_MAX){
+            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim++;
+        }
+        else{
+            /* do nothing */
+        }
+    }
 }
 
 /*===================================================================================================================================*/
@@ -159,14 +186,8 @@ static U4      u4_s_AlertH_leaunfPdEhvSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  5.0.0    12/15/2020  RI       New.                                                                                               */
-/*  5.0.1     3/26/2021  TN       Update for 840B CV(CAN flame define change).                                                       */
-/*  5.0.2     1/19/2022  HU       Update for 840B #2 CV(Version update).                                                             */
-/*  5.1.0     1/18/2024  AA       Update for 19pfv3                                                                                  */
+/*  1.0.0     7/07/2025  TN       New.                                                                                               */
 /*                                                                                                                                   */
-/*  * RI   = Ren Itou, NTTD MSE                                                                                                      */
-/*  * TN   = Toshiaki Nagashima, NTTD MSE                                                                                            */
-/*  * HU   = Hidekazu Usui, NTTD MSE                                                                                                 */
-/*  * AA   = Anna Asuncion, DT                                                                                                       */
+/*  * TN   = Tetsu Naruse, DensoTechno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

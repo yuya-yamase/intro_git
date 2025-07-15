@@ -56,6 +56,8 @@
 #define XSPI_IVI_CANCOMMAND_ID              (0x434E4454U)
 #define XSPI_IVI_CANCOMMAND_BUS_REQ         (0x03U)
 #define XSPI_IVI_CANCOMMAND_SEND            (0x04U)
+#define XSPI_IVI_CANCOMMAND_PARNMSEND_REQ   (0x10U)
+#define XSPI_IVI_CANCOMMAND_PARNM_STS       (0x11U)
 #define XSPI_IVI_CANCOMMAND_UTC_SEND        (0x21U)
 
 #define XSPI_IVI_CAN_COMMNDDATA_SIZE        (24U)
@@ -63,12 +65,28 @@
 #define XSPI_IVI_CAN_COMMAND_BUF_MAX        (128U)
 #define XSPI_IVI_CAN_COMMAND_SIZE_MAX       (256U)
 
+/* CANバスステータス通知 バッファ位置 */
+#define XSPI_IVI_CANBUS_POS_TOTAL           (4U)
+#define XSPI_IVI_CANBUS_POS_REGSTUCK        (0U)
+#define XSPI_IVI_CANBUS_POS_BUSOFF          (1U)
+#define XSPI_IVI_CANBUS_POS_NOCONNECT       (2U)
+#define XSPI_IVI_CANBUS_POS_STATUS          (3U)
+
+/* CANバスステータス通知 VM通信受信値 */
+#define XSPI_IVI_CANBUS_RSV_ACTIVE          (0x00U)
+#define XSPI_IVI_CANBUS_RSV_REGSTUCK        (0x01U)
+#define XSPI_IVI_CANBUS_RSV_BUSOFF          (0x02U)
+#define XSPI_IVI_CANBUS_RSV_NOCONNECT       (0x03U)
+
 /*UTC*/
 #define XSPI_IVI_CLOCKUTC_SEND_TASK         (1000U / XSPI_IVI_TASK_TIME)
 #define XSPI_IVI_CLOCKUTC_COMMAND_SIZE      (14U)
 #define XSPI_IVI_CLOCKUTC_DATA_SIZE         (9U)
 #define XSPI_IVI_WEEK_SUNDAY_RTC            (7U)
 #define XSPI_IVI_WEEK_SUNDAY_UTC            (0U)
+
+/*PartialNM*/
+#define XSPI_IVI_PARTIALNM_DATASIZE         (7U)
 
 #define XSPI_IVI_MASK_04                    (0x0FU)
 
@@ -93,10 +111,10 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1       u1_sp_Xspi_Ivi_CanBusSts2M[4];
-static U1       u1_sp_Xspi_Ivi_CanBusSts5M[4];
-static U1       u1_sp_Xspi_Ivi_CanBusSts2M_pre[4];
-static U1       u1_sp_Xspi_Ivi_CanBusSts5M_pre[4];
+static U1       u1_sp_Xspi_Ivi_CanBusSts2M[XSPI_IVI_CANBUS_POS_TOTAL];
+static U1       u1_sp_Xspi_Ivi_CanBusSts5M[XSPI_IVI_CANBUS_POS_TOTAL];
+static U1       u1_sp_Xspi_Ivi_CanBusSts2M_pre[XSPI_IVI_CANBUS_POS_TOTAL];
+static U1       u1_sp_Xspi_Ivi_CanBusSts5M_pre[XSPI_IVI_CANBUS_POS_TOTAL];
 
 static U1       u1_s_Xspi_Ivi_ClockUtc_recflg;
 static U1       u1_sp_Xspi_Ivi_ClockUtcdata[XSPI_IVI_CLOCKUTC_DATA_SIZE];
@@ -128,27 +146,17 @@ static void     vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZ
 /*===================================================================================================================================*/
 void            vd_g_XspiIviSub4Init(void)
 {
-    /*CANBusステータスを取得するIF不明のため暫定で正常動作固定とする*/
-    /*初期化状態で初期値セットの必要あり*/
     /*2MBusSts*/
-    u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)3U;   /*通常動作状態*/
-    u1_sp_Xspi_Ivi_CanBusSts2M_pre[0] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts2M_pre[1] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts2M_pre[2] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts2M_pre[3] = (U1)3U;   /*通常動作状態*/
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_CanBusSts2M[0], (U1)0x00U, sizeof(u1_sp_Xspi_Ivi_CanBusSts2M));
+    u1_sp_Xspi_Ivi_CanBusSts2M[XSPI_IVI_CANBUS_POS_STATUS]  = (U1)0x01U;    /* INIT：初期化状態（送受信不可状態） */
+
+    vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_CanBusSts2M_pre[0], &u1_sp_Xspi_Ivi_CanBusSts2M[0], sizeof(u1_sp_Xspi_Ivi_CanBusSts2M_pre));
 
     /*5MBusSts*/
-    u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)3U;   /*通常動作状態*/
-    u1_sp_Xspi_Ivi_CanBusSts5M_pre[0] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts5M_pre[1] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts5M_pre[2] = (U1)0U;   /*正常*/
-    u1_sp_Xspi_Ivi_CanBusSts5M_pre[3] = (U1)3U;   /*通常動作状態*/
+    vd_g_MemfillU1(&u1_sp_Xspi_Ivi_CanBusSts5M[0], (U1)0x00U, sizeof(u1_sp_Xspi_Ivi_CanBusSts5M));
+    u1_sp_Xspi_Ivi_CanBusSts5M[XSPI_IVI_CANBUS_POS_STATUS]  = (U1)0x01U;    /* INIT：初期化状態（送受信不可状態） */
+
+    vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_CanBusSts5M_pre[0], &u1_sp_Xspi_Ivi_CanBusSts5M[0], sizeof(u1_sp_Xspi_Ivi_CanBusSts5M_pre));
 
     u1_s_Xspi_Ivi_ClockUtc_recflg = (U1)FALSE;
     vd_g_MemfillU1(&u1_sp_Xspi_Ivi_ClockUtcdata[0], (U1)0U, (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
@@ -227,6 +235,9 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
     U2          u2_t_cancommandsize;                    /* CAN Command データサイズ*/
     U1          u1_t_cd_size;
 
+    U1          u1_t_parnm_sts;                         /* PartialNM用ステータスデータ格納用*/
+    U1          u1_tp_parnm_data[XSPI_IVI_PARTIALNM_DATASIZE];                     /* PartialNM用PNCIDデータ格納用*/
+
     /* CAN Command Header Field 解析処理 */
     //u4_t_com_ID     = (U4)((u1_ap_SUB4_ADD[0] << XSPI_IVI_SFT_24) | (u1_ap_SUB4_ADD[1] << XSPI_IVI_SFT_16) | (u1_ap_SUB4_ADD[2] << XSPI_IVI_SFT_08) | u1_ap_SUB4_ADD[3]);
     //u2_t_com_num    = (U2)((u1_ap_SUB4_ADD[4] << XSPI_IVI_SFT_08) | u1_ap_SUB4_ADD[5]);
@@ -245,6 +256,14 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
         case XSPI_IVI_CANCOMMAND_BUS_REQ:
             /* BUSステータス要求に対する応答 */
             vd_g_XspiIviCANBusSend();
+            break;
+        case XSPI_IVI_CANCOMMAND_PARNMSEND_REQ:
+            vd_g_MemcpyU1(&u1_tp_parnm_data[0], &u1_tp_CNDT[u2_t_cancommandbuf + 9U], (U4)XSPI_IVI_PARTIALNM_DATASIZE);
+            vd_g_PncReqctl_PartialNMSendReq(&u1_tp_parnm_data[0]);
+            break;
+        case XSPI_IVI_CANCOMMAND_PARNM_STS:
+            u1_t_parnm_sts = u1_tp_CNDT[u2_t_cancommandbuf + 9U];
+            vd_g_PncReqctl_PartialNMGetSts(u1_t_parnm_sts);
             break;
         default:
             break;
@@ -288,6 +307,7 @@ static void            vd_s_XspiIviSub4CanAna(const U1 * u1_ap_SUB4_ADD, const U
                 u1_tp_can_data[6] = u1_tp_can_data[6] & (U1)XSPI_IVI_MASK_04;
                 u1_tp_can_data[6] |= (U1)(u1_t_cd_size << XSPI_IVI_SFT_04);
             }
+            vd_g_CanCtlTx_SendHk(u4_t_msg_aubistid, &u1_tp_can_data[0]);
             (void)Com_SendIPDU((PduIdType)u4_t_msg_aubistid, &u1_tp_can_data[0] );
         }
 
@@ -1098,29 +1118,188 @@ static void         vd_s_XspiIviCANGWStuckBuff(const U4 u4_a_TIME, const U4 u4_a
 }
 
 /*===================================================================================================================================*/
-/*  void         vd_g_XspiIviCANBusGet2M(void)                                                                                       */
+/*  void            vd_g_XspiIviCANBusGet2M(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    CANBusステータス受信によるユーザフック処理                                                                          */
+/*  Description:    2M CANBusステータス更新処理                                                                                        */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void         vd_g_XspiIviCANBusGet2M(void){
-    /*暫定 CANBusステータスの取得IF不明のため側だけ用意しておく*/
-    /*RAMに状態を格納*/
-    /*状態変化時スタックしていく*/
+void            vd_g_XspiIviCANBusGet2M(void)
+{
+    static U2   u2_st_NWORD     = (U2)1U;
+
+    U1      u1_t_sts;
+    U4      u4_t_data;
+
+    u4_t_data   = (U4)0U;
+
+    /* 2M-1 */
+    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_029, &u4_t_data, u2_st_NWORD);
+    if(u1_t_sts != (U1)IVDSH_NO_REA){
+        switch (u4_t_data)
+        {
+        case XSPI_IVI_CANBUS_RSV_ACTIVE:
+            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x03U;      /* 通常動作状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_LOCK,   (U1)TRUE);
+            break;
+
+        case XSPI_IVI_CANBUS_RSV_REGSTUCK:
+            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x01U;      /* 通信不能状態要因 メッセージレジスタ固着 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_REGERR, (U1)FALSE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_LOCK,   (U1)TRUE);
+            break;
+
+        case XSPI_IVI_CANBUS_RSV_BUSOFF:
+            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x01U;      /* 通信不能状態要因 バス OFF */
+            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_BUSOFF, (U1)FALSE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_LOCK,   (U1)TRUE);
+            break;
+
+        case XSPI_IVI_CANBUS_RSV_NOCONNECT:
+            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x01U;      /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
+            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_2M1_LOCK,   (U1)FALSE);
+            break;
+        
+        default:
+            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x01U;      /* INIT：初期化状態（送受信不可状態） */
+            break;
+        }
+    }
+    else{
+        /* do nothing */
+    }
+
+    /* 2M-2 */
+    /* T.B.D */
 }
 
 /*===================================================================================================================================*/
-/*  void         vd_g_XspiIviCANBusGet5M(void)                                                                                       */
+/*  void            vd_g_XspiIviCANBusGet5M(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    CANBusステータス受信によるユーザフック処理                                                                          */
+/*  Description:    5M CANBusステータス更新処理                                                                                        */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void         vd_g_XspiIviCANBusGet5M(void){
-    /*暫定 CANBusステータスの取得IF不明のため側だけ用意しておく*/
-    /*RAMに状態を格納*/
-    /*状態変化時スタックしていく*/
+void            vd_g_XspiIviCANBusGet5M(void)
+{
+    static U2   u2_st_NWORD     = (U2)1U;
+
+    U1      u1_t_sts;
+    U4      u4_t_data;
+
+    u4_t_data   = (U4)0U;
+
+    /* 5M */
+    u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_032, &u4_t_data, u2_st_NWORD);
+    if(u1_t_sts != (U1)IVDSH_NO_REA){
+        switch (u4_t_data)
+        {
+        case (U4)XSPI_IVI_CANBUS_RSV_ACTIVE:
+            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x03U;      /* 通常動作状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_LOCK,   (U1)TRUE);
+            break;
+
+        case (U4)XSPI_IVI_CANBUS_RSV_REGSTUCK:
+            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x01U;      /* 通信不能状態要因 メッセージレジスタ固着 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_REGERR, (U1)FALSE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_LOCK,   (U1)TRUE);
+            break;
+
+        case (U4)XSPI_IVI_CANBUS_RSV_BUSOFF:
+            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x01U;      /* 通信不能状態要因 バス OFF */
+            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_BUSOFF, (U1)FALSE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_LOCK,   (U1)TRUE);
+            break;
+
+        case (U4)XSPI_IVI_CANBUS_RSV_NOCONNECT:
+            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x01U;      /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
+            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_REGERR, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_BUSOFF, (U1)TRUE);
+            vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_CAN_5M_LOCK,   (U1)FALSE);
+            break;
+        
+        default:
+            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
+            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x01U;      /* INIT：初期化状態（送受信不可状態） */
+            break;
+        }
+    }
+    else{
+        /* do nothing */
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviCANBusEventJdg(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    CANBusステータス イベント送信判定                                                                                  */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviCANBusEventJdg(void)
+{
+    U1      u1_t_jdg;
+    U4      u4_t_loop;
+
+    u1_t_jdg    = (U1)FALSE;
+
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_IVI_CANBUS_POS_TOTAL; u4_t_loop++){
+        /* 2M */
+        if(u1_sp_Xspi_Ivi_CanBusSts2M[u4_t_loop] != u1_sp_Xspi_Ivi_CanBusSts2M_pre[u4_t_loop]){
+            u1_t_jdg    = (U1)TRUE;
+        }
+        /* 5M */
+        if(u1_sp_Xspi_Ivi_CanBusSts5M[u4_t_loop] != u1_sp_Xspi_Ivi_CanBusSts5M_pre[u4_t_loop]){
+            u1_t_jdg    = (U1)TRUE;
+        }
+    }
+
+    if(u1_t_jdg == (U1)TRUE){
+        /* CANBusステータスイベント送信 */
+        vd_g_XspiIviCANBusSend();
+    }
+    else{
+        /* do nothing */
+    }
 }
 
 /*===================================================================================================================================*/
@@ -1135,15 +1314,12 @@ void         vd_g_XspiIviCANBusSend(void){
     vd_s_XspiIviCANCommandStuckBuff((U1)XSPI_IVI_CANCOMMAND_SEND,(U2)XSPI_IVI_CAN_BUSSTS_SIZE);
 }
 
-
-
 /*===================================================================================================================================*/
-/*  void         vd_s_XspiIviCANCommandStuckBuff(void)                                                                               */
+/*  static void            vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE)                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    BUSステータスをバッファにスタックしていく処理                                                                        */
-/*  Arguments:      u2_a_TYPE : Command Data Type                                                                                    */
+/*  Arguments:      u1_a_ID   : Command ID                                                                                           */
 /*                  u2_a_SIZE : Command Data Length                                                                                  */
-/*                  u1_ap_SRC : Command Data                                                                                         */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2 u2_a_SIZE)
@@ -1152,49 +1328,62 @@ static void            vd_s_XspiIviCANCommandStuckBuff(const U1 u1_a_ID,const U2
     U1          u1_t_cancommand_data_size;
     U1          u1_t_jdg;
 
-    
     u1_t_jdg = (U1)FALSE;
     vd_g_MemfillU1(&u1_tp_cancomamand_data[0], (U1)0U, (U4)XSPI_IVI_CAN_COMMNDDATA_SIZE);
     
-
-    /*8byteアライメント*/
+    /* 8byteアライメント確保とキュー空き判定 */
     if((u2_a_SIZE > (U2)8U) && (u2_a_SIZE <= (U2)16U)) {
         u1_t_cancommand_data_size = (U1)XSPI_IVI_HEADER + (U1)16U;
+        u1_t_jdg    = u1_g_XspiIviQueueWriChkCanCommand(u1_t_cancommand_data_size);
     } else if(u2_a_SIZE <= (U2)8U){
         u1_t_cancommand_data_size = (U1)XSPI_IVI_HEADER + (U1)8U;
+        u1_t_jdg    = u1_g_XspiIviQueueWriChkCanCommand(u1_t_cancommand_data_size);
     } else {
-
+        /* コマンドサイズ異常 */
+        u1_t_jdg    = (U1)FALSE;
     }
-    u1_t_jdg = u1_g_XspiIviQueueWriChkCanCommand(u1_t_cancommand_data_size);
 
     if(u1_t_jdg == (U1)TRUE)
     {
-        /*キューに空き容量があるためデータ格納*/
-        /*各コマンドのヘッダー情報作成*/
-        /*識別値*/
+        /* キューに空き容量があるためデータ格納 */
+        /* 各コマンドのヘッダー情報作成 */
+        /* 識別値 */
         u1_tp_cancomamand_data[0] = (U1)0x43U;
         u1_tp_cancomamand_data[1] = (U1)0x4EU;
         u1_tp_cancomamand_data[2] = (U1)0x44U;
         u1_tp_cancomamand_data[3] = (U1)0x54U;
-        /*データ長*/
-        u1_tp_cancomamand_data[4] = 0U;        /*データタイプがU1に収まるためByte4は0固定*/
-        u1_tp_cancomamand_data[5] = (U1)u1_t_cancommand_data_size - (U2)XSPI_IVI_HEADER;
-        /*データサイズ*/
+        /* データ長 */
+        u1_tp_cancomamand_data[4] = (U1)0U;         /* データタイプがU1に収まるためByte4は0固定 */
+        u1_tp_cancomamand_data[5] = (U1)u1_t_cancommand_data_size - (U1)XSPI_IVI_HEADER;
+        /* データサイズ */
         u1_tp_cancomamand_data[6] = (U1)u1_a_ID;
         u1_tp_cancomamand_data[7] = (U1)0U;
+
+        /* Byte1 SubType */
         u1_tp_cancomamand_data[8] = (U1)u1_a_ID;
 
-        vd_g_MemcpyU1(&u1_tp_cancomamand_data[9], &u1_sp_Xspi_Ivi_CanBusSts2M[0], (U4)4U);
-        vd_g_MemcpyU1(&u1_tp_cancomamand_data[13], &u1_sp_Xspi_Ivi_CanBusSts5M[0], (U4)4U);
+        switch (u1_a_ID)
+        {
+        case XSPI_IVI_CANCOMMAND_SEND:
+            /* 200.102_04h：CANバスステータス通知 */
+            /* Byte2-5 CANBusStatus 2M */
+            vd_g_MemcpyU1(&u1_tp_cancomamand_data[9], &u1_sp_Xspi_Ivi_CanBusSts2M[0], (U4)XSPI_IVI_CANBUS_POS_TOTAL);
+            /* Byte6-9 CANBusStatus 5M */
+            vd_g_MemcpyU1(&u1_tp_cancomamand_data[13], &u1_sp_Xspi_Ivi_CanBusSts5M[0], (U4)XSPI_IVI_CANBUS_POS_TOTAL);
+            break;
+        
+        default:
+            /* do nothing */
+            break;
+        }
 
-
-        /*CANコマンドデータをキューに格納*/
+        /* CANコマンドデータをキューに格納 */
         vd_g_XspiIviQueueWriCanCommandData(u1_tp_cancomamand_data,(U2)u1_t_cancommand_data_size);
-        /*CANコマンドデータサイズをキューに格納*/
+        /* CANコマンドデータサイズをキューに格納 */
         u1_g_XspiIviQueueWriCanCommandSize(&u1_t_cancommand_data_size);
     }
     else{
-        /*キューに空き容量がないため読み飛ばし*/
+        /* ID不正orキューに空き容量がないため読み飛ばし */
         /* do nothing */
     }
 }

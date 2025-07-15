@@ -53,6 +53,9 @@
 #define DATESI_CAL_CAN_WEEK_SAT                 (6U)                                         /* Saturday                             */
 #define DATESI_CAL_CAN_WEEK_SUN                 (7U)                                         /* Sunday                               */
 
+/* BEV PreCV provisionally */
+#define DATESI_CAL_MIN                          (2021U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -62,17 +65,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static  U2                                      u2_s_datesi_cal_min;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0
-const   U2                                      u2_g_DATESI_CAL_NVMCID_CALE   = (U2)NVMCID_U2_DATESI_CALENDAR;
-#else
-const   U2                                      u2_g_DATESI_CAL_NVMCID_CALE   = (U2)U2_MAX;
-#endif
 const   U2                                      u2_g_DATESI_CAL_YEAR_MAX      = (U2)DATESI_CAL_YEAR_MAX;
 const   U4                                      u4_g_DATESI_CAL_DAYCNT_MAX    = (U4)DATESI_CAL_DAYCNT_MAX;
 const   U4                                      u4_g_DATESI_CAL_DAYCNT_ABSMAX = (U4)DATESI_CAL_DAYCNT_ABSMAX;
@@ -84,6 +83,18 @@ const   U4                                      u4_g_DATESI_CAL_DAYCNT_ABSMAX = 
      (DATESI_CAL_STSBIT_INVALID != COM_TIMEOUT))
 #error "datesi_cal status bit and com status bit are inconsistent!"
 #endif
+
+/*===================================================================================================================================*/
+/* void            vd_g_DateSICalCfgInit(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_DateSICalCfgInit(void)
+{
+    u2_s_datesi_cal_min = (U2)DATESI_CAL_MIN; /* BEV PreCV provisionally */
+}
+
 /*===================================================================================================================================*/
 /* U1              u1_g_DateSICalCfgCanRx(ST_DATESI_CAL_RX * stp_a_rx)                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -136,24 +147,18 @@ void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVE
      defined(ComConf_ComSignal_M_MONTH) || \
      defined(ComConf_ComSignal_M_YEAR)  || \
      defined(ComConf_ComSignal_M_WEEK))
-#if 0 /* BEV provisionally */
     U1  u1_t_pretx;
-#else
-    ST_XSPI_IVI_CLOCK_DISP_DATA st_t_pre_tx;
-#endif
     U1  u1_t_date[YYMMDD_DATE_SIZE];
-    U2  u2_t_cal_min;
+    U1  u1_t_read_sts;
+    U4  u4_t_cal_min;
 
-#if 0
-    u2_t_cal_min   = u2_CALIB_MCUID0575_CAL_MIN;
-#else
-    u2_t_cal_min   = (U2)2021U;
-#endif
-#if 0 /* BEV provisionally */
+    u4_t_cal_min = (U4)0U;
+    u1_t_read_sts = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_022, &u4_t_cal_min, (U2)DATESI_CAL_VM_1WORD);
+    if((u1_t_read_sts != (U1)IVDSH_NO_REA) && (u4_t_cal_min <= (U4)U2_MAX)){
+        u2_s_datesi_cal_min = (U2)u4_t_cal_min;
+    }
+
     u1_t_pretx     = (U1)0U;
-#else
-    st_t_pre_tx    = st_g_DateSIComPreTx();
-#endif
 #endif
 
     u1_t_can_trig  = (U1)FALSE;
@@ -164,49 +169,36 @@ void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVE
         u1_t_date[YYMMDD_DATE_YR] = (U1)(u2_t_year - (U2)DATESI_CAL_YEAR_OFFSET);
     }
     else{
-        u1_t_date[YYMMDD_DATE_YR] = (U1)(u2_t_cal_min - (U2)DATESI_CAL_YEAR_OFFSET);
+        if(u2_s_datesi_cal_min >= (U2)DATESI_CAL_YEAR_OFFSET){
+            u1_t_date[YYMMDD_DATE_YR] = (U1)(u2_s_datesi_cal_min - (U2)DATESI_CAL_YEAR_OFFSET);
+        }
+        else{
+            u1_t_date[YYMMDD_DATE_YR] = (U1)DATESI_CAL_MIN - (U1)DATESI_CAL_YEAR_OFFSET;
+        }
     }
-#if 0 /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_M_YEAR, &u1_t_pretx);
     if(u1_t_pretx != u1_t_date[YYMMDD_DATE_YR]){
-#else
-    if(st_t_pre_tx.u1_year_disp != u1_t_date[YYMMDD_DATE_YR]){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_date[YYMMDD_DATE_YR], DATESI_COM_M_YEAR, u1_a_EVENT_EI);
-#if 0 /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_M_YEAR, &u1_t_date[YYMMDD_DATE_YR]);
-#endif
         u1_t_can_trig = (U1)TRUE;
     }
 #endif /* ComConf_ComSignal_M_YEAR */
 
 #if defined(ComConf_ComSignal_M_MONTH)
     u1_t_date[YYMMDD_DATE_MO] = (U1)((u4_a_YYYYMMDD & (U4)YYMMDDWK_BIT_MO) >> YYMMDDWK_LSB_MO);
-#if 0 /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_M_MONTH, &u1_t_pretx);
     if(u1_t_pretx != u1_t_date[YYMMDD_DATE_MO]){
-#else
-    if(st_t_pre_tx.u1_month_disp != u1_t_date[YYMMDD_DATE_MO]){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_date[YYMMDD_DATE_MO], DATESI_COM_M_MONTH, u1_a_EVENT_EI);
-#if 0 /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_M_MONTH, &u1_t_date[YYMMDD_DATE_MO]);
-#endif
         u1_t_can_trig = (U1)TRUE;
     }
 #endif /* ComConf_ComSignal_M_MONTH */
 #if defined(ComConf_ComSignal_M_DAY)
     u1_t_date[YYMMDD_DATE_DA] = (U1)((u4_a_YYYYMMDD & (U4)YYMMDDWK_BIT_DA) >> YYMMDDWK_LSB_DA);
-#if 0 /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_M_DAY, &u1_t_pretx);
     if(u1_t_pretx != u1_t_date[YYMMDD_DATE_DA]){
-#else
-    if(st_t_pre_tx.u1_day_disp != u1_t_date[YYMMDD_DATE_DA]){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_date[YYMMDD_DATE_DA], DATESI_COM_M_DAY, u1_a_EVENT_EI);
-#if 0 /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_M_DAY, &u1_t_date[YYMMDD_DATE_DA]);
-#endif
         u1_t_can_trig = (U1)TRUE;
     }
 #endif /* ComConf_ComSignal_M_DAY */
@@ -220,25 +212,17 @@ void            vd_g_DateSICalCfgCanTx(const U4 u4_a_YYYYMMDD, const U1 u1_a_EVE
     else{
         u1_t_week = (U1)DATESI_CAL_CAN_WEEK_INVALID;
     }
-#if 0 /* BEV provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_M_WEEK, &u1_t_pretx);
     if(u1_t_pretx != u1_t_week){
-#else
-    if(st_t_pre_tx.u1_dow_disp != u1_t_week){
-#endif
         vd_g_DateSIComClockDispUpdate(u1_t_week, DATESI_COM_M_WEEK, u1_a_EVENT_EI);
-#if 0 /* BEV provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_M_WEEK, &u1_t_week);
-#endif
         u1_t_can_trig = (U1)TRUE;
     }
 #endif /* ComConf_ComSignal_M_WEEK */
 
     if((u1_t_can_trig == (U1)TRUE) &&
        (u1_a_EVENT_EI == (U1)TRUE)){
-#if 0 /* BEV provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S33_TXCH0);
-#endif
     }
 }
 

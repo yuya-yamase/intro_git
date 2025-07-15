@@ -368,12 +368,6 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
 /*  }                                                       */
 
     switch (u2_a_IPDU_RX) {
-#if 0   /* BEV BSW provisionally */
-        case (U2)MSG_AVN1S30_RXCH0:
-            vd_g_DateSITimCanRxHk();
-            break;
-#else
-#endif
         case (U2)MSG_ENG1G17_RXCH0:
             vd_g_FsposnsrCanRxEng1g17();
             break;
