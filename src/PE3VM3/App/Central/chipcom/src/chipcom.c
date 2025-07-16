@@ -16,7 +16,7 @@
 #define CHIPCOM_POS_USERDATA_OFFSET ((uint16)0x000EU)
 #define CHIPCOM_RCV_FRM_MAX         ((uint16)(XSPI_FRM_MAX - 4U))
 #define CHIPCOM_SND_FRM_MAX         ((uint16)(XSPI_FRM_MAX - 4U))
-#define CHIPCOM_RCV_FRM_MAX_WORD    ((uint16)(CHIPCOM_RCV_FRM_MAX / 4))
+#define CHIPCOM_RCV_FRM_MAX_WORD    ((uint16)(XSPI_FRM_MAX_WORD - 1U))
 #define CHIPCOM_SND_FRM_MAX_WORD    ((uint16)(XSPI_FRM_MAX_WORD - 1U))
 
 #define CHIPCOM_BUFFER_INITVAL   	((uint8) 0x00U)
@@ -72,8 +72,8 @@ void ChipCom_Init(void)
 
     LIB_memset(&(ChipCom_SpiRxDataU1[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_RCV_FRM_MAX);
     LIB_memset(&(ChipCom_SpiTxDataU1[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_SND_FRM_MAX);
-    LIB_memset((uint8 *)&(ChipCom_SpiRxDataU4[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_RCV_FRM_MAX_WORD);
-    LIB_memset((uint8 *)&(ChipCom_SpiTxDataU4[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_SND_FRM_MAX_WORD);
+    LIB_memset((uint8 *)&(ChipCom_SpiRxDataU4[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_RCV_FRM_MAX);
+    LIB_memset((uint8 *)&(ChipCom_SpiTxDataU4[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_SND_FRM_MAX);
     for (i = 0; i < CHIPCOM_PERIODICID_MAX; i++) {
         pInitBuff = PeriodicRelation[i].InitVal;
         if( PeriodicRelation[i].TxPos < CHIPCOM_POS_TX_EVENTDATA_OFFSET ) {
