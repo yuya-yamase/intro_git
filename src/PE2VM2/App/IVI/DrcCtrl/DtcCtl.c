@@ -85,8 +85,8 @@ static const U1 u1_s_DTCCTL_DTCLIST[DTCCTL_DTCID_NUM][DTCCTL_DTCCODE_KIND] = {
         {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_2M1_BUSOFF},  /*  */
         {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_2M1_LOCK},  /*  */
         {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_5M_REGERR},  /*  */
-        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_5M_BUSOFF},  /*  */
-        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_5M_LOCK}  /*  */
+        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_5M_REGERR},  /*  */
+        {(U1)DTCCTL_CTG_CAN,  (U1)DTCCTL_DIAG_CAN_5M_REGERR}  /*  */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
