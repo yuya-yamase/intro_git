@@ -180,7 +180,7 @@ static void vd_s_VISCanGetOdo(void)
         
         /* オド単位がkmの場合 */
         if(u1_t_odounit == VIS_CAN_ODO_UNIT_KM){
-            /* 最大値以上の場合 */
+            /* 最大値を超える場合 */
             if(u4_t_odo > VIS_CAN_ODO_MAX_KM){
                 u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
             }
@@ -192,7 +192,7 @@ static void vd_s_VISCanGetOdo(void)
         }
         /* オド単位がMileの場合 */
         else if(u1_t_odounit == VIS_CAN_ODO_UNIT_MILE){
-            /* 最大値以上の場合 */
+            /* 最大値を超える場合 */
             if(u4_t_odo > VIS_CAN_ODO_MAX_MILE){
                 u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
             }
