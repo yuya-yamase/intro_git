@@ -32,6 +32,7 @@
 
 #include "PwrCtlSup.h"
 #include "chipcom.h"
+#include "VSM.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -80,6 +81,8 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    vd_g_VSM_Init();
+    vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainBonReq();
     EthSW_StaBonInit();
     ChipCom_Init();
@@ -122,6 +125,8 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    vd_g_VSM_Init();
+    vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainWakeupReq();
     EthSW_StaRstInit();
     ChipCom_Init();
@@ -164,6 +169,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    vd_g_VSM_Init();
+    vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainWakeupReq();
     EthSW_StaWkupInit();
     ChipCom_Init();

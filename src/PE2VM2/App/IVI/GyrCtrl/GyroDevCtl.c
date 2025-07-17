@@ -142,7 +142,8 @@ static U2 u2_s_gyrodev_reg_btwn_time;                           /* Gyro Device A
 static ST_XSPI_IVI_GYRO_SENSOR_DATA st_gyrodev_readdata;        /* Gyro Device Read Data */
 static U1 u1_s_gyrodev_pre_appon_sts;                           /* Previous APP-ON Status */
 
-static U1 u1_s_gyrodev_dtcrec_a_flag;                           /* Gyro Device Read Data Check DTC Record(A) Flag */
+static U1 u1_s_gyrodev_gyro_dtcrec_a_flag;                      /* Gyro Device Gyro Register Read Data Check DTC Record(A) Flag */
+static U1 u1_s_gyrodev_gsens_dtcrec_a_flag;                     /* Gyro Device G-Sensor Register Read Data Check DTC Record(A) Flag */
 
 static U1 u1_s_gyrodev_notifcondset_sts;                        /* "[API]G-Sensor INT Signal Notification Condition" Function Status */
 static U1 u1_s_gyrodev_oscmd_notifcond_rcv_flag;                /* "[API]G-Sensor INT Signal Notification Condition" Setting Request Receive Flag */
@@ -485,7 +486,8 @@ void    vd_g_GyroDev_BonInit(void)
 
     u1_s_gyrodev_pre_appon_sts = (U1)GYRODEV_APPOFF;
 
-    u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
+    u1_s_gyrodev_gyro_dtcrec_a_flag = (U1)FALSE;
+    u1_s_gyrodev_gsens_dtcrec_a_flag = (U1)FALSE;
 
     u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP0;
     u1_s_gyrodev_oscmd_notifcond_rcv_flag = (U1)FALSE;
@@ -571,7 +573,8 @@ void    vd_g_GyroDev_WkupInit(void)
 
     u1_s_gyrodev_pre_appon_sts = (U1)GYRODEV_APPOFF;
 
-    u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
+    u1_s_gyrodev_gyro_dtcrec_a_flag = (U1)FALSE;
+    u1_s_gyrodev_gsens_dtcrec_a_flag = (U1)FALSE;
 
     u1_s_gyrodev_notifcondset_sts = (U1)GYRODEV_NOTIFCONDSET_STEP0;
     u1_s_gyrodev_oscmd_notifcond_rcv_flag = (U1)FALSE;
@@ -972,7 +975,7 @@ static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_dat
 
                 /* Gyro Fail DTC Record */
                 vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GYR_ERR, (U1)GYRODEV_DTC_STS_FAIL);
-                u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
+                u1_s_gyrodev_gyro_dtcrec_a_flag = (U1)FALSE;
 
                 if(u1_s_gyrodev_gyro_rst_cnt >= (U2)GYRODEV_GYRODTC_RSTCNT_MAX){    /* Reset Count >= n(6_3) */
                     /* Counter Clear */
@@ -1004,10 +1007,10 @@ static void    vd_s_GyroDev_GyroDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_dat
             u1_s_gyrodev_gyro_rst_cnt = (U1)0;
 
             /* DTC Record Check */
-            if(u1_s_gyrodev_dtcrec_a_flag == (U1)FALSE){                       /* Initial Record or Error -> Normal */
+            if(u1_s_gyrodev_gyro_dtcrec_a_flag == (U1)FALSE){                       /* Initial Record or Error -> Normal */
                 /* Gyro Normal DTC Record */
                 vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GYR_ERR, (U1)GYRODEV_DTC_STS_NORMAL);
-                u1_s_gyrodev_dtcrec_a_flag = (U1)TRUE;
+                u1_s_gyrodev_gyro_dtcrec_a_flag = (U1)TRUE;
             }
         }
     }
@@ -1061,7 +1064,7 @@ static void    vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_da
 
             /* G Sonsor Fail DTC Record */
             vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GSNS_ERR, (U1)GYRODEV_DTC_STS_FAIL);
-            u1_s_gyrodev_dtcrec_a_flag = (U1)FALSE;
+            u1_s_gyrodev_gsens_dtcrec_a_flag = (U1)FALSE;
 
             if(u1_s_gyrodev_gsens_rst_cnt >= (U2)GYRODEV_GSENSDTC_RSTCNT_MAX){            /* Reset Count >= n(6_3) */
                 /* Counter Clear */
@@ -1093,10 +1096,10 @@ static void    vd_s_GyroDev_GSensDtcChk(const U2 u2_a_x_data, const U2 u2_a_y_da
         u1_s_gyrodev_gsens_rst_cnt = (U1)0;
 
         /* DTC Record Check */
-        if(u1_s_gyrodev_dtcrec_a_flag == (U1)FALSE){                       /* Initial Record or Error -> Normal */
+        if(u1_s_gyrodev_gsens_dtcrec_a_flag == (U1)FALSE){                      /* Initial Record or Error -> Normal */
             /* G Sonsor Normal DTC Record */
             vd_GYRODEV_DTC_REQ((U1)DTCCTL_DTCID_GSNS_ERR, (U1)GYRODEV_DTC_STS_NORMAL);
-            u1_s_gyrodev_dtcrec_a_flag = (U1)TRUE;
+            u1_s_gyrodev_gsens_dtcrec_a_flag = (U1)TRUE;
         }
     }
 }
