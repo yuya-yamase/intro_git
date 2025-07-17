@@ -180,23 +180,30 @@ static void vd_s_VISCanGetOdo(void)
         
         /* オド単位がkmの場合 */
         if(u1_t_odounit == VIS_CAN_ODO_UNIT_KM){
-            /* LSBを1kmから0.1kmに変換 */
-            u4_s_vis_can_ododata = u4_t_odo * VIS_CAN_ODO_LSB;
+            /* 最大値以上の場合 */
+            if(u4_t_odo > VIS_CAN_ODO_MAX_KM){
+                u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
+            }
+            /* 最大値以下の場合 */
+            else{
+                /* LSB変換 */
+                u4_s_vis_can_ododata = u4_t_odo * VIS_CAN_ODO_LSB;
+            }
         }
         /* オド単位がMileの場合 */
         else if(u1_t_odounit == VIS_CAN_ODO_UNIT_MILE){
-            /* 1mileを161kmに変換(1mile=1.61km) */
-            u4_s_vis_can_ododata = u4_t_odo * VIS_CAN_ODO_MILE_TO_KM;
-            /* LSBを0.01kmから0.1kmに変換 */
-            u4_s_vis_can_ododata = u4_s_vis_can_ododata / VIS_CAN_ODO_LSB;
+            /* 最大値以上の場合 */
+            if(u4_t_odo > VIS_CAN_ODO_MAX_MILE){
+                u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
+            }
+            /* 最大値以下の場合 */
+            else{
+                /* 単位変換(1mile =1.61km) LSB変換 */
+                u4_s_vis_can_ododata = (u4_t_odo * VIS_CAN_ODO_MILE_TO_KM) / VIS_CAN_ODO_LSB;
+            }
         }
         /* オド単位が異常の場合 */
         else{
-            u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
-        }
-        
-        /* オドメータ情報が最大値以上の場合 */
-        if(u4_s_vis_can_ododata > VIS_CAN_ODO_MAX){
             u4_s_vis_can_ododata = VIS_CAN_ODO_FAIL;
         }
     }
