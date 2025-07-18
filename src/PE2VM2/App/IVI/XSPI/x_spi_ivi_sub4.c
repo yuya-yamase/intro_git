@@ -1262,10 +1262,12 @@ void            vd_g_XspiIviCANBusEventJdg(void)
         /* 2M */
         if(u1_sp_Xspi_Ivi_CanBusSts2M[u4_t_loop] != u1_sp_Xspi_Ivi_CanBusSts2M_pre[u4_t_loop]){
             u1_t_jdg    = (U1)TRUE;
+            vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_CanBusSts2M_pre[0], &u1_sp_Xspi_Ivi_CanBusSts2M[0], sizeof(u1_sp_Xspi_Ivi_CanBusSts2M_pre));
         }
         /* 5M */
         if(u1_sp_Xspi_Ivi_CanBusSts5M[u4_t_loop] != u1_sp_Xspi_Ivi_CanBusSts5M_pre[u4_t_loop]){
             u1_t_jdg    = (U1)TRUE;
+            vd_g_MemcpyU1(&u1_sp_Xspi_Ivi_CanBusSts5M_pre[0], &u1_sp_Xspi_Ivi_CanBusSts5M[0], sizeof(u1_sp_Xspi_Ivi_CanBusSts5M_pre));
         }
     }
 
