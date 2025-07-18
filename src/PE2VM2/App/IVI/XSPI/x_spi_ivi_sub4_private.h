@@ -27,7 +27,6 @@
 #include    "PictCtl.h"
 #include    "PncreqCtl.h"
 #include    "ivdsh.h"
-#include    "DtcCtl.h"
 #include    "CanCtlTx.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
