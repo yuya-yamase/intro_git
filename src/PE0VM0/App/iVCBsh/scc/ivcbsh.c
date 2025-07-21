@@ -55,7 +55,7 @@ typedef struct
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static ST_IVCBSH_STS    u1_s_ivcbsh_sts[IVCBSH_SYS_NUM_NET];
+static ST_IVCBSH_STS    st_sp_ivcbsh_sts[IVCBSH_SYS_NUM_NET];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -79,7 +79,7 @@ void            vd_g_iVCBshInit(void)
     U4      u4_t_lpcnt;
 
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)IVCBSH_SYS_NUM_NET; u4_t_lpcnt++){
-        u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  = (U4)IVCBSH_STS_OTH;
+        st_sp_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre = (U4)IVCBSH_STS_ACTIVE;
         vd_s_iVCBshInitPrm(u4_t_lpcnt);
     }
 }
@@ -92,8 +92,8 @@ void            vd_g_iVCBshInit(void)
 static void     vd_s_iVCBshInitPrm(const U4 u1_a_POS)
 {
     if(u1_a_POS < (U4)IVCBSH_SYS_NUM_NET){
-        u1_s_ivcbsh_sts[u1_a_POS].u2_fail   = (U2)BSWM_CAN_CHFAILST_NONE;
-        u1_s_ivcbsh_sts[u1_a_POS].u4_tim    = (U4)U4_MAX;
+        st_sp_ivcbsh_sts[u1_a_POS].u2_fail  = (U2)BSWM_CAN_CHFAILST_NONE;
+        st_sp_ivcbsh_sts[u1_a_POS].u4_tim   = (U4)U4_MAX;
     }
 }
 /*===================================================================================================================================*/
@@ -108,14 +108,14 @@ void            vd_g_iVCBshMainTask(void)
 
     U4      u4_t_lpcnt;
     U2      u2_t_can;
-    U1      u1_t_buserr;
+    U1      u1_t_txlog;
+    U1      u1_t_rxlog;
     U4      u4_t_wri;
 
-    u2_t_can        = (U2)BSWM_CAN_CHFAILST_NONE;
-    u1_t_buserr     = (U1)BSWM_CAN_CTRERRST_NONE;
-    u4_t_wri        = (U4)IVCBSH_STS_OTH;
-
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)IVCBSH_SYS_NUM_NET; u4_t_lpcnt++){
+        u2_t_can        = (U2)BSWM_CAN_CHFAILST_NONE;
+        u4_t_wri        = (U4)IVCBSH_STS_ACTIVE;
+
         /* Active-Fail Judge */
         /* ----------------------------------------------------------------------------------------------------- */
         /* Attention :                                                                                           */
@@ -124,12 +124,13 @@ void            vd_g_iVCBshMainTask(void)
         /* only if the 1st parameter "NetworkHandleType network" is greater than or equal to BSW_COM_CFG_CHNUM.  */
         /* ----------------------------------------------------------------------------------------------------- */
         (void)BswM_Can_GetChFailStatus(st_sp_IVCBSH_PRM[u4_t_lpcnt].u1_COM_CH, &u2_t_can);
-        (void)BswM_Can_GetControllerErrStatus(st_sp_IVCBSH_PRM[u4_t_lpcnt].u1_COM_CH, &u1_t_buserr);
+        u1_t_txlog  = CanSM_GetTxConfirmationState(st_sp_IVCBSH_PRM[u4_t_lpcnt].u1_COM_CH);
+        u1_t_rxlog  = CanSM_GetRxIndicationState(st_sp_IVCBSH_PRM[u4_t_lpcnt].u1_COM_CH);
 
         /* Fail Timer Start */
         if(((u2_t_can & (U2)(BSWM_CAN_CHFAILST_SNDLOCK | BSWM_CAN_CHFAILST_USER)) != (U2)0U) &&
-           (u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  == (U4)U4_MAX)){
-            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  = (U4)0U;
+           (st_sp_ivcbsh_sts[u4_t_lpcnt].u4_tim == (U4)U4_MAX)){
+            st_sp_ivcbsh_sts[u4_t_lpcnt].u4_tim = (U4)0U;
         }
         else{
             /* do nothing */
@@ -137,40 +138,60 @@ void            vd_g_iVCBshMainTask(void)
 
         /* Failure Status Update */
         if(u2_t_can != (U2)BSWM_CAN_CHFAILST_NONE){
-            u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail = u2_t_can;
+            st_sp_ivcbsh_sts[u4_t_lpcnt].u2_fail    = u2_t_can;
+        }
+        else{
+            /* do nothing */
         }
 
-        /* Failure Causes Judge */
-        if(u1_t_buserr == (U1)BSWM_CAN_CTRERRST_NONE){
-            /* Active */
-            u4_t_wri    = (U4)IVCBSH_STS_ACTIVE;
-            vd_s_iVCBshInitPrm(u4_t_lpcnt);
-        }
-        else if((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail & (U2)BSWM_CAN_CHFAILST_REGCHECK) != (U2)0U){
+        /* Failure Causes Judge and Abnormal recovery detection */
+        if((st_sp_ivcbsh_sts[u4_t_lpcnt].u2_fail & (U2)BSWM_CAN_CHFAILST_REGCHECK) != (U2)0U){
+            /* Register Stuck */
             u4_t_wri    = (U4)IVCBSH_STS_REGSTUCK;
         }
-        else if((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail    & (U2)BSWM_CAN_CHFAILST_BUSOFF) != (U2)0U){
-            u4_t_wri    = (U4)IVCBSH_STS_BUSOFF;
+        else if((st_sp_ivcbsh_sts[u4_t_lpcnt].u2_fail   & (U2)BSWM_CAN_CHFAILST_BUSOFF) != (U2)0U){
+            /* Bus-off */
+            if((u1_t_txlog == (U1)CANSM_TX_RX_NOTIFICATION) || 
+               (u1_t_rxlog == (U1)CANSM_TX_RX_NOTIFICATION)){
+                /* Normal Recovery */
+                u4_t_wri    = (U4)IVCBSH_STS_ACTIVE;
+                vd_s_iVCBshInitPrm(u4_t_lpcnt);
+            }
+            else{
+                u4_t_wri    = (U4)IVCBSH_STS_BUSOFF;
+            }
         }
-        else if(((u1_s_ivcbsh_sts[u4_t_lpcnt].u2_fail & (U2)(BSWM_CAN_CHFAILST_SNDLOCK | BSWM_CAN_CHFAILST_USER)) != (U2)0U) &&
-                u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim >= (U4)IVCBSH_TIM_NOCONNECT){
+        else if(((st_sp_ivcbsh_sts[u4_t_lpcnt].u2_fail & (U2)(BSWM_CAN_CHFAILST_SNDLOCK | BSWM_CAN_CHFAILST_USER)) != (U2)0U) &&
+                st_sp_ivcbsh_sts[u4_t_lpcnt].u4_tim >= (U4)IVCBSH_TIM_NOCONNECT){
+            /* CAN Bus Disconnected */
+            if((u1_t_txlog == (U1)CANSM_TX_RX_NOTIFICATION) || 
+               (u1_t_rxlog == (U1)CANSM_TX_RX_NOTIFICATION)){
+                /* Normal Recovery */
+                u4_t_wri    = (U4)IVCBSH_STS_ACTIVE;
+                vd_s_iVCBshInitPrm(u4_t_lpcnt);
+            }
+            else{
                 u4_t_wri    = (U4)IVCBSH_STS_NOCONNECT;
-                u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim  = (U4)U4_MAX;
+                st_sp_ivcbsh_sts[u4_t_lpcnt].u4_tim = (U4)U4_MAX;
+            }
         }
         else{
             /* Previous state retention */
-            u4_t_wri    = u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre;
+            u4_t_wri    = st_sp_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre;
         }
 
         /* inter-VM Sharing */
-        if(u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  != u4_t_wri){
+        if(st_sp_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre != u4_t_wri){
             vd_g_iVDshWribyDid(st_sp_IVCBSH_PRM[u4_t_lpcnt].u2_IVDSH_ID, &u4_t_wri, u2_st_NWORD);
-            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre  = u4_t_wri;
+            st_sp_ivcbsh_sts[u4_t_lpcnt].u4_wri_pre = u4_t_wri;
+        }
+        else{
+            /* do nothing */
         }
 
         /* Fail Timer Count */
-        if(u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim   < (U4)U4_MAX){
-            u1_s_ivcbsh_sts[u4_t_lpcnt].u4_tim++;
+        if(st_sp_ivcbsh_sts[u4_t_lpcnt].u4_tim  < (U4)U4_MAX){
+            st_sp_ivcbsh_sts[u4_t_lpcnt].u4_tim++;
         }
         else{
             /* do nothing */
