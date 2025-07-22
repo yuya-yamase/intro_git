@@ -65,7 +65,6 @@ static ehvm_uint32_t Ecu_Arb_u4VMmCommand;
 #define ECU_SLEEP_INITIALIZED    ((ehvm_uint32_t)0xCC33CC33U)
 #define ECU_SLEEP_GO_OPE         ((ehvm_uint32_t)0x33CC33CCU)
 #define ECU_SLEEP_READY_SLEEP    ((ehvm_uint32_t)0xA5A5A5A5U)
-#define ECU_SLEEP_CANCEL_SLEEP   ((ehvm_uint32_t)0x5A5A5A5AU)
 #define ECU_SLEEP_GO_SLEEP       ((ehvm_uint32_t)0xC3C3C3C3U)
 #define ECU_SLEEP_UNKNOWN        ((ehvm_uint32_t)0xFFFFFFFFU)
 #define ECU_VCC_SLEEP_STATUS_LEN ((ehvm_uint32_t)4U)
@@ -269,7 +268,14 @@ static void Ecu_Arb_stateOpe_VMm(boolean bAwake)
     boolean bSleepOK;
     uint8   u1VmNum;
 
-    bSleepOK = TRUE;
+    if ( bAwake == FALSE)
+    {
+        bSleepOK = TRUE;
+    }
+    else
+    {
+        bSleepOK = FALSE;
+    }
 
     /* 調停ステータス更新 */
     Ecu_Arb_getVMxStatus();
@@ -302,7 +308,14 @@ static void Ecu_Arb_statePrpSlp_VMm(boolean bAwake)
     boolean bPrpSlpComplete;
     uint8   u1VmNum;
 
-    bSleepOK = TRUE;
+    if ( bAwake == FALSE)
+    {
+        bSleepOK = TRUE;
+    }
+    else
+    {
+        bSleepOK = FALSE;
+    }
 
     /* 調停ステータス更新 */
     Ecu_Arb_getVMxStatus();
@@ -346,42 +359,18 @@ static void Ecu_Arb_statePrpSlp_VMm(boolean bAwake)
  *--------------------------------------------------------------------------*/
 static void Ecu_Arb_stateRdySlp_VMm(boolean bAwake)
 {
-    boolean bSleepOK;
-    uint8   u1VmNum;
 
-    bSleepOK = TRUE;
-
-    /* 調停ステータス更新 */
-    Ecu_Arb_getVMxStatus();
-
-    /* SleepOK判定 */
-    for (u1VmNum = 0U; u1VmNum < ECU_ARB_SLAVE_VM_NUM; u1VmNum++)
+    /* READYSLEEPカウント待ち */
+    if (Ecu_Arb_u4ReadySleepCount < ECU_ARB_READY_SLEEP_PERIOD)
     {
-        bSleepOK &= Ecu_Arb_bVMxSleepOKFlag[u1VmNum];
-    }
-
-    /* スリープOKの場合 */
-    if (bSleepOK == TRUE)
-    {
-        /* READYSLEEPカウント待ち */
-        if (Ecu_Arb_u4ReadySleepCount < ECU_ARB_READY_SLEEP_PERIOD)
-        {
-            Ecu_Arb_u4ReadySleepCount++;
-        }
-        else
-        /* READYSLEEPカウント待ち完了後、GO_SLEEPを送信してSLEEP状態に遷移 */
-        {
-            Ecu_Arb_vccSend(ECU_SLEEP_GO_SLEEP);
-            (void)ehvm_vmm_enable_suppression();
-            Ecu_Arb_u1OwnCpuStatus = ECU_ARB_STATE_SLEEP;
-        }
+        Ecu_Arb_u4ReadySleepCount++;
     }
     else
-    /* スリープNGの場合、CANCEL_SLEEPを送信してINIT状態に遷移 */
+    /* READYSLEEPカウント待ち完了後、GO_SLEEPを送信してSLEEP状態に遷移 */
     {
-        Ecu_Arb_vccSend(ECU_SLEEP_CANCEL_SLEEP);
-        Ecu_Arb_initVariable();
-        Ecu_Arb_awakeUnMskCallout();
+        Ecu_Arb_vccSend(ECU_SLEEP_GO_SLEEP);
+        (void)ehvm_vmm_enable_suppression();
+        Ecu_Arb_u1OwnCpuStatus = ECU_ARB_STATE_SLEEP;
     }
 
     return;
@@ -414,7 +403,7 @@ static boolean Ecu_Arb_stateSleep_VMm(void)
         }
         else
         {
-//            Ecu_Intg_performSTReset(ECU_INTG_ST_RESET_HARD, ECU_INTG_ST_RESET_BY_ECU_ARB);
+            Ecu_Intg_performSTReset(ECU_INTG_ST_RESET_HARD, ECU_INTG_ST_RESET_BY_ECU_ARB);
         }
     }
 
@@ -527,23 +516,27 @@ static void Ecu_Arb_stateOpe_VMx(boolean bAwake)
     /* 調停ステータス更新 */
     Ecu_Arb_getVMmCommand();
 
-    /* 自VMのアウェイクがあればスリープNG送信 */
-    if (bAwake == TRUE)
+    /* READY_SLEEP指示があればExit処理 */
+    if (Ecu_Arb_u4VMmCommand == ECU_SLEEP_READY_SLEEP)
     {
-        Ecu_Arb_vccSend(ECU_SLEEP_NG);
+        Ecu_Arb_u1OwnCpuStatus = ECU_ARB_STATE_RDYSLP;
+        Ecu_Arb_awakeMskCallout();
     }
     else
-    /* 自VMのアウェイクが無い場合 */
     {
-        /* スリープOK送信 */
-        Ecu_Arb_vccSend(ECU_SLEEP_OK);
-        /* READY_SLEEP指示があればExit処理 */
-        if (Ecu_Arb_u4VMmCommand == ECU_SLEEP_READY_SLEEP)
+        /* 自VMのアウェイクがあればスリープNG送信 */
+        if (bAwake == TRUE)
         {
-            Ecu_Arb_u1OwnCpuStatus = ECU_ARB_STATE_RDYSLP;
-            Ecu_Arb_awakeMskCallout();
+            Ecu_Arb_vccSend(ECU_SLEEP_NG);
+        }
+        else
+        /* 自VMのアウェイクが無い場合 */
+        {
+            /* スリープOK送信 */
+            Ecu_Arb_vccSend(ECU_SLEEP_OK);
         }
     }
+
     return;
 }
 
@@ -559,14 +552,7 @@ static void Ecu_Arb_stateRdySlp_VMx(boolean bAwake)
     /* 調停ステータス更新 */
     Ecu_Arb_getVMmCommand();
 
-    /* CANCEL_SLEEP指示があればINIT状態に遷移 */
-    if (Ecu_Arb_u4VMmCommand == ECU_SLEEP_CANCEL_SLEEP)
-    {
-        Ecu_Arb_u1OwnCpuStatus = ECU_ARB_STATE_INIT;
-        Ecu_Arb_initVariable();
-        Ecu_Arb_awakeUnMskCallout();
-    }
-    else if (Ecu_Arb_u4VMmCommand == ECU_SLEEP_GO_SLEEP)
+    if (Ecu_Arb_u4VMmCommand == ECU_SLEEP_GO_SLEEP)
     /* GO_SLEEP指示があればSLEEP状態に遷移 */
     {
         Ecu_Arb_u1OwnCpuStatus = ECU_ARB_STATE_SLEEP;
@@ -574,17 +560,7 @@ static void Ecu_Arb_stateRdySlp_VMx(boolean bAwake)
     else
     /* 遷移指示が無い場合 */
     {
-        /* 自VMのアウェイクがあればスリープNG送信 */
-        if (bAwake == TRUE)
-        {
-            Ecu_Arb_vccSend(ECU_SLEEP_NG);
-        }
-        else
-        /* 自VMのアウェイクが無い場合 */
-        {
-            /* スリープOK送信 */
-            Ecu_Arb_vccSend(ECU_SLEEP_OK);
-        }
+        /* Nothing to do */
     }
 
     return;
