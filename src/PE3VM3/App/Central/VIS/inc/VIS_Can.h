@@ -28,7 +28,8 @@
 #define VIS_CAN_ODO_UNIT_NON                    ((U1)3U)            /* オド単位情報なし */
 #define VIS_CAN_ODO_LSB                         (10U)               /* LSB変換(1km→0.1km) */
 #define VIS_CAN_ODO_MILE_TO_KM                  (161U)              /* Mile→km変換値 */
-#define VIS_CAN_ODO_MAX                         (9999990U)          /* オドメータ情報最大値(LSB0.1km) */
+#define VIS_CAN_ODO_MAX_KM                      (999999U)           /* オドメータ情報最大値(km) */
+#define VIS_CAN_ODO_MAX_MILE                    (621117U)           /* オドメータ情報最大値(mile) */
 #define VIS_CAN_ODO_MASK                        (0x000000FFU)       /* オドメータ情報マスク値 */
 #define VIS_CAN_ODO_FAIL                        (0x00000000U)       /* オドメータ情報Fail値 */
 
