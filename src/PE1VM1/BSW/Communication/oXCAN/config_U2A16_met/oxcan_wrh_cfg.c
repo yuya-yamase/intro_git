@@ -56,9 +56,6 @@ ST_OXCAN_WRH_HCH            st_gp_oxcan_wrh_hch[OXCAN_WRH_NUM_RQH];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U4                    u4_g_OXCAN_WRH_LOG_REQ_EX = (U4)OXCAN_SYS_BAT;                    /* vd_g_oXCANWrhReqHch was executed    */ 
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U4                    u4_g_OXCAN_WRH_TOR_BY_VOM = (U4)OXCAN_SYS_IGR;                    /* TimeOut count Restart Condition     */
 const U4                    u4_g_OXCAN_WRH_REQ_BY_VOM = ((U4)OXCAN_SYS_PNC_16 |
                                                          (U4)OXCAN_SYS_PNC_40 |
@@ -69,10 +66,22 @@ const U2                    u2_g_OXCAN_WRH_VOM_TOUT   = (U2)13000U / (U2)OXCAN_M
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const ST_OXCAN_WRH_RQH      st_gp_OXCAN_WRH_RQH[OXCAN_WRH_NUM_RQH] = {
     {
-        ((U4)OXCAN_SYS_PNC_16 |                   /* u4_sys_net  : OXCAN_SYS_NET             */
-         (U4)OXCAN_SYS_PNC_40 |
-         (U4)OXCAN_SYS_PNC_43 |
-         (U4)OXCAN_SYS_PNC_44),
+        (U4)OXCAN_SYS_PNC_16,                     /* u4_sys_net  : OXCAN_SYS_NET             */
+        ((U2)5000U / (U2)OXCAN_MAIN_TICK),        /* u2_tout_sta : OXCAN_NWRQH_CTRL_STA (0U) */
+        ((U2)5000U / (U2)OXCAN_MAIN_TICK)         /* u2_tout_run : OXCAN_NWRQH_CTRL_RUN (1U) */
+    },
+    {
+        (U4)OXCAN_SYS_PNC_40,                     /* u4_sys_net  : OXCAN_SYS_NET             */
+        ((U2)5000U / (U2)OXCAN_MAIN_TICK),        /* u2_tout_sta : OXCAN_NWRQH_CTRL_STA (0U) */
+        ((U2)5000U / (U2)OXCAN_MAIN_TICK)         /* u2_tout_run : OXCAN_NWRQH_CTRL_RUN (1U) */
+    },
+    {
+        (U4)OXCAN_SYS_PNC_43,                     /* u4_sys_net  : OXCAN_SYS_NET             */
+        ((U2)5000U / (U2)OXCAN_MAIN_TICK),        /* u2_tout_sta : OXCAN_NWRQH_CTRL_STA (0U) */
+        ((U2)5000U / (U2)OXCAN_MAIN_TICK)         /* u2_tout_run : OXCAN_NWRQH_CTRL_RUN (1U) */
+    },
+    {
+        (U4)OXCAN_SYS_PNC_44,                     /* u4_sys_net  : OXCAN_SYS_NET             */
         ((U2)5000U / (U2)OXCAN_MAIN_TICK),        /* u2_tout_sta : OXCAN_NWRQH_CTRL_STA (0U) */
         ((U2)5000U / (U2)OXCAN_MAIN_TICK)         /* u2_tout_run : OXCAN_NWRQH_CTRL_RUN (1U) */
     }

@@ -98,6 +98,7 @@ const U4                    u4_gp_OXCAN_RXD_SYS_BY_PDU[] = {
 /* #define OXCAN_SYS_PNC_43                         (0x00040000U) */
 /* #define OXCAN_SYS_PNC_44                         (0x00080000U) */
 
+    (U4)0x00030014U , /* IGR, IGP,      PNC_16, PNC_40                 */       /* [23]  MSG_ABG1D50_RXCH0 */
     (U4)0x00030014U , /* IGR, IGP,      PNC_16, PNC_40                 */       /* [24]  MSG_ABG1D51_RXCH0 */
     (U4)0x00030014U , /* IGR, IGP,      PNC_16, PNC_40                 */       /* [25]  MSG_ABG1S01_RXCH0 */
     (U4)0x00010014U , /* IGR, IGP,      PNC_16                         */       /* [26]  MSG_ABG1S09_RXCH0 */

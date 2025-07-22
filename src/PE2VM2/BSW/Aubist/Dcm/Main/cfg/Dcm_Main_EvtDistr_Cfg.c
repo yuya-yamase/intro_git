@@ -19,11 +19,7 @@
 #include <Dcm/Dcm_Dsl_Ctrl.h>
 #include <Dcm/Dcm_Dsp_SID10.h>
 #include <Dcm/Dcm_Dsp_SID28.h>
-#include <Dcm/Dcm_Apl_SID14.h>
-#include <Dcm/Dcm_Apl_SID19.h>
 #include <Dcm/Dcm_Apl_SID22.h>
-#include <Dcm/Dcm_Apl_SID2E.h>
-#include <Dcm/Dcm_Apl_SID31.h>
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
