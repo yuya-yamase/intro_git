@@ -203,7 +203,7 @@ static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
-                                          (U4)OXCAN_SYS_IGR,
+                                          (U4)OXCAN_SYS_IGP,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_PEXI_TT_LSB_EHV1S94);
 #endif /* defined(OXCAN_RXD_PDU_CAN_EHV1S94_CH0) && defined(ComConf_ComSignal_SOCLOWID) */
