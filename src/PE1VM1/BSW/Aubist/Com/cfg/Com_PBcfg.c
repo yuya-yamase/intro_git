@@ -13162,7 +13162,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [26] MSG_ABG1S09_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [27] MSG_ACN1D50_RXCH0 */
@@ -13194,11 +13194,11 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_44 )
      }
     ,{    /* [34] MSG_ADC1S08_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [35] MSG_ADC1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [36] MSG_ADC1S11_RXCH0 */
@@ -13206,7 +13206,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_43 )
      }
     ,{    /* [37] MSG_ADC1S12_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [38] MSG_ADC1S13_RXCH0 */
@@ -13214,23 +13214,23 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_43 )
      }
     ,{    /* [39] MSG_ADC1S14_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [40] MSG_ADC1S15_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [41] MSG_ADC1S16_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [42] MSG_ADC1S17_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [43] MSG_ADC1S27_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [44] MSG_ADC1S31_RXCH0 */
@@ -13238,15 +13238,15 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_43 )
      }
     ,{    /* [45] MSG_ADU1S03_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [46] MSG_ADU1S05_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [47] MSG_ADU1S06_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [48] MSG_ADU1S07_RXCH0 */
@@ -13254,7 +13254,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_43 )
      }
     ,{    /* [49] MSG_ARS1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [50] MSG_ARS1S90_RXCH0 */
@@ -13274,7 +13274,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [54] MSG_BAT1EDA_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [55] MSG_BAT1EDB_RXCH0 */
@@ -13294,11 +13294,11 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [59] MSG_BAT2ED2_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [60] MSG_BCC1S06_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [61] MSG_BDB1F01_RXCH0 */
@@ -13522,27 +13522,27 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_44 )
      }
     ,{    /* [116] MSG_CSR1G10_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [117] MSG_CSR1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [118] MSG_CSR1S07_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [119] MSG_CSR1S08_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [120] MSG_DDM1S00_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [121] MSG_DDM1S09_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [122] MSG_DDM1S12_RXCH0 */
@@ -13558,7 +13558,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [125] MSG_DDM1S32_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [126] MSG_DDM1S35_RXCH0 */
@@ -13618,11 +13618,11 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [140] MSG_ECT1G92_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [141] MSG_ECT1S80_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [142] MSG_ECT1S93_RXCH0 */
@@ -13634,11 +13634,11 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [144] MSG_EHV1F02_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [145] MSG_EHV1F04_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [146] MSG_EHV1G30_RXCH0 */
@@ -13678,19 +13678,19 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [155] MSG_EHV1S99_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [156] MSG_EHV2G02_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [157] MSG_EHV2G10_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [158] MSG_EHV2G20_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [159] MSG_EHV2G70_RXCH0 */
@@ -13702,39 +13702,39 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_44 )
      }
     ,{    /* [161] MSG_ENG1C01_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [162] MSG_ENG1C02_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [163] MSG_ENG1D51_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [164] MSG_ENG1D52_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [165] MSG_ENG1D53_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [166] MSG_ENG1D55_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [167] MSG_ENG1D56_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [168] MSG_ENG1D59_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [169] MSG_ENG1D60_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [170] MSG_ENG1G03_RXCH0 */
@@ -13746,7 +13746,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [172] MSG_ENG1G17_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [173] MSG_ENG1G90_RXCH0 */
@@ -13758,15 +13758,15 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [175] MSG_ENG1S60_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [176] MSG_ENG1S99_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [177] MSG_EPS1D50_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [178] MSG_EPS1S11_RXCH0 */
@@ -13778,15 +13778,15 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [180] MSG_FCM1C01_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [181] MSG_FCM1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [182] MSG_FCM1S12_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [183] MSG_FCM1S39_RXCH0 */
@@ -13794,27 +13794,27 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_43 )
      }
     ,{    /* [184] MSG_FCM1S40_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [185] MSG_FCM1S41_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [186] MSG_FCM1S49_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [187] MSG_FCM1S51_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [188] MSG_FCM1S52_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [189] MSG_FCM1S58_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [190] MSG_FCM1S70_RXCH0 */
@@ -13822,7 +13822,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_43 )
      }
     ,{    /* [191] MSG_FCM1S76_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [192] MSG_FCM1S78_RXCH0 */
@@ -13838,15 +13838,15 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_43 )
      }
     ,{    /* [195] MSG_FCM1S92_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [196] MSG_FCM1S95_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [197] MSG_FWD1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [198] MSG_IDT1S02_RXCH0 */
@@ -13878,7 +13878,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [205] MSG_LVN1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [206] MSG_MET1S33_RXCH0 */
@@ -13886,7 +13886,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 | BSW_COM_u4IPDUGRP_PNC_43 | BSW_COM_u4IPDUGRP_PNC_44 )
      }
     ,{    /* [207] MSG_MGC1F13_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [208] MSG_PCN1S01_RXCH0 */
@@ -13902,7 +13902,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_44 )
      }
     ,{    /* [211] MSG_PDS1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [212] MSG_PLG1G15_RXCH0 */
@@ -13938,7 +13938,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_44 )
      }
     ,{    /* [220] MSG_RCP1S02_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [221] MSG_RCP1S03_RXCH0 */
@@ -13946,15 +13946,15 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_43 )
      }
     ,{    /* [222] MSG_RCP1S04_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [223] MSG_RCP1S05_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [224] MSG_RCP1S06_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [225] MSG_RSE1G20_RXCH0 */
@@ -13978,7 +13978,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [230] MSG_SBW1G02_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [231] MSG_SCN1S01_RXCH0 */
@@ -13990,7 +13990,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_44 )
      }
     ,{    /* [233] MSG_SCS1S10_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [234] MSG_SCS1S11_RXCH0 */
@@ -13998,7 +13998,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [235] MSG_SCS1S14_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [236] MSG_SOL1S02_RXCH0 */
@@ -14030,7 +14030,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_44 )
      }
     ,{    /* [243] MSG_TRA1S01_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [244] MSG_UCB1S01_RXCH0 */
@@ -14042,11 +14042,11 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [246] MSG_VGR1D50_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [247] MSG_VSC1D51_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [248] MSG_VSC1F01_RXCH0 */
@@ -14066,7 +14066,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
          ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [252] MSG_VSC1G96_RXCH0 */
-          ( BSW_COM_u4IPDUGRP_PNC_NONE )
+          ( BSW_COM_u4IPDUGRP_PNC_16 )
          ,( BSW_COM_u4IPDUGRP_PNC_NONE )
      }
     ,{    /* [253] MSG_VUM1S01_RXCH0 */

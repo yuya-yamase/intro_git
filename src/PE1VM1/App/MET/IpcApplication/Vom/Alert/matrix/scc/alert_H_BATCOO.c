@@ -130,7 +130,7 @@ static U4      u4_s_AlertH_batcooTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 
 #if defined(OXCAN_RXD_PDU_CAN_EHV1S94_CH0)
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
-                                          (U4)OXCAN_SYS_IGR,
+                                          (U4)OXCAN_SYS_IGP,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;
@@ -173,7 +173,7 @@ static U4      u4_s_AlertH_batcooBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
 #if defined(OXCAN_RXD_PDU_CAN_EHV1S94_CH0)
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
-                                          (U4)OXCAN_SYS_IGR,
+                                          (U4)OXCAN_SYS_IGP,
                                           (U2)U2_MAX) & (U1)COM_NO_RX;
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;
