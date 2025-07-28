@@ -26,6 +26,7 @@
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/STUB/config
     :sourceDir=${APP_DIR}/IVI/DrcCtrl
     :sourceDir=${APP_DIR}/IVI/CanCtrl
+    :sourceDir=${APP_DIR}/IVI/iVDTr
 
     -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
@@ -67,6 +68,7 @@
     -I${APP_DIR}/IVI/DspCtrl/config
     -I${APP_DIR}/IVI/DrcCtrl
     -I${APP_DIR}/IVI/CanCtrl
+    -I${APP_DIR}/IVI/iVDTr
 
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
@@ -154,6 +156,8 @@ datesi_com.c
 datesi.c
 PowerIcCtl.c
 PwrCtl.c
+iVDTr_Main.c
+iVDTr_SlpCtrl.c
 
 volmute.c
 volmute_cfg.c
