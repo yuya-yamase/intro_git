@@ -39,10 +39,8 @@
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV BSW provisionally */
-#define u2_DATESI_CAL_DEF                       (u2_CALIB_MCUID0574_CAL_DEF)                 /* Disp Default Year                    */
 #define u2_DATESI_CAL_YEAR_MIN                  (u2_CALIB_MCUID0575_CAL_MIN)                 /* Disp Min Year                        */
 #else
-#define u2_DATESI_CAL_DEF                       ((U2)2050U)                                  /* Disp Default Year                    */
 #define u2_DATESI_CAL_YEAR_MIN                  ((U2)2021U)                                  /* Disp Min Year                        */
 #endif
 #define DATESI_CAL_DAYCNT_MAX                   (DATESI_CAL_OFFSET_2000DAYCUNT + 36524U)     /* Date MAX Value(2099/12/31)           */
