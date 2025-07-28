@@ -19,7 +19,7 @@
 #include "date_clk_cfg_private.h"
 #include "date_clk_sca.h"
 
-// #include "nvmc_mgr.h"
+#include "ivdsh.h"
 // #include "esi_ssc.h"
 // #include "ecu_m.h"
 // #include "calibration.h"
@@ -43,6 +43,9 @@
 #define DATE_CLK_CAL_MIN_MM_DD                   (0x00001010U)
 #define DATE_CLK_CAL_DEF_MM_DD                   (0x00001010U)
 #define DATE_CLK_CAL_MIN_MINUS                   (1U)
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define u2_DATESI_CAL_DEF                       ((U2)2050U)                                  /* Disp Default Year                    */
+#define u2_DATESI_CAL_YEAR_MIN                  ((U2)2021U)                                  /* Disp Min Year                        */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -116,35 +119,29 @@ U4      u4_g_DateclkCfgHhmmss24hInit(void)
 /*===================================================================================================================================*/
 U4      u4_g_DateclkCfgDaycntInit(void)
 {
-    U2  u2_t_date_calendar;
+    U4  u4_t_date_calendar;
     U4  u4_t_daycnt;
     U4  u4_t_ret;
-    U1  u1_t_nvm_sts;
-    U4  u4_t_bon;
+    U1  u1_t_read_sts;
     U4  u4_t_daycnt_min;
 
     u4_t_ret           = u4_s_DateclkCfgCaldefValJdg();
-    u2_t_date_calendar = (U2)0U;
-    u1_t_nvm_sts       = (U1)0; //u1_g_Nvmc_ReadU2withSts((U2)NVMCID_U2_DATESI_CALENDAR, &u2_t_date_calendar);
-    u4_t_bon           = (U4)0; //u4_g_EcuMWkupReason() & (U4)ECU_M_WKUP_BY_BATT_ON;
-
+    u4_t_date_calendar = (U4)0U;
+    u1_t_read_sts      = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_018, &u4_t_date_calendar, (U2)1U);
     u4_t_daycnt_min    = u4_s_DateclkCfgGetDayCntMin();
     
-    if(u4_t_bon != (U4)0U){
-        if(u1_t_nvm_sts == (U1)0){ //(U1)NVMC_STATUS_COMP){
-            u4_t_daycnt = (U4)u2_t_date_calendar + (U4)DATE_CLK_OFFSET_2000DAYCUNT;
-            /* The type of u2_t_date_calendar is U2, so max value of u2_t_date_calendar is 65535.        */
-            /* Therefor (u2_t_date_calendar + DATE_CLK_OFFSET_2000DAYCUNT) is always lower than U4_MAX   */
-            if((u4_t_daycnt >= u4_t_daycnt_min) &&
-               (u4_t_daycnt <= (U4)DATE_CLK_DAYCNT_DISP_MAX)){
-                u4_t_ret = u4_t_daycnt;
-            }
+    if(u1_t_read_sts != (U1)IVDSH_NO_REA){
+        u4_t_daycnt = u4_t_date_calendar + (U4)DATE_CLK_OFFSET_2000DAYCUNT;
+        /* The type of u2_t_date_calendar is U2, so max value of u2_t_date_calendar is 65535.        */
+        /* Therefor (u2_t_date_calendar + DATE_CLK_OFFSET_2000DAYCUNT) is always lower than U4_MAX   */
+        if((u4_t_daycnt >= u4_t_daycnt_min) &&
+           (u4_t_daycnt <= (U4)DATE_CLK_DAYCNT_DISP_MAX)){
+            u4_t_ret = u4_t_daycnt;
         }
+        vd_g_DateclkYymmdd_Commit((U1)TRUE);
     }
-    else{
-        if(u4_t_daycnt_min > (U4)DATE_CLK_CAL_MIN_MINUS){
-            u4_t_ret = u4_t_daycnt_min - (U4)DATE_CLK_CAL_MIN_MINUS;
-        }
+    else {
+        vd_g_DateclkYymmdd_Commit((U1)FALSE);
     }
     return(u4_t_ret);
 }
@@ -265,7 +262,7 @@ static U4    u4_s_DateclkCfgCaldefValJdg(void)
     U4                 u4_t_def_yymmdd;
     U4                 u4_t_def_daycnt;
 
-    u2_t_caldef_val  = (U2)0U; //u2_CALIB_MCUID0574_CAL_DEF;
+    u2_t_caldef_val  = u2_DATESI_CAL_DEF;
     u4_t_def_yymmdd  = (U4)DATE_CLK_CAL_DEF_MM_DD;
     u4_t_def_yymmdd |= ((U4)u2_t_caldef_val << YYMMDDWK_LSB_YR);
     u4_t_def_daycnt  = u4_g_YymmddToDaycnt(u4_t_def_yymmdd);
@@ -284,7 +281,7 @@ static U4    u4_s_DateclkCfgGetDayCntMin(void)
     U4                 u4_t_min_yymmdd;
     U4                 u4_t_min_daycnt;
 
-    u2_t_calmin_val  = (U2)0U; //u2_CALIB_MCUID0575_CAL_MIN;
+    u2_t_calmin_val  = u2_DATESI_CAL_YEAR_MIN;
     u4_t_min_yymmdd  = (U4)DATE_CLK_CAL_MIN_MM_DD;
     u4_t_min_yymmdd |= ((U4)u2_t_calmin_val << YYMMDDWK_LSB_YR);
     u4_t_min_daycnt  = u4_g_YymmddToDaycnt(u4_t_min_yymmdd);
