@@ -20,7 +20,11 @@
 #include <Dcm/Dcm_Dsp_SID10.h>
 #include <Dcm/Dcm_Dsp_SID28.h>
 #include <Dcm/Dcm_Dsp_SID3E.h>
+#include <Dcm/Dcm_Apl_SID14.h>
+#include <Dcm/Dcm_Apl_SID19.h>
 #include <Dcm/Dcm_Apl_SID22.h>
+#include <Dcm/Dcm_Apl_SID2E.h>
+#include <Dcm/Dcm_Apl_SID31.h>
 
 
 /*--------------------------------------------------------------------------*/
@@ -82,35 +86,52 @@ static CONST(AB_83_ConstV Dcm_Dsd_SubServiceType, DCM_CONFIG_DATA) Dcm_Dsd_stIdx
     }
 };
 
-/* Dcm_Dsd_stService[0002] SID=0x28 */
-/* Table of subfunctions */
-static CONST(AB_83_ConstV Dcm_Dsd_SubServiceType, DCM_CONFIG_DATA) Dcm_Dsd_stIdx0002SubService[2] =
+/* Dcm_Dsd_stService[0001] SID=0x14 */
+/* Table of service SessionCheck */
+static CONST(AB_83_ConstV uint8, DCM_CONFIG_DATA) Dcm_Dsd_stIdx0001SesChk[2] =
 {
-    /* Dcm_Dsd_stService[0002] SID=0x28 SF=0x00 */
+    /* Enable Session List */
+    (uint8)0x01U,
+    (uint8)0x03U
+};
+
+/* Dcm_Dsd_stService[0004] SID=0x28 */
+/* Table of subfunctions */
+static CONST(AB_83_ConstV Dcm_Dsd_SubServiceType, DCM_CONFIG_DATA) Dcm_Dsd_stIdx0004SubService[2] =
+{
+    /* Dcm_Dsd_stService[0004] SID=0x28 SF=0x00 */
     {
         /* ptFnc            ptSecurityLevel                 ptSessionLevel                  u1Id            u1SecurityLevelNum  u1SessionLevelNum    */
         &(Dcm_SID28_Sub00), NULL_PTR,                       NULL_PTR,                       (uint8)0x00U,   (uint8)0U,          (uint8)0U
     },
-    /* Dcm_Dsd_stService[0002] SID=0x28 SF=0x03 */
+    /* Dcm_Dsd_stService[0004] SID=0x28 SF=0x03 */
     {
         /* ptFnc            ptSecurityLevel                 ptSessionLevel                  u1Id            u1SecurityLevelNum  u1SessionLevelNum    */
         &(Dcm_SID28_Sub03), NULL_PTR,                       NULL_PTR,                       (uint8)0x03U,   (uint8)0U,          (uint8)0U
     }
 };
 
-/* Dcm_Dsd_stService[0002] SID=0x28 */
+/* Dcm_Dsd_stService[0004] SID=0x28 */
 /* Table of service SessionCheck */
-static CONST(AB_83_ConstV uint8, DCM_CONFIG_DATA) Dcm_Dsd_stIdx0002SesChk[1] =
+static CONST(AB_83_ConstV uint8, DCM_CONFIG_DATA) Dcm_Dsd_stIdx0004SesChk[1] =
 {
     /* Enable Session List */
     (uint8)0x03U
 };
 
-/* Dcm_Dsd_stService[0003] SID=0x3E */
-/* Table of subfunctions */
-static CONST(AB_83_ConstV Dcm_Dsd_SubServiceType, DCM_CONFIG_DATA) Dcm_Dsd_stIdx0003SubService[1] =
+/* Dcm_Dsd_stService[0005] SID=0x2E */
+/* Table of service SessionCheck */
+static CONST(AB_83_ConstV uint8, DCM_CONFIG_DATA) Dcm_Dsd_stIdx0005SesChk[1] =
 {
-    /* Dcm_Dsd_stService[0003] SID=0x3E SF=0x00 */
+    /* Enable Session List */
+    (uint8)0x03U
+};
+
+/* Dcm_Dsd_stService[0007] SID=0x3E */
+/* Table of subfunctions */
+static CONST(AB_83_ConstV Dcm_Dsd_SubServiceType, DCM_CONFIG_DATA) Dcm_Dsd_stIdx0007SubService[1] =
+{
+    /* Dcm_Dsd_stService[0007] SID=0x3E SF=0x00 */
     {
         /* ptFnc            ptSecurityLevel                 ptSessionLevel                  u1Id            u1SecurityLevelNum  u1SessionLevelNum    */
         &(Dcm_SID3E_Sub00), NULL_PTR,                       NULL_PTR,                       (uint8)0x00U,   (uint8)0U,          (uint8)0U
@@ -125,87 +146,139 @@ CONST(AB_83_ConstV Dcm_Dsd_ServiceType, DCM_CONFIG_DATA) Dcm_Dsd_stService[DCM_D
         /* ptFnc        ptSecurityLevelRef          ptSessionLevelRef           ptSubService                    u1Id            bSubfuncAvail       u1SecurityLevelNum  u1SessionLevelNum   u1SubServiceNum        */
         NULL_PTR,       NULL_PTR,                   NULL_PTR,                   Dcm_Dsd_stIdx0000SubService,    (uint8)0x10U,   (boolean)TRUE,      (uint8)0U,          (uint8)0U,          (uint8)2U
     },
-    /* Idx=0001 SID=0x22 */
+    /* Idx=0001 SID=0x14 */
+    {
+        /* ptFnc        ptSecurityLevelRef          ptSessionLevelRef           ptSubService                    u1Id            bSubfuncAvail       u1SecurityLevelNum  u1SessionLevelNum   u1SubServiceNum        */
+        &(u1_g_oXDoCANApl_SID14),NULL_PTR,                   Dcm_Dsd_stIdx0001SesChk,    NULL_PTR,                       (uint8)0x14U,   (boolean)FALSE,     (uint8)0U,          (uint8)2U,          (uint8)0U
+    },
+    /* Idx=0002 SID=0x19 */
+    {
+        /* ptFnc        ptSecurityLevelRef          ptSessionLevelRef           ptSubService                    u1Id            bSubfuncAvail       u1SecurityLevelNum  u1SessionLevelNum   u1SubServiceNum        */
+        &(u1_g_oXDoCANApl_SID19),NULL_PTR,                   NULL_PTR,                   NULL_PTR,                       (uint8)0x19U,   (boolean)FALSE,     (uint8)0U,          (uint8)0U,          (uint8)0U
+    },
+    /* Idx=0003 SID=0x22 */
     {
         /* ptFnc        ptSecurityLevelRef          ptSessionLevelRef           ptSubService                    u1Id            bSubfuncAvail       u1SecurityLevelNum  u1SessionLevelNum   u1SubServiceNum        */
         &(u1_g_oXDoCANApl_SID22),NULL_PTR,                   NULL_PTR,                   NULL_PTR,                       (uint8)0x22U,   (boolean)FALSE,     (uint8)0U,          (uint8)0U,          (uint8)0U
     },
-    /* Idx=0002 SID=0x28 */
+    /* Idx=0004 SID=0x28 */
     {
         /* ptFnc        ptSecurityLevelRef          ptSessionLevelRef           ptSubService                    u1Id            bSubfuncAvail       u1SecurityLevelNum  u1SessionLevelNum   u1SubServiceNum        */
-        NULL_PTR,       NULL_PTR,                   Dcm_Dsd_stIdx0002SesChk,    Dcm_Dsd_stIdx0002SubService,    (uint8)0x28U,   (boolean)TRUE,      (uint8)0U,          (uint8)1U,          (uint8)2U
+        NULL_PTR,       NULL_PTR,                   Dcm_Dsd_stIdx0004SesChk,    Dcm_Dsd_stIdx0004SubService,    (uint8)0x28U,   (boolean)TRUE,      (uint8)0U,          (uint8)1U,          (uint8)2U
     },
-    /* Idx=0003 SID=0x3E */
+    /* Idx=0005 SID=0x2E */
     {
         /* ptFnc        ptSecurityLevelRef          ptSessionLevelRef           ptSubService                    u1Id            bSubfuncAvail       u1SecurityLevelNum  u1SessionLevelNum   u1SubServiceNum        */
-        NULL_PTR,       NULL_PTR,                   NULL_PTR,                   Dcm_Dsd_stIdx0003SubService,    (uint8)0x3EU,   (boolean)TRUE,      (uint8)0U,          (uint8)0U,          (uint8)1U
+        &(u1_g_oXDoCANApl_SID2E),NULL_PTR,                   Dcm_Dsd_stIdx0005SesChk,    NULL_PTR,                       (uint8)0x2EU,   (boolean)FALSE,     (uint8)0U,          (uint8)1U,          (uint8)0U
+    },
+    /* Idx=0006 SID=0x31 */
+    {
+        /* ptFnc        ptSecurityLevelRef          ptSessionLevelRef           ptSubService                    u1Id            bSubfuncAvail       u1SecurityLevelNum  u1SessionLevelNum   u1SubServiceNum        */
+        &(u1_g_oXDoCANApl_SID31),NULL_PTR,                   NULL_PTR,                   NULL_PTR,                       (uint8)0x31U,   (boolean)FALSE,     (uint8)0U,          (uint8)0U,          (uint8)0U
+    },
+    /* Idx=0007 SID=0x3E */
+    {
+        /* ptFnc        ptSecurityLevelRef          ptSessionLevelRef           ptSubService                    u1Id            bSubfuncAvail       u1SecurityLevelNum  u1SessionLevelNum   u1SubServiceNum        */
+        NULL_PTR,       NULL_PTR,                   NULL_PTR,                   Dcm_Dsd_stIdx0007SubService,    (uint8)0x3EU,   (boolean)TRUE,      (uint8)0U,          (uint8)0U,          (uint8)1U
     }
 };
 
 /* Table of Dcm_Dsd_stService Index */
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0004_ServiceIndex[4] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0004_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
     (uint8)0x0001U,
     (uint8)0x0002U,
-    (uint8)0x0003U
+    (uint8)0x0003U,
+    (uint8)0x0004U,
+    (uint8)0x0005U,
+    (uint8)0x0006U,
+    (uint8)0x0007U
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0005_ServiceIndex[4] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0005_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
     (uint8)0x0001U,
     (uint8)0x0002U,
-    (uint8)0x0003U
+    (uint8)0x0003U,
+    (uint8)0x0004U,
+    (uint8)0x0005U,
+    (uint8)0x0006U,
+    (uint8)0x0007U
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0006_ServiceIndex[4] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0006_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
     (uint8)0x0001U,
     (uint8)0x0002U,
-    (uint8)0x0003U
+    (uint8)0x0003U,
+    (uint8)0x0004U,
+    (uint8)0x0005U,
+    (uint8)0x0006U,
+    (uint8)0x0007U
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0007_ServiceIndex[4] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0007_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
     (uint8)0x0001U,
     (uint8)0x0002U,
-    (uint8)0x0003U
+    (uint8)0x0003U,
+    (uint8)0x0004U,
+    (uint8)0x0005U,
+    (uint8)0x0006U,
+    (uint8)0x0007U
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0008_ServiceIndex[4] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0008_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
     (uint8)0x0001U,
     (uint8)0x0002U,
-    (uint8)0x0003U
+    (uint8)0x0003U,
+    (uint8)0x0004U,
+    (uint8)0x0005U,
+    (uint8)0x0006U,
+    (uint8)0x0007U
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0009_ServiceIndex[4] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId0009_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
     (uint8)0x0001U,
     (uint8)0x0002U,
-    (uint8)0x0003U
+    (uint8)0x0003U,
+    (uint8)0x0004U,
+    (uint8)0x0005U,
+    (uint8)0x0006U,
+    (uint8)0x0007U
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId000A_ServiceIndex[4] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId000A_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
     (uint8)0x0001U,
     (uint8)0x0002U,
-    (uint8)0x0003U
+    (uint8)0x0003U,
+    (uint8)0x0004U,
+    (uint8)0x0005U,
+    (uint8)0x0006U,
+    (uint8)0x0007U
 };
-static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId000B_ServiceIndex[4] = 
+static CONST(AB_83_ConstV uint16, DCM_CONFIG_DATA) Dcm_Dsd_PduId000B_ServiceIndex[8] = 
 {
     /* Index of Dcm_Dsd_stService */
     (uint8)0x0000U,
     (uint8)0x0001U,
     (uint8)0x0002U,
-    (uint8)0x0003U
+    (uint8)0x0003U,
+    (uint8)0x0004U,
+    (uint8)0x0005U,
+    (uint8)0x0006U,
+    (uint8)0x0007U
 };
 
 CONST(AB_83_ConstV Dcm_DsdType, DCM_CONFIG_DATA) Dcm_Dsd_stConfigSet =
@@ -215,14 +288,14 @@ CONST(AB_83_ConstV Dcm_DsdType, DCM_CONFIG_DATA) Dcm_Dsd_stConfigSet =
     /* stServiceTable */
     {
         /* u2Id             u1ServiceNum,         ptServiceIdx  */
-        {  (uint16)0x0004U, (uint8)4U,            Dcm_Dsd_PduId0004_ServiceIndex },
-        {  (uint16)0x0005U, (uint8)4U,            Dcm_Dsd_PduId0005_ServiceIndex },
-        {  (uint16)0x0006U, (uint8)4U,            Dcm_Dsd_PduId0006_ServiceIndex },
-        {  (uint16)0x0007U, (uint8)4U,            Dcm_Dsd_PduId0007_ServiceIndex },
-        {  (uint16)0x0008U, (uint8)4U,            Dcm_Dsd_PduId0008_ServiceIndex },
-        {  (uint16)0x0009U, (uint8)4U,            Dcm_Dsd_PduId0009_ServiceIndex },
-        {  (uint16)0x000AU, (uint8)4U,            Dcm_Dsd_PduId000A_ServiceIndex },
-        {  (uint16)0x000BU, (uint8)4U,            Dcm_Dsd_PduId000B_ServiceIndex }
+        {  (uint16)0x0004U, (uint8)8U,            Dcm_Dsd_PduId0004_ServiceIndex },
+        {  (uint16)0x0005U, (uint8)8U,            Dcm_Dsd_PduId0005_ServiceIndex },
+        {  (uint16)0x0006U, (uint8)8U,            Dcm_Dsd_PduId0006_ServiceIndex },
+        {  (uint16)0x0007U, (uint8)8U,            Dcm_Dsd_PduId0007_ServiceIndex },
+        {  (uint16)0x0008U, (uint8)8U,            Dcm_Dsd_PduId0008_ServiceIndex },
+        {  (uint16)0x0009U, (uint8)8U,            Dcm_Dsd_PduId0009_ServiceIndex },
+        {  (uint16)0x000AU, (uint8)8U,            Dcm_Dsd_PduId000A_ServiceIndex },
+        {  (uint16)0x000BU, (uint8)8U,            Dcm_Dsd_PduId000B_ServiceIndex }
     }
 };
 
@@ -250,7 +323,7 @@ CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_Dsd_bNoSuppressNegResIMLOIFTo
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
