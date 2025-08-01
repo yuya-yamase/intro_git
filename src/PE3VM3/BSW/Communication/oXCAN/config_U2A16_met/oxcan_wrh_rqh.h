@@ -62,12 +62,12 @@
 #define OXCAN_WRH_WRQBIT_VOM                     (0x80000000U)    /* Reserved, DO NOT Delete */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_WRH_NUM_RQH                        (4U)
+#define OXCAN_WRH_NUM_RQH                        (1U)
 
 #define OXCAN_WRH_HCH_0                          (0U)
-#define OXCAN_WRH_HCH_1                          (1U)
-#define OXCAN_WRH_HCH_2                          (2U)
-#define OXCAN_WRH_HCH_3                          (3U)
+/* #define OXCAN_WRH_HCH_1                          (1U) */
+/* #define OXCAN_WRH_HCH_2                          (2U) */
+/* #define OXCAN_WRH_HCH_3                          (3U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

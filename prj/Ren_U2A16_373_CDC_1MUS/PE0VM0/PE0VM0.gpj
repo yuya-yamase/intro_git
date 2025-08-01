@@ -8,7 +8,6 @@ primaryTarget=v800_standalone.tgt
     :macro=ROOT_DIR=${%expand_path(${PRJ_DIR}/../../../src/PE0VM0)}
     :macro=OBJ_DIR=obj
     :macro=OUT_DIR=dst
-    :macro=HSM_DUMMY=HSM_DUMMY_NOT_USE
 
     :macro=EHVM_IF_DIR=${ROOT_DIR}/BSW/ehvm_if
     :macro=OS_DIR=${ROOT_DIR}/BSW/Aubist/Os/source
