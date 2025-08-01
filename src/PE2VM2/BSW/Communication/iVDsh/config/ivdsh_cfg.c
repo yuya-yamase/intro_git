@@ -45,12 +45,12 @@
 #define IVDSH_FQ_CH_WRI                          (3U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (13U)
+#define IVDSH_WA_NWORD_WRI                       (14U)
 #define IVDSH_WA_NWORD_REA_0                     (6U)
 #define IVDSH_WA_NWORD_REA_1                     (14U)
-#define IVDSH_WA_NWORD_REA_2                     (4U)
+#define IVDSH_WA_NWORD_REA_2                     (5U)
 
-#define IVDSH_WA_NWORD                           (61U)
+#define IVDSH_WA_NWORD                           (64U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -97,6 +97,7 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_027         */
     {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_042         */
     {(U2)12U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_046         */
+    {(U2)13U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_GPS_REQ           */
     /*------------------------------------------------------------------*/
     /* Read from VM#0                                                   */
     /*------------------------------------------------------------------*/
@@ -127,7 +128,8 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_005         */
     {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_007         */
     {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_043         */
-    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2}      /* IVDSH_DID_REA_CPREQ_045         */
+    {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_045         */
+    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2}      /* IVDSH_DID_REA_GPS_STS           */
 };
 const U2                    u2_g_IVDSH_NUM_DID = (U2)IVDSH_NUM_DID;
 

@@ -58,6 +58,15 @@
 #define     MCU_GVIF_RESTRT_STS_2ND   (1U)     /* GVIFリンク用状態 2回目以降 */
 #define     MCU_GVIF_RESTRT_STS_CMP   (2U)     /* GVIFリンク用状態 完了 */
 
+/* GPSモジュール状態 */
+#define     PWRCTRL_GPSSTS_OFF        (0U)
+#define     PWRCTRL_GPSSTS_ON         (1U)
+#define     PWRCTRL_GPSSTS_FAIL       (2U)
+
+/* GPS動作要求 */
+#define     PWRCTRL_GPSREQ_RESTART    (0U)
+#define     PWRCTRL_GPSREQ_STOP       (1U)
+#define     PWRCTRL_GPSREQ_NON        (2U)
 /*--------------------------------------------------------------------------*/
 /*  Function Prototypes                                                     */
 /*--------------------------------------------------------------------------*/
