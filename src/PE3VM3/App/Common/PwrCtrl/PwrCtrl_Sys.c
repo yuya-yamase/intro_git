@@ -1303,7 +1303,7 @@ void    Mcu_Dev_Pwron_GNSS( void ){
         case MCU_STEP_GNSS_PRECHK:
             u4_t_pwrCtrl_sys_gnss_sts = (U4)PWRCTRL_GPSSTS_OFF;
             vd_g_iVDshWribyDid((U2)IVDSH_DID_WRI_GPS_STS, &u4_t_pwrCtrl_sys_gnss_sts, (U2)GNSS_CFG_VM_1WORD);
-            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);    /* t3はmin0msのため、wait処理をせずに次処理を実施 */
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);    /* t3はmin0msのため、wait処理をせずに次処理を実施 */
             if(mcu_dio_ret == (uint8)STD_HIGH){
                 /* 初期化前チェックの内容不明のためskip */
                 //if(初期化前チェック=OK){
@@ -1336,7 +1336,7 @@ void    Mcu_Dev_Pwron_GNSS( void ){
             }
             break;
         case MCU_STEP_GNSS_POLING:
-            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);
             if(mcu_dio_ret == (U1)STD_LOW){
                 Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_WAIT;
             }
@@ -1361,13 +1361,13 @@ void    Mcu_Dev_Pwron_GNSS( void ){
             }
             break;
         case MCU_STEP_GNSS_FIN:
-            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);
             if(mcu_dio_ret == (U1)STD_LOW){
                 Mcu_OnStep_GNSS = (uint8)MCU_STEP_GNSS_WAIT;
             }
             break;
         case MCU_STEP_GNSS_WAIT:
-            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
+            mcu_dio_ret =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);
             if(mcu_dio_ret == (U1)STD_HIGH){
                 Mcu_GNSS_LinkTimer  = (uint32)0U;
                 Mcu_frt_stamp[GPT_FRT_USELPSD_BASE] = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
