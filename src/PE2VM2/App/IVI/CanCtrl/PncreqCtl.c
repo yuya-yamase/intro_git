@@ -218,23 +218,22 @@ static void     vd_s_PncReqctl_PartialNMReqJdg(const U1* u1_ap_PNCREQDATA)
 /*===================================================================================================================================*/
 static void     vd_s_PncReqctl_PartialNMSetReq(const U1* u1_ap_PNCREQDATA)
 {
-    static const U1    u1_sp_PNCREQCTL_WRH_HCH[PNCREQCTL_PNCID_REQNUM]= {
-        (U1)OXCAN_WRH_HCH_0, /* PNC_16 */
-        (U1)OXCAN_WRH_HCH_1, /* PNC_40 */
-        (U1)OXCAN_WRH_HCH_2, /* PNC_43 */
-        (U1)OXCAN_WRH_HCH_3  /* PNC_44 */
+    static const U4    u4_sp_PNCREQCTL_WRH_HCH[PNCREQCTL_PNCID_REQNUM]= {
+        (U4)OXCAN_SYS_PNC_16, /* PNC_16 */
+        (U4)OXCAN_SYS_PNC_40, /* PNC_40 */
+        (U4)OXCAN_SYS_PNC_43, /* PNC_43 */
+        (U4)OXCAN_SYS_PNC_44  /* PNC_44 */
     };
     
     U1 u1_t_cnt;
+    U4 u4_t_req;
     
     for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)PNCREQCTL_PNCID_REQNUM; u1_t_cnt++){
         if(u1_ap_PNCREQDATA[u1_t_cnt] == (U1)PNCREQCTL_REQ_ON){
-            vd_g_oXCANWrhReqHch(u1_sp_PNCREQCTL_WRH_HCH[u1_t_cnt], (U1)OXCAN_WRH_REQ_WK);
-        }
-        else{
-            vd_g_oXCANWrhReqHch(u1_sp_PNCREQCTL_WRH_HCH[u1_t_cnt], (U1)OXCAN_WRH_REQ_SL);
+            u4_t_req |= u4_sp_PNCREQCTL_WRH_HCH[u1_t_cnt];
         }
     }
+    vd_g_oXCANWrhReqHch((U1)OXCAN_WRH_HCH_0, u4_t_req);
 }
 
 /*===================================================================================================================================*/

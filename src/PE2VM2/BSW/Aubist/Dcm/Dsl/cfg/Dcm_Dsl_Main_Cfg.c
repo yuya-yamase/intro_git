@@ -408,7 +408,7 @@ CONST(AB_83_ConstV Dcm_Dsl_DiagRespType, DCM_CONFIG_DATA) Dcm_Dsl_stDiagResp[1] 
     {
         (boolean)TRUE,     /* bP4Server */
         (boolean)FALSE,    /* bDiagRespOnSecondDeclinedRequest */
-        (uint8)0x24U        /* u1RespMaxNumRespPend */
+        (uint8)0x08U        /* u1RespMaxNumRespPend */
     }
 };
 
@@ -416,7 +416,7 @@ CONST(AB_83_ConstV Dcm_Dsl_DiagRespType, DCM_CONFIG_DATA) Dcm_Dsl_stDiagResp[1] 
 CONST (AB_83_ConstV Dcm_Dsl_GeneralType, DCM_CONFIG_DATA) Dcm_Dsl_stGeneral[1] =
 {
     {
-        (uint32)181000UL    /* u4FailSafeTimeout */
+        (uint32)41000UL    /* u4FailSafeTimeout */
     }
 };
 
@@ -630,7 +630,7 @@ FUNC(Std_ReturnType, DCM_CODE) SchM_Call_Dcm_IocM_SetFullComMode
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 

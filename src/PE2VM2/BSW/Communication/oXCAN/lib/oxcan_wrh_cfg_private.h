@@ -47,9 +47,9 @@
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct{
+    volatile U4      u4_req;
     U2               u2_elpsd;
-    U1               u1_ctrl;
-    volatile U1      u1_req;
+    U2               u2_ctrl;
 }ST_OXCAN_WRH_HCH;                         /* HCH = Handler Channel                                     */
 
 typedef struct{
@@ -74,6 +74,9 @@ void    vd_g_oXCANWrhCfgReqbyNet(const U4 u4_a_REQ_BY_NET);             /* u4_a_
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern const U4                    u4_g_OXCAN_WRH_LOG_REQ_EX;           /* vd_g_oXCANWrhReqHch was executed                          */ 
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 extern const U4                    u4_g_OXCAN_WRH_TOR_BY_VOM;           /* TimeOut count Restart Condition                           */
                                                                         /* OXCAN_SYS_XXX of OXCAN_SYS_VOM defined in oxcan_sys_def.h */

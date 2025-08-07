@@ -19,7 +19,11 @@
 #include <Dcm/Dcm_Dsl_Ctrl.h>
 #include <Dcm/Dcm_Dsp_SID10.h>
 #include <Dcm/Dcm_Dsp_SID28.h>
+#include <Dcm/Dcm_Apl_SID14.h>
+#include <Dcm/Dcm_Apl_SID19.h>
 #include <Dcm/Dcm_Apl_SID22.h>
+#include <Dcm/Dcm_Apl_SID2E.h>
+#include <Dcm/Dcm_Apl_SID31.h>
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -210,7 +214,7 @@ CONST( AB_83_ConstV uint8, DCM_CONFIG_DATA ) Dcm_M_EvtDistr_u1EventIdExNum = DCM
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
