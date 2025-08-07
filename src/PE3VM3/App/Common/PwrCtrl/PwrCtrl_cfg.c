@@ -80,6 +80,10 @@ const U2 Mcu_Dio_PortId[MCU_PORT_NUM] = {
     DIO_ID_PORT8_CH8,
     DIO_ID_PORT17_CH0,
     DIO_ID_PORT8_CH9,
+/* WAKEUP-STATêßå‰ Portê›íË */
+    DIO_ID_PORT17_CH5,
+    DIO_ID_PORT17_CH3,
+    DIO_ID_PORT17_CH1
 };
 
 /*--------------------------------------------------------------------------*/

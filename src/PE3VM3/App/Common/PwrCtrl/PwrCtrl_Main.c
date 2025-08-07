@@ -165,6 +165,9 @@ void vd_g_PwrCtrlMainBonReq( void )
     u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源：実行中 */
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
 
+    /* VM間通信処理初期化 */
+    vd_g_PwrCtrlComBonInit();
+
     return;
 }
 
@@ -243,6 +246,9 @@ void vd_g_PwrCtrlMainWakeupReq( void )
     u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源：実行中 */
     u4_s_PwrCtrl_Main_Aoss      = (U4)PWRCTRL_MAIN_TIME_INIT;
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
+
+    /* VM間通信処理初期化 */
+    vd_g_PwrCtrlComWkupInit();
 
     return;
 }
@@ -376,6 +382,9 @@ static void vd_s_PwrCtrlMainForcedOffReq( const U1 u1_s_evtype )
 *****************************************************************************/
 void vd_g_PwrCtrlMainTask( void )
 {
+    /* VM間通信受信定期処理 */
+    vd_g_PwrCtrlComRxTask();
+    
     /* 端子モニタ定期処理 */
     vd_g_PwrCtrlPinMonitorMainFunc();
     
@@ -414,6 +423,9 @@ void vd_g_PwrCtrlMainTask( void )
 
     /* EtherSW制御要求処理 */
     vd_g_PwrCtrlSipEthReqJudge();
+
+    /* VM間通信送信定期処理 */
+    vd_g_PwrCtrlComTxTask();
 
     return;
 }
@@ -567,7 +579,9 @@ static void vd_s_PwrCtrlMainBonSeq( void )
             {
                 /* 強制OFFシーケンス(SoC異常)要求 */
                 u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_SOCERR;
-                /* 【todo】異常内容の保存 */
+                /* 【todo】異常内容の保存[ID0008] */
+                /* SoC異常検知を通知 */
+                vd_g_PwrCtrlSipSoCOnError();
             }
         
             else {
@@ -649,7 +663,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                 vd_g_PwrCtrlSipRsmReq();                                                                  /* SIP電源ON要求(WakeUp) */
             }
             else{
-               /* 【todo】異常内容保存 */
+               /* 【todo】異常内容保存[ID0009]※STRがON時のみ記録 */
                /* +B-ONシーケンスのSIP通常起動から開始 */
                vd_s_PwrCtrlMainBonDDconvOnReq();
                
@@ -697,6 +711,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                 /* 強制OFFシーケンス(PMIC異常)要求 */
                 u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_PMICERR;
                 /* 【todo】異常内容の保存 */
+                /* SoC異常検知を通知 */
+                vd_g_PwrCtrlSipSoCOnError();
             }
         
             else {
@@ -710,6 +726,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
     }
     
     /* 【todo】4.0版参照 SAIL-ERR[2:1] == 01かどうかのチェック 4.0版参照 */
+    /* 【todo】異常内容の保存[ID0011] */
     
 
 /* MM_STBY_N =Hi?(SOCメインドメインのQNX起動完了の確認) */
@@ -735,7 +752,9 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
             {
                 /* 強制OFFシーケンス(SoC異常)要求 */
                 u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_SOCERR;
-                /* 【todo】異常内容の保存 */
+                /* 【todo】異常内容の保存[ID0012] */
+                /* SoC異常検知を通知 */
+                vd_g_PwrCtrlSipSoCOnError();
             }
         
             else {
