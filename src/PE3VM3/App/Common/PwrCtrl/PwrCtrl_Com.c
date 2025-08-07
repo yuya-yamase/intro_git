@@ -115,7 +115,7 @@ void vd_g_PwrCtrlComWkupInit( void )
     u1_t_soctime_ret = u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_PWCTR_SOC_ON_TIME, &u4_t_soctime_buf);
     if((u1_t_soctime_ret & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK)
     {
-        u4_s_PwrCtrl_Com_Tx_SoCOnTime = (U4)u4_t_soctime_buf;
+        u4_s_PwrCtrl_Com_Tx_SoCOnTime = u4_t_soctime_buf;
     }
     else
     {
