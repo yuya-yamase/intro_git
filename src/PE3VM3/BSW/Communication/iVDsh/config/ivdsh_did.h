@@ -24,7 +24,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_WRI                        (4U)
+#define IVDSH_NUM_DID_WRI                        (5U)
 
 /*-------------------------------------------------------------------------------*/
 /* CPREQ_XXX = "https://wiki.geniie.net/x/Wcq5pQ" numbering list (sample config) */
@@ -33,19 +33,21 @@
 #define IVDSH_DID_WRI_CPREQ_007                  (1U)
 #define IVDSH_DID_WRI_CPREQ_043                  (2U)
 #define IVDSH_DID_WRI_CPREQ_045                  (3U)
+#define IVDSH_DID_WRI_GPS_STS                    (4U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (7U)
+#define IVDSH_NUM_DID_REA                        (8U)
 
 /* Read from VM#1 */
-#define IVDSH_DID_REA_CPREQ_002                  (4U)
-#define IVDSH_DID_REA_CPREQ_023                  (5U)
-#define IVDSH_DID_REA_CPREQ_044                  (6U)
+#define IVDSH_DID_REA_CPREQ_002                  (5U)
+#define IVDSH_DID_REA_CPREQ_023                  (6U)
+#define IVDSH_DID_REA_CPREQ_044                  (7U)
 /* Read from VM#2 */
-#define IVDSH_DID_REA_CPREQ_003                  (7U)
-#define IVDSH_DID_REA_CPREQ_024                  (8U)
-#define IVDSH_DID_REA_CPREQ_042                  (9U)
-#define IVDSH_DID_REA_CPREQ_046                  (10U)
+#define IVDSH_DID_REA_CPREQ_003                  (8U)
+#define IVDSH_DID_REA_CPREQ_024                  (9U)
+#define IVDSH_DID_REA_CPREQ_042                  (10U)
+#define IVDSH_DID_REA_CPREQ_046                  (11U)
+#define IVDSH_DID_REA_GPS_REQ                    (12U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)

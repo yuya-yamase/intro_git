@@ -26,6 +26,7 @@
 #include "Dio_Symbols.h"
 
 #include "EthSwt_SWIC.h"
+#include "ivdsh.h"
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
