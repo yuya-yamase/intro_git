@@ -44,11 +44,11 @@
 #define IVDSH_FQ_CH_WRI                          (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (5U)
+#define IVDSH_WA_NWORD_WRI                       (7U)
 #define IVDSH_WA_NWORD_REA_0                     (14U)
-#define IVDSH_WA_NWORD_REA_1                     (14U)
+#define IVDSH_WA_NWORD_REA_1                     (15U)
 
-#define IVDSH_WA_NWORD                           (61U)
+#define IVDSH_WA_NWORD                           (65U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -92,7 +92,9 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_007         */
     {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_043         */
     {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_045         */
-    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_GPS_STS           */
+    {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_048         */
+    {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_049         */
+    {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_GPS_STS           */
     /*------------------------------------------------------------------*/
     /* Read from VM#1                                                   */
     /*------------------------------------------------------------------*/
@@ -106,7 +108,8 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_024         */
     {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_042         */
     {(U2)12U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_046         */
-    {(U2)13U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1}      /* IVDSH_DID_REA_GPS_REQ           */
+    {(U2)13U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1},     /* IVDSH_DID_REA_CPREQ_047         */
+    {(U2)14U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_1}      /* IVDSH_DID_REA_GPS_REQ           */
 };
 const U2                    u2_g_IVDSH_NUM_DID = (U2)IVDSH_NUM_DID;
 
