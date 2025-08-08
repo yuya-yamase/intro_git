@@ -26,7 +26,8 @@
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
 void            ChipCom_Init( void );
-void            ChipCom_Main( void );
+void            ChipCom_MainRx( void );
+void            ChipCom_MainTx( void );
 
 Std_ReturnType ChipCom_Transmit(const uint8 data_id, const uint16 transreq_len, const uint8* const transreq_data);
 Std_ReturnType ChipCom_SetPeriodicTxData(const uint8 periodic_id, const uint16 trans_len, const uint8* const trans_data);

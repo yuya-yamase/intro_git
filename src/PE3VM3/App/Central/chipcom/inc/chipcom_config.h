@@ -216,8 +216,8 @@ extern uint8 ChipCom_Initval_Vsm_SleepNg            [];
 #define CHIPCOM_POS_RX_EVENTDATA_OFFSET         ((uint16)252U)
 #endif
 
-#define CHIPCOM_DISABLE_INTERRUPT()     DisableAllInterrupts()
-#define CHIPCOM_ENABLE_INTERRUPT()      EnableAllInterrupts()
+#define CHIPCOM_DISABLE_INTERRUPT()     LIB_DI()
+#define CHIPCOM_ENABLE_INTERRUPT()      LIB_EI()
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */

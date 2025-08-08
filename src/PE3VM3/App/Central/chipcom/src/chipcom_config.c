@@ -1,13 +1,13 @@
 #include "chipcom.h"
 #include "chipcom_config.h"
 /* #include "EthSwt_SWIC_Reg.h" */
-/* #include "CanIfProxy.h" */
+#include "CanIfProxy.h"
 
 #ifdef CHIPCOM_MCU_SETTING  /* MCU ChipCom */ /* See chipcom_config.h */
 NotifcataionTable NotificationFunction[CHIPCOM_DATAID_MAX] = {
     /* {DataId,                                   FunctionPtr} */
     {CHIPCOM_DATAID_DUMMY                      ,  ChipCom_Nop                       },   /* Index 0 not support */
-    {CHIPCOM_DATAID_CANIFPROXY_TRANSMIT        ,  ChipCom_Nop                       },   /* MCU receive     CanIfProxy_Transmit*/
+    {CHIPCOM_DATAID_CANIFPROXY_TRANSMIT        ,  CanIfProxy_Transmit               },   /* MCU receive     CanIfProxy_Transmit*/
     {CHIPCOM_DATAID_CANIFPROXY_CANCELTRANSMIT  ,  ChipCom_Nop                       },   /* MCU receive     CanIfProxy_CancelTransmit*/
     {CHIPCOM_DATAID_CANTP_TPTXCONF             ,  ChipCom_Nop                       },   /* MCU not receive CanTp_TpTxConfiramtion */
     {CHIPCOM_DATAID_CANTP_RXIND                ,  ChipCom_Nop                       },   /* MCU not receive CanTp_RxIndication */
@@ -21,7 +21,7 @@ NotifcataionTable NotificationFunction[CHIPCOM_DATAID_MAX] = {
     {CHIPCOM_DATAID_CANIFPROXY_TRANSMIT        ,  ChipCom_Nop                       },   /* SAIL not receive CanIfProxy_Transmit*/
     {CHIPCOM_DATAID_CANIFPROXY_CANCELTRANSMIT  ,  ChipCom_Nop                       },   /* SAIL not receive CanIfProxy_CancelTransmit*/
     {CHIPCOM_DATAID_CANTP_TPTXCONF             ,  ChipCom_Nop                       },   /* SAIL receive     CanIfStub_TxConfiramtion */
-    {CHIPCOM_DATAID_CANTP_RXIND                ,  ChipCom_Nop                       },   /* SAIL receive     CanIfStub_RxIndication */
+    {CHIPCOM_DATAID_CANTP_RXIND                ,  CanIfStub_RxIndication            },   /* SAIL receive     CanIfStub_RxIndication */
     {CHIPCOM_DATAID_ETHERSWT_RIDCLEAR          ,  ChipCom_Nop                       },   /* SAIL not receive EthSwt_SWIC_Reg_RidClear */
     {CHIPCOM_DATAID_VIS_TIME                   ,  ChipCom_Nop                       },   /* SAIL not receive Vis_TimeStsReq */
 };
