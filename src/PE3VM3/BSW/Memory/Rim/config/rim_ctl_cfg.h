@@ -27,53 +27,41 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* RimId */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
-#define RIMID_U1_SAMPLE_BBB_1                    (0x0000U)
+#define RIMID_U1_PWCTR_SOC_WU_STAT1              (0x0000U)
+#define RIMID_U1_PWCTR_SOC_WU_STAT2              (0x0001U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
-#define RIMID_U2_SAMPLE_BBB_2                    (0x4000U)
+#define RIMID_U2_PWCTR_SOC_ON_COUNT              (0x4000U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
-#define RIMID_U4_SAMPLE_BBB_4                    (0x8000U)
+#define RIMID_U4_PWCTR_SOC_ON_TIME               (0x8000U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
-#define RIMID_OTR_SAMPLE_BBB_OTH                 (0xC000U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
 
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B2C_U1## */
-#define RIMID_U1_SAMPLE_BCC_1                    (0x0200U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B2C_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B2C_U2## */
-#define RIMID_U2_SAMPLE_BCC_2                    (0x4200U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B2C_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B2C_U4## */
-#define RIMID_U4_SAMPLE_BCC_4                    (0x8200U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B2C_U4## */
 
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
-#define RIMID_U1_SAMPLE_B_1                      (0x0400U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U2## */
-#define RIMID_U2_SAMPLE_B_2                      (0x4400U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_U4## */
-#define RIMID_U4_SAMPLE_B_4                      (0x8400U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_1B_OTR## */
-#define RIMID_OTR_SAMPLE_B_OTH                   (0xC400U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_1B_OTR## */
 
 /* START : ##TOOL_OUT#RIM_ID_MOD_3C_U1## */
-#define RIMID_U1_SAMPLE_CCC_1                    (0x0600U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3C_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3C_U2## */
-#define RIMID_U2_SAMPLE_CCC_2                    (0x4600U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3C_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3C_U4## */
-#define RIMID_U4_SAMPLE_CCC_4                    (0x8600U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3C_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3C_OTR## */
-#define RIMID_OTR_SAMPLE_CCC_OTH                 (0xC600U)
-#define RIMID_OTR_SAMPLE_CCC_OTH_2               (0xC601U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3C_OTR## */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
