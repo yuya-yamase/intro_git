@@ -69,7 +69,7 @@ void vd_g_VISPwrInit(void)
 {
     
     u1_s_vis_pwr_batvolt = VIS_PWR_BAT_FAIL;
-    u1_s_vis_pwr_batvolt_polltimcnt = VIS_PWR_BMONITOR_WAITTIME;
+    u1_s_vis_pwr_batvolt_polltimcnt = VIS_PWR_BMONI_POLLINGINIT;
     u1_s_vispwr_basicstate = VIS_BASICSTATE_PARKING;
     u1_s_vispwr_specialstate = VIS_SPECIALSTATE_NOTSET;
     u1_s_vispwr_transflg = (U1)STD_OFF;
@@ -111,6 +111,10 @@ static void vd_s_VISPwrGetBatVolt(void)
     U1 u1_t_bat2ret;
     U2 u2_t_len = sizeof(u1_s_vis_pwr_batvolt);
     
+    if(u1_s_vis_pwr_batvolt_polltimcnt > (U1)0U){
+        u1_s_vis_pwr_batvolt_polltimcnt --;
+    }
+    
     /* 100ms経過した場合 */
     if(u1_s_vis_pwr_batvolt_polltimcnt <= (U1)0U){
         /* +B-MONITOR1電圧値取得 */
@@ -144,10 +148,7 @@ static void vd_s_VISPwrGetBatVolt(void)
         /* +B電圧(LSB：0.1V)のアナログ値に変換 */
         u1_s_vis_pwr_batvolt = u1_s_VISPwrBatVoltADCnv(u2_t_digitalbatvolt);
         /* ポーリングタイマを初期化 */
-        u1_s_vis_pwr_batvolt_polltimcnt = VIS_PWR_BMONITOR_WAITTIME;
-    }
-    else{
-        u1_s_vis_pwr_batvolt_polltimcnt --;
+        u1_s_vis_pwr_batvolt_polltimcnt = VIS_PWR_BMONI_POLLINGCNT;
     }
     
     /* チップ間通信定期送信要求 */
