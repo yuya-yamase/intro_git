@@ -71,6 +71,10 @@ U1 u1_g_PwrCtrlSipFOffInfo( void );
 U1 u1_g_PwrCtrlSipFOffGetSts( void );
 /* EtherSW制御要求処理 */
 void vd_g_PwrCtrlSipEthReqJudge( void );
+/* SoC起動完了通知関数 */
+void vd_g_PwrCtrlSipSoCOnComp( void );
+/* SoC異常検知通知関数 */
+void vd_g_PwrCtrlSipSoCOnError( void );
 
 #endif /* PWRCTRL_SIP_H */
 
