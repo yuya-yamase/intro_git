@@ -15,6 +15,7 @@
     :sourceDir=${APP_DIR}/Central/LIB
     :sourceDir=${APP_DIR}/Central/Pmic/src
     :sourceDir=${APP_DIR}/Central/chipcom/src
+    :sourceDir=${APP_DIR}/Central/CanIfProxy/src
     :sourceDir=${APP_DIR}/Central/VIS/src
     :sourceDir=${APP_DIR}/Central/VSM/src
 
@@ -47,6 +48,7 @@
     -I${APP_DIR}/Central/esw/EthSW_Task
     -I${APP_DIR}/Central/inc
     -I${APP_DIR}/Central/chipcom/inc
+    -I${APP_DIR}/Central/CanIfProxy/inc
     -I${APP_DIR}/Central/VIS/inc
     -I${APP_DIR}/Central/VSM/inc
 
@@ -94,6 +96,7 @@ Pmic_Pwr.c
 EthSW_Task.c
 chipcom.c
 chipcom_config.c
+CanIfProxy.c
 VIS_Can.c
 VIS_Main.c
 VIS_Pwr.c
