@@ -27,6 +27,7 @@
     :sourceDir=${APP_DIR}/IVI/DrcCtrl
     :sourceDir=${APP_DIR}/IVI/CanCtrl
     :sourceDir=${APP_DIR}/IVI/iVDTr
+    :sourceDir=${APP_DIR}/IVI/DiagApp
 
     -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
@@ -69,6 +70,7 @@
     -I${APP_DIR}/IVI/DrcCtrl
     -I${APP_DIR}/IVI/CanCtrl
     -I${APP_DIR}/IVI/iVDTr
+    -I${APP_DIR}/IVI/DiagApp
 
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
@@ -94,6 +96,14 @@ ExtSigCtrl.c
 xspi.c
 xspi_sub.c
 x_spi_ivi.c
+x_spi_ivi_sub0.c
+x_spi_ivi_sub0_SID10.c
+x_spi_ivi_sub0_SID14.c
+x_spi_ivi_sub0_SID19.c
+x_spi_ivi_sub0_SID22.c
+x_spi_ivi_sub0_SID28.c
+x_spi_ivi_sub0_SID2E.c
+x_spi_ivi_sub0_SID31.c
 x_spi_ivi_sub4.c
 x_spi_ivi_sub2.c
 x_spi_ivi_sub1.c
@@ -169,3 +179,11 @@ RobCtl.c
 IVI_CanCtrl_Main.c
 PncreqCtl.c
 CanCtlTx.c
+DiagApp.c
+DiagApp_SID10.c
+DiagApp_SID14.c
+DiagApp_SID19.c
+DiagApp_SID22.c
+DiagApp_SID28.c
+DiagApp_SID2E.c
+DiagApp_SID31.c

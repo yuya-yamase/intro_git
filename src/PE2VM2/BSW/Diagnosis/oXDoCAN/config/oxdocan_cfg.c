@@ -19,6 +19,13 @@
 #include "oxdocan_cfg_private.h"
 #include "Dcm_Dsp_SID28_Cfg.h"
 
+#include "DiagApp_SID14.h"
+#include "DiagApp_SID19.h"
+#include "DiagApp_SID22.h"
+#include "DiagApp_SID28.h"
+#include "DiagApp_SID2E.h"
+#include "DiagApp_SID31.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -43,7 +50,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES);
+static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES, const U1 u1_a_SES_BEF);
+static void    vd_s_oXDoCANRequest(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
 static void    vd_s_oXDoCANTest(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -87,16 +95,16 @@ void    vd_g_oXDoCANCfgWkupInit(void)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANCfgMainbySid(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans, const U2 u2_a_TSLOT)
 {
-    vd_s_oXDoCANMainSid28(st_ap_REQ->u1_ses_aft);
-    vd_s_oXDoCANTest(st_ap_REQ, st_ap_ans);
+    vd_s_oXDoCANMainSid28(st_ap_REQ->u1_ses_aft, st_ap_REQ->u1_ses_bfr);
+    vd_s_oXDoCANRequest(st_ap_REQ, st_ap_ans);
 }
 /*===================================================================================================================================*/
-/*  static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES)                                                                          */
+/*  static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES, const U1 u1_a_SES_BEF)                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES)
+static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES, const U1 u1_a_SES_BEF)
 {
     U4                     u4_t_lpcnt;
     U1                     u1_t_ch;
@@ -105,9 +113,48 @@ static void    vd_s_oXDoCANMainSid28(const U1 u1_a_SES)
         for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)DCM_P_COMCTRL_ALLCH_N; u4_t_lpcnt++){
             u1_t_ch = Dcm_P_SID28_stComCtrl_Tbl.ptAllCh[u4_t_lpcnt].u1ComMChannel;
             (void)BswM_CS_ResumeTxPdu(u1_t_ch);
+            if(u1_a_SES != u1_a_SES_BEF) {
+                vd_g_DiagAppSID28Request((U1)DCM_ENABLE_RX_TX_NORM);
+            }
         }
     }
 }
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_oXDoCANRequest(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans)                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_oXDoCANRequest(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans)
+{
+    /* sid */
+    switch (st_ap_REQ->u1_sid) {
+    case OXDC_SID_14:
+        vd_g_DiagAppSID14Request(st_ap_REQ, st_ap_ans);
+        break;
+
+    case OXDC_SID_19:
+        vd_g_DiagAppSID19Request(st_ap_REQ, st_ap_ans);
+        break;
+
+    case OXDC_SID_22:
+        vd_g_DiagAppSID22Request(st_ap_REQ, st_ap_ans);
+        break;
+
+    case OXDC_SID_2E:
+        vd_g_DiagAppSID2ERequest(st_ap_REQ, st_ap_ans);
+        break;
+
+    case OXDC_SID_31:
+        vd_g_DiagAppSID31Request(st_ap_REQ, st_ap_ans);
+        break;
+
+    default:
+        break;
+    }
+}
+
 /*===================================================================================================================================*/
 /*  static void    vd_s_oXDoCANTest(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans)                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */

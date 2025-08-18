@@ -22,6 +22,8 @@
     -I${CAN_DIR}/Dem/usr
 
     -I${CAN_DIR}/CS/inc
+    
+    -I${APP_DIR}/IVI/DiagApp
 
     -I${OXCAN_DIR}/config_U2A16_met
     -I${OXCAN_DIR}/lib

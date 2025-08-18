@@ -2,68 +2,74 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
-/*  Transmission and reception processing of XSPI communication data in IVI.                                                         */
+/*  Transmission and reception processing of subframe 0 in XSPI communication.                                                       */
+/*  Handled data: DiagCAN Data                                                                                                       */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_C_MAJOR                        (0)
-#define XSPI_IVI_C_MINOR                        (0)
-#define XSPI_IVI_C_PATCH                        (0)
+#define XSPI_IVI_SUB0_SID22_C_MAJOR                   (0)
+#define XSPI_IVI_SUB0_SID22_C_MINOR                   (0)
+#define XSPI_IVI_SUB0_SID22_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include    "x_spi_ivi_private.h"
 #include    "x_spi_ivi_sub0_private.h"
-#include    "x_spi_ivi_sub1_private.h"
-#include    "x_spi_ivi_sub2_private.h"
-#include    "x_spi_ivi_sub4_private.h"
+#include    "x_spi_ivi_sub0_SID22.h"
+#include    "DiagApp.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((XSPI_IVI_C_MAJOR != XSPI_IVI_H_MAJOR) || \
-     (XSPI_IVI_C_MINOR != XSPI_IVI_H_MINOR) || \
-     (XSPI_IVI_C_PATCH != XSPI_IVI_H_PATCH))
-#error "x_spi_ivi.c and x_spi_ivi.h : source and header files are inconsistent!"
-#endif
-
-#if ((XSPI_IVI_C_MAJOR != XSPI_IVI_PRIVATE_H_MAJOR) || \
-     (XSPI_IVI_C_MINOR != XSPI_IVI_PRIVATE_H_MINOR) || \
-     (XSPI_IVI_C_PATCH != XSPI_IVI_PRIVATE_H_PATCH))
-#error "x_spi_ivi.c and x_spi_ivi_private.h : source and header files are inconsistent!"
+#if ((XSPI_IVI_SUB0_SID22_C_MAJOR != XSPI_IVI_SUB0_SID22_H_MAJOR) || \
+     (XSPI_IVI_SUB0_SID22_C_MINOR != XSPI_IVI_SUB0_SID22_H_MINOR) || \
+     (XSPI_IVI_SUB0_SID22_C_PATCH != XSPI_IVI_SUB0_SID22_H_PATCH))
+#error "x_spi_ivi_sub0_SID22.c and x_spi_ivi_sub0_SID22.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define XSPI_IVI_SID22_OPC_2201         (0x2201U)
+#define XSPI_IVI_SID22_OPC_2202         (0x2202U)
+#define XSPI_IVI_SID22_OPC_2203         (0x2203U)
+#define XSPI_IVI_SID22_OPC_2204         (0x2204U)
+#define XSPI_IVI_SID22_OPC_2205         (0x2205U)
+#define XSPI_IVI_SID22_OPC_2206         (0x2206U)
+
+#define XSPI_IVI_DIAG_OPC_2201_SIZE     (4U)
+#define XSPI_IVI_DIAG_OPC_2203_SIZE     (4U)
+#define XSPI_IVI_DIAG_OPC_2205_SIZE     (4U)
+
+#define XSPI_IVI_DIAG_SID22_NODATA_SIZE (5U)
+
+#define XSPI_IVI_DIAG_SID22_NRC_UNKNOWN (0xFFU)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define     XSPI_TRANS_RSLT_OK       (0U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1              u1_g_XspiIviRcv[XSPI_FRM_MAX];          /* XSPIデータ受信用バッファ */
-
-U1              u1_g_XspiIviSnd_flg;                    /* 次回送信データ作成可否 */
-U1              u1_g_XspiIviSnd[XSPI_FRM_MAX];          /* XSPI 次回送信データバッファ */
-
-U4              u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_NUM];                 /* 送信周期用 */
+static ST_DIAG_DID st_sp_XspiIviSub0DiagSid22Did[DIAGAPP_SID22_DID_MAXNUM];
+static U1   u1_s_XspiIviSub0DidNum;
+static U1   u1_s_XspiIviSub0DidBuf;
+static U1   u1_sp_XspiIviSub0DidResultChk[DIAGAPP_SID22_DID_MAXNUM];
+static U1   u1_s_XspiIviSub0DidResultOKNum;
+static U1   u1_s_XspiIviSub0Sid22ReqID;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void     vd_s_XspiIviRoutine(void);
-static void     vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add);
-static void     vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add);
-static void     vd_s_XspiIviTaskCnt(void);
-static void     vd_s_XSpiIviComvertU1(U1* u1_ap_data,U4* u4_ap_data_tra);
-static void     vd_s_XSpiIviComvertU4(U1* u1_ap_data,U4* u4_ap_data_rec);
+static void     vd_s_XspiIviSub0Request_OPC2201(void);
+static void     vd_s_XspiIviSub0Request_OPC2205(void);
+
+static void     vd_s_XspiIviSub0Response_OPC2202(const U1 * u1_ap_DATA, const U2 u2_a_LEN);
+static void     vd_s_XspiIviSub0Response_OPC2206(const U1 * u1_ap_DATA);
+static void     vd_s_XspiIviSub0SID22Response(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -71,230 +77,202 @@ static void     vd_s_XSpiIviComvertU4(U1* u1_ap_data,U4* u4_ap_data_rec);
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviInit(void)                                                                                           */
+/*  void            vd_g_XspiIviSub0SID22Init(void)                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    初期化処理                                                                                                        */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviInit(void)
+void            vd_g_XspiIviSub0SID22Init(void)
 {
-    /* 送受信バッファ,フラグ初期化 */
-    vd_g_MemfillU1(&u1_g_XspiIviRcv[0], (U1)0x00, (U4)XSPI_FRM_MAX);
+    U4  u4_t_lpcnt;
 
-    u1_g_XspiIviSnd_flg = (U1)TRUE;
-    vd_g_MemfillU1(&u1_g_XspiIviSnd[0], (U1)0x00, (U4)XSPI_FRM_MAX);
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)DIAGAPP_SID22_DID_MAXNUM; u4_t_lpcnt++) {
+        st_sp_XspiIviSub0DiagSid22Did[u4_t_lpcnt].u2_DID = (U1)0U;
+        st_sp_XspiIviSub0DiagSid22Did[u4_t_lpcnt].u2_DataLength = (U2)0U;
+        vd_g_MemfillU1(&st_sp_XspiIviSub0DiagSid22Did[u4_t_lpcnt].u1_Data[0], (U1)0U, (U4)DIAGAPP_DID_MAXSIZE);
 
-    /* 初期化処理 */
-    vd_g_XspiIviQueueInit();
-    vd_g_XspiIviSub4Init();
-    vd_g_XspiIviSub2Init();
-    vd_g_XspiIviSub1Init();
-    vd_g_XspiIviSub0Init();
-    vd_g_MemfillU4(&u4_s_xspi_ivi_task_cnt[0], (U4)0U, (U4)XSPI_TASK_CNT_NUM);
+        u1_sp_XspiIviSub0DidResultChk[u4_t_lpcnt] = (U1)XSPI_IVI_DIAG_SID22_NRC_UNKNOWN;
+    }
+    u1_s_XspiIviSub0DidNum = (U1)0U;
+    u1_s_XspiIviSub0DidBuf = (U1)0U;
+    u1_s_XspiIviSub0Sid22ReqID = (U1)0U;
+    u1_s_XspiIviSub0DidResultOKNum = (U1)0U;
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviMain1st(void)                                                                                        */
+/*  U1          u1_g_XspiIviSub0Request_Sid22(const U1 u1_a_REQID, const U1 u1_a_NUM                                                 */
+/*                                          , const U2 * u2_ap_DID, U1 * u1_ap_NegativeResponseCode)                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信受信処理                                                                                                  */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
+/*  Description:    SID22 Request                                                                                                    */
+/*  Arguments:                                                                                                                       */
+/*  Return:         u1_t_ret : positive or negative response                                                                         */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviMain1st(void)
+U1          u1_g_XspiIviSub0Request_Sid22(const U1 u1_a_REQID, const U1 u1_a_NUM, const U2 * u2_ap_DID, U1 * u1_ap_NegativeResponseCode)
 {
-    U1          u1_t_buf_rslt;
-    U1          u1_t_trans_rslt;
-    U4          u4_tp_rec_data[XSPI_FRM_MAX_WORD];
+    U1  u1_t_ret;
+    U1  u1_t_power_sts;
+    U1  u1_t_oscom_chk;
+    U4  u4_t_lpcnt;
 
-    u1_t_buf_rslt   = (U1)XSPI_NG;
+    u1_t_ret = (U1)E_OK;
+    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    vd_g_MemfillU4(&u4_tp_rec_data[0], (U4)0U, (U4)XSPI_FRM_MAX_WORD);
-
-    /* データ取得処理 */
-    u1_t_buf_rslt = xspi_Read((U1)XSPI_CH_01, &u4_tp_rec_data[0], (U4)XSPI_FRM_MAX_WORD);
-
-    if (u1_t_buf_rslt == (U1)XSPI_OK) {
-        vd_s_XSpiIviComvertU4(&u1_g_XspiIviRcv[0],&u4_tp_rec_data[0]);
-        u1_t_trans_rslt  = u1_g_XspiIviRcv[5552];
-        u1_t_trans_rslt |= u1_g_XspiIviRcv[5553];
-        u1_t_trans_rslt |= u1_g_XspiIviRcv[5554];
-        u1_t_trans_rslt |= u1_g_XspiIviRcv[5555];
-        if(u1_t_trans_rslt == (U1)XSPI_TRANS_RSLT_OK) {
-            vd_s_XspiIviAnaRcv(&u1_g_XspiIviRcv[0]);
+    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        u1_t_ret = (U1)E_NOT_OK;
+    } else if(u1_t_oscom_chk == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        u1_t_ret = (U1)E_NOT_OK;
+    } else {
+        u1_s_XspiIviSub0Sid22ReqID = u1_a_REQID;
+        u1_s_XspiIviSub0DidNum = u1_a_NUM;
+        for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_a_NUM; u4_t_lpcnt++) {
+            st_sp_XspiIviSub0DiagSid22Did[u4_t_lpcnt].u2_DID = u2_ap_DID[u4_t_lpcnt];
         }
+        vd_s_XspiIviSub0Request_OPC2205();
     }
-    else {
-        /* 受信データの取得失敗 */
-        /* do nothing */
-    }
+
+    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviMain2nd(void)                                                                                        */
+/*  static void     vd_s_XspiIviSub0Request_OPC2201(void)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信送信処理                                                                                                  */
+/*  Description:    SID22 OPC2201 Request                                                                                            */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviMain2nd(void)
+static void     vd_s_XspiIviSub0Request_OPC2201(void)
 {
-    U1          u1_t_drvr_cond;
-    U1          u1_t_buf_rslt;
-    U4          u4_tp_tra_data[XSPI_FRM_MAX_WORD];
+    U1  u1_tp_data[XSPI_IVI_DIAG_OPC_2201_SIZE];
+    U2  u2_t_datalength;
 
-    u1_t_buf_rslt   = (U1)XSPI_NG;
+    u2_t_datalength = (U2)XSPI_IVI_DIAG_OPC_2201_SIZE;
+    u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID22_OPC_2201 >> XSPI_IVI_SFT_08) & 0x00FFU);
+    u1_tp_data[1] = ((U1)XSPI_IVI_SID22_OPC_2201 & 0x00FFU);
+    u1_tp_data[2] = (U1)((st_sp_XspiIviSub0DiagSid22Did[u1_s_XspiIviSub0DidBuf].u2_DID >> XSPI_IVI_SFT_08) & 0x00FFU);
+    u1_tp_data[3] = (U1)(st_sp_XspiIviSub0DiagSid22Did[u1_s_XspiIviSub0DidBuf].u2_DID & 0x00FFU);
 
-    vd_g_MemfillU4(&u4_tp_tra_data[0], (U4)0U, (U4)XSPI_FRM_MAX_WORD);
-
-    /* 定期監視処理 */
-    vd_s_XspiIviRoutine();
-    
-    /* 次回送信データ作成処理 */
-    if(u1_g_XspiIviSnd_flg == (U1)TRUE) {
-        vd_s_XspiIviMakeSend(&u1_g_XspiIviSnd[0]);
-        u1_g_XspiIviSnd_flg = (U1)FALSE;
-    }
-
-    /* XSPI通信ドライバ状態取得処理 */
-    u1_t_drvr_cond = xspi_GetCondition((U1)XSPI_CH_01);
-
-    if ((u1_t_drvr_cond == (U1)XSPI_DCOND_IDLE) || (u1_t_drvr_cond == (U1)XSPI_DCOND_TRANSMIT)) {
-        /* 送信バッファアドレス取得処理 */
-        vd_s_XSpiIviComvertU1(&u1_g_XspiIviSnd[0], &u4_tp_tra_data[0]);
-        u1_t_buf_rslt = xspi_Write((U1)XSPI_CH_01, &u4_tp_tra_data[0], (U4)XSPI_FRM_MAX_WORD);
-    }
-    else {
-        /* ドライバ状態が初期化前(XSPI_DCOND_INIT) or 通信無効(XSPI_DCOND_INVALID)なのでデータ送信スキップ */
-        /* do nothing */
-    }
-
-    if (u1_t_buf_rslt == (U1)XSPI_OK) {
-        /* 送信データ受け渡し完了 次回タスクで送信データの再作成 */
-        u1_g_XspiIviSnd_flg = (U1)TRUE;
-    }
-    else {
-        /* 送信データ受け渡し失敗 次回タスクで同じデータを再送するためフラグ更新はしない */
-    }
-    vd_s_XspiIviTaskCnt();
+    vd_g_XspiIviSub0Request(u2_t_datalength,u1_s_XspiIviSub0Sid22ReqID,u1_tp_data,(U1)XSPI_IVI_SID22);
 }
 
 /*===================================================================================================================================*/
-/*  static void     vd_s_XspiIviRoutine(void)                                                                                        */
+/*  static void     vd_s_XspiIviSub0Request_OPC2205(void)                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信送信 定期監視                                                                                             */
+/*  Description:    SID22 OPC2205 Request                                                                                            */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void     vd_s_XspiIviRoutine(void)
+static void     vd_s_XspiIviSub0Request_OPC2205(void)
 {
-    vd_g_XspiIviCANBusGet2M();
-    vd_g_XspiIviCANBusGet5M();
-    vd_g_XspiIviCANBusEventJdg();
+    U1  u1_tp_data[XSPI_IVI_DIAG_OPC_2205_SIZE];
+    U2  u2_t_datalength;
+
+    u2_t_datalength = (U2)XSPI_IVI_DIAG_OPC_2205_SIZE;
+    u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID22_OPC_2205 >> XSPI_IVI_SFT_08) & 0x00FFU);
+    u1_tp_data[1] = ((U1)XSPI_IVI_SID22_OPC_2205 & 0x00FFU);
+    u1_tp_data[2] = (U1)((st_sp_XspiIviSub0DiagSid22Did[u1_s_XspiIviSub0DidBuf].u2_DID >> XSPI_IVI_SFT_08) & 0x00FFU);
+    u1_tp_data[3] = (U1)(st_sp_XspiIviSub0DiagSid22Did[u1_s_XspiIviSub0DidBuf].u2_DID & 0x00FFU);
+
+    vd_g_XspiIviSub0Request(u2_t_datalength,u1_s_XspiIviSub0Sid22ReqID,u1_tp_data,(U1)XSPI_IVI_SID22);
 }
 
 /*===================================================================================================================================*/
-/*  static void            vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add)                                                                   */
+/*  void         vd_g_XspiIviSub0Response_SID22(const U1 * u1_ap_DATA, const U2 u2_a_LEN)                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信受信データのサブフレーム分割/解析処理                                                                       */
-/*  Arguments:      u1_ap_xspi_add : XSPIバッファへのポインタ                                                                          */
+/*  Description:    SubFlame0(DiagCAN Data) Transmission data                                                                        */
+/*  Arguments:      u1_ap_DATA : SubFlame0 Data                                                                                      */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void            vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add)
+void         vd_g_XspiIviSub0Response_SID22(const U1 * u1_ap_DATA, const U2 u2_a_LEN)
 {
-    /* サブフレーム0(DiagCAN)データ解析処理 */
-    vd_g_XspiIviSub0Ana(&u1_ap_xspi_add[8]);
+    U2  u2_t_opc;
 
-    /* サブフレーム1(Misc通信)データ解析処理 */
-    vd_g_XspiIviSub1Ana(&u1_ap_xspi_add[272]);
+    u2_t_opc = (U2)((u1_ap_DATA[0] << XSPI_IVI_SFT_08) | u1_ap_DATA[1]);
 
-    /* サブフレーム2(Gyro)データ解析処理 */
-    vd_g_XspiIviSub2Ana(&u1_ap_xspi_add[536]);
-
-    /* サブフレーム4(CAN Data/Repro/LCAN Data)データ解析処理 */
-    vd_g_XspiIviSub4Ana(&u1_ap_xspi_add[2040]);
+    switch(u2_t_opc) {
+        case XSPI_IVI_SID22_OPC_2202:
+            vd_s_XspiIviSub0Response_OPC2202(&u1_ap_DATA[0], u2_a_LEN);
+            break;
+        case XSPI_IVI_SID22_OPC_2206:
+            vd_s_XspiIviSub0Response_OPC2206(&u1_ap_DATA[0]);
+            break;
+        default:
+            break;
+    }
 }
 
 /*===================================================================================================================================*/
-/*  static void            vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add)                                                                 */
+/*  static void     vd_s_XspiIviSub0Response_OPC2202(const U1 * u1_ap_DATA, const U2 u2_a_LEN)                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    XSPI通信送信データの作成処理                                                                                       */
-/*  Arguments:      u1_ap_xspi_add : XSPIバッファへのポインタ                                                                          */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void            vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add)
-{
-    static const U1     u1_sp_XSPI_FRAME_HEADER[XSPI_IVI_HEADER] = {(U1)0x00U, (U1)0x22U, (U1)0x43U, (U1)0xC4U, (U1)0xFFU, (U1)0x00U, (U1)0x00U, (U1)0x00U};
-
-    /* FrameHeaderの付与 */
-    vd_g_MemcpyU1(&u1_ap_xspi_add[0], &u1_sp_XSPI_FRAME_HEADER[0], (U4)XSPI_IVI_HEADER);
-
-    /* サブフレーム0(DiagCAN)用送信データ作成処理 */
-    vd_g_XspiIviSub0Send(&u1_ap_xspi_add[8]);
-
-    /* サブフレーム1(Misc通信)用送信データ作成処理 */
-    vd_g_XspiIviSub1Send(&u1_ap_xspi_add[272]);
-
-    /* サブフレーム2(Gyro)用送信データ作成処理 */
-    vd_g_XspiIviSub2Send(&u1_ap_xspi_add[536]);
-
-    /* サブフレーム4(CAN Data/Repro/LCAN Data)用送信データ作成処理 */
-    vd_g_XspiIviSub4Send(&u1_ap_xspi_add[2040]);
-}
-
-/*===================================================================================================================================*/
-/*  static void            vd_s_XspiIviTaskCnt(void)                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    定期送信処理のタスクカウント                                                                                        */
+/*  Description:    SID22 OPC2204 Response                                                                                           */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void           vd_s_XspiIviTaskCnt(void){
-    U4    u4_t_lpcnt;
+static void     vd_s_XspiIviSub0Response_OPC2202(const U1 * u1_ap_DATA, const U2 u2_a_LEN)
+{
+    U2  u2_t_dtlen;
 
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_TASK_CNT_NUM; u4_t_lpcnt++) {
-        if(u4_s_xspi_ivi_task_cnt[u4_t_lpcnt] < (U4)U4_MAX) {
-            u4_s_xspi_ivi_task_cnt[u4_t_lpcnt]++;
+    u1_sp_XspiIviSub0DidResultChk[u1_s_XspiIviSub0DidBuf] = u1_ap_DATA[2];
+    u2_t_dtlen = u2_a_LEN - (U2)XSPI_IVI_DIAG_SID22_NODATA_SIZE;
+
+    if(u1_sp_XspiIviSub0DidResultChk[u1_s_XspiIviSub0DidBuf] == (U1)E_OK) {
+        st_sp_XspiIviSub0DiagSid22Did[u1_s_XspiIviSub0DidBuf].u2_DataLength = u2_t_dtlen;
+        if(u2_t_dtlen <= (U2)DIAGAPP_DID_MAXSIZE) {
+            vd_g_MemcpyU1(&st_sp_XspiIviSub0DiagSid22Did[u1_s_XspiIviSub0DidBuf].u1_Data[0], &u1_ap_DATA[5], (U4)u2_t_dtlen);
+        }
+        u1_s_XspiIviSub0DidResultOKNum++;
+    }
+
+    if(u1_s_XspiIviSub0DidBuf < (U1)DIAGAPP_SID22_DID_MAXNUM) {
+        u1_s_XspiIviSub0DidBuf++;
+    }
+
+    if(u1_s_XspiIviSub0DidBuf == u1_s_XspiIviSub0DidNum) {
+        vd_s_XspiIviSub0SID22Response();
+    } else {
+        vd_s_XspiIviSub0Request_OPC2205();
+    }
+}
+
+/*===================================================================================================================================*/
+/*  static void     vd_s_XspiIviSub0Response_OPC2206(const U1 * u1_ap_DATA)                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SID22 OPC2206 Response                                                                                           */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_XspiIviSub0Response_OPC2206(const U1 * u1_ap_DATA)
+{
+    u1_sp_XspiIviSub0DidResultChk[u1_s_XspiIviSub0DidBuf] = u1_ap_DATA[2];
+
+    if(u1_sp_XspiIviSub0DidResultChk[u1_s_XspiIviSub0DidBuf] == (U1)E_OK) {
+        vd_s_XspiIviSub0Request_OPC2201();
+    } else {
+        if(u1_s_XspiIviSub0DidBuf < (U1)DIAGAPP_SID22_DID_MAXNUM) {
+            u1_s_XspiIviSub0DidBuf++;
+        }
+        if(u1_s_XspiIviSub0DidBuf == u1_s_XspiIviSub0DidNum) {
+            vd_s_XspiIviSub0SID22Response();
         } else {
-            u4_s_xspi_ivi_task_cnt[u4_t_lpcnt] = (U4)0U;
+            vd_s_XspiIviSub0Request_OPC2205();
         }
     }
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiIviComvertU1(U1* u1_ap_data,U4* u4_ap_data_tra)                                                          */
+/*  static void     vd_s_XspiIviSub0SID22Response(void)                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SID22 OPC2206 Response                                                                                           */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_XSpiIviComvertU1(U1* u1_ap_data,U4* u4_ap_data_tra)
+static void     vd_s_XspiIviSub0SID22Response(void)
 {
-    U4 u4_t_lpcnt;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_FRM_MAX_WORD; u4_t_lpcnt++){
-        u4_ap_data_tra[u4_t_lpcnt]  = (((U4)u1_ap_data[(u4_t_lpcnt * 4)    ]       ) & (U4)0x000000FFU);
-        u4_ap_data_tra[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 1] <<  8U) & (U4)0x0000FF00U);
-        u4_ap_data_tra[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 2] << 16U) & (U4)0x00FF0000U);
-        u4_ap_data_tra[u4_t_lpcnt] |= (((U4)u1_ap_data[(u4_t_lpcnt * 4) + 3] << 24U) & (U4)0xFF000000U);
-    }
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiIviComvertU4(U1* u1_ap_data,U4* u4_ap_data_rec)                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_XSpiIviComvertU4(U1* u1_ap_data,U4* u4_ap_data_rec)
-{
-    U4 u4_t_lpcnt;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_FRM_MAX_WORD; u4_t_lpcnt++){
-        u1_ap_data[u4_t_lpcnt * 4]     = (U1)(u4_ap_data_rec[u4_t_lpcnt]  & (U4)0x000000FFU);
-        u1_ap_data[(u4_t_lpcnt * 4)+1] = (U1)((u4_ap_data_rec[u4_t_lpcnt] & (U4)0x0000FF00U) >> 8U);
-        u1_ap_data[(u4_t_lpcnt * 4)+2] = (U1)((u4_ap_data_rec[u4_t_lpcnt] & (U4)0x00FF0000U) >> 16U);
-        u1_ap_data[(u4_t_lpcnt * 4)+3] = (U1)((u4_ap_data_rec[u4_t_lpcnt] & (U4)0xFF000000U) >> 24U);
-    }
+    vd_g_DiagAppResponse_Sid22(u1_s_XspiIviSub0DidNum,&st_sp_XspiIviSub0DiagSid22Did[0],&u1_sp_XspiIviSub0DidResultChk[0]);
+    vd_g_XspiIviSub0SID22Init();
 }
 
 /*===================================================================================================================================*/
@@ -305,12 +283,12 @@ static void    vd_s_XSpiIviComvertU4(U1* u1_ap_data,U4* u4_ap_data_rec)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  0.0.0    11/11/2024  TN       New.                                                                                               */
+/*  0.0.0    07/31/2025  KT       New.                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
-/*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
+/*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
