@@ -228,6 +228,7 @@ static void     vd_s_PncReqctl_PartialNMSetReq(const U1* u1_ap_PNCREQDATA)
     U1 u1_t_cnt;
     U4 u4_t_req;
     
+    u4_t_req = (U4)0U;
     for(u1_t_cnt = (U1)0U; u1_t_cnt < (U1)PNCREQCTL_PNCID_REQNUM; u1_t_cnt++){
         if(u1_ap_PNCREQDATA[u1_t_cnt] == (U1)PNCREQCTL_REQ_ON){
             u4_t_req |= u4_sp_PNCREQCTL_WRH_HCH[u1_t_cnt];
