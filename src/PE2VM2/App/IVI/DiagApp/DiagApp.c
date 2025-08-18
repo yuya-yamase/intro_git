@@ -2,161 +2,138 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
-/*  Transmission and reception processing of subframe 4 in XSPI communication.                                                       */
-/*  Handled data: CAN Data/Repro/LCAN Data                                                                                           */
+/*  IVI DiagApp Function                                                                                                             */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_SUB1_CONTROL_C_MAJOR                   (0)
-#define XSPI_IVI_SUB1_CONTROL_C_MINOR                   (0)
-#define XSPI_IVI_SUB1_CONTROL_C_PATCH                   (0)
+#define DIAGAPP_C_MAJOR             (0)
+#define DIAGAPP_C_MINOR             (0)
+#define DIAGAPP_C_PATCH             (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include    "x_spi_ivi_sub1_private.h"
-#include    "x_spi_ivi_sub1_control.h"
-#include    "x_spi_ivi_sub1_power.h"
-#include    "x_spi_ivi_sub1_system.h"
-#include    "x_spi_ivi_sub4_private.h"
-#include    "x_spi_ivi_sub0_private.h"
+#include       "DiagApp_private.h"
+#include       "DiagApp_SID10.h"
+#include       "DiagApp_SID14.h"
+#include       "DiagApp_SID19.h"
+#include       "DiagApp_SID22.h"
+#include       "DiagApp_SID2E.h"
+#include       "DiagApp_SID31.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((XSPI_IVI_SUB1_CONTROL_C_MAJOR != XSPI_IVI_SUB1_CONTROL_H_MAJOR) || \
-     (XSPI_IVI_SUB1_CONTROL_C_MINOR != XSPI_IVI_SUB1_CONTROL_H_MINOR) || \
-     (XSPI_IVI_SUB1_CONTROL_C_PATCH != XSPI_IVI_SUB1_CONTROL_H_PATCH))
-#error "x_spi_ivi_sub1_control.c and x_spi_ivi_sub1.h : source and header files are inconsistent!"
-#endif
-#if ((XSPI_IVI_SUB1_CONTROL_C_MAJOR != XSPI_IVI_SUB1_PRIVATE_H_MAJOR) || \
-     (XSPI_IVI_SUB1_CONTROL_C_MINOR != XSPI_IVI_SUB1_PRIVATE_H_MINOR) || \
-     (XSPI_IVI_SUB1_CONTROL_C_PATCH != XSPI_IVI_SUB1_PRIVATE_H_PATCH))
-#error "x_spi_ivi_sub1_control.c and x_spi_ivi_sub1_private.h : source and header files are inconsistent!"
+#if ((DIAGAPP_C_MAJOR != DIAGAPP_H_MAJOR) || \
+     (DIAGAPP_C_MINOR != DIAGAPP_H_MINOR) || \
+     (DIAGAPP_C_PATCH != DIAGAPP_H_PATCH))
+#error "DiagApp.c and DiagApp.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define    XSPI_IVI_CONTRL_ID     (0x01U)
-#define    XSPI_IVI_OS_WAKE       (0x11U)
-#define    XSPI_IVI_OS_WAKE_SEND  (0x12U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size);
-void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1ControlInit(void)                                                                                */
+/*  void            vd_g_DiagAppInit(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    初期化処理                                                                                                        */
+/*  Description:    Initial Function                                                                                                 */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1ControlInit(void)
+void            vd_g_DiagAppInit(void)
 {
-
+    vd_g_DiagAppSID10Init();
+    vd_g_DiagAppSID14Init();
+    vd_g_DiagAppSID19Init();
+    vd_g_DiagAppSID22Init();
+    vd_g_DiagAppSID2EInit();
+    vd_g_DiagAppSID31Init();
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1ControlMainTask(void)                                                                            */
+/*  void            vd_g_DiagAppMaintask(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    初期化処理                                                                                                        */
+/*  Description:    MainTask                                                                                                         */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1ControlMainTask(void)
+void            vd_g_DiagAppMaintask(void)
 {
-    /*定期送信などのデータ作成をここで行う*/
 }
 
 /*===================================================================================================================================*/
-/*  void            vd_g_XspiIviSub1ControlAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)                                   */
+/*  void            vd_g_DiagAppAnsTx(const ST_OXDC_ANS * st_ap_TX)                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
-/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
-/*                  u2_a_data_size : Data Size                                                                                       */
+/*  Description:    positive response                                                                                                */
+/*  Arguments:      u4_a_LEN : response deta length                                                                                  */
+/*                  u1_ap_TX : response data                                                                                         */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void            vd_g_XspiIviSub1ControlAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)
+void           vd_g_DiagAppAnsTx(const ST_OXDC_ANS * st_ap_TX)
 {
-    U1 u1_t_subtype;
+    vd_g_oXDoCANAnsTx((U1)OXDC_SAL_PROC_FIN, st_ap_TX);
+}
 
-    u1_t_subtype = u1_ap_XSPI_ADD[0];
+/*===================================================================================================================================*/
+/*  void            vd_g_DiagAppAnsTxNRC(const U1 u1_a_NRC)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    negative response                                                                                                */
+/*  Arguments:      u1_a_NRC : negative response code                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void           vd_g_DiagAppAnsTxNRC(const U1 u1_a_NRC)
+{
+    vd_g_oXDoCANAnsTx(u1_a_NRC, vdp_PTR_NA);
+}
 
-    switch (u1_t_subtype)
-    {
-    case XSPI_IVI_OS_WAKE:
-        vd_s_XspiIviSub1_ControlOSWake(u1_ap_XSPI_ADD,u2_a_data_size);
-        break;
-    
-    default:
-        break;
+/*===================================================================================================================================*/
+/*  U1            vd_g_DiagAppConvPduIdToRequestId(U1 u1_a_REQTYPE)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    Convert PduID to RequestID                                                                                       */
+/*  Arguments:      u2_a_pduID : PduID                                                                                               */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1             u1_g_DiagAppConvPduIdToRequestId(U1 u1_a_REQTYPE)
+{
+    U1 u1_t_requestId;
+
+    /* 初期値 */
+    u1_t_requestId = (U1)DIAGAPP_REQUESTID_UNKNOWN;
+
+    if(u1_a_REQTYPE == (U1)OXDC_REQ_TYPE_PHYS) {
+        /* Off-board tester(物理) */
+        u1_t_requestId = (U1)DIAGAPP_REQUESTID_PHYOFF;
+    } else if(u1_a_REQTYPE == (U1)OXDC_REQ_TYPE_FUNC) {
+        /* Off-board tester(機能) */
+        u1_t_requestId = (U1)DIAGAPP_REQUESTID_FUNCOFF;
+    } else {
+        /* Do Nothing */
     }
-}
 
-/*===================================================================================================================================*/
-/*  void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
-/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
-/*                  u2_a_data_size : Data Size                                                                                       */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)
-{
-    /*OS起動通知をトリガーに動くIFを登録*/
-    vd_s_XspiIviSub1_ControlOsWakeToQueue(u1_ap_XSPI_ADD[1]);
-    vd_g_XspiIviSub1_PowerState1stSend();
-    vd_g_XspiIviCANBusSend();
-    vd_g_XspiIviSub1GpsStsSend();
-    vd_g_XspiIviSub1ExtSiGSend();
-    vd_g_XspiIviSub1VehspdCntSend();
-    vd_g_XspiIviSub1TmuteSend();
-    vd_g_XspiIviSub1PowerBmoniVolSend();
-    vd_g_XspiIviSub0OSComChk();
-}
-
-/*===================================================================================================================================*/
-/*  void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD)                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
-/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
-/*                  u2_a_data_size : Data Size                                                                                       */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD)
-{
-    U2     u2_s_MISC_CONTROL_SIZE = (U2)2U;
-
-    U1     u1_tp_data[2];
-    U1     u1_t_id;
-
-    u1_t_id = (U1)XSPI_IVI_CONTRL_ID;
-    u1_tp_data[0] = (U1)XSPI_IVI_OS_WAKE_SEND;
-    u1_tp_data[1] = u1_a_XSPI_ADD;
-
-    /*キューの関数呼び出し*/
-    vd_g_XspiIviSub1MISCStuckBuff(u1_t_id,u2_s_MISC_CONTROL_SIZE,u1_tp_data);
+    return u1_t_requestId;
 }
 
 /*===================================================================================================================================*/
@@ -167,7 +144,7 @@ void            vd_s_XspiIviSub1_ControlOsWakeToQueue(const U1 u1_a_XSPI_ADD)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  0.0.0    01/20/2025  KT       New.                                                                                               */
+/*  0.0.0    07/17/2024  KT       New.                                                                                               */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

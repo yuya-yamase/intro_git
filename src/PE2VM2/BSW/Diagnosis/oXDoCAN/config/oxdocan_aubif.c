@@ -18,6 +18,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxdocan_cfg_private.h"
 #include "oxdocan_aubif.h"
+#include "DiagApp_SID10.h"
+#include "DiagApp_SID28.h"
 
 #include "Dcm.h"
 
@@ -96,9 +98,11 @@ void    vd_g_oXDoCANAubIfComTREOvrrd(const uint8 u1_a_COM_CH, const uint8 u1_a_M
     if((u1_a_MODE == (U1)DCM_ENABLE_RX_TX_NORM   ) ||
        (u1_a_MODE == (U1)DCM_ENABLE_RX_TX_NORM_NM)){
         (void)BswM_CS_ResumeTxPdu(u1_a_COM_CH);
+        vd_g_DiagAppSID28Request(u1_a_MODE);
     }
     else if(u1_a_MODE == (U1)DCM_DISABLE_RX_TX_NORMAL){
         (void)BswM_CS_StopTxPdu(u1_a_COM_CH);
+        vd_g_DiagAppSID28Request(u1_a_MODE);
     }
     else{
         /* Do Nothing */
@@ -112,7 +116,11 @@ void    vd_g_oXDoCANAubIfComTREOvrrd(const uint8 u1_a_COM_CH, const uint8 u1_a_M
 /*===================================================================================================================================*/
 uint8   u1_g_oXDoCANAubIfSesCtrlOk(const uint8 u1_a_NEXT)
 {
-    return((U1)0x00U);
+    U1  u1_t_ret;
+
+    u1_t_ret = u1_g_DiagAppSID10Request(u1_a_NEXT);
+
+    return(u1_t_ret);
 }
 /*===================================================================================================================================*/
 /*  uint8   u1_g_oXDoCANAubIfComCtrlOk(void)                                                                                         */
