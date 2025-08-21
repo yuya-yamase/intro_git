@@ -1,7 +1,7 @@
 /************************************************************************************************/
 /* file Name        : VIS_Pwr.c                                                                 */
-/* contents         : PwrStatus                                                                 */
-/* maker            :                                                                           */
+/* contents         : PWR module source                                                         */
+/* maker            : NCOS                                                                      */
 /* change history   :                                                                           */
 /* ---------------------------------------------------------------------------------------------*/
 /* ver   | Comments                                                                             */
@@ -271,7 +271,7 @@ static void vd_s_VISPwrJudgeBasicState(void)
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vispwr_basicstate;
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RETURNVAL] = u1_s_vispwr_vpsinfo_responsestate;
     
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_BASICSTATE,VIS_PWR_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_BASICSTATE,VIS_PWR_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
 
     return;
 }
@@ -316,7 +316,7 @@ static void vd_s_VISPwrJudgeSpecialState(void)
     /* チップ間通信_送信要求 */
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vispwr_specialstate;
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RETURNVAL] = u1_s_vispwr_vpsinfos_responsestate;
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_SPECIALSTATE,VIS_PWR_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_SPECIALSTATE,VIS_PWR_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
 
     return;
 }
@@ -353,7 +353,7 @@ static void vd_s_VISPwrJudgeTransFlg(void)
     /* チップ間通信_送信要求 */
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vispwr_transflg;
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RETURNVAL] = u1_s_vispwr_vpscng_responsestate;
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_TRANSFLG,VIS_PWR_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_TRANSFLG,VIS_PWR_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
     
     return;
 }
@@ -376,7 +376,7 @@ static U1 u1_s_VISPwrJudgeEthActiveStartup(void)
         (void)Com_ReceiveSignal(ComConf_ComSignal_ETHWU_21, &u1_t_ethwu_21);
         (void)Com_ReceiveSignal(ComConf_ComSignal_ETHWU_23, &u1_t_ethwu_23);
         
-        if ((STD_ON == u1_t_ethwu_21) ||(STD_ON == u1_t_ethwu_23)){
+        if (((U1)STD_ON == u1_t_ethwu_21) ||((U1)STD_ON == u1_t_ethwu_23)){
             u1_t_app_comcond = (U1)STD_ON;
         }
     }
@@ -394,7 +394,7 @@ static U1 u1_s_VISPwrJudgeEthActiveStartup(void)
     }
 
     /* Ethernet通信アクティブ起動条件判定 */
-    if ((STD_ON == u1_t_app_comcond) || (STD_ON == u1_t_nm_awakepwr)) {
+    if (((U1)STD_ON == u1_t_app_comcond) || ((U1)STD_ON == u1_t_nm_awakepwr)) {
         u1_t_active_startup = (U1)STD_ON;
     }
 
@@ -423,7 +423,7 @@ static U1 u1_s_VISPwrJudgeEthPassiveStartup(void)
         (void)Com_ReceiveSignal(ComConf_ComSignal_ETHWU_32, &u1_t_ethwu_32);
     }
     
-    if ((STD_ON == u1_t_ethwu_12) || (STD_ON == u1_t_ethwu_32)) {
+    if (((U1)STD_ON == u1_t_ethwu_12) || ((U1)STD_ON == u1_t_ethwu_32)) {
         u1_t_passive_startup = (U1)STD_ON;
         u2_s_vispwr_tm_passive_on = VIS_PWR_TIMEOUTINIT;
     }
@@ -451,16 +451,16 @@ static void vd_s_VISPwrJudgeEthChComPwr(void)
     u1_t_active_startup = u1_s_VISPwrJudgeEthActiveStartup();
     u1_t_passive_startup = u1_s_VISPwrJudgeEthPassiveStartup();
     
-    if (STD_OFF == u1_s_vispwr_ch_compwr) {
-        if ((STD_ON == u1_t_active_startup)                 
-        || (STD_ON == u1_t_passive_startup)) {
+    if ((U1)STD_OFF == u1_s_vispwr_ch_compwr) {
+        if (((U1)STD_ON == u1_t_active_startup)                 
+        || ((U1)STD_ON == u1_t_passive_startup)) {
             u1_s_vispwr_ch_compwr = (U1)STD_ON;
         }
         u2_s_vispwr_tm_ch_off = VIS_PWR_TIMEOUTINIT;
     }
     else{
-        if ((STD_OFF == u1_t_active_startup)
-        && (STD_OFF == u1_t_passive_startup)) {
+        if (((U1)STD_OFF == u1_t_active_startup)
+        && ((U1)STD_OFF == u1_t_passive_startup)) {
             if (VIS_PWR_JUDGE_CH_POWEROFF_TM <= u2_s_vispwr_tm_ch_off) {
                 u1_s_vispwr_ch_compwr = (U1)STD_OFF;
             }
@@ -475,7 +475,7 @@ static void vd_s_VISPwrJudgeEthChComPwr(void)
     
     /* チップ間通信_送信要求 */
     u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vispwr_ch_compwr;
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_COMPWR,VIS_PWR_TRANSREQ_DATA_LENGTH_1,u1_tp_transreq_data);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_COMPWR,VIS_PWR_TRANSREQ_DATA_LENGTH_1,u1_tp_transreq_data);
 
     return;
 }

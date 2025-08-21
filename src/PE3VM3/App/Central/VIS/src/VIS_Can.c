@@ -1,6 +1,14 @@
-/* -------------------------------------------------------------------------- */
-/* file name    :   VIS_Can.c                                                 */
-/* -------------------------------------------------------------------------- */
+/************************************************************************************************/
+/* file Name        : VIS_Can.c                                                                 */
+/* contents         : CAN module source                                                         */
+/* maker            : NCOS                                                                      */
+/* change history   :                                                                           */
+/* ---------------------------------------------------------------------------------------------*/
+/* ver   | Comments                                                                             */
+/* ---------------------------------------------------------------------------------------------*/
+/* v1.00 | New created                                                                          */
+/************************************************************************************************/
+
 #include <Std_Types.h>
 #include <ComStack_Types.h>
 #include <Com.h>
@@ -417,7 +425,7 @@ static void vd_s_VISCanGetVin(void)
     }
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_VINDATA_RETURNVAL] = u1_s_vis_vin_responsestate;
 
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_VIN,VIS_CAN_TRANSREQ_DATA_LENGTH_18,u1_tp_transreq_data);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_VIN,VIS_CAN_TRANSREQ_DATA_LENGTH_18,u1_tp_transreq_data);
 
     return;
 }
@@ -452,7 +460,7 @@ static void vd_s_VISCanGetOtaswact(void)
     /* チップ間通信_送信要求 */
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vis_can_otaswact;
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_RETURNVAL] = u1_s_vis_otaswact_responsestate;
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_OTASWACT,VIS_CAN_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_OTASWACT,VIS_CAN_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
     
     return;
 }
@@ -487,7 +495,7 @@ static void vd_s_VISCanGetPwrerrst(void)
     /* チップ間通信_送信要求 */
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vis_can_pwrerrst;
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_RETURNVAL] = u1_s_vis_pwrerrst_responsestate;
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_PWRERRST,VIS_CAN_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_PWRERRST,VIS_CAN_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
 
     return;
 }
@@ -522,7 +530,7 @@ static void vd_s_VISCanGetCrlyof(void)
     /* チップ間通信_送信要求 */
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_RECEIVEVAL] = u1_s_vis_can_crlyof;
     u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_RETURNVAL] = u1_s_vis_crlyof_responsestate;
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_CRLYOF,VIS_CAN_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_CRLYOF,VIS_CAN_TRANSREQ_DATA_LENGTH_2,u1_tp_transreq_data);
 
     return;
 }
