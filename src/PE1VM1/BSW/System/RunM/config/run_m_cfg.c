@@ -1,4 +1,4 @@
-/* 1.11.0 */
+/* 1.12.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -11,7 +11,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define RUN_M_CFG_C_MAJOR                        (1)
-#define RUN_M_CFG_C_MINOR                        (11)
+#define RUN_M_CFG_C_MINOR                        (12)
 #define RUN_M_CFG_C_PATCH                        (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -142,6 +142,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
     }
     else{
         u4_s_run_m_forceslp_tout = (U4)0U;
+        u4_t_req = (U4)RUN_M_SLPNG_CHK_TYCAN;
     }
 
     u2_t_num_reqbit = (U2)(sizeof(st_sp_REQBIT) / sizeof(st_sp_REQBIT[0]));
@@ -158,7 +159,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
     u1_t_1st  = u1_g_Fpcall_u1_And(&fp_sp_u1_RUN_M_SHTDWN_CHK[0], u2_NC_U1_AND(fp_sp_u1_RUN_M_SHTDWN_CHK));
 
     if(u4_t_req == (U4)0U){
-        u1_t_1st = (U1)TRUE;
+        u1_t_1st |= (U1)RUN_M_FRCD_SLP_CHK_TRUE;
     }
 
     return(u1_t_1st);
@@ -174,7 +175,7 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 /*===================================================================================================================================*/
 U1      u1_g_RunMCfgWksrcIrqchk(void)
 {
-    return((U1)TRUE);
+    return((U1)RUN_M_NRML_SLP_CHK_TRUE | (U1)RUN_M_FRCD_SLP_CHK_TRUE);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_RunMCfgWksrcCfgRefresh(void)                                                                                        */
@@ -234,10 +235,12 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 /*  1.9.0     4/ 7/2016  TN       Improvement : vd_g_BswMCfgInit was implemented.                                                    */
 /*  1.10.0   11/ 7/2016  TN       bsw_m.c v1.9.0 -> v1.10.0.                                                                         */
 /*  1.11.0    3/ 4/2019  TN       bsw_m.c v1.10.0 -> v1.11.0.                                                                        */
+/*  1.12.0    6/24/2025  RS       Change for BEV PreCV.                                                                              */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
+/*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
