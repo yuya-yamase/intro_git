@@ -1177,6 +1177,7 @@ static void     vd_s_McuDev_Pwron_Most(const U1 u1_a_PWR)
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_XMTuner(void)
 {
+#ifdef SYS_PWR_ANT_XM_SHDN
     static const U4 u4_s_WAITTIME_XM_ON     = (U4)(PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);
     static const U4 u4_s_WAITTIME_XM_SHDN   = (U4)(1010U / PWRCTRL_CFG_TASK_TIME);
 
@@ -1190,14 +1191,13 @@ static void     vd_s_McuDev_Pwron_XMTuner(void)
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_ON , MCU_DIO_HIGH);
     }
     if(u1_t_timchk_xmshdn == (U1)TRUE){
-#ifdef SYS_PWR_ANT_XM_SHDN
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_SHDN , MCU_DIO_HIGH);
-#endif
         /* 暫定対応：SPI通信系は未実装(OS間コマンド不明) */
     }
     if((u1_t_timchk_xmon == (U1)TRUE) && (u1_t_timchk_xmshdn == (U1)TRUE)){
         u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_XMTUNER_BIT;
     }
+#endif
 }
 /*****************************************************************************
   Function      : vd_s_McuDev_Pwron_PowerIc
