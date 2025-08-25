@@ -47,7 +47,9 @@ static  U1 u1_s_xmtuner_waitcnt;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_g_XMTuner_Pwroff(void);
+#ifdef XMTUNER_XM_SHDN
+static void    vd_s_XMTuner_Pwroff(void);
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -77,6 +79,7 @@ void    vd_g_XMTuner_Init(void)
 /*===================================================================================================================================*/
 void    vd_g_XMTuner_MainTask(void)
 {
+#ifdef XMTUNER_XM_SHDN
     U1 u1_t_port;
     
     u1_t_port = (U1)Dio_ReadChannel(XMTUNER_PORT_BU_DET);
@@ -86,18 +89,20 @@ void    vd_g_XMTuner_MainTask(void)
     }
     
     if(u1_s_xmtuner_budetflg == (U1)XMTUNER_BUDET_ON){
-        vd_g_XMTuner_Pwroff();
+        vd_s_XMTuner_Pwroff();
     }
     u1_s_xmtuner_budetsts = u1_t_port;
+#endif
 }
 
+#ifdef XMTUNER_XM_SHDN
 /*===================================================================================================================================*/
-/*  static void    vd_g_XMTuner_Pwroff(void)                                                                                         */
+/*  static void    vd_s_XMTuner_Pwroff(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_g_XMTuner_Pwroff(void)
+static void    vd_s_XMTuner_Pwroff(void)
 {
     U1 u1_t_port;
     
@@ -115,9 +120,7 @@ static void    vd_g_XMTuner_Pwroff(void)
             u1_s_xmtuner_waitcnt++;
         }
         if(u1_s_xmtuner_waitcnt >= (U1)XMTUNER_WAIT_10MS){
-#ifdef XMTUNER_XM_SHDN
             Dio_WriteChannel(XMTUNER_PORT_XM_SHDN, (Dio_LevelType)FALSE);
-#endif
             u1_s_xmtuner_offstep = (U1)XMTUNER_BUDET_STEP2;
             u1_s_xmtuner_waitcnt = (U1)0U;
         }
@@ -141,6 +144,7 @@ static void    vd_g_XMTuner_Pwroff(void)
         break;
     }
 }
+#endif
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

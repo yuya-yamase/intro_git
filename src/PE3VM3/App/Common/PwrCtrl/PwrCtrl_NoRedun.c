@@ -182,7 +182,7 @@ static U2       u2_s_McuDev_Pwroff_Ant(const U1 u1_a_PWR);
 static U2       u2_s_McuDev_Pwroff_SoundMUTE(void);
 static U2       u2_s_McuDev_Pwroff_Most(const U1 u1_a_PWR);
 static U2       u2_s_McuDev_Pwroff_PowerIC(void);
-static U2       u2_s_McuDev_Pwroff_XMTuner(void);
+static U2       u2_s_McuDev_Pwroff_XMTuner(const U1 u1_a_PWR);
 uint16 Mcu_Dev_Pwroff_GNSS(const U1 u1_a_PWR);
 static U2       u2_s_McuDev_Pwroff_Gyro(void);
 
@@ -345,8 +345,6 @@ void vd_g_PwrCtrlNoRedunMainFunction( void )
 
     /* 前回状態の更新 */
     u1_s_PwrCtrl_NoRedun_Sts = u1_t_mcu_nxtsts;
-
-    vd_g_McuDev_Pwroff(); /* デバイスOFF制御 */
 
     if ( ( u1_g_PwrCtrl_NoRedun_Pwr_Sts      == (U1)PWRCTRL_NOREDUN_STS_ON            )  /* 非冗長電源OFF制御 */
       && ( u1_s_PwrCtrl_NoRedun_MetBB_OnStep == (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT )  /* Meter+BB Display ONシーケンス完了 */
@@ -1158,7 +1156,7 @@ void            vd_g_McuDev_Pwroff(void)
 
     /* XM TUNER制御 */
     if((u2_g_PwrCtrl_OffSts & (U2)PWROFF_XMTUNER_BIT) != (U2)PWROFF_XMTUNER_BIT){
-        u2_g_PwrCtrl_OffSts |=  u2_s_McuDev_Pwroff_XMTuner();
+        u2_g_PwrCtrl_OffSts |=  u2_s_McuDev_Pwroff_XMTuner(u1_t_pwr);
     }
 
     /* GNSS制御 */
@@ -1409,18 +1407,18 @@ static U2       u2_s_McuDev_Pwroff_PowerIC(void)
   return        : PWROFF_XMTUNER_BIT ：プロセス完了
   Note          : XM-SHDN=Lから10msでXM-ON,PMIC_FAST_POFF_EN_N=Hから20msでXM-SHDN
 *****************************************************************************/
-static U2       u2_s_McuDev_Pwroff_XMTuner(void)
+static U2       u2_s_McuDev_Pwroff_XMTuner(const U1 u1_a_PWR)
 {
     U2              u2_t_ret;
-    Dio_LevelType   dl_t_sts_pmic;    /* ポート読出し値 */
 #ifdef SYS_PWR_ANT_XM_SHDN
+    Dio_LevelType   dl_t_sts_pmic;    /* ポート読出し値 */
     Dio_LevelType   dl_t_sts_xmshdn;  /* ポート読出し値 */
-#endif
 
     u2_t_ret        = (U2)PWROFF_BIT_OFF;
     dl_t_sts_pmic   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_PMIC_FAST_POFF_EN]);
 
-    if(dl_t_sts_pmic == (Dio_LevelType)STD_LOW){
+    //if(dl_t_sts_pmic == (Dio_LevelType)STD_LOW){
+    if(u1_a_PWR == (U1)POWER_MODE_STATE_STANDBY){ //temporarily
         if(u2_s_OffTime_XMTuner_Pmic < U2_MAX){
             u2_s_OffTime_XMTuner_Pmic++;
         }
@@ -1429,8 +1427,8 @@ static U2       u2_s_McuDev_Pwroff_XMTuner(void)
         u2_s_OffTime_XMTuner_Pmic = (U2)0U;
     }
 
-#ifdef SYS_PWR_ANT_XM_SHDN
-    if(u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_20MS){
+    //if(u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_20MS){
+    if(u2_s_OffTime_XMTuner_Pmic != (U2)0U){ //temporarily
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_SHDN , MCU_DIO_LOW);
     }
 
@@ -1449,15 +1447,13 @@ static U2       u2_s_McuDev_Pwroff_XMTuner(void)
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_ON , MCU_DIO_LOW);
     }
 
-    if((u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_20MS) &&
+    //if((u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_20MS) &&
+    if((u2_s_OffTime_XMTuner_Pmic != (U2)0U) && //temporarily
        (u2_s_OffTime_XMTuner_XmShdn >= (U2)PWRCTRL_NOREDUN_WAIT_10MS)){
         u2_t_ret  = (U2)PWROFF_XMTUNER_BIT;
     }
 #else
-    if(u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_30MS){
-        vd_g_McuDevPwronSetPort(MCU_PORT_XM_ON , MCU_DIO_LOW);
-        u2_t_ret  = (U2)PWROFF_XMTUNER_BIT;
-    }
+    u2_t_ret  = (U2)PWROFF_XMTUNER_BIT;
 #endif
 
     return(u2_t_ret);
