@@ -11,6 +11,8 @@
     -I${CAN_DIR}/CanSM/cfg
     -I${CAN_DIR}/VCan/inc
 
+    -I${APP_DIR}/IVI/XSPI
+
 config/can_lpfq_cfg.c
 config/can_qsev_rx_cfg.c
 config/vcan_tx_ack_cfg.c
