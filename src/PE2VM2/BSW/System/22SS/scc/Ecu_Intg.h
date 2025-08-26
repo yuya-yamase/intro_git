@@ -55,6 +55,7 @@ typedef uint8  Ecu_Intg_STResetKeyType;
  *--------------------------------------------------------------------------*/
 
 void Ecu_Intg_init(void);
+void Ecu_Intg_initApp(void);
 #if 0
 void Ecu_Intg_preClockUp(void);
 void Ecu_Intg_postClockUp(void);

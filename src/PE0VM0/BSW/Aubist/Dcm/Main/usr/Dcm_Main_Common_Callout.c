@@ -52,6 +52,34 @@
 #define DCM_START_SEC_CODE_CALLOUT
 #include <Dcm_MemMap.h>
 
+/****************************************************************************/
+/* Function Name | Dcm_GetProgConditions                                    */
+/* Description   | The Dcm_GetProgConditions callout is called upon DCM     */
+/*               | initialization and allows to determine if a response     */
+/*               | (50 or 51) has to be sent depending on request within    */
+/*               | the bootloader. The context parameter are defined in     */
+/*               | Dcm_ProgConditionsType.                                  */
+/* Preconditions | None                                                     */
+/* Parameters    | [OUT] ProgConditions : Conditions on which the jump to   */
+/*               |                        bootloader has been requested     */
+/* Return Value  | Dcm_EcuStartModeType                                     */
+/*               |   DCM_COLD_START : The ECU starts normally               */
+/*               |   DCM_WARM_START : The ECU starts from a bootloader jump */
+/*               |   Other user defined values : -                          */
+/* Notes         | -                                                        */
+/****************************************************************************/
+FUNC( Dcm_EcuStartModeType, DCM_CODE_CALLOUT ) Dcm_GetProgConditions
+(
+    P2VAR( Dcm_ProgConditionsType, AUTOMATIC, DCM_APPL_DATA ) ProgConditions    /* MISRA DEVIATION */
+)
+{
+    Dcm_EcuStartModeType u1_RetVal;
+
+    u1_RetVal = DCM_COLD_START;
+
+    return u1_RetVal;
+}
+
 #define DCM_STOP_SEC_CODE_CALLOUT
 #include <Dcm_MemMap.h>
 
@@ -64,7 +92,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-1-0                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 

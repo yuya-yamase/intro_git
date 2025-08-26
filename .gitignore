@@ -27,6 +27,3 @@ Reprog_CAPL.cbf
 Reprog_CANFD.stcfg
 tags
 install_config.log
-#CycurHSM
-bswSEC_CycurHSM.a
-bswSEC_CycurHSM.dba

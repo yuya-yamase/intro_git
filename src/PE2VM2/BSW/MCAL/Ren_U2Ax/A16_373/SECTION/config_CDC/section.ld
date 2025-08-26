@@ -98,10 +98,6 @@ SECTIONS {
     .iohw_rom_bottom        align(4)                        : > .
     _IOHW_ROM_SIZE = . - ADDR(.iohw_rom_top);
 
-// Communication
-    .IVDSH_TEXT_CODE        align(4)                        : > .
-    .IVDSH_RODATA_CONST     align(4)                        : > .
-
 // APP
     .app_n_nvarLR_ival      align(4)  ROM(.app_n_nvarLR_withval)  : > .
     .app_n_nvarCR0_ival     align(4)  ROM(.app_n_nvarCR0_withval)  : > .
@@ -121,9 +117,6 @@ SECTIONS {
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
-    .rodata_SHARE_ROM_RIM_KEYWORD0 SHARE_ROM_VM2_RIM_KEYWORD0      ABS    : > rom_memory_share
-    .rodata_SHARE_ROM_RIM_KEYWORD1 SHARE_ROM_VM2_RIM_KEYWORD1      ABS    : > .
-    .rodata_SHARE_ROM_RIM_KEYWORD2 SHARE_ROM_VM2_RIM_KEYWORD2      ABS    : > .
 
 // -- RAM -------------------
 // TopAddress
@@ -149,7 +142,6 @@ SECTIONS {
     .ecu_n_nvarLR_top            align(4)                  : > .
     .app_n_nvarLR                align(4)                  : > .
     .bss_GPI2C                   align(4)                  : > .
-    .IVDSH_BSS_VAR_NO_INIT       align(4)                  : > .
     .ecu_n_nvarLR_bottom         align(4)                  : > .
     _ECU_N_NVAR_LR_SIZE = . - ADDR(.ecu_n_nvarLR_top);
 

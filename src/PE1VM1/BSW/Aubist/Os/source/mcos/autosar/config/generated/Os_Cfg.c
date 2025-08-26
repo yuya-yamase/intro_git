@@ -305,6 +305,6 @@ const ar_int_config_t ar_int_configs[AR_OS_NUM_C2ISRS] = {
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-1-0                                              */
+/*  Framework          :v2-0-2                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/

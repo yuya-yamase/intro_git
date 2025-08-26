@@ -78,16 +78,16 @@ FUNC( Std_ReturnType, DCM_CODE_CALLOUT ) Dcm_ComCtrl_CheckComCtrl
 )
 {
     Std_ReturnType u1_RetVal;
-    uint8          u1_t_nrc;
+#if(OXDC_SID28_NR_22_USE == OXDC_USE)
+    uint8          u1_t_err;
 
-    u1_t_nrc = u1_g_oXDoCANAubIfComCtrlOk();
-    if(u1_t_nrc == (U1)0U){
-        u1_RetVal      = (Std_ReturnType)E_OK;
+    u1_RetVal = u1_g_oXDoCANComCtrlChk(&u1_t_err);
+    if(u1_RetVal == (Std_ReturnType)E_NOT_OK){
+        (*ptErrorCode) = u1_t_err;
     }
-    else{
-        (*ptErrorCode) = u1_t_nrc;
-        u1_RetVal      = (Std_ReturnType)E_NOT_OK;
-    }
+#else
+    u1_RetVal = E_OK;
+#endif
 
     return u1_RetVal;
 }
@@ -132,7 +132,7 @@ FUNC( Std_ReturnType, DCM_CODE_CALLOUT ) Dcm_CompCommunicationControl
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-1-0                                              */
+/*  Framework          :v2-0-3-z0003                                        */
 /*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 
