@@ -268,9 +268,10 @@ static inline void    vd_s_oXCANAubIfE2ePrepTx(PduIdType PduId, PduInfoType* Pdu
  
         u2_t_offset = PduId - (U2)OXCAN_E2E_TRA_MIN;
         u2_t_offset = u2_gp_OXCAN_E2E_TRA_BY_PDU[u2_t_offset];
-        if(u2_t_offset < (U2)OXCAN_E2E_NUM_TRA){
+        if((u2_t_offset           <  (U2)OXCAN_E2E_NUM_TRA                   ) &&
+           (PduInfoPtr->SduLength >= (U4)u1_gp_OXCAN_E2E_TRA_LEN[u2_t_offset])){
 
-            u2_t_length              = PduInfoPtr->SduLength;
+            u2_t_length              = (U2)u1_gp_OXCAN_E2E_TRA_LEN[u2_t_offset];
             st_t_cfg.Offset          = (U2)OXCAN_E2E_OFFSET;
             st_t_cfg.DataLength      = u2_t_length << OXCAN_E2E_LEN_BYT_TO_BIT;
             st_t_cfg.DataID          = (U2)Com_GetFrameID(PduId);
@@ -315,9 +316,14 @@ static inline U1      u1_s_oXCANAubIfE2eRxOk(PduIdType PduId, BswConstR PduInfoT
 
         u2_t_offset = PduId - (U2)OXCAN_E2E_REC_MIN;
         u2_t_offset = u2_gp_OXCAN_E2E_REC_BY_PDU[u2_t_offset];
-        if(u2_t_offset < (U2)OXCAN_E2E_NUM_REC){
-
-            u2_t_length              = PduInfoPtr->SduLength;
+        if(u2_t_offset >= (U2)OXCAN_E2E_NUM_REC){
+         /* u1_t_ok = (U1)TRUE; */
+        }
+        else if(PduInfoPtr->SduLength < (U4)u1_gp_OXCAN_E2E_REC_LEN[u2_t_offset]){
+            u1_t_ok = (U1)FALSE;
+        }
+        else{
+            u2_t_length              = (U2)u1_gp_OXCAN_E2E_REC_LEN[u2_t_offset];
             st_t_cfg.Offset          = (U2)OXCAN_E2E_OFFSET;
             st_t_cfg.DataLength      = u2_t_length << OXCAN_E2E_LEN_BYT_TO_BIT;
             st_t_cfg.DataID          = (U2)Com_GetFrameID(PduId);
