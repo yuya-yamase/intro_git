@@ -30,18 +30,13 @@
     -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
 
-    -I${OXDOCAN_DIR}/lib/config_U2A16_met
-    -I${OXDOCAN_DIR}/lib/scc
+    -I${OXDOCAN_DIR}/config
+    -I${OXDOCAN_DIR}/scc
 
     -T ${MCAL_DIR}/section.ld
 
-lib/config_U2A16_met/oxdocan_cfg.c
-lib/config_U2A16_met/oxdocan_did_cfg.c
-lib/config_U2A16_met/oxdocan_xid_cfg.c
+config/oxdocan_aubif.c
+config/oxdocan_cfg.c
+scc/oxdocan.c
 
-lib/scc/oxdocan.c
-lib/scc/oxdocan_rebyid.c
-lib/scc/tydocan_xid.c
-
-sal/stub/tydocan_xid_stub.c
 

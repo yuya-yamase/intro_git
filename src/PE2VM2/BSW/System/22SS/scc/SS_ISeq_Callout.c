@@ -135,9 +135,11 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 {
     /* vv User Hook start vv */
     Ecu_Intg_BootCauseType u4BootCause;
+    U1                     u1_t_bram_retained;
 
     vd_g_Wdg_Init();
-    u4BootCause = Ecu_IntgHAL_getBootCause();
+    u4BootCause        = Ecu_IntgHAL_getBootCause();
+
     if(u4BootCause == ECU_INTG_u4BTCAUSE_PON){
         (void)SS_Memory_set(__ghsbegin_MEM_SEC_STA_BACK_BSW, 0UL, (uintptr_t)BSS_BACK_BSW_SIZE);
     }
@@ -166,6 +168,7 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 
     if (u4_BootSource == SS_PM_BOOT_SUP)
     {
+        /* If MCU reset factor is not DRESF0 (DeepSTOP Reset Flag), u4_BootSource will be "SS_PM_BOOT_SUP" */
         (void)SS_Memory_set(__ghsbegin_bsw_n_rvar_top, 0UL, (uintptr_t)BSW_N_RVAR_SIZE);
         (void)SS_Memory_copy(__ghsbegin_bsw_n_rvar_withval_top, __ghsbegin_bsw_n_rvar_ival_top, (uintptr_t)BSW_N_RVAR_WITHVAL_SIZE);
     }
@@ -176,8 +179,15 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
 
     vd_g_GpI2cMaInit();
 
-    if(u4BootCause == ECU_INTG_u4BTCAUSE_PON){
+    u1_t_bram_retained = (U1)FALSE;
+    if(u4BootCause != ECU_INTG_u4BTCAUSE_PON){
+        u1_t_bram_retained = u1_g_Rim_WkupRAMCheck();
+    }
+
+    if((u4BootCause        == ECU_INTG_u4BTCAUSE_PON) ||
+       (u1_t_bram_retained != (U1)TRUE              )){
         vd_g_22SSCallout_StaBonInit();
+        (void)SS_Memory_set(__ghsbegin_ecu_n_bvar_top, 0UL, (uint32)ECU_N_BVAR_SIZE);   /* Merged Ecu_Intg_initApp process with RIM keyword RAM destruction check */
     }
     else if(u4BootCause == ECU_INTG_u4BTCAUSE_RESET){
         vd_g_22SSCallout_StaRstInit();
@@ -185,8 +195,6 @@ void SS_Pm_postClockUpCallout(SS_BootType u4_BootSource)
     else{
         vd_g_22SSCallout_StaWkupInit();
     }
-
-    Ecu_Intg_initApp();
 
     Ecu_Intg_checkAndImmShutdown();
     /* ^^ User Hook end   ^^ */

@@ -13,8 +13,8 @@
     -I${CAN_DIR}/Dcm/Dsp/cfg
     -I${CAN_DIR}/Dem/cfg
     -I${CAN_DIR}/Dem/usr
-    -I${OXDOCAN_DIR}/lib/config_U2A16_met
-    -I${OXDOCAN_DIR}/lib/scc
+    -I${OXDOCAN_DIR}/config
+    -I${OXDOCAN_DIR}/scc
 
 
 ab_lib/libbswcs.a
