@@ -50,6 +50,9 @@
 const U2                           u2_gp_OXCAN_E2E_TRA_BY_PDU[] = {
     (U2)U2_MAX
 };
+const U1                           u1_gp_OXCAN_E2E_TRA_LEN[OXCAN_E2E_NUM_TRA] = {
+    (U1)0U
+};
 #endif /* #if (OXCAN_E2E_NUM_TRA > 0U) */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -58,6 +61,10 @@ const U2                           u2_gp_OXCAN_E2E_TRA_BY_PDU[] = {
 const U2                           u2_gp_OXCAN_E2E_REC_BY_PDU[] = {
     (U2)0U,                         /* #define MSG_BDC1S81_RXCH0                       (0U) */
     (U2)1U                          /* #define MSG_BDC1S91_RXCH1                       (1U) */
+};
+const U1                           u1_gp_OXCAN_E2E_REC_LEN[OXCAN_E2E_NUM_REC] = {
+    (U1)21U,                        /* 0 BDC1S81 32 - FV/KZK 11 bytes */
+    (U1)21U                         /* 1 BDC1S91 32 - FV/KZK 11 bytes */
 };
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
 
