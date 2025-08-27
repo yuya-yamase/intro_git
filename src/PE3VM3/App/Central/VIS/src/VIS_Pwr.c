@@ -109,7 +109,6 @@ static void vd_s_VISPwrGetBatVolt(void)
     U2 u2_t_digitalbatvolt;                 /* +B電圧値 (デジタル値) */
     U1 u1_t_bat1ret;
     U1 u1_t_bat2ret;
-    U2 u2_t_len = sizeof(u1_s_vis_pwr_batvolt);
     
     if(u1_s_vis_pwr_batvolt_polltimcnt > (U1)0U){
         u1_s_vis_pwr_batvolt_polltimcnt --;
@@ -123,13 +122,13 @@ static void vd_s_VISPwrGetBatVolt(void)
         u1_t_bat2ret = u1_g_IoHwAdcRead(ADC_CH_B_MON2, &u2_t_bat2volt);
         
         /* +B1電圧値が正しく取得できなかった場合 */
-        if(u1_t_bat1ret == FALSE){
+        if(u1_t_bat1ret == (U1)FALSE){
             /* Fail値を設定 */
             u2_t_bat1volt = VIS_PWR_BAT_FAIL;
         }
         
         /* +B2電圧値が正しく取得できなかった場合 */
-        if(u1_t_bat2ret == FALSE){
+        if(u1_t_bat2ret == (U1)FALSE){
             /* Fail値を設定 */
             u2_t_bat2volt = VIS_PWR_BAT_FAIL;
         }
@@ -152,7 +151,7 @@ static void vd_s_VISPwrGetBatVolt(void)
     }
     
     /* チップ間通信定期送信要求 */
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_VIS_VOLT, u2_t_len, &u1_s_vis_pwr_batvolt);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_VOLT, VIS_PWR_TRANSREQ_DATA_LENGTH_1, &u1_s_vis_pwr_batvolt);
     
     return;
 }
