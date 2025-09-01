@@ -38,19 +38,20 @@
 #define IVDSH_DID_WRI_GPS_STS                    (6U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_NUM_DID_REA                        (9U)
+#define IVDSH_NUM_DID_REA                        (10U)
 
 /* Read from VM#1 */
 #define IVDSH_DID_REA_CPREQ_002                  (7U)
 #define IVDSH_DID_REA_CPREQ_023                  (8U)
 #define IVDSH_DID_REA_CPREQ_044                  (9U)
+#define IVDSH_DID_REA_VM1TO3_WHLINI_INF          (10U)
 /* Read from VM#2 */
-#define IVDSH_DID_REA_CPREQ_003                  (10U)
-#define IVDSH_DID_REA_CPREQ_024                  (11U)
-#define IVDSH_DID_REA_CPREQ_042                  (12U)
-#define IVDSH_DID_REA_CPREQ_046                  (13U)
-#define IVDSH_DID_REA_CPREQ_047                  (14U)
-#define IVDSH_DID_REA_GPS_REQ                    (15U)
+#define IVDSH_DID_REA_CPREQ_003                  (11U)
+#define IVDSH_DID_REA_CPREQ_024                  (12U)
+#define IVDSH_DID_REA_VM2TO3_WHLINI_REQ          (13U)
+#define IVDSH_DID_REA_CPREQ_046                  (14U)
+#define IVDSH_DID_REA_CPREQ_047                  (15U)
+#define IVDSH_DID_REA_GPS_REQ                    (16U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVDSH_NUM_DID                            (IVDSH_NUM_DID_WRI + IVDSH_NUM_DID_REA)
