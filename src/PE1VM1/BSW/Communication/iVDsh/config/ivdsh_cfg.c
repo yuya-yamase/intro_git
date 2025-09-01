@@ -44,11 +44,11 @@
 #define IVDSH_FQ_CH_WRI                          (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IVDSH_WA_NWORD_WRI                       (16U)
-#define IVDSH_WA_NWORD_REA_0                     (16U)
+#define IVDSH_WA_NWORD_WRI                       (14U)
+#define IVDSH_WA_NWORD_REA_0                     (15U)
 #define IVDSH_WA_NWORD_REA_1                     (7U)
 
-#define IVDSH_WA_NWORD                           (62U)
+#define IVDSH_WA_NWORD                           (58U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -98,12 +98,10 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_021         */
     {(U2)8U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_022         */
     {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_023         */
-    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_CAM_DIAP   */
+    {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_026         */
     {(U2)11U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_028         */
     {(U2)12U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_FLYNOP     */
     {(U2)13U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_CPREQ_044         */
-    {(U2)14U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO2_WHLINI_RES */
-    {(U2)15U,       (U2)1U,         (U2)IVDSH_FQ_CH_WRI  },     /* IVDSH_DID_WRI_VM1TO3_WHLINI_INF */
     /*------------------------------------------------------------------*/
     /* Read from VM#2                                                   */
     /*------------------------------------------------------------------*/
@@ -114,9 +112,8 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_017         */
     {(U2)6U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_019         */
     {(U2)7U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_020         */
-    {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_CAM_DIAP   */
+    {(U2)9U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_025         */
     {(U2)10U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_CPREQ_027         */
-    {(U2)15U,       (U2)1U,         (U2)IVDSH_FQ_CH_REA_0},     /* IVDSH_DID_REA_VM2TO1_WHLINI_REQ */
     /*------------------------------------------------------------------*/
     /* Read from VM#3                                                   */
     /*------------------------------------------------------------------*/
