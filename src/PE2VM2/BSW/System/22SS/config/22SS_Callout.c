@@ -30,6 +30,7 @@
 #include "ExtSigCtrl_Main.h"
 
 /* IVI */
+#include "Mcu_I2c_Ctrl.h"
 #include "x_spi_ivi.h"
 #include "IVI_PwrCtrl_Main.h"
 #include "IVI_ExtSigCtrl_Main.h"
@@ -97,6 +98,7 @@ void vd_g_22SSCallout_StaBonInit(void)
     ExtSigCtrl_Init();
 
     /* IVI */
+    Mcu_Dev_I2c_Ctrl_Init();
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Bon_init();
     vd_g_Ivi_ExtSigCtrl_Main_Bon_init();
@@ -152,6 +154,7 @@ void vd_g_22SSCallout_StaRstInit(void)
     ExtSigCtrl_Init();
 
     /* IVI */
+    Mcu_Dev_I2c_Ctrl_Init();
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Rst_init();
     vd_g_Ivi_ExtSigCtrl_Main_Rst_init();
@@ -208,6 +211,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
     ExtSigCtrl_Init();
 
     /* IVI */
+    Mcu_Dev_I2c_Ctrl_Init();
     vd_g_XspiIviInit();
     vd_g_Ivi_PwrCtrl_Main_Wkup_init();
     vd_g_Ivi_ExtSigCtrl_Main_Wkup_init();
