@@ -139,9 +139,15 @@
 #define     MCU_PORT_MOST_WAKE_ON               (21U)        /* (DIO_ID_PORT24_CH11) */
 /*#define     MCU_PORT_PIC_POFF               (xxx)*/       /* (DIO_ID_PORT11_CH7)  */
 /*#define     MCU_PORT_P_ON                   (xxx)*/        /* (DIO_ID_PORT11_CH6)  */
+#ifdef ANTCTL_XM_SHDN
 #define     MCU_PORT_XM_ON                      (22U)        /* (DIO_ID_APORT4_CH10) */
-/*#define     MCU_PORT_SENSOR_ON              (xxx)*/        /* (DIO_ID_PORT8_CH7)   */
 #define     MCU_PORT_GPS_RST                    (23U)        /* (DIO_ID_APORT4_CH8)  */
+#define     MCU_PORT_NUM                        (24U)
+#else
+#define     MCU_PORT_GPS_RST                    (22U)        /* (DIO_ID_APORT4_CH8)  */
+#define     MCU_PORT_NUM                        (23U)
+#endif
+/*#define     MCU_PORT_SENSOR_ON              (xxx)*/        /* (DIO_ID_PORT8_CH7)   */
 /*Readのみのため初期化確認対象外*/
 /*#define     MCU_PORT_GPS_PMONI              (xxx)*/        /* (DIO_ID_PORT6_CH3)   */
 /*Readのみのため初期化確認対象外*/
@@ -149,7 +155,6 @@
 /*#define     MCU_PORT_GPS_PCTL               (xxx)*/        /* (DIO_ID_APORT4_CH5)  */
 /*Readのみのため初期化確認対象外*/
 /*#define     MCU_PORT_BU_DTE                 (xxx)*/        /* (DIO_ID_PORT0_CH4)   */
-#define     MCU_PORT_NUM                        (24U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -241,7 +246,9 @@ static U2 Mcu_Dio_PortId[MCU_PORT_NUM] = {
         DIO_ID_PORT24_CH11,
         /*DIO_ID_PORT11_CH7,*/ /*アプリから初期化完了通知受け取るためPINでの制御はしない*/
         /*DIO_ID_PORT11_CH6,*/ /*アプリから初期化完了通知受け取るためPINでの制御はしない*/
+#ifdef ANTCTL_XM_SHDN
         DIO_ID_APORT4_CH10,
+#endif
         /*DIO_ID_PORT8_CH7,*/  /*アプリから初期化完了通知受け取るためPINでの制御はしない*/
         DIO_ID_APORT4_CH8
         /*DIO_ID_PORT6_CH3,*/ /*Readのみのため初期化確認対象外*/
