@@ -25,8 +25,12 @@
 #define DMA_CFG_GLOBAL_REG_CONTROL			(STD_ON)
 #define DMA_CFG_DMA0_ACCESS					(STD_ON)
 #define DMA_CFG_DMA1_ACCESS					(STD_ON)
+#if 0   /* BEV Rebase provisionally */
 void vd_g_SoundCriDrvDmacInterrupt(void);
 #define ADX_INTR_PTR		(&vd_g_SoundCriDrvDmacInterrupt)
+#else   /* BEV Rebase provisionally */
+#define ADX_INTR_PTR		(NULL_PTR)
+#endif   /* BEV Rebase provisionally */
 
 /*==============================================================================================*/
 /*	Configuration per DMA channel ID															*/

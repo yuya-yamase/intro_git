@@ -40,11 +40,13 @@
 #include "veh_opemd_xmode_STUB.h"
 #endif
 
+#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #include "hud_ca.h"
 #include "vardef.h"
 #if 0   /* BEV BSW provisionally */
 #include "product.h"
+#endif   /* BEV Rebase provisionally */
 #endif
 
 #include "rim_ctl.h"
@@ -960,6 +962,7 @@ static void    vd_s_XSpiDsalRx_Dtc(const U4 * u4_ap_PDU_RX)
 /*===================================================================================================================================*/
 static void    vd_s_XSpiDsalRx_Mal(const U4 * u4_ap_PDU_RX)
 {
+#if 0   /* BEV Rebase provisionally */
     U2                                u2_t_mal_rx;
     U2                                u2_t_mal_ca;
     U2                                u2_t_kmph;
@@ -984,6 +987,7 @@ static void    vd_s_XSpiDsalRx_Mal(const U4 * u4_ap_PDU_RX)
         }
         u2_s_xspi_hw_mal_ca |= u2_t_mal_ca;
     }
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiDsalRx_Spn(const U4 * u4_ap_PDU_RX)                                                                      */
@@ -1220,6 +1224,7 @@ static void    vd_s_XSpiDsalTx_Tesmd(U4 * u4_ap_pdu_tx)
 /*===================================================================================================================================*/
 static void    vd_s_XSpiDsalTx_2E(U4 * u4_ap_pdu_tx)
 {
+#if 0   /* BEV Rebase provisionally */
     U4                                u4_t_hud_ca;
     U4                                u4_t_stsw;
 
@@ -1246,6 +1251,7 @@ static void    vd_s_XSpiDsalTx_2E(U4 * u4_ap_pdu_tx)
     u4_t_stsw         |= (U4)((u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2209) & (U4)VDF_DS_2E_TO_MSK  ) << 8U);
     u4_ap_pdu_tx[451]  = u4_t_stsw;                                                 /* DG_2E_2209_5_STSW_TIMEOUT            */ 
                                                                                     /* DG_2E_2209_4_STSW_TOUCH_SENSE        */
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiDsalTx_Xpn(U4 * u4_ap_pdu_tx)                                                                            */
