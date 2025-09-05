@@ -47,12 +47,18 @@
 #define    XSPI_IVI_POWER_STATE_TRANS_REC       (0x03U)
 #define    XSPI_IVI_POWER_STATE_TRANS_SEND      (0x04U)
 #define    XSPI_IVI_POWER_BMONIVOL_SEND         (0x05U)
+#define    XSPI_IVI_POWER_OPESTS_REC            (0x21U)
+#define    XSPI_IVI_POWER_OPESTS_SEND           (0x22U)
+#define    XSPI_IVI_POWER_STRMODE_REC           (0x43U)
+#define    XSPI_IVI_POWER_STRMODE_SEND          (0x44U)
 
 #define    XSPI_IVI_POWER_TASK                  (2000U / XSPI_IVI_TASK_TIME)
 #define    XSPI_IVI_POWER_SIZE                  (7U)
 #define    XSPI_IVI_POWER_STATE_SIZE            (7U)
 #define    XSPI_IVI_POWER_TRANS_SIZE            (6U)
 #define    XSPI_IVI_POWER_BMONI_SIZE            (7U)
+#define    XSPI_IVI_POWER_OPESTS_SIZE           (8U)
+#define    XSPI_IVI_POWER_STRMODE_SIZE          (2U)
 
 #define    XSPI_IVI_POWER_01_BUFSIZ             (6U)    /* 電源状態通知 バッファサイズ */
 #define    XSPI_IVI_POWER_01_BYTE2              (0U)    /* 基本ステート */
@@ -259,6 +265,10 @@ static U2 Mcu_Dio_PortId[MCU_PORT_NUM] = {
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void            vd_s_XspiIviSub1_PowerStateTransRec(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size);
+static void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSPI_ADD);
+static void            vd_s_XspiIviSub1PowerOperationStsSend(const U1 u1_a_DATA);
+static void            vd_s_XspiIviSub1PowerSTRmodeRec(const U1 * u1_ap_XSPI_ADD);
+static void            vd_s_XspiIviSub1PowerSTRmodeSend(const U1 u1_a_DATA);
 static U1              u1_s_XspiIviSub1PowerDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
 static void            vd_s_XspiIviSub1PowerDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD);
 /*===================================================================================================================================*/
@@ -503,6 +513,48 @@ void            vd_g_XspiIviSub1_PowerState1stSend(void)
 }
 
 /*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1PowerOperationStsSend(const U1 u1_a_DATA)                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_a_DATA : SoC Operation Status                                                                                 */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerOperationStsSend(const U1 u1_a_DATA)
+{
+    /*動作ステータス応答*/    
+    U1 u1_tp_data[XSPI_IVI_POWER_OPESTS_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_POWER_OPESTS_SEND;
+    u1_tp_data[1] = u1_a_DATA;
+    u1_tp_data[2] = (U1)0U; /*暫定 起動回数カウンタ*/
+    u1_tp_data[3] = (U1)0U; /*暫定 起動回数カウンタ*/
+    u1_tp_data[4] = (U1)0U; /*暫定 Tick Time*/
+    u1_tp_data[5] = (U1)0U; /*暫定 Tick Time*/
+    u1_tp_data[6] = (U1)0U; /*暫定 Tick Time*/
+    u1_tp_data[7] = (U1)0U; /*暫定 Tick Time*/
+
+    vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_OPESTS_SIZE,u1_tp_data);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1PowerSTRmodeSend(const U1 u1_a_DATA)                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_a_DATA : STR Mode Status                                                                                      */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerSTRmodeSend(const U1 u1_a_DATA)
+{
+    /*動作ステータス応答*/    
+    U1 u1_tp_data[XSPI_IVI_POWER_STRMODE_SIZE];
+
+    u1_tp_data[0] = (U1)XSPI_IVI_POWER_STRMODE_SEND;
+    u1_tp_data[1] = u1_a_DATA;
+
+    vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_STRMODE_SIZE,u1_tp_data);
+}
+
+/*===================================================================================================================================*/
 /*  void            vd_g_XspiIviSub1_POWER_Ana(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size)                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
@@ -523,7 +575,13 @@ void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_
         break;
     case XSPI_IVI_POWER_STATE_TRANS_REC:
         vd_s_XspiIviSub1_PowerStateTransRec(&u1_ap_XSPI_ADD[0],u2_a_data_size);
-        break;    
+        break;
+    case XSPI_IVI_POWER_OPESTS_REC:
+        vd_s_XspiIviSub1PowerOperationStsRec(&u1_ap_XSPI_ADD[0]);
+        break;
+    case XSPI_IVI_POWER_STRMODE_REC:
+        vd_s_XspiIviSub1PowerSTRmodeRec(&u1_ap_XSPI_ADD[0]);
+        break;
     default:
         break;
     }
@@ -548,6 +606,35 @@ static void            vd_s_XspiIviSub1_PowerStateTransRec(const U1 * u1_ap_XSPI
     st_s_xspi_ivi_state_trans.u1_special_state = u1_ap_XSPI_ADD[3];
     st_s_xspi_ivi_state_trans.u1_ota_state = u1_ap_XSPI_ADD[4];
     st_s_xspi_ivi_state_trans.u1_appearance_state = u1_ap_XSPI_ADD[5];
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSPI_ADD)                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerOperationStsRec(const U1 * u1_ap_XSPI_ADD)
+{
+    /*動作ステータス通知*/    
+    vd_s_XspiIviSub1PowerOperationStsSend(u1_ap_XSPI_ADD[1]);
+
+    /*暫定:Skip SoCからのリセット要求*/
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1PowerSTRmodeRec(const U1 * u1_ap_XSPI_ADD)                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_XSPI_ADD : SubFlame1 Start Buffer                                                                          */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1PowerSTRmodeRec(const U1 * u1_ap_XSPI_ADD)
+{
+    /*デバイスのサスペンド/レジューム処理スキップ*/
+    /*暫定:44hコマンドをそのまま応答する*/
+    vd_s_XspiIviSub1PowerSTRmodeSend(u1_ap_XSPI_ADD[1]);
 }
 
 /*===================================================================================================================================*/
@@ -640,16 +727,12 @@ void            vd_g_XspiIviSub1PowerDevInitCmpApp(const U1 u1_a_ID)
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviSub1PowerDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD)
 {
-    U1     u1_tp_data[XSPI_IVI_POWER_SIZE];
     U1     u1_t_id;
 
     u1_t_id = (U1)XSPI_IVI_POWER_ID;
 
-    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)XSPI_IVI_POWER_SIZE);
-    vd_g_MemcpyU1(&u1_tp_data[0], &u1_ap_XSPI_ADD[0], (U4)u2_a_size);
-
     /*キューの関数呼び出し（そっちでヘッダーとかは入れてく）*/
-    vd_g_XspiIviSub1MISCStuckBuff(u1_t_id,u2_a_size,u1_tp_data);
+    vd_g_XspiIviSub1MISCStuckBuff(u1_t_id,u2_a_size,&u1_ap_XSPI_ADD[0]);
 }
 
 /*===================================================================================================================================*/
