@@ -1534,18 +1534,18 @@ static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u
         u1_tp_utc_data[2] = (U1)0x44U;
         u1_tp_utc_data[3] = (U1)0x54U;
         /*データ長*/
-        u1_tp_utc_data[4] = 0U;        /*データタイプがU1に収まるためByte4は0固定*/
-        u1_tp_utc_data[5] = (U1)u1_t_utc_data_size - (U2)XSPI_IVI_HEADER;
+        u1_tp_utc_data[4] = (U1)((u2_a_SIZE >> XSPI_IVI_SFT_08) & (U2)0x00FFU);
+        u1_tp_utc_data[5] = (U1)(u2_a_SIZE & (U2)0x00FFU);
         /*データサイズ*/
         u1_tp_utc_data[6] = (U1)u1_a_ID;
         u1_tp_utc_data[7] = (U1)0U;
         u1_tp_utc_data[8] = (U1)u1_a_ID;
 
         /*tickTime*/
-        u1_tp_utc_data[9] = (U1)((u4_t_time >> XSPI_IVI_SFT_24) & 0x000000FFU);
-        u1_tp_utc_data[10] = (U1)((u4_t_time >> XSPI_IVI_SFT_16) & 0x000000FFU);
-        u1_tp_utc_data[11] = (U1)((u4_t_time >> XSPI_IVI_SFT_08) & 0x000000FFU);
-        u1_tp_utc_data[12] = (U1)(u4_t_time & 0x000000FFU);
+        u1_tp_utc_data[9] = (U1)((u4_t_time >> XSPI_IVI_SFT_24) & (U4)0x000000FFU);
+        u1_tp_utc_data[10] = (U1)((u4_t_time >> XSPI_IVI_SFT_16) & (U4)0x000000FFU);
+        u1_tp_utc_data[11] = (U1)((u4_t_time >> XSPI_IVI_SFT_08) & (U4)0x000000FFU);
+        u1_tp_utc_data[12] = (U1)(u4_t_time & (U4)0x000000FFU);
         /*UTC data*/
         vd_g_MemcpyU1(&u1_tp_utc_data[13], &u1_sp_Xspi_Ivi_ClockUtcdata[0], (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
 

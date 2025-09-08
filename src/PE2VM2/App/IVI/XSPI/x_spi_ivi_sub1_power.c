@@ -414,7 +414,10 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
     if(u1_t_boot == STD_HIGH){   /* BOOT=Hiを検知した場合、どの状態でも下記状態に上書き */
         u1_s_xspi_ivi_power_state[XSPI_IVI_POWER_01_BYTE2] = (U1)XSPI_IVI_POWER_STATE_POWERON;   /* 基本ステート：POWERON通常 */
         u1_s_xspi_ivi_power_state[XSPI_IVI_POWER_01_BYTE3] = (U1)XSPI_IVI_POWER_STATE_OFF;       /* 特殊ステート：未設定 */
+        u1_s_xspi_ivi_power_state[XSPI_IVI_POWER_01_BYTE4] = (U1)0U;                             /* OTAステート ：未設定 */
         u1_s_xspi_ivi_power_state[XSPI_IVI_POWER_01_BYTE5] = (U1)0U;                             /* 見た目ON/OFF：ON */
+        u1_s_xspi_ivi_power_state[XSPI_IVI_POWER_01_BYTE6] = (U1)0U;                             /* 車両電源（特殊）ステート遷移中フラグ：遷移完了 */
+        u1_s_xspi_ivi_power_state[XSPI_IVI_POWER_01_BYTE7] = (U1)XSPI_IVI_POWER_DC_NONE;         /* 途絶状態：途絶なし */
     }
     /* シス検暫定ここまで */
 
