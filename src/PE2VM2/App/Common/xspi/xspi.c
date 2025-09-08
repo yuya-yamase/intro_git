@@ -23,12 +23,6 @@ static uint8 	bf_drv_skip_first_data = XSPI_NG;		/* 暫定対応 初回データ
 static uint32 	bf_drv_dummy_rcvdata = 0x00000000UL;	/* 暫定対応 初回データスキップ */
 static uint32 	bf_drv_dummy_snddata = 0x00000000UL;	/* 暫定対応 初回データスキップ */
 
-static uint32	bf_drv_OST_START[GPT_OST_START_NUM_CFG] = {	/* OSTM開始情報 */
-	((uint32)GPT_OST_START_CTRL_BIT_IRQ_EN |
-	 (uint32)GPT_OST_START_CTRL_BIT_TRG_ST),		/* GPT_OST_START_CTRL */
-	 (uint32)XSPI_OST_CNT_N_NEXT					/* GPT_OST_START_PERIOD */
-	};
-
 extern BF_DRV_SPI	bf_drv_SpiMng;		/* XSPI管理情報 */
 
 #ifdef XSPI_DEBUG
@@ -191,6 +185,11 @@ void	xspi_Init(
 )
 {
 	(VOID)ch;
+	const uint32 ost_start[GPT_OST_START_NUM_CFG] = {	/* OSTM開始情報 */
+	XSPI_OST_START_CTRL,	/* GPT_OST_START_CTRL */
+	XSPI_OST_CNT_INIT		/* GPT_OST_START_PERIOD */
+	};
+
 	/* SPIポート設定 */
 	Port_SetPinMode( XSPI_SCLK_PORT, XSPI_SCLK_MODE_CFG );
 	Port_SetPinMode( XSPI_TXD_PORT, XSPI_TXD_MODE_CFG );
@@ -212,8 +211,7 @@ void	xspi_Init(
 	PDR_SPI_FRM_WR( STD_HIGH );
 
 	/* OSTM起動（初期化用） */
-	bf_drv_OST_START[GPT_OST_START_PERIOD] = XSPI_OST_CNT_INIT;
-	vd_g_Gpt_OstStart( XSPI_OST_CH, bf_drv_OST_START );
+	vd_g_Gpt_OstStart( XSPI_OST_CH, ost_start );
 
 	return;
 }
@@ -562,6 +560,10 @@ static uint8	fs_tbl_Excute(
 {
 	uint8	stat;
 	uint8	func_result;
+	uint32 ost_start[GPT_OST_START_NUM_CFG] = {	/* OSTM開始情報 */
+	XSPI_OST_START_CTRL,	/* GPT_OST_START_CTRL */
+	XSPI_OST_CNT_INIT		/* GPT_OST_START_PERIOD */
+	};
 
 	/* テーブル処理前の状態を保存 */
 	stat = bf_drv_SpiMng.stat;
@@ -595,16 +597,16 @@ static uint8	fs_tbl_Excute(
 	if( tb_drv_SpiDrvJmp[stat][event].ostm_cnt != 0UL )
 	{
 		/* OSTM割り込みのカウンタ値をセット */
-		bf_drv_OST_START[GPT_OST_START_PERIOD] = tb_drv_SpiDrvJmp[stat][event].ostm_cnt;
+		ost_start[GPT_OST_START_PERIOD] = tb_drv_SpiDrvJmp[stat][event].ostm_cnt;
 	}
 	else
 	{
 		/* OSTM割り込みのカウンタ値をセット（通常の状態遷移では起こりえない） */
-		bf_drv_OST_START[GPT_OST_START_PERIOD] = XSPI_OST_CNT_N_NEXT;
+		ost_start[GPT_OST_START_PERIOD] = XSPI_OST_CNT_N_NEXT;
 	}
 
 	/* OSTM起動 */
-	vd_g_Gpt_OstStart( XSPI_OST_CH, bf_drv_OST_START );
+	vd_g_Gpt_OstStart( XSPI_OST_CH, ost_start );
 
 	return( bf_drv_SpiMng.stat );
 }
