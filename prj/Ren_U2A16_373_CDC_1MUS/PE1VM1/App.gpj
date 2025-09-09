@@ -48,7 +48,6 @@ xspi_met_vptran.c
 xspi_met_ch0.c
 xspi_met_ch0_cfg.c
 xspi_met_ch1.c
-xspi_met_dsal.c
 xspi_met_nvm.c
 xspi_met_ota.c
 App/MET/STUB/config/veh_opemd_xmode_STUB.c

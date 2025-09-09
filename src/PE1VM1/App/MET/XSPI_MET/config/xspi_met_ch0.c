@@ -26,7 +26,6 @@
 #include "xspi_aisstr.h"
 #endif
 #include "xspi_met_ch0_cfg.h"
-#include "xspi_met_dsal.h"
 
 /* Platform */
 #include "oxcan.h"
