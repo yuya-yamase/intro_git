@@ -69,7 +69,6 @@
 #endif
 #include "vds_ci.h"
 #include "oilmil.h"
-#include "ecojdg.h"
 #include "dte_ed.h"
 #include "avggrph.h"
 #include "batcare.h"
@@ -237,8 +236,6 @@
 #define XSPI_GMONI_MAXHIST_KIND             (2U)
 #define XSPI_GMONI_MAXHIST_BYTE             (0U)
 #define XSPI_GMONI_MAXHIST_POS              (1U)
-
-#define XSPI_ECOJDG_INVALID                 (155U)
 
 #define XSPI_NICKNAME_USERNUM               (3U)
 #define XSPI_NICKNAME_TXTNUM                (10U)
@@ -1129,7 +1126,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     U4              u4_t_data;
     U2              u2_t_data;
     U1              u1_t_data;
-    U1              u1_tp_ecojdg_scr[ECOJDG_NUM_SCR];
     U1              u1_t_loop;
     U1              u1_t_acsts;
 
@@ -1246,19 +1242,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[35] = u4_t_data;                                                   /* TRIPB_DRVTIME_HHHH_USRRST            */
                                                                                     /* TRIPB_DRVTIME_MM_USRRST              */
                                                                                     /* TRIPB_DRVTIME_SS_USRRST              */
-    for(u1_t_loop = (U1)0U;  u1_t_loop < (U1)ECOJDG_NUM_SCR; u1_t_loop++){
-       u1_tp_ecojdg_scr[u1_t_loop] = (U1)0U;
-    }
-    vd_g_EcoJdgScr(&u1_tp_ecojdg_scr[0], (U1)ECOJDG_NUM_SCR);
-    for(u1_t_loop = (U1)0U;  u1_t_loop < (U1)ECOJDG_NUM_SCR; u1_t_loop++){
-        if (u1_tp_ecojdg_scr[u1_t_loop] == (U1)ECOJDG_SCR_INVALID){
-            u1_tp_ecojdg_scr[u1_t_loop] =  (U1)XSPI_ECOJDG_INVALID;             /* Invalid Value Convert                */
-        }
-    }
-    u4_ap_pdu_tx[36]  = ((U4)u1_tp_ecojdg_scr[ECOJDG_SCR_RUN_TOTAL] << XSPI_SHIFT_3BYTE); /* OVERALL                              */
-    u4_ap_pdu_tx[36] |= ((U4)u1_tp_ecojdg_scr[ECOJDG_SCR_RUN_STR]   << XSPI_SHIFT_2BYTE); /* ECO_STARTING                         */
-    u4_ap_pdu_tx[36] |= ((U4)u1_tp_ecojdg_scr[ECOJDG_SCR_RUN_RUN]   << XSPI_SHIFT_1BYTE); /* STABLE_RUNNING                       */
-    u4_ap_pdu_tx[36] |=  (U4)u1_tp_ecojdg_scr[ECOJDG_SCR_RUN_DEC];                            /* ECO_DECELERATION                     */
 
     u1_t_data         = (U1)0U;
     u1_t_sts          = u1_g_EvDtePct(&u1_t_data);

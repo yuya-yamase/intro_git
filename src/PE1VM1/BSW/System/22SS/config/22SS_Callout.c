@@ -74,7 +74,6 @@
 #include "mmlang.h"
 #include "vmmunit.h"
 #include "fspomgr.h"
-#include "ecojdg.h"
 #include "mmappctrl.h"
 #include "attmp_cel.h"
 #include "evschg.h"
@@ -156,7 +155,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_MmLangBonInit,
         &vd_g_VardefMmUnitBonInit,
         &vd_g_FspomgrBonInit,
-        &vd_g_EcoJdgInit,
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareBonInit,
@@ -246,7 +244,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
         &vd_g_FspomgrWkupInit,
-        &vd_g_EcoJdgInit,
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareRstwkInit,
@@ -336,7 +333,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
         &vd_g_FspomgrWkupInit,
-        &vd_g_EcoJdgInit,
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_BatcareRstwkInit,
