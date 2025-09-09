@@ -29,32 +29,15 @@
 
 /* Platform */
 #include "oxcan.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "iohw_diflt.h"
 #include "iohw_adc.h"
 #include "iohw_adc_channel.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "iohw_adc_channel_STUB.h"
-#include "iohw_diflt_sgnl_STUB.h"
-#endif
 #if 0   /* BEV BSW provisionally */
 #include "CxpiCdd_App.h"
 #endif
 
 #include "rim_ctl_cfg.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "rim_ctl_cfg_STUB.h"
-#endif
 #include "veh_opemd.h"
-#if 0   /* BEV BSW provisionally */
-#else
-#include "veh_opemd_xmode_STUB.h"
-#endif
 #include "ivdsh.h"
 
 #if 0   /* BEV Rebase provisionally */

@@ -24,7 +24,6 @@
     -I${VEHOPE_DIR}/scc
     -I${LIB_DIR}
 
-    -I${APP_DIR}/MET/STUB/config
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config
     -I${APP_DIR}/MET/EcuLib/Ren_G3m/scc
@@ -50,7 +49,6 @@ xspi_met_ch0_cfg.c
 xspi_met_ch1.c
 xspi_met_nvm.c
 xspi_met_ota.c
-App/MET/STUB/config/veh_opemd_xmode_STUB.c
 App/MET/EcuLib/Common/scc/fpcall_vd_fu1.c
 App/MET/EcuLib/Common/scc/fpcall_vd_fvd.c
 App/MET/EcuLib/Common/scc/lerp_u2.c

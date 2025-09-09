@@ -26,10 +26,6 @@
 #include "rim_ctl.h"
 #include "nvmc_mgr.h"
 
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "fpcall_vd_fvd.h"
 #if 0   /* BEV Rebase provisionally */
 /* Complex Device Driver */
