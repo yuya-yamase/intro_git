@@ -1208,7 +1208,11 @@ static U2       u2_s_McuDev_Pwroff_PictIC(const U1 u1_a_PWR)
 
     u2_t_ret    = (U2)PWROFF_BIT_OFF;
 
+#if 0   /* temporary */
     if((u1_a_PWR == (U1)POWER_MODE_STATE_STANDBY) || (u1_a_PWR == (U1)POWER_MODE_STATE_PARK) || (u1_a_PWR == (U1)POWER_MODE_STATE_EDS)){
+#else
+    if(u1_a_PWR == (U1)POWER_MODE_STATE_STANDBY){
+#endif    /* temporary */
         vd_g_McuDevPwronSetPort(MCU_PORT_V_IC_RST, MCU_DIO_LOW);
         u2_t_ret    = (U2)PWROFF_PICTIC_BIT;
     }
@@ -1253,7 +1257,11 @@ static U2       u2_s_McuDev_Pwroff_GVIFTx_CDisp(const U1 u1_a_PWR)
 
     u2_t_ret    = (U2)PWROFF_BIT_OFF;
 
+#if 0   /* temporary */
     if((u1_a_PWR == (U1)POWER_MODE_STATE_STANDBY) || (u1_a_PWR == (U1)POWER_MODE_STATE_PARK) || (u1_a_PWR == (U1)POWER_MODE_STATE_EDS)){
+#else
+    if(u1_a_PWR == (U1)POWER_MODE_STATE_STANDBY){
+#endif    /* temporary */
         vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CDISP_RST, MCU_DIO_LOW);
         u2_t_ret    = (U2)PWROFF_GVIFTX_BIT;
     }
