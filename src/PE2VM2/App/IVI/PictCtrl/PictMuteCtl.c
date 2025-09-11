@@ -90,9 +90,16 @@ void    vd_g_PictMute_Routine(void)
         && (u1_s_pictmute_pmapshold_pre_sts == (U1)PICTMUTE_IO_STS_LOW)){
             u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTELO_PMAPSHOLD;
         }
+#if 0   /* temporary */
         if(u1_t_read_vicrst_sts == (U1)PICTMUTE_IO_STS_LOW){
             u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTELO_VICRST;
         }
+#else
+        if((u1_t_read_vehpowstt_sts != (U1)POWER_MODE_STATE_PARK) &&
+           (u1_t_read_vehpowstt_sts != (U1)POWER_MODE_STATE_EDS)){
+            u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTELO_VICRST;
+        }
+#endif  /* temporary */
 
         /* PM-V-MUTE Update */
         u1_s_pictmute_mute_signal &= (U1)PICTMUTE_MUTESET_MASK;
