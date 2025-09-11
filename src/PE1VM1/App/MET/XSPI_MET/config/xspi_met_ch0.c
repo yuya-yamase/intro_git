@@ -71,7 +71,6 @@
 #include "oilmil.h"
 #include "dte_ed.h"
 #include "avggrph.h"
-#include "batcare.h"
 
 #include "himgadj.h"
 #include "hdimmgr_if.h"
@@ -347,7 +346,6 @@ static inline void    vd_s_XSpiCfgTxHybsys(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxFuelvol(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxBatcare(       U4 * u4_ap_pdu_tx);
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx); */
 static inline void    vd_s_XSpiCfgTxBatpow(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx);
@@ -924,18 +922,6 @@ static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx) {
     u2_t_tmp /= (U2)XSPI_AMB_LSB_1;
 
     u4_ap_pdu_tx[1] |= ((U4)u2_t_tmp << XSPI_SHIFT_2BYTE);                     /* AMB_TEMP_FAH                                       */
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxBatcare(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxBatcare(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    u4_ap_pdu_tx[0]   = (U4)u2_g_BatcareGetBSOH();                            /* BSOH                                                */
-    u4_ap_pdu_tx[0]  |= ((U4)u1_g_BatcareGetBSOCE() << XSPI_SHIFT_2BYTE); /* BSOCE                                               */
 #endif   /* BEV Rebase provisionally */
 }
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx) {} */ /* @@Stub */
@@ -3024,7 +3010,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxFuelvol(       &u4_ap_pdu_tx[ 41]);      /* 041 - 042    : Fuel Volume                                   */
     vd_s_XSpiCfgTxPtsctmp(       &u4_ap_pdu_tx[ 43]);      /* 043 - 043    : EngineTemp                                    */
     vd_s_XSpiCfgTxAmbtmp(        &u4_ap_pdu_tx[ 44]);      /* 044 - 045    : Ambient Temp                                  */
-    vd_s_XSpiCfgTxBatcare(       &u4_ap_pdu_tx[ 46]);      /* 046 - 046    : SOHDSP                                        */
     /* vd_g_XSpiCfgTxHydrovol(      &u4_ap_pdu_tx[0]); */  /*     -        : Hydro Volume                                  */
     vd_s_XSpiCfgTxBatpow(        &u4_ap_pdu_tx[ 47]);      /* 047 - 048    : Battery Power                                 */
     vd_s_XSpiCfgTxShift(         &u4_ap_pdu_tx[ 49]);      /* 049 - 053    : Shift                                         */
