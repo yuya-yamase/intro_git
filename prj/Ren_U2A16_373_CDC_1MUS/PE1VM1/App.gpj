@@ -27,6 +27,7 @@
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config
     -I${APP_DIR}/MET/EcuLib/Ren_G3m/scc
+    -I${APP_DIR}/MET/IpcApplication/Evc/Calibration/config
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -75,3 +76,4 @@ App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u2_dw.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_blp.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_dw.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_mtrxsrch.850
+App/MET/IpcApplication/Evc/Calibration/config/calibration.c
