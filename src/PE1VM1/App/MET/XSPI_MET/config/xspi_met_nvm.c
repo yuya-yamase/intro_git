@@ -21,10 +21,6 @@
 
 #include "nvmc_mgr.h"
 #if 0   /* BEV BSW provisionally */
-#else
-#include "nvmc_mgr_cfg_STUB.h"
-#endif
-#if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
 #endif
 

@@ -29,6 +29,7 @@
 #else
 #endif
 
+#if 0   /* BEV Rebase provisionally */
 /* Complex Device Driver */
 #ifdef DATE_CLK_H
 #include "date_clk.h"
@@ -48,6 +49,7 @@
 #include "illumi.h"
 #include "hmiproxy.h"
 #include "vardef.h"
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -106,6 +108,7 @@ void    vd_g_RunMCfgInit(void)
 /*===================================================================================================================================*/
 U1      u1_g_RunMCfghkShtdwnchk1st(void)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (__RUN_M_CHK_1ST__ == 1)
     static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
         &u1_g_oXCANShtdwnOk,
@@ -166,6 +169,9 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 #else
     return((U1)TRUE);
 #endif /* #if (__RUN_M_CHK_1ST__ != 1) */
+#else   /* BEV Rebase provisionally */
+    return((U1)TRUE);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_RunMCfgWksrcIrqchk(void)                                                                                            */
