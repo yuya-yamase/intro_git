@@ -77,7 +77,6 @@
 #include "mmappctrl.h"
 #include "attmp_cel.h"
 #include "evschg.h"
-#include "batcare.h"
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met.h"
 #if 0   /* BEV Rebase provisionally */
@@ -157,7 +156,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_FspomgrBonInit,
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
-        &vd_g_BatcareBonInit,
         &vd_g_DateSIMETInit
     };
 #endif   /* BEV Rebase provisionally */
@@ -246,7 +244,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_FspomgrWkupInit,
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
-        &vd_g_BatcareRstwkInit,
         &vd_g_DateSIMETInit
     };
 #endif   /* BEV Rebase provisionally */
@@ -335,7 +332,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_FspomgrWkupInit,
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
-        &vd_g_BatcareRstwkInit,
         &vd_g_DateSIMETInit
     };
 #endif   /* BEV Rebase provisionally */
