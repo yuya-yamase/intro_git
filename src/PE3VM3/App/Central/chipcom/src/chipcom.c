@@ -1,9 +1,23 @@
+/* v0-3-0 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/*  chipcom.c                                                                                                                        */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
 /*--------------------------------------------------------------------------*/
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
 #include "chipcom.h"
 #include "aip_common.h"
 #include "LIB.h"
+
+#ifdef CHIPCOM_SAIL_SETTING
+#include "CanIf.h"
+#include "CanIf_Cbk.h"
+#include "CanIfStub.h"
+#include "CDD_DebugLog.h" /* CanIfStub Debug Code*/
+#endif /* CHIPCOM_SAIL_SETTING */
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
@@ -41,6 +55,7 @@
 #define CHIPCOM_SHIFT_2BYTE         (16U)
 #define CHIPCOM_SHIFT_3BYTE         (24U)
 
+#define CHIPCOM_TXCONF_PDUIDQUEUE_SIZE  ((uint8)30U)
 /*--------------------------------------------------------------------------*/
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -62,6 +77,14 @@ static uint32       ChipCom_SeqNumberRx;
 static uint32       ChipCom_SeqNumberTx;
 
 static uint16       ChipCom_SpiTxData_index;
+
+#ifdef CHIPCOM_SAIL_SETTING
+static PduIdType    ChipCom_TxConfPduIdQueue[CHIPCOM_TXCONF_PDUIDQUEUE_SIZE];
+static uint8        ChipCom_TxConfPduIdQueue_index;
+static uint8        ChipCom_TxConfPduIdQueue_Num;
+
+static uint8        ChipCom_TxConf_isTxConfBurstEnabled;
+#endif /* CHIPCOM_SAIL_SETTING */
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -97,6 +120,13 @@ void ChipCom_Init(void)
 
     ChipCom_SpiTxData_index = CHIPCOM_POS_TX_EVENTDATA_OFFSET;
 
+#ifdef CHIPCOM_SAIL_SETTING
+    LIB_memset((uint8 *)&(ChipCom_TxConfPduIdQueue[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_TXCONF_PDUIDQUEUE_SIZE);
+    ChipCom_TxConfPduIdQueue_index = 0;
+    ChipCom_TxConfPduIdQueue_Num = 0;
+    ChipCom_TxConf_isTxConfBurstEnabled = FALSE;
+#endif /* CHIPCOM_SAIL_SETTING */
+
     return;
 }
 
@@ -104,6 +134,9 @@ void ChipCom_MainRx(void)
 {
     uint8 SpiRead_Result;
     uint16 RxLoopCnt;
+#ifdef CHIPCOM_SAIL_SETTING
+    uint8 u1t_TxConf_Cnt;
+#endif /* CHIPCOM_SAIL_SETTING */
 
     /* SPI Read */
     SpiRead_Result = xspi_Read(XSPI_CH_03, &(ChipCom_SpiRxDataU4[0]), (uint32)CHIPCOM_RCV_FRM_MAX_WORD);
@@ -127,6 +160,19 @@ void ChipCom_MainRx(void)
         CHIPCOM_ENABLE_INTERRUPT();
 
         ChipCom_DispatchReceiveDate(&(ChipCom_SpiRxDataU1[0U]));
+#ifdef CHIPCOM_SAIL_SETTING
+        if (ChipCom_TxConf_isTxConfBurstEnabled == TRUE) {
+            /* Send All TxConfirmation When RxInd receive Task */
+            if (ChipCom_TxConfPduIdQueue_Num > 0) {
+                for(u1t_TxConf_Cnt=0; u1t_TxConf_Cnt < ChipCom_TxConfPduIdQueue_Num; u1t_TxConf_Cnt++) {
+                    CanIfStub_TxConfirmation(ChipCom_TxConfPduIdQueue[u1t_TxConf_Cnt]);
+                }
+                LIB_memset((uint8 *)&(ChipCom_TxConfPduIdQueue[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_TXCONF_PDUIDQUEUE_SIZE);
+                ChipCom_TxConfPduIdQueue_index = 0;
+                ChipCom_TxConfPduIdQueue_Num = 0;
+            }
+        }
+#endif /* CHIPCOM_SAIL_SETTING */
     }
 
     return;
@@ -137,6 +183,22 @@ void ChipCom_MainTx(void)
     uint8 SpiState;
     uint8 SpiWrite_Result;
     uint16 TxLoopCnt;
+#ifdef CHIPCOM_SAIL_SETTING
+    uint8 u1t_TxConf_Cnt;
+
+    if (ChipCom_TxConf_isTxConfBurstEnabled == TRUE) {
+        /* Send All TxConfirmation When RxInd receive Task */
+        if (ChipCom_TxConfPduIdQueue_Num > 0) {
+            for(u1t_TxConf_Cnt=0; u1t_TxConf_Cnt < ChipCom_TxConfPduIdQueue_Num; u1t_TxConf_Cnt++) {
+                CanIfStub_TxConfirmation(ChipCom_TxConfPduIdQueue[u1t_TxConf_Cnt]);
+            }
+            LIB_memset((uint8 *)&(ChipCom_TxConfPduIdQueue[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_TXCONF_PDUIDQUEUE_SIZE);
+            ChipCom_TxConfPduIdQueue_index = 0;
+            ChipCom_TxConfPduIdQueue_Num = 0;
+        }
+        ChipCom_TxConf_isTxConfBurstEnabled = FALSE;
+    }
+#endif /* CHIPCOM_SAIL_SETTING */
 
     SpiState = xspi_GetCondition(XSPI_CH_03);
     if ((SpiState == XSPI_DCOND_IDLE) || (SpiState == XSPI_DCOND_TRANSMIT)) {
@@ -169,6 +231,17 @@ void ChipCom_MainTx(void)
             ChipCom_SpiTxDataU1[CHIPCOM_POS_SEQUENCENO2] = (uint8)((ChipCom_SeqNumberTx & CHIPCOM_4BYTEMASK_HIGH   ) >> CHIPCOM_SHIFT_2BYTE);
             ChipCom_SpiTxDataU1[CHIPCOM_POS_SEQUENCENO3] = (uint8)((ChipCom_SeqNumberTx & CHIPCOM_4BYTEMASK_LOW    ) >> CHIPCOM_SHIFT_1BYTE);
             ChipCom_SpiTxDataU1[CHIPCOM_POS_SEQUENCENO4] = (uint8)((ChipCom_SeqNumberTx & CHIPCOM_4BYTEMASK_LOWEST )                       );
+#ifdef CHIPCOM_SAIL_SETTING
+            /* Send TxConfirmation */
+            if (ChipCom_TxConfPduIdQueue_Num > 0) {
+                for(u1t_TxConf_Cnt=0; u1t_TxConf_Cnt < ChipCom_TxConfPduIdQueue_Num; u1t_TxConf_Cnt++) {
+                    CanIfStub_TxConfirmation(ChipCom_TxConfPduIdQueue[u1t_TxConf_Cnt]);
+                }
+                LIB_memset((uint8 *)&(ChipCom_TxConfPduIdQueue[0]), CHIPCOM_BUFFER_INITVAL, CHIPCOM_TXCONF_PDUIDQUEUE_SIZE);
+                ChipCom_TxConfPduIdQueue_index = 0;
+                ChipCom_TxConfPduIdQueue_Num = 0;
+            }
+#endif /* CHIPCOM_SAIL_SETTING */
         }
 
         /* Enable Interrupt */
@@ -178,34 +251,13 @@ void ChipCom_MainTx(void)
     return;
 }
 
-static void ChipCom_DispatchReceiveDate(uint8* pReceiveData)
-{
-    uint8 DataId;
-    uint16 TotalLength;
-    uint16 PayloadLength;
-    uint16 i = CHIPCOM_POS_RX_EVENTDATA_OFFSET;
-
-    TotalLength = (pReceiveData[CHIPCOM_POS_TOTALLENGTH1] << CHIPCOM_SHIFT_1BYTE);
-    TotalLength = (TotalLength | pReceiveData[CHIPCOM_POS_TOTALLENGTH2]);
-
-    while (i < TotalLength) {
-        DataId = pReceiveData[i];
-        PayloadLength = pReceiveData[i + CHIPCOM_POS_LENGTH1_OFFSET];
-        PayloadLength = ((PayloadLength << CHIPCOM_SHIFT_1BYTE) | pReceiveData[i + CHIPCOM_POS_LENGTH2_OFFSET]);
-
-        if (DataId < CHIPCOM_DATAID_MAX) {
-            (NotificationFunction[DataId].NotificationFuncPtr)(PayloadLength, &pReceiveData[i + CHIPCOM_POS_DATA_OFFSET]);
-        }
-        i += CHIPCOM_HEADER_LENGTH + PayloadLength;/* Header+Length */
-    }
-
-    return;
-}
-
 Std_ReturnType  ChipCom_Transmit(const uint8 data_id, const uint16 transreq_len, const uint8* const transreq_data)
 {
     uint16 u2t_TxDataCount;
     Std_ReturnType Ret = E_NOT_OK;
+#ifdef CHIPCOM_SAIL_SETTING
+    uint16 u2t_PduId;
+#endif /* CHIPCOM_SAIL_SETTING */
 
     /* Disable Interrupt */
     CHIPCOM_DISABLE_INTERRUPT();
@@ -227,6 +279,17 @@ Std_ReturnType  ChipCom_Transmit(const uint8 data_id, const uint16 transreq_len,
                 }
                 ChipCom_SpiTxData_index += u2t_TxDataCount;
 
+#ifdef CHIPCOM_SAIL_SETTING
+                if (data_id == CHIPCOM_DATAID_CANIFPROXY_TRANSMIT) {
+                    u2t_PduId = (uint16)((transreq_data[CHIPCOM_CANIFTRANS_POS_PDUID_DATA0]) << CHIPCOM_SHIFT_1BYTE);
+                    u2t_PduId = u2t_PduId | (uint16)(transreq_data[CHIPCOM_CANIFTRANS_POS_PDUID_DATA1]);
+                    if (ChipCom_TxConfPduIdQueue_Num < (CHIPCOM_TXCONF_PDUIDQUEUE_SIZE - 1)) {
+                        ChipCom_TxConfPduIdQueue[ChipCom_TxConfPduIdQueue_index] = u2t_PduId;
+                        ChipCom_TxConfPduIdQueue_index++;
+                        ChipCom_TxConfPduIdQueue_Num++;
+                    }
+                }
+#endif /* CHIPCOM_SAIL_SETTING */
                 Ret = E_OK;
             }
         }
@@ -292,6 +355,35 @@ void ChipCom_Nop(const uint16 receive_len, const uint8* const receive_data)
 /****************************************************************************/
 /* Internal Functions                                                       */
 /****************************************************************************/
+static void ChipCom_DispatchReceiveDate(uint8* pReceiveData)
+{
+    uint8 DataId;
+    uint16 TotalLength;
+    uint16 PayloadLength;
+    uint16 i = CHIPCOM_POS_RX_EVENTDATA_OFFSET;
+
+    TotalLength = (pReceiveData[CHIPCOM_POS_TOTALLENGTH1] << CHIPCOM_SHIFT_1BYTE);
+    TotalLength = (TotalLength | pReceiveData[CHIPCOM_POS_TOTALLENGTH2]);
+
+    while (i < TotalLength) {
+        DataId = pReceiveData[i];
+        PayloadLength = pReceiveData[i + CHIPCOM_POS_LENGTH1_OFFSET];
+        PayloadLength = ((PayloadLength << CHIPCOM_SHIFT_1BYTE) | pReceiveData[i + CHIPCOM_POS_LENGTH2_OFFSET]);
+
+        if (DataId < CHIPCOM_DATAID_MAX) {
+#ifdef CHIPCOM_SAIL_SETTING
+            if (DataId == CHIPCOM_DATAID_CANTP_RXIND) {
+                ChipCom_TxConf_isTxConfBurstEnabled = TRUE;
+            }
+#endif
+            (NotificationFunction[DataId].NotificationFuncPtr)(PayloadLength, &pReceiveData[i + CHIPCOM_POS_DATA_OFFSET]);
+        }
+        i += CHIPCOM_HEADER_LENGTH + PayloadLength;/* Header+Length */
+    }
+
+    return;
+}
+
 
 
 /**** End of File ***********************************************************/
