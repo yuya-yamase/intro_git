@@ -197,6 +197,12 @@
     },
     "COMPONENT_LIST": [
         "PE0VM0",
+        "PE0VM0/App",
+        "PE0VM0/App/iVCBsh",
+        "PE0VM0/App/iVCBsh/config",
+        "PE0VM0/App/iVCBsh/config/ivcbsh_cfg.c",
+        "PE0VM0/App/iVCBsh/scc",
+        "PE0VM0/App/iVCBsh/scc/ivcbsh.c",
         "PE0VM0/BSW",
         "PE0VM0/BSW/Aubist",
         "PE0VM0/BSW/Aubist/AbPartition",
