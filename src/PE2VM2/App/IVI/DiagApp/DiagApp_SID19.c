@@ -225,18 +225,22 @@ void            vd_g_DiagAppSID19Init(void)
 /*===================================================================================================================================*/
 void            vd_g_DiagAppSID19Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans)
 {
-    U1 u1_t_dataLength;             /* Data Length  */
+    U4 u4_t_dataLength;             /* Data Length  */
     EN_DIAGAPP_SID19_SF en_t_sf;    /* Sub Function */
     U1 u1_t_requestId;              /* RequestID    */
 
     /* Data Length */
-    u1_t_dataLength = (U1)st_ap_REQ->u4_nbyte;
+    u4_t_dataLength = st_ap_REQ->u4_nbyte;
 
-    if (st_ap_REQ->u2_tim_elpsd == 0) {
+    if (st_ap_REQ->u2_tim_elpsd == (U2)0U) {
+        if(st_ap_REQ->u1_req_type == (U1)OXDC_REQ_TYPE_FUNC) {
+            vd_g_DiagAppAnsTxNRC((U1)DIAGAPP_NRC_NONSUP);
+            return;
+        }
         st_s_diagapp_sid19_ans.u1p_tx = st_ap_ans->u1p_tx;
         st_s_diagapp_sid19_ans.u4_nbyte = st_ap_ans->u4_nbyte;
         /* Data Length < minimun request size */
-        if (u1_t_dataLength < DIAGAPP_SID19_MIN_REQ_SIZE)
+        if (u4_t_dataLength < (U4)DIAGAPP_SID19_MIN_REQ_SIZE)
         {
             /* NRC:0x13 */
             vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_13);
@@ -284,7 +288,7 @@ void            vd_g_DiagAppSID19Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_
         }
 
         /* Data Length Check */
-        if ((st_sp_DIAGAPP_SFDATAMNG[en_t_sf].reqDataLength) != u1_t_dataLength) {
+        if ((st_sp_DIAGAPP_SFDATAMNG[en_t_sf].reqDataLength) != u4_t_dataLength) {
             /* MSG Length Mismatch */
             /* NRC:0x13 */
             vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_13);
@@ -328,7 +332,7 @@ static void     vd_s_DiagAppSID19Request_Sub02(const ST_OXDC_REQ * st_ap_REQ, ST
     u1_a_DTCStatusMask = st_ap_REQ->u1p_RX[DIAGAPP_SID19_SF02_REQ_DTC_STATUS_MASK];
     u1_t_result = u1_g_XspiIviSub0Request_SID19sf02(u1_a_REQID, u1_a_DTCStatusMask, &u1_t_NRC);
 
-    if (u1_t_result == E_NOT_OK) {
+    if (u1_t_result == (U1)E_NOT_OK) {
         /* NRC */
         vd_g_DiagAppAnsTxNRC(u1_t_NRC);
     }
@@ -354,7 +358,7 @@ static void     vd_s_DiagAppSID19Request_Sub03(const ST_OXDC_REQ * st_ap_REQ, ST
     u1_t_NRC = (U1)0U;
     u1_t_result = u1_g_XspiIviSub0Request_SID19sf03(u1_a_REQID, &u1_t_NRC);
 
-    if (u1_t_result == E_NOT_OK) {
+    if (u1_t_result == (U1)E_NOT_OK) {
         /* NRC */
         vd_g_DiagAppAnsTxNRC(u1_t_NRC);
     }
@@ -387,7 +391,7 @@ static void     vd_s_DiagAppSID19Request_Sub04(const ST_OXDC_REQ * st_ap_REQ, ST
 
     u1_t_result = u1_g_XspiIviSub0Request_SID19sf04(u1_a_REQID, u4_t_DTCMaskRecord, u1_t_DTCSnapshotRecordNumber, &u1_t_NRC);
 
-    if (u1_t_result == E_NOT_OK) {
+    if (u1_t_result == (U1)E_NOT_OK) {
         /* NRC */
         vd_g_DiagAppAnsTxNRC(u1_t_NRC);
     }
@@ -420,7 +424,7 @@ static void     vd_s_DiagAppSID19Request_Sub06(const ST_OXDC_REQ * st_ap_REQ, ST
 
     u1_t_result = u1_g_XspiIviSub0Request_SID19sf06(u1_a_REQID, u4_t_DTCMaskRecord, u1_t_DTCExtDataRecordNumber, &u1_t_NRC);
 
-    if (u1_t_result == E_NOT_OK) {
+    if (u1_t_result == (U1)E_NOT_OK) {
         /* NRC */
         vd_g_DiagAppAnsTxNRC(u1_t_NRC);
     }
@@ -451,7 +455,7 @@ static void     vd_s_DiagAppSID19Request_Sub17(const ST_OXDC_REQ * st_ap_REQ, ST
 
     u1_t_result = u1_g_XspiIviSub0Request_SID19sf17(u1_a_REQID, u1_t_DTCStatusMask, u1_t_MemorySelection, &u1_t_NRC);
 
-    if (u1_t_result == E_NOT_OK) {
+    if (u1_t_result == (U1)E_NOT_OK) {
         /* NRC */
         vd_g_DiagAppAnsTxNRC(u1_t_NRC);
     }
@@ -486,7 +490,7 @@ static void     vd_s_DiagAppSID19Request_Sub18(const ST_OXDC_REQ * st_ap_REQ, ST
 
     u1_t_result = u1_g_XspiIviSub0Request_SID19sf18(u1_a_REQID, u4_t_DTCMaskRecord, u1_t_DTCSnapshotRecordNumber, u1_t_MemorySelection, &u1_t_NRC);
 
-    if (u1_t_result == E_NOT_OK) {
+    if (u1_t_result == (U1)E_NOT_OK) {
         /* NRC */
         vd_g_DiagAppAnsTxNRC(u1_t_NRC);
     }
@@ -521,7 +525,7 @@ static void     vd_s_DiagAppSID19Request_Sub19(const ST_OXDC_REQ * st_ap_REQ, ST
 
     u1_t_result = u1_g_XspiIviSub0Request_SID19sf19(u1_a_REQID, u4_t_DTCMaskRecord, u1_t_DTCExtDataRecordNumber, u1_t_MemorySelection, &u1_t_NRC);
 
-    if (u1_t_result == E_NOT_OK) {
+    if (u1_t_result == (U1)E_NOT_OK) {
         /* NRC */
         vd_g_DiagAppAnsTxNRC(u1_t_NRC);
     }
@@ -551,7 +555,7 @@ static void     vd_s_DiagAppSID19Request_Sub1A(const ST_OXDC_REQ * st_ap_REQ, ST
 
     u1_t_result = u1_g_XspiIviSub0Request_SID19sf1A(u1_a_REQID, u1_t_DTCExtDataRecordNumber, &u1_t_NRC);
 
-    if (u1_t_result == E_NOT_OK) {
+    if (u1_t_result == (U1)E_NOT_OK) {
         /* NRC */
         vd_g_DiagAppAnsTxNRC(u1_t_NRC);
     }
