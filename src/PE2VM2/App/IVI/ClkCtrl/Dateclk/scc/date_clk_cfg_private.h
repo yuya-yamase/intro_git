@@ -117,6 +117,8 @@ U4      u4_g_DateclkCfgTmrwkTimout(void);
 void    vd_g_DateclkCfgLogCapt(const ST_DATE_CLK_LOG * st_ap_LOG, const U1 u1_a_ADJ);
 U4      u4_g_DateclkCfgDayCntMinValJdg(void);
 
+void    vd_g_DateclkYymmdd_Commit(const U1 u1_a_state);
+
 /* void    vd_g_DateclkIfRtcwkEI(void);                                         */ /* invoked at u1_g_DateclkShtLpmToTmrwk */
 /* void    vd_g_DateclkIfRtcwkDI(void);                                         */ /* invoked at u1_g_DateclkShtLpmToTmrwk */
                                                                                    /*        and vd_g_DateclkMainTask      */

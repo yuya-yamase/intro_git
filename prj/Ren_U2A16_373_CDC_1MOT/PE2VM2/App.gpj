@@ -26,6 +26,8 @@
     :sourceDir=${APP_DIR}/IVI/ClkCtrl/STUB/config
     :sourceDir=${APP_DIR}/IVI/DrcCtrl
     :sourceDir=${APP_DIR}/IVI/CanCtrl
+    :sourceDir=${APP_DIR}/IVI/iVDTr
+    :sourceDir=${APP_DIR}/IVI/DiagApp
 
     -I${APP_DIR}/Common/ExtSigCtrl
     -I${APP_DIR}/Common/xspi
@@ -44,8 +46,8 @@
     -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
 
-    -I${OXDOCAN_DIR}/lib/config_U2A16_met
-    -I${OXDOCAN_DIR}/lib/scc
+    -I${OXDOCAN_DIR}/config
+    -I${OXDOCAN_DIR}/scc
 
     -I${LIB_DIR}
     
@@ -67,6 +69,8 @@
     -I${APP_DIR}/IVI/DspCtrl/config
     -I${APP_DIR}/IVI/DrcCtrl
     -I${APP_DIR}/IVI/CanCtrl
+    -I${APP_DIR}/IVI/iVDTr
+    -I${APP_DIR}/IVI/DiagApp
 
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/scc
     -I${APP_DIR}/IVI/ClkCtrl/RtcIcDrv/config
@@ -83,6 +87,7 @@ ${SS_DIR}/RunM/scc/run_m.c
 ${SS_DIR}/RunM/config/run_m_cfg.c
 ${SS_DIR}/SchdM//scc/scheduler.c
 ${SS_DIR}/SchdM/config/scheduler_cfg.c
+${SS_DIR}/RprgIf/config/rprg_if_cfg_bkram.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
 ${APP_DIR}/Stub/stub_u2a.c
@@ -91,6 +96,14 @@ ExtSigCtrl.c
 xspi.c
 xspi_sub.c
 x_spi_ivi.c
+x_spi_ivi_sub0.c
+x_spi_ivi_sub0_SID10.c
+x_spi_ivi_sub0_SID14.c
+x_spi_ivi_sub0_SID19.c
+x_spi_ivi_sub0_SID22.c
+x_spi_ivi_sub0_SID28.c
+x_spi_ivi_sub0_SID2E.c
+x_spi_ivi_sub0_SID31.c
 x_spi_ivi_sub4.c
 x_spi_ivi_sub2.c
 x_spi_ivi_sub1.c
@@ -154,6 +167,8 @@ datesi_com.c
 datesi.c
 PowerIcCtl.c
 PwrCtl.c
+iVDTr_Main.c
+iVDTr_SlpCtrl.c
 
 volmute.c
 volmute_cfg.c
@@ -163,3 +178,12 @@ DtcCtl.c
 RobCtl.c
 IVI_CanCtrl_Main.c
 PncreqCtl.c
+CanCtlTx.c
+DiagApp.c
+DiagApp_SID10.c
+DiagApp_SID14.c
+DiagApp_SID19.c
+DiagApp_SID22.c
+DiagApp_SID28.c
+DiagApp_SID2E.c
+DiagApp_SID31.c

@@ -171,7 +171,7 @@ const ST_GP_I2C_MA_SLA           st_gp_GP_I2C_MA_SLA[GP_I2C_MA_NUM_SLA]  = {
         &vd_s_GpI2cMaCfgTRxAckCh1_Rtc,             /* fp_vd_ACK  */
         &st_gp_GP_I2C_MA_CH[GP_I2C_MA_CH_1],       /* stp_CH     */
         &st_gp_gpi2c_ma_ctrl[GP_I2C_MA_CH_1],      /* stp_CTRL   */
-        (U2)32U                                    /* u2_rwc_max */
+        (U2)25U                                    /* u2_rwc_max */
     },
     {   /* Gryo     : W 0xD2, R 0xD3 */
         &vd_s_GpI2cMaCfgTRxAckCh1_Gyro,            /* fp_vd_ACK  */

@@ -261,7 +261,7 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxPduRPduTbl[BSW_CANIF_RXPDURPDUNUM]
 {
    /* CAN-ID      , DLC       , Channel             , Extend     */
      { 0x400004ACUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [0] ABG1D50_Rx_CDC_VCAN_BUS */
-    ,{ 0x000004BCUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [1] ABG1D51_Rx_CDC_VCAN_BUS */
+    ,{ 0x400004BCUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [1] ABG1D51_Rx_CDC_VCAN_BUS */
     ,{ 0x400003B1UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [2] ABG1S01_Rx_CDC_VCAN_BUS */
     ,{ 0x400001D8UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [3] ABG1S04_Rx_CDC_VCAN_BUS */
     ,{ 0x400001D6UL, (BswU1)32U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [4] ABG1S09_Rx_CDC_VCAN_BUS */

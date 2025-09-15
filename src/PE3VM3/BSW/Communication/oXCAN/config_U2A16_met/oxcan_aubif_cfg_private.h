@@ -66,11 +66,13 @@
 /* Transmission */
 #if (OXCAN_E2E_NUM_TRA > 0U)
 extern const U2                           u2_gp_OXCAN_E2E_TRA_BY_PDU[];
+extern const U1                           u1_gp_OXCAN_E2E_TRA_LEN[OXCAN_E2E_NUM_TRA];
 #endif /* #if (OXCAN_E2E_NUM_TRA > 0U) */
 
 /* Reception   */
 #if (OXCAN_E2E_NUM_REC > 0U)
 extern const U2                           u2_gp_OXCAN_E2E_REC_BY_PDU[];
+extern const U1                           u1_gp_OXCAN_E2E_REC_LEN[OXCAN_E2E_NUM_REC];
 #endif /* #if (OXCAN_E2E_NUM_REC > 0U) */
 
 #endif      /* OXCAN_AUBIF_CFG_H */

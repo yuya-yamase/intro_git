@@ -182,8 +182,8 @@ static U2       u2_s_McuDev_Pwroff_Ant(const U1 u1_a_PWR);
 static U2       u2_s_McuDev_Pwroff_SoundMUTE(void);
 static U2       u2_s_McuDev_Pwroff_Most(const U1 u1_a_PWR);
 static U2       u2_s_McuDev_Pwroff_PowerIC(void);
-static U2       u2_s_McuDev_Pwroff_XMTuner(void);
-uint16 Mcu_Dev_Pwroff_GNSS( void );
+static U2       u2_s_McuDev_Pwroff_XMTuner(const U1 u1_a_PWR);
+uint16 Mcu_Dev_Pwroff_GNSS(const U1 u1_a_PWR);
 static U2       u2_s_McuDev_Pwroff_Gyro(void);
 
 /****************************************************************************/
@@ -345,8 +345,6 @@ void vd_g_PwrCtrlNoRedunMainFunction( void )
 
     /* 前回状態の更新 */
     u1_s_PwrCtrl_NoRedun_Sts = u1_t_mcu_nxtsts;
-
-    vd_g_McuDev_Pwroff(); /* デバイスOFF制御 */
 
     if ( ( u1_g_PwrCtrl_NoRedun_Pwr_Sts      == (U1)PWRCTRL_NOREDUN_STS_ON            )  /* 非冗長電源OFF制御 */
       && ( u1_s_PwrCtrl_NoRedun_MetBB_OnStep == (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT )  /* Meter+BB Display ONシーケンス完了 */
@@ -1158,12 +1156,12 @@ void            vd_g_McuDev_Pwroff(void)
 
     /* XM TUNER制御 */
     if((u2_g_PwrCtrl_OffSts & (U2)PWROFF_XMTUNER_BIT) != (U2)PWROFF_XMTUNER_BIT){
-        u2_g_PwrCtrl_OffSts |=  u2_s_McuDev_Pwroff_XMTuner();
+        u2_g_PwrCtrl_OffSts |=  u2_s_McuDev_Pwroff_XMTuner(u1_t_pwr);
     }
 
     /* GNSS制御 */
     if((u2_g_PwrCtrl_OffSts & (U2)PWROFF_GNSS_BIT) != (U2)PWROFF_GNSS_BIT){
-        u2_g_PwrCtrl_OffSts |=  (U2)Mcu_Dev_Pwroff_GNSS();
+        u2_g_PwrCtrl_OffSts |=  (U2)Mcu_Dev_Pwroff_GNSS(u1_t_pwr);
     }
 
     /* ジャイロ・加速度センサ(SMI230)制御 */
@@ -1409,18 +1407,18 @@ static U2       u2_s_McuDev_Pwroff_PowerIC(void)
   return        : PWROFF_XMTUNER_BIT ：プロセス完了
   Note          : XM-SHDN=Lから10msでXM-ON,PMIC_FAST_POFF_EN_N=Hから20msでXM-SHDN
 *****************************************************************************/
-static U2       u2_s_McuDev_Pwroff_XMTuner(void)
+static U2       u2_s_McuDev_Pwroff_XMTuner(const U1 u1_a_PWR)
 {
     U2              u2_t_ret;
-    Dio_LevelType   dl_t_sts_pmic;    /* ポート読出し値 */
 #ifdef SYS_PWR_ANT_XM_SHDN
+    Dio_LevelType   dl_t_sts_pmic;    /* ポート読出し値 */
     Dio_LevelType   dl_t_sts_xmshdn;  /* ポート読出し値 */
-#endif
 
     u2_t_ret        = (U2)PWROFF_BIT_OFF;
     dl_t_sts_pmic   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_PMIC_FAST_POFF_EN]);
 
-    if(dl_t_sts_pmic == (Dio_LevelType)STD_LOW){
+    //if(dl_t_sts_pmic == (Dio_LevelType)STD_LOW){
+    if(u1_a_PWR == (U1)POWER_MODE_STATE_STANDBY){ //temporarily
         if(u2_s_OffTime_XMTuner_Pmic < U2_MAX){
             u2_s_OffTime_XMTuner_Pmic++;
         }
@@ -1429,8 +1427,8 @@ static U2       u2_s_McuDev_Pwroff_XMTuner(void)
         u2_s_OffTime_XMTuner_Pmic = (U2)0U;
     }
 
-#ifdef SYS_PWR_ANT_XM_SHDN
-    if(u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_20MS){
+    //if(u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_20MS){
+    if(u2_s_OffTime_XMTuner_Pmic != (U2)0U){ //temporarily
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_SHDN , MCU_DIO_LOW);
     }
 
@@ -1449,15 +1447,13 @@ static U2       u2_s_McuDev_Pwroff_XMTuner(void)
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_ON , MCU_DIO_LOW);
     }
 
-    if((u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_20MS) &&
+    //if((u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_20MS) &&
+    if((u2_s_OffTime_XMTuner_Pmic != (U2)0U) && //temporarily
        (u2_s_OffTime_XMTuner_XmShdn >= (U2)PWRCTRL_NOREDUN_WAIT_10MS)){
         u2_t_ret  = (U2)PWROFF_XMTUNER_BIT;
     }
 #else
-    if(u2_s_OffTime_XMTuner_Pmic >= (U2)PWRCTRL_NOREDUN_WAIT_30MS){
-        vd_g_McuDevPwronSetPort(MCU_PORT_XM_ON , MCU_DIO_LOW);
-        u2_t_ret  = (U2)PWROFF_XMTUNER_BIT;
-    }
+    u2_t_ret  = (U2)PWROFF_XMTUNER_BIT;
 #endif
 
     return(u2_t_ret);
@@ -1470,17 +1466,17 @@ static U2       u2_s_McuDev_Pwroff_XMTuner(void)
   return        : PWROFF_GNSS_BIT ：プロセス完了
   Note          : シス検暫定対応あり
 *****************************************************************************/
-uint16 Mcu_Dev_Pwroff_GNSS( void ){
+uint16 Mcu_Dev_Pwroff_GNSS(const U1 u1_a_PWR){
     static const uint32 MCU_GNSS_POLING_MAX      =   (45U);       /* Checkﾘﾄﾗｲ 45回後、Hibernateに移行しない場合は、Reset（H→L遷移）し、状態を保持する */
 
     uint16  mcu_return;
-    uint8   mcu_dio_ret_mmstby;
+    uint8   mcu_dio_ret_v33peri;
     uint8   mcu_dio_ret_budte;
     uint8   mcu_dio_ret_gpsrst;
     uint8   mcu_dio_ret_pmoni;
 
     mcu_return  = (uint16)FALSE;
-    mcu_dio_ret_mmstby = (uint8)STD_HIGH;
+    mcu_dio_ret_v33peri = (uint8)STD_HIGH;
     mcu_dio_ret_budte = (uint8)STD_LOW;
     mcu_dio_ret_gpsrst = (uint8)STD_LOW;
     mcu_dio_ret_pmoni = (uint8)STD_HIGH;
@@ -1489,12 +1485,11 @@ uint16 Mcu_Dev_Pwroff_GNSS( void ){
     {
     case MCU_STEP_GNSS_OVERALL_1:
         mcu_dio_ret_budte   =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_BU_DTE]);
-        mcu_dio_ret_mmstby  =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
-        
+
         if(mcu_dio_ret_budte == (uint8)STD_HIGH){
             Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_3;       /* 次状態に遷移 */
         }
-        else if(mcu_dio_ret_mmstby == (uint8)STD_LOW){
+        else if(u1_a_PWR == (uint8)POWER_MODE_STATE_STANDBY){
             Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_2;      /* 次状態に遷移 */
         }
         else{
@@ -1520,6 +1515,7 @@ uint16 Mcu_Dev_Pwroff_GNSS( void ){
             /* t10はmin0msのため、判定せず即次処理を実施する */
             vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
             Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_FIN;      /* 次状態に遷移 */
+            mcu_return = (uint16)PWROFF_GNSS_BIT;    /* 完了通知 */
         }
         else{
             Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_5;      /* 次状態に遷移 */
@@ -1533,6 +1529,7 @@ uint16 Mcu_Dev_Pwroff_GNSS( void ){
             vd_g_McuDevPwronSetPort(MCU_PORT_GPS_RST , MCU_DIO_LOW);
             Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_FIN;     /* 次状態に遷移 */
             Mcu_OffTime_GNSS = (uint16)0U;                      /* タイマクリア */
+            mcu_return = (uint16)PWROFF_GNSS_BIT;    /* 完了通知 */
         }
         else if(Mcu_OffTime_GNSS >= MCU_OFFWAIT_GNSS_100MS){
             Mcu_OffTime_GNSS    =   (uint16)0U;
@@ -1542,6 +1539,7 @@ uint16 Mcu_Dev_Pwroff_GNSS( void ){
                 /* Hibernate移行確認 → /GPS-RST=H保持 */
                 Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_FIN;      /* 次状態に遷移 */
                 Mcu_OffCnt_GNSS  = (uint8)0U;                       /* カウンタクリア */
+                mcu_return = (uint16)PWROFF_GNSS_BIT;    /* 完了通知 */
             }
             else{
                 Mcu_OffCnt_GNSS++;
@@ -1560,13 +1558,14 @@ uint16 Mcu_Dev_Pwroff_GNSS( void ){
             vd_g_McuDevPwronSetPort(MCU_PORT_GPS_PCTL , MCU_DIO_LOW);
             Mcu_OffStep_GNSS = (uint8)MCU_STEP_GNSS_OVERALL_FIN;      /* 次状態に遷移 */
             Mcu_OffTime_GNSS = (uint16)0U;                   /* タイマクリア */
+            mcu_return = (uint16)PWROFF_GNSS_BIT;    /* 完了通知 */
         }
         break;
 
     case MCU_STEP_GNSS_OVERALL_FIN:
         mcu_return = (uint16)PWROFF_GNSS_BIT;    /* 完了通知 */
-        mcu_dio_ret_mmstby =   Dio_ReadChannel(Mcu_Dio_PortId[MCU_PORT_MM_STBY_N]);
-        if(mcu_dio_ret_mmstby == (U1)STD_HIGH){
+        mcu_dio_ret_v33peri =   Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_V33_PERI]);
+        if(mcu_dio_ret_v33peri == (U1)STD_HIGH){
             Mcu_OffStep_GNSS    = (uint8)MCU_STEP_GNSS_OVERALL_1;   /* GNSS制御の遷移状態クリア */
             Mcu_OffTime_GNSS    = (uint16)0U;
             Mcu_OffCnt_GNSS     = (uint8)0U;

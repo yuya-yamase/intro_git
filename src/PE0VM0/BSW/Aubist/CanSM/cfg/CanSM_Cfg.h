@@ -19,7 +19,7 @@
 /* General                */
 /**************************/
 /* Tx/Rx Indication State */
-#define BSW_CANSM_CFG_TXRX_INDSTATE                  (BSW_NOUSE)
+#define BSW_CANSM_CFG_TXRX_INDSTATE                  (BSW_USE)
 
 #define BSW_CANSM_CFG_ICOM                           (BSW_NOUSE)
 #define BSW_CANSM_CFG_PNC                            (BSW_USE)

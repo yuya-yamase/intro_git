@@ -74,7 +74,7 @@
 
 /* VCCID:0 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH0     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH0         (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH0         (0x05U)
 #define VCC_SIZE_OF_PACKET_CH0              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH0      (VCC_SIZE_OF_PACKET_CH0 / VCC_MESSAGE_ALIGN)
 
@@ -268,7 +268,7 @@ extern void ehvm_intm_ecm_error( void );
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

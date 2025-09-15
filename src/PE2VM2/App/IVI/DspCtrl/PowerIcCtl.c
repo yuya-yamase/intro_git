@@ -1,12 +1,32 @@
+/* 0.5.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
+/*  Power-IC Control process                                                                                                         */
+/*===================================================================================================================================*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version                                                                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define POWERICCTL_MAIN_C_MAJOR              (0)
+#define POWERICCTL_MAIN_C_MINOR              (5)
+#define POWERICCTL_MAIN_C_PATCH              (0)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "PowerIcCtl.h"
 
 #include "poweric.h"
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version Check                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if ((POWERICCTL_MAIN_C_MAJOR != POWERICCTL_MAIN_H_MAJOR) || \
+     (POWERICCTL_MAIN_C_MINOR != POWERICCTL_MAIN_H_MINOR) || \
+     (POWERICCTL_MAIN_C_PATCH != POWERICCTL_MAIN_H_PATCH))
+#error "PowerIcCtl.c and PowerIcCtl.h : source and header files are inconsistent!"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -68,9 +88,8 @@
 #define POWERIC_FAILSAFE_FACT_NUM           (5U)
 #define POWERIC_FAILSAFE_FACT_OVERCUR       (0U)            /* Power-IC Fail Safe Factor Overcurrent */
 #define POWERIC_FAILSAFE_FACT_I2CFAIL       (1U)            /* Power-IC Fail Safe Factor I2C Access Fail */
-#define POWERIC_FAILSAFE_FACT_DIAG_OFFSET   (2U)            /* Power-IC Fail Safe Factor Speaker Output Offset Fail */
-#define POWERIC_FAILSAFE_FACT_DIAG_SHORT    (3U)            /* Power-IC Fail Safe Factor Speaker Short */
-#define POWERIC_FAILSAFE_FACT_HIGHTEMP      (4U)            /* Power-IC Fail Safe Factor High Temperature */
+#define POWERIC_FAILSAFE_FACT_DIAGFAIL      (2U)            /* Power-IC Fail Safe Factor Diag Cycle Check Fail */
+#define POWERIC_FAILSAFE_FACT_HIGHTEMP      (3U)            /* Power-IC Fail Safe Factor High Temperature */
 
 #define POWERIC_I2CFAIL_DEVICESTOP_CNT      (5U)            /* Power-IC I2c Fail Device Stop Count */
 
@@ -522,22 +541,11 @@ void    vd_g_PowerIc_WkupInit(void)
 /*===================================================================================================================================*/
 void    vd_g_PowerIc_Routine(void)
 {
-    U1  u1_t_power_state;
-
-    u1_t_power_state = u1_POWERIC_GET_POWER_STATE();
-
     switch (u1_s_poweric_state){
         case POWERIC_SEQ_IDLE:                                                      /* IDLE */
             /* Timer Clear */
             u2_s_poweric_overcurchk_timer = (U2)0;
             u2_s_poweric_i2ccycchk_timer = (U2)0;
-
-            /* Power ON Check */
-            if((u1_t_power_state == (U1)POWERIC_POWER_STATE_APP_OFF)
-            || (u1_t_power_state == (U1)POWERIC_POWER_STATE_APP_ON)){           /* 暫定：見た目起動オフ or 見た目起動オン */
-                /* State Update */
-                u1_s_poweric_state = (U1)POWERIC_SEQ_CYC;
-            }
             break;
         case POWERIC_SEQ_CYC:                                                       /* CYCLIC */
             vd_s_PowerIc_CycChk();
@@ -943,67 +951,113 @@ static void vd_s_PowerIc_TurnOnDiagFunc(void)
             if(u1_t_reg_req_sts == (U1)TRUE){
                 u1_t_speaker_type = (U1)POWERIC_SPEAKER_TYPE_4SPK;     //u1_POWERIC_GET_SPEAKER_TYPE();    /* 暫定 車パラI/F展開後に見直し 4SPK固定とする */
                 /* Offset Sts Judge */
-                u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOffsetJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[1]);    /* FL */
-                u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagOffsetJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);   /* FR */
+                u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOffsetJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);    /* FL */
+                u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagOffsetJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);   /* FR */
                 if(u1_t_speaker_type == (U1)POWERIC_SPEAKER_TYPE_4SPK){
-                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagOffsetJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);   /* RL */
-                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagOffsetJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);   /* RR */
+                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagOffsetJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);   /* RL */
+                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagOffsetJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[5]);   /* RR */
                 }
                 if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                     /* Offset Fail DTC Record */
                     vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT_DC, (U1)POWERIC_DTC_STS_FAIL);
                     /* 暫定 SPK出力オフセット異常ログを残す */
                     vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OFFSET, (U1)0x00U);
+                    /* Flag Updata */
+                    u1_s_poweric_diagcyc_offset_nrml_recflag = (U1)FALSE;
+                }
+                else if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_NML){
+                    /* Offset Normal DTC Record */
+                    vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT_DC, (U1)POWERIC_DTC_STS_NORMAL);
+                }
+                else{
+                    /* Nothing */
                 }
 
                 /* Open Sts Judge */
-                u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[1]);      /* FL */
+                u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);      /* FL */
                 if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                     /* FL Open Fail DTC Record */
                     vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_UNCN_LF, (U1)POWERIC_DTC_STS_FAIL);
                     /* 暫定 SPK FLオープン異常ログを残す */
                     vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OPEN_FL, (U1)0x00U);
                 }
-                u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);      /* FR */
+                else if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_NML){
+                    /* FL Open Normal DTC Record */
+                    vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_UNCN_LF, (U1)POWERIC_DTC_STS_NORMAL);
+                }
+                else{
+                    /* Nothing */
+                }
+                u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);      /* FR */
                 if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                     /* FR Open Fail DTC Record */
                     vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_UNCN_RF, (U1)POWERIC_DTC_STS_FAIL);
                     /* 暫定 SPK FRオープン異常ログを残す */
                     vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OPEN_FR, (U1)0x00U);
                 }
+                else if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_NML){
+                    /* FR Open Normal DTC Record */
+                    vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_UNCN_RF, (U1)POWERIC_DTC_STS_NORMAL);
+                }
+                else{
+                    /* Nothing */
+                }
                 if(u1_t_speaker_type == (U1)POWERIC_SPEAKER_TYPE_4SPK){
-                    u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);      /* RL */
+                    u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);      /* RL */
                     if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                         /* RL Open Fail DTC Record */
                         vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_UNCN_LBD, (U1)POWERIC_DTC_STS_FAIL);
                         /* 暫定 SPK RLオープン異常ログを残す */
                         vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OPEN_RL, (U1)0x00U);
                     }
-                    u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);      /* RR */
+                    else if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_NML){
+                        /* RL Open Normal DTC Record */
+                        vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_UNCN_LBD, (U1)POWERIC_DTC_STS_NORMAL);
+                    }
+                    else{
+                        /* Nothing */
+                    }
+                    u1_t_diag_jdg_sts = u1_s_PowerIc_DiagOpenJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[5]);      /* RR */
                     if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                         /* RR Open Fail DTC Record */
                         vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_UNCN_RBD, (U1)POWERIC_DTC_STS_FAIL);
                         /* 暫定 SPK RRオープン異常ログを残す */
                         vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_OPEN_RR, (U1)0x00U);
                     }
+                    else if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_NML){
+                        /* RR Open Normal DTC Record */
+                        vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_UNCN_RBD, (U1)POWERIC_DTC_STS_NORMAL);
+                    }
+                    else{
+                        /* Nothing */
+                    }
                 }
 
                 /* Short Sts Judge */
-                u1_t_diag_jdg_sts = u1_s_PowerIc_DiagVccShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[1]);   /* FL */
-                u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagVccShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);  /* FR */
-                u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagGndShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[1]);  /* FL */
-                u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagGndShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);  /* FR */
+                u1_t_diag_jdg_sts = u1_s_PowerIc_DiagVccShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);   /* FL */
+                u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagVccShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);  /* FR */
+                u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagGndShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);  /* FL */
+                u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagGndShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);  /* FR */
                 if(u1_t_speaker_type == (U1)POWERIC_SPEAKER_TYPE_4SPK){
-                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagVccShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);  /* RL */
-                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagVccShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);  /* RR */
-                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagGndShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[2]);  /* RL */
-                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagGndShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[4]);  /* RR */
+                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagVccShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);  /* RL */
+                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagVccShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[5]);  /* RR */
+                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagGndShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[3]);  /* RL */
+                    u1_t_diag_jdg_sts |= u1_s_PowerIc_DiagGndShrtJdg(st_sp_POWERIC_TURNON_DATA_RD3_TBL[1].u1p_pdu[5]);  /* RR */
                 }
                 if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_FAIL){
                     /* Short Fail DTC Record */
                     vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT, (U1)POWERIC_DTC_STS_FAIL);
                     /* 暫定 SPK短絡異常ログを残す */
                     vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_3, (U1)POWERIC_TURNONDIAG_DREC_SHORT, (U1)0x00U);
+                    /* Flag Updata */
+                    u1_s_poweric_diagcyc_short_nrml_recflag = (U1)FALSE;
+                }
+                else if(u1_t_diag_jdg_sts == (U1)POWERIC_DIAG_JUGE_STS_NML){
+                    /* Short Normal DTC Record */
+                    vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT, (U1)POWERIC_DTC_STS_NORMAL);
+                }
+                else{
+                    /* Nothing */
                 }
 
                 /* Next Process */
@@ -1150,8 +1204,12 @@ static void vd_s_PowerIc_DiagCycChk(void)
     || (st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RR].u1_offset_fail >= (U1)POWERIC_DIAGCYC_STSCONF_CNT)){
     /* --------------- I2C Cycle Check Stop --------------- */
         u1_s_poweric_i2ccycchk_stop_flag = (U1)TRUE;
+        /* Offset Fail DTC Record */
+        vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT_DC, (U1)POWERIC_DTC_STS_FAIL);
+        /* Flag Updata */
+        u1_s_poweric_diagcyc_offset_nrml_recflag = (U1)FALSE;
         /* Fail Safe */
-        u1_s_poweric_fail_safe_fact = (U1)POWERIC_FAILSAFE_FACT_DIAG_OFFSET;
+        u1_s_poweric_fail_safe_fact = (U1)POWERIC_FAILSAFE_FACT_DIAGFAIL;
         /* State Update */
         u1_s_poweric_state = (U1)POWERIC_SEQ_FAIL_SAFE;
     }
@@ -1178,8 +1236,12 @@ static void vd_s_PowerIc_DiagCycChk(void)
     || (st_poweric_diagcyc_readcnt[POWERIC_SPEAKER_IDX_RR].u1_gndshrt_fail >= (U1)POWERIC_DIAGCYC_STSCONF_CNT)){
     /* --------------- I2C Cycle Check Stop --------------- */
         u1_s_poweric_i2ccycchk_stop_flag = (U1)TRUE;
+        /* Short Fail DTC Record */
+        vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT, (U1)POWERIC_DTC_STS_FAIL);
+        /* Flag Updata */
+        u1_s_poweric_diagcyc_short_nrml_recflag = (U1)FALSE;
         /* Fail Safe */
-        u1_s_poweric_fail_safe_fact = (U1)POWERIC_FAILSAFE_FACT_DIAG_SHORT;
+        u1_s_poweric_fail_safe_fact = (U1)POWERIC_FAILSAFE_FACT_DIAGFAIL;
         /* State Update */
         u1_s_poweric_state = (U1)POWERIC_SEQ_FAIL_SAFE;
     }
@@ -1337,13 +1399,8 @@ static void vd_s_PowerIc_FailSafeFunc(void)
                     /* 暫定 P-IC破壊ログを残す(DTF記憶) */
                     vd_POWERIC_DREC_REQ((U1)SYSECDRC_DREC_ID_1, (U1)0x00U, (U1)0x00U);
                 }
-                else if(u1_s_poweric_fail_safe_fact == (U1)POWERIC_FAILSAFE_FACT_DIAG_OFFSET){
-                    /* Offset Fail DTC Record */
-                    vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT_DC, (U1)POWERIC_DTC_STS_FAIL);
-                }
-                else if(u1_s_poweric_fail_safe_fact == (U1)POWERIC_FAILSAFE_FACT_DIAG_SHORT){
-                    /* Short Fail DTC Record */
-                    vd_POWERIC_DTC_REQ((U1)DTCCTL_DTCID_PWR_SHCT, (U1)POWERIC_DTC_STS_FAIL);
+                else if(u1_s_poweric_fail_safe_fact == (U1)POWERIC_FAILSAFE_FACT_DIAGFAIL){
+                    /* Nothing */
                 }
                 else if(u1_s_poweric_fail_safe_fact == (U1)POWERIC_FAILSAFE_FACT_I2CFAIL){
                     /* 暫定 P-IC異常ログを残す */
@@ -1653,6 +1710,18 @@ void    vd_g_PowerIc_SoftMuteSet(const U1 u1_a_softmute_sts)
 }
 
 /*===================================================================================================================================*/
+/*  void            vd_g_PowerIc_SeqCycStrt(void)                                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_PowerIc_SeqCycStrt(void)
+{
+    /* State Update */
+    u1_s_poweric_state  = (U1)POWERIC_SEQ_CYC;
+}
+
+/*===================================================================================================================================*/
 /*  void    vd_s_PowerIc_Memset(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -1667,3 +1736,24 @@ static void vd_s_PowerIc_Memset(void * vdp_a_dst, const U1 u1_a_data, U4 u4_a_si
         u1p_udst++;
     }
 }
+
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Change History                                                                                                                   */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Version  Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  0.0.0    05/19/2025  SH       New.                                                                                               */
+/*  0.1.0    05/23/2025  SH       Addition of register conflict countermeasure processing.                                           */
+/*  0.2.0    05/26/2025  SH       Support Diag Record.                                                                               */
+/*  0.3.0    05/26/2025  SH       Support DTC.                                                                                       */
+/*  0.4.0    06/09/2025  SH       Bug fix: Excessive notification of speaker output short-circuit DTCs                               */
+/*  0.5.0    07/31/2025  TN       Modification of periodic monitoring start conditions.                                              */
+/*                                                                                                                                   */
+/*                                                                                                                                   */
+/*  * SH   = Shota.Hiramatsu, Denso Techno                                                                                           */
+/*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/

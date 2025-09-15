@@ -16,6 +16,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include    "x_spi_ivi_private.h"
+#include    "x_spi_ivi_sub0_private.h"
 #include    "x_spi_ivi_sub1_private.h"
 #include    "x_spi_ivi_sub2_private.h"
 #include    "x_spi_ivi_sub4_private.h"
@@ -89,6 +90,7 @@ void            vd_g_XspiIviInit(void)
     vd_g_XspiIviSub4Init();
     vd_g_XspiIviSub2Init();
     vd_g_XspiIviSub1Init();
+    vd_g_XspiIviSub0Init();
     vd_g_MemfillU4(&u4_s_xspi_ivi_task_cnt[0], (U4)0U, (U4)XSPI_TASK_CNT_NUM);
 }
 
@@ -201,7 +203,7 @@ static void     vd_s_XspiIviRoutine(void)
 static void            vd_s_XspiIviAnaRcv(U1 * u1_ap_xspi_add)
 {
     /* サブフレーム0(DiagCAN)データ解析処理 */
-    /* skip */
+    vd_g_XspiIviSub0Ana(&u1_ap_xspi_add[8]);
 
     /* サブフレーム1(Misc通信)データ解析処理 */
     vd_g_XspiIviSub1Ana(&u1_ap_xspi_add[272]);
@@ -228,7 +230,7 @@ static void            vd_s_XspiIviMakeSend(U1 * u1_ap_xspi_add)
     vd_g_MemcpyU1(&u1_ap_xspi_add[0], &u1_sp_XSPI_FRAME_HEADER[0], (U4)XSPI_IVI_HEADER);
 
     /* サブフレーム0(DiagCAN)用送信データ作成処理 */
-    /* skip */
+    vd_g_XspiIviSub0Send(&u1_ap_xspi_add[8]);
 
     /* サブフレーム1(Misc通信)用送信データ作成処理 */
     vd_g_XspiIviSub1Send(&u1_ap_xspi_add[272]);

@@ -21,6 +21,7 @@
 #include    "x_spi_ivi_sub1_power.h"
 #include    "x_spi_ivi_sub1_system.h"
 #include    "x_spi_ivi_sub4_private.h"
+#include    "x_spi_ivi_sub0_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -132,6 +133,7 @@ void            vd_s_XspiIviSub1_ControlOSWake(const U1 * u1_ap_XSPI_ADD, const 
     vd_g_XspiIviSub1VehspdCntSend();
     vd_g_XspiIviSub1TmuteSend();
     vd_g_XspiIviSub1PowerBmoniVolSend();
+    vd_g_XspiIviSub0OSComChk();
 }
 
 /*===================================================================================================================================*/

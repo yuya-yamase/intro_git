@@ -12,7 +12,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DTCCTL_DTCID_NUM                (16U)
+#define DTCCTL_DTCID_NUM                (10U)
 #define DTCCTL_DTCID_GYR_ERR            (0U)
 #define DTCCTL_DTCID_GSNS_ERR           (1U)
 #define DTCCTL_DTCID_GNSS_LOW           (2U)
@@ -23,12 +23,6 @@
 #define DTCCTL_DTCID_PWR_UNCN_LF        (7U)
 #define DTCCTL_DTCID_PWR_UNCN_RBD       (8U)
 #define DTCCTL_DTCID_PWR_UNCN_LBD       (9U)
-#define DTCCTL_DTCID_CAN_2M1_REGERR     (10U)
-#define DTCCTL_DTCID_CAN_2M1_BUSOFF     (11U)
-#define DTCCTL_DTCID_CAN_2M1_LOCK       (12U)
-#define DTCCTL_DTCID_CAN_5M_REGERR      (13U)
-#define DTCCTL_DTCID_CAN_5M_BUSOFF      (14U)
-#define DTCCTL_DTCID_CAN_5M_LOCK        (15U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

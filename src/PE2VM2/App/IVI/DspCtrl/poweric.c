@@ -1,4 +1,17 @@
 /* メインタスクコードに移管するまでの仮置き */
+/* 0.5.0 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/*  Power-IC Initialization/Termination process                                                                                      */
+/*===================================================================================================================================*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version                                                                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define POWERIC_MAIN_C_MAJOR                 (0)
+#define POWERIC_MAIN_C_MINOR                 (5)
+#define POWERIC_MAIN_C_PATCH                 (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -9,6 +22,16 @@
 #include "Mcu_I2c_Ctrl_private.h"
 #include "Mcu_Sys_Pwr_PowerIc.h"
 #include "x_spi_ivi_sub1_power.h"
+#include "PowerIcCtl.h"
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version Check                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if ((POWERIC_MAIN_C_MAJOR != POWERIC_MAIN_H_MAJOR) || \
+     (POWERIC_MAIN_C_MINOR != POWERIC_MAIN_H_MINOR) || \
+     (POWERIC_MAIN_C_PATCH != POWERIC_MAIN_H_PATCH))
+#error "poweric.c and poweric.h : source and header files are inconsistent!"
+#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -24,8 +47,8 @@
 #define POWERIC_COUNTTIME_FIN           (0xFFFFFFFFU)
 
 /* 通常起動フロー */
-#define POWERIC_WAIT_PON                (210U   / MCU_POWERIC_TASK_TIME)
-#define POWERIC_WAIT_60MS               ( 60U   / MCU_POWERIC_TASK_TIME)
+#define POWERIC_WAIT_ON                 (1U)
+#define POWERIC_WAIT_60MS               (60U   / MCU_POWERIC_TASK_TIME)
 
 #define POWERIC_WRINUM_INISET           (3U)    /* 初期設定 「5-1.初期設定」 レジスタ書込み回数 */
 #define POWERIC_WRINUM_AMPON            (1U)    /* Amp On設定 レジスタ書込み回数 */
@@ -170,7 +193,7 @@ static void     vd_s_PowerIcFlow(void)
 {
     U1  u1_t_timechk;
 
-    u1_t_timechk    = u1_s_PowerIcTimChk(u4_t_PowerIc_Polling, (U4)POWERIC_WAIT_PON);
+    u1_t_timechk    = u1_s_PowerIcTimChk(u4_t_PowerIc_Polling, (U4)POWERIC_WAIT_ON);
 
     if(u1_s_PowerIc_MUTE_Hook == (U1)TRUE){
         /* 通常終了処理 */
@@ -309,6 +332,7 @@ static void     vd_s_PowerIcOnFlow(void)
                 u1_s_PowerIc_OnStep_OverAll = (U1)POWERIC_ONSTEP_OVERALL_FIN;
                 /* 初期化完了通知 */
                 vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_POWER_INI);
+                vd_g_PowerIc_SeqCycStrt();
             }
             break;
 
@@ -493,3 +517,25 @@ void            vd_g_PowerIcMuteHook(void)
 {
     u1_s_PowerIc_MUTE_Hook  = (U1)TRUE;
 }
+
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Change History                                                                                                                   */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Version  Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  0.0.0    01/20/2025  TN       New.                                                                                               */
+/*  0.1.0    02/17/2025  KT       Add initialization complete notification to XSPI.                                                  */
+/*  0.2.0    04/11/2025  TN       Shorter initialization time.                                                                       */
+/*  0.3.0    04/25/2025  TN       Add inter-OS "HexagonDSP MUTE complete" reception.                                                 */
+/*                                Enable normal shutdown flow.                                                                       */
+/*  0.4.0    06/23/2025  TN       Change power information to IVI common power control interface.                                    */
+/*  0.5.0    07/31/2025  TN       Modification of periodic monitoring start conditions.                                              */
+/*                                                                                                                                   */
+/*                                                                                                                                   */
+/*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */
+/*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/

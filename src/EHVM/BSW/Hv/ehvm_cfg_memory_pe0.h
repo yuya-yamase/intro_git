@@ -52,7 +52,7 @@ extern EhvmConst ehvm_spid_config_t    ehvmSpidConfigData;
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 
