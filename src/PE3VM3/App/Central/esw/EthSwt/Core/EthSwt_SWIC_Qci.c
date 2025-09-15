@@ -50,7 +50,7 @@ Std_ReturnType EthSwt_SWIC_Qci_Clear (uint32 * const errFactor)
 
     do {
         for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
-            // result = EthSwt_SWIC_Reg_SetTbl(, , &val, errFactor);
+            result = EthSwt_SWIC_Reg_SetTbl(G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, &val, errFactor);
             if (result != E_OK) {break;}
         }
     } while (0);
@@ -101,7 +101,7 @@ static Std_ReturnType ethswt_swic_qci_readQci (uint32 * const errFactor)
 
     do {
         for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
-            // result = ethswt_swic_qci_addVal(&G_ETHSWT_SWIC_QCI_COUNT[idx], [idx].tbl, [idx].num, errFactor);
+            result = ethswt_swic_qci_addVal(&G_ETHSWT_SWIC_QCI_COUNT[idx], G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, errFactor);
             if (result != E_OK) {break;}
         }
     } while (0);
