@@ -124,7 +124,7 @@ static Std_ReturnType ethswt_swic_mib_readMIB (const uint8 SwitchPortIdx, uint32
         result = ethswt_swic_mib_captureAndClear(SwitchPortIdx, errFactor);
         if (result != E_OK) {break;}
         for (idx = 0u; idx < D_ETHSWT_SWIC_MIB_NUM; idx++) {
-            result = ethswt_swic_mib_addVal(&G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][idx].IngressCount, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx], SWIC_TBL_NUM(G_ETHSWT_SWIC_MIB_TABLE_LIST[idx]), errFactor);
+            result = ethswt_swic_mib_addVal(&G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][idx].IngressCount, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, errFactor);
             if (result != E_OK) {break;}
         }
     } while (0);

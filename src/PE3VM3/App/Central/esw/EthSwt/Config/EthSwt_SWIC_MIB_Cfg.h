@@ -9,6 +9,7 @@
 #include <Std_Types.h>
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegListSeqMib.h>
+#include <EthSwt_SWIC_Define.h>
 /* -------------------------------------------------------------------------- */
 struct swic_reg_tbl {								/* レジスタテーブル */
 	const swic_reg_data_t	*tbl;
@@ -39,16 +40,16 @@ static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_SELECT_PORT[]
   , {&g_regListSeqSelectPort[16], 2u} /* P9 */
 };
 
-static const swic_reg_data_t *G_ETHSWT_SWIC_MIB_TABLE_LIST[]
-= { g_regListSeqMibInFCSErr           /* InFCSErr */
-  , g_regListSeqMibInDiscards         /* InDiscards */
-  , g_regListSeqMibInFiltered         /* InFiltered */
-  , g_regListSeqMibInOverSize         /* InOverSize */
-  , g_regListSeqMibInUnderSize        /* InUnderSize */
-  , g_regListSeqMibTcamCnt0           /* Tcam0 */
-  , g_regListSeqMibTcamCnt1           /* Tcam1 */
-  , g_regListSeqMibTcamCnt2           /* Tcam2 */
-  , g_regListSeqMibTcamCnt3           /* Tcam3 */
+static const struct swic_reg_tbl G_ETHSWT_SWIC_MIB_TABLE_LIST[]
+= { {g_regListSeqMibInFCSErr,     SWIC_TBL_NUM(g_regListSeqMibInFCSErr)     }           /* InFCSErr */
+  , {g_regListSeqMibInDiscards,   SWIC_TBL_NUM(g_regListSeqMibInDiscards)   }           /* InDiscards */
+  , {g_regListSeqMibInFiltered,   SWIC_TBL_NUM(g_regListSeqMibInFiltered)   }           /* InFiltered */
+  , {g_regListSeqMibInOverSize,   SWIC_TBL_NUM(g_regListSeqMibInOverSize)   }           /* InOverSize */
+  , {g_regListSeqMibInUnderSize,  SWIC_TBL_NUM(g_regListSeqMibInUnderSize)  }           /* InUnderSize */
+  , {g_regListSeqMibTcamCnt0,     SWIC_TBL_NUM(g_regListSeqMibTcamCnt0)     }           /* Tcam0 */
+  , {g_regListSeqMibTcamCnt1,     SWIC_TBL_NUM(g_regListSeqMibTcamCnt1)     }           /* Tcam1 */
+  , {g_regListSeqMibTcamCnt2,     SWIC_TBL_NUM(g_regListSeqMibTcamCnt2)     }           /* Tcam2 */
+  , {g_regListSeqMibTcamCnt3,     SWIC_TBL_NUM(g_regListSeqMibTcamCnt3)     }           /* Tcam3 */
 };
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_MIB_CFG_H */
