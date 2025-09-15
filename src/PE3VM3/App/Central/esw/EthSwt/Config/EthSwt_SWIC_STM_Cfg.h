@@ -58,6 +58,7 @@ typedef void (*EthSwt_ClearFunc)(void);
 const EthSwt_ClearFunc G_ETHSWT_SWIC_CLEAR_FULC_LIST[] = 
 {
     EthSwt_SWIC_Link_Init
+,   EthSwt_SWIC_MIB_Init
 };
 #define D_ETHSWT_SWIC_CLEAR_FUNC_NUM    (sizeof(G_ETHSWT_SWIC_CLEAR_FULC_LIST) / sizeof(G_ETHSWT_SWIC_CLEAR_FULC_LIST[0]))
 
