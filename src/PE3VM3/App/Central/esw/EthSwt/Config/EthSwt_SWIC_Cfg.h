@@ -54,7 +54,17 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define D_ETHSWT_SWIC_LINK_FAST_GET_TMO             (70U)
 #define D_ETHSWT_SWIC_LINK_GET_CYCLE                (100U)
 
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_Qci.c                                              */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_QCI_GET_CYCLE	                (20U)
 
+#define D_ETHSWT_SWIC_QCI_ID_DCM_TCP				(0U)
+#define D_ETHSWT_SWIC_QCI_ID_DCM_UDP				(1U)
+#define D_ETHSWT_SWIC_QCI_ID_DCM_ICMP				(2U)
+#define D_ETHSWT_SWIC_QCI_ID_DLC_TCP				(3U)
+#define D_ETHSWT_SWIC_QCI_ID_DLC_UDP				(4U)
+#define D_ETHSWT_SWIC_QCI_ID_NUM					(5U)
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_CFG_H */
