@@ -301,7 +301,7 @@ U1              u1_g_TripsnsrCfgEvDteCNGPIEVD(U1 * u1p_a_cngpievd)
     U1          u1_t_msgsts;
 
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                         (U4)OXCAN_SYS_IGR,
+                                         (U4)OXCAN_SYS_IGP,
                                          (U2)U2_MAX) & ((U1)TRIPSNSR_EVDTE_INVALID | (U1)TRIPSNSR_EVDTE_UNKNOWN);
     (void)Com_ReceiveSignal(ComConf_ComSignal_CNGPIEVD, u1p_a_cngpievd);
     return(u1_t_msgsts);
@@ -389,7 +389,7 @@ U1              u1_g_TripsnsrCfgGetInsEpusd(S4 * s4p_a_insepusd)
     (void)Com_ReceiveSignal(ComConf_ComSignal_INS_BATE, &s2_t_insepusd);
     (*s4p_a_insepusd) = (S4)s2_t_insepusd;
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                         (U4)OXCAN_SYS_IGR,
+                                         (U4)OXCAN_SYS_IGP,
                                          (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return (u1_t_msgsts);
@@ -415,7 +415,7 @@ U1              u1_g_TripsnsrCfgGetInsEvdist(U4 * u4p_a_evdist)
     (void)Com_ReceiveSignal(ComConf_ComSignal_INS_EVD, &u2_t_evdist);
     (*u4p_a_evdist) = (U4)u2_t_evdist;
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                         (U4)OXCAN_SYS_IGR,
+                                         (U4)OXCAN_SYS_IGP,
                                          (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return (u1_t_msgsts);
@@ -441,7 +441,7 @@ U1              u1_g_TripsnsrCfgGetInsUpdtflg(U1 * u1p_a_updtflg)
     (void)Com_ReceiveSignal(ComConf_ComSignal_INS_UPD, &u1_t_updtflg);
     (*u1p_a_updtflg) = u1_t_updtflg;
     u1_t_msgsts =  u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S31_CH0,
-                                         (U4)OXCAN_SYS_IGR,
+                                         (U4)OXCAN_SYS_IGP,
                                          (U2)TRIPSNSR_EHV1S31_FAILTIM) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     return (u1_t_msgsts);

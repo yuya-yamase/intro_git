@@ -81,6 +81,11 @@
 #define   u1_ANTCTL_GET_DTV_ANT_ON()        (Dio_ReadChannel(DIO_ID_PORT11_CH4))    /*DTVポーリングトリガー信号*/
 #endif
 
+/*GNSS DTC STS*/
+#define   ANTCTL_GPS_NML                    (0U)    /*正常*/
+#define   ANTCTL_GPS_FAIL                   (1U)    /*異常*/
+#define   ANTCTL_GPS_UNKNOWN                (0xFFU) /*初期値*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -197,8 +202,8 @@ void vd_g_Ant_Init(void)
     st_s_antctl_gnss.u1_fail_flg = (U1)FALSE;
     st_s_antctl_gnss.u1_antena_reboot_flg = (U1)FALSE;
     st_s_antctl_gnss.u1_antena_reboot_wait_time = (U1)0U;
-    u1_s_gnss_dtc_short_flg = (U1)FALSE;
-    u1_s_gnss_dtc_open_flg = (U1)FALSE;
+    u1_s_gnss_dtc_short_flg = (U1)ANTCTL_GPS_UNKNOWN;
+    u1_s_gnss_dtc_open_flg = (U1)ANTCTL_GPS_UNKNOWN;
 #ifdef ANTCTL_DAB
     st_s_antctl_dab.u2_poll_start_tim = (U2)0U;
     st_s_antctl_dab.u2_poll_det_tim = (U2)0U;
@@ -296,7 +301,7 @@ void vd_g_Ant_MainTask(void)
        (u1_s_gnss_confirm_sts == (U1)ANTCTL_DETECT_STS_DISCONECT)) {
         /*未接続判定した場合にDTC記録する*/
         vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_OPEN, (U1)ANTCTL_DTC_STS_FAIL);
-        u1_s_gnss_dtc_open_flg = (U1)TRUE;
+        u1_s_gnss_dtc_open_flg = (U1)ANTCTL_GPS_FAIL;
         u1_s_gnss_confirm_sts_pre = u1_s_gnss_confirm_sts;
     }
 
@@ -392,19 +397,21 @@ static void vd_s_Ant_GNSS_AdcStsDetermine(const U2 u2_a_VALUE)
         if(u1_t_adc_det_sts != (U1)ANTCTL_DETECT_STS_SHORT) {
             u1_s_gnss_short_cnt = 0U;
         } else {
-            u1_s_gnss_short_cnt++;
+            if(u1_s_gnss_short_cnt < (U1)U1_MAX){
+                u1_s_gnss_short_cnt++;
+            }
             st_s_antctl_gnss.u1_fail_flg = (U1)TRUE;
         }
         if(u1_t_adc_det_sts == (U1)ANTCTL_DETECT_STS_CONECT) {
-            /*未接続からの正常復帰*/
-            if(u1_s_gnss_dtc_open_flg == (U1)TRUE) {
+            /*初回正常検知,未接続からの正常復帰*/
+            if(u1_s_gnss_dtc_open_flg != (U1)ANTCTL_GPS_NML) {
                 vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_OPEN, (U1)ANTCTL_DTC_STS_NML);
-                u1_s_gnss_dtc_open_flg = (U1)FALSE;
+                u1_s_gnss_dtc_open_flg = (U1)ANTCTL_GPS_NML;
             }
-            /*ショートからの正常復帰*/
-            if(u1_s_gnss_dtc_short_flg == (U1)TRUE) {
+            /*初回正常検知,ショートからの正常復帰*/
+            if(u1_s_gnss_dtc_short_flg != (U1)ANTCTL_GPS_NML) {
                 vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_LOW, (U1)ANTCTL_DTC_STS_NML);
-                u1_s_gnss_dtc_short_flg = (U1)FALSE;
+                u1_s_gnss_dtc_short_flg = (U1)ANTCTL_GPS_NML;
             }
         }
         vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_GNSS,u1_t_adc_det_sts);
@@ -930,7 +937,7 @@ static void vd_s_Ant_Gnss_Fail(void)
     if(u1_s_gnss_short_cnt == (U1)ANTCTL_SHORT_DET_CNT) {
         /*ダイアグにショート検知ログを残す*/
         vd_g_DtcCtl_SetDtcId((U1)DTCCTL_DTCID_GNSS_LOW, (U1)ANTCTL_DTC_STS_FAIL);
-        u1_s_gnss_dtc_short_flg = (U1)TRUE;
+        u1_s_gnss_dtc_short_flg = (U1)ANTCTL_GPS_FAIL;
     }
     Dio_WriteChannel((U2)DIO_ID_APORT4_CH2,(U1)ANTCTL_DIO_LOW);
     st_s_antctl_gnss.u1_antena_reboot_flg = (U1)TRUE;

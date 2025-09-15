@@ -102,7 +102,7 @@ static U4      u4_s_AlertH_onaccnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
 #if defined(OXCAN_RXD_PDU_CAN_EHV1S94_CH0)
     u1_t_msgsts   = u1_g_oXCANRxdStat((U2)OXCAN_RXD_PDU_CAN_EHV1S94_CH0,
-                                          (U4)OXCAN_SYS_IGR,
+                                          (U4)OXCAN_SYS_IGP,
                                           u2_s_ALERT_H_ONACCN_TO_THRESH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #else
     u1_t_msgsts   = (U1)COM_NO_RX;

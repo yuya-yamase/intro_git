@@ -31,6 +31,7 @@
 #define RIMID_U1_TIMEZONE_TZ                     (0x0001U)
 #define RIMID_U1_TIMEZONE_TZ_SIGN                (0x0002U)
 #define RIMID_U1_TIMEZONE_DST_S30                (0x0003U)
+#define RIMID_U1_IVI_STR_MODE                    (0x0004U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U1## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 #define RIMID_U2_SAMPLE_BBB_2                    (0x4000U)

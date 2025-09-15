@@ -123,20 +123,6 @@ Ecu_Intg_BootCauseType Ecu_Intg_hasBootCause(void)
     return Ecu_Intg_u4BootCause;
 }
 
-void Ecu_Intg_initApp(void)
-{
-    Ecu_Intg_BootCauseType u4BootCause;
-
-/*    (void)Ecu_Intg_initAppCallout(Ecu_Intg_u4BootCause); */
-
-    u4BootCause = Ecu_IntgHAL_getBootCause();
-    if (u4BootCause == ECU_INTG_u4BTCAUSE_PON)
-    {
-        (void)SS_Memory_set(__ghsbegin_ecu_n_bvar_top, 0UL, (uint32)ECU_N_BVAR_SIZE);
-    }
-
-    return;
-}
 #if 0
 void Ecu_Intg_preClockup(void)
 {

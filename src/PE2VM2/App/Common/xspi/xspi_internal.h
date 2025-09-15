@@ -71,6 +71,7 @@ enum {
 /*------------------------------*/
 /*	OSTM制御関連				*/
 /*------------------------------*/
+#define XSPI_OST_START_CTRL	(uint32)GPT_OST_START_CTRL_BIT_IRQ_EN |(uint32)GPT_OST_START_CTRL_BIT_TRG_ST	/* GPT_OST_START_CTRL */
 #define XSPI_OST_CNT_INIT	((uint32)( 1000UL * GPT_OST_1US ))	/* 初期化用（1.0ms） */
 #define XSPI_OST_CNT_COMEND	((uint32)( 400UL * GPT_OST_1US ))	/* 通信終了用（0.4ms） */
 #define XSPI_OST_CNT_N_NEXT	((uint32)( 5000UL * GPT_OST_1US ))	/* 通信継続用（5.0ms） */

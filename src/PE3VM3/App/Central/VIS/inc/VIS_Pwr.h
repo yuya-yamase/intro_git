@@ -9,7 +9,10 @@
 #define VIS_PWR_BAT_FAIL                        ((U1)0x00U)    /* +B電圧 Fail値      */
 #define VIS_PWR_ADCNVCHK_OK                     ((U1)0x01U)    /* ADテーブル変換成功 */
 #define VIS_PWR_ADCNVCHK_NOTOK                  ((U1)0x00U)    /* ADテーブル変換失敗 */
-#define VIS_PWR_BMONITOR_WAITTIME               ((U1)20U)      /* ポーリング周期[100ms = 20 * 5ms] */
+#define VIS_PWR_BMONI_POLLINGTIME               ((U1)100U)     /* ポーリング周期[100ms] */
+#define VIS_PWR_TASK_CYCLE                      ((U1)5U)       /* タスク周期[5ms] */
+#define VIS_PWR_BMONI_POLLINGCNT                (VIS_PWR_BMONI_POLLINGTIME / VIS_PWR_TASK_CYCLE)  /* ポーリングカウンタ[20 = 100 / 5ms] */
+#define VIS_PWR_BMONI_POLLINGINIT               ((U1)0U)       /* ポーリングタイマ初期値 */
 
 #define VIS_PWR_RCV_CHECKING                    ((U1)0x01U)
 #define VIS_PWR_RCV_PARKING                     ((U1)0x02U)

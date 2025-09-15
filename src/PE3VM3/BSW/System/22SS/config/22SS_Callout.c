@@ -32,6 +32,8 @@
 
 #include "PwrCtlSup.h"
 #include "chipcom.h"
+#include "VSM.h"
+#include "CanIfProxy.h"
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
  *--------------------------------------------------------------------------*/
@@ -65,11 +67,6 @@ void vd_g_22SSCallout_StaBonInit(void)
     /*****************************************************/
     vd_g_Rim_BonInit();
 
-    /* 仮：Nvmc起動時処理                                         */
-    /* ※Bon/Wkup判定条件は仮                                     */
-    /*     BRAMが正常か否かで切り分ける(起動時に必ずどちらかを実施)  */
-    /* RIMでRAMチェックした結果も考慮して、Bon/Wkupを切り分けるべき。*/
-    /* (他の部品もその基準でBon/Wkupを切り分けているものがあるはず)  */
 /*    vd_g_Nvmc_BonInit(); */
 /*    do{  */
 /*        u1_t_rslt = u1_g_Nvmc_BonRead(); */
@@ -80,9 +77,12 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    vd_g_VSM_Init();
+    vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainBonReq();
     EthSW_StaBonInit();
     ChipCom_Init();
+    CanIfProxy_Init();
     vd_g_VISInit();
     vd_g_PowerSup_BonInit();
     /* ^^ User Hook end   ^^ */
@@ -105,16 +105,11 @@ void vd_g_22SSCallout_StaRstInit(void)
     /*****************************************************/
     /* Rim, Nvmc Init Function should be called at first */
     /*****************************************************/
-    vd_g_Rim_BonInit();
+    vd_g_Rim_WkupInit();
 
-    /* 仮：Nvmc起動時処理                                         */
-    /* ※Bon/Wkup判定条件は仮                                     */
-    /*     BRAMが正常か否かで切り分ける(起動時に必ずどちらかを実施)  */
-    /* RIMでRAMチェックした結果も考慮して、Bon/Wkupを切り分けるべき。*/
-    /* (他の部品もその基準でBon/Wkupを切り分けているものがあるはず)  */
-/*    vd_g_Nvmc_BonInit(); */
+/*    vd_g_Nvmc_WkupInit(); */
 /*    do{  */
-/*        u1_t_rslt = u1_g_Nvmc_BonRead(); */
+/*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
     vd_g_oXCANRstInit();
@@ -122,9 +117,12 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    vd_g_VSM_Init();
+    vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainWakeupReq();
     EthSW_StaRstInit();
     ChipCom_Init();
+    CanIfProxy_Init();
     vd_g_VISInit();
     vd_g_PowerSup_BonInit();
     /* ^^ User Hook end   ^^ */
@@ -149,11 +147,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
     /*****************************************************/
     vd_g_Rim_WkupInit();
 
-    /* 仮：Nvmc起動時処理                                         */
-    /* ※Bon/Wkup判定条件は仮                                     */
-    /*     BRAMが正常か否かで切り分ける(起動時に必ずどちらかを実施)  */
-    /* RIMでRAMチェックした結果も考慮して、Bon/Wkupを切り分けるべき。*/
-    /* (他の部品もその基準でBon/Wkupを切り分けているものがあるはず)  */
 /*    vd_g_Nvmc_WkupInit(); */
 /*    do{  */
 /*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
@@ -164,9 +157,12 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+    vd_g_VSM_Init();
+    vd_g_VSM_SAILWrapper_Init();
     vd_g_PwrCtrlMainWakeupReq();
     EthSW_StaWkupInit();
     ChipCom_Init();
+    CanIfProxy_Init();
     vd_g_VISInit();
     vd_g_PowerSup_WkupInit();
     /* ^^ User Hook end   ^^ */

@@ -128,6 +128,10 @@ static U2                  u2_s_dateclk_swot_elpsd;
 static U2                  u2_sp_dateclk_adjtocnt[DATE_CLK_ADJ_NUM_TOUT];
 static U1                  u1_s_dateclk_adj_rqbit;
 
+static U1                  u1_s_dateclk_yymmdd_commit;
+static U1                  u1_s_dateclk_bon_state;
+
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -250,6 +254,9 @@ void    vd_g_DateclkBonInit(void)
     ST_DATE_CLK_LOG             st_t_log;
     U4                          u4_t_daycntmin;
 
+    u1_s_dateclk_yymmdd_commit = (U1)FALSE;
+    u1_s_dateclk_bon_state     = (U1)TRUE;
+
     st_t_log.u4_hhmmss_bfr = (U4)HHMMSS_UNKNWN;
     st_t_log.u4_daycnt_bfr = (U4)YYMMDDWK_DAYCNT_UNKNWN;
     st_t_log.u4_hhmmss_aft = u4_g_DateclkCfgHhmmss24hInit();
@@ -287,6 +294,9 @@ void    vd_g_DateclkRstwkInit(void)
     U4                          u4_t_tout;
     U4                          u4_t_frt;
     U4                          u4_t_daycntmin;
+
+    u1_s_dateclk_yymmdd_commit = (U1)FALSE;
+    u1_s_dateclk_bon_state     = (U1)FALSE;
 
     st_t_log.u4_hhmmss_bfr = (U4)HHMMSS_UNKNWN;
     st_t_log.u4_daycnt_bfr = (U4)YYMMDDWK_DAYCNT_UNKNWN;
@@ -567,7 +577,9 @@ U4      u4_g_DateclkYymmddwk(void)
 {
     U4                          u4_t_yymmdd;
 
-    if(u4_s_dateclk_ope_run == (U4)DATE_CLK_OPE_RUN){
+    if((u4_s_dateclk_ope_run == (U4)DATE_CLK_OPE_RUN) &&
+       (u1_s_dateclk_yymmdd_commit == (U1)TRUE)) {
+
         u4_t_yymmdd = u4_s_dateclk_adj_yymmddwk;
     }
     else{
@@ -575,6 +587,16 @@ U4      u4_g_DateclkYymmddwk(void)
     }
 
     return(u4_t_yymmdd);
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_DateclkYymmdd_Initial(const U1 u1_a_initial)                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_DateclkYymmdd_Commit(const U1 u1_a_state)
+{
+    u1_s_dateclk_yymmdd_commit = u1_a_state;
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DateclkAdjUnLock(const U1 u1_a_ADJ)                                                                                 */
@@ -974,16 +996,26 @@ static U1      u1_s_DateclkBackLast(ST_DATE_CLK_LOG * st_ap_log)
     U1                          u1_t_chk;
     U1                          u1_t_bit;
     U1                          u1_t_last;
+    U1                          u1_t_bon;
 
     u1_t_chk = (U1)0U;
     u1_t_bit = (U1)DATE_CLK_EAS_BC_1_NE_2;
+    u1_t_bon = u1_s_dateclk_bon_state;
 
     st_tp_1st = &st_sp_dateclk_back[DATE_CLK_BACK_1ST];
     st_tp_2nd = &st_sp_dateclk_back[DATE_CLK_BACK_2ND];
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)DATE_CLK_BACK_NUM_CMPR; u4_t_lpcnt++){
-        if((st_tp_1st[u4_t_lpcnt].u4_hhmmss_24h != st_tp_2nd[u4_t_lpcnt].u4_hhmmss_24h) ||
-           (st_tp_1st[u4_t_lpcnt].u4_daycnt     != st_tp_2nd[u4_t_lpcnt].u4_daycnt    )){
+        if ((u1_t_bon                   == (U1)TRUE) &&
+            (u1_s_dateclk_yymmdd_commit == (U1)TRUE)) {
+            u1_t_chk |= u1_t_bit;
+            u1_s_dateclk_bon_state = (U1)FALSE;
+        }
+        else if((st_tp_1st[u4_t_lpcnt].u4_hhmmss_24h != st_tp_2nd[u4_t_lpcnt].u4_hhmmss_24h) ||
+                (st_tp_1st[u4_t_lpcnt].u4_daycnt     != st_tp_2nd[u4_t_lpcnt].u4_daycnt    )){
             u1_t_chk |= u1_t_bit; 
+        }
+        else {
+            /* do nothing */
         }
         u1_t_bit <<= 1U;
     }

@@ -18,8 +18,17 @@
 
 #define GNSS_OSCMD_NOTIF_STANDBY                (0U)
 #define GNSS_OSCMD_NOTIF_NORMAL                 (1U)
-#define GNSS_OSCMD_RESET                        (0U)
+#define GNSS_OSCMD_RESTART                      (0U)
 #define GNSS_OSCMD_STOP                         (1U)
+
+#define GNSS_VMCOM_GPS_STS_PRE_STARTUP          (0U)
+#define GNSS_VMCOM_GPS_STS_NORMAL               (1U)
+#define GNSS_VMCOM_GPS_STS_STOP                 (2U)
+
+#define GNSS_VMCOM_GPS_REQ_RESTART              (0U)
+#define GNSS_VMCOM_GPS_REQ_STOP                 (1U)
+#define GNSS_VMCOM_GPS_REQ_NON                  (2U)
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -27,9 +36,8 @@
 #define GNSS_IO_STS_LOW                         (0U)
 #define GNSS_IO_STS_HIGH                        (1U)
 
-#define u1_GNSS_GET_GPS_RST()                   (Dio_ReadChannel(DIO_ID_APORT4_CH8))
+#define u1_GNSS_GET_V33_PERI_ON()               (Dio_ReadChannel(DIO_ID_PORT10_CH2))
 #define u1_GNSS_GET_GPS_PMONI()                 (Dio_ReadChannel(DIO_ID_PORT6_CH3))
-#define u1_GNSS_SET_GPS_RST_L()                 (Dio_WriteChannel(DIO_ID_APORT4_CH8, (Dio_LevelType)GNSS_IO_STS_LOW))
 
 #define u1_GNSS_OSCMD_GPS_STS_NOTIF(x)          (vd_g_XspiIviSub1GpsStsPut(x))
 #define u1_GNSS_OSCMD_GPS_RES(x)                (vd_g_XspiIviSub1GpsOpeResPut(x))

@@ -26,7 +26,8 @@
 #include "Dio_Symbols.h"
 
 #include "EthSwt_SWIC.h"
-
+#include "ivdsh.h"
+#include "rim_ctl.h"
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
@@ -44,6 +45,7 @@
 #include "PwrCtrl_NoRedun.h"
 #include "PwrCtrl_Sip.h"
 #include "PwrCtrl_Sys.h"
+#include "PwrCtrl_Com.h"
 
 /*--------------------------------------------------------------------------*/
 /*  Literal Definitions                                                     */
@@ -108,7 +110,11 @@
 #define     PWRCTRL_CFG_PRIVATE_PORT_SAIL_RESOUT            (51U)        /* (DIO_ID_PORT8_CH8)   */
 #define     PWRCTRL_CFG_PRIVATE_PORT_AOSS_SLP_ENTRY_EXIT    (52U)        /* (DIO_ID_PORT17_CH0)  */
 #define     PWRCTRL_CFG_PRIVATE_PORT_PM_RESIN               (53U)        /* (DIO_ID_PORT8_CH9)   */
-#define     MCU_PORT_NUM                    (54)
+/* WAKEUP-STAT制御 Port設定 */
+#define     PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT1           (54U)        /* (DIO_ID_PORT17_CH5)   */
+#define     PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT2           (55U)        /* (DIO_ID_PORT17_CH3)   */
+#define     PWRCTRL_CFG_PRIVATE_PORT_WAKEUP_STAT3           (56U)        /* (DIO_ID_PORT17_CH1)   */
+#define     MCU_PORT_NUM                    (57)
 
 /* 端子モニタ処理用定義 */
 #define     PWRCTRL_CFG_PRIVATE_AOSS_SLEEP_ENTRY_EXIT_JUDGECOUNT (3U) /* AOSS_SLEEP_ENTRY_EXITの論理確定回数(3回) */

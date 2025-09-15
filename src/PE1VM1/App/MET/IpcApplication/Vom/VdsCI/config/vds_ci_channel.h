@@ -22,7 +22,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDS_CI_NUM_CH         (167U)
+#define VDS_CI_NUM_CH         (168U)
 
 #define VDS_CI_SW_ASD_CONT    ( 0U)
 #define VDS_CI_SW_ASD_CANC    ( 1U)
@@ -191,6 +191,7 @@
 #define VDS_CI_SW_DPMS_BB     (164U)
 #define VDS_CI_SW_POS_CALL    (165U)
 #define VDS_CI_SW_POS_REG     (166U)
+#define VDS_CI_SW_FLYNOP      (167U)
 
 #define VDS_CI_LCASGAPR_MAX   ( 2U)
 #define VDS_CI_M_COP_S_MAX    ( 3U)
