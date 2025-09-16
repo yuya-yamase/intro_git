@@ -74,7 +74,9 @@ static U1           u1_s_vdf_pts_rx_rim;
 void    vd_g_VardefPtsRxBonInit(void)
 {
     u1_s_vdf_pts_rx_rim    = (U1)VDF_PTS_RX_1F_NRX;
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_PTS_RX_RIM_U1, u1_s_vdf_pts_rx_rim);
+#endif   /* BEV Rebase provisionally */
 
     u2_s_vdf_pts_rx_elpsd  = (U2)U2_MAX;
     u1_s_vdf_pts_rxc_sta   = u1_g_VDF_PTS_RX_RXC_INT;
@@ -92,14 +94,20 @@ void    vd_g_VardefPtsRxRstwkInit(void)
     U1          u1_t_rim_chk;
 
     u1_t_rim_rx  = (U1)VDF_PTS_RX_1F_NRX;
+#if 0   /* BEV Rebase provisionally */
     u1_t_rim_chk = u1_g_Rim_ReadU1withStatus(u2_g_VDF_PTS_RX_RIM_U1, &u1_t_rim_rx) & (U1)RIM_RESULT_KIND_MASK;
+#else   /* BEV Rebase provisionally */
+    u1_t_rim_chk = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
     if((u1_t_rim_chk == (U1)RIM_RESULT_KIND_OK) &&
        (u1_t_rim_rx  <= (U1)VDF_PTS_RX_0F_UNK )){
         u1_s_vdf_pts_rx_rim = u1_t_rim_rx;
     }
     else{
         u1_s_vdf_pts_rx_rim = (U1)VDF_PTS_RX_1F_NRX;
+#if 0   /* BEV Rebase provisionally */
         vd_g_Rim_WriteU1(u2_g_VDF_PTS_RX_RIM_U1, u1_s_vdf_pts_rx_rim);
+#endif   /* BEV Rebase provisionally */
     }
 
     u2_s_vdf_pts_rx_elpsd  = (U2)U2_MAX;
@@ -158,7 +166,9 @@ void    vd_g_VardefPtsRxMainTask(const U2 u2_a_EOM)
         if(u2_t_inc >= (U2)VDF_PTS_RX_RXC_MAX){
             if(u1_t_rx != (U1)VDF_PTS_RX_00_UNK){
                 u1_s_vdf_pts_rx_rim  = u1_t_rx;
+#if 0   /* BEV Rebase provisionally */
                 vd_g_Rim_WriteU1(u2_g_VDF_PTS_RX_RIM_U1, u1_s_vdf_pts_rx_rim);
+#endif   /* BEV Rebase provisionally */
             }
         }
     }
@@ -187,7 +197,9 @@ void    vd_g_VardefPtsRxMainTask(const U2 u2_a_EOM)
 void    vd_g_VardefPtsRxReset(void)
 {
     u1_s_vdf_pts_rx_rim = (U1)VDF_PTS_RX_1F_NRX;
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_PTS_RX_RIM_U1, u1_s_vdf_pts_rx_rim);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VardefPtsRx(void)                                                                                                   */

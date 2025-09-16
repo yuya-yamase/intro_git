@@ -61,7 +61,9 @@ U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQR(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQR, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -84,7 +86,9 @@ U1      u1_g_VdfEsoRx_ZMILRQ_EVMILRQA(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_EVMILRQA, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }

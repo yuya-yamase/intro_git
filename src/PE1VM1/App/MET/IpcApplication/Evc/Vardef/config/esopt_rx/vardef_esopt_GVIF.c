@@ -57,6 +57,7 @@
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_GVIF(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1                 u1_t_sts;
     U1                 u1_t_ava_rx;
 
@@ -70,6 +71,9 @@ U1      u1_g_VdfEsoRx_GVIF(void)
     }
 
     return(u1_t_ava_rx);
+#else   /* BEV Rebase provisionally */
+    return((U1)VDF_ESO_AVA_RX_UNK);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VdfEsoRx_GVIF_METDISP(void)                                                                                         */
@@ -79,6 +83,7 @@ U1      u1_g_VdfEsoRx_GVIF(void)
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_GVIF_METDISP(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1                 u1_t_sts;
     U1                 u1_t_ava_rx;
 
@@ -92,6 +97,9 @@ U1      u1_g_VdfEsoRx_GVIF_METDISP(void)
     }
 
     return(u1_t_ava_rx);
+#else   /* BEV Rebase provisionally */
+    return((U1)VDF_ESO_AVA_RX_UNK);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VdfEsoRx_GVIF_MM(void)                                                                                              */
@@ -101,6 +109,7 @@ U1      u1_g_VdfEsoRx_GVIF_METDISP(void)
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_GVIF_MM(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1                 u1_t_sts;
     U1                 u1_t_ava_rx;
 
@@ -114,6 +123,9 @@ U1      u1_g_VdfEsoRx_GVIF_MM(void)
     }
 
     return(u1_t_ava_rx);
+#else   /* BEV Rebase provisionally */
+    return((U1)VDF_ESO_AVA_RX_UNK);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

@@ -61,7 +61,9 @@ U1      u1_g_VdfEsoRx_SW_LTA(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_EXT, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -83,7 +85,9 @@ U1      u1_g_VdfEsoRx_SW_LTA_HOFDI(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOFDIEXT, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -108,8 +112,10 @@ U1      u1_g_VdfEsoRx_SW_LTA_NA(void)
 
     u1_data1_rx = (U1)0U;
     u1_data2_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_EXT, &u1_data1_rx);
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_PROP, &u1_data2_rx);
+#endif   /* BEV Rebase provisionally */
     if((u1_data1_rx != (U1)0U) &&
        (u1_data2_rx == u1_s_VDF_ESO_HOF_PROP_ACT)){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
@@ -132,7 +138,9 @@ U1      u1_g_VdfEsoRx_HOF_EXT(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HOF_EXT, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
     if (u1_t_rx != (U1)0U) {
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }

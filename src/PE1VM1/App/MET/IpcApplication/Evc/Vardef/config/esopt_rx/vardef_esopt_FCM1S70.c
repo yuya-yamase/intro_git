@@ -61,7 +61,9 @@ U1      u1_g_VdfEsoRx_MWL(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_A_BW_PRE, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -83,7 +85,9 @@ U1      u1_g_VdfEsoRx_SW_SWIVEL(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx     = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AHSSWVEX, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }
@@ -105,7 +109,9 @@ U1      u1_g_VdfEsoRx_SW_SHADING_AREA(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx     = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AHSSDEEX, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
     }

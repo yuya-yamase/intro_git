@@ -62,7 +62,11 @@ U1      u1_g_VdfEsoRx_CNTR_DISP(void)
     U1                 u1_t_rx;
     U1                 u1_t_ava_rx;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_rx  = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_AVN1S30, (U2)OXCAN_RX_SYS_TOE_PBA, u2_s_VDF_ESO_AVN_RXTO_MAX);
+#else   /* BEV Rebase provisionally */
+    u1_t_rx  = (U1)COM_TIMEOUT;
+#endif   /* BEV Rebase provisionally */
     u1_t_rx &= (U1)COM_TIMEOUT;
     if(u1_t_rx == (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;

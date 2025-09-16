@@ -21,16 +21,15 @@
 #include "vardef_ptsrx_cfg_private.h"
 #include "vardef_hcs_cfg_private.h"
 
-#include "locale.h"
-
 #include "oxcan.h"
 
-#include "nvmc_mgr.h"
 #include "rim_ctl.h"
 
 #include "vardef_esopt.h"
 #include "veh_opemd.h"
+#if 0   /* BEV Rebase provisionally */
 #include "es_inspect.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -66,18 +65,36 @@
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef VARDEF_PTS_RX_H
+#if 0   /* BEV Rebase provisionally */
 const U2                u2_g_VDF_PTS_RX_RIM_U1       = (U2)RIMID_U1_VDF_PTSYS;
+#else   /* BEV Rebase provisionally */
+const U2                u2_g_VDF_PTS_RX_RIM_U1       = U2_MAX;
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
 const U1                u1_g_VDF_PTS_RX_RXC_INT  = (U1)OXCAN_RX_RXEV_CNT_UNK;
 const U1                u1_g_VDF_PTS_RX_RXC_MAX  = (U1)OXCAN_RX_RXEV_CNT_MAX;
+#else   /* BEV Rebase provisionally */
+const U1                u1_g_VDF_PTS_RX_RXC_INT  = (U1)OXCAN_RXD_EVC_UNK;
+const U1                u1_g_VDF_PTS_RX_RXC_MAX  = (U1)OXCAN_RXD_EVC_MAX;
+#endif   /* BEV Rebase provisionally */
 #endif /* #ifdef VARDEF_PTS_RX_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef VARDEF_HCS_H
+#if 0   /* BEV Rebase provisionally */
 const U2               u2_g_VDF_HCS_ASCEXT_RIM_U1  = (U2)RIMID_U1_VDF_HCS_ASCEXT;
+#else   /* BEV Rebase provisionally */
+const U2               u2_g_VDF_HCS_ASCEXT_RIM_U1  = U2_MAX;
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
 const U1               u1_g_VDF_HCS_ASCEXT_RXC_INT = (U1)OXCAN_RX_RXEV_CNT_UNK;
 const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RX_RXEV_CNT_MAX;
+#else   /* BEV Rebase provisionally */
+const U1               u1_g_VDF_HCS_ASCEXT_RXC_INT = (U1)OXCAN_RXD_EVC_UNK;
+const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RXD_EVC_MAX;
+#endif   /* BEV Rebase provisionally */
 #endif /* #ifdef VARDEF_HCS_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -156,21 +173,29 @@ void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT)
 /*===================================================================================================================================*/
 U2      u2_g_VardefCfgEomchk(void)
 {
+#if 0   /* BEV Rebase provisionally */
 #if ((VDF_EOM_ACC_ON != VEH_OPEMD_MDBIT_ACC) || \
      (VDF_EOM_IGR_ON != VEH_OPEMD_MDBIT_IGN))
 #error "vardef_fg.c : VDF_EOM_XXX shall be equal to VEH_OPEMD_MDBIT_XXX."
 #endif
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
 #if ((ES_INSPECT_MDBF_NUO_DI != (VDF_EOM_NUO_DI >> 8U)) ||  \
      (ES_INSPECT_MDBF_SI_ACT != (VDF_EOM_SI_ACT >> 8U)))
 #error "vardef_fg.c : VDF_EOM_XXX shall be equal to ES_INSPECT_MDBF_XXXX."
 #endif
+#endif   /* BEV Rebase provisionally */
 
     U2          u2_t_eom;
 
     u2_t_eom  = (U2)VDF_EOM_PB_ON;
+#if 0   /* BEV Rebase provisionally */
     u2_t_eom |= (U2)u4_g_VehopemdMdfield() & ((U2)VDF_EOM_ACC_ON | (U2)VDF_EOM_IGR_ON | (U2)VDF_EOM_PBA_ON | (U2)VDF_EOM_IGP_ON);
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
     u2_t_eom |= ((U2)u1_g_ESInspectMdBfield() << 8U);
+#endif   /* BEV Rebase provisionally */
 
     return(u2_t_eom);
 }
@@ -186,6 +211,7 @@ U2      u2_g_VardefCfgEomchk(void)
 /*===================================================================================================================================*/
 U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
 {
+#if 0   /* BEV Rebase provisionally */
 #ifdef ComConf_ComSignal_PTSYS
     (void)Com_ReceiveSignal(ComConf_ComSignal_PTSYS, u1_ap_ptsys_rx);
     return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13));
@@ -193,6 +219,10 @@ U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
     (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_1F_NRX;
     return((U1)OXCAN_RX_RXEV_CNT_UNK);
 #endif
+#else   /* BEV Rebase provisionally */
+    (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_1F_NRX;
+    return((U1)OXCAN_RXD_EVC_UNK);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 
@@ -208,8 +238,13 @@ U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
 /*===================================================================================================================================*/
 U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 {
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ASCEXT, u1_ap_ascext_rx);
     return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ASC1S90));
+#else   /* BEV Rebase provisionally */
+    (*u1_ap_ascext_rx) = (U1)0U;
+    return((U1)OXCAN_RXD_EVC_UNK);
+#endif   /* BEV Rebase provisionally */
 }
 
 

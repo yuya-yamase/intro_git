@@ -77,7 +77,9 @@ U1      u1_g_VdfEsoRx_D_DPTZ(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_DBKLAB, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
 
     u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
     if((u1_t_rx != (U1)VDF_ESO_BKL_SW_STS_UNDTRMIND) &&
@@ -101,7 +103,9 @@ U1      u1_g_VdfEsoRx_P_DPTZ(void)
     U1                 u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_PBKLAB, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
 
     u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_UNK;
     if((u1_t_rx != (U1)VDF_ESO_BKL_SW_STS_UNDTRMIND) &&

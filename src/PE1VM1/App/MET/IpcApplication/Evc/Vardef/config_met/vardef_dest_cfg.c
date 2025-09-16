@@ -18,7 +18,104 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef_dest_cfg_private.h"
 
+#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
+#else   /* BEV Rebase provisionally */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Unit Distance */
+#define UNIT_NUM_VAL_DIST                   (2U)
+#define UNIT_VAL_DIST_KM                    (0U)
+#define UNIT_VAL_DIST_MILE                  (1U)
+
+/* Unit Speed */
+#define UNIT_NUM_VAL_SPEED                  (2U)
+#define UNIT_VAL_SPEED_KMPH                 (0U)
+#define UNIT_VAL_SPEED_MPH                  (1U)
+
+/* Unit Fuel Economy */
+#define UNIT_NUM_VAL_FUECO                  (7U)
+#define UNIT_VAL_FUECO_KMPL                 (0U)
+#define UNIT_VAL_FUECO_LP100KM              (1U)
+#define UNIT_VAL_FUECO_MPG_USA              (2U)
+#define UNIT_VAL_FUECO_MPG_UK               (3U)
+#define UNIT_VAL_FUECO_MPG_E                (4U)
+#define UNIT_VAL_FUECO_KMPKG                (5U)
+#define UNIT_VAL_FUECO_KGP100KM             (6U)
+
+/* Unit Electronic Economy */
+#define UNIT_NUM_VAL_ELECO                  (7U)   /* Electricity cost Number                      */
+#define UNIT_VAL_ELECO_WHPKM                (0U)
+#define UNIT_VAL_ELECO_KWHPKM               (1U)
+#define UNIT_VAL_ELECO_WHPMILE              (2U)
+#define UNIT_VAL_ELECO_KWHPMILE             (3U)
+#define UNIT_VAL_ELECO_KMPKWH               (4U)   /* Electricity cost    : km/kWh                 */
+#define UNIT_VAL_ELECO_KWHP100KM            (5U)   /* Electricity cost    : kWh/100km              */
+#define UNIT_VAL_ELECO_MILEPKWH             (6U)   /* Electricity cost    : miles/kWh              */
+
+/* Unit Ambient Temparature */
+#define UNIT_NUM_VAL_AMBTMP                 (2U)
+#define UNIT_VAL_AMBTMP_CEL                 (0U)
+#define UNIT_VAL_AMBTMP_FAH                 (1U)
+
+#define TIMEFMT_NUM_VAL                     (2U)
+#define TIMEFMT_VAL_24H                     (0U)
+#define TIMEFMT_VAL_12H                     (1U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Language */
+#define LANG_NUM_VAL                        (49U)   /* Country             : Language               */
+#define LANG_VAL__________JPN               ( 0U)   /* Japan               : Japanese               */
+#define LANG_VAL______USA_ENG               ( 1U)   /* USA                 : English                */
+#define LANG_VAL______BRI_ENG               ( 2U)   /* United Kingdom      : English                */
+#define LANG_VAL_______FRENCH               ( 3U)   /* France              : French                 */
+#define LANG_VAL_______GERMAN               ( 4U)   /* Germany             : German                 */
+#define LANG_VAL______ITALIAN               ( 5U)   /* Italy               : Italian                */
+#define LANG_VAL________DUTCH               ( 6U)   /* Netherlands         : Dutch                  */
+#define LANG_VAL______SPANISH               ( 7U)   /* Spain               : Spanish                */
+#define LANG_VAL______SWEDISH               ( 8U)   /* Sweden              : Swedish                */
+#define LANG_VAL_______DANISH               ( 9U)   /* Denmark             : Danish                 */
+#define LANG_VAL____NORWEGIAN               (10U)   /* Norway              : Norwegian              */
+#define LANG_VAL___PORTUGUESE               (11U)   /* Portugal            : Portuguese             */
+#define LANG_VAL______RUSSIAN               (12U)   /* Russia              : Russian                */
+#define LANG_VAL________GREEK               (13U)   /* Greece              : Greek                  */
+#define LANG_VAL_______POLISH               (14U)   /* Poland              : Polish                 */
+#define LANG_VAL______FINNISH               (15U)   /* Finland             : Finnish                */
+#define LANG_VAL______CHN_SMP               (16U)   /* China               : Simplified             */
+#define LANG_VAL______CHN_TRA               (17U)   /* China               : Traditional            */
+#define LANG_VAL_______KOREAN               (18U)   /* Korea               : Korean                 */
+#define LANG_VAL____UKRAINIAN               (19U)   /* Ukraine             : Ukrainian              */
+#define LANG_VAL______TURKISH               (20U)   /* Turkey              : Turkish                */
+#define LANG_VAL____HUNGARIAN               (21U)   /* Hungary             : Hungarian              */
+#define LANG_VAL________CZECH               (22U)   /* the Czech Repubic   : Czech                  */
+#define LANG_VAL_______SLOVAK               (23U)   /* Slovakia            : Slovak                 */
+#define LANG_VAL_____ROMANIAN               (24U)   /* Romania             : Romanian               */
+#define LANG_VAL_______ARABIC               (25U)   /* Middle East         : Arabic                 */
+#define LANG_VAL_________THAI               (26U)   /* Thailand            : Thai                   */
+#define LANG_VAL__BRA_PORTUGU               (27U)   /* Brazil              : Portuguese             */
+#define LANG_VAL___SA_SPANISH               (28U)   /* South America       : Spanish                */
+#define LANG_VAL__MIDEAST_ENG               (29U)   /* Middle East         : English                */
+#define LANG_VAL__JPN_ENGLISH               (30U)   /* Japan               : English                */
+#define LANG_VAL___CAN_FRENCH               (31U)   /* Canada              : French                 */
+#define LANG_VAL__USA_SPANISH               (32U)   /* USA                 : Spanish                */
+#define LANG_VAL________MALAY               (33U)   /* Malaysia            : Malay                  */
+#define LANG_VAL___INDONESIAN               (34U)   /* Indonesia           : Indonesian             */
+#define LANG_VAL______EUSKARA               (35U)   /* Euskal Herria       : euskara                */
+#define LANG_VAL____BULGARIAN               (36U)   /* Bulgaria            : Bulgarian              */
+#define LANG_VAL_______VLAAMS               (37U)   /* Belgium             : Vlaams                 */
+#define LANG_VAL_______AU_ENG               (38U)   /* Australia           : English                */
+#define LANG_VAL____TAIWANESE               (39U)   /* Taiwan              : Taiwanese              */
+#define LANG_VAL____INDIA_ENG               (40U)   /* India               : English                */
+#define LANG_VAL________HINDI               (41U)   /* India               : Hindi                  */
+#define LANG_VAL___VIETNAMESE               (42U)   /* Vietnam             : Vietnamese             */
+#define LANG_VAL_____FILIPINO               (43U)   /* Philippines         : Filipino               */
+#define LANG_VAL________TAMIL               (44U)   /* South India         : Tamil                  */
+#define LANG_VAL______PERSIAN               (45U)   /* Middle East         : Persian                */
+#define LANG_VAL_______HEBREW               (46U)   /* Israel              : Hebrew                 */
+#define LANG_VAL_______ISRAEL               (47U)   /* Israel              : Israel                 */
+#define LANG_VAL____SLOVENIAN               (48U)   /* Slovenian           : Slovenian              */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#endif   /* BEV Rebase provisionally */
 
 #include "oxcan.h"
 
@@ -179,13 +276,25 @@ static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 const U2        u2_g_VDF_DST_C_CODE_RIM_U2      = (U2)RIMID_U2_VDF_C_CODE;
 const U2        u2_g_VDF_DST_DEST_BDB_RIM_U1    = (U2)RIMID_U1_VDF_DEST_BDB;
 const U2        u2_g_VDF_DST_STRG_WHL_RIM_U1    = (U2)RIMID_U1_VDF_STRG_WHL;
 const U2        u2_g_VDF_DST_IDX_RIM_U1         = (U2)RIMID_U1_VDF_DST_IDX;
 const U2        u2_g_VDF_LANG_DST_IDX_RIM_U1    = (U2)RIMID_U1_VDF_LANG_DST_IDX;
+#else   /* BEV Rebase provisionally */
+const U2        u2_g_VDF_DST_C_CODE_RIM_U2      = U2_MAX;
+const U2        u2_g_VDF_DST_DEST_BDB_RIM_U1    = U2_MAX;
+const U2        u2_g_VDF_DST_STRG_WHL_RIM_U1    = U2_MAX;
+const U2        u2_g_VDF_DST_IDX_RIM_U1         = U2_MAX;
+const U2        u2_g_VDF_LANG_DST_IDX_RIM_U1    = U2_MAX;
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
 const U1        u1_g_VDF_DST_RXEV_CNT_INIT      = (U1)OXCAN_RX_RXEV_CNT_UNK;
+#else   /* BEV Rebase provisionally */
+const U1        u1_g_VDF_DST_RXEV_CNT_INIT      = (U1)OXCAN_RXD_EVC_UNK;
+#endif   /* BEV Rebase provisionally */
 
 const U1        u1_g_VDF_DST_C_CODE_IDX_DEF     = (U1)U1_MAX;
 const U1        u1_g_VDF_DST_DEST_BDB_IDX_DEF   = (U1)VDF_DST_DEST_BDB_B_GNR_L;
@@ -471,19 +580,34 @@ U1      u1_g_VardefDestCfg(U2 * u2p_a_c_code, U1 * u1p_a_dest_bdb, U1 * u1p_a_st
     U1  u1_t_c_code;
 
     u1_t_c_code = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S08);
+#else   /* BEV Rebase provisionally */
+    u1_t_rxcnt = (U1)OXCAN_RXD_EVC_UNK;
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE1, &u1_t_c_code);
+#endif   /* BEV Rebase provisionally */
     *u2p_a_c_code =  ((U2)u1_t_c_code & u2_s_VDF_DST_C_CODE_MSK) << u1_s_VDF_DST_C_CODE1_BIT;
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE2, &u1_t_c_code);
+#endif   /* BEV Rebase provisionally */
     *u2p_a_c_code |= (U2)(((U2)u1_t_c_code & u2_s_VDF_DST_C_CODE_MSK) << u1_s_VDF_DST_C_CODE2_BIT);
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE3, &u1_t_c_code);
+#endif   /* BEV Rebase provisionally */
     *u2p_a_c_code |= ((U2)u1_t_c_code & u2_s_VDF_DST_C_CODE_MSK);
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_DEST_BDB, u1p_a_dest_bdb);
     (void)Com_ReceiveSignal(ComConf_ComSignal_STRG_WHL, u1p_a_strg_whl);
+#else   /* BEV Rebase provisionally */
+    (*u1p_a_dest_bdb) = (U1)0U;
+    (*u1p_a_strg_whl) = (U1)0U;
+#endif   /* BEV Rebase provisionally */
 
     return(u1_t_rxcnt);
 }

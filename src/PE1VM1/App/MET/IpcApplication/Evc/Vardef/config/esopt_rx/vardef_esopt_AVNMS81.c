@@ -71,10 +71,16 @@ U1      u1_g_VdfEsoRx_MM_MAP(void)
 
     u1_t_rx_navi = u1_s_VDF_ESO_MM_MAP_ACT_NAV_INI;
     u1_t_rx_map  = u1_s_VDF_ESO_MM_MAP_ACT_MAP_INI;
+#if 0   /* BEV Rebase provisionally */
     u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_AVNMS81_RXCH1) & (U1)COM_NO_RX;
+#else   /* BEV Rebase provisionally */
+    u1_t_msgsts = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_V_OUT_NAV_STS, &u1_t_rx_navi);
     (void)Com_ReceiveSignal(ComConf_ComSignal_V_OUT_PROJ_STS, &u1_t_rx_map);
+#endif   /* BEV Rebase provisionally */
 
     if(u1_t_msgsts == (U1)0U){
         if((u1_t_rx_navi      == u1_s_VDF_ESO_MM_MAP_ACT_NAV_INI) &&

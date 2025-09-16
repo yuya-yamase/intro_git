@@ -32,7 +32,9 @@
 #include "alert.h"
 #include "gauge.h"
 
+#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */
 #include "fspomgr.h"
 #endif   /* BEV Rebase provisionally */
 
@@ -106,9 +108,7 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
     vd_g_IoHwDifltSgnlInit(); /* DO NOT REMOVED */
     vd_g_oXCANVomEvhk();
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_VardefOpemdEvhk();
-#endif   /* BEV Rebase provisionally */
 
 #ifdef DATE_CLK_H
     u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF;

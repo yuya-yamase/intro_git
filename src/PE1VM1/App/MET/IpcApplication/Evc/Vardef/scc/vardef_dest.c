@@ -97,15 +97,21 @@ void    vd_g_VardefDestBonInit(void)
 {
     u2_s_vdf_dst_c_code            = (U2)VDF_DST_C_CODE_DEF;
     u2_s_vdf_dst_c_code_pre        = (U2)VDF_DST_C_CODE_DEF;
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU2(u2_g_VDF_DST_C_CODE_RIM_U2, u2_s_vdf_dst_c_code);
+#endif   /* BEV Rebase provisionally */
 
     u1_s_vdf_dst_dest_bdb          = (U1)VDF_DST_DEST_BDB_DEF;
     u1_s_vdf_dst_dest_bdb_pre      = (U1)VDF_DST_DEST_BDB_DEF;
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_DST_DEST_BDB_RIM_U1, u1_s_vdf_dst_dest_bdb);
+#endif   /* BEV Rebase provisionally */
 
     u1_s_vdf_dst_strg_whl          = (U1)VDF_DST_STRG_WHL_DEF;
     u1_s_vdf_dst_strg_whl_pre      = (U1)VDF_DST_STRG_WHL_DEF;
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_DST_STRG_WHL_RIM_U1, u1_s_vdf_dst_strg_whl);
+#endif   /* BEV Rebase provisionally */
 
     u1_s_vdf_dst_rxcnt             = u1_g_VDF_DST_RXEV_CNT_INIT;
     u2_s_vdf_dst_intvl             = (U2)0U;
@@ -115,10 +121,14 @@ void    vd_g_VardefDestBonInit(void)
     u1_s_vdf_lang_dst_dest_bdb_idx = u1_g_VDF_LANG_DST_IDX_DEF;
 
     u1_s_vdf_dst_idx               = u1_g_VDF_DST_IDX_DEF;
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_DST_IDX_RIM_U1, u1_s_vdf_dst_idx);
+#endif   /* BEV Rebase provisionally */
 
     u1_s_vdf_lang_dst_idx          = u1_g_VDF_DST_IDX_DEF;
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_LANG_DST_IDX_RIM_U1, u1_s_vdf_lang_dst_idx);
+#endif   /* BEV Rebase provisionally */
 
     u1_s_vdf_dst_hdlside           = (U1)VDF_HDSIDE_LHD;
 }
@@ -137,7 +147,11 @@ void    vd_g_VardefDestRstwkInit(void)
     u2_t_data = (U2)0U;
     u1_t_data = (U1)0U;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts    = u1_g_Rim_ReadU2withStatus(u2_g_VDF_DST_C_CODE_RIM_U2, &u2_t_data);
+#else   /* BEV Rebase provisionally */
+    u1_t_sts    = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
     if ((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
         u2_s_vdf_dst_c_code         = u2_t_data;
         u2_s_vdf_dst_c_code_pre     = u2_t_data;
@@ -147,7 +161,11 @@ void    vd_g_VardefDestRstwkInit(void)
         u2_s_vdf_dst_c_code_pre     = (U2)VDF_DST_C_CODE_DEF;
     }
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts    = u1_g_Rim_ReadU1withStatus(u2_g_VDF_DST_DEST_BDB_RIM_U1, &u1_t_data);
+#else   /* BEV Rebase provisionally */
+    u1_t_sts    = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
     if ((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
         u1_s_vdf_dst_dest_bdb       = u1_t_data;
         u1_s_vdf_dst_dest_bdb_pre   = u1_t_data;
@@ -157,7 +175,11 @@ void    vd_g_VardefDestRstwkInit(void)
         u1_s_vdf_dst_dest_bdb_pre   = (U1)VDF_DST_DEST_BDB_DEF;
     }
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts    = u1_g_Rim_ReadU1withStatus(u2_g_VDF_DST_STRG_WHL_RIM_U1, &u1_t_data);
+#else   /* BEV Rebase provisionally */
+    u1_t_sts    = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
     if ((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
         u1_s_vdf_dst_strg_whl       = u1_t_data;
         u1_s_vdf_dst_strg_whl_pre   = u1_t_data;
@@ -169,7 +191,11 @@ void    vd_g_VardefDestRstwkInit(void)
 
     u1_s_vdf_dst_rxcnt        = u1_g_VDF_DST_RXEV_CNT_INIT;
     u2_s_vdf_dst_intvl        = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts    = u1_g_Rim_ReadU1withStatus(u2_g_VDF_DST_IDX_RIM_U1, &u1_t_data);
+#else   /* BEV Rebase provisionally */
+    u1_t_sts    = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
     if ((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
         u1_s_vdf_dst_idx            = u1_t_data;
     }
@@ -177,7 +203,11 @@ void    vd_g_VardefDestRstwkInit(void)
         u1_s_vdf_dst_idx            = u1_g_VDF_DST_IDX_DEF;
     }
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts    = u1_g_Rim_ReadU1withStatus(u2_g_VDF_LANG_DST_IDX_RIM_U1, &u1_t_data);
+#else   /* BEV Rebase provisionally */
+    u1_t_sts    = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
     if ((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
         u1_s_vdf_lang_dst_idx       = u1_t_data;
     }
@@ -215,15 +245,21 @@ void    vd_g_VardefDestMainTask(void)
         if(u2_s_vdf_dst_intvl <= u2_s_VDF_DST_RXINTVL ){
             if(u2_s_vdf_dst_c_code_pre == u2_t_c_code){
                 u2_s_vdf_dst_c_code = u2_t_c_code;
+#if 0   /* BEV Rebase provisionally */
                 vd_g_Rim_WriteU2(u2_g_VDF_DST_C_CODE_RIM_U2, u2_s_vdf_dst_c_code);
+#endif   /* BEV Rebase provisionally */
             }
             if(u1_s_vdf_dst_dest_bdb_pre == u1_t_dest_bdb){
                 u1_s_vdf_dst_dest_bdb = u1_t_dest_bdb;
+#if 0   /* BEV Rebase provisionally */
                 vd_g_Rim_WriteU1(u2_g_VDF_DST_DEST_BDB_RIM_U1, u1_s_vdf_dst_dest_bdb);
+#endif   /* BEV Rebase provisionally */
             }
             if(u1_s_vdf_dst_strg_whl_pre == u1_t_strg_whl){
                 u1_s_vdf_dst_strg_whl = u1_t_strg_whl;
+#if 0   /* BEV Rebase provisionally */
                 vd_g_Rim_WriteU1(u2_g_VDF_DST_STRG_WHL_RIM_U1, u1_s_vdf_dst_strg_whl);
+#endif   /* BEV Rebase provisionally */
             }
         }
         u2_s_vdf_dst_intvl = (U2)0U;
@@ -333,7 +369,9 @@ static void    vd_s_VardefDestDBIdxJdg(void)
         u1_s_vdf_dst_dest_bdb_idx = u1_g_VDF_DST_DEST_BDB_IDX_DEF;
         u1_s_vdf_dst_idx          = u1_g_VDF_DST_IDX_DEF;
     }
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_DST_IDX_RIM_U1, u1_s_vdf_dst_idx);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static U1    vd_s_VardefLangDestDBIdxJdg(void)                                                                                   */
@@ -388,7 +426,9 @@ static void    vd_s_VardefLangDestDBIdxJdg(void)
         u1_s_vdf_lang_dst_dest_bdb_idx = u1_g_VDF_LANG_DST_IDX_DEF;
         u1_s_vdf_lang_dst_idx          = u1_g_VDF_DST_IDX_DEF;
     }
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_LANG_DST_IDX_RIM_U1, u1_s_vdf_lang_dst_idx);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_VardefDestHdlJdg(const U1 u1_a_STRG_WHL)                                                                     */

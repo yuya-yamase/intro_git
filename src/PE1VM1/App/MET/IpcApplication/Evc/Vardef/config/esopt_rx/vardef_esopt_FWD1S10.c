@@ -64,7 +64,9 @@ U1      u1_g_VdfEsoRx_4WDSYS(void)
 
     u1_t_rx = (U1)0U;
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_FWDREQ, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
 
     if(u1_t_rx == u1_s_VDF_ESO_4WD_ACT_FWDREQ){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
