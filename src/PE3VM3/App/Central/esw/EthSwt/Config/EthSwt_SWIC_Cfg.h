@@ -54,6 +54,21 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define D_ETHSWT_SWIC_LINK_FAST_GET_TMO             (70U)
 #define D_ETHSWT_SWIC_LINK_GET_CYCLE                (100U)
 
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_MIB.c                                               */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_MIB_GET_CYCLE	                (100U)
+
+#define D_ETHSWT_SWIC_MIB_INFCSERR					(0U)
+#define D_ETHSWT_SWIC_MIB_INDISCARDS				(1U)
+#define D_ETHSWT_SWIC_MIB_INFILTERED				(2U)
+#define D_ETHSWT_SWIC_MIB_INOVERSIZE				(3U)
+#define D_ETHSWT_SWIC_MIB_INUNDERSIZE				(4U)
+#define D_ETHSWT_SWIC_MIB_TCAM0						(5U)
+#define D_ETHSWT_SWIC_MIB_TCAM1						(6U)
+#define D_ETHSWT_SWIC_MIB_TCAM2						(7U)
+#define D_ETHSWT_SWIC_MIB_TCAM3						(8U)
+#define D_ETHSWT_SWIC_MIB_NUM						(9U)
 
 
 /* -------------------------------------------------------------------------- */
