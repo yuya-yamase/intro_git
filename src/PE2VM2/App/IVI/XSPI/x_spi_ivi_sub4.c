@@ -75,7 +75,7 @@
 #define XSPI_IVI_CANBUS_RSV_ACTIVE          (0x00U)
 #define XSPI_IVI_CANBUS_RSV_REGSTUCK        (0x01U)
 #define XSPI_IVI_CANBUS_RSV_BUSOFF          (0x02U)
-#define XSPI_IVI_CANBUS_RSV_NOCONNECT       (0x03U)
+#define XSPI_IVI_CANBUS_RSV_NOCONNECT       (0x04U)
 
 /*UTC*/
 #define XSPI_IVI_CLOCKUTC_SEND_TASK         (1000U / XSPI_IVI_TASK_TIME)
@@ -1187,42 +1187,35 @@ void            vd_g_XspiIviCANBusGet2M(void)
     /* 2M-1 */
     u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_029, &u4_t_data, u2_s_NWORD);
     if(u1_t_sts != (U1)IVDSH_NO_REA){
-        switch (u4_t_data)
-        {
-        case XSPI_IVI_CANBUS_RSV_ACTIVE:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x03U;      /* 通常動作状態 */
-            break;
+        u1_sp_Xspi_Ivi_CanBusSts2M[0]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts2M[1]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts2M[2]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts2M[3]   = (U1)0x03U;    /* 初期化 : 通常動作状態 */
 
-        case XSPI_IVI_CANBUS_RSV_REGSTUCK:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x01U;      /* 通信不能状態要因 メッセージレジスタ固着 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
+        if(u4_t_data    != (U4)XSPI_IVI_CANBUS_RSV_ACTIVE){
+            u1_sp_Xspi_Ivi_CanBusSts2M[3]   = (U1)0x04U;        /* 通信不能状態 */
 
-        case XSPI_IVI_CANBUS_RSV_BUSOFF:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x01U;      /* 通信不能状態要因 バス OFF */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
-
-        case XSPI_IVI_CANBUS_RSV_NOCONNECT:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x01U;      /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
-        
-        default:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x01U;      /* INIT：初期化状態（送受信不可状態） */
-            break;
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_REGSTUCK)    != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts2M[0]   = (U1)0x01U;    /* 通信不能状態要因 メッセージレジスタ固着 */
+            }
+            else{
+                 /* do nothing */
+            }
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_BUSOFF)      != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts2M[1]   = (U1)0x01U;    /* 通信不能状態要因 バス OFF */
+            }
+            else{
+                 /* do nothing */
+            }
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_NOCONNECT)   != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts2M[2]   = (U1)0x01U;    /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
+            }
+            else{
+                 /* do nothing */
+            }
+        }
+        else{
+            /* do nothing */
         }
     }
     else{
@@ -1252,42 +1245,35 @@ void            vd_g_XspiIviCANBusGet5M(void)
     /* 5M */
     u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_032, &u4_t_data, u2_s_NWORD);
     if(u1_t_sts != (U1)IVDSH_NO_REA){
-        switch (u4_t_data)
-        {
-        case (U4)XSPI_IVI_CANBUS_RSV_ACTIVE:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x03U;      /* 通常動作状態 */
-            break;
+        u1_sp_Xspi_Ivi_CanBusSts5M[0]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts5M[1]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts5M[2]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts5M[3]   = (U1)0x03U;    /* 初期化 : 通常動作状態 */
 
-        case (U4)XSPI_IVI_CANBUS_RSV_REGSTUCK:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x01U;      /* 通信不能状態要因 メッセージレジスタ固着 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
+        if(u4_t_data    != (U4)XSPI_IVI_CANBUS_RSV_ACTIVE){
+            u1_sp_Xspi_Ivi_CanBusSts5M[3]   = (U1)0x04U;        /* 通信不能状態 */
 
-        case (U4)XSPI_IVI_CANBUS_RSV_BUSOFF:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x01U;      /* 通信不能状態要因 バス OFF */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
-
-        case (U4)XSPI_IVI_CANBUS_RSV_NOCONNECT:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x01U;      /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
-        
-        default:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x01U;      /* INIT：初期化状態（送受信不可状態） */
-            break;
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_REGSTUCK)    != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts5M[0]   = (U1)0x01U;    /* 通信不能状態要因 メッセージレジスタ固着 */
+            }
+            else{
+                 /* do nothing */
+            }
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_BUSOFF)      != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts5M[1]   = (U1)0x01U;    /* 通信不能状態要因 バス OFF */
+            }
+            else{
+                 /* do nothing */
+            }
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_NOCONNECT)   != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts5M[2]   = (U1)0x01U;    /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
+            }
+            else{
+                 /* do nothing */
+            }
+        }
+        else{
+            /* do nothing */
         }
     }
     else{

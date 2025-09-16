@@ -99,7 +99,11 @@ void           vd_g_DiagAppSID22Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
     u1_t_datanum = (U1)(st_ap_REQ->u4_nbyte / (U4)2U);
     u1_t_NRC = (U1)0U;
 
-    if (st_ap_REQ->u2_tim_elpsd == 0) {
+    if (st_ap_REQ->u2_tim_elpsd == (U2)0U) {
+        if(st_ap_REQ->u1_req_type == (U1)OXDC_REQ_TYPE_FUNC) {
+            vd_g_DiagAppAnsTxNRC((U1)DIAGAPP_NRC_NONSUP);
+            return;
+        }
         st_s_diagapp_sid22_ans.u1p_tx = st_ap_ans->u1p_tx;
         st_s_diagapp_sid22_ans.u4_nbyte = st_ap_ans->u4_nbyte;
         /* Under Minimum Request Data */
@@ -141,7 +145,7 @@ void           vd_g_DiagAppSID22Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
 
         u1_t_result = u1_g_XspiIviSub0Request_Sid22(u1_t_requestId, u1_t_datanum, &u2_tp_did[0], &u1_t_NRC);
 
-        if (u1_t_result == E_NOT_OK) {
+        if (u1_t_result == (U1)E_NOT_OK) {
             /* NRC */
             vd_g_DiagAppAnsTxNRC(u1_t_NRC);
         }

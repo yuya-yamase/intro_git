@@ -1,3 +1,11 @@
+/* v0-2-0 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/*  CanIfProxy.c                                                                                                                     */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+
 /*--------------------------------------------------------------------------*/
 /* Include Files                                                            */
 /*--------------------------------------------------------------------------*/
@@ -73,7 +81,7 @@
 #define CANIFPROXY_VCAN_VIRTUAL_CH_PROXY            ((U1)0x80U)
 #define CANIFPROXY_VCAN_CONTROL                     ((U1)0x00U)
 #define CANIFPROXY_VCAN_CONTROLLER                  (CANIFPROXY_VCAN_VIRTUAL_CH_PROXY | CANIFPROXY_VCAN_CONTROL)
-#define CANIFPROXY_VCAN_MBOX                        ((U1)0x00U)
+#define CANIFPROXY_VCAN_MBOX                        ((U1)0x06U)
 #define CANIFPROXY_VCAN_MESSAGEBUFFER               (CANIFPROXY_VCAN_MBOX)
 #define CANIFPROXY_VCAN_DATA_BUFNUM                 ((U1)40U)
 #define CANIFPROXY_VCAN_DATA_BUFNUM_MASK            ((U1)0x3FU)
@@ -89,16 +97,15 @@
 
 #define CANIFPROXY_RX_CANID_FRAMETYPE_11BIT_LIMIT   ((U4)0x00000800U)
 #define CANIFPROXY_RX_CANID_FRAMETYPE_CANFD         ((U4)0x80000000U)   /* CANFD 31bit=ON */
-#define CANIFPROXY_EXTENDED_CANID_MASK              ((U4)0xFFFFFF00U)
-#define CANIFPROXY_RX_CANID_18DAE1XX_MASK           ((U4)0xD8DAE100U) /* CANID + CanFDBit31 + ExtendedBit30 */
-#define CANIFPROXY_RX_CANID_19DAE1XX_MASK           ((U4)0x98DAE100U) /* CANID + ExtendedBit30 */
-#define CANIDPROXY_RX_CANID_FRAMETYPE_FUNCADDR      ((U4)0x98DB33F1U) /* D(1101b)8DB33F1 or 9(1001b)8DB33F1 */
-#define CANIFPROXY_RX_CANID_18DA33F1_CANFD          ((U4)0xD8DA33F1U) /* CANID + CanFDBit31 + ExtendedBit30 */
-#define CANIFPROXY_RX_CANID_18DA33F1_CLASSIC        ((U4)0x98DA33F1U) /* CANID + ExtendedBit30 */
-#define CANIFPROXY_RX_CANID_00000700_0707           ((U4)0x00000707U) /* CANID for Standard 700-707 */
-#define CANIFPROXY_RX_CANID_00000708                ((U4)0x00000708U)
-#define CANIFPROXY_RX_CANID_00000709                ((U4)0x00000709U)
-#define CANIFPROXY_RX_CANID_0000070E                ((U4)0x0000070EU)
+#define CANIFPROXY_RX_EXTENDED_CANID_MASK           ((U4)0xFFFFFF00U)
+#define CANIFPROXY_RX_CANID_18DAE1XX_CANFD          ((U4)0xD8DAE100U)   /* CANID + CanFDBit31 + ExtendedBit30 */
+#define CANIFPROXY_RX_CANID_18DAE1XX_CLASSIC        ((U4)0x98DAE100U)   /* CANID + ExtendedBit30 */
+#define CANIDPROXY_RX_CANID_FRAMETYPE_FUNCADDR      ((U4)0x98DB33F1U)   /* D(1101b)8DB33F1 or 9(1001b)8DB33F1 */
+#define CANIFPROXY_RX_CANID_18DB33F1_CANFD          ((U4)0xD8DB33F1U)   /* CANID + CanFDBit31 + ExtendedBit30 */
+#define CANIFPROXY_RX_CANID_18DB33F1_CLASSIC        ((U4)0x98DB33F1U)   /* CANID + ExtendedBit30 */
+#define CANIFPROXY_RX_STANDARD_CANID_MASK           ((U4)0xFFFFFFF8U)   /* CANID Mask for 11bit Standard 708-70F */
+#define CANIFPROXY_RX_CANID_00000708_070F           ((U4)0x00000708U)   /* CANID for 11bit Standard Physical 708-70F */
+#define CANIFPROXY_RX_CANID_000007DF                ((U4)0x000007DFU)   /* CANID for 11bit Standard Functional 7DF */
 
 
 
@@ -143,7 +150,7 @@ void CanIfProxy_Init( void )
     U4 u4_t_QueueCnt;
     U1 u1_t_TxBuff_Cnt;
 
-    LIB_memset(CanIfProxy_McuSpiTxData, 0xFF, CANIFPROXY_BUFF_TX_DATA_SIZE);
+    LIB_memset(CanIfProxy_McuSpiTxData, 0x00, CANIFPROXY_BUFF_TX_DATA_SIZE);
 
     for( u1_t_TxBuff_Cnt=0; u1_t_TxBuff_Cnt < CANIFPROXY_VCAN_DATA_BUFNUM; u1_t_TxBuff_Cnt++ ) {
         LIB_memset(&(CanIfProxy_VCanDataTx[u1_t_TxBuff_Cnt][0]), 0x00, CANIFPROXY_VCAN_DATA_BUFSIZE_TX);
@@ -295,15 +302,33 @@ static U1 CanIfProxy_IsSailTransferCanId(U4 CanId)
     u1_t_ret = FALSE;
     u4_t_CanId =CanId;
 
-    if ((u4_t_CanId & CANIDPROXY_RX_CANID_FRAMETYPE_FUNCADDR) != CANIDPROXY_RX_CANID_FRAMETYPE_FUNCADDR) {
+    if ((u4_t_CanId & CANIDPROXY_RX_CANID_FRAMETYPE_FUNCADDR) == CANIDPROXY_RX_CANID_FRAMETYPE_FUNCADDR) {
+        /* Funcational Address */
+        if (u4_t_CanId == CANIFPROXY_RX_CANID_18DB33F1_CANFD) {
+            /* Extended FD */
+            u1_t_ret = TRUE;
+        } 
+        else if (u4_t_CanId == CANIFPROXY_RX_CANID_18DB33F1_CLASSIC) {
+            /* Extended Classic */
+            u1_t_ret = TRUE;
+        }
+        else {
+            /* do nothing */
+        }
+    }
+    else if(u4_t_CanId == CANIFPROXY_RX_CANID_000007DF) {
+            /* Functional Address */
+            /* Standard Classic */
+            u1_t_ret = TRUE;
+    } else {
         /* Physical Address(not target functional CanId) */
         if( (u4_t_CanId & CANIFPROXY_RX_CANID_FRAMETYPE_CANFD) >= CANIFPROXY_RX_CANID_FRAMETYPE_11BIT_LIMIT) {
             /* 29bit Extended */
-            if ((u4_t_CanId & CANIFPROXY_EXTENDED_CANID_MASK) == CANIFPROXY_RX_CANID_18DAE1XX_MASK) {
+            if ((u4_t_CanId & CANIFPROXY_RX_EXTENDED_CANID_MASK) == CANIFPROXY_RX_CANID_18DAE1XX_CANFD) {
                 /* Extended FD */
                 u1_t_ret = TRUE;
             }
-            else if ((u4_t_CanId & CANIFPROXY_EXTENDED_CANID_MASK) == CANIFPROXY_RX_CANID_19DAE1XX_MASK) {
+            else if ((u4_t_CanId & CANIFPROXY_RX_EXTENDED_CANID_MASK) == CANIFPROXY_RX_CANID_18DAE1XX_CLASSIC) {
                 /* Extended Classic*/
                 u1_t_ret = TRUE;
             }
@@ -312,72 +337,14 @@ static U1 CanIfProxy_IsSailTransferCanId(U4 CanId)
             }
         } else {
             /* 11bit Classical CAN2.0 */
-            if ((u4_t_CanId & CANIFPROXY_RX_CANID_00000700_0707) == CANIFPROXY_RX_CANID_00000700_0707) {
+            if ((u4_t_CanId & CANIFPROXY_RX_STANDARD_CANID_MASK) == CANIFPROXY_RX_CANID_00000708_070F) {
                 u1_t_ret = TRUE;
             } 
-            else if ((u4_t_CanId & CANIFPROXY_RX_CANID_00000708) == CANIFPROXY_RX_CANID_00000708) {
-                u1_t_ret = TRUE;
-            } 
-            else if ((u4_t_CanId & CANIFPROXY_RX_CANID_00000709) == CANIFPROXY_RX_CANID_00000709) {
-                u1_t_ret = TRUE;
-            } 
-            else if ((u4_t_CanId & CANIFPROXY_RX_CANID_0000070E) == CANIFPROXY_RX_CANID_0000070E) {
-                u1_t_ret = TRUE;
-            }
             else {
                 /* do nothing */
             }
         }
-
-    } else {
-        /* Funcational Address */
-        if (u4_t_CanId == CANIFPROXY_RX_CANID_18DA33F1_CANFD) {
-            /* Extended FD */
-            u1_t_ret = TRUE;
-        } 
-        else if (u4_t_CanId == CANIFPROXY_RX_CANID_18DA33F1_CLASSIC) {
-            /* Extended Classic*/
-            u1_t_ret = TRUE;
-        }
-        else {
-            /* do nothing */
-        }
     }
-#if 0 /* old conversion */
-    if (u4_t_CanId > CANIFPROXY_RX_CANID_FRAMETYPE_11BIT_LIMIT) {
-        /* 29bit Extended */
-        if ((u4_t_CanId & CANIFPROXY_EXTENDED_CANID_MASK) == CANIFPROXY_RX_CANID_18DAE1XX_MASK) {
-            /* Extended FD */
-            u1_t_ret = TRUE;
-        }
-        else if ((u4_t_CanId & CANIFPROXY_EXTENDED_CANID_MASK) == CANIFPROXY_RX_CANID_19DAE1XX_MASK) {
-            /* Extended Classic*/
-            u1_t_ret = TRUE;
-        } 
-        else if (u4_t_CanId == CANIFPROXY_RX_CANID_18DA33F1_CANFD) {
-            /* Extended FD */
-            u1_t_ret = TRUE;
-        } 
-        else if (u4_t_CanId == CANIFPROXY_RX_CANID_18DA33F1_CLASSIC) {
-            /* Extended Classic*/
-            u1_t_ret = TRUE;
-        } 
-    } else {
-        /* Classic*/
-        if ((u4_t_CanId & CANIFPROXY_RX_CANID_00000700_0707) == CANIFPROXY_RX_CANID_00000700_0707) {
-            u1_t_ret = TRUE;
-        } 
-        else if ((u4_t_CanId & CANIFPROXY_RX_CANID_00000708) == CANIFPROXY_RX_CANID_00000708) {
-            u1_t_ret = TRUE;
-        } 
-        else if ((u4_t_CanId & CANIFPROXY_RX_CANID_00000709) == CANIFPROXY_RX_CANID_00000709) {
-            u1_t_ret = TRUE;
-        } 
-        else if ((u4_t_CanId & CANIFPROXY_RX_CANID_0000070E) == CANIFPROXY_RX_CANID_0000070E) {
-            u1_t_ret = TRUE;
-        } 
-    }
-#endif /* old conversion */
 
     return u1_t_ret;
 }
