@@ -102,18 +102,18 @@ void           vd_g_DiagAppSID14Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
     u1_t_dataLength = (U1)st_ap_REQ->u4_nbyte;
     u1_t_NRC = (U1)0U;
 
-    if (st_ap_REQ->u2_tim_elpsd == 0) {
+    if (st_ap_REQ->u2_tim_elpsd == (U2)0U) {
         st_s_diagapp_sid14_ans.u1p_tx = st_ap_ans->u1p_tx;
         st_s_diagapp_sid14_ans.u4_nbyte = st_ap_ans->u4_nbyte;
         /* Data Length Check */
-        if ((u1_t_dataLength == DIAGAPP_SID14_REQ_DATA_LENGTH) ||
-            (u1_t_dataLength == DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN)) {
+        if ((u1_t_dataLength == (U1)DIAGAPP_SID14_REQ_DATA_LENGTH) ||
+            (u1_t_dataLength == (U1)DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN)) {
             /* DTC group */
             u4_t_groupOfDTC = (((U4)st_ap_REQ->u1p_RX[DIAGAPP_SID14_DTC_HIGH]) << DIAGAPP_SID14_SHIFT_DTC_HIGH) |
             (((U4)st_ap_REQ->u1p_RX[DIAGAPP_SID14_DTC_MIDDLE]) << DIAGAPP_SID14_SHIFT_DTC_MIDDLE) |
             ((U4)st_ap_REQ->u1p_RX[DIAGAPP_SID14_DTC_LOW]);
 
-            if (u4_t_groupOfDTC != DIAGAPP_SID14_ENABLE_DTC) {
+            if (u4_t_groupOfDTC != (U4)DIAGAPP_SID14_ENABLE_DTC) {
                 /* --- error --- */
                 /* NRC:0x31 */
                 vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_31);
@@ -132,7 +132,7 @@ void           vd_g_DiagAppSID14Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
                 u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
                 /* DTC Clear Request */
                 u1_t_result = u1_g_XspiIviSub0Request_Sid14(u1_t_requestId, u1_t_dataLength, u4_t_groupOfDTC, u1_t_memorySelection, &u1_t_NRC);
-                if (u1_t_result == E_NOT_OK) {
+                if (u1_t_result == (U1)E_NOT_OK) {
                     /* NRC */
                     vd_g_DiagAppAnsTxNRC(u1_t_NRC);
                 }
