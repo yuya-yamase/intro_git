@@ -73,7 +73,7 @@
 /* Read from VM#3 */
 #define IVDSH_DID_REA_CPREQ_005                  (35U)
 #define IVDSH_DID_REA_CPREQ_007                  (36U)
-#define IVDSH_DID_REA_CPREQ_043                  (37U)
+#define IVDSH_DID_REA_VM3TO2_BOOTLOG_INF         (37U)
 #define IVDSH_DID_REA_CPREQ_045                  (38U)
 #define IVDSH_DID_REA_CPREQ_048                  (39U)
 #define IVDSH_DID_REA_CPREQ_049                  (40U)

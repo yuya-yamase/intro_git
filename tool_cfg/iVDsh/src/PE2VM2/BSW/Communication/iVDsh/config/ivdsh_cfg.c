@@ -136,7 +136,7 @@ const ST_IVDSH_WA           st_gp_IVDSH_WA_BY_DID[IVDSH_NUM_DID] =
     /*------------------------------------------------------------------*/
     {(U2)0U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_005         */
     {(U2)1U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_007         */
-    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_043         */
+    {(U2)2U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_VM3TO2_BOOTLOG_INF*/
     {(U2)3U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_045         */
     {(U2)4U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_048         */
     {(U2)5U,        (U2)1U,         (U2)IVDSH_FQ_CH_REA_2},     /* IVDSH_DID_REA_CPREQ_049         */
