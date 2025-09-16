@@ -8,6 +8,12 @@
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_Cfg.h>
 /* -------------------------------------------------------------------------- */
+#define D_ETHSWT_DATA_CYCLE                 (5U)
+#define D_ETHSWT_DATA_GET_LINK_CYCLE        (5U)
+#define D_ETHSWT_DATA_GET_MIB_CYCLE         (100U)
+#define D_ETHSWT_DATA_GET_SQI_CYCLE         (5U)
+#define D_ETHSWT_DATA_GET_QCI_CYCLE         (20U)
+/* -------------------------------------------------------------------------- */
 #define D_ETHSWT_DATA_LINK_ADC_ID           (0U)
 #define D_ETHSWT_DATA_LINK_DCM_ID           (1U)
 #define D_ETHSWT_DATA_LINK_SAIL_ID          (2U)
@@ -34,7 +40,17 @@
 #define D_ETHSWT_DATA_QCI_DLC_TCP_ID        (3U)
 #define D_ETHSWT_DATA_QCI_DLC_UDP_ID        (4U)
 #define D_ETHSWT_DATA_QCI_NUM               (5U)
+
+#define D_ETHSWT_DATA_USE_PORT_NUM          (6U)
+
+#define D_ETHSWT_SWIC_ADC_PORT_ID           (0U)
+#define D_ETHSWT_SWIC_DCM_PORT_ID           (1U)
+#define D_ETHSWT_SWIC_SAIL_PORT_ID          (4U)
+#define D_ETHSWT_SWIC_TOOL_PORT_ID          (5U)
+#define D_ETHSWT_SWIC_LINUX_PORT_ID         (6U)
+#define D_ETHSWT_SWIC_ANDROID_PORT_ID       (7U)
 /* -------------------------------------------------------------------------- */
+
 #pragma pack(1)
 /* -------------------------------------------------------------------------- */
 typedef struct {
@@ -47,21 +63,21 @@ typedef struct {
     uint32                          id;                                     /* 4byte */
 } S_ETHSWT_DATA_LINK;                                                       /* Total: 16byte */
 /* -------------------------------------------------------------------------- */
-typedef struct {
-    uint32                          InFCSErr;                               /* 4byte */
-    uint32                          InDiscards;                             /* 4byte */
-    uint32                          InFiltered;                             /* 4byte */
-    uint32                          InOversize;                             /* 4byte */
-    uint32                          InUndersize;                            /* 4byte */
-    uint32                          Tcam0;                                  /* 4byte */
-    uint32                          Tcam1;                                  /* 4byte */
-    uint32                          Tcam2;                                  /* 4byte */
-    uint32                          Tcam3;                                  /* 4byte */
-    uint32                          reserved;                               /* 4byte */
-} S_ETHSWT_DATA_MIB_PER_PORT;                                               /* Total: 20byte */
+// typedef struct {
+//     uint32                          InFCSErr;                               /* 4byte */
+//     uint32                          InDiscards;                             /* 4byte */
+//     uint32                          InFiltered;                             /* 4byte */
+//     uint32                          InOversize;                             /* 4byte */
+//     uint32                          InUndersize;                            /* 4byte */
+//     uint32                          Tcam0;                                  /* 4byte */
+//     uint32                          Tcam1;                                  /* 4byte */
+//     uint32                          Tcam2;                                  /* 4byte */
+//     uint32                          Tcam3;                                  /* 4byte */
+//     uint32                          reserved;                               /* 4byte */
+// } S_ETHSWT_DATA_MIB_PER_PORT;                                               /* Total: 20byte */
 
 typedef struct {
-    S_ETHSWT_DATA_MIB_PER_PORT      mib[D_ETHSWT_DATA_MIB_NUM];             /* 240byte */
+    uint32                          mib[D_ETHSWT_DATA_MIB_NUM][D_ETHSWT_SWIC_MIB_NUM + 1];             /* 240byte */ /* +1‚Íreserve*/
     uint32                          id;                                     /* 4byte */
 } S_ETHSWT_DATA_MIB;                                                        /* Total: 244byte */
 /* -------------------------------------------------------------------------- */
