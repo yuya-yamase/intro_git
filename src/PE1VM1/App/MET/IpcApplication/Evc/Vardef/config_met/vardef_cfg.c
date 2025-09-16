@@ -19,13 +19,7 @@
 #include "vardef_cfg_private.h"
 #include "vardef_dest_cfg_private.h"
 #include "vardef_ptsrx_cfg_private.h"
-#include "vardef_ptsrx_milreq_cfg_private.h"
-#include "vardef_tcrx_cfg_private.h"
-#include "vardef_ds2e.h"
-#include "vardef_mmmthd_cfg_private.h"
-#include "vardef_navspdlmt_cfg_private.h"
 #include "vardef_hcs_cfg_private.h"
-#include "vardef_sgauge_cfg_private.h"
 
 #include "locale.h"
 
@@ -79,36 +73,12 @@ const U1                u1_g_VDF_PTS_RX_RXC_MAX  = (U1)OXCAN_RX_RXEV_CNT_MAX;
 #endif /* #ifdef VARDEF_PTS_RX_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#ifdef VARDEF_PTS_RX_MILREQ_H
-const U2                u2_g_VDF_PTS_RX_MILREQ_RIM_U1 = (U2)RIMID_U1_VDF_PTSYS_MILREQ;
-
-const U1                u1_g_VDF_PTS_RX_MILREQ_RXC_INT = (U1)OXCAN_RX_RXEV_CNT_UNK;
-const U1                u1_g_VDF_PTS_RX_MILREQ_RXC_MAX = (U1)OXCAN_RX_RXEV_CNT_MAX;
-#endif /* #ifdef VARDEF_PTS_RX_MILREQ_H */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef VARDEF_HCS_H
 const U2               u2_g_VDF_HCS_ASCEXT_RIM_U1  = (U2)RIMID_U1_VDF_HCS_ASCEXT;
 
 const U1               u1_g_VDF_HCS_ASCEXT_RXC_INT = (U1)OXCAN_RX_RXEV_CNT_UNK;
 const U1               u1_g_VDF_HCS_ASCEXT_RXC_MAX = (U1)OXCAN_RX_RXEV_CNT_MAX;
 #endif /* #ifdef VARDEF_HCS_H */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#ifdef VARDEF_SGAUGE_H
-const U2               u2_g_VDF_SGAUGE_RIM_U1  = (U2)RIMID_U1_VDF_SGAUGE;
-
-const U1               u1_g_VDF_SGAUGE_RXC_INT = (U1)OXCAN_RX_RXEV_CNT_UNK;
-const U1               u1_g_VDF_SGAUGE_RXC_MAX = (U1)OXCAN_RX_RXEV_CNT_MAX;
-#endif /* #ifdef VARDEF_SGAUGE_H */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#ifdef VARDEF_TC_RX_H
-const U2                u2_g_VDF_TC_RX_RIM_U1   = (U2)RIMID_U1_VDF_TACHO;
-
-const U1                u1_g_VDF_TC_RX_RXC_INT  = (U1)OXCAN_RX_RXEV_CNT_UNK;
-const U1                u1_g_VDF_TC_RX_RXC_MAX  = (U1)OXCAN_RX_RXEV_CNT_MAX;
-#endif /* #ifdef VARDEF_TC_RX_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -131,13 +101,7 @@ void    vd_g_VardefCfgBonInit(void)
     vd_g_VardefDestBonInit();
 
     vd_g_VardefPtsRxBonInit();
-    vd_g_VardefPtsRxMilreqBonInit();
-    vd_g_VardefDs2EInit();
-    vd_g_VardefMmMthdBonInit();
-    vd_g_VardefNavSpdLmtBonInit();
     vd_g_VardefHcsBonInit();
-    vd_g_VardefSgaugeBonInit();
-    vd_g_VardefTcRxBonInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VardefCfgRstwkInit(void)                                                                                            */
@@ -151,13 +115,7 @@ void    vd_g_VardefCfgRstwkInit(void)
     vd_g_VardefDestRstwkInit();
 
     vd_g_VardefPtsRxRstwkInit();
-    vd_g_VardefPtsRxMilreqRstwkInit();
-    vd_g_VardefDs2EInit();
-    vd_g_VardefMmMthdRstwkInit();
-    vd_g_VardefNavSpdLmtRstwkInit();
     vd_g_VardefHcsRstwkInit();
-    vd_g_VardefSgaugeRstwkInit();
-    vd_g_VardefTcRxRstwkInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VardefCfgOpemdEvhk(const U2 u2_a_EOM)                                                                               */
@@ -169,9 +127,7 @@ void    vd_g_VardefCfgOpemdEvhk(const U2 u2_a_EOM)
 {
     vd_g_VardefEsOptOpemdEvhk(u2_a_EOM);
     vd_g_VardefPtsRxOpemdEvhk(u2_a_EOM);
-    vd_g_VardefPtsRxMilreqOpemdEvhk(u2_a_EOM);
     vd_g_VardefHcsOpemdEvhk(u2_a_EOM);
-    vd_g_VardefSgaugeOpemdEvhk(u2_a_EOM);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT)                                                           */
@@ -182,24 +138,15 @@ void    vd_g_VardefCfgOpemdEvhk(const U2 u2_a_EOM)
 void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT)
 {
     vd_g_VardefEsOptMainTask(u2_a_EOM, u1_a_TSLOT);
-    vd_g_VardefTcRxMainTask(u2_a_EOM);
 
     if(u1_a_TSLOT == (U1)VDF_TSLOT_2){
         vd_g_VardefDestMainTask();                    /* vd_g_VardefDestMainTask shall be invoked every 100 milliseconds        */
         vd_g_VardefPtsRxMainTask(u2_a_EOM);           /* vd_g_VardefPtsRxMainTask shall be invoked every 100 milliseconds       */
-        vd_g_VardefPtsRxMilreqMainTask(u2_a_EOM);     /* vd_g_VardefPtsRxMilreqMainTask shall be invoked every 100 milliseconds */
-        vd_g_VardefNavSpdLmtMainTask(u2_a_EOM);       /* vd_g_VardefNavSpdLmtMainTask shall be invoked every 100 milliseconds   */
         vd_g_VardefHcsMainTask(u2_a_EOM);
-        vd_g_VardefSgaugeMainTask(u2_a_EOM);          /* vd_g_VardefSgaugeMainTask shall be invoked every 100 milliseconds      */
-    }
-    else if(u1_a_TSLOT == (U1)VDF_TSLOT_4){
-        vd_g_VardefMmMthdMainTask(u2_a_EOM);         /* vd_g_VardefMmMthdMainTask shall be invoked every 100 milliseconds    */
     }
     else{
         /* do nothing */
     }
-
-    vd_g_VardefDs2EMainTask();
 }
 /*===================================================================================================================================*/
 /*  U2      u2_g_VardefCfgEomchk(void)                                                                                               */
@@ -252,90 +199,6 @@ U1      u1_g_VardefPtsRxCfgPtsyschk(U1 * u1_ap_ptsys_rx)
 
 #endif /* #ifdef VARDEF_PTS_RX_H */
 
-#ifdef VARDEF_PTS_RX_MILREQ_H
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefPtsRxMlrqCfgPtsyschk(U1 * u1_ap_ptsys_rx)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefPtsRxMlrqCfgPtsyschk(U1* u1_ap_ptsys_rx)
-{
-#ifdef ComConf_ComSignal_PTSYS
-    (void)Com_ReceiveSignal(ComConf_ComSignal_PTSYS, u1_ap_ptsys_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13));
-#else
-    (*u1_ap_ptsys_rx) = (U1)VDF_PTS_RX_MILREQ_1F_NRX;
-    return((U1)OXCAN_RX_RXEV_CNT_UNK);
-#endif
-}
-/*===================================================================================================================================*/
-
-#endif /* #ifdef VARDEF_PTS_RX_MILREQ_H */
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefCfgMmcProt(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefCfgMmcProt(void)
-{
-    U1  u1_t_mmprt;
-    U1  u1_t_sts;
-
-    u1_t_mmprt = (U1)VDF_MMPROT_AUTO;
-    
-    if(u1_t_mmprt == (U1)VDF_MMPROT_AUTO){
-        u1_t_sts = u1_g_VardefMmMthdSts();
-        if(u1_t_sts == (U1)VDF_MM_MTHD_MMSUBBUS){
-            u1_t_mmprt = (U1)VDF_MMPROT_17CY_MM_SUB_BUS;
-        }
-        else{
-            u1_t_mmprt = (U1)VDF_MMPROT_21CY_ETH_WO_AR;
-        }
-    }
-
-    return(u1_t_mmprt);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefCfgMmMthd(void)                                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefCfgMmMthd(void)
-{
-    U1  u1_t_mmprt;
-    U1  u1_t_sts;
-
-    u1_t_mmprt = (U1)VDF_MMPROT_AUTO;
-    
-    if(u1_t_mmprt == (U1)VDF_MMPROT_AUTO){
-        u1_t_sts = u1_g_VardefMmMthdSts();
-    }
-    else if(u1_t_mmprt == (U1)VDF_MMPROT_21CY_ETH_WO_AR){
-        u1_t_sts = (U1)VDF_MM_MTHD_ETHER;
-    }
-    else{
-        u1_t_sts = (U1)VDF_MM_MTHD_MMSUBBUS;
-    }
-    return(u1_t_sts);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_VardefCfgSendMmcProt(const U1 u1_a_SIG)                                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_VardefCfgSendMmcProt(const U1 u1_a_SIG)
-{
-    U1  u1_t_sig;
-
-    u1_t_sig = u1_a_SIG;
-    (void)Com_SendSignal(ComConf_ComSignal_MMC_PROT, &u1_t_sig);
-}
-
 
 /*===================================================================================================================================*/
 /*  U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)                                                                          */
@@ -349,52 +212,6 @@ U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
     return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ASC1S90));
 }
 
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefSgaugeCfgVartrm1chk(U1* u1_ap_sgauge_rx)                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefSgaugeCfgVartrm1chk(U1* u1_ap_sgauge_rx)
-{
-    (void)Com_ReceiveSignal(ComConf_ComSignal_VARTRM1, u1_ap_sgauge_rx);
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1G13));
-}
-
-#ifdef VARDEF_TC_RX_H
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefTcRxCfgNeMetchk(U1 * u1_ap_nemet_ava)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefTcRxCfgNeMetchk(U1 * u1_ap_nemet_ava)
-{
-    S2  s2_t_sig;
-
-    s2_t_sig = (S2)0;
-    (void)Com_ReceiveSignal(ComConf_ComSignal_NE_MET, &s2_t_sig);
-    if(s2_t_sig != (S2)VDF_TC_RX_NE_MET_INA){
-        (*u1_ap_nemet_ava) = (U1)VDF_TC_RX_ACT;
-    }
-    else{
-        (*u1_ap_nemet_ava) = (U1)VDF_TC_RX_INA;
-    }
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_ENG1S98));
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_VardefTcRxCfgHvNechk(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_VardefTcRxCfgHvNechk(void)
-{
-    return(u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_EHV1F04_31)); /* for 19PFv3 */
-}
-
-#endif /* #ifdef VARDEF_TC_RX_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

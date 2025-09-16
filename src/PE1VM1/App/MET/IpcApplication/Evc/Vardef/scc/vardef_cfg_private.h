@@ -44,9 +44,6 @@ void    vd_g_VardefCfgMainTask(const U2 u2_a_EOM, const U1 u1_a_TSLOT);
 
 U2      u2_g_VardefCfgEomchk(void);
 
-U1      u1_g_VardefCfgMmcProt(void);
-void    vd_g_VardefCfgSendMmcProt(const U1 u1_a_SIG);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

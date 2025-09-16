@@ -50,8 +50,6 @@ static U1           u1_s_vdf_tslot_cnt;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void         vd_s_VardefSendMMProt(const U2 u2_a_EOM);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -111,13 +109,6 @@ void    vd_g_VardefMainTask(void)
 
     u2_t_eom = u2_g_VardefCfgEomchk();
 
-    if(u1_s_vdf_tslot_cnt == (U1)VDF_TSLOT_1){
-        vd_s_VardefSendMMProt(u2_t_eom);
-    }
-    else{
-        /* do nothing */
-    }
-
     vd_g_VardefCfgMainTask(u2_t_eom, u1_s_vdf_tslot_cnt);
 
     u1_s_vdf_tslot_cnt++;
@@ -153,37 +144,6 @@ U1      u1_g_VardefTrnsmssn(void)
     }
 
     return(u1_t_trnsmssn);
-}
-/*===================================================================================================================================*/
-/*  static void         vd_s_VardefSendMMProt(const U2 u2_a_EOM)                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void         vd_s_VardefSendMMProt(const U2 u2_a_EOM)
-{
-    static const U1 u1_sp_VDF_MMC_PROT[VDF_NUM_MMPROT] = {
-        (U1)0x00,    /*  13CY : HMI-BUS                  */
-        (U1)0x01,    /*  17CY : MM-SUB-BUS               */
-        (U1)0x02,    /*  21CY : Ethernet without AR-HUD  */
-        (U1)0x03     /*  21CY : Ethernet with AR-HUD     */
-    };
-    static const U1 u1_s_VDF_MMC_PROT_DEF = (U1)0x07U;
-
-    U1  u1_t_mmprt;
-    U2  u2_t_mdbit;
-
-    u1_t_mmprt = u1_g_VardefCfgMmcProt();
-    u2_t_mdbit = u2_a_EOM & (U2)VDF_EOM_ACC_ON;
-
-    if(u2_t_mdbit != (U2)0U){
-        if(u1_t_mmprt < (U1)VDF_NUM_MMPROT){
-            vd_g_VardefCfgSendMmcProt(u1_sp_VDF_MMC_PROT[u1_t_mmprt]);
-        }
-        else{
-            vd_g_VardefCfgSendMmcProt(u1_s_VDF_MMC_PROT_DEF);
-        }
-    }
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

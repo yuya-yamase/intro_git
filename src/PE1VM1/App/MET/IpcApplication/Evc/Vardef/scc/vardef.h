@@ -47,14 +47,6 @@
 #define VDF_EOM_NUO_DI                           (0x0200U)           /* NvM update operation is disabled                             */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VDF_NUM_MMPROT                           (4U)
-#define VDF_MMPROT_13CY_HMI_BUS                  (0U)                /* 13CY : HMI-BUS                                               */
-#define VDF_MMPROT_17CY_MM_SUB_BUS               (1U)                /* 17CY : MM-SUB-BUS                                            */
-#define VDF_MMPROT_21CY_ETH_WO_AR                (2U)                /* 21CY : Ethernet without AR-HUD                               */
-#define VDF_MMPROT_21CY_ETH_W_AR                 (3U)                /* 21CY : Ethernet with AR-HUD                                 */
-#define VDF_MMPROT_AUTO                          (255U)              /* Automatic Judgment                                           */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define VDF_NUM_TRNSMSSN                         (3U)
 #define VDF_TRNSMSSN_MT                          (0U)
 #define VDF_TRNSMSSN_AT                          (1U)

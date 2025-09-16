@@ -475,11 +475,9 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     U1  u1_t_engrpm_unit;                                              /*  ENGRPM_UNIT                                          */
     U1  u1_t_fugag_scale;                                              /*  FUGAG_SCALE                                          */
     U1  u1_t_spd_red_scale;                                            /*  SPD_RED_SCALE                                        */
-    U1  u1_t_mmcnnct_comsys;                                           /*  MMCNNCT_COMSYS                                       */
     U1  u1_t_var_ecojdg_type;                                          /*  VAR_ECOJDG_TYPE                                      */
     U1  u1_t_langslct_type;                                            /*  LANGSLCT_TYPE                                        */
     U1  u1_t_smasta_na;                                                /*  SMASTA_NA                                            */
-    U1  u1_t_sport_gauge_num;                                          /*  SPORT_GAUGE_NUM                                      */
     U1  u1_t_var_4wdsys_disp;                                          /*  VAR_4WDSYS_DISP                                      */
     U1  u1_t_tempdest;                                                 /*  TEMPDEST                                             */
     U1  u1_t_cal_dsptyp;                                               /*  CALENDAR_DISP_TYPE                                   */
@@ -516,9 +514,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1] |= (U4)u1_t_design_sup;                            /*  SYS_CLASSIC and SYS_METALIC                          */
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;     /*  VAR_PTSYS                                            */
-
-    u1_t_mmcnnct_comsys = u1_g_VardefMmMthd();
-    u4_ap_pdu_tx[2]  = ((U4)u1_t_mmcnnct_comsys & (U4)0x03U) << 9;     /*  MMCNNCT_COMSYS                                       */
 
     u1_t_subdigspd = u1_g_UnitSubSpd();
     u4_ap_pdu_tx[2] |= ((U4)u1_t_subdigspd & (U4)0x03U) << 11;         /*  SUBDIGSPD_DISP                                       */
@@ -583,9 +578,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     u1_t_langslct_type = u1_g_VardefLngDBTypeByPid();
     u4_ap_pdu_tx[13] |= ((U4)u1_t_langslct_type & (U4)0x3FU) << 10;    /*  LANGSLCT_TYPE                                        */
-
-    u1_t_sport_gauge_num = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SGAUGE);
-    u4_ap_pdu_tx[13] |= ((U4)u1_t_sport_gauge_num & (U4)0x01U) << 21;  /*  SPORT_GAUGE_NUM                                      */
 
     u1_t_sys_hcs      = u1_g_VardefHcsAva();
     u4_ap_pdu_tx[13] |= ((U4)u1_t_sys_hcs & (U4)0x01U) << 22;          /*  SYS_HCS                                              */
@@ -1459,7 +1451,6 @@ static inline void    vd_s_XSpiCfgTxCstmize(       U4 * u4_ap_pdu_tx) {
     U4  u4_t_loop;
     U1  u1_t_esopt_ais_ether;
     U1  u1_t_esopt_ais_subbus;
-    U1  u1_t_mmmthd;
 
     for(u4_t_loop = (U1)0U; u4_t_loop < u4_s_XSPI_MMCSTM_PAYLOAD; u4_t_loop++){
         u4_ap_pdu_tx[u4_t_loop] = (U4)0U;
@@ -1473,18 +1464,12 @@ static inline void    vd_s_XSpiCfgTxCstmize(       U4 * u4_ap_pdu_tx) {
 
     u1_t_esopt_ais_subbus = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISMM);    /* MM-SUBBUS and Ais      */
     u1_t_esopt_ais_ether  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);   /* Ethernet  and Ais      */
-    u1_t_mmmthd           = u1_g_VardefMmMthd();
     
     if(u1_t_esopt_ais_subbus == (U1)TRUE){
         vd_s_XSpiCfgAisSubbus(&u4_ap_pdu_tx[2]);
     }
     if(u1_t_esopt_ais_ether == (U1)TRUE){
         vd_s_XSpiCfgMcst(&u4_ap_pdu_tx[2]);
-    }
-    if(u1_t_mmmthd == (U1)VDF_MM_MTHD_ETHER){
-        u4_ap_pdu_tx[8]  |= (((U4)u1_g_McstFunc((U1)MCST_L_VS_FUNC)   & (U4)XSPI_MSK_01BIT) << 5 );    /* L_VS_FUNC    */
-        u4_ap_pdu_tx[9]  |= (((U4)u1_g_McstFunc((U1)MCST_L_STSW_FUNC) & (U4)XSPI_MSK_01BIT) << 7 );    /* L_STSW_FUNC  */
-        u4_ap_pdu_tx[10] |= (((U4)u1_g_McstFunc((U1)MCST_L_GRV_FUNC)  & (U4)XSPI_MSK_01BIT) << 17);    /* L_GRV_FUNC   */
     }
 #endif   /* BEV Rebase provisionally */
 }

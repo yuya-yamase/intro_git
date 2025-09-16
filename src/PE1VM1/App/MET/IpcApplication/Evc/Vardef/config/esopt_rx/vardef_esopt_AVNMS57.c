@@ -57,6 +57,7 @@
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_NAVI_TAB(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_VDF_ESO_NAVI_TAB_ACT1 = (U1)1U;
     static const U1 u1_s_VDF_ESO_NAVI_TAB_ACT2 = (U1)3U;
 
@@ -77,6 +78,9 @@ U1      u1_g_VdfEsoRx_NAVI_TAB(void)
     }
 
     return(u1_t_ava_rx);
+#else   /* BEV Rebase provisionally */
+    return((U1)VDF_ESO_AVA_RX_UNK);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VdfEsoRx_MM_NAVI(void)                                                                                              */
@@ -86,6 +90,7 @@ U1      u1_g_VdfEsoRx_NAVI_TAB(void)
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_MM_NAVI(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_ava_rx;
     U1              u1_t_sts;
 
@@ -99,6 +104,9 @@ U1      u1_g_VdfEsoRx_MM_NAVI(void)
     }
 
     return(u1_t_ava_rx);
+#else   /* BEV Rebase provisionally */
+    return((U1)VDF_ESO_AVA_RX_UNK);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

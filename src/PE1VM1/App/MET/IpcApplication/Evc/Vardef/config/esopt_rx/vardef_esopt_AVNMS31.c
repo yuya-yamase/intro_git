@@ -57,6 +57,7 @@
 /*===================================================================================================================================*/
 U1      u1_g_VdfEsoRx_MM_TEL(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_VDF_ESO_MM_TEL_ACT = (U1)2U;
     U1              u1_t_rx;
     U1              u1_t_ava_rx;
@@ -74,6 +75,9 @@ U1      u1_g_VdfEsoRx_MM_TEL(void)
     }
 
     return(u1_t_ava_rx);
+#else   /* BEV Rebase provisionally */
+    return((U1)VDF_ESO_AVA_RX_UNK);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
