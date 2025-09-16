@@ -58,7 +58,9 @@
 #include "wchime.h"
 #include "sbltsync.h"
 #include "locale.h"
+#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #include "mcst.h"
 #include "vds_ci.h"
@@ -109,10 +111,12 @@
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_StaBonInit(void)
 {
-#if 0   /* BEV Rebase provisionally */
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EvschgBonInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_VardefBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
         &vd_g_McstBonInit,
         &vd_g_LocaleBonInit,
@@ -157,8 +161,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_DateSIMETInit
-    };
 #endif   /* BEV Rebase provisionally */
+    };
 
     U1    u1_t_rslt;
 
@@ -179,8 +183,8 @@ void vd_g_22SSCallout_StaBonInit(void)
     /* vv User Hook start vv */
 #if 0   /* BEV Rebase provisionally */
     vd_g_NWCMBonInit();
-    vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_BON_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_BON_INIT));
 #endif   /* BEV Rebase provisionally */
+    vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_BON_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_BON_INIT));
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
 
@@ -197,10 +201,12 @@ void vd_g_22SSCallout_StaBonInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_StaRstInit(void)
 {
-#if 0   /* BEV Rebase provisionally */
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EvschgRstwkInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_VardefRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
         &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
@@ -245,8 +251,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_DateSIMETInit
-    };
 #endif   /* BEV Rebase provisionally */
+    };
 
     U1    u1_t_rslt;
 
@@ -267,8 +273,8 @@ void vd_g_22SSCallout_StaRstInit(void)
     /* vv User Hook start vv */
 #if 0   /* BEV Rebase provisionally */
     vd_g_NWCMWkupInit();
-    vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_RST_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_RST_INIT));
 #endif   /* BEV Rebase provisionally */
+    vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_RST_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_RST_INIT));
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
 
@@ -285,10 +291,12 @@ void vd_g_22SSCallout_StaRstInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_StaWkupInit(void)
 {
-#if 0   /* BEV Rebase provisionally */
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EvschgRstwkInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_VardefRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
         &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
@@ -333,8 +341,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_AttmpInit,
         &vd_g_MMAppCtrlInitial,
         &vd_g_DateSIMETInit
-    };
 #endif   /* BEV Rebase provisionally */
+    };
 
     U1    u1_t_rslt;
 
@@ -355,8 +363,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
     /* vv User Hook start vv */
 #if 0   /* BEV Rebase provisionally */
     vd_g_NWCMWkupInit();
-    vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_WKUP_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_WKUP_INIT));
 #endif   /* BEV Rebase provisionally */
+    vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_WKUP_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_WKUP_INIT));
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
 

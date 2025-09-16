@@ -1,0 +1,262 @@
+/* 1.0.0 */
+/*===================================================================================================================================*/
+/*  Copyright DENSO Corporation                                                                                                      */
+/*===================================================================================================================================*/
+/*  Variation Defines / Height Control Suspension                                                                                    */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version                                                                                                                          */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define VARDEF_HCS_C_MAJOR                    (1)
+#define VARDEF_HCS_C_MINOR                    (0)
+#define VARDEF_HCS_C_PATCH                    (0)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Include Files                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "aip_common.h"
+#include "oxcan.h"
+#include "rim_ctl.h"
+#include "vardef_hcs_cfg_private.h"
+#include "vardef.h"
+/* #include vardef_hcs.h is included in vardef_dbf.h */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Version Check                                                                                                                    */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if ((VARDEF_HCS_C_MAJOR != VARDEF_HCS_H_MAJOR) || \
+     (VARDEF_HCS_C_MINOR != VARDEF_HCS_H_MINOR) || \
+     (VARDEF_HCS_C_PATCH != VARDEF_HCS_H_PATCH))
+#error "vardef_hcs.c and vardef_hcs.h : source and header files are inconsistent!"
+#endif
+
+#if ((VARDEF_HCS_C_MAJOR != VARDEF_HCS_CFG_H_MAJOR) || \
+     (VARDEF_HCS_C_MINOR != VARDEF_HCS_CFG_H_MINOR) || \
+     (VARDEF_HCS_C_PATCH != VARDEF_HCS_CFG_H_PATCH))
+#error "vardef_hcs.c and vardef_hcs_cfg_private.h : source and header files are inconsistent!"
+#endif
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Literal Definitions                                                                                                              */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define VDF_HCS_RXC_MAX                       (2U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Macro Definitions                                                                                                                */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Type Definitions                                                                                                                 */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Variable Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U2           u2_s_vdf_ascext_rcv_elpsd;
+static U1           u1_s_vdf_ascext_rcv_sta;
+static U1           u1_s_vdf_ascext_rx_las;
+static U1           u1_s_vdf_hcs_rx_ascext_rim;
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Static Function Prototypes                                                                                                       */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Constant Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Function Definitions                                                                                                             */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*===================================================================================================================================*/
+/*  void    vd_g_VardefHcsBonInit(void)                                                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_VardefHcsBonInit(void)
+{
+    u1_s_vdf_hcs_rx_ascext_rim  = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+
+#if 0   /* BEV Rebase provisionally */
+    vd_g_Rim_WriteU1(u2_g_VDF_HCS_ASCEXT_RIM_U1, u1_s_vdf_hcs_rx_ascext_rim);
+#endif   /* BEV Rebase provisionally */
+
+    u2_s_vdf_ascext_rcv_elpsd = (U2)U2_MAX;
+    u1_s_vdf_ascext_rcv_sta   = u1_g_VDF_HCS_ASCEXT_RXC_INT;
+    u1_s_vdf_ascext_rx_las    = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_VardefHcsRstwkInit(void)                                                                                            */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_VardefHcsRstwkInit(void)
+{
+    U1          u1_t_rim_ascext_rx;
+    U1          u1_t_rim_ascext_chk;
+
+    u1_t_rim_ascext_rx   = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+#if 0   /* BEV Rebase provisionally */
+    u1_t_rim_ascext_chk  = u1_g_Rim_ReadU1withStatus(u2_g_VDF_HCS_ASCEXT_RIM_U1, &u1_t_rim_ascext_rx) & (U1)RIM_RESULT_KIND_MASK;
+#else   /* BEV Rebase provisionally */
+    u1_t_rim_ascext_chk  = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
+
+    if ((u1_t_rim_ascext_chk == (U1)RIM_RESULT_KIND_OK) &&
+        (u1_t_rim_ascext_rx  <= (U1)VDF_HCS_RX_ASCEXT_07_UNK)) {
+        u1_s_vdf_hcs_rx_ascext_rim = u1_t_rim_ascext_rx;
+    }
+    else {
+        u1_s_vdf_hcs_rx_ascext_rim = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+#if 0   /* BEV Rebase provisionally */
+        vd_g_Rim_WriteU1(u2_g_VDF_HCS_ASCEXT_RIM_U1, u1_s_vdf_hcs_rx_ascext_rim);
+#endif   /* BEV Rebase provisionally */
+    }
+
+    u2_s_vdf_ascext_rcv_elpsd = (U2)U2_MAX;
+    u1_s_vdf_ascext_rcv_sta   = u1_g_VDF_HCS_ASCEXT_RXC_INT;
+    u1_s_vdf_ascext_rx_las    = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_VardefHcsOpemdEvhk(const U2 u2_a_EOM)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_VardefHcsOpemdEvhk(const U2 u2_a_EOM)
+{
+    U2                  u2_t_ign;
+
+    u2_t_ign = u2_a_EOM & (U2)VDF_EOM_IGR_ON;
+    if (u2_t_ign == (U2)0U) {
+        u1_s_vdf_ascext_rcv_sta = u1_g_VDF_HCS_ASCEXT_RXC_INT;
+        u1_s_vdf_ascext_rx_las  = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+    }
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_VardefHcsMainTask(const U2 u2_a_EOM)                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_VardefHcsMainTask(const U2 u2_a_EOM)
+{
+    static const U2     u2_s_VDF_HCS_RX_ASCEXT_PERI = ((U2)4200U / (U2)VDF_MAIN_TICK);
+    U4                  u4_t_elpsd;
+    U2                  u2_t_ign;
+    U2                  u2_t_inc;
+    U1                  u1_t_rx;
+    U1                  u1_t_cnt;
+    
+    U2                  u2_t_rxcnt;
+    U2                  u2_t_rxcnt_masked;
+
+    u1_t_rx = (U1)0U;
+    u1_t_cnt = u1_g_VardefHcsCfgAscextchk(&u1_t_rx);
+    u2_t_ign = u2_a_EOM & (U2)VDF_EOM_IGR_ON;
+    if (u2_t_ign == (U2)0U) {
+        u1_t_rx = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+    }
+
+    if ((u1_t_rx > (U1)VDF_HCS_RX_ASCEXT_07_UNK               ) ||
+        (u1_s_vdf_ascext_rcv_sta > u1_g_VDF_HCS_ASCEXT_RXC_MAX) ||
+        (u1_t_cnt > u1_g_VDF_HCS_ASCEXT_RXC_MAX               )){
+        u1_s_vdf_ascext_rcv_sta = u1_t_cnt;
+        u1_s_vdf_ascext_rx_las  = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+    }
+    else if (u1_t_rx == u1_s_vdf_ascext_rx_las) { 
+        u2_t_rxcnt        = (U2)((U2)u1_t_cnt - (U2)u1_s_vdf_ascext_rcv_sta);
+        u2_t_rxcnt_masked = u2_t_rxcnt & (U2)u1_g_VDF_HCS_ASCEXT_RXC_MAX;
+        u2_t_inc = u2_t_rxcnt_masked + (U2)1U;
+        if (u2_t_inc >= (U2)VDF_HCS_RXC_MAX) {
+
+            u1_s_vdf_hcs_rx_ascext_rim = u1_t_rx;
+#if 0   /* BEV Rebase provisionally */
+            vd_g_Rim_WriteU1(u2_g_VDF_HCS_ASCEXT_RIM_U1, u1_s_vdf_hcs_rx_ascext_rim);
+#endif   /* BEV Rebase provisionally */
+        }
+    }
+    else if (u1_t_cnt != u1_s_vdf_ascext_rcv_sta) {
+        u1_s_vdf_ascext_rcv_sta = u1_t_cnt;
+        u1_s_vdf_ascext_rx_las = u1_t_rx;
+    }
+    else {
+        /* do nothing */
+    }
+
+    u4_t_elpsd = (U4)u2_s_vdf_ascext_rcv_elpsd + (U4)VDF_NUM_TSLOT;
+    if (u4_t_elpsd >= (U4)u2_s_VDF_HCS_RX_ASCEXT_PERI) {
+        u1_s_vdf_ascext_rcv_sta = u1_t_cnt;
+        u1_s_vdf_ascext_rx_las = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+        u4_t_elpsd = (U4)0U;
+    }
+    u2_s_vdf_ascext_rcv_elpsd = (U2)u4_t_elpsd;
+
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_VardefHcsRxAscextReset(void)                                                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_VardefHcsRxReset(void)
+{
+    u1_s_vdf_hcs_rx_ascext_rim  = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
+#if 0   /* BEV Rebase provisionally */
+    vd_g_Rim_WriteU1(u2_g_VDF_HCS_ASCEXT_RIM_U1, u1_s_vdf_hcs_rx_ascext_rim);
+#endif   /* BEV Rebase provisionally */
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_VardefHcsRxAscext(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VardefHcsRxAscext(void)
+{
+    U1    u1_t_ascext_rx;
+
+    if (u1_s_vdf_hcs_rx_ascext_rim == (U1)VDF_HCS_RX_ASCEXT_FF_NRX) {
+        u1_t_ascext_rx = (U1)VDF_HCS_RX_ASCEXT_00_NON;
+    }
+    else {
+        u1_t_ascext_rx = u1_s_vdf_hcs_rx_ascext_rim;
+    }
+
+    return(u1_t_ascext_rx);
+}
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_VardefHcsAvail(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_VardefHcsAva(void)
+{
+    U1 u1_t_sys_hcs;
+
+    if ((u1_s_vdf_hcs_rx_ascext_rim == (U1)VDF_HCS_RX_ASCEXT_01_VEH_HCS) ||
+        (u1_s_vdf_hcs_rx_ascext_rim == (U1)VDF_HCS_RX_ASCEXT_02_AIRSUS ) ||
+        (u1_s_vdf_hcs_rx_ascext_rim == (U1)VDF_HCS_RX_ASCEXT_03_ACT_HCS)){
+        u1_t_sys_hcs =  (U1)VDF_HCS_RX_ASCEXT_SYS_HCS_ACT;
+    }
+    else{
+        u1_t_sys_hcs = (U1)VDF_HCS_RX_ASCEXT_SYS_HCS_INACT;
+    }
+    return(u1_t_sys_hcs);
+}
+
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Change History                                                                                                                   */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/
+/*                                                                                                                                   */
+/*  Version  Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  1.0.0    07/08/2024  YR       New for 19PFv3 HCS                                                                                 */
+/*                                                                                                                                   */
+/*  * YR = Yhana Regalario, DTPH                                                                                                     */
+/*                                                                                                                                   */
+/*===================================================================================================================================*/

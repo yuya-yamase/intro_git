@@ -77,7 +77,9 @@
 #include "gauge.h"
 #include "sbltsync.h"
 #include "locale.h"
+#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #include "mcst.h"
 #include "vds_ci.h"
@@ -328,7 +330,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+#endif   /* BEV Rebase provisionally */
     {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_HudCaMainTask,               (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_McstMainTask,                (U4)SCHDLR_TASKBIT__20MS_B  },
     /*-------------------------------------------------------------------*/
