@@ -17,6 +17,7 @@
 #include <EthSwt_SWIC_Time.h>
 #include <EthSwt_SWIC_STM.h>
 #include <EthSwt_SWIC_MIB.h>
+#include <EthSwt_SWIC_Qci.h>
 /* -------------------------------------------------------------------------- */
 typedef void (*EthSwt_InitFunc)(void);
 const EthSwt_InitFunc G_ETHSWT_SWIC_INIT_FUNC_LIST[] = 
@@ -26,6 +27,7 @@ const EthSwt_InitFunc G_ETHSWT_SWIC_INIT_FUNC_LIST[] =
 ,	EthSwt_SWIC_Port_Init
 ,   EthSwt_SWIC_Time_Init
 ,   EthSwt_SWIC_MIB_Init
+,   EthSwt_SWIC_Qci_Init
 };
 #define D_ETHSWT_SWIC_INIT_FUNC_NUM     (sizeof(G_ETHSWT_SWIC_INIT_FUNC_LIST) / sizeof(G_ETHSWT_SWIC_INIT_FUNC_LIST[0]))
 
@@ -36,6 +38,7 @@ const EthSwt_HiPorcFunc G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[][D_ETHSWT_SWIC_ST_NUM] 
     {   EthSwt_SWIC_Time_HiProc , EthSwt_SWIC_Time_HiProc   , EthSwt_SWIC_Time_HiProc   , EthSwt_SWIC_Time_HiProc   , EthSwt_SWIC_Time_HiProc       , EthSwt_SWIC_Time_HiProc   }   /* タイマ更新 */
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                  , NULL_PTR                  , EthSwt_SWIC_Link_TimerUpdate  , NULL_PTR                  }   /* リンク状態取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                  , NULL_PTR                  , EthSwt_SWIC_MIB_TimerUpdate   , NULL_PTR                  }   /* MIB取得 */
+,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                  , NULL_PTR                  , EthSwt_SWIC_Qci_TimerUpdate  , NULL_PTR                  }   /* Qci取得 */
 };
 #define D_ETHSWT_SWIC_HIPROC_FUNC_NUM   (sizeof(G_ETHSWT_SWIC_HIPROC_FUNC_TABLE) / sizeof(G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[0]))
 
@@ -50,6 +53,7 @@ const EthSwt_registerAccessFunc G_ETHSWT_SWIC_BACK_FUNC_TABLE[][D_ETHSWT_SWIC_ST
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_Link_FastGet  , NULL_PTR                  }   /* 高速リンク状態取得 */
 ,   {   NULL_PTR                , NULL_PTR                  , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_Port_Action   , NULL_PTR                  }   /* ポートモード制御 */
 ,   {   NULL_PTR                , EthSwt_SWIC_MIB_Clear     , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_MIB_Action    , NULL_PTR                  }   /* MIB取得 */
+,   {   NULL_PTR                , EthSwt_SWIC_Qci_Clear     , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_Qci_Action    , NULL_PTR                  }   /* Qci取得 */
 };
 #define D_ETHSWT_SWIC_BACK_FUNC_NUM         (sizeof(G_ETHSWT_SWIC_BACK_FUNC_TABLE) / sizeof(G_ETHSWT_SWIC_BACK_FUNC_TABLE[0]))
 
@@ -59,6 +63,7 @@ const EthSwt_ClearFunc G_ETHSWT_SWIC_CLEAR_FULC_LIST[] =
 {
     EthSwt_SWIC_Link_Init
 ,   EthSwt_SWIC_MIB_Init
+,   EthSwt_SWIC_Qci_Init
 };
 #define D_ETHSWT_SWIC_CLEAR_FUNC_NUM    (sizeof(G_ETHSWT_SWIC_CLEAR_FULC_LIST) / sizeof(G_ETHSWT_SWIC_CLEAR_FULC_LIST[0]))
 
