@@ -57,18 +57,18 @@ void EthSwt_Data_Init(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_LoProc(void)
 {
-    ethswt_data_set_linkStatus();
+    ethswt_data_set_link();
     
     // (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_MCUINFO, sizeof(G_ETHSWT_DATA), (uint8*)&G_ETHSWT_DATA);
 
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_set_linkStatus(void)
+static void ethswt_data_set_link(void)
 {
-    uint8                   idx;
-    EthTrcv_LinkStateType   status;
-    Std_ReturnType          getResult;
+    // uint8                   idx;
+    // EthTrcv_LinkStateType   status;
+    // Std_ReturnType          getResult;
 
     // for(idx = 0; idx < D_ETHSWT_DATA_USE_PORT_NUM; idx++) {
     //     getResult = EthSwt_SWIC_GetLinkState(D_ETHSWT_SWIC_ID, S_ETHSWT_DATA_IDX_TABLE[idx], &status);
