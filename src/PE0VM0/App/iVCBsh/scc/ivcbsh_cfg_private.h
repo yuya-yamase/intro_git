@@ -14,7 +14,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IVCBSH_CFG_H_MAJOR                       (1)
 #define IVCBSH_CFG_H_MINOR                       (0)
-#define IVCBSH_CFG_H_PATCH                       (0)
+#define IVCBSH_CFG_H_PATCH                       (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -34,11 +34,16 @@
 #define IVCBSH_STS_ACTIVE                       (0x00U)
 #define IVCBSH_STS_REGSTUCK                     (0x01U)
 #define IVCBSH_STS_BUSOFF                       (0x02U)
-#define IVCBSH_STS_NOCONNECT                    (0x03U)
+#define IVCBSH_STS_NOCONNECT                    (0x04U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define IVCBSH_ERR_NONE                         (BSWM_CAN_CHFAILST_NONE)
+#define IVCBSH_ERR_REGCHECK                     (BSWM_CAN_CHFAILST_REGCHECK)
+#define IVCBSH_ERR_BUSOFF                       (BSWM_CAN_CHFAILST_BUSOFF)
+#define IVCBSH_ERR_SNDLOCK_USER                 (BSWM_CAN_CHFAILST_SNDLOCK | BSWM_CAN_CHFAILST_USER)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

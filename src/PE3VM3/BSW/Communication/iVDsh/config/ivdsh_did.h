@@ -31,7 +31,7 @@
 /*-------------------------------------------------------------------------------*/
 #define IVDSH_DID_WRI_CPREQ_005                  (0U)
 #define IVDSH_DID_WRI_CPREQ_007                  (1U)
-#define IVDSH_DID_WRI_CPREQ_043                  (2U)
+#define IVDSH_DID_WRI_VM3TO2_BOOTLOG_INF         (2U)
 #define IVDSH_DID_WRI_CPREQ_045                  (3U)
 #define IVDSH_DID_WRI_CPREQ_048                  (4U)
 #define IVDSH_DID_WRI_CPREQ_049                  (5U)
