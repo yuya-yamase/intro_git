@@ -106,7 +106,7 @@ static void vd_s_VISCanGetUtc(void)
     U1 u1_t_basicstate = VIS_BASICSTATE_CHECKING;   /* 車両電源ステート */
     U1 u1_t_ret;                                    /* 時刻範囲チェック結果 */
     U1 u1_t_msgsts;                                 /* 受信フレームの状態 */
-    U1 u1_tp_utcdata[VIS_CAN_TRANSREQ_DATA_LENGTH_6];
+    U1 u1_tp_utcdata[VIS_CAN_TRANSREQ_DATA_UTCNUM];
 
     /* UTC時刻情報取得 */
     /* ★車両電源ステート(基本ステート)情報を取得 */
@@ -172,7 +172,7 @@ static void vd_s_VISCanGetOdo(void)
     U1 u1_t_msgsts;                             /* 受信フレームの状態 */
     U1 u1_t_odounit = VIS_CAN_ODO_UNIT_NON;     /* オドメータ単位情報 */
     U4 u4_t_odo = VIS_CAN_ODO_FAIL;             /* オドメータ情報 */
-    U1 u1_tp_ododata[VIS_CAN_TRANSREQ_DATA_LENGTH_4];
+    U1 u1_tp_ododata[VIS_CAN_TRANSREQ_DATA_ODONUM];
 
     /* オド情報取得 */
     /* MET1S02メッセージの状態取得 */
@@ -232,7 +232,7 @@ static void vd_s_VISCanGetOdo(void)
 static void vd_s_VISCanGetTripCnt(void)
 {
     U1 u1_t_msgsts;     /* 受信フレームの状態 */
-    U1 u1_tp_tripcnt[VIS_CAN_TRANSREQ_DATA_LENGTH_3];
+    U1 u1_tp_tripcnt[VIS_CAN_TRANSREQ_DATA_TRIPNUM];
 
     
     /* Tripカウンタ情報取得 */
