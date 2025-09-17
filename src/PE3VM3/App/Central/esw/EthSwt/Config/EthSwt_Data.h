@@ -51,8 +51,9 @@
 #define D_ETHSWT_SWIC_ANDROID_PORT_ID       (7U)
 /* -------------------------------------------------------------------------- */
 
-#pragma pack(1)
+
 /* -------------------------------------------------------------------------- */
+#pragma pack(1)
 typedef struct {
     Std_ReturnType                  linkGetResult;                          /* 1byte */
     EthTrcv_LinkStateType           linkStatus;                             /* 1byte */
@@ -62,25 +63,29 @@ typedef struct {
     S_ETHSWT_DATA_LINK_PER_PORT     link[D_ETHSWT_DATA_LINK_NUM];           /* 12byte */
     uint32                          id;                                     /* 4byte */
 } S_ETHSWT_DATA_LINK;                                                       /* Total: 16byte */
+#pragma pack()
 /* -------------------------------------------------------------------------- */
-// typedef struct {
-//     uint32                          InFCSErr;                               /* 4byte */
-//     uint32                          InDiscards;                             /* 4byte */
-//     uint32                          InFiltered;                             /* 4byte */
-//     uint32                          InOversize;                             /* 4byte */
-//     uint32                          InUndersize;                            /* 4byte */
-//     uint32                          Tcam0;                                  /* 4byte */
-//     uint32                          Tcam1;                                  /* 4byte */
-//     uint32                          Tcam2;                                  /* 4byte */
-//     uint32                          Tcam3;                                  /* 4byte */
-//     uint32                          reserved;                               /* 4byte */
-// } S_ETHSWT_DATA_MIB_PER_PORT;                                               /* Total: 20byte */
+#pragma pack(1)
+typedef struct {
+    uint32                          InFCSErr;                               /* 4byte */
+    uint32                          InDiscards;                             /* 4byte */
+    uint32                          InFiltered;                             /* 4byte */
+    uint32                          InOversize;                             /* 4byte */
+    uint32                          InUndersize;                            /* 4byte */
+    uint32                          Tcam0;                                  /* 4byte */
+    uint32                          Tcam1;                                  /* 4byte */
+    uint32                          Tcam2;                                  /* 4byte */
+    uint32                          Tcam3;                                  /* 4byte */
+    uint32                          reserved;                               /* 4byte */
+} S_ETHSWT_DATA_MIB_PER_PORT;                                               /* Total: 20byte */
 
 typedef struct {
-    uint32                          mib[D_ETHSWT_DATA_MIB_NUM][D_ETHSWT_SWIC_MIB_NUM + 1];             /* 240byte */ /* +1‚Íreserve*/
+    S_ETHSWT_DATA_MIB_PER_PORT      mib[D_ETHSWT_DATA_MIB_NUM];             /* 240byte */
     uint32                          id;                                     /* 4byte */
 } S_ETHSWT_DATA_MIB;                                                        /* Total: 244byte */
+#pragma pack()
 /* -------------------------------------------------------------------------- */
+#pragma pack(1)
 typedef struct {
     Std_ReturnType                  sqiGetResult;                           /* 1byte */
     uint8                           sqiValue;                               /* 1byte */   
@@ -90,13 +95,16 @@ typedef struct {
     S_ETHSWT_DATA_SQI_PER_PORT      sqi[D_ETHSWT_DATA_SQI_NUM];             /* 4byte */
     uint32                          id;                                     /* 4byte */
 } S_ETHSWT_DATA_SQI;                                                        /* Total: 8byte */
+#pragma pack()
 /* -------------------------------------------------------------------------- */
+#pragma pack(1)
 typedef struct {
     uint32                          qciCount[D_ETHSWT_DATA_QCI_NUM];        /* 20byte */
     uint32                          id;                                     /* 4byte */
 } S_ETHSWT_DATA_QCI;                                                        /* Total: 24byte */
-/* -------------------------------------------------------------------------- */
 #pragma pack()
+/* -------------------------------------------------------------------------- */
+
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void);
 void EthSwt_Data_LoProc(void);
