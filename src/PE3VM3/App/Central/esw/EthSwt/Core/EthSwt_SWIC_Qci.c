@@ -77,17 +77,17 @@ Std_ReturnType EthSwt_SWIC_Qci_Action (uint32 * const errFactor)
     return result;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Qci_Get(uint32 * const QciInfoPtr)
+Std_ReturnType EthSwt_SWIC_Qci_Get(uint8 id, uint32 * const qciDataPtr)
 {
     Std_ReturnType ret = E_NOT_OK;
     EthSwt_StateType status;
     status = EthSwt_SWIC_STM_GetStatus();
 
     do {
-        if (status != ETHSWT_STATE_ACTIVE)	            { break; }
-        if (QciInfoPtr == NULL_PTR)					{ break; }
-        LIB_memcpy((uint8*)QciInfoPtr, (uint8*)&G_ETHSWT_SWIC_QCI_COUNT, sizeof(G_ETHSWT_SWIC_QCI_COUNT));
-
+        if (status != ETHSWT_STATE_ACTIVE)	        { break; }
+        if (qciDataPtr == NULL_PTR)					{ break; }
+        if (id >= D_ETHSWT_SWIC_QCI_ID_NUM)         { break; }
+        *qciDataPtr = G_ETHSWT_SWIC_QCI_COUNT[id];
     } while (0);
 	
 	return ret;

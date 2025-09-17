@@ -55,10 +55,10 @@ Std_ReturnType EthSwt_SWIC_GetMIB(uint8 SwitchIdx, uint8 SwitchPortIdx, uint32 M
 	return EthSwt_SWIC_MIB_GetMIB(SwitchPortIdx, Mib, MibCountPtr);
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_GetQci(uint8 SwitchIdx, uint32 * const QciInfoPtr)
+Std_ReturnType EthSwt_SWIC_GetQci(uint8 SwitchIdx, uint8 QciId, uint32 * const QciDataPtr)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
-	return EthSwt_SWIC_Qci_Get(QciInfoPtr);
+	return EthSwt_SWIC_Qci_Get(QciId, QciDataPtr);
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_PowerOn(void)
