@@ -89,9 +89,10 @@
 #define GYRO_SEQ_STAUP1_11                      (10U)                   /* Self-Test (Gセンサ) */
 #define GYRO_SEQ_STAUP1_12                      (11U)                   /* To 【upload config】 */
 #define GYRO_SEQ_STAUP1_13                      (12U)                   /* To【Set Interrupt】 */
-#define GYRO_SEQ_STAUP1_14                      (13U)                   /* Setup Sensor (Gセンサ1) */
-#define GYRO_SEQ_STAUP1_15                      (14U)                   /* Mode Change (Gyro) OFF normal mode ⇒ suspend mode */
-#define GYRO_SEQ_STAUP1_16                      (15U)                   /* Wati t21 (Gyroモード切替後のwait時間) */
+#define GYRO_SEQ_STAUP1_14                      (13U)                   /* Set Watchdog Timer (Gセンサ) */
+#define GYRO_SEQ_STAUP1_15                      (14U)                   /* Setup Sensor (Gセンサ1) */
+#define GYRO_SEQ_STAUP1_16                      (15U)                   /* Mode Change (Gyro) OFF normal mode ⇒ suspend mode */
+#define GYRO_SEQ_STAUP1_17                      (16U)                   /* Wati t21 (Gyroモード切替後のwait時間) */
 
 /* シーケンス実行No Self-Test (Gyro) */
 #define GYRO_SEQ_SELFTEST_GYRO_1                (GYRO_SEQ_IDLE_STA) /* 【write】0x3C */
@@ -1844,8 +1845,8 @@ static void     vd_s_GyroDevSeqStaUp1(void)
         break;
 
     case (U1)GYRO_SEQ_STAUP1_14:
-        u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_SETUP_SEN1_ACC, st_sp_GYRO_WRISTEP_SETUP_SEN1_ACC,
-                                            &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_SEN1_SETUP, &u2_s_gyro_i2cwaittim);
+        u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_WDG_ACC, st_sp_GYRO_WRISTEP_WDG_ACC,
+                                            &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_WDG, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
             /* 次のシーケンスへ */
             st_s_gyro_seqmng.u1_step    = (U1)GYRO_SEQ_STAUP1_15;
@@ -1853,8 +1854,8 @@ static void     vd_s_GyroDevSeqStaUp1(void)
         break;
 
     case (U1)GYRO_SEQ_STAUP1_15:
-        u1_t_sts    = GYRO_I2C_WRITE_GYRO(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_MODE_OFF_GYR, st_sp_GYRO_WRISTEP_MODE_OFF_GYR,
-                                            &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_GYR_MODE_OFF, &u2_s_gyro_i2cwaittim);
+        u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_SETUP_SEN1_ACC, st_sp_GYRO_WRISTEP_SETUP_SEN1_ACC,
+                                            &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_SEN1_SETUP, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
             /* 次のシーケンスへ */
             st_s_gyro_seqmng.u1_step    = (U1)GYRO_SEQ_STAUP1_16;
@@ -1862,6 +1863,15 @@ static void     vd_s_GyroDevSeqStaUp1(void)
         break;
 
     case (U1)GYRO_SEQ_STAUP1_16:
+        u1_t_sts    = GYRO_I2C_WRITE_GYRO(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_MODE_OFF_GYR, st_sp_GYRO_WRISTEP_MODE_OFF_GYR,
+                                            &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_GYR_MODE_OFF, &u2_s_gyro_i2cwaittim);
+        if(u1_t_sts == (U1)TRUE){
+            /* 次のシーケンスへ */
+            st_s_gyro_seqmng.u1_step    = (U1)GYRO_SEQ_STAUP1_17;
+        }
+        break;
+
+    case (U1)GYRO_SEQ_STAUP1_17:
         /* Wati t21 */
         u1_t_timchk = u1_s_GyroDevTimCheck(u4_s_gyro_linktim, (U4)GYRO_WAIT_T21);
         if(u1_t_timchk  == (U1)TRUE){
