@@ -91,6 +91,7 @@
 #define GYRO_SEQ_STAUP1_13                      (12U)                   /* To【Set Interrupt】 */
 #define GYRO_SEQ_STAUP1_14                      (13U)                   /* Setup Sensor (Gセンサ1) */
 #define GYRO_SEQ_STAUP1_15                      (14U)                   /* Mode Change (Gyro) OFF normal mode ⇒ suspend mode */
+#define GYRO_SEQ_STAUP1_16                      (15U)                   /* Wati t21 (Gyroモード切替後のwait時間) */
 
 /* シーケンス実行No Self-Test (Gyro) */
 #define GYRO_SEQ_SELFTEST_GYRO_1                (GYRO_SEQ_IDLE_STA) /* 【write】0x3C */
@@ -139,17 +140,18 @@
 #define GYRO_SEQ_STAUP2_3                       (2U)                    /* Mode (Gyro) チェック */
 #define GYRO_SEQ_STAUP2_4                       (3U)                    /* Wait t10 (Gyroセンサsuspend mode時のwait time) */
 #define GYRO_SEQ_STAUP2_5                       (4U)                    /* Mode Change (Gyro) ON suspend mode ⇒ normal mode */
-#define GYRO_SEQ_STAUP2_6                       (5U)                    /* Wait t10 (Gyroセンサsuspend mode時のwait time) */
+#define GYRO_SEQ_STAUP2_6                       (5U)                    /* Wait t21 (Gyroモード切替後のwait時間) */
 
 /* シーケンス実行No 終了(1) */
 #define GYRO_SEQ_SHUTDN1_1                      (GYRO_SEQ_IDLE_STA)     /* SENSOR-ON端子= Hi ? */
 #define GYRO_SEQ_SHUTDN1_2                      (1U)                    /* Mode Change (Gyro) OFF normal mode ⇒ suspend mode */
-#define GYRO_SEQ_SHUTDN1_3                      (2U)                    /* Wait t10 */
+#define GYRO_SEQ_SHUTDN1_3                      (2U)                    /* Wait t21 */
 #define GYRO_SEQ_SHUTDN1_4                      (3U)                    /* Mode Change (Gyro) Read */
 #define GYRO_SEQ_SHUTDN1_5                      (4U)                    /* Read Data = 0x80 ? */
 #define GYRO_SEQ_SHUTDN1_6                      (5U)                    /* Wait t18 */
 #define GYRO_SEQ_SHUTDN1_7                      (6U)                    /* カウンタ≧ k(5-1)回？ */
-#define GYRO_SEQ_SHUTDN1_8                      (7U)                    /* 5.2.6 入力パラメータ設定(2) */
+#define GYRO_SEQ_SHUTDN1_8                      (7U)                    /* Wait t10 */
+#define GYRO_SEQ_SHUTDN1_9                      (8U)                    /* 5.2.6 入力パラメータ設定(2) */
 
 /* シーケンス実行No 入力パラメータ設定(2) */
 #define GYRO_SEQ_PARASET2_1                     (GYRO_SEQ_IDLE_STA)     /* 衝撃検知有効の保持値が出力ＯＮか？ */
@@ -306,6 +308,8 @@
 #define GYRO_WAIT_T15                           (170U   / GYRO_TASK_TIME)
 /* T18 IC機能のWatchdog期間から規定。 2ms-10ms-20ms */
 #define GYRO_WAIT_T18                           ( 10U   / GYRO_TASK_TIME)
+/* T21 Gyroモード切替後のwait時間 (デバイス仕様 200ms) */
+#define GYRO_WAIT_T21                           (210U   / GYRO_TASK_TIME)
 
 /* I2C Read/Write */
 #define GYRO_I2C_WRITE_GYRO(u,v,w,x,y,z)        (Mcu_Dev_I2c_Ctrl_RegSet((U1)MCU_I2C_ACK_GYRO, (u), (v), (U1)GP_I2C_MA_SLA_6_GYRO, (w), (x), (y), (z)))
@@ -1851,6 +1855,18 @@ static void     vd_s_GyroDevSeqStaUp1(void)
         u1_t_sts    = GYRO_I2C_WRITE_GYRO(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_MODE_OFF_GYR, st_sp_GYRO_WRISTEP_MODE_OFF_GYR,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_GYR_MODE_OFF, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
+            /* 次のシーケンスへ */
+            st_s_gyro_seqmng.u1_step    = (U1)GYRO_SEQ_STAUP1_16;
+        }
+        break;
+
+    case (U1)GYRO_SEQ_STAUP1_16:
+        /* Wati t21 */
+        u1_t_timchk = u1_s_GyroDevTimCheck(u4_s_gyro_linktim, (U4)GYRO_WAIT_T21);
+        if(u1_t_timchk  == (U1)TRUE){
+            /* Wati t21完了 */
+            u4_s_gyro_linktim           = (U4)0U;
+
             /* GyroモードをSuspendに変更する */
             st_s_gyro_ctrl.u1_dev_mode  = (U1)GYRO_DEV_MODE_SUSPEND;
 
@@ -1863,6 +1879,9 @@ static void     vd_s_GyroDevSeqStaUp1(void)
 
             /* GYRO状態管理の イベント・ハンドラを呼び出し */
             vd_g_GyroDevEventGo((U1)GYRO_EVENT_SEQ_COMP);
+        }
+        else{
+            u4_s_gyro_linktim++;
         }
         break;
 
@@ -2585,10 +2604,11 @@ static U1       u1_s_GyroDevSeqAccIntSet(void)
 static void     vd_s_GyroDevSeqStaUp2(void)
 {
     /* GYRO起動(2)シーケンス */
-
     U1      u1_t_sts;       /* I2C,サブ関数処理状況チェック */
+    U1      u1_t_timchk;    /* 経過時間判定 */
 
     u1_t_sts    = (U1)FALSE;
+    u1_t_timchk = (U1)FALSE;
 
     /* Ackタイムアウト用カウンタインクリメント */
     if(u4_s_gyro_acktime < (U4)U4_MAX){
@@ -2645,12 +2665,21 @@ static void     vd_s_GyroDevSeqStaUp2(void)
         break;
 
     case (U1)GYRO_SEQ_STAUP2_6:
-        /* Wati t10(1ms待機)は本caseに到達した時点で満たしていると判断するためwait処理は実施しない */
-        /* シーケンスアイドルに設定 */
-        vd_s_GyroDevSeqSet((U1)GYRO_SEQ_IDLE);
+        /* Wati t21 */
+        u1_t_timchk = u1_s_GyroDevTimCheck(u4_s_gyro_linktim, (U4)GYRO_WAIT_T21);
+        if(u1_t_timchk  == (U1)TRUE){
+            /* Wati t21完了 */
+            u4_s_gyro_linktim   = (U4)0U;
 
-        /* GYRO状態管理の イベント・ハンドラを呼び出し */
-        vd_g_GyroDevEventGo((U1)GYRO_EVENT_SEQ_COMP);
+            /* シーケンスアイドルに設定 */
+            vd_s_GyroDevSeqSet((U1)GYRO_SEQ_IDLE);
+
+            /* GYRO状態管理の イベント・ハンドラを呼び出し */
+            vd_g_GyroDevEventGo((U1)GYRO_EVENT_SEQ_COMP);
+        }
+        else{
+            u4_s_gyro_linktim++;
+        }
         break;
 
     default:
@@ -2716,9 +2745,16 @@ static void     vd_s_GyroDevSeqGyrShutDn1(void)
         break;
 
     case (U1)GYRO_SEQ_SHUTDN1_3:
-        /* Wati t10(1ms待機)は本caseに到達した時点で満たしていると判断するためwait処理は実施しない */
-        /* 次のシーケンスへ */
-        st_s_gyro_seqmng.u1_step = (U1)GYRO_SEQ_SHUTDN1_4;
+        /* Wati t21 */
+        u1_t_timchk = u1_s_GyroDevTimCheck(u4_s_gyro_linktim, (U4)GYRO_WAIT_T21);
+        if(u1_t_timchk  == (U1)TRUE){
+            /* Wati t21完了 次のシーケンスへ */
+            u4_s_gyro_linktim           = (U4)0U;
+            st_s_gyro_seqmng.u1_step    = (U1)GYRO_SEQ_SHUTDN1_4;
+        }
+        else{
+            u4_s_gyro_linktim++;
+        }
         break;
 
     case (U1)GYRO_SEQ_SHUTDN1_4:
@@ -2777,6 +2813,12 @@ static void     vd_s_GyroDevSeqGyrShutDn1(void)
         break;
 
     case (U1)GYRO_SEQ_SHUTDN1_8:
+        /* Wati t10(1ms待機)は本caseに到達した時点で満たしていると判断するためwait処理は実施しない */
+        /* 次のシーケンスへ */
+        st_s_gyro_seqmng.u1_step = (U1)GYRO_SEQ_SHUTDN1_9;
+        break;
+
+    case (U1)GYRO_SEQ_SHUTDN1_9:
         u1_t_sts    = u1_s_GyroDevParamSet2();
         if(u1_t_sts == (U1)GYRO_RET_OK){
             /* シーケンスアイドルに設定 */
@@ -2817,7 +2859,7 @@ static U1       u1_s_GyroDevParamSet2(void)
     case GYRO_SEQ_PARASET2_1:
         /* IF提供前なので常に"No(OFFあるいは保持値なしの場合)"で処理する */
         /* ToDo：IF置き換え */
-         u1_t_impact = (U1)FALSE;
+        u1_t_impact = (U1)FALSE;
         if(u1_t_impact  == (U1)TRUE){
             /* 次のシーケンスへ */
             st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_PARASET2_2;
