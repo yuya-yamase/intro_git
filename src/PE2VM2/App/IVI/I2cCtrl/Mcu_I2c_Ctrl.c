@@ -73,6 +73,24 @@ static uint8 *  Mcu_I2c_Ack[MCU_I2C_ACK_NUM] = {
     &Mcu_I2c_Ack_G_Moni
 };
 
+static U2   u2_s_I2cCtrl_AckCnt_Eizoic;          /* Video-IC : W 0x72, R 0x73 */
+static U2   u2_s_I2cCtrl_AckCnt_Gvif_Rx;         /* GVIF-Rx  : W 0x46, R 0x47 */
+static U2   u2_s_I2cCtrl_AckCnt_Gvif_Tx;         /* GVIF-Tx  : W 0x48, R 0x49 */
+static U2   u2_s_I2cCtrl_AckCnt_Power;           /* P-IC     : W 0xDE, R 0xDF */
+static U2   u2_s_I2cCtrl_AckCnt_Rtc;             /* RTC-IC   : W 0x64, R 0x65 */
+static U2   u2_s_I2cCtrl_AckCnt_Gyro;            /* Gryo     : W 0xD2, R 0xD3 */
+static U2   u2_s_I2cCtrl_AckCnt_G_Moni;          /* Gmoni    : W 0x32, R 0x33 */
+
+static U2 * u2_s_I2cCtrl_AckCnt[MCU_I2C_ACK_NUM] = {
+    &u2_s_I2cCtrl_AckCnt_Eizoic,
+    &u2_s_I2cCtrl_AckCnt_Gvif_Rx,
+    &u2_s_I2cCtrl_AckCnt_Gvif_Tx,
+    &u2_s_I2cCtrl_AckCnt_Power,
+    &u2_s_I2cCtrl_AckCnt_Rtc,
+    &u2_s_I2cCtrl_AckCnt_Gyro,
+    &u2_s_I2cCtrl_AckCnt_G_Moni
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -95,13 +113,21 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
 *****************************************************************************/
 void Mcu_Dev_I2c_Ctrl_Init(void)
 {
-    Mcu_I2c_Ack_Eizoic      = (uint8)MCU_REGWRI_ACK_INI;
-    Mcu_I2c_Ack_Gvif_Rx     = (uint8)MCU_REGWRI_ACK_INI;
-    Mcu_I2c_Ack_Gvif_Tx     = (uint8)MCU_REGWRI_ACK_INI;
-    Mcu_I2c_Ack_Power       = (uint8)MCU_REGWRI_ACK_INI;
-    Mcu_I2c_Ack_Rtc         = (uint8)MCU_REGWRI_ACK_INI;
-    Mcu_I2c_Ack_Gyro        = (uint8)MCU_REGWRI_ACK_INI;
-    Mcu_I2c_Ack_G_Moni      = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_Eizoic          = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_Gvif_Rx         = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_Gvif_Tx         = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_Power           = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_Rtc             = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_Gyro            = (uint8)MCU_REGWRI_ACK_INI;
+    Mcu_I2c_Ack_G_Moni          = (uint8)MCU_REGWRI_ACK_INI;
+
+    u2_s_I2cCtrl_AckCnt_Eizoic  = (U2)0xFFFFU;
+    u2_s_I2cCtrl_AckCnt_Gvif_Rx = (U2)0xFFFFU;
+    u2_s_I2cCtrl_AckCnt_Gvif_Tx = (U2)0xFFFFU;
+    u2_s_I2cCtrl_AckCnt_Power   = (U2)0xFFFFU;
+    u2_s_I2cCtrl_AckCnt_Rtc     = (U2)0xFFFFU;
+    u2_s_I2cCtrl_AckCnt_Gyro    = (U2)0xFFFFU;
+    u2_s_I2cCtrl_AckCnt_G_Moni  = (U2)0xFFFFU;
 }
 
 /*****************************************************************************
@@ -153,8 +179,15 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
         (*mcu_btwmtime_cnt) = (uint16)0U;
     }
 
+    /* Ack受信回数 < 書込み回数 */
+    if((*u2_s_I2cCtrl_AckCnt[mcu_ack]) < I2C_WR_REGSET[(*mcu_regstep)].u2_num){
+        /* 書込み回数分のAck待ち */
+        /* レジスタアクセス間waitタイマ アクセス完了前なのでゼロクリア */
+        (*mcu_btwmtime_cnt) = (uint16)0U;
+    }
     /* [Ackあり(正常) or 初回] & [レジスタアクセス間のWait時間経過] */
-    if((((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_INI) || ((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_RCV)) &&
+    else if((((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_INI) || ((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_RCV)) &&
+    // if((((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_INI) || ((*Mcu_I2c_Ack[mcu_ack]) == (uint8)MCU_REGWRI_ACK_RCV)) &&
        ((*mcu_btwmtime_cnt) >= I2C_WR_REGSET[(*mcu_regstep)].u2_wait)){
         /* レジスタアクセス間waitタイマのゼロクリア */
         (*mcu_btwmtime_cnt) = (uint16)0U;
@@ -165,6 +198,8 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
             (*Mcu_I2c_Ack[mcu_ack]) = (uint8)MCU_REGWRI_ACK_INI;
             (*mcu_regstep)          = (uint8)0U;
             mcu_return              = (uint8)MCU_REGWRI_RTRN_FIN;
+            /* Ack受信回数のクリア */
+            (*u2_s_I2cCtrl_AckCnt[mcu_ack]) = (U2)0xFFFFU;
         }
         else{
             /* I2Cの書込みキューの空き状況確認 */
@@ -178,6 +213,8 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
                 mcu_return = (uint8)MCU_REGWRI_RTRN_ACT;
                 /* Ack取得RAMのクリア */
                 (*Mcu_I2c_Ack[mcu_ack]) = (uint8)MCU_REGWRI_ACK_NON;
+                /* Ack受信回数のクリア */
+                (*u2_s_I2cCtrl_AckCnt[mcu_ack]) = (U2)0U;
             }
         }
     }
@@ -187,6 +224,8 @@ static uint8 Mcu_Dev_I2c_Ctrl_AckChk_Wri(uint8 mcu_ack, uint16 * mcu_regstep, co
         mcu_return = (uint8)MCU_REGWRI_RTRN_ACT;
         /* 再送のためAckをクリアする */
         (*Mcu_I2c_Ack[mcu_ack])      = (uint8)MCU_REGWRI_ACK_NON;
+        /* Ack受信回数のクリア */
+        (*u2_s_I2cCtrl_AckCnt[mcu_ack]) = (U2)0U;
     }
     else{
         /* Ackなし or レジスタアクセス間のWait時間経過前 */
@@ -312,6 +351,9 @@ uint8 Mcu_Dev_I2c_Ctrl_RegRead(uint8 mcu_ack, uint16 * mcu_regstep, const uint8 
 void Mcu_Dev_I2c_Ctrl_Ack_VideoIc(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_Eizoic      |=  mcu_ack;
+    if(u2_s_I2cCtrl_AckCnt_Eizoic < (U2)U2_MAX){
+        u2_s_I2cCtrl_AckCnt_Eizoic++;
+    }
 }
 
 /*****************************************************************************
@@ -324,6 +366,9 @@ void Mcu_Dev_I2c_Ctrl_Ack_VideoIc(const uint8 mcu_ack)
 void Mcu_Dev_I2c_Ctrl_Ack_GvifRx(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_Gvif_Rx     |=  mcu_ack;
+    if(u2_s_I2cCtrl_AckCnt_Gvif_Rx < (U2)U2_MAX){
+        u2_s_I2cCtrl_AckCnt_Gvif_Rx++;
+    }
 }
 
 /*****************************************************************************
@@ -336,6 +381,9 @@ void Mcu_Dev_I2c_Ctrl_Ack_GvifRx(const uint8 mcu_ack)
 void Mcu_Dev_I2c_Ctrl_Ack_GvifTx(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_Gvif_Tx     |=  mcu_ack;
+    if(u2_s_I2cCtrl_AckCnt_Gvif_Tx < (U2)U2_MAX){
+        u2_s_I2cCtrl_AckCnt_Gvif_Tx++;
+    }
 }
 
 /*****************************************************************************
@@ -348,6 +396,9 @@ void Mcu_Dev_I2c_Ctrl_Ack_GvifTx(const uint8 mcu_ack)
 void Mcu_Dev_I2c_Ctrl_Ack_Power(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_Power       |=  mcu_ack;
+    if(u2_s_I2cCtrl_AckCnt_Power < (U2)U2_MAX){
+        u2_s_I2cCtrl_AckCnt_Power++;
+    }
 }
 
 /*****************************************************************************
@@ -360,6 +411,9 @@ void Mcu_Dev_I2c_Ctrl_Ack_Power(const uint8 mcu_ack)
 void Mcu_Dev_I2c_Ctrl_Ack_Rtc(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_Rtc         |=  mcu_ack;
+    if(u2_s_I2cCtrl_AckCnt_Rtc < (U2)U2_MAX){
+        u2_s_I2cCtrl_AckCnt_Rtc++;
+    }
 }
 
 /*****************************************************************************
@@ -372,6 +426,9 @@ void Mcu_Dev_I2c_Ctrl_Ack_Rtc(const uint8 mcu_ack)
 void Mcu_Dev_I2c_Ctrl_Ack_Gyro(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_Gyro        |=  mcu_ack;
+    if(u2_s_I2cCtrl_AckCnt_Gyro < (U2)U2_MAX){
+        u2_s_I2cCtrl_AckCnt_Gyro++;
+    }
 }
 
 /*****************************************************************************
@@ -384,6 +441,9 @@ void Mcu_Dev_I2c_Ctrl_Ack_Gyro(const uint8 mcu_ack)
 void Mcu_Dev_I2c_Ctrl_Ack_Gmoni(const uint8 mcu_ack)
 {
     Mcu_I2c_Ack_G_Moni      |=  mcu_ack;
+    if(u2_s_I2cCtrl_AckCnt_G_Moni < (U2)U2_MAX){
+        u2_s_I2cCtrl_AckCnt_G_Moni++;
+    }
 }
 
 /*===================================================================================================================================*/

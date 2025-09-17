@@ -1013,8 +1013,12 @@ static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR)
     dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_EIZO]);
 
     if((dl_t_port == (Dio_LevelType)STD_HIGH) && 
+#if 0   /* temporary */
        ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
         /* EIZO-ON=H かつ「見た目オフ起動」または「見た目オン起動」または「OTA」へでカウンタインクリメント */
+#else
+       (u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY)){
+#endif  /* temporary */
         if(u4_s_PwrCtrl_waittim_pictic < U4_MAX){
             u4_s_PwrCtrl_waittim_pictic++;
         }
@@ -1073,7 +1077,11 @@ static void     vd_s_McuDev_Pwron_GVIFTx_CDisp(const U1 u1_a_PWR)
     u1_t_timchk     = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_AUDIO, u4_s_WAITTIME_GVIFTX);
 
     if((u1_t_timchk ==  (U1)TRUE) &&
+#if 0   /* temporary */
        ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
+#else
+       (u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY)){
+#endif  /* temporary */
         vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CDISP_RST , MCU_DIO_HIGH);
         u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_GVIFTX_BIT;
     }
@@ -1177,6 +1185,7 @@ static void     vd_s_McuDev_Pwron_Most(const U1 u1_a_PWR)
 *****************************************************************************/
 static void     vd_s_McuDev_Pwron_XMTuner(void)
 {
+#ifdef SYS_PWR_ANT_XM_SHDN
     static const U4 u4_s_WAITTIME_XM_ON     = (U4)(PWRCTRL_CFG_TASK_TIME / PWRCTRL_CFG_TASK_TIME);
     static const U4 u4_s_WAITTIME_XM_SHDN   = (U4)(1010U / PWRCTRL_CFG_TASK_TIME);
 
@@ -1190,14 +1199,13 @@ static void     vd_s_McuDev_Pwron_XMTuner(void)
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_ON , MCU_DIO_HIGH);
     }
     if(u1_t_timchk_xmshdn == (U1)TRUE){
-#ifdef SYS_PWR_ANT_XM_SHDN
         vd_g_McuDevPwronSetPort(MCU_PORT_XM_SHDN , MCU_DIO_HIGH);
-#endif
         /* 暫定対応：SPI通信系は未実装(OS間コマンド不明) */
     }
     if((u1_t_timchk_xmon == (U1)TRUE) && (u1_t_timchk_xmshdn == (U1)TRUE)){
         u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_XMTUNER_BIT;
     }
+#endif
 }
 /*****************************************************************************
   Function      : vd_s_McuDev_Pwron_PowerIc
