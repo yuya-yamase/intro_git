@@ -99,6 +99,8 @@ Std_ReturnType EthSwt_SWIC_MIB_GetMIB(uint8 SwitchPortIdx, uint32 Mib, S_ETHSWT_
         G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib].IngressCount = 0;
         MibCountPtr->EgressCount = G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib].EgressCount;
         G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib].EgressCount = 0;
+        
+        ret = E_OK;
 
     } while (0);
 	
