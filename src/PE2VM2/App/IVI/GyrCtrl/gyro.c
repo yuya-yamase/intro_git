@@ -114,20 +114,21 @@
 /* シーケンス実行No upload config */
 #define GYRO_SEQ_UPCONF_1                       (GYRO_SEQ_IDLE_STA)     /* Configファイル読出し,INIT Check NGカウント初期化 */
 #define GYRO_SEQ_UPCONF_2                       ( 1U)                   /* softreset (Gセンサ) */
-#define GYRO_SEQ_UPCONF_3                       ( 2U)                   /* 【wait】t15 */
+#define GYRO_SEQ_UPCONF_3                       ( 2U)                   /* wait t15 */
 #define GYRO_SEQ_UPCONF_4                       ( 3U)                   /* change mode ACC suspend(ADS:0x7D) */
-#define GYRO_SEQ_UPCONF_5                       ( 4U)                   /* change mode ACC normal(ADS:0x7C) */
-#define GYRO_SEQ_UPCONF_6                       ( 5U)                   /* 【wait】t15 */
-#define GYRO_SEQ_UPCONF_7                       ( 6U)                   /* Set INT_CTRL write ADS:0x59 val:0x00 */
-#define GYRO_SEQ_UPCONF_8                       ( 7U)                   /* 【wait】t15 */
-#define GYRO_SEQ_UPCONF_9                       ( 8U)                   /* upload config file via I2C write 0x5B */
-#define GYRO_SEQ_UPCONF_10                      ( 9U)                   /* upload config file via I2C write 0x5C */
-#define GYRO_SEQ_UPCONF_11                      (10U)                   /* upload config file via I2C write 0x5E */
-#define GYRO_SEQ_UPCONF_12                      (11U)                   /* Set INT_CTRL write ADS:0x59 val:0x01 */
-#define GYRO_SEQ_UPCONF_13                      (12U)                   /* 【wait】t15 */
-#define GYRO_SEQ_UPCONF_14                      (13U)                   /* read 0x2A */
-#define GYRO_SEQ_UPCONF_15                      (14U)                   /* change mode ACC normal */
-#define GYRO_SEQ_UPCONF_16                      (15U)                   /* 【wait】t15 */
+#define GYRO_SEQ_UPCONF_5                       ( 4U)                   /* wait t10 */
+#define GYRO_SEQ_UPCONF_6                       ( 5U)                   /* change mode ACC normal(ADS:0x7C) */
+#define GYRO_SEQ_UPCONF_7                       ( 6U)                   /* wait t15 */
+#define GYRO_SEQ_UPCONF_8                       ( 7U)                   /* Set INT_CTRL write ADS:0x59 val:0x00 */
+#define GYRO_SEQ_UPCONF_9                       ( 8U)                   /* wait t15 */
+#define GYRO_SEQ_UPCONF_10                      ( 9U)                   /* upload config file via I2C write 0x5B */
+#define GYRO_SEQ_UPCONF_11                      (10U)                   /* upload config file via I2C write 0x5C */
+#define GYRO_SEQ_UPCONF_12                      (11U)                   /* upload config file via I2C write 0x5E */
+#define GYRO_SEQ_UPCONF_13                      (12U)                   /* Set INT_CTRL write ADS:0x59 val:0x01 */
+#define GYRO_SEQ_UPCONF_14                      (13U)                   /* wait t15 */
+#define GYRO_SEQ_UPCONF_15                      (14U)                   /* read 0x2A */
+#define GYRO_SEQ_UPCONF_16                      (15U)                   /* change mode ACC normal */
+#define GYRO_SEQ_UPCONF_17                      (16U)                   /* wait t15 */
 
 /* シーケンス実行No Set Interrupt */
 #define GYRO_SEQ_INTSET_1                       (GYRO_SEQ_IDLE_STA)     /* INT_ANYMOT_TH */
@@ -400,7 +401,7 @@ static U1                   u1_s_gyro_sysoffflg;
 /* Self Test エラーカウント l(6_1) */
 static U1                   u1_s_errcnt_l;
 /* Self Test エラーカウント j(6_1) */
-static U1                   u1_s_errcnt_j;  /* 予備設計 */
+static U1                   u1_s_errcnt_j;  /* preliminary design */
 
 /* SelfTest(Gセンサ) +側データ */
 static ST_GYRO_ACCTEST      st_s_gyro_accdat_pls;
@@ -572,7 +573,7 @@ static const ST_REG_WRI_REQ     st_sp_GYRO_WRISTEP_PWRCONF_ON[GYRO_WRISTEP_PWRCO
     /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
     {        0,         1,         0}
 };
-static const ST_REG_WRI_REQ     st_sp_GYRO_WRISTEP_PWRCONF_OFF[GYRO_WRISTEP_PWRCONF_OFF] = {    /* 予備設計 */
+static const ST_REG_WRI_REQ     st_sp_GYRO_WRISTEP_PWRCONF_OFF[GYRO_WRISTEP_PWRCONF_OFF] = {    /* preliminary design */
     /*  開始位置,   書込み個数, レジスタアクセス間Wait時間 */
     {        0,         1,         0}
 };
@@ -2275,52 +2276,58 @@ static U1       u1_s_GyroDevSeqAccCfgUpload(void)
         break;
 
     case (U1)GYRO_SEQ_UPCONF_5:
+        /* Wati t10(1ms待機)は本caseに到達した時点で満たしていると判断するためwait処理は実施しない */
+        /* 次のシーケンスへ */
+        st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_6;
+        break;
+
+    case (U1)GYRO_SEQ_UPCONF_6:
         /* change mode ACC normal(ADS:0x7C) */
         u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_PWRCONF_ON, st_sp_GYRO_WRISTEP_PWRCONF_ON,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_PWRCONF_ON, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
             /* 次のシーケンスへ */
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_6;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_7;
         }
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_6:
+    case (U1)GYRO_SEQ_UPCONF_7:
         /* 【wait】t15 */
         u1_t_timchk = u1_s_GyroDevTimCheck(u4_s_gyro_linktim, (U4)GYRO_WAIT_T15);
         if(u1_t_timchk  == (U1)TRUE){
             /* Wati t15完了 次のシーケンスへ */
             u4_s_gyro_linktim           = (U4)0U;
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_7;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_8;
         }
         else{
             u4_s_gyro_linktim++;
         }
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_7:
+    case (U1)GYRO_SEQ_UPCONF_8:
         /* Set INT_CTRL write ADS:0x59 val:0x00 */
         u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_INTCONF_ON, st_sp_GYRO_WRISTEP_INTCONF_ON,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_ON, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
             /* 次のシーケンスへ */
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_8;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_9;
         }
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_8:
+    case (U1)GYRO_SEQ_UPCONF_9:
         /* 【wait】t15 */
         u1_t_timchk = u1_s_GyroDevTimCheck(u4_s_gyro_linktim, (U4)GYRO_WAIT_T15);
         if(u1_t_timchk  == (U1)TRUE){
             /* Wati t15完了 次のシーケンスへ */
             u4_s_gyro_linktim           = (U4)0U;
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_9;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_10;
         }
         else{
             u4_s_gyro_linktim++;
         }
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_9:
+    case (U1)GYRO_SEQ_UPCONF_10:
         /* upload config file via I2C write 0x5B */
         u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_CFG_OFST1, st_sp_GYRO_WRISTEP_CFG_OFST1,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_CFG1, &u2_s_gyro_i2cwaittim);
@@ -2328,11 +2335,11 @@ static U1       u1_s_GyroDevSeqAccCfgUpload(void)
             /* 次書込みデータ作成 */
             st_sp_MCU_SYS_PWR_GYR_REG_ACC_CFG2[GYRO_WRIPOS_0].u1p_pdu[GYRO_WRIPOS_2]    = st_s_gyro_cfgmng.u1_upload_idx;
             /* 次のシーケンスへ */
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_10;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_11;
         } 
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_10:
+    case (U1)GYRO_SEQ_UPCONF_11:
         /* upload config file via I2C write 0x5C */
         u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_CFG_OFST2, st_sp_GYRO_WRISTEP_CFG_OFST2,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_CFG2, &u2_s_gyro_i2cwaittim);
@@ -2342,11 +2349,11 @@ static U1       u1_s_GyroDevSeqAccCfgUpload(void)
             u1p_t_addr      = (U1 *)(st_s_gyro_cfgmng.u4_upload_addr + u4_t_offset);
             vd_g_MemcpyU1(&st_sp_MCU_SYS_PWR_GYR_REG_ACC_DATA[GYRO_WRIPOS_0].u1p_pdu[GYRO_WRIPOS_2], u1p_t_addr, (U4)GYRO_CFG_WRISIZ);
             /* 次のシーケンスへ */
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_11;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_12;
         } 
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_11:
+    case (U1)GYRO_SEQ_UPCONF_12:
         /* upload config file via I2C write 0x5E */
         u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_CFG_DATA, st_sp_GYRO_WRISTEP_CFG_DATA,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_DATA, &u2_s_gyro_i2cwaittim);
@@ -2356,38 +2363,38 @@ static U1       u1_s_GyroDevSeqAccCfgUpload(void)
             /* 完了判定 */
             if(st_s_gyro_cfgmng.u1_upload_idx >= st_s_gyro_cfgmng.u1_upload_cnt){
                 /* アップロード完了 次のシーケンスへ */
-                st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_12;
+                st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_13;
             }
             else{
                 /* アップロードシーケンスを再実行 */
-                st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_9;
+                st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_10;
             }
         } 
         break;
-    case (U1)GYRO_SEQ_UPCONF_12:
+    case (U1)GYRO_SEQ_UPCONF_13:
         /* Set INT_CTRL write ADS:0x59 val:0x01 */
         u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_INTCONF_OFF, st_sp_GYRO_WRISTEP_INTCONF_OFF,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_OFF, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
             /* 次のシーケンスへ */
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_13;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_14;
         }
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_13:
+    case (U1)GYRO_SEQ_UPCONF_14:
         /* 【wait】t15 */
         u1_t_timchk = u1_s_GyroDevTimCheck(u4_s_gyro_linktim, (U4)GYRO_WAIT_T15);
         if(u1_t_timchk  == (U1)TRUE){
             /* Wati t15完了 次のシーケンスへ */
             u4_s_gyro_linktim           = (U4)0U;
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_14;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_15;
         }
         else{
             u4_s_gyro_linktim++;
         }
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_14:
+    case (U1)GYRO_SEQ_UPCONF_15:
         /* read 0x2A */
         u1_t_sts    = GYRO_I2C_READ_ACC(&u2_s_gyro_regstep, &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_INTCONF_READ, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
@@ -2396,7 +2403,7 @@ static U1       u1_s_GyroDevSeqAccCfgUpload(void)
 
             if(u1_t_read ==(U1)GYRO_READDAT_BIT0){
                 /* 次のシーケンスへ */
-                st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_15;
+                st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_16;
             }
             else{
                 if(u1_s_gyro_uploadcfg_rtrycnt > (U1)GYRO_CFG_MAXRTRY){
@@ -2416,17 +2423,17 @@ static U1       u1_s_GyroDevSeqAccCfgUpload(void)
         }
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_15:
+    case (U1)GYRO_SEQ_UPCONF_16:
         /* change mode ACC normal */
         u1_t_sts    = GYRO_I2C_WRITE_ACC(&u2_s_gyro_regstep, (U2)GYRO_WRISTEP_MODE_ON_ACC, st_sp_GYRO_WRISTEP_MODE_ON_ACC,
                                             &u4_s_gyro_acktime, st_sp_MCU_SYS_PWR_GYR_REG_ACC_MODE_ON, &u2_s_gyro_i2cwaittim);
         if(u1_t_sts == (U1)TRUE){
             /* 次のシーケンスへ */
-            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_16;
+            st_s_gyro_seqmng.u1_subtype = (U1)GYRO_SEQ_UPCONF_17;
         }
         break;
 
-    case (U1)GYRO_SEQ_UPCONF_16:
+    case (U1)GYRO_SEQ_UPCONF_17:
         /* 【wait】t15 */
         u1_t_timchk = u1_s_GyroDevTimCheck(u4_s_gyro_linktim, (U4)GYRO_WAIT_T15);
         if(u1_t_timchk  == (U1)TRUE){
