@@ -88,6 +88,8 @@ Std_ReturnType EthSwt_SWIC_Qci_Get(uint8 id, uint32 * const qciDataPtr)
         if (qciDataPtr == NULL_PTR)					{ break; }
         if (id >= D_ETHSWT_SWIC_QCI_ID_NUM)         { break; }
         *qciDataPtr = G_ETHSWT_SWIC_QCI_COUNT[id];
+
+        ret = E_OK;
     } while (0);
 	
 	return ret;
