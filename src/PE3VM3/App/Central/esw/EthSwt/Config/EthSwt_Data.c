@@ -29,6 +29,9 @@ static const uint8 S_ETHSWT_DATA_IDX_TABLE[D_ETHSWT_DATA_USE_PORT_NUM] =
 };
 
 /* -------------------------------------------------------------------------- */
+/* à»â∫ÅAébíË */
+static EthSwt_StateType         G_ETHSWT_DATA_STATE[181];
+/* à»è„ÅAébíË */
 static S_ETHSWT_DATA_LINK       G_ETHSWT_DATA_LINK;
 static S_ETHSWT_DATA_MIB        G_ETHSWT_DATA_MIB;
 static S_ETHSWT_DATA_SQI        G_ETHSWT_DATA_SQI;
@@ -44,15 +47,17 @@ static uint32                   G_ETHSWT_DATA_MIB_ID;
 static uint32                   G_ETHSWT_DATA_SQI_ID;
 static uint32                   G_ETHSWT_DATA_QCI_ID;
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_set_link(void);
-static void ethswt_data_set_mib(void);
-static uint32 ethswt_data_read_each_mib(uint8 targetPort, uint8 targetMIB);
-static void ethswt_data_set_sqi(void);
-static void ethswt_data_set_qci(void);
-static void ethswt_data_set_state(void);
+static void ethswt_data_setLinkData(void);
+static void ethswt_data_setMIBData(void);
+static uint32 ehtswt_data_getTargetMib(uint8 targetPort, uint8 targetMIB);
+static void ethswt_data_setSQIData(void);
+static void ethswt_data_setQciData(void);
+static uint32 ethswt_data_getTargetQci(uint8 targetQciId);
+static void ethswt_data_setEthSwtStateData(void);
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void)
 {
+    LIB_memset((uint8*)&G_ETHSWT_DATA_STATE, 0, sizeof(G_ETHSWT_DATA_STATE));
     LIB_memset((uint8*)&G_ETHSWT_DATA_LINK, 0, sizeof(G_ETHSWT_DATA_LINK));
     LIB_memset((uint8*)&G_ETHSWT_DATA_MIB, 0, sizeof(G_ETHSWT_DATA_MIB));
     LIB_memset((uint8*)&G_ETHSWT_DATA_SQI, 0, sizeof(G_ETHSWT_DATA_SQI));
@@ -73,19 +78,19 @@ void EthSwt_Data_Init(void)
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_LoProc(void)
 {
-    ethswt_data_set_link();
-    ethswt_data_set_mib();
-    ethswt_data_set_sqi();
-    ethswt_data_set_qci();
-    ethswt_data_set_state();
+    ethswt_data_setLinkData();
+    ethswt_data_setMIBData();
+    ethswt_data_setSQIData();
+    ethswt_data_setQciData();
+    ethswt_data_setEthSwtStateData();
     
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_set_link(void)
+static void ethswt_data_setLinkData(void)
 {
     uint8                   idx;
-    EthTrcv_LinkStateType   status;
+    EthTrcv_LinkStateType   status = ETHTRCV_LINK_STATE_DOWN;
     Std_ReturnType          getResult;
 
     G_ETHSWT_DATA_LINK_COUNT++;
@@ -112,7 +117,7 @@ static void ethswt_data_set_link(void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_set_mib(void)
+static void ethswt_data_setMIBData(void)
 {
     uint8                   idx;
 
@@ -122,15 +127,15 @@ static void ethswt_data_set_mib(void)
         G_ETHSWT_DATA_MIB_COUNT = 0;
 
         for(idx = 0; idx < D_ETHSWT_DATA_USE_PORT_NUM; idx++) {
-            G_ETHSWT_DATA_MIB.mib[idx].InFCSErr = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INFCSERR);
-            G_ETHSWT_DATA_MIB.mib[idx].InDiscards = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INDISCARDS);
-            G_ETHSWT_DATA_MIB.mib[idx].InFiltered = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INFILTERED);
-            G_ETHSWT_DATA_MIB.mib[idx].InOversize = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INOVERSIZE);
-            G_ETHSWT_DATA_MIB.mib[idx].InUndersize = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INUNDERSIZE);
-            G_ETHSWT_DATA_MIB.mib[idx].Tcam0 = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM0);
-            G_ETHSWT_DATA_MIB.mib[idx].Tcam1 = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM1);
-            G_ETHSWT_DATA_MIB.mib[idx].Tcam2 = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM2);
-            G_ETHSWT_DATA_MIB.mib[idx].Tcam3 = ethswt_data_read_each_mib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM3);
+            G_ETHSWT_DATA_MIB.mib[idx].InFCSErr = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INFCSERR);
+            G_ETHSWT_DATA_MIB.mib[idx].InDiscards = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INDISCARDS);
+            G_ETHSWT_DATA_MIB.mib[idx].InFiltered = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INFILTERED);
+            G_ETHSWT_DATA_MIB.mib[idx].InOversize = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INOVERSIZE);
+            G_ETHSWT_DATA_MIB.mib[idx].InUndersize = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INUNDERSIZE);
+            G_ETHSWT_DATA_MIB.mib[idx].Tcam0 = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM0);
+            G_ETHSWT_DATA_MIB.mib[idx].Tcam1 = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM1);
+            G_ETHSWT_DATA_MIB.mib[idx].Tcam2 = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM2);
+            G_ETHSWT_DATA_MIB.mib[idx].Tcam3 = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM3);
         }
 
         G_ETHSWT_DATA_MIB.id = G_ETHSWT_DATA_MIB_ID;
@@ -147,44 +152,83 @@ static void ethswt_data_set_mib(void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-static uint32 ethswt_data_read_each_mib(uint8 targetPort, uint8 targetMIB)
+static uint32 ehtswt_data_getTargetMib(uint8 targetPort, uint8 targetMIB)
 {
     Std_ReturnType          getResult;
     S_ETHSWT_SWIC_MIB_COUNT mibCounter;
-    uint32                  ingressCount;
+    uint32                  ingressCount = 0;
 
     getResult = EthSwt_SWIC_GetMIB(D_ETHSWT_SWIC_ID, targetPort, targetMIB, &mibCounter);
     if (getResult == E_OK) {
         ingressCount = mibCounter.IngressCount;
-    } else {
-        ingressCount = 0;
     }
 
     return ingressCount;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_set_sqi(void)
+static void ethswt_data_setSQIData(void)
 {
+    G_ETHSWT_DATA_SQI_COUNT++;
+    if(G_ETHSWT_DATA_SQI_COUNT >= D_ETHSWT_SWIC_GET_SQI_TIME)
+    {
+        G_ETHSWT_DATA_SQI_COUNT = 0;
+
+        /* å„Ç…ëŒâû */
+
+        G_ETHSWT_DATA_SQI.id = G_ETHSWT_DATA_SQI_ID;
+
+        if (G_ETHSWT_DATA_SQI_ID >= 0xFFFFFFFF) {
+            G_ETHSWT_DATA_SQI_ID = 0;
+        } else {
+            G_ETHSWT_DATA_SQI_ID++;
+        }
+    }
+
+    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_SQI, sizeof(G_ETHSWT_DATA_SQI), (uint8*)&G_ETHSWT_DATA_SQI);
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_set_qci(void)
+static void ethswt_data_setQciData(void)
 {
-    uint8                   idx;
-    uint32                  qciInfo;
-    Std_ReturnType          getResult;
-
     G_ETHSWT_DATA_QCI_COUNT++;
     if(G_ETHSWT_DATA_QCI_COUNT >= D_ETHSWT_DATA_GET_QCI_TIME)
     {
         G_ETHSWT_DATA_QCI_COUNT = 0;
         
+        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DCM_TCP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DCM_TCP);
+        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DCM_UDP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DCM_UDP);
+        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DCM_ICMP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DCM_ICMP);
+        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DLC_TCP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DLC_TCP);
+        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DLC_UDP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DLC_UDP);
+        
+        G_ETHSWT_DATA_QCI.id = G_ETHSWT_DATA_QCI_ID;
+
+        if (G_ETHSWT_DATA_QCI_ID >= 0xFFFFFFFF) {
+            G_ETHSWT_DATA_QCI_ID = 0;
+        } else {
+            G_ETHSWT_DATA_QCI_ID++;
+        }
     }
+
+    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_DATAUSAGEEXCEED, sizeof(G_ETHSWT_DATA_QCI), (uint8*)&G_ETHSWT_DATA_QCI);
 
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_set_state(void)
+static uint32 ethswt_data_getTargetQci(uint8 targetQciId)
 {
+    uint32                  qciData = 0;
+
+    (void)EthSwt_SWIC_GetQci(D_ETHSWT_SWIC_ID, targetQciId, &qciData);
+    
+    return qciData;
+}
+/* -------------------------------------------------------------------------- */
+static void ethswt_data_setEthSwtStateData(void)
+{
+    G_ETHSWT_DATA_STATE[0] = EthSwt_SWIC_GetEthSwtState(D_ETHSWT_SWIC_ID);
+
+    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_MCUINFO, sizeof(G_ETHSWT_DATA_STATE), (uint8*)&G_ETHSWT_DATA_STATE);
+
     return;
 }

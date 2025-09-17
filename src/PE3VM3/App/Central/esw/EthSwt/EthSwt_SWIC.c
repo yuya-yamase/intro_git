@@ -74,5 +74,11 @@ void EthSwt_SWIC_PowerOff(void)
 
 	return;
 }
+/* -------------------------------------------------------------------------- */
+EthSwt_StateType EthSwt_SWIC_GetEthSwtState(uint8 SwitchIdx)
+{
+	return EthSwt_SWIC_STM_GetStatus();
+}
+
 #define	ETHSWT_STOP_SEC_CODE
 #include <EthSwt_SWIC_MemMap.h>
