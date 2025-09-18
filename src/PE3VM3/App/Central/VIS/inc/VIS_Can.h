@@ -41,7 +41,6 @@
 #define VIS_CAN_ODO_FAIL                        ((U4)0x00000000U)   /* オドメータ情報Fail値 */
 
 /* 時間情報 */
-#define VIS_CAN_TRIP_MASK                       ((U2)0x00FF)        /* Tripカウンタ情報マスク値 */
 #define VIS_CAN_TRIP_FAIL                       ((U2)0xFFFFU)       /* TripカウンタFail値 */
 
 /* 車速 */
