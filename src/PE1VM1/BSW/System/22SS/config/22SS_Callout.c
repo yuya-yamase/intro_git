@@ -36,7 +36,9 @@
 #include "gateway_mm.h"
 
 /* Application           */
+#endif   /* BEV Rebase provisionally */
 #include "dimmer.h"
+#if 0   /* BEV Rebase provisionally */
 #include "illumi.h"
 #include "thblnkr.h"
 #include "vehspd_kmph.h"
@@ -123,7 +125,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxBonInit,
         &vd_g_DioIfInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiBonInit,
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
@@ -213,7 +217,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxRstInit,
         &vd_g_DioIfInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiRstInit,
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
@@ -303,7 +309,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxWkupInit,
         &vd_g_DioIfInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiWkupInit,
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
