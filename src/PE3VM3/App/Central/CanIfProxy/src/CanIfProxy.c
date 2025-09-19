@@ -1,4 +1,4 @@
-/* v0-2-0 */
+/* v0-2-1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -86,7 +86,6 @@
 #define CANIFPROXY_VCAN_DATA_BUFNUM                 ((U1)40U)
 #define CANIFPROXY_VCAN_DATA_BUFNUM_MASK            ((U1)0x3FU)
 #define CANIFPROXY_VCAN_DATA_BUFSIZE_TX             ((U1)0x40U)
-#define CANIFPROXY_VCAN_DATA_BUFSIZE_RX             ((U1)0x40U)
 
 #define CANIFPROXY_VCANRX_PARANUM                   ((U1)5U)
 #define CANIFPROXY_VCANRX_P1U1CTRLERLENGTH          ((U1)1U)
@@ -249,7 +248,7 @@ U1  VCan_URxIndication(U1 u1Controller, U1 u1MsgBuffer, CanConstR CanMsgType* pt
     u1_t_PayloadLength = (ptMsg->u1Length);
     u1_t_ret = (U1)CAN_PROC_OK;
 
-    LIB_memset(&CanIfProxy_McuSpiTxData[0], 0x00, CANIFPROXY_VCAN_DATA_BUFSIZE_RX);
+    LIB_memset(&CanIfProxy_McuSpiTxData[0], 0x00, CANIFPROXY_RXIND_BUFF_SIZE);
 
     u1_t_SendSailFlag = CanIfProxy_IsSailTransferCanId(u4_t_canid);
     if( ptMsg->u1Length > CANIFPROXY_VCANRX_P5U4DATALENGTH ){
