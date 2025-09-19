@@ -994,7 +994,6 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
     U1  u1_t_rheosw;
     U2  u2_t_ub_act;
     U2  u2_t_rheo_lvl;
-    U1  u1_t_iohw_mask;
     U1  u1_t_illumi_mask;
 
     u1_t_daynight    = u1_g_DimLvlDaynight() & (U1)0x03U;
@@ -1027,6 +1026,7 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
             /* Do Nothing */
             break;
     }
+
     u4_ap_pdu_tx[1] |= ((U4)u1_t_illumi_mask << 10U);
 #if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2]  = (U4)u2_g_IoHwAdcLv((U1)ADC_CH_TFT_TH);       /* TFT_BL_TH_AD */
