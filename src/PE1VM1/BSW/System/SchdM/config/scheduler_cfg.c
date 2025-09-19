@@ -53,8 +53,8 @@
 /*---------------------------------------------------------------------------*/
 /* Application Header                                                        */
 /*---------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
 #include "dimmer.h"
+#if 0   /* BEV Rebase provisionally */
 #include "illumi.h"
 #include "thblnkr.h"
 #include "vehspd_kmph.h"
@@ -346,7 +346,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_VardefMmUnitCstmzTask,       (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_LocaleMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_VdsCIMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
+#endif   /* BEV Rebase provisionally */
     {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_EngspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_EngspdDetMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },

@@ -21,13 +21,23 @@
 #include "dim_usadjbysw_cfg_private.h"
 
 #include "oxcan.h"
+#if 0   /* BEV Rebase provisionally */
 #include "es_inspect.h"
+#endif   /* BEV Rebase provisionally */
 
+#if 0   /* BEV Rebase provisionally */
 #include "dio_if.h"
-#include "lcom_spi_ch0.h"
+#endif   /* BEV Rebase provisionally */
+#include "xspi_met_ch0.h"
+#if 0   /* BEV Rebase provisionally */
 #include "iohw_adc.h"
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
 #include "mcst.h"
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
 #include "hmiscreen.h"
+#endif   /* BEV Rebase provisionally */
 
 #include "calibration.h"
 
@@ -124,13 +134,19 @@ void    vd_g_DimCfgInit(void)
     U1                      u1_t_tx;
 
     u1_t_tx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
+#endif   /* BEV Rebase provisionally */
 #endif
 
     vd_g_DimDaynightInit();
     vd_g_DimUsadjbySwInit();
 
+#if 0   /* BEV Rebase provisionally */
     u1_s_dim_adim_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01);
+#else   /* BEV Rebase provisionally */
+    u1_s_dim_adim_rxcnt = (U1)OXCAN_RXD_EVC_UNK;
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimCfgIFidx(void)                                                                                                   */
@@ -150,7 +166,11 @@ U1      u1_g_DimCfgIFidx(void)
 /*===================================================================================================================================*/
 U1      u1_g_DimDaynightCfgRxEnabled(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return(u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_CAN));
+#else   /* BEV Rebase provisionally */
+    return((U1)FALSE);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)                                                                        */
@@ -166,11 +186,17 @@ U1      u1_g_DimDaynightCfgAdimRxEvt(U1 * u1_ap_daynight)
 
     u1_t_rx_evt = (U1)FALSE;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S01);
+#else   /* BEV Rebase provisionally */
+    u1_t_rx_cnt = (U1)OXCAN_RXD_EVC_UNK;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_rx_cnt != u1_s_dim_adim_rxcnt){
 
         u1_t_adim = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_ADIM, &u1_t_adim);
+#endif   /* BEV Rebase provisionally */
         if(u1_t_adim == (U1)DIM_DAYNIGHT_ADIM_DAY){
             (*u1_ap_daynight) = (U1)DIM_DAYNIGHT_LVL_DAY;
             u1_t_rx_evt       = (U1)TRUE;
@@ -216,7 +242,9 @@ void    vd_g_DimDaynightCfgAdimRxchk(const U1 u1_a_RX_CHK, const U1 u1_a_DAYNIGH
         u1_t_tx = (U1)DIM_DAYNIGHT_ADIM_NIGHT;
     }
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_D_N_INF,  &u1_t_tx);
+#endif   /* BEV Rebase provisionally */
 #endif
 }
 /*===================================================================================================================================*/
@@ -229,7 +257,11 @@ U1      u1_g_DimUsadjbySwCfgAdjstbl(void)
 {
     U1 u1_t_adjstbl;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_adjstbl = u1_g_HmiScreen();
+#else   /* BEV Rebase provisionally */
+    u1_t_adjstbl = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     return(u1_t_adjstbl);
 }
 /*===================================================================================================================================*/
@@ -250,18 +282,26 @@ U1      u1_g_DimUsadjbySwCfgUpdwchk(void)
     switch(u1_t_rheosw){
         case (U1)CALIB_MCUID0430_1_INPUT:
         case (U1)CALIB_MCUID0430_2_INPUT:
+#if 0   /* BEV Rebase provisionally */
             u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE);
+#else   /* BEV Rebase provisionally */
+            u1_t_ch_act = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
             if(u1_t_ch_act == (U1)TRUE){
                 u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
             }
 
+#if 0   /* BEV Rebase provisionally */
             u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_DW, (U1)TRUE);
+#else   /* BEV Rebase provisionally */
+            u1_t_ch_act = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
             if(u1_t_ch_act == (U1)TRUE){
                 u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
             }
             break;
         case (U1)CALIB_MCUID0430_SOFTSW:
-            u1_t_ch_act = u1_g_LcomSpiDimSw();
+            u1_t_ch_act = u1_g_XSpiDimSw();
             if(u1_t_ch_act == (U1)DIM_CFG_CSTM_SW_UP){
                 u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
             }
@@ -276,12 +316,20 @@ U1      u1_g_DimUsadjbySwCfgUpdwchk(void)
             /* Do Nothing */
             break;
         default:
+#if 0   /* BEV Rebase provisionally */
             u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE);
+#else   /* BEV Rebase provisionally */
+            u1_t_ch_act = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
             if(u1_t_ch_act == (U1)TRUE){
                 u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_UP;
             }
 
+#if 0   /* BEV Rebase provisionally */
             u1_t_ch_act = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_DW, (U1)TRUE);
+#else   /* BEV Rebase provisionally */
+            u1_t_ch_act = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
             if(u1_t_ch_act == (U1)TRUE){
                 u1_t_swchk |= (U1)DIM_USADJ_BY_SW_SWON_BIT_DW;
             }
@@ -300,8 +348,12 @@ U1      u1_g_DimUsadjbySwVrCfgReAd(U2 * u2_a_ad)
 {
     U1          u1_t_sts;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts = u1_g_IoHwAdcRead((U1)ADC_CH_RHEOSTAT_VR_IN, u2_a_ad);
 
+#else   /* BEV Rebase provisionally */
+    u1_t_sts = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     return(u1_t_sts);
 }
 /*===================================================================================================================================*/
@@ -315,7 +367,11 @@ void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)
     U1         u1_t_rheo_pos;
     U2         u2_t_lvl;
     
+#if 0   /* BEV Rebase provisionally */
     u2_t_lvl = (U2)u1_g_McstBf((U1)MCST_BFI_RHEO_DAY);
+#else   /* BEV Rebase provisionally */
+    u2_t_lvl = (U2)DIM_USADJ_BY_SW_NUM_LVL;
+#endif   /* BEV Rebase provisionally */
     if(u2_t_lvl > (U2)DIM_USADJ_BY_SW_LVL_MAX){
         u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY] = (U2)DIM_USADJ_BY_SW_LVL_MAX;
     }
@@ -323,7 +379,11 @@ void    vd_g_DimUsadjbySwCfgNvmRead(U2 * u2_ap_lvl)
         u2_ap_lvl[DIM_DAYNIGHT_LVL_DAY] = u2_t_lvl;
     }
     
+#if 0   /* BEV Rebase provisionally */
     u2_t_lvl = (U2)u1_g_McstBf((U1)MCST_BFI_RHEO_NIGHT);
+#else   /* BEV Rebase provisionally */
+    u2_t_lvl = (U2)DIM_USADJ_BY_SW_NUM_LVL;
+#endif   /* BEV Rebase provisionally */
     if(u2_t_lvl > (U2)DIM_USADJ_BY_SW_LVL_MAX){
         u1_t_rheo_pos = u1_s_DimCfgCalibU1MaxChk(u1_CALIB_MCUID0340_RHEOPOS_NIGHT, (U1)CALIB_MCUID0340_MAX, (U1)CALIB_MCUID0340_DEF);
         u2_ap_lvl[DIM_DAYNIGHT_LVL_NIGHT] = (U2)u1_t_rheo_pos;
@@ -342,10 +402,16 @@ void    vd_g_DimUsadjbySwCfgNvmWrite(const U2 * u2_ap_LVL)
 {
     U1          u1_t_esi_chk;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_esi_chk = u1_g_ESInspectMdBfield();
+#else   /* BEV Rebase provisionally */
+    u1_t_esi_chk = (U1)1U;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_esi_chk == (U1)0U){
+#if 0   /* BEV Rebase provisionally */
         vd_g_McstBfPut((U1)MCST_BFI_RHEO_DAY,   (U1)u2_ap_LVL[DIM_DAYNIGHT_LVL_DAY]  );
         vd_g_McstBfPut((U1)MCST_BFI_RHEO_NIGHT, (U1)u2_ap_LVL[DIM_DAYNIGHT_LVL_NIGHT]);
+#endif   /* BEV Rebase provisionally */
     }
 }
 /*===================================================================================================================================*/
@@ -362,8 +428,13 @@ U1      u1_g_DimUsadjbySwCfgComRxTAIL(U1 * u1p_a_tail)
     u1_t_tail_sup = u1_CALIB_MCUID0341_TAIL;
 
     if(u1_t_tail_sup == (U1)TRUE){
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_TAIL, u1p_a_tail);
         u1_t_rx_chk = Com_GetIPDUStatus(MSG_BDB1S03_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else   /* BEV Rebase provisionally */
+        *u1p_a_tail = (U1)0U;
+        u1_t_rx_chk = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
     }
     else{
         u1_t_rx_chk = (U1)COM_NO_RX;

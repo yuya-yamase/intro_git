@@ -40,9 +40,9 @@
 #include "veh_opemd.h"
 #include "ivdsh.h"
 
-#if 0   /* BEV Rebase provisionally */
 /* VOM */
 #include "dimmer.h"
+#if 0   /* BEV Rebase provisionally */
 #include "drvind_pwr_pct.h"
 
 /* #include "alert.h" */
@@ -106,12 +106,14 @@
 #include "vardef_esopt.h"
 #if 0   /* BEV Rebase provisionally */
 #include "mcst.h"
+#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
 /* Legacy */
 #if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
 #endif
+#if 0   /* BEV BSW provisionally */
 #include "g_monitor.h"
 #include "hmigmon.h"
 #include "fspo_cmn.h"
@@ -981,7 +983,6 @@ static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     static const U2    u2_sp_XSPI_UB_DIM[] = {
         (U2)0x0000U, /* Up / Down = ina / ina */
         (U2)0x0200U, /* Up / Down = ina / act */
@@ -1002,27 +1003,36 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1]  = ((U4)u2_t_rheo_lvl & (U4)0x000000FFU);
     u2_t_ub_act      = (U2)0U;
     u1_t_rheosw      = u1_CALIB_MCUID0430_RHEOSW;
-    u1_t_illumi_mask = u1_g_IllumiTftAlpha();
+#if 0   /* BEV Rebase provisionally */
+    u1_t_illumi_mask = (U1)u2_g_IllumiLvlPct((U1)ILLUMI_CH_ALPHA);
+#else   /* BEV Rebase provisionally */
+    u1_t_illumi_mask = (U1)0U;
+#endif   /* BEV Rebase provisionally */
 
     switch(u1_t_rheosw){
         case (U1)CALIB_MCUID0430_1_INPUT:
+        case (U1)CALIB_MCUID0430_2_INPUT:
+            /* RHEO_SW_DOWN & RHEO_SW_UP is follow u2_s_DioIfRea_Ub_MI setting */
+#if 0   /* BEV Rebase provisionally */
             u2_t_ub_act      = u2_DIO_IF_CH_TO_BN((U2)DIO_IF_CH_DIM_DW);
             u2_t_ub_act      = (u2_g_DioIfGrAct((U1)DIO_IF_GR_UB_MI, (U1)TRUE) >> u2_t_ub_act) & (U2)0x0003U;
+#endif   /* BEV Rebase provisionally */
             u4_ap_pdu_tx[1] |= (U4)u2_sp_XSPI_UB_DIM[u2_t_ub_act];
             break;
-        case (U1)CALIB_MCUID0430_2_INPUT:
-            u1_t_iohw_mask   = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE)        & (U1)0x01U;
-            u4_ap_pdu_tx[1] |= ((U4)u1_t_iohw_mask << 8U);
-            u1_t_iohw_mask   = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_RHEOSTAT_DOWN_SW) & (U1)0x01U;
-            u4_ap_pdu_tx[1] |= ((U4)u1_t_iohw_mask << 9U);
+        case (U1)CALIB_MCUID0430_THUMB_WHEEL:
+            u4_ap_pdu_tx[1] |= ((U4)u1_g_DimSwVrUpDown() << 8U);
             break;
+     /* case (U1)CALIB_MCUID0430_SOFTSW: */
         default:
             /* Do Nothing */
             break;
     }
     u4_ap_pdu_tx[1] |= ((U4)u1_t_illumi_mask << 10U);
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2]  = (U4)u2_g_IoHwAdcLv((U1)ADC_CH_TFT_TH);       /* TFT_BL_TH_AD */
-    u4_ap_pdu_tx[2] |= ((U4)u1_g_IllumiTftPct() << 16U);
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
+    u4_ap_pdu_tx[2] |= ((U4)u2_g_IllumiLvlPct((U1)ILLUMI_CH_DUTY) << 16U);
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -2500,10 +2510,10 @@ static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
     /* Oilmaint */
     vd_g_HmiOilmaintMetCstmPut(&u4_ap_PDU_RX[6]);
 
+#endif   /* BEV Rebase provisionally */
     /* CSTM_DIMSW */
     u1_s_xspi_dimsw = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0] , (U1)24U , (U1)2U);
 
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
