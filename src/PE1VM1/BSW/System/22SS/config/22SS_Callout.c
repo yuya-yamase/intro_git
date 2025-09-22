@@ -38,8 +38,8 @@
 /* Application           */
 #endif   /* BEV Rebase provisionally */
 #include "dimmer.h"
-#if 0   /* BEV Rebase provisionally */
 #include "illumi.h"
+#if 0   /* BEV Rebase provisionally */
 #include "thblnkr.h"
 #include "vehspd_kmph.h"
 #include "vptran_sel.h"
@@ -127,8 +127,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
@@ -219,8 +219,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiRstInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
@@ -311,8 +311,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
