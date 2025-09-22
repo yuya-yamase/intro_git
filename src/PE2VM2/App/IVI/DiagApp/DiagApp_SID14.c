@@ -41,8 +41,10 @@
 #define DIAGAPP_SID14_DTC_HIGH                  (0U)            /* DTC High Bufpos        */
 #define DIAGAPP_SID14_DTC_MIDDLE                (1U)            /* DTC Middle Bufpos      */
 #define DIAGAPP_SID14_DTC_LOW                   (2U)            /* DTC Low Bufpos         */
-#define DIAGAPP_SID14_MEMSEL_INIT_VALUE         ((uint8)0x00U)  /* MemorySelection Init   */
-#define DIAGAPP_SID14_ENABLE_DTC                (0xFFFFFF)      /* GroupOfDTC             */
+#define DIAGAPP_SID14_ENABLE_DTC                (0xFFFFFFU)     /* GroupOfDTC             */
+#define DIAGAPP_SID14_MEMSEL_OCCDTC             (0x11U)         /* Memory Selection OccurrenceDTC(0x11)    */
+#define DIAGAPP_SID14_MEMSEL_MNTDTC             (0x12U)         /* Memory Selection MaintenanceDTC(0x12)   */
+#define DIAGAPP_SID14_MEMSEL_SECDTC             (0x14U)         /* Memory Selection SecurityEventDTC(0x14) */
 
 #define DIAGAPP_SID14_REQ_OFF_MEMSEL            ((uint8)3U)     /* MemorySelection Bufpos */
 #define DIAGAPP_SID14_REQ_MEMSEL_LEN            ((uint8)1U)     /* MemorySelection Size   */
@@ -113,21 +115,31 @@ void           vd_g_DiagAppSID14Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
             (((U4)st_ap_REQ->u1p_RX[DIAGAPP_SID14_DTC_MIDDLE]) << DIAGAPP_SID14_SHIFT_DTC_MIDDLE) |
             ((U4)st_ap_REQ->u1p_RX[DIAGAPP_SID14_DTC_LOW]);
 
+            /* Memory Selection*/
+            if (u1_t_dataLength == (U1)DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN) {
+                u1_t_memorySelection = st_ap_REQ->u1p_RX[DIAGAPP_SID14_REQ_OFF_MEMSEL];
+            }
+            else {
+                /* Not MemorySelection */
+                u1_t_memorySelection = 0;
+            }
+
             if (u4_t_groupOfDTC != (U4)DIAGAPP_SID14_ENABLE_DTC) {
                 /* --- error --- */
+                /* Group Of DTC */
+                /* NRC:0x31 */
+                vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_31);
+            }
+            else if((u1_t_dataLength == (U1)DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN) &&
+                   ((u1_t_memorySelection != (U1)DIAGAPP_SID14_MEMSEL_OCCDTC) &&
+                    (u1_t_memorySelection != (U1)DIAGAPP_SID14_MEMSEL_MNTDTC) &&
+                    (u1_t_memorySelection != (U1)DIAGAPP_SID14_MEMSEL_SECDTC))) {
+                /* --- error --- */
+                /* Memory Selection */
                 /* NRC:0x31 */
                 vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_31);
             }
             else {
-                if (u1_t_dataLength == DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN) {
-                    /* MemorySelection */
-                    u1_t_memorySelection = st_ap_REQ->u1p_RX[DIAGAPP_SID14_REQ_OFF_MEMSEL];
-                }
-                else {
-                    /* Not MemorySelection */
-                    u1_t_memorySelection = 0;
-                }
-
                 /* RequestID */
                 u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
                 /* DTC Clear Request */
