@@ -22,7 +22,9 @@
 #include "lerp_u2.h"
 #include "calibration.h"
 #include "vardef_esopt.h"
+#if 0   /* BEV Rebase provisionally */
 #include "iohw_adc.h"
+#endif   /* BEV Rebase provisionally */
 #include "scheduler.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -487,7 +489,11 @@ U2    u2_g_IllumiTftPctDuty(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)
     if(u1_t_dsp != (U1)TRUE){
         u4_t_schd = (U4)(u4_g_SchdlrTaskActivated() & (U4)SCHDLR_TASKBIT_100MS_I);
         if(u4_t_schd != (U4)0U){
+#if 0   /* BEV Rebase provisionally */
             u2_t_illumi_ad = u2_g_IoHwAdcLv((U1)ADC_CH_TFT_TH);
+#else   /* BEV Rebase provisionally */
+            u2_t_illumi_ad = (U2)ILLUMI_TFTPCT_AD_MAX;
+#endif   /* BEV Rebase provisionally */
             u2_t_therm     = u2_s_IllumiTftPctMvAvg(u2_t_illumi_ad);
             if(u2_t_therm < (U2)ILLUMI_TFTPCT_THERM_DLYCAL_STA){
                 u2_t_pct_uplmt = (U2)ILLUMI_TFTPCT_DUTYLMT_UPPER;

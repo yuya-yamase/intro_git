@@ -22,12 +22,22 @@
 #include "dim_usadjbysw.h"
 #include "oxcan.h"
 #include "calibration.h"
+#if 0   /* BEV Rebase provisionally */
 #include "iohw_diflt.h"
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
 #include "rim_ctl.h"
+#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
 #include "vptran_sel.h"
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
 #include "dio_if.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -175,6 +185,7 @@ void    vd_g_IllumiComTxInit(void)
     u2_s_illumi_rheo_tx_il     = (U2)0U;
     u1_s_illumi_rheo_tx_pos    = (U1)ILLUMI_RHEOPOS_TX_DEF;
 
+#if 0   /* BEV Rebase provisionally */
 #ifdef ComConf_ComSignal_ILL_OUT
     (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
 #endif /* #ifdef ComConf_ComSignal_ILL_OUT */
@@ -186,6 +197,7 @@ void    vd_g_IllumiComTxInit(void)
     (void)Com_SendSignal(ComConf_ComSignal_IL2_DUTY, &u2_s_illumi_rheo_tx_il);
     (void)Com_SendSignal(ComConf_ComSignal_RHEO_POS, &u1_s_illumi_rheo_tx_pos);
 
+#endif   /* BEV Rebase provisionally */
     vd_s_IllumiTailCancelTx();
     u2_s_illumi_comtx_b_p_dlycnt   = (U2)ILLUMI_COMTX_B_P_DLY_MAX;
     u2_s_illumi_comtx_fade_tmelpsd = (U2)U2_MAX;
@@ -204,7 +216,9 @@ void    vd_g_IllumiComTxBonInit(void)
     U2                  u2_tp_dim_lvl[ILLUMI_NUM_DIM_LVL];
 
     u1_t_data = (U1)ILLUMI_LOUNGE_UNK;
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1((U2)RIMID_U1_ILLUMI_LOUNGE, u1_t_data);
+#endif   /* BEV Rebase provisionally */
     u1_s_illumi_lounge_tx = u1_t_data;
 
     u2_tp_dim_lvl[ILLUMI_DIM_LVL_USADJ_DAY]   = u2_g_DimLvlUsadjust((U1)DIM_DAYNIGHT_LVL_DAY);
@@ -212,7 +226,9 @@ void    vd_g_IllumiComTxBonInit(void)
     u2_tp_dim_lvl[ILLUMI_DIM_LVL_DAYNIGHT]    = (U2)u1_g_DimLvlDaynight();
     u1_t_lounge_tx = u1_s_IllumiLoungeHysJdg(&u2_tp_dim_lvl[0]);
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_ILL_OF, &u1_t_lounge_tx);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_IllumiComTxRstwkInit(void)                                                                                          */
@@ -228,10 +244,17 @@ void    vd_g_IllumiComTxRstwkInit(void)
     U2                  u2_tp_dim_lvl[ILLUMI_NUM_DIM_LVL];
 
     u1_t_data = (U1)ILLUMI_LOUNGE_UNK;
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts = u1_g_Rim_ReadU1withStatus((U2)RIMID_U1_ILLUMI_LOUNGE, &u1_t_data);
     if((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK){
         u1_s_illumi_lounge_tx = u1_t_data;
     }
+#else   /* BEV Rebase provisionally */
+    u1_t_sts = (U1)0x10U; /* RIM_RESULT_KIND_NG */
+    if((u1_t_sts & (U1)0xF0U) == (U1)0x00U){
+        u1_s_illumi_lounge_tx = u1_t_data;
+    }
+#endif   /* BEV Rebase provisionally */
     else{
         u1_s_illumi_lounge_tx = (U1)ILLUMI_LOUNGE_UNK;
     }
@@ -240,7 +263,9 @@ void    vd_g_IllumiComTxRstwkInit(void)
     u2_tp_dim_lvl[ILLUMI_DIM_LVL_DAYNIGHT]    = (U2)u1_g_DimLvlDaynight();
     u1_t_lounge_tx = u1_s_IllumiLoungeHysJdg(&u2_tp_dim_lvl[0]);
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_ILL_OF, &u1_t_lounge_tx);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U2      u2_g_IllumiComTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)                                                             */
@@ -278,8 +303,10 @@ U2      u2_g_IllumiTRTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)
         u2_t_pct = (U2)ILLUMI_DUTY_TX_MAX;
     }
     if(u2_t_pct != u2_s_illumi_rheo_tx_tr){
+#if 0   /* BEV Rebase provisionally */
        (void)Com_SendSignal(ComConf_ComSignal_TR2_DUTY, &u2_t_pct);
         (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S38_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
     u2_s_illumi_rheo_tx_tr = u2_t_pct;
 
@@ -306,8 +333,10 @@ U2      u2_g_IllumiILTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)
         u2_t_pct = (U2)ILLUMI_DUTY_TX_MAX;
     }
     if(u2_t_pct != u2_s_illumi_rheo_tx_il){
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_IL2_DUTY, &u2_t_pct);
         (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S38_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
     u2_s_illumi_rheo_tx_il = u2_t_pct;
 
@@ -387,7 +416,11 @@ static U2   u2_s_IllumiILFadeJdg(const U2 u2_a_LVL, const U2 u2_a_PCT)
     U2                  u2_t_pct;
 
     u1_t_at = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AT);
+#if 0   /* BEV Rebase provisionally */
     u1_t_ig = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_ig = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
 
     if((u1_CALIB_MCUID0741_IL2OUTILLRUN == (U1)TRUE) && (u1_t_at == (U1)TRUE)
     && (u1_t_ig == (U1)TRUE)){
@@ -448,9 +481,15 @@ static U1   u1_s_IllumiILFadeDriveJdg(void)
     U1                  u1_t_sft_p;
 
     u1_t_b_p = (U1)TRUE;
+#if 0   /* BEV Rebase provisionally */
     u1_t_chk = (U1)Com_GetIPDUStatus(MSG_ECT1G01_RXCH0) & (U1)COM_NO_RX;
+#else   /* BEV Rebase provisionally */
+    u1_t_chk = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_chk == (U1)0U){
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_B_P, &u1_t_b_p);
+#endif   /* BEV Rebase provisionally */
     }
     if(u1_t_b_p == (U1)TRUE){
         u2_s_illumi_comtx_b_p_dlycnt = (U2)U2_MAX;
@@ -466,12 +505,23 @@ static U1   u1_s_IllumiILFadeDriveJdg(void)
     }
 
     u2_t_range   = (U2)0x0000U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_sftsts  = u1_g_VptranRangeSelected(&u2_t_range);
+#else   /* BEV Rebase provisionally */
+    u1_t_sftsts  = (U1)0x00U; /* VPTRAN_VALID */
+#endif   /* BEV Rebase provisionally */
     u1_t_sft_p = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
     /* Treat as shift P if signal is not VALID */
     if ((u1_t_sftsts != (U1)VPTRAN_VALID) || ((u2_t_range & (U2)VPTRAN_RNG_MSK) == (U2)VPTRAN_OFF) || ((u2_t_range & (U2)VPTRAN_RNG_MSK) == (U2)VPTRAN_RNG_P_ON)) {
         u1_t_sft_p = (U1)TRUE;
     }
+#else   /* BEV Rebase provisionally */
+    /* Treat as shift P if signal is not VALID */
+    if ((u1_t_sftsts != (U1)0x00U) || ((u2_t_range & (U2)0x0FFFU) == (U2)0x0000U) || ((u2_t_range & (U2)0x0FFFU) == (U2)0x0001U)) {
+        u1_t_sft_p = (U1)TRUE;
+    }
+#endif   /* BEV Rebase provisionally */
 
     if(u1_t_sft_p == (U1)FALSE){                                                    /* RangeValid w/o P             */
         u1_t_sts = (U1)ILLUMI_COMTX_IL2STS_DRIVE;
@@ -657,8 +707,10 @@ static void    vd_s_IllumiRheoTxAct(const U2 u2_a_ACT, const U1 u1_a_RHEOPCT, co
 
             u1_s_illumi_rheo_tx_ack    = (U1)0U;
             u1_s_illumi_rheo_tx_pct    = u1_a_RHEOPCT;
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_RHEOSTAT, &u1_s_illumi_rheo_tx_pct);
             (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S01_TXCH0);
+#endif   /* BEV Rebase provisionally */
             break;
      /* case ILLUMI_RHEO_TX_ACT_INIT: */
         default:
@@ -668,7 +720,9 @@ static void    vd_s_IllumiRheoTxAct(const U2 u2_a_ACT, const U1 u1_a_RHEOPCT, co
 
             u1_s_illumi_rheo_tx_ack    = (U1)0U;
             u1_s_illumi_rheo_tx_pct    = u1_a_RHEOPCT;
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_RHEOSTAT, &u1_s_illumi_rheo_tx_pct);
+#endif   /* BEV Rebase provisionally */
             break;
     }
 
@@ -688,8 +742,10 @@ static void    vd_s_IllumiLoungeTx(const U2 * u2_ap_DIM_LVL)
 
     u1_t_tx = u1_s_IllumiLoungeHysJdg(u2_ap_DIM_LVL);
     if(u1_t_tx != u1_s_illumi_lounge_tx){
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_ILL_OF, &u1_t_tx);
         (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S01_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
     u1_s_illumi_lounge_tx = u1_t_tx;
 }
@@ -720,8 +776,10 @@ static void    vd_s_IllumiPosTx(const U2 * u2_ap_DIM_LVL)
     }
 
     if(u1_t_tx != u1_s_illumi_rheo_tx_pos){
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_RHEO_POS, &u1_t_tx);
         (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S39_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
     u1_s_illumi_rheo_tx_pos = u1_t_tx;
 }
@@ -757,7 +815,9 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
         }
     }
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_ILL_OUT, &u1_t_tx);
+#endif   /* BEV Rebase provisionally */
 #endif
 }
 /*===================================================================================================================================*/
@@ -776,9 +836,18 @@ static void    vd_s_IllumiTailCancelTx(void)
     u1_t_rheosw   = u1_CALIB_MCUID0430_RHEOSW;
 
     if(u1_t_rheosw   == (U1)CALIB_MCUID0430_THUMB_WHEEL){
+#if 0   /* BEV Rebase provisionally */
         u1_t_tailcnsw_act = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_TAIL_CANCEL_IN);
         if(u1_t_tailcnsw_act != (U1)IOHW_DIFLT_SWITCH_UNKNWN){
+#else   /* BEV Rebase provisionally */
+        u1_t_tailcnsw_act = (U1)2U; /* IOHW_DIFLT_SWITCH_UNKNWN */
+        if(u1_t_tailcnsw_act != (U1)2U){
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
             u1_t_tailcnsw_act = u1_g_DioIfChAct((U2)DIO_IF_CH_TAI_CN, (U1)TRUE);
+#else   /* BEV Rebase provisionally */
+            u1_t_tailcnsw_act = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
             if(u1_t_tailcnsw_act == (U1)TRUE){
                 u1_t_tx = (U1)ILLUMI_TAIL_CN_ACT;
             }
@@ -794,14 +863,18 @@ static void    vd_s_IllumiTailCancelTx(void)
     else{
         u1_t_tx = (U1)ILLUMI_TAIL_CN_INACT;
     }
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_TAIL_CN, &u1_t_tx);
+#endif   /* BEV Rebase provisionally */
     if(u2_s_illumi_tc_nmwk_tout < (U2)U2_MAX){
         u2_s_illumi_tc_nmwk_tout++;
     }
 
     if(u1_t_tx != u1_s_illumi_tail_cn_tx){
         u2_s_illumi_tc_nmwk_tout = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend((PduIdType)MSG_MET1S01_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
     u1_s_illumi_tail_cn_tx = u1_t_tx;
 }
@@ -842,7 +915,9 @@ static U1       u1_s_IllumiLoungeHysJdg(const U2 * u2_ap_DIM_LVL)
         u1_t_tx = (U1)ILLUMI_LOUNGE_ON;
     }
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1((U2)RIMID_U1_ILLUMI_LOUNGE, u1_t_tx);
+#endif   /* BEV Rebase provisionally */
 
     return(u1_t_tx);
 }

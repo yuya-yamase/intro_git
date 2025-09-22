@@ -78,7 +78,9 @@
 /* VSV */
 #include "gagdst_nxmph.h"
 #include "wchime.h"
+#endif   /* BEV Rebase provisionally */
 #include "illumi.h"
+#if 0   /* BEV Rebase provisionally */
 
 /* HMI */
 #include "hmiodo.h"
@@ -1002,11 +1004,7 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1]  = ((U4)u2_t_rheo_lvl & (U4)0x000000FFU);
     u2_t_ub_act      = (U2)0U;
     u1_t_rheosw      = u1_CALIB_MCUID0430_RHEOSW;
-#if 0   /* BEV Rebase provisionally */
     u1_t_illumi_mask = (U1)u2_g_IllumiLvlPct((U1)ILLUMI_CH_ALPHA);
-#else   /* BEV Rebase provisionally */
-    u1_t_illumi_mask = (U1)0U;
-#endif   /* BEV Rebase provisionally */
 
     switch(u1_t_rheosw){
         case (U1)CALIB_MCUID0430_1_INPUT:
@@ -1031,9 +1029,7 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
 #if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2]  = (U4)u2_g_IoHwAdcLv((U1)ADC_CH_TFT_TH);       /* TFT_BL_TH_AD */
 #endif   /* BEV Rebase provisionally */
-#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2] |= ((U4)u2_g_IllumiLvlPct((U1)ILLUMI_CH_DUTY) << 16U);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

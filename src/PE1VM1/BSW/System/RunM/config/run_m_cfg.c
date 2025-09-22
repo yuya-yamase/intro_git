@@ -48,7 +48,9 @@
 /* Application           */
 
 #include "alert.h"
+#endif   /* BEV Rebase provisionally */
 #include "illumi.h"
+#if 0   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
 #endif   /* BEV Rebase provisionally */
 #include "vardef.h"
@@ -120,7 +122,9 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
         &u1_g_Nvmc_IsShtdwnOk,
 #if 0   /* BEV Rebase provisionally */
         &u1_g_SoundCriMgrShtdwnOk,
+#endif   /* BEV Rebase provisionally */
         &u1_g_IllumiShtdwnOk,
+#if 0   /* BEV Rebase provisionally */
         &u1_g_HmiProxyShtdwnOK
 #endif   /* BEV Rebase provisionally */
     };
