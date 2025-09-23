@@ -18,6 +18,7 @@
 #define SYSECDRC_DREC_CAT_CAMCTL        (4U)
 #define SYSECDRC_DREC_CAT_GYROACC       (5U)
 #define SYSECDRC_DREC_CAT_POWERIC       (6U)
+#define SYSECDRC_DREC_CAT_BOOTLOG       (7U)
 
 #define SYSECDRC_DREC_ID_1              (1U)
 #define SYSECDRC_DREC_ID_2              (2U)
@@ -46,6 +47,7 @@ void    vd_g_SysEcDrc_Init(void);
 void    vd_g_SysEcDrc_MainTask(void);
 void    vd_g_SysEcDrc_Drec(const U1 u1_a_ARGTRCKIND, const U1 u1_a_DREC1, const U1 u1_a_DREC2, const U1 u1_a_DREC3);
 void    vd_g_SysEcDrc_SendDateSet(U4* u4p_a_size, U1* u1p_a_buff, const U4 u4_a_BUFF_MAX);
+U4      u4_g_SysEcDrc_GetSystime(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

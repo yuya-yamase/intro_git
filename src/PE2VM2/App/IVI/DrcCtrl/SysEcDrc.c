@@ -9,6 +9,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "SysEcDrc.h"
 #include "memfill_u1.h"
+#include "gpt_drv_frt.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -41,6 +42,8 @@
 
 #define SYSECDRC_TIMCNT50MS (5U)
 
+#define SYSECDRC_FRT_1MS    (1000U * GPT_FRT_1US)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -65,15 +68,18 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4    u4_s_sysecdrc_systime;
 static U1    u1_s_sysecdrc_timecnt_10ms;
 ST_DRC_SYS   st_s_drc_sys;
+static U4    u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_NUM_PARAM];
+static U4    u4_s_sysecdrc_systime_1ms;
+static U4    u4_s_sysecdrc_frtsum_1ms;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_g_SysEcDrc_DrcClear(void);
-static void    vd_s_SysEcDrc_GetTim50ms_4(U1* u1p_a_tim1, U1* u1p_a_tim2, U1* u1p_a_tim3, U1* u1p_a_tim4);
+static void    vd_s_SysEcDrc_DrcClear(void);
+static void    vd_s_SysEcDrc_UpdateSystime(void);
+static void    vd_s_SysEcDrc_GetTim1ms_4(U1* u1p_a_tim1, U1* u1p_a_tim2, U1* u1p_a_tim3, U1* u1p_a_tim4);
 static void    vd_s_SysEcDrc_Memcpy(U1 * u1p_a_dst, const ST_DRC_SYSREC * stp_a_src);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -89,18 +95,21 @@ static void    vd_s_SysEcDrc_Memcpy(U1 * u1p_a_dst, const ST_DRC_SYSREC * stp_a_
 /*===================================================================================================================================*/
 void    vd_g_SysEcDrc_Init(void)
 {
-    vd_g_SysEcDrc_DrcClear();
+    vd_s_SysEcDrc_DrcClear();
     u1_s_sysecdrc_timecnt_10ms = (U1)0U;
-    u4_s_sysecdrc_systime = (U4)0U;
+    u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE]  = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
+    u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_CRRNT] = (U4)0U;
+    u4_s_sysecdrc_systime_1ms = u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE] / (U4)SYSECDRC_FRT_1MS;
+    u4_s_sysecdrc_frtsum_1ms = u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE] % (U4)SYSECDRC_FRT_1MS;
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_g_SysEcDrc_DrcClear(void)                                                                                      */
+/*  static void    vd_s_SysEcDrc_DrcClear(void)                                                                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_g_SysEcDrc_DrcClear(void)
+static void    vd_s_SysEcDrc_DrcClear(void)
 {
     U1 u1_t_cnt;
     
@@ -122,15 +131,49 @@ static void    vd_g_SysEcDrc_DrcClear(void)
 void    vd_g_SysEcDrc_MainTask(void)
 {
     if(u1_s_sysecdrc_timecnt_10ms >= (U1)SYSECDRC_TIMCNT50MS){
-        if(u4_s_sysecdrc_systime < (U4)U4_MAX){
-            u4_s_sysecdrc_systime++;      /* LSB:10ms -> 50ms  */
-        }
-        else{
-            u4_s_sysecdrc_systime = (U4)0U;
-        }
+        vd_s_SysEcDrc_UpdateSystime();
         u1_s_sysecdrc_timecnt_10ms = (U1)0U;
     }
     u1_s_sysecdrc_timecnt_10ms++;
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_SysEcDrc_UpdateSystime(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_SysEcDrc_UpdateSystime(void)
+{
+    U4 u4_t_frt_elpsd;
+    U4 u4_t_frt_next;
+    U4 u4_t_max;
+
+    u4_t_frt_elpsd = u4_g_Gpt_FrtGetUsElapsed(&u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE]);
+    u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE] = u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_CRRNT];
+
+    u4_s_sysecdrc_frtsum_1ms = u4_s_sysecdrc_frtsum_1ms + u4_t_frt_elpsd;
+    u4_t_frt_next = u4_s_sysecdrc_frtsum_1ms / (U4)SYSECDRC_FRT_1MS;
+    u4_s_sysecdrc_frtsum_1ms = u4_s_sysecdrc_frtsum_1ms % (U4)SYSECDRC_FRT_1MS;
+
+    u4_t_max = (U4)U4_MAX - u4_t_frt_next;
+    if(u4_t_max >= u4_s_sysecdrc_systime_1ms){
+        u4_s_sysecdrc_systime_1ms  = u4_s_sysecdrc_systime_1ms + u4_t_frt_next;
+    }
+    else{
+        u4_s_sysecdrc_systime_1ms = u4_t_frt_next - ((U4)U4_MAX - u4_s_sysecdrc_systime_1ms);
+    }
+}
+
+/*===================================================================================================================================*/
+/*  U4      u4_g_SysEcDrc_GetSystime(void)                                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U4    u4_g_SysEcDrc_GetSystime(void)
+{
+    return(u4_s_sysecdrc_systime_1ms);
 }
 
 /*===================================================================================================================================*/
@@ -150,10 +193,11 @@ void vd_g_SysEcDrc_Drec(const U1 u1_a_ARGTRCKIND, const U1 u1_a_DREC1, const U1 
             st_tp_trcmng->u2_wp = (U2)0U;
         }
 
-        vd_s_SysEcDrc_GetTim50ms_4(&st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_systime[SYSECDRC_BUFF0],
-                                   &st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_systime[SYSECDRC_BUFF1],
-                                   &st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_systime[SYSECDRC_BUFF2],
-                                   &st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_systime[SYSECDRC_BUFF3]);
+        vd_s_SysEcDrc_UpdateSystime();
+        vd_s_SysEcDrc_GetTim1ms_4(&st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_systime[SYSECDRC_BUFF0],
+                                  &st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_systime[SYSECDRC_BUFF1],
+                                  &st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_systime[SYSECDRC_BUFF2],
+                                  &st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_systime[SYSECDRC_BUFF3]);
 
         st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_drec[SYSECDRC_BUFF3] = u1_a_ARGTRCKIND;
         st_s_drc_sys.st_drcrec[st_tp_trcmng->u2_wp].u1_drec[SYSECDRC_BUFF2] = u1_a_DREC1;
@@ -174,19 +218,19 @@ void vd_g_SysEcDrc_Drec(const U1 u1_a_ARGTRCKIND, const U1 u1_a_DREC1, const U1 
 }
 
 /*===================================================================================================================================*/
-/*  static void vd_s_SysEcDrc_GetTim50ms_4(U1* u1p_a_tim1, U1* u1p_a_tim2, U1* u1p_a_tim3, U1* u1p_a_tim4)                           */
+/*  static void vd_s_SysEcDrc_GetTim1ms_4(U1* u1p_a_tim1, U1* u1p_a_tim2, U1* u1p_a_tim3, U1* u1p_a_tim4)                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void vd_s_SysEcDrc_GetTim50ms_4(U1* u1p_a_tim1, U1* u1p_a_tim2, U1* u1p_a_tim3, U1* u1p_a_tim4)
+static void vd_s_SysEcDrc_GetTim1ms_4(U1* u1p_a_tim1, U1* u1p_a_tim2, U1* u1p_a_tim3, U1* u1p_a_tim4)
 {
     U1 u1_time[SYSECDRC_TIMSIZ];
     
-    u1_time[SYSECDRC_BUFF0] = (U1)(u4_s_sysecdrc_systime & (U4)SYSECDRC_MASK_1BYTE);
-    u1_time[SYSECDRC_BUFF1] = (U1)((u4_s_sysecdrc_systime & (U4)SYSECDRC_MASK_2BYTE) >> SYSECDRC_SHIF_1BYTE);
-    u1_time[SYSECDRC_BUFF2] = (U1)((u4_s_sysecdrc_systime & (U4)SYSECDRC_MASK_3BYTE) >> SYSECDRC_SHIF_2BYTE);
-    u1_time[SYSECDRC_BUFF3] = (U1)((u4_s_sysecdrc_systime & (U4)SYSECDRC_MASK_4BYTE) >> SYSECDRC_SHIF_3BYTE);
+    u1_time[SYSECDRC_BUFF0] = (U1)(u4_s_sysecdrc_systime_1ms & (U4)SYSECDRC_MASK_1BYTE);
+    u1_time[SYSECDRC_BUFF1] = (U1)((u4_s_sysecdrc_systime_1ms & (U4)SYSECDRC_MASK_2BYTE) >> SYSECDRC_SHIF_1BYTE);
+    u1_time[SYSECDRC_BUFF2] = (U1)((u4_s_sysecdrc_systime_1ms & (U4)SYSECDRC_MASK_3BYTE) >> SYSECDRC_SHIF_2BYTE);
+    u1_time[SYSECDRC_BUFF3] = (U1)((u4_s_sysecdrc_systime_1ms & (U4)SYSECDRC_MASK_4BYTE) >> SYSECDRC_SHIF_3BYTE);
     
     if((((u1p_a_tim1 != NULL_PTR)  &&
          (u1p_a_tim2 != NULL_PTR)) &&
@@ -243,14 +287,14 @@ void vd_g_SysEcDrc_SendDateSet(U4* u4p_a_size, U1* u1p_a_buff, const U4 u4_a_BUF
 /*===================================================================================================================================*/
 static void vd_s_SysEcDrc_Memcpy(U1 * u1p_a_dst, const ST_DRC_SYSREC * stp_a_src)
 {
-	u1p_a_dst[SYSECDRC_BUFF0] = stp_a_src->u1_systime[SYSECDRC_BUFF3];
-	u1p_a_dst[SYSECDRC_BUFF1] = stp_a_src->u1_systime[SYSECDRC_BUFF2];
-	u1p_a_dst[SYSECDRC_BUFF2] = stp_a_src->u1_systime[SYSECDRC_BUFF1];
-	u1p_a_dst[SYSECDRC_BUFF3] = stp_a_src->u1_systime[SYSECDRC_BUFF0];
-	u1p_a_dst[SYSECDRC_BUFF4] = stp_a_src->u1_drec[SYSECDRC_BUFF3];
-	u1p_a_dst[SYSECDRC_BUFF5] = stp_a_src->u1_drec[SYSECDRC_BUFF2];
-	u1p_a_dst[SYSECDRC_BUFF6] = stp_a_src->u1_drec[SYSECDRC_BUFF1];
-	u1p_a_dst[SYSECDRC_BUFF7] = stp_a_src->u1_drec[SYSECDRC_BUFF0];
+    u1p_a_dst[SYSECDRC_BUFF0] = stp_a_src->u1_systime[SYSECDRC_BUFF3];
+    u1p_a_dst[SYSECDRC_BUFF1] = stp_a_src->u1_systime[SYSECDRC_BUFF2];
+    u1p_a_dst[SYSECDRC_BUFF2] = stp_a_src->u1_systime[SYSECDRC_BUFF1];
+    u1p_a_dst[SYSECDRC_BUFF3] = stp_a_src->u1_systime[SYSECDRC_BUFF0];
+    u1p_a_dst[SYSECDRC_BUFF4] = stp_a_src->u1_drec[SYSECDRC_BUFF3];
+    u1p_a_dst[SYSECDRC_BUFF5] = stp_a_src->u1_drec[SYSECDRC_BUFF2];
+    u1p_a_dst[SYSECDRC_BUFF6] = stp_a_src->u1_drec[SYSECDRC_BUFF1];
+    u1p_a_dst[SYSECDRC_BUFF7] = stp_a_src->u1_drec[SYSECDRC_BUFF0];
 
 }
 
