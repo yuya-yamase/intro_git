@@ -22,6 +22,7 @@
 #include    "Dio_Symbols.h"
 #include    "Iohw_adc.h"
 #include    "PwrCtl.h"
+#include    "BootLogCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -48,12 +49,15 @@
 #define    XSPI_IVI_POWER_STATE_TRANS_REC       (0x03U)
 #define    XSPI_IVI_POWER_STATE_TRANS_SEND      (0x04U)
 #define    XSPI_IVI_POWER_BMONIVOL_SEND         (0x05U)
+#define    XSPI_IVI_POWER_BOOTLOG_REQ           (0x61U)
+#define    XSPI_IVI_POWER_BOOTLOG_RES           (0x62U)
 
 #define    XSPI_IVI_POWER_TASK                  (2000U / XSPI_IVI_TASK_TIME)
 #define    XSPI_IVI_POWER_SIZE                  (7U)
 #define    XSPI_IVI_POWER_STATE_SIZE            (7U)
 #define    XSPI_IVI_POWER_TRANS_SIZE            (6U)
 #define    XSPI_IVI_POWER_BMONI_SIZE            (7U)
+#define    XSPI_IVI_POWER_BOOTLOG_SIZE          (36U)
 
 #define    XSPI_IVI_POWER_STATE_NUM             (7U)    /* 基本ステート 状態総数 */
 #define    XSPI_IVI_POWER_STATE_OFF             (0U)    /* OFF */
@@ -550,7 +554,10 @@ void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_
         break;
     case XSPI_IVI_POWER_STATE_TRANS_REC:
         vd_s_XspiIviSub1_PowerStateTransRec(&u1_ap_XSPI_ADD[0],u2_a_data_size);
-        break;    
+        break;
+    case XSPI_IVI_POWER_BOOTLOG_REQ:
+        vd_g_BootLogCtl_RxReq();
+        break;
     default:
         break;
     }
@@ -676,6 +683,24 @@ static U1            u1_s_XspiIviSub1PowerDevInitCompChk(void)
 }
 
 /*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1PowerBootLogResSend(const U1 * u1_ap_DATA)                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1PowerBootLogResSend(const U1 * u1_ap_DATA)
+{
+    U1  u1_tp_data[XSPI_IVI_POWER_BOOTLOG_SIZE];
+    U1  u1_t_size;
+
+    u1_t_size = (U1)XSPI_IVI_POWER_BOOTLOG_SIZE - (U1)1U;
+    u1_tp_data[0] = (U1)XSPI_IVI_POWER_BOOTLOG_RES;
+    vd_g_MemcpyU1(&u1_tp_data[1],&u1_ap_DATA[0],u1_t_size);
+    vd_s_XspiIviSub1PowerDataToQueue((U2)XSPI_IVI_POWER_BOOTLOG_SIZE,u1_tp_data);
+}
+
+/*===================================================================================================================================*/
 /*  void            vd_s_XspiIviSub1PowerDataToQueue(const U2 u2_a_size,const U1 u1_a_XSPI_ADD)                                      */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
@@ -685,16 +710,12 @@ static U1            u1_s_XspiIviSub1PowerDevInitCompChk(void)
 /*===================================================================================================================================*/
 static void            vd_s_XspiIviSub1PowerDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD)
 {
-    U1     u1_tp_data[XSPI_IVI_POWER_SIZE];
     U1     u1_t_id;
 
     u1_t_id = (U1)XSPI_IVI_POWER_ID;
 
-    vd_g_MemfillU1(&u1_tp_data[0], (U1)0U, (U4)XSPI_IVI_POWER_SIZE);
-    vd_g_MemcpyU1(&u1_tp_data[0], &u1_ap_XSPI_ADD[0], (U4)u2_a_size);
-
     /*キューの関数呼び出し（そっちでヘッダーとかは入れてく）*/
-    vd_g_XspiIviSub1MISCStuckBuff(u1_t_id,u2_a_size,u1_tp_data);
+    vd_g_XspiIviSub1MISCStuckBuff(u1_t_id,u2_a_size,&u1_ap_XSPI_ADD[0]);
 }
 
 /*===================================================================================================================================*/
