@@ -21,11 +21,6 @@
 #include "iohw_diflt.h"
 #include "oxcan.h"
 
-#if 0   /* BEV BSW provisionally */
-#include "xpd_init.h"
-#else
-#endif
-
 #if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #include "ptsctmp_cel.h"
@@ -116,14 +111,6 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
         vd_g_DateclkEtmStart((U1)DATE_CLK_ETM_CH_TMRWK, (U4)0U); /* zero start */
     }
 #endif
-#if 0   /* BEV BSW provisionally */
-    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON;
-    if(u4_t_jdgbit != (U4)0U){
-       (void)u1_g_XpdiAbocnt((U1)TRUE);
-    }
-#else
-#endif
-
 #if 0   /* BEV Rebase provisionally */
     for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)VEH_OPEMD_NUM_EVHK; u4_t_cnt++){
         u4_t_bit = u4_a_EVBIT & st_sp_VEH_OPEMD_EVHK[u4_t_cnt].u4_evbit;

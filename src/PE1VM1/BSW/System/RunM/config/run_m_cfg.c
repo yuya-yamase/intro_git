@@ -34,10 +34,6 @@
 #ifdef DATE_CLK_H
 #include "date_clk.h"
 #endif
-#if 0   /* BEV BSW provisionally */
-#include "xpd_init.h"
-#else
-#endif
 #include "sound_cri_mgr.h"
 /* MCAL                  */
 /* Memory                */
@@ -202,7 +198,7 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 {
 #if 0   /* BEV BSW provisionally */
     U1                        u1_t_2nd;
-    u1_t_2nd  = u1_g_XpdiShtdwnOk(u1_a_1ST);
+    u1_t_2nd  = u1_a_1ST;
 
 #ifdef DATE_CLK_H
     /* ----------------------------------------------------------------------------------- */
