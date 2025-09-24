@@ -71,7 +71,9 @@
 #include "ambtmp.h"
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
+#endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
+#if 0   /* BEV Rebase provisionally */
 #include "telltale.h"
 #include "wchime.h"
 #include "gauge.h"
@@ -366,7 +368,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_AmbtmpMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_MulmedColorMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MulmedMulfrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
+#endif   /* BEV Rebase provisionally */
     {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_BattpowMainTask,             (U4)SCHDLR_TASKBIT_100MS_E  },
     {&vd_g_DrvIndPwrMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_DrvIndEcoMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },

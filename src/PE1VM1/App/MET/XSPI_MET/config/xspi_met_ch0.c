@@ -59,7 +59,9 @@
 /* #include "hydrvol.h" */
 #include "tripcom.h"
 #include "mulmed_mulfr.h"
+#endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
+#if 0   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "odo_om_rst_if.h"
 #include "vptran_sel.h"
@@ -1301,9 +1303,7 @@ static inline void    vd_s_XSpiCfgTxTelltale(      U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxRcmmui(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[0] = (U4)u1_g_RcmmUISelect();
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2621,14 +2621,12 @@ static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxRcmmui(     const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
     U1                 u1_t_cid;
     U1                 u1_t_usract;
 
     u1_t_cid    = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[0] , (U1)1U);
     u1_t_usract = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[0] , (U1)0U);
     vd_g_RcmmUIUserAct(u1_t_cid , u1_t_usract);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
