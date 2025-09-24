@@ -53,9 +53,9 @@
 /*---------------------------------------------------------------------------*/
 /* Application Header                                                        */
 /*---------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
 #include "dimmer.h"
 #include "illumi.h"
+#if 0   /* BEV Rebase provisionally */
 #include "thblnkr.h"
 #include "vehspd_kmph.h"
 #include "vptran_sel.h"
@@ -71,13 +71,17 @@
 #include "ambtmp.h"
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
+#endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
+#if 0   /* BEV Rebase provisionally */
 #include "telltale.h"
 #include "wchime.h"
 #include "gauge.h"
 #include "sbltsync.h"
 #include "locale.h"
+#endif   /* BEV Rebase provisionally */
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #include "mcst.h"
 #include "vds_ci.h"
@@ -92,12 +96,10 @@
 #include "mmlang.h"
 #include "vmmunit.h"
 #include "fspomgr.h"
-#include "ecojdg.h"
 #include "attmp_cel.h"
 #include "mmvar.h"
 #include "mmappctrl.h"
 #include "evschg.h"
-#include "batcare.h"
 #include "datesi_met.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
@@ -330,7 +332,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+#endif   /* BEV Rebase provisionally */
     {&vd_g_VardefMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_HudCaMainTask,               (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_McstMainTask,                (U4)SCHDLR_TASKBIT__20MS_B  },
     /*-------------------------------------------------------------------*/
@@ -344,7 +348,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_VardefMmUnitCstmzTask,       (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_LocaleMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
     {&vd_g_VdsCIMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
+#endif   /* BEV Rebase provisionally */
     {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_EngspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_EngspdDetMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
@@ -362,7 +368,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_AmbtmpMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_MulmedColorMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MulmedMulfrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
+#endif   /* BEV Rebase provisionally */
     {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_BattpowMainTask,             (U4)SCHDLR_TASKBIT_100MS_E  },
     {&vd_g_DrvIndPwrMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_DrvIndEcoMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
@@ -372,11 +380,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_Fsposnsr10msTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_FspomgrRoutine,              (U4)SCHDLR_TASKBIT__50MS_E  },
-    {&vd_g_EcoJdgMainTask,              (U4)SCHDLR_TASKBIT__50MS_E  },
     {&vd_g_AttmpMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MMVarTask,                   (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MMAppCtrlTask,               (U4)SCHDLR_TASKBIT__50MS_E  },
-    {&vd_g_BatcareMainTask,             (U4)SCHDLR_TASKBIT__50MS_B  },
     {&vd_g_DateSIMETMainTask,           (U4)SCHDLR_TASKBIT___5MS    },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -393,7 +399,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+#endif   /* BEV Rebase provisionally */
     {&vd_g_IllumiMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_GaugeMainTask,               (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_TelltaleMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
