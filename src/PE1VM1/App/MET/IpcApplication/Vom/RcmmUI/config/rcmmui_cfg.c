@@ -70,17 +70,15 @@ static  U1                                      u1_s_rcmmui_prereq;
 /*===================================================================================================================================*/
 void            vd_g_RcmmUIInitCfg(void)
 {
-#ifdef OXCAN_PDU_RX_CAN_BDB1S13
-
 #if 0   /* BEV Rebase provisionally */
+#ifdef OXCAN_PDU_RX_CAN_BDB1S13
     u1_s_rcmmui_rxcnt  = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13);
-#else   /* BEV Rebase provisionally */
-    u1_s_rcmmui_rxcnt  = (U1)0U;
-#endif   /* BEV Rebase provisionally */
-
 #else
 	u1_s_rcmmui_rxcnt  = (U1)0U;
 #endif
+#else   /* BEV Rebase provisionally */
+    u1_s_rcmmui_rxcnt  = (U1)0U;
+#endif   /* BEV Rebase provisionally */
     u1_s_rcmmui_prereq = (U1)0U;
 }
 
@@ -106,10 +104,10 @@ void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm)
         u1_t_req1 = (U1)0U;
         u1_t_req2 = (U1)0U;
 
-    #if 0   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ1, &u1_t_req1);
         (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ2, &u1_t_req2);
-    #endif   /* BEV Rebase provisionally */
+#endif   /* BEV Rebase provisionally */
 
         (*u2p_a_rcmm)   = (U2)((U2)u1_t_req1 << RCMMUI_RCMM_MKSFT) | (U2)u1_t_req2;
     }
@@ -154,9 +152,9 @@ void            vd_g_RcmmUICfgCanTx(const U2 u2_a_RCMM, const U1 u1_a_RES)
 void    vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT)
 {
     if(u1_s_rcmmui_prereq != u1_a_OPT){
-    #if 0   /* BEV Rebase provisionally */
+#if 0   /* BEV Rebase provisionally */
         vd_g_VdsCIReqTx((U1)VDS_CI_SW_PBDMSW, u1_a_OPT);
-    #endif   /* BEV Rebase provisionally */
+#endif   /* BEV Rebase provisionally */
     }
     u1_s_rcmmui_prereq = u1_a_OPT;
 }
