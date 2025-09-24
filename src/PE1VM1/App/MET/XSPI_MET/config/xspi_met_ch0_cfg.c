@@ -17,7 +17,9 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "xspi_met_ch0_cfg.h"
+#if 0   /* BEV Rebase provisionally */
 #include "battpow.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -57,12 +59,16 @@
 /*===================================================================================================================================*/
 U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
 
     *s2p_a_pct        = (S2)XSPI_HV_PCT_INIT;
     u1_t_sts          = u1_g_DrvIndHvPctFltrd(s2p_a_pct);
 
     return(u1_t_sts);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -73,11 +79,15 @@ U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct)
 /*===================================================================================================================================*/
 U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
 
     *u1p_a_data       = (U1)0U;
     u1_t_sts          = u1_g_EvRunTmRatio(u1p_a_data);
     return(u1_t_sts);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -88,12 +98,16 @@ U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data)
 /*===================================================================================================================================*/
 U1    u1_g_XSpiCfgGetBatpow(U1 * u1p_a_socdsp, U1 * u1p_a_socindll)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
 
     *u1p_a_socdsp     = (U1)0U;
     *u1p_a_socindll   = (U1)0U;
     u1_t_sts          = u1_g_BattpowDigPct(u1p_a_socdsp, u1p_a_socindll);
     return(u1_t_sts);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 
@@ -105,10 +119,12 @@ U1    u1_g_XSpiCfgGetBatpow(U1 * u1p_a_socdsp, U1 * u1p_a_socindll)
 /*===================================================================================================================================*/
 void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf)
 {
+#if 0   /* BEV Rebase provisionally */
     *u4p_a_drvinf = ((U4)XSPI_TOTAL_FUEL_CONS << 24);
     *u4p_a_drvinf |= ((U4)XSPI_INST_FUEL_CONS << 16);
     *u4p_a_drvinf |= ((U4)XSPI_AVERAGE_SPEED << 8);
     *u4p_a_drvinf |= ((U4)XSPI_DRIVE_TIME);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

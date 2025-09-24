@@ -17,9 +17,11 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "xspi_met_vptran.h"
+#if 0   /* BEV Rebase provisionally */
 #include "vptran_sel.h"
 #include "vptran_sel_typ.h"
 #include "vardef.h"
+#endif   /* BEV Rebase provisionally */
 #include "bitcnt.h"
 #include "lsbsrch.h"
 
@@ -71,6 +73,7 @@ static  U1      u1_s_XSpiCfgVptranHideDispJdg(void);
 /*===================================================================================================================================*/
 U1    u1_g_XSpiCfgCvtVptranGear(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U2      u2_t_gear;
     U1      u1_t_ger_sts;
     U1      u1_t_hide_disp_jdg;
@@ -92,6 +95,9 @@ U1    u1_g_XSpiCfgCvtVptranGear(void)
     }
 
     return((U1)u2_t_gear);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_XSpiCfgCvtVptranShift(void)                                                                                         */
@@ -101,6 +107,7 @@ U1    u1_g_XSpiCfgCvtVptranGear(void)
 /*===================================================================================================================================*/
 void  vd_g_XSpiCfgCvtVptranShift(U1* u1p_a_blnk, U1* u1p_a_pos)
 {
+#if 0   /* BEV Rebase provisionally */
     U2      u2_t_rng;
     U2      u2_t_gear;
     U1      u1_t_rng_sts;
@@ -128,6 +135,7 @@ void  vd_g_XSpiCfgCvtVptranShift(U1* u1p_a_blnk, U1* u1p_a_pos)
             (*u1p_a_blnk) = (U1)XSPI_VPTRAN_SFT_POS_OFF;
         }
     }
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_XSpiCfgCvtVptranGsi(void)                                                                                           */
@@ -137,6 +145,7 @@ void  vd_g_XSpiCfgCvtVptranShift(U1* u1p_a_blnk, U1* u1p_a_pos)
 /*===================================================================================================================================*/
 U1      u1_g_XSpiCfgCvtVptranGsi(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2     u2_s_GSI_MSK = (U2)0x0003U;
     U2                  u2_t_gsi;
     U1                  u1_t_sts;
@@ -157,6 +166,9 @@ U1      u1_g_XSpiCfgCvtVptranGsi(void)
     u2_t_gsi &= u2_s_GSI_MSK;
 
     return((U1)u2_t_gsi);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -169,6 +181,7 @@ U1      u1_g_XSpiCfgCvtVptranGsi(void)
 /*===================================================================================================================================*/
 static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_RNG_STS, const U2 u2_a_RNG, const U1 u1_a_GEAR)
 {
+#if 0   /* BEV Rebase provisionally */
     static const    U1      u1_s_VALID_SEL_RNG = (U1)1U;
     U2                      u2_t_rng;
     U1                      u1_t_rng_bitcnt;
@@ -185,6 +198,9 @@ static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_RNG_STS, const U2 u2_a
         u1_t_rng_out = (U1)XSPI_VPTRAN_SFT_OFF;
     }
     return (u1_t_rng_out);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -195,6 +211,7 @@ static  U1      u1_s_XSpiCfgCvtVptranSftRng(const U1 u1_a_RNG_STS, const U2 u2_a
 /*===================================================================================================================================*/
 static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_RNG, const U1 u1_a_GEAR)
 {
+#if 0   /* BEV Rebase provisionally */
     static const    U1  u1_sp_SFTRNG_SBW_TBL[XSPI_VPTRAN_SFTRNG_BUF_NUM] = {
         /* GEAR Inactive */                  /* GEAR Active */
         (U1)XSPI_VPTRAN_SFT_P   ,        (U1)XSPI_VPTRAN_SFT_OFF ,      /* VPTRAN_RNG_P_ON  */
@@ -224,6 +241,9 @@ static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_RNG, const U1 u1_a_GEA
     u1_t_rng_out = u1_sp_SFTRNG_SBW_TBL[u1_t_pos];
 
     return (u1_t_rng_out);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -234,6 +254,7 @@ static  U1      u1_s_XSpiCfgCvtVptranSftOut(const U1 u1_a_RNG, const U1 u1_a_GEA
 /*===================================================================================================================================*/
 static  U1      u1_s_XSpiCfgCvtVptranShiftPos(const U2 u2_a_RNG, const U1 u1_a_XSPI_RNG)
 {
+#if 0   /* BEV Rebase provisionally */
     U1      u1_t_pos;
 
     if ((u1_a_XSPI_RNG == (U1)XSPI_VPTRAN_SFT_N) &&
@@ -244,6 +265,9 @@ static  U1      u1_s_XSpiCfgCvtVptranShiftPos(const U2 u2_a_RNG, const U1 u1_a_X
         u1_t_pos = (U1)XSPI_VPTRAN_SFT_POS_ON;
     }
     return (u1_t_pos);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -254,6 +278,7 @@ static  U1      u1_s_XSpiCfgCvtVptranShiftPos(const U2 u2_a_RNG, const U1 u1_a_X
 /*===================================================================================================================================*/
 static  U1      u1_s_XSpiCfgVptranHideDispJdg(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2     u2_s_GERHIDE_RNG = (U2)(VPTRAN_RNG_P_ON | VPTRAN_RNG_R_ON | VPTRAN_RNG_N_ON | VPTRAN_RNG_B_ON | VPTRAN_RNG_SD_ON);
     U2                  u2_t_rng;
     U1                  u1_t_xspi_blnk;
@@ -282,6 +307,9 @@ static  U1      u1_s_XSpiCfgVptranHideDispJdg(void)
     }
 
     return (u1_t_ret);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -23,6 +23,7 @@
 #endif
 #include "xspi_met_ch_private.h"
 
+#if 0   /* BEV Rebase provisionally */
 /* Platform */
 /* #include "oxcan.h" */ /* @@@ Provisional for 310D PreCV @@@ */
 
@@ -40,6 +41,7 @@
 #include "hmimm2c112n.h"
 #include "hmimm2c124n.h"
 #include "evschg.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -59,8 +61,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 #define XSPI_MMCUS_NUM_TXSIGNAL     (4U)
 #define XSPI_METCUS_NUM_TXSIGNAL    (15U)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -69,6 +73,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 typedef struct{
     U1                          u1_xspiid;
     U1                          u1_bitpos;
@@ -76,10 +81,12 @@ typedef struct{
     U1                          u1_maxvalue;
     U1                          u1_vdsci_id;
 }ST_XSPI_TXSIG;
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/  
 
+#if 0   /* BEV Rebase provisionally */
 static U1             u1_s_xspi_ethercomsts;
 static U1             u1_s_xspi_mm2c100n_rxcnt;
 static U1             u1_s_xspi_mm2c107n_rxcnt;
@@ -189,9 +196,11 @@ static U1             u1_s_predpms_bb;            /*  DPMS_BB Previous RxValue *
 static U1             u1_s_prepos_call;           /*  POS_CALL Previous RxValue*/
 static U1             u1_s_prepos_reg;            /*  POS_REG Previous RxValue */
 static U1             u1_s_preflynop;             /*  FLYNOP Previous RxValue  */
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 static inline void    vd_s_XSpiCfgRxEther(const U4 * u4_ap_pck_rx);
 
 static inline void    vd_s_XSpiCanTx_ASD_CONT(const U4 * u4_ap_pck_rx);
@@ -294,6 +303,7 @@ static inline void    vd_s_XSpiCanTx_DPMS_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_POS_CALL(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_POS_REG(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_FLYNOP(const U4* u4_ap_pck_rx);
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -308,6 +318,7 @@ static inline void    vd_s_XSpiCanTx_FLYNOP(const U4* u4_ap_pck_rx);
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh1(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_loop;
 
     u1_s_xspi_ethercomsts = (U1)XSPI_ETHER_UNDEF2;
@@ -423,6 +434,7 @@ void    vd_g_XSpiCfgInitCh1(void)
     for (u1_t_loop = (U1)0U; u1_t_loop < (U1)XSPI_METCUS_NUM_TXSIGNAL; u1_t_loop++) {
         u1_sp_xspi_metcus_pretxsig[u1_t_loop] = (U1)0U;
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -433,6 +445,7 @@ void    vd_g_XSpiCfgInitCh1(void)
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 {
+#if 0   /* BEV Rebase provisionally */
     vd_s_XSpiCfgRxEther(&u4_ap_PDU_RX[100]);
 
     vd_s_XSpiCanTx_CANSignal(&u4_ap_PDU_RX[15]);
@@ -536,6 +549,7 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCanTx_POS_REG(&u4_ap_PDU_RX[91]);
     vd_s_XSpiCanTx_FLYNOP(&u4_ap_PDU_RX[47]);
 
+#endif   /* BEV Rebase provisionally */
 }
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -547,6 +561,7 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  static inline void    vd_s_XSpiCfgRxEther(  const U4 * u4_ap_pck_rx)                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -568,6 +583,7 @@ static inline void    vd_s_XSpiCfgRxEther(const U4 * u4_ap_pck_rx)
     vd_g_HmiMM2C124NDataPut(&u4_ap_pck_rx[93]);
 
 }
+#endif   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  U1    u1_g_XSpiEtherComSts(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -575,7 +591,11 @@ static inline void    vd_s_XSpiCfgRxEther(const U4 * u4_ap_pck_rx)
 /*  Return:         u1_s_xspi_ethercomsts                                                                                            */
 /*===================================================================================================================================*/
 U1    u1_g_XSpiEtherComSts(void){
+#if 0   /* BEV Rebase provisionally */
     return(u1_s_xspi_ethercomsts);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1    u1_g_XSpiMm2c100n_rxcnt(void)                                                                                              */
@@ -584,7 +604,11 @@ U1    u1_g_XSpiEtherComSts(void){
 /*  Return:         u1_s_xspi_mm2c100n_rxcnt                                                                                         */
 /*===================================================================================================================================*/
 U1    u1_g_XSpiMm2c100n_rxcnt(void){
+#if 0   /* BEV Rebase provisionally */
     return(u1_s_xspi_mm2c100n_rxcnt);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1    u1_g_XSpiMm2c107n_rxcnt(void)                                                                                              */
@@ -593,7 +617,11 @@ U1    u1_g_XSpiMm2c100n_rxcnt(void){
 /*  Return:         u1_s_xspi_mm2c107n_rxcnt                                                                                         */
 /*===================================================================================================================================*/
 U1    u1_g_XSpiMm2c107n_rxcnt(void){
+#if 0   /* BEV Rebase provisionally */
     return(u1_s_xspi_mm2c107n_rxcnt);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1    u1_g_XSpiMm2c112n_rxcnt(void)                                                                                              */
@@ -602,7 +630,11 @@ U1    u1_g_XSpiMm2c107n_rxcnt(void){
 /*  Return:         u1_s_xspi_mm2c112n_rxcnt                                                                                         */
 /*===================================================================================================================================*/
 U1    u1_g_XSpiMm2c112n_rxcnt(void){
+#if 0   /* BEV Rebase provisionally */
     return(u1_s_xspi_mm2c112n_rxcnt);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1    u1_g_XSpiMm2c118n_rxcnt(void)                                                                                              */
@@ -611,9 +643,14 @@ U1    u1_g_XSpiMm2c112n_rxcnt(void){
 /*  Return:         u1_s_xspi_mm2c118n_rxcnt                                                                                         */
 /*===================================================================================================================================*/
 U1    u1_g_XSpiMm2c118n_rxcnt(void){
+#if 0   /* BEV Rebase provisionally */
     return(u1_s_xspi_mm2c118n_rxcnt);
+#else   /* BEV Rebase provisionally */
+    return(0U);
+#endif   /* BEV Rebase provisionally */
 }
 
+#if 0   /* BEV Rebase provisionally */
 /*===================================================================================================================================*/
 /*  static inline void    vd_s_XSpiCanTx_ASD_CONT(U4 * u4_ap_pdu_tx)                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -3120,6 +3157,7 @@ static inline void    vd_s_XSpiCanTx_FLYNOP(const U4 * u4_ap_pck_rx)
     }
     u1_s_preflynop = u1_t_rxdata;
 }
+#endif   /* BEV Rebase provisionally */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
