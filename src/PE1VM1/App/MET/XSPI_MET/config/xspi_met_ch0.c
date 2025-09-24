@@ -64,9 +64,6 @@
 #include "odo_om_rst_if.h"
 #include "vptran_sel.h"
 #include "locale.h"
-#if 0   /* BEV BSW provisionally */
-#include "fuelvol_tau.h"
-#endif
 #include "vds_ci.h"
 #include "oilmil.h"
 #include "dte_ed.h"
@@ -351,7 +348,6 @@ static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxHybsys(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxFuelvol(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx);
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx); */
@@ -837,36 +833,6 @@ static inline void    vd_s_XSpiCfgTxPwrmet(U4* u4_ap_pdu_tx) {
     u1_t_sts = u1_g_DrvIndPwrPctPwrth(&u2_t_pmpwrth);
     u4_ap_pdu_tx[1] |= (U4)u2_t_pmpwrth & (U4)XSPI_MSK_09BIT;               /* PWRMET_PMPWRTH                              */
     u4_ap_pdu_tx[1] |= ((U4)u1_t_sts << XSPI_PMPWRTH_STS_SHIFT);            /* PWRMET_PMPWRTH_STS                          */
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxFuelvol(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxFuelvol(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U2  u2_t_pct;
-    U1  u1_t_sts;
-    U2  u2_t_lit;
-
-    u2_t_pct         = (U2)0U;
-#if 0   /* BEV BSW provisionally */
-    u1_t_sts         = u1_g_FuelvolTauPctMeZ(&u2_t_pct);
-#else
-    u1_t_sts         = (U1)0U;
-#endif
-    u4_ap_pdu_tx[0] = ((U4)u2_t_pct | ((U4)u1_t_sts << XSPI_STS_SHIFT));   /* FUELVOLPER_STS / FUELVOL_PER                      */
-
-    u2_t_lit         = (U2)0U;
-#if 0   /* BEV BSW provisionally */
-    u1_t_sts         = u1_g_FuelvolTauLitEst((U1)FALSE , &u2_t_lit);
-#else
-    u1_t_sts         = (U1)0U;
-#endif
-    u4_ap_pdu_tx[1] = ( (U4)u2_t_lit | ((U4)u1_t_sts << XSPI_STS_SHIFT) ); /* FUELVOLLIT_STS / FUELVOL_LIT                      */
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -2999,7 +2965,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxVehSpd(        &u4_ap_pdu_tx[ 32]);      /* 032 - 035    : Vehicle Speed                                 */
     vd_s_XSpiCfgTxEngspd(        &u4_ap_pdu_tx[ 36]);      /* 036 - 038    : Engine Speed                                  */
     vd_s_XSpiCfgTxHybsys(        &u4_ap_pdu_tx[ 39]);      /* 039 - 040    : Hybrid System Ind.                            */
-    vd_s_XSpiCfgTxFuelvol(       &u4_ap_pdu_tx[ 41]);      /* 041 - 042    : Fuel Volume                                   */
     vd_s_XSpiCfgTxPtsctmp(       &u4_ap_pdu_tx[ 43]);      /* 043 - 043    : EngineTemp                                    */
     vd_s_XSpiCfgTxAmbtmp(        &u4_ap_pdu_tx[ 44]);      /* 044 - 045    : Ambient Temp                                  */
     /* vd_g_XSpiCfgTxHydrovol(      &u4_ap_pdu_tx[0]); */  /*     -        : Hydro Volume                                  */
