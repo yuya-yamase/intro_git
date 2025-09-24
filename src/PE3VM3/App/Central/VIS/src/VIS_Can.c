@@ -162,7 +162,7 @@ static void vd_s_VISCanGetUtc(void)
     u1_tp_utcdata[VIS_CAN_TRANSREQ_DATA_SEC] = st_s_vis_can_utcdata.u1_second;
     
     /* チップ間通信定期送信要求 */
-    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_UTC, VIS_CAN_TRANSREQ_DATA_LENGTH_6, u1_tp_utcdata);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_UTC, sizeof(u1_tp_utcdata), u1_tp_utcdata);
     
     return;
 }
@@ -224,7 +224,7 @@ static void vd_s_VISCanGetOdo(void)
     u1_tp_ododata[VIS_CAN_TRANSREQ_DATA_ODOPOS4] = (U1)((u4_s_vis_can_ododata & VIS_CAN_4BYTEMASK_4BYTE) >> VIS_CAN_SHIFT_3BYTE);
     
     /* チップ間通信定期送信要求 */
-    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_ODO, VIS_CAN_TRANSREQ_DATA_LENGTH_4, u1_tp_ododata);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_ODO, sizeof(u1_tp_ododata), u1_tp_ododata);
     
     return;
 }
@@ -261,7 +261,7 @@ static void vd_s_VISCanGetTripCnt(void)
     u1_tp_tripcnt[VIS_CAN_TRANSREQ_DATA_SYNC] = u1_s_vis_can_sync;
     
     /* チップ間通信定期送信要求 */
-    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_TRIP, VIS_CAN_TRANSREQ_DATA_LENGTH_3, u1_tp_tripcnt);
+    (void)ChipCom_SetPeriodicTxData((U1)CHIPCOM_PERIODICID_VIS_TRIP, sizeof(u1_tp_tripcnt), u1_tp_tripcnt);
     
     return;
 }

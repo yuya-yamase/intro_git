@@ -96,9 +96,6 @@
 #define VIS_CAN_TRANSREQ_DATA_TRIPNUM           ((U1)3U)            /* チップ間通信：TRIPカウンタ情報要素数 */
 #define VIS_CAN_TRANSREQ_DATA_LENGTH_1          ((U2)1U)            /* チップ間通信：データ長(1byte) */
 #define VIS_CAN_TRANSREQ_DATA_LENGTH_2          ((U2)2U)            /* チップ間通信：データ長(2byte) */
-#define VIS_CAN_TRANSREQ_DATA_LENGTH_3          ((U2)3U)            /* チップ間通信：データ長(3byte) */
-#define VIS_CAN_TRANSREQ_DATA_LENGTH_4          ((U2)4U)            /* チップ間通信：データ長(4byte) */
-#define VIS_CAN_TRANSREQ_DATA_LENGTH_6          ((U2)6U)            /* チップ間通信：データ長(6byte) */
 #define VIS_CAN_TRANSREQ_DATA_LENGTH_18         ((U2)18U)           /* チップ間通信：データ長(18byte) */
 #define VIS_CAN_SHIFT_1BYTE                     ((U4)8U)            /* ビットシフト：1BYTE */
 #define VIS_CAN_SHIFT_2BYTE                     ((U4)16U)           /* ビットシフト：2BYTE */
