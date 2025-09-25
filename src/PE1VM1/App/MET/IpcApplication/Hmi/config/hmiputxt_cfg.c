@@ -248,36 +248,12 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slote_req[u4_t_loop];
     }
 
-    /*  LoFuel  */
-    u1_t_sts = u1_g_FuelvolTauLwAct();
-    if(u1_t_sts == (U1)TRUE){
-        u2_t_blkpos             = (U2)HMIPUTXT_FUEL_IDX >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos             = (U2)HMIPUTXT_FUEL_IDX &  (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-
     /* IceWrn */
     u1_t_icewrn = u1_g_AmbtmpIcyraWrnAct();
     if(u1_t_icewrn == (U1)TRUE){
         u2_t_blkpos             = (U2)HMIPUTXT_ICEWRN_IDX >> HMIPUTXT_IDX_SFT;
         u2_t_bitpos             = (U2)HMIPUTXT_ICEWRN_IDX &  (U2)HMIPUTXT_REM_MSK;
         u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-
-    /* Oilmil */
-    u1_t_oilrststs = u1_g_OilmilGetRstSts();
-    if(u1_t_oilrststs == (U1)OILMIL_RSTSTS_COMP) {
-        u2_t_blkpos = (U2)HMIPUTXT_OILMILRST_OK >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos = (U2)HMIPUTXT_OILMILRST_OK & (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-    else if (u1_t_oilrststs == (U1)OILMIL_RSTSTS_FAIL) {
-        u2_t_blkpos = (U2)HMIPUTXT_OILMILRST_NG >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos = (U2)HMIPUTXT_OILMILRST_NG & (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-    else {
-        /* Do Nothing */
     }
 
     /* Timchg */

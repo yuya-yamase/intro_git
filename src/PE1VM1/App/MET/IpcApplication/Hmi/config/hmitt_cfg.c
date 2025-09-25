@@ -23,8 +23,6 @@
 #include "thblnkr.h"
 #include "ambtmp.h"
 #include "sbltsync.h"
-#include "mcst.h"
-#include "fuelvol_tau.h"
 
 #include "vardef.h"
 #include "vardef_ds2e.h"
@@ -168,7 +166,6 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     U1  u1_t_icewrn;
     U1  u1_t_rearbelt_tt;
     U1  u1_t_placon;
-    U1  u1_t_lowfuel;
     U1  u1_t_ecbepbtt;
     U1  u1_t_pkbtt;
 
@@ -212,11 +209,8 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     }
 
     u1_t_placon  = u1_g_AlertReqByCh((U2)ALERT_CH_P_PLACON);
-    u1_t_lowfuel =  u1_g_FuelvolTauLwAct();
     if(u1_t_placon == (U1)ALERT_REQ_P_PLACON_FLASH){
         u4_ap_req[HMITT_LOWFUEL_DATPOS] |= u4_HMITT_HB6(HMITT_BLINK_CO_4P00HZ__50P_PLACON);
-    }else if (u1_t_lowfuel == (U1)TRUE){
-        u4_ap_req[HMITT_LOWFUEL_DATPOS] |= u4_HMITT_HB6(HMITT_BLINK_CO_ON_____100P);
     }else {
         /* Do Nothing */
     }

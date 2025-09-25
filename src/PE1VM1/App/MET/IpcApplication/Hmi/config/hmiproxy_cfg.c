@@ -18,31 +18,16 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
 
-#include "hmimm2c100n.h"
-#include "hmimm2c107n.h"
-#include "hmimm2c112n.h"
-#include "hmimm2c118n.h"
-#include "hmimm2c124n.h"
-#include "hmivardef.h"
-#include "hmidiag.h"
-#include "hmigateway.h"
 #include "hmihud.h"
 #include "hmilocale.h"
 #include "hmimaint.h"
-#include "hmioilmaint.h"
 #include "hmiodo.h"
-#include "hmirim.h"
 #include "hmiputxt.h"
 #include "hmitt.h"
 #include "hmiwchime.h"
 #include "hmitripcom.h"
-#include "hmiclock.h"
-#include "hmimcst.h"
-#include "hmifuel.h"
 #include "hmiscreen.h"
-#include "hmidate.h"
 #include "hmiadu.h"
-#include "hmitdoor.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -78,87 +63,42 @@
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void ( * const              fp_gp_vd_HMIPROXY_BON_INIT[HMIPROXY_INIT_NUM])(void) = {
-     &vd_g_HmiMM2C100NInit,
-     &vd_g_HmiMM2C107NInit,
-     &vd_g_HmiMM2C112NInit,
-     &vd_g_HmiMM2C118NInit,
-     &vd_g_HmiMM2C124NInit,
-     &vd_g_HmiVardefInit,
-     &vd_g_HmiDiagInit,
-     &vd_g_HmiGatewayInit,
      &vd_g_HmiHudInit,
      &vd_g_HmiLocaleInit,
      &vd_g_HmiMaintInit,
-     &vd_g_HmiOilmaintInit,
      &vd_g_HmiOdoInit,
-     &vd_g_HmiRimBonInit,
      &vd_g_HmiPuTxtInit,
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiClockInit,
-     &vd_g_HmiMcstInit,
-     &vd_g_HmiFuelInit,
      &vd_g_HmiScreenInit,
-     &vd_g_HmiDateInit,
-     &vd_g_HmiAduInit,
-     &vd_g_HmiTdoorBonRstInit
+     &vd_g_HmiAduInit
 };
 
 void ( * const              fp_gp_vd_HMIPROXY_RST_INIT[HMIPROXY_INIT_NUM])(void) = {
-     &vd_g_HmiMM2C100NInit,
-     &vd_g_HmiMM2C107NInit,
-     &vd_g_HmiMM2C112NInit,
-     &vd_g_HmiMM2C118NInit,
-     &vd_g_HmiMM2C124NInit,
-     &vd_g_HmiVardefInit,
-     &vd_g_HmiDiagInit,
-     &vd_g_HmiGatewayInit,
      &vd_g_HmiHudInit,
      &vd_g_HmiLocaleInit,
      &vd_g_HmiMaintInit,
-     &vd_g_HmiOilmaintInit,
      &vd_g_HmiOdoInit,
-     &vd_g_HmiRimRstWkupInit,
      &vd_g_HmiPuTxtInit,
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiClockInit,
-     &vd_g_HmiMcstInit,
-     &vd_g_HmiFuelInit,
      &vd_g_HmiScreenInit,
-     &vd_g_HmiDateInit,
-     &vd_g_HmiAduInit,
-     &vd_g_HmiTdoorBonRstInit
+     &vd_g_HmiAduInit
 };
 
 void ( * const              fp_gp_vd_HMIPROXY_WKUP_INIT[HMIPROXY_INIT_NUM])(void) = {
-     &vd_g_HmiMM2C100NInit,
-     &vd_g_HmiMM2C107NInit,
-     &vd_g_HmiMM2C112NInit,
-     &vd_g_HmiMM2C118NInit,
-     &vd_g_HmiMM2C124NInit,
-     &vd_g_HmiVardefInit,
-     &vd_g_HmiDiagInit,
-     &vd_g_HmiGatewayInit,
      &vd_g_HmiHudInit,
      &vd_g_HmiLocaleInit,
      &vd_g_HmiMaintInit,
-     &vd_g_HmiOilmaintInit,
      &vd_g_HmiOdoInit,
-     &vd_g_HmiRimRstWkupInit,
      &vd_g_HmiPuTxtInit,
      &vd_g_HmiTtInit,
      &vd_g_HmiWchimeInit,
      &vd_g_HmiTripcomInit,
-     &vd_g_HmiClockInit,
-     &vd_g_HmiMcstInit,
-     &vd_g_HmiFuelInit,
      &vd_g_HmiScreenInit,
-     &vd_g_HmiDateInit,
-     &vd_g_HmiAduInit,
-     &vd_g_HmiTdoorWkupInit
+     &vd_g_HmiAduInit
 };
 
 U1   ( * const              fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(void) = {
@@ -166,31 +106,16 @@ U1   ( * const              fp_gp_u1_HMIPROXY_SHTDWN_CHK[HMIPROXY_SHTDWN_NUM])(v
 };
 
 const ST_HMIPROXY     st_gp_HMIPROXY[HMIPROXY_MAINTASK_NUM] = {
-     {&vd_g_HmiMM2C100NMainTask, (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiMM2C107NMainTask, (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiMM2C112NMainTask, (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiMM2C118NMainTask, (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiMM2C124NMainTask, (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiVardefMainTask,   (U4)SCHDLR_TASKBIT__20MS_B  },
-     {&vd_g_HmiDiagMainTask ,    (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiGatewayMainTask , (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiHudMainTask ,     (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiLocaleMainTask,   (U4)SCHDLR_TASKBIT__20MS_B  },
      {&vd_g_HmiMaintMainTask,    (U4)SCHDLR_TASKBIT__50MS_C  },
      {&vd_g_HmiOdoMainTask,      (U4)SCHDLR_TASKBIT__50MS_C  },
-     {&vd_g_HmiOilmaintMainTask, (U4)SCHDLR_TASKBIT__20MS_B  },
-     {&vd_g_HmiRimMainTask,      (U4)SCHDLR_TASKBIT__50MS_E  },
      {&vd_g_HmiPuTxtMainTask,    (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiTtMainTask,       (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiWchimeMainTask,   (U4)SCHDLR_TASKBIT__10MS_A  },
      {&vd_g_HmiTripcomMainTask,  (U4)SCHDLR_TASKBIT__50MS_E  },
-     {&vd_g_HmiClockMainTask,    (U4)SCHDLR_TASKBIT__20MS_A  },
-     {&vd_g_HmiMcstMainTask,     (U4)SCHDLR_TASKBIT__20MS_B  },
-     {&vd_g_HmiFuelMainTask,     (U4)SCHDLR_TASKBIT_100MS_E  },
      {&vd_g_HmiScreenMainTask,   (U4)SCHDLR_TASKBIT__50MS_A  },
-     {&vd_g_HmiDateMainTask,     (U4)SCHDLR_TASKBIT__20MS_A  },
      {&vd_g_HmiAduMainTask,      (U4)SCHDLR_TASKBIT__10MS_A  },
-     {&vd_g_HmiTdoorMainTask,    (U4)SCHDLR_TASKBIT__10MS_A  },
      {vdp_PTR_NA,                (U4)SCHDLR_TASKBIT_RGLR     }   /* <- Terminator. Do Not Delete! */
 };
 

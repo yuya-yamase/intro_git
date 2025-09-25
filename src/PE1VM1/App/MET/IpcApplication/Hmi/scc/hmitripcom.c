@@ -54,10 +54,7 @@ static U2   u2_s_hmitripcom_rstbit;
 static U2   u2_s_hmitripcom_grphrst;
 static U2   u2_s_hmitripcom_to;
 
-static U1   u1_s_hmitripcom_fe_usrrst;
-static U1   u1_s_hmitripcom_fe_1min_hst;
 static U1   u1_s_hmitripcom_ee_1min_hst;
-static U1   u1_s_hmitripcom_fe_rst_hst;
 static U1   u1_s_hmitripcom_ee_rst_hst;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -82,10 +79,7 @@ void    vd_g_HmiTripcomInit(void)
     u2_s_hmitripcom_rstbit      = (U2)0U;
     u2_s_hmitripcom_grphrst     = (U2)0U;
     u2_s_hmitripcom_to          = (U2)HMIPROXY_TOC_MAX;
-    u1_s_hmitripcom_fe_usrrst   = (U1)HMITRIPCOM_CNTREQ_INACT;
-    u1_s_hmitripcom_fe_1min_hst = (U1)HMITRIPCOM_CNTREQ_INACT;
     u1_s_hmitripcom_ee_1min_hst = (U1)HMITRIPCOM_CNTREQ_INACT;
-    u1_s_hmitripcom_fe_rst_hst  = (U1)HMITRIPCOM_CNTREQ_INACT;
     u1_s_hmitripcom_ee_rst_hst  = (U1)HMITRIPCOM_CNTREQ_INACT;
 }
 
@@ -122,21 +116,8 @@ void  vd_g_HmiTripcomPut(const ST_HMITRIPCOM * stp_a_HMITRIPCOM)
     if(stp_a_HMITRIPCOM->u2_avg_vehspd_kmph_ta == (U2)0U){
         u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGVEHSPD_TA;          /*  AVG_SPD_KMPH_USRRST                 */
     }
-    if(stp_a_HMITRIPCOM->u4_avg_fe_kmpl_ta == (U4)0U){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_TA;            /*  AVG_FE_KMPL_USRRST                  */
-        if(u1_s_hmitripcom_fe_usrrst == (U1)HMITRIPCOM_CNTREQ_INACT){
-            vd_s_HmiTripcomSWCount((U2)RIMID_U2_DS_22_10B2_AVG_FE_KMPL_USRRST);
-        }
-        u1_s_hmitripcom_fe_usrrst = (U1)HMITRIPCOM_CNTREQ_ACT;
-    }
-    else{
-        u1_s_hmitripcom_fe_usrrst = (U1)HMITRIPCOM_CNTREQ_INACT;
-    }
     if(stp_a_HMITRIPCOM->u4_avg_ee_kmpl_ta == (U4)0U){
         u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGEE_TA;              /*  AVG_EE_KMPL_USRRST                  */
-    }
-    if(stp_a_HMITRIPCOM->u4_avg_he_kmpkg_ta == (U4)0U){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_TA;            /*  AVG_HE_KMPL_USRRST                  */
     }
     if(stp_a_HMITRIPCOM->u4_ptsrun_dist_km_lc == (U4)0U){
         u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_PTSRUNDIST_LC;         /*  DIST_KM_USRRST                      */
@@ -196,18 +177,6 @@ void  vd_g_HmiTripcomGrphPut(const U4 * const u4_ap_GRPHRST)
         u4_t_grphrst = (U4)0U;
     }
 
-    u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
-    if(u1_t_req == (U1)TRUE){
-        u2_s_hmitripcom_grphrst |= (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_ONEM;         /*  AVG_FE_KMPL_1MIN_HIST_CLR           */
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_ONEM;          /*  AVG_FE_KMPL_1NIN_CLR                */
-        if(u1_s_hmitripcom_fe_1min_hst == (U1)HMITRIPCOM_CNTREQ_INACT){
-            vd_s_HmiTripcomSWCount((U2)RIMID_U2_DS_22_10B2_FE_1MIN_HIST_CLR);
-        }
-        u1_s_hmitripcom_fe_1min_hst = (U1)HMITRIPCOM_CNTREQ_ACT;
-    }
-    else{
-        u1_s_hmitripcom_fe_1min_hst = (U1)HMITRIPCOM_CNTREQ_INACT;
-    }
     u4_t_grphrst >>= HMITRIPCOM_GRPHRSTREQ_LSB;
     u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
     if(u1_t_req == (U1)TRUE){
@@ -222,17 +191,6 @@ void  vd_g_HmiTripcomGrphPut(const U4 * const u4_ap_GRPHRST)
         u1_s_hmitripcom_ee_1min_hst = (U1)HMITRIPCOM_CNTREQ_INACT;
     }
     u4_t_grphrst >>= HMITRIPCOM_GRPHRSTREQ_LSB;
-    u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
-    if(u1_t_req == (U1)TRUE){
-        u2_s_hmitripcom_grphrst |= (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_TA;           /*  AVG_FE_KMPL_USRRST_HIST_CLR         */
-        if(u1_s_hmitripcom_fe_rst_hst == (U1)HMITRIPCOM_CNTREQ_INACT){
-            vd_s_HmiTripcomSWCount((U2)RIMID_U2_DS_22_10B2_FE_USRRST_HIST_CLR);
-        }
-        u1_s_hmitripcom_fe_rst_hst = (U1)HMITRIPCOM_CNTREQ_ACT;
-    }
-    else{
-        u1_s_hmitripcom_fe_rst_hst = (U1)HMITRIPCOM_CNTREQ_INACT;
-    }
     u4_t_grphrst >>= HMITRIPCOM_GRPHRSTREQ_LSB;
     u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
     if(u1_t_req == (U1)TRUE){
@@ -246,10 +204,6 @@ void  vd_g_HmiTripcomGrphPut(const U4 * const u4_ap_GRPHRST)
         u1_s_hmitripcom_ee_rst_hst = (U1)HMITRIPCOM_CNTREQ_INACT;
     }
     u4_t_grphrst >>= HMITRIPCOM_GRPHRSTREQ_LSB;
-    u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
-    if(u1_t_req == (U1)TRUE){
-        u2_s_hmitripcom_rstbit |= (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_TA;            /*  AVG_FE_KMPL_USRRST_HIST_UPDT        */
-    }
     u4_t_grphrst >>= HMITRIPCOM_GRPHRSTREQ_LSB;
     u1_t_req = (U1)(u4_t_grphrst & (U4)HMITRIPCOM_GRPHRSTREQ_BIT);
     if(u1_t_req == (U1)TRUE){
