@@ -35,6 +35,7 @@ primaryTarget=v800_standalone.tgt
 
     -DECU_HOST
     -D__RELEASE_BUILD__
+    -D__AIP_THROUGHPUT__=$FLAG_THROUGHPUT
     -o host.elf
 
     -T ${MCAL_SECTION_DIR}/memory_map_HOST.ld

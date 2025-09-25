@@ -2,7 +2,7 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Renesas RH850/F1KM : Timer Array Unit D                                                                                          */
+/*  Renesas RH850/U2A : Timer Array Unit D                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -32,6 +32,17 @@
 #define GPT_D16_MDCTRL_CLKSRC_1                  (0x00004000U)
 #define GPT_D16_MDCTRL_CLKSRC_2                  (0x00008000U)
 #define GPT_D16_MDCTRL_CLKSRC_3                  (0x0000c000U)
+
+/**********************/
+/* PIC Configuration  */
+/**********************/
+#define GPT_PIC1_UNIT_SELF                       (0U)
+#define GPT_PIC1_UNIT_OTHER                      (0x00000002U)
+
+#define GPT_PIC1_CH_SELF                         (0U)
+#define GPT_PIC1_CH_OTHER                        (0x00000001U)
+
+#define GPT_PIC1_TAUD(Group, Channel)            ((Group) + (Channel))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -81,6 +92,7 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 extern const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[];
 extern const U1                 u1_g_GPT_D16_NUM_UNIT;
+extern const U4                 u4_g_GPT_CFG_PIC1_TAUDSEL[];
 
 #endif      /* GPT_DRV_D16_CFG_H */
 

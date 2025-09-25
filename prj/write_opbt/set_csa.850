@@ -4,10 +4,10 @@
 ------------------------------------------------------------------------------
 	.section "CSA_SECTION", const
 	.align	4
-	.dw	0x00020000			-- Reset Vector (PE0)         Shipping : 0x00000000 [Modified]
-	.dw	0x00020000			-- Reset Vector (PE1)         Shipping : 0x00000000 [Modified]
-	.dw	0x00020000			-- Reset Vector (PE2)         Shipping : 0x00800000 [Modified]
-	.dw	0x00020000			-- Reset Vector (PE3)         Shipping : 0x00800000 [Modified]
+	.dw	0x003C0000			-- Reset Vector (PE0)         Shipping : 0x00000000 [Modified]
+	.dw	0x003C0000			-- Reset Vector (PE1)         Shipping : 0x00000000 [Modified]
+	.dw	0x003C0000			-- Reset Vector (PE2)         Shipping : 0x00800000 [Modified]
+	.dw	0x003C0000			-- Reset Vector (PE3)         Shipping : 0x00800000 [Modified]
 	.dw	0xFFFFFFFF			-- Reserved                   Shipping : 0xFFFFFFFF
 	.dw	0xFFFFFFFF			-- Reserved                   Shipping : 0xFFFFFFFF
 	.dw	0xFFFFFFFF			-- Reserved                   Shipping : 0xFFFFFFFF
@@ -36,4 +36,15 @@
 	.dw	0x000000CC			-- Option byte 21 (OPBT21)    Shipping : 0x000000CC
 	.dw	0xC000C000			-- Option byte 22 (OPBT22)    Shipping : 0xC000C000
 	.dw	0xFFFFC000			-- Option byte 23 (OPBT23)    Shipping : 0xFFFFC000
+
+------------------------------------------------------------------------------
+--	set Security Setting Area (Option Bytes)
+------------------------------------------------------------------------------
+	.section "CSA_SEC_SECTION", const
+	.align	4
+	.dw	0x0FFFFFFF			-- ICUM_OPBT0                 Shipping : 0xFFFFFFFF
+	.dw	0x007D4000			-- ICUM_OPBT1                 Shipping : 0xFFFFFFFF
+	.dw	0x007D0000			-- ICUM_OPBT2                 Shipping : 0xFFFFFFFF
+	.dw	0xFF280000			-- ICUM_OPBT3                 Shipping : 0xFFFFFFFF
+	.dw	0xFFFD7FC6			-- ICUM_OPBT4                 Shipping : 0xFFFFFFFF
 

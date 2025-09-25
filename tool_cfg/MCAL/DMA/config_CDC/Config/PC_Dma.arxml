@@ -194,6 +194,28 @@
                     </ECUC-TEXTUAL-PARAM-VALUE>
                   </PARAMETER-VALUES>
                 </ECUC-CONTAINER-VALUE>
+                <ECUC-CONTAINER-VALUE>
+                  <SHORT-NAME>NewDmaChannelConfiguration6</SHORT-NAME>
+                  <DEFINITION-REF DEST="ECUC-PARAM-CONF-CONTAINER-DEF">/Dma/Dma/DmaChannelConfigSet/DmaChannelConfiguration</DEFINITION-REF>
+                  <PARAMETER-VALUES>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Dma/Dma/DmaChannelConfigSet/DmaChannelConfiguration/DmaType</DEFINITION-REF>
+                      <VALUE>DMA_DMAC0</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-STRING-PARAM-DEF">/Dma/Dma/DmaChannelConfigSet/DmaChannelConfiguration/DmaReq</DEFINITION-REF>
+                      <VALUE>PIL_DMAC_GR0_INTRLIN311UR1</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Dma/Dma/DmaChannelConfigSet/DmaChannelConfiguration/DmaHwch</DEFINITION-REF>
+                      <VALUE>PIL_DMAC_CH10</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                    <ECUC-TEXTUAL-PARAM-VALUE>
+                      <DEFINITION-REF DEST="ECUC-ENUMERATION-PARAM-DEF">/Dma/Dma/DmaChannelConfigSet/DmaChannelConfiguration/DmaPrilevel</DEFINITION-REF>
+                      <VALUE>DMA_PRIORITY_NOUSE</VALUE>
+                    </ECUC-TEXTUAL-PARAM-VALUE>
+                  </PARAMETER-VALUES>
+                </ECUC-CONTAINER-VALUE>
               </SUB-CONTAINERS>
             </ECUC-CONTAINER-VALUE>
           </CONTAINERS>

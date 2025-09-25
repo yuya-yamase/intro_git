@@ -90,7 +90,7 @@ void    vd_g_iVDshFqIfWriCh(const U2 u2_a_FQ_CH, const U4 * const u4_ap_WRI, con
 /*===================================================================================================================================*/
 U1      u1_g_iVDshFqIfReaCh(const U2 u2_a_FQ_CH, U4 * const u4_ap_rea, const U2 u2_a_NWORD)
 {
-    static const U1     u1_s_IVDSH_FQIF_DEQ_MAX = (U1)2U;
+    static const U1     u1_s_IVDSH_FQIF_DEQ_MAX = (U1)5U;
 
     U4                  u4_t_lpcnt;
     U4                  u4_t_nb_rea;
@@ -118,7 +118,7 @@ U1      u1_g_iVDshFqIfReaCh(const U2 u2_a_FQ_CH, U4 * const u4_ap_rea, const U2 
             }
         }
         else if(u1_t_eas_chk == E_EHVM_RECEIVE_OVERWRITE_OCCURS){
-            /* do nothing */
+            u1_t_ok = (U1)FALSE;
         }
         else{
             break;

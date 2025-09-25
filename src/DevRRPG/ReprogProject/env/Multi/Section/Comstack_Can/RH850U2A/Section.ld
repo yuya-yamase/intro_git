@@ -9,8 +9,8 @@
 
 MEMORY
 {
-	CODEFLASH_1			: ORIGIN = 0x00000000, LENGTH = 4M		/* Code flash(User Area 0)(Bank A) */
-	CODEFLASH_1_END		: ORIGIN = 0x003FFFFF, LENGTH = 0K
+	CODEFLASH_1			: ORIGIN = 0x00000000, LENGTH = 112K	/* Code flash(User Area 0)(Bank A) */	/* 250908 changed by EPSW */
+	CODEFLASH_1_END		: ORIGIN = 0x0001BFFF, LENGTH = 0K												/* 250908 changed by EPSW */
 
 	CODEFLASH_2			: ORIGIN = 0x08000000, LENGTH = 64K		/* Code flash(User Boot Area 0)(Bank A) */
 	CODEFLASH_2_END		: ORIGIN = 0x0800FFFF, LENGTH = 0K
@@ -34,7 +34,7 @@ DEFAULTS
 	rpg_rom_ext_2_addr	= 0x00008000;
 	rpg_rom_ext_2_size	= 0x00004000;
 	rpg_rom_2_addr		= 0x0000C000;
-	rpg_rom_2_size		= 0x00014000;
+	rpg_rom_2_size		= 0x00010000;  /* 250908 changed by EPSW */
 	rpg_rom_3_addr		= 0x08000000;
 	rpg_rom_3_size		= 0x00010000;
 

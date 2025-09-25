@@ -1,0 +1,11 @@
+#!gbuild
+[Subproject]
+    :optionsFile=${CMN_DIR}/IOHW.opt
+
+    -I${LIB_DIR}
+
+${IOHW_ADC_SCC_DIR}/iohw_adc_sh.c
+${IOHW_ADC_CFG_DIR}/iohw_adc_sh_cfg.c
+${IOHW_DIFIL_SCC_DIR}/iohw_diflt.c
+${IOHW_DIFIL_CFG_DIR}/iohw_diflt_cfg.c
+

@@ -37,7 +37,7 @@
 #define DCM_D_SERVICETABLE_NUM              (6U)
 
 /* NUM of all services  */
-#define DCM_D_SERVICE_NUM                   (10U)
+#define DCM_D_SERVICE_NUM                   (11U)
 
 /* Supported OBD System */
 #define DCM_DSD_OBDSYS_ON_UDS               ((uint8)0x01U)

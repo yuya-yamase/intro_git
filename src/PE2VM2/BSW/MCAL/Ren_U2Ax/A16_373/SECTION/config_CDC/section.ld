@@ -9,6 +9,9 @@ SECTIONS {
 
 // -- ROM -------------------
 // TopAddress
+// PE2VM2/IVI Consts
+    .IVI_PARAMETER_CONST    align(4)                        : > rom_memory_const  // PE2VM2/IVI Consts Repro. Logical Block RH850-2
+
 // Vector
     .vectortable_fe0                                        : > vector_core     // OS起動前ベクタ領域(FE用)トップ
 
@@ -121,6 +124,7 @@ SECTIONS {
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
+// Keyword address info(shared)
     .rodata_SHARE_ROM_RIM_KEYWORD0 SHARE_ROM_VM2_RIM_KEYWORD0      ABS    : > rom_memory_share
     .rodata_SHARE_ROM_RIM_KEYWORD1 SHARE_ROM_VM2_RIM_KEYWORD1      ABS    : > .
     .rodata_SHARE_ROM_RIM_KEYWORD2 SHARE_ROM_VM2_RIM_KEYWORD2      ABS    : > .
@@ -221,14 +225,10 @@ SECTIONS {
     .cluster2_share_ramtop                                   : > ram_memory_cluster2_share
 
 //1byte
-    .bss_SHARE_IOHW_ADC_LV_RD   SHARE_IOHW_ADC_LV_RD_ADDR   ABS    : > .
 //2byte
 //4byte
     .bss_SHARE_PORT_CONF        SHARE_PORT_CONF_ADDR        ABS    : > .
-    .bss_SHARE_VEH_OPEMD_MDBIT  SHARE_VEH_OPEMD_MDBIT_ADDR  ABS    : > .
 //struct
-    .bss_SHARE_IOHW_ADC_LV      SHARE_IOHW_ADC_LV_ADDR      ABS    : > .
-    .bss_SHARE_IOHW_DIFLT_FLTRD SHARE_IOHW_DIFLT_FLTRD_ADDR ABS    : > .
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .

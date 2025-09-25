@@ -51,6 +51,38 @@
 #define COM_IPDUGROUP_USER27            (BSW_COM_IPDUGROUP_USER27)
 #define COM_IPDUGROUP_USER28            (BSW_COM_IPDUGROUP_USER28)
 #define COM_IPDUGROUP_USER29            (BSW_COM_IPDUGROUP_USER29)
+#define COM_IPDUGROUP_USER30            (BSW_COM_IPDUGROUP_USER30)
+#define COM_IPDUGROUP_USER31            (BSW_COM_IPDUGROUP_USER31)
+#define COM_IPDUGROUP_USER32            (BSW_COM_IPDUGROUP_USER32)
+#define COM_IPDUGROUP_USER33            (BSW_COM_IPDUGROUP_USER33)
+#define COM_IPDUGROUP_USER34            (BSW_COM_IPDUGROUP_USER34)
+#define COM_IPDUGROUP_USER35            (BSW_COM_IPDUGROUP_USER35)
+#define COM_IPDUGROUP_USER36            (BSW_COM_IPDUGROUP_USER36)
+#define COM_IPDUGROUP_USER37            (BSW_COM_IPDUGROUP_USER37)
+#define COM_IPDUGROUP_USER38            (BSW_COM_IPDUGROUP_USER38)
+#define COM_IPDUGROUP_USER39            (BSW_COM_IPDUGROUP_USER39)
+#define COM_IPDUGROUP_USER40            (BSW_COM_IPDUGROUP_USER40)
+#define COM_IPDUGROUP_USER41            (BSW_COM_IPDUGROUP_USER41)
+#define COM_IPDUGROUP_USER42            (BSW_COM_IPDUGROUP_USER42)
+#define COM_IPDUGROUP_USER43            (BSW_COM_IPDUGROUP_USER43)
+#define COM_IPDUGROUP_USER44            (BSW_COM_IPDUGROUP_USER44)
+#define COM_IPDUGROUP_USER45            (BSW_COM_IPDUGROUP_USER45)
+#define COM_IPDUGROUP_USER46            (BSW_COM_IPDUGROUP_USER46)
+#define COM_IPDUGROUP_USER47            (BSW_COM_IPDUGROUP_USER47)
+#define COM_IPDUGROUP_USER48            (BSW_COM_IPDUGROUP_USER48)
+#define COM_IPDUGROUP_USER49            (BSW_COM_IPDUGROUP_USER49)
+#define COM_IPDUGROUP_USER50            (BSW_COM_IPDUGROUP_USER50)
+#define COM_IPDUGROUP_USER51            (BSW_COM_IPDUGROUP_USER51)
+#define COM_IPDUGROUP_USER52            (BSW_COM_IPDUGROUP_USER52)
+#define COM_IPDUGROUP_USER53            (BSW_COM_IPDUGROUP_USER53)
+#define COM_IPDUGROUP_USER54            (BSW_COM_IPDUGROUP_USER54)
+#define COM_IPDUGROUP_USER55            (BSW_COM_IPDUGROUP_USER55)
+#define COM_IPDUGROUP_USER56            (BSW_COM_IPDUGROUP_USER56)
+#define COM_IPDUGROUP_USER57            (BSW_COM_IPDUGROUP_USER57)
+#define COM_IPDUGROUP_USER58            (BSW_COM_IPDUGROUP_USER58)
+#define COM_IPDUGROUP_USER59            (BSW_COM_IPDUGROUP_USER59)
+#define COM_IPDUGROUP_USER60            (BSW_COM_IPDUGROUP_USER60)
+#define COM_IPDUGROUP_USER61            (BSW_COM_IPDUGROUP_USER61)
 
 /* Periodic Tx Reset Reason */
 #define COM_RSTR_BUSWAKEUP              (BSW_COM_RSTR_BUSWAKEUP)
@@ -97,7 +129,7 @@
 /*  v2-0-0          :2021/06/24                                             */
 /*  v2-1-0          :2022/05/16                                             */
 /*  v2-2-0          :2022/05/23                                             */
-/*  v3-0-0          :2024/09/19                                             */
+/*  v3-0-0          :2025/03/12                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

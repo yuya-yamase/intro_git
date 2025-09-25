@@ -81,7 +81,7 @@ FUNC(void, BSWM_CS_CODE) bsw_bswm_cs_st_MainFunctionMid(void);
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

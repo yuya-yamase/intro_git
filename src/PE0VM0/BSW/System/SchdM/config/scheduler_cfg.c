@@ -42,9 +42,9 @@
 
 #include "rim_ctl.h"
 #include "run_m.h"
-/* #include "nvmc_mgr.h" */
 #include "oxcan.h"
 #include "oxdocan.h"
+#include "oxsec.h"
 #include "ivdsh.h"
 
 #include "gpt_drv_ost.h"
@@ -81,7 +81,6 @@
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void    vd_s_SchdlrCfgIdleChkptRchd(void);
-static void    vd_s_SchdlrCfgIoRefresh(void);
 static void    vd_s_SchdlrCfgWdgTimRestart(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -130,11 +129,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_s_SchdlrCfgWdgTimRestart,      (U4)SCHDLR_TASKBIT__10MS_A  },
 
-//    {&vd_g_XpdiMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
-//    {&vd_g_EsmMStkmMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
-
     {&vd_g_IoHwAdcMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
-//    {&vd_g_FFLvCaptMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_IoHwDifltMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
@@ -143,11 +138,10 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_iVDshMainReaTask,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXSECMainPreMid,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPreTask,            (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_VehopemdMainTask,            (U4)SCHDLR_TASKBIT___5MS    }, /* In case of toyota product, vd_g_VehopemdMainTask shall be    */
                                                                        /* called after vd_g_IoHwDifltSmplgTask                         */ 
-//    {&vd_g_Nvmc_Task,                   (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_oXDoCANMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -160,14 +154,15 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  20ms B Task                                                      */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-//    {&vd_g_Nvmc_PeriodicTask,           (U4)SCHDLR_TASKBIT__20MS_B  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*   5ms Platform Post Task                                          */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
+    {&vd_g_oXDoCANMainTask,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXSECMainPosMid,             (U4)SCHDLR_TASKBIT___5MS    },
     {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
@@ -176,7 +171,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_Rim_Task,                    (U4)SCHDLR_TASKBIT__10MS_A  },
-    {&vd_s_SchdlrCfgIoRefresh,          (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
@@ -259,15 +253,6 @@ void    vd_g_SchdlrCfgIdleToRun(void)
     /* and launching the initial task.                                              */
     /*------------------------------------------------------------------------------*/
     vd_g_Gpt_OstStart((U1)GPT_OST_CH_05_SCHDLR_TICK, &u4_sp_SCHDLR_OST_START[0]);
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_SchdlrCfgIoRefresh(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void    vd_s_SchdlrCfgIoRefresh(void)
-{
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_SchdlrCfgIdleChkptRchd(void)                                                                                 */

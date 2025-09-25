@@ -26,6 +26,8 @@ extern  U4 __ghsbegin_bss_BACK_KEYWORD2;
 const U4 u4_g_RIM_KEYWORD0_ADD  __attribute__((section(".rodata_SHARE_ROM_RIM_KEYWORD0"))) = (U4)(&__ghsbegin_bss_BACK_KEYWORD0);
 const U4 u4_g_RIM_KEYWORD1_ADD  __attribute__((section(".rodata_SHARE_ROM_RIM_KEYWORD1"))) = (U4)(&__ghsbegin_bss_BACK_KEYWORD1);
 const U4 u4_g_RIM_KEYWORD2_ADD  __attribute__((section(".rodata_SHARE_ROM_RIM_KEYWORD2"))) = (U4)(&__ghsbegin_bss_BACK_KEYWORD2);
+
+const U4 u4_g_FIXEDDATA_DUMMY_CONST  __attribute__((section(".FIXEDDATA_DUMMY_CONST"))) = (U4)0xFFFFFFFFU;
 /*----------------------------------------------------------------------------
  *      プロトタイプ宣言
  *--------------------------------------------------------------------------*/

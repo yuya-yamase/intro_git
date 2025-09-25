@@ -27,11 +27,11 @@
 #define OXDC_FUNC_ROUT_STOP                      (0U)
 #define OXDC_MAIN_TICK_CFG                       (5U)             /* DCM_TASKTIME_MSEC : 5 milliseconds    */
 
-#define OXDC_SID23_USE                           (OXDC_NOUSE)     /* @@@ */
-#define OXDC_SID2F_USE                           (OXDC_NOUSE)     /* @@@ */
-#define OXDC_SID86_USE                           (OXDC_NOUSE)     /* @@@ */
+#define OXDC_SID23_USE                           (OXDC_NOUSE)
+#define OXDC_SID2F_USE                           (OXDC_NOUSE)
+#define OXDC_SID86_USE                           (OXDC_NOUSE)
 #define OXDC_SIDAB_USE                           (OXDC_NOUSE)
-#define OXDC_SIDBA_USE                           (OXDC_NOUSE)     /* @@@ */
+#define OXDC_SIDBA_USE                           (OXDC_NOUSE)
 
 #define OXDC_SID22_PH6                           (0U)
 
@@ -39,9 +39,9 @@
 #define OXDC_SID22_NR_22_USE                     (OXDC_NOUSE)
 #define OXDC_SID2E_NR_22_USE                     (OXDC_NOUSE)
 #define OXDC_SID31_NR_22_USE                     (OXDC_NOUSE)
-#define OXDC_SID14_NR_22_USE                     (OXDC_NOUSE)     /* @@@ */
-#define OXDC_SID27_NR_22_USE                     (OXDC_NOUSE)     /* @@@ */
-#define OXDC_SID28_NR_22_USE                     (OXDC_NOUSE)     /* @@@ */
+#define OXDC_SID14_NR_22_USE                     (OXDC_NOUSE)
+#define OXDC_SID27_NR_22_USE                     (OXDC_NOUSE)
+#define OXDC_SID28_NR_22_USE                     (OXDC_NOUSE)
 #define OXDC_SID2F_NR_22_USE                     (OXDC_NOUSE)
 #define OXDC_SID85_NR_22_USE                     (OXDC_NOUSE)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

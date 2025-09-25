@@ -55,12 +55,14 @@
 #define EHVM_TX_VCCID_VCCBUFFER_8_VM0_TOOTHERVM ((ehvm_uint32_t)8U)
 #define EHVM_TX_VCCID_VCCBUFFER_12_VM0_TOOTHERVM ((ehvm_uint32_t)12U)
 #define EHVM_TX_VCCID_VCC_SHARED_TX_VM0 ((ehvm_uint32_t)16U)
+#define EHVM_TX_VCCID_VCC_IOHWAD_DATA_TX_VM0 ((ehvm_uint32_t)20U)
 
 #define EHVM_TX_VCCID_VCCBUFFER_0_SLEEPREQUEST_MASTER_TOSLAVE_MAX ((ehvm_uint32_t)0x00000004U)
 #define EHVM_TX_VCCID_VCCBUFFER_4_VM0_TOOTHERS_MAX ((ehvm_uint32_t)0x00000048U)
 #define EHVM_TX_VCCID_VCCBUFFER_8_VM0_TOOTHERVM_MAX ((ehvm_uint32_t)0x00000004U)
 #define EHVM_TX_VCCID_VCCBUFFER_12_VM0_TOOTHERVM_MAX ((ehvm_uint32_t)0x00000004U)
 #define EHVM_TX_VCCID_VCC_SHARED_TX_VM0_MAX ((ehvm_uint32_t)0x00000100U)
+#define EHVM_TX_VCCID_VCC_IOHWAD_DATA_TX_VM0_MAX ((ehvm_uint32_t)0x00000040U)
 
 /* ehvm_vcc_receive */
 #define EHVM_RX_VCCID_VCCBUFFER_1_SLEEPSTATUS_VM1_TOMASTER ((ehvm_uint32_t)1U)
@@ -196,6 +198,6 @@
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

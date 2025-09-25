@@ -146,7 +146,8 @@
 #define Com_ReceiveSignalB64OvA         (bsw_com_data_ReceiveSignalB64OvA)
 #define Com_ReceiveSignalL64OvA         (bsw_com_data_ReceiveSignalL64OvA)
 #define Com_SetTxDelayTime              (bsw_com_tx_SetTxDelayTime)
-#define Com_SetPeridoicTxTime           (bsw_com_tx_SetPeriodicTxTime)
+#define Com_SetPeriodicTxTime           (bsw_com_tx_SetPeriodicTxTime)
+#define Com_WriteIPDUMask               (bsw_com_data_WriteMsgMsk)
 
 #define Com_SendSignalMetaDataB         (bsw_com_data_SendSgnlMDB)
 #define Com_SendSignalMetaDataL         (bsw_com_data_SendSgnlMDL)
@@ -252,7 +253,7 @@
 /*  v1-2-0          :2019/09/27                                             */
 /*  v2-0-0          :2021/06/24                                             */
 /*  v2-1-0          :2022/09/05                                             */
-/*  v3-0-0          :2024/11/05                                             */
+/*  v3-0-0          :2025/01/20                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

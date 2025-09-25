@@ -17,6 +17,7 @@ primaryTarget=v800_standalone.tgt
     :macro=CANIC_DIR=${ROOT_DIR}/BSW/Communication/Cdd_Canic_TJA1145A
     :macro=OXCAN_DIR=${ROOT_DIR}/BSW/Communication/oXCAN
     :macro=CANLPR_DIR=${ROOT_DIR}/BSW/Communication/CANLpR
+    :macro=OXSEC_DIR=${ROOT_DIR}/BSW/Security/oXSEC
     :macro=OXDOCAN_DIR=${ROOT_DIR}/BSW/Diagnosis/oXDoCAN
     :macro=IVDSH_DIR=${ROOT_DIR}/BSW/Communication/iVDsh
     :macro=VEHOPE_DIR=${ROOT_DIR}/BSW/ComplexDriver/Vehopemd
@@ -77,6 +78,8 @@ primaryTarget=v800_standalone.tgt
     -I${CANLPR_DIR}/lib
     -I${CANLPR_DIR}/scc
 
+    -I${OXSEC_DIR}/scc
+
     -I${OXDOCAN_DIR}/lib/scc
     -I${LIB_DIR}/Ren_G4MH/scc
     -I${LIB_DIR}/Common/scc
@@ -90,10 +93,12 @@ primaryTarget=v800_standalone.tgt
     -DAR_OS_USE_HYPERVISOR
     -DECU_VM0
     -DECU_INTG_LWH_GUEST
-
+    -D__AIP_THROUGHPUT__=$FLAG_THROUGHPUT
     -o PE0VM0.elf
 
 ${PRJ_DIR}/bswCAN.gpj
+${CMN_DIR}/bswSEC.gpj
+${CMN_DIR}/bswSEC_CycurHSM.gpj
 ${CMN_DIR}/bswOS.gpj
 ${CMN_DIR}/ehvm_if.gpj
 ${CMN_DIR}/22SS.gpj
@@ -114,11 +119,11 @@ ${CMN_DIR}/MCAL_Intc.gpj
 ${CMN_DIR}/MCAL_DUMMY.gpj
 ${CMN_DIR}/MCAL_ErrH.gpj
 
-###${CMN_DIR}/bswMS.gpj
+#${CMN_DIR}/bswMS.gpj
 ${CMN_DIR}/MS_Rim.gpj
-###${CMN_DIR}/MS_NVMC.gpj
+#${CMN_DIR}/MS_NVMC.gpj
 
-${CMN_DIR}/IOHW.gpj
+${PRJ_DIR}/IOHW.gpj
 ${CMN_DIR}/LIB.gpj
 ${PRJ_DIR}/App.gpj
 
@@ -127,4 +132,5 @@ ${PRJ_DIR}/COM_OXCAN.gpj
 ${PRJ_DIR}/COM_CANLPR.gpj
 ${CMN_DIR}/VEHOPE.gpj
 ${CMN_DIR}/DIAG_oXDoCAN.gpj
+${PRJ_DIR}/SEC_OXSEC.gpj
 ${CMN_DIR}/IVDSH.gpj

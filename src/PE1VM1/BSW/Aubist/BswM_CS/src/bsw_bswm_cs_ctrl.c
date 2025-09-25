@@ -409,7 +409,7 @@ bsw_bswm_cs_ctrl_ResetPeriTx( NetworkHandleType Network, uint8 ResetReason, uint
 /* Notes         | Supported API : BswM_CS_ClearNonAwakeEvtIpdu             */
 /****************************************************************************/
 void
-bsw_bswm_cs_ctrl_ClrNoAwkEvtPdu( NetworkHandleType Network, uint32* NonBusAwakePw )
+bsw_bswm_cs_ctrl_ClrNoAwkEvtPdu( NetworkHandleType Network, BswConstR uint32* NonBusAwakePw )
 {
 #if ( BSW_BSWM_CS_FUNC_COM == BSW_USE )
     BswU1 u1ChNum;
@@ -560,7 +560,7 @@ bsw_bswm_cs_ctrl_BusWakeup( NetworkHandleType Network, uint8 WakeupKind, uint16 
 /*  v1-2-0          :2020/04/15                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-2-0          :2023/05/23                                             */
-/*  v3-0-0          :2024/11/12                                             */
+/*  v3-0-0          :2025/02/05                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

@@ -78,6 +78,7 @@ primaryTarget=v800_standalone.tgt
     -DAR_OS_USE_HYPERVISOR
     -DECU_VM1
     -DECU_INTG_LWH_GUEST
+    -D__AIP_THROUGHPUT__=$FLAG_THROUGHPUT
 
     -o PE1VM1.elf
 
@@ -103,7 +104,7 @@ ${CMN_DIR}/bswMS.gpj
 ${CMN_DIR}/MS_Rim.gpj
 ${CMN_DIR}/MS_NVMC.gpj
 
-${CMN_DIR}/IOHW.gpj
+${PRJ_DIR}/IOHW.gpj
 ${CMN_DIR}/LIB.gpj
 ${PRJ_DIR}/App.gpj
 ${PRJ_DIR}/COM_OXCAN.gpj

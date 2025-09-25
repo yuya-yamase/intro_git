@@ -28,28 +28,7 @@
 /* #include "rim_ctl.h"              rim_ctl.h is included in tydocan_dtc_cfg_private.h           */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)     ) && \
-     (defined(BSW_BSWM_CS_CFG_FUNC_SECOC)  ) && \
-     (BSW_BSWM_CS_CFG_FUNC_CS    == BSW_USE) && \
-     (BSW_BSWM_CS_CFG_FUNC_SECOC == BSW_USE))
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0       /* @@@ */
-#include "tydocan_dtc_ma_cfg_private.h"
-#include "tydocan_xid_ma_cfg_private.h"
-#endif
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-
-#endif /* #if ((defined(BSW_BSWM_CS_CFG_FUNC_CS)  ) && ... */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Application Headers */
-#if 0
-#include "tydocan_dtc_mm_cfg_private.h" 
-#include "tydocan_dtc_nmwk.h"
-#include "tydocan_dtc_ecuslp.h"
-#include "tydocan_dtc_nmgbl.h"
-#endif
 #ifdef TYDOCAN_DTC_MA_CFG_H
 #include "tydocan_evlog_cfg_private.h"
 #include "stub.h"           /* Use stubs instead of odo_km.h */
@@ -72,8 +51,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define TYDC_DTC_NUM_TR_EVT                      (3U)   /* @@@ */        /* ((Max. of DEM_DemEventDTC_XXXX) + 1) */
-#define TYDC_DTC_NUM_PDU_RX                      (1U)   /* @@@ */
+#define TYDC_DTC_NUM_TR_EVT                      (3U)                    /* ((Max. of DEM_DemEventDTC_XXXX) + 1) */
+#define TYDC_DTC_NUM_PDU_RX                      (1U)
 #define TYDC_DTC_NOW_LOG_RX                      (2U)
 
 #ifdef TYDOCAN_DTC_MM_CFG_H
@@ -110,15 +89,10 @@ U1                      u1_gp_tydc_dtc_mm_rx_cnt[TYDC_DTC_MM_NUM_PDU_RX];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1      u1_s_oXDoCANDtcSup_U0100(void);   /* @@@ */
+U1      u1_s_oXDoCANDtcSup_U0100(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0	/* @@@ */
-const U2                    u2_g_TYDC_DTC_RIMID_UDM_EV_CNT = (U2)RIMID_U1_OXDC_DTC_UDM_EV_CNT;
-const U2                    u2_g_TYDC_DTC_RIMID_UDM_EV_ID  = (U2)RIMID_U2_OXDC_DTC_UDM_LAST_EV_ID;
-#endif
-
 const U1                    u1_g_TYDC_DTC_NOW_TR_ACT = (U1)TYDC_DTC_NOW_TR_ACT;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -130,12 +104,8 @@ const U1                    u1_g_TYDC_DTC_NUM_PDU_RX = (U1)TYDC_DTC_NUM_PDU_RX;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U2                    u2_gp_TYDC_DTC_NVMC_LOG_RX[TYDC_DTC_NOW_LOG_RX] = {
-#if 0	/* @@@ */
-    (U2)NVMCID_U4_OXDC_DTC_LOGRX1,
-    (U2)NVMCID_U4_OXDC_DTC_LOGRX2
-#endif
-    (U2)0,      /* @@@ */
-    (U2)0       /* @@@ */
+    (U2)0,
+    (U2)0
 };
 const U1                    u1_g_TYDC_DTC_NOW_LOG_RX = (U1)TYDC_DTC_NOW_LOG_RX;
 
@@ -154,22 +124,6 @@ const ST_TYDC_DTC_TR_CHK    st_gp_TYDC_DTC_TR_CHK[] = {
 const U1                    u1_g_TYDC_DTC_NUM_TR_CHK = (U1)(sizeof(st_gp_TYDC_DTC_TR_CHK) / sizeof(ST_TYDC_DTC_TR_CHK));
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* @@@ */
-const ST_TYDC_DTC_UDM_DEL   st_gp_TYDC_DTC_UDM_DEL[] = {
-/*   u2_mem_slct,                                           fp_u1_UDM_DEL              */
-    {(U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x11U),   &u1_g_oXDoCANDtcUdmDelNmwk},
-    {(U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x11U),   &u1_g_oXDoCANDtcUdmDelNmGbl},
-    {(U2)(DEM_DTC_ORIGIN_USERDEFINED_MEMORY | (U2)0x11U),   &u1_g_oXDoCANDtcUdmDelEcuSlp}
-};
-const U1                    u1_g_TYDC_DTC_NUM_UDM_DEL = (U1)(sizeof(st_gp_TYDC_DTC_UDM_DEL) / sizeof(ST_TYDC_DTC_UDM_DEL));
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-const U2                    u2_gp_TYDC_DTC_NVMC_BLOCK[DEM_NVM_USE_NVBLOCK_NUM] = {
-    (U2)NVMCID_OTR_OXDC_DTC_EVENT001,
-    (U2)NVMCID_OTR_OXDC_DTC_FAULT001,
-    (U2)NVMCID_OTR_OXDC_DTC_FFD001,
-    (U2)NVMCID_U4_OXDC_DTC_CLEARINFO,
-};
-#endif
 const U2                    u2_g_TYDC_DTC_S14_TOUT = ((U2)200U / (U2)OXDC_MAIN_TICK) * (U2)DEM_NVM_USE_NVBLOCK_NUM;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -204,13 +158,6 @@ U1      u1_g_TyDoCANDtcCfgNvmKind(const U2 u2_a_rec_id)
     case DEM_MM_NVM_REC_KIND_EVT:
         u1_t_rec_kind = (U1)TYDC_DTC_NVM_REC_KIND_PRIM_EVT;
         break;
-#if 0   /* @@@ */
-    case DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE2_EVT:
-    case DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE3_EVT:
-    case DEM_MM_NVM_REC_KIND_UDM_RKDEMUDM_OCCURRENCE7_EVT:
-        u1_t_rec_kind = (U1)TYDC_DTC_NVM_REC_KIND_UDM_EVT;
-        break;
-#endif
     default:
         /* Do Nothing */
         break;
@@ -322,7 +269,7 @@ U1      u1_g_TyDoCANDtcMaCfgRfcOdochk(void)
 
 #endif /* #ifdef TYDOCAN_DTC_MA_CFG_H */
 
-U1      u1_s_oXDoCANDtcSup_U0100(void){return((U1)FALSE);}   /* @@@ */
+U1      u1_s_oXDoCANDtcSup_U0100(void){return((U1)FALSE);}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

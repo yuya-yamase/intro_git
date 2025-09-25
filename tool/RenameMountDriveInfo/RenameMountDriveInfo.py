@@ -31,7 +31,12 @@ filelist = [
     r"..\..\src\DevRRPG\Tool\TS-WriterData\config4.ini",
     r"..\..\src\DevRRPG\Tool\TS-WriterData\config5.ini",
     r"..\..\src\DevRRPG\Tool\TS-WriterData\config6.ini",
-    r"..\..\src\DevRRPG\Tool\TS-WriterData\config7.ini"
+    r"..\..\src\DevRRPG\Tool\TS-WriterData\config7.ini",
+    r"..\..\tool\XMerge\config1.ini",
+    r"..\..\tool\XMerge\config2.ini",
+    r"..\..\tool\XMerge\config3.ini",
+    r"..\..\tool\XMerge\config4.ini",
+    r"..\..\tool\XMerge\config5.ini",
 ]
 
 def detect_encoding(filepath, sample_size=4096):

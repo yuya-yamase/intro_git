@@ -117,7 +117,7 @@ static EhvmConst ehvm_guest_ctx_register_t ehvm_guest_initialize_ctx_list_pe2[VM
 
 static EhvmConst ehvm_guest_pc_register_t ehvm_guest_initialize_pc_list_pe2[VM_NUM_PE2] = {
     {
-        (ehvm_uint32_t)0x00400000U  /* GMEIPC/GMFEPC */
+        (ehvm_uint32_t)0x00404000U  /* GMEIPC/GMFEPC */
     }
 };
 
@@ -127,12 +127,20 @@ static EhvmConst ehvm_guest_peid_register_t ehvm_guest_peid_list_pe2[VM_NUM_PE2]
     }
 };
 
+static EhvmConst ehvm_uint8_t ehvm_vmm_clear_int_flag_pe2[VM_NUM_PE2] = {
+    EHVM_VMM_DISABLE_CLEAR_INT_FLAG
+};
+
 /****************************************************************************************/
 /* Hv4mSchedulingConfigSet                                                              */
 /****************************************************************************************/
 static EhvmConst ehvm_vm_table_info_t ehvm_sch_SchTable_pe2_0[1] = {
     {
+#if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
+        4850U,              /* VMCycle */
+#else
         400U,               /* VMCycle */
+#endif
         GPID_VM0            /* VMId */
     }
 };
@@ -225,7 +233,11 @@ EhvmConst ehvm_cfg_tbl_t ehvm_cfg_tbl_pe2 =
     0U,                             /* tptm_dividingratio */
     VM_NUM_PE2,                     /* vmnum */
     13U,                            /* guest_int_num */
+#if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
+    (ehvm_uint32_t)5000U,          /* hv_cycle */
+#else
     (ehvm_uint32_t)500U,           /* hv_cycle */
+#endif
     MPU_MPCFG_HBE_PE2,                  /* mpu_mpcfg_hbe */
     MPU_NUM_OF_HOST_ENTRY_PE2,          /* mpu_num_of_host_entry */
     MPU_GUEST_ENTRY_T_PE2,              /* mpu_guest_entry_t */
@@ -243,7 +255,8 @@ EhvmConst ehvm_cfg_tbl_t ehvm_cfg_tbl_pe2 =
     ehvm_vm_system_control2_pe2,      /* ehvm_vm_system_control2 */
     ehvm_vm_system_control3_pe2,      /* ehvm_vm_system_control3 */
     &ehvm_PegConfigData_pe2,          /* ehvm_PegConfigData */
-    &ehvm_Intc2gSwitchConfigData_pe2  /* Intc2g_ProtSwitchConfigData */
+    &ehvm_Intc2gSwitchConfigData_pe2, /* Intc2g_ProtSwitchConfigData */
+    &ehvm_vmm_clear_int_flag_pe2[0]   /* ehvm_vmm_clear_int_flag_config */
 };
 
 
@@ -252,6 +265,6 @@ EhvmConst ehvm_cfg_tbl_t ehvm_cfg_tbl_pe2 =
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

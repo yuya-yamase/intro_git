@@ -9,6 +9,7 @@
 *.run
 *.mot
 *.dla
+*.env
 .vscode
 *.bak
 *.dle
@@ -18,6 +19,7 @@
 *.bin
 Section_Size*.xlsx
 #RRPG
+!write_opbt_back.mot
 APL.txt
 Reprog_SBL.txt
 !empty_G4.o

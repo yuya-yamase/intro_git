@@ -315,5 +315,10 @@ GdnConst Gdn_PduR_UpTpTxRoutingTblType gdn_pdur_UpTpTxRoutingTbl_0[GDN_PDUR_MaxT
 #define GDN_PDUR_STOP_SEC_CST
 #include <Gdn_PduR_MemMap.h>
 
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

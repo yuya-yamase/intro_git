@@ -86,7 +86,7 @@ FUNC(void, CRC_CODE) Crc_GetVersionInfo( P2VAR(Std_VersionInfoType, AUTOMATIC, C
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

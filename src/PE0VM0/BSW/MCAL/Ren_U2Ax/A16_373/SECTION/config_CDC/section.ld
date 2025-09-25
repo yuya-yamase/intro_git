@@ -25,22 +25,22 @@ SECTIONS {
     } > .
     .bsw_cs_text            align(16)                       : > .
     .bsw_can_text           align(16)                       : > .
+    .bsw_csm_code           align(16)                       : > .
+    .bsw_cryif_code         align(16)                       : > .
+    .bsw_secoc_code         align(16)                       : > .
+    .bsw_secoc_cd_fv_code   align(16)                       : > .
     .bsw_dcm_text           align(16)                       : > .
     .bsw_dem_text           align(16)                       : > .
-    bsw_fee_text            align(16)                       : > .
-    bsw_fls_text            align(16)                       : > .
-    bsw_memif_text          align(16)                       : > .
-    bsw_mscd_text           align(16)                       : > .
-    bsw_nvm_text            align(16)                       : > .
-    .bsw_lin_text           align(16)                       : > .
-    .BSW_ETH_CODE           align(16)                       : > .
+    .bsw_fee_text           align(16)                       : > .
+    .bsw_fls_text           align(16)                       : > .
+    .bsw_memif_text         align(16)                       : > .
+    .bsw_mscd_text          align(16)                       : > .
+    .bsw_nvm_text           align(16)                       : > .
     .BSW_LIB_CODE           align(4)                        : > .
-    .Crypto_83_sw_AES128_text align(4)                      : > .
-    .Crypto_83_sw_RSA_text    align(4)                      : > .
-    .Crypto_83_sw_SHA256_text align(4)                      : > .
     .bsw_e2e_text           align(16)                       : > .
-// BSW_Ether Code
-    .bsw_ethdrv_text        align(4)                        : > .
+// Crypto, CycurHSM Code
+    .bsw_crypto_text        align(4)                        : > .                                           // CryptoDriver: must allocate in QM section area
+    .hsm_text               align(4)                        : { "bswSEC_CycurHSM.a(*(.text))" }    > .      // CycurHSM: must allocate in QM section area
     .bsw_code_bottom        align(4)                        : > .
 
     .bsw_const_top          align(4)                        : > .
@@ -50,22 +50,20 @@ SECTIONS {
     } > .
     .bsw_cs_const           align(4)                        : > .
     .bsw_can_const          align(4)                        : > .
+    .bsw_csm_const_config   align(4)                        : > .
+    .bsw_secoc_const_config align(4)                        : > .
     .bsw_dcm_rodata         align(4)                        : > .
     .bsw_dem_rodata         align(4)                        : > .
-    bsw_fee_rodata          align(4)                        : > .
-    bsw_fls_rodata          align(4)                        : > .
-    bsw_memif_rodata        align(4)                        : > .
-    bsw_mscd_rodata         align(4)                        : > .
-    bsw_nvm_rodata          align(4)                        : > .
-    .bsw_lin_const          align(4)                        : > .
-    .BSW_ETH_CONST_CONFIG   align(4)                        : > .
-    .BSW_ETH_CONST          align(4)                        : > .
+    .bsw_fee_rodata         align(4)                        : > .
+    .bsw_fls_rodata         align(4)                        : > .
+    .bsw_memif_rodata       align(4)                        : > .
+    .bsw_mscd_rodata        align(4)                        : > .
+    .bsw_nvm_rodata         align(4)                        : > .
     .BSW_LIB_CONST          align(4)                        : > .
-    .Crypto_83_sw_AES128_const align(4)                     : > .
-    .Crypto_83_sw_RSA_const    align(4)                     : > .
-    .Crypto_83_sw_SHA256_const align(4)                     : > .
-// BSW_Ether Const Data
-    .bsw_ethdrv_const       align(4)                        : > .
+    .bsw_csm_shared_const_config align(4)                   : > .
+// Crypto, CycurHSM Const Data
+    .bsw_crypto_rodata      align(4)                        : > .                                           // CryptoDriver: must allocate in QM section area
+    .hsm_rodata				ALIGN(4)                        : { "bswSEC_CycurHSM.a(*(.rodata))" } > .       // CycurHSM: must allocate in QM section area
     .bsw_const_bottom       align(4)                        : > .
 
     .bsw_e_nvar_ival_top    align(4)  ROM(.bsw_e_nvar_withval_top)     : > .
@@ -80,6 +78,17 @@ SECTIONS {
     .bsw_n_rvar_ival_top    align(4)  ROM(.bsw_n_rvar_withval_top)     : > .
     .bsw_n_rvar_ival_bottom align(4)  ROM(.bsw_n_rvar_withval_bottom)  : > .
 
+// Crypto, CycurHSM Data (ROM)
+    .bsw_sec_nvar_ival_top             align(4)  ROM(.bsw_sec_nvar_withval_top)         : > .
+    .bsw_crypto_data_rom               align(4)  ROM(.bsw_crypto_data)                  : > .   // CryptoDriver: must allocate in QM section area
+    .hsm_data_rom                      align(4)  ROM(.hsm_data)                         : > .   // CycurHSM: must allocate in QM section area
+    .bsw_sec_nvar_ival_bottom          align(4)  ROM(.bsw_sec_nvar_withval_bottom)      : > .
+
+    .bsw_sec_hsm_nvar_ival_top         align(4)  ROM(.bsw_sec_hsm_nvar_withval_top)     : > .
+    .bsw_crypto_hsm_shared_data_rom    align(4)  ROM(.bsw_crypto_hsm_shared_data)       : > .   // CryptoDriver: must allocate in QM section area
+    .hsm_shared_data_rom               align(4)  ROM(.hsm_shared.data)                  : > .   // CycurHSM: must allocate in QM section area
+    .bsw_sec_hsm_nvar_ival_bottom      align(4)  ROM(.bsw_sec_hsm_nvar_withval_bottom)  : > .
+
 // SS
     .ss_code                align(4)                        : > .               // SSコード領域(QM)
     .ss_code_p              align(4)                        : > .               // SSコード領域(ASIL)
@@ -90,15 +99,6 @@ SECTIONS {
     .ecu_const              align(4)                        : > .               // ユーザの定数領域(QM)
     .ecu_const_p            align(4)                        : > .               // ユーザの定数領域(ASIL)
     .text                   align(4)                        : > .               // コンパイラのデフォルト領域
-
-    .gw_l3r_code            align(4)                        : > .
-    .gw_cid_code            align(4)                        : > .
-    .gw_fw_code             align(4)                        : > .
-    .gw_util_code           align(4)                        : > .
-
-    .gw_l3r_const           align(4)                        : > .
-    .gw_cid_const           align(4)                        : > .
-    .gw_chm_const           align(4)                        : > .
 
 // MCAL
     .mcal_rom_top           align(4)                        : > .
@@ -170,10 +170,15 @@ SECTIONS {
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
+// Keyword address info(shared)
     .rodata_SHARE_ROM_RIM_KEYWORD_top   SHARE_ROM_VM0_RIM_KEYWORD0      ABS    : > rom_memory_share
     .rodata_SHARE_ROM_RIM_KEYWORD0      SHARE_ROM_VM0_RIM_KEYWORD0      ABS    : > .
     .rodata_SHARE_ROM_RIM_KEYWORD1      SHARE_ROM_VM0_RIM_KEYWORD1      ABS    : > .
     .rodata_SHARE_ROM_RIM_KEYWORD2      SHARE_ROM_VM0_RIM_KEYWORD2      ABS    : > .
+
+// ▼▼▼ CycurHSM FirmWare用セクション定義 (割付禁止) ▼▼▼
+//    .cycurhsm_firmware                  0x007D0000  MAX_ENDADDRESS(0x00800000):
+// ▲▲▲ CycurHSM FirmWare用セクション定義 (割付禁止) ▲▲▲
 
 // -- RAM -------------------
 // TopAddress
@@ -240,12 +245,12 @@ SECTIONS {
     .bss_RIM1                    ALIGN(8)                             : > .
     .bss_RIM2                    ALIGN(8)                             : > .
     .bss_RIM3                    ALIGN(8)                             : > .
-    bsw_fee_bss             align(4)                        : > .
-    bsw_fls_bss             align(4)                        : > .
-    bsw_memif_bss           align(4)                        : > .
-    bsw_mscd_bss            align(4)                        : > .
-    bsw_nvm_bss             align(4)                        : > .
-    bsw_nvm_bss_saved_zone  align(4)                        : > .
+    .bsw_fee_bss            align(4)                        : > .
+    .bsw_fls_bss            align(4)                        : > .
+    .bsw_memif_bss          align(4)                        : > .
+    .bsw_mscd_bss           align(4)                        : > .
+    .bsw_nvm_bss            align(4)                        : > .
+    .bsw_nvm_bss_saved_zone align(4)                        : > .
     .MEM_SEC_END_RAM_LOC_APPL    ALIGN(8)                             : > .
     _LOC_RAM_SIZE = . - ADDR(.MEM_SEC_STA_RAM_LOC_APPL);
 
@@ -296,15 +301,10 @@ SECTIONS {
 
     .cluster2_share_ramtop                                   : > ram_memory_cluster2_share
 
-//1byte
-    .bss_SHARE_IOHW_ADC_LV_RD   SHARE_IOHW_ADC_LV_RD_ADDR   ABS    : > .
 //2byte
 //4byte
     .bss_SHARE_PORT_CONF        SHARE_PORT_CONF_ADDR        ABS    : > .
-    .bss_SHARE_VEH_OPEMD_MDBIT  SHARE_VEH_OPEMD_MDBIT_ADDR  ABS    : > .
 //struct
-    .bss_SHARE_IOHW_ADC_LV      SHARE_IOHW_ADC_LV_ADDR      ABS    : > .
-    .bss_SHARE_IOHW_DIFLT_FLTRD SHARE_IOHW_DIFLT_FLTRD_ADDR ABS    : > .
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
@@ -351,6 +351,51 @@ SECTIONS {
     .bsw_n_nvar_withval_bottom    align(4)                        : > .
     _BSW_N_NVAR_WITHVAL_SIZE = . - ADDR(.bsw_n_nvar_withval_top);
 
+    .bsw_sec_nvar_top             align(4)                        : > .
+        // Aubist Sec Bss
+        .bsw_csm_var_cleared_wakeup   align(4)                    : > .
+        .bsw_csm_var_no_init          align(4)                    : > .
+        .bsw_secoc_var_no_init        align(4)                    : > .
+        .bsw_secoc_var_cleared_wakeup align(4)                    : > .
+        .bsw_secoc_cd_fv_var_no_init  align(4)                    : > .
+
+        // CryptoDriver, CycurHSM Bss
+        .bsw_crypto_bss               align(4)                    : > .                                      // CryptoDriver: must allocate in QM section area(zero clear section)
+        .hsm_bss                      align(4)                    : { "bswSEC_CycurHSM.a(*(.bss))" }  > .    // CycurHSM: must allocate in QM section area(zero clear section)
+    .bsw_sec_nvar_bottom          align(4)                        : > .
+    _BSW_SEC_NVAR_SIZE = . - ADDR(.bsw_sec_nvar_top);
+
+    // ▼▼▼ CryptoDriver, CycurHSM Data ▼▼▼
+    .bsw_sec_nvar_withval_top       align(4)                      : > .
+        .bsw_crypto_data                align(4)                  : > .                                      // CryptoDriver: variable with initial value
+        .hsm_data                       align(4)                  : { "bswSEC_CycurHSM.a(*(.data))" }    > . // CycurHSM: variable with initial value
+        .bsw_sec_nvar_withval_bottom    align(4)                  : > .
+    _BSW_SEC_NVAR_WITHVAL_SIZE = . - ADDR(.bsw_sec_nvar_withval_top);
+    // ▲▲▲ CryptoDriver, CycurHSM Data ▲▲▲
+
+    // ▼▼▼ HSMコアとの共有RAM領域 ▼▼▼
+    .bsw_sec_hsm_nvar_top             align(4)                        : > .
+        // Aubist Sec Bss
+        .bsw_csm_shared_var_no_init     align(4)                      : > .
+        .bsw_cryif_shared_var_no_init   align(4)                      : > .
+        .bsw_secoc_var_no_init_gram     align(4)                      : > .
+
+        // CryptoDriver, CycurHSM Bss (HSM共有)
+        .crypto_hsm_shared_bss          align(4)                      : > .   // CryptoDriver: must allocate in QM section area(zero clear section)
+        .hsm_shared.bss                 align(4)                      : > .   // CycurHSM: must allocate in QM section area(zero clear section)
+    .bsw_sec_hsm_nvar_bottom          align(4)                        : > .
+    _BSW_SEC_HSM_NVAR_SIZE = . - ADDR(.bsw_sec_hsm_nvar_top);
+
+    // ▼▼▼ CryptoDriver, CycurHSM Data (HSM共有) ▼▼▼
+    .bsw_sec_hsm_nvar_withval_top       align(4)                      : > .
+        .bsw_crypto_hsm_shared_data         align(4)                  : > .   // CryptoDriver: variable with initial value
+        .hsm_shared.data                    align(4)                  : > .   // CycurHSM: variable with initial value
+        .bsw_sec_hsm_nvar_withval_bottom    align(4)                  : > .
+    _BSW_SEC_HSM_NVAR_WITHVAL_SIZE = . - ADDR(.bsw_sec_hsm_nvar_withval_top);
+    // ▲▲▲ CryptoDriver, CycurHSM Data (HSM共有) ▲▲▲
+
+    // ▲▲▲ HSMコアとの共有RAM領域 ▲▲▲
+
 // Default Data
     .data                   align(4)                        : > .               // コンパイラのデフォルト領域
     .data_bottom            align(4)                        : > .
@@ -358,7 +403,6 @@ SECTIONS {
 
     .ecu_nvar_top           align(4)                        : > .
     .bss                    align(4)                        : > .               // コンパイラのデフォルト領域
-    .gw_l3r_nbva_zi         align(4)                        : > .
 
     .ecu_nvar_bottom        align(4)                        : > .
     _ECU_NVAR_SIZE = . - ADDR(.ecu_nvar_top);
@@ -385,7 +429,6 @@ SECTIONS {
     .MEM_SEC_STA_BACK_APPL       ALIGN(8)                             : > .
     .bss_BACK_KEYWORD0           ALIGN(8)                             : > .
     .bss_BACK                    ALIGN(8)                             : > .
-    .gw_l3r_buva_zi              ALIGN(8)                             : > .
     .bss_BACK_KEYWORD1           ALIGN(8)                             : > .
     .bss_BACK_RIM1               ALIGN(8)                             : > .
     .bss_BACK_RIM2               ALIGN(8)                             : > .

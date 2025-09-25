@@ -75,5 +75,10 @@ GdnConst Gdn_Dcm_SessionCtrlConfigType   Gdn_Dcm_SessionCtrlConfig[ GDN_DCM_SESS
 #define GDN_DCM_STOP_SEC_CST
 #include <Gdn_Dcm_MemMap.h>
 
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /*-- End Of File -------------------------------------------------------*/
 

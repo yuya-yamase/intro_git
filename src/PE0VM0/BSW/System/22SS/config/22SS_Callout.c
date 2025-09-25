@@ -20,6 +20,7 @@
 #include "veh_opemd.h"
 #include "oxcan.h"
 #include "oxdocan.h"
+#include "oxsec.h"
 #include "ivdsh.h"
 
 /* Memory               */
@@ -65,6 +66,8 @@ void vd_g_22SSCallout_StaBonInit(void)
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
+    vd_g_oXSECInit();
+    vd_g_oXSECBonKeyInit();
     vd_g_oXCANRstInit();
     vd_g_oXDoCANBonInit();
     vd_g_VehopemdRstInit();
@@ -99,6 +102,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
+    vd_g_oXSECInit();
     vd_g_oXCANRstInit();
     vd_g_oXDoCANRstInit();
     vd_g_VehopemdRstInit();
@@ -133,6 +137,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
     vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
+    vd_g_oXSECInit();
     vd_g_oXCANWkupInit();
     vd_g_oXDoCANWkupInit();
     vd_g_VehopemdWkupInit();

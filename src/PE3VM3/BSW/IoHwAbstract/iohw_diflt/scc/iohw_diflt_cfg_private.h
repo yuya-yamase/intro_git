@@ -81,12 +81,7 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-//extern U4                          u4_gp_iohw_diflt_fltrd[];    /* array size = # of digital port                                */
-#pragma ghs startdata
-extern  U4 __ghsbegin_bss_SHARE_IOHW_DIFLT_FLTRD;
-#pragma ghs enddata
-#define u4_gp_iohw_diflt_fltrd  ((U4 *)((U4)&__ghsbegin_bss_SHARE_IOHW_DIFLT_FLTRD))
-
+extern U4                          u4_gp_iohw_diflt_fltrd[];    /* array size = # of digital port                                */
 extern U2                          u2_gp_iohw_diflt_smpld[];    /* array size = # of digital port                                */
 
 extern ST_IOHW_DICTRL              st_gp_iohw_diflt_ctrl[];     /* array size = # of di-signals, e.g. u2_g_IOHW_DIFLT_NUM_DISGNL */
