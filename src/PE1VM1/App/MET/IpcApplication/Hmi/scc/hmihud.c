@@ -18,12 +18,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
 #include "hmihud.h"
-#include "hmidiag.h"
-#include "hmimm2c118n.h"
 #include "vardef.h"
 
+#if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
 #include "hdimmgr_if.h"
+#endif   /* BEV Rebase provisionally */
 
 #include "rim_ctl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -228,8 +228,9 @@ static void vd_s_HmiHudSetResid(void){
     U1 u1_t_resid;    /* recieve signal */
 
     u1_t_resid = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESID, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_RESID(u1_t_resid);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -242,8 +243,9 @@ static void vd_s_HmiHudSetHudst(void){
     U1 u1_t_hudst;    /* recieve signal */
 
     u1_t_hudst = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ST, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_HUD_ST(u1_t_hudst);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -258,14 +260,6 @@ static void vd_s_HmiHudSetHudbrns(void){
     
     u1_t_ill_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u1_t_ill_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
-
-    if((u1_t_ill_upsw == (U1)HMIHUD_SW_OPE) &&
-       (u1_t_ill_dnsw == (U1)HMIHUD_SW_OPE)) {
-        /* Do Nothing */
-    } else {
-        vd_g_HmiDiagPut(u1_t_ill_upsw, (U1)HMIDIAG_DIM_UP);
-        vd_g_HmiDiagPut(u1_t_ill_dnsw, (U1)HMIDIAG_DIM_DOWN);
-    }
 }
 
 /*===================================================================================================================================*/
@@ -281,15 +275,9 @@ static void vd_s_HmiHudSetViposSw(void){
     u1_t_vpos_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_VIPOS_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u1_t_vpos_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_VIPOS_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     
-    if((u1_t_vpos_upsw == (U1)HMIHUD_SW_OPE) &&
-       (u1_t_vpos_dnsw == (U1)HMIHUD_SW_OPE)) {
-        /* Do Nothing */
-    } else {
-        vd_g_HmiDiagPut(u1_t_vpos_upsw, (U1)HMIDIAG_VIPOS_UP);
-        vd_g_HmiDiagPut(u1_t_vpos_dnsw, (U1)HMIDIAG_VIPOS_DN);
-    }
-
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSetUpDwSw(u1_t_vpos_upsw, u1_t_vpos_dnsw);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -305,7 +293,9 @@ static void vd_s_HmiHudSetViposUpdn(void){
     u1_t_vpos_up = u1_s_hmihud_viposup_sig;
     u1_t_vpos_dn = u1_s_hmihud_viposdn_sig;
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_L_VIPOS_UPDW(u1_t_vpos_up, u1_t_vpos_dn);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -321,13 +311,20 @@ static void vd_s_HmiHudSetIllSw(void){
     U1 u1_t_kind;
     U2 u2_t_swcnt;
 
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_HMIHUD_ID_HUDDIM = (U2)RIMID_U2_DS_22_10A7_HUD_DIM;
-
+#else   /* BEV Rebase provisionally */
+    static const U2 u2_s_HMIHUD_ID_HUDDIM = (U2)U2_MAX;
+#endif   /* BEV Rebase provisionally */
     u1_t_ill_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u1_t_ill_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u2_t_swcnt    = (U2)0U;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts  = u1_g_Rim_ReadU2withStatus(u2_s_HMIHUD_ID_HUDDIM , &u2_t_swcnt);
+#else   /* BEV Rebase provisionally */
+    u1_t_sts  = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
     u1_t_kind = u1_t_sts & (U1)RIM_RESULT_KIND_MASK;
 
     if ((u1_t_kind == (U1)RIM_RESULT_KIND_OK) &&
@@ -339,12 +336,16 @@ static void vd_s_HmiHudSetIllSw(void){
         else if ((u1_t_ill_upsw != u1_s_hmihud_illupsw_presig) &&
            (u1_t_ill_upsw == (U1)HMIHUD_SW_OPE         ))  {
             u2_t_swcnt++;
+#if 0   /* BEV Rebase provisionally */
             vd_g_Rim_WriteU2(u2_s_HMIHUD_ID_HUDDIM, u2_t_swcnt);
+#endif   /* BEV Rebase provisionally */
         }
         else if ((u1_t_ill_dnsw != u1_s_hmihud_illdnsw_presig) &&
                  (u1_t_ill_dnsw == (U1)HMIHUD_SW_OPE         ))  {
             u2_t_swcnt++;
+#if 0   /* BEV Rebase provisionally */
             vd_g_Rim_WriteU2(u2_s_HMIHUD_ID_HUDDIM, u2_t_swcnt);
+#endif   /* BEV Rebase provisionally */
         }
         else {
             /* Do Nothing */
@@ -357,7 +358,9 @@ static void vd_s_HmiHudSetIllSw(void){
     u1_s_hmihud_illupsw_presig = u1_t_ill_upsw;
     u1_s_hmihud_illdnsw_presig = u1_t_ill_dnsw;
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_HdimmgrIfSetUpDwSw(u1_t_ill_upsw, u1_t_ill_dnsw);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -371,7 +374,9 @@ static void vd_s_HmiHudSetBldutyout(void){
 
     u2_t_bldutyout = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_BLDUTY_OUT, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_HdimmgrIfSetOutduty(u2_t_bldutyout);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -385,7 +390,9 @@ static void vd_s_HmiHudSetAdjmaxpos(void){
 
     u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMAXPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_ADJMAXPOS(u2_t_adjmaxpos);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -399,7 +406,9 @@ static void vd_s_HmiHudSetRespos(void){
 
     u2_t_respos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_RESPOS(u2_t_respos);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -413,7 +422,9 @@ static void vd_s_HmiHudSetMovpos(void){
 
     u2_t_movpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_MOVPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_MOVPOS(u2_t_movpos);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -427,7 +438,9 @@ static void vd_s_HmiHudSetAdjminpos(void){
 
     u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMINPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_ADJMINPOS(u2_t_adjmaxpos);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -441,35 +454,9 @@ static void vd_s_HmiHudSetAdjteppos(void){
 
     u2_t_adjteppos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJTEPPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_ADJTEPPOS(u2_t_adjteppos);
-}
-
-/*===================================================================================================================================*/
-/*  void  vd_g_HmiHudSigPut(const U1 u1_a_SIG, const U1 u1_a_SIG_ID)                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u1_a_SIG     :  recieve signal                                                                                   */
-/*                  u1_a_SIG_ID  :  recieve signal id                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void  vd_g_HmiHudSigPut(const U1 u1_a_SIG, const U1 u1_a_SIG_ID)
-{
-    U1 u1_t_sts;
-    U1 u1_t_mmmthd;
-
-    u1_t_sts = u1_g_HmiMM2C118NStsChk();
-    u1_t_mmmthd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH); 
-
-    if((u1_t_sts != (U1)HMIMM2C118N_STS_NML) && 
-        (u1_t_mmmthd == (U1)TRUE)){
-        u1_s_hmihud_viposdn_sig = (U1)0U;
-        u1_s_hmihud_viposup_sig = (U1)0U;
-    }else if(u1_a_SIG_ID == (U1)HMIHUD_SIGDAT_VIPOS_DN){
-        u1_s_hmihud_viposdn_sig = u1_a_SIG;
-    }else if(u1_a_SIG_ID == (U1)HMIHUD_SIGDAT_VIPOS_UP) {
-        u1_s_hmihud_viposup_sig = u1_a_SIG;
-    }else{
-        /* Do Nothing */
-    }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

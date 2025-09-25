@@ -32,6 +32,8 @@
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config/esopt_rx
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config_met_common
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/scc
+    -I${APP_DIR}/MET/IpcApplication/Hmi/config
+    -I${APP_DIR}/MET/IpcApplication/Hmi/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
@@ -150,6 +152,22 @@ App/MET/IpcApplication/Evc/Vardef/scc/vardef_hcs.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef_ptsrx.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef_zmilrq.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef.c
+App/MET/IpcApplication/Hmi/config/hmiproxy_cfg.c
+App/MET/IpcApplication/Hmi/config/hmiputxt_cfg.c
+App/MET/IpcApplication/Hmi/config/hmiputxt_if_cfg.c
+App/MET/IpcApplication/Hmi/config/hmitt_cfg.c
+App/MET/IpcApplication/Hmi/config/hmitt_if_cfg.c
+App/MET/IpcApplication/Hmi/scc/hmiadu.c
+App/MET/IpcApplication/Hmi/scc/hmihud.c
+App/MET/IpcApplication/Hmi/scc/hmilocale.c
+App/MET/IpcApplication/Hmi/scc/hmimaint.c
+App/MET/IpcApplication/Hmi/scc/hmiodo.c
+App/MET/IpcApplication/Hmi/scc/hmiproxy.c
+App/MET/IpcApplication/Hmi/scc/hmiputxt.c
+App/MET/IpcApplication/Hmi/scc/hmiscreen.c
+App/MET/IpcApplication/Hmi/scc/hmitripcom.c
+App/MET/IpcApplication/Hmi/scc/hmitt.c
+App/MET/IpcApplication/Hmi/scc/hmiwchime.c
 App/MET/IpcApplication/Vom/Dimmer/config/dimmer_cfg.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_daynight.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_usadjbysw.c

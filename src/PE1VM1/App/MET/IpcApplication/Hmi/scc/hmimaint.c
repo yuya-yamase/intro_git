@@ -17,12 +17,15 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
+#if 0   /* BEV Rebase provisionally */
 #include "odo_om_rst_if.h"
+#endif   /* BEV Rebase provisionally */
 
 #include "hmimaint.h"
-#include "hmimm2c118n.h"
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */
 #include "mcst_bf.h"
+#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -100,10 +103,14 @@ void    vd_g_HmiMaintMainTask(void)
 #endif
         if((u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
            (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
+#if 0   /* BEV Rebase provisionally */
             vd_g_OdoOmReset((U1)TRUE);
+#endif   /* BEV Rebase provisionally */
         }
         else{
+#if 0   /* BEV Rebase provisionally */
             vd_g_OdoOmReset((U1)FALSE);
+#endif   /* BEV Rebase provisionally */
         }
 #if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
 #else
@@ -111,36 +118,18 @@ void    vd_g_HmiMaintMainTask(void)
         if((u1_t_to              == (U1)FALSE)        &&
            (u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
            (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
+#if 0   /* BEV Rebase provisionally */
             vd_g_OdoOmReset((U1)TRUE);
+#endif   /* BEV Rebase provisionally */
         }
         else{
+#if 0   /* BEV Rebase provisionally */
             vd_g_OdoOmReset((U1)FALSE);
+#endif   /* BEV Rebase provisionally */
         }
     }
 #endif
     u1_s_hmimaint_rstreq_pre = u1_s_hmimaint_rstreq;
-}
-
-/*===================================================================================================================================*/
-/*  void  vd_g_HmiMaintPut(const U1 u1_a_MAINTDIST)                                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u4_a_MAINTDIST  :  maintenance reset signal                                                                      */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void  vd_g_HmiMaintPut(const U1 u1_a_MAINTRST)
-{
-    U1 u1_t_sts;
-    U1 u1_t_mmmthd;
-
-    u1_t_sts = u1_g_HmiMM2C118NStsChk();
-    u1_t_mmmthd = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
-
-    if((u1_t_sts != (U1)HMIMM2C118N_STS_NML) && 
-        (u1_t_mmmthd == (U1)TRUE)){
-        u1_s_hmimaint_rstreq = (U1)0U;
-    }else{
-        u1_s_hmimaint_rstreq = u1_a_MAINTRST;
-    }
 }
 
 /*===================================================================================================================================*/

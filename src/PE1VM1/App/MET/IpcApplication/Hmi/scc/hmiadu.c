@@ -85,10 +85,19 @@ void    vd_g_HmiAduMainTask(void)
     U1 u1_t_baonuser;
     U1 u1_t_wk;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_igon     = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igon     = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     u1_t_baonuser = (U1)0U;
+
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_BAONUSER, &u1_t_baonuser);
     u1_t_wk       = u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_CAN);
+#else   /* BEV Rebase provisionally */
+    u1_t_wk       = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
 
     if(u2_s_hmiadu_tx_tssmalf_elpsd >= (U2)HMIADU_COMTX_TSSMALF_5000MS) {
         u1_s_hmiadu_tssmalf_timeout_sts = (U1)HMIADU_TSSMALF_FRM_STATE_EST;

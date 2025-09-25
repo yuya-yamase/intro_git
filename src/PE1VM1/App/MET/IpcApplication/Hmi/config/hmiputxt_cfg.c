@@ -22,18 +22,22 @@
 #include "memfill_u4.h"
 #include "memcpy_u4.h"
 #include "oxcan.h"
+#if 0   /* BEV Rebase provisionally */
 #include "alert.h"
-#include "fuelvol_tau.h"
 #include "ambtmp.h"
-#include "oilmil.h"
 #include "odo_om_rst_if.h"
 #include "vptran_sel_typ.h"
+#endif   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */
 #include "rim_ctl.h"
+#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 #if (HMIPUTXT_TIMCHG_JDG == HMIPUTXT_JDG_ON)
+#if 0   /* BEV Rebase provisionally */
 #include "evschg.h"
+#endif   /* BEV Rebase provisionally */
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -68,7 +72,11 @@
 
 #define HMIPUTXT_TASK_TIME                  (10U)
 #define HMIPUTXT_HID_CNT_MAX                (6000U / HMIPUTXT_TASK_TIME)
+#if 0   /* BEV Rebase provisionally */
 #define HMIPUTXT_REQ_INIT                   (ALERT_REQ_UNKNOWN)
+#else   /* BEV Rebase provisionally */
+#define HMIPUTXT_REQ_INIT                   (0xFFU)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -203,6 +211,7 @@ static void    vd_s_HmiPuTxtCfgIGOffInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 {
+#if 0   /* BEV Rebase provisionally */
     static const ST_HMIPUTXT_REQ_W_ESOPT   st_sp_HMIPUTXT_REQ_W_ESOPT[] = {
         /*  u2_idx    u2_chid                      u1_req                                   u2_eso_ch             */
         {   (U2)331U, (U2)ALERT_CH_S_ADAFRO_PD,    (U1)ALERT_REQ_S_ADAFRO_PD_MLFNC,         (U2)U2_MAX           }     /* WARNING_ID_331 */
@@ -321,6 +330,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
             }
         }
     }
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)                                                                                */
@@ -330,6 +340,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (HMIPUTXT_SYSMAL_JDG == HMIPUTXT_JDG_ON)
     U1 u1_t_sysmal_req;    /* sysmal request */
     U2 u2_t_reqpos;        /* request position */
@@ -384,7 +395,7 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 #else
     u2_ap_detail[0] = (U2)0U;
 #endif
-
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -503,6 +514,7 @@ static U4     u4_s_HmiPuTxtIdx2Mask(const U2 u2_a_PUTXTIDX , U1 * u1p_a_bufpos)
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static void vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask) {
+#if 0   /* BEV Rebase provisionally */
 #if (HMIPUTXT_SYSMAL_JDG == HMIPUTXT_JDG_ON)
     static const U2 u2_sp_HMIPUTXT_SYSMAL[] = {
         (U2)95U,
@@ -541,6 +553,7 @@ static void vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask) {
         }
     }
 #endif
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -584,6 +597,7 @@ static void vd_s_HmiPutTxtCfgGpfMidMask(U4* u4_ap_varmask) {
 /*===================================================================================================================================*/
 static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (HMIPUTXT_EVM_JDG == HMIPUTXT_JDG_ON)
     static const U2 u2_sp_HMIPUTXT_EVMOD[] = {
         (U2)521U,
@@ -648,7 +662,7 @@ static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
 #else
     /* Do Nothing */
 #endif
-
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -659,6 +673,7 @@ static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
 /*===================================================================================================================================*/
 void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (HMIPUTXT_THEVM_JDG == HMIPUTXT_JDG_ON)
     static const U2 u2_sp_HMIPUTXT_THEVM[] = {
         (U2)166U,
@@ -710,6 +725,7 @@ void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
 #else
     /* Do Nothing */
 #endif
+#endif   /* BEV Rebase provisionally */
 
 }
 
@@ -729,18 +745,32 @@ static U1 u1_s_HmiPuTxtCfgTimchgReq(void)
     U1 u1_t_signal;          /* Signal Varlue  */
     U1 u1_t_timchg_pncdsp;   /* P_NCDSPVarlue  */
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_igon = u1_g_VehopemdIgnOn();
     u1_t_baon = u1_g_VehopemdBaOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igon = (U1)FALSE;
+    u1_t_baon = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
+
     u1_t_timchg_pncdsp = (U1)0U;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_PLG1G10_RXCH0);
+#else   /* BEV Rebase provisionally */
+    u1_t_msgsts = (U1)1U;
+#endif   /* BEV Rebase provisionally */
+
     u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
     u1_t_signal = (U1)0U;
     if(u1_t_msgsts == (U1)0x00U){
+#if 0   /* BEV Rebase provisionally */        
         (void)Com_ReceiveSignal(ComConf_ComSignal_PSDSPRQ, &u1_t_signal);
+#endif   /* BEV Rebase provisionally */    
     }
-
+#if 0   /* BEV Rebase provisionally */  
     u1_t_timchg_pncdsp = (U1)u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_NCDSP);
+#endif   /* BEV Rebase provisionally */    
 
     u1_t_ret = (U1)FALSE;
     if((u1_t_igon == (U1)FALSE) &&
@@ -778,16 +808,26 @@ static U1 u1_s_HmiPuTxtCfgFctahudReq(void)
     U1 u1_t_ctahr_sig;       /* Signal Varlue  */
     U1 u1_t_ctahl_sig;       /* Signal Varlue  */
 
+#if 0   /* BEV Rebase provisionally */  
     u1_t_igon = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igon = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     u1_t_ctahr_sig = (U1)0U;
     u1_t_ctahl_sig = (U1)0U;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_DS11S40_RXCH0);
+#else   /* BEV Rebase provisionally */
+    u1_t_msgsts = (U1)1U;
+#endif   /* BEV Rebase provisionally */
     u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
 
     if(u1_t_msgsts == (U1)0x00U){
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_CTAHR, &u1_t_ctahr_sig);
         (void)Com_ReceiveSignal(ComConf_ComSignal_CTAHL, &u1_t_ctahl_sig);
+#endif   /* BEV Rebase provisionally */
     }
 
     u1_t_ret = (U1)FALSE;
@@ -814,7 +854,11 @@ static U1 u1_s_HmiPuTxtCfgSftaltReq(void)
     U1 u1_t_igon;            /* IG-ON State    */
     U1 u1_t_calib_jdg;       /* Calib Value   */
 
+#if 0   /* BEV Rebase provisionally */ 
     u1_t_igon = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igon = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
 
     u1_t_ret = (U1)FALSE;
     if(u1_t_igon == (U1)TRUE){
@@ -874,6 +918,7 @@ static void    vd_s_HmiPutTxtCfgLbwMask(U4* u4_ap_varmask)
 /*===================================================================================================================================*/
 static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
 {
+#if 0   /* BEV Rebase provisionally */ 
     U4    u4_tp_req[HMIPUTXT_NWORD];
 
     vd_g_MemfillU4(&u4_tp_req[0], (U4)0U, (U4)HMIPUTXT_NWORD);
@@ -903,6 +948,7 @@ static void    vd_s_HmiPutTxtCfgAlertReq(U1 u1_a_slot)
             /* Do Nothing */
             break;
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

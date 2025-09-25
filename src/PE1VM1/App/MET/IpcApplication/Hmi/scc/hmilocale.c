@@ -17,7 +17,9 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
+#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
+#endif   /* BEV Rebase provisionally */
 
 #include "hmilocale.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -83,6 +85,7 @@ void    vd_g_HmiLocaleInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiLocaleMainTask(void)
 {
+#if 0   /* BEV Rebase provisionally */
     if (st_s_hmilocale_put.u1_language <= (U1)HMILOCALE_LANG){
         vd_g_LanguagePut(st_s_hmilocale_put.u1_language);
     }
@@ -133,6 +136,7 @@ void    vd_g_HmiLocaleMainTask(void)
     if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){
         vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

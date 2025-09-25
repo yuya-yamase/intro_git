@@ -41,7 +41,6 @@
 void      vd_g_HmiHudInit(void);
 void      vd_g_HmiHudMainTask(void);
 void      vd_g_HmiHudDataPut(const U4 * u4_ap_REQ);
-void      vd_g_HmiHudSigPut(const U1 u1_a_SIG, const U1 u1_a_SIG_ID);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

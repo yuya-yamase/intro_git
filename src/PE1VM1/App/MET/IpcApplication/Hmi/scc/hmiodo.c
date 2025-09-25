@@ -17,7 +17,9 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
+#if 0   /* BEV Rebase provisionally */
 #include "odo_km.h"
+#endif   /* BEV Rebase provisionally */
 
 #include "hmiodo.h"
 #include "rim_ctl.h"
@@ -89,19 +91,27 @@ void    vd_g_HmiOdoMainTask(void)
     /*  TRIP A   */
     if((u1_t_to            == (U1)FALSE ) &&
        (u4_s_hmiodo_trip_a == (U4)0U    )){
+#if 0   /* BEV Rebase provisionally */
         vd_g_OdoTripReset((U1)ODO_TRIP_CH_A , (U1)TRUE);
+#endif   /* BEV Rebase provisionally */
     }
     else{
+#if 0   /* BEV Rebase provisionally */
         vd_g_OdoTripReset((U1)ODO_TRIP_CH_A , (U1)FALSE);
+#endif   /* BEV Rebase provisionally */
     }
 
     /*  TRIP B   */
     if((u1_t_to            == (U1)FALSE ) &&
        (u4_s_hmiodo_trip_b == (U4)0U    )){
+#if 0   /* BEV Rebase provisionally */
         vd_g_OdoTripReset((U1)ODO_TRIP_CH_B , (U1)TRUE);
+#endif   /* BEV Rebase provisionally */
     }
     else{
+#if 0   /* BEV Rebase provisionally */
         vd_g_OdoTripReset((U1)ODO_TRIP_CH_B , (U1)FALSE);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -119,12 +129,16 @@ void  vd_g_HmiOdoPut(const U4 u4_a_TRIP_A , const U4 u4_a_TRIP_B)
 
     if((u4_s_hmiodo_trip_a     == (U1)0U) &&
        (u4_s_hmiodo_pre_trip_a != (U1)0U)){
+#if 0   /* BEV Rebase provisionally */
         vd_s_HmiOdoSWCount((U2)RIMID_U2_DS_22_10B2_TRIP_A);
+#endif   /* BEV Rebase provisionally */
     }
 
     if((u4_s_hmiodo_trip_b     == (U1)0U) &&
        (u4_s_hmiodo_pre_trip_b != (U1)0U)){
+#if 0   /* BEV Rebase provisionally */
         vd_s_HmiOdoSWCount((U2)RIMID_U2_DS_22_10B2_TRIP_B);
+#endif   /* BEV Rebase provisionally */
     }
 
     u4_s_hmiodo_pre_trip_a = u4_s_hmiodo_trip_a;
@@ -145,12 +159,18 @@ static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID)
 
     u2_t_count = (U2)0U;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts = u1_g_Rim_ReadU2withStatus(u2_a_RIMID, &u2_t_count);
+#else   /* BEV Rebase provisionally */
+    u1_t_sts = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
 
     if(((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) &&
        (u2_t_count                            <  (U2)U2_MAX            )){
         u2_t_count++;
+#if 0   /* BEV Rebase provisionally */
         vd_g_Rim_WriteU2(u2_a_RIMID, u2_t_count);
+#endif   /* BEV Rebase provisionally */
     }
 
 }
