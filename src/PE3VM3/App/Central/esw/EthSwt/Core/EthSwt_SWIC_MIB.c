@@ -45,7 +45,16 @@ void EthSwt_SWIC_MIB_TimerUpdate (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_MIB_Clear (uint32 * const errFactor)
+void EthSwt_SWIC_MIB_Clear (void)
+{
+    LIB_DI();
+    LIB_memset((uint8*)&G_ETHSWT_SWIC_MIB_LIST, 0, sizeof(G_ETHSWT_SWIC_MIB_LIST));
+    swicGetMIBTimer.time = 0;
+    swicGetMIBTimer.req = STD_ON;
+    LIB_EI();
+}
+/* -------------------------------------------------------------------------- */
+Std_ReturnType EthtSwt_SWIC_MIB_ReadDiscard (uint32 * const errFactor)
 {
     uint8 idx;
     Std_ReturnType	result = E_OK;      /* MIB読み出しポートがない場合は、E_OKで終了させる */
@@ -84,7 +93,7 @@ Std_ReturnType EthSwt_SWIC_MIB_Action (uint32 * const errFactor)
     return result;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_MIB_GetMIB(uint8 SwitchPortIdx, uint32 Mib, S_ETHSWT_SWIC_MIB_COUNT *MibCountPtr)
+Std_ReturnType EthSwt_SWIC_MIB_Get(uint8 SwitchPortIdx, uint32 Mib, S_ETHSWT_SWIC_MIB_COUNT *MibCountPtr)
 {
     Std_ReturnType ret = E_NOT_OK;
     EthSwt_StateType status;
