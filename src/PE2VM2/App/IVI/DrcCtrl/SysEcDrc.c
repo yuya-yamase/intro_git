@@ -10,6 +10,7 @@
 #include "SysEcDrc.h"
 #include "memfill_u1.h"
 #include "gpt_drv_frt.h"
+#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -77,6 +78,7 @@ static U4    u4_s_sysecdrc_frtsum_1ms;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static void    vd_s_SysEcDrc_Init(void);
 static void    vd_s_SysEcDrc_DrcClear(void);
 static void    vd_s_SysEcDrc_UpdateSystime(void);
 static void    vd_s_SysEcDrc_GetTim1ms_4(U1* u1p_a_tim1, U1* u1p_a_tim2, U1* u1p_a_tim3, U1* u1p_a_tim4);
@@ -88,19 +90,54 @@ static void    vd_s_SysEcDrc_Memcpy(U1 * u1p_a_dst, const ST_DRC_SYSREC * stp_a_
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_SysEcDrc_Init(void)                                                                                                 */
+/*  void    vd_g_SysEcDrc_BonInit(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_SysEcDrc_Init(void)
+void    vd_g_SysEcDrc_BonInit(void)
+{
+    vd_s_SysEcDrc_Init();
+	vd_s_SysEcDrc_UpdateSystime();
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_SysEcDrc_WkupInit(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_SysEcDrc_WkupInit(void)
+{
+    U1 u1_t_sts;
+    U4 u4_t_read;
+    
+    u1_t_sts = (U1)0U;
+    u4_t_read = (U4)0U;
+	
+    vd_s_SysEcDrc_Init();
+    
+    u1_t_sts = u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_DRC_TICKTIME, &u4_t_read);
+    if(((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) &&
+       (u4_t_read != (U4)0U)){
+        u4_s_sysecdrc_systime_1ms = u4_s_sysecdrc_systime_1ms + u4_t_read;
+    };
+	
+	vd_s_SysEcDrc_UpdateSystime();
+}
+/*===================================================================================================================================*/
+/*  static void    vd_s_SysEcDrc_Init(void)                                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void    vd_s_SysEcDrc_Init(void)
 {
     vd_s_SysEcDrc_DrcClear();
     u1_s_sysecdrc_timecnt_10ms = (U1)0U;
-    u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE]  = u4_g_Gpt_FrtGetUsElapsed(vdp_PTR_NA);
+    u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE]  = (U4)0U;
     u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_CRRNT] = (U4)0U;
-    u4_s_sysecdrc_systime_1ms = u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE] / (U4)SYSECDRC_FRT_1MS;
-    u4_s_sysecdrc_frtsum_1ms = u4_sp_sysecdrc_elpsd_frt[GPT_FRT_USELPSD_BASE] % (U4)SYSECDRC_FRT_1MS;
+    u4_s_sysecdrc_systime_1ms = (U4)0U;;
+    u4_s_sysecdrc_frtsum_1ms = (U4)0U;;
 }
 
 /*===================================================================================================================================*/
@@ -163,6 +200,7 @@ static void    vd_s_SysEcDrc_UpdateSystime(void)
     else{
         u4_s_sysecdrc_systime_1ms = u4_t_frt_next - ((U4)U4_MAX - u4_s_sysecdrc_systime_1ms);
     }
+    vd_g_Rim_WriteU4((U2)RIMID_U4_DRC_TICKTIME, u4_s_sysecdrc_systime_1ms);
 }
 
 /*===================================================================================================================================*/

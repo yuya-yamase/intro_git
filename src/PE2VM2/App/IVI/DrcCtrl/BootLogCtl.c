@@ -15,6 +15,7 @@
 #include "memcpy_u1.h"
 #include "Dio.h"
 #include "ivdsh.h"
+#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -115,10 +116,12 @@ static U1    u1_s_bootlogctl_linkup_sts;
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static void     vd_s_BootLogCtl_Init(void);
-static void     vd_s_BootLogCtl_Clear(void);
 static void     vd_s_BootLogCtl_WakeFactDetect(void);
+static void     vd_s_BootLogCtl_ReadSocWake(void);
 static void     vd_s_BootLogCtl_ChkSocWake(const U1 u1_a_STS);
+static void     vd_s_BootLogCtl_RstSocWake(void);
 static void     vd_s_BootLogCtl_ChkStrWake(const U1 u1_a_STS);
+static void     vd_s_BootLogCtl_RstStrWake(void);
 static void     vd_s_BootLogCtl_ChkLinkUp(const U1 u1_a_STS);
 static void     vd_s_BootLogCtl_SetTim_4(U4 u4_a_time, U1* u1p_a_buff);
 static U4       u4_s_BootLogCtl_GetElpsdTim(const U4 u4_a_NEW, const U4 u4_a_BASE);
@@ -129,7 +132,7 @@ static U4       u4_s_BootLogCtl_GetElpsdTim(const U4 u4_a_NEW, const U4 u4_a_BAS
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_s_BootLogCtl_Init(void)                                                                                               */
+/*  void    vd_g_BootLogCtl_BonInit(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
@@ -157,9 +160,11 @@ void    vd_g_BootLogCtl_WkupInit(void)
     u1_t_port_sts = (U1)Dio_ReadChannel(BOOTLOGCTL_PORT_AOSS_SLEEP_ENTRY_EXIT);
     if(u1_t_port_sts == (U1)STD_HIGH){
         u1_s_bootlogctl_wakefact = (U1)BOOTLOGCTL_FACT_STRRESUME;
+        vd_s_BootLogCtl_ReadSocWake();
     }
     else{
         u1_s_bootlogctl_wakefact = (U1)BOOTLOGCTL_FACT_WKUP;
+        vd_g_Rim_WriteU4((U2)RIMID_U4_BOOTLOG_SOCWAKE, u4_sp_bootlogctl_time[BOOTLOGCTL_POINT_SOCWAKE]);
     }
     vd_s_BootLogCtl_WakeFactDetect();
 }
@@ -175,17 +180,6 @@ static void     vd_s_BootLogCtl_Init(void)
     u1_s_bootlogctl_socwake_sts = (U1)BOOTLOGCTL_DETECT_OFF;
     u1_s_bootlogctl_strwake_sts = (U1)BOOTLOGCTL_DETECT_OFF;
     u1_s_bootlogctl_linkup_sts = (U1)BOOTLOGCTL_DETECT_OFF;
-    vd_s_BootLogCtl_Clear();
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_BootLogCtl_Clear(void)                                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static void     vd_s_BootLogCtl_Clear(void)
-{
     vd_g_MemfillU4(&u4_sp_bootlogctl_time[0], (U4)0U, (U4)BOOTLOGCTL_POINT_NUM);
     vd_g_MemfillU1(&u1_sp_bootlogctl_pwrstate[0], (U1)0U, (U4)XSPI_IVI_POWER_01_BUFSIZ);
     u1_s_bootlogctl_stsflg = (U1)0U;
@@ -208,6 +202,28 @@ static void     vd_s_BootLogCtl_WakeFactDetect(void)
     u4_sp_bootlogctl_time[BOOTLOGCTL_POINT_WKFCTDTCT] = u4_g_SysEcDrc_GetSystime();
     vd_g_XspiIviSub1PowerGetSts(&u1_sp_bootlogctl_pwrstate[0]);
     u1_s_bootlogctl_stsflg |= (U1)BOOTLOGCTL_STS_WAKEFACT;
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_BootLogCtl_ReadSocWake(void)                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_BootLogCtl_ReadSocWake(void)
+{
+    U1 u1_t_sts;
+    U4 u4_t_read;
+    
+    u1_t_sts = (U1)0U;
+    u4_t_read = (U4)0U;
+    
+    u1_t_sts = u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_BOOTLOG_SOCWAKE, &u4_t_read);
+    if(((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) &&
+       (u4_t_read != (U4)0U)){
+        u4_sp_bootlogctl_time[BOOTLOGCTL_POINT_SOCWAKE] = u4_t_read;
+        u1_s_bootlogctl_stsflg |= (U1)BOOTLOGCTL_STS_SOCWAKE;
+    };
 }
 
 /*===================================================================================================================================*/
@@ -244,17 +260,31 @@ void    vd_g_BootLogCtl_MainTask(void)
 /*===================================================================================================================================*/
 static void     vd_s_BootLogCtl_ChkSocWake(const U1 u1_a_STS)
 {
+    if((u1_a_STS == (U1)BOOTLOGCTL_DETECT_OFF) && (u1_s_bootlogctl_socwake_sts == (U1)BOOTLOGCTL_DETECT_ON)){
+        vd_s_BootLogCtl_RstSocWake();
+    }
     if((u1_a_STS == (U1)BOOTLOGCTL_DETECT_ON) && (u1_s_bootlogctl_socwake_sts == (U1)BOOTLOGCTL_DETECT_OFF)){
+        if(u1_s_bootlogctl_wakefact == (U1)BOOTLOGCTL_FACT_STRRESUME){
+            vd_s_BootLogCtl_RstSocWake();
+        }
         vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_BOOTLOG, (U1)BOOTLOGCTL_MCULOG_SOCWAKE, (U1)0x00, (U1)0x00);
         u4_sp_bootlogctl_time[BOOTLOGCTL_POINT_SOCWAKE] = u4_g_SysEcDrc_GetSystime();
         u1_s_bootlogctl_stsflg |= (U1)BOOTLOGCTL_STS_SOCWAKE;
-    }
-    if((u1_a_STS == (U1)BOOTLOGCTL_DETECT_OFF) && (u1_s_bootlogctl_socwake_sts == (U1)BOOTLOGCTL_DETECT_ON)){
-        vd_s_BootLogCtl_Clear();
-        u1_s_bootlogctl_wakefact = (U1)BOOTLOGCTL_FACT_WKUP;
-        vd_s_BootLogCtl_WakeFactDetect();
+        vd_g_Rim_WriteU4((U2)RIMID_U4_BOOTLOG_SOCWAKE, u4_sp_bootlogctl_time[BOOTLOGCTL_POINT_SOCWAKE]);
     }
     u1_s_bootlogctl_socwake_sts = u1_a_STS;
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_BootLogCtl_RstSocWake(void)                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_BootLogCtl_RstSocWake(void)
+{
+    u1_s_bootlogctl_wakefact = (U1)BOOTLOGCTL_FACT_WKUP;
+    vd_s_BootLogCtl_WakeFactDetect();
 }
 
 /*===================================================================================================================================*/
@@ -265,17 +295,30 @@ static void     vd_s_BootLogCtl_ChkSocWake(const U1 u1_a_STS)
 /*===================================================================================================================================*/
 static void     vd_s_BootLogCtl_ChkStrWake(const U1 u1_a_STS)
 {
+    if((u1_a_STS == (U1)BOOTLOGCTL_DETECT_OFF) && (u1_s_bootlogctl_strwake_sts == (U1)BOOTLOGCTL_DETECT_ON)){
+        vd_s_BootLogCtl_RstStrWake();
+    }
     if((u1_a_STS == (U1)BOOTLOGCTL_DETECT_ON) && (u1_s_bootlogctl_strwake_sts == (U1)BOOTLOGCTL_DETECT_OFF)){
+        if(u1_s_bootlogctl_wakefact == (U1)BOOTLOGCTL_FACT_WKUP){
+            vd_s_BootLogCtl_RstStrWake();
+        }
         vd_g_SysEcDrc_Drec((U1)SYSECDRC_DREC_CAT_BOOTLOG, (U1)BOOTLOGCTL_MCULOG_STRWAKE, (U1)0x00, (U1)0x00);
         u4_sp_bootlogctl_time[BOOTLOGCTL_POINT_STRWAKE] = u4_g_SysEcDrc_GetSystime();
         u1_s_bootlogctl_stsflg |= (U1)BOOTLOGCTL_STS_STRWAKE;
     }
-    if((u1_a_STS == (U1)BOOTLOGCTL_DETECT_OFF) && (u1_s_bootlogctl_strwake_sts == (U1)BOOTLOGCTL_DETECT_ON)){
-        vd_s_BootLogCtl_Clear();
-        u1_s_bootlogctl_wakefact = (U1)BOOTLOGCTL_FACT_STRRESUME;
-        vd_s_BootLogCtl_WakeFactDetect();
-    }
     u1_s_bootlogctl_strwake_sts = u1_a_STS;
+}
+
+/*===================================================================================================================================*/
+/*  static void    vd_s_BootLogCtl_RstStrWake(void)                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void     vd_s_BootLogCtl_RstStrWake(void)
+{
+    u1_s_bootlogctl_wakefact = (U1)BOOTLOGCTL_FACT_STRRESUME;
+    vd_s_BootLogCtl_WakeFactDetect();
 }
 
 /*===================================================================================================================================*/

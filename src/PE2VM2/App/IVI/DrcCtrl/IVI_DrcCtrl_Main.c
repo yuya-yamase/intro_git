@@ -64,7 +64,7 @@
 /*===================================================================================================================================*/
 void            vd_g_Ivi_DrcCtrl_Main_Bon_init(void)
 {
-    vd_g_SysEcDrc_Init();
+    vd_g_SysEcDrc_BonInit();
     vd_g_DtcCtl_Init();
     vd_g_RobCtl_Init();
     vd_g_BootLogCtl_BonInit();
@@ -79,7 +79,7 @@ void            vd_g_Ivi_DrcCtrl_Main_Bon_init(void)
 /*===================================================================================================================================*/
 void            vd_g_Ivi_DrcCtrl_Main_Wkup_init(void)
 {
-    vd_g_SysEcDrc_Init();
+    vd_g_SysEcDrc_WkupInit();
     vd_g_DtcCtl_Init();
     vd_g_RobCtl_Init();
     vd_g_BootLogCtl_WkupInit();
@@ -94,7 +94,7 @@ void            vd_g_Ivi_DrcCtrl_Main_Wkup_init(void)
 /*===================================================================================================================================*/
 void            vd_g_Ivi_DrcCtrl_Main_Rst_init(void)
 {
-    vd_g_SysEcDrc_Init();
+    vd_g_SysEcDrc_WkupInit();
     vd_g_DtcCtl_Init();
     vd_g_RobCtl_Init();
     vd_g_BootLogCtl_WkupInit();
