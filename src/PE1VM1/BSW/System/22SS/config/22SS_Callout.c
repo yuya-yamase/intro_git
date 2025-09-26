@@ -67,7 +67,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #include "mcst.h"
-#include "vds_ci.h"
 #include "hmiproxy.h"
 #include "battpow.h"
 #include "drvind_pwr_pct.h"
@@ -146,7 +145,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
         &vd_g_AmbtmpBonInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
 #endif   /* BEV Rebase provisionally */
@@ -240,7 +238,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
 #endif   /* BEV Rebase provisionally */
@@ -334,7 +331,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
 #endif   /* BEV Rebase provisionally */
