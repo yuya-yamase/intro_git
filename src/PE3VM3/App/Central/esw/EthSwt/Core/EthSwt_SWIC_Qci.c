@@ -42,7 +42,18 @@ void EthSwt_SWIC_Qci_TimerUpdate (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Qci_Clear (uint32 * const errFactor)
+void EthSwt_SWIC_Qci_Clear (void)
+{
+    LIB_DI();
+    LIB_memset((uint8*)&G_ETHSWT_SWIC_QCI_COUNT, 0, sizeof(G_ETHSWT_SWIC_QCI_COUNT));
+    swicGetQciTimer.time = 0;
+    swicGetQciTimer.req = STD_ON;
+    LIB_EI();
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+Std_ReturnType EthSwt_SWIC_Qci_ReadDiscard (uint32 * const errFactor)
 {
     uint8 idx;
     uint32          val = 0uL;
