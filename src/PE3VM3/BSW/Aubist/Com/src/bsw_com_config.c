@@ -55,7 +55,6 @@
 #else  /* BSW_COM_TXCLRSTOPTOUT == BSW_USE */
 #define BSW_COM_CANCELTXTIMEOUTCLR_FUNC   (&bsw_com_tx_CnclTxToutClrIpduNn)
 #endif /* BSW_COM_TXCLRSTOPTOUT == BSW_USE*/
-#define BSW_COM_TXTIMEOUTHOOK_FUNC        (&bsw_com_tx_TimeoutTxMsg)
 #else  /* BSW_COM_TX_TIMEOUT_USE == BSW_USE */
 #define BSW_COM_INITALLTXREQST_FUNC       (&bsw_com_tx_InitAllTxReqStNone)
 #define BSW_COM_INITTXREQST_FUNC          (&bsw_com_tx_InitTxReqStatNone)
@@ -65,7 +64,6 @@
 #define BSW_COM_TXTIMEOUT_FUNC            (&bsw_com_tx_TxTimeoutNone)
 #define BSW_COM_CANCELTXTIMEOUTBW_FUNC    (&bsw_com_tx_CnclTxToutBusWkupNn)
 #define BSW_COM_CANCELTXTIMEOUTCLR_FUNC   (&bsw_com_tx_CnclTxToutClrIpduNn)
-#define BSW_COM_TXTIMEOUTHOOK_FUNC        (&bsw_com_tx_TimeoutTxMsgNone)
 #endif /* BSW_COM_TX_TIMEOUT_USE == BSW_USE */
 
 #define BSW_COM_ALIVECOUNTER_PTN_CH(ch)    (BSW_COM_ALIVECOUNTER_PTN_CH##ch)
@@ -143,7 +141,8 @@
 #define BSW_COM_CLRMETADATARMCH_FUNC       (&bsw_com_tx_ClearMDRmCh)
 #define BSW_COM_CLRMETADATARMMSG_FUNC      (&bsw_com_tx_ClearMDRmMsg)
 #define BSW_COM_GETMETADATATXMSG_FUNC      (&bsw_com_tx_GetMetaDataTxMsg)
-#define BSW_COM_CHKMETADATAUPDATED_FUNC    (&bsw_com_tx_CheckMetaDataUpdated)
+#define BSW_COM_GETTXMSG_FUNC              (&bsw_com_tx_GetTxMsgUseMetaData)
+#define BSW_COM_INITTMPMETABUF_FUNC        (&bsw_com_tx_InitTempMetaDataBuf)
 #else
 #define BSW_COM_INITBITRSP_FUNC            (&bsw_com_tx_InitBitRspNone)
 #define BSW_COM_INITCHANNELRSP_FUNC        (&bsw_com_tx_InitChannelRspNone)
@@ -153,8 +152,17 @@
 #define BSW_COM_CLRMETADATARMCH_FUNC       (&bsw_com_tx_ClearMDRmChNone)
 #define BSW_COM_CLRMETADATARMMSG_FUNC      (&bsw_com_tx_ClearMDRmMsgNone)
 #define BSW_COM_GETMETADATATXMSG_FUNC      (&bsw_com_tx_GetMetaDataTxMsgNone)
-#define BSW_COM_CHKMETADATAUPDATED_FUNC    (&bsw_com_tx_CheckMDUpdatedNone)
+#define BSW_COM_GETTXMSG_FUNC              (&bsw_com_tx_GetTxMsg)
+#define BSW_COM_INITTMPMETABUF_FUNC        (&bsw_com_tx_InitTmpMetaBufNone)
 #endif
+
+#if (BSW_COM_CFG_METADATA_USE == BSW_USE)
+#if (BSW_COM_CFG_METADATASIZE_MAX > 0U)
+#define BSW_COM_TMPMETADATA_BUFSIZE        (BSW_COM_CFG_METADATASIZE_MAX)
+#else
+#define BSW_COM_TMPMETADATA_BUFSIZE        (BSW_COM_DUMMY_SIZE)
+#endif /* (BSW_COM_CFG_METADATASIZE_MAX > 0U) */
+#endif /* (BSW_COM_CFG_METADATA_USE == BSW_USE) */
 
 #if ( BSW_COM_FUNC_PNCIPDU == BSW_USE )
 #define BSW_COM_CHKCHPNCUSE_FUNC       (&bsw_com_data_ChkChPncUse)
@@ -240,10 +248,20 @@
 #if ( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
 #define BSW_COM_RX_VPSRXINDICATION_FUNC        (&BswM_VPS_RxIndication)
 #define BSW_COM_TX_VPSTXIPDUCALLOUT_FUNC       (&BswM_VPS_TxIpduCallout)
+#define BSW_COM_TX_VPSTXCONF_FUNC              (&BswM_VPS_TxConfirmation)
+#define BSW_COM_TX_VPSTXREQCONF_FUNC           (&BswM_VPS_TxReqConfirmation)
 #else
 #define BSW_COM_RX_VPSRXINDICATION_FUNC        (&bsw_com_rx_VPSRxIndicationNone)
 #define BSW_COM_TX_VPSTXIPDUCALLOUT_FUNC       (&bsw_com_tx_VPSTxIpduCalloutNone)
+#define BSW_COM_TX_VPSTXCONF_FUNC              (&bsw_com_tx_VPSTxConfNone)
+#define BSW_COM_TX_VPSTXREQCONF_FUNC           (&bsw_com_tx_VPSTxReqConfNone)
 #endif
+
+#if (BSW_COM_PRETX_MAX_MSGSIZE > 0U)
+#define BSW_COM_PRETX_BUFSIZE                  (BSW_COM_PRETX_MAX_MSGSIZE)
+#else
+#define BSW_COM_PRETX_BUFSIZE                  (BSW_COM_DUMMY_SIZE)
+#endif /* (BSW_COM_PRETX_MAX_MSGSIZE > 0U) */
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -365,18 +383,10 @@ Bsw_Com_PncIpduTxInfoType   bsw_com_tx_stPncIpduTxInfo[BSW_COM_DUMMY_SIZE];     
 #endif /* ( BSW_COM_FUNC_PNCIPDU == BSW_USE ) */
 
 /* For notification before tansmission */
-#if (BSW_COM_PRETX_MAX_MSGSIZE != 0U)
-BswU1 bsw_com_tx_u1PreTxMsgBuf[BSW_COM_PRETX_MAX_MSGSIZE];          /* Temporary buffer for notification before tansmission         */
-#else
-BswU1 bsw_com_tx_u1PreTxMsgBuf[BSW_COM_DUMMY_SIZE];          /* Temporary buffer for notification before tansmission         */
-#endif /* (BSW_COM_PRETX_MAX_MSGSIZE != 0U) */
+BswU1 bsw_com_tx_u1PreTxMsgBuf[BSW_COM_PRETX_BUFSIZE];                                  /* Temporary buffer for notification before tansmission         */
 
 #if (BSW_COM_CFG_METADATA_USE == BSW_USE) 
-#if (BSW_COM_CFG_METADATASIZE_MAX > 0)
-BswU1 bsw_com_tx_u1MetaDataBuf[BSW_COM_CFG_METADATASIZE_MAX];
-#else
-BswU1 bsw_com_tx_u1MetaDataBuf[BSW_COM_DUMMY_SIZE];
-#endif /* BSW_COM_CFG_METADATASIZE_MAX > 0 */
+BswU1 bsw_com_tx_u1MetaDataBuf[BSW_COM_TMPMETADATA_BUFSIZE];
 #endif /* BSW_COM_CFG_METADATA_USE == BSW_USE */
 
 /*------------------------------------*/
@@ -748,6 +758,10 @@ BswConst        BswU1  bsw_com_rom_u1TXDLYSW              = (BswU1)BSW_COM_TX_DL
 BswConst        BswU1  bsw_com_rom_u1TXTIMEOUT            = (BswU1)BSW_COM_TX_TIMEOUT_USE;
 BswConst        BswU1  bsw_com_rom_u1EVTAWAKEFUNC         = (BswU1)BSW_COM_EVENTAWAKE_USE;
 BswConst        BswU2  bsw_com_rom_u2EVDELAYTIME = BSW_COM_u2MILSEC_RUP(BSW_COM_EVMSG_DELAY_TIME);
+BswConst        BswU2  bsw_com_rom_u2PRETXBUFSIZE         = (BswU2)BSW_COM_PRETX_BUFSIZE;
+#if (BSW_COM_CFG_METADATA_USE == BSW_USE) 
+BswConst        BswU1  bsw_com_rom_u1TMPMETABUFSIZE       = (BswU1)BSW_COM_TMPMETADATA_BUFSIZE;
+#endif /* BSW_COM_CFG_METADATA_USE == BSW_USE */
 
 BswConst        BswU1  bsw_com_rom_u1RETRIGGER[BSW_COM_NETWORK_NUM] =
 {
@@ -2129,11 +2143,10 @@ BswConst    BswU1   bsw_com_rom_u1TXSTOPTOUTHOOK[BSW_COM_NETWORK_NUM] =
 void  (* BswConst bsw_com_rom_ptInitTxReqStFunc)( PduIdType u2PduId ) = BSW_COM_INITTXREQST_FUNC;
 void  (* BswConst bsw_com_rom_ptSetTxReqStFunc)( PduIdType u2PduId, Bsw_Com_TxModeType u1TxMode ) = BSW_COM_SETTXREQST_FUNC;
 BswU1 (* BswConst bsw_com_rom_ptGetTxReqStFunc)( PduIdType u2PduId ) = BSW_COM_GETTXREQST_FUNC;
-void  (* BswConst bsw_com_rom_ptTransCfmFunc)( PduIdType u2PduId ) = BSW_COM_TRANSCFM_FUNC;
+void  (* BswConst bsw_com_rom_ptTransCfmFunc)( PduIdType u2PduId, Std_ReturnType u1Result ) = BSW_COM_TRANSCFM_FUNC;
 BswU2 (* BswConst bsw_com_rom_ptTxTimeoutFunc)( PduIdType u2PduId ) = BSW_COM_TXTIMEOUT_FUNC;
 void  (* BswConst bsw_com_rom_ptTxCnclToutBWFunc)( PduIdType u2PduId ) = BSW_COM_CANCELTXTIMEOUTBW_FUNC;
 void  (* BswConst bsw_com_rom_ptTxCnclToutClrFunc)( PduIdType u2PduId ) = BSW_COM_CANCELTXTIMEOUTCLR_FUNC;
-void  (* BswConst bsw_com_rom_ptTxTimeoutHookFunc)( PduIdType PduId ) = BSW_COM_TXTIMEOUTHOOK_FUNC;
 void  (* BswConst bsw_com_rom_ptSndNTimCntFunc)( void ) = BSW_COM_SENDNTIMESCNT_FUNC;
 Bsw_Com_RetStatusType (* BswConst bsw_com_rom_ptChgPeriToNTimFunc)( PduIdType u2PduId, Bsw_Com_RetStatusType s1QueExist ) = BSW_COM_CHGPERITONTIM_FUNC;
 void  (* BswConst bsw_com_rom_ptSndNTimMsgFunc)( PduIdType u2PduId ) = BSW_COM_SENDNTIMESMSG_FUNC;
@@ -2157,13 +2170,14 @@ BswU1 (* BswConst bsw_com_rom_ptGetPncIpduTxStFunc)( NetworkHandleType Network, 
 
 void  (* BswConst bsw_com_rom_ptInitBitRspFunc)( void ) = BSW_COM_INITBITRSP_FUNC;
 void  (* BswConst bsw_com_rom_ptInitChRspFunc)( NetworkHandleType network ) = BSW_COM_INITCHANNELRSP_FUNC;
+void  (* BswConst bsw_com_rom_ptInitTpMetaBufFunc)( void ) = BSW_COM_INITTMPMETABUF_FUNC;
 void  (* BswConst bsw_com_rom_ptDelBitRspFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId ) = BSW_COM_DELBITRSP_FUNC;
 Bsw_Com_RetStatusType (* BswConst bsw_com_rom_ptGetBitRspFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId ) = BSW_COM_GETBITRSP_FUNC;
 void  (* BswConst bsw_com_rom_ptDelBitUseMDFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId, Bsw_Com_RetStatusType s1QueExist ) = BSW_COM_DELBITUSEMETADATA_FUNC;
 void  (* BswConst bsw_com_rom_ptClrMDRmChFunc)( NetworkHandleType Network ) = BSW_COM_CLRMETADATARMCH_FUNC;
 void  (* BswConst bsw_com_rom_ptClrMDRmMsgFunc)( Bsw_Com_NetworkType u1Network, PduIdType u2PduId ) = BSW_COM_CLRMETADATARMMSG_FUNC;
-void  (* BswConst bsw_com_rom_ptGetMDTxMsgFunc)( PduIdType u2PduId, PduInfoType* ptSendMsg ) = BSW_COM_GETMETADATATXMSG_FUNC;
-Std_ReturnType  (* BswConst bsw_com_rom_ptChkMDUpdatedFunc)( PduIdType u2PduId ) = BSW_COM_CHKMETADATAUPDATED_FUNC;
+void  (* BswConst bsw_com_rom_ptGetMDTxMsgFunc)( PduIdType u2PduId, PduInfoType* ptSendMsg, Bsw_Com_RetStatusType s1QueExist ) = BSW_COM_GETMETADATATXMSG_FUNC;
+void  (* BswConst bsw_com_rom_ptGetTxMsgFunc)( PduIdType u2PduId, PduInfoType* ptSendMsg, Bsw_Com_RetStatusType s1QueExist ) = BSW_COM_GETTXMSG_FUNC;
 
 void  (* BswConst bsw_com_rom_ptUpdateTxStsFunc[BSW_COM_NETWORK_NUM])( BswU1 u1Ch ) =
 {
@@ -2510,8 +2524,10 @@ void  (* BswConst bsw_com_rom_ptInitPncRxStatFunc)( void ) = BSW_COM_INITPNCRXST
 void  (* BswConst bsw_com_rom_ptDeInitPncRxStFunc)( void ) = BSW_COM_SHUTDOWNPNCRXSTAT_FUNC;
 BswU1 (* BswConst bsw_com_rom_ptGetPncIpduRxDMStFunc)( NetworkHandleType Network, PduIdType u2PduId ) = BSW_COM_GETPNCIPDURXDMST_FUNC;
 BswU1 (* BswConst bsw_com_rom_ptGetPncIpduRxStFunc)( NetworkHandleType Network, PduIdType u2PduId ) = BSW_COM_GETPNCIPDURXST_FUNC;
-void  (* BswConst bsw_com_rom_ptVpsRxIndictionFunc)( PduIdType PduId ) = BSW_COM_RX_VPSRXINDICATION_FUNC;
+boolean (* BswConst bsw_com_rom_ptVpsRxIndictionFunc)( PduIdType PduId, BswConstR PduInfoType* PduInfoPtr ) = BSW_COM_RX_VPSRXINDICATION_FUNC;
 void  (* BswConst bsw_com_rom_ptVpsTxIpduCOFunc)( PduIdType PduId, PduInfoType* PduInfoPtr ) = BSW_COM_TX_VPSTXIPDUCALLOUT_FUNC;
+void  (* BswConst bsw_com_rom_ptVpsTxConfFunc)( PduIdType TxPduId ) = BSW_COM_TX_VPSTXCONF_FUNC;
+void  (* BswConst bsw_com_rom_ptVpsTxReqConfFunc)( PduIdType TxPduId ) = BSW_COM_TX_VPSTXREQCONF_FUNC;
 
 void  (* BswConst bsw_com_rom_ptUpdateRxStsFunc[BSW_COM_NETWORK_NUM])( BswU1 u1Ch ) =
 {
@@ -2774,7 +2790,7 @@ BswConst Bsw_Com_AlvCnt3RxInfoType bsw_com_AlvCnt3RxInfo[BSW_COM_DUMMY_SIZE] = {
 /*  v2-0-0          :2022/02/21                                             */
 /*  v2-1-0          :2022/11/18                                             */
 /*  v2-2-0          :2023/07/06                                             */
-/*  v3-0-0          :2024/11/15                                             */
+/*  v3-0-0          :2025/03/04                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

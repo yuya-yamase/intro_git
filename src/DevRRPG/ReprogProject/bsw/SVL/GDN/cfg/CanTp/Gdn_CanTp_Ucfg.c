@@ -166,7 +166,7 @@ GdnConst Gdn_CanTp_TxNAIInfoType    gdn_cantp_TxNAIInformation[GDN_CANTP_MaxTxNA
         (Gdn_TimeoutValueType)0U           ,/* N_Cs(Delay)タイマ   ：0..65534 (ms)         */
         GDN_CANIF_CanTpTxPduId0001          /* 送信PDUID（CanIfの定義する値を使用する）    */
 #if ( GDN_CANTP_CanFDSupport == GDN_ON )
-        ,(Gdn_PduLengthType)8U             /* 送信サイズ(8,12,16,20,24,32,48,64から選択)  */
+        ,(Gdn_PduLengthType)8U              /* 送信サイズ(8,12,16,20,24,32,48,64から選択)  */
 #endif
     }
 };
@@ -181,5 +181,10 @@ GdnConst Gdn_TimerIdType gdn_cantp_TimerId[GDN_CANTP_MaxChannelCnt][GDN_CANTP_Ti
 #define GDN_CANTP_STOP_SEC_CST
 #include <Gdn_CanTp_MemMap.h>
 
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

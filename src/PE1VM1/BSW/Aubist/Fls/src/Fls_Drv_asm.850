@@ -48,7 +48,7 @@
 -- Note          : -
 ------------------------------------------------------------------------------
 .align 16
-.section"bsw_fls_text",.text
+.section".bsw_fls_text",.text
 .globl _Fls_Drv_GetRegReady_Asm
 
 _Fls_Drv_GetRegReady_Asm:
@@ -87,7 +87,7 @@ _FLS_DRV_GETREGREADY_ASM_END:
 -- return        : -
 -- Note          : -
 ------------------------------------------------------------------------------
-.section"bsw_fls_text",.text
+.section".bsw_fls_text",.text
 .globl _Fls_Drv_Syncp_Asm
 
 _Fls_Drv_Syncp_Asm:

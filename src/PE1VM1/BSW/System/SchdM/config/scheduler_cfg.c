@@ -36,7 +36,7 @@
 #include "SS.h"
 #include "Os.h"             /* for ActivateTask */
 
-#include "iohw_adc.h"
+#include "iohw_adc_sh.h"
 #include "iohw_diflt.h"
 
 #include "veh_opemd.h"
@@ -268,10 +268,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_s_SchdlrCfgWdgTimRestart,      (U4)SCHDLR_TASKBIT__10MS_A  },
 
-//    {&vd_g_XpdiMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
-//    {&vd_g_EsmMStkmMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
-
-//    {&vd_g_FFLvCaptMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_IoHwAdcShMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
+    {&vd_g_IoHwDifltMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */
@@ -304,8 +302,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*   5ms Platform Post Task                                          */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-    {&vd_g_oXCANMainPosTask,           (U4)SCHDLR_TASKBIT___5MS    },
-    {&vd_g_iVDshMainWriTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_oXCANMainPosTask,            (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_iVDshMainWriTask,            (U4)SCHDLR_TASKBIT___5MS    },
 
     /*-------------------------------------------------------------------*/
     /*                                                                   */

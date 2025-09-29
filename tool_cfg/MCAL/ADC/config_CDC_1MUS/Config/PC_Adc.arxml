@@ -896,7 +896,7 @@
                 </ECUC-TEXTUAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Adc/Adc/AdcGeneral/AdcDeInitApi</DEFINITION-REF>
-                  <VALUE>false</VALUE>
+                  <VALUE>true</VALUE>
                 </ECUC-NUMERICAL-PARAM-VALUE>
                 <ECUC-NUMERICAL-PARAM-VALUE>
                   <DEFINITION-REF DEST="ECUC-BOOLEAN-PARAM-DEF">/Adc/Adc/AdcGeneral/AdcEnableStartStopGroupApi</DEFINITION-REF>

@@ -50,7 +50,8 @@
 #define BSW_BSWM_CS_FUNC_NM         (BSW_BSWM_CS_CFG_FUNC_NM)
 #define BSW_BSWM_CS_FUNC_SECOC      (BSW_BSWM_CS_CFG_FUNC_SECOC)
 #define BSW_BSWM_CS_FUNC_IPDUM      (BSW_BSWM_CS_CFG_FUNC_IPDUM)
-#define BSW_BSWM_CS_FUNC_SOMEIP     (BSW_BSWM_CS_CFG_FUNC_SOMEIP)
+#define BSW_BSWM_CS_FUNC_SOMEIPTP   (BSW_BSWM_CS_CFG_FUNC_SOMEIPTP)
+#define BSW_BSWM_CS_FUNC_SD         (BSW_BSWM_CS_CFG_FUNC_SD)
 #define BSW_BSWM_CS_FUNC_BSWM_VPS   (BSW_BSWM_CS_CFG_FUNC_BSWM_VPS)
 
 #define BSW_BSWM_CS_FUNC_PNCIPDU    (BSW_BSWM_CS_FUNC_PNCIPDU_0)
@@ -105,6 +106,7 @@
 #define BSW_BSWM_CS_FUNC_CANNM      (BSW_BSWM_CS_CFG_FUNC_CANNM)
 #define BSW_BSWM_CS_FUNC_CANDRV     (BSW_BSWM_CS_CFG_FUNC_CANDRV)
 #define BSW_BSWM_CS_FUNC_VCAN       (BSW_BSWM_CS_CFG_FUNC_VCAN)
+#define BSW_BSWM_CS_FUNC_J1939TP    (BSW_BSWM_CS_CFG_FUNC_J1939TP)
 
 #define BSW_BSWM_CS_FUNC_LIN        (BSW_BSWM_CS_CFG_FUNC_LIN)
 #define BSW_BSWM_CS_FUNC_BSWMLIN    (BSW_BSWM_CS_CFG_FUNC_LIN)
@@ -294,7 +296,7 @@
 /*  v2-0-0          :2021/12/08                                             */
 /*  v2-1-0          :2023/01/26                                             */
 /*  v2-2-0          :2023/05/09                                             */
-/*  v3-0-0          :2024/11/11                                             */
+/*  v3-0-0          :2025/01/21                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

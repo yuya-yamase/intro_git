@@ -2,7 +2,7 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Renesas RH850/F1KM : Timer Array Unit D                                                                                          */
+/*  Renesas RH850/U2A : Timer Array Unit D                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -246,6 +246,72 @@ const ST_GPT_D16_UNIT    st_gp_GPT_D16_UNIT_CFG[GPT_D16_NUM_UNIT] = {
     }
 };
 const U1                 u1_g_GPT_D16_NUM_UNIT = (U1)GPT_D16_NUM_UNIT;
+
+/* PIC1 Unit/Channel Fix definition */
+const U4                 u4_g_GPT_CFG_PIC1_TAUDSEL[GPT_D16_NUM_UNIT] = {
+    {
+        /* PIC1TAUD0SEL */
+          (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000001U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000004U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000010U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000040U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000100U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000400U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00001000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00004000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00010000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00040000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00100000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00400000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x01000000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x04000000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x10000000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_OTHER) * (0x40000000U))
+    },
+    {
+         /* PIC1TAUD1SEL */
+          (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000001U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000004U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000010U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000040U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000100U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00000400U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00001000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00004000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00010000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00040000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00100000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x00400000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x01000000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x04000000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x10000000U))
+        + (GPT_PIC1_TAUD(GPT_PIC1_UNIT_SELF, GPT_PIC1_CH_SELF)  * (0x40000000U))
+    },
+    {
+    /* ------------------------------------------------------------------------------------*/
+    /* Attention :                                                                         */
+    /* ------------------------------------------------------------------------------------*/
+    /* Only GPT_PIC1_CH_SELF or GPT_PIC1_CH_OTHER should be selected in TAUD2              */
+    /* ------------------------------------------------------------------------------------*/
+        /* PIC1SELB_TAUD2I */
+          (GPT_PIC1_CH_SELF  * (0x00000001U))
+        + (GPT_PIC1_CH_SELF  * (0x00000002U))
+        + (GPT_PIC1_CH_SELF  * (0x00000004U))
+        + (GPT_PIC1_CH_SELF  * (0x00000008U))
+        + (GPT_PIC1_CH_SELF  * (0x00000010U))
+        + (GPT_PIC1_CH_SELF  * (0x00000020U))
+        + (GPT_PIC1_CH_SELF  * (0x00000040U))
+        + (GPT_PIC1_CH_SELF  * (0x00000080U))
+        + (GPT_PIC1_CH_SELF  * (0x00000100U))
+        + (GPT_PIC1_CH_SELF  * (0x00000200U))
+        + (GPT_PIC1_CH_SELF  * (0x00000400U))
+        + (GPT_PIC1_CH_SELF  * (0x00000800U))
+        + (GPT_PIC1_CH_SELF  * (0x00001000U))
+        + (GPT_PIC1_CH_SELF  * (0x00002000U))
+        + (GPT_PIC1_CH_SELF  * (0x00004000U))
+        + (GPT_PIC1_CH_SELF  * (0x00008000U))
+    }
+};
 
 #pragma ghs section rodata=default
 

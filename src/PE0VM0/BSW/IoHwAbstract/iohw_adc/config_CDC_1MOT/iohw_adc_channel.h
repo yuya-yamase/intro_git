@@ -27,8 +27,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ADC_NUM_CH                               (ADC_CFG_GRP00_CNV_CH_SIZE + ADC_CFG_GRP01_CNV_CH_SIZE + ADC_CFG_GRP02_CNV_CH_SIZE)
-#define ADC_CH_IG_MON                            (0U)      /* This macro is necessary for integration with iohw_difilt */
 #define ADC_CH_USB_ADP                           (0U)      /* USB-ADP-DET,      ADCJ0I0,   AP0_0   */
 #define ADC_CH_GPS_ANT                           (1U)      /* GPS-ANT-DET,      ADCJ0I1,   AP0_1   */
 #define ADC_CH_DAB_ANT1                          (2U)      /* DAB-ANT-DET1,     ADCJ0I2,   AP0_2   */
@@ -59,15 +57,6 @@
 #define ADC_CH_B_MON2                            (27U)     /* +B-MONITOR2,      ADCJ2I3,   AP4_3   */
 #define ADC_CH_B_MON1                            (28U)     /* +B-MONITOR1,      ADCJ2I4,   AP4_4   */
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ADC_NUM_GR                               (ADC_CFG_GRP_SIZE)
-#define ADC_GR_UN_0                              (ADC_GR_0)
-#define ADC_GR_UN_1                              (ADC_GR_1)
-#define ADC_GR_UN_2                              (ADC_GR_2)
-
-#define ADC_UN_0_NUM_CH                          (ADC_CFG_GRP00_CNV_CH_SIZE)
-#define ADC_UN_1_NUM_CH                          (ADC_CFG_GRP01_CNV_CH_SIZE)
-#define ADC_UN_2_NUM_CH                          (ADC_CFG_GRP02_CNV_CH_SIZE)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IOHW_ADC_LV_MAX                          (0x0fffU) /* resolution = 12 bit */
 

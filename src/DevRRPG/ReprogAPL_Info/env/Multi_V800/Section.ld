@@ -21,7 +21,7 @@ MEMORY
 DEFAULTS
 {
 	apl_version_size		=	  0x18;
-	apl_jump_addr			=	  0x007FFDF8;
+	apl_jump_addr			=	  0x007BFDF8;	/* 250908 changed by EPSW */
 }
 
 SECTIONS

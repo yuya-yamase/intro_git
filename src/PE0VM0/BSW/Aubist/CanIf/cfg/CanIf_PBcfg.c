@@ -78,7 +78,7 @@ BswConst Bsw_CanIf_TxPduTblType bsw_canif_stTxCanNmPduTbl[BSW_CANIF_TXCANNMPDUNU
    /* CAN ID      , Channel             , Extend   , Send Queue                 */
      { 0x00000442UL, (BswU1)BSW_CANIF_CH0,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [0] CDC1N01_Tx_CANFD_G2M_1_BUS */
     ,{ 0x00000442UL, (BswU1)BSW_CANIF_CH1,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [1] CDC1N01_Tx_CANFD_G2M_2_BUS */
-    ,{ 0x00000442UL, (BswU1)BSW_CANIF_CH2,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [2] CDC1N00_Tx_CANFD_VCC_1_BUS */
+    ,{ 0x00000442UL, (BswU1)BSW_CANIF_CH2,  (BswU1)0U, (BswU2)BSW_CANIF_SNDREQ_QUE000 }  /* [2] CDC1N01_Tx_CDC_VCAN_BUS */
 };
 
 #if(BSW_CANIF_CFG_METADATA_USE == BSW_CANIF_USE)
@@ -180,9 +180,9 @@ BswConst Bsw_CanIf_RxPduTblType bsw_canif_stRxCanNmPduTbl[BSW_CANIF_RXCANNMPDUNU
    /* CAN-ID      , DLC       , Channel             , Extend     */
      { 0x00000440UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH0,  (BswU2)0U }  /* [0] NM_Rx_CANFD_G2M_1_BUS */
     ,{ 0x00000440UL, (BswU1) 8U, (BswU1)BSW_CANIF_CH1,  (BswU2)0U }  /* [1] NM_Rx_CANFD_G2M_2_BUS */
-    ,{ 0x0000047DUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH2,  (BswU2)0U }  /* [2] CDC1N01_Rx_CANFD_VCC_1_BUS */
-    ,{ 0x0000047EUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH2,  (BswU2)0U }  /* [3] CDC1N02_Rx_CANFD_VCC_1_BUS */
-    ,{ 0x0000047FUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH2,  (BswU2)0U }  /* [4] CDC1N03_Rx_CANFD_VCC_1_BUS */
+    ,{ 0x0000047DUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH2,  (BswU2)0U }  /* [2] VME1N99_Rx_CDC_VCAN_BUS */
+    ,{ 0x0000047EUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH2,  (BswU2)0U }  /* [3] VIV1N99_Rx_CDC_VCAN_BUS */
+    ,{ 0x0000047FUL, (BswU1) 8U, (BswU1)BSW_CANIF_CH2,  (BswU2)0U }  /* [4] VCE1N99_Rx_CDC_VCAN_BUS */
 };
 
 #if(BSW_CANIF_CFG_CANID_MASK_TYPE == BSW_CANIF_MASK_RXMSG)
@@ -318,7 +318,7 @@ BswConst BswU1 bsw_canif_u1MsgIdTbl[BSW_CANIF_TXPDURPDUNUM + BSW_CANIF_RXPDURPDU
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

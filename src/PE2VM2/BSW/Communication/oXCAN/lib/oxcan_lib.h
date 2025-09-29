@@ -77,12 +77,6 @@
 #define OXCAN_SYSEA_EAGR_2ND                     (1U)              /* Event Action Group 2nd executed at vd_g_oXCANMainPosTask */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 2nd Parameter of vd_g_oXCANWrhReqHch                                                                                              */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define OXCAN_WRH_REQ_WK                         (0x03U)
-#define OXCAN_WRH_REQ_SL                         (0x00U)
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u2_OXCAN_RXTO_THRSH(MSEC)                ((U2)(((U4)(MSEC) + (U4)(OXCAN_MAIN_TICK - 1U)) / (U4)OXCAN_MAIN_TICK))
@@ -116,8 +110,8 @@ U4      u4_g_oXCANvCtWrqRx(void);                            /* Return : OXCAN_S
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if (OXCAN_LIB_CFG_EN_WRH == 1U)
 
-void    vd_g_oXCANWrhReqHch(const U1 u1_a_HCH, const U1 u1_a_REQ);
-U4      u4_g_oXCANWrhWrqAct(void);                                           /* Return : see oxcan_wrh_rqh.h OXCAN_WRH_RQBIT_XXX     */
+void    vd_g_oXCANWrhReqHch(const U1 u1_a_HCH, const U4 u4_a_REQ);           /* u4_a_REQ : see oxcan_sys_def.h OXCAN_SYS_NET         */
+U4      u4_g_oXCANWrhWrqAct(void);                                           /* Return   : see oxcan_wrh_rqh.h OXCAN_WRH_RQBIT_XXX   */
 
 #endif /* #if (OXCAN_LIB_CFG_EN_WRH == 1U) */
 

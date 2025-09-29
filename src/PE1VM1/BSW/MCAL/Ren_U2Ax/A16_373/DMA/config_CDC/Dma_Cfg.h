@@ -11,7 +11,12 @@
 /*	DMA common configuration																	*/
 /*==============================================================================================*/
 /* Total number of channels using Dma */
+#warning "BEVCDCFD-1829"
+#if 0 /* BEVCDCFD-1829 */
 #define	DMA_UCFG_CHDATA_NUM				(9u)
+#else /* BEVCDCFD-1829 */
+#define	DMA_UCFG_CHDATA_NUM				(7u)
+#endif /* BEVCDCFD-1829 */
 
 /* Uninterruptible/Uninterruptible */
 #define DMA_ENTER_CRITICAL_SECTION()			SuspendAllInterrupts()							/* Do not interrupt */
@@ -78,6 +83,8 @@ void vd_g_SoundCriDrvDmacInterrupt(void);
 #define	DMA_UCFG_CHDATA5_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA5_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
 
+#warning "BEVCDCFD-1829"
+#if 0 /* BEVCDCFD-1829 */
 /* CRI */
 /* [DMA_CH_DATA_ID_6] config */
 #define	DMA_UCFG_CHDATA6_TYPE				(DMA_DMAC1)							/* See DMA_UCFG_CHDATA0_TYPE			*/
@@ -99,5 +106,15 @@ void vd_g_SoundCriDrvDmacInterrupt(void);
 #define	DMA_UCFG_CHDATA8_HWCH				(PIL_DMAC_CH2)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
 #define	DMA_UCFG_CHDATA8_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
 #define	DMA_UCFG_CHDATA8_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
+#else /* BEVCDCFD-1829 */
+/* [DMA_CH_DATA_ID_6] config */
+#define	DMA_UCFG_CHDATA6_TYPE				(DMA_DMAC0)							/* See DMA_UCFG_CHDATA0_TYPE			*/
+#define	DMA_UCFG_CHDATA6_REQ				(PIL_DMAC_GR0_INTRLIN311UR1)		/* See DMA_UCFG_CHDATA0_REQ for range			*/
+#define	DMA_UCFG_CHDATA6_HWCH				(PIL_DMAC_CH10)						/* See DMA_UCFG_CHDATA0_HWCH for range			*/
+#define	DMA_UCFG_CHDATA6_PRILEVEL			(DMA_PRIORITY_NOUSE)				/* See DMA_UCFG_CHDATA0_PRILEVEL for range		*/
+#define	DMA_UCFG_CHDATA6_NOTIFICATION		(NULL_PTR)							/* See DMA_UCFG_CHDATA0_NOTIFICATION for range	*/
+
+
+#endif /* BEVCDCFD-1829 */
 /*-- End Of File -------------------------------------------------------------------------------*/
 #endif /* DMA_CFG_H */
