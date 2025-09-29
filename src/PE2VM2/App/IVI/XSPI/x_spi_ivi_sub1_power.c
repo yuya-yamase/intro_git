@@ -21,6 +21,7 @@
 #include    "Dio.h"
 #include    "Dio_Symbols.h"
 #include    "Iohw_adc.h"
+#include    "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -68,28 +69,39 @@
 #define    XSPI_IVI_POWER_STATE_UNKNOWN         (0xFFU) /* 未確定  */
 
 /*Appからのデバイス初期化完了マクロ*/
-#define    XSPI_IVI_POWER_DEV_INI_COMP_APP      (0x001FU)
+#define    XSPI_IVI_POWER_DEV_INI_COMP_PARK     (0x000AU)   /*Appからの初期化監視対象(駐車中)*/
+#define    XSPI_IVI_POWER_DEV_INI_COMP_APPOFF   (0x001FU)   /*Appからの初期化監視対象(見た目オフ)*/
+#define    XSPI_IVI_POWER_DEV_INI_COMP_APPON    (0x001FU)   /*Appからの初期化監視対象(見た目オン)*/
+#define    XSPI_IVI_POWER_DEV_INI_COMP_EDS      (0x0008U)   /*Appからの初期化監視対象(縮退走行)*/
 #define    XSPI_IVI_POWER_DEV_INI_COMP_EIZO     (0x0001U)
 #define    XSPI_IVI_POWER_DEV_INI_COMP_GVIFREC  (0x0002U)
 #define    XSPI_IVI_POWER_DEV_INI_COMP_GVIFSEND (0x0004U)
 #define    XSPI_IVI_POWER_DEV_INI_COMP_GYRO     (0x0008U)
 #define    XSPI_IVI_POWER_DEV_INI_COMP_POWER    (0x0010U)
+/*電源状態ごとのデバイス初期化完了マクロ*/
+#ifdef ANTCTL_XM_SHDN
+#define    XSPI_IVI_POWER_DEV_INI_PARK          (0x008A0FFFU) /*デバイス初期化監視対象(駐車中)*/
+#define    XSPI_IVI_POWER_DEV_INI_APPOFF        (0x00AA3FFFU) /*デバイス初期化監視対象(見た目オフ)*/
+#define    XSPI_IVI_POWER_DEV_INI_APPON         (0x00FFFFFFU) /*デバイス初期化監視対象(見た目オン)*/
+#define    XSPI_IVI_POWER_DEV_INI_EDS           (0x00880FFFU) /*デバイス初期化監視対象(縮退走行)*/
+#else
+#define    XSPI_IVI_POWER_DEV_INI_PARK          (0x004A0FFFU) /*デバイス初期化監視対象(駐車中)*/
+#define    XSPI_IVI_POWER_DEV_INI_APPOFF        (0x006A3FFFU) /*デバイス初期化監視対象(見た目オフ)*/
+#define    XSPI_IVI_POWER_DEV_INI_APPON         (0x007FFFFFU) /*デバイス初期化監視対象(見た目オン)*/
+#define    XSPI_IVI_POWER_DEV_INI_EDS           (0x00480FFFU) /*デバイス初期化監視対象(縮退走行)*/
+#endif
+
 /*GPS-RST端子 Lo→Hiからのカウント*/
 #define    XSPI_IVI_POWER_GPSRST_INI_TASK       (400U / XSPI_IVI_TASK_TIME)
 
 /*B-MON電圧端子のポーリング周期*/
 #define    XSPI_IVI_POWER_BMONVOL_TASK          (100U / XSPI_IVI_TASK_TIME)
 
-
 /*デバイス初期化確認Pin*/
 /* SYS電源制御 Port設定 */
 #define     MCU_PORT_BU_DD_MODE                 (0U)         /* (DIO_ID_APORT0_CH12) */
 #define     MCU_PORT_BOOST_DCDC                 (1U)         /* (DIO_ID_PORT10_CH4)  */
 #define     MCU_PORT_BOOST_ASIL_DCDC            (2U)         /* (DIO_ID_APORT0_CH15) */
-/*Readのみのため初期化確認対象外*/
-/*#define     MCU_PORT_DD_FREQ                (xxx)*/         /* (DIO_ID_PORT2_CH6)   */
-/*Readのみのため初期化確認対象外*/
-/*#define     MCU_PORT_BOOST_ASIL_FREQ        (xxx) */        /* (DIO_ID_PORT21_CH3)  */
 #define     MCU_PORT_V33_PERI                   (3U)         /* (DIO_ID_PORT10_CH2)  */
 #define     MCU_PORT_V33_ASIL                   (4U)         /* (DIO_ID_APORT0_CH13) */
 #define     MCU_PORT_V18                        (5U)         /* (DIO_ID_APORT1_CH0)  */
@@ -98,7 +110,6 @@
 #define     MCU_PORT_V11_ASIL                   (8U)        /* (DIO_ID_APORT0_CH11) */
 #define     MCU_PORT_EIZO                       (9U)        /* (DIO_ID_PORT6_CH11)  */
 /* 非冗長電源制御 Port設定 */
-/*#define     MCU_PORT_BOOT                   (xxx)*/    /* (DIO_ID_PORT0_CH2)   */
 #define     MCU_PORT_MBPWR                      (10U)        /* (DIO_ID_PORT22_CH1)  */
 #define     MCU_PORT_GVIF_TX_MBWK               (11U)        /* (DIO_ID_PORT20_CH9)  */
 #define     MCU_PORT_DISP                       (12U)        /* (DIO_ID_PORT22_CH2)  */
@@ -106,14 +117,7 @@
 #define     MCU_PORT_HUB_PWRON                  (14U)        /* (DIO_ID_PORT4_CH14)  */
 #define     MCU_PORT_HUB_WK                     (15U)        /* (DIO_ID_PORT4_CH0)   */
 /* デバイスON/OFF制御用 Port設定 */
-// #define     MCU_PORT_V33_PERI               (xxx) 
 #define     MCU_PORT_USB_LED_ON                 (16U)        /* (DIO_ID_APORT0_CH10) */
-/*#define     MCU_PORT_V_IC_RST               (xxx)*/        /* (DIO_ID_PORT3_CH3)   */
-/*Writeされることがないためデバイス初期化確認対象外*/
-/* #define     MCU_PORT_DISP_REQ_GPIO0         (xxx)*/        /* (DIO_ID_PORT2_CH2)   */
-// #define     MCU_PORT_AUDIO                  (xxx)
-/*#define     MCU_PORT_GVIF_CAN_RST           (xxx)*/        /* (DIO_ID_PORT10_CH6)  */
-/*#define     MCU_PORT_GVIF_CDISP_RST         (xxx)*/        /* (DIO_ID_PORT17_CH4)  */
 #define     MCU_PORT_MIC_ON                     (17U)        /* (DIO_ID_PORT11_CH13) */
 #define     MCU_PORT_AMFM_ANT_ON                (18U)        /* (DIO_ID_PORT4_CH8)   */
 #define     MCU_PORT_GPS_ANT_ON                 (19U)        /* (DIO_ID_APORT4_CH2)  */
@@ -126,21 +130,15 @@
 #ifdef ANTCTL_XM_SHDN
 #define     MCU_PORT_XM_SHDN                    (20U)        /* (DIO_ID_PORT11_CH4)  */
 #endif
-/*#define     MCU_PORT_PM_SYS_MUTE            (xxx)*/        /* (DIO_ID_PORT20_CH8)  */
 #define     MCU_PORT_MOST_WAKE_ON               (21U)        /* (DIO_ID_PORT24_CH11) */
-/*#define     MCU_PORT_PIC_POFF               (xxx)*/       /* (DIO_ID_PORT11_CH7)  */
-/*#define     MCU_PORT_P_ON                   (xxx)*/        /* (DIO_ID_PORT11_CH6)  */
+#ifdef ANTCTL_XM_SHDN
 #define     MCU_PORT_XM_ON                      (22U)        /* (DIO_ID_APORT4_CH10) */
-/*#define     MCU_PORT_SENSOR_ON              (xxx)*/        /* (DIO_ID_PORT8_CH7)   */
 #define     MCU_PORT_GPS_RST                    (23U)        /* (DIO_ID_APORT4_CH8)  */
-/*Readのみのため初期化確認対象外*/
-/*#define     MCU_PORT_GPS_PMONI              (xxx)*/        /* (DIO_ID_PORT6_CH3)   */
-/*Readのみのため初期化確認対象外*/
-/*#define     MCU_PORT_MM_STBY_N              (xxx)*/        /* (DIO_ID_PORT10_CH11) */
-/*#define     MCU_PORT_GPS_PCTL               (xxx)*/        /* (DIO_ID_APORT4_CH5)  */
-/*Readのみのため初期化確認対象外*/
-/*#define     MCU_PORT_BU_DTE                 (xxx)*/        /* (DIO_ID_PORT0_CH4)   */
 #define     MCU_PORT_NUM                        (24U)
+#else
+#define     MCU_PORT_GPS_RST                    (22U)        /* (DIO_ID_APORT4_CH8)  */
+#define     MCU_PORT_NUM                        (23U)
+#endif
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -173,8 +171,8 @@ static ST_XSPI_IVI_POWER_STATE_TRANS st_s_xspi_ivi_state_trans;
 static U1 u1_s_xspi_ivi_power_start_flg;
 /*状態移行指示有無*/
 static U1 u1_s_xspi_ivi_power_state_trans_flg;
-/*デバイス初期化完了フラグ*/
-static U1 u1_s_xspi_ivi_power_device_init_fin_flg;
+/*デバイス初期化完了ステータス*/
+static U4 u4_s_xspi_ivi_power_device_init_fin_sts;
 /*アプリからのデバイス初期化状態格納*/
 static U2 u2_s_xspi_ivi_power_device_init_app;
 static U1 u1_s_xspi_ivi_power_gpsrst_sts_pre;
@@ -186,6 +184,22 @@ static U2 u2_s_xspi_ivi_power_bmonivol1_data;
 static U2 u2_s_xspi_ivi_power_bmonivol2_data;
 static U2 u2_s_xspi_ivi_power_bmonivol3_data;
 static U1 u1_s_xspi_ivi_power_bmoni_1stsend_flg;
+
+/*電源状態でのデバイス初期化確認*/
+static U4 u4_sp_xspi_ivi_power_dev_init[POWER_MODE_STATE_NUM] = {
+    XSPI_IVI_POWER_DEV_INI_PARK,
+    XSPI_IVI_POWER_DEV_INI_APPOFF,
+    XSPI_IVI_POWER_DEV_INI_APPON,
+    XSPI_IVI_POWER_DEV_INI_EDS
+};
+
+/*電源状態でのAPPからのデバイス初期化確認*/
+static U2 u2_sp_xspi_ivi_power_dev_app_init[POWER_MODE_STATE_NUM] = {
+    XSPI_IVI_POWER_DEV_INI_COMP_PARK,
+    XSPI_IVI_POWER_DEV_INI_COMP_APPOFF,
+    XSPI_IVI_POWER_DEV_INI_COMP_APPON,
+    XSPI_IVI_POWER_DEV_INI_COMP_EDS
+};
 
 /*デバイス初期化確認Port配列*/
 static U2 Mcu_Dio_PortId[MCU_PORT_NUM] = {
@@ -232,7 +246,9 @@ static U2 Mcu_Dio_PortId[MCU_PORT_NUM] = {
         DIO_ID_PORT24_CH11,
         /*DIO_ID_PORT11_CH7,*/ /*アプリから初期化完了通知受け取るためPINでの制御はしない*/
         /*DIO_ID_PORT11_CH6,*/ /*アプリから初期化完了通知受け取るためPINでの制御はしない*/
+#ifdef ANTCTL_XM_SHDN
         DIO_ID_APORT4_CH10,
+#endif
         /*DIO_ID_PORT8_CH7,*/  /*アプリから初期化完了通知受け取るためPINでの制御はしない*/
         DIO_ID_APORT4_CH8
         /*DIO_ID_PORT6_CH3,*/ /*Readのみのため初期化確認対象外*/
@@ -252,6 +268,7 @@ static U2 Mcu_Dio_PortId[MCU_PORT_NUM] = {
 static void            vd_s_XspiIviSub1_PowerStateTransRec(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size);
 static U1              u1_s_XspiIviSub1PowerDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
 static void            vd_s_XspiIviSub1PowerDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD);
+static U1              u1_s_XspiIviSub1PowerDevInitCompChk(void);
 /*===================================================================================================================================*/
 /*  void            vd_g_XspiIviSub1POWERInit(void)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -263,7 +280,6 @@ void            vd_g_XspiIviSub1PowerInit(void)
 {
     u1_s_xspi_ivi_power_start_flg = (U1)FALSE;
     u1_s_xspi_ivi_power_state_trans_flg = (U1)FALSE;
-    u1_s_xspi_ivi_power_device_init_fin_flg = (U1)FALSE;
 
     vd_g_MemfillU1(&u1_s_xspi_ivi_power_state[0], (U1)U1_MAX, (U4)4U);
     vd_g_MemfillU1(&u1_s_xspi_ivi_power_state_pre[0], (U1)U1_MAX, (U4)4U);
@@ -274,6 +290,7 @@ void            vd_g_XspiIviSub1PowerInit(void)
     st_s_xspi_ivi_state_trans.u1_ota_state = (U1)U1_MAX;
     st_s_xspi_ivi_state_trans.u1_appearance_state = (U1)U1_MAX;
 
+    u4_s_xspi_ivi_power_device_init_fin_sts = (U4)0U;
     u2_s_xspi_ivi_power_device_init_app = (U2)0U;
     u1_s_xspi_ivi_power_gpsrst_sts_pre = (U1)STD_LOW;
     u1_s_xspi_ivi_power_gpsrst_init_fin_flg = (U1)FALSE;
@@ -300,6 +317,7 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
     U1 u1_tp_data[6];
     U4 u4_t_power_task;
     U1 u1_t_power_ivent_jdg;
+    U1  u1_t_init_chk;
 
     /*CAN受信用*/
     U1 u1_t_VPSINFO1;
@@ -382,9 +400,11 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
             /*Do Nothing*/
         }
 
-        if((u1_s_xspi_ivi_power_device_init_fin_flg == (U1)TRUE) &&
-           (u1_s_xspi_ivi_power_state_trans_flg == (U1)TRUE)){/*デバイス初期化済かつ指示あり*/
-            /*状態移行確認*/
+        u1_t_init_chk = u1_s_XspiIviSub1PowerDevInitCompChk();
+
+        if((u1_t_init_chk == (U1)TRUE) &&
+           (u1_s_xspi_ivi_power_state_trans_flg == (U1)TRUE)){  /* デバイス初期化済かつ指示あり */
+            /* 状態移行確認 */
             u1_tp_data[0] = (U1)XSPI_IVI_POWER_STATE_TRANS_SEND;
             u1_tp_data[1] = st_s_xspi_ivi_state_trans.u1_count;
             u1_tp_data[2] = st_s_xspi_ivi_state_trans.u1_basic_state;
@@ -514,12 +534,9 @@ static void            vd_s_XspiIviSub1_PowerStateTransRec(const U1 * u1_ap_XSPI
 /*===================================================================================================================================*/
 void            vd_g_XspiIviSub1DevInitFinish(void)
 {
-    U1 u1_t_result;
     U1 u1_t_gpsrst_pin;
     U4 u4_t_loop;
     U4 u4_t_task_cnt;
-
-    u1_t_result = (U1)TRUE;
 
     for(u4_t_loop = (U4)0U; u4_t_loop < (U4)MCU_PORT_NUM; u4_t_loop++) {
         if(u4_t_loop == (U4)MCU_PORT_GPS_RST){ 
@@ -533,24 +550,12 @@ void            vd_g_XspiIviSub1DevInitFinish(void)
             u4_t_task_cnt = u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_POWER_GPSRST];
             if((u1_s_xspi_ivi_power_gpsrst_sts_chk == (U1)TRUE) &&
                (u4_t_task_cnt >= (U4)XSPI_IVI_POWER_GPSRST_INI_TASK)){
-                u1_s_xspi_ivi_power_gpsrst_init_fin_flg = (U1)TRUE;
+                u4_s_xspi_ivi_power_device_init_fin_sts |= (U4)((U4)TRUE << u4_t_loop);
             }
             u1_s_xspi_ivi_power_gpsrst_sts_pre = u1_t_gpsrst_pin;
         } else {
-            u1_t_result &= Dio_ReadChannel(Mcu_Dio_PortId[u4_t_loop]);
+            u4_s_xspi_ivi_power_device_init_fin_sts |= (U4)(Dio_ReadChannel(Mcu_Dio_PortId[u4_t_loop]) << u4_t_loop);
         }
-    }
-
-    if(u1_t_result == (U1)TRUE) {
-        u1_s_xspi_ivi_power_device_init_fin_flg = (U1)TRUE;
-    }
-
-    if(u1_s_xspi_ivi_power_gpsrst_init_fin_flg == (U1)TRUE) {
-        u1_s_xspi_ivi_power_device_init_fin_flg &= (U1)TRUE;
-    }
-    
-    if(u2_s_xspi_ivi_power_device_init_app == (U1)XSPI_IVI_POWER_DEV_INI_COMP_APP) {
-        u1_s_xspi_ivi_power_device_init_fin_flg &= (U1)TRUE;
     }
 }
 
@@ -583,6 +588,39 @@ void            vd_g_XspiIviSub1PowerDevInitCmpApp(const U1 u1_a_ID)
     default:
         break;
     }
+}
+
+/*===================================================================================================================================*/
+/*  static U1            u1_s_XspiIviSub1PowerDevInitCompChk(void)                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         u1_t_result : Devie initialization Status Check                                                                  */
+/*===================================================================================================================================*/
+static U1            u1_s_XspiIviSub1PowerDevInitCompChk(void)
+{
+    U1  u1_t_result;
+    U1  u1_t_pwrsts;
+    U4  u4_t_dev_chk;
+    U2  u2_t_devapp_chk;
+
+    u1_t_result = (U1)FALSE;
+    u1_t_pwrsts = u1_g_Power_ModeState();
+
+    if(u1_t_pwrsts < (U1)POWER_MODE_STATE_NUM) {
+        u4_t_dev_chk = u4_s_xspi_ivi_power_device_init_fin_sts & u4_sp_xspi_ivi_power_dev_init[u1_t_pwrsts];
+        u2_t_devapp_chk = u2_s_xspi_ivi_power_device_init_app & u2_sp_xspi_ivi_power_dev_app_init[u1_t_pwrsts];
+
+        if(u4_t_dev_chk == u4_sp_xspi_ivi_power_dev_init[u1_t_pwrsts]) {
+            u1_t_result = (U1)TRUE;
+        }
+
+        if(u2_t_devapp_chk != u2_sp_xspi_ivi_power_dev_app_init[u1_t_pwrsts]) {
+            u1_t_result &= (U1)FALSE;
+        }
+    }
+
+    return(u1_t_result);
 }
 
 /*===================================================================================================================================*/
