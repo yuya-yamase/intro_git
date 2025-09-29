@@ -64,6 +64,9 @@ U1      u1_g_VdfEsoRx_ETH_NAVI_TAB(void)
     U1              u1_t_ava_rx;
 
     u1_t_rx = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    vd_g_HmiVardefRecieveSig((U1)HMIVARDEF_SIG_NAVFUNC, &u1_t_rx);
+#endif   /* BEV Rebase provisionally */
 
     if((u1_t_rx == u1_s_VDF_ESO_NAVI_TAB_ACT1) ||
        (u1_t_rx == u1_s_VDF_ESO_NAVI_TAB_ACT2)){

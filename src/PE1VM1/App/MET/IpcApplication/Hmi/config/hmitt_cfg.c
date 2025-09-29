@@ -27,6 +27,9 @@
 #endif   /* BEV Rebase provisionally */
 
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */ 
+#include "vardef_ds2e.h"
+#endif   /* BEV Rebase provisionally */
 #include "vardef_dest_dbf.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -377,6 +380,7 @@ static U1      u1_s_HmiTtPkbTt(void)
     U1  u1_t_req;
 #if 0   /* BEV Rebase provisionally */ 
     U1  u1_t_epb1f01;
+
 #endif   /* BEV Rebase provisionally */
     u1_t_req  = (U1)HMITT_BLINK_CO_OFF____100P;
 #if 0   /* BEV Rebase provisionally */ 

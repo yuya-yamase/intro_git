@@ -36,7 +36,6 @@
 #define HMIPUTXT_SYSMAL_JDG                      (1)
 #define HMIPUTXT_EVM_JDG                         (1)
 #define HMIPUTXT_THEVM_JDG                       (1)
-#define HMIPUTXT_TIMCHG_JDG                      (1)
 
 #define HMIPUTXTCFG_SLOT_A                       (1U)
 #define HMIPUTXTCFG_SLOT_B                       (2U)

@@ -35,9 +35,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 #if (HMIPUTXT_TIMCHG_JDG == HMIPUTXT_JDG_ON)
-#if 0   /* BEV Rebase provisionally */
-#include "evschg.h"
-#endif   /* BEV Rebase provisionally */
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -156,7 +153,6 @@ static U4      u4_sp_hmiputxt_slote_req[HMIPUTXT_NWORD];
 static void           vd_s_HmiPuTxtCfgIGOffInit(void);
 static void           vd_s_HmiPutTxtCfgSysmalMask(U4* u4_ap_varmask);
 static void           vd_s_HmiPutTxtCfgGpfMidMask(U4* u4_ap_varmask);
-static U1             u1_s_HmiPuTxtCfgTimchgReq(void);
 static U1             u1_s_HmiPuTxtCfgFctahudReq(void);
 static void           vd_s_HmiPuTxtCfgEvmReq(U4* u4_ap_req);
 static U1             u1_s_HmiPuTxtCfgSftaltReq(void);
@@ -201,7 +197,6 @@ static void    vd_s_HmiPuTxtCfgIGOffInit(void)
     u2_s_hmiputxt_thevm_cnt       = (U2)U2_MAX;
     u1_s_hmiputxt_thevm_prereq = (U1)HMIPUTXT_REQ_INIT;
 #endif
-
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)                                                                                      */
@@ -262,14 +257,6 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     if(u1_t_icewrn == (U1)TRUE){
         u2_t_blkpos             = (U2)HMIPUTXT_ICEWRN_IDX >> HMIPUTXT_IDX_SFT;
         u2_t_bitpos             = (U2)HMIPUTXT_ICEWRN_IDX &  (U2)HMIPUTXT_REM_MSK;
-        u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
-    }
-
-    /* Timchg */
-    u1_t_timchg = u1_s_HmiPuTxtCfgTimchgReq();
-    if(u1_t_timchg == (U1)TRUE){
-        u2_t_blkpos             = (U2)HMIPUTXT_TIMCHG_IDX >> HMIPUTXT_IDX_SFT;
-        u2_t_bitpos             = (U2)HMIPUTXT_TIMCHG_IDX &  (U2)HMIPUTXT_REM_MSK;
         u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
     }
 
@@ -729,71 +716,6 @@ void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
 
 }
 
-/*===================================================================================================================================*/
-/*  static U1 u1_s_HmiPuTxtCfgTimchgReq(void)                                                                                        */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         Request (TRUE / FALSE)                                                                                           */
-/*===================================================================================================================================*/
-static U1 u1_s_HmiPuTxtCfgTimchgReq(void)
-{
-#if (HMIPUTXT_TIMCHG_JDG == HMIPUTXT_JDG_ON)
-    U1 u1_t_ret;             /* Requeset       */
-    U1 u1_t_igon;            /* IG-ON State    */
-    U1 u1_t_baon;            /* BA-ON State    */
-    U1 u1_t_msgsts;          /* Message State  */
-    U1 u1_t_signal;          /* Signal Varlue  */
-    U1 u1_t_timchg_pncdsp;   /* P_NCDSPVarlue  */
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_igon = u1_g_VehopemdIgnOn();
-    u1_t_baon = u1_g_VehopemdBaOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igon = (U1)FALSE;
-    u1_t_baon = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_timchg_pncdsp = (U1)0U;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_PLG1G10_RXCH0);
-#else   /* BEV Rebase provisionally */
-    u1_t_msgsts = (U1)1U;
-#endif   /* BEV Rebase provisionally */
-
-    u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
-    u1_t_signal = (U1)0U;
-    if(u1_t_msgsts == (U1)0x00U){
-#if 0   /* BEV Rebase provisionally */        
-        (void)Com_ReceiveSignal(ComConf_ComSignal_PSDSPRQ, &u1_t_signal);
-#endif   /* BEV Rebase provisionally */    
-    }
-#if 0   /* BEV Rebase provisionally */  
-    u1_t_timchg_pncdsp = (U1)u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_NCDSP);
-#endif   /* BEV Rebase provisionally */    
-
-    u1_t_ret = (U1)FALSE;
-    if((u1_t_igon == (U1)FALSE) &&
-       (u1_t_baon == (U1)TRUE ))  {
-        if(u1_t_signal == (U1)HMIPUTXT_TIMCHG_REQ_ON){
-            switch(u1_t_timchg_pncdsp)
-            {
-                case (U1)HMIPUTXT_TIMCHG_P_NCDSP_PLANINFO:                        /* P_NCDSP=01b */
-                case (U1)HMIPUTXT_TIMCHG_P_NCDSP_CHGSTART:                        /* P_NCDSP=11b */
-                    u1_t_ret = (U1)TRUE;
-                    break;
-                default:
-                    /* Do Nothing */
-                    break;
-            }
-        }
-    }
-
-    return(u1_t_ret);
-#else
-    return((U1)FALSE);
-#endif
-}
 /*===================================================================================================================================*/
 /*  static U1 u1_s_HmiPuTxtCfgFctahudReq(void)                                                                                       */
 /* --------------------------------------------------------------------------------------------------------------------------------- */

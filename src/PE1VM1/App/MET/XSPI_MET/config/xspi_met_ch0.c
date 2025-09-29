@@ -2407,8 +2407,6 @@ static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
 
-    U1    u1_t_rxdata;
-
     /* Maint */
     vd_g_HmiMaintMetCstmPut(&u4_ap_PDU_RX[6]);
 
@@ -2474,18 +2472,14 @@ static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
-
     ST_HMILOCALE st_t_hmilocale;
-#if 0   /* BEV Rebase provisionally */
 
     st_t_hmilocale.u1_language    = (U1)u4_ap_PDU_RX[0];
     st_t_hmilocale.u1_unit_dist   = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 0U , (U1)2U);
     st_t_hmilocale.u1_unit_speed  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 2U , (U1)2U);
-    st_t_hmilocale.u1_unit_fueco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 4U , (U1)3U);
     st_t_hmilocale.u1_unit_eleco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 8U , (U1)4U);
     st_t_hmilocale.u1_unit_ambtmp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)12U , (U1)2U);
     st_t_hmilocale.u1_timeformat  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)14U , (U1)2U);
-#endif   /* BEV Rebase provisionally */
     vd_g_HmiLocalePut(&st_t_hmilocale);
 }
 
@@ -2515,20 +2509,23 @@ static inline void    vd_s_XSpiCfgRxRemoteWarn( const U4 * u4_ap_PDU_RX) {} /* @
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX) {
-
     U4  u4_t_trip_a;
     U4  u4_t_trip_b;
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_odtrp_dsp;
-#if 0   /* BEV BSW provisionally */
-    u1_t_odtrp_dsp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[87] , (U1)0U , (U1)3U);  /* ODOTRIP_CONTENTS                     */
 
+    u1_t_odtrp_dsp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[87] , (U1)0U , (U1)3U);  /* ODOTRIP_CONTENTS                     */
+    if(u1_t_odtrp_dsp != (U1)7U){
+        vd_g_HmiRimPut((U1)HMIRIM_ODOTRIPCNTTS , (U4)u1_t_odtrp_dsp);
+    }
+#endif   /* BEV Rebase provisionally */
+#if 0   /* BEV BSW provisionally */
     u4_t_trip_a    = u4_ap_PDU_RX[0];                                        /* TRIP_A                               */
     u4_t_trip_b    = u4_ap_PDU_RX[2];                                        /* TRIP_B                               */
 #else
-    u1_t_odtrp_dsp = (U1)U1_MAX;                                             /* ODOTRIP_CONTENTS                     */
     u4_t_trip_a    = (U4)U4_MAX;                                             /* TRIP_A                               */
     u4_t_trip_b    = (U4)U4_MAX;                                             /* TRIP_B                               */
-#endif   /* BEV Rebase provisionally */
+#endif
 
     vd_g_HmiOdoPut(u4_t_trip_a , u4_t_trip_b);
 }
@@ -2540,14 +2537,10 @@ static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
-
     ST_HMITRIPCOM st_t_hmitripcom;
-#if 0   /* BEV Rebase provisionally */
+
     st_t_hmitripcom.u2_avg_vehspd_kmph_ta  = (U2)u4_ap_PDU_RX[0];       /* AVG_SPD_KMPH_USRRST                  */
-    st_t_hmitripcom.u4_avg_fe_kmpl_ta      = u4_ap_PDU_RX[1];           /* AVG_FE_KMPL_USRRST                   */
     st_t_hmitripcom.u4_avg_ee_kmpl_ta      = u4_ap_PDU_RX[2];           /* AVG_EE_KMPL_USRRST                   */
-    st_t_hmitripcom.u4_ptsrun_dist_km_lc   = u4_ap_PDU_RX[3];           /* DIST_KM_USRRST                       */
-    st_t_hmitripcom.u4_ptsrun_time_hrs_lc  = u4_ap_PDU_RX[4];           /* DRVTIME_HHHH_USRRST                  */
     st_t_hmitripcom.u4_dist_km_tr_a        = u4_ap_PDU_RX[5];           /* TRIPA_DIST_KM_USRRST                 */
     st_t_hmitripcom.u4_dist_km_tr_b        = u4_ap_PDU_RX[6];           /* TRIPB_DIST_KM_USRRST                 */
     st_t_hmitripcom.u2_avg_vehspd_tr_a     = (U2)u4_ap_PDU_RX[7];       /* TRIPA_AVG_SPD_KMPH_USRRST            */
@@ -2561,7 +2554,6 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
     st_t_hmitripcom.u4_avg_he_kmpkg_ta     = (U4)XSPI_UNKNOWN;      /* AVG_HE_KMPL_USRRST is not Applicable */
     st_t_hmitripcom.u4_idlstp_time_hrs_lc  = (U4)XSPI_UNKNOWN;      /* IDLSTP_USRRST is not Applicable      */
     st_t_hmitripcom.u4_save_fs_ml_lc       = (U4)XSPI_UNKNOWN;      /* FUELSAVE_ML_USRRST is not Applicable */
-#endif   /* BEV Rebase provisionally */
 
     vd_g_HmiTripcomPut(&st_t_hmitripcom);
 }
@@ -2611,10 +2603,35 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
         u1_s_xspi_vipos_disp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[15] , (U1)0U , (U1)1U);
 
         u1_t_rxdata = (U1)(u4_ap_PDU_RX[10] & (U4)0x03U);
+        if(u1_t_rxdata == (U1)1U){
+#if 0   /* BEV Rebase provisionally */
+            vd_g_HmiMcstPut((U1)HMIMCST_GV_SYS_HW_ERR, u1_t_rxdata);    /* GV SYS HW ERR */
+#endif   /* BEV Rebase provisionally */
+        }
+        else if(u1_t_rxdata == (U1)0U){
+#if 0   /* BEV Rebase provisionally */
+            vd_g_HmiMcstPut((U1)HMIMCST_GV_SYS_HW_ERR, u1_t_rxdata);    /* GV SYS HW NML */
+#endif   /* BEV Rebase provisionally */
+        }
+        else {
+            /* Do Nothing */
+        }
 
         u1_t_rxdata = (U1)((u4_ap_PDU_RX[10] >> 2) & (U4)0x03U);
         u1_s_xspi_gvifsts = u1_t_rxdata;
-
+        if(u1_t_rxdata == (U1)1U){
+#if 0   /* BEV Rebase provisionally */
+            vd_g_HmiMcstPut((U1)HMIMCST_GVIF_LINKDOWN, u1_t_rxdata);    /* GVIF LINKDOWN */
+#endif   /* BEV Rebase provisionally */
+        }
+        else if(u1_t_rxdata == (U1)0U){
+#if 0   /* BEV Rebase provisionally */
+            vd_g_HmiMcstPut((U1)HMIMCST_GVIF_LINKDOWN, u1_t_rxdata);    /* GVIF LINK NML */
+#endif   /* BEV Rebase provisionally */
+        }
+        else {
+            /* Do Nothing */
+        }
     } else {
         u1_s_xspi_vipos_disp = (U1)0U;
         u1_s_xspi_gvifsts = (U1)XSPI_GVIF_UNDEF2;
