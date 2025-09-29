@@ -49,9 +49,9 @@
 #define BSW_CANNM_E_u1TASK_JITTER             ( (BswU1)1U )
 
 #if (BSW_BSWM_CS_MSG_DELIVER == BSW_BSWM_CS_MSGDELIVER_HIGH)
-#define BSW_CANNM_E_u2MS2COMTICK_RUP          BSW_BSWM_CS_u2MS2TICK_RUP_HIGH
+#define BSW_CANNM_E_u2MS2COMTICK_RUP(msTime)    BSW_BSWM_CS_u2MS2TICK_RUP_HIGH(msTime)
 #else
-#define BSW_CANNM_E_u2MS2COMTICK_RUP          BSW_BSWM_CS_u2MS2TICK_RUP_MID
+#define BSW_CANNM_E_u2MS2COMTICK_RUP(msTime)    BSW_BSWM_CS_u2MS2TICK_RUP_MID(msTime)
 #endif
 
 #define BSW_CANNM_E_SNDSLPTIME_SLV            ( 0U )  /* Slave Send_Sleep timer:There is no Send_Sleep timer in Slave, so it is not configurable and fixed to 0 */
@@ -1501,7 +1501,7 @@ void (* BswConst bsw_cannm_e_ctrl_ptAbtWkUpFrmFn[BSW_CANNM_E_CHNUM] )( BswU1 u1N
 /*  Version         :Date                                                   */
 /*  v1-0-0          :2019/02/15                                             */
 /*  v2-0-0          :2021/12/02                                             */
-/*  v3-0-0          :2024/09/03                                             */
+/*  v3-0-0          :2025/01/17                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

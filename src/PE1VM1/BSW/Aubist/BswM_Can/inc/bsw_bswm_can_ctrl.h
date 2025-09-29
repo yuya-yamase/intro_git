@@ -107,6 +107,8 @@ void  bsw_bswm_can_ctrl_CntTimTxCtrl( BswU1 u1Channel );
 void  bsw_bswm_can_ctrl_CtTmTxCtrNone( BswU1 u1Channel );
 void  bsw_bswm_can_ctrl_TpEnTxNone( NetworkHandleType Network );
 void  bsw_bswm_can_ctrl_TpDisTxNone( NetworkHandleType Network );
+void  bsw_bswm_can_ctrl_J1939TpEnTxNn( NetworkHandleType Network );
+void  bsw_bswm_can_ctrl_J1939TpDsTxNn( NetworkHandleType Network );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -133,6 +135,9 @@ extern void (* BswConst bsw_bswm_can_ctrl_ptIntDmCtrFnc)( void );
 extern void (* BswConst bsw_bswm_can_ctrl_ptUpdDmCtrFnc)( BswU1 u1Channel, BswU4* u4DmGroup );
 extern void (* BswConst bsw_bswm_can_ctrl_ptTPEnTxFunc)( NetworkHandleType Network );
 extern void (* BswConst bsw_bswm_can_ctrl_ptTPDisTxFunc)( NetworkHandleType Network );
+extern void (* BswConst bsw_bswm_can_ctrl_ptJ1939TPETxF)( NetworkHandleType Network );
+extern void (* BswConst bsw_bswm_can_ctrl_ptJ1939TPDTxF)( NetworkHandleType Network );
+
 extern BswConst BswU1 bsw_bswm_can_ctrl_u1ChOffset;
 extern BswConst BswU1 bsw_bswm_can_ctrl_u1RegChk;
 extern BswConst BswU1 bsw_bswm_can_ctrl_u1WpRgCkStart;
@@ -149,7 +154,7 @@ extern BswConst BswU1 bsw_bswm_can_ctrl_u1BsSlpUseTbl[];
 /*  v1-1-0          :2018/11/19                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/05/24                                             */
-/*  v3-0-0          :2024/11/13                                             */
+/*  v3-0-0          :2025/01/22                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

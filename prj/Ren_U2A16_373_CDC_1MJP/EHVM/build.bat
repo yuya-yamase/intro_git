@@ -53,7 +53,7 @@ echo ROMSUM_PARAM: %ROMSUM_PARAM%
 echo ===============================
 
 if %GEN_OPT%==ON (
-    gbuild -top %TARGET%.gpj -cleanfirst -commands -nested_commands > build_opt.log 2>&1
+    gbuild -top %TARGET%.gpj -cleanfirst -commands -nested_commands %THROUGHPUT_DEFINE% > build_opt.log 2>&1
 )
 
 rem === preprocess
@@ -62,7 +62,7 @@ if %GEN_PP%==ON (
         rmdir /s /q pp
     )
     mkdir pp
-    gbuild -cleanfirst -top %TARGET%.gpj -preprocess > build_pp.log 2>&1
+    gbuild -cleanfirst -top %TARGET%.gpj -preprocess %THROUGHPUT_DEFINE% > build_pp.log 2>&1
     rem 空行(スペース、タブ、改行コードを含む)削除
     mv obj/*.i pp
     sed -b -i "/^\s*$/d" pp/*.i
@@ -71,14 +71,14 @@ if %GEN_PP%==ON (
 )
 
 if %OUT_CLEAN%==ON (
-    gbuild -top %TARGET%.gpj -strict -clean > build.log  2>&1
+    gbuild -top %TARGET%.gpj -strict -clean %THROUGHPUT_DEFINE% > build.log  2>&1
     if exist "out\%TARGET%.dle" (
         del out\%TARGET%.dle
     )
 ) else if %BUILD_CLEAN%==ON (
-    gbuild -top %TARGET%.gpj %NO_PARALLEL% -strict -cleanfirst > build.log  2>&1
+    gbuild -top %TARGET%.gpj %NO_PARALLEL% -strict -cleanfirst %THROUGHPUT_DEFINE% > build.log  2>&1
 ) else (
-    gbuild -top %TARGET%.gpj %NO_PARALLEL% -strict > build.log  2>&1
+    gbuild -top %TARGET%.gpj %NO_PARALLEL% -strict %THROUGHPUT_DEFINE% > build.log  2>&1
 )
 TYPE build.log
 

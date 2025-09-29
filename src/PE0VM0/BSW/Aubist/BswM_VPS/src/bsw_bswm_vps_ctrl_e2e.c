@@ -16,26 +16,30 @@
 #include <Std_Types.h>
 #include <cs/bsw_cs_common.h>
 #include <cs/bsw_cs_system.h>
+#include <cs/bsw_cs_system_memmap_pre.h>
 #include <ComStack_Types.h>
-#include "../inc/bsw_bswm_vps_MemMap.h"
 
 #include <comm/bsw_comm.h>
 #include <bswm_cs/bsw_bswm_cs.h>
 #include "../../ComM/inc/bsw_comm_config.h"
 #include "../../BswM_CS/inc/bsw_bswm_cs_config.h"
+#include <cs/bsw_cs_system_memmap_post.h>
 
 #if( BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE )
+#include <cs/bsw_cs_system_memmap_pre.h>
 #include <bswm_vps/bsw_bswm_vps.h>
 #include "../inc/bsw_bswm_vps_ctrl.h"
 #include "../inc/bsw_bswm_vps_config.h"
+#include <cs/bsw_cs_system_memmap_post.h>
 
 #if( BSW_BSWM_VPS_VPSMSG_E2EUSE == BSW_USE )
 #include <E2E.h>
+#include <cs/bsw_cs_system_memmap_pre.h>
 #include "../inc/bsw_bswm_vps_ctrl_e2e.h"
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-#define BSW_BSWM_VPS_E2E_MSGBIT_PER_BYTE           (8U)
+#define BSW_BSWM_VPS_BITIND_BYTEPOS_SHIFT    (3U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -44,7 +48,7 @@
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
-static uint8 bsw_bswm_vps_ctrl_E2ECheck (uint8 u1RxIdx, uint8* DataPtr);
+static uint8 bsw_bswm_vps_ctrl_E2ECheck(uint8 u1RxIdx, BswConstR uint8* DataPtr);
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -79,12 +83,12 @@ bsw_bswm_vps_ctrl_E2EInit( void )
     /* Tx Message */
     for (u1MsgIdx = (BswU1)0U; u1MsgIdx < u1CfgE2EProtectTxMsgNum; u1MsgIdx++)
     {
-        (void)E2E_P05ProtectInit( &bsw_bswm_vps_stTxProtectState[u1MsgIdx] );
+        (void)E2E_P05ProtectInit( &bsw_bswm_vps_stTxProtectState[u1MsgIdx] ); /* MISRA DEVIATION: no return check required */
     }
     /* Rx Message */
     for (u1MsgIdx = (BswU1)0U; u1MsgIdx < u1CfgE2EProtectRxMsgNum; u1MsgIdx++)
     {
-        (void)E2E_P05CheckInit( &bsw_bswm_vps_stRxCheckState[u1MsgIdx] );
+        (void)E2E_P05CheckInit( &bsw_bswm_vps_stRxCheckState[u1MsgIdx] ); /* MISRA DEVIATION: no return check required */
     }
 }
 
@@ -102,11 +106,18 @@ void
 bsw_bswm_vps_ctrl_E2ETxProtect(uint8 u1TxIdx, uint8* DataPtr)
 {
     BswU2              u2Length;
-    BswConst E2E_P05ConfigType* ptTxE2EMsgTbl;
+    BswU2              u2TmpLength;
+    E2E_P05ConfigType  stTxE2EMsgTbl;
+    BswConst E2E_P05ConfigType* ptTmpTxE2EMsgTbl;
 
-    ptTxE2EMsgTbl = &(bsw_bswm_vps_stTxE2EMsgInfoTbl[u1TxIdx]);
-    u2Length      = (BswU2)(ptTxE2EMsgTbl->DataLength / BSW_BSWM_VPS_E2E_MSGBIT_PER_BYTE);
-    (void)E2E_P05Protect( (BswConstR E2E_P05ConfigType*)ptTxE2EMsgTbl, &bsw_bswm_vps_stTxProtectState[u1TxIdx], DataPtr, u2Length );
+    ptTmpTxE2EMsgTbl              = &(bsw_bswm_vps_stTxE2EMsgInfoTbl[u1TxIdx]);
+    u2TmpLength                   = ptTmpTxE2EMsgTbl->DataLength;
+    stTxE2EMsgTbl.Offset          = ptTmpTxE2EMsgTbl->Offset;
+    stTxE2EMsgTbl.DataLength      = u2TmpLength;
+    stTxE2EMsgTbl.DataID          = ptTmpTxE2EMsgTbl->DataID;
+    stTxE2EMsgTbl.MaxDeltaCounter = ptTmpTxE2EMsgTbl->MaxDeltaCounter;
+    u2Length                      = (BswU2)( u2TmpLength >> BSW_BSWM_VPS_BITIND_BYTEPOS_SHIFT );
+    (void)E2E_P05Protect( &stTxE2EMsgTbl, &bsw_bswm_vps_stTxProtectState[u1TxIdx], DataPtr, u2Length ); /* MISRA DEVIATION: no return check required */
 
     return;
 }
@@ -116,29 +127,29 @@ bsw_bswm_vps_ctrl_E2ETxProtect(uint8 u1TxIdx, uint8* DataPtr)
 /* Description   | E2E Rx Check                                             */
 /* Preconditions | Caller:BswM/VPS                                          */
 /*               | Timing:Processing in the period                          */
-/* Parameters    | u1RxEvntIdx:Receive Message Index                        */
-/*               | SduDataPtr:Receive Data                                  */
+/* Parameters    | u1RxIdx:Receive Message Index                            */
+/*               | DataPtr:Receive Data                                     */
 /* Return Value  | TRUE :Receive success                                    */
 /*               | FALSE:Receive false                                      */
 /* Notes         | None                                                     */
 /****************************************************************************/
 boolean
-bsw_bswm_vps_ctrl_E2ERxCheck( uint8 u1RxEvntIdx, uint8 *SduDataPtr )
+bsw_bswm_vps_ctrl_E2ERxCheck( uint8 u1RxIdx, BswConstR uint8* DataPtr )
 {
     boolean bE2ERxChkRet;
     BswU1   u1E2ERet;
     BswU1   u1CfgE2ERxCntError;
     BswU1   u1RxStatus;
     
-    u1E2ERet = bsw_bswm_vps_ctrl_E2ECheck( u1RxEvntIdx, SduDataPtr );
+    u1E2ERet = bsw_bswm_vps_ctrl_E2ECheck( u1RxIdx, DataPtr );
     if( u1E2ERet == BSW_BSWM_VPS_u1_E2E_CHK_OK )
     {
         bE2ERxChkRet = (boolean)TRUE;
-        bsw_bswm_vps_u1RxStatus[u1RxEvntIdx] = BSW_BSWM_VPS_u1RXSTATUS_EXIST;
+        bsw_bswm_vps_u1RxStatus[u1RxIdx] = BSW_BSWM_VPS_u1RXSTATUS_EXIST;
     }
     else if( u1E2ERet == BSW_BSWM_VPS_u1_E2E_CHK_CNTERR )
     {
-        u1RxStatus         = bsw_bswm_vps_u1RxStatus[u1RxEvntIdx];
+        u1RxStatus         = bsw_bswm_vps_u1RxStatus[u1RxIdx];
         u1CfgE2ERxCntError = bsw_bswm_vps_u1E2ERxCntError;
         if( (u1RxStatus == BSW_BSWM_VPS_u1RXSTATUS_NONE) && (u1CfgE2ERxCntError == (BswU1)BSW_USE) )
         {
@@ -148,7 +159,7 @@ bsw_bswm_vps_ctrl_E2ERxCheck( uint8 u1RxEvntIdx, uint8 *SduDataPtr )
         {
             bE2ERxChkRet = (boolean)FALSE;
         }
-        bsw_bswm_vps_u1RxStatus[u1RxEvntIdx] = BSW_BSWM_VPS_u1RXSTATUS_EXIST;
+        bsw_bswm_vps_u1RxStatus[u1RxIdx] = BSW_BSWM_VPS_u1RXSTATUS_EXIST;
     }
     else /* u1E2ERet == BSW_BSWM_VPS_u1_E2E_CHK_FAIL */
     {
@@ -174,25 +185,32 @@ bsw_bswm_vps_ctrl_E2ERxCheck( uint8 u1RxEvntIdx, uint8 *SduDataPtr )
 /* Notes         | NONE                                                     */
 /****************************************************************************/
 static uint8
-bsw_bswm_vps_ctrl_E2ECheck(uint8 u1RxIdx, uint8* DataPtr)
+bsw_bswm_vps_ctrl_E2ECheck(uint8 u1RxIdx, BswConstR uint8* DataPtr)
 {
     Std_ReturnType       u1RetCheck;
     E2E_PCheckStatusType u1Checkstate;
     E2E_P05CheckStateType* ptRxChkStat;
-    BswConst E2E_P05ConfigType*   ptRxE2EMsgTbl;
+    E2E_P05ConfigType  stRxE2EMsgTbl;
+    BswConst E2E_P05ConfigType* ptTmpRxE2EMsgTbl;
     BswU2 u2Length;
-    uint8 u1Ret;
+    BswU2 u2TmpLength;
+    BswU1 u1Ret;
 
-    ptRxE2EMsgTbl = &(bsw_bswm_vps_stRxE2EMsgInfoTbl[u1RxIdx]);
-    u2Length      = (BswU2)( ptRxE2EMsgTbl->DataLength / BSW_BSWM_VPS_E2E_MSGBIT_PER_BYTE );
+    ptTmpRxE2EMsgTbl = &(bsw_bswm_vps_stRxE2EMsgInfoTbl[u1RxIdx]);
+    u2TmpLength                   = ptTmpRxE2EMsgTbl->DataLength;
+    stRxE2EMsgTbl.Offset          = ptTmpRxE2EMsgTbl->Offset;
+    stRxE2EMsgTbl.DataLength      = ptTmpRxE2EMsgTbl->DataLength;
+    stRxE2EMsgTbl.DataID          = ptTmpRxE2EMsgTbl->DataID;
+    stRxE2EMsgTbl.MaxDeltaCounter = ptTmpRxE2EMsgTbl->MaxDeltaCounter;
+    u2Length      = (BswU2)( u2TmpLength >> BSW_BSWM_VPS_BITIND_BYTEPOS_SHIFT );
     ptRxChkStat   = &(bsw_bswm_vps_stRxCheckState[u1RxIdx]);
-    u1RetCheck    = E2E_P05Check( (BswConstR E2E_P05ConfigType*)ptRxE2EMsgTbl, ptRxChkStat, DataPtr, u2Length );
+    u1RetCheck    = E2E_P05Check( &stRxE2EMsgTbl, ptRxChkStat, DataPtr, u2Length );
     u1Checkstate  = E2E_P05MapStatusToSM(u1RetCheck, ptRxChkStat->Status);
-    if( u1Checkstate == E2E_P_OK )
+    if( u1Checkstate == (BswU1)E2E_P_OK )
     {
         u1Ret = BSW_BSWM_VPS_u1_E2E_CHK_OK;
     }
-    else if( (u1Checkstate == E2E_P_WRONGSEQUENCE) || (u1Checkstate == E2E_P05STATUS_REPEATED) )
+    else if( (u1Checkstate == (BswU1)E2E_P_WRONGSEQUENCE) || (u1Checkstate == (BswU1)E2E_P_REPEATED) )
     {
         u1Ret = BSW_BSWM_VPS_u1_E2E_CHK_CNTERR;
     }
@@ -204,13 +222,15 @@ bsw_bswm_vps_ctrl_E2ECheck(uint8 u1RxIdx, uint8* DataPtr)
     return  u1Ret;
 }
 
+#include <cs/bsw_cs_system_memmap_post.h>
+
 #endif /* BSW_BSWM_VPS_VPSMSG_E2EUSE == BSW_USE */
 #endif /* BSW_BSWM_CS_FUNC_BSWM_VPS == BSW_USE */
 
 /****************************************************************************/
 /* History                                                                  */
 /*  Version         :Date                                                   */
-/*  v3-0-0          :2024/11/05                                             */
+/*  v3-0-0          :2025/02/24                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

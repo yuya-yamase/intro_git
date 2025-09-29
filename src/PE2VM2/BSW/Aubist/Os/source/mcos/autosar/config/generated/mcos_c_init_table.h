@@ -133,6 +133,6 @@ extern const bss_section_info_t mcos_local_core01_var_cleared_table[1];
 #endif /* MCOS_C_INIT_TABLE_H */
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/

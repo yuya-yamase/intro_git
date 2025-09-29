@@ -19,6 +19,8 @@
 
 #include "./Compiler_AbPartition_Cfg.h"
 #include "./Compiler_Crc_Cfg.h"
+#include "./Compiler_CryIf_Cfg.h"
+#include "./Compiler_Csm_Cfg.h"
 #include "./Compiler_Dcm_Cfg.h"
 #include "./Compiler_Dem_Cfg.h"
 #include "./Compiler_E2E_Cfg.h"
@@ -28,6 +30,7 @@
 #include "./Compiler_MemIf_Cfg.h"
 #include "./Compiler_Mscd_Cfg.h"
 #include "./Compiler_NvM_Cfg.h"
+#include "./Compiler_SecOC_Cfg.h"
 
 #include "./Compiler_ExtDefs.h" /* SWS_COMPILER_00050 */
 
@@ -61,7 +64,7 @@
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

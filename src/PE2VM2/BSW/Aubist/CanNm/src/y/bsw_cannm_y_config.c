@@ -52,9 +52,9 @@
 #define BSW_CANNM_Y_PN_SLP_SYNC            ( BSW_NM_SYNC_PNC_SHUTDOWN )
 
 #if (BSW_BSWM_CS_MSG_DELIVER == BSW_BSWM_CS_MSGDELIVER_HIGH)
-#define BSW_CANNM_Y_u2MS2COMTICK_RUP       BSW_BSWM_CS_u2MS2TICK_RUP_HIGH
+#define BSW_CANNM_Y_u2MS2COMTICK_RUP(msTime)  BSW_BSWM_CS_u2MS2TICK_RUP_HIGH(msTime)
 #else
-#define BSW_CANNM_Y_u2MS2COMTICK_RUP       BSW_BSWM_CS_u2MS2TICK_RUP_MID
+#define BSW_CANNM_Y_u2MS2COMTICK_RUP(msTime)  BSW_BSWM_CS_u2MS2TICK_RUP_MID(msTime)
 #endif
 
 /* SendStart */
@@ -4895,7 +4895,7 @@ BswConst BswU2 bsw_cannm_y_ctrl_u2MaxPwOnWtTim    = (BSW_BSWM_CS_u2MS2TICK_RUP_M
 /*  v2-0-0          :2022/02/01                                             */
 /*  v2-1-0          :2023/01/27                                             */
 /*  v2-3-0          :2023/11/01                                             */
-/*  v3-0-0          :2024/09/13                                             */
+/*  v3-0-0          :2025/01/17                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

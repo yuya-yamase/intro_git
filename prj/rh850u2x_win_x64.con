@@ -44,4 +44,19 @@ target_connection {
         log = "no"
         timestamp = "0"
     }
+     {
+        title = "R7F702300(20MHz)_doublemap_HSM"
+        type = "Renesas V850/V850E ICE (850eserv2)"
+        short_type = "850eserv"
+        args = "  -df=\"W:\\prj\\DR7F702300I.DVF\" -rh850 -e2lpd4=default -dclock=20000,,swoff -noiop -id FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF -nouse_svr -initstop -dwmap"
+        command = "850eserv2  -df=\"W:\\prj\\DR7F702300I.DVF\" -rh850 -e2lpd4=default -dclock=20000,,swoff -noiop -id FFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFFF -nouse_svr -initstop -dwmap"
+        logfile = ""
+        mode = ""
+        setup_script = ".\\setup.mbs"
+        run_mode_partner = ""
+        run_mode_policy = ""
+        sane = "yes"
+        log = "no"
+        timestamp = "0"
+    }
 }

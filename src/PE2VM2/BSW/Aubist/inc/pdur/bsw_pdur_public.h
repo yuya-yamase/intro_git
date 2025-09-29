@@ -22,6 +22,8 @@
 #define BSW_PDUR_UPCOMP_LDCOM                 (0x1000U)
 #define BSW_PDUR_UPCOMP_CDD1                  (0x1800U)
 #define BSW_PDUR_UPCOMP_CDD2                  (0x2000U)
+#define BSW_PDUR_UPCOMP_J1939TP               (0x2800U)
+#define BSW_PDUR_UPCOMP_SOMEIPTP              (0x5000U)
 
 /* Lower */
 #define BSW_PDUR_LOCOMP_IF                    (0x0000U)
@@ -39,7 +41,10 @@
 #define BSW_PDUR_LOCOMP_SOADTP                (BSW_PDUR_LOCOMP_SOAD | BSW_PDUR_LOCOMP_TP)
 #define BSW_PDUR_LOCOMP_DOIPIF                (BSW_PDUR_LOCOMP_DOIP | BSW_PDUR_LOCOMP_IF)
 #define BSW_PDUR_LOCOMP_DOIPTP                (BSW_PDUR_LOCOMP_DOIP | BSW_PDUR_LOCOMP_TP)
+#define BSW_PDUR_LOCOMP_J1939TP               (0x4000U)
+#define BSW_PDUR_LOCOMP_SOMEIPTP              (0x5800U)
 #define BSW_PDUR_LOCOMP_CANNM                 (0x6000U)
+#define BSW_PDUR_LOCOMP_SD                    (0xB000U)
 #define BSW_PDUR_LOCOMP_CANCDD1               (0xB800U)
 #define BSW_PDUR_LOCOMP_CANCDD2               (0xC000U)
 #define BSW_PDUR_LOCOMP_LINNM                 (0xC800U)
@@ -217,6 +222,13 @@ BufReq_ReturnType       bsw_pdur_rt_SomeIpTpCopyRxData( PduIdType id, BswConstR 
 void                    bsw_pdur_rt_SomeIpTpTxConfirm( PduIdType id, Std_ReturnType result );
 BufReq_ReturnType       bsw_pdur_rt_SomeIpTpCopyTxData( PduIdType id, BswConstR PduInfoType* info, BswConstR RetryInfoType* retry, PduLengthType* availableDataPtr );
 
+Std_ReturnType          bsw_pdur_rt_J1939TpTransmit( PduIdType TxPduId, BswConstR PduInfoType* PduInfoPtr );
+void                    bsw_pdur_rt_J1939TpTxConfirm( PduIdType id, Std_ReturnType result );
+void                    bsw_pdur_rt_J1939TpRxIndication( PduIdType id, Std_ReturnType result );
+BufReq_ReturnType       bsw_pdur_rt_J1939TpStartOfRcpt( PduIdType id, BswConstR PduInfoType* info, PduLengthType TpSduLength, PduLengthType* bufferSizePtr );
+BufReq_ReturnType       bsw_pdur_rt_J1939TpCopyRxData( PduIdType id, BswConstR PduInfoType* info, PduLengthType* bufferSizePtr );
+BufReq_ReturnType       bsw_pdur_rt_J1939TpCopyTxData( PduIdType id, BswConstR PduInfoType* info, BswConstR RetryInfoType* retry, PduLengthType* availableDataPtr );
+
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
@@ -231,7 +243,7 @@ BufReq_ReturnType       bsw_pdur_rt_SomeIpTpCopyTxData( PduIdType id, BswConstR 
 /* History                                                                  */
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2022/02/25                                             */
-/*  v3-0-0          :2024/09/04                                             */
+/*  v3-0-0          :2025/01/27                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

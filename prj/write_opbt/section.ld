@@ -3,6 +3,11 @@ CONSTANTS
 	CSA_START = 0xFF321380
 	CSA_SIZE = 0x80
 }
+CONSTANTS
+{
+	CSA_SEC_START = 0xFF322700
+	CSA_SEC_SIZE = 0x20
+}
 MEMORY
 {
     /* memory map */
@@ -11,6 +16,7 @@ MEMORY
     lram(rwx)          : ORIGIN = 0xfde00000, LENGTH = 24K     /* Local RAM (self)        */
     cram2_data(rwx)    : ORIGIN = 0xfe400000, LENGTH = 1500K   /* Cluster RAM (Cluster2)  */
 	CSA : ORIGIN = CSA_START, LENGTH = CSA_SIZE
+	CSA_SEC : ORIGIN = CSA_SEC_START, LENGTH = CSA_SEC_SIZE
 }
 SECTIONS
 {
@@ -24,4 +30,6 @@ SECTIONS
     .text :
 	
 	CSA_SECTION align(4) :>CSA
+	CSA_SEC_SECTION align(4) :>CSA_SEC
+
 }
