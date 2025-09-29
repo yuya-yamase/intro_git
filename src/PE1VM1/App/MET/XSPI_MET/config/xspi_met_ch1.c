@@ -68,15 +68,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-typedef struct{
-    U1                          u1_xspiid;
-    U1                          u1_bitpos;
-    U1                          u1_datalen;
-    U1                          u1_maxvalue;
-    U1                          u1_vdsci_id;
-}ST_XSPI_TXSIG;
-#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/  
@@ -173,8 +164,6 @@ static inline void    vd_s_XSpiCanTx_FLYNOP(const U4* u4_ap_pck_rx);
 void    vd_g_XSpiCfgInitCh1(void)
 {
 #if 0   /* BEV Rebase provisionally */
-    U1  u1_t_loop;
-
     u1_s_xspi_ethercomsts = (U1)XSPI_ETHER_UNDEF2;
     u1_s_xspi_mm2c100n_rxcnt = (U1)0U;
     u1_s_xspi_mm2c107n_rxcnt = (U1)0U;
