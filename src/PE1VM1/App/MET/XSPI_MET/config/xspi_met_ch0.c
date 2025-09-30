@@ -69,7 +69,6 @@
 #if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
 #endif
-#include "vds_ci.h"
 #include "oilmil.h"
 #include "dte_ed.h"
 #include "avggrph.h"

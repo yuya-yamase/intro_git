@@ -84,7 +84,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #include "mcst.h"
-#include "vds_ci.h"
 #include "hmiproxy.h"
 #include "battpow.h"
 #include "drvind_pwr_pct.h"
@@ -347,7 +346,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_MmLangCstmzTask,             (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VardefMmUnitCstmzTask,       (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_LocaleMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
-    {&vd_g_VdsCIMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
 #endif   /* BEV Rebase provisionally */
     {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
 #if 0   /* BEV Rebase provisionally */
