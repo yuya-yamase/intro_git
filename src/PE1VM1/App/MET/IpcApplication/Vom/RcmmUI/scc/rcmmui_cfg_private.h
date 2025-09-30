@@ -1,70 +1,47 @@
-/* 2.1.0 */
+/* 1.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Vehicle Operational Mode                                                                                                         */
-/*                                                                                                                                   */
-/*                                                                                                                                   */
-/*  WARNING :                                                                                                                        */
-/*  veh_opemd_xmode.h is included in veh_opemd.h.                                                                                     */
-/*  DO NOT include this file in any file even though this configuration header is public.                                            */
+/*  Recommendation user interface                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef VEH_OPEMD_XMODE_H
-#define VEH_OPEMD_XMODE_H
+#ifndef RCMMUI_CFG_H
+#define RCMMUI_CFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_TYBEV3_H_MAJOR                 (2)
-#define VEH_OPEMD_TYBEV3_H_MINOR                 (1)
-#define VEH_OPEMD_TYBEV3_H_PATCH                 (0)
+#define RCMMUI_CFG_H_MAJOR                      (1)
+#define RCMMUI_CFG_H_MINOR                      (2)
+#define RCMMUI_CFG_H_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "aip_common.h"
+#include "rcmmui.h"
+#include "veh_opemd.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_MDBIT_ACC                      (0x00000002U)  /* BDC1S81.VPSINFOx =                 0x66 or 0x76 or 0x7e */
-#define VEH_OPEMD_MDBIT_IG_P                     (0x00000004U)  /* BDC1S81.VPSINFOx =                                 0x7e */
-#define VEH_OPEMD_MDBIT_PBA                      (0x00000008U)  /* BDC1S81.VPSINFOx = 0x22 or 0x62 or 0x66 or 0x76 or 0x7e */
-#define VEH_OPEMD_MDBIT_IG_R                     (0x00000010U)  /* BDC1S81.VPSINFOx =                         0x76 or 0x7e */
-#define VEH_OPEMD_MDBIT_IGCT                     (0x00000020U)  /* BDC1S81.VPSINFOx = 0x22 or 0x62                         */
-#define VEH_OPEMD_MDBIT_IGBD                     (0x00000040U)  /* BDC1S81.VPSINFOx =         0x62                         */
+#define RCMMUI_STSBIT_VALID                     (0x00U)                 /*  Valid                                                    */
+#define RCMMUI_STSBIT_UNKNOWN                   (0x01U)                 /*  Unknown                                                  */
+#define RCMMUI_STSBIT_INVALID                   (0x02U)                 /*  Invalid                                                  */
 
-#define VEH_OPEMD_MDBIT_FIELDS                   (0x0000007eU)
+#define RCMMI_MAIN_TICK                         (20U)
+#define RCMMI_STREQ_TO                          (20000U / RCMMI_MAIN_TICK)
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_EVBIT_ACC_TO_ON                (0x00000002U)
-#define VEH_OPEMD_EVBIT_IG_P_TO_ON               (0x00000004U)
-#define VEH_OPEMD_EVBIT_PBA_TO_ON                (0x00000008U)
-#define VEH_OPEMD_EVBIT_IG_R_TO_ON               (0x00000010U)
-#define VEH_OPEMD_EVBIT_IGCT_TO_ON               (0x00000020U)
-#define VEH_OPEMD_EVBIT_IGBD_TO_ON               (0x00000040U)
-
-#define VEH_OPEMD_EVBIT_ACC_TO_OFF               (0x00020000U)
-#define VEH_OPEMD_EVBIT_IG_P_TO_OFF              (0x00040000U)
-#define VEH_OPEMD_EVBIT_PBA_TO_OFF               (0x00080000U)
-#define VEH_OPEMD_EVBIT_IG_R_TO_OFF              (0x00100000U)
-#define VEH_OPEMD_EVBIT_IGCT_TO_OFF              (0x00200000U)
-#define VEH_OPEMD_EVBIT_IGBD_TO_OFF              (0x00400000U)
-
-#define VEH_OPEMD_EVBIT_FIELDS                   (0x007e007eU)
-
-#define VEH_OPEMD_PTS_INV_OFF                    (0U)
-#define VEH_OPEMD_PTS_INV_ON                     (1U)
-#define VEH_OPEMD_PTS_INV_LAS                    (2U)
-
+#define RCMMUI_PBDMSW_ON                        (1U)
+#define RCMMUI_PBDMSW_OFF                       (0U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define u1_g_VehopemdBaOn()                      (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_PBA,  (U4)VEH_OPEMD_MDBIT_PBA ))
-#define u1_g_VehopemdAccOn()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_ACC,  (U4)VEH_OPEMD_MDBIT_ACC ))
-#define u1_g_VehopemdIgnOn()                     (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_IG_R, (U4)VEH_OPEMD_MDBIT_IG_R))
-#define u1_g_VehopemdIgnpOn()                    (u1_g_VehopemdMdchk((U4)VEH_OPEMD_MDBIT_IG_P, (U4)VEH_OPEMD_MDBIT_IG_P))
-
+#define u1_g_RcmmUIIgnOn()                      (u1_g_VehopemdIgnOn())
+#define u1_g_RcmmUIBaOn()                       (u1_g_VehopemdBaOn())
+#define u1_g_RcmmUIIgnpOn()                     (u1_g_VehopemdIgnpOn())
+#define u1_g_RcmmUIAccOn()                      (u1_g_VehopemdAccOn())
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -74,16 +51,20 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1      u1_g_VehopemdPtsOn(const U1 u1_a_INV);
+void            vd_g_RcmmUIInitCfg(void);
+void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm);
+void            vd_g_RcmmUICfgCanTx(const U2 u2_a_RCMM, const U1 u1_a_RES);
+void            vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT);
+U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* VEH_OPEMD_XMODE_H */
+#endif      /* RCMMUI_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  see veh_opemd_tybev3.c                                                                                        */
+/*  Change History  :  rcmmui.c                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

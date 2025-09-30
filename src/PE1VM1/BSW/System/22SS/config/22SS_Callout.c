@@ -54,7 +54,9 @@
 #include "ambtmp.h"
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
+#endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
+#if 0   /* BEV Rebase provisionally */
 #include "gauge.h"
 #include "telltale.h"
 #include "wchime.h"
@@ -65,7 +67,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #include "mcst.h"
-#include "vds_ci.h"
 #endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
 #if 0   /* BEV Rebase provisionally */
@@ -146,10 +147,11 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
         &vd_g_AmbtmpBonInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
@@ -240,10 +242,11 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
@@ -334,10 +337,11 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
