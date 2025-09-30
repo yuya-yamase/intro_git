@@ -70,15 +70,7 @@ static  U1                                      u1_s_rcmmui_prereq;
 /*===================================================================================================================================*/
 void            vd_g_RcmmUIInitCfg(void)
 {
-#if 0   /* BEV Rebase provisionally */
-#ifdef OXCAN_PDU_RX_CAN_BDB1S13
-    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13);
-#else
-	u1_s_rcmmui_rxcnt  = (U1)0U;
-#endif
-#else   /* BEV Rebase provisionally */
-    u1_s_rcmmui_rxcnt  = (U1)0U;
-#endif   /* BEV Rebase provisionally */
+    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
     u1_s_rcmmui_prereq = (U1)0U;
 }
 
@@ -94,20 +86,14 @@ void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm)
     U1          u1_t_req1;
     U1          u1_t_req2;
 
-#if 0   /* BEV Rebase provisionally */
-    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13);
-#else   /* BEV Rebase provisionally */
-    u1_t_rx_cnt = (U1)0U;
-#endif   /* BEV Rebase provisionally */
+    u1_t_rx_cnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S13_CH0);
 
     if (u1_t_rx_cnt != u1_s_rcmmui_rxcnt) {
         u1_t_req1 = (U1)0U;
         u1_t_req2 = (U1)0U;
 
-#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ1, &u1_t_req1);
         (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ2, &u1_t_req2);
-#endif   /* BEV Rebase provisionally */
 
         (*u2p_a_rcmm)   = (U2)((U2)u1_t_req1 << RCMMUI_RCMM_MKSFT) | (U2)u1_t_req2;
     }
@@ -135,12 +121,10 @@ void            vd_g_RcmmUICfgCanTx(const U2 u2_a_RCMM, const U1 u1_a_RES)
     u1_t_psrsp1 = (U1)((u2_a_RCMM & u2_s_PSRSP1_MSK) >> RCMMUI_RCMM_MKSFT);
     u1_t_psrsp2 = (U1)( u2_a_RCMM & u2_s_PSRSP2_MSK);
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_PSRSP1, &u1_t_psrsp1);
     (void)Com_SendSignal(ComConf_ComSignal_PSRSP2, &u1_t_psrsp2);
     (void)Com_SendSignal(ComConf_ComSignal_PSRSP3, &u1_a_RES);
     (void)Com_TriggerIPDUSend(MSG_MET1S25_TXCH0);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -174,17 +158,10 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
     U1 u1_t_igp_sts;
 
     u1_t_chk     = (U1)TRUE;
-#if 0   /* BEV Rebase provisionally */
     u1_t_ba_sts  = u1_g_RcmmUIBaOn();
     u1_t_acc_sts = u1_g_RcmmUIAccOn();
     u1_t_igr_sts = u1_g_RcmmUIIgnOn();
     u1_t_igp_sts = u1_g_RcmmUIIgnpOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_ba_sts  = (U1)FALSE;
-    u1_t_acc_sts = (U1)FALSE;
-    u1_t_igr_sts = (U1)FALSE;
-    u1_t_igp_sts = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
 
     switch(u1_a_REQID){
         case (U1)RCMMUI_STREQ_1_1:
@@ -226,9 +203,11 @@ U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  220D-1   07/18/2022  TH       Configured for 220D                                                                                */
+/*  BEV-1    10/02/2025  KO       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
 /*  * TH   = Takahiro Hirano,  Denso Techno                                                                                          */
 /*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * KO   = Kazuto Oishi,  Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
