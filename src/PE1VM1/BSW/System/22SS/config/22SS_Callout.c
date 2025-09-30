@@ -56,8 +56,8 @@
 #include "mulmed_mulfr.h"
 #endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
-#if 0   /* BEV Rebase provisionally */
 #include "gauge.h"
+#if 0   /* BEV Rebase provisionally */
 #include "telltale.h"
 #include "wchime.h"
 #include "sbltsync.h"
@@ -140,7 +140,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdBonInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoBonInit,
@@ -235,7 +237,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoRstwkInit,
@@ -330,7 +334,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoRstwkInit,
