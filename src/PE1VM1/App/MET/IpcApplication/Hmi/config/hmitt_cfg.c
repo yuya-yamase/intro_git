@@ -317,6 +317,7 @@ static U1      u1_s_HmiTtEcbEpbTt(void)
         (U1)HMITT_BLINK_CO_ON_____100P,                /* ALERT_REQ_C_EPB_WRN_IG_EPBDEF7           (20U) */
         (U1)HMITT_BLINK_CO_ON_____100P                 /* ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW7         (21U) */
     };
+
 #endif   /* BEV Rebase provisionally */
     U1  u1_t_req;
 #if 0   /* BEV Rebase provisionally */ 
@@ -350,6 +351,7 @@ static U1      u1_s_HmiTtEcbEpbTt(void)
     } else {
         u1_t_req = (U1)HMITT_BLINK_CO_OFF____100P;
     }
+
 #else   /* BEV Rebase provisionally */
     u1_t_req = (U1)HMITT_BLINK_CO_OFF____100P;
 #endif   /* BEV Rebase provisionally */
@@ -555,6 +557,7 @@ void    vd_g_HmiTtCfgCstmask(U4* u4_ap_varmask)
     if (u1_t_mcst == (U1)0U) {
         u4_ap_varmask[HMITT_ECOIND_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_ECOIND_BITPOS));
     }
+
 #if 0   /* BEV Rebase provisionally */
     u1_t_mcst = u1_g_McstBf((U1)MCST_BFI_EV_IND);
 #else   /* BEV Rebase provisionally */
