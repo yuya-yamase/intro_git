@@ -42,14 +42,14 @@ const EthSwt_HiPorcFunc G_ETHSWT_SWIC_HIPROC_FUNC_TABLE[][D_ETHSWT_SWIC_ST_NUM] 
 
 typedef Std_ReturnType (*EthSwt_registerAccessFunc)(uint32 * const);
 const EthSwt_registerAccessFunc G_ETHSWT_SWIC_BACK_FUNC_TABLE[][D_ETHSWT_SWIC_ST_NUM] =
-{   /*  UNINT                   , INIT                          , PORT_INIT_COMPLETED       , SET_RELAY_ON                          , ACTIVE                    , SET_RELAY_OFF      */
-    {   NULL_PTR                , EthSwt_SWIC_Init_Setting      , NULL_PTR                  , NULL_PTR                              , NULL_PTR                  , NULL_PTR                  }   /* 初期レジスタ設定 */
-,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                  , EthSwt_SWIC_Port_RelayOn              , NULL_PTR                  , NULL_PTR                  }   /* 中継開始設定 */
-,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                  , NULL_PTR                              , NULL_PTR                  , EthSwt_SWIC_Port_RelayOff }   /* 中継停止設定 */
-,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_Link_Action   , NULL_PTR                  }   /* リンク状態取得 */
-,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_Link_FastGet  , NULL_PTR                  }   /* 高速リンク状態取得 */
-,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_Port_Action   , NULL_PTR                  }   /* ポートモード制御 */
-,   {   NULL_PTR                , EthtSwt_SWIC_MIB_ReadDiscard  , NULL_PTR                  , NULL_PTR                              , EthSwt_SWIC_MIB_Action    , NULL_PTR                  }   /* MIB取得 */
+{   /*  UNINT                   , INIT                          , PORT_INIT_COMPLETED           , SET_RELAY_ON                          , ACTIVE                    , SET_RELAY_OFF      */
+    {   NULL_PTR                , EthSwt_SWIC_Init_Setting      , NULL_PTR                      , NULL_PTR                              , NULL_PTR                  , NULL_PTR                  }   /* 初期レジスタ設定 */
+,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , EthSwt_SWIC_Port_RelayOn              , NULL_PTR                  , NULL_PTR                  }   /* 中継開始設定 */
+,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , NULL_PTR                              , NULL_PTR                  , EthSwt_SWIC_Port_RelayOff }   /* 中継停止設定 */
+,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , NULL_PTR                              , EthSwt_SWIC_Link_Action   , NULL_PTR                  }   /* リンク状態取得 */
+,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , NULL_PTR                              , EthSwt_SWIC_Link_FastGet  , NULL_PTR                  }   /* 高速リンク状態取得 */
+,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , NULL_PTR                              , EthSwt_SWIC_Port_Action   , NULL_PTR                  }   /* ポートモード制御 */
+,   {   NULL_PTR                , NULL_PTR                      , EthtSwt_SWIC_MIB_ReadDiscard  , NULL_PTR                              , EthSwt_SWIC_MIB_Action    , NULL_PTR                  }   /* MIB取得 */
 };
 #define D_ETHSWT_SWIC_BACK_FUNC_NUM         (sizeof(G_ETHSWT_SWIC_BACK_FUNC_TABLE) / sizeof(G_ETHSWT_SWIC_BACK_FUNC_TABLE[0]))
 

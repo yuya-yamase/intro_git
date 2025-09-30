@@ -48,7 +48,7 @@ Std_ReturnType EthSwt_SWIC_SetSwitchPortMode(uint8 SwitchIdx, uint8 SwitchPortId
 	return EthSwt_SWIC_Port_SetSwitchPortMode(SwitchPortIdx, PortMode);
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_GetMIB(uint8 SwitchIdx, uint8 SwitchPortIdx, uint32 Mib, S_ETHSWT_SWIC_MIB_COUNT *MibCountPtr)
+Std_ReturnType EthSwt_SWIC_GetMIB(uint8 SwitchIdx, uint8 SwitchPortIdx, uint32 Mib, uint32 *MibCountPtr)
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
 	return EthSwt_SWIC_MIB_Get(SwitchPortIdx, Mib, MibCountPtr);

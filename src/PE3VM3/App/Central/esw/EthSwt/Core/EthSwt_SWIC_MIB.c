@@ -18,7 +18,7 @@ static struct {
     volatile uint8                      req;
 } swicGetMIBTimer;
 /* -------------------------------------------------------------------------- */
-static S_ETHSWT_SWIC_MIB_COUNT G_ETHSWT_SWIC_MIB_LIST[D_ETHSWT_SWIC_PORT_NUM][D_ETHSWT_SWIC_MIB_NUM];
+static uint32 G_ETHSWT_SWIC_MIB_LIST[D_ETHSWT_SWIC_PORT_NUM][D_ETHSWT_SWIC_MIB_NUM];
 
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType ethswt_swic_mib_captureAndClear (const uint8 SwitchPortIdx, uint32 * const errFactor);
@@ -52,6 +52,8 @@ void EthSwt_SWIC_MIB_Clear (void)
     swicGetMIBTimer.time = 0;
     swicGetMIBTimer.req = STD_ON;
     LIB_EI();
+
+    return;
 }
 /* -------------------------------------------------------------------------- */
 Std_ReturnType EthtSwt_SWIC_MIB_ReadDiscard (uint32 * const errFactor)
@@ -63,6 +65,7 @@ Std_ReturnType EthtSwt_SWIC_MIB_ReadDiscard (uint32 * const errFactor)
         if (G_ETHSWT_SWIC_MIB_VAILD[idx] == STD_ON) {
             result = ethswt_swic_mib_captureAndClear(idx, errFactor);
         }
+        if (result != E_OK) {break;}
     }
     
     return result;
@@ -93,7 +96,7 @@ Std_ReturnType EthSwt_SWIC_MIB_Action (uint32 * const errFactor)
     return result;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_MIB_Get(uint8 SwitchPortIdx, uint32 Mib, S_ETHSWT_SWIC_MIB_COUNT *MibCountPtr)
+Std_ReturnType EthSwt_SWIC_MIB_Get(uint8 SwitchPortIdx, uint32 Mib, uint32 *MibCountPtr)
 {
     Std_ReturnType ret = E_NOT_OK;
     EthSwt_StateType status;
@@ -104,10 +107,7 @@ Std_ReturnType EthSwt_SWIC_MIB_Get(uint8 SwitchPortIdx, uint32 Mib, S_ETHSWT_SWI
         if (SwitchPortIdx >= D_ETHSWT_SWIC_PORT_NUM)	{ break; }
         if (Mib >= D_ETHSWT_SWIC_MIB_NUM)               { break; }
         if (MibCountPtr == NULL_PTR)					{ break; }
-        MibCountPtr->IngressCount = G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib].IngressCount;
-        G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib].IngressCount = 0;
-        MibCountPtr->EgressCount = G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib].EgressCount;
-        G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib].EgressCount = 0;
+        *MibCountPtr = G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib];
         
         ret = E_OK;
 
@@ -135,7 +135,7 @@ static Std_ReturnType ethswt_swic_mib_readMIB (const uint8 SwitchPortIdx, uint32
         result = ethswt_swic_mib_captureAndClear(SwitchPortIdx, errFactor);
         if (result != E_OK) {break;}
         for (idx = 0u; idx < D_ETHSWT_SWIC_MIB_NUM; idx++) {
-            result = ethswt_swic_mib_addVal(&G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][idx].IngressCount, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, errFactor);
+            result = ethswt_swic_mib_addVal(&G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][idx], G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, errFactor);
             if (result != E_OK) {break;}
         }
     } while (0);
