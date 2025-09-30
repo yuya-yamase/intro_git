@@ -76,7 +76,9 @@
 #if 0   /* BEV Rebase provisionally */
 #include "telltale.h"
 #include "wchime.h"
+#endif   /* BEV Rebase provisionally */
 #include "gauge.h"
+#if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
 #include "locale.h"
 #endif   /* BEV Rebase provisionally */
@@ -399,8 +401,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
 #endif   /* BEV Rebase provisionally */
     {&vd_g_IllumiMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
-#if 0   /* BEV Rebase provisionally */
     {&vd_g_GaugeMainTask,               (U4)SCHDLR_TASKBIT__20MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_TelltaleMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },

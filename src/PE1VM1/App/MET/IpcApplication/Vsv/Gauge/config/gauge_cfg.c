@@ -18,20 +18,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "gauge_cfg_private.h"
 /* DIGITAL SPEED            */
+#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
+#endif   /* BEV Rebase provisionally */
 #include "gagdst_nxmph.h"
-/* LOW FUEL WARNING         */
-#include "fuelvol_tau_gag.h"
-#include "gagdst_lowfuel.h"
-/* TEMP GAUGE - SEGMENT     */
-#include "ptsctmp_cel.h"
-#include "gagdst_tempseg.h"
-/* ENGSPD REV PEAK          */
-#include "engspd_rpm.h"
-#include "gagdst_revpeak.h"
-/* REV INDICATOR            */
-/* #include "engspd_rpm.h"  */
-#include "gagdst_revind.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -60,8 +50,6 @@ ST_GAUGE_OW_CTRL             st_gp_gauge_ow_ctrl[GAUGE_NUM_CH];
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1      u1_s_GagsrcKmph(U2 * u2p_a_src);         /* vehspd_kmph      */
-static U1      u1_s_GagsrcTempCel(U2 * u2p_a_src);      /* ptsctmp_cel      */
-static U1      u1_s_GagsrcRpm(U2 * u2p_a_src);          /* engspd_rpm       */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -74,26 +62,6 @@ const ST_GAUGE_IF           st_gp_GAUGE_IF_CFG[GAUGE_NUM_CH] = {
     /* Digital Speed        */
         &u1_s_GagsrcKmph,                       /* fp_u1_SRC     */
         &vd_g_GagdstNxmphUpdt                   /* fp_vd_DST     */
-    },
-    /* Low Fuel Warning     */
-    {
-        &u1_g_FuelvolTauGagLitEst,              /* fp_u1_SRC     */
-        &vd_g_GagdstLowFuelUpdt                 /* fp_vd_DST     */
-    },
-    /* Temp Gauge Segment   */
-    {
-        &u1_s_GagsrcTempCel,                    /* fp_u1_SRC     */
-        &vd_g_GagdstTempSegUpdt                 /* fp_vd_DST     */
-    },
-    /* Engspd Rev Peak      */
-    {
-        &u1_s_GagsrcRpm,                        /* fp_u1_SRC     */
-        &vd_g_GagdstRevpeakUpdt                 /* fp_vd_DST     */
-    },
-    /* Engspd Rev Indicator */
-    {
-        &u1_s_GagsrcRpm,                        /* fp_u1_SRC     */
-        &vd_g_GagdstRevindUpdt                  /* fp_vd_DSP     */
     }
 };
 const U1                    u1_g_GAUGE_NUM_CH = (U1)GAUGE_NUM_CH;
@@ -110,10 +78,6 @@ const U1                    u1_g_GAUGE_NUM_CH = (U1)GAUGE_NUM_CH;
 void    vd_g_GaugeCfgBonInit(void)
 {
     vd_g_GagdstNxmphInit();
-    vd_g_GagdstLowFuelBonInit();
-    vd_g_GagdstTempSegInit();
-    vd_g_GagdstRevpeakInit();
-    vd_g_GagdstRevindInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GaugeCfgRstwkInit(void)                                                                                             */
@@ -124,10 +88,6 @@ void    vd_g_GaugeCfgBonInit(void)
 void    vd_g_GaugeCfgRstwkInit(void)
 {
     vd_g_GagdstNxmphInit();
-    vd_g_GagdstLowFuelRstwkInit();
-    vd_g_GagdstTempSegInit();
-    vd_g_GagdstRevpeakInit();
-    vd_g_GagdstRevindInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT)                                                                             */
@@ -137,8 +97,6 @@ void    vd_g_GaugeCfgRstwkInit(void)
 /*===================================================================================================================================*/
 void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT)
 {
-    vd_g_GagdstLowFuelOpemdEvhk(u4_a_EVTBIT);
-    vd_g_GagdstTempSegOpemdEvhk(u4_a_EVTBIT);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_GaugeCfgMainStart(void)                                                                                             */
@@ -175,43 +133,12 @@ void    vd_g_GaugeCfgMapUpdate(void)
 /*===================================================================================================================================*/
 static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
 {
+#if 0   /* BEV Rebase provisionally */
     return(u1_g_VehspdKmphBiased(u2p_a_src, (U1)FALSE));
-}
-/*===================================================================================================================================*/
-/*  static U1      u1_s_GagsrcTempCel(U2 * u2p_a_src)                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1      u1_s_GagsrcTempCel(U2 * u2p_a_src)
-{
-    U1  u1_t_sts;
-    U2  u2_t_src;
-
-    u2_t_src = (U2)0U;
-
-    u1_t_sts = u1_g_PtsctmpCelFltrd(&u2_t_src);
-
-    if(u2_t_src < (U2)PTSCTMP_CEL_OFFSET){
-        u2_t_src = (U2)0U;
-    }
-    else{
-        u2_t_src -= (U2)PTSCTMP_CEL_OFFSET;
-    }
-    (*u2p_a_src) = u2_t_src;
-
-    return(u1_t_sts);
-}
-/*===================================================================================================================================*/
-/*===================================================================================================================================*/
-/*  static U1      u1_s_GagsrcRpm(U2 * u2p_a_src)                                                                                    */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static U1      u1_s_GagsrcRpm(U2 * u2p_a_src)
-{
-    return(u1_g_EngspdRpmFltrd(u2p_a_src));
+#else   /* BEV Rebase provisionally */
+    (*u2p_a_src) = (U2)0x00U;
+    return((U1)0U); /* VEHSPD_STSBIT_UNKNOWN */
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

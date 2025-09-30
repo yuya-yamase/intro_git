@@ -50,8 +50,6 @@
 #include "engspd_rpm.h"
 #include "engspd_det_rpm.h"
 #include "engspd_varrz.h"
-#include "gagdst_revind.h"
-#include "gagdst_revpeak.h"
 #include "ptsctmp_cel.h"
 #include "ambtmp.h"
 #include "gagdst_attempovhtind.h"
@@ -77,7 +75,9 @@
 #include "hdimmgr_if.h"
 
 /* VSV */
+#endif   /* BEV Rebase provisionally */
 #include "gagdst_nxmph.h"
+#if 0   /* BEV Rebase provisionally */
 #include "wchime.h"
 #endif   /* BEV Rebase provisionally */
 #include "illumi.h"
@@ -721,8 +721,10 @@ static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx) {
 static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
 #if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
+#endif   /* BEV Rebase provisionally */
     U2  u2_t_kmph;
     U2  u2_t_mph;
+#if 0   /* BEV Rebase provisionally */
 
     u2_t_kmph          = (U2)0U;
     u1_t_sts           = u1_g_VehspdKmphInst(&u2_t_kmph, (U1)TRUE);
@@ -734,6 +736,7 @@ static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1]   = (U4)u2_t_kmph;                                         /* VEHICLE_SPD_ANALOG                           */
     u4_ap_pdu_tx[1]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT);                  /* VEHSPD_ANA_STS                               */
 
+#endif   /* BEV Rebase provisionally */
     u2_t_kmph          = u2_g_GagdstNxmphDsplyd((U1)GAGDST_NXMPH_KMPH);
     u4_ap_pdu_tx[2]   = (U4)u2_t_kmph;                                         /* VEHICLE_SPD_DIGITAL_KM                       */
     /* u4_ap_pdu_tx[2]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT); */            /* VEHSPD_DIG_STS_KM                            */
@@ -741,7 +744,6 @@ static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
     u2_t_mph           = u2_g_GagdstNxmphDsplyd((U1)GAGDST_NXMPH__MPH);
     u4_ap_pdu_tx[3]   = (U4)u2_t_mph;                                          /* VEHICLE_SPD_DIGITAL_MI                       */
     /* u4_ap_pdu_tx[3]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT); */            /* VEHSPD_DIG_STS_MI                            */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -753,19 +755,13 @@ static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
 static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx) {
 #if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
-    U1  u1_t_revind;
-    U1  u1_t_revpeak;
     U2  u2_t_rpm;
-    U2  u2_t_revpeakval;
     U2  u2_t_instrpm;
     U2  u2_t_rzrpm;
     U2  u2_t_max;
 
     u2_t_rpm          =  (U2)0U;
-    u2_t_revpeakval   =  (U2)0U;
     u1_t_sts          =  u1_g_EngspdRpmFltrd(&u2_t_rpm);
-    u1_t_revind       =  u1_g_GagdstRevindSts();
-    u1_t_revpeak      =  u1_g_GagdstRevpeakRpm(&u2_t_revpeakval);
     u2_t_instrpm      =  (U2)0U;
     (void)u1_g_EngspdDetRpm(&u2_t_instrpm);
     u2_t_rzrpm        =  u2_g_EngspdVarrzGetRzrpm();
@@ -775,9 +771,6 @@ static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1]   =  (U4)u2_t_rpm;                                          /* ENGINE_SPD                                   */
     u4_ap_pdu_tx[1]  |=  ((U4)u2_t_rzrpm << XSPI_SHIFT_2BYTE);              /* TACHO_VRZ_VAL                                */
     u4_ap_pdu_tx[1]  |=  ((U4)u1_t_sts << XSPI_STS_SHIFT);                  /* ENGSPD_STS                                   */
-    u4_ap_pdu_tx[2]   =  (U4)u2_t_revpeakval;                                   /* TACHO_REVPEAK_VAL                            */
-    u4_ap_pdu_tx[2]  |=  ((U4)u1_t_revind << 30);                               /* TACHO_REVIND                                 */
-    u4_ap_pdu_tx[2]  |=  ((U4)u1_t_revpeak & (U4)0x00000001U) << 29;            /* TACHO_REVPEAK                                */
 #endif   /* BEV Rebase provisionally */
 }
 
