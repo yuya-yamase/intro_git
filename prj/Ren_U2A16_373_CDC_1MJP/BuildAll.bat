@@ -65,12 +65,12 @@ REM call build.bat %VM_BUILD_ARG%
 REM type build.log >> ..\all_build.log
 REM popd
 
-REM echo -- motCreate -- >> all_build.log
-REM call U2A_BevCreateMot.bat >> all_build.log
-
 echo -- XCreate -- >> all_build.log
 REM call xCreate.bat >> all_build.log
 call ..\..\tool\XMerge\xCreate.bat
+call build_cfg.bat
+move CDC_Hypervisor_U2A16.x %MOT_FILE%
+move CDC_Hypervisor_U2A16_B.x %MOT_B_FILE%
 
 @echo OFF
 echo -- Step: Calculate ROM/RAM  --
