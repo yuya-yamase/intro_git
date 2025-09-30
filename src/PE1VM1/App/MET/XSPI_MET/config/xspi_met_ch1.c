@@ -33,12 +33,6 @@
 
 #include "gateway_mm.h"
 
-/* Hmi */
-#include "hmimm2c100n.h"
-#include "hmimm2c107n.h"
-#include "hmimm2c118n.h"
-#include "hmimm2c112n.h"
-#include "hmimm2c124n.h"
 #include "evschg.h"
 #endif   /* BEV Rebase provisionally */
 
@@ -73,13 +67,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/  
 
 #if 0   /* BEV Rebase provisionally */
-static U1             u1_s_xspi_ethercomsts;
-static U1             u1_s_xspi_mm2c100n_rxcnt;
-static U1             u1_s_xspi_mm2c107n_rxcnt;
-static U1             u1_s_xspi_mm2c112n_rxcnt;
-static U1             u1_s_xspi_mm2c118n_rxcnt;
-static U1             u1_s_xspi_mm2c124n_rxcnt;
-
 static U1             u1_s_prem_bb;               /*  M_BB Previous RxValue    */
 static U1             u1_s_premlr_bb;             /*  MLR_BB Previous RxValue  */
 static U1             u1_s_prerlm_bb;             /*  RLM_BB Previous RxValue  */
@@ -116,7 +103,6 @@ static U1             u1_s_preflynop;             /*  FLYNOP Previous RxValue  *
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV Rebase provisionally */
-static inline void    vd_s_XSpiCfgRxEther(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_M_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_MLR_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_RLM_BB(const U4* u4_ap_pck_rx);
@@ -164,12 +150,6 @@ static inline void    vd_s_XSpiCanTx_FLYNOP(const U4* u4_ap_pck_rx);
 void    vd_g_XSpiCfgInitCh1(void)
 {
 #if 0   /* BEV Rebase provisionally */
-    u1_s_xspi_ethercomsts = (U1)XSPI_ETHER_UNDEF2;
-    u1_s_xspi_mm2c100n_rxcnt = (U1)0U;
-    u1_s_xspi_mm2c107n_rxcnt = (U1)0U;
-    u1_s_xspi_mm2c112n_rxcnt = (U1)0U;
-    u1_s_xspi_mm2c118n_rxcnt = (U1)0U;
-    u1_s_xspi_mm2c124n_rxcnt = (U1)0U;
     u1_s_prem_bb     = (U1)0U;
     u1_s_premlr_bb   = (U1)0U;
     u1_s_prerlm_bb   = (U1)0U;
@@ -214,7 +194,6 @@ void    vd_g_XSpiCfgInitCh1(void)
 void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 {
 #if 0   /* BEV Rebase provisionally */
-    vd_s_XSpiCfgRxEther(&u4_ap_PDU_RX[100]);
 
     vd_s_XSpiCanTx_M_BB(&u4_ap_PDU_RX[91]);
     vd_s_XSpiCanTx_MLR_BB(&u4_ap_PDU_RX[91]);
@@ -260,94 +239,6 @@ void    vd_g_XSpiCfgPduRxCh1(const U4 * u4_ap_PDU_RX)
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-/*===================================================================================================================================*/
-/*  static inline void    vd_s_XSpiCfgRxEther(  const U4 * u4_ap_pck_rx)                                                             */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgRxEther(const U4 * u4_ap_pck_rx)
-{
-    u1_s_xspi_ethercomsts = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[5], (U1)0U, (U1)2U);
-    u1_s_xspi_mm2c100n_rxcnt = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)0U, (U1)8U);
-    u1_s_xspi_mm2c107n_rxcnt = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)8U, (U1)8U);
-    u1_s_xspi_mm2c118n_rxcnt = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)16U, (U1)8U);
-    u1_s_xspi_mm2c112n_rxcnt = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[0], (U1)24U, (U1)8U);
-    u1_s_xspi_mm2c124n_rxcnt = u1_XSPI_MET_READ__BIT(u4_ap_pck_rx[1], (U1)0U, (U1)8U);
-    vd_g_HmiMM2C100NDataPut(&u4_ap_pck_rx[6]);
-    vd_g_HmiMM2C107NDataPut(&u4_ap_pck_rx[31]);
-    vd_g_HmiMM2C112NDataPut(&u4_ap_pck_rx[38]);
-    vd_g_HmiMM2C118NDataPut(&u4_ap_pck_rx[58]);
-    vd_g_HmiMM2C124NDataPut(&u4_ap_pck_rx[93]);
-
-}
-#endif   /* BEV Rebase provisionally */
-/*===================================================================================================================================*/
-/*  U1    u1_g_XSpiEtherComSts(void)                                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_s_xspi_ethercomsts                                                                                            */
-/*===================================================================================================================================*/
-U1    u1_g_XSpiEtherComSts(void){
-#if 0   /* BEV Rebase provisionally */
-    return(u1_s_xspi_ethercomsts);
-#else   /* BEV Rebase provisionally */
-    return(0U);
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  U1    u1_g_XSpiMm2c100n_rxcnt(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_s_xspi_mm2c100n_rxcnt                                                                                         */
-/*===================================================================================================================================*/
-U1    u1_g_XSpiMm2c100n_rxcnt(void){
-#if 0   /* BEV Rebase provisionally */
-    return(u1_s_xspi_mm2c100n_rxcnt);
-#else   /* BEV Rebase provisionally */
-    return(0U);
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  U1    u1_g_XSpiMm2c107n_rxcnt(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_s_xspi_mm2c107n_rxcnt                                                                                         */
-/*===================================================================================================================================*/
-U1    u1_g_XSpiMm2c107n_rxcnt(void){
-#if 0   /* BEV Rebase provisionally */
-    return(u1_s_xspi_mm2c107n_rxcnt);
-#else   /* BEV Rebase provisionally */
-    return(0U);
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  U1    u1_g_XSpiMm2c112n_rxcnt(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_s_xspi_mm2c112n_rxcnt                                                                                         */
-/*===================================================================================================================================*/
-U1    u1_g_XSpiMm2c112n_rxcnt(void){
-#if 0   /* BEV Rebase provisionally */
-    return(u1_s_xspi_mm2c112n_rxcnt);
-#else   /* BEV Rebase provisionally */
-    return(0U);
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  U1    u1_g_XSpiMm2c118n_rxcnt(void)                                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_s_xspi_mm2c118n_rxcnt                                                                                         */
-/*===================================================================================================================================*/
-U1    u1_g_XSpiMm2c118n_rxcnt(void){
-#if 0   /* BEV Rebase provisionally */
-    return(u1_s_xspi_mm2c118n_rxcnt);
-#else   /* BEV Rebase provisionally */
-    return(0U);
-#endif   /* BEV Rebase provisionally */
-}
 
 #if 0   /* BEV Rebase provisionally */
 

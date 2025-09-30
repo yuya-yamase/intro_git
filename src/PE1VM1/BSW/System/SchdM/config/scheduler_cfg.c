@@ -84,7 +84,9 @@
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #include "mcst.h"
+#endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
+#if 0   /* BEV Rebase provisionally */
 #include "battpow.h"
 #include "drvind_pwr_pct.h"
 #include "drvind_eco.h"
@@ -382,6 +384,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_MMVarTask,                   (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MMAppCtrlTask,               (U4)SCHDLR_TASKBIT__50MS_E  },
     {&vd_g_DateSIMETMainTask,           (U4)SCHDLR_TASKBIT___5MS    },
+    #endif   /* BEV Rebase provisionally */
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -397,7 +400,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*                                                                   */
     /*-------------------------------------------------------------------*/
-#endif   /* BEV Rebase provisionally */
     {&vd_g_IllumiMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
 #if 0   /* BEV Rebase provisionally */
     {&vd_g_GaugeMainTask,               (U4)SCHDLR_TASKBIT__20MS_A  },

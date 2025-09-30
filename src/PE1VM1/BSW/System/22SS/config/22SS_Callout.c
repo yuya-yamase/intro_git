@@ -67,7 +67,9 @@
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #include "mcst.h"
+#endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
+#if 0   /* BEV Rebase provisionally */
 #include "battpow.h"
 #include "drvind_pwr_pct.h"
 #include "drvind_eco.h"
@@ -156,7 +158,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
         &vd_g_OilmilInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
         &vd_g_HdimmgrBonInit,
@@ -249,7 +253,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
         &vd_g_OilmilInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyRstInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
         &vd_g_HdimmgrWkRstInit,
@@ -342,7 +348,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
         &vd_g_OilmilInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
         &vd_g_HdimmgrWkRstInit,
