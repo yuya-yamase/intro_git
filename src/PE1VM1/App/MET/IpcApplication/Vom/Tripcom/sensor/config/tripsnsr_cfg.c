@@ -68,12 +68,12 @@ static  U4      u4_sp_tripsnsr_elpsdtm_frt[GPT_FRT_USELPSD_NUM_PARAM];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const   ST_TRIPSNSR_CNTTS                       st_gp_TRIPSNSR_CNTTS_CFG[TRIPSNSR_NUM_SNSR]         = {
     {   &vd_g_TripsnsrElpsdtmInit,  &vd_g_TripsnsrElpsdtmSmplngTask,    &u2_g_TripsnsrElpsdtmGetDelta,  vdp_PTR_NA                   },
-    {   &vd_g_TripsnsrFuelusdInit,  &vd_g_TripsnsrFuelusdSmplngTask,    &u2_g_TripsnsrFuelusdGetDelta,  &u1_g_TripsnsrFuelusdRxReset },
-    {   &vd_g_TripsnsrHydrusdInit,  &vd_g_TripsnsrHydrusdSmplngTask,    &u2_g_TripsnsrHydrusdGetDelta,  &u1_g_TripsnsrHydrusdRxReset },
+    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                   },
+    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                   },
     {   &vd_g_TripsnsrOdocntInit,   &vd_g_TripsnsrOdocntSmplngTask,     &u2_g_TripsnsrOdocntGetDelta,   vdp_PTR_NA                   },
     {   &vd_g_TripsnsrAvgeeInit,    &vd_g_TripsnsrAvgeeSmplngTask,      &u2_g_TripsnsrAvgeeGetDelta,    vdp_PTR_NA                   },
     {   &vd_g_TripsnsrInsteeInit,   &vd_g_TripsnsrInsteeSmplngTask,     &u2_g_TripsnsrInsteeGetDelta,   &u1_g_TripsnsrInsteeRxReset  },
-    {   vdp_PTR_NA,                 vdp_PTR_NA,                         &u2_g_TripsnsrFuelusdEmgfGetDelta,vdp_PTR_NA                 },
+    {   vdp_PTR_NA,                 vdp_PTR_NA,                         vdp_PTR_NA,                     vdp_PTR_NA                 },
     {   vdp_PTR_NA,                 vdp_PTR_NA,                         &u2_g_TripsnsrOdocntEmgfGetDelta,vdp_PTR_NA                  }
 };
 const   U4                                      u4_g_TRIPSNSR_ELPSDTM_FRT_1US                       = (U4)GPT_FRT_1US;  /*  1 [us]   */

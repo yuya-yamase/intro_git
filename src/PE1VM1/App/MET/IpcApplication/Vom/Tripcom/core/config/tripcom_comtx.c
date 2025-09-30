@@ -124,15 +124,6 @@ static  void    vd_s_TripcomCfgCanDrTx(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static  const   U1                              u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_NUM_VAL_FUECO]        = {
-    (U1)1U,                                     /* 00 UNIT_VAL_FUECO_KMPL       */
-    (U1)2U,                                     /* 01 UNIT_VAL_FUECO_LP100KM    */
-    (U1)3U,                                     /* 02 UNIT_VAL_FUECO_MPG_USA    */
-    (U1)4U,                                     /* 03 UNIT_VAL_FUECO_MPG_UK     */
-    (U1)0U,                                     /* 04 UNIT_VAL_FUECO_MPG_E      */
-    (U1)0U,                                     /* 05 UNIT_VAL_FUECO_KMPKG      */
-    (U1)0U                                      /* 06 UNIT_VAL_FUECO_KGP100KM   */
-};
 static  const   U1                              u1_sp_TRIPCOM_TX_SPEED_UNTCNV[UNIT_NUM_VAL_SPEED]        = {
     (U1)1U,                                     /* 00 UNIT_VAL_SPEED_KMPH       */
     (U1)2U                                      /* 01 UNIT_VAL_SPEED_MPH        */
@@ -151,7 +142,6 @@ static  const   U1                              u1_sp_TRIPCOM_TX_EECON_UNTCNV[UN
     (U1)3U                                      /* 06 UNIT_VAL_ELECO_MILEPKWH   */
 };
 static  const   ST_TRIPCOM_LOCALE               st_sp_TRIPCOM_TX_LOCALE_INF[TRIPCOM_NUM_CANTXUNIT]       = {
-    {   (U1)UNIT_IDX_FUECO,      (U1)UNIT_NUM_VAL_FUECO,      &u1_sp_TRIPCOM_TX_XECON_UNTCNV[0]   },
     {   (U1)UNIT_IDX_SPEED,      (U1)UNIT_NUM_VAL_SPEED,      &u1_sp_TRIPCOM_TX_SPEED_UNTCNV[0]   },
     {   (U1)UNIT_IDX_DIST,       (U1)UNIT_NUM_VAL_DIST,       &u1_sp_TRIPCOM_TX_DIST_UNTCNV[0]    },
     {   (U1)UNIT_IDX_ELECO,      (U1)UNIT_NUM_VAL_ELECO,      &u1_sp_TRIPCOM_TX_EECON_UNTCNV[0]   }

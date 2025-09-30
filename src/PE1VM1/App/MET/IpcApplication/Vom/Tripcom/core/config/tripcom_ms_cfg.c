@@ -55,15 +55,15 @@ static U1   u1_s_TripcomMsNvmcRead(const U2 u2_a_NVMCID, U4 * u4p_a_value);
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM_MS_NUM_ID]     = {
-    {   (U2)RIMID_U4_TRIPCOM_AVGFE_TA_FE,           (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  00 TRIPCOM_MS_ID_AVGFE_TA_FE           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOFC_FU         },        /*  01 TRIPCOM_MS_ID_AVGFE_TA_FU           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOFC_OC         },        /*  02 TRIPCOM_MS_ID_AVGFE_TA_OC           */
-    {   (U2)RIMID_U4_TRIPCOM_AVGFE_DC_FE,           (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  03 TRIPCOM_MS_ID_AVGFE_DC_FE           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  00 TRIPCOM_MS_ID_AVGFE_TA_FE           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  01 TRIPCOM_MS_ID_AVGFE_TA_FU           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  02 TRIPCOM_MS_ID_AVGFE_TA_OC           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  03 TRIPCOM_MS_ID_AVGFE_DC_FE           */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  04 TRIPCOM_MS_ID_AVGFE_DC_FU           */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  05 TRIPCOM_MS_ID_AVGFE_DC_OC           */
-    {   (U2)RIMID_U4_TRIPCOM_AVGFE_RF_FE,           (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  06 TRIPCOM_MS_ID_AVGFE_RF_FE           */
-    {   (U2)RIMID_U4_TRIPCOM_AVGFE_RF_FU,           (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  07 TRIPCOM_MS_ID_AVGFE_RF_FU           */
-    {   (U2)RIMID_U4_TRIPCOM_AVGFE_RF_OC,           (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  08 TRIPCOM_MS_ID_AVGFE_RF_OC           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  06 TRIPCOM_MS_ID_AVGFE_RF_FE           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  07 TRIPCOM_MS_ID_AVGFE_RF_FU           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  08 TRIPCOM_MS_ID_AVGFE_RF_OC           */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  09 TRIPCOM_MS_ID_AVGFE_ONEM_FE         */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  10 TRIPCOM_MS_ID_AVGFE_ONEM_FU         */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  11 TRIPCOM_MS_ID_AVGFE_ONEM_OC         */
@@ -119,7 +119,7 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)RIMID_U4_TRIPCOM_PTSRUNTM_DC_ET,        (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  61 TRIPCOM_MS_ID_PTSRUNTM_DC_ET        */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)TRIPCOM_NVMIF_CH_TODT_OC         },        /*  62 TRIPCOM_MS_ID_PTSRUNDIST_LC_OC      */
     {   (U2)RIMID_U4_TRIPCOM_PTSRUNDIST_DC_OC,      (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  63 TRIPCOM_MS_ID_PTSRUNDIST_DC_OC      */
-    {   (U2)RIMID_U4_TRIPCOM_EVRATIO_DT,            (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  64 TRIPCOM_MS_ID_EVRATIO_DT            */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  64 TRIPCOM_MS_ID_EVRATIO_DT            */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  65 TRIPCOM_MS_ID_EVRATIO_DV            */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  66 TRIPCOM_MS_ID_EVRATIO_EV_ET         */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  67 TRIPCOM_MS_ID_EVRATIO_NEV_ET        */
@@ -133,19 +133,19 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOTM_TR_B_TM_ET },        /*  75 TRIPCOM_MS_ID_PTSRUNTM_TR_B_ET      */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TODT_TR_A_DT_OC },        /*  76 TRIPCOM_MS_ID_PTSRUNDIST_TR_A_OC    */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TODT_TR_B_DT_OC },        /*  77 TRIPCOM_MS_ID_PTSRUNDIST_TR_B_OC    */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U1_CG_STS,      (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  78 TRIPCOM_MS_ID_DTE_ED_U1_CG_STS      */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_DTE_ED_FE       },        /*  79 TRIPCOM_MS_ID_DTE_ED_U2_CRSCG       */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U4_SPDPLS_CG,   (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  80 TRIPCOM_MS_ID_DTE_ED_U4_SPDPLS_CG   */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U4_FCP_CG,      (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  81 TRIPCOM_MS_ID_DTE_ED_U4_FCP_CG      */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U4_CNSM_FUEL,   (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  82 TRIPCOM_MS_ID_DTE_ED_U4_CNSM_FUEL   */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U1_CRS_STS,     (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  83 TRIPCOM_MS_ID_DTE_ED_U1_CRS_STS     */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U4_KS_SPPLS,    (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  84 TRIPCOM_MS_ID_DTE_ED_U4_KS_SPPLS    */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U2_KH_1KM,      (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  85 TRIPCOM_MS_ID_DTE_ED_U2_KH_1KM      */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U2_KH_1MI,      (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  86 TRIPCOM_MS_ID_DTE_ED_U2_KH_1MI      */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U4_KF_SPPLS,    (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  87 TRIPCOM_MS_ID_DTE_ED_U4_KF_SPPLS    */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U2_KZ_10CC,     (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  88 TRIPCOM_MS_ID_DTE_ED_U2_KZ_10CC     */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U4_TC,          (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  89 TRIPCOM_MS_ID_DTE_ED_U4_TC          */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_ED_U2_BLWME_CNT,   (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  90 TRIPCOM_MS_ID_DTE_ED_U2_BLWME_CNT   */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  78 TRIPCOM_MS_ID_DTE_ED_U1_CG_STS      */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  79 TRIPCOM_MS_ID_DTE_ED_U2_CRSCG       */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  80 TRIPCOM_MS_ID_DTE_ED_U4_SPDPLS_CG   */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  81 TRIPCOM_MS_ID_DTE_ED_U4_FCP_CG      */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  82 TRIPCOM_MS_ID_DTE_ED_U4_CNSM_FUEL   */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  83 TRIPCOM_MS_ID_DTE_ED_U1_CRS_STS     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  84 TRIPCOM_MS_ID_DTE_ED_U4_KS_SPPLS    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  85 TRIPCOM_MS_ID_DTE_ED_U2_KH_1KM      */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  86 TRIPCOM_MS_ID_DTE_ED_U2_KH_1MI      */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  87 TRIPCOM_MS_ID_DTE_ED_U4_KF_SPPLS    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  88 TRIPCOM_MS_ID_DTE_ED_U2_KZ_10CC     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  89 TRIPCOM_MS_ID_DTE_ED_U4_TC          */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  90 TRIPCOM_MS_ID_DTE_ED_U2_BLWME_CNT   */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  91 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE00     */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  92 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE01     */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  93 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE02     */
@@ -158,39 +158,39 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  100 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT03    */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  101 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT04    */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  102 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT05    */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TAFE_LTST       },        /*  103 TRIPCOM_MS_ID_AVGGRPH_TAFE_LTST    */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TAFE_MAX        },        /*  104 TRIPCOM_MS_ID_AVGGRPH_TAFE_MAX     */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE00,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  105 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE00    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE01,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  106 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE01    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE02,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  107 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE02    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE03,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  108 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE03    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE04,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  109 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE04    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE05,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  110 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE05    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE06,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  111 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE06    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE07,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  112 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE07    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE08,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  113 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE08    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE09,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  114 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE09    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE10,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  115 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE10    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE11,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  116 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE11    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE12,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  117 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE12    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE13,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  118 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE13    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE14,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  119 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE14    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE15,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  120 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE15    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE16,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  121 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE16    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE17,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  122 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE17    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE18,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  123 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE18    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE19,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  124 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE19    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE20,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  125 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE20    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE21,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  126 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE21    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE22,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  127 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE22    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE23,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  128 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE23    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE24,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  129 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE24    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE25,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  130 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE25    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE26,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  131 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE26    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE27,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  132 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE27    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE28,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  133 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE28    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_FE29,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  134 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE29    */
-    {   (U2)RIMID_U4_TRIPCOM_1MFE_LTST,             (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  135 TRIPCOM_MS_ID_AVGGRPH_1MFE_LTST    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  103 TRIPCOM_MS_ID_AVGGRPH_TAFE_LTST    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  104 TRIPCOM_MS_ID_AVGGRPH_TAFE_MAX     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  105 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE00    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  106 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE01    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  107 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE02    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  108 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE03    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  109 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE04    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  110 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE05    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  111 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE06    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  112 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE07    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  113 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE08    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  114 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE09    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  115 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE10    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  116 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE11    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  117 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE12    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  118 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE13    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  119 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE14    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  120 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE15    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  121 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE16    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  122 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE17    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  123 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE18    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  124 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE19    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  125 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE20    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  126 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE21    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  127 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE22    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  128 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE23    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  129 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE24    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  130 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE25    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  131 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE26    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  132 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE27    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  133 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE28    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  134 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE29    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  135 TRIPCOM_MS_ID_AVGGRPH_1MFE_LTST    */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  136 TRIPCOM_MS_ID_AVGGRPH_TAEE_EE00    */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  137 TRIPCOM_MS_ID_AVGGRPH_TAEE_EE01    */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  138 TRIPCOM_MS_ID_AVGGRPH_TAEE_EE02    */
