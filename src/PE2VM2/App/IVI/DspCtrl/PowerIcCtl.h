@@ -20,7 +20,7 @@
 #include "aip_common.h"
 
 #include "Dio.h"
-#include "Iohw_adc.h"
+#include "iohw_adc_sh.h"
 #include "Mcu_I2c_Ctrl_private.h"
 #include "SysEcDrc.h"
 #include "DtcCtl.h"
