@@ -34,8 +34,6 @@
 #include "rim_ctl.h"
 #endif   /* BEV Rebase provisionally */
 #include "calibration.h"
-#if (HMIPUTXT_TIMCHG_JDG == HMIPUTXT_JDG_ON)
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -59,11 +57,7 @@
 #define HMIPUTXT_REM_MSK                    (0x1FU)
 #define HMIPUTXT_ON_BIT                     (0x00000001U)
 
-#define HMIPUTXT_FUEL_IDX                   (465U)
 #define HMIPUTXT_ICEWRN_IDX                 (427U)
-#define HMIPUTXT_OILMILRST_OK               (181U)
-#define HMIPUTXT_OILMILRST_NG               (180U)
-#define HMIPUTXT_TIMCHG_IDX                 (542U)
 #define HMIPUTXT_FCTAHUD_IDX                (1087U)
 #define HMIPUTXT_SFTALT_IDX                 (1266U)
 
@@ -94,13 +88,9 @@
 #define HMIPUTXT_11BIT_SHIFT                (11U)
 #define HMIPUTXT_12BIT_SHIFT                (12U)
 
-#define HMIPUTXT_TIMCHG_REQ_ON              (1U)
 #define HMIPUTXT_FCTAHUD_REQ_ON             (1U)
 #define HMIPUTXT_SFTALT_REQ_ON              (0U)
 
-#define HMIPUTXT_TIMCHG_P_NCDSP_PLANINFO    (0x01U)
-#define HMIPUTXT_TIMCHG_P_NCDSP_CHGNG       (0x02U)
-#define HMIPUTXT_TIMCHG_P_NCDSP_CHGSTART    (0x03U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -197,6 +187,7 @@ static void    vd_s_HmiPuTxtCfgIGOffInit(void)
     u2_s_hmiputxt_thevm_cnt       = (U2)U2_MAX;
     u1_s_hmiputxt_thevm_prereq = (U1)HMIPUTXT_REQ_INIT;
 #endif
+
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)                                                                                      */
@@ -221,7 +212,6 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 
     U2              u2_t_num_reqbit;
     U4              u4_t_loop;
-    U1              u1_t_sts;
     U2              u2_t_blkpos;
     U2              u2_t_bitpos;
     U4              u4_t_num_tbl;
@@ -229,8 +219,6 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
     U1              u1_t_req;
     U1              u1_t_exist;
     U1              u1_t_icewrn;
-    U1              u1_t_oilrststs;
-    U1              u1_t_timchg;
     U1              u1_t_fctahud;
     U1              u1_t_sftalt;
     U1              u1_t_slot;

@@ -163,6 +163,7 @@ void    vd_g_HmiTtCfgInit(void)
 void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
 {
 #if 0   /* BEV Rebase provisionally */ 
+
     U4  u4_t_loop;
     U4  u4_t_onoff;
     U2  u2_t_num_reqbit;

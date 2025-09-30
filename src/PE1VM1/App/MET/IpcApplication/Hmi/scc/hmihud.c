@@ -228,6 +228,7 @@ static void vd_s_HmiHudSetResid(void){
     U1 u1_t_resid;    /* recieve signal */
 
     u1_t_resid = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESID, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
 #if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_RESID(u1_t_resid);
 #endif   /* BEV Rebase provisionally */
@@ -243,6 +244,7 @@ static void vd_s_HmiHudSetHudst(void){
     U1 u1_t_hudst;    /* recieve signal */
 
     u1_t_hudst = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ST, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
 #if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_HUD_ST(u1_t_hudst);
 #endif   /* BEV Rebase provisionally */
@@ -275,6 +277,7 @@ static void vd_s_HmiHudSetViposSw(void){
     u1_t_vpos_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_VIPOS_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u1_t_vpos_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_VIPOS_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     
+
 #if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSetUpDwSw(u1_t_vpos_upsw, u1_t_vpos_dnsw);
 #endif   /* BEV Rebase provisionally */
@@ -313,6 +316,7 @@ static void vd_s_HmiHudSetIllSw(void){
 
 #if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_HMIHUD_ID_HUDDIM = (U2)RIMID_U2_DS_22_10A7_HUD_DIM;
+
 #else   /* BEV Rebase provisionally */
     static const U2 u2_s_HMIHUD_ID_HUDDIM = (U2)U2_MAX;
 #endif   /* BEV Rebase provisionally */

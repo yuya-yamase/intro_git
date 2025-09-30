@@ -92,7 +92,7 @@
 #include "hmitripcom.h"
 #include "hmiscreen.h"
 #include "hmihud.h"
-#if 0   /* BEV BSW provisionally */
+#if 0   /* BEV Rebase provisionally */
 
 #include "dio_if.h"
 
@@ -2508,14 +2508,7 @@ static inline void    vd_s_XSpiCfgRxRemoteWarn( const U4 * u4_ap_PDU_RX) {} /* @
 static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX) {
     U4  u4_t_trip_a;
     U4  u4_t_trip_b;
-#if 0   /* BEV Rebase provisionally */
-    U1  u1_t_odtrp_dsp;
 
-    u1_t_odtrp_dsp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[87] , (U1)0U , (U1)3U);  /* ODOTRIP_CONTENTS                     */
-    if(u1_t_odtrp_dsp != (U1)7U){
-        vd_g_HmiRimPut((U1)HMIRIM_ODOTRIPCNTTS , (U4)u1_t_odtrp_dsp);
-    }
-#endif   /* BEV Rebase provisionally */
 #if 0   /* BEV BSW provisionally */
     u4_t_trip_a    = u4_ap_PDU_RX[0];                                        /* TRIP_A                               */
     u4_t_trip_b    = u4_ap_PDU_RX[2];                                        /* TRIP_B                               */

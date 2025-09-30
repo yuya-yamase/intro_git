@@ -103,7 +103,6 @@ static U1             u1_s_preflynop;             /*  FLYNOP Previous RxValue  *
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV Rebase provisionally */
-static inline void    vd_s_XSpiCfgRxEther(const U4 * u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_M_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_MLR_BB(const U4* u4_ap_pck_rx);
 static inline void    vd_s_XSpiCanTx_RLM_BB(const U4* u4_ap_pck_rx);

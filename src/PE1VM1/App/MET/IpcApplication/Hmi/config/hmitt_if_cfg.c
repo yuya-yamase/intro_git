@@ -278,8 +278,10 @@ const ST_ALERT_REQBIT   st_gp_HMITTREQBIT[HMITTCFG_IF_NUM] = {
 U2 u2_g_HmittSizeReqbit(void){
 
     U2 u2_t_ret;
+
 #if 0   /* BEV Rebase provisionally */
     u2_t_ret = (U2)(sizeof(st_gp_HMITTREQBIT) / sizeof(st_gp_HMITTREQBIT[0]));
+
 #else   /* BEV Rebase provisionally */
     u2_t_ret = (U2)0U;
 #endif   /* BEV Rebase provisionally */
