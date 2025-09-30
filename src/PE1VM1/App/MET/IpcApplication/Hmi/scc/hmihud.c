@@ -262,6 +262,16 @@ static void vd_s_HmiHudSetHudbrns(void){
     
     u1_t_ill_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u1_t_ill_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ILL_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
+
+    if((u1_t_ill_upsw == (U1)HMIHUD_SW_OPE) &&
+       (u1_t_ill_dnsw == (U1)HMIHUD_SW_OPE)) {
+        /* Do Nothing */
+    } else {
+#if 0   /* BEV Rebase provisionally */
+        vd_g_HmiDiagPut(u1_t_ill_upsw, (U1)HMIDIAG_DIM_UP);
+        vd_g_HmiDiagPut(u1_t_ill_dnsw, (U1)HMIDIAG_DIM_DOWN);
+#endif   /* BEV Rebase provisionally */
+    }
 }
 
 /*===================================================================================================================================*/
@@ -277,6 +287,15 @@ static void vd_s_HmiHudSetViposSw(void){
     u1_t_vpos_upsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_VIPOS_UPSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     u1_t_vpos_dnsw = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_VIPOS_DNSW, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
     
+    if((u1_t_vpos_upsw == (U1)HMIHUD_SW_OPE) &&
+       (u1_t_vpos_dnsw == (U1)HMIHUD_SW_OPE)) {
+        /* Do Nothing */
+    } else {
+#if 0   /* BEV Rebase provisionally */
+        vd_g_HmiDiagPut(u1_t_vpos_upsw, (U1)HMIDIAG_VIPOS_UP);
+        vd_g_HmiDiagPut(u1_t_vpos_dnsw, (U1)HMIDIAG_VIPOS_DN);
+#endif   /* BEV Rebase provisionally */
+    }
 
 #if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSetUpDwSw(u1_t_vpos_upsw, u1_t_vpos_dnsw);
