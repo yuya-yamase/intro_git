@@ -113,12 +113,10 @@ static Std_ReturnType ethswt_swic_qci_readQci (uint32 * const errFactor)
     Std_ReturnType	result;
     uint8           idx;
 
-    do {
-        for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
-            result = ethswt_swic_qci_addVal(&G_ETHSWT_SWIC_QCI_COUNT[idx], G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, errFactor);
-            if (result != E_OK) {break;}
-        }
-    } while (0);
+    for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
+        result = ethswt_swic_qci_addVal(&G_ETHSWT_SWIC_QCI_COUNT[idx], G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, errFactor);
+        if (result != E_OK) {break;}
+    }
 
     return result;
 }
