@@ -183,16 +183,28 @@ static  U2      u2_s_TripsnsrMakeVehstsbit(void)
 
     u2_t_vehmode = (U2)0U;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_vehsts = u1_g_TripsnsrAccOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_vehsts = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if (u1_t_vehsts == (U1)TRUE) {
         u2_t_vehmode = (U2)TRIPCOM_VEHSTS_ACCON;
     }
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_igsts = u1_g_TripsnsrIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igsts = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if (u1_t_igsts == (U1)TRUE) {
         u2_t_vehmode |= (U2)TRIPCOM_VEHSTS_IGON;
 
+#if 0   /* BEV Rebase provisionally */
         u1_t_vehsts = u1_g_TripsnsrPtsOn();
+#else   /* BEV Rebase provisionally */
+        u1_t_vehsts = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
         if (u1_t_vehsts == (U1)TRUE) {
             u2_s_tripsnsr_drvcyc_sts = (U2)TRIPCOM_VEHSTS_DRVCYC;
         }
@@ -219,7 +231,11 @@ static  U2      u2_s_TripsnsrMakeVehstsbit(void)
     }
     
     u2_t_kmph   = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_spdsts = u1_g_TripsnsrVspKmph(&u2_t_kmph);
+#else   /* BEV Rebase provisionally */
+    u1_t_spdsts = (U1)1U;
+#endif   /* BEV Rebase provisionally */
     if (u1_t_spdsts != (U1)0U) {
         u2_t_kmph = (U2)0U;
     }

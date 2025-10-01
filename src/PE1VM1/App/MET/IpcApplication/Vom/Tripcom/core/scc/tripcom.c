@@ -292,7 +292,9 @@ U1              u1_g_TripcomGetMaterialInfo(const U1 u1_a_INFOID, U2 * u2p_a_val
 
     u1_t_status = (U1)TRIPCOM_STSBIT_INVALID;
     if (u1_a_INFOID < (U1)TRIPCOM_NUM_MTRLINFO) {
+#if 0   /* BEV Rebase provisionally */
         u1_t_status = (fp_sp_TRIPCOM_FUELINFO[u1_a_INFOID])(u2p_a_val);
+#endif   /* BEV Rebase provisionally */
     }
     return (u1_t_status);
 }

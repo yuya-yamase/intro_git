@@ -21,9 +21,9 @@
 #include "tripcom_nvmif_grph_cfg_private.h"
 #include "tripcom_ms.h"
 #include "rim_ctl.h"
+#if 0   /* BEV Rebase provisionally */
 #include "es_inspect.h"
-
-#include "dte_ed.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -76,10 +76,18 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  18 TRIPCOM_MS_ID_AVGHE_RF_HE           */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  19 TRIPCOM_MS_ID_AVGHE_RF_HU           */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  20 TRIPCOM_MS_ID_AVGHE_RF_OC           */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_AVGEE_TA_EE,           (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  21 TRIPCOM_MS_ID_AVGEE_TA_EE           */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOEC_EU         },        /*  22 TRIPCOM_MS_ID_AVGEE_TA_EU           */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOEC_OC         },        /*  23 TRIPCOM_MS_ID_AVGEE_TA_OC           */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_AVGEE_DC_EE,           (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  24 TRIPCOM_MS_ID_AVGEE_DC_EE           */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  25 TRIPCOM_MS_ID_AVGEE_DC_EU           */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  26 TRIPCOM_MS_ID_AVGEE_DC_OC           */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  27 TRIPCOM_MS_ID_AVGEE_ONEM_EE         */
@@ -100,14 +108,30 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  42 TRIPCOM_MS_ID_INSTEE_EU             */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  43 TRIPCOM_MS_ID_INSTEE_OC             */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  44 TRIPCOM_MS_ID_INSTEE_DV             */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_DTE_OC,                (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  45 TRIPCOM_MS_ID_DTE_OC                */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_DTE_FE          },        /*  46 TRIPCOM_MS_ID_DTE_FE                */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_EVDTE_OC,              (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  47 TRIPCOM_MS_ID_EVDTE_OC              */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  48 TRIPCOM_MS_ID_EVDTE_PCT             */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_AVGVEHSPD_TA_SP,       (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  49 TRIPCOM_MS_ID_AVGVEHSPD_TA_SP       */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOSP_OC         },        /*  50 TRIPCOM_MS_ID_AVGVEHSPD_TA_OC       */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOSP_ET         },        /*  51 TRIPCOM_MS_ID_AVGVEHSPD_TA_ET       */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_AVGVEHSPD_DC_SP,       (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  52 TRIPCOM_MS_ID_AVGVEHSPD_DC_SP       */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  53 TRIPCOM_MS_ID_AVGVEHSPD_DC_OC       */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  54 TRIPCOM_MS_ID_AVGVEHSPD_DC_ET       */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  55 TRIPCOM_MS_ID_SAVEFS_LC_F           */
@@ -116,17 +140,33 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  58 TRIPCOM_MS_ID_ECOSTPTM_DC_ET        */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  59 TRIPCOM_MS_ID_ECOSTPTM_ST_ET        */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOTM_ET         },        /*  60 TRIPCOM_MS_ID_PTSRUNTM_LC_ET        */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_PTSRUNTM_DC_ET,        (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  61 TRIPCOM_MS_ID_PTSRUNTM_DC_ET        */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)TRIPCOM_NVMIF_CH_TODT_OC         },        /*  62 TRIPCOM_MS_ID_PTSRUNDIST_LC_OC      */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_PTSRUNDIST_DC_OC,      (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  63 TRIPCOM_MS_ID_PTSRUNDIST_DC_OC      */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  64 TRIPCOM_MS_ID_EVRATIO_DT            */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  65 TRIPCOM_MS_ID_EVRATIO_DV            */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  66 TRIPCOM_MS_ID_EVRATIO_EV_ET         */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  67 TRIPCOM_MS_ID_EVRATIO_NEV_ET        */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_AVGSPD_TR_A_SP,        (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  68 TRIPCOM_MS_ID_AVGVEHSPD_TR_A_SP     */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOSP_TR_A_SP_OC },        /*  69 TRIPCOM_MS_ID_AVGVEHSPD_TR_A_OC     */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOSP_TR_A_SP_ET },        /*  70 TRIPCOM_MS_ID_AVGVEHSPD_TR_A_ET     */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_AVGSPD_TR_B_SP,        (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  71 TRIPCOM_MS_ID_AVGVEHSPD_TR_B_SP     */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOSP_TR_B_SP_OC },        /*  72 TRIPCOM_MS_ID_AVGVEHSPD_TR_B_OC     */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOSP_TR_B_SP_ET },        /*  73 TRIPCOM_MS_ID_AVGVEHSPD_TR_B_ET     */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOTM_TR_A_TM_ET },        /*  74 TRIPCOM_MS_ID_PTSRUNTM_TR_A_ET      */
@@ -205,6 +245,7 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  147 TRIPCOM_MS_ID_AVGGRPH_TAEE_DT05    */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TAEE_LTST       },        /*  148 TRIPCOM_MS_ID_AVGGRPH_TAEE_LTST    */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TAEE_MAX        },        /*  149 TRIPCOM_MS_ID_AVGGRPH_TAEE_MAX     */
+#if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_1MEE_EE00,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  150 TRIPCOM_MS_ID_AVGGRPH_1MEE_EE00    */
     {   (U2)RIMID_U4_TRIPCOM_1MEE_EE01,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  151 TRIPCOM_MS_ID_AVGGRPH_1MEE_EE01    */
     {   (U2)RIMID_U4_TRIPCOM_1MEE_EE02,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  152 TRIPCOM_MS_ID_AVGGRPH_1MEE_EE02    */
@@ -236,6 +277,38 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)RIMID_U4_TRIPCOM_1MEE_EE28,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  178 TRIPCOM_MS_ID_AVGGRPH_1MEE_EE28    */
     {   (U2)RIMID_U4_TRIPCOM_1MEE_EE29,             (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  179 TRIPCOM_MS_ID_AVGGRPH_1MEE_EE29    */
     {   (U2)RIMID_U4_TRIPCOM_1MEE_LTST,             (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            }         /*  180 TRIPCOM_MS_ID_AVGGRPH_1MEE_LTST    */
+#else   /* BEV Rebase provisionally */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
+#endif   /* BEV Rebase provisionally */
 };
 
 
@@ -272,17 +345,30 @@ const           U1                              u1_gp_TRIPCOM_MS_GRPH_CH2ID[TRIP
 };
 
 const           ST_TRIPCOM_MS_RDIF              st_gp_TRIPCOM_MS_RDIF[TRIPCOM_MS_NUM_DEV]       = {
+#if 0   /* BEV Rebase provisionally */
     {   &u1_g_Rim_ReadU4withStatus    },
     {   &u1_g_Rim_ReadU4withStatus    },
     {   &u1_s_TripcomMsNvmcRead       }
+#else   /* BEV Rebase provisionally */
+    {   vdp_PTR_NA                    },
+    {   vdp_PTR_NA                    },
+    {   vdp_PTR_NA                    }
+#endif   /* BEV Rebase provisionally */
 };
 void            (* const                        fp_gp_TRIPCOM_MS_WRIF[TRIPCOM_MS_NUM_DEV])(const U2 u2_a_ID, const U4 u4_a_VALUE)  = {
+#if 0   /* BEV Rebase provisionally */
     &vd_g_Rim_WriteU4,   /* TRIPCOM_MS_DEV_BR_Z (0U) */
     &vd_g_Rim_WriteU4,   /* TRIPCOM_MS_DEV_BR_M (1U) */
     &vd_g_Nvmc_WriteU4   /* TRIPCOM_MS_DEV_NVM  (2U) */
+#else   /* BEV Rebase provisionally */
+    vdp_PTR_NA,
+    vdp_PTR_NA,
+    vdp_PTR_NA
+#endif   /* BEV Rebase provisionally */
 };
 
 static const    U2               u2_sp_TRIPCOM_MS_DTF_BLOCK[]    = {
+#if 0   /* BEV Rebase provisionally */
     /*  00 TRIPCOM_NVMIF_CH_TOFC_FU          */
     (U2)NVMC_BLOCKID_DTF_TOFC_FU_00,
     (U2)NVMC_BLOCKID_DTF_TOFC_FU_01,
@@ -453,6 +539,7 @@ static const    U2               u2_sp_TRIPCOM_MS_DTF_BLOCK[]    = {
     (U2)NVMC_BLOCKID_DTF_GRPH_TAEE_MAX_03,
     (U2)NVMC_BLOCKID_DTF_GRPH_TAEE_MAX_04,
     (U2)NVMC_BLOCKID_DTF_GRPH_TAEE_MAX_05
+#endif   /* BEV Rebase provisionally */
 };
 
 const ST_TRIPCOM_NVMIF_REC_DATA  st_g_TRIPCOM_NVMIF_REC_DATA = {
@@ -460,9 +547,17 @@ const ST_TRIPCOM_NVMIF_REC_DATA  st_g_TRIPCOM_NVMIF_REC_DATA = {
     (U1)TRIPCOM_NVMIF_CH_NUM * (U1)TRIPCOM_NVMIF_NUM_REC,               /* u1_num_rec    */
     ((U1)sizeof(ST_TRIPCOM_NVMDATA) / (U1)TRIPCOM_NVMIF_BLO_NBYTE_12),  /* u1_rec_nblock */
     (U1)TRIPCOM_NVMIF_BLO_NBYTE_12,                                     /* u1_blo_nbyte  */
+#if 0   /* BEV Rebase provisionally */
     (U1)NVMC_DEVICE_TYPE_DTF                                            /* u1_dev_idx    */
+#else   /* BEV Rebase provisionally */
+    (U1)2U
+#endif   /* BEV Rebase provisionally */
 };
+#if 0   /* BEV Rebase provisionally */
 const U2 u2_g_TRIPCOM_NVMIF_NVMCID_DATA = (U2)NVMCID_APP_TRIPCOM;
+#else   /* BEV Rebase provisionally */
+const U2 u2_g_TRIPCOM_NVMIF_NVMCID_DATA = (U2)U2_MAX;
+#endif   /* BEV Rebase provisionally */
 
 const U1 u1_g_TRIPCOM_NVMIF_DEF_TYPE[TRIPCOM_NVMIF_CH_NUM] = {
     (U1)TRIPCOM_NVMIF_DEF_TYPE_ZERO,    /*  00 TRIPCOM_NVMIF_CH_TOFC_FU          */
@@ -490,6 +585,7 @@ const U1 u1_g_TRIPCOM_NVMIF_DEF_TYPE[TRIPCOM_NVMIF_CH_NUM] = {
 };
 
 static const    U2               u2_sp_TRIPCOM_MS_GRPH_DTF_BLOCK[]    = {
+#if 0   /* BEV Rebase provisionally */
     /*  0 TRIPCOM_NVMIF_GRPH_CH_TAFE_FE           */
     (U2)NVMC_BLOCKID_DTF_GRPH_TAFE_FE_00,
     (U2)NVMC_BLOCKID_DTF_GRPH_TAFE_FE_01,
@@ -518,6 +614,7 @@ static const    U2               u2_sp_TRIPCOM_MS_GRPH_DTF_BLOCK[]    = {
     (U2)NVMC_BLOCKID_DTF_GRPH_TAEE_DT_03,
     (U2)NVMC_BLOCKID_DTF_GRPH_TAEE_DT_04,
     (U2)NVMC_BLOCKID_DTF_GRPH_TAEE_DT_05
+#endif   /* BEV Rebase provisionally */
 };
 
 const ST_TRIPCOM_NVMIF_GRPH_REC_DATA  st_g_TRIPCOM_NVMIF_GRPH_REC_DATA = {
@@ -525,9 +622,17 @@ const ST_TRIPCOM_NVMIF_GRPH_REC_DATA  st_g_TRIPCOM_NVMIF_GRPH_REC_DATA = {
     (U1)TRIPCOM_NVMIF_GRPH_CH_NUM * (U1)TRIPCOM_NVMIF_GRPH_NUM_REC,               /* u1_num_rec    */
     ((U1)sizeof(ST_TRIPCOM_GRPH_NVMDATA) / (U1)TRIPCOM_NVMIF_GRPH_BLO_NBYTE_32),  /* u1_rec_nblock */
     (U1)TRIPCOM_NVMIF_GRPH_BLO_NBYTE_32,                                          /* u1_blo_nbyte  */
+#if 0   /* BEV Rebase provisionally */
     (U1)NVMC_DEVICE_TYPE_DTF                                                      /* u1_dev_idx    */
+#else   /* BEV Rebase provisionally */
+    (U1)2U
+#endif   /* BEV Rebase provisionally */
 };
+#if 0   /* BEV Rebase provisionally */
 const U2 u2_g_TRIPCOM_NVMIF_GRPH_NVMCID_DATA = (U2)NVMCID_APP_TRIPCOM_GRPH;
+#else   /* BEV Rebase provisionally */
+const U2 u2_g_TRIPCOM_NVMIF_GRPH_NVMCID_DATA = (U2)U2_MAX;
+#endif   /* BEV Rebase provisionally */
 
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -541,7 +646,11 @@ const U2 u2_g_TRIPCOM_NVMIF_GRPH_NVMCID_DATA = (U2)NVMCID_APP_TRIPCOM_GRPH;
 /*===================================================================================================================================*/
 U1              u1_g_TripcomMsEsichk(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return (u1_g_ESInspectMdBfield());
+#else   /* BEV Rebase provisionally */
+    return ((U1)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -556,6 +665,7 @@ static U1   u1_s_TripcomMsNvmcRead(const U2 u2_a_NVMCID, U4 * u4p_a_value)
     U1  u1_t_nvm_sts;
 
     u1_t_nvm_sts = (U1)TRIPCOM_STSBIT_VALID;
+#if 0   /* BEV Rebase provisionally */
     u1_t_nvm_chk = u1_g_Nvmc_ReadU4withSts(u2_a_NVMCID , u4p_a_value);
     if((u1_t_nvm_chk >= (U1)NVMC_STATUS_NG        ) ||
        (u1_t_nvm_chk == (U1)NVMC_STATUS_ERRCOMP   ) ||
@@ -563,6 +673,11 @@ static U1   u1_s_TripcomMsNvmcRead(const U2 u2_a_NVMCID, U4 * u4p_a_value)
            u1_t_nvm_sts   = (U1)TRIPCOM_STSBIT_INVALID;
            (*u4p_a_value) = (U4)0U;
     }
+#else   /* BEV Rebase provisionally */
+    u1_t_nvm_chk = (U1)NVMC_STATUS_NG;
+    u1_t_nvm_sts   = (U1)TRIPCOM_STSBIT_INVALID;
+    (*u4p_a_value) = (U4)0U;
+#endif   /* BEV Rebase provisionally */
     return(u1_t_nvm_sts);
 }
 
@@ -575,7 +690,9 @@ static U1   u1_s_TripcomMsNvmcRead(const U2 u2_a_NVMCID, U4 * u4p_a_value)
 void            vd_g_TripcomMsSyncUpdtImm(const U1 u1_a_CH)
 {
     if(u1_a_CH == (U1)TRIPCOM_NVMIF_CH_DTE_ED_FE){
+#if 0   /* BEV Rebase provisionally */
          vd_g_DteEdSyncUpdtInit();
+#endif   /* BEV Rebase provisionally */
     }
 }
 

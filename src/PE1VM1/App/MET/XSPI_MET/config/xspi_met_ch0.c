@@ -57,7 +57,9 @@
 #include "gagdst_attempovhtind.h"
 #include "attmp_cel.h"
 /* #include "hydrvol.h" */
+#endif   /* BEV Rebase provisionally */
 #include "tripcom.h"
+#if 0   /* BEV Rebase provisionally */
 #include "mulmed_mulfr.h"
 #endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
@@ -70,7 +72,9 @@
 #include "fuelvol_tau.h"
 #endif
 #include "oilmil.h"
+#endif   /* BEV Rebase provisionally */
 #include "avggrph.h"
+#if 0   /* BEV Rebase provisionally */
 
 #include "himgadj.h"
 #include "hdimmgr_if.h"
@@ -146,8 +150,10 @@
 #define XSPI_STS_SHIFT                      (30U)
 #if 0   /* BEV Rebase provisionally */
 #define XSPI_OVERHEAT_SHIFT                 (29U)
+#endif   /* BEV Rebase provisionally */
 #define XSPI_EV_KM_ACOFF_STS_SHIFT          (27U)
 #define XSPI_EV_KM_ACON_STS_SHIFT           (24U)
+#if 0   /* BEV Rebase provisionally */
 #define XSPI_PMCHGTH_SHIFT                  (16U)
 #define XSPI_PMPWRTH_STS_SHIFT              (28U)
 #endif   /* BEV Rebase provisionally */
@@ -1103,7 +1109,6 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sts;
     U4              u4_t_data;
     U2              u2_t_data;
@@ -1195,19 +1200,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[37]  = (U4)u1_t_sts;                                               /* DISTTOEMPTY_PHV_ENG_STS             */
     u4_ap_pdu_tx[37] |= ((U4)u1_t_data << 2);                                       /* DISTTOEMPTY_PHV_ENG                 */
 
-    u2_t_data        = u2_g_DteEdKm();
-    if(u2_t_data == (U2)DTE_ED_UNDET_VLE){                                          /* Before the calculation is completed */
-        u1_t_sts     = (U1)XSPI_DTE_STS_UNKNOWN;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else if (u2_t_data == (U2)DTE_ED__FAIL_VLE){                                    /* The calculation is Failure           */
-        u1_t_sts     = (U1)XSPI_DTE_STS_INVALID;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else{                                                                           /* The calculation is completed         */
-        u1_t_sts     = (U1)XSPI_DTE_STS_VALID;
-        u4_t_data    = (U4)u2_t_data * (U4)1000U;                                   /* Since LSB is "0.001", it's multiplied by 1000  */
-    }
     u4_ap_pdu_tx[38] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* DISTTOEMPTY_KM_STS                   */
     u4_ap_pdu_tx[39] = u4_t_data;                                                   /* DISTTOEMPTY_KM                       */
 
@@ -1236,7 +1228,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[47]  = u4_t_data;                                                  /* DISTTOEMPTY_EV_KM                    */
     u4_ap_pdu_tx[37] |= ((U4)u1_t_acsts << 9);                                      /* DISTTOEMPTY_EV_AC_STS                */
 
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

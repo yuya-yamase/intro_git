@@ -91,7 +91,6 @@
 #define INSTEE_NUM_CNTTS                        (1U)
 #define INSTEE_CNTT_RX                          (0U)
 /* 06 Distance To Empty                          */
-#define DTE_NUM_CNTTS                           (1U)
 #define DTE_CNTT_FU                             (0U)
 /* 07 EV Distance To Empty                       */
 #define EVDTE_NUM_CNTTS                         (1U)
@@ -122,7 +121,6 @@
 #define PTSRUNDIST_CNTT_TR_A                    (2U)
 #define PTSRUNDIST_CNTT_TR_B                    (3U)
 /* 12 EV Ratio                                   */
-#define EVRATIO_NUM_CNTTS                       (1U)
 #define EVRATIO_CNTT_DC                         (0U)
 
 /* 13 Distance To Empty Electric Delay          */

@@ -20,7 +20,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-#include "datesi_cal.h"
 #include "date.h"
 #include "tripcom_ms.h"
 #include "avggrph.h"

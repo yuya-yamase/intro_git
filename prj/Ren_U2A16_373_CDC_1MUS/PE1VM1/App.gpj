@@ -35,6 +35,11 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/RcmmUI/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/app/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/scc
     
@@ -157,6 +162,29 @@ App/MET/IpcApplication/Vom/Dimmer/scc/dim_usadjbysw.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dimmer.c
 App/MET/IpcApplication/Vom/RcmmUI/config/rcmmui_cfg.c
 App/MET/IpcApplication/Vom/RcmmUI/scc/rcmmui.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/avgecon.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/avgee_kmpkwh.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/avggrph.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/avgvehspd_kmph.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/evdte_km.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/instecon.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/instee_kmpkwh.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsrundist_km.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsruntm_hrs.c
+App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_cfg.c
+App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_comtx.c
+App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_ms_cfg.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_calc.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_ms.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_nvmif_grph.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_nvmif.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/config/tripsnsr_cfg.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_avgee.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_elpsdtm.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_instee.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_odocnt.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_cfg.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_comtx.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_tftpct.c

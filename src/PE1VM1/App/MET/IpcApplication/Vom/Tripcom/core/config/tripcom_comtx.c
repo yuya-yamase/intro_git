@@ -20,9 +20,10 @@
 #include "tripcom_comtx.h"
 #include "oxcan.h"
 #include "vardef.h"
+#if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
 #include "locale.h"
-#include "dte_ed.h"
+#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -58,7 +59,6 @@
 
 #define TRIPCOM_COMTX_PREVSTS_SFT               (1U)
 
-#define TRIPCOM_COMTX_DTE_TYPE                  (0U)
 
 
 
@@ -124,15 +124,27 @@ static  void    vd_s_TripcomCfgCanDrTx(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 static  const   U1                              u1_sp_TRIPCOM_TX_SPEED_UNTCNV[UNIT_NUM_VAL_SPEED]        = {
+#else   /* BEV Rebase provisionally */
+static  const   U1                              u1_sp_TRIPCOM_TX_SPEED_UNTCNV[2]                         = {
+#endif   /* BEV Rebase provisionally */
     (U1)1U,                                     /* 00 UNIT_VAL_SPEED_KMPH       */
     (U1)2U                                      /* 01 UNIT_VAL_SPEED_MPH        */
 };
+#if 0   /* BEV Rebase provisionally */
 static  const   U1                              u1_sp_TRIPCOM_TX_DIST_UNTCNV[UNIT_NUM_VAL_DIST]          = {
+#else   /* BEV Rebase provisionally */
+static  const   U1                              u1_sp_TRIPCOM_TX_DIST_UNTCNV[2]                          = {
+#endif   /* BEV Rebase provisionally */
     (U1)1U,                                     /* 00 UNIT_VAL_DIST_KM          */
     (U1)2U                                      /* 01 UNIT_VAL_DIST_MILE        */
 };
+#if 0   /* BEV Rebase provisionally */
 static  const   U1                              u1_sp_TRIPCOM_TX_EECON_UNTCNV[UNIT_NUM_VAL_ELECO]        = {
+#else   /* BEV Rebase provisionally */
+static  const   U1                              u1_sp_TRIPCOM_TX_EECON_UNTCNV[7]                         = {
+#endif   /* BEV Rebase provisionally */
     (U1)0U,                                     /* 00 UNIT_VAL_ELECO_WHPKM      */
     (U1)0U,                                     /* 01 UNIT_VAL_ELECO_KWHPKM     */
     (U1)0U,                                     /* 02 UNIT_VAL_ELECO_WHPMILE    */
@@ -142,9 +154,15 @@ static  const   U1                              u1_sp_TRIPCOM_TX_EECON_UNTCNV[UN
     (U1)3U                                      /* 06 UNIT_VAL_ELECO_MILEPKWH   */
 };
 static  const   ST_TRIPCOM_LOCALE               st_sp_TRIPCOM_TX_LOCALE_INF[TRIPCOM_NUM_CANTXUNIT]       = {
+#if 0   /* BEV Rebase provisionally */
     {   (U1)UNIT_IDX_SPEED,      (U1)UNIT_NUM_VAL_SPEED,      &u1_sp_TRIPCOM_TX_SPEED_UNTCNV[0]   },
     {   (U1)UNIT_IDX_DIST,       (U1)UNIT_NUM_VAL_DIST,       &u1_sp_TRIPCOM_TX_DIST_UNTCNV[0]    },
     {   (U1)UNIT_IDX_ELECO,      (U1)UNIT_NUM_VAL_ELECO,      &u1_sp_TRIPCOM_TX_EECON_UNTCNV[0]   }
+#else   /* BEV Rebase provisionally */
+    {   (U1)U1_MAX,              (U1)U1_MAX,                  vdp_PTR_NA                          },
+    {   (U1)U1_MAX,              (U1)U1_MAX,                  vdp_PTR_NA                          },
+    {   (U1)U1_MAX,              (U1)U1_MAX,                  vdp_PTR_NA                          }
+#endif   /* BEV Rebase provisionally */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -274,7 +292,11 @@ void            vd_g_TripcomCfgGetUnit(U1 * u1_ap_unittype)
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NUM_CANTXUNIT; u4_t_loop++) {
         u1_ap_unittype[u4_t_loop] = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         u1_t_unit = u1_g_Unit(st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1_ch);
+#else   /* BEV Rebase provisionally */
+        u1_t_unit = (U1)U1_MAX;
+#endif   /* BEV Rebase provisionally */
         if (u1_t_unit < st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1_unit_num) {
             u1_ap_unittype[u4_t_loop] = st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1p_table[u1_t_unit];
         }
@@ -304,7 +326,11 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
     u1_s_tripcom_tx_m1ec_timer  = (U1)U1_MAX;
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPCOM_NUM_CANTXUNIT; u4_t_loop++) {
         u1_sp_tripcom_tx_unit[u4_t_loop] = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         u1_t_unit = u1_g_Unit(st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1_ch);
+#else   /* BEV Rebase provisionally */
+        u1_t_unit = (U1)U1_MAX;
+#endif   /* BEV Rebase provisionally */
         if (u1_t_unit < st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1_unit_num) {
             u1_sp_tripcom_tx_unit[u4_t_loop] = st_sp_TRIPCOM_TX_LOCALE_INF[u4_t_loop].u1p_table[u1_t_unit];
         }
@@ -313,6 +339,7 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
 
     /* to avoid event-tx when initial value of bit-assignment table is inconsistent with tripcom spec */
     /* only for +B-on message                                                                         */
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_TO_FC,   &u2_sp_tripcom_tx_value[0]);
 
     (void)Com_SendSignal(ComConf_ComSignal_AS_FC,   &u2_sp_tripcom_tx_value[1]);
@@ -357,6 +384,7 @@ static  void    vd_s_TripcomCfgCanTxInit(void)
 
     u1_t_sndval = (U1)TRIPCOM_COMTX_NFCS_TYPE_A;
     (void)Com_SendSignal(ComConf_ComSignal_NFCS, &u1_t_sndval);
+#endif   /* BEV Rebase provisionally */
 
 }
 
@@ -377,6 +405,7 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
         u1_s_tripcom_tx_ptson_elpsd++;
     }
     if (u1_s_tripcom_tx_ptson_elpsd == (U1)TRIPCOM_COMTX_PTSON_250MS) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S01_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S03_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
@@ -384,10 +413,19 @@ static  void    vd_s_TripcomCfgCanTxPtsOn250ms(void)
         (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
         (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
+#if 0   /* BEV Rebase provisionally */
     u1_t_igsts = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igsts = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if (u1_t_igsts == (U1)TRUE) {
+#if 0   /* BEV Rebase provisionally */
         u1_t_ptssts = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF);
+#else   /* BEV Rebase provisionally */
+        u1_t_ptssts = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
         if (u1_t_ptssts == (U1)TRUE) {
             u1_s_tripcom_tx_drvcyc <<= TRIPCOM_COMTX_PREVSTS_SFT;
             u1_s_tripcom_tx_drvcyc |= (U1)TRUE;
@@ -423,10 +461,16 @@ static  void    vd_s_TripcomCfgCanTxEMGF250ms(void)
         u1_s_tripcom_tx_emgf_elpsd++;
     }
     if (u1_s_tripcom_tx_emgf_elpsd == (U1)TRIPCOM_COMTX_EMGF_250MS) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_igsts = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igsts = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     u1_t_emgf  = (U1)0U;
     if (u1_t_igsts == (U1)TRUE) {
         u1_t_sts = u1_g_TripcomCfgGetEMGF(&u1_t_emgf);
@@ -461,11 +505,15 @@ static  void    vd_s_TripcomCfgCanTxUNIT6(const U1 u1_a_UNIT)
     U1          u1_t_unitsndval;
 
     u1_t_preunit = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_6, &u1_t_preunit);
+#endif   /* BEV Rebase provisionally */
     u1_t_unitsndval = u1_s_TripcomCfgCanTxUNIT6Cnvt(u1_a_UNIT);
     if (u1_t_preunit != u1_t_unitsndval) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_UNIT_6, &u1_t_unitsndval);
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -485,6 +533,7 @@ static  U1     u1_s_TripcomCfgCanTxUNIT6Cnvt(const U1 u1_a_UNIT)
     u1_t_unitsndval = u1_a_UNIT;
 
     u1_t_unittype = u1_g_VardefUnitSlctTypeByPid();
+#if 0   /* BEV Rebase provisionally */
     if(u1_t_unittype == (U1)VDF_UNIT_TYPE_H) { /* PTSYS = BEV and DEST = NA/UK */
         if((u1_a_UNIT == u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_USA]) || 
            (u1_a_UNIT == u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_UK])) {
@@ -502,6 +551,7 @@ static  U1     u1_s_TripcomCfgCanTxUNIT6Cnvt(const U1 u1_a_UNIT)
             }
         }
     }
+#endif   /* BEV Rebase provisionally */
     return(u1_t_unitsndval);
 }
 
@@ -516,10 +566,14 @@ static  void    vd_s_TripcomCfgCanTxTOFC(const U2 u2_a_VALUE)
     U2          u2_t_presndval;
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TO_FC, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TO_FC, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -536,10 +590,14 @@ static  void    vd_s_TripcomCfgCanTxASFC(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_FC, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_AS_FC, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -564,12 +622,16 @@ static  void    vd_s_TripcomCfgCanTxM1FC1(const U2 u2_a_VALUE)
     u1_t_m1fc_req = (U1)FALSE;
     u2_t_prem1fc1 = (U2)0U;
     
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_M1_FC1, &u2_t_prem1fc1);
     (void)Com_ReceiveSignal(ComConf_ComSignal_M1_FC_R, &u1_t_prem1fcr);
+#endif   /* BEV Rebase provisionally */
     
     
     if (u2_t_prem1fc1 != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_M1_FC1, &u2_a_VALUE);
+#endif   /* BEV Rebase provisionally */
         u1_t_sndflg   = (U1)TRUE;
         u1_t_m1fc_req = (U1)TRUE;
     }
@@ -581,12 +643,16 @@ static  void    vd_s_TripcomCfgCanTxM1FC1(const U2 u2_a_VALUE)
     if (u1_s_tripcom_tx_m1fc_timer >= (U1)TRIPCOM_COMTX_TXHLD_2SEC) {
         if (u1_t_prem1fcr != (U1)FALSE) {
             u1_t_m1fcr = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_M1_FC_R, &u1_t_m1fcr);
+#endif   /* BEV Rebase provisionally */
             u1_t_sndflg = (U1)TRUE;
         }
         else if (u1_t_m1fc_req == (U1)TRUE) {
             u1_t_m1fcr = (U1)TRUE;
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_M1_FC_R, &u1_t_m1fcr);
+#endif   /* BEV Rebase provisionally */
             u1_t_sndflg = (U1)TRUE;
             u1_s_tripcom_tx_m1fc_timer = (U1)0U;
         }
@@ -596,7 +662,9 @@ static  void    vd_s_TripcomCfgCanTxM1FC1(const U2 u2_a_VALUE)
     }
     
     if (u1_t_sndflg == (U1)TRUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 
 }
@@ -614,10 +682,14 @@ static  void    vd_s_TripcomCfgCanTxTOEC(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_TO_EC, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_TO_EC, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -642,12 +714,16 @@ static  void    vd_s_TripcomCfgCanTxM1EC1(const U2 u2_a_VALUE)
     u1_t_m1ec_req = (U1)FALSE;
     u2_t_prem1ec1 = (U2)0U;
     
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_M1_EC1,  &u2_t_prem1ec1);
     (void)Com_ReceiveSignal(ComConf_ComSignal_M1_EC_R, &u1_t_prem1ecr);
+#endif   /* BEV Rebase provisionally */
     
     
     if (u2_t_prem1ec1 != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_M1_EC1, &u2_a_VALUE);
+#endif   /* BEV Rebase provisionally */
         u1_t_sndflg   = (U1)TRUE;
         u1_t_m1ec_req = (U1)TRUE;
     }
@@ -659,12 +735,16 @@ static  void    vd_s_TripcomCfgCanTxM1EC1(const U2 u2_a_VALUE)
     if (u1_s_tripcom_tx_m1ec_timer >= (U1)TRIPCOM_COMTX_TXHLD_2SEC) {
         if (u1_t_prem1ecr != (U1)FALSE) {
             u1_t_m1ecr = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_M1_EC_R, &u1_t_m1ecr);
+#endif   /* BEV Rebase provisionally */
             u1_t_sndflg = (U1)TRUE;
         }
         else if (u1_t_m1ec_req == (U1)TRUE) {
             u1_t_m1ecr = (U1)TRUE;
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_M1_EC_R, &u1_t_m1ecr);
+#endif   /* BEV Rebase provisionally */
             u1_t_sndflg = (U1)TRUE;
             u1_s_tripcom_tx_m1ec_timer = (U1)0U;
         }
@@ -674,7 +754,9 @@ static  void    vd_s_TripcomCfgCanTxM1EC1(const U2 u2_a_VALUE)
     }
 
     if (u1_t_sndflg == (U1)TRUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 
 
@@ -691,10 +773,14 @@ static  void    vd_s_TripcomCfgCanTxASEC(const U2 u2_a_VALUE)
     U2          u2_t_presndval;
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_EC, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_AS_EC, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -714,7 +800,9 @@ static  void    vd_s_TripcomCfgCanTxINFC(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal( ComConf_ComSignal_IN_FC, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
 
     if ((u2_a_VALUE     <= u2_s_TXMAX) &&
         (u2_t_presndval <= u2_s_TXMAX)) {
@@ -729,14 +817,18 @@ static  void    vd_s_TripcomCfgCanTxINFC(const U2 u2_a_VALUE)
             ((u2_a_VALUE == (U2)0U       )  &&
              (u2_t_diff  != (U2)0U       ))) {
 
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_IN_FC, &u2_a_VALUE);
             (void)Com_TriggerIPDUSend(MSG_MET1S01_TXCH0);
+#endif   /* BEV Rebase provisionally */
         }
     }
     else {
         if (u2_a_VALUE != u2_t_presndval) {
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_IN_FC, &u2_a_VALUE);
             (void)Com_TriggerIPDUSend(MSG_MET1S01_TXCH0);
+#endif   /* BEV Rebase provisionally */
         }
     }
 }
@@ -757,7 +849,9 @@ static  void    vd_s_TripcomCfgCanTxINFCC(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal( ComConf_ComSignal_IN_FC_C, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
 
     if ((u2_a_VALUE     <= u2_s_TXMAX) &&
         (u2_t_presndval <= u2_s_TXMAX)) {
@@ -772,14 +866,18 @@ static  void    vd_s_TripcomCfgCanTxINFCC(const U2 u2_a_VALUE)
             ((u2_a_VALUE == (U2)0U       )  &&
              (u2_t_diff  != (U2)0U       ))) {
 
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_IN_FC_C, &u2_a_VALUE);
             (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
+#endif   /* BEV Rebase provisionally */
         }
     }
     else {
         if (u2_a_VALUE != u2_t_presndval) {
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_IN_FC_C, &u2_a_VALUE);
             (void)Com_TriggerIPDUSend(MSG_MET1S52_TXCH0);
+#endif   /* BEV Rebase provisionally */
         }
     }
 #endif
@@ -800,7 +898,9 @@ static  void    vd_s_TripcomCfgCanTxINEC(const U2 u2_a_VALUE)
     U2                                          u2_t_diff;
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal( ComConf_ComSignal_IN_EC, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
 
     if ((u2_a_VALUE     <= u2_s_TXMAX) &&
         (u2_t_presndval <= u2_s_TXMAX)) {
@@ -814,14 +914,18 @@ static  void    vd_s_TripcomCfgCanTxINEC(const U2 u2_a_VALUE)
         if ((u2_t_diff    > u2_s_IN_EC_HIS) ||
             ((u2_a_VALUE == (U2)0U       )  &&
              (u2_t_diff  != (U2)0U       ))) {
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_IN_EC, &u2_a_VALUE);
             (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
+#endif   /* BEV Rebase provisionally */
         }
     }
     else {
         if (u2_a_VALUE != u2_t_presndval) {
+#if 0   /* BEV Rebase provisionally */
             (void)Com_SendSignal(ComConf_ComSignal_IN_EC, &u2_a_VALUE);
             (void)Com_TriggerIPDUSend(MSG_MET1S55_TXCH0);
+#endif   /* BEV Rebase provisionally */
         }
     }
 }
@@ -839,10 +943,14 @@ static  void    vd_s_TripcomCfgCanTxRANGE(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RANGE, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_RANGE, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -858,10 +966,14 @@ static  void    vd_s_TripcomCfgCanTxEVRANGE(const U2 u2_a_VALUE)
     U2          u2_t_presndval;
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_EV_RANGE, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_EV_RANGE, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S56_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -878,10 +990,14 @@ static  void    vd_s_TripcomCfgCanTxASSP(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_SP, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_AS_SP, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S39_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -898,10 +1014,14 @@ static  void    vd_s_TripcomCfgCanTxASTM(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_AS_TM, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_AS_TM, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -918,10 +1038,14 @@ static  void    vd_s_TripcomCfgCanTxASDT(const U2 u2_a_VALUE)
 
 
     u2_t_presndval = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal( ComConf_ComSignal_AS_DT, &u2_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u2_t_presndval != u2_a_VALUE) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_AS_DT, &u2_a_VALUE);
         (void)Com_TriggerIPDUSend(MSG_MET1S03_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -953,10 +1077,14 @@ static  void    vd_s_TripcomCfgCanTxEC_SCL(void)
             /* Do Nothing */
             break;
     }
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_EC_SCL, &u1_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u1_t_presndval != u1_t_sndval) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_EC_SCL, &u1_t_sndval);
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 
 }
@@ -998,10 +1126,14 @@ static  void    vd_s_TripcomCfgCanTxFC_SCL(void)
             /* Do Nothing */
             break;
     }
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_FC_SCL, &u1_t_presndval);
+#endif   /* BEV Rebase provisionally */
     if (u1_t_presndval != u1_t_sndval) {
+#if 0   /* BEV Rebase provisionally */
         (void)Com_SendSignal(ComConf_ComSignal_FC_SCL, &u1_t_sndval);
         (void)Com_TriggerIPDUSend(MSG_MET1S38_TXCH0);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -1025,18 +1157,16 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 
     u4_t_kmpl   = (U4)0U;
     u1_t_lnfc   = u1_s_TXINIT;
-#if (TRIPCOM_COMTX_DTE_TYPE == 1)
-    u1_t_status = u1_g_DteTrainedFeKmpl(&u4_t_kmpl);
-#else
-    u1_t_status = u1_g_DteEdCg0p001kmpl(&u4_t_kmpl);
-#endif
+    u1_t_status = (U1)1U;
     if (u1_t_status == (U1)TRIPCOM_STSBIT_VALID) {
         u1_t_lnfc = u1_s_TXMAX;
         if (u4_t_kmpl < u4_s_MAXVAL) {
             u1_t_lnfc = (U1)((u4_t_kmpl + u4_s_RESOFST) / u4_s_RESCONV);
         }
     }
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_LN_FC, &u1_t_lnfc);
+#endif   /* BEV Rebase provisionally */
 
     u1_t_rffc   = u1_s_TXINIT;
     u1_t_status = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_RF, &u4_t_kmpl);
@@ -1046,7 +1176,9 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
             u1_t_rffc = (U1)((u4_t_kmpl + u4_s_RESOFST) / u4_s_RESCONV);
         }
     }
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_RF_FC, &u1_t_rffc);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

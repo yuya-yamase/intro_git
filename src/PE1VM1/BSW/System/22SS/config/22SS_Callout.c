@@ -49,8 +49,10 @@
 #include "engspd_rpm.h"
 #include "engspd_det_rpm.h"
 #include "odo_km.h"
+#endif   /* BEV Rebase provisionally */
 #include "tripsnsr.h"
 #include "tripcom.h"
+#if 0   /* BEV Rebase provisionally */
 #include "ambtmp.h"
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
@@ -142,8 +144,10 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_EngspdBonInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoBonInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_AmbtmpBonInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
@@ -235,8 +239,10 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoRstwkInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_AmbtmpRstWkInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
@@ -328,8 +334,10 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoRstwkInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_AmbtmpRstWkInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,

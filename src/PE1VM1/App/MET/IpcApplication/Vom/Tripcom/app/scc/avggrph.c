@@ -243,7 +243,11 @@ void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const
             vd_g_TripcomMsSetNvmRqst(u1_t_msid);
         }
         if(st_tp_cfg->u2p_date != vdp_PTR_NA){
+#if 0   /* BEV Rebase provisionally */
             u4_t_yymmddwk = u4_g_DateSICal();
+#else   /* BEV Rebase provisionally */
+           u4_t_yymmddwk = (U1)0U;
+#endif   /* BEV Rebase provisionally */
             st_tp_cfg->u2p_date[u1_t_next] = (U2)((u4_t_yymmddwk & (U4)((U4)YYMMDDWK_BIT_DA | (U4)YYMMDDWK_BIT_MO)) >> YYMMDDWK_LSB_DA);
             u1_t_msid = st_tp_cfg->u1_msid_date + u1_t_next;
             vd_g_TripcomMsSetAccmltVal(u1_t_msid, (U4)(st_tp_cfg->u2p_date[u1_t_next]));
