@@ -405,8 +405,7 @@ static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC)
 #if 0   /* BEV BSW provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_SW_INF,   &u1_s_drec_tx_bpe_evt);    /* COM Tx STUB delete */
 #endif
-#warning "BEVCDCFD-1829"
-#if 0 /* BEVCDCFD-1829 */
+#if 0   /* BEV BSW provisionally */
     u4_t_igvol = (U4)u2_g_IoHwAdcLv((U1)ADC_CH_IG_MON);
     if(u4_t_igvol > (U4)u2_s_DREC_TX_IG_MAX){
         u1_t_tx = (U1)U1_MAX;
@@ -421,8 +420,7 @@ static void    vd_s_DrectxMsg_MET1D51(const U1 * u1_ap_FNC)
         u4_t_igvol =  u4_t_igvol / (U4)u2_s_DREC_TX_IG_DIV;
         u1_t_tx    = (U1)u4_t_igvol;
     }
-#else /* BEVCDCFD-1829 */
-#endif /* BEVCDCFD-1829 */
+#endif
 #if 0   /* BEV BSW provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_IG_VOL, &u1_t_tx);    /* COM Tx STUB delete */
 #endif
