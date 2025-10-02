@@ -20,9 +20,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "oxcan.h"
-#if 0   /* BEV Rebase provisionally */
-#include "hmivardef.h"
-#endif   /* BEV Rebase provisionally */
 #include "xspi_met_ch0.h"
 #include "calibration.h"
 

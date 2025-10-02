@@ -30,7 +30,9 @@
 #include "vehspd_kmph.h"
 #include "ptsctmp_cel.h"
 #include "alert.h"
+#endif   /* BEV Rebase provisionally */
 #include "gauge.h"
+#if 0   /* BEV Rebase provisionally */
 
 #endif   /* BEV Rebase provisionally */
 #include "vardef.h"
@@ -50,7 +52,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define VEH_OPEMD_NUM_EVHK                      (5U)
+#if 0   /* BEV Rebase provisionally */
+#define VEH_OPEMD_NUM_EVHK                      (6U)
+#else   /* BEV Rebase provisionally */
+#define VEH_OPEMD_NUM_EVHK                      (2U)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -84,8 +90,8 @@ typedef struct{
 void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 {
 #if (VEH_OPEMD_NUM_EVHK > 0U)
-#if 0   /* BEV Rebase provisionally */
     static const ST_VEH_OPEMD_EVHK   st_sp_VEH_OPEMD_EVHK[VEH_OPEMD_NUM_EVHK] = {
+#if 0   /* BEV Rebase provisionally */
         {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON    },
 
         {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
@@ -94,13 +100,16 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
         {&vd_g_AlertOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 
+#endif   /* BEV Rebase provisionally */
         {&vd_g_GaugeOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
+#if 0   /* BEV Rebase provisionally */
 
         {&vd_g_FspoOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
-                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) }
-    };
+                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 #endif   /* BEV Rebase provisionally */
+        {&vd_g_VardefEsOptIgoffEvhk,    (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF   }
+    };
 
     U4                                u4_t_cnt;
     U4                                u4_t_bit;
@@ -124,14 +133,12 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 #else
 #endif
 
-#if 0   /* BEV Rebase provisionally */
     for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)VEH_OPEMD_NUM_EVHK; u4_t_cnt++){
         u4_t_bit = u4_a_EVBIT & st_sp_VEH_OPEMD_EVHK[u4_t_cnt].u4_evbit;
         if(u4_t_bit != (U4)0U){
             (st_sp_VEH_OPEMD_EVHK[u4_t_cnt].fp_vd_HK)(u4_a_MDBIT, u4_a_EVBIT);
         }
     }
-#endif   /* BEV Rebase provisionally */
 #else
     vd_g_IoHwDifltSgnlInit(); /* DO NOT REMOVED */
     vd_g_oXCANVomEvhk();
