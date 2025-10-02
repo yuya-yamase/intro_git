@@ -161,10 +161,12 @@ void    vd_g_OdoNvmIfWriKmBlock(const ST_ODO_NVMIF_REC_KM * st_ap_REC_KM,
     u2_tp_BLOCK     = st_ap_REC_KM->u2p_BLOCK;
     u2_t_blo_next   = ((U2)st_ap_CTRL->u1_rec_idx * (U2)st_ap_REC_KM->u1_rec_nblock) + (U2)st_ap_CTRL->u1_blo_cnt;
     u2_t_src_offset = (U2)st_ap_CTRL->u1_blo_cnt * (U2)st_ap_REC_KM->u1_blo_nbyte;
+#if 0   /* BEV Rebase provisionally */
     vd_g_OdoNvmIfWriteBlock(st_ap_REC_KM->u1_dev_idx,
                             u2_tp_BLOCK[u2_t_blo_next],
                             &u1_ap_KM[u2_t_src_offset],
                             (U2)st_ap_REC_KM->u1_blo_nbyte);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_OdoNvmIfReaKmBlock(const ST_ODO_NVMIF_REC_KM * st_ap_REC_KM,                                                        */
@@ -181,7 +183,9 @@ void    vd_g_OdoNvmIfReaKmBlock(const ST_ODO_NVMIF_REC_KM * st_ap_REC_KM,
 
     u2_tp_BLOCK   = st_ap_REC_KM->u2p_BLOCK;
     u2_t_blo_next = ((U2)st_ap_CTRL->u1_rec_idx * (U2)st_ap_REC_KM->u1_rec_nblock) + (U2)st_ap_CTRL->u1_blo_cnt;
+#if 0   /* BEV Rebase provisionally */
     vd_g_OdoNvmIfReadBlock(st_ap_REC_KM->u1_dev_idx, u2_tp_BLOCK[u2_t_blo_next]);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

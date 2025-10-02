@@ -17,9 +17,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
-#if 0   /* BEV Rebase provisionally */
 #include "odo_om_rst_if.h"
-#endif   /* BEV Rebase provisionally */
 
 #include "hmimaint.h"
 #include "vardef.h"
@@ -103,14 +101,10 @@ void    vd_g_HmiMaintMainTask(void)
 #endif
         if((u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
            (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
-#if 0   /* BEV Rebase provisionally */
             vd_g_OdoOmReset((U1)TRUE);
-#endif   /* BEV Rebase provisionally */
         }
         else{
-#if 0   /* BEV Rebase provisionally */
             vd_g_OdoOmReset((U1)FALSE);
-#endif   /* BEV Rebase provisionally */
         }
 #if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
 #else
@@ -118,14 +112,10 @@ void    vd_g_HmiMaintMainTask(void)
         if((u1_t_to              == (U1)FALSE)        &&
            (u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
            (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
-#if 0   /* BEV Rebase provisionally */
             vd_g_OdoOmReset((U1)TRUE);
-#endif   /* BEV Rebase provisionally */
         }
         else{
-#if 0   /* BEV Rebase provisionally */
             vd_g_OdoOmReset((U1)FALSE);
-#endif   /* BEV Rebase provisionally */
         }
     }
 #endif

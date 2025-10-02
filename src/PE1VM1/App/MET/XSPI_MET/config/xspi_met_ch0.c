@@ -59,9 +59,9 @@
 #include "mulmed_mulfr.h"
 #endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
-#if 0   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "odo_om_rst_if.h"
+#if 0   /* BEV Rebase provisionally */
 #include "vptran_sel.h"
 #include "locale.h"
 #if 0   /* BEV BSW provisionally */
@@ -1042,21 +1042,24 @@ static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U4  u4_t_odo_dat;
     U1  u1_t_odo_sts;
     U4  u4_t_tripa_dat;
     U1  u1_t_tripa_sts;
     U4  u4_t_tripb_dat;
     U1  u1_t_tripb_sts;
+#if 0   /* BEV Rebase provisionally */
     U4  u4_t_odtrp_dsp;
+#endif   /* BEV Rebase provisionally */
     U4  u4_t_odo_km_dat;                                               /* ODO_KM                                       */
     U1  u1_t_tmnt_reset_sts;
 
 
     u4_t_odo_dat       = (U4)0U;
     u1_t_odo_sts = u1_g_OdoKmMileByUnit(&u4_t_odo_dat);
+#if 0   /* BEV Rebase provisionally */
     u4_t_odtrp_dsp     = u4_g_HmiRim((U1)HMIRIM_ODOTRIPCNTTS);
+#endif   /* BEV Rebase provisionally */
     u4_t_tripa_dat     = (U4)0U;
     u1_t_tripa_sts = u1_g_OdoTripKmMileByUnit((U1)ODO_TRIP_CH_A, &u4_t_tripa_dat);
     u4_t_tripb_dat     = (U4)0U;
@@ -1069,7 +1072,9 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET                                   */
     u4_ap_pdu_tx[0]  |= ((U4)u1_t_odo_sts   << XSPI_STS_SHIFT);    /* ODO_STS                                      */
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[10]  = u4_t_odtrp_dsp & (U4)XSPI_MSK_03BIT;       /* ODOTRIP_CONTENTS (Address is Provisional)    */
+#endif   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[1]   = u4_t_odo_dat;                                  /* ODO                                          */
     u4_ap_pdu_tx[2]   = ((U4)u1_t_tripa_sts << XSPI_STS_SHIFT);    /* TRIPA_STS                                    */
     u4_ap_pdu_tx[3]   = u4_t_tripa_dat;                                /* TRIP_A                                       */
@@ -1077,7 +1082,6 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[5]   = u4_t_tripb_dat;                                /* TRIP_B                                       */
     u4_ap_pdu_tx[6]   = u4_t_odo_km_dat;                               /* ODO_KM                                       */
 
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -21,7 +21,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "crc32.h"
+#if 0   /* BEV Rebase provisionally */
 #include "nvmc_mgr.h"
+#endif   /* BEV Rebase provisionally */
 #include "odo_nvmif.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -39,6 +41,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define u4_g_OdoNvmIfCrc32(u1p, u4)              (u4_g_Crc32((U4)0x5aa5a55aU, (u1p), (u4), (U1)FALSE))
 
+#if 0   /* BEV Rebase provisionally */
 #define vd_g_OdoNvmIfOdoRWAct()                  (vd_g_Nvmc_SetAcsReq(u2_g_ODO_NVMIF_NVMCID_ODO_KM, (U1)TRUE))
 #define vd_g_OdoNvmIfOdoRWDeAct()                (vd_g_Nvmc_SetAcsReq(u2_g_ODO_NVMIF_NVMCID_ODO_KM, (U1)FALSE))
 #define vd_g_OdoNvmIfTripRWAct()                 (vd_g_Nvmc_SetAcsReq(u2_g_ODO_NVMIF_NVMCID_TRIP_KM, (U1)TRUE))
@@ -50,6 +53,10 @@
 
 #define ODO_NVMIF_REQ_TYPE_READ                  (NVMC_REQUEST_TYPE_READ)
 #define ODO_NVMIF_JOB_RESULT_OK                  (NVMC_RESULT_OK)
+#else   /* BEV Rebase provisionally */
+#define ODO_NVMIF_REQ_TYPE_READ                  (0U)
+#define ODO_NVMIF_JOB_RESULT_OK                  (0U)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
