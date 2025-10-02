@@ -32,9 +32,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "iohw_adc.h"
 #endif   /* BEV Rebase provisionally */
-#if 0   /* BEV Rebase provisionally */
-#include "mcst.h"
-#endif   /* BEV Rebase provisionally */
 #include "hmiscreen.h"
 
 #include "calibration.h"
