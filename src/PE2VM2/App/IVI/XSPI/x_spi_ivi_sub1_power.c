@@ -602,22 +602,27 @@ static U1            u1_s_XspiIviSub1PowerDevInitCompChk(void)
     U1  u1_t_result;
     U1  u1_t_pwrsts;
     U4  u4_t_dev_chk;
+#if 0
     U2  u2_t_devapp_chk;
+#endif
 
     u1_t_result = (U1)FALSE;
     u1_t_pwrsts = u1_g_Power_ModeState();
 
     if(u1_t_pwrsts < (U1)POWER_MODE_STATE_NUM) {
         u4_t_dev_chk = u4_s_xspi_ivi_power_device_init_fin_sts & u4_sp_xspi_ivi_power_dev_init[u1_t_pwrsts];
+#if 0
         u2_t_devapp_chk = u2_s_xspi_ivi_power_device_init_app & u2_sp_xspi_ivi_power_dev_app_init[u1_t_pwrsts];
+#endif
 
         if(u4_t_dev_chk == u4_sp_xspi_ivi_power_dev_init[u1_t_pwrsts]) {
             u1_t_result = (U1)TRUE;
         }
-
+#if 0
         if(u2_t_devapp_chk != u2_sp_xspi_ivi_power_dev_app_init[u1_t_pwrsts]) {
             u1_t_result &= (U1)FALSE;
         }
+#endif
     }
 
     return(u1_t_result);
