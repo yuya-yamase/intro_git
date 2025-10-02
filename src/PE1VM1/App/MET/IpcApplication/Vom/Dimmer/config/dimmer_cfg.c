@@ -35,9 +35,7 @@
 #if 0   /* BEV Rebase provisionally */
 #include "mcst.h"
 #endif   /* BEV Rebase provisionally */
-#if 0   /* BEV Rebase provisionally */
 #include "hmiscreen.h"
-#endif   /* BEV Rebase provisionally */
 
 #include "calibration.h"
 
@@ -257,11 +255,7 @@ U1      u1_g_DimUsadjbySwCfgAdjstbl(void)
 {
     U1 u1_t_adjstbl;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_adjstbl = u1_g_HmiScreen();
-#else   /* BEV Rebase provisionally */
-    u1_t_adjstbl = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     return(u1_t_adjstbl);
 }
 /*===================================================================================================================================*/
