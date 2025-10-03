@@ -232,7 +232,9 @@ void            vd_g_XspiIviSub0Send(U1 * u1_ap_xspi_add)
         u1_ap_xspi_add[6] = (U1)XSPI_IVI_DIAG_TX_MCU_TO_SOC;
         u1_ap_xspi_add[7] = u1_t_canid;
 
-        u1_s_XspiIviSub0SendFlg = (U1)FALSE;
+        if(st_s_XspiIviSub0DiagCanData.u2_frame_num == st_s_XspiIviSub0DiagCanData.u2_frame_cnt) {
+            u1_s_XspiIviSub0SendFlg = (U1)FALSE;
+        }
     }
 }
 
