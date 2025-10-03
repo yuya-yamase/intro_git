@@ -1,6 +1,14 @@
-/* ----------------------------------------------------------------------------------------------------------- */
-/* file name    :   VIS_CAN.h                                                                                  */
-/* ----------------------------------------------------------------------------------------------------------- */
+/************************************************************************************************/
+/* file Name        : VIS_Can.h                                                                 */
+/* contents         : CAN module header                                                         */
+/* maker            : NCOS                                                                      */
+/* change history   :                                                                           */
+/* ---------------------------------------------------------------------------------------------*/
+/* ver   | Comments                                                                             */
+/* ---------------------------------------------------------------------------------------------*/
+/* v1.00 | New created                                                                          */
+/************************************************************************************************/
+
 #ifndef VIS_CAN_H
 #define VIS_CAN_H
 /* ----------------------------------------------------------------------------------------------------------- */
@@ -26,15 +34,13 @@
 #define VIS_CAN_ODO_UNIT_KM                     ((U1)1U)            /* オド単位Km */
 #define VIS_CAN_ODO_UNIT_MILE                   ((U1)2U)            /* オド単位Mile */
 #define VIS_CAN_ODO_UNIT_NON                    ((U1)3U)            /* オド単位情報なし */
-#define VIS_CAN_ODO_LSB                         (10U)               /* LSB変換(1km→0.1km) */
-#define VIS_CAN_ODO_MILE_TO_KM                  (161U)              /* Mile→km変換値 */
-#define VIS_CAN_ODO_MAX_KM                      (999999U)           /* オドメータ情報最大値(km) */
-#define VIS_CAN_ODO_MAX_MILE                    (621117U)           /* オドメータ情報最大値(mile) */
-#define VIS_CAN_ODO_MASK                        (0x000000FFU)       /* オドメータ情報マスク値 */
-#define VIS_CAN_ODO_FAIL                        (0x00000000U)       /* オドメータ情報Fail値 */
+#define VIS_CAN_ODO_LSB                         ((U4)10U)           /* LSB変換(1km→0.1km) */
+#define VIS_CAN_ODO_MILE_TO_KM                  ((U4)161U)          /* Mile→km変換値 */
+#define VIS_CAN_ODO_MAX_KM                      ((U4)999999U)       /* オドメータ情報最大値(km) */
+#define VIS_CAN_ODO_MAX_MILE                    ((U4)621117U)       /* オドメータ情報最大値(mile) */
+#define VIS_CAN_ODO_FAIL                        ((U4)0x00000000U)   /* オドメータ情報Fail値 */
 
 /* 時間情報 */
-#define VIS_CAN_TRIP_MASK                       ((U2)0x00FF)        /* Tripカウンタ情報マスク値 */
 #define VIS_CAN_TRIP_FAIL                       ((U2)0xFFFFU)       /* TripカウンタFail値 */
 
 /* 車速 */
@@ -72,8 +78,34 @@
 #define VIS_CAN_TRANSREQ_DATA_RECEIVEVAL        ((U1)0U)            /* チップ間通信：受信値格納領域 */
 #define VIS_CAN_TRANSREQ_DATA_RETURNVAL         ((U1)1U)            /* チップ間通信：受信状態格納領域 */
 #define VIS_CAN_TRANSREQ_VINDATA_RETURNVAL      ((U1)17U)           /* チップ間通信：VIN受信状態格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_YEAR              ((U1)0U)            /* チップ間通信：年情報格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_MONT              ((U1)1U)            /* チップ間通信：月情報格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_DAY               ((U1)2U)            /* チップ間通信：日情報格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_HOUR              ((U1)3U)            /* チップ間通信：時情報格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_MIN               ((U1)4U)            /* チップ間通信：分情報格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_SEC               ((U1)5U)            /* チップ間通信：秒情報格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_UTCNUM            ((U1)6U)            /* チップ間通信：UTC時刻情報要素数 */
+#define VIS_CAN_TRANSREQ_DATA_ODOPOS1           ((U1)0U)            /* チップ間通信：1BYTE目格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_ODOPOS2           ((U1)1U)            /* チップ間通信：2BYTE目格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_ODOPOS3           ((U1)2U)            /* チップ間通信：3BYTE目格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_ODOPOS4           ((U1)3U)            /* チップ間通信：4BYTE目格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_ODONUM            ((U1)4U)            /* チップ間通信：オドメータ情報要素数 */
+#define VIS_CAN_TRANSREQ_DATA_TRIPPOS1          ((U1)0U)            /* チップ間通信：TRIPカウンタ1BYTE目格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_TRIPPOS2          ((U1)1U)            /* チップ間通信：TRIPカウンタ2BYTE目格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_SYNC              ((U1)2U)            /* チップ間通信：マスタ同期情報格納領域 */
+#define VIS_CAN_TRANSREQ_DATA_TRIPNUM           ((U1)3U)            /* チップ間通信：TRIPカウンタ情報要素数 */
+#define VIS_CAN_TRANSREQ_DATA_LENGTH_1          ((U2)1U)            /* チップ間通信：データ長(1byte) */
 #define VIS_CAN_TRANSREQ_DATA_LENGTH_2          ((U2)2U)            /* チップ間通信：データ長(2byte) */
 #define VIS_CAN_TRANSREQ_DATA_LENGTH_18         ((U2)18U)           /* チップ間通信：データ長(18byte) */
+#define VIS_CAN_SHIFT_1BYTE                     ((U4)8U)            /* ビットシフト：1BYTE */
+#define VIS_CAN_SHIFT_2BYTE                     ((U4)16U)           /* ビットシフト：2BYTE */
+#define VIS_CAN_SHIFT_3BYTE                     ((U4)24U)           /* ビットシフト：3BYTE */
+#define VIS_CAN_4BYTEMASK_1BYTE                 ((U4)0x000000FFU)
+#define VIS_CAN_4BYTEMASK_2BYTE                 ((U4)0x0000FF00U)
+#define VIS_CAN_4BYTEMASK_3BYTE                 ((U4)0x00FF0000U)
+#define VIS_CAN_4BYTEMASK_4BYTE                 ((U4)0xFF000000U)
+#define VIS_CAN_2BYTEMASK_LOW                   ((U2)0x00FFU)
+#define VIS_CAN_2BYTEMASK_HIGH                  ((U2)0xFF00U)
 
 #define VIS_CAN_COM_IPDUST_OK                   ((U1)0U)            /* CANメッセージ受信状態：正常受信 */
 /* ----------------------------------------------------------------------------------------------------------- */

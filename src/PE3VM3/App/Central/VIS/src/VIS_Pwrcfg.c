@@ -1,7 +1,7 @@
 /************************************************************************************************/
-/* file Name        : VIS_Pwrcfg.c                                                                 */
-/* contents         : PwrStatus                                                                 */
-/* maker            :                                                                           */
+/* file Name        : VIS_Pwrcfg.c                                                              */
+/* contents         : PWR module config source                                                  */
+/* maker            : NCOS                                                                      */
 /* change history   :                                                                           */
 /* ---------------------------------------------------------------------------------------------*/
 /* ver   | Comments                                                                             */
