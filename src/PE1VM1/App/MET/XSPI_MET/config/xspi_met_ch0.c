@@ -46,7 +46,9 @@
 #include "drvind_pwr_pct.h"
 
 /* #include "alert.h" */
+#endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
+#if 0   /* BEV Rebase provisionally */
 #include "engspd_rpm.h"
 #include "engspd_det_rpm.h"
 #include "engspd_varrz.h"
@@ -706,12 +708,9 @@ static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
-#endif   /* BEV Rebase provisionally */
     U2  u2_t_kmph;
     U2  u2_t_mph;
-#if 0   /* BEV Rebase provisionally */
 
     u2_t_kmph          = (U2)0U;
     u1_t_sts           = u1_g_VehspdKmphInst(&u2_t_kmph, (U1)TRUE);
@@ -723,7 +722,6 @@ static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1]   = (U4)u2_t_kmph;                                         /* VEHICLE_SPD_ANALOG                           */
     u4_ap_pdu_tx[1]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT);                  /* VEHSPD_ANA_STS                               */
 
-#endif   /* BEV Rebase provisionally */
     u2_t_kmph          = u2_g_GagdstNxmphDsplyd((U1)GAGDST_NXMPH_KMPH);
     u4_ap_pdu_tx[2]   = (U4)u2_t_kmph;                                         /* VEHICLE_SPD_DIGITAL_KM                       */
     /* u4_ap_pdu_tx[2]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT); */            /* VEHSPD_DIG_STS_KM                            */

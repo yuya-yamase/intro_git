@@ -117,7 +117,11 @@ U1      u1_g_VehspdCanSp1xOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     U1                    u1_t_updt;
 
     u1_t_updt = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
     u4_t_evtchk = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON;
+#else   /* BEV Rebase provisionally */
+    u4_t_evtchk = (U4)0U;
+#endif   /* BEV Rebase provisionally */
     if(u4_t_evtchk != (U4)0U){
 
         u2_t_sp1    = (U2)0U;
@@ -189,7 +193,11 @@ static U1      u1_s_VehspdCanSp1xIgnchk(void)
     U1                    u1_t_fltrchk;
     U1                    u1_t_igon;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_igon = u1_g_VehspdCanSp1xIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igon = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_igon == (U1)TRUE){
 
         if(u2_s_vehspd_can_tmelpsd < (U2)U2_MAX){
