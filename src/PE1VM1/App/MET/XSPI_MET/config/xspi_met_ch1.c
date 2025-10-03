@@ -28,7 +28,9 @@
 /* #include "oxcan.h" */ /* @@@ Provisional for 310D PreCV @@@ */
 
 #include "mulmed_color.h"
+#endif   /* BEV Rebase provisionally */
 #include "locale.h"
+#if 0   /* BEV Rebase provisionally */
 #include "vardef.h"
 
 #include "gateway_mm.h"

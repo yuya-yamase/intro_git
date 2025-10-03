@@ -18,7 +18,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "locale_cfg_private.h"
 #include "vardef.h"
-#include "mcst.h"
 #include "oxcan.h"
 #include "rim_ctl.h"
 
@@ -72,11 +71,19 @@ typedef struct {
 const U1 u1_g_LANG_NUM = (U1)LANG_NUM_VAL;
 
 static const ST_UNITIDX st_sp_LOCALE_UNITIDX[UNIT_NUM_IDX] = {
+#if 0   /* BEV Rebase provisionally */
     { (U1)MCST_BFI_DIST,   (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
     { (U1)MCST_BFI_SPEED,  (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
     { (U1)MCST_BFI_FUECO,  (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
     { (U1)MCST_BFI_ELECO,  (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (3U) */
     { (U1)MCST_BFI_AMBTMP, (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (4U) */
+#else   /* BEV Rebase provisionally */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_DIST                       (0U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_SPD    }, /*   UNIT_IDX_SPEED                      (1U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_FUECO  }, /*   UNIT_IDX_FUECO                      (2U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_DEFUNIT_ELECO  }, /*   UNIT_IDX_ELECO                      (3U) */
+    { (U1)U1_MAX,          (U1)VDF_DEST_DBF_AMBTMP         }  /*   UNIT_IDX_AMBTMP                     (4U) */
+#endif   /* BEV Rebase provisionally */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -427,7 +434,11 @@ U1  u1_g_LocaleCfgSubSpd(const U1 u1_a_UNIT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgLang(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return(u1_g_McstBf((U1)MCST_BFI_LANG));
+#else   /* BEV Rebase provisionally */
+    return((U1)U1_MAX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -438,7 +449,11 @@ U1      u1_g_LocaleCfgLang(void)
 /*===================================================================================================================================*/
 void    vd_g_LocaleCfgLangPut(const U1 u1_a_LANG)
 {
+#if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_LANG, u1_a_LANG);
+#else   /* BEV Rebase provisionally */
+    return((U1)U1_MAX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -453,7 +468,11 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
     U1  u1_t_unit;
 
     u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
+#if 0   /* BEV Rebase provisionally */
     u1_t_unit  = u1_g_McstBf(u1_t_idx);
+#else   /* BEV Rebase provisionally */
+    u1_t_unit = (U1)U1_MAX;
+#endif   /* BEV Rebase provisionally */
     return(u1_t_unit);
 }
 
@@ -467,7 +486,9 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 {
     U1  u1_t_idx;
     u1_t_idx   = st_sp_LOCALE_UNITIDX[u1_a_UNITIDX].u1_mcst_id;
+#if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut(u1_t_idx , u1_a_VAL);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -478,7 +499,9 @@ void    vd_g_LocaleCfgUnitPut(const U1 u1_a_UNITIDX, const U1 u1_a_VAL)
 /*===================================================================================================================================*/
 void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 {
+#if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_TIMEFMT, u1_a_FRMT);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -489,7 +512,11 @@ void    vd_g_LocaleCfgTfmPut(const U1 u1_a_FRMT)
 /*===================================================================================================================================*/
 U1      u1_g_LocaleCfgTfm(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return(u1_g_McstBf((U1)MCST_BFI_TIMEFMT));
+#else   /* BEV Rebase provisionally */
+    return((U1)U1_MAX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
