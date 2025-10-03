@@ -154,16 +154,11 @@ static void ethswt_data_setMIBData(void)
 /* -------------------------------------------------------------------------- */
 static uint32 ehtswt_data_getTargetMib(uint8 targetPort, uint8 targetMIB)
 {
-    Std_ReturnType          getResult;
-    S_ETHSWT_SWIC_MIB_COUNT mibCounter;
-    uint32                  ingressCount = 0;
+    uint32                  mibCounter = 0;
 
-    getResult = EthSwt_SWIC_GetMIB(D_ETHSWT_SWIC_ID, targetPort, targetMIB, &mibCounter);
-    if (getResult == E_OK) {
-        ingressCount = mibCounter.IngressCount;
-    }
+    (void)EthSwt_SWIC_GetMIB(D_ETHSWT_SWIC_ID, targetPort, targetMIB, &mibCounter);
 
-    return ingressCount;
+    return mibCounter;
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_data_setSQIData(void)

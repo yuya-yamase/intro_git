@@ -71,7 +71,7 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define D_ETHSWT_SWIC_MIB_NUM						(9U)
 
 /* -------------------------------------------------------------------------- */
-/* Config for EthSwt_SWIC_Qci.c                                               */
+/* Config for EthSwt_SWIC_Qci.c                                              */
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_QCI_GET_CYCLE	                (20U)
 

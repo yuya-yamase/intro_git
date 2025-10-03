@@ -42,7 +42,18 @@ void EthSwt_SWIC_Qci_TimerUpdate (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Qci_Clear (uint32 * const errFactor)
+void EthSwt_SWIC_Qci_Clear (void)
+{
+    LIB_DI();
+    LIB_memset((uint8*)&G_ETHSWT_SWIC_QCI_COUNT, 0, sizeof(G_ETHSWT_SWIC_QCI_COUNT));
+    swicGetQciTimer.time = 0;
+    swicGetQciTimer.req = STD_ON;
+    LIB_EI();
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+Std_ReturnType EthSwt_SWIC_Qci_ReadDiscard (uint32 * const errFactor)
 {
     uint8 idx;
     uint32          val = 0uL;
@@ -102,12 +113,10 @@ static Std_ReturnType ethswt_swic_qci_readQci (uint32 * const errFactor)
     Std_ReturnType	result;
     uint8           idx;
 
-    do {
-        for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
-            result = ethswt_swic_qci_addVal(&G_ETHSWT_SWIC_QCI_COUNT[idx], G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, errFactor);
-            if (result != E_OK) {break;}
-        }
-    } while (0);
+    for (idx = 0u; idx < D_ETHSWT_SWIC_QCI_ID_NUM; idx++) {
+        result = ethswt_swic_qci_addVal(&G_ETHSWT_SWIC_QCI_COUNT[idx], G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].tbl, G_ETHSWT_SWIC_MIB_TABLE_LIST[idx].num, errFactor);
+        if (result != E_OK) {break;}
+    }
 
     return result;
 }
