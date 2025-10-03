@@ -56,7 +56,7 @@ void EthSwt_SWIC_MIB_Clear (void)
     return;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthtSwt_SWIC_MIB_ReadDiscard (uint32 * const errFactor)
+Std_ReturnType EthSwt_SWIC_MIB_ReadDiscard (uint32 * const errFactor)
 {
     uint8 idx;
     Std_ReturnType	result = E_OK;      /* MIB読み出しポートがない場合は、E_OKで終了させる */
@@ -108,6 +108,7 @@ Std_ReturnType EthSwt_SWIC_MIB_Get(uint8 SwitchPortIdx, uint32 Mib, uint32 *MibC
         if (Mib >= D_ETHSWT_SWIC_MIB_NUM)               { break; }
         if (MibCountPtr == NULL_PTR)					{ break; }
         *MibCountPtr = G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib];
+        G_ETHSWT_SWIC_MIB_LIST[SwitchPortIdx][Mib] = 0;
         
         ret = E_OK;
 
