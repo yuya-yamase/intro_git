@@ -93,7 +93,11 @@ void            vd_g_VptranMainTask(void)
 
 
     u4_t_pwrsts = (U4)VPTRAN_PWRSTSBIT_BON;
+#if 0   /* BEV Rebase provisionally */
     u1_t_pwrmd = u1_g_VptranIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_pwrmd = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if (u1_t_pwrmd == (U1)TRUE) {
         u4_t_pwrsts = (U4)VPTRAN_PWRSTSBIT_IGON;
     }

@@ -62,7 +62,9 @@
 #if 0   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "odo_om_rst_if.h"
+#endif   /* BEV Rebase provisionally */
 #include "vptran_sel.h"
+#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
 #if 0   /* BEV BSW provisionally */
 #include "fuelvol_tau.h"
@@ -935,7 +937,6 @@ static inline void    vd_s_XSpiCfgTxBatpow(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
 
     U1  u1_t_shift_pos;
     U1  u1_t_shift_blnk;
@@ -956,7 +957,6 @@ static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   |= ((U4)u1_t_shift_blnk << 8);                            /* SHIFT_BLNK_STS */
 
     u4_ap_pdu_tx[1]   = (U4)u1_t_gsi;                                           /* GSI DOWN / UP */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

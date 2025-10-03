@@ -71,9 +71,13 @@
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
                              ((U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else   /* BEV Rebase provisionally */
+    return ((U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -84,9 +88,13 @@ U1              u1_g_VptranBywCfgGetMsgStsRNG(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PCN1S01,
                              ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
                              (U2)VPTRAN_TIM_PCN1S01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else   /* BEV Rebase provisionally */
+    return ((U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -97,9 +105,13 @@ U1              u1_g_VptranBywCfgGetMsgStsGR(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECT1G92,
                              ((U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR),
                              (U2)VPTRAN_TIM_ECT1G92_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else   /* BEV Rebase provisionally */
+    return ((U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -110,9 +122,13 @@ U1              u1_g_VptranBywCfgGetMsgStsGRSts(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranBywCfgGetMsgStsSftBlks(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return (u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_SBW1G01,
                              ((U2)OXCAN_RX_SYS_NRX_BAT | (U2)OXCAN_RX_SYS_TOE_BAT),
                              (U2)VPTRAN_TIM_SBW1G01_TO) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else   /* BEV Rebase provisionally */
+    return ((U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -126,7 +142,9 @@ U1              u1_g_VptranBywCfgGetSFTMETS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SFT_METS, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -141,7 +159,9 @@ U1              u1_g_VptranBywCfgGetBSLUPS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_SLUP_S, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -156,7 +176,9 @@ U1              u1_g_VptranBywCfgGetBSLDNS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_SLDN_S, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -171,7 +193,9 @@ U1              u1_g_VptranBywCfgGetBGEARS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_GEAR_S, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -186,7 +210,9 @@ U1              u1_g_VptranBywCfgGetSFTBLNK(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SFT_BLNK, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -201,7 +227,9 @@ U1              u1_g_VptranBywCfgGetSFTBLKS(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_SFT_BLKS, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
