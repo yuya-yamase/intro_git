@@ -19,7 +19,6 @@
 #include "vptran_sel_cfg_private.h"
 #include "vptran_sel_typ.h"
 #include "vptran_byw.h"
-#include "vptran_cvt.h"
 #include "vardef_esopt.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -57,8 +56,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const   U1                                      u1_g_VPTRAN_NUM_TYPE                        = (U1)VPTRAN_NUM_TYPE;
 const   ST_VPTRAN_MTYPE_FUNCCFG                 st_gp_VPTRAN_MTYPE_FUNCCFG[VPTRAN_NUM_TYPE] = {
-    {   &vd_g_VptranBywInit,    &vd_g_VptranByw,        &u1_g_VptranBywGetSts               },  /* 00 VPTRAN_BYW                     */
-    {   &vd_g_VptranCvtInit,    &vd_g_VptranCvt,        &u1_g_VptranCvtGetSts               }   /* 01 VPTRAN_CVT                     */
+    {   &vd_g_VptranBywInit,    &vd_g_VptranByw,        &u1_g_VptranBywGetSts               }   /* 00 VPTRAN_BYW                     */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -89,8 +87,6 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 
     if (u1_t_sbw_sup == (U1)TRUE) {
         u1_t_tm_type = (U1)VPTRAN_BYW;
-    } else {
-        u1_t_tm_type = (U1)VPTRAN_CVT;
     }
 
     return (u1_t_tm_type);
