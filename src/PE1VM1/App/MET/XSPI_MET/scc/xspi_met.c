@@ -1,4 +1,4 @@
-/* 0.1.0 */
+/* 0.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -10,7 +10,7 @@
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_MET_C_MAJOR                     (0U)
-#define XSPI_MET_C_MINOR                     (2U)
+#define XSPI_MET_C_MINOR                     (3U)
 #define XSPI_MET_C_PATCH                     (0U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -50,7 +50,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U4                u4_sp_xspi_met_db_tra[XSPI_MET_PDU_NWORD];
-static U4                u4_sp_xspi_met_subframe_offset[XSPI_MET_SUBFRAME_NUM];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -82,10 +81,6 @@ void    vd_g_XSpiMETInit(void)
     /* Transmmit Recieve buff Init */
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_PDU_NWORD ; u4_t_lpcnt++){
         u4_sp_xspi_met_db_tra[u4_t_lpcnt] = (U4)U4_MAX;
-    }
-    
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_SUBFRAME_NUM; u4_t_lpcnt++){
-        u4_sp_xspi_met_subframe_offset[u4_t_lpcnt] = (U4)0U;
     }
 
     vd_g_XSpiMETCANGWInit();
@@ -136,11 +131,9 @@ void    vd_g_XSpiMETPduTx(void)
 
     U1      u1_t_xspi_condition;
     U1      u1_t_write_sts;
-    U4      u4p_t_data[XSPI_FRM_MAX_WORD];
+    U4      u4_t_lpcnt;
 
     u1_t_write_sts = (U1)XSPI_NG;
-
-    vd_g_MemfillU4(&u4p_t_data[0], (U4)0U, (U4)XSPI_FRM_MAX_WORD);
 
     u1_t_xspi_condition = xspi_GetCondition((U1)XSPI_CH_02);
 
@@ -150,11 +143,13 @@ void    vd_g_XSpiMETPduTx(void)
     vd_g_XSpiMETTxSCL(&u4_sp_xspi_met_db_tra[660]);
     vd_g_XSpiMETPduTxCAN(&u4_sp_xspi_met_db_tra[670], &st_sp_XSPIMET_CAN_TXCFG[XSPIMETCANGW_BLOCK]);
 
-    vd_g_MemcpyU4(&u4p_t_data[0], &u4_sp_xspi_met_subframe_offset[0], (U4)XSPI_MET_SUBFRAME_NUM);
-    vd_g_MemcpyU4(&u4p_t_data[2], &u4_sp_xspi_met_db_tra[0], (U4)XSPI_MET_PDU_NWORD);
+    /* Set the data for Header */
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MET_SUBFRAME_NUM; u4_t_lpcnt++){
+        u4_sp_xspi_met_db_tra[u4_t_lpcnt] = (U4)0U;
+    }
 
     if((u1_t_xspi_condition == (U1)XSPI_DCOND_IDLE) || (u1_t_xspi_condition == (U1)XSPI_DCOND_TRANSMIT)) {
-        u1_t_write_sts = xspi_Write((U1)XSPI_CH_02, &u4p_t_data[0],(U4)XSPI_FRM_MAX_WORD);
+        u1_t_write_sts = xspi_Write((U1)XSPI_CH_02, &u4_sp_xspi_met_db_tra[0], (U4)XSPI_MET_PDU_NWORD);
     }
 
 }
@@ -170,11 +165,13 @@ void    vd_g_XSpiMETPduTx(void)
 /*  0.0.0    12/18/2024  KT       New.                                                                                               */
 /*  0.1.0    06/09/2025  KT       Change for xspi IF.(1byte -> 4byte)                                                                */
 /*  0.2.0    07/07/2025  KT       Change for BEV System_Consideration_1.(CAN V7.3)                                                   */
+/*  0.3.0    10/02/2025  TN       Fix header issue (BEV3CDCMET-971).                                                                 */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * KT   = Kenta Takaji, Denso Techno                                                                                              */
+/*  * TN   = Tetsushi Nakano, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
