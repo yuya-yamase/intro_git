@@ -118,7 +118,7 @@ uint8   u1_g_oXDoCANAubIfSesCtrlOk(const uint8 u1_a_NEXT)
 {
     U1  u1_t_ret;
 
-    u1_t_ret = u1_g_DiagAppSID10Request(u1_a_NEXT);
+    u1_t_ret = u1_g_DiagAppSID10SesCtrlChk(u1_a_NEXT);
 
     return(u1_t_ret);
 }
