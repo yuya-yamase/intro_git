@@ -8,6 +8,7 @@
 #include <EthSwt_SWIC_Reg.h>
 #include <EthSwt_SWIC_Link.h>
 #include <EthSwt_SWIC_Port.h>
+#include <EthSwt_SWIC_Qci.h>
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Init(const EthSwt_ConfigType *CfgPtr)
 {
@@ -52,6 +53,12 @@ Std_ReturnType EthSwt_SWIC_GetMIB(uint8 SwitchIdx, uint8 SwitchPortIdx, uint32 M
 {
 	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
 	return EthSwt_SWIC_MIB_Get(SwitchPortIdx, Mib, MibCountPtr);
+}
+/* -------------------------------------------------------------------------- */
+Std_ReturnType EthSwt_SWIC_GetQci(uint8 SwitchIdx, uint8 QciId, uint32 * const QciDataPtr)
+{
+	if (SwitchIdx != ETHSWT_SWIC_IDX)	{ return E_NOT_OK; }
+	return EthSwt_SWIC_Qci_Get(QciId, QciDataPtr);
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_PowerOn(void)
