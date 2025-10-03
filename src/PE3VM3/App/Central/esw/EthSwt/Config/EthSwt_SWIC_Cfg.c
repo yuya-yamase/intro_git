@@ -120,3 +120,8 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void)
 
     return swicAvailable;
 }
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_MIB.c                                               */
+/* -------------------------------------------------------------------------- */
+#include "EthSwt_SWIC_Define.h"
