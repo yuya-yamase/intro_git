@@ -84,6 +84,7 @@ EthSwt_SWIC_Link.c
 EthSwt_SWIC_Port.c
 EthSwt_Data.c
 EthSwt_SWIC_Time.c
+EthSwt_SWIC_Qci.c
 EthDLC.c
 EthDLC_Cfg.c
 EthDLC_ACTL.c
