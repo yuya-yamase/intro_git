@@ -17,7 +17,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "ambtmp_cfg_private.h"
-#include "ambtmp_ad.h"
 #include "ambtmp_can.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,7 +41,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define AMBTMP_NUM_SNSRIF           (2U)
+#define AMBTMP_NUM_SNSRIF           (1U)
 
 #define AMBTMP_NUM_DEGREE           (2U)
 #define AMBTMP_DEG_CELSIUS          (0U)
@@ -110,7 +109,6 @@ void    vd_g_AmbtmpBonInit(void)
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icew   = (U1)FALSE;
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icyraw = (U1)FALSE;
 
-    vd_g_AmbtmpAdBonInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_AmbtmpRstWkInit(void)                                                                                               */
@@ -132,8 +130,6 @@ void    vd_g_AmbtmpRstWkInit(void)
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icew   = (U1)FALSE;
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icyraw = (U1)FALSE;
 
-    vd_g_AmbtmpAdRstWkInit();
-
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)                                                          */
@@ -145,7 +141,11 @@ void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
 {
     U1  u1_t_comp;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_comp = u1_g_AmbtmpAdInitComp();
+#else   /* BEV Rebase provisionally */
+    u1_t_comp = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_comp == (U1)TRUE){
         vd_g_AmbtmpCfgOpemdEvhk(u4_a_MDBIT, u4_a_EVTBIT);
     }
@@ -160,8 +160,7 @@ void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
 void    vd_g_AmbtmpMainTask(void)
 {
     static U1      (* const fp_sp_u1_AMBTMP_IF[AMBTMP_NUM_SNSRIF])(U2 * u2p_a_cel) ={
-        &u1_g_AmbtmpCAN,
-        &u1_g_AmbtmpAd
+        &u1_g_AmbtmpCAN
     };
 
     U1  u1_t_ifidx;
@@ -191,9 +190,6 @@ void    vd_g_AmbtmpMainTask(void)
         st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u2_dsp = u2_s_AmbtmpDspFah(st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u2_deg);
         vd_s_AmbtmpTrvlFlgChk();
         vd_s_AmbtmpIceWrnChk();
-    }
-    else{
-        vd_g_AmbtmpAdBonInit(); 
     }
     vd_g_AmbtmpCfgMainFinish(u1_s_ambtmp_sts, st_sp_ambtmp[AMBTMP_DEG_CELSIUS].u2_deg, st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u2_deg);
 }
