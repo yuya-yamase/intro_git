@@ -60,7 +60,6 @@ ${SS_DIR}/RunM/scc/run_m.c
 ${SS_DIR}/RunM/config/run_m_cfg.c
 ${SS_DIR}/SchdM//scc/scheduler.c
 ${SS_DIR}/SchdM/config/scheduler_cfg.c
-${SS_DIR}/RprgIf/config/rprg_if_cfg_bkram.c
 ${SS_DIR}/Throughput/scc/throughput.c
 ${SS_DIR}/Throughput/config/throughput_cfg.c
 ${SS_DIR}/Throughput/config/throughput_sched.c

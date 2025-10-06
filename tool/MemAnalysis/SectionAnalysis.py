@@ -95,11 +95,11 @@ include_pattern = [selected_variation[:-2],selected_variation]
 options.remove(selected_variation)
 
 # 使用するフォルダパスと拡張子リストを指定してください
-base_paths = [r'W:\src\EHVM',  # 例: '/path/to/your/folder'
-             r'W:\src\PE0VM0',
-             r'W:\src\PE1VM1',
-             r'W:\src\PE2VM2',
-             r'W:\src\PE3VM3'
+base_paths = [r'..\..\src\EHVM',  # 例: '/path/to/your/folder'
+             r'..\..\src\PE0VM0',
+             r'..\..\src\PE1VM1',
+             r'..\..\src\PE2VM2',
+             r'..\..\src\PE3VM3'
             ]
 VM_keywords = ['EHVM','PE0VM0','PE1VM1','PE2VM2','PE3VM3']
 # 既存のJSONファイルのパス

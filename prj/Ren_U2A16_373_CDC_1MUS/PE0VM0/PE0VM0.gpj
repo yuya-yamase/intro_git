@@ -31,6 +31,11 @@ primaryTarget=v800_standalone.tgt
     :optionsFile=${CMN_DIR}/MCAL.opt
     :optionsFile=${CMN_DIR}/IOHW.opt
 
+    :macro=GSR_CLI="gsrec -sort -S3 -noS5 -bytes 16"
+    :macro=GSR_PAR="-pad1 0x00210000 0x003bffff 0xff -start 0x00210000 -end 0x003bffff"
+    :postexec="${GSR_CLI} ${GSR_PAR}                     -o dst/PE0VM0_ac.mot dst/PE0VM0.elf"
+    :postexec="${GSR_CLI} ${GSR_PAR} -romaddr 0x02210000 -o dst/PE0VM0_bd.mot dst/PE0VM0.elf"
+
     -I${COMP_DIR}/include/v800
     -I${COMP_DIR}/ansi
     -L${COMP_DIR}/lib/rh850
@@ -94,7 +99,7 @@ primaryTarget=v800_standalone.tgt
     -DAR_OS_USE_HYPERVISOR
     -DECU_VM0
     -DECU_INTG_LWH_GUEST
-    -D__AIP_THROUGHPUT__=$FLAG_THROUGHPUT
+    {isdefined(__GMM_AIP_THROUGHPUT__)} -D__AIP_THROUGHPUT__=${__GMM_AIP_THROUGHPUT__}
 
     # CompileSW (ProcessingLoad)
     # Enter the measurement time in milliseconds
@@ -102,6 +107,7 @@ primaryTarget=v800_standalone.tgt
     -DPROCESSING_LOAD_MEASURE_TIME=0U
 
     -o PE0VM0.elf
+    --no_additional_output
 
 ${PRJ_DIR}/bswCAN.gpj
 ${CMN_DIR}/bswSEC.gpj
