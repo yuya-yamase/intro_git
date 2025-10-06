@@ -43,8 +43,6 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Attmp/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Attmp/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Batcare/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Battpow/config
-    -I${APP_DIR}/MET/IpcApplication/Vom/Battpow/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/config
     -I${APP_DIR}/MET/IpcApplication/Vom/DateSI/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config

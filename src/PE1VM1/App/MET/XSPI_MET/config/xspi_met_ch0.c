@@ -336,7 +336,6 @@ static inline void    vd_s_XSpiCfgTxHybsys(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx);
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx); */
-static inline void    vd_s_XSpiCfgTxBatpow(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx);
@@ -856,30 +855,6 @@ static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx) {
 #endif   /* BEV Rebase provisionally */
 }
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx) {} */ /* @@Stub */
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxBatpow(U4 * u4_ap_pdu_tx)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxBatpow(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U1 u1_t_sts;
-    U1 u1_t_socdsp;
-    U1 u1_t_socindll;
-
-    u1_t_socdsp   = (U1)0U;
-    u1_t_socindll = (U1)0U;
-
-    u1_t_sts = u1_g_XSpiCfgGetBatpow(&u1_t_socdsp, &u1_t_socindll);
-
-    u4_ap_pdu_tx[0]   = (U4)u1_t_socdsp;
-    u4_ap_pdu_tx[0]  |= ((U4)u1_t_socindll << XSPI_SHIFT_1BYTE);
-    u4_ap_pdu_tx[0]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT);
-
-#endif   /* BEV Rebase provisionally */
-}
 
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxShift(U4 * u4_ap_pdu_tx)                                                                            */
@@ -2584,7 +2559,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxPtsctmp(       &u4_ap_pdu_tx[ 43]);      /* 043 - 043    : EngineTemp                                    */
     vd_s_XSpiCfgTxAmbtmp(        &u4_ap_pdu_tx[ 44]);      /* 044 - 045    : Ambient Temp                                  */
     /* vd_g_XSpiCfgTxHydrovol(      &u4_ap_pdu_tx[0]); */  /*     -        : Hydro Volume                                  */
-    vd_s_XSpiCfgTxBatpow(        &u4_ap_pdu_tx[ 47]);      /* 047 - 048    : Battery Power                                 */
     vd_s_XSpiCfgTxShift(         &u4_ap_pdu_tx[ 49]);      /* 049 - 053    : Shift                                         */
     vd_s_XSpiCfgTxDimming(       &u4_ap_pdu_tx[ 54]);      /* 054 - 056    : Dimming                                       */
     vd_s_XSpiCfgTxClock(         &u4_ap_pdu_tx[ 57]);      /* 057 - 058    : Clock                                         */
