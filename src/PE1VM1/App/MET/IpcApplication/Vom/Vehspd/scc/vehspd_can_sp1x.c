@@ -193,11 +193,7 @@ static U1      u1_s_VehspdCanSp1xIgnchk(void)
     U1                    u1_t_fltrchk;
     U1                    u1_t_igon;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_igon = u1_g_VehspdCanSp1xIgnOn();
-#else   /* BEV Rebase provisionally */
-    u1_t_igon = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
     if(u1_t_igon == (U1)TRUE){
 
         if(u2_s_vehspd_can_tmelpsd < (U2)U2_MAX){

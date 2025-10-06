@@ -26,8 +26,8 @@
 #else
 #endif
 
-#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
+#if 0   /* BEV Rebase provisionally */
 #include "ptsctmp_cel.h"
 #include "alert.h"
 #endif   /* BEV Rebase provisionally */
@@ -55,7 +55,7 @@
 #if 0   /* BEV Rebase provisionally */
 #define VEH_OPEMD_NUM_EVHK                      (6U)
 #else   /* BEV Rebase provisionally */
-#define VEH_OPEMD_NUM_EVHK                      (2U)
+#define VEH_OPEMD_NUM_EVHK                      (3U)
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -91,9 +91,9 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 {
 #if (VEH_OPEMD_NUM_EVHK > 0U)
     static const ST_VEH_OPEMD_EVHK   st_sp_VEH_OPEMD_EVHK[VEH_OPEMD_NUM_EVHK] = {
-#if 0   /* BEV Rebase provisionally */
         {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON    },
 
+#if 0   /* BEV Rebase provisionally */
         {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 
