@@ -1,36 +1,36 @@
-/* 1.5.0 */
+/* 2.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Dimmer                                                                                                                           */
+/*  Illumination                                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
-#define DIMMER_C_PATCH                           (0)
+#define ILLUMI_C_MAJOR                          (2)
+#define ILLUMI_C_MINOR                          (2)
+#define ILLUMI_C_PATCH                          (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "dimmer_cfg_private.h"
+#include "illumi_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((DIMMER_C_MAJOR != DIMMER_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_H_PATCH))
-#error "dimmer.c and dimmer.h : source and header files are inconsistent!"
+#if ((ILLUMI_C_MAJOR != ILLUMI_H_MAJOR) || \
+     (ILLUMI_C_MINOR != ILLUMI_H_MINOR) || \
+     (ILLUMI_C_PATCH != ILLUMI_H_PATCH))
+#error "illumi.c and illumi.h : source and header files are inconsistent!"
 #endif
 
-#if ((DIMMER_C_MAJOR != DIMMER_CFG_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_CFG_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_CFG_H_PATCH))
-#error "dimmer.c and dimmer_cfg_private.h : source and header files are inconsistent!"
+#if ((ILLUMI_C_MAJOR != ILLUMI_CFG_H_MAJOR) || \
+     (ILLUMI_C_MINOR != ILLUMI_CFG_H_MINOR) || \
+     (ILLUMI_C_PATCH != ILLUMI_CFG_H_PATCH))
+#error "illumi.c and illumi_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,9 +45,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2          u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_NUM_LVL];
-static U1          u1_s_dim_lvl_daynight;
-static U1          u1_s_dim_if_idx;
+static U1       u1_s_illumi_shtdwn_ok;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -59,130 +57,159 @@ static U1          u1_s_dim_if_idx;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DimInit(void)                                                                                                       */
+/*  void    vd_g_IllumiBonInit(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimInit(void)
+void    vd_g_IllumiBonInit(void)
 {
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN; 
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN; 
+    U4      u4_t_lpcnt;
 
-    u1_s_dim_lvl_daynight = (U1)DIM_DAYNIGHT_LVL_UNKNWN;
-    u1_s_dim_if_idx       = u1_g_DimCfgIFidx();
+    u1_s_illumi_shtdwn_ok = (U1)TRUE;
 
-    vd_g_DimCfgInit();
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMainTask(void)                                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMainTask(void)
-{
-    U1        u1_t_daynight;
-    U1        u1_t_if_idx;
-
-    u1_t_if_idx = u1_g_DimCfgIFidx();
-    if(u1_t_if_idx < u1_g_DIM_IF_NUM_CFG){
-
-        if(u1_s_dim_if_idx != u1_t_if_idx){
-            vd_g_DimInit();
-        }
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT != vdp_PTR_NA){
-            u1_t_daynight = (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT)(u1_s_dim_lvl_daynight);
-        }
-        else{
-            u1_t_daynight = (U1)DIM_DAYNIGHT_LVL_DAY;
-        }
-        u1_s_dim_lvl_daynight = u1_t_daynight;
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST != vdp_PTR_NA){
-            (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST)(u1_t_daynight,
-                                                            &u2_sp_dim_lvl_usadjust[0]);
-        }
-        else{
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN;
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN;
-        }
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_ILLUMI_NUM_CH; u4_t_lpcnt++) {
+        u2_gp_illumi_lvl_pct[u4_t_lpcnt]          = (U2)0U;
+        st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)ILLUMI_OW_TOC_MAX;
+        st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_pct   = (U2)ILLUMI_OW_INA;
     }
 
-    u1_s_dim_if_idx = u1_t_if_idx;
+    vd_g_IllumiCfgBonInit();
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_DimLvlDaynight(void)                                                                                                */
+/*  void    vd_g_IllumiRstInit(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_DimLvlDaynight(void)
+void    vd_g_IllumiRstInit(void)
 {
-    return(u1_s_dim_lvl_daynight);
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
-{
-    U2          u2_t_lvl;
+    U4      u4_t_lpcnt;
 
-    if((u1_a_DAYNIGHT         < (U1)DIM_DAYNIGHT_NUM_LVL) &&
-       (u1_s_dim_lvl_daynight < (U1)DIM_DAYNIGHT_NUM_LVL)){
-        u2_t_lvl = u2_sp_dim_lvl_usadjust[u1_a_DAYNIGHT];
+    u1_s_illumi_shtdwn_ok = (U1)TRUE;
+
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_ILLUMI_NUM_CH; u4_t_lpcnt++) {
+        u2_gp_illumi_lvl_pct[u4_t_lpcnt]          = (U2)0U;
+        st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)ILLUMI_OW_TOC_MAX;
+        st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_pct   = (U2)ILLUMI_OW_INA;
+    }
+
+    vd_g_IllumiCfgRstInit();
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_IllumiWkupInit(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_IllumiWkupInit(void)
+{
+    U4      u4_t_lpcnt;
+
+    u1_s_illumi_shtdwn_ok = (U1)TRUE;
+
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_ILLUMI_NUM_CH; u4_t_lpcnt++) {
+        u2_gp_illumi_lvl_pct[u4_t_lpcnt]          = (U2)0U;
+        st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)ILLUMI_OW_TOC_MAX;
+        st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_pct   = (U2)ILLUMI_OW_INA;
+    }
+
+    vd_g_IllumiCfgWkupInit();
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_IllumiMainTask(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_IllumiMainTask(void)
+{
+    U4      u4_t_lpcnt;
+    U4      u4_t_shtdwn_chk;
+    U4      u4_t_chbit;
+
+    U2      u2_tp_dim_lvl[ILLUMI_NUM_DIM_LVL];
+    U2      u2_t_pct;
+    U2      u2_t_ow;
+
+    U1      u1_t_shtdwn_ok;
+
+    vd_g_IllumiCfgMainStart();
+
+    u2_tp_dim_lvl[ILLUMI_DIM_LVL_USADJ_DAY]   = u2_g_DimLvlUsadjust((U1)DIM_DAYNIGHT_LVL_DAY);
+    u2_tp_dim_lvl[ILLUMI_DIM_LVL_USADJ_NIGHT] = u2_g_DimLvlUsadjust((U1)DIM_DAYNIGHT_LVL_NIGHT);
+    u2_tp_dim_lvl[ILLUMI_DIM_LVL_DAYNIGHT]    = (U2)u1_g_DimLvlDaynight();
+
+    u1_t_shtdwn_ok  = (U1)TRUE;
+    u4_t_shtdwn_chk = u4_g_ILLUMI_SHTDWN_CHK_BY_CH;
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_ILLUMI_NUM_CH; u4_t_lpcnt++) {
+
+        if(fp_gp_u2_ILLUMI_LVL_UPDT[u4_t_lpcnt] != vdp_PTR_NA) {
+            if(st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt >= (U2)U2_MAX){
+                st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)0U;
+            }
+            else if(st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt >= (U2)ILLUMI_OW_TOC_MAX){
+                st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)ILLUMI_OW_TOC_MAX;
+            }
+            else{
+                st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt++; /* QAC over-detection */
+            }
+
+            if(st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_tocnt >= u2_g_ILLUMI_OW_TOUT){
+                u2_t_ow = (U2)ILLUMI_OW_INA;
+            }
+            else{
+                u2_t_ow = st_gp_illumi_ow_ctrl[u4_t_lpcnt].u2_pct;
+            }
+
+            u2_t_pct = (fp_gp_u2_ILLUMI_LVL_UPDT[u4_t_lpcnt])(&u2_tp_dim_lvl[0], u2_t_ow);
+        }
+        else{
+            u2_t_pct = (U2)0U;
+        }
+
+        u2_gp_illumi_lvl_pct[u4_t_lpcnt] = u2_t_pct;
+        u4_t_chbit = u4_t_shtdwn_chk & (U4)1U;
+        if((u4_t_chbit != (U4)0U) &&
+           (u2_t_pct   >  (U2)0U)){
+            u1_t_shtdwn_ok = (U1)FALSE;
+        }
+
+        u4_t_shtdwn_chk >>= 1;
+    }
+
+    u1_s_illumi_shtdwn_ok = u1_t_shtdwn_ok;
+
+    vd_g_IllumiCfgMainFinish();
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_IllumiShtdwnOk(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_IllumiShtdwnOk(void)
+{
+    return(u1_s_illumi_shtdwn_ok & (U1)TRUE);
+}
+/*===================================================================================================================================*/
+/*  U2      u2_g_IllumiLvlPct(const U1 u1_a_ILLUMI_CH)                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U2      u2_g_IllumiLvlPct(const U1 u1_a_ILLUMI_CH)
+{
+    U2      u2_t_pct;
+
+    if(u1_a_ILLUMI_CH < u1_g_ILLUMI_NUM_CH){
+        u2_t_pct = u2_gp_illumi_lvl_pct[u1_a_ILLUMI_CH];
     }
     else{
-        u2_t_lvl = (U2)DIM_LVL_UNKNWN;
+        u2_t_pct = (U2)0U;
     }
 
-    return(u2_t_lvl);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstReadHook(void)                                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstReadHook(void)
-{
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstDataResetHook(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstDataResetHook(void)
-{
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimSwVrUpDown(void)
-{
-    return(u1_g_DimUsadjbySwVrUpDown());
+    return(u2_t_pct);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -193,16 +220,25 @@ U1      u1_g_DimSwVrUpDown(void)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  1.0.0     3/19/2018  TN       New.                                                                                               */
-/*  1.1.0     1/15/2019  TN       NULL check was implement in vd_g_DimMainTask.                                                      */
-/*  1.2.0     2/26/2019  TN       The implementation of vd_g_DimMainTask was optimized.                                              */
-/*  1.3.0     9/24/2020  SH       dimmer_cfg v1.2.0 -> v1.3.0.                                                                       */
-/*  1.3.1    12/21/2020  KM       Add old user customize writeing in vd_g_DimMcstReadHook                                            */
-/*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
-/*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
-/*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.1.0    10/12/2018  TN       vd_g_IllumiCfgMainStart and vd_g_IllumiCfgMainFinish were implemented.                             */
+/*           10/15/2018  TN       u1_g_IllumiShtdwnOk was implemented.                                                               */
+/*  1.2.0    04/13/2020  SM       Over Write function was implemented.                                                               */
+/*  1.3.0    09/24/2020  SH       illumi_cfg v1.2.0 -> v1.3.0.                                                                       */
+/*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
+/*  2.1.0    02/01/2022  TA(M)    Change to decompose initialization function into Bon / Reset / Wakeup                              */
+/*  2.2.0    02/15/2024  TH       for 19PFv3                                                                                         */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/* 19PFv3-1  04/16/2024  SaH      Add calibration guard                                                                              */
+/* 19PFv3-2  12/18/2024  KA       Change config for temperature derating                                                             */
 /*                                                                                                                                   */
 /*  * TN = Takashi Nagai, DENSO                                                                                                      */
+/*  * SM = Shota Maegawa, Denso Techno                                                                                               */
 /*  * SH = Shota Higashide                                                                                                           */
-/*  * KM = Kota Matoba                                                                                                               */
+/*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * TH = Taisuke Hirakawa, KSE                                                                                                     */
+/*  * SaH  = Sae Hirose, Denso Techno                                                                                                */
+/*  * KA = Kapuri Ando, NTT Data MSE                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,41 +1,44 @@
-/* 1.5.0 */
+/* 1.2.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Dimmer                                                                                                                           */
+/*  Recommendation user interface                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
-#define DIMMER_C_PATCH                           (0)
+#define RCMMUI_CFG_C_MAJOR                      (1)
+#define RCMMUI_CFG_C_MINOR                      (2)
+#define RCMMUI_CFG_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "dimmer_cfg_private.h"
+#include "rcmmui_cfg_private.h"
+#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((DIMMER_C_MAJOR != DIMMER_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_H_PATCH))
-#error "dimmer.c and dimmer.h : source and header files are inconsistent!"
+#if ((RCMMUI_CFG_C_MAJOR != RCMMUI_H_MAJOR) || \
+     (RCMMUI_CFG_C_MINOR != RCMMUI_H_MINOR) || \
+     (RCMMUI_CFG_C_PATCH != RCMMUI_H_PATCH))
+#error "rcmmui_cfg.c and rcmmui.h : source and header files are inconsistent!"
 #endif
 
-#if ((DIMMER_C_MAJOR != DIMMER_CFG_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_CFG_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_CFG_H_PATCH))
-#error "dimmer.c and dimmer_cfg_private.h : source and header files are inconsistent!"
+#if ((RCMMUI_CFG_C_MAJOR != RCMMUI_CFG_H_MAJOR) || \
+     (RCMMUI_CFG_C_MINOR != RCMMUI_CFG_H_MINOR) || \
+     (RCMMUI_CFG_C_PATCH != RCMMUI_CFG_H_PATCH))
+#error "rcmmui_cfg.c and rcmmui_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define RCMMUI_RCMM_MKSFT                       (8U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,10 +48,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2          u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_NUM_LVL];
-static U1          u1_s_dim_lvl_daynight;
-static U1          u1_s_dim_if_idx;
-
+static  U1                                      u1_s_rcmmui_rxcnt;
+static  U1                                      u1_s_rcmmui_prereq;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,131 +60,153 @@ static U1          u1_s_dim_if_idx;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DimInit(void)                                                                                                       */
+/* void            vd_g_RcmmUIInitCfg(void)                                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimInit(void)
+void            vd_g_RcmmUIInitCfg(void)
 {
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN; 
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN; 
-
-    u1_s_dim_lvl_daynight = (U1)DIM_DAYNIGHT_LVL_UNKNWN;
-    u1_s_dim_if_idx       = u1_g_DimCfgIFidx();
-
-    vd_g_DimCfgInit();
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMainTask(void)                                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMainTask(void)
-{
-    U1        u1_t_daynight;
-    U1        u1_t_if_idx;
-
-    u1_t_if_idx = u1_g_DimCfgIFidx();
-    if(u1_t_if_idx < u1_g_DIM_IF_NUM_CFG){
-
-        if(u1_s_dim_if_idx != u1_t_if_idx){
-            vd_g_DimInit();
-        }
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT != vdp_PTR_NA){
-            u1_t_daynight = (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT)(u1_s_dim_lvl_daynight);
-        }
-        else{
-            u1_t_daynight = (U1)DIM_DAYNIGHT_LVL_DAY;
-        }
-        u1_s_dim_lvl_daynight = u1_t_daynight;
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST != vdp_PTR_NA){
-            (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST)(u1_t_daynight,
-                                                            &u2_sp_dim_lvl_usadjust[0]);
-        }
-        else{
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN;
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN;
-        }
-    }
-
-    u1_s_dim_if_idx = u1_t_if_idx;
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimLvlDaynight(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimLvlDaynight(void)
-{
-    return(u1_s_dim_lvl_daynight);
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
-{
-    U2          u2_t_lvl;
-
-    if((u1_a_DAYNIGHT         < (U1)DIM_DAYNIGHT_NUM_LVL) &&
-       (u1_s_dim_lvl_daynight < (U1)DIM_DAYNIGHT_NUM_LVL)){
-        u2_t_lvl = u2_sp_dim_lvl_usadjust[u1_a_DAYNIGHT];
-    }
-    else{
-        u2_t_lvl = (U2)DIM_LVL_UNKNWN;
-    }
-
-    return(u2_t_lvl);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstReadHook(void)                                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstReadHook(void)
-{
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
 #if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
+#ifdef OXCAN_PDU_RX_CAN_BDB1S13
+    u1_s_rcmmui_rxcnt  = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13);
+#else
+	u1_s_rcmmui_rxcnt  = (U1)0U;
+#endif
+#else   /* BEV Rebase provisionally */
+    u1_s_rcmmui_rxcnt  = (U1)0U;
+#endif   /* BEV Rebase provisionally */
+    u1_s_rcmmui_prereq = (U1)0U;
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm, U1 * u1p_a_powreq)                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_RcmmUICfgCanRx(U2 * u2p_a_rcmm)
+{
+    U1          u1_t_rx_cnt;
+    U1          u1_t_req1;
+    U1          u1_t_req2;
+
+#if 0   /* BEV Rebase provisionally */
+    u1_t_rx_cnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S13);
+#else   /* BEV Rebase provisionally */
+    u1_t_rx_cnt = (U1)0U;
+#endif   /* BEV Rebase provisionally */
+
+    if (u1_t_rx_cnt != u1_s_rcmmui_rxcnt) {
+        u1_t_req1 = (U1)0U;
+        u1_t_req2 = (U1)0U;
+
+#if 0   /* BEV Rebase provisionally */
+        (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ1, &u1_t_req1);
+        (void)Com_ReceiveSignal(ComConf_ComSignal_PSREQ2, &u1_t_req2);
+#endif   /* BEV Rebase provisionally */
+
+        (*u2p_a_rcmm)   = (U2)((U2)u1_t_req1 << RCMMUI_RCMM_MKSFT) | (U2)u1_t_req2;
+    }
+    u1_s_rcmmui_rxcnt   = u1_t_rx_cnt;
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_RcmmUICfgCanTx(const U2 u2_a_RCMM, const U1 u1_a_RES)                                                        */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_RcmmUICfgCanTx(const U2 u2_a_RCMM, const U1 u1_a_RES)
+{
+    /* ------------------------------------------------ */
+    /* This function is called eventually               */
+    /* when the BDB1S13 is received and SW is pressed   */
+    /* ------------------------------------------------ */
+    static  const   U2                          u2_s_PSRSP1_MSK = (U2)0xFF00U;
+    static  const   U2                          u2_s_PSRSP2_MSK = (U2)0x00FFU;
+    U1                                          u1_t_psrsp1;
+    U1                                          u1_t_psrsp2;
+
+
+    u1_t_psrsp1 = (U1)((u2_a_RCMM & u2_s_PSRSP1_MSK) >> RCMMUI_RCMM_MKSFT);
+    u1_t_psrsp2 = (U1)( u2_a_RCMM & u2_s_PSRSP2_MSK);
+
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_SendSignal(ComConf_ComSignal_PSRSP1, &u1_t_psrsp1);
+    (void)Com_SendSignal(ComConf_ComSignal_PSRSP2, &u1_t_psrsp2);
+    (void)Com_SendSignal(ComConf_ComSignal_PSRSP3, &u1_a_RES);
+    (void)Com_TriggerIPDUSend(MSG_MET1S25_TXCH0);
+#endif   /* BEV Rebase provisionally */
+}
+
+/*===================================================================================================================================*/
+/*  void           vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT)                                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_OPT: send signal value                                                                                      */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_RcmmUIPbdmswPut(const U1 u1_a_OPT)
+{
+    if(u1_s_rcmmui_prereq != u1_a_OPT){
+#if 0   /* BEV Rebase provisionally */
+        vd_g_VdsCIReqTx((U1)VDS_CI_SW_PBDMSW, u1_a_OPT);
 #endif   /* BEV Rebase provisionally */
     }
+    u1_s_rcmmui_prereq = u1_a_OPT;
+}
 
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
+/*===================================================================================================================================*/
+/*  U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)                                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      u1_a_REQID                                                                                                       */
+/*  Return:         u1_t_chk                                                                                                         */
+/*===================================================================================================================================*/
+U1              u1_g_RcmmUICfgCheckPow(const U1 u1_a_REQID)
+{
+    U1 u1_t_chk;
+    U1 u1_t_ba_sts;
+    U1 u1_t_acc_sts;
+    U1 u1_t_igr_sts;
+    U1 u1_t_igp_sts;
+
+    u1_t_chk     = (U1)TRUE;
 #if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
+    u1_t_ba_sts  = u1_g_RcmmUIBaOn();
+    u1_t_acc_sts = u1_g_RcmmUIAccOn();
+    u1_t_igr_sts = u1_g_RcmmUIIgnOn();
+    u1_t_igp_sts = u1_g_RcmmUIIgnpOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_ba_sts  = (U1)FALSE;
+    u1_t_acc_sts = (U1)FALSE;
+    u1_t_igr_sts = (U1)FALSE;
+    u1_t_igp_sts = (U1)FALSE;
 #endif   /* BEV Rebase provisionally */
+
+    switch(u1_a_REQID){
+        case (U1)RCMMUI_STREQ_1_1:
+        case (U1)RCMMUI_STREQ_1_3:
+        case (U1)RCMMUI_STREQ_11_1:
+        case (U1)RCMMUI_STREQ_11_3:
+            if ((u1_t_ba_sts  == (U1)TRUE) ||
+                (u1_t_acc_sts == (U1)TRUE) ||
+                (u1_t_igr_sts == (U1)TRUE) ||
+                (u1_t_igp_sts == (U1)TRUE))
+            {
+                u1_t_chk = (U1)TRUE;
+            }
+            else{
+                u1_t_chk = (U1)FALSE;
+            }        
+            break;
+        default:
+            /* Do nothing */
+            break;
     }
 
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
+    return(u1_t_chk);
 }
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstDataResetHook(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstDataResetHook(void)
-{
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimSwVrUpDown(void)
-{
-    return(u1_g_DimUsadjbySwVrUpDown());
-}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -192,17 +215,17 @@ U1      u1_g_DimSwVrUpDown(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/19/2018  TN       New.                                                                                               */
-/*  1.1.0     1/15/2019  TN       NULL check was implement in vd_g_DimMainTask.                                                      */
-/*  1.2.0     2/26/2019  TN       The implementation of vd_g_DimMainTask was optimized.                                              */
-/*  1.3.0     9/24/2020  SH       dimmer_cfg v1.2.0 -> v1.3.0.                                                                       */
-/*  1.3.1    12/21/2020  KM       Add old user customize writeing in vd_g_DimMcstReadHook                                            */
-/*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
-/*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
-/*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.0.0    02/18/2018  HY       New.                                                                                               */
+/*  1.1.0    10/07/2020  TH       Change config for 800B CV-R.                                                                       */
+/*  1.2.0    10/01/2025  YR       Change config for 19PFv3                                                                           */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SH = Shota Higashide                                                                                                           */
-/*  * KM = Kota Matoba                                                                                                               */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  220D-1   07/18/2022  TH       Configured for 220D                                                                                */
+/*                                                                                                                                   */
+/*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
+/*  * TH   = Takahiro Hirano,  Denso Techno                                                                                          */
+/*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

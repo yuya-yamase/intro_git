@@ -2,35 +2,32 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Dimmer                                                                                                                           */
+/*  HmiScreen                                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
-#define DIMMER_C_PATCH                           (0)
+#define HMISCREEN_C_MAJOR                         (1)
+#define HMISCREEN_C_MINOR                         (5)
+#define HMISCREEN_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "dimmer_cfg_private.h"
+#include "hmiproxy_cfg_private.h"
+
+#include "hmiscreen.h"
+#include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((DIMMER_C_MAJOR != DIMMER_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_H_PATCH))
-#error "dimmer.c and dimmer.h : source and header files are inconsistent!"
-#endif
-
-#if ((DIMMER_C_MAJOR != DIMMER_CFG_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_CFG_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_CFG_H_PATCH))
-#error "dimmer.c and dimmer_cfg_private.h : source and header files are inconsistent!"
+#if ((HMISCREEN_C_MAJOR != HMISCREEN_H_MAJOR) || \
+     (HMISCREEN_C_MINOR != HMISCREEN_H_MINOR) || \
+     (HMISCREEN_C_PATCH != HMISCREEN_H_PATCH))
+#error "hmiscreen.c and hmiscreen.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,9 +42,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2          u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_NUM_LVL];
-static U1          u1_s_dim_lvl_daynight;
-static U1          u1_s_dim_if_idx;
+static U1   u1_s_hmiscreen_sts;
+static U1   u1_s_hmiscreen_sts_wo_turn;
+static U2   u2_s_hmiscreen_to;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -59,131 +56,104 @@ static U1          u1_s_dim_if_idx;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DimInit(void)                                                                                                       */
+/*  void    vd_g_HmiScreenInit(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimInit(void)
+void    vd_g_HmiScreenInit(void)
 {
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN; 
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN; 
-
-    u1_s_dim_lvl_daynight = (U1)DIM_DAYNIGHT_LVL_UNKNWN;
-    u1_s_dim_if_idx       = u1_g_DimCfgIFidx();
-
-    vd_g_DimCfgInit();
+    u1_s_hmiscreen_sts         = (U1)FALSE;
+    u1_s_hmiscreen_sts_wo_turn = (U1)FALSE;
+    u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_MAX;
 }
+
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMainTask(void)                                                                                                   */
+/*  void    vd_g_HmiScreenMainTask(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMainTask(void)
+void    vd_g_HmiScreenMainTask(void)
 {
-    U1        u1_t_daynight;
-    U1        u1_t_if_idx;
+    static const U2 u2_s_HMISCREEN_TO = (U2)1000U / (U2)50U;
+    U1              u1_t_to;
 
-    u1_t_if_idx = u1_g_DimCfgIFidx();
-    if(u1_t_if_idx < u1_g_DIM_IF_NUM_CFG){
+    u1_t_to = u1_g_HmiProxyToc(&u2_s_hmiscreen_to, u2_s_HMISCREEN_TO);
 
-        if(u1_s_dim_if_idx != u1_t_if_idx){
-            vd_g_DimInit();
-        }
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT != vdp_PTR_NA){
-            u1_t_daynight = (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT)(u1_s_dim_lvl_daynight);
-        }
-        else{
-            u1_t_daynight = (U1)DIM_DAYNIGHT_LVL_DAY;
-        }
-        u1_s_dim_lvl_daynight = u1_t_daynight;
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST != vdp_PTR_NA){
-            (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST)(u1_t_daynight,
-                                                            &u2_sp_dim_lvl_usadjust[0]);
-        }
-        else{
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN;
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN;
-        }
+    if(u1_t_to == (U1)TRUE){
+        u1_s_hmiscreen_sts         = (U1)FALSE;
+        u1_s_hmiscreen_sts_wo_turn = (U1)FALSE;
     }
 
-    u1_s_dim_if_idx = u1_t_if_idx;
 }
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimLvlDaynight(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimLvlDaynight(void)
-{
-    return(u1_s_dim_lvl_daynight);
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
-{
-    U2          u2_t_lvl;
 
-    if((u1_a_DAYNIGHT         < (U1)DIM_DAYNIGHT_NUM_LVL) &&
-       (u1_s_dim_lvl_daynight < (U1)DIM_DAYNIGHT_NUM_LVL)){
-        u2_t_lvl = u2_sp_dim_lvl_usadjust[u1_a_DAYNIGHT];
-    }
-    else{
-        u2_t_lvl = (U2)DIM_LVL_UNKNWN;
-    }
-
-    return(u2_t_lvl);
-}
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMcstReadHook(void)                                                                                               */
+/*  U1      u1_g_HmiScreen(void)                                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMcstReadHook(void)
+U1      u1_g_HmiScreen(void)
 {
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
+    return(u1_s_hmiscreen_sts);
 }
+
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMcstDataResetHook(void)                                                                                          */
+/*  void    vd_g_HmiScreenPut(const U1 u1_a_STS)                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMcstDataResetHook(void)
+void    vd_g_HmiScreenPut(const U1 u1_a_CH, const U1 u1_a_STS)
 {
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
+    if(u1_a_CH == (U1)HMISCREEN_CH_DISP_STS){
+        u1_s_hmiscreen_sts         = u1_a_STS;
+        u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_INI;
+    }
+    else if(u1_a_CH == (U1)HMISCREEN_CH_DISP_STS_WO_TURN) {
+        u1_s_hmiscreen_sts_wo_turn = u1_a_STS;
+        u2_s_hmiscreen_to          = (U2)HMIPROXY_TOC_INI;
+    }
+    else {
+        /* Do nothing */
+    }
 }
+
 /*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
+/*  U1      u1_g_HmiScreenShtdwnOK(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_DimSwVrUpDown(void)
+U1      u1_g_HmiScreenShtdwnOK(void)
 {
-    return(u1_g_DimUsadjbySwVrUpDown());
+    U1  u1_t_shtdwnok;
+
+    u1_t_shtdwnok = (U1)FALSE;
+    if(u1_s_hmiscreen_sts == (U1)FALSE){
+        u1_t_shtdwnok = (U1)TRUE;
+    }
+    return(u1_t_shtdwnok);
 }
+
+/*===================================================================================================================================*/
+/*  U1      u1_g_HmiScreenWoTurnShtdwnOK(void)                                                                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_HmiScreenWoTurnShtdwnOK(void)
+{
+    U1  u1_t_shtdwnok;
+
+    u1_t_shtdwnok = (U1)FALSE;
+    if(u1_s_hmiscreen_sts_wo_turn == (U1)FALSE){
+        u1_t_shtdwnok = (U1)TRUE;
+    }
+    return(u1_t_shtdwnok);
+}
+
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -192,17 +162,15 @@ U1      u1_g_DimSwVrUpDown(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/19/2018  TN       New.                                                                                               */
-/*  1.1.0     1/15/2019  TN       NULL check was implement in vd_g_DimMainTask.                                                      */
-/*  1.2.0     2/26/2019  TN       The implementation of vd_g_DimMainTask was optimized.                                              */
-/*  1.3.0     9/24/2020  SH       dimmer_cfg v1.2.0 -> v1.3.0.                                                                       */
-/*  1.3.1    12/21/2020  KM       Add old user customize writeing in vd_g_DimMcstReadHook                                            */
-/*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
-/*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
-/*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.0.0    07/16/2019  TA       New.                                                                                               */
+/*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
+/*  1.2.0    01/11/2024  SW       Delete transmission of CDISP_EX signal                                                             */
+/*  1.3.0    07/09/2024  AA       Revised for WKUPSLP condition change                                                               */
+/*  1.4.0    07/22/2024  AA       Deleted u1_g_HmiScreenShtdwnOK                                                                     */
+/*  1.5.0    08/23/2024  AA       Added u1_g_HmiScreenShtdwnOK                                                                     */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SH = Shota Higashide                                                                                                           */
-/*  * KM = Kota Matoba                                                                                                               */
+/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * SW   = Shun Watanae, DensoTechno                                                                                               */
+/*  * AA   = Anna Asuncion, DensoTechno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

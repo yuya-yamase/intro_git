@@ -38,8 +38,8 @@
 /* Application           */
 #endif   /* BEV Rebase provisionally */
 #include "dimmer.h"
-#if 0   /* BEV Rebase provisionally */
 #include "illumi.h"
+#if 0   /* BEV Rebase provisionally */
 #include "thblnkr.h"
 #include "vehspd_kmph.h"
 #include "vptran_sel.h"
@@ -54,8 +54,10 @@
 #include "ambtmp.h"
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
+#endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
 #include "gauge.h"
+#if 0   /* BEV Rebase provisionally */
 #include "telltale.h"
 #include "wchime.h"
 #include "sbltsync.h"
@@ -64,9 +66,9 @@
 #include "vardef.h"
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
-#include "mcst.h"
-#include "vds_ci.h"
+#endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
+#if 0   /* BEV Rebase provisionally */
 #include "battpow.h"
 #include "drvind_pwr_pct.h"
 #include "drvind_eco.h"
@@ -120,15 +122,14 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_VardefBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
-        &vd_g_McstBonInit,
         &vd_g_LocaleBonInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxBonInit,
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
@@ -137,24 +138,29 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdBonInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoBonInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
         &vd_g_AmbtmpBonInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
         &vd_g_OilmilInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
         &vd_g_HdimmgrBonInit,
@@ -212,15 +218,14 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
-        &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxRstInit,
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiRstInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
@@ -229,24 +234,29 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoRstwkInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
         &vd_g_OilmilInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyRstInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
         &vd_g_HdimmgrWkRstInit,
@@ -304,15 +314,14 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
-        &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxWkupInit,
         &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_IllumiWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
@@ -321,24 +330,29 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
         &vd_g_OdoRstwkInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
-        &vd_g_VdsCIInit,
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
         &vd_g_OilmilInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
         &vd_g_HdimmgrWkRstInit,

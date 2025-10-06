@@ -1,36 +1,32 @@
-/* 1.5.0 */
+/* 1.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Dimmer                                                                                                                           */
+/*  Hmiwchime                                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
-#define DIMMER_C_PATCH                           (0)
+#define HMIWCHIME_C_MAJOR                         (1)
+#define HMIWCHIME_C_MINOR                         (1)
+#define HMIWCHIME_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "dimmer_cfg_private.h"
+#include "hmiproxy_cfg_private.h"
+
+#include "hmiwchime.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((DIMMER_C_MAJOR != DIMMER_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_H_PATCH))
-#error "dimmer.c and dimmer.h : source and header files are inconsistent!"
-#endif
-
-#if ((DIMMER_C_MAJOR != DIMMER_CFG_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_CFG_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_CFG_H_PATCH))
-#error "dimmer.c and dimmer_cfg_private.h : source and header files are inconsistent!"
+#if ((HMIWCHIME_C_MAJOR != HMIWCHIME_H_MAJOR) || \
+     (HMIWCHIME_C_MINOR != HMIWCHIME_H_MINOR) || \
+     (HMIWCHIME_C_PATCH != HMIWCHIME_H_PATCH))
+#error "hmiwchime.c and hmiwchime.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,9 +41,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2          u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_NUM_LVL];
-static U1          u1_s_dim_lvl_daynight;
-static U1          u1_s_dim_if_idx;
+static U1   u1_sp_hmiwchime_req[HMIWCHIME_NUM];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -59,131 +53,65 @@ static U1          u1_s_dim_if_idx;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DimInit(void)                                                                                                       */
+/*  void    vd_g_HmiWchimeInit(void)                                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimInit(void)
+void    vd_g_HmiWchimeInit(void)
 {
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN; 
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN; 
-
-    u1_s_dim_lvl_daynight = (U1)DIM_DAYNIGHT_LVL_UNKNWN;
-    u1_s_dim_if_idx       = u1_g_DimCfgIFidx();
-
-    vd_g_DimCfgInit();
+    U4  u4_t_loop;
+    for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIWCHIME_NUM ; u4_t_loop++){
+        u1_sp_hmiwchime_req[u4_t_loop] = (U1)HMIWCHIME_UNDEF;
+    }
 }
+
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMainTask(void)                                                                                                   */
+/*  void    vd_g_HmiWchimeMainTask(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMainTask(void)
+void    vd_g_HmiWchimeMainTask(void)
 {
-    U1        u1_t_daynight;
-    U1        u1_t_if_idx;
+}
 
-    u1_t_if_idx = u1_g_DimCfgIFidx();
-    if(u1_t_if_idx < u1_g_DIM_IF_NUM_CFG){
+/*===================================================================================================================================*/
+/*  void    vd_g_HmiWchime(U1 * u1_ap_req , const U1 u1_a_NWORD)                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_HmiWchime(U1 * u1_ap_req, const U1 u1_a_NWORD)
+{
+    U4  u4_t_loop;
 
-        if(u1_s_dim_if_idx != u1_t_if_idx){
-            vd_g_DimInit();
-        }
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT != vdp_PTR_NA){
-            u1_t_daynight = (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT)(u1_s_dim_lvl_daynight);
-        }
-        else{
-            u1_t_daynight = (U1)DIM_DAYNIGHT_LVL_DAY;
-        }
-        u1_s_dim_lvl_daynight = u1_t_daynight;
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST != vdp_PTR_NA){
-            (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST)(u1_t_daynight,
-                                                            &u2_sp_dim_lvl_usadjust[0]);
-        }
-        else{
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN;
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN;
+    if((u1_ap_req   != vdp_PTR_NA       ) &&
+       (u1_a_NWORD  >= (U1)HMIWCHIME_NUM)    ){
+        for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIWCHIME_NUM ; u4_t_loop++){
+            u1_ap_req[u4_t_loop] = u1_sp_hmiwchime_req[u4_t_loop];
         }
     }
-
-    u1_s_dim_if_idx = u1_t_if_idx;
 }
+
 /*===================================================================================================================================*/
-/*  U1      u1_g_DimLvlDaynight(void)                                                                                                */
+/*  void    vd_g_HmiWchimePut(const U1 * u1_ap_REQ , const U1 u1_a_NWORD)                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_DimLvlDaynight(void)
+void    vd_g_HmiWchimePut(const U1 * u1_ap_REQ , const U1 u1_a_NWORD)
 {
-    return(u1_s_dim_lvl_daynight);
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
-{
-    U2          u2_t_lvl;
+    U4  u4_t_loop;
 
-    if((u1_a_DAYNIGHT         < (U1)DIM_DAYNIGHT_NUM_LVL) &&
-       (u1_s_dim_lvl_daynight < (U1)DIM_DAYNIGHT_NUM_LVL)){
-        u2_t_lvl = u2_sp_dim_lvl_usadjust[u1_a_DAYNIGHT];
+    if((u1_ap_REQ   != vdp_PTR_NA      ) &&
+       (u1_a_NWORD  >= (U1)HMIWCHIME_NUM)    ){
+        for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMIWCHIME_NUM ; u4_t_loop++){
+            u1_sp_hmiwchime_req[u4_t_loop] = u1_ap_REQ[u4_t_loop];
+        }
     }
-    else{
-        u2_t_lvl = (U2)DIM_LVL_UNKNWN;
-    }
+}
 
-    return(u2_t_lvl);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstReadHook(void)                                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstReadHook(void)
-{
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstDataResetHook(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstDataResetHook(void)
-{
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimSwVrUpDown(void)
-{
-    return(u1_g_DimUsadjbySwVrUpDown());
-}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -192,17 +120,10 @@ U1      u1_g_DimSwVrUpDown(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/19/2018  TN       New.                                                                                               */
-/*  1.1.0     1/15/2019  TN       NULL check was implement in vd_g_DimMainTask.                                                      */
-/*  1.2.0     2/26/2019  TN       The implementation of vd_g_DimMainTask was optimized.                                              */
-/*  1.3.0     9/24/2020  SH       dimmer_cfg v1.2.0 -> v1.3.0.                                                                       */
-/*  1.3.1    12/21/2020  KM       Add old user customize writeing in vd_g_DimMcstReadHook                                            */
-/*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
-/*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
-/*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.0.0    07/16/2019  TA       New.                                                                                               */
+/*  1.1.0    10/07/2020  TH       Change config for 800B CV.                                                                         */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SH = Shota Higashide                                                                                                           */
-/*  * KM = Kota Matoba                                                                                                               */
+/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

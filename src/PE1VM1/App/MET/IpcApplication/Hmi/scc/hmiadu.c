@@ -1,36 +1,34 @@
-/* 1.5.0 */
+/* 1.1.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Dimmer                                                                                                                           */
+/*  Hmiadu                                                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
-#define DIMMER_C_PATCH                           (0)
+#define HMIADU_C_MAJOR                         (1)
+#define HMIADU_C_MINOR                         (1)
+#define HMIADU_C_PATCH                         (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "dimmer_cfg_private.h"
+#include "aip_common.h"
+#include "hmiadu.h"
+
+#include "oxcan.h"
+#include "veh_opemd.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((DIMMER_C_MAJOR != DIMMER_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_H_PATCH))
-#error "dimmer.c and dimmer.h : source and header files are inconsistent!"
-#endif
-
-#if ((DIMMER_C_MAJOR != DIMMER_CFG_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_CFG_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_CFG_H_PATCH))
-#error "dimmer.c and dimmer_cfg_private.h : source and header files are inconsistent!"
+#if ((HMIADU_C_MAJOR != HMIADU_H_MAJOR) || \
+     (HMIADU_C_MINOR != HMIADU_H_MINOR) || \
+     (HMIADU_C_PATCH != HMIADU_H_PATCH))
+#error "hmiadu.c and hmiadu.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -39,15 +37,20 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define HMIADU_MAIN_TICK                         (10U)                     /* 10 milliseconds */
+#define HMIADU_COMTX_TSSMALF_5000MS              (5000U / HMIADU_MAIN_TICK)
+#define HMIADU_TSSMALF_FRM_STATE_NON_EST         (0U)
+#define HMIADU_TSSMALF_FRM_STATE_EST             (1U)
+#define HMIADU_BAONUSER_ON                       (1U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2          u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_NUM_LVL];
-static U1          u1_s_dim_lvl_daynight;
-static U1          u1_s_dim_if_idx;
+static U2           u2_s_hmiadu_tx_tssmalf_elpsd;
+static U1           u1_s_hmiadu_tssmalf_timeout_sts;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -59,130 +62,79 @@ static U1          u1_s_dim_if_idx;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DimInit(void)                                                                                                       */
+/*  void    vd_g_HmiAduInit(void)                                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimInit(void)
+void    vd_g_HmiAduInit(void)
 {
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN; 
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN; 
-
-    u1_s_dim_lvl_daynight = (U1)DIM_DAYNIGHT_LVL_UNKNWN;
-    u1_s_dim_if_idx       = u1_g_DimCfgIFidx();
-
-    vd_g_DimCfgInit();
+    u2_s_hmiadu_tx_tssmalf_elpsd    = (U2)0U;
+    u1_s_hmiadu_tssmalf_timeout_sts = (U1)HMIADU_TSSMALF_FRM_STATE_NON_EST;
 }
+
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMainTask(void)                                                                                                   */
+/*  void    vd_g_HmiAduMainTask(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMainTask(void)
+void    vd_g_HmiAduMainTask(void)
 {
-    U1        u1_t_daynight;
-    U1        u1_t_if_idx;
+    U1 u1_t_igon;
+    U1 u1_t_baonuser;
+    U1 u1_t_wk;
 
-    u1_t_if_idx = u1_g_DimCfgIFidx();
-    if(u1_t_if_idx < u1_g_DIM_IF_NUM_CFG){
+#if 0   /* BEV Rebase provisionally */
+    u1_t_igon     = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igon     = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
+    u1_t_baonuser = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_BAONUSER, &u1_t_baonuser);
+    u1_t_wk       = u1_g_oXCANRxEnabled((U1)OXCAN_CH_0_CAN);
+#else   /* BEV Rebase provisionally */
+    u1_t_wk       = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
 
-        if(u1_s_dim_if_idx != u1_t_if_idx){
-            vd_g_DimInit();
-        }
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT != vdp_PTR_NA){
-            u1_t_daynight = (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT)(u1_s_dim_lvl_daynight);
-        }
-        else{
-            u1_t_daynight = (U1)DIM_DAYNIGHT_LVL_DAY;
-        }
-        u1_s_dim_lvl_daynight = u1_t_daynight;
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST != vdp_PTR_NA){
-            (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST)(u1_t_daynight,
-                                                            &u2_sp_dim_lvl_usadjust[0]);
-        }
-        else{
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN;
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN;
-        }
-    }
-
-    u1_s_dim_if_idx = u1_t_if_idx;
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimLvlDaynight(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimLvlDaynight(void)
-{
-    return(u1_s_dim_lvl_daynight);
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
-{
-    U2          u2_t_lvl;
-
-    if((u1_a_DAYNIGHT         < (U1)DIM_DAYNIGHT_NUM_LVL) &&
-       (u1_s_dim_lvl_daynight < (U1)DIM_DAYNIGHT_NUM_LVL)){
-        u2_t_lvl = u2_sp_dim_lvl_usadjust[u1_a_DAYNIGHT];
+    if(u2_s_hmiadu_tx_tssmalf_elpsd >= (U2)HMIADU_COMTX_TSSMALF_5000MS) {
+        u1_s_hmiadu_tssmalf_timeout_sts = (U1)HMIADU_TSSMALF_FRM_STATE_EST;
     }
     else{
-        u2_t_lvl = (U2)DIM_LVL_UNKNWN;
+        u1_s_hmiadu_tssmalf_timeout_sts = (U1)HMIADU_TSSMALF_FRM_STATE_NON_EST;
+        u2_s_hmiadu_tx_tssmalf_elpsd++;
     }
 
-    return(u2_t_lvl);
+    if((u1_t_igon      == (U1)FALSE             )  &&
+       ((u1_t_baonuser != (U1)HMIADU_BAONUSER_ON)  ||
+        (u1_t_wk       == (U1)FALSE             ))) {
+        u1_s_hmiadu_tssmalf_timeout_sts = (U1)HMIADU_TSSMALF_FRM_STATE_NON_EST;
+        u2_s_hmiadu_tx_tssmalf_elpsd    = (U2)0U;
+    }
 }
+
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMcstReadHook(void)                                                                                               */
+/*  U1      u1_g_HmiAduTssmalfFrmSts(void)                                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMcstReadHook(void)
+U1      u1_g_HmiAduTssmalfFrmSts(void)
 {
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
+    return(u1_s_hmiadu_tssmalf_timeout_sts);
 }
+
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMcstDataResetHook(void)                                                                                          */
+/*  void    vd_g_HmiAduCntRst(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMcstDataResetHook(void)
+void    vd_g_HmiAduCntRst(void)
 {
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimSwVrUpDown(void)
-{
-    return(u1_g_DimUsadjbySwVrUpDown());
+    u2_s_hmiadu_tx_tssmalf_elpsd    = (U2)0U;
+    u1_s_hmiadu_tssmalf_timeout_sts = (U1)HMIADU_TSSMALF_FRM_STATE_NON_EST;
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -192,17 +144,9 @@ U1      u1_g_DimSwVrUpDown(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/19/2018  TN       New.                                                                                               */
-/*  1.1.0     1/15/2019  TN       NULL check was implement in vd_g_DimMainTask.                                                      */
-/*  1.2.0     2/26/2019  TN       The implementation of vd_g_DimMainTask was optimized.                                              */
-/*  1.3.0     9/24/2020  SH       dimmer_cfg v1.2.0 -> v1.3.0.                                                                       */
-/*  1.3.1    12/21/2020  KM       Add old user customize writeing in vd_g_DimMcstReadHook                                            */
-/*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
-/*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
-/*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.0.0    05/20/2025  PG       New.                                                                                               */
+/*  1.1.0    06/10/2025  PG       Revised vd_g_HmiAduMainTask logic                                                                  */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SH = Shota Higashide                                                                                                           */
-/*  * KM = Kota Matoba                                                                                                               */
+/*  * PG   = Patrick Garcia, DTPH                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

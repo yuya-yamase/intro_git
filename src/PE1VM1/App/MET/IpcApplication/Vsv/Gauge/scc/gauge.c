@@ -1,36 +1,36 @@
-/* 1.5.0 */
+/* 2.0.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Dimmer                                                                                                                           */
+/*  Vehicle Status Viewer / Toyota IPC/MET Gauge                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
-#define DIMMER_C_PATCH                           (0)
+#define GAUGE_C_MAJOR                           (2)
+#define GAUGE_C_MINOR                           (0)
+#define GAUGE_C_PATCH                           (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "dimmer_cfg_private.h"
+#include "gauge_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((DIMMER_C_MAJOR != DIMMER_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_H_PATCH))
-#error "dimmer.c and dimmer.h : source and header files are inconsistent!"
+#if ((GAUGE_C_MAJOR != GAUGE_H_MAJOR) || \
+     (GAUGE_C_MINOR != GAUGE_H_MINOR) || \
+     (GAUGE_C_PATCH != GAUGE_H_PATCH))
+#error "gauge.c and gauge.h : source and header files are inconsistent!"
 #endif
 
-#if ((DIMMER_C_MAJOR != DIMMER_CFG_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_CFG_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_CFG_H_PATCH))
-#error "dimmer.c and dimmer_cfg_private.h : source and header files are inconsistent!"
+#if ((GAUGE_C_MAJOR != GAUGE_CFG_H_MAJOR) || \
+     (GAUGE_C_MINOR != GAUGE_CFG_H_MINOR) || \
+     (GAUGE_C_PATCH != GAUGE_CFG_H_PATCH))
+#error "gauge.c and gauge_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,10 +45,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2          u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_NUM_LVL];
-static U1          u1_s_dim_lvl_daynight;
-static U1          u1_s_dim_if_idx;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,130 +55,159 @@ static U1          u1_s_dim_if_idx;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DimInit(void)                                                                                                       */
+/*  void    vd_g_GaugeBonInit(void)                                                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimInit(void)
+void    vd_g_GaugeBonInit(void)
 {
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN; 
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN; 
+    U4           u4_t_lpcnt;
 
-    u1_s_dim_lvl_daynight = (U1)DIM_DAYNIGHT_LVL_UNKNWN;
-    u1_s_dim_if_idx       = u1_g_DimCfgIFidx();
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_GAUGE_NUM_CH; u4_t_lpcnt++){
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u4_unlock = (U4)0U;
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt  = (U2)GAUGE_OW_TOC_MAX;
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_trgt   = (U2)GAUGE_OW_INA;
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u1_esi    = (U1)FALSE;
+    }
 
-    vd_g_DimCfgInit();
+    vd_g_GaugeCfgBonInit();
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMainTask(void)                                                                                                   */
+/*  void    vd_g_GaugeRstwkInit(void)                                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMainTask(void)
+void    vd_g_GaugeRstwkInit(void)
 {
-    U1        u1_t_daynight;
-    U1        u1_t_if_idx;
+    U4           u4_t_lpcnt;
 
-    u1_t_if_idx = u1_g_DimCfgIFidx();
-    if(u1_t_if_idx < u1_g_DIM_IF_NUM_CFG){
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_GAUGE_NUM_CH; u4_t_lpcnt++){
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u4_unlock = (U4)0U;
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt  = (U2)GAUGE_OW_TOC_MAX;
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_trgt   = (U2)GAUGE_OW_INA;
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u1_esi    = (U1)FALSE;
+    }
 
-        if(u1_s_dim_if_idx != u1_t_if_idx){
-            vd_g_DimInit();
-        }
+    vd_g_GaugeCfgRstwkInit();
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_GaugeOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)                                                           */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_GaugeOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
+{
+    vd_g_GaugeCfgOpemdEvhk(u4_a_EVTBIT);
+}
 
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT != vdp_PTR_NA){
-            u1_t_daynight = (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT)(u1_s_dim_lvl_daynight);
+/*===================================================================================================================================*/
+/*  void    vd_g_GaugeMapUpdate(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_GaugeMapUpdate(void)
+{
+    vd_g_GaugeCfgMapUpdate();
+}
+
+/*===================================================================================================================================*/
+/*  void    vd_g_GaugeMainTask(void)                                                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_GaugeMainTask(void)
+{
+    U4           u4_t_lpcnt;
+
+    U2           u2_t_vom_chk;
+    U2           u2_t_src;
+    U2           u2_t_sts_chk;
+    U2           u2_t_ow;
+
+    vd_g_GaugeCfgMainStart();
+
+    u2_t_vom_chk = u2_g_GaugeCfgVomchk();
+    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_GAUGE_NUM_CH; u4_t_lpcnt++){
+        st_gp_gauge_ow_ctrl[u4_t_lpcnt].u4_unlock = (U4)0U;
+
+        if((st_gp_GAUGE_IF_CFG[u4_t_lpcnt].fp_u1_SRC != vdp_PTR_NA) &&
+           (st_gp_GAUGE_IF_CFG[u4_t_lpcnt].fp_vd_DST != vdp_PTR_NA)){
+
+            u2_t_src      = (U2)0U;
+            u2_t_sts_chk  = (U2)(*st_gp_GAUGE_IF_CFG[u4_t_lpcnt].fp_u1_SRC)(&u2_t_src);
+            u2_t_sts_chk |= u2_t_vom_chk;
+
+            if(st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt >= (U2)U2_MAX){
+                st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)0U;
+            }
+            else if(st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt >= (U2)GAUGE_OW_TOC_MAX){
+                st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)GAUGE_OW_TOC_MAX;
+            }
+            else{
+                st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt++; /* QAC over-detection */
+            }
+
+            if(st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt     >= u2_g_GAUGE_OW_TOUT){
+                st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_trgt  = u2_t_src;
+                st_gp_gauge_ow_ctrl[u4_t_lpcnt].u1_esi   = (U1)FALSE;
+                u2_t_ow                                  = (U2)GAUGE_OW_INA;
+            }
+            else{
+                u2_t_ow                                  = st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_trgt;
+            }
+
+            (*st_gp_GAUGE_IF_CFG[u4_t_lpcnt].fp_vd_DST)(u2_t_sts_chk, u2_t_src, u2_t_ow, st_gp_gauge_ow_ctrl[u4_t_lpcnt].u1_esi);
         }
         else{
-            u1_t_daynight = (U1)DIM_DAYNIGHT_LVL_DAY;
-        }
-        u1_s_dim_lvl_daynight = u1_t_daynight;
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST != vdp_PTR_NA){
-            (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST)(u1_t_daynight,
-                                                            &u2_sp_dim_lvl_usadjust[0]);
-        }
-        else{
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN;
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN;
+            st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_tocnt = (U2)GAUGE_OW_TOC_MAX;
+            st_gp_gauge_ow_ctrl[u4_t_lpcnt].u2_trgt  = (U2)GAUGE_OW_INA;
         }
     }
 
-    u1_s_dim_if_idx = u1_t_if_idx;
+    vd_g_GaugeCfgMainFinish();
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_DimLvlDaynight(void)                                                                                                */
+/*  U1      u1_g_GaugeOwActSts(const U1 u1_a_GAG_CH)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_DimLvlDaynight(void)
+U1      u1_g_GaugeOwActSts(const U1 u1_a_GAG_CH)
 {
-    return(u1_s_dim_lvl_daynight);
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
-{
-    U2          u2_t_lvl;
+    U1           u1_t_sts;
 
-    if((u1_a_DAYNIGHT         < (U1)DIM_DAYNIGHT_NUM_LVL) &&
-       (u1_s_dim_lvl_daynight < (U1)DIM_DAYNIGHT_NUM_LVL)){
-        u2_t_lvl = u2_sp_dim_lvl_usadjust[u1_a_DAYNIGHT];
+    u1_t_sts = (U1)FALSE;
+
+    if(u1_a_GAG_CH < u1_g_GAUGE_NUM_CH){
+        if(st_gp_gauge_ow_ctrl[u1_a_GAG_CH].u2_tocnt < u2_g_GAUGE_OW_TOUT){
+            u1_t_sts = (U1)TRUE;
+        }
+    }
+
+    return(u1_t_sts);
+}
+/*===================================================================================================================================*/
+/*  U2      u2_g_GaugeTrgt(const U1 u1_a_GAG_CH)                                                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U2      u2_g_GaugeTrgt(const U1 u1_a_GAG_CH)
+{
+    U2           u2_t_trgt;
+
+    if(u1_a_GAG_CH < u1_g_GAUGE_NUM_CH){
+        u2_t_trgt = st_gp_gauge_ow_ctrl[u1_a_GAG_CH].u2_trgt;
     }
     else{
-        u2_t_lvl = (U2)DIM_LVL_UNKNWN;
+        u2_t_trgt = (U2)GAUGE_OW_INA;
     }
-
-    return(u2_t_lvl);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstReadHook(void)                                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstReadHook(void)
-{
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstDataResetHook(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstDataResetHook(void)
-{
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimSwVrUpDown(void)
-{
-    return(u1_g_DimUsadjbySwVrUpDown());
+    return(u2_t_trgt);
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
@@ -192,17 +217,20 @@ U1      u1_g_DimSwVrUpDown(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/19/2018  TN       New.                                                                                               */
-/*  1.1.0     1/15/2019  TN       NULL check was implement in vd_g_DimMainTask.                                                      */
-/*  1.2.0     2/26/2019  TN       The implementation of vd_g_DimMainTask was optimized.                                              */
-/*  1.3.0     9/24/2020  SH       dimmer_cfg v1.2.0 -> v1.3.0.                                                                       */
-/*  1.3.1    12/21/2020  KM       Add old user customize writeing in vd_g_DimMcstReadHook                                            */
-/*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
-/*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
-/*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.0.0     2/26/2018  TN       New.                                                                                               */
+/*  1.1.0     3/ 9/2018  TN       st_gp_GAUGE_DST_CH[u4_t_lpcnt].fp_vd_UPDT was modified.                                            */
+/*  1.2.0     6/ 3/2019  TN       The design and implementation was optimized.                                                       */
+/*  1.3.0    10/17/2019  TN       Improvement : st_gp_gauge_ow_ctrl[].u2_tocnt handling was optimized.                               */
+/*  1.4.0     8/10/2020  AM       Changes to the initialization function.                                                            */
+/*                                Changes to Overwrite Action.                                                                       */
+/*                                Add : Notifications of Overwrite Action Status.                                                    */
+/*  2.0.0     6/04/2021  TA       Renew.                                                                                             */
+/*  2.0.1    10/18/2021  TK       Change the definition of the null pointer used.(BSW v115_r007)                                     */
+/*  2.0.2    10/25/2021  TK       QAC supported.                                                                                     */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SH = Shota Higashide                                                                                                           */
-/*  * KM = Kota Matoba                                                                                                               */
+/*  * TN   = Takashi Nagai, Denso                                                                                                    */
+/*  * AM   = Atsushi Mizutani, DENSO TECHNO                                                                                          */
+/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * TK   = Takanori Kuno, DensoTechno                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

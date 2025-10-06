@@ -1,36 +1,35 @@
-/* 1.5.0 */
+/* 2.0.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Dimmer                                                                                                                           */
+/*  Vehicle Status Viewer / Toyota IPC/MET Gauge                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
-#define DIMMER_C_PATCH                           (0)
+#define GAUGE_CFG_C_MAJOR                        (2)
+#define GAUGE_CFG_C_MINOR                        (0)
+#define GAUGE_CFG_C_PATCH                        (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "dimmer_cfg_private.h"
+#include "gauge_cfg_private.h"
+/* DIGITAL SPEED            */
+#if 0   /* BEV Rebase provisionally */
+#include "vehspd_kmph.h"
+#endif   /* BEV Rebase provisionally */
+#include "gagdst_nxmph.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((DIMMER_C_MAJOR != DIMMER_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_H_PATCH))
-#error "dimmer.c and dimmer.h : source and header files are inconsistent!"
-#endif
-
-#if ((DIMMER_C_MAJOR != DIMMER_CFG_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_CFG_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_CFG_H_PATCH))
-#error "dimmer.c and dimmer_cfg_private.h : source and header files are inconsistent!"
+#if ((GAUGE_CFG_C_MAJOR != GAUGE_CFG_H_MAJOR) || \
+     (GAUGE_CFG_C_MINOR != GAUGE_CFG_H_MINOR) || \
+     (GAUGE_CFG_C_PATCH != GAUGE_CFG_H_PATCH))
+#error "gauge_cfg.c and gauge_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,145 +44,103 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2          u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_NUM_LVL];
-static U1          u1_s_dim_lvl_daynight;
-static U1          u1_s_dim_if_idx;
+ST_GAUGE_OW_CTRL             st_gp_gauge_ow_ctrl[GAUGE_NUM_CH];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1      u1_s_GagsrcKmph(U2 * u2p_a_src);         /* vehspd_kmph      */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+const U2                    u2_g_GAUGE_OW_TOUT = (U2)5000U / (U2)20U;
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+const ST_GAUGE_IF           st_gp_GAUGE_IF_CFG[GAUGE_NUM_CH] = {
+    {
+    /* Digital Speed        */
+        &u1_s_GagsrcKmph,                       /* fp_u1_SRC     */
+        &vd_g_GagdstNxmphUpdt                   /* fp_vd_DST     */
+    }
+};
+const U1                    u1_g_GAUGE_NUM_CH = (U1)GAUGE_NUM_CH;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DimInit(void)                                                                                                       */
+/*  void    vd_g_GaugeCfgBonInit(void)                                                                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimInit(void)
+void    vd_g_GaugeCfgBonInit(void)
 {
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN; 
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN; 
-
-    u1_s_dim_lvl_daynight = (U1)DIM_DAYNIGHT_LVL_UNKNWN;
-    u1_s_dim_if_idx       = u1_g_DimCfgIFidx();
-
-    vd_g_DimCfgInit();
+    vd_g_GagdstNxmphInit();
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMainTask(void)                                                                                                   */
+/*  void    vd_g_GaugeCfgRstwkInit(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMainTask(void)
+void    vd_g_GaugeCfgRstwkInit(void)
 {
-    U1        u1_t_daynight;
-    U1        u1_t_if_idx;
-
-    u1_t_if_idx = u1_g_DimCfgIFidx();
-    if(u1_t_if_idx < u1_g_DIM_IF_NUM_CFG){
-
-        if(u1_s_dim_if_idx != u1_t_if_idx){
-            vd_g_DimInit();
-        }
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT != vdp_PTR_NA){
-            u1_t_daynight = (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT)(u1_s_dim_lvl_daynight);
-        }
-        else{
-            u1_t_daynight = (U1)DIM_DAYNIGHT_LVL_DAY;
-        }
-        u1_s_dim_lvl_daynight = u1_t_daynight;
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST != vdp_PTR_NA){
-            (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST)(u1_t_daynight,
-                                                            &u2_sp_dim_lvl_usadjust[0]);
-        }
-        else{
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN;
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN;
-        }
-    }
-
-    u1_s_dim_if_idx = u1_t_if_idx;
+    vd_g_GagdstNxmphInit();
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_DimLvlDaynight(void)                                                                                                */
+/*  void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT)                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1      u1_g_DimLvlDaynight(void)
+void    vd_g_GaugeCfgOpemdEvhk(const U4 u4_a_EVTBIT)
 {
-    return(u1_s_dim_lvl_daynight);
 }
 /*===================================================================================================================================*/
-/*  U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)                                                                              */
+/*  void    vd_g_GaugeCfgMainStart(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
+void    vd_g_GaugeCfgMainStart(void)
 {
-    U2          u2_t_lvl;
-
-    if((u1_a_DAYNIGHT         < (U1)DIM_DAYNIGHT_NUM_LVL) &&
-       (u1_s_dim_lvl_daynight < (U1)DIM_DAYNIGHT_NUM_LVL)){
-        u2_t_lvl = u2_sp_dim_lvl_usadjust[u1_a_DAYNIGHT];
-    }
-    else{
-        u2_t_lvl = (U2)DIM_LVL_UNKNWN;
-    }
-
-    return(u2_t_lvl);
 }
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMcstReadHook(void)                                                                                               */
+/*  void    vd_g_GaugeCfgMainFinish(void)                                                                                            */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMcstReadHook(void)
+void    vd_g_GaugeCfgMainFinish(void)
 {
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
+}
+/*===================================================================================================================================*/
+/*  void    vd_g_GaugeCfgMapUpdate(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_GaugeCfgMapUpdate(void)
+{
+}
+/*===================================================================================================================================*/
+/*  static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)                                                                                   */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
+{
 #if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
+    return(u1_g_VehspdKmphBiased(u2p_a_src, (U1)FALSE));
+#else   /* BEV Rebase provisionally */
+    (*u2p_a_src) = (U2)0x00U;
+    return((U1)0U); /* VEHSPD_STSBIT_UNKNOWN */
 #endif   /* BEV Rebase provisionally */
-    }
+}
 
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstDataResetHook(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstDataResetHook(void)
-{
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimSwVrUpDown(void)
-{
-    return(u1_g_DimUsadjbySwVrUpDown());
-}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -192,17 +149,30 @@ U1      u1_g_DimSwVrUpDown(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/19/2018  TN       New.                                                                                               */
-/*  1.1.0     1/15/2019  TN       NULL check was implement in vd_g_DimMainTask.                                                      */
-/*  1.2.0     2/26/2019  TN       The implementation of vd_g_DimMainTask was optimized.                                              */
-/*  1.3.0     9/24/2020  SH       dimmer_cfg v1.2.0 -> v1.3.0.                                                                       */
-/*  1.3.1    12/21/2020  KM       Add old user customize writeing in vd_g_DimMcstReadHook                                            */
-/*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
-/*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
-/*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.0.0     2/26/2018  TN       New.                                                                                               */
+/*  1.2.0     6/ 3/2019  TN       gauge v1.1.0 -> v1.2.0.                                                                            */
+/*  1.3.0    10/17/2019  TN       gauge v1.2.0 -> v1.3.0.                                                                            */
+/*  1.4.0     8/10/2020  AM       gauge v1.3.0 -> v1.4.0.                                                                            */
+/*            9/ 2/2020  TA       Addition of SOCINDLL signal judgment and change of I/F                                             */
+/*            1/27/2021  TA       Soc_Gauge function call removed on IG hook event                                                   */
+/*  2.0.0     6/04/2021  TA(M)    Renew.                                                                                             */
+/*  2.0.1    10/18/2021  TK       gauge v2.0.0 -> v2.0.1.                                                                            */
+/*  2.0.2    10/25/2021  TK       gauge v2.0.1 -> v2.0.2.                                                                            */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SH = Shota Higashide                                                                                                           */
-/*  * KM = Kota Matoba                                                                                                               */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  800B-1   03/21/2020  SM       800B CV Correspondence                                                                             */
+/*  19PFv3-1 09/21/2023  SN       Delete tempseg,rpmzpos                                                                             */
+/*  19PFv3-2 02/01/2024  KH       Apply 19PFv3 configuration                                                                         */
+/*  19PFv3-3 10/03/2024  SN       Delete ATTemp Overheat                                                                             */
+/*                                                                                                                                   */
+/*  * TN   = Takashi Nagai, Denso                                                                                                    */
+/*  * SM   = Shota Maegawa, Denso Techno                                                                                             */
+/*  * AM   = Atsushi Mizutani, Denso Techno                                                                                          */
+/*  * TA   = Tsubasa Aki, Denso Techno                                                                                               */
+/*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * TK   = Takanori Kuno, DensoTechno                                                                                              */
+/*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
+/*  * KH   = Kiko Huerte, DTPH                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

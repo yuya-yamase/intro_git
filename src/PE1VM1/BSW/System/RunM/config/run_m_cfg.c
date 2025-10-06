@@ -29,23 +29,27 @@
 #else
 #endif
 
-#if 0   /* BEV Rebase provisionally */
 /* Complex Device Driver */
 #ifdef DATE_CLK_H
 #include "date_clk.h"
 #endif
+#if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
+#endif   /* BEV Rebase provisionally */
 /* MCAL                  */
 /* Memory                */
 #include "nvmc_mgr.h"
 
+#if 0   /* BEV Rebase provisionally */
 /* Application           */
 
 #include "alert.h"
-#include "illumi.h"
-#include "hmiproxy.h"
-#include "vardef.h"
 #endif   /* BEV Rebase provisionally */
+#include "illumi.h"
+#if 0   /* BEV Rebase provisionally */
+#include "hmiproxy.h"
+#endif   /* BEV Rebase provisionally */
+#include "vardef.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -104,7 +108,6 @@ void    vd_g_RunMCfgInit(void)
 /*===================================================================================================================================*/
 U1      u1_g_RunMCfghkShtdwnchk1st(void)
 {
-#if 0   /* BEV Rebase provisionally */
 #if (__RUN_M_CHK_1ST__ == 1)
     static const FP_U1_AND    fp_sp_u1_RUN_M_SHTDWN_CHK[] = {
         &u1_g_oXCANShtdwnOk,
@@ -113,16 +116,22 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 #else
 #endif
         &u1_g_Nvmc_IsShtdwnOk,
+#if 0   /* BEV Rebase provisionally */
         &u1_g_SoundCriMgrShtdwnOk,
+#endif   /* BEV Rebase provisionally */
         &u1_g_IllumiShtdwnOk,
+#if 0   /* BEV Rebase provisionally */
         &u1_g_HmiProxyShtdwnOK
+#endif   /* BEV Rebase provisionally */
     };
+#if 0   /* BEV Rebase provisionally */
     static const ST_ALERT_REQBIT   st_sp_REQBIT[] = {
         /*  u2_src_ch                       u1_src_act                          u1_dst_idx  u4_dst_bit                            */
         {  (U2)ALERT_CH_B_SMASTA_BCI1,      (U1)ALERT_REQ_B_SMASTA_BCI1_ON,     (U1)0U,     (U4)RUN_M_SLPNG_CHK_SMTBZ_ON       },
         {  (U2)ALERT_CH_B_THEAD,            (U1)ALERT_REQ_B_THEAD_ON,           (U1)0U,     (U4)RUN_M_SLPNG_CHK_THEAD_ON       },
         {  (U2)ALERT_CH_B_TTAIL,            (U1)ALERT_REQ_B_TTAIL_ON,           (U1)0U,     (U4)RUN_M_SLPNG_CHK_TTAIL_ON       }
     };
+#endif   /* BEV Rebase provisionally */
     U1                        u1_t_1st;
     U1                        u1_t_dest;
     U2                        u2_t_num_reqbit;
@@ -144,8 +153,10 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
         u4_t_req = (U4)RUN_M_SLPNG_CHK_TYCAN;
     }
 
+#if 0   /* BEV Rebase provisionally */
     u2_t_num_reqbit = (U2)(sizeof(st_sp_REQBIT) / sizeof(st_sp_REQBIT[0]));
     vd_g_AlertReqToBit( st_sp_REQBIT, u2_t_num_reqbit, &u4_t_req, (U1)1);
+#endif   /* BEV Rebase provisionally */
 
     u1_t_dest       = u1_g_VardefTtTailHead();
     if(u1_t_dest == (U1)VDF_TTTAILHEAD_NO12){
@@ -165,9 +176,6 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
 #else
     return((U1)TRUE);
 #endif /* #if (__RUN_M_CHK_1ST__ != 1) */
-#else   /* BEV Rebase provisionally */
-    return((U1)TRUE);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_RunMCfgWksrcIrqchk(void)                                                                                            */
