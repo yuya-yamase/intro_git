@@ -15,28 +15,6 @@ replace_value2 = arg1+":\\\\"
 
 # 対象ファイルリスト（相対パス）
 filelist = [
-    r"..\..\tool\MemAnalysis\SectionAnalysis.py",
-    r"..\..\tool\MemAnalysis\Sub.py",
-    r"..\..\src\DevRRPG\Tool\CombineMOT\config1.ini",
-    r"..\..\src\DevRRPG\Tool\CombineMOT\config2.ini",
-    r"..\..\src\DevRRPG\Tool\CombineMOT\config3.ini",
-    r"..\..\src\DevRRPG\Tool\CombineMOT\config4.ini",
-    r"..\..\src\DevRRPG\Tool\CombineMOT\config5.ini",
-    r"..\..\src\DevRRPG\Tool\CombineMOT\config6.ini",
-    r"..\..\src\DevRRPG\Tool\Converter\config1.ini",
-    r"..\..\src\DevRRPG\Tool\Converter\config2.ini",
-    r"..\..\src\DevRRPG\Tool\TS-WriterData\config1.ini",
-    r"..\..\src\DevRRPG\Tool\TS-WriterData\config2.ini",
-    r"..\..\src\DevRRPG\Tool\TS-WriterData\config3.ini",
-    r"..\..\src\DevRRPG\Tool\TS-WriterData\config4.ini",
-    r"..\..\src\DevRRPG\Tool\TS-WriterData\config5.ini",
-    r"..\..\src\DevRRPG\Tool\TS-WriterData\config6.ini",
-    r"..\..\src\DevRRPG\Tool\TS-WriterData\config7.ini",
-    r"..\..\tool\XMerge\config1.ini",
-    r"..\..\tool\XMerge\config2.ini",
-    r"..\..\tool\XMerge\config3.ini",
-    r"..\..\tool\XMerge\config4.ini",
-    r"..\..\tool\XMerge\config5.ini",
 ]
 
 def detect_encoding(filepath, sample_size=4096):

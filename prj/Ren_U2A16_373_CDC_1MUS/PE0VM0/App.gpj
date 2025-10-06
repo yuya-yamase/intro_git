@@ -49,6 +49,5 @@ ${SS_DIR}/Throughput/scc/throughput.c
 ${SS_DIR}/Throughput/config/throughput_cfg.c
 ${SS_DIR}/Throughput/config/throughput_sched.c
 ${SS_DIR}/RprgIf/config/rprg_if_request.c
-${SS_DIR}/RprgIf/config/rprg_if_cfg_bkram.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
