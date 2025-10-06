@@ -17,8 +17,10 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "thblnkr_cfg_private.h"
+#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #include "iohw_diflt.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -62,8 +64,13 @@ U2    u2_g_ThblnkrVehSpdDsplyd(void)
     U1  u1_t_sts;
 
     u2_t_kmph = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts  = u1_g_VehspdKmphBiased(&u2_t_kmph, (U1)FALSE);
     if(u1_t_sts !=  (U1)VEHSPD_STSBIT_VALID){
+#else   /* BEV Rebase provisionally */
+    u1_t_sts  = (U1)1U;
+    if(u1_t_sts !=  (U1)0U){
+#endif   /* BEV Rebase provisionally */
         u2_t_kmph = (U2)0U;
     }
 
@@ -78,6 +85,7 @@ U2    u2_g_ThblnkrVehSpdDsplyd(void)
 /*===================================================================================================================================*/
 U1             u1_g_ThblnkrCfgMTNL(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1                       u1_t_raw;
     U1                       u1_t_mtnl;
 
@@ -95,6 +103,9 @@ U1             u1_g_ThblnkrCfgMTNL(void)
     }
 
     return(u1_t_mtnl);
+#else   /* BEV Rebase provisionally */
+    return((U1)FALSE);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -105,6 +116,7 @@ U1             u1_g_ThblnkrCfgMTNL(void)
 /*===================================================================================================================================*/
 U1             u1_g_ThblnkrCfgMTNR(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1                       u1_t_raw;
     U1                       u1_t_mtnr;
 
@@ -122,6 +134,9 @@ U1             u1_g_ThblnkrCfgMTNR(void)
     }
 
     return(u1_t_mtnr);
+#else   /* BEV Rebase provisionally */
+    return((U1)FALSE);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

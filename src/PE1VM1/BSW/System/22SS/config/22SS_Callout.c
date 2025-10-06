@@ -39,8 +39,8 @@
 #endif   /* BEV Rebase provisionally */
 #include "dimmer.h"
 #include "illumi.h"
-#if 0   /* BEV Rebase provisionally */
 #include "thblnkr.h"
+#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #include "vptran_sel.h"
 #include "ptsctmp_cel.h"
@@ -134,7 +134,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
@@ -230,7 +232,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrRstWkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
@@ -326,7 +330,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrRstWkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
