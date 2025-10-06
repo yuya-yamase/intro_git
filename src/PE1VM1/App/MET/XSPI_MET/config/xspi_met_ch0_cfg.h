@@ -23,7 +23,6 @@
 
 #if 0   /* BEV Rebase provisionally */
 #include "drvind_hv_pct.h"
-#include "tripcom.h"
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
