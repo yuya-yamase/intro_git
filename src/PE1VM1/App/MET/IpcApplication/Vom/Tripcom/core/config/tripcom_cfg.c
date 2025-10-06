@@ -143,10 +143,10 @@ const           ST_TRIPCOM_CALCTX               st_gp_TRIPCOM_CALCTX_CFG[TRIPCOM
     {   vdp_PTR_NA,                     (U1)U1_MAX                              }   /*  14 Distance To Empty for ED                  */
 };
 const           ST_TRIPCOM_CNTT                 st_gp_TRIPCOM_CNTTS_CFG[TRIPCOM_NUM_CNTTS]                  = {
-    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_TA,         (U2)0x0001U     },  /*  Total Average                                */
-    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_DC,         (U2)0x0001U     },  /*  Driving Cycle                                */
-    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_RF,         (U2)0x0001U     },  /*  Refuel Cycle                                 */
-    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_ONEM,       (U2)0x0001U     },  /*  One min Cycle                                */
+    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_TA,         (U2)0x0000U     },  /*  Total Average                                */
+    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_DC,         (U2)0x0000U     },  /*  Driving Cycle                                */
+    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_RF,         (U2)0x0000U     },  /*  Refuel Cycle                                 */
+    {   (U1)TRIPCOM_APPL_AVGFE,         (U1)AVGFE_CNTT_ONEM,       (U2)0x0000U     },  /*  One min Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGHE,         (U1)AVGHE_CNTT_TA,         (U2)0x0000U     },  /*  Total Average                                */
     {   (U1)TRIPCOM_APPL_AVGHE,         (U1)AVGHE_CNTT_DC,         (U2)0x0000U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGHE,         (U1)AVGHE_CNTT_RF,         (U2)0x0000U     },  /*  Refuel Cycle                                 */
@@ -154,8 +154,8 @@ const           ST_TRIPCOM_CNTT                 st_gp_TRIPCOM_CNTTS_CFG[TRIPCOM_
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_DC,         (U2)0x0100U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_ONEM,       (U2)0x0100U     },  /*  One min Cycle                                */
     {   (U1)TRIPCOM_APPL_AVGEE,         (U1)AVGEE_CNTT_FIVEM,      (U2)0x0000U     },  /*  Five mins Cycle                              */
-    {   (U1)TRIPCOM_APPL_INSTFE,        (U1)INSTFE_CNTT_RX,        (U2)0x0002U     },  /*  Rx Signal Cycle                              */
-    {   (U1)TRIPCOM_APPL_INSTFEC,       (U1)INSTFEC_CNTT_RX,       (U2)0x0002U     },  /*  Rx Signal Cycle                              */
+    {   (U1)TRIPCOM_APPL_INSTFE,        (U1)INSTFE_CNTT_RX,        (U2)0x0000U     },  /*  Rx Signal Cycle                              */
+    {   (U1)TRIPCOM_APPL_INSTFEC,       (U1)INSTFEC_CNTT_RX,       (U2)0x0000U     },  /*  Rx Signal Cycle                              */
     {   (U1)TRIPCOM_APPL_INSTHE,        (U1)INSTHE_CNTT_RX,        (U2)0x0000U     },  /*  Rx Signal Cycle                              */
     {   (U1)TRIPCOM_APPL_INSTEE,        (U1)INSTEE_CNTT_RX,        (U2)0x0200U     },  /*  Rx Signal Cycle                              */
     /*  DTE(Fuel) depends on AvgFe (Refuel Cycle)  */
@@ -179,9 +179,10 @@ const           ST_TRIPCOM_CNTT                 st_gp_TRIPCOM_CNTTS_CFG[TRIPCOM_
     {   (U1)TRIPCOM_APPL_PTSRUNDIST,    (U1)PTSRUNDIST_CNTT_DC,    (U2)0x8000U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_PTSRUNDIST,    (U1)PTSRUNDIST_CNTT_TR_A,  (U2)0x8000U     },  /*  Trip A                                       */
     {   (U1)TRIPCOM_APPL_PTSRUNDIST,    (U1)PTSRUNDIST_CNTT_TR_B,  (U2)0x8000U     },  /*  Trip B                                       */
-    {   (U1)TRIPCOM_APPL_EVRATIO,       (U1)EVRATIO_CNTT_DC,       (U2)0x0800U     },  /*  Driving Cycle                                */
-    {   (U1)TRIPCOM_APPL_DTE_ED,        (U1)DTE_ED_CNTT_FU,        (U2)0x0004U     }   /*  Fuel                                         */
+    {   (U1)TRIPCOM_APPL_EVRATIO,       (U1)EVRATIO_CNTT_DC,       (U2)0x0000U     },  /*  Driving Cycle                                */
+    {   (U1)TRIPCOM_APPL_DTE_ED,        (U1)DTE_ED_CNTT_FU,        (U2)0x0000U     }   /*  Fuel                                         */
 };
+
 const           U2                              u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_NUM_CNTT]                 = {
     (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_TA,
     (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_ONEM,

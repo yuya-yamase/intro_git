@@ -67,15 +67,15 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  09 TRIPCOM_MS_ID_AVGFE_ONEM_FE         */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  10 TRIPCOM_MS_ID_AVGFE_ONEM_FU         */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  11 TRIPCOM_MS_ID_AVGFE_ONEM_OC         */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  12 TRIPCOM_MS_ID_AVGHE_TA_HE           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  13 TRIPCOM_MS_ID_AVGHE_TA_HU           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  14 TRIPCOM_MS_ID_AVGHE_TA_OC           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  15 TRIPCOM_MS_ID_AVGHE_DC_HE           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  12 TRIPCOM_MS_ID_AVGHE_TA_HE           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  13 TRIPCOM_MS_ID_AVGHE_TA_HU           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  14 TRIPCOM_MS_ID_AVGHE_TA_OC           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  15 TRIPCOM_MS_ID_AVGHE_DC_HE           */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  16 TRIPCOM_MS_ID_AVGHE_DC_HU           */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  17 TRIPCOM_MS_ID_AVGHE_DC_OC           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  18 TRIPCOM_MS_ID_AVGHE_RF_HE           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  19 TRIPCOM_MS_ID_AVGHE_RF_HU           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  20 TRIPCOM_MS_ID_AVGHE_RF_OC           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  18 TRIPCOM_MS_ID_AVGHE_RF_HE           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  19 TRIPCOM_MS_ID_AVGHE_RF_HU           */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  20 TRIPCOM_MS_ID_AVGHE_RF_OC           */
 #if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_AVGEE_TA_EE,           (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  21 TRIPCOM_MS_ID_AVGEE_TA_EE           */
 #else   /* BEV Rebase provisionally */
@@ -108,12 +108,8 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  42 TRIPCOM_MS_ID_INSTEE_EU             */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  43 TRIPCOM_MS_ID_INSTEE_OC             */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  44 TRIPCOM_MS_ID_INSTEE_DV             */
-#if 0   /* BEV Rebase provisionally */
-    {   (U2)RIMID_U4_TRIPCOM_DTE_OC,                (U1)TRIPCOM_MS_DEV_BR_M,     (U1)0xFFU                            },        /*  45 TRIPCOM_MS_ID_DTE_OC                */
-#else   /* BEV Rebase provisionally */
-    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },
-#endif   /* BEV Rebase provisionally */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_DTE_FE          },        /*  46 TRIPCOM_MS_ID_DTE_FE                */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  45 TRIPCOM_MS_ID_DTE_OC                */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  46 TRIPCOM_MS_ID_DTE_FE                */
 #if 0   /* BEV Rebase provisionally */
     {   (U2)RIMID_U4_TRIPCOM_EVDTE_OC,              (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  47 TRIPCOM_MS_ID_EVDTE_OC              */
 #else   /* BEV Rebase provisionally */
@@ -136,8 +132,8 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  54 TRIPCOM_MS_ID_AVGVEHSPD_DC_ET       */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  55 TRIPCOM_MS_ID_SAVEFS_LC_F           */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  56 TRIPCOM_MS_ID_SAVEFS_DC_F           */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  57 TRIPCOM_MS_ID_ECOSTPTM_LC_ET        */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_BR_Z,     (U1)0xFFU                            },        /*  58 TRIPCOM_MS_ID_ECOSTPTM_DC_ET        */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  57 TRIPCOM_MS_ID_ECOSTPTM_LC_ET        */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  58 TRIPCOM_MS_ID_ECOSTPTM_DC_ET        */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  59 TRIPCOM_MS_ID_ECOSTPTM_ST_ET        */
     {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)TRIPCOM_NVMIF_CH_TOTM_ET         },        /*  60 TRIPCOM_MS_ID_PTSRUNTM_LC_ET        */
 #if 0   /* BEV Rebase provisionally */
@@ -186,18 +182,18 @@ const           ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[TRIPCOM
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  88 TRIPCOM_MS_ID_DTE_ED_U2_KZ_10CC     */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  89 TRIPCOM_MS_ID_DTE_ED_U4_TC          */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  90 TRIPCOM_MS_ID_DTE_ED_U2_BLWME_CNT   */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  91 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE00     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  92 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE01     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  93 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE02     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  94 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE03     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  95 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE04     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  96 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE05     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  97 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT00     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  98 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT01     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  99 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT02     */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  100 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT03    */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  101 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT04    */
-    {   (U2)U2_MAX,                                 (U1)TRIPCOM_MS_DEV_NVM,      (U1)0xFFU                            },        /*  102 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT05    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  91 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE00     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  92 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE01     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  93 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE02     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  94 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE03     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  95 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE04     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  96 TRIPCOM_MS_ID_AVGGRPH_TAFE_FE05     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  97 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT00     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  98 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT01     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  99 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT02     */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  100 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT03    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  101 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT04    */
+    {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  102 TRIPCOM_MS_ID_AVGGRPH_TAFE_DT05    */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  103 TRIPCOM_MS_ID_AVGGRPH_TAFE_LTST    */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  104 TRIPCOM_MS_ID_AVGGRPH_TAFE_MAX     */
     {   (U2)U2_MAX,                                 (U1)0xFFU,                   (U1)0xFFU                            },        /*  105 TRIPCOM_MS_ID_AVGGRPH_1MFE_FE00    */

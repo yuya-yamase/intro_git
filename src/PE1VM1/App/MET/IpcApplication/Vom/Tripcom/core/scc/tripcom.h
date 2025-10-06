@@ -155,11 +155,7 @@ void            vd_g_TripcomWkupInit(void);
 void            vd_g_TripcomMainTask(void);
 void            vd_g_TripcomSmoothingTask(void);
 
-U1              u1_g_AvgFeKmpl(const U1 u1_a_AVG_FE_CH, U4 * u4p_a_kmpl);
-U1              u1_g_AvgHeKmpkg(const U1 u1_a_AVG_HE_CH, U4 * u4p_a_kmpkg);
 U1              u1_g_AvgVehspdKmph(const U1 u1_a_AVG_VEHSPD_CH, U2 * u2p_a_kmph);
-U1              u1_g_InstFeKmpl(U4 * u4p_a_kmpl);
-U1              u1_g_InstHeKmpkg(U4 * u4p_a_kmpkg);
 U1              u1_g_PtsRunDistKm(const U1 u1_a_PTSRUN_DIST_CH, U4 * u4p_a_km);
 U1              u1_g_PtsRunTmHrs(const U1 u1_a_PTSRUN_TM_CH, U4 * u4p_a_hhmmss);
 U1              u1_g_InstEeKmpkwh(U4 * u4p_a_kmpkwh);
@@ -171,11 +167,9 @@ U1              u1_g_EvDtePct(U1 * u1p_a_pct);
 U1              u1_g_EvRunTmRatio(U1 * u1p_a_evratio);
 U2              u2_g_EvDteKmDiff(void);
 
-U1              u1_g_AvgFeRstImmwRslt(const U1 u1_a_AVG_FE_CH);        /* called by Diagnosis */
 U1              u1_g_AvgVehspdRstImmwRslt(const U1 u1_a_AVG_VEHSPD_CH);/* called by Diagnosis */
 U1              u1_g_PtsRunTmRstImmwRslt(const U1 u1_a_PTSRUN_TM_CH);  /* called by Diagnosis */
 U1              u1_g_AvgEeRstImmwRslt(const U1 u1_a_AVG_EE_CH);        /* called by Diagnosis */
-U1              u1_g_DteEdRstImmwRslt(const U1 u1_a_DTE_ED_CH);        /* called by Diagnosis */
 
 void            vd_g_TripcomActRefuelEvHk(const U2 u2_a_DELTA, const U1 u1_a_VTM);
 void            vd_g_TripcomFrcRefuelEvHk(void);

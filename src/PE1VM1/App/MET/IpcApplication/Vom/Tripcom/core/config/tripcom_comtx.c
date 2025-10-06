@@ -1169,7 +1169,11 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 #endif   /* BEV Rebase provisionally */
 
     u1_t_rffc   = u1_s_TXINIT;
+#if 0   /* BEV Rebase provisionally */
     u1_t_status = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_RF, &u4_t_kmpl);
+#else   /* BEV Rebase provisionally */
+    u1_t_status = (U1)TRIPCOM_STSBIT_UNKNOWN;
+#endif   /* BEV Rebase provisionally */
     if (u1_t_status == (U1)TRIPCOM_STSBIT_VALID) {
         u1_t_rffc = u1_s_TXMAX;
         if (u4_t_kmpl < u4_s_MAXVAL) {
