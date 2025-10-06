@@ -20,8 +20,8 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-#if 0   /* BEV Rebase provisionally */
 #include "unitconvrt.h"
+#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
 #endif   /* BEV Rebase provisionally */
 #include "odo_km.h"

@@ -54,6 +54,15 @@
 #define ODO_NVMIF_REQ_TYPE_READ                  (NVMC_REQUEST_TYPE_READ)
 #define ODO_NVMIF_JOB_RESULT_OK                  (NVMC_RESULT_OK)
 #else   /* BEV Rebase provisionally */
+#define vd_g_OdoNvmIfOdoRWAct()                  vdp_PTR_NA
+#define vd_g_OdoNvmIfOdoRWDeAct()                vdp_PTR_NA
+#define vd_g_OdoNvmIfTripRWAct()                 vdp_PTR_NA
+#define vd_g_OdoNvmIfTripRWDeAct()               vdp_PTR_NA
+ 
+#define vd_g_OdoNvmIfWriteBlock(m,b,w,l)         vdp_PTR_NA
+#define vd_g_OdoNvmIfReadBlock(m,b)              vdp_PTR_NA
+#define u1_g_OdoNvmIfSyncBlock(m,b,r,l)          ((U1)1U)
+
 #define ODO_NVMIF_REQ_TYPE_READ                  (0U)
 #define ODO_NVMIF_JOB_RESULT_OK                  (0U)
 #endif   /* BEV Rebase provisionally */

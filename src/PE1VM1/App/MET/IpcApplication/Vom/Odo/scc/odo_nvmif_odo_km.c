@@ -165,9 +165,7 @@ void    vd_g_OdoNvmIfOdoInit(const U1 u1_a_SYNC)
         vd_s_OdoNvmIfOdoSynInit();
     }
     else{
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoNvmIfOdoRWAct();
-#endif   /* BEV Rebase provisionally */
     }
 }
 /*===================================================================================================================================*/
@@ -198,9 +196,7 @@ U1      u1_g_OdoNvmIfOdoRWRqst(const ST_ODO_KM * st_ap_KM_NEXT)
             st_tp_km_next->u4_crc32 = st_ap_KM_NEXT->u4_crc32;
         }
 
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoNvmIfOdoRWAct();
-#endif   /* BEV Rebase provisionally */
 
         u1_t_accpt = (U1)TRUE;
     }
@@ -394,14 +390,10 @@ static void    vd_s_OdoNvmIfOdoSynInit(void)
         u2_t_rdbk_offset = (U2)0U;
 
         do{
-#if 0   /* BEV Rebase provisionally */
             u1_t_rdrslt = u1_g_OdoNvmIfSyncBlock(u1_t_dev_idx,
                                                  u2_tp_BLOCK[u4_t_blo_idx],
                                                  &u1_tp_rdbk[u2_t_rdbk_offset],
                                                  u2_t_blo_nbyte);
-#else   /* BEV Rebase provisionally */
-            u1_t_rdrslt = (U1)1U;
-#endif   /* BEV Rebase provisionally */
 
             u2_t_rdbk_offset += u2_t_blo_nbyte;
             /* The source of u2_t_blo_nbyte is st_g_ODO_NVMIF_REC_ODO_KM.u1_blo_nbyte, so the max value of u2_t_blo_nbyte is 255.    */
@@ -767,9 +759,7 @@ static U1      u1_s_OdoNvmIfOdoSynchk(void)
 /*===================================================================================================================================*/
 static void    vd_s_OdoNvmIfOdoActToSeqCmplt(void)
 {
-#if 0   /* BEV Rebase provisionally */
     vd_g_OdoNvmIfOdoRWDeAct();
-#endif   /* BEV Rebase provisionally */
 }   
 /*===================================================================================================================================*/
 /*  static void    vd_s_OdoNvmIfOdoActToReqNext(void)                                                                                */
@@ -827,9 +817,7 @@ static void    vd_s_OdoNvmIfOdoActToSynCmplt(void)
     u1_s_odo_nvmif_odo_rdbk_cnt             = (U1)0U;
 
     vd_g_OdoNvmIfCbkOdoKm(&st_sp_odo_nvmif_odo_rw_km[ODO_NVMIF_RW_KM_LAST]);
-#if 0   /* BEV Rebase provisionally */
     vd_g_OdoNvmIfOdoRWDeAct();
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_OdoNvmIfOdoActWriNext(void)                                                                                  */
