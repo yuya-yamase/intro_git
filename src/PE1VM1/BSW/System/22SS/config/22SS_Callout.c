@@ -41,8 +41,8 @@
 #include "illumi.h"
 #if 0   /* BEV Rebase provisionally */
 #include "thblnkr.h"
-#include "vehspd_kmph.h"
 #endif   /* BEV Rebase provisionally */
+#include "vehspd_kmph.h"
 #include "vptran_sel.h"
 #if 0   /* BEV Rebase provisionally */
 #include "ptsctmp_cel.h"
@@ -50,7 +50,9 @@
 #include "sbltwrn.h"
 #include "engspd_rpm.h"
 #include "engspd_det_rpm.h"
+#endif   /* BEV Rebase provisionally */
 #include "odo_km.h"
+#if 0   /* BEV Rebase provisionally */
 #include "tripsnsr.h"
 #include "tripcom.h"
 #include "ambtmp.h"
@@ -68,7 +70,6 @@
 #include "vardef.h"
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
-#include "mcst.h"
 #endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
 #if 0   /* BEV Rebase provisionally */
@@ -125,7 +126,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_VardefBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
-        &vd_g_McstBonInit,
         &vd_g_LocaleBonInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxBonInit,
@@ -139,8 +139,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
         &vd_g_ThblnkrBonInit,
-        &vd_g_VehspdInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_VehspdInit,
         &vd_g_VptranInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
@@ -149,7 +149,9 @@ void vd_g_22SSCallout_StaBonInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdBonInit,
         &vd_g_EngspdDetInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_OdoBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
         &vd_g_AmbtmpBonInit,
@@ -224,7 +226,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
-        &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxRstInit,
@@ -238,8 +239,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
         &vd_g_ThblnkrRstWkInit,
-        &vd_g_VehspdInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_VehspdInit,
         &vd_g_VptranInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
@@ -248,7 +249,9 @@ void vd_g_22SSCallout_StaRstInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
@@ -323,7 +326,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
-        &vd_g_McstRstwkInit,
         &vd_g_LocaleRstWkupInit,
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxWkupInit,
@@ -337,8 +339,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
         &vd_g_ThblnkrRstWkInit,
-        &vd_g_VehspdInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_VehspdInit,
         &vd_g_VptranInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
@@ -347,7 +349,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,

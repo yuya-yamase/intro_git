@@ -21,13 +21,8 @@
 #include "iohw_diflt.h"
 #include "oxcan.h"
 
-#if 0   /* BEV BSW provisionally */
-#include "xpd_init.h"
-#else
-#endif
-
-#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
+#if 0   /* BEV Rebase provisionally */
 #include "ptsctmp_cel.h"
 #include "alert.h"
 #endif   /* BEV Rebase provisionally */
@@ -55,7 +50,7 @@
 #if 0   /* BEV Rebase provisionally */
 #define VEH_OPEMD_NUM_EVHK                      (6U)
 #else   /* BEV Rebase provisionally */
-#define VEH_OPEMD_NUM_EVHK                      (2U)
+#define VEH_OPEMD_NUM_EVHK                      (3U)
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -91,9 +86,9 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 {
 #if (VEH_OPEMD_NUM_EVHK > 0U)
     static const ST_VEH_OPEMD_EVHK   st_sp_VEH_OPEMD_EVHK[VEH_OPEMD_NUM_EVHK] = {
-#if 0   /* BEV Rebase provisionally */
         {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON    },
 
+#if 0   /* BEV Rebase provisionally */
         {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 
@@ -125,14 +120,6 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
         vd_g_DateclkEtmStart((U1)DATE_CLK_ETM_CH_TMRWK, (U4)0U); /* zero start */
     }
 #endif
-#if 0   /* BEV BSW provisionally */
-    u4_t_jdgbit = u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_ON;
-    if(u4_t_jdgbit != (U4)0U){
-       (void)u1_g_XpdiAbocnt((U1)TRUE);
-    }
-#else
-#endif
-
     for(u4_t_cnt = (U4)0U; u4_t_cnt < (U4)VEH_OPEMD_NUM_EVHK; u4_t_cnt++){
         u4_t_bit = u4_a_EVBIT & st_sp_VEH_OPEMD_EVHK[u4_t_cnt].u4_evbit;
         if(u4_t_bit != (U4)0U){
