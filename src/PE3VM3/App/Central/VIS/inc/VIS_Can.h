@@ -15,6 +15,13 @@
 #include "VIS.h"
 /* ----------------------------------------------------------------------------------------------------------- */
 /* 絶対時刻 */
+#define VIS_CAN_UTC_RX_NBYTE                    ((U1)8U)            /* CAN受信：RSE1G20バイト数 */
+#define VIS_CAN_UTC_RX_YE                       ((U1)2U)            /* CAN受信：年格納領域 */
+#define VIS_CAN_UTC_RX_MO                       ((U1)3U)            /* CAN受信：月格納領域 */
+#define VIS_CAN_UTC_RX_DA                       ((U1)4U)            /* CAN受信：日格納領域 */
+#define VIS_CAN_UTC_RX_HO                       ((U1)5U)            /* CAN受信：時格納領域 */
+#define VIS_CAN_UTC_RX_MI                       ((U1)6U)            /* CAN受信：分格納領域 */
+#define VIS_CAN_UTC_RX_SE                       ((U1)7U)            /* CAN受信：秒格納領域 */
 #define VIS_CAN_UTC_YEARMIN                     ((U1)0x00U)         /* UTC時刻情報年最小値 */
 #define VIS_CAN_UTC_MONTMIN                     ((U1)0x01U)         /* UTC時刻情報月最小値 */
 #define VIS_CAN_UTC_DAYMIN                      ((U1)0x01U)         /* UTC時刻情報日最小値 */
@@ -30,6 +37,13 @@
 #define VIS_CAN_UTC_FAIL                        ((U1)0xFFU)         /* UTC時刻情報Fail値 */
 
 /* オドメータ */
+#define VIS_CAN_ODO_RX_NBYTE                    ((U1)8U)            /* CAN受信：MET1S02バイト数 */
+#define VIS_CAN_ODO_RX_UNIT                     ((U1)3U)            /* CAN受信：オド単位格納領域 */
+#define VIS_CAN_ODO_RX_POS1                     ((U1)4U)            /* CAN受信：オドメータ情報格納領域(1Byte目) */
+#define VIS_CAN_ODO_RX_POS2                     ((U1)5U)            /* CAN受信：オドメータ情報格納領域(2Byte目) */
+#define VIS_CAN_ODO_RX_POS3                     ((U1)6U)            /* CAN受信：オドメータ情報格納領域(3Byte目) */
+#define VIS_CAN_ODO_RX_POS4                     ((U1)7U)            /* CAN受信：オドメータ情報格納領域(4Byte目) */
+#define VIS_CAN_ODO_UNITMASK                    ((U1)0x30U)         /* CAN受信：オド単位取得マスク値 */
 #define VIS_CAN_ODO_UNIT_INVALID                ((U1)0U)            /* オド単位異常 */
 #define VIS_CAN_ODO_UNIT_KM                     ((U1)1U)            /* オド単位Km */
 #define VIS_CAN_ODO_UNIT_MILE                   ((U1)2U)            /* オド単位Mile */
@@ -97,6 +111,7 @@
 #define VIS_CAN_TRANSREQ_DATA_LENGTH_1          ((U2)1U)            /* チップ間通信：データ長(1byte) */
 #define VIS_CAN_TRANSREQ_DATA_LENGTH_2          ((U2)2U)            /* チップ間通信：データ長(2byte) */
 #define VIS_CAN_TRANSREQ_DATA_LENGTH_18         ((U2)18U)           /* チップ間通信：データ長(18byte) */
+#define VIS_CAN_SHIFT_4BIT                      ((U4)4U)            /* ビットシフト：4bit */
 #define VIS_CAN_SHIFT_1BYTE                     ((U4)8U)            /* ビットシフト：1BYTE */
 #define VIS_CAN_SHIFT_2BYTE                     ((U4)16U)           /* ビットシフト：2BYTE */
 #define VIS_CAN_SHIFT_3BYTE                     ((U4)24U)           /* ビットシフト：3BYTE */
