@@ -32,9 +32,7 @@
 #if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
 #endif   /* BEV Rebase provisionally */
-#if 0   /* BEV Rebase provisionally */
 #include "vptran_sel.h"
-#endif   /* BEV Rebase provisionally */
 #if 0   /* BEV Rebase provisionally */
 #include "dio_if.h"
 #endif   /* BEV Rebase provisionally */
@@ -505,23 +503,12 @@ static U1   u1_s_IllumiILFadeDriveJdg(void)
     }
 
     u2_t_range   = (U2)0x0000U;
-#if 0   /* BEV Rebase provisionally */
     u1_t_sftsts  = u1_g_VptranRangeSelected(&u2_t_range);
-#else   /* BEV Rebase provisionally */
-    u1_t_sftsts  = (U1)0x00U; /* VPTRAN_VALID */
-#endif   /* BEV Rebase provisionally */
     u1_t_sft_p = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
     /* Treat as shift P if signal is not VALID */
     if ((u1_t_sftsts != (U1)VPTRAN_VALID) || ((u2_t_range & (U2)VPTRAN_RNG_MSK) == (U2)VPTRAN_OFF) || ((u2_t_range & (U2)VPTRAN_RNG_MSK) == (U2)VPTRAN_RNG_P_ON)) {
         u1_t_sft_p = (U1)TRUE;
     }
-#else   /* BEV Rebase provisionally */
-    /* Treat as shift P if signal is not VALID */
-    if ((u1_t_sftsts != (U1)0x00U) || ((u2_t_range & (U2)0x0FFFU) == (U2)0x0000U) || ((u2_t_range & (U2)0x0FFFU) == (U2)0x0001U)) {
-        u1_t_sft_p = (U1)TRUE;
-    }
-#endif   /* BEV Rebase provisionally */
 
     if(u1_t_sft_p == (U1)FALSE){                                                    /* RangeValid w/o P             */
         u1_t_sts = (U1)ILLUMI_COMTX_IL2STS_DRIVE;

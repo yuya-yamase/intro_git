@@ -41,6 +41,8 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/RcmmUI/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
@@ -191,6 +193,10 @@ App/MET/IpcApplication/Vom/RcmmUI/scc/rcmmui.c
 App/MET/IpcApplication/Vom/Vehspd/config/vehspd_kmph_cfg.c
 App/MET/IpcApplication/Vom/Vehspd/scc/vehspd_can_sp1x.c
 App/MET/IpcApplication/Vom/Vehspd/scc/vehspd_kmph.c
+App/MET/IpcApplication/Vom/Vptran/config/vptran_byw_cfg.c
+App/MET/IpcApplication/Vom/Vptran/config/vptran_sel_cfg.c
+App/MET/IpcApplication/Vom/Vptran/scc/vptran_byw.c
+App/MET/IpcApplication/Vom/Vptran/scc/vptran_sel.c
 App/MET/IpcApplication/Vsv/Gauge/config/gagdst_nxmph_cfg.c
 App/MET/IpcApplication/Vsv/Gauge/config/gauge_cfg.c
 App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_nxmph.c
