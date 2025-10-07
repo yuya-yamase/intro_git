@@ -88,6 +88,8 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
 
     if (u1_t_sbw_sup == (U1)TRUE) {
         u1_t_tm_type = (U1)VPTRAN_BYW;
+    } else {
+        u1_t_tm_type = (U1)VPTRAN_CVT;
     }
 
     return (u1_t_tm_type);
