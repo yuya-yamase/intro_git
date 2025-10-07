@@ -80,6 +80,7 @@ void            vd_g_VptranInitCfg(void)
 /*===================================================================================================================================*/
 U1              u1_g_VptranTransMissionTypeCfg(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_sbw_sup; 
     U1  u1_t_tm_type;
 
@@ -90,6 +91,9 @@ U1              u1_g_VptranTransMissionTypeCfg(void)
     }
 
     return (u1_t_tm_type);
+#else   /* BEV Rebase provisionally */
+    return ((U1)VPTRAN_BYW);
+#endif 0   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
