@@ -429,7 +429,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_0    (BSW_COMM_CH_PNCNUM_0 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_0         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_0    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 1U )
@@ -438,7 +437,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_1    (BSW_COMM_CH_PNCNUM_1 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_1         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_1    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 2U )
@@ -447,7 +445,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_2    (BSW_COMM_CH_PNCNUM_2 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_2         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_2    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 3U )
@@ -456,7 +453,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_3    (BSW_COMM_CH_PNCNUM_3 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_3         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_3    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 4U )
@@ -465,7 +461,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_4    (BSW_COMM_CH_PNCNUM_4 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_4         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_4    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 5U )
@@ -474,7 +469,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_5    (BSW_COMM_CH_PNCNUM_5 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_5         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_5    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 6U )
@@ -483,7 +477,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_6    (BSW_COMM_CH_PNCNUM_6 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_6         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_6    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 7U )
@@ -492,7 +485,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_7    (BSW_COMM_CH_PNCNUM_7 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_7         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_7    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 8U )
@@ -501,7 +493,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_8    (BSW_COMM_CH_PNCNUM_8 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_8         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_8    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 9U )
@@ -510,7 +501,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_9    (BSW_COMM_CH_PNCNUM_9 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_9         BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_9    BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 10U )
@@ -519,7 +509,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_10   (BSW_COMM_CH_PNCNUM_10 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_10        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_10   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 11U )
@@ -528,7 +517,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_11   (BSW_COMM_CH_PNCNUM_11 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_11        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_11   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 12U )
@@ -537,7 +525,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_12   (BSW_COMM_CH_PNCNUM_12 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_12        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_12   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 13U )
@@ -546,7 +533,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_13   (BSW_COMM_CH_PNCNUM_13 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_13        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_13   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 14U )
@@ -555,7 +541,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_14   (BSW_COMM_CH_PNCNUM_14 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_14        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_14   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 15U )
@@ -564,7 +549,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_15   (BSW_COMM_CH_PNCNUM_15 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_15        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_15   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 16U )
@@ -573,7 +557,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_16   (BSW_COMM_CH_PNCNUM_16 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_16        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_16   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 17U )
@@ -582,7 +565,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_17   (BSW_COMM_CH_PNCNUM_17 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_17        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_17   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 18U )
@@ -591,7 +573,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_18   (BSW_COMM_CH_PNCNUM_18 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_18        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_18   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 19U )
@@ -600,7 +581,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_19   (BSW_COMM_CH_PNCNUM_19 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_19        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_19   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 20U )
@@ -609,7 +589,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_20   (BSW_COMM_CH_PNCNUM_20 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_20        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_20   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 21U )
@@ -618,7 +597,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_21   (BSW_COMM_CH_PNCNUM_21 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_21        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_21   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 22U )
@@ -627,7 +605,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_22   (BSW_COMM_CH_PNCNUM_22 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_22        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_22   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 23U )
@@ -636,7 +613,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_23   (BSW_COMM_CH_PNCNUM_23 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_23        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_23   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 24U )
@@ -645,7 +621,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_24   (BSW_COMM_CH_PNCNUM_24 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_24        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_24   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 25U )
@@ -654,7 +629,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_25   (BSW_COMM_CH_PNCNUM_25 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_25        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_25   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 26U )
@@ -663,7 +637,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_26   (BSW_COMM_CH_PNCNUM_26 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_26        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_26   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 27U )
@@ -672,7 +645,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_27   (BSW_COMM_CH_PNCNUM_27 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_27        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_27   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 28U )
@@ -681,7 +653,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_28   (BSW_COMM_CH_PNCNUM_28 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_28        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_28   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 29U )
@@ -690,7 +661,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_29   (BSW_COMM_CH_PNCNUM_29 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_29        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_29   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 30U )
@@ -699,7 +669,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_30   (BSW_COMM_CH_PNCNUM_30 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_30        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_30   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 #if ( BSW_COMM_CFG_CHNUM > 31U )
@@ -708,7 +677,6 @@
 #define BSW_COMM_CH_PNAWKPW_NUM_31   (BSW_COMM_CH_PNCNUM_31 << 1U)
 #else
 #define BSW_COMM_CH_PNCNUM_31        BSW_COMM_PNCNUM_NONE
-#define BSW_COMM_CH_PNAWKPW_NUM_31   BSW_COMM_PNCNUM_NONE
 #endif
 #endif
 
@@ -737,7 +705,7 @@
 /*  v1-1-0          :2018/07/02                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/06/09                                             */
-/*  v3-0-0          :2024/11/14                                             */
+/*  v3-0-0          :2024/12/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

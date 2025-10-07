@@ -164,6 +164,6 @@ extern ar_isrcb_t ar_isrcb_eMCOS_ISR_INTRIIC1TEI;
 #endif /* OS_CFG_INTERNAL_H */
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/

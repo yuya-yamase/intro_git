@@ -1,0 +1,17 @@
+version = 1
+title = "title"
+core {
+    0 {
+        download = { "../../prj/Ren_U2A16_373_CDC_1MUS/PE0VM0/dst/PE0VM0.elf" }
+        symbol = { "../../prj/Ren_U2A16_373_CDC_1MUS/EHVM/dst/EHVM.elf" }
+    }
+    1 {
+        symbol = { "../../prj/Ren_U2A16_373_CDC_1MUS/EHVM/dst/EHVM.elf", "../../prj/Ren_U2A16_373_CDC_1MUS/PE1VM1/dst/PE1VM1.elf" }
+    }
+    2 {
+        symbol = { "../../prj/Ren_U2A16_373_CDC_1MUS/EHVM/dst/EHVM.elf", "../../prj/Ren_U2A16_373_CDC_1MUS/PE2VM2/dst/PE2VM2.elf" }
+    }
+    3 {
+        symbol = { "../../prj/Ren_U2A16_373_CDC_1MUS/EHVM/dst/EHVM.elf", "../../prj/Ren_U2A16_373_CDC_1MUS/PE3VM3/dst/PE3VM3.elf" }
+    }
+}

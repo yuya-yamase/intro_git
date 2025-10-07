@@ -41,8 +41,6 @@
 
 #include "oxdocan_aubif.h"
 
-/*#include "ox25epf_can.h"*//* @@@ */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -56,13 +54,6 @@
      (OXDOCAN_C_MINOR != OXDOCAN_CFG_H_MINOR) || \
      (OXDOCAN_C_PATCH != OXDOCAN_CFG_H_PATCH))
 #error "oxdocan.c and oxdocan_cfg_private.h : source and header files are inconsistent!"
-#endif
-
-#define OXDOCAN_PKG_MAJOR                        (1U)
-#if 0       /* @@@ */
-#if (OXDOCAN_PKG_MAJOR != OX25EPF_CAN_VER_MAJOR)
-#error "oxdocan.c and ox25epf_can.h : source and header files are inconsistent!"
-#endif
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -124,7 +115,6 @@ void    vd_g_oXDoCANBonInit(void)
     Dcm_ConfigType         st_t_type;
 
     vd_g_oXDoCANCfgBonPreInit();
-/*    vd_g_oXDoCANTmstpBonInit();*//* @@@ */
 
     u1_s_oxdc_eom_si_act = (U1)0x00U;
 
@@ -148,7 +138,6 @@ void    vd_g_oXDoCANRstInit(void)
     Dcm_ConfigType         st_t_type;
 
     vd_g_oXDoCANCfgRstPreInit();
-/*    vd_g_oXDoCANTmstpRstInit();*//* @@@ */
 
     u1_s_oxdc_eom_si_act = (U1)0x00U;
 
@@ -172,7 +161,6 @@ void    vd_g_oXDoCANWkupInit(void)
     Dcm_ConfigType         st_t_type;
 
     vd_g_oXDoCANCfgWkupPreInit();
-/*    vd_g_oXDoCANTmstpWkupInit();*//* @@@ */
 
     u1_s_oxdc_eom_si_act = (U1)0x00U;
 
@@ -285,7 +273,6 @@ void    vd_g_oXDoCANShutdown(void)
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANStaTmrwk(void)
 {
-/*    vd_g_oXDoCANTmstpStaTmrwk();*//* @@@ */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXDoCANAubIfStoreReqData(const uint8 *u1_ap_REQ, const uint32 u4_a_LEN)                                             */

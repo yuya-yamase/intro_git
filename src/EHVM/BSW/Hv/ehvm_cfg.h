@@ -36,14 +36,14 @@
 
 /* VCC */
 /* Number of VccId */
-#define VCC_NUM_OF_VCCID                  (0x0014U)
+#define VCC_NUM_OF_VCCID                  (0x0015U)
 
 /* Number of VccIds associated with SPID */
 #define SPID0_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID1_NUM_OF_RECEIVED_VCCID       (0x0CU)
 #define SPID2_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID3_NUM_OF_RECEIVED_VCCID       (0x01U)
-#define SPID4_NUM_OF_RECEIVED_VCCID       (0x0CU)
+#define SPID4_NUM_OF_RECEIVED_VCCID       (0x0DU)
 #define SPID5_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID6_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID7_NUM_OF_RECEIVED_VCCID       (0x01U)
@@ -51,9 +51,9 @@
 #define SPID9_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID10_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID11_NUM_OF_RECEIVED_VCCID       (0x01U)
-#define SPID12_NUM_OF_RECEIVED_VCCID       (0x0CU)
+#define SPID12_NUM_OF_RECEIVED_VCCID       (0x0DU)
 #define SPID13_NUM_OF_RECEIVED_VCCID       (0x01U)
-#define SPID14_NUM_OF_RECEIVED_VCCID       (0x0DU)
+#define SPID14_NUM_OF_RECEIVED_VCCID       (0x0EU)
 #define SPID15_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID16_NUM_OF_RECEIVED_VCCID       (0x01U)
 #define SPID17_NUM_OF_RECEIVED_VCCID       (0x01U)
@@ -74,25 +74,25 @@
 
 /* VCCID:0 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH0     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH0         (0x05U)
+#define VCC_NUM_OF_RING_ELEMENT_CH0         (0x06U)
 #define VCC_SIZE_OF_PACKET_CH0              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH0      (VCC_SIZE_OF_PACKET_CH0 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:1 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH1     (0x01U)
-#define VCC_NUM_OF_RING_ELEMENT_CH1         (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH1         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH1              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH1      (VCC_SIZE_OF_PACKET_CH1 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:2 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH2     (0x01U)
-#define VCC_NUM_OF_RING_ELEMENT_CH2         (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH2         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH2              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH2      (VCC_SIZE_OF_PACKET_CH2 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:3 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH3     (0x01U)
-#define VCC_NUM_OF_RING_ELEMENT_CH3         (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH3         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH3              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH3      (VCC_SIZE_OF_PACKET_CH3 / VCC_MESSAGE_ALIGN)
 
@@ -122,25 +122,25 @@
 
 /* VCCID:8 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH8     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH8         (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH8         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH8              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH8      (VCC_SIZE_OF_PACKET_CH8 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:9 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH9     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH9         (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH9         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH9              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH9      (VCC_SIZE_OF_PACKET_CH9 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:10 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH10     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH10         (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH10         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH10              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH10      (VCC_SIZE_OF_PACKET_CH10 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:11 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH11     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH11         (0x01U)
+#define VCC_NUM_OF_RING_ELEMENT_CH11         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH11              (0x00000004U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH11      (VCC_SIZE_OF_PACKET_CH11 / VCC_MESSAGE_ALIGN)
 
@@ -170,27 +170,33 @@
 
 /* VCCID:16 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH16     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH16         (0x02U)
+#define VCC_NUM_OF_RING_ELEMENT_CH16         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH16              (0x00000100U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH16      (VCC_SIZE_OF_PACKET_CH16 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:17 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH17     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH17         (0x02U)
+#define VCC_NUM_OF_RING_ELEMENT_CH17         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH17              (0x00000100U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH17      (VCC_SIZE_OF_PACKET_CH17 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:18 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH18     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH18         (0x02U)
+#define VCC_NUM_OF_RING_ELEMENT_CH18         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH18              (0x00000100U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH18      (VCC_SIZE_OF_PACKET_CH18 / VCC_MESSAGE_ALIGN)
 
 /* VCCID:19 */
 #define VCC_NUM_OF_RECEIVER_CHANNEL_CH19     (0x03U)
-#define VCC_NUM_OF_RING_ELEMENT_CH19         (0x02U)
+#define VCC_NUM_OF_RING_ELEMENT_CH19         (0x03U)
 #define VCC_SIZE_OF_PACKET_CH19              (0x00000100U)
 #define VCC_SIZE_OF_MESSAGE_BUFFER_CH19      (VCC_SIZE_OF_PACKET_CH19 / VCC_MESSAGE_ALIGN)
+
+/* VCCID:20 */
+#define VCC_NUM_OF_RECEIVER_CHANNEL_CH20     (0x03U)
+#define VCC_NUM_OF_RING_ELEMENT_CH20         (0x03U)
+#define VCC_SIZE_OF_PACKET_CH20              (0x00000040U)
+#define VCC_SIZE_OF_MESSAGE_BUFFER_CH20      (VCC_SIZE_OF_PACKET_CH20 / VCC_MESSAGE_ALIGN)
 
 
 /* EM */
@@ -256,6 +262,9 @@
 #define EM_SIZE_OF_MESSAGE_BUFFER_CH3       (EM_ERROR_BUFFER_SIZE_VM0_PE3)
 
 
+/* Num of Get Lock Component */
+#define HVM_NUM_OF_GET_LOCK_COMPONENT       (0x02U)
+
 #pragma ghs section rodata=default
 
 extern ehvm_uint32_t ehvm_em_cbk_make_error_message( EhvmConstR ehvm_em_error_msg_t* errorMessageInfo, EhvmConstR ehvm_uint32_t messageSizemax, ehvm_uint32_t* EhvmConstR messagebuf );
@@ -268,7 +277,7 @@ extern void ehvm_intm_ecm_error( void );
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

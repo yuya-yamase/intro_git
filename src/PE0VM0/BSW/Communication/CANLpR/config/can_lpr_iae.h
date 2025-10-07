@@ -64,7 +64,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define CAN_LPR_RR_EN_SECOC_TX                   (0U)      /* 1U   : SecOC Tx is enabled  and vd_g_CANLpRSecOCTRxPosHigh is disabled */
+#define CAN_LPR_RR_EN_SECOC_TX                   (1U)      /* 1U   : SecOC Tx is enabled  and vd_g_CANLpRSecOCTRxPosHigh is disabled */
                                                            /* 2U   : SecOC Tx is enabled  and vd_g_CANLpRSecOCTRxPosHigh is enabled  */
                                                            /* else : SecOC Tx is disabled and vd_g_CANLpRSecOCTRxPosHigh is disabled */
 #define CAN_LPR_RR_EN_SECOC_RX                   (0U)      /* 1U   : SecOC Rx is enabled  and vd_g_CANLpRSecOCTRxPosHigh is disabled */

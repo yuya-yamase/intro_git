@@ -142,29 +142,29 @@ static const Can_HardwareObjConfigType CAN_CFG_HARDWARE_OBJECT_DATA[CAN_HARDWARE
         CAN_RX,
         5U,
         0U,
-        0x18DA17E0UL,             /* ^^^ */
+        0x18DA17E0UL,
         CAN_FD_ID_EXTEND
     },
     {
         CAN_RX,
         5U,
         1U,
-        0x18DBEFE0UL,             /* ^^^ */
+        0x18DBEFE0UL,
         CAN_FD_ID_EXTEND
     },
     {
         CAN_TX,
         5U,
         2U,
-        0x18DAE017UL,             /* ^^^ */
+        0x18DAE017UL,
         CAN_FD_ID_EXTEND
     },
     {
-        CAN_TX,                   /* ^^^ */
-        5U,                       /* ^^^ */
-        3U,                       /* ^^^ */
-        0x18DAE017UL,             /* ^^^ */
-        CAN_ID_EXTEND             /* ^^^ */
+        CAN_TX,
+        5U,
+        3U,
+        0x18DAE017UL,
+        CAN_ID_EXTEND
     },
     {
         CAN_NOUSE,
@@ -320,5 +320,10 @@ const Can_DevConfigType CAN_DEVCFG_DATA =
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
 /*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

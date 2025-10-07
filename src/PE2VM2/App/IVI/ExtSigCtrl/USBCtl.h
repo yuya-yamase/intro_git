@@ -9,7 +9,7 @@
 #include "aip_common.h"
 
 #include "Dio.h"
-#include "Iohw_adc.h"
+#include "iohw_adc_sh.h"
 #include "x_spi_ivi_sub1_system.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

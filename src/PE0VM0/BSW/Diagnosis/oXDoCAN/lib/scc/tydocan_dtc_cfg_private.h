@@ -22,9 +22,6 @@
 #include "memfill_u1.h"
 
 #include "Dem_MM_Cfg.h"           /* DEM_NVM_USE_NVBLOCK_NUM is defined in Dem_MM_Cfg.h           */
-#if 0 /* @@@ */
-#include "rim_ctl.h"
-#endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */

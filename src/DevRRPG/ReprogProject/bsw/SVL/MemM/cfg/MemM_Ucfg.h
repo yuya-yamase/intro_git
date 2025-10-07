@@ -84,9 +84,9 @@
 
 /* MemoryArea 3 */
 #define MEMM_UCFG_MEMORY_ID_3               (0x00000000UL)
-#define MEMM_UCFG_PHYSICAL_ADDR_3           (0x00020000UL)
-#define MEMM_UCFG_VIRTUAL_ADDR_3            (0x00020000UL)
-#define MEMM_UCFG_MEMORY_AREA_SIZE_3        (0x007E0000UL)
+#define MEMM_UCFG_PHYSICAL_ADDR_3           (0x0001C000UL)
+#define MEMM_UCFG_VIRTUAL_ADDR_3            (0x0001C000UL)
+#define MEMM_UCFG_MEMORY_AREA_SIZE_3        (0x007A4000UL)
 #define MEMM_UCFG_GRNT_AREA_1ST_ADDR_3      (MEMM_INVALID_ADDR)
 #define MEMM_UCFG_GRNT_AREA_2ND_ADDR_3      (MEMM_INVALID_ADDR)
 #define MEMM_UCFG_DEVICE_TYPE_3             (MEMM_DEVICE_TYPE_CODEFLS)
@@ -128,5 +128,10 @@ extern CONST(MemM_MemoryAreaConfigType, MEMM_CONFIG_DATA) MemM_Ucfg_MemoryAreaDa
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
 /*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

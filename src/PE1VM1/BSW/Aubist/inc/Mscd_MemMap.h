@@ -23,7 +23,7 @@
 
 #if defined MSCD_START_SEC_CODE
 #undef MSCD_START_SEC_CODE
-#pragma ghs section text = "bsw_mscd_text"
+#pragma ghs section text = ".bsw_mscd_text"
 #undef MEMMAP_ERROR
 
 #elif defined MSCD_STOP_SEC_CODE
@@ -33,7 +33,7 @@
 
 #elif defined Mscd_START_SEC_CODE
 #undef Mscd_START_SEC_CODE
-#pragma ghs section text = "bsw_mscd_text"
+#pragma ghs section text = ".bsw_mscd_text"
 #undef MEMMAP_ERROR
 
 #elif defined Mscd_STOP_SEC_CODE
@@ -43,7 +43,7 @@
 
 #elif defined MSCD_START_SEC_CODE_CALLOUT
 #undef MSCD_START_SEC_CODE_CALLOUT
-#pragma ghs section text = "bsw_mscd_text"
+#pragma ghs section text = ".bsw_mscd_text"
 #undef MEMMAP_ERROR
 
 #elif defined MSCD_STOP_SEC_CODE_CALLOUT
@@ -53,7 +53,7 @@
 
 #elif defined Mscd_START_SEC_CODE_CALLOUT
 #undef Mscd_START_SEC_CODE_CALLOUT
-#pragma ghs section text = "bsw_mscd_text"
+#pragma ghs section text = ".bsw_mscd_text"
 #undef MEMMAP_ERROR
 
 #elif defined Mscd_STOP_SEC_CODE_CALLOUT
@@ -63,7 +63,7 @@
 
 #elif defined MSCD_START_SEC_CONST_32
 #undef MSCD_START_SEC_CONST_32
-#pragma ghs section rodata = "bsw_mscd_rodata"
+#pragma ghs section rodata = ".bsw_mscd_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined MSCD_STOP_SEC_CONST_32
@@ -73,7 +73,7 @@
 
 #elif defined Mscd_START_SEC_CONST_32
 #undef Mscd_START_SEC_CONST_32
-#pragma ghs section rodata = "bsw_mscd_rodata"
+#pragma ghs section rodata = ".bsw_mscd_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined Mscd_STOP_SEC_CONST_32
@@ -83,7 +83,7 @@
 
 #elif defined MSCD_START_SEC_CONST_CONFIG_32
 #undef MSCD_START_SEC_CONST_CONFIG_32
-#pragma ghs section rodata = "bsw_mscd_rodata"
+#pragma ghs section rodata = ".bsw_mscd_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined MSCD_STOP_SEC_CONST_CONFIG_32
@@ -93,7 +93,7 @@
 
 #elif defined Mscd_START_SEC_CONST_CONFIG_32
 #undef Mscd_START_SEC_CONST_CONFIG_32
-#pragma ghs section rodata = "bsw_mscd_rodata"
+#pragma ghs section rodata = ".bsw_mscd_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined Mscd_STOP_SEC_CONST_CONFIG_32
@@ -103,7 +103,7 @@
 
 #elif defined MSCD_START_SEC_VAR_NO_INIT_32
 #undef MSCD_START_SEC_VAR_NO_INIT_32
-#pragma ghs section bss = "bsw_mscd_bss"
+#pragma ghs section bss = ".bsw_mscd_bss"
 #undef MEMMAP_ERROR
 
 #elif defined MSCD_STOP_SEC_VAR_NO_INIT_32
@@ -113,7 +113,7 @@
 
 #elif defined Mscd_START_SEC_VAR_NO_INIT_32
 #undef Mscd_START_SEC_VAR_NO_INIT_32
-#pragma ghs section bss = "bsw_mscd_bss"
+#pragma ghs section bss = ".bsw_mscd_bss"
 #undef MEMMAP_ERROR
 
 #elif defined Mscd_STOP_SEC_VAR_NO_INIT_32
@@ -123,7 +123,7 @@
 
 #elif defined MSCD_START_SEC_VAR_INIT_WAKEUP_32
 #undef MSCD_START_SEC_VAR_INIT_WAKEUP_32
-#pragma ghs section bss = "bsw_mscd_bss"
+#pragma ghs section bss = ".bsw_mscd_bss"
 #undef MEMMAP_ERROR
 
 #elif defined MSCD_STOP_SEC_VAR_INIT_WAKEUP_32
@@ -133,7 +133,7 @@
 
 #elif defined Mscd_START_SEC_VAR_INIT_WAKEUP_32
 #undef Mscd_START_SEC_VAR_INIT_WAKEUP_32
-#pragma ghs section bss = "bsw_mscd_bss"
+#pragma ghs section bss = ".bsw_mscd_bss"
 #undef MEMMAP_ERROR
 
 #elif defined Mscd_STOP_SEC_VAR_INIT_WAKEUP_32
@@ -143,7 +143,7 @@
 
 #elif defined MSCD_START_SEC_VAR_CLEARED_32
 #undef MSCD_START_SEC_VAR_CLEARED_32
-#pragma ghs section bss = "bsw_mscd_bss"
+#pragma ghs section bss = ".bsw_mscd_bss"
 #undef MEMMAP_ERROR
 
 #elif defined MSCD_STOP_SEC_VAR_CLEARED_32
@@ -153,7 +153,7 @@
 
 #elif defined Mscd_START_SEC_VAR_CLEARED_32
 #undef Mscd_START_SEC_VAR_CLEARED_32
-#pragma ghs section bss = "bsw_mscd_bss"
+#pragma ghs section bss = ".bsw_mscd_bss"
 #undef MEMMAP_ERROR
 
 #elif defined Mscd_STOP_SEC_VAR_CLEARED_32
@@ -227,7 +227,7 @@
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

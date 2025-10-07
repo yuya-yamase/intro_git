@@ -5557,11 +5557,34 @@ EhvmConst ehvm_spid_config_t ehvmSpidConfigData = {
     NULL_PTR          /* SpidBMSpidPtr */
 };
 
+/****************************************************************************************/
+/* ehvmMmCommonConfigData                                                               */
+/****************************************************************************************/
+static EhvmConst ehvm_mm_romram_area_t ehvmMmRomramArea[MM_NUM_OF_ROMRAM_AREA] = {
+    {
+        0x00000000U,    /* MmRomramLowerAddr */
+        0x0FFFFFFFU     /* MmRomramUpperAddr */
+    },
+    {
+        0xFA000000U,    /* MmRomramLowerAddr */
+        0xFE83FFFFU     /* MmRomramUpperAddr */
+    },
+    {
+        0xFF200000U,    /* MmRomramLowerAddr */
+        0xFF5FFFFFU     /* MmRomramUpperAddr */
+    }
+};
+
+EhvmConst ehvm_mm_common_config_t ehvmMmCommonConfigData = {
+    &ehvmMmRomramArea[0],        /* MmRomramArea */
+    MM_NUM_OF_ROMRAM_AREA        /* MmNumOfRomramArea */
+};
+
 #pragma ghs section rodata=default
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

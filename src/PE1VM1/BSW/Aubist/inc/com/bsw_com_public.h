@@ -369,7 +369,7 @@ void                   bsw_com_rx_ClearTickTime( PduIdType PduId );
 void                   bsw_com_rx_SetRxTickTime( NetworkHandleType network, uint16 Offset );
 Std_ReturnType         bsw_com_data_FailInitMsg( PduIdType PduId );
 void                   bsw_com_tx_ClearTxIpdu( NetworkHandleType network, Bsw_Com_TxModeType mode );
-void                   bsw_com_tx_ClearNonAwakeEvt( NetworkHandleType network, uint32* SysStatus );
+void                   bsw_com_tx_ClearNonAwakeEvt( NetworkHandleType network, BswConstR uint32* SysStatus );
 void                   bsw_com_tx_StartChangePeriodCh( NetworkHandleType network );
 void                   bsw_com_tx_StopChangePeriodCh( NetworkHandleType network );
 void                   bsw_com_tx_CancelTxIpdu( PduIdType PduId, Bsw_Com_TxModeType mode );
@@ -404,7 +404,7 @@ void                   bsw_com_tx_SetFirstTxStatus( NetworkHandleType network );
 void                   bsw_com_tx_BusWakeup( NetworkHandleType network, uint8 WakeupKind, uint16 DisableSend, uint16 EnablePeriodic );
 void                   bsw_com_tx_SetTxDelayTime( PduIdType u2PduId, uint16 SetTime );
 void                   bsw_com_tx_SetPeriodicTxTime( PduIdType u2PduId, uint16 SetTime, uint8 FirstOffset );
-
+Std_ReturnType         bsw_com_data_WriteMsgMsk( PduIdType id, BswConstR uint8* SduDataPtr, BswConstR uint8* SduMaskPtr );
 
 uint8                  bsw_com_data_SendSgnlMDB( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
 uint8                  bsw_com_data_SendSgnlMDL( Bsw_Com_DataHandlerType DataHandler, Bsw_Com_MsgOffsetType MsgOffset, uint8 DataSize, uint8 Offset, BswConstR void *ptData, BswConstR uint8 *ptMetaData );
@@ -446,9 +446,9 @@ uint8                  bsw_com_data_RcvSgnlGrpArryMD( Bsw_Com_DataHandlerType Da
 
 Std_ReturnType         bsw_com_data_ReadMsgMetaData( PduIdType PduId, uint8 *ptMsg, uint8 *ptMetaData  );
 
-Std_ReturnType         bsw_com_data_RespSendMetaData( PduIdType PduId, uint8 *MetaData );
+Std_ReturnType         bsw_com_data_RespSendMetaData( PduIdType PduId, BswConstR uint8 *MetaData );
 Std_ReturnType         bsw_com_data_SetInitMetaData( PduIdType id );
-Std_ReturnType         bsw_com_data_SetSendMetaData( PduIdType TxPduId, uint8 *ptMetaData );
+Std_ReturnType         bsw_com_data_SetSendMetaData( PduIdType TxPduId, BswConstR uint8 *ptMetaData );
 Std_ReturnType         bsw_com_data_GetSendMetaData( PduIdType TxPduId, uint8 *ptMetaData );
 
 /* Callback */
@@ -466,7 +466,7 @@ void                   bsw_com_tx_CbkTxAck( PduIdType PduId );
 void                   bsw_com_tx_CbkTxErr( PduIdType PduId );
 uint16                 bsw_com_tx_CbkPrePeriTxRtrgr( NetworkHandleType network, PduIdType PduId, uint16 NextTime );
 boolean                bsw_com_tx_PreTxIpdu( PduIdType PduId, PduInfoType* PduInfoPtr );
-void                   bsw_com_tx_PreTrgTxIPdu( PduIdType PduId, PduInfoType* PduInfoPtr );
+boolean                bsw_com_tx_PreTrgTxIPdu( PduIdType PduId, PduInfoType* PduInfoPtr );
 void                   bsw_com_tx_CbkSetStatus( NetworkHandleType network, Bsw_Com_TxStatusType status );
 void                   bsw_com_tx_CbkBusWakeUp( NetworkHandleType network, uint8 WakeupKind );
 void                   bsw_com_tx_CbkEnablePeriTx( NetworkHandleType network, uint8 WakeupKind );
@@ -487,7 +487,7 @@ void                   bsw_com_tx_CbkEnablePeriTx( NetworkHandleType network, ui
 /*  v2-0-0          :2021/09/10                                             */
 /*  v2-1-0          :2022/10/11                                             */
 /*  v2-2-0          :2023/05/24                                             */
-/*  v3-0-0          :2024/11/12                                             */
+/*  v3-0-0          :2025/02/03                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

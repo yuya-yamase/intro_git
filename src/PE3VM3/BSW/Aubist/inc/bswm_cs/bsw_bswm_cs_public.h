@@ -277,11 +277,10 @@ void                    bsw_bswm_cs_st_ReqProvideClock( void );
 /* Unit:sysstat                 */
 /*------------------------------*/
 void                    bsw_bswm_cs_sysst_SetSysStat( uint32 Mask, uint32 SysStatus );
-void                    bsw_bswm_cs_sysst_SetSysStatExt( uint32* Mask, uint32* SysStatus );
+void                    bsw_bswm_cs_sysst_SetSysStatExt( BswConstR uint32* Mask, BswConstR uint32* SysStatus );
 uint8                   bsw_bswm_cs_sysst_GetSysStat( void );
 void                    bsw_bswm_cs_sysst_GetSysStatExt( uint32* SysStatus );
-uint32                  bsw_bswm_cs_sysst_GetLatSysStat( void );
-void                    bsw_bswm_cs_sysst_GetLatSSExt( uint32* SysStatus );
+void                    bsw_bswm_cs_sysst_GetLatSysStat( uint32* SysStatus );
 void                    bsw_bswm_cs_sysst_GetECUInitPw( uint32* EcuInitPw );
 uint8                   bsw_bswm_cs_sysst_JudgeWkUpChPw( NetworkHandleType Network );
 
@@ -295,11 +294,11 @@ void                    bsw_bswm_cs_ctrl_StopNetwork( NetworkHandleType Network 
 void                    bsw_bswm_cs_ctrl_StartNetwork( NetworkHandleType Network );
 void                    bsw_bswm_cs_ctrl_EvtWkupTxConf( NetworkHandleType Network, uint16 DisableTime );
 void                    bsw_bswm_cs_st_SetIpduGrVct( NetworkHandleType Network, uint8 TxIpduGrpVct, uint8 RxIpduGrpVct );
-void                    bsw_bswm_cs_st_SetIpduGrVctExt( NetworkHandleType Network, uint32* TxIpduGrpVct, uint32* RxIpduGrpVct );
+void                    bsw_bswm_cs_st_SetIpduGrVctExt( NetworkHandleType Network, BswConstR uint32* TxIpduGrpVct, BswConstR uint32* RxIpduGrpVct );
 void                    bsw_bswm_cs_st_SetWkIpGrVct( NetworkHandleType Network, uint32 IpduGrpVct );
-void                    bsw_bswm_cs_st_SetWkIpGrVctExt( NetworkHandleType Network, uint32* IpduGrpVct );
+void                    bsw_bswm_cs_st_SetWkIpGrVctExt( NetworkHandleType Network, BswConstR uint32* IpduGrpVct );
 void                    bsw_bswm_cs_st_SetDMGrVct( NetworkHandleType Network, uint8 IpduGrpVct );
-void                    bsw_bswm_cs_st_SetDMGrVctExt( NetworkHandleType Network, uint32* IpduGrpVct );
+void                    bsw_bswm_cs_st_SetDMGrVctExt( NetworkHandleType Network, BswConstR uint32* IpduGrpVct );
 void                    bsw_bswm_cs_ctrl_SetTxControl( NetworkHandleType Network, uint8 TxStatus );
 void                    bsw_bswm_cs_ctrl_ResetPeriTx( NetworkHandleType Network, uint8 ResetReason, uint16 offset );
 Bsw_BswM_CS_RetCtrlType bsw_bswm_cs_ctrl_StopTxPdu( NetworkHandleType Network );
@@ -307,7 +306,7 @@ Bsw_BswM_CS_RetCtrlType bsw_bswm_cs_ctrl_ResumeTxPdu( NetworkHandleType Network 
 uint16                  bsw_bswm_cs_ctrl_GetRsmWaitTime( NetworkHandleType Network );
 uint8                   bsw_bswm_cs_ctrl_GetTxCtrlType( NetworkHandleType Network );
 void                    bsw_bswm_cs_ctrl_ClearTxPdu( NetworkHandleType Network, uint8 clrTxMode );
-void                    bsw_bswm_cs_ctrl_ClrNoAwkEvtPdu( NetworkHandleType Network, uint32* NonBusAwakePw );
+void                    bsw_bswm_cs_ctrl_ClrNoAwkEvtPdu( NetworkHandleType Network, BswConstR uint32* NonBusAwakePw );
 void                    bsw_bswm_cs_ctrl_StartChgPeriCh( NetworkHandleType Network );
 void                    bsw_bswm_cs_ctrl_StopChgPeriCh( NetworkHandleType Network );
 void                    bsw_bswm_cs_ctrl_RestartChCtrl( NetworkHandleType Network );
@@ -377,7 +376,7 @@ uint16                  bsw_bswm_cs_system_ms2MTickRup( uint16 msTime );
 /*  Version         :Date                                                   */
 /*  v2-0-0          :2021/11/16                                             */
 /*  v2-2-0          :2023/06/08                                             */
-/*  v3-0-0          :2024/11/13                                             */
+/*  v3-0-0          :2025/02/06                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

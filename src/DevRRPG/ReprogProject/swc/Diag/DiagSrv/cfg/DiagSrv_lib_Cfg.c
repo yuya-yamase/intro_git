@@ -46,7 +46,7 @@ static VAR(DiagSrv_RewriteAreaStatusInfoType, DIAGSRV_VAR_CLEARED) DiagSrv_Rewri
 #include <DiagSrv_MemMap.h>
 
 static CONST(DiagSrv_RprgDataAreaInfoConfigType, DIAGSRV_CONFIG_DATA) DiagSrv_RprgDataAreaInfoConfig[] = {
-     { 0x00U, 0x007FFE00UL, DIAGSRV_CFG_RPRGDATA_SIZE }
+     { 0x00U, 0x007BFE00UL, DIAGSRV_CFG_RPRGDATA_SIZE }
 };
 
 CONST(DiagSrv_RprgDataAreaConfigType, DIAGSRV_CONFIG_DATA) DiagSrv_RprgDataAreaConfig = {
@@ -85,5 +85,10 @@ CONST(uint8, DIAGSRV_CONFIG_DATA) DiagSrv_EncryptionFlagConfig = DIAGSRV_ENCRYPT
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
 /*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

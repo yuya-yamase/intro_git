@@ -8,13 +8,10 @@
 
     -I${CAN_DIR}/inc
     -I${CAN_DIR}/inc/Dcm
-    -I${CAN_DIR}/inc/Dem
     -I${CAN_DIR}/Dcm/Dsd/cfg
     -I${CAN_DIR}/Dcm/Dsp/cfg
-    -I${CAN_DIR}/Dem/cfg
-    -I${CAN_DIR}/Dem/usr
-    -I${OXDOCAN_DIR}/lib/config_U2A16_met
-    -I${OXDOCAN_DIR}/lib/scc
+    -I${OXDOCAN_DIR}/config
+    -I${OXDOCAN_DIR}/scc
 
 
 ab_lib/libbswcs.a
@@ -267,7 +264,6 @@ Dcm/Dsp/cfg/Dcm_Dsp_SID85_Cfg.c
 Dcm/Dsp/cfg/Dcm_Dsp_SID34_Cfg.c
 Dcm/Dsp/cfg/Dcm_Dsp_SID36_Cfg.c
 Dcm/Dsp/cfg/Dcm_Dsp_SID37_Cfg.c
-Dcm/Dsp/cfg/Dcm_Dsp_SID86_Cfg.c
 Dcm/Dsp/cfg/Dcm_Dsp_StorageMng_Cfg.c
 Dcm/Dsp/src/Dcm_Dsp_DataTfrMng.c
 Dcm/Dsp/src/Dcm_Dsp_DidMng.c
@@ -293,7 +289,6 @@ Dcm/Dsp/src/Dcm_Dsp_SID85.c
 Dcm/Dsp/src/Dcm_Dsp_SID34.c
 Dcm/Dsp/src/Dcm_Dsp_SID36.c
 Dcm/Dsp/src/Dcm_Dsp_SID37.c
-Dcm/Dsp/src/Dcm_Dsp_SID86.c
 Dcm/Dsp/src/Dcm_Dsp_StorageMng.c
 Dcm/Dsp/usr/Dcm_Dsp_DataTfrMng_Callout.c
 Dcm/Dsp/usr/Dcm_Dsp_DidMng_Callout.c
@@ -312,8 +307,6 @@ Dcm/Dsp/usr/Dcm_Dsp_SID85_Connector.c
 Dcm/Dsp/usr/Dcm_Dsp_SID34_Callout.c
 Dcm/Dsp/usr/Dcm_Dsp_SID36_Callout.c
 Dcm/Dsp/usr/Dcm_Dsp_SID37_Callout.c
-Dcm/Dsp/usr/Dcm_Dsp_SID86_Callout.c
-Dcm/Dsp/usr/Dcm_Dsp_SID86_Connector.c
 Dcm/Dsp/usr/Dcm_Dsp_StorageMng_Connector.c
 Dcm/Main/cfg/Dcm_Main_Common_Cfg.c
 Dcm/Main/cfg/Dcm_Main_EvtDistr_Cfg.c

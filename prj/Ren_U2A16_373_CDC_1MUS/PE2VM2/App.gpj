@@ -44,8 +44,11 @@
     -I${VEHOPE_DIR}/config_tybev3
     -I${VEHOPE_DIR}/scc
 
-    -I${OXDOCAN_DIR}/lib/config_U2A16_met
-    -I${OXDOCAN_DIR}/lib/scc
+    -I${OXDOCAN_DIR}/config
+    -I${OXDOCAN_DIR}/scc
+
+    -I${SS_DIR}/Throughput/scc
+    -I${SS_DIR}/Throughput/config
 
     -I${LIB_DIR}
     
@@ -83,6 +86,9 @@ ${SS_DIR}/RunM/scc/run_m.c
 ${SS_DIR}/RunM/config/run_m_cfg.c
 ${SS_DIR}/SchdM//scc/scheduler.c
 ${SS_DIR}/SchdM/config/scheduler_cfg.c
+${SS_DIR}/Throughput/scc/throughput.c
+${SS_DIR}/Throughput/config/throughput_cfg.c
+${SS_DIR}/Throughput/config/throughput_sched.c
 
 ${SS_DIR}/22SS/config/22SS_Callout.c
 ${APP_DIR}/Stub/stub_u2a.c
