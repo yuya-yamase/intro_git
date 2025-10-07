@@ -275,8 +275,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_s_SchdlrCfgWdgTimRestart,      (U4)SCHDLR_TASKBIT__10MS_A  },
-
-//    {&vd_g_XpdiMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
 //    {&vd_g_EsmMStkmMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
 
     /*-------------------------------------------------------------------*/
