@@ -268,7 +268,9 @@ void  vd_g_LocaleComTxInit(void)
     if(u1_t_unit_fueco < (U1)UNIT_NUM_VAL_FUECO){
         u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
     }
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void  vd_g_LocaleComTxTask(void)                                                                                                 */
@@ -282,7 +284,9 @@ void  vd_g_LocaleComTxTask(void)
     U1  u1_t_pre_unit_ch2;
     U1  u1_t_unit_ch2;
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_pre_unit_ch2);
+#endif   /* BEV Rebase provisionally */
 
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
     u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
@@ -290,10 +294,12 @@ void  vd_g_LocaleComTxTask(void)
         u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
     }
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
     if(u1_t_pre_unit_ch2 != u1_t_unit_ch2){
         (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1  u1_g_LocaleCfgLangDef(void)                                                                                                  */
