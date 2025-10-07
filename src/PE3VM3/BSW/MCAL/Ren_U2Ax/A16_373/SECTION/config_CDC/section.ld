@@ -126,11 +126,6 @@ SECTIONS {
         .=ALIGN(4);
     } > .
 
-// Keyword address info(shared)
-    .rodata_SHARE_ROM_RIM_KEYWORD0 SHARE_ROM_VM3_RIM_KEYWORD0      ABS    : > rom_memory_share
-    .rodata_SHARE_ROM_RIM_KEYWORD1 SHARE_ROM_VM3_RIM_KEYWORD1      ABS    : > .
-    .rodata_SHARE_ROM_RIM_KEYWORD2 SHARE_ROM_VM3_RIM_KEYWORD2      ABS    : > .
-
 // -- RAM -------------------
 // TopAddress
     .ram_local_top                                          : > ram_memory_core

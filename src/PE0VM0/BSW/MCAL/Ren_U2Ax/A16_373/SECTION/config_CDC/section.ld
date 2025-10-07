@@ -170,12 +170,6 @@ SECTIONS {
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
-// Keyword address info(shared)
-    .rodata_SHARE_ROM_RIM_KEYWORD_top   SHARE_ROM_VM0_RIM_KEYWORD0      ABS    : > rom_memory_share
-    .rodata_SHARE_ROM_RIM_KEYWORD0      SHARE_ROM_VM0_RIM_KEYWORD0      ABS    : > .
-    .rodata_SHARE_ROM_RIM_KEYWORD1      SHARE_ROM_VM0_RIM_KEYWORD1      ABS    : > .
-    .rodata_SHARE_ROM_RIM_KEYWORD2      SHARE_ROM_VM0_RIM_KEYWORD2      ABS    : > .
-
 // ▼▼▼ CycurHSM FirmWare用セクション定義 (割付禁止) ▼▼▼
 //    .cycurhsm_firmware                  0x007D0000  MAX_ENDADDRESS(0x00800000):
 // ▲▲▲ CycurHSM FirmWare用セクション定義 (割付禁止) ▲▲▲
