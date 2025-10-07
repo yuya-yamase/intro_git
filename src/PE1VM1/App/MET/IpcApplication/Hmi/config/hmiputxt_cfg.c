@@ -24,7 +24,9 @@
 #include "oxcan.h"
 #if 0   /* BEV Rebase provisionally */
 #include "alert.h"
+#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
+#if 0   /* BEV Rebase provisionally */
 #include "odo_om_rst_if.h"
 #include "vptran_sel_typ.h"
 #endif   /* BEV Rebase provisionally */
@@ -212,13 +214,17 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
 
     U2              u2_t_num_reqbit;
     U4              u4_t_loop;
+#endif   /* BEV Rebase provisionally */
     U2              u2_t_blkpos;
     U2              u2_t_bitpos;
+#if 0   /* BEV Rebase provisionally */
     U4              u4_t_num_tbl;
     U2              u2_t_chid;
     U1              u1_t_req;
     U1              u1_t_exist;
+#endif   /* BEV Rebase provisionally */
     U1              u1_t_icewrn;
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_fctahud;
     U1              u1_t_sftalt;
     U1              u1_t_slot;
@@ -240,6 +246,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u4_t_loop] |= u4_sp_hmiputxt_slote_req[u4_t_loop];
     }
 
+#endif   /* BEV Rebase provisionally */
     /* IceWrn */
     u1_t_icewrn = u1_g_AmbtmpIcyraWrnAct();
     if(u1_t_icewrn == (U1)TRUE){
@@ -248,6 +255,7 @@ void    vd_g_HmiPuTxtCfgReq(U4 * u4_ap_req)
         u4_ap_req[u2_t_blkpos] |= ((U4)HMIPUTXT_ON_BIT << u2_t_bitpos);
     }
 
+#if 0   /* BEV Rebase provisionally */
     /* FCTA(HUD) */
     u1_t_fctahud = u1_s_HmiPuTxtCfgFctahudReq();
     if(u1_t_fctahud == (U1)TRUE){

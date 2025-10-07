@@ -71,7 +71,11 @@ U1   u1_g_AmbtmpCAN(U2 * u2p_a_cel)
     U1  u1_t_ac_amb05;
     U1  u1_t_ambsts;
     
+#if 0   /* BEV Rebase provisionally */
     u1_t_igon = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igon = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_igon == (U1)TRUE){
         u1_t_acn_tmp  = (U1)0U;
         u1_t_ac_amb05 = (U1)0U;

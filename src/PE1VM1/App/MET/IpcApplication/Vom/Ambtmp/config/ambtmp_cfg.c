@@ -18,11 +18,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "ambtmp_cfg_private.h"
 
+#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
+#endif   /* BEV Rebase provisionally */
 #include "lerp_u2.h"
 #include "oxcan.h"
 #include "iohw_adc.h"
-#include "date_clk.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -89,8 +90,13 @@ U1      u1_g_AmbtmpCfgUnit(void)
 {
     U1  u1_t_unit;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_unit = u1_g_Unit((U1)UNIT_IDX_AMBTMP);
     if(u1_t_unit == (U1)UNIT_VAL_AMBTMP_CEL){
+#else   /* BEV Rebase provisionally */
+    u1_t_unit = (U1)0U;
+    if(u1_t_unit == (U1)0U){
+#endif   /* BEV Rebase provisionally */
         u1_t_unit = (U1)AMBTMP_UNIT_CEL;
     }
     else{
@@ -107,11 +113,6 @@ U1      u1_g_AmbtmpCfgUnit(void)
 /*===================================================================================================================================*/
 void    vd_g_AmbtmpCfgOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
 {
-#if 0    
-    if((u4_a_EVTBIT & (U4)VEH_OPEMD_EVTBIT_IGN_TO_OFF) != (U4)0U){
-        vd_g_DateclkEtmStart((U1)DATE_CLK_ETM_CH_AMBTMP, (U4)0U);
-    }
-#endif
 }
 
 /*===================================================================================================================================*/
@@ -127,9 +128,13 @@ U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)
     U1           u1_t_pdusts;
     U1           u1_t_stsbit;
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACN_AMB, u1p_a_acn_amb);
     (void)Com_ReceiveSignal(ComConf_ComSignal_AC_AMB05, u1p_a_ac_amb05);
     u1_t_pdusts = (U1)Com_GetIPDUStatus(MSG_ZN21S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else   /* BEV Rebase provisionally */
+    u1_t_pdusts = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
 
     if (u1_t_pdusts == ((U1)COM_TIMEOUT | (U1)COM_NO_RX)) {
         u1_t_stsbit = (U1)AMBTMP_STSBIT_INVALID | (U1)AMBTMP_STSBIT_UNKNOWN;
@@ -146,9 +151,13 @@ U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)
 
     return(u1_t_stsbit);
 #else
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACN_AMB, u1p_a_acn_amb);
     (void)Com_ReceiveSignal(ComConf_ComSignal_AC_AMB05, u1p_a_ac_amb05);
     return((U1)Com_GetIPDUStatus(MSG_ZN21S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else   /* BEV Rebase provisionally */
+    return((U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
 #endif
 }
 /*===================================================================================================================================*/
@@ -159,9 +168,6 @@ U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)
 /*===================================================================================================================================*/
 U4  u4_g_AmbtmpAdCfgIgoffMilliSec(void)
 {
-#if 0    
-    return(u4_g_DateclkEtmElapsed((U1)DATE_CLK_ETM_CH_AMBTMP));
-#endif
     return((U4)0U);
 }
 

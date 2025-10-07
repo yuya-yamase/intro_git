@@ -51,7 +51,9 @@
 #include "engspd_det_rpm.h"
 #include "engspd_varrz.h"
 #include "ptsctmp_cel.h"
+#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
+#if 0   /* BEV Rebase provisionally */
 #include "gagdst_attempovhtind.h"
 #include "attmp_cel.h"
 /* #include "hydrvol.h" */
@@ -202,7 +204,9 @@
 #define XSPI_RW_ADSW                        (0x01U)
 
 #define XSPI_SHIFT_3BYTE                    (24U)
+#endif   /* BEV Rebase provisionally */
 #define XSPI_SHIFT_2BYTE                    (16U)
+#if 0   /* BEV Rebase provisionally */
 #define XSPI_SHIFT_1BYTE                    (8U)
 #define XSPI_SHIFT_NON                      (0U)
 #define XSPI_UNIT_LOW                       (0x0000007FU)
@@ -212,10 +216,12 @@
 
 #define XSPI_MAINTEDIST_OFFSET              (32768)
 
+#endif   /* BEV Rebase provisionally */
 #define XSPI_AMB_CEL_MAX                    (10000U)
 #define XSPI_AMB_FAH_MAX                    (18100U)
 #define XSPI_AMB_LSB_1                      (100U)
 
+#if 0   /* BEV Rebase provisionally */
 #define XSPI_DTE_STS_VALID                  (0U)
 #define XSPI_DTE_STS_UNKNOWN                (1U)
 #define XSPI_DTE_STS_INVALID                (2U)
@@ -829,7 +835,6 @@ static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
     U2  u2_t_tmp;
 
@@ -853,7 +858,6 @@ static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx) {
     u2_t_tmp /= (U2)XSPI_AMB_LSB_1;
 
     u4_ap_pdu_tx[1] |= ((U4)u2_t_tmp << XSPI_SHIFT_2BYTE);                     /* AMB_TEMP_FAH                                       */
-#endif   /* BEV Rebase provisionally */
 }
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx) {} */ /* @@Stub */
 

@@ -68,7 +68,9 @@
 #include "tripsnsr.h"
 #include "tripcom.h"
 #include "tripcom_comtx.h"
+#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
+#if 0   /* BEV Rebase provisionally */
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
 #endif   /* BEV Rebase provisionally */
@@ -363,7 +365,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_TripcomMainTask,             (U4)SCHDLR_TASKBIT__50MS_E  },
     {&vd_g_TripcomComTxTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_TripcomSmoothingTask,        (U4)SCHDLR_TASKBIT__10MS_A  },
+#endif   /* BEV Rebase provisionally */
     {&vd_g_AmbtmpMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_MulmedColorMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MulmedMulfrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
 #endif   /* BEV Rebase provisionally */

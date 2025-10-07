@@ -22,7 +22,9 @@
 #if 0   /* BEV Rebase provisionally */ 
 #include "alert.h"
 #include "thblnkr.h"
+#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
+#if 0   /* BEV Rebase provisionally */ 
 #include "sbltsync.h"
 #endif   /* BEV Rebase provisionally */
 
@@ -162,30 +164,36 @@ void    vd_g_HmiTtCfgInit(void)
 /*===================================================================================================================================*/
 void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
 {
-#if 0   /* BEV Rebase provisionally */ 
 
     U4  u4_t_loop;
     U4  u4_t_onoff;
+#if 0   /* BEV Rebase provisionally */ 
     U2  u2_t_num_reqbit;
     U2  u2_t_belt_tt;
+#endif   /* BEV Rebase provisionally */
     U1  u1_t_icewrn;
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_rearbelt_tt;
     U1  u1_t_placon;
     U1  u1_t_ecbepbtt;
     U1  u1_t_pkbtt;
 
+#endif   /* BEV Rebase provisionally */
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMITT_NUM ; u4_t_loop++){
         u4_ap_req[u4_t_loop] = (U4)0U;
     }
 
+#if 0   /* BEV Rebase provisionally */ 
     u2_t_num_reqbit = u2_g_HmittSizeReqbit();
     vd_g_AlertReqToBit( st_gp_HMITTREQBIT, u2_t_num_reqbit, u4_ap_req, (U1)HMITT_NUM);
+#endif   /* BEV Rebase provisionally */
 
     u1_t_icewrn = u1_g_AmbtmpIceWrnAct();
     if(u1_t_icewrn == (U1)TRUE){
         u4_ap_req[HMITT_ICEWRN_DATPOS] |= u4_HMITT_HB0(HMITT_BLINK_SI_1P00HZ__50P_10TIMS_E__ON);
     }
 
+#if 0   /* BEV Rebase provisionally */
     u2_t_belt_tt  = u2_g_SbltsyncReqTt();
     u4_t_onoff    = (((U4)u2_t_belt_tt & (U4)SBLTSYNC_TT_REQ_R2L) >> HMITT_SBLT_R2L_SFT);
     u4_ap_req[HMITT_SBLT_R2L_DATPOS] |= (u4_t_onoff << HMITT_8BIT_SHIFT);
