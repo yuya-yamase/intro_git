@@ -190,9 +190,7 @@ void    vd_g_OdoNvmIfTripInit(const U1 u1_a_SYNC)
         vd_s_OdoNvmIfTripSynInit();
     }
     else{
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoNvmIfTripRWAct();
-#endif   /* BEV Rebase provisionally */
     }
 }
 /*===================================================================================================================================*/
@@ -220,9 +218,7 @@ U1      u1_g_OdoNvmIfTripRWRqst(const U1 u1_a_CH, const ST_ODO_KM * st_ap_KM_NEX
     u2_t_rec_ch  = (U2)((U2)u1_a_CH << 1U) + (U2)ODO_NVMIF_TRIP_NUM_REC;
     if((u2_tp_BLOCK  == vdp_PTR_NA) ||
        (u2_t_num_rec == (U2)0U    )){
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoNvmIfTripRWDeAct();
-#endif   /* BEV Rebase provisionally */
     }
     else if((st_ap_KM_NEXT == vdp_PTR_NA) ||
             (u2_t_rec_ch   >  u2_t_num_rec           )){
@@ -239,9 +235,7 @@ U1      u1_g_OdoNvmIfTripRWRqst(const U1 u1_a_CH, const ST_ODO_KM * st_ap_KM_NEX
             st_tp_km_next->u4_lt_m  = st_ap_KM_NEXT->u4_lt_m;
             st_tp_km_next->u4_crc32 = st_ap_KM_NEXT->u4_crc32;
 
-#if 0   /* BEV Rebase provisionally */
             vd_g_OdoNvmIfTripRWAct();
-#endif   /* BEV Rebase provisionally */
 
             u1_t_accpt = (U1)TRUE;
         }
@@ -432,14 +426,10 @@ static void    vd_s_OdoNvmIfTripSynInit(void)
 
         u2_t_rdbk_offset = (U2)0U;
         do{
-#if 0   /* BEV Rebase provisionally */
             u1_t_rdrslt = u1_g_OdoNvmIfSyncBlock(u1_t_dev_idx,
                                                  u2_tp_BLOCK[u4_t_blo_idx],
                                                  &u1_tp_rdbk[u2_t_rdbk_offset],
                                                  u2_t_blo_nbyte);
-#else   /* BEV Rebase provisionally */
-            u1_t_rdrslt = (U1)1U;
-#endif   /* BEV Rebase provisionally */
 
             u2_t_rdbk_offset += u2_t_blo_nbyte;
             /* The source of u2_t_blo_nbyte is st_g_ODO_NVMIF_REC_ODO_KM.u1_blo_nbyte, so the max value of u2_t_blo_nbyte is 255.    */
@@ -879,9 +869,7 @@ static U1      u1_s_OdoNvmIfTripSynchk(void)
 /*===================================================================================================================================*/
 static void    vd_s_OdoNvmIfTripActToSeqCmplt(void)
 {
-#if 0   /* BEV Rebase provisionally */
     vd_g_OdoNvmIfTripRWDeAct();
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_OdoNvmIfTripActToReqNext(void)                                                                               */
