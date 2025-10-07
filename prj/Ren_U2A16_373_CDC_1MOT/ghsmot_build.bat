@@ -1,12 +1,14 @@
 @echo OFF
 SETLOCAL ENABLEDELAYEDEXPANSION
 
+call build_cfg.bat
+
 rem ---------------------------------------------------------------------------------------------
 rem Target *.mot/x Definition
 rem ---------------------------------------------------------------------------------------------
 set GHS_MOT_OPB_TRGT=bs3ckpt_opbt
 set GHS_MOT_TSW_TGRT=bs3ckpt_usr_tsw.x
-set GHS_MOT_RFP_TGRT=bs3ckpt_usr_acbd.mot
+set GHS_MOT_RFP_TGRT=%MOT_FILE%
 
 rem ---------------------------------------------------------------------------------------------
 echo -------------------------------------------------------------------------------------
@@ -160,9 +162,6 @@ echo S70500000000FA >> RFP\bin\%GHS_MOT_RFP_TGRT%
 
 copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM.hex RFP\bin\cychsm_v2716_rfp_ac.hex
 copy ..\..\src\PE0VM0\BSW\Aubist\CycurHSM\ecy_hsm_RH850_GHS_D7_DM\bin\HSM_B.hex RFP\bin\cychsm_v2716_rfp_bd.hex
-
-call build_cfg.bat
-move RFP\bin\%GHS_MOT_RFP_TGRT% RFP\bin\%MOT_FILE%
 
 rem ---------------------------------------------------------------------------------------------
 @echo OFF
