@@ -27,6 +27,7 @@
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config
     -I${APP_DIR}/MET/EcuLib/Ren_G3m/scc
+    -I${APP_DIR}/MET/HudApplication/Vom/HudImgadj/config_met
     -I${APP_DIR}/MET/IpcApplication/Evc/Calibration/config
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config/esopt_rx
@@ -95,6 +96,7 @@ App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u2_dw.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_blp.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_dw.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_mtrxsrch.850
+App/MET/HudApplication/Vom/HudImgadj/config_met/himgadj.c
 App/MET/IpcApplication/Evc/Calibration/config/calibration.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ABG1S01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADU1S07.c

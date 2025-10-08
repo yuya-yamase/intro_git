@@ -20,8 +20,8 @@
 #include "hmihud.h"
 #include "vardef.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
+#if 0   /* BEV Rebase provisionally */
 #include "hdimmgr_if.h"
 #endif   /* BEV Rebase provisionally */
 
@@ -229,9 +229,7 @@ static void vd_s_HmiHudSetResid(void){
 
     u1_t_resid = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESID, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_RESID(u1_t_resid);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -245,9 +243,7 @@ static void vd_s_HmiHudSetHudst(void){
 
     u1_t_hudst = (U1)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_HUD_ST, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_HUD_ST(u1_t_hudst);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -297,9 +293,7 @@ static void vd_s_HmiHudSetViposSw(void){
 #endif   /* BEV Rebase provisionally */
     }
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSetUpDwSw(u1_t_vpos_upsw, u1_t_vpos_dnsw);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -315,9 +309,7 @@ static void vd_s_HmiHudSetViposUpdn(void){
     u1_t_vpos_up = u1_s_hmihud_viposup_sig;
     u1_t_vpos_dn = u1_s_hmihud_viposdn_sig;
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_L_VIPOS_UPDW(u1_t_vpos_up, u1_t_vpos_dn);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -413,9 +405,7 @@ static void vd_s_HmiHudSetAdjmaxpos(void){
 
     u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMAXPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_ADJMAXPOS(u2_t_adjmaxpos);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -429,9 +419,7 @@ static void vd_s_HmiHudSetRespos(void){
 
     u2_t_respos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_RESPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_RESPOS(u2_t_respos);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -445,9 +433,7 @@ static void vd_s_HmiHudSetMovpos(void){
 
     u2_t_movpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_MOVPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_MOVPOS(u2_t_movpos);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -461,9 +447,7 @@ static void vd_s_HmiHudSetAdjminpos(void){
 
     u2_t_adjmaxpos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJMINPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_ADJMINPOS(u2_t_adjmaxpos);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -477,9 +461,7 @@ static void vd_s_HmiHudSetAdjteppos(void){
 
     u2_t_adjteppos = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_ADJTEPPOS, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HudImgAdjSet_GV_VIPOS_ADJTEPPOS(u2_t_adjteppos);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

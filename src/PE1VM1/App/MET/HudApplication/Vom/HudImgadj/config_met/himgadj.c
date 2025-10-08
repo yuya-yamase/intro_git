@@ -19,7 +19,6 @@
 
 #include "himgadj.h"
 
-#include "mcst.h"
 #include "vardef.h"
 
 #include "oxcan.h"
@@ -299,6 +298,7 @@ static U1   u1_s_himgadj_dgrtinitreq;
 /*---------------------------------------------------------------------------*/
 static const U2 u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[HUDIMGADJ_NUM_DRVPS_DT] =
 {
+#if 0   /* BEV Rebase provisionally */
     (U2)U2_MAX,                            /* Position Request None */
     (U2)NVMCID_U2_DRVPS_MRRPOS01,          /* User1 Memory No1      */
     (U2)NVMCID_U2_DRVPS_MRRPOS02,          /* User1 Memory No2      */
@@ -315,6 +315,24 @@ static const U2 u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[HUDIMGADJ_NUM_DRVPS_DT] =
     (U2)NVMCID_U2_DRVPS_MRRPOS13,          /* Guest Memory No1      */
     (U2)NVMCID_U2_DRVPS_MRRPOS14,          /* Guest Memory No2      */
     (U2)NVMCID_U2_DRVPS_MRRPOS15           /* Guest Memory No3      */
+#else   /* BEV Rebase provisionally */
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX,
+    (U2)U2_MAX
+#endif   /* BEV Rebase provisionally */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -566,7 +584,11 @@ static void vd_s_HudImgAdjIfUpdt(void)
         vd_s_HudImgAdjIfInit();
     }
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_ig = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_ig = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_ig != (U1)TRUE){
         u1_s_himgadj_l_up_possw = (U1)FALSE;
         u1_s_himgadj_l_dn_possw = (U1)FALSE;
@@ -585,8 +607,13 @@ static U1   u1_s_HudImgAdjGetHudSts(void)
     U1  u1_t_ishudon;
 
     u1_t_ishudon  = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
     u1_t_hudonoff = u1_g_McstBf((U1)MCST_BFI_HUD);
     if(u1_t_hudonoff == (U1)MCST_HUD_ON){
+#else   /* BEV Rebase provisionally */
+    u1_t_hudonoff = (U1)U1_MAX;
+    if(u1_t_hudonoff == (U1)1U){
+#endif   /* BEV Rebase provisionally */
         u1_t_ishudon = (U1)TRUE;
     }
     return(u1_t_ishudon);
@@ -1024,7 +1051,11 @@ static void vd_s_HudImgAdjUpdtCustomDrvPs(void)
     U1  u1_t_sts;
 
     u4_t_data = (U4)HUDIMGADJ_CSTMZ_DRVPS_INITVAL;
+#if 0   /* BEV Rebase provisionally */
     u1_t_sts = u1_g_Nvmc_ReadU4withSts((U2)NVMCID_U4_DS_2E_2003, (&u4_t_data));
+#else   /* BEV Rebase provisionally */
+    u1_t_sts = (U1)NVMC_STATUS_NG;
+#endif   /* BEV Rebase provisionally */
     if((u1_t_sts == (U1)NVMC_STATUS_COMP   ) ||
        (u1_t_sts == (U1)NVMC_STATUS_READING)){
         u1_s_himgadj_cstmz_drvps = (U1)u4_t_data;
@@ -1199,7 +1230,9 @@ static void vd_s_HudImgAdjDrvPsInit(void)
 
     u1_t_hudsts = (U1)HUDIMGADJ_HUDST_UNDET;
 #ifdef ComConf_ComSignal_HUD_ST
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);  /* No event sending occur. Depend on TyCAN config. */
+#endif   /* BEV Rebase provisionally */
 #endif
 }
 /*===================================================================================================================================*/
@@ -1228,12 +1261,16 @@ static void vd_s_HudImgAdjDrvPsInvalidInit(void)
     u1_t_hudsts      = (U1)HUDIMGADJ_HUDST_UNDET;
     u1_t_hudsts_prev = (U1)HUDIMGADJ_HUDST_UNDET;
 #ifdef ComConf_ComSignal_HUD_ST
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts_prev);
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);
+#endif   /* BEV Rebase provisionally */
 #endif
     if(u1_t_hudsts_prev != u1_t_hudsts){
 #ifdef MSG_HUD1S01_TXCH0
+#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_HUD1S01_TXCH0);        /* Event send Trigger */
+#endif   /* BEV Rebase provisionally */
 #endif
     }
 }
@@ -1252,7 +1289,11 @@ static U2 u2_s_HudImgAdjDrvPsReadData(const U1 u1_a_ID)
     u2_t_read_data = (U2)HUDIMGADJ_RDDTUNDEF;
     if(((U1)HUDIMGADJ_DRVPSDT_01 <= u1_a_ID                   ) &&
        (u1_a_ID                  <  (U1)HUDIMGADJ_NUM_DRVPS_DT)){
+#if 0   /* BEV Rebase provisionally */
         u1_t_nvmc_rsp = u1_g_Nvmc_ReadU2withSts(u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[u1_a_ID], &u2_t_read_data);
+#else   /* BEV Rebase provisionally */
+        u1_t_nvmc_rsp = (U1)NVMC_STATUS_NG;
+#endif   /* BEV Rebase provisionally */
         if((u1_t_nvmc_rsp == (U1)NVMC_STATUS_COMP) ||
            (u1_t_nvmc_rsp == (U1)NVMC_STATUS_READING)){
             u2_t_data = u2_t_read_data;
@@ -1309,17 +1350,25 @@ static void vd_s_HudImgAdjDrvPsUpdt(void)
     U1  u1_t_drvps;
     U1  u1_t_hudreq;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_msg = Com_GetIPDUStatus((PduIdType)MSG_BDB1F02_RXCH0);
+#else   /* BEV Rebase provisionally */
+    u1_t_msg = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
     u1_t_msg &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     u1_t_drvps = (U1)HUDIMGADJ_CAN_DRVPSDT_NON;
     u1_t_hudreq = (U1)HUDIMGADJ_CAN_DRVPSREQ_NON;
     if(u1_t_msg == (U1)0U){
         u1_t_drvps = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_DRVPS_DT, &u1_t_drvps);
+#endif   /* BEV Rebase provisionally */
 
         u1_t_hudreq = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_R, &u1_t_hudreq);
+#endif   /* BEV Rebase provisionally */
 
         if(u1_t_drvps < (U1)HUDIMGADJ_NUM_DRVPS_DT){
             u1_t_id = u1_sp_HUDIMGADJ_TBL_DRVPSID[u1_t_drvps];
@@ -1380,7 +1429,11 @@ static void vd_s_HudImgAdjDrvPsMemUpdt(const U4 u4_a_SGNL, const U1 u1_a_ID)
     U1  u1_t_isvld;
 
     u1_t_isvld = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
     u1_t_ig = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_ig = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     u1_t_hudsts = u1_s_HudImgAdjGetHudSts();
     u2_t_imgpos = u2_s_himgadj_gv_vipos_respos;
     u2_t_max = u2_s_himgadj_gv_vipos_maxpos;
@@ -1397,7 +1450,9 @@ static void vd_s_HudImgAdjDrvPsMemUpdt(const U4 u4_a_SGNL, const U1 u1_a_ID)
 
     if(u1_t_isvld == (U1)TRUE){
         u2_sp_himgadj_imgpos[u1_a_ID] = u2_t_imgpos;
+#if 0   /* BEV Rebase provisionally */
         vd_g_Nvmc_WriteU2(u2_sp_HUDIMGADJ_TBL_NVMCID_DRVPSDT[u1_a_ID], u2_t_imgpos);
+#endif   /* BEV Rebase provisionally */
     }
 }
 
@@ -1620,12 +1675,16 @@ static void vd_s_HudImgAdjDrvPsHudStsActn(const U1 u1_a_EVT)
 
     u1_t_hudsts_prev = (U1)HUDIMGADJ_HUDST_STP;
 #ifdef ComConf_ComSignal_HUD_ST
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts_prev);
     (void)Com_SendSignal(ComConf_ComSignal_HUD_ST, &u1_t_hudsts);
+#endif   /* BEV Rebase provisionally */
 #endif
     if(u1_t_hudsts_prev != u1_t_hudsts){
 #ifdef MSG_HUD1S01_TXCH0
+#if 0   /* BEV Rebase provisionally */
         (void)Com_TriggerIPDUSend(MSG_HUD1S01_TXCH0);        /* Event send Trigger */
+#endif   /* BEV Rebase provisionally */
 #endif
     }
 }
