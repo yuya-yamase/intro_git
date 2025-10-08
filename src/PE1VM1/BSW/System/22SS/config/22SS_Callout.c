@@ -40,15 +40,17 @@
 #include "dimmer.h"
 #include "illumi.h"
 #include "thblnkr.h"
-#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #include "vptran_sel.h"
+#if 0   /* BEV Rebase provisionally */
 #include "ptsctmp_cel.h"
 #include "alert.h"
 #include "sbltwrn.h"
 #include "engspd_rpm.h"
 #include "engspd_det_rpm.h"
+#endif   /* BEV Rebase provisionally */
 #include "odo_km.h"
+#if 0   /* BEV Rebase provisionally */
 #include "tripsnsr.h"
 #include "tripcom.h"
 #include "ambtmp.h"
@@ -136,16 +138,18 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrBonInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_GaugeBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdBonInit,
         &vd_g_EngspdDetInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_OdoBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
         &vd_g_AmbtmpBonInit,
@@ -234,16 +238,18 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrRstWkInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,
@@ -332,16 +338,18 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrRstWkInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
         &vd_g_EngspdDetInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
         &vd_g_AmbtmpRstWkInit,

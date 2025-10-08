@@ -25,7 +25,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "alert.h"
 #include "ambtmp.h"
-#include "odo_om_rst_if.h"
 #include "vptran_sel_typ.h"
 #endif   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
