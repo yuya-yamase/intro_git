@@ -123,7 +123,6 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void)
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_RstDtct.c                                           */
-/* Config for EthSwt_SWIC_MIB.c                                               */
 /* -------------------------------------------------------------------------- */
 #include "EthSwt_SWIC_Define.h"
 Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct()

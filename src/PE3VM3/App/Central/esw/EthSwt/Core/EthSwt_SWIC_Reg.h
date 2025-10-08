@@ -8,10 +8,6 @@
 /* -------------------------------------------------------------------------- */
 #include <EthSwt_SWIC_initRegCommon.h>
 /* -------------------------------------------------------------------------- */
-
-/* リセット要因 */
-#define ETHSWT_SWIC_REG_FACT_SWIC                   (0x0020uL)	/* SWIC内部エラー */
-/* -------------------------------------------------------------------------- */
 Std_ReturnType EthSwt_SWIC_Reg_SetTbl(const swic_reg_data_t tbl[], const uint32 cnt, uint32 * const dat, uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_REG_H */

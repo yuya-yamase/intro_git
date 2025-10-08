@@ -11,7 +11,6 @@
 
 #define D_ETHSWT_SWIC_PERIOD                        (1U)
 #define D_ETHSWT_SWIC_PORT_NUM                      (9U)
-
 extern const Eth_ModeType G_ETHSWT_SWIC_PORT_DEFINE[D_ETHSWT_SWIC_PORT_NUM];
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_PWR.c                                               */
@@ -71,22 +70,23 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define D_ETHSWT_SWIC_MIB_TCAM3						(8U)
 #define D_ETHSWT_SWIC_MIB_NUM						(9U)
 
-
 /* -------------------------------------------------------------------------- */
-/* Config for EthSwt_SWIC_RstDtct.c                                               */
-/* Config for EthSwt_SWIC_Qci.c                                              */
+/* Config for EthSwt_SWIC_Qci.c                                               */
 /* -------------------------------------------------------------------------- */
-#define D_ETHSWT_SWIC_QCI_GET_CYCLE	                (20U)
-#define D_ETHSWT_SWIC_RSTDTCT_GET_CYCLE             (50U)	/* リセット検出周期(50ms) */
-#define REG_INCREMENT	(4U)	/* レジスタリセットテーブルの添え字 */
-Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct(void);
-
 #define D_ETHSWT_SWIC_QCI_ID_DCM_TCP				(0U)
 #define D_ETHSWT_SWIC_QCI_ID_DCM_UDP				(1U)
 #define D_ETHSWT_SWIC_QCI_ID_DCM_ICMP				(2U)
 #define D_ETHSWT_SWIC_QCI_ID_DLC_TCP				(3U)
 #define D_ETHSWT_SWIC_QCI_ID_DLC_UDP				(4U)
 #define D_ETHSWT_SWIC_QCI_ID_NUM					(5U)
+
+/* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_RstDtct.c                                           */
+/* -------------------------------------------------------------------------- */
+#define D_ETHSWT_SWIC_QCI_GET_CYCLE	                (20U)
+#define D_ETHSWT_SWIC_RSTDTCT_GET_CYCLE             (50U)	/* リセット検出周期(50ms) */
+Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct(void);
+
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_IntErr.c                                               */
 /* -------------------------------------------------------------------------- */

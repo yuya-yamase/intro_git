@@ -16,7 +16,6 @@
 #include <Dio.h>
 #include <Dio_Symbols.h>
 /* -------------------------------------------------------------------------- */
-#define D_ETHSWT_SWIC_EV_INTN_ERROR                     (9U)
 #define	ETHSWT_SWIC_CNTCVL		(*((volatile sint32*)0xE6081000uL))		/* Current Count Value Lower register (CNTCVL) QAC対応(sint32) */
 #define	SWIC_REG_BIT(a)		(1uL << (a))			/* ビット */
 /* -------------------------------------------------------------------------- */
@@ -32,7 +31,7 @@ static struct {
 static uint8 ethswt_swic_interr_check_intn(void);
 static Std_ReturnType ethswt_swic_interr_errDtct (uint32 * const errFactor);
 static void ethswt_swic_interr_portMacResetRequest(uint32 * const errFactor);
-static Std_ReturnType ethswt_swic_interr_TblReg(const uint8 SwitchPortIdx, const struct swic_reg_tbl tbl[], const uint32 num, uint32 * const errFactor);
+static Std_ReturnType ethswt_swic_interr_tblReg(const uint8 SwitchPortIdx, const struct swic_reg_tbl tbl[], const uint32 num, uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */
 
 void EthSwt_SWIC_IntErr_Init(void)
@@ -67,7 +66,6 @@ void EthSwt_SWIC_IntErr_Clear(void)
 Std_ReturnType EthSwt_SWIC_IntErr_Action(uint32 * const errFactor)
 {
 	Std_ReturnType result = E_OK;
-	uint8 idx;
 	uint8 req;
 	uint8 intn;
 
@@ -161,7 +159,6 @@ static Std_ReturnType ethswt_swic_interr_errDtct (uint32 * const errFactor)
 		};
 	static const struct swic_reg_mon seq_src  = {SWIC_REG_TBL(g_regListSeqGetWatchdogIntSource),      SWIC_REG_TBL(bit_src), 0x00u};
 		
-	Std_ReturnType				err;
 	const struct swic_reg_mon	*tbl = &seq_src;
 	uint32						val = 0uL;
 
@@ -210,7 +207,7 @@ static Std_ReturnType ethswt_swic_interr_errDtct (uint32 * const errFactor)
 	if(E_NOT_OK == result && D_ETHSWT_SWIC_ERR_NONE == *errFactor )
 	{
 		/* ①FIRハードリセット */		
-		*errFactor = D_ETHSWT_SWIC_EV_INTN_ERROR;
+		*errFactor = D_ETHSWT_SWIC_ERR_INTN;
 	}
 	return result;
 

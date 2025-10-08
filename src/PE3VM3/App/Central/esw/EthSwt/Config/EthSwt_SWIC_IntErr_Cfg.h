@@ -1,11 +1,11 @@
 /* -------------------------------------------------------------------------- */
 /* file name  :  EthSwt_SWIC_IntErr_Cfg.h                                     */
 /* -------------------------------------------------------------------------- */
-#ifndef ETHSWT_SWIC_INTERNALERR_CFG_H
-#define ETHSWT_SWIC_INTERNALERR_CFG_H
+#ifndef ETHSWT_SWIC_INTERR_CFG_H
+#define ETHSWT_SWIC_INTERR_CFG_H
 /* -------------------------------------------------------------------------- */
 
 
 /* -------------------------------------------------------------------------- */
-#endif /* ETHSWT_SWIC_INTERNALERR_CFG_H */
+#endif /* ETHSWT_SWIC_INTERR_CFG_H */
 /* -------------------------------------------------------------------------- */
