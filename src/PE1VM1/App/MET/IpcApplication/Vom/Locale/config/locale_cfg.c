@@ -457,8 +457,6 @@ void    vd_g_LocaleCfgLangPut(const U1 u1_a_LANG)
 {
 #if 0   /* BEV Rebase provisionally */
     vd_g_McstBfPut((U1)MCST_BFI_LANG, u1_a_LANG);
-#else   /* BEV Rebase provisionally */
-    return((U1)U1_MAX);
 #endif   /* BEV Rebase provisionally */
 }
 
