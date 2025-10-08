@@ -110,7 +110,7 @@ static void vd_s_VISCanGetUtc(void)
     U1 u1_tp_utcdata[VIS_CAN_TRANSREQ_DATA_UTCNUM];
 
     /* 格納先の初期化 */
-    LIB_memset(u1_tp_rx, VIS_UTC_INIT, sizeof(u1_tp_rx));
+    LIB_memset(u1_tp_rx, VIS_CAN_UTC_FAIL, sizeof(u1_tp_rx));
     
     /* UTC時刻情報取得 */
     /* ★車両電源ステート(基本ステート)情報を取得 */
@@ -125,12 +125,12 @@ static void vd_s_VISCanGetUtc(void)
             if(u1_t_msgsts == VIS_CAN_COM_IPDUST_OK){
                 /* RSE1G20取得 */
                 (void)Com_ReadIPDU(MSG_RSE1G20_RXCH0, u1_tp_rx);
-                st_s_vis_can_utcdata.u1_year   = u1_tp_rx[VIS_CAN_UTC_RX_YE];
-                st_s_vis_can_utcdata.u1_month  = u1_tp_rx[VIS_CAN_UTC_RX_MO];
-                st_s_vis_can_utcdata.u1_day    = u1_tp_rx[VIS_CAN_UTC_RX_DA];
-                st_s_vis_can_utcdata.u1_hour   = u1_tp_rx[VIS_CAN_UTC_RX_HO];
-                st_s_vis_can_utcdata.u1_minute = u1_tp_rx[VIS_CAN_UTC_RX_MI];
-                st_s_vis_can_utcdata.u1_second = u1_tp_rx[VIS_CAN_UTC_RX_SE];
+                st_s_vis_can_utcdata.u1_year   = u1_tp_rx[VIS_CAN_UTC_RX_YEAR];
+                st_s_vis_can_utcdata.u1_month  = u1_tp_rx[VIS_CAN_UTC_RX_MONTH];
+                st_s_vis_can_utcdata.u1_day    = u1_tp_rx[VIS_CAN_UTC_RX_DAY];
+                st_s_vis_can_utcdata.u1_hour   = u1_tp_rx[VIS_CAN_UTC_RX_HOUR];
+                st_s_vis_can_utcdata.u1_minute = u1_tp_rx[VIS_CAN_UTC_RX_MIN];
+                st_s_vis_can_utcdata.u1_second = u1_tp_rx[VIS_CAN_UTC_RX_SEC];
                 /* 時刻範囲チェック */
                 u1_t_ret = u1_s_VISCanUtcCheckVal(&st_s_vis_can_utcdata);
                 /* UTC時刻情報が範囲外の場合 */
@@ -175,7 +175,7 @@ static void vd_s_VISCanGetOdo(void)
     U1 u1_tp_ododata[VIS_CAN_TRANSREQ_DATA_ODONUM];
 
     /* 格納先の初期化 */
-    LIB_memset(u1_tp_rx, VIS_ODO_INIT, sizeof(u1_tp_rx));
+    LIB_memset(u1_tp_rx, VIS_CAN_ODO_FAIL, sizeof(u1_tp_rx));
 
     /* オド情報取得 */
     /* MET1S02メッセージの状態取得 */
@@ -185,10 +185,10 @@ static void vd_s_VISCanGetOdo(void)
         /* MET1S02取得 */
         (void)Com_ReadIPDU(MSG_MET1S02_RXCH0, u1_tp_rx);
         u1_t_odounit = (u1_tp_rx[VIS_CAN_ODO_RX_UNIT] & VIS_CAN_ODO_UNITMASK) >> VIS_CAN_SHIFT_4BIT;
-        u4_t_odo = (((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS4] << VIS_CAN_SHIFT_3BYTE) |
-                    ((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS3] << VIS_CAN_SHIFT_2BYTE) |
-                    ((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS2] << VIS_CAN_SHIFT_1BYTE) |
-                     (U4)u1_tp_rx[VIS_CAN_ODO_RX_POS1]);
+        u4_t_odo = (((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS1] << VIS_CAN_SHIFT_3BYTE) |
+                    ((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS2] << VIS_CAN_SHIFT_2BYTE) |
+                    ((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS3] << VIS_CAN_SHIFT_1BYTE) |
+                     (U4)u1_tp_rx[VIS_CAN_ODO_RX_POS4]);
         
         /* オド単位がkmの場合 */
         if(u1_t_odounit == VIS_CAN_ODO_UNIT_KM){

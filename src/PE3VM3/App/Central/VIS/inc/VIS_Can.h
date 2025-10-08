@@ -16,12 +16,12 @@
 /* ----------------------------------------------------------------------------------------------------------- */
 /* 絶対時刻 */
 #define VIS_CAN_UTC_RX_NBYTE                    ((U1)8U)            /* CAN受信：RSE1G20バイト数 */
-#define VIS_CAN_UTC_RX_YE                       ((U1)2U)            /* CAN受信：年格納領域 */
-#define VIS_CAN_UTC_RX_MO                       ((U1)3U)            /* CAN受信：月格納領域 */
-#define VIS_CAN_UTC_RX_DA                       ((U1)4U)            /* CAN受信：日格納領域 */
-#define VIS_CAN_UTC_RX_HO                       ((U1)5U)            /* CAN受信：時格納領域 */
-#define VIS_CAN_UTC_RX_MI                       ((U1)6U)            /* CAN受信：分格納領域 */
-#define VIS_CAN_UTC_RX_SE                       ((U1)7U)            /* CAN受信：秒格納領域 */
+#define VIS_CAN_UTC_RX_YEAR                     ((U1)2U)            /* CAN受信：年格納領域 */
+#define VIS_CAN_UTC_RX_MONTH                    ((U1)3U)            /* CAN受信：月格納領域 */
+#define VIS_CAN_UTC_RX_DAY                      ((U1)4U)            /* CAN受信：日格納領域 */
+#define VIS_CAN_UTC_RX_HOUR                     ((U1)5U)            /* CAN受信：時格納領域 */
+#define VIS_CAN_UTC_RX_MIN                      ((U1)6U)            /* CAN受信：分格納領域 */
+#define VIS_CAN_UTC_RX_SEC                      ((U1)7U)            /* CAN受信：秒格納領域 */
 #define VIS_CAN_UTC_YEARMIN                     ((U1)0x00U)         /* UTC時刻情報年最小値 */
 #define VIS_CAN_UTC_MONTMIN                     ((U1)0x01U)         /* UTC時刻情報月最小値 */
 #define VIS_CAN_UTC_DAYMIN                      ((U1)0x01U)         /* UTC時刻情報日最小値 */
