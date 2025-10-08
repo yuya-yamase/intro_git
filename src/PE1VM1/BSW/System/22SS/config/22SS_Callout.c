@@ -73,7 +73,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
 #if 0   /* BEV Rebase provisionally */
-#include "battpow.h"
 #include "drvind_pwr_pct.h"
 #include "drvind_eco.h"
 #include "drvind_hv_pct.h"
@@ -162,7 +161,6 @@ void vd_g_22SSCallout_StaBonInit(void)
 #endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
@@ -264,7 +262,6 @@ void vd_g_22SSCallout_StaRstInit(void)
 #endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
@@ -366,7 +363,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
 #endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,

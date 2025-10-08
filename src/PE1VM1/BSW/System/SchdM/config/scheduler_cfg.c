@@ -92,7 +92,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
 #if 0   /* BEV Rebase provisionally */
-#include "battpow.h"
 #include "drvind_pwr_pct.h"
 #include "drvind_eco.h"
 #include "drvind_hv_pct.h"
@@ -373,7 +372,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
 #endif   /* BEV Rebase provisionally */
     {&vd_g_RcmmUIMainTask,              (U4)SCHDLR_TASKBIT__20MS_B  },
 #if 0   /* BEV Rebase provisionally */
-    {&vd_g_BattpowMainTask,             (U4)SCHDLR_TASKBIT_100MS_E  },
     {&vd_g_DrvIndPwrMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_DrvIndEcoMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_DrvIndHvMainTask,            (U4)SCHDLR_TASKBIT__20MS_A  },
