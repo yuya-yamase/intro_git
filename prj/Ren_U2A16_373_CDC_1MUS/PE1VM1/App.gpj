@@ -47,7 +47,6 @@
     -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/scc
-    -I${APP_DIR}/MET/IpcApplication/Vsv/Thblnkr/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Thblnkr/scc
     
 
@@ -207,6 +206,6 @@ App/MET/IpcApplication/Vsv/Illumi/config/illumi_cfg.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_comtx.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_tftpct.c
 App/MET/IpcApplication/Vsv/Illumi/scc/illumi.c
-
 App/MET/IpcApplication/Vsv/Thblnkr/config/thblnkr_cfg.c
 App/MET/IpcApplication/Vsv/Thblnkr/scc/thblnkr.c
+
