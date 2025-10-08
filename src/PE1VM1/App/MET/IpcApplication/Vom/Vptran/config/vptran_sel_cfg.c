@@ -1,36 +1,39 @@
-/* 1.3.0 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Hmimaint                                                                                        */
+/*  Vehicle Power Transmission                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIMAINT_C_MAJOR                         (1)
-#define HMIMAINT_C_MINOR                         (3)
-#define HMIMAINT_C_PATCH                         (0)
+#define VPTRAN_SEL_CFG_C_MAJOR                  (2)
+#define VPTRAN_SEL_CFG_C_MINOR                  (3)
+#define VPTRAN_SEL_CFG_C_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "hmiproxy_cfg_private.h"
-#include "odo_om_rst_if.h"
+#include "vptran_sel_cfg_private.h"
+#include "vptran_sel_typ.h"
+#include "vptran_byw.h"
+#include "vardef_esopt.h"
 
-#include "hmimaint.h"
-#include "vardef.h"
-#if 0   /* BEV Rebase provisionally */
-#include "mcst_bf.h"
-#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((HMIMAINT_C_MAJOR != HMIMAINT_H_MAJOR) || \
-     (HMIMAINT_C_MINOR != HMIMAINT_H_MINOR) || \
-     (HMIMAINT_C_PATCH != HMIMAINT_H_PATCH))
-#error "hmimaint.c and hmimaint.h : source and header files are inconsistent!"
+#if ((VPTRAN_SEL_CFG_C_MAJOR != VPTRAN_SEL_H_MAJOR) || \
+     (VPTRAN_SEL_CFG_C_MINOR != VPTRAN_SEL_H_MINOR) || \
+     (VPTRAN_SEL_CFG_C_PATCH != VPTRAN_SEL_H_PATCH))
+#error "vptran_sel_cfg.c and vptran_sel.h : source and header files are inconsistent!"
+#endif
+
+#if ((VPTRAN_SEL_CFG_C_MAJOR != VPTRAN_SEL_CFG_PRIVATE_H_MAJOR) || \
+     (VPTRAN_SEL_CFG_C_MINOR != VPTRAN_SEL_CFG_PRIVATE_H_MINOR) || \
+     (VPTRAN_SEL_CFG_C_PATCH != VPTRAN_SEL_CFG_PRIVATE_H_PATCH))
+#error "vptran_sel_cfg.c and vptran_sel_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -39,111 +42,60 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIMAINT_RST                              (1U)
-#define HMIMAINT_BITMASK                          (0x03U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1    u1_s_hmimaint_rstreq;
-static U1    u1_s_hmimaint_rstreq_pre;
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-static U2    u2_s_hmimaint_to;
-#endif
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+const   U1                                      u1_g_VPTRAN_NUM_TYPE                        = (U1)VPTRAN_NUM_TYPE;
+const   ST_VPTRAN_MTYPE_FUNCCFG                 st_gp_VPTRAN_MTYPE_FUNCCFG[VPTRAN_NUM_TYPE] = {
+    {   &vd_g_VptranBywInit,    &vd_g_VptranByw,        &u1_g_VptranBywGetSts               }   /* 00 VPTRAN_BYW                     */
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiMaintInit(void)                                                                                                  */
+/* void vd_g_VptranInitCfg(void)                                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiMaintInit(void)
+void            vd_g_VptranInitCfg(void)
 {
-    u1_s_hmimaint_rstreq = (U1)U1_MAX;
-    u1_s_hmimaint_rstreq_pre = (U1)U1_MAX;
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-    u2_s_hmimaint_to   = (U2)HMIPROXY_TOC_MAX;
-#endif
-
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiMaintMainTask(void)                                                                                              */
+/* U1              u1_g_VptranTransMissionTypeCfg(void)                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiMaintMainTask(void)
+U1              u1_g_VptranTransMissionTypeCfg(void)
 {
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-    static const U2 u2_s_HMIMAINT_TO = (U2)1000U / (U2)50U;
-    U1              u1_t_to;
-    U1              u1_t_exist;
+#if 0   /* BEV Rebase provisionally */
+    U1  u1_t_sbw_sup; 
+    U1  u1_t_tm_type;
 
-    u1_t_to = u1_g_HmiProxyToc(&u2_s_hmimaint_to, u2_s_HMIMAINT_TO);
-    u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
+    u1_t_sbw_sup = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW);
 
-    if (u1_t_exist == (U1)TRUE){
-#endif
-        if((u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
-           (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
-            vd_g_OdoOmReset((U1)TRUE);
-        }
-        else{
-            vd_g_OdoOmReset((U1)FALSE);
-        }
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
+    if (u1_t_sbw_sup == (U1)TRUE) {
+        u1_t_tm_type = (U1)VPTRAN_BYW;
     } else {
-        if((u1_t_to              == (U1)FALSE)        &&
-           (u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
-           (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
-            vd_g_OdoOmReset((U1)TRUE);
-        }
-        else{
-            vd_g_OdoOmReset((U1)FALSE);
-        }
+        u1_t_tm_type = (U1)VPTRAN_CVT;
     }
-#endif
-    u1_s_hmimaint_rstreq_pre = u1_s_hmimaint_rstreq;
-}
 
-/*===================================================================================================================================*/
-/*  void  vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u4_ap_REQ   : Lcom first address                                                                                 */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
-{
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-    U1 u1_t_exist;
-
-    u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
-    if(u1_t_exist == (U1)TRUE){
-        /* Ais Do Not Application */
-    }else{
-        if(u4_ap_REQ != vdp_PTR_NA) {
-            u1_s_hmimaint_rstreq = (U1)(u4_ap_REQ[0] & (U4)HMIMAINT_BITMASK);
-        }
-        u2_s_hmimaint_to   = (U2)HMIPROXY_TOC_INI;
-    }
-#endif
+    return (u1_t_tm_type);
+#else   /* BEV Rebase provisionally */
+    return ((U1)VPTRAN_BYW);
+#endif 0   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -154,12 +106,28 @@ void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    07/16/2019  TA       New.                                                                                               */
-/*  1.1.0    03/18/2020  TH       Setting for 800B CV.                                                                               */
-/*  1.2.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
-/*  1.3.0    06/15/2021  TH       Add to Meter Custmize.                                                                             */
+/*  1.0.0    02/13/2018  HY       New.                                                                                               */
+/*  1.1.0    02/14/2020  KK       Add Mission Type Dynamically switching support (MET-D_SFTEXI-)                                     */
+/*  2.0.0    08/26/2021  TA(M)    vptran_sel.c v1.1.0 -> v2.0.0.                                                                     */
+/*  2.0.1    10/18/2021  TA(M)    vptran_sel.c v2.0.0 -> v2.0.1.                                                                     */
+/*  2.1.0    11/30/2021  TA(M)    vptran_sel.c v2.0.1 -> v2.1.0.                                                                     */
+/*  2.2.0    09/30/2022  TA(M)    vptran_sel.c v2.1.0 -> v2.2.0.                                                                     */
+/*  2.3.0    12/15/2023  GM       vptran_sel.c v2.3.0 -> v2.3.0.                                                                     */
 /*                                                                                                                                   */
-/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
-/*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
+/*                                                                                                                                   */
+/*  Revision    Date        Author   Change Description                                                                              */
+/* ------------ ----------  -------  ----------------------------------------------------------------------------------------------- */
+/*  893B178D-1  10/07/2021  TN       893B178D/19PF Correspondence                                                                    */
+/*  200D-1      09/05/2022  YK       200D Correspondence                                                                             */
+/*  200D-2      10/31/2022  YK       Update Toyota Standard Application(lib_ipc_tycan_v210_r009)                                     */
+/*  330D-1      02/22/2023  YK       330D Correspondence                                                                             */
+/*  19PFv3-1    12/15/2023  GM       19PFv3 Correspondence                                                                           */
+/*                                                                                                                                   */
+/*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
+/*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
+/*  * TN   = Tetsu Naruse,     Denso Techno                                                                                          */
+/*  * TA(M)= Teruyuki Anjima,  NTT Data MSE                                                                                          */
+/*  * YK   = Yuki Kawai,       Denso Techno                                                                                          */
+/*  * GM   = Glen Monteposo,   DTPH                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

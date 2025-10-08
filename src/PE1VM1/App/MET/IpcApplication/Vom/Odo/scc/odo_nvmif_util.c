@@ -1,36 +1,37 @@
-/* 1.3.0 */
+/* 2.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Hmimaint                                                                                        */
+/*  Odo Non-Volatile Memory Interface                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIMAINT_C_MAJOR                         (1)
-#define HMIMAINT_C_MINOR                         (3)
-#define HMIMAINT_C_PATCH                         (0)
+#define ODO_NVMIF_UTIL_C_MAJOR                   (2)
+#define ODO_NVMIF_UTIL_C_MINOR                   (0)
+#define ODO_NVMIF_UTIL_C_PATCH                   (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "hmiproxy_cfg_private.h"
-#include "odo_om_rst_if.h"
+#include "odo_nvmif_cfg_private.h"
+#include "odo_nvmif_util.h"
 
-#include "hmimaint.h"
-#include "vardef.h"
-#if 0   /* BEV Rebase provisionally */
-#include "mcst_bf.h"
-#endif   /* BEV Rebase provisionally */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((HMIMAINT_C_MAJOR != HMIMAINT_H_MAJOR) || \
-     (HMIMAINT_C_MINOR != HMIMAINT_H_MINOR) || \
-     (HMIMAINT_C_PATCH != HMIMAINT_H_PATCH))
-#error "hmimaint.c and hmimaint.h : source and header files are inconsistent!"
+#if ((ODO_NVMIF_UTIL_C_MAJOR != ODO_NVMIF_UTIL_H_MAJOR) || \
+     (ODO_NVMIF_UTIL_C_MINOR != ODO_NVMIF_UTIL_H_MINOR) || \
+     (ODO_NVMIF_UTIL_C_PATCH != ODO_NVMIF_UTIL_H_PATCH))
+#error "odo_nvmif_util.c and odo_nvmif_util.h : source and header files are inconsistent!"
+#endif
+
+#if ((ODO_NVMIF_UTIL_C_MAJOR != ODO_NVMIF_CFG_H_MAJOR) || \
+     (ODO_NVMIF_UTIL_C_MINOR != ODO_NVMIF_CFG_H_MINOR) || \
+     (ODO_NVMIF_UTIL_C_PATCH != ODO_NVMIF_CFG_H_PATCH))
+#error "odo_nvmif_util.c and odo_nvmif_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -39,21 +40,12 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIMAINT_RST                              (1U)
-#define HMIMAINT_BITMASK                          (0x03U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U1    u1_s_hmimaint_rstreq;
-static U1    u1_s_hmimaint_rstreq_pre;
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-static U2    u2_s_hmimaint_to;
-#endif
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -64,88 +56,133 @@ static U2    u2_s_hmimaint_to;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiMaintInit(void)                                                                                                  */
+/*  U1      u1_g_OdoNvmIfFifoPosIn(ST_ODO_NVMIF_FIFO_CTRL * st_ap_ctrl, const U1 u1_a_MAX)                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiMaintInit(void)
+U1      u1_g_OdoNvmIfFifoPosIn(ST_ODO_NVMIF_FIFO_CTRL * st_ap_ctrl, const U1 u1_a_MAX)
 {
-    u1_s_hmimaint_rstreq = (U1)U1_MAX;
-    u1_s_hmimaint_rstreq_pre = (U1)U1_MAX;
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-    u2_s_hmimaint_to   = (U2)HMIPROXY_TOC_MAX;
-#endif
+    U2                      u2_t_fifo_len;
+    U1                      u1_t_fifo_in;
+    U1                      u1_t_fifo_out;
+    U1                      u1_t_fifo_next;
 
+    u2_t_fifo_len = st_ap_ctrl->u2_len;
+    u1_t_fifo_in  = st_ap_ctrl->u1_pos_in;
+    u1_t_fifo_out = st_ap_ctrl->u1_pos_out;
+
+    if((u2_t_fifo_len                   == (U2)0U                         ) ||
+       (u2_t_fifo_len                   >  (U2)u1_a_MAX                   ) ||
+       ((u2_t_fifo_len == (U2)u1_a_MAX) && (u1_t_fifo_out != u1_t_fifo_in)) ||
+       (u1_t_fifo_in                    >= u1_a_MAX                       )){
+
+        u2_t_fifo_len = (U2)0U;
+        u1_t_fifo_in  = (U1)0U;
+        u1_t_fifo_out = (U1)0U;
+    }
+
+    if(u2_t_fifo_len < (U2)u1_a_MAX){
+
+        u1_t_fifo_next = u1_t_fifo_in + (U1)1U;
+        if(u1_t_fifo_next >= u1_a_MAX){
+            u1_t_fifo_next = (U1)0U;
+        }
+        u2_t_fifo_len++;
+
+        st_ap_ctrl->u2_len     = u2_t_fifo_len; 
+        st_ap_ctrl->u1_pos_in  = u1_t_fifo_next;
+        st_ap_ctrl->u1_pos_out = u1_t_fifo_out;
+    }
+    else{
+        u1_t_fifo_in = (U1)U1_MAX;
+    }
+
+    return(u1_t_fifo_in);
 }
-
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiMaintMainTask(void)                                                                                              */
+/*  U1      u1_g_OdoNvmIfFifoPosOut(ST_ODO_NVMIF_FIFO_CTRL * st_ap_ctrl, const U1 u1_a_MAX)                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiMaintMainTask(void)
+U1      u1_g_OdoNvmIfFifoPosOut(ST_ODO_NVMIF_FIFO_CTRL * st_ap_ctrl, const U1 u1_a_MAX)
 {
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-    static const U2 u2_s_HMIMAINT_TO = (U2)1000U / (U2)50U;
-    U1              u1_t_to;
-    U1              u1_t_exist;
+    U2                      u2_t_fifo_len;
+    U1                      u1_t_fifo_in;
+    U1                      u1_t_fifo_out;
+    U1                      u1_t_fifo_next;
 
-    u1_t_to = u1_g_HmiProxyToc(&u2_s_hmimaint_to, u2_s_HMIMAINT_TO);
-    u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
+    u2_t_fifo_len = st_ap_ctrl->u2_len;
+    u1_t_fifo_in  = st_ap_ctrl->u1_pos_in;
+    u1_t_fifo_out = st_ap_ctrl->u1_pos_out;
 
-    if (u1_t_exist == (U1)TRUE){
-#endif
-        if((u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
-           (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
-            vd_g_OdoOmReset((U1)TRUE);
-        }
-        else{
-            vd_g_OdoOmReset((U1)FALSE);
-        }
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-    } else {
-        if((u1_t_to              == (U1)FALSE)        &&
-           (u1_s_hmimaint_rstreq == (U1)HMIMAINT_RST) &&
-           (u1_s_hmimaint_rstreq != u1_s_hmimaint_rstreq_pre)){
-            vd_g_OdoOmReset((U1)TRUE);
-        }
-        else{
-            vd_g_OdoOmReset((U1)FALSE);
-        }
+    if((u2_t_fifo_len                   == (U2)0U                         ) ||
+       (u2_t_fifo_len                   >  (U2)u1_a_MAX                   ) ||
+       ((u2_t_fifo_len == (U2)u1_a_MAX) && (u1_t_fifo_out != u1_t_fifo_in)) ||
+       (u1_t_fifo_out                   >= u1_a_MAX                       )){
+
+        st_ap_ctrl->u2_len     = (U2)0U; 
+        st_ap_ctrl->u1_pos_in  = (U1)0U;
+        st_ap_ctrl->u1_pos_out = (U1)0U;
+
+        u1_t_fifo_out          = (U1)U1_MAX;
     }
-#endif
-    u1_s_hmimaint_rstreq_pre = u1_s_hmimaint_rstreq;
-}
+    else{
 
+        u1_t_fifo_next = u1_t_fifo_out + (U1)1U;
+        if(u1_t_fifo_next >= u1_a_MAX){
+            u1_t_fifo_next = (U1)0U;
+        }
+        u2_t_fifo_len--;
+
+        st_ap_ctrl->u2_len     = u2_t_fifo_len;
+        st_ap_ctrl->u1_pos_out = u1_t_fifo_next;
+    }
+
+    return(u1_t_fifo_out);
+}
 /*===================================================================================================================================*/
-/*  void  vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)                                                                              */
+/*  void    vd_g_OdoNvmIfWriKmBlock(const ST_ODO_NVMIF_REC_KM * st_ap_REC_KM,                                                        */
+/*                                  const ST_ODO_NVMIF_RW_CTRL * st_ap_CTRL,                                                         */
+/*                                  const U1 * u1_ap_KM)                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      u4_ap_REQ   : Lcom first address                                                                                 */
+/*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
+void    vd_g_OdoNvmIfWriKmBlock(const ST_ODO_NVMIF_REC_KM * st_ap_REC_KM,
+                                const ST_ODO_NVMIF_RW_CTRL * st_ap_CTRL,
+                                const U1 * u1_ap_KM)
 {
-#if ((defined(MCST_MMCUSREQ)) && (MCST_MMCUSREQ == TRUE))
-#else
-    U1 u1_t_exist;
+    const U2 *              u2_tp_BLOCK;
+    U2                      u2_t_blo_next;
+    U2                      u2_t_src_offset;
 
-    u1_t_exist = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);
-    if(u1_t_exist == (U1)TRUE){
-        /* Ais Do Not Application */
-    }else{
-        if(u4_ap_REQ != vdp_PTR_NA) {
-            u1_s_hmimaint_rstreq = (U1)(u4_ap_REQ[0] & (U4)HMIMAINT_BITMASK);
-        }
-        u2_s_hmimaint_to   = (U2)HMIPROXY_TOC_INI;
-    }
-#endif
+    u2_tp_BLOCK     = st_ap_REC_KM->u2p_BLOCK;
+    u2_t_blo_next   = ((U2)st_ap_CTRL->u1_rec_idx * (U2)st_ap_REC_KM->u1_rec_nblock) + (U2)st_ap_CTRL->u1_blo_cnt;
+    u2_t_src_offset = (U2)st_ap_CTRL->u1_blo_cnt * (U2)st_ap_REC_KM->u1_blo_nbyte;
+    vd_g_OdoNvmIfWriteBlock(st_ap_REC_KM->u1_dev_idx,
+                            u2_tp_BLOCK[u2_t_blo_next],
+                            &u1_ap_KM[u2_t_src_offset],
+                            (U2)st_ap_REC_KM->u1_blo_nbyte);
 }
+/*===================================================================================================================================*/
+/*  void    vd_g_OdoNvmIfReaKmBlock(const ST_ODO_NVMIF_REC_KM * st_ap_REC_KM,                                                        */
+/*                                  const ST_ODO_NVMIF_RW_CTRL * st_ap_CTRL)                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_OdoNvmIfReaKmBlock(const ST_ODO_NVMIF_REC_KM * st_ap_REC_KM,
+                                const ST_ODO_NVMIF_RW_CTRL * st_ap_CTRL)
+{
+    const U2 *              u2_tp_BLOCK;
+    U2                      u2_t_blo_next;
 
+    u2_tp_BLOCK   = st_ap_REC_KM->u2p_BLOCK;
+    u2_t_blo_next = ((U2)st_ap_CTRL->u1_rec_idx * (U2)st_ap_REC_KM->u1_rec_nblock) + (U2)st_ap_CTRL->u1_blo_cnt;
+    vd_g_OdoNvmIfReadBlock(st_ap_REC_KM->u1_dev_idx, u2_tp_BLOCK[u2_t_blo_next]);
+}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -154,12 +191,18 @@ void    vd_g_HmiMaintMetCstmPut(const U4 * u4_ap_REQ)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    07/16/2019  TA       New.                                                                                               */
-/*  1.1.0    03/18/2020  TH       Setting for 800B CV.                                                                               */
-/*  1.2.0    01/06/2021  TH       Follow 775B 1A.                                                                                    */
-/*  1.3.0    06/15/2021  TH       Add to Meter Custmize.                                                                             */
+/*  1.0.0     9/18/2018  TN       New.                                                                                               */
+/*  1.1.0     5/27/2019  TN       vd_g_OdoNvmIfRWDInit, vd_g_OdoNvmIfRWDTimCnt, vd_g_OdoNvmIfRWDUnlock, vd_g_OdoNvmIfRWDLock and     */
+/*                                vd_g_OdoNvmIfRWDTimStart were implemented.                                                         */
+/*  1.2.0    12/20/2019  TN       odo_nvmif_odo_km.c v1.1.0 -> v1.2.0.                                                               */
+/*  1.2.1    05/14/2020  YN       odo_nvmif_odo_km.c & odo_nvmif_trip_km.c v1.2.0 -> v1.2.1.                                         */
+/*  1.3.0     8/20/2020  TN       odo_km.c v1.2.0 -> v1.3.0.                                                                         */
+/*  1.3.1    07/27/2020  YN       odo_km.c & odo_nvmif_odo_km.c v1.2.1 -> v1.3.1.                                                    */
+/*  1.3.2    08/18/2020  YN       odo_nvmif_km.c v1.3.1 -> v1.3.2                                                                    */
+/*  2.0.1    10/18/2021  TA(M)    odo_nvmif_km.c v1.3.2 -> v2.0.1                                                                    */
 /*                                                                                                                                   */
-/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
-/*  * TH   = Takahiro Hirano, Denso Techno                                                                                           */
+/*  * TN   = Takashi Nagai, Denso                                                                                                    */
+/*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
+/*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
