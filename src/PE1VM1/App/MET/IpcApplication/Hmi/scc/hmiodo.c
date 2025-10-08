@@ -17,9 +17,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "hmiproxy_cfg_private.h"
-#if 0   /* BEV Rebase provisionally */
 #include "odo_km.h"
-#endif   /* BEV Rebase provisionally */
 
 #include "hmiodo.h"
 #include "rim_ctl.h"
@@ -91,27 +89,19 @@ void    vd_g_HmiOdoMainTask(void)
     /*  TRIP A   */
     if((u1_t_to            == (U1)FALSE ) &&
        (u4_s_hmiodo_trip_a == (U4)0U    )){
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoTripReset((U1)ODO_TRIP_CH_A , (U1)TRUE);
-#endif   /* BEV Rebase provisionally */
     }
     else{
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoTripReset((U1)ODO_TRIP_CH_A , (U1)FALSE);
-#endif   /* BEV Rebase provisionally */
     }
 
     /*  TRIP B   */
     if((u1_t_to            == (U1)FALSE ) &&
        (u4_s_hmiodo_trip_b == (U4)0U    )){
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoTripReset((U1)ODO_TRIP_CH_B , (U1)TRUE);
-#endif   /* BEV Rebase provisionally */
     }
     else{
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoTripReset((U1)ODO_TRIP_CH_B , (U1)FALSE);
-#endif   /* BEV Rebase provisionally */
     }
 }
 

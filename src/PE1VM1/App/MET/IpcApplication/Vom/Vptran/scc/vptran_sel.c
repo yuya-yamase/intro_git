@@ -1,36 +1,36 @@
-/* 1.5.0 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Dimmer                                                                                                                           */
+/*  Vehicle Power Transmission                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define DIMMER_C_MAJOR                           (1)
-#define DIMMER_C_MINOR                           (5)
-#define DIMMER_C_PATCH                           (0)
+#define VPTRAN_SEL_C_MAJOR                      (2)
+#define VPTRAN_SEL_C_MINOR                      (3)
+#define VPTRAN_SEL_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "dimmer_cfg_private.h"
+#include "vptran_sel_cfg_private.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((DIMMER_C_MAJOR != DIMMER_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_H_PATCH))
-#error "dimmer.c and dimmer.h : source and header files are inconsistent!"
+#if ((VPTRAN_SEL_C_MAJOR != VPTRAN_SEL_H_MAJOR) || \
+     (VPTRAN_SEL_C_MINOR != VPTRAN_SEL_H_MINOR) || \
+     (VPTRAN_SEL_C_PATCH != VPTRAN_SEL_H_PATCH))
+#error "vptran_sel.c and vptran_sel.h : source and header files are inconsistent!"
 #endif
 
-#if ((DIMMER_C_MAJOR != DIMMER_CFG_H_MAJOR) || \
-     (DIMMER_C_MINOR != DIMMER_CFG_H_MINOR) || \
-     (DIMMER_C_PATCH != DIMMER_CFG_H_PATCH))
-#error "dimmer.c and dimmer_cfg_private.h : source and header files are inconsistent!"
+#if ((VPTRAN_SEL_C_MAJOR != VPTRAN_SEL_CFG_PRIVATE_H_MAJOR) || \
+     (VPTRAN_SEL_C_MINOR != VPTRAN_SEL_CFG_PRIVATE_H_MINOR) || \
+     (VPTRAN_SEL_C_PATCH != VPTRAN_SEL_CFG_PRIVATE_H_PATCH))
+#error "vptran_sel.c and vptran_sel_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -45,13 +45,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U2          u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_NUM_LVL];
-static U1          u1_s_dim_lvl_daynight;
-static U1          u1_s_dim_if_idx;
+static  U1                                      u1_s_vptran_missiontype;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static  U1      u1_s_VptranGetSts(const U1 u1_a_APPID,  U2 * const u2_ap_val);
+static  void    vd_s_VptranCallRoutine(const U4 u4_a_TM_TYPE, const U4 u4_a_PWRSTS);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,131 +60,146 @@ static U1          u1_s_dim_if_idx;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_DimInit(void)                                                                                                       */
+/* void            vd_g_VptranInit(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimInit(void)
+void            vd_g_VptranInit(void)
 {
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN; 
-    u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN; 
+    U4  u4_t_cnt;
+    u1_s_vptran_missiontype = (U1)U1_MAX;
 
-    u1_s_dim_lvl_daynight = (U1)DIM_DAYNIGHT_LVL_UNKNWN;
-    u1_s_dim_if_idx       = u1_g_DimCfgIFidx();
-
-    vd_g_DimCfgInit();
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMainTask(void)                                                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMainTask(void)
-{
-    U1        u1_t_daynight;
-    U1        u1_t_if_idx;
-
-    u1_t_if_idx = u1_g_DimCfgIFidx();
-    if(u1_t_if_idx < u1_g_DIM_IF_NUM_CFG){
-
-        if(u1_s_dim_if_idx != u1_t_if_idx){
-            vd_g_DimInit();
-        }
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT != vdp_PTR_NA){
-            u1_t_daynight = (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_u1_DAY_NIGHT)(u1_s_dim_lvl_daynight);
-        }
-        else{
-            u1_t_daynight = (U1)DIM_DAYNIGHT_LVL_DAY;
-        }
-        u1_s_dim_lvl_daynight = u1_t_daynight;
-
-        if(st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST != vdp_PTR_NA){
-            (st_gp_DIM_IF_CFG[u1_t_if_idx].fp_vd_US_ADJUST)(u1_t_daynight,
-                                                            &u2_sp_dim_lvl_usadjust[0]);
-        }
-        else{
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]   = (U2)DIM_LVL_UNKNWN;
-            u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] = (U2)DIM_LVL_UNKNWN;
+    for (u4_t_cnt = (U4)0U; u4_t_cnt < (U4)u1_g_VPTRAN_NUM_TYPE; u4_t_cnt++) {
+        if (st_gp_VPTRAN_MTYPE_FUNCCFG[u4_t_cnt].fp_INITFUNC != vdp_PTR_NA) {
+            (*st_gp_VPTRAN_MTYPE_FUNCCFG[u4_t_cnt].fp_INITFUNC)();
         }
     }
 
-    u1_s_dim_if_idx = u1_t_if_idx;
+    vd_g_VptranInitCfg();
 }
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimLvlDaynight(void)                                                                                                */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimLvlDaynight(void)
-{
-    return(u1_s_dim_lvl_daynight);
-}
-/*===================================================================================================================================*/
-/*  U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U2      u2_g_DimLvlUsadjust(const U1 u1_a_DAYNIGHT)
-{
-    U2          u2_t_lvl;
 
-    if((u1_a_DAYNIGHT         < (U1)DIM_DAYNIGHT_NUM_LVL) &&
-       (u1_s_dim_lvl_daynight < (U1)DIM_DAYNIGHT_NUM_LVL)){
-        u2_t_lvl = u2_sp_dim_lvl_usadjust[u1_a_DAYNIGHT];
-    }
-    else{
-        u2_t_lvl = (U2)DIM_LVL_UNKNWN;
+/*===================================================================================================================================*/
+/* void            vd_g_VptranMainTask(void)                                                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_VptranMainTask(void)
+{
+    U4          u4_t_pwrsts;
+    U4          u4_t_cnt;
+    U1          u1_t_pwrmd;
+
+
+    u4_t_pwrsts = (U4)VPTRAN_PWRSTSBIT_BON;
+    u1_t_pwrmd = u1_g_VptranIgnOn();
+    if (u1_t_pwrmd == (U1)TRUE) {
+        u4_t_pwrsts = (U4)VPTRAN_PWRSTSBIT_IGON;
     }
 
-    return(u2_t_lvl);
+    u1_s_vptran_missiontype = u1_g_VptranTransMissionTypeCfg();
+
+    for (u4_t_cnt = (U4)0U; u4_t_cnt < (U4)u1_g_VPTRAN_NUM_TYPE; u4_t_cnt++) {
+        vd_s_VptranCallRoutine(u4_t_cnt, u4_t_pwrsts);
+    }
 }
+
 /*===================================================================================================================================*/
-/*  void    vd_g_DimMcstReadHook(void)                                                                                               */
+/* void            vd_s_VptranCallRoutine(const U1 u1_a_TM_TYPE, const U4 u4_a_PWRSTS)                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_DimMcstReadHook(void)
+static void     vd_s_VptranCallRoutine(const U4 u4_a_TM_TYPE, const U4 u4_a_PWRSTS)
 {
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_DAY, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_DAY]);
-#endif   /* BEV Rebase provisionally */
+    if (u4_a_TM_TYPE != (U4)u1_s_vptran_missiontype) {
+        if (st_gp_VPTRAN_MTYPE_FUNCCFG[u4_a_TM_TYPE].fp_INITFUNC != vdp_PTR_NA) {
+            (*st_gp_VPTRAN_MTYPE_FUNCCFG[u4_a_TM_TYPE].fp_INITFUNC)();
+        }
+    } else {
+        if (st_gp_VPTRAN_MTYPE_FUNCCFG[u4_a_TM_TYPE].fp_EVTFUNC != vdp_PTR_NA) {
+            (*st_gp_VPTRAN_MTYPE_FUNCCFG[u4_a_TM_TYPE].fp_EVTFUNC)(u4_a_PWRSTS);
+        }
+    }
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_VptranRangeSelected(U2 * const u2_ap_range)                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_VptranRangeSelected(U2 * const u2_ap_range)
+{
+    U1          u1_t_ret;
+
+
+    u1_t_ret = (U1)VPTRAN_INVALID;
+    if (u2_ap_range != vdp_PTR_NA) {
+        u1_t_ret = u1_s_VptranGetSts((U1)VPTRAN_APP_RNG, u2_ap_range);
+    }
+    return (u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_VptranGearSelected(U2 * const u2_ap_gear)                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_VptranGearSelected(U2 * const u2_ap_gear)
+{
+    U1          u1_t_ret;
+
+
+    u1_t_ret = (U1)VPTRAN_INVALID;
+    if (u2_ap_gear != vdp_PTR_NA) {
+        u1_t_ret = u1_s_VptranGetSts((U1)VPTRAN_APP_GR, u2_ap_gear);
+    }
+    return (u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_VptranGearShiftIndicator(U2 * const u2_ap_direction)                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_VptranGearShiftIndicator(U2 * const u2_ap_direction)
+{
+    U1          u1_t_ret;
+
+
+    u1_t_ret = (U1)VPTRAN_INVALID;
+    if (u2_ap_direction != vdp_PTR_NA) {
+        u1_t_ret = u1_s_VptranGetSts((U1)VPTRAN_APP_GSI, u2_ap_direction);
+    }
+    return (u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/* static  U1      u1_s_VptranGetSts(const U1 u1_a_APPID,  U2 * const u2_ap_val)                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_VptranGetSts(const U1 u1_a_APPID,  U2 * const u2_ap_val)
+{
+    U1          u1_t_ret;
+
+
+    (*u2_ap_val)        = (U2)VPTRAN_OFF;
+    u1_t_ret            = (U1)VPTRAN_UNKNOWN;
+    if (u1_s_vptran_missiontype < u1_g_VPTRAN_NUM_TYPE) {
+        if (st_gp_VPTRAN_MTYPE_FUNCCFG[u1_s_vptran_missiontype].fp_GETFUNC != vdp_PTR_NA) {
+            u1_t_ret = (*st_gp_VPTRAN_MTYPE_FUNCCFG[u1_s_vptran_missiontype].fp_GETFUNC)(u1_a_APPID, u2_ap_val);
+        }
     }
 
-    if(u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT] < (U2)DIM_USADJ_BY_SW_NUM_LVL){
-#if 0   /* BEV Rebase provisionally */
-        vd_g_McstBfPutPreUser((U1)MCST_BFI_RHEO_NIGHT, (U4)u2_sp_dim_lvl_usadjust[DIM_DAYNIGHT_LVL_NIGHT]);
-#endif   /* BEV Rebase provisionally */
-    }
+    return (u1_t_ret);
+}
 
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  void    vd_g_DimMcstDataResetHook(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_DimMcstDataResetHook(void)
-{
-    vd_g_DimUsadjbySwCfgNvmRead(&u2_sp_dim_lvl_usadjust[0]);
-}
-/*===================================================================================================================================*/
-/*  U1      u1_g_DimSwVrUpDown(void)                                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_DimSwVrUpDown(void)
-{
-    return(u1_g_DimUsadjbySwVrUpDown());
-}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -192,17 +208,19 @@ U1      u1_g_DimSwVrUpDown(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0     3/19/2018  TN       New.                                                                                               */
-/*  1.1.0     1/15/2019  TN       NULL check was implement in vd_g_DimMainTask.                                                      */
-/*  1.2.0     2/26/2019  TN       The implementation of vd_g_DimMainTask was optimized.                                              */
-/*  1.3.0     9/24/2020  SH       dimmer_cfg v1.2.0 -> v1.3.0.                                                                       */
-/*  1.3.1    12/21/2020  KM       Add old user customize writeing in vd_g_DimMcstReadHook                                            */
-/*  1.4.0     1/12/2021  KM       Add customize Data Reset Hook Function                                                             */
-/*  1.4.1     1/26/2021  KM       dimmer_cfg v1.4.0 -> v1.4.1.                                                                       */
-/*  1.5.0     2/08/2021  KM       dimmer_cfg v1.4.1 -> v1.5.0.                                                                       */
+/*  1.0.0    02/13/2018  HY       New.                                                                                               */
+/*  1.1.0    02/14/2020  KK       Add: Mission Type Dynamically switching support     (MET-D_SFTEXI-)                                */
+/*                                     A/T Actual Gear Indicator support              (MET-M_GMGEAR-CORG-)(800B)                     */
+/*  2.0.0    08/26/2021  TA(M)    Add: Deceleration level support                     (DCLDSP-CSTD-0-00-A-C0)                        */
+/*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
+/*  2.1.0    11/30/2021  TA(M)    Add u1_g_VptranRangeSepSelected, u1_g_VptranGearSepSelected                                        */
+/*  2.2.0    09/30/2022  TA(M)    Add TMOIL                                                                                          */
+/*  2.3.0    12/19/2023  GM       19PFv3 CV Change                                                                                   */
 /*                                                                                                                                   */
-/*  * TN = Takashi Nagai, DENSO                                                                                                      */
-/*  * SH = Shota Higashide                                                                                                           */
-/*  * KM = Kota Matoba                                                                                                               */
+/*                                                                                                                                   */
+/*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
+/*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
+/*  * TA(M)= Teruyuki Anjima,  NTT Data MSE                                                                                          */
+/*  * GM   = Glen Monteposo  , DTPH                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
