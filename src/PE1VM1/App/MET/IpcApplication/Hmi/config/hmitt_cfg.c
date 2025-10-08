@@ -21,7 +21,9 @@
 
 #if 0   /* BEV Rebase provisionally */ 
 #include "alert.h"
+#endif   /* BEV Rebase provisionally */
 #include "thblnkr.h"
+#if 0   /* BEV Rebase provisionally */ 
 #include "ambtmp.h"
 #include "sbltsync.h"
 #endif   /* BEV Rebase provisionally */
@@ -242,7 +244,6 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
 /*===================================================================================================================================*/
 static void    vd_s_HmiTtTurn(U4 * u4_ap_req)
 {
-#if 0   /* BEV Rebase provisionally */ 
     U1  u1_t_turn;
     U1  u1_t_turn_act;
 
@@ -257,7 +258,6 @@ static void    vd_s_HmiTtTurn(U4 * u4_ap_req)
     if(u1_t_turn_act == (U1)TRUE){
         u4_ap_req[HMITT_TURN_DATPOS] |= ((U4)TRUE << HMITT_TURN_ACT_SFT);
     }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
