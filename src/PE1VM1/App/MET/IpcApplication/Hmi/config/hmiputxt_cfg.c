@@ -26,10 +26,8 @@
 #include "alert.h"
 #endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
-#if 0   /* BEV Rebase provisionally */
 #include "odo_om_rst_if.h"
 #include "vptran_sel_typ.h"
-#endif   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
 #include "vardef.h"
 #if 0   /* BEV Rebase provisionally */

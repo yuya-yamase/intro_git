@@ -1,33 +1,36 @@
-/* 1.1.0 */
+/* 2.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Hmiodo                                                                                                                           */
+/*  Vehicle Power Transmission                                                                                                       */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMIODO_C_MAJOR                         (1)
-#define HMIODO_C_MINOR                         (1)
-#define HMIODO_C_PATCH                         (0)
+#define VPTRAN_SEL_C_MAJOR                      (2)
+#define VPTRAN_SEL_C_MINOR                      (3)
+#define VPTRAN_SEL_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "hmiproxy_cfg_private.h"
-#include "odo_km.h"
+#include "vptran_sel_cfg_private.h"
 
-#include "hmiodo.h"
-#include "rim_ctl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((HMIODO_C_MAJOR != HMIODO_H_MAJOR) || \
-     (HMIODO_C_MINOR != HMIODO_H_MINOR) || \
-     (HMIODO_C_PATCH != HMIODO_H_PATCH))
-#error "hmiodo.c and hmiodo.h : source and header files are inconsistent!"
+#if ((VPTRAN_SEL_C_MAJOR != VPTRAN_SEL_H_MAJOR) || \
+     (VPTRAN_SEL_C_MINOR != VPTRAN_SEL_H_MINOR) || \
+     (VPTRAN_SEL_C_PATCH != VPTRAN_SEL_H_PATCH))
+#error "vptran_sel.c and vptran_sel.h : source and header files are inconsistent!"
+#endif
+
+#if ((VPTRAN_SEL_C_MAJOR != VPTRAN_SEL_CFG_PRIVATE_H_MAJOR) || \
+     (VPTRAN_SEL_C_MINOR != VPTRAN_SEL_CFG_PRIVATE_H_MINOR) || \
+     (VPTRAN_SEL_C_PATCH != VPTRAN_SEL_CFG_PRIVATE_H_PATCH))
+#error "vptran_sel.c and vptran_sel_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,16 +45,14 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static U4   u4_s_hmiodo_trip_a;
-static U4   u4_s_hmiodo_trip_b;
-static U2   u2_s_hmiodo_to;
-static U4   u4_s_hmiodo_pre_trip_a;
-static U4   u4_s_hmiodo_pre_trip_b;
+static  U1                                      u1_s_vptran_missiontype;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID);
+static  U1      u1_s_VptranGetSts(const U1 u1_a_APPID,  U2 * const u2_ap_val);
+static  void    vd_s_VptranCallRoutine(const U4 u4_a_TM_TYPE, const U4 u4_a_PWRSTS);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,110 +60,144 @@ static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID);
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiOdoInit(void)                                                                                                    */
+/* void            vd_g_VptranInit(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiOdoInit(void)
+void            vd_g_VptranInit(void)
 {
-    u4_s_hmiodo_trip_a     = (U4)U4_MAX;
-    u4_s_hmiodo_trip_b     = (U4)U4_MAX;
-    u2_s_hmiodo_to         = (U2)HMIPROXY_TOC_MAX;
-    u4_s_hmiodo_pre_trip_a = (U4)U4_MAX;
-    u4_s_hmiodo_pre_trip_b = (U4)U4_MAX;
+    U4  u4_t_cnt;
+    u1_s_vptran_missiontype = (U1)U1_MAX;
+
+    for (u4_t_cnt = (U4)0U; u4_t_cnt < (U4)u1_g_VPTRAN_NUM_TYPE; u4_t_cnt++) {
+        if (st_gp_VPTRAN_MTYPE_FUNCCFG[u4_t_cnt].fp_INITFUNC != vdp_PTR_NA) {
+            (*st_gp_VPTRAN_MTYPE_FUNCCFG[u4_t_cnt].fp_INITFUNC)();
+        }
+    }
+
+    vd_g_VptranInitCfg();
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiOdoMainTask(void)                                                                                              */
+/* void            vd_g_VptranMainTask(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiOdoMainTask(void)
+void            vd_g_VptranMainTask(void)
 {
-    static const U2 u2_s_HMIODO_TO = (U2)1000U / (U2)50U;
-    U1              u1_t_to;
+    U4          u4_t_pwrsts;
+    U4          u4_t_cnt;
+    U1          u1_t_pwrmd;
 
-    u1_t_to = u1_g_HmiProxyToc(&u2_s_hmiodo_to, u2_s_HMIODO_TO);
 
-    /*  TRIP A   */
-    if((u1_t_to            == (U1)FALSE ) &&
-       (u4_s_hmiodo_trip_a == (U4)0U    )){
-        vd_g_OdoTripReset((U1)ODO_TRIP_CH_A , (U1)TRUE);
-    }
-    else{
-        vd_g_OdoTripReset((U1)ODO_TRIP_CH_A , (U1)FALSE);
+    u4_t_pwrsts = (U4)VPTRAN_PWRSTSBIT_BON;
+    u1_t_pwrmd = u1_g_VptranIgnOn();
+    if (u1_t_pwrmd == (U1)TRUE) {
+        u4_t_pwrsts = (U4)VPTRAN_PWRSTSBIT_IGON;
     }
 
-    /*  TRIP B   */
-    if((u1_t_to            == (U1)FALSE ) &&
-       (u4_s_hmiodo_trip_b == (U4)0U    )){
-        vd_g_OdoTripReset((U1)ODO_TRIP_CH_B , (U1)TRUE);
-    }
-    else{
-        vd_g_OdoTripReset((U1)ODO_TRIP_CH_B , (U1)FALSE);
+    u1_s_vptran_missiontype = u1_g_VptranTransMissionTypeCfg();
+
+    for (u4_t_cnt = (U4)0U; u4_t_cnt < (U4)u1_g_VPTRAN_NUM_TYPE; u4_t_cnt++) {
+        vd_s_VptranCallRoutine(u4_t_cnt, u4_t_pwrsts);
     }
 }
 
 /*===================================================================================================================================*/
-/*  void  vd_g_HmiOdoPut(const U4 u4_a_TRIP_A , const U4 u4_a_TRIP_B)                                                                */
+/* void            vd_s_VptranCallRoutine(const U1 u1_a_TM_TYPE, const U4 u4_a_PWRSTS)                                               */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void  vd_g_HmiOdoPut(const U4 u4_a_TRIP_A , const U4 u4_a_TRIP_B)
+static void     vd_s_VptranCallRoutine(const U4 u4_a_TM_TYPE, const U4 u4_a_PWRSTS)
 {
-    u2_s_hmiodo_to         = (U2)HMIPROXY_TOC_INI;
-    u4_s_hmiodo_trip_a     = u4_a_TRIP_A;
-    u4_s_hmiodo_trip_b     = u4_a_TRIP_B;
-
-    if((u4_s_hmiodo_trip_a     == (U1)0U) &&
-       (u4_s_hmiodo_pre_trip_a != (U1)0U)){
-#if 0   /* BEV Rebase provisionally */
-        vd_s_HmiOdoSWCount((U2)RIMID_U2_DS_22_10B2_TRIP_A);
-#endif   /* BEV Rebase provisionally */
+    if (u4_a_TM_TYPE != (U4)u1_s_vptran_missiontype) {
+        if (st_gp_VPTRAN_MTYPE_FUNCCFG[u4_a_TM_TYPE].fp_INITFUNC != vdp_PTR_NA) {
+            (*st_gp_VPTRAN_MTYPE_FUNCCFG[u4_a_TM_TYPE].fp_INITFUNC)();
+        }
+    } else {
+        if (st_gp_VPTRAN_MTYPE_FUNCCFG[u4_a_TM_TYPE].fp_EVTFUNC != vdp_PTR_NA) {
+            (*st_gp_VPTRAN_MTYPE_FUNCCFG[u4_a_TM_TYPE].fp_EVTFUNC)(u4_a_PWRSTS);
+        }
     }
-
-    if((u4_s_hmiodo_trip_b     == (U1)0U) &&
-       (u4_s_hmiodo_pre_trip_b != (U1)0U)){
-#if 0   /* BEV Rebase provisionally */
-        vd_s_HmiOdoSWCount((U2)RIMID_U2_DS_22_10B2_TRIP_B);
-#endif   /* BEV Rebase provisionally */
-    }
-
-    u4_s_hmiodo_pre_trip_a = u4_s_hmiodo_trip_a;
-    u4_s_hmiodo_pre_trip_b = u4_s_hmiodo_trip_b;
 }
 
 /*===================================================================================================================================*/
-/* static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID)                                                                            */
+/* U1              u1_g_VptranRangeSelected(U2 * const u2_ap_range)                                                                  */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID)
+U1              u1_g_VptranRangeSelected(U2 * const u2_ap_range)
 {
+    U1          u1_t_ret;
 
-    U2  u2_t_count;
-    U1  u1_t_sts;
 
-    u2_t_count = (U2)0U;
+    u1_t_ret = (U1)VPTRAN_INVALID;
+    if (u2_ap_range != vdp_PTR_NA) {
+        u1_t_ret = u1_s_VptranGetSts((U1)VPTRAN_APP_RNG, u2_ap_range);
+    }
+    return (u1_t_ret);
+}
 
-#if 0   /* BEV Rebase provisionally */
-    u1_t_sts = u1_g_Rim_ReadU2withStatus(u2_a_RIMID, &u2_t_count);
-#else   /* BEV Rebase provisionally */
-    u1_t_sts = (U1)RIM_RESULT_KIND_NG;
-#endif   /* BEV Rebase provisionally */
+/*===================================================================================================================================*/
+/* U1              u1_g_VptranGearSelected(U2 * const u2_ap_gear)                                                                    */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_VptranGearSelected(U2 * const u2_ap_gear)
+{
+    U1          u1_t_ret;
 
-    if(((u1_t_sts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK) &&
-       (u2_t_count                            <  (U2)U2_MAX            )){
-        u2_t_count++;
-#if 0   /* BEV Rebase provisionally */
-        vd_g_Rim_WriteU2(u2_a_RIMID, u2_t_count);
-#endif   /* BEV Rebase provisionally */
+
+    u1_t_ret = (U1)VPTRAN_INVALID;
+    if (u2_ap_gear != vdp_PTR_NA) {
+        u1_t_ret = u1_s_VptranGetSts((U1)VPTRAN_APP_GR, u2_ap_gear);
+    }
+    return (u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_VptranGearShiftIndicator(U2 * const u2_ap_direction)                                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1              u1_g_VptranGearShiftIndicator(U2 * const u2_ap_direction)
+{
+    U1          u1_t_ret;
+
+
+    u1_t_ret = (U1)VPTRAN_INVALID;
+    if (u2_ap_direction != vdp_PTR_NA) {
+        u1_t_ret = u1_s_VptranGetSts((U1)VPTRAN_APP_GSI, u2_ap_direction);
+    }
+    return (u1_t_ret);
+}
+
+/*===================================================================================================================================*/
+/* static  U1      u1_s_VptranGetSts(const U1 u1_a_APPID,  U2 * const u2_ap_val)                                                     */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static  U1      u1_s_VptranGetSts(const U1 u1_a_APPID,  U2 * const u2_ap_val)
+{
+    U1          u1_t_ret;
+
+
+    (*u2_ap_val)        = (U2)VPTRAN_OFF;
+    u1_t_ret            = (U1)VPTRAN_UNKNOWN;
+    if (u1_s_vptran_missiontype < u1_g_VPTRAN_NUM_TYPE) {
+        if (st_gp_VPTRAN_MTYPE_FUNCCFG[u1_s_vptran_missiontype].fp_GETFUNC != vdp_PTR_NA) {
+            u1_t_ret = (*st_gp_VPTRAN_MTYPE_FUNCCFG[u1_s_vptran_missiontype].fp_GETFUNC)(u1_a_APPID, u2_ap_val);
+        }
     }
 
+    return (u1_t_ret);
 }
 
 /*===================================================================================================================================*/
@@ -173,14 +208,19 @@ static void    vd_s_HmiOdoSWCount(const U2 u2_a_RIMID)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    07/16/2019  TA       New.                                                                                               */
-/*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
+/*  1.0.0    02/13/2018  HY       New.                                                                                               */
+/*  1.1.0    02/14/2020  KK       Add: Mission Type Dynamically switching support     (MET-D_SFTEXI-)                                */
+/*                                     A/T Actual Gear Indicator support              (MET-M_GMGEAR-CORG-)(800B)                     */
+/*  2.0.0    08/26/2021  TA(M)    Add: Deceleration level support                     (DCLDSP-CSTD-0-00-A-C0)                        */
+/*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
+/*  2.1.0    11/30/2021  TA(M)    Add u1_g_VptranRangeSepSelected, u1_g_VptranGearSepSelected                                        */
+/*  2.2.0    09/30/2022  TA(M)    Add TMOIL                                                                                          */
+/*  2.3.0    12/19/2023  GM       19PFv3 CV Change                                                                                   */
 /*                                                                                                                                   */
-/*  Revision Date        Author   Change Description                                                                                 */
-/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  19PFv3-1 09/24/2024  SI       Add Reset Count Logic (DID-10B2)                                                                   */
 /*                                                                                                                                   */
-/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
-/*  * SI   = Shugo Ichinose, Denso Techno                                                                                            */
+/*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
+/*  * KK   = Kohei Kato,       Denso Techno                                                                                          */
+/*  * TA(M)= Teruyuki Anjima,  NTT Data MSE                                                                                          */
+/*  * GM   = Glen Monteposo  , DTPH                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
