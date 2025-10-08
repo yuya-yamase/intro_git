@@ -28,7 +28,6 @@
 /* #include "oxcan.h" */ /* @@@ Provisional for 310D PreCV @@@ */
 
 #include "mulmed_color.h"
-#include "locale.h"
 #include "vardef.h"
 
 #include "gateway_mm.h"

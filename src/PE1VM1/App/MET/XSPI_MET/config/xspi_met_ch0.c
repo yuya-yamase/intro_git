@@ -64,8 +64,8 @@
 #include "odo_km.h"
 #include "odo_om_rst_if.h"
 #include "vptran_sel.h"
-#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
+#if 0   /* BEV Rebase provisionally */
 #include "oilmil.h"
 #include "dte_ed.h"
 #include "avggrph.h"
@@ -236,10 +236,12 @@
 #define XSPI_NICKNAME_USERNUM               (3U)
 #define XSPI_NICKNAME_TXTNUM                (10U)
 
+#endif   /* BEV Rebase provisionally */
 #define XSPI_UNIT_MPGIMP                    (4U)
 #define XSPI_UNIT_VAL_ELECO_KMPKWH          (0U)   /* Electricity cost    : km/kWh                 */
 #define XSPI_UNIT_VAL_ELECO_KWHP100KM       (1U)   /* Electricity cost    : kWh/100km              */
 #define XSPI_UNIT_VAL_ELECO_MILEPKWH        (2U)   /* Electricity cost    : miles/kWh              */
+#if 0   /* BEV Rebase provisionally */
 
 #define XSPI_DESIGN_CLASSIC_SUP             (0x40U)
 #define XSPI_DESIGN_METALIC_SUP             (0x80U)
@@ -482,10 +484,8 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;     /*  VAR_PTSYS                                            */
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_subdigspd = u1_g_UnitSubSpd();
     u4_ap_pdu_tx[2] |= ((U4)u1_t_subdigspd & (U4)0x03U) << 11;         /*  SUBDIGSPD_DISP                                       */
-#endif   /* BEV Rebase provisionally */
 
     u1_t_uniove    = u1_g_VardefChainaReq();
     u4_ap_pdu_tx[2] |= ((U4)u1_t_uniove & (U4)0x01U) << 13;            /*  UNIOVE_ICON                                          */
@@ -512,15 +512,11 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u1_t_fugag_scale = u1_g_VardefFuGauge();
     u4_ap_pdu_tx[2] |= ((U4)u1_t_fugag_scale & (U4)0x01U) << 28;       /*  FUGAG_SCALE                                          */
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_spd_red_scale = (U1)0U;
     u1_t_dist = u1_g_Unit((U1)UNIT_IDX_DIST);
     if(u1_t_dist == (U1)UNIT_VAL_DIST_KM){
         u1_t_spd_red_scale = u1_g_VardefEuSpdScaleByPid();
     }
-#else   /* BEV Rebase provisionally */
-    u1_t_spd_red_scale = u1_g_VardefEuSpdScaleByPid();
-#endif   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2] |= ((U4)u1_t_spd_red_scale & (U4)0x01U) << 29;     /*  SPD_RED_SCALE                                        */
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)XSPI_VDF_AREA_SIZE; u4_t_loop++){
@@ -617,7 +613,6 @@ static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
 
     U1    u1_t_unitslct;
     U1    u1_t_convert;
@@ -657,7 +652,6 @@ static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1]  |= (((U4)u1_t_convert_eleco             & (U4)0x0FU)  << 8 );  /* ELE          */
     u4_ap_pdu_tx[1]  |= (((U4)u1_g_Unit((U1)UNIT_IDX_AMBTMP) & (U4)0x03U)  << 12);  /* AMBTMP       */
     u4_ap_pdu_tx[1]  |= ((U4)u1_g_TimeFormat12H24H()                       << 14);  /* TMFMT_12H24H */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

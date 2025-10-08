@@ -84,8 +84,8 @@
 #include "gauge.h"
 #if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
-#include "locale.h"
 #endif   /* BEV Rebase provisionally */
+#include "locale.h"
 #include "vardef.h"
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"

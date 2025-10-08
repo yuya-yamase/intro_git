@@ -65,8 +65,8 @@
 #include "telltale.h"
 #include "wchime.h"
 #include "sbltsync.h"
-#include "locale.h"
 #endif   /* BEV Rebase provisionally */
+#include "locale.h"
 #include "vardef.h"
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
@@ -126,7 +126,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_VardefBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxBonInit,
         &vd_g_DioIfInit,
@@ -226,7 +228,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxRstInit,
         &vd_g_DioIfInit,
@@ -326,7 +330,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxWkupInit,
         &vd_g_DioIfInit,
