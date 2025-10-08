@@ -122,6 +122,29 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void)
 }
 
 /* -------------------------------------------------------------------------- */
+/* Config for EthSwt_SWIC_RstDtct.c                                           */
 /* Config for EthSwt_SWIC_MIB.c                                               */
 /* -------------------------------------------------------------------------- */
 #include "EthSwt_SWIC_Define.h"
+Std_ReturnType EthSwt_SWIC_RstDtct_IsNeedDtct()
+{
+    Std_ReturnType result = E_NOT_OK;
+    Std_ReturnType ether_pwr_en =           Dio_ReadChannel(DIO_ID_PORT8_CH8);
+    Std_ReturnType sail_resout_n =          Dio_ReadChannel(DIO_ID_APORT4_CH11);
+    Std_ReturnType aoss_sleep_entry_exit =  Dio_ReadChannel(DIO_ID_PORT17_CH0);
+
+
+    if (STD_HIGH == ether_pwr_en)
+    {
+        if (STD_HIGH == sail_resout_n)
+        {
+            if (STD_HIGH == aoss_sleep_entry_exit)
+            {
+                // リセット検出確認要求あり
+                result = E_OK;
+            }
+        }
+    }
+
+    return result;
+}
