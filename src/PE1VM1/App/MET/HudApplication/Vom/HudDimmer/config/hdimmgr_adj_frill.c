@@ -573,13 +573,23 @@ static void vd_s_HdimadjFrillReadFrill(void)
     U1  u1_t_msgsts;
     U1  u1_t_ig;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_ig = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_ig = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_ig == (U1)TRUE){
+#if 0   /* BEV Rebase provisionally */
         u1_t_msgsts  = Com_GetIPDUStatus((PduIdType)MSG_FCM1S78_RXCH0);
+#else   /* BEV Rebase provisionally */
+        u1_t_msgsts = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
         u1_t_msgsts &= ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
         if(u1_t_msgsts == (U1)0){
             u4_t_rcvdt = (U4)HDIMADJFRILL_CDDATA_INIT;
+#if 0   /* BEV Rebase provisionally */
             (void)Com_ReceiveSignal(ComConf_ComSignal_OTHFRILL, &u4_t_rcvdt);
+#endif   /* BEV Rebase provisionally */
             if((u4_t_rcvdt != (U4)HDIMADJFRILL_CDDATA_FAIL) &&
                (u4_t_rcvdt != (U4)HDIMADJFRILL_CDDATA_INIT)){
                 u4_t_in    = u4_s_HdimadjFrillFrill_CdCal(u4_t_rcvdt);

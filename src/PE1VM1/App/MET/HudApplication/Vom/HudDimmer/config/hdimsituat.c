@@ -80,10 +80,18 @@ void    vd_g_HdimsituatUpdt(void)
     U1          u1_t_headison;
     U1          u1_t_msgsts;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_msgsts = Com_GetIPDUStatus((PduIdType)MSG_BDB1S03_RXCH0);
+#else   /* BEV Rebase provisionally */
+        u1_t_msgsts = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
     u1_t_msgsts &= (U1)(COM_TIMEOUT | COM_NO_RX);
     if(u1_t_msgsts == (U1)0){
+#if 0   /* BEV Rebase provisionally */
         (void)Com_ReceiveSignal(ComConf_ComSignal_HEDL, &u1_t_headison);
+#else   /* BEV Rebase provisionally */
+        u1_t_headison = (U1)0U;
+#endif   /* BEV Rebase provisionally */
         if(u1_t_headison == (U1)TRUE){
             u1_s_hdimsituat_mode = (U1)HDIMSITUAT_HEAD_ON;
         }
