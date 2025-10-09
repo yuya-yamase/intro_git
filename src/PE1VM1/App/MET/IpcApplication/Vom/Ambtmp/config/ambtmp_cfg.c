@@ -18,9 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "ambtmp_cfg_private.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
-#endif   /* BEV Rebase provisionally */
 #include "oxcan.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -81,13 +79,8 @@ U1      u1_g_AmbtmpCfgUnit(void)
 {
     U1  u1_t_unit;
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_unit = u1_g_Unit((U1)UNIT_IDX_AMBTMP);
     if(u1_t_unit == (U1)UNIT_VAL_AMBTMP_CEL){
-#else   /* BEV Rebase provisionally */
-    u1_t_unit = (U1)0U;
-    if(u1_t_unit == (U1)0U){
-#endif   /* BEV Rebase provisionally */
         u1_t_unit = (U1)AMBTMP_UNIT_CEL;
     }
     else{
