@@ -110,7 +110,7 @@ static void vd_s_VISCanGetUtc(void)
     U1 u1_tp_utcdata[VIS_CAN_TRANSREQ_DATA_UTCNUM];
 
     /* 格納先の初期化 */
-    LIB_memset(u1_tp_rx, VIS_CAN_UTC_FAIL, sizeof(u1_tp_rx));
+    LIB_memset(u1_tp_rx, VIS_CAN_INIT_0, sizeof(u1_tp_rx));
     
     /* UTC時刻情報取得 */
     /* ★車両電源ステート(基本ステート)情報を取得 */
@@ -175,7 +175,7 @@ static void vd_s_VISCanGetOdo(void)
     U1 u1_tp_ododata[VIS_CAN_TRANSREQ_DATA_ODONUM];
 
     /* 格納先の初期化 */
-    LIB_memset(u1_tp_rx, VIS_CAN_ODO_FAIL, sizeof(u1_tp_rx));
+    LIB_memset(u1_tp_rx, VIS_CAN_INIT_0, sizeof(u1_tp_rx));
 
     /* オド情報取得 */
     /* MET1S02メッセージの状態取得 */

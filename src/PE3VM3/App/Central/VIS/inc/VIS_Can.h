@@ -89,6 +89,7 @@
 #define VIS_CAN_VIN16_NM                        ((U1)16U)           /* VIN情報(要素16) */
 #define VIS_CAN_RCV_CHK                         ((U1)0x01)          /* CAN受信値確認 */
 #define VIS_CAN_RCV_PWRERRST_CHK                ((U1)0x1F)          /* CAN受信値確認(PWRERRST用) */
+#define VIS_CAN_INIT_0                          ((U1)0x00U)         /* 変数初期化用 */
 #define VIS_CAN_TRANSREQ_DATA_RECEIVEVAL        ((U1)0U)            /* チップ間通信：受信値格納領域 */
 #define VIS_CAN_TRANSREQ_DATA_RETURNVAL         ((U1)1U)            /* チップ間通信：受信状態格納領域 */
 #define VIS_CAN_TRANSREQ_VINDATA_RETURNVAL      ((U1)17U)           /* チップ間通信：VIN受信状態格納領域 */
