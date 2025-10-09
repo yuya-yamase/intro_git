@@ -17,9 +17,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "xspi_met_ch0_cfg.h"
-#if 0   /* BEV Rebase provisionally */
-#include "battpow.h"
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -89,27 +86,6 @@ U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data)
     return(0U);
 #endif   /* BEV Rebase provisionally */
 }
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_XSpiCfgGetBatpow(U1 * u1p_a_socdsp, U1 * u1p_a_socindll)                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1    u1_g_XSpiCfgGetBatpow(U1 * u1p_a_socdsp, U1 * u1p_a_socindll)
-{
-#if 0   /* BEV Rebase provisionally */
-    U1  u1_t_sts;
-
-    *u1p_a_socdsp     = (U1)0U;
-    *u1p_a_socindll   = (U1)0U;
-    u1_t_sts          = u1_g_BattpowDigPct(u1p_a_socdsp, u1p_a_socindll);
-    return(u1_t_sts);
-#else   /* BEV Rebase provisionally */
-    return(0U);
-#endif   /* BEV Rebase provisionally */
-}
-
 
 /*===================================================================================================================================*/
 /*  void    vd_g_XSPICfgGetDrvInfUnit(U4 * u4p_a_drvinf)                                                                             */
