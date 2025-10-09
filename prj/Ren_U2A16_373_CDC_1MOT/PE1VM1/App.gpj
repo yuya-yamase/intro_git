@@ -41,7 +41,6 @@
     -I${APP_DIR}/MET/IpcApplication/Vom/Odo/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Odo/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/RcmmUI/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/scc
