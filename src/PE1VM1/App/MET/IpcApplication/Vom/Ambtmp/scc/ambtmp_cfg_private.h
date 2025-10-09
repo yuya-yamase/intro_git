@@ -61,13 +61,9 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_AmbtmpCfgOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
 U1      u1_g_AmbtmpCfgIFIdx(void);
 U1      u1_g_AmbtmpCfgUnit(void);
 U1      u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05);
-U4      u4_g_AmbtmpAdCfgIgoffMilliSec(void);
-U2      u2_g_AmbtmpAdCfgAd2Cel(const U2 u2_a_AD);
-U1      u1_g_AmbtmpAdCfgReAd(U2 * u2p_a_ad);
 void    vd_g_AmbtmpCfgMainStart(void);
 void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 u2_a_FAH);
 

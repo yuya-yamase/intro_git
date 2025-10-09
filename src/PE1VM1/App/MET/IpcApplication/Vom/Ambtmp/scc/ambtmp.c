@@ -131,25 +131,6 @@ void    vd_g_AmbtmpRstWkInit(void)
     st_sp_ambtmp[AMBTMP_DEG_FAHRENHEIT].u1_icyraw = (U1)FALSE;
 
 }
-/*===================================================================================================================================*/
-/*  void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
-{
-    U1  u1_t_comp;
-
-#if 0   /* BEV Rebase provisionally */
-    u1_t_comp = u1_g_AmbtmpAdInitComp();
-#else   /* BEV Rebase provisionally */
-    u1_t_comp = (U1)FALSE;
-#endif   /* BEV Rebase provisionally */
-    if(u1_t_comp == (U1)TRUE){
-        vd_g_AmbtmpCfgOpemdEvhk(u4_a_MDBIT, u4_a_EVTBIT);
-    }
-}
 
 /*===================================================================================================================================*/
 /*  void    vd_g_AmbtmpMainTask(void)                                                                                                */
