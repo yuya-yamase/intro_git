@@ -96,7 +96,9 @@
 #include "drvind_eco.h"
 #include "drvind_hv_pct.h"
 #include "oilmil.h"
+#endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
+#if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
 #include "mmlang.h"
 #include "vmmunit.h"
@@ -378,7 +380,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_DrvIndEcoMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_DrvIndHvMainTask,            (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_OilmilMainTask,              (U4)SCHDLR_TASKBIT__50MS_E  },
+    #endif   /* BEV Rebase provisionally */
     {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_Fsposnsr10msTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_FspomgrRoutine,              (U4)SCHDLR_TASKBIT__50MS_E  },

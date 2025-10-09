@@ -78,7 +78,9 @@
 #include "drvind_hv_pct.h"
 #include "oilmil.h"
 #include "gateway_cxpi.h"
+#endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
+#if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
 #include "mmlang.h"
 #include "vmmunit.h"
@@ -173,7 +175,9 @@ void vd_g_22SSCallout_StaBonInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
         &vd_g_MmLangBonInit,
         &vd_g_VardefMmUnitBonInit,
@@ -276,7 +280,9 @@ void vd_g_22SSCallout_StaRstInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrWkRstInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
@@ -379,7 +385,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrWkRstInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,

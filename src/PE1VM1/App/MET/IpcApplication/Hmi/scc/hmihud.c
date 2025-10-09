@@ -22,8 +22,8 @@
 
 #if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
-#include "hdimmgr_if.h"
 #endif   /* BEV Rebase provisionally */
+#include "hdimmgr_if.h"
 
 #include "rim_ctl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -381,9 +381,7 @@ static void vd_s_HmiHudSetIllSw(void){
     u1_s_hmihud_illupsw_presig = u1_t_ill_upsw;
     u1_s_hmihud_illdnsw_presig = u1_t_ill_dnsw;
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HdimmgrIfSetUpDwSw(u1_t_ill_upsw, u1_t_ill_dnsw);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -397,9 +395,7 @@ static void vd_s_HmiHudSetBldutyout(void){
 
     u2_t_bldutyout = (U2)u4_s_HmiHudReadSig((U1)HMIHUD_SIG_BLDUTY_OUT, &u4_sp_hmihud_dtabuf[HMIHUD_FIRST_DTA]);
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_HdimmgrIfSetOutduty(u2_t_bldutyout);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

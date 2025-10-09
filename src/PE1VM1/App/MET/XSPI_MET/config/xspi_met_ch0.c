@@ -73,10 +73,10 @@
 #include "avggrph.h"
 
 #include "himgadj.h"
+#endif   /* BEV Rebase provisionally */
 #include "hdimmgr_if.h"
 
 /* VSV */
-#endif   /* BEV Rebase provisionally */
 #include "gagdst_nxmph.h"
 #if 0   /* BEV Rebase provisionally */
 #include "wchime.h"
@@ -1233,7 +1233,6 @@ static inline void    vd_s_XSpiCfgTxMaint(         U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1 u1_t_owdutyreq;
     U2 u2_t_owduty;
 
@@ -1241,12 +1240,15 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
     u1_t_owdutyreq = u1_g_HdimmgrIfGetOwduty(&u2_t_owduty);
 
     u4_ap_pdu_tx[0]  = (U4)u2_t_owduty;                                                     /* HUD_BLDUTY_OW        */
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[0] |= (U4)u2_g_HudImgAdjGetGvOwPos() << 16;                                /* HUD_VIPOS_POS_OW     */
     u4_ap_pdu_tx[1]  = (U4)u2_g_HudImgAdjGetMovReqPos();                                    /* HUD_VIPOS_REQPOS     */
     u4_ap_pdu_tx[1] |= (U4)u2_g_HdimmgrIfGetAdjduty() << 16;                                /* HUD_DIM_ILLMN        */
     u4_ap_pdu_tx[2]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
+#endif   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HdimmgrIfGet_L_HUDBR_S() & (U4)0x0000001FU) << 8;      /* HUD_L_HUDBR_S        */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_t_owdutyreq & (U4)0x00000001U) << 13;                    /* HUD_BLDUTY_OWREQ     */
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_s_xspi_vipos_disp & (U4)0x00000001U) << 14;          /* GV_VIPOS_DISP        */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvOwReq() & (U4)0x00000001U) << 15;        /* HUD_VIPOS_POS_OWREQ  */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 16;  /* HUD_VIPOS_INIT_OWREQ */
