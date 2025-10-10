@@ -27,16 +27,37 @@
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config
     -I${APP_DIR}/MET/EcuLib/Ren_G3m/scc
+    -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/config
+    -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/scc
+    -I${APP_DIR}/MET/HudApplication/Vom/HudImgadj/config_met
     -I${APP_DIR}/MET/IpcApplication/Evc/Calibration/config
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config/esopt_rx
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config_met_common
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/scc
+    -I${APP_DIR}/MET/IpcApplication/Hmi/config
+    -I${APP_DIR}/MET/IpcApplication/Hmi/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Ambtmp/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Locale/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Locale/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Odo/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Odo/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/RcmmUI/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/app/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/core/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Tripcom/sensor/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/scc
+    -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/config
+    -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/scc
+    -I${APP_DIR}/MET/IpcApplication/Vsv/Thblnkr/scc
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -85,6 +106,18 @@ App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u2_dw.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_blp.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_dw.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_mtrxsrch.850
+App/MET/HudApplication/Vom/HudDimmer/config/hdimillmn.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_adj_cfg.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_adj_frill.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_cfg.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_if.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimsituat.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimstep_cfg.c
+App/MET/HudApplication/Vom/HudDimmer/scc/hdimmgr_adj.c
+App/MET/HudApplication/Vom/HudDimmer/scc/hdimmgr.c
+App/MET/HudApplication/Vom/HudDimmer/scc/hdimowduty.c
+App/MET/HudApplication/Vom/HudDimmer/scc/hdimstep.c
+App/MET/HudApplication/Vom/HudImgadj/config_met/himgadj.c
 App/MET/IpcApplication/Evc/Calibration/config/calibration.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ABG1S01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADU1S07.c
@@ -151,14 +184,78 @@ App/MET/IpcApplication/Evc/Vardef/scc/vardef_hcs.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef_ptsrx.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef_zmilrq.c
 App/MET/IpcApplication/Evc/Vardef/scc/vardef.c
+App/MET/IpcApplication/Hmi/config/hmiproxy_cfg.c
+App/MET/IpcApplication/Hmi/config/hmiputxt_cfg.c
+App/MET/IpcApplication/Hmi/config/hmiputxt_if_cfg.c
+App/MET/IpcApplication/Hmi/config/hmitt_cfg.c
+App/MET/IpcApplication/Hmi/config/hmitt_if_cfg.c
+App/MET/IpcApplication/Hmi/scc/hmiadu.c
+App/MET/IpcApplication/Hmi/scc/hmihud.c
+App/MET/IpcApplication/Hmi/scc/hmilocale.c
+App/MET/IpcApplication/Hmi/scc/hmimaint.c
+App/MET/IpcApplication/Hmi/scc/hmiodo.c
+App/MET/IpcApplication/Hmi/scc/hmiproxy.c
+App/MET/IpcApplication/Hmi/scc/hmiputxt.c
+App/MET/IpcApplication/Hmi/scc/hmiscreen.c
+App/MET/IpcApplication/Hmi/scc/hmitripcom.c
+App/MET/IpcApplication/Hmi/scc/hmitt.c
+App/MET/IpcApplication/Hmi/scc/hmiwchime.c
+App/MET/IpcApplication/Vom/Ambtmp/config/ambtmp_cfg.c
+App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp_can.c
+App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp.c
 App/MET/IpcApplication/Vom/Dimmer/config/dimmer_cfg.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_daynight.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_usadjbysw.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dimmer.c
+App/MET/IpcApplication/Vom/Locale/config/locale_cfg.c
+App/MET/IpcApplication/Vom/Locale/scc/locale.c
+App/MET/IpcApplication/Vom/Odo/config/odo_km_cfg.c
+App/MET/IpcApplication/Vom/Odo/scc/odo_km.c
+App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_km.c
+App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_odo_km.c
+App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_trip_km.c
+App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_util.c
+App/MET/IpcApplication/Vom/Odo/scc/odo_vslmt.c
 App/MET/IpcApplication/Vom/RcmmUI/config/rcmmui_cfg.c
 App/MET/IpcApplication/Vom/RcmmUI/scc/rcmmui.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/avgecon.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/avgee_kmpkwh.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/avggrph.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/avgvehspd_kmph.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/evdte_km.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/instecon.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/instee_kmpkwh.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsrundist_km.c
+App/MET/IpcApplication/Vom/Tripcom/app/scc/ptsruntm_hrs.c
+App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_cfg.c
+App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_comtx.c
+App/MET/IpcApplication/Vom/Tripcom/core/config/tripcom_ms_cfg.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_calc.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_ms.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_nvmif_grph.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom_nvmif.c
+App/MET/IpcApplication/Vom/Tripcom/core/scc/tripcom.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/config/tripsnsr_cfg.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_avgee.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_elpsdtm.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_instee.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr_odocnt.c
+App/MET/IpcApplication/Vom/Tripcom/sensor/scc/tripsnsr.c
+App/MET/IpcApplication/Vom/Vehspd/config/vehspd_kmph_cfg.c
+App/MET/IpcApplication/Vom/Vehspd/scc/vehspd_can_sp1x.c
+App/MET/IpcApplication/Vom/Vehspd/scc/vehspd_kmph.c
+App/MET/IpcApplication/Vom/Vptran/config/vptran_byw_cfg.c
+App/MET/IpcApplication/Vom/Vptran/config/vptran_sel_cfg.c
+App/MET/IpcApplication/Vom/Vptran/scc/vptran_byw.c
+App/MET/IpcApplication/Vom/Vptran/scc/vptran_sel.c
+App/MET/IpcApplication/Vsv/Gauge/config/gagdst_nxmph_cfg.c
+App/MET/IpcApplication/Vsv/Gauge/config/gauge_cfg.c
+App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_nxmph.c
+App/MET/IpcApplication/Vsv/Gauge/scc/gauge.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_cfg.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_comtx.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_tftpct.c
 App/MET/IpcApplication/Vsv/Illumi/scc/illumi.c
+App/MET/IpcApplication/Vsv/Thblnkr/config/thblnkr_cfg.c
+App/MET/IpcApplication/Vsv/Thblnkr/scc/thblnkr.c
 

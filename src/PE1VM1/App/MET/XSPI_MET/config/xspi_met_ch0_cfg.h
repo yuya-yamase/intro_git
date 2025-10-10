@@ -23,7 +23,6 @@
 
 #if 0   /* BEV Rebase provisionally */
 #include "drvind_hv_pct.h"
-#include "tripcom.h"
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -49,8 +48,6 @@
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data);
-U1    u1_g_XSpiCfgGetBatpow(U1 * u1p_a_socdsp, U1 * u1p_a_socindll);
 void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
