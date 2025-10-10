@@ -73,9 +73,7 @@
 #include "oilmil.h"
 #endif   /* BEV Rebase provisionally */
 #include "avggrph.h"
-#if 0   /* BEV Rebase provisionally */
 
-#endif   /* BEV Rebase provisionally */
 #include "himgadj.h"
 #include "hdimmgr_if.h"
 
@@ -111,7 +109,7 @@
 #if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
 #endif
-#if 0   /* BEV BSW provisionally */
+#if 0   /* BEV Rebase provisionally */
 #include "g_monitor.h"
 #include "hmigmon.h"
 #include "fspo_cmn.h"
@@ -2419,7 +2417,9 @@ void    vd_g_XSpiCfgInitCh0(void)
     u4_s_xspi_drvinf                         |= ((U4)XSPI_INST_FUEL_CONS << XSPI_SHIFT_2BYTE);
     u4_s_xspi_drvinf                         |= ((U4)XSPI_AVERAGE_SPEED << XSPI_SHIFT_1BYTE);
     u4_s_xspi_drvinf                         |= ((U4)XSPI_DRIVE_TIME);
+#endif   /* BEV Rebase provisionally */
     u1_s_xspi_dimsw                           = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_s_gmoni_reset_pre                      = (U1)0U;
     u1_s_xspi_gvifsts                         = (U1)XSPI_GVIF_UNDEF2;
     u1_s_xspi_disp_gvifsts                    = (U1)XSPI_GVIF_METDSP_UNDEF;
