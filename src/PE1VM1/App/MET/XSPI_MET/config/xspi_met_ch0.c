@@ -586,7 +586,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
 
     U4 u4_tp_xspi_esopt[VDF_ESO_NOW_AVA];
     U4 u4_t_loop;
@@ -607,7 +606,6 @@ static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[7] = u4_tp_xspi_esopt[7];
     u4_ap_pdu_tx[8] = u4_tp_xspi_esopt[8];
 
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
