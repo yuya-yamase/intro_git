@@ -17,8 +17,8 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "thblnkr_cfg_private.h"
-#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
+#if 0   /* BEV Rebase provisionally */
 #include "iohw_diflt.h"
 #endif   /* BEV Rebase provisionally */
 
@@ -64,13 +64,8 @@ U2    u2_g_ThblnkrVehSpdDsplyd(void)
     U1  u1_t_sts;
 
     u2_t_kmph = (U2)0U;
-#if 0   /* BEV Rebase provisionally */
     u1_t_sts  = u1_g_VehspdKmphBiased(&u2_t_kmph, (U1)FALSE);
     if(u1_t_sts !=  (U1)VEHSPD_STSBIT_VALID){
-#else   /* BEV Rebase provisionally */
-    u1_t_sts  = (U1)1U;
-    if(u1_t_sts !=  (U1)0U){
-#endif   /* BEV Rebase provisionally */
         u2_t_kmph = (U2)0U;
     }
 
