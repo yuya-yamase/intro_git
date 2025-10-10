@@ -91,6 +91,7 @@
 #define INSTEE_NUM_CNTTS                        (1U)
 #define INSTEE_CNTT_RX                          (0U)
 /* 06 Distance To Empty                          */
+#define DTE_NUM_CNTTS                           (1U)
 #define DTE_CNTT_FU                             (0U)
 /* 07 EV Distance To Empty                       */
 #define EVDTE_NUM_CNTTS                         (1U)
@@ -121,6 +122,7 @@
 #define PTSRUNDIST_CNTT_TR_A                    (2U)
 #define PTSRUNDIST_CNTT_TR_B                    (3U)
 /* 12 EV Ratio                                   */
+#define EVRATIO_NUM_CNTTS                       (1U)
 #define EVRATIO_CNTT_DC                         (0U)
 
 /* 13 Distance To Empty Electric Delay          */
@@ -164,7 +166,6 @@ U1              u1_g_EvDteKm(U4 * u4p_a_km, U1 * u1p_a_acsts);
 U1              u1_g_TripcomEvDteKmIgOffAcOn(U4 * u4p_a_km);
 U1              u1_g_TripcomEvDteKmIgOffAcOff(U4 * u4p_a_km);
 U1              u1_g_EvDtePct(U1 * u1p_a_pct);
-U1              u1_g_EvRunTmRatio(U1 * u1p_a_evratio);
 U2              u2_g_EvDteKmDiff(void);
 
 U1              u1_g_AvgVehspdRstImmwRslt(const U1 u1_a_AVG_VEHSPD_CH);/* called by Diagnosis */

@@ -20,9 +20,44 @@
 #include "tripcom_comtx.h"
 #include "oxcan.h"
 #include "vardef.h"
-#if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
+#if 0   /* BEV Rebase provisionally */
 #include "locale.h"
+#else   /* BEV Rebase provisionally */
+#define UNIT_IDX_DIST                       (0U)
+#define UNIT_IDX_SPEED                      (1U)
+#define UNIT_IDX_FUECO                      (2U)
+#define UNIT_IDX_ELECO                      (3U)
+
+/* Unit Distance */
+#define UNIT_NUM_VAL_DIST                   (2U)
+#define UNIT_VAL_DIST_KM                    (0U)
+#define UNIT_VAL_DIST_MILE                  (1U)
+
+/* Unit Speed */
+#define UNIT_NUM_VAL_SPEED                  (2U)
+#define UNIT_VAL_SPEED_KMPH                 (0U)
+#define UNIT_VAL_SPEED_MPH                  (1U)
+
+/* Unit Fuel Economy */
+#define UNIT_NUM_VAL_FUECO                  (7U)
+#define UNIT_VAL_FUECO_KMPL                 (0U)
+#define UNIT_VAL_FUECO_LP100KM              (1U)
+#define UNIT_VAL_FUECO_MPG_USA              (2U)
+#define UNIT_VAL_FUECO_MPG_UK               (3U)
+#define UNIT_VAL_FUECO_MPG_E                (4U)
+#define UNIT_VAL_FUECO_KMPKG                (5U)
+#define UNIT_VAL_FUECO_KGP100KM             (6U)
+
+/* Unit Electronic Economy */
+#define UNIT_NUM_VAL_ELECO                  (7U)   /* Electricity cost Number                      */
+#define UNIT_VAL_ELECO_WHPKM                (0U)
+#define UNIT_VAL_ELECO_KWHPKM               (1U)
+#define UNIT_VAL_ELECO_WHPMILE              (2U)
+#define UNIT_VAL_ELECO_KWHPMILE             (3U)
+#define UNIT_VAL_ELECO_KMPKWH               (4U)   /* Electricity cost    : km/kWh                 */
+#define UNIT_VAL_ELECO_KWHP100KM            (5U)   /* Electricity cost    : kWh/100km              */
+#define UNIT_VAL_ELECO_MILEPKWH             (6U)   /* Electricity cost    : miles/kWh              */
 #endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
@@ -59,6 +94,9 @@
 
 #define TRIPCOM_COMTX_PREVSTS_SFT               (1U)
 
+#if 0   /* BEV Rebase provisionally */
+#define TRIPCOM_COMTX_DTE_TYPE                  (0U)
+#endif   /* BEV Rebase provisionally */
 
 
 
@@ -124,27 +162,24 @@ static  void    vd_s_TripcomCfgCanDrTx(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
+static  const   U1                              u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_NUM_VAL_FUECO]        = {
+    (U1)1U,                                     /* 00 UNIT_VAL_FUECO_KMPL       */
+    (U1)2U,                                     /* 01 UNIT_VAL_FUECO_LP100KM    */
+    (U1)3U,                                     /* 02 UNIT_VAL_FUECO_MPG_USA    */
+    (U1)4U,                                     /* 03 UNIT_VAL_FUECO_MPG_UK     */
+    (U1)0U,                                     /* 04 UNIT_VAL_FUECO_MPG_E      */
+    (U1)0U,                                     /* 05 UNIT_VAL_FUECO_KMPKG      */
+    (U1)0U                                      /* 06 UNIT_VAL_FUECO_KGP100KM   */
+};
 static  const   U1                              u1_sp_TRIPCOM_TX_SPEED_UNTCNV[UNIT_NUM_VAL_SPEED]        = {
-#else   /* BEV Rebase provisionally */
-static  const   U1                              u1_sp_TRIPCOM_TX_SPEED_UNTCNV[2]                         = {
-#endif   /* BEV Rebase provisionally */
     (U1)1U,                                     /* 00 UNIT_VAL_SPEED_KMPH       */
     (U1)2U                                      /* 01 UNIT_VAL_SPEED_MPH        */
 };
-#if 0   /* BEV Rebase provisionally */
 static  const   U1                              u1_sp_TRIPCOM_TX_DIST_UNTCNV[UNIT_NUM_VAL_DIST]          = {
-#else   /* BEV Rebase provisionally */
-static  const   U1                              u1_sp_TRIPCOM_TX_DIST_UNTCNV[2]                          = {
-#endif   /* BEV Rebase provisionally */
     (U1)1U,                                     /* 00 UNIT_VAL_DIST_KM          */
     (U1)2U                                      /* 01 UNIT_VAL_DIST_MILE        */
 };
-#if 0   /* BEV Rebase provisionally */
 static  const   U1                              u1_sp_TRIPCOM_TX_EECON_UNTCNV[UNIT_NUM_VAL_ELECO]        = {
-#else   /* BEV Rebase provisionally */
-static  const   U1                              u1_sp_TRIPCOM_TX_EECON_UNTCNV[7]                         = {
-#endif   /* BEV Rebase provisionally */
     (U1)0U,                                     /* 00 UNIT_VAL_ELECO_WHPKM      */
     (U1)0U,                                     /* 01 UNIT_VAL_ELECO_KWHPKM     */
     (U1)0U,                                     /* 02 UNIT_VAL_ELECO_WHPMILE    */
@@ -154,15 +189,10 @@ static  const   U1                              u1_sp_TRIPCOM_TX_EECON_UNTCNV[7]
     (U1)3U                                      /* 06 UNIT_VAL_ELECO_MILEPKWH   */
 };
 static  const   ST_TRIPCOM_LOCALE               st_sp_TRIPCOM_TX_LOCALE_INF[TRIPCOM_NUM_CANTXUNIT]       = {
-#if 0   /* BEV Rebase provisionally */
+    {   (U1)UNIT_IDX_FUECO,      (U1)UNIT_NUM_VAL_FUECO,      &u1_sp_TRIPCOM_TX_XECON_UNTCNV[0]   },
     {   (U1)UNIT_IDX_SPEED,      (U1)UNIT_NUM_VAL_SPEED,      &u1_sp_TRIPCOM_TX_SPEED_UNTCNV[0]   },
     {   (U1)UNIT_IDX_DIST,       (U1)UNIT_NUM_VAL_DIST,       &u1_sp_TRIPCOM_TX_DIST_UNTCNV[0]    },
     {   (U1)UNIT_IDX_ELECO,      (U1)UNIT_NUM_VAL_ELECO,      &u1_sp_TRIPCOM_TX_EECON_UNTCNV[0]   }
-#else   /* BEV Rebase provisionally */
-    {   (U1)U1_MAX,              (U1)U1_MAX,                  vdp_PTR_NA                          },
-    {   (U1)U1_MAX,              (U1)U1_MAX,                  vdp_PTR_NA                          },
-    {   (U1)U1_MAX,              (U1)U1_MAX,                  vdp_PTR_NA                          }
-#endif   /* BEV Rebase provisionally */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -533,7 +563,6 @@ static  U1     u1_s_TripcomCfgCanTxUNIT6Cnvt(const U1 u1_a_UNIT)
     u1_t_unitsndval = u1_a_UNIT;
 
     u1_t_unittype = u1_g_VardefUnitSlctTypeByPid();
-#if 0   /* BEV Rebase provisionally */
     if(u1_t_unittype == (U1)VDF_UNIT_TYPE_H) { /* PTSYS = BEV and DEST = NA/UK */
         if((u1_a_UNIT == u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_USA]) || 
            (u1_a_UNIT == u1_sp_TRIPCOM_TX_XECON_UNTCNV[UNIT_VAL_FUECO_MPG_UK])) {
@@ -551,7 +580,6 @@ static  U1     u1_s_TripcomCfgCanTxUNIT6Cnvt(const U1 u1_a_UNIT)
             }
         }
     }
-#endif   /* BEV Rebase provisionally */
     return(u1_t_unitsndval);
 }
 
@@ -1157,7 +1185,15 @@ static  void    vd_s_TripcomCfgCanDrTx(void)
 
     u4_t_kmpl   = (U4)0U;
     u1_t_lnfc   = u1_s_TXINIT;
-    u1_t_status = (U1)1U;
+#if 0   /* BEV Rebase provisionally */
+#if (TRIPCOM_COMTX_DTE_TYPE == 1)
+    u1_t_status = u1_g_DteTrainedFeKmpl(&u4_t_kmpl);
+#else
+    u1_t_status = u1_g_DteEdCg0p001kmpl(&u4_t_kmpl);
+#endif
+#else   /* BEV Rebase provisionally */
+    u1_t_status = (U1)TRIPCOM_STSBIT_UNKNOWN;
+#endif   /* BEV Rebase provisionally */
     if (u1_t_status == (U1)TRIPCOM_STSBIT_VALID) {
         u1_t_lnfc = u1_s_TXMAX;
         if (u4_t_kmpl < u4_s_MAXVAL) {

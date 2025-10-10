@@ -233,7 +233,6 @@
 #define XSPI_AMB_FAH_MAX                    (18100U)
 #define XSPI_AMB_LSB_1                      (100U)
 
-
 /* @@@ Provisional @@@ */
 #define XSPI_HUD_DTA_NUM                    (7U)
 
@@ -1116,7 +1115,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     U1              u1_t_loop;
     U1              u1_t_acsts;
 
-
     u2_t_data        = (U2)0U;
     u1_t_sts         = u1_g_AvgVehspdKmph((U1)AVGVEHSPD_CNTT_TA , &u2_t_data);
     u4_ap_pdu_tx[ 4] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_SPD_KMPH_USRRST_STS              */
@@ -1199,9 +1197,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u1_t_sts          = u1_g_EvDtePct(&u1_t_data);
     u4_ap_pdu_tx[37]  = (U4)u1_t_sts;                                               /* DISTTOEMPTY_PHV_ENG_STS             */
     u4_ap_pdu_tx[37] |= ((U4)u1_t_data << 2);                                       /* DISTTOEMPTY_PHV_ENG                 */
-
-    u4_ap_pdu_tx[38] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* DISTTOEMPTY_KM_STS                   */
-    u4_ap_pdu_tx[39] = u4_t_data;                                                   /* DISTTOEMPTY_KM                       */
 
     u4_t_data        = (U4)0U;
     u1_t_sts         = u1_g_InstEeKmpkwh(&u4_t_data);

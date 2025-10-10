@@ -279,19 +279,20 @@ void            vd_g_TripcomMsSetNvmRqst(const U1 u1_a_ID)
                (fp_gp_TRIPCOM_MS_WRIF[stp_t_MEM->u1_devtype]            != vdp_PTR_NA) &&
                (st_gp_TRIPCOM_MS_RDIF[stp_t_MEM->u1_devtype].fp_u1_RDIF != vdp_PTR_NA)) {
 
-#if 0   /* BEV Rebase provisionally */
                 fp_gp_TRIPCOM_MS_WRIF[stp_t_MEM->u1_devtype](stp_t_MEM->u2_memoryid, u4_sp_tripcom_ms_value[u1_a_ID]);
+#if 0   /* BEV Rebase provisionally */
                 u1_t_memsts = st_gp_TRIPCOM_MS_RDIF[stp_t_MEM->u1_devtype].fp_u1_RDIF(stp_t_MEM->u2_memoryid, &u4_t_value);
+#else   /* BEV Rebase provisionally */
+                u4_t_value = (U4)U4_MAX;
+                u1_t_memsts = (U1)RIM_RESULT_KIND_NG;
+#endif   /* BEV Rebase provisionally */
                 if(((u1_t_memsts & (U1)RIM_RESULT_KIND_MASK) == (U1)RIM_RESULT_KIND_OK         )
                 && (u4_t_value                               == u4_sp_tripcom_ms_value[u1_a_ID])){
                     u1_sp_tripcom_ms_rimsts[u1_a_ID] = (U1)TRIPCOM_MS_NVMSTS_SUC;
                 }
                 else{
-#endif   /* BEV Rebase provisionally */
                     u1_sp_tripcom_ms_rimsts[u1_a_ID] = (U1)TRIPCOM_MS_NVMSTS_FAIL;
-#if 0   /* BEV Rebase provisionally */
                 }
-#endif   /* BEV Rebase provisionally */
             }
         }
         else if(stp_t_MEM->u1_devtype == (U1)TRIPCOM_MS_DEV_NVM){       /* Non Volatile Memory */

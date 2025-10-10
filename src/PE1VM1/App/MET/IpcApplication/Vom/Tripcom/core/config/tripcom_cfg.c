@@ -109,7 +109,7 @@ void                (* const                    fp_gp_TRIPCOM_CALC_APPL_TASK[])(
 };
 const U1     u1_g_TRIPCOM_NUM_CALC_APPL_TASK = sizeof(fp_gp_TRIPCOM_CALC_APPL_TASK) / sizeof(fp_gp_TRIPCOM_CALC_APPL_TASK[0]);
 const           ST_TRIPCOM_IF                   st_gp_TRIPCOM_IF_CFG[TRIPCOM_NUM_APPL]                      = {
-    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA            }, /* 00 Average Fuel Economy           */
+    {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 00 Average Fuel Economy           */
     {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 01 Average Hydrogen Economy       */
     {   vdp_PTR_NA,              &u1_g_AvgEeCalcTrnst,      &vd_g_AvgEeAccmlt,      &vd_g_AvgEeUpdt,        &vd_g_AvgEeGrphUpdt,  &vd_g_AvgEeRstImmw     }, /* 02 Average Electric Economy       */
     {   vdp_PTR_NA,              vdp_PTR_NA,                vdp_PTR_NA,             vdp_PTR_NA,             vdp_PTR_NA,           vdp_PTR_NA             }, /* 03 Inst. Fuel Economy             */
@@ -182,7 +182,6 @@ const           ST_TRIPCOM_CNTT                 st_gp_TRIPCOM_CNTTS_CFG[TRIPCOM_
     {   (U1)TRIPCOM_APPL_EVRATIO,       (U1)EVRATIO_CNTT_DC,       (U2)0x0000U     },  /*  Driving Cycle                                */
     {   (U1)TRIPCOM_APPL_DTE_ED,        (U1)DTE_ED_CNTT_FU,        (U2)0x0000U     }   /*  Fuel                                         */
 };
-
 const           U2                              u2_gp_TRIPCOM_GRPH_RSTBIT[AVGGRPH_NUM_CNTT]                 = {
     (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_TA,
     (U2)TRIPCOM_RSTRQBIT_M_AVGFEHE_ONEM,
@@ -208,7 +207,7 @@ void            vd_g_TripcomCfgApplInit(void)
         &vd_g_EvDteInit,
         &vd_g_AvgVehspdInit,
         &vd_g_PtsRunTmInit,
-        &vd_g_PtsRunDistInit,
+        &vd_g_PtsRunDistInit
     };
 
     vd_g_Fpcall_vd_Fvd(&fp_sp_TRIPCOM_CALC_APPL_INIT[0], u2_NC_VD_FVD(fp_sp_TRIPCOM_CALC_APPL_INIT));
@@ -280,9 +279,13 @@ U2              u2_g_TripcomCfgGetVariation(void)
 /*===================================================================================================================================*/
 U1              u1_g_TripcomCfgFuelFull(U2 * u2p_a_val)
 {
+#if 0   /* BEV Rebase provisionally */
     (*u2p_a_val) = u2_CALIB_MCUID0239_FULFUL;
 
     return ((U1)TRIPCOM_STSBIT_VALID);
+#else   /* BEV Rebase provisionally */
+    return ((U1)TRIPCOM_STSBIT_UNKNOWN);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -293,6 +296,7 @@ U1              u1_g_TripcomCfgFuelFull(U2 * u2p_a_val)
 /*===================================================================================================================================*/
 U1              u1_g_TripcomCfgFuelVol(U2 * u2p_a_val)
 {
+#if 0   /* BEV Rebase provisionally */
 #ifdef FUEL_VOL_TAU_H
 #if ((TRIPCOM_STSBIT_VALID   != FUEL_TAU_STSBIT_VALID    ) || \
      (TRIPCOM_STSBIT_UNKNOWN != FUEL_TAU_STSBIT_UNKNOWN  ))
@@ -304,6 +308,10 @@ U1              u1_g_TripcomCfgFuelVol(U2 * u2p_a_val)
     (*u2p_a_val) = (U2)4000U; /* Sample */
     return ((U1)TRIPCOM_STSBIT_VALID);
 #endif
+#else   /* BEV Rebase provisionally */
+    (*u2p_a_val) = (U2)0U;
+    return ((U1)TRIPCOM_STSBIT_UNKNOWN);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -579,14 +587,11 @@ U1              u1_g_TripcomCfgJdgRefuelEnd(void)
 /*===================================================================================================================================*/
 void            vd_g_TripcomCfgSmoothingTask(void)
 {
-#if 0   /* BEV Rebase provisionally */
     static const FP_VD_FVD             fp_sp_TRIPCOM_SMOOTH_TASK[] = {
-        &vd_g_InstFeSmooth,
         &vd_g_InstEeSmooth
     };
 
     vd_g_Fpcall_vd_Fvd(&fp_sp_TRIPCOM_SMOOTH_TASK[0], u2_NC_VD_FVD(fp_sp_TRIPCOM_SMOOTH_TASK));
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

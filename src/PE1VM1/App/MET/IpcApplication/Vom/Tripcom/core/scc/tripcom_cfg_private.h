@@ -49,7 +49,7 @@
 #define TRIPCOM_NUM_CNTTS                       (36U)
 #define TRIPCOM_NUM_ENGPARAM                    (5U)
 
-#define TRIPCOM_NUM_CANTXUNIT                   (3U)
+#define TRIPCOM_NUM_CANTXUNIT                   (4U)
 #define TRIPCOM_CANTXUNIT_XECON                 (0U)
 #define TRIPCOM_CANTXUNIT_SPEED                 (1U)
 #define TRIPCOM_CANTXUNIT_DIST                  (2U)
