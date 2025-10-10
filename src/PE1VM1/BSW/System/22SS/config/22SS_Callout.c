@@ -50,10 +50,8 @@
 #include "engspd_det_rpm.h"
 #endif   /* BEV Rebase provisionally */
 #include "odo_km.h"
-#if 0   /* BEV Rebase provisionally */
 #include "tripsnsr.h"
 #include "tripcom.h"
-#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
 #if 0   /* BEV Rebase provisionally */
 #include "mulmed_color.h"
@@ -80,8 +78,8 @@
 #include "gateway_cxpi.h"
 #endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
-#if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
+#if 0   /* BEV Rebase provisionally */
 #include "mmlang.h"
 #include "vmmunit.h"
 #include "fspomgr.h"
@@ -154,10 +152,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_EngspdDetInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_OdoBonInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_AmbtmpBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_MulmedColorInit,
@@ -177,8 +173,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_GatewaymmInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrBonInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangBonInit,
         &vd_g_VardefMmUnitBonInit,
         &vd_g_FspomgrBonInit,
@@ -259,10 +255,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_EngspdDetInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_AmbtmpRstWkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_MulmedColorInit,
@@ -282,8 +276,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_GatewaymmInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrWkRstInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
         &vd_g_FspomgrWkupInit,
@@ -364,10 +358,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_EngspdDetInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_AmbtmpRstWkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_MulmedColorInit,
@@ -387,8 +379,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_GatewaymmInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrWkRstInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
         &vd_g_FspomgrWkupInit,

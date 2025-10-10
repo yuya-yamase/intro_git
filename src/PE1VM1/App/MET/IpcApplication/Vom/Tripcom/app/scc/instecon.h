@@ -1,89 +1,80 @@
-/* 2.0.1 */
+/* 2.0.4 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Odo                                                                                                                              */
+/*  Instant XXXX Economy application core                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef ODO_KM_CFG_H
-#define ODO_KM_CFG_H
+#ifndef INSTECON_H
+#define INSTECON_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_KM_CFG_H_MAJOR                       (2)
-#define ODO_KM_CFG_H_MINOR                       (0)
-#define ODO_KM_CFG_H_PATCH                       (1)
+#define INSTECON_H_MAJOR                        (2)
+#define INSTECON_H_MINOR                        (0)
+#define INSTECON_H_PATCH                        (4)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
-#include "unitconvrt.h"
-#include "locale.h"
-#include "odo_km.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_TRIP_INIT_BY_NVM_RDBK                (0U)
-#define ODO_TRIP_INIT_BY_MANU_RST                (1U)
-#define ODO_TRIP_INIT_BY_AUTO_RST                (2U)
-
-#define ODO_MIN_PER_KM                           (50U)                  /* 50 [counts / km], 1 count = 20 [m]                        */
+#define INSTECON_NUM_ENGYTYPE                   (3U)
+#define INSTECON_ENGYTYPE_FUEL                  (0U)
+#define INSTECON_ENGYTYPE_HYDR                  (1U)
+#define INSTECON_ENGYTYPE_ELPW                  (2U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (ODO_TRIP_NUM_CH > 8U)
-#error "odo_km_cfg_private.h :  ODO_TRIP_NUM_CH shall be equal to or less than 8."
-#endif
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    U4        u4_ge_m;                                                  /* odo_km at trip reset : Greater than or Equal to 0.001[km] */
-    U4        u4_lt_m;                                                  /* odo_km at trip reset : Less than 0.001[km]                */
-    U4        u4_di_m;                                                  /* distance since trip reset : 0.001[km]                     */
-}ST_ODO_TRIP_KM;
+typedef struct {
+    U1                                          u1_calcstsbit;
+    U1                                          u1_ocinit;
+    U1                                          u1_status;
+} ST_INSTECON_VAR;
+
+typedef struct {
+    U2                                          u2_autoreset;           /* see tripcom.h                                             */
+    U1                                          u1_ms_economy_id;       /* see tripcom_ms.h                                          */
+    U1                                          u1_ms_used_id;          /* see tripcom_ms.h                                          */
+    U1                                          u1_ms_odocnt_id;        /* see tripcom_ms.h                                          */
+    U1                                          u1_ms_dspval_id;        /* see tripcom_ms.h                                          */
+
+    U1                                          u1_cantx_resconv;       /* Multiplier to convert resolution                          */
+    U2                                          u2_cantx_unknown;       /* Unit is not defined                                       */
+    U2                                          u2_cantx_init;          /* Init value for vehicle stopped                            */
+    U2                                          u2_cantx_max;           /* Range max property for cantx value                        */
+} ST_INSTECON_CNTT;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern ST_ODO_TRIP_KM             st_gp_odo_trip_km[];                  /* shall be allocated onto Backup RAM section                */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_OdoCfgBonInit(const U4 u4_a_0P001KM);
-void    vd_g_OdoCfgRstwkInit(const U4 u4_a_0P001KM);
-
-void    vd_g_OdoCfgMainStart(void);
-void    vd_g_OdoCfgMainFinish(const U4 u4_a_0P001KM);
-
-U4      u4_g_OdoCfgInstPerKm(void);
-U1      u1_g_OdoCfgIncrEn(void);                                                         /* Return TRUE = incrementation is enabled */
-U1      u1_g_OdoCfgKmNextToNvm(const U4 u4_a_0P001KM_NEXT, const U4 u4_a_0P001KM_NVM);   /* Return TRUE = Write Next, FALSE = Not   */
-
-void    vd_g_OdoCfgTripMirrInit(const U1 u1_a_CH, const U1 u1_a_INIT);                   /* u1_a_INIT : ODO_TRIP_INIT_BY_XXXX       */
-void    vd_g_OdoCfgTripOmRstJdg(const U1 u1_a_CH);
-void    vd_g_OdoCfgTripMirrCpbk(void);
+void            vd_g_InstEconInit(ST_INSTECON_VAR * stp_a_var, U1 * u1p_a_prevsts);
+U1              u1_g_InstEconCalcTrnst(const ST_INSTECON_CNTT * stp_a_CNTT, ST_INSTECON_VAR * stp_a_var,
+                                       const U2 * u2_ap_STSFIELD, const U1 u1_a_SNSRSTS);
+void            vd_g_InstEconAccmlt(const ST_INSTECON_CNTT * stp_a_CNTT,
+                                    const U1 u1_a_ISINIT, const U4 u4_a_USD, const U4 u4_a_ODO);
+void            vd_g_InstEconUpdt(const ST_INSTECON_CNTT * stp_a_CNTT, const U1 u1_a_TYPE);
+U2              u2_g_InstEconCalcTx(const ST_INSTECON_CNTT * stp_a_CNTT, const U1 u1_a_STS, const U1 u1_a_UNIT, const U1 u1_a_TYPE);
+void            vd_g_InstEconSmooth(const ST_INSTECON_CNTT * stp_a_CNTT, const U1 u1_a_STATUS, const U1 u1_a_PREVSTS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2                   u2_g_ODO_NVM_REQ_TOUT;
 
-extern const U2                   u2_g_ODO_TRIP_RST_TOUT;
-extern const U1                   u1_g_ODO_TRIP_SYNC_RST_BY_CH;           /* ODO_TRIP_CHBIT_XXX shall be used to configure the const */
-extern const U1                   u1_g_ODO_TRIP_NUM_CH;
-
-#endif      /* ODO_KM_CFG_H */
+#endif      /* INSTECON_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  odo_km.c                                                                                                      */
+/*  Change History  :  instecon.c                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

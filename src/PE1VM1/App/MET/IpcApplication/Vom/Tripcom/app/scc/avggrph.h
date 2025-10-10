@@ -1,89 +1,66 @@
-/* 2.0.1 */
+/* 1.2.2 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Odo                                                                                                                              */
+/*  Make Average XXXX Economy Graph                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef ODO_KM_CFG_H
-#define ODO_KM_CFG_H
+#ifndef AVGGRPH_H
+#define AVGGRPH_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_KM_CFG_H_MAJOR                       (2)
-#define ODO_KM_CFG_H_MINOR                       (0)
-#define ODO_KM_CFG_H_PATCH                       (1)
+#define AVGGRPH_H_MAJOR                         (1)
+#define AVGGRPH_H_MINOR                         (2)
+#define AVGGRPH_H_PATCH                         (2)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
-#include "unitconvrt.h"
-#include "locale.h"
-#include "odo_km.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_TRIP_INIT_BY_NVM_RDBK                (0U)
-#define ODO_TRIP_INIT_BY_MANU_RST                (1U)
-#define ODO_TRIP_INIT_BY_AUTO_RST                (2U)
+#define AVGGRPH_NUM_CNTT                        (4U)
+#define AVGGRPH_CNTT_TAFE                       (0U)
+#define AVGGRPH_CNTT_1MFE                       (1U)
+#define AVGGRPH_CNTT_TAEE                       (2U)
+#define AVGGRPH_CNTT_1MEE                       (3U)
 
-#define ODO_MIN_PER_KM                           (50U)                  /* 50 [counts / km], 1 count = 20 [m]                        */
+#define AVGGRPH_SIZE_TA                         (6U)
+#define AVGGRPH_SIZE_1M                         (30U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (ODO_TRIP_NUM_CH > 8U)
-#error "odo_km_cfg_private.h :  ODO_TRIP_NUM_CH shall be equal to or less than 8."
-#endif
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    U4        u4_ge_m;                                                  /* odo_km at trip reset : Greater than or Equal to 0.001[km] */
-    U4        u4_lt_m;                                                  /* odo_km at trip reset : Less than 0.001[km]                */
-    U4        u4_di_m;                                                  /* distance since trip reset : 0.001[km]                     */
-}ST_ODO_TRIP_KM;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern ST_ODO_TRIP_KM             st_gp_odo_trip_km[];                  /* shall be allocated onto Backup RAM section                */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_OdoCfgBonInit(const U4 u4_a_0P001KM);
-void    vd_g_OdoCfgRstwkInit(const U4 u4_a_0P001KM);
-
-void    vd_g_OdoCfgMainStart(void);
-void    vd_g_OdoCfgMainFinish(const U4 u4_a_0P001KM);
-
-U4      u4_g_OdoCfgInstPerKm(void);
-U1      u1_g_OdoCfgIncrEn(void);                                                         /* Return TRUE = incrementation is enabled */
-U1      u1_g_OdoCfgKmNextToNvm(const U4 u4_a_0P001KM_NEXT, const U4 u4_a_0P001KM_NVM);   /* Return TRUE = Write Next, FALSE = Not   */
-
-void    vd_g_OdoCfgTripMirrInit(const U1 u1_a_CH, const U1 u1_a_INIT);                   /* u1_a_INIT : ODO_TRIP_INIT_BY_XXXX       */
-void    vd_g_OdoCfgTripOmRstJdg(const U1 u1_a_CH);
-void    vd_g_OdoCfgTripMirrCpbk(void);
+void            vd_g_AvgGrphInit(void);
+void            vd_g_AvgGrphDataSync(void);
+void            vd_g_AvgGrphUpdt(const U1 u1_a_CNTTID, const U4 u4_a_data, const U1 u1_a_rwrqst);
+void            vd_g_AvgGrphReset(const U1 u1_a_CNTTID);
+U4              u4_g_AvgGrphData(const U1 u1_a_CNTTID, U4 * u4_ap_data, U1 * u1_ap_month, U1 * u1_ap_day);
+void            vd_g_AvgGrphUpdtRslt(void);
+U1              u1_g_AvgGrphRslt(const U1 u1_a_CNTTID);
+U1              u1_g_AvgGrphDiagRslt(const U1 u1_a_CNTTID);
+void            vd_g_AvgGrphTimeCnt(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2                   u2_g_ODO_NVM_REQ_TOUT;
 
-extern const U2                   u2_g_ODO_TRIP_RST_TOUT;
-extern const U1                   u1_g_ODO_TRIP_SYNC_RST_BY_CH;           /* ODO_TRIP_CHBIT_XXX shall be used to configure the const */
-extern const U1                   u1_g_ODO_TRIP_NUM_CH;
-
-#endif      /* ODO_KM_CFG_H */
+#endif      /* AVGGRPH_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  odo_km.c                                                                                                      */
+/*  Change History  :  avggrph.c                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,89 +1,74 @@
-/* 2.0.1 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Odo                                                                                                                              */
+/*  Tripcom Non-Volatile Memory Interface for M_DMGRPH                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef ODO_KM_CFG_H
-#define ODO_KM_CFG_H
+#ifndef TRIPCOM_NVMIF_GRPH_H
+#define TRIPCOM_NVMIF_GRPH_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_KM_CFG_H_MAJOR                       (2)
-#define ODO_KM_CFG_H_MINOR                       (0)
-#define ODO_KM_CFG_H_PATCH                       (1)
+#define TRIPCOM_NVMIF_GRPH_H_MAJOR                  (1)
+#define TRIPCOM_NVMIF_GRPH_H_MINOR                  (0)
+#define TRIPCOM_NVMIF_GRPH_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
-#include "unitconvrt.h"
-#include "locale.h"
-#include "odo_km.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_TRIP_INIT_BY_NVM_RDBK                (0U)
-#define ODO_TRIP_INIT_BY_MANU_RST                (1U)
-#define ODO_TRIP_INIT_BY_AUTO_RST                (2U)
+#define TRIPCOM_NVMIF_GRPH_UNK                      (0xffffffffU)
 
-#define ODO_MIN_PER_KM                           (50U)                  /* 50 [counts / km], 1 count = 20 [m]                        */
+#define TRIPCOM_NVMIF_GRPH_CH_NUM                   (4U)
+#define TRIPCOM_NVMIF_GRPH_CH_TAFE_FE               (0U)
+#define TRIPCOM_NVMIF_GRPH_CH_TAFE_DT               (1U)
+#define TRIPCOM_NVMIF_GRPH_CH_TAEE_EE               (2U)
+#define TRIPCOM_NVMIF_GRPH_CH_TAEE_DT               (3U)
 
+
+#define TRIPCOM_NVMIF_GRPH_DIAG_REQ_CMP             (0x00U)
+#define TRIPCOM_NVMIF_GRPH_DIAG_REQ_WRI             (0x01U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (ODO_TRIP_NUM_CH > 8U)
-#error "odo_km_cfg_private.h :  ODO_TRIP_NUM_CH shall be equal to or less than 8."
-#endif
-
+#define TRIPCOM_NVMIF_GRPH_GRP_SIZE                 (6U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 typedef struct{
-    U4        u4_ge_m;                                                  /* odo_km at trip reset : Greater than or Equal to 0.001[km] */
-    U4        u4_lt_m;                                                  /* odo_km at trip reset : Less than 0.001[km]                */
-    U4        u4_di_m;                                                  /* distance since trip reset : 0.001[km]                     */
-}ST_ODO_TRIP_KM;
-
+    U4               u4_value[TRIPCOM_NVMIF_GRPH_GRP_SIZE]; /* back-up value        */
+    U4               u4_wrt_cnt;                            /* Nvm write counter    */
+    volatile U4      u4_crc32;
+}ST_TRIPCOM_GRPH_NVMDATA;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern ST_ODO_TRIP_KM             st_gp_odo_trip_km[];                  /* shall be allocated onto Backup RAM section                */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_OdoCfgBonInit(const U4 u4_a_0P001KM);
-void    vd_g_OdoCfgRstwkInit(const U4 u4_a_0P001KM);
+U1      u1_g_TripcomNvmIfGrphRWRqst(const U1 u1_a_CH, const U4 * u4_ap_NEXT);
+                                                                  /* if st_ap_NEXT == vdp_PTR_NA, requst to read all records         */
 
-void    vd_g_OdoCfgMainStart(void);
-void    vd_g_OdoCfgMainFinish(const U4 u4_a_0P001KM);
+void    vd_g_TripcomNvmIfGrphInit(const U1 u1_a_SYNC);                          /* called by tripcom                                 */
+void    vd_g_TripcomNvmIfGrphDiagStart(const U1 u1_a_REQ);                      /* called by tripcom_ms                              */
 
-U4      u4_g_OdoCfgInstPerKm(void);
-U1      u1_g_OdoCfgIncrEn(void);                                                         /* Return TRUE = incrementation is enabled */
-U1      u1_g_OdoCfgKmNextToNvm(const U4 u4_a_0P001KM_NEXT, const U4 u4_a_0P001KM_NVM);   /* Return TRUE = Write Next, FALSE = Not   */
-
-void    vd_g_OdoCfgTripMirrInit(const U1 u1_a_CH, const U1 u1_a_INIT);                   /* u1_a_INIT : ODO_TRIP_INIT_BY_XXXX       */
-void    vd_g_OdoCfgTripOmRstJdg(const U1 u1_a_CH);
-void    vd_g_OdoCfgTripMirrCpbk(void);
+void    vd_g_TripcomNvmIfGrphCbkData(const U1 u1_a_CH, const ST_TRIPCOM_GRPH_NVMDATA * const st_ap_DATANVM);
+                                                                                /* called by tripcom_nvmif                           */
+void    vd_g_TripcomNvmIfGrphDiagFinish(const U1 u1_a_RSLT);                    /* called by tripcom_nvmif                           */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2                   u2_g_ODO_NVM_REQ_TOUT;
 
-extern const U2                   u2_g_ODO_TRIP_RST_TOUT;
-extern const U1                   u1_g_ODO_TRIP_SYNC_RST_BY_CH;           /* ODO_TRIP_CHBIT_XXX shall be used to configure the const */
-extern const U1                   u1_g_ODO_TRIP_NUM_CH;
-
-#endif      /* ODO_KM_CFG_H */
+#endif      /* TRIPCOM_NVMIF_GRPH_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  odo_km.c                                                                                                      */
+/*  Change History  :  tripcom_nvmif_grph.c                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

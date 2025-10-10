@@ -1,89 +1,65 @@
-/* 2.0.1 */
+/* 2.0.3 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Odo                                                                                                                              */
+/*  Calculate                                                                                                                        */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef ODO_KM_CFG_H
-#define ODO_KM_CFG_H
+#ifndef TRIPCOM_CALC_CFG_H
+#define TRIPCOM_CALC_CFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_KM_CFG_H_MAJOR                       (2)
-#define ODO_KM_CFG_H_MINOR                       (0)
-#define ODO_KM_CFG_H_PATCH                       (1)
+#define TRIPCOM_CALC_CFG_H_MAJOR                (2)
+#define TRIPCOM_CALC_CFG_H_MINOR                (0)
+#define TRIPCOM_CALC_CFG_H_PATCH                (3)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-#include "unitconvrt.h"
-#include "locale.h"
-#include "odo_km.h"
+#include "tripcom.h"
+#include "tripcom_private.h"
+#include "tripcom_calc.h"
+#include "calc_u8.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ODO_TRIP_INIT_BY_NVM_RDBK                (0U)
-#define ODO_TRIP_INIT_BY_MANU_RST                (1U)
-#define ODO_TRIP_INIT_BY_AUTO_RST                (2U)
+#define TRIPCOM_CALC_KM_TO_MI_MLT               (1000U)          /*  1 mile = 1.609 km (for using SP1P)      */
+#define TRIPCOM_CALC_KM_TO_MI_DIV               (1609U)
 
-#define ODO_MIN_PER_KM                           (50U)                  /* 50 [counts / km], 1 count = 20 [m]                        */
+#define TRIPCOM_CALC_LI_TO_GAUS_MLT             (10000U)         /*  1 gallon = 3.785 liter                  */
+#define TRIPCOM_CALC_LI_TO_GAUS_DIV             (37850U)
+
+#define TRIPCOM_CALC_LI_TO_GAUK_MLT             (10000U)         /*  1 gallon = 4.546 liter                  */
+#define TRIPCOM_CALC_LI_TO_GAUK_DIV             (45460U)
+
+#define TRIPCOM_CALC_EVRUN_KM_TO_MI_MLT         (1000U)          /*  1 mile = 1.609 km (for NOT using SP1P)  */
+#define TRIPCOM_CALC_EVRUN_KM_TO_MI_DIV         (1609U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if (ODO_TRIP_NUM_CH > 8U)
-#error "odo_km_cfg_private.h :  ODO_TRIP_NUM_CH shall be equal to or less than 8."
-#endif
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    U4        u4_ge_m;                                                  /* odo_km at trip reset : Greater than or Equal to 0.001[km] */
-    U4        u4_lt_m;                                                  /* odo_km at trip reset : Less than 0.001[km]                */
-    U4        u4_di_m;                                                  /* distance since trip reset : 0.001[km]                     */
-}ST_ODO_TRIP_KM;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern ST_ODO_TRIP_KM             st_gp_odo_trip_km[];                  /* shall be allocated onto Backup RAM section                */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_OdoCfgBonInit(const U4 u4_a_0P001KM);
-void    vd_g_OdoCfgRstwkInit(const U4 u4_a_0P001KM);
-
-void    vd_g_OdoCfgMainStart(void);
-void    vd_g_OdoCfgMainFinish(const U4 u4_a_0P001KM);
-
-U4      u4_g_OdoCfgInstPerKm(void);
-U1      u1_g_OdoCfgIncrEn(void);                                                         /* Return TRUE = incrementation is enabled */
-U1      u1_g_OdoCfgKmNextToNvm(const U4 u4_a_0P001KM_NEXT, const U4 u4_a_0P001KM_NVM);   /* Return TRUE = Write Next, FALSE = Not   */
-
-void    vd_g_OdoCfgTripMirrInit(const U1 u1_a_CH, const U1 u1_a_INIT);                   /* u1_a_INIT : ODO_TRIP_INIT_BY_XXXX       */
-void    vd_g_OdoCfgTripOmRstJdg(const U1 u1_a_CH);
-void    vd_g_OdoCfgTripMirrCpbk(void);
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2                   u2_g_ODO_NVM_REQ_TOUT;
 
-extern const U2                   u2_g_ODO_TRIP_RST_TOUT;
-extern const U1                   u1_g_ODO_TRIP_SYNC_RST_BY_CH;           /* ODO_TRIP_CHBIT_XXX shall be used to configure the const */
-extern const U1                   u1_g_ODO_TRIP_NUM_CH;
-
-#endif      /* ODO_KM_CFG_H */
+#endif      /* TRIPCOM_CALC_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  odo_km.c                                                                                                      */
+/*  Change History  :  tripcom_calc.c                                                                                                */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

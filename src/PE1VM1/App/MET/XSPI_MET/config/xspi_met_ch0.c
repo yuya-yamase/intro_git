@@ -59,7 +59,9 @@
 #include "gagdst_attempovhtind.h"
 #include "attmp_cel.h"
 /* #include "hydrvol.h" */
+#endif   /* BEV Rebase provisionally */
 #include "tripcom.h"
+#if 0   /* BEV Rebase provisionally */
 #include "mulmed_mulfr.h"
 #endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
@@ -69,11 +71,12 @@
 #include "locale.h"
 #if 0   /* BEV Rebase provisionally */
 #include "oilmil.h"
-#include "dte_ed.h"
-#include "avggrph.h"
-
-#include "himgadj.h"
 #endif   /* BEV Rebase provisionally */
+#include "avggrph.h"
+#if 0   /* BEV Rebase provisionally */
+
+#endif   /* BEV Rebase provisionally */
+#include "himgadj.h"
 #include "hdimmgr_if.h"
 
 /* VSV */
@@ -139,8 +142,10 @@
 #define XSPI_STS_SHIFT                      (30U)
 #if 0   /* BEV Rebase provisionally */
 #define XSPI_OVERHEAT_SHIFT                 (29U)
+#endif   /* BEV Rebase provisionally */
 #define XSPI_EV_KM_ACOFF_STS_SHIFT          (27U)
 #define XSPI_EV_KM_ACON_STS_SHIFT           (24U)
+#if 0   /* BEV Rebase provisionally */
 #define XSPI_PMCHGTH_SHIFT                  (16U)
 #define XSPI_PMPWRTH_STS_SHIFT              (28U)
 #endif   /* BEV Rebase provisionally */
@@ -223,12 +228,6 @@
 #define XSPI_AMB_FAH_MAX                    (18100U)
 #define XSPI_AMB_LSB_1                      (100U)
 
-#if 0   /* BEV Rebase provisionally */
-#define XSPI_DTE_STS_VALID                  (0U)
-#define XSPI_DTE_STS_UNKNOWN                (1U)
-#define XSPI_DTE_STS_INVALID                (2U)
-
-#endif   /* BEV Rebase provisionally */
 /* @@@ Provisional @@@ */
 #define XSPI_HUD_DTA_NUM                    (7U)
 #if 0   /* BEV Rebase provisionally */
@@ -1006,34 +1005,12 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sts;
     U4              u4_t_data;
     U2              u2_t_data;
     U1              u1_t_data;
     U1              u1_t_loop;
     U1              u1_t_acsts;
-
-    u4_t_data        = (U4)0U;
-    u1_t_sts         = u1_g_InstFeKmpl(&u4_t_data);
-    u4_ap_pdu_tx[ 0] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* INST_FE_KMPL_STS                     */
-    u4_ap_pdu_tx[ 1] = u4_t_data;                                                   /* INST_FE_KMPL                         */
-
-    u2_t_data        = u2_g_DteEdMi();
-    if(u2_t_data == (U2)DTE_ED_UNDET_VLE){                                          /* Before the calculation is completed */
-        u1_t_sts     = (U1)XSPI_DTE_STS_UNKNOWN;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else if (u2_t_data == (U2)DTE_ED__FAIL_VLE){                                    /* The calculation is Failure           */
-        u1_t_sts     = (U1)XSPI_DTE_STS_INVALID;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else{                                                                           /* The calculation is completed         */
-        u1_t_sts     = (U1)XSPI_DTE_STS_VALID;
-        u4_t_data    = (U4)u2_t_data * (U4)1000U;                                   /* Since LSB is "0.001", it's multiplied by 1000  */
-    }
-    u4_ap_pdu_tx[2]  = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* DISTTOEMPTY_MILE_STS                 */
-    u4_ap_pdu_tx[3]  = u4_t_data;                                                   /* DISTTOEMPTY_MILE                     */
 
     u2_t_data        = (U2)0U;
     u1_t_sts         = u1_g_AvgVehspdKmph((U1)AVGVEHSPD_CNTT_TA , &u2_t_data);
@@ -1044,21 +1021,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u1_t_sts         = u1_g_AvgVehspdKmph((U1)AVGVEHSPD_CNTT_DC , &u2_t_data);
     u4_ap_pdu_tx[ 6] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_SPD_KMPH_AFTSTRT_STS             */
     u4_ap_pdu_tx[ 7] = (U4)u2_t_data;                                               /* AVG_SPD_KMPH_AFTSTRT                 */
-
-    u4_t_data        = (U4)0U;
-    u1_t_sts         = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_TA , &u4_t_data);
-    u4_ap_pdu_tx[ 8] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_FE_KMPL_USRRST_STS               */
-    u4_ap_pdu_tx[ 9] = u4_t_data;                                                   /* AVG_FE_KMPL_USRRST                   */
-
-    u4_t_data        = (U4)0U;
-    u1_t_sts         = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_DC , &u4_t_data);
-    u4_ap_pdu_tx[10] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_FE_KMPL_AFTSTRT_STS              */
-    u4_ap_pdu_tx[11] = u4_t_data;                                                   /* AVG_FE_KMPL_AFTSTRT                  */
-
-    u4_t_data        = (U4)0U;
-    u1_t_sts         = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_RF , &u4_t_data);
-    u4_ap_pdu_tx[12] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_FE_KMPL_AFTREFUEL_STS            */
-    u4_ap_pdu_tx[13] = u4_t_data;                                                   /* AVG_FE_KMPL_AFTREFUEL                */
 
     u4_t_data         = (U4)0U;
     u1_t_sts          = u1_g_TripcomEvDteKmIgOffAcOff(&u4_t_data);
@@ -1133,22 +1095,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[37]  = (U4)u1_t_sts;                                               /* DISTTOEMPTY_PHV_ENG_STS             */
     u4_ap_pdu_tx[37] |= ((U4)u1_t_data << 2);                                       /* DISTTOEMPTY_PHV_ENG                 */
 
-    u2_t_data        = u2_g_DteEdKm();
-    if(u2_t_data == (U2)DTE_ED_UNDET_VLE){                                          /* Before the calculation is completed */
-        u1_t_sts     = (U1)XSPI_DTE_STS_UNKNOWN;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else if (u2_t_data == (U2)DTE_ED__FAIL_VLE){                                    /* The calculation is Failure           */
-        u1_t_sts     = (U1)XSPI_DTE_STS_INVALID;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else{                                                                           /* The calculation is completed         */
-        u1_t_sts     = (U1)XSPI_DTE_STS_VALID;
-        u4_t_data    = (U4)u2_t_data * (U4)1000U;                                   /* Since LSB is "0.001", it's multiplied by 1000  */
-    }
-    u4_ap_pdu_tx[38] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* DISTTOEMPTY_KM_STS                   */
-    u4_ap_pdu_tx[39] = u4_t_data;                                                   /* DISTTOEMPTY_KM                       */
-
     u4_t_data        = (U4)0U;
     u1_t_sts         = u1_g_InstEeKmpkwh(&u4_t_data);
     u4_ap_pdu_tx[40] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* INST_EE_KMPKWH_STS                   */
@@ -1174,12 +1120,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[47]  = u4_t_data;                                                  /* DISTTOEMPTY_EV_KM                    */
     u4_ap_pdu_tx[37] |= ((U4)u1_t_acsts << 9);                                      /* DISTTOEMPTY_EV_AC_STS                */
 
-    u1_t_data        = (U1)0U;
-    u1_t_sts         = u1_g_XSpiCfgGetEvRatio(&u1_t_data);
-    u4_ap_pdu_tx[48] = ((U4)u1_t_sts << (XSPI_STS_SHIFT - 1U));                 /* EV_RATIO_STS                         */
-    u4_ap_pdu_tx[48] |= (U4)u1_t_data;                                              /* EV_RATIO                             */
-
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1233,21 +1173,17 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
     u1_t_owdutyreq = u1_g_HdimmgrIfGetOwduty(&u2_t_owduty);
 
     u4_ap_pdu_tx[0]  = (U4)u2_t_owduty;                                                     /* HUD_BLDUTY_OW        */
-#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[0] |= (U4)u2_g_HudImgAdjGetGvOwPos() << 16;                                /* HUD_VIPOS_POS_OW     */
     u4_ap_pdu_tx[1]  = (U4)u2_g_HudImgAdjGetMovReqPos();                                    /* HUD_VIPOS_REQPOS     */
     u4_ap_pdu_tx[1] |= (U4)u2_g_HdimmgrIfGetAdjduty() << 16;                                /* HUD_DIM_ILLMN        */
     u4_ap_pdu_tx[2]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
-#endif   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HdimmgrIfGet_L_HUDBR_S() & (U4)0x0000001FU) << 8;      /* HUD_L_HUDBR_S        */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_t_owdutyreq & (U4)0x00000001U) << 13;                    /* HUD_BLDUTY_OWREQ     */
-#if 0   /* BEV Rebase provisionally */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_s_xspi_vipos_disp & (U4)0x00000001U) << 14;          /* GV_VIPOS_DISP        */
+    u4_ap_pdu_tx[2] |= (U4)((U4)u1_s_xspi_vipos_disp & (U4)0x00000001U) << 14;              /* GV_VIPOS_DISP        */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvOwReq() & (U4)0x00000001U) << 15;        /* HUD_VIPOS_POS_OWREQ  */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 16;  /* HUD_VIPOS_INIT_OWREQ */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsUpSwOn() & (U4)0x00000001U) << 17;          /* HUD_VIPOS_UPSW       */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsDnSwOn() & (U4)0x01U) << 18;                /* HUD_VIPOS_DNSW       */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

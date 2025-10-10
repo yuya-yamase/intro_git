@@ -1,137 +1,154 @@
-/* 3.3.0 */
+/* 2.1.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Turn & Hazard Make/Manage Flash Cycle                                                                                            */
+/*  Elapsed time count for Tripcom                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define THBLNKR_CFG_C_MAJOR                      (3)
-#define THBLNKR_CFG_C_MINOR                      (3)
-#define THBLNKR_CFG_C_PATCH                      (0)
+#define TRIPSNSR_ELPSDTM_C_MAJOR                (2)
+#define TRIPSNSR_ELPSDTM_C_MINOR                (1)
+#define TRIPSNSR_ELPSDTM_C_PATCH                (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "thblnkr_cfg_private.h"
-#include "vehspd_kmph.h"
-#if 0   /* BEV Rebase provisionally */
-#include "iohw_diflt.h"
-#endif   /* BEV Rebase provisionally */
+#include "tripsnsr_cfg_private.h"
+#include "tripsnsr_elpsdtm.h"
+#include "tripcom_private.h"
+#include "tripcom_calc.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((THBLNKR_CFG_C_MAJOR != THBLNKR_CFG_H_MAJOR) || \
-     (THBLNKR_CFG_C_MINOR != THBLNKR_CFG_H_MINOR) || \
-     (THBLNKR_CFG_C_PATCH != THBLNKR_CFG_H_PATCH))
-#error "thblnkr_cfg.c and thblnkr_cfg_private.h : source and header files are inconsistent!"
+#if ((TRIPSNSR_ELPSDTM_C_MAJOR != TRIPSNSR_ELPSDTM_H_MAJOR) || \
+     (TRIPSNSR_ELPSDTM_C_MINOR != TRIPSNSR_ELPSDTM_H_MINOR) || \
+     (TRIPSNSR_ELPSDTM_C_PATCH != TRIPSNSR_ELPSDTM_H_PATCH))
+#error "tripsnsr_elpsdtm.c and tripsnsr_elpsdtm.h : source and header files are inconsistent!"
+#endif
+
+#if ((TRIPSNSR_ELPSDTM_C_MAJOR != TRIPSNSR_CFG_H_MAJOR) || \
+     (TRIPSNSR_ELPSDTM_C_MINOR != TRIPSNSR_CFG_H_MINOR) || \
+     (TRIPSNSR_ELPSDTM_C_PATCH != TRIPSNSR_CFG_H_PATCH))
+#error "tripsnsr_elpsdtm.c and tripsnsr_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define TRIPSNSR_ELPSDTM_NUM_TYPE               (3U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct  {
+    U4          u4_res;
+    U2          u2_cond;
+    U1          u1_type;
+} ST_TRIPSNSR_ELPSDTM_TYPE;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static  U4      u4_sp_tripsnsr_elpsd[TRIPSNSR_ELPSDTM_NUM_TYPE];
+static  U2      u2_s_tripsnsr_elpsd_snsrbit;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static  const   ST_TRIPSNSR_ELPSDTM_TYPE        st_s_TRIPSNSR_ELPSDTM_TYPE[TRIPSNSR_ELPSDTM_NUM_TYPE] = {
+    {   (U4)10000U,   (U2)(TRIPCOM_VEHSTS_DRVCYC                        ), (U1)TRIPCOM_DELTA_DC_ELPSD_10MS },
+    {   (U4)1000000U, (U2)(TRIPCOM_VEHSTS_DRVCYC                        ), (U1)TRIPCOM_DELTA_DC_ELPSD_SEC  },
+    {   (U4)1000000U, (U2)(TRIPCOM_VEHSTS_DRVCYC | TRIPCOM_VEHSTS_ECOSTP), (U1)TRIPCOM_DELTA_IDS_ELPSD_SEC }
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  U2    u2_g_ThblnkrVehSpdDsplyd(void)                                                                                             */
+/* void            vd_g_TripsnsrElpsdtmInit(void)                                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U2    u2_g_ThblnkrVehSpdDsplyd(void)
+void            vd_g_TripsnsrElpsdtmInit(void)
 {
-    U2  u2_t_kmph;
-    U1  u1_t_sts;
+    U4          u4_t_loop;
 
-    u2_t_kmph = (U2)0U;
-    u1_t_sts  = u1_g_VehspdKmphBiased(&u2_t_kmph, (U1)FALSE);
-    if(u1_t_sts !=  (U1)VEHSPD_STSBIT_VALID){
-        u2_t_kmph = (U2)0U;
+
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPSNSR_ELPSDTM_NUM_TYPE; u4_t_loop++) {
+        u4_sp_tripsnsr_elpsd[u4_t_loop] = (U4)0U;
     }
+    u2_s_tripsnsr_elpsd_snsrbit = (U2)TRIPCOM_SNSRBIT_ELPSDTM_UNKNOWN;
 
-    return(u2_t_kmph);
+    vd_g_TripsnsrCfgElpsdtmInit();
 }
 
 /*===================================================================================================================================*/
-/*  U1             u1_g_ThblnkrCfgMTNL(void)                                                                                         */
+/* void            vd_g_TripsnsrElpsdtmSmplngTask(const U2 u2_a_VEHSYSSTS, const U1 u1_a_PTSSTS)                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1             u1_g_ThblnkrCfgMTNL(void)
+void            vd_g_TripsnsrElpsdtmSmplngTask(const U2 u2_a_VEHSYSSTS, const U1 u1_a_PTSSTS)
 {
-#if 0   /* BEV Rebase provisionally */
-    U1                       u1_t_raw;
-    U1                       u1_t_mtnl;
+    U4          u4_t_loop;
+    U4          u4_t_frt_dlt;
+    U2          u2_t_vcond;
 
-    u1_t_raw = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_TURN_L_IN);
 
-    if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_UNKNWN)
-    {
-        u1_t_mtnl = (U1)FALSE;
-    }
-    else if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_ACT) {
-        u1_t_mtnl = (U1)TRUE;
-    }
-    else {/* inact */
-        u1_t_mtnl = (U1)FALSE;
-    }
+    u4_t_frt_dlt = u4_g_TripsnsrCfgElpsdtmGetDlt();
 
-    return(u1_t_mtnl);
-#else   /* BEV Rebase provisionally */
-    return((U1)FALSE);
-#endif   /* BEV Rebase provisionally */
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPSNSR_ELPSDTM_NUM_TYPE; u4_t_loop++) {
+        u2_t_vcond = st_s_TRIPSNSR_ELPSDTM_TYPE[u4_t_loop].u2_cond;
+
+        u2_s_tripsnsr_elpsd_snsrbit = (U2)0U;
+        if ((u1_a_PTSSTS & (U1)TRIPCOM_STSBIT_UNKNOWN) != (U1)0U) {
+            u2_s_tripsnsr_elpsd_snsrbit  = (U2)TRIPCOM_SNSRBIT_ELPSDTM_UNKNOWN;
+            u4_t_frt_dlt = (U4)0U;
+        }
+        if ((u1_a_PTSSTS & (U1)TRIPCOM_STSBIT_INVALID) != (U1)0U) {
+            u2_s_tripsnsr_elpsd_snsrbit |= (U2)TRIPCOM_SNSRBIT_ELPSDTM_INVALID;
+            u4_t_frt_dlt = (U4)0U;
+        }
+
+        if ((u2_a_VEHSYSSTS & u2_t_vcond) == u2_t_vcond) {
+            u4_sp_tripsnsr_elpsd[u4_t_loop] = u4_g_TripcomCalcAddU4U4(u4_sp_tripsnsr_elpsd[u4_t_loop], u4_t_frt_dlt);
+        }
+    }
 }
 
+
 /*===================================================================================================================================*/
-/*  U1             u1_g_ThblnkrCfgMTNR(void)                                                                                 */
+/* U2              u2_g_TripsnsrElpsdtmGetDelta(U4 * u4_ap_delta)                                                                    */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-U1             u1_g_ThblnkrCfgMTNR(void)
+U2              u2_g_TripsnsrElpsdtmGetDelta(U4 * u4_ap_delta)
 {
-#if 0   /* BEV Rebase provisionally */
-    U1                       u1_t_raw;
-    U1                       u1_t_mtnr;
+    const ST_TRIPSNSR_ELPSDTM_TYPE *            stp_t_TYPE;
+    U4                                          u4_t_loop;
+    U4                                          u4_t_mul;
 
-    u1_t_raw = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_TURN_R_IN);
 
-    if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_UNKNWN)
-    {
-        u1_t_mtnr = (U1)FALSE;
-    }
-    else if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_ACT) {
-        u1_t_mtnr = (U1)TRUE;
-    }
-    else {/* inact */
-        u1_t_mtnr = (U1)FALSE;
+    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)TRIPSNSR_ELPSDTM_NUM_TYPE; u4_t_loop++) {
+        stp_t_TYPE = &st_s_TRIPSNSR_ELPSDTM_TYPE[u4_t_loop];
+
+        u4_t_mul                         = u4_g_TripcomCalcMulU4U4(stp_t_TYPE->u4_res, u4_g_TRIPSNSR_ELPSDTM_FRT_1US);
+        u4_ap_delta[stp_t_TYPE->u1_type] = u4_sp_tripsnsr_elpsd[u4_t_loop] / u4_t_mul;
+        u4_sp_tripsnsr_elpsd[u4_t_loop]  = u4_sp_tripsnsr_elpsd[u4_t_loop] % u4_t_mul;
     }
 
-    return(u1_t_mtnr);
-#else   /* BEV Rebase provisionally */
-    return((U1)FALSE);
-#endif   /* BEV Rebase provisionally */
+    return (u2_s_tripsnsr_elpsd_snsrbit);
 }
 
 /*===================================================================================================================================*/
@@ -142,49 +159,18 @@ U1             u1_g_ThblnkrCfgMTNR(void)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    02/07/2018  TA       New.                                                                                               */
-/*  1.3.0    10/08/2020  KK       thblnkr.c v1.2.0 -> v1.3.0.                                                                        */
-/*  1.3.1    03/15/2021  KK       thblnkr.c v1.3.0 -> v1.3.1.                                                                        */
-/*  2.0.0    09/06/2021  YI       thblnkr.c v1.3.1 -> v2.0.0.                                                                        */
-/*  2.0.1    10/18/2021  TA(M)    thblnkr.c v2.0.0 -> v2.0.1.                                                                        */
-/*  2.1.0    11/04/2021  TA(M)    thblnkr.c v2.0.1 -> v2.1.0.                                                                        */
-/*  2.3.0    04/18/2022  ZS       thblnkr.c v2.1.0 -> v2.3.0.                                                                        */
-/*  2.4.0    08/25/2022  TA(M)    thblnkr.c v2.3.0 -> v2.4.0.                                                                        */
-/*  2.5.0    09/24/2022  TA(M)    thblnkr.c v2.4.0 -> v2.5.0.                                                                        */
-/*  2.5.1    10/20/2022  YI       thblnkr.c v2.5.0 -> v2.5.1.                                                                        */
-/*  3.0.0    12/13/2023  KH       thblnkr.c v2.5.1 -> v3.0.0.                                                                        */
-/*  3.1.0    07/03/2024  AA       thblnkr.c v3.0.0 -> v3.1.0.                                                                        */
-/*  3.2.0    09/16/2024  YR       thblnkr.c v3.1.0 -> v3.2.0.                                                                        */
-/*  3.3.0    09/16/2024  KH       thblnkr.c v3.1.0 -> v3.3.0.                                                                        */
+/*  1.0.0    11/07/2018  HY       New.                                                                                               */
+/*  1.1.0    03/23/2020  YA       Change for 800B CV                                                                                 */
+/*  1.1.1    07/27/2020  YA       Change status to be determined only during IG-ON                                                   */
+/*  2.0.1    10/18/2021  TA(M)    Change the definition of the null pointer used.(BSW v115_r007)                                     */
+/*  2.0.2    10/27/2021  TK       QAC supported.                                                                                     */
+/*  2.1.0    04/14/2022  TA(M)    See tripcom.c v2.1.1                                                                               */
+/*  2.1.1    08/08/2022  YI       See tripsnsr.c v2.1.1                                                                              */
 /*                                                                                                                                   */
-/*  Revision     Date         Author   Change Description                                                                            */
-/*  ------------ -----------  -------  --------------------------------------------------------------------------------------------- */
-/*               03/06/2020   KK       Configured for 800B (The Output Ports and open_thresh were configured)                        */
-/*  893b-1       11/08/2020   SK       Configured for 893B (AD_I, open_thresh and mask_time were configred)                          */
-/*  200D-1       01/19/2022   XY       Configured for 200D                                                                           */
-/*  200D-2       08/10/2022   MK       Update Toyota Standard Application(lib_ipc_tycan_v210_r002)                                   */
-/*  200D-3       08/31/2022   MK       Fixed 24FGM22-14131                                                                           */
-/*  200D-4       09/02/2022   MK       Configured open_thresh for 200D                                                               */
-/*  200D-5       09/12/2022   MK       Update Toyota Standard Application(lib_ipc_tycan_v210_r004)                                   */
-/*  200D-6       09/23/2022   MK       Change value of F+B correction factor / default disconnection threshold.                      */
-/*  200D-7       10/31/2022   MK       Update Toyota Standard Application(lib_ipc_tycan_v210_r009)                                   */
-/*  200D-8       12/06/2022   YK       Add masking with starter signal(B_ST).                                                        */
-/*  330D-1       02/23/2023   MK       Fix 24FGM22-23181(F+B correction value error).                                                */
-/*  19PFv3-1     09/16/2024   YR       Removed the processing for sound pressure                                                     */
-/*  19PFv3-2     09/19/2024   YR       Removed "vardef.h" in the include files                                                       */
-/*                                                                                                                                   */
-/*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
-/*  * DS   = Daisuke Suzuki,  Denso                                                                                                  */
-/*  * KK   = Kohei Kato,      Denso Techno                                                                                           */
-/*  * YI   = Yoshiki Iwata,   NTT Data MSE                                                                                           */
+/*  * HY   = Hidefumi Yoshida, Denso                                                                                                 */
+/*  * YA   = Yuhei Aoyama, DensoTechno                                                                                               */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
-/*  * SK   = Shintaro Kanou,  Denso Techno                                                                                           */
-/*  * XY   = Xu Yang, DNKT                                                                                                           */
-/*  * ZS   = Zenjiro Shamoto, NTT Data MSE                                                                                           */
-/*  * MK   = Mitsuhiro Kato,  Denso Techno                                                                                           */
-/*  * YK   = Yuki Kawai,      Denso Techno                                                                                           */
-/*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
-/*  * AA   = Anna Asuncion,   Denso Techno                                                                                           */
-/*  * YR   = Yhana Regalario, DTPH                                                                                                   */
+/*  * TK   = Takanori Kuno, Denso Techno                                                                                             */
+/*  * YI   = Yoshiki Iwata, NTT Data MSE                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
