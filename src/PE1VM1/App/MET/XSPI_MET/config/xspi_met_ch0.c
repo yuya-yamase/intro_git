@@ -208,12 +208,12 @@
 
 #define XSPI_RW_ADSW                        (0x01U)
 
-#define XSPI_SHIFT_3BYTE                    (24U)
 #endif   /* BEV Rebase provisionally */
+#define XSPI_SHIFT_3BYTE                    (24U)
 #define XSPI_SHIFT_2BYTE                    (16U)
-#if 0   /* BEV Rebase provisionally */
 #define XSPI_SHIFT_1BYTE                    (8U)
 #define XSPI_SHIFT_NON                      (0U)
+#if 0   /* BEV Rebase provisionally */
 #define XSPI_UNIT_LOW                       (0x0000007FU)
 #define XSPI_UNIT_HI                        (0x00003F00U)
 
@@ -1960,7 +1960,6 @@ static inline void    vd_s_XSpiCfgRxGmoni(    const U4 * u4_ap_PDU_RX) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
 {
-#if 0   /* BEV Rebase provisionally */
     U4          u4_t_1mfedata[AVGGRPH_SIZE_1M];
     U4          u4_t_1meedata[AVGGRPH_SIZE_1M];
     U4          u4_t_tafedata[AVGGRPH_SIZE_TA];
@@ -2056,7 +2055,6 @@ static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
     u4_ap_pdu_tx[80] |= ((U4)u1_t_taeerslt & (U4)XSPI_MSK_02BIT) << 6U;
     u4_ap_pdu_tx[80] |= ((U4)u1_t_taferslt & (U4)XSPI_MSK_02BIT) << 8U;
     u4_ap_pdu_tx[80] |= ((U4)u1_t_taeerslt & (U4)XSPI_MSK_02BIT) << 10U;
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
