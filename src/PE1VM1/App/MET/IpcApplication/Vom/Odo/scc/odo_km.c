@@ -725,13 +725,8 @@ U1      u1_g_OdoKmMileByUnit(U4 * u4p_a_0p001kmmile)
     if(st_s_odo_km_bra_0.u4_ge_m <= (U4)ODO_KM_MAX){
         u1_t_stsbit = (U1)ODO_STSBIT_VALID;
         if(u4p_a_0p001kmmile != vdp_PTR_NA){
-#if 0   /* BEV Rebase provisionally */
             u1_t_unit = u1_g_Unit((U1)UNIT_IDX_DIST);
             if(u1_t_unit == (U1)UNIT_VAL_DIST_MILE){
-#else   /* BEV Rebase provisionally */
-            u1_t_unit = (U1)0U;
-            if(u1_t_unit == (U1)1U){
-#endif   /* BEV Rebase provisionally */
                 (*u4p_a_0p001kmmile) = u4_g_UnitconvtrKmtoMi(st_s_odo_km_bra_0.u4_ge_m);
             }else{
                 (*u4p_a_0p001kmmile) = st_s_odo_km_bra_0.u4_ge_m;
@@ -854,13 +849,8 @@ U1      u1_g_OdoTripKmMileByUnit(const U1 u1_a_CH, U4 * u4p_a_0p001kmmile)
 
         u1_t_stsbit = (U1)ODO_STSBIT_VALID;
         if(u4p_a_0p001kmmile != vdp_PTR_NA){
-#if 0   /* BEV Rebase provisionally */
             u1_t_unit = u1_g_Unit((U1)UNIT_IDX_DIST);
             if(u1_t_unit == (U1)UNIT_VAL_DIST_MILE){
-#else   /* BEV Rebase provisionally */
-            u1_t_unit = (U1)0U;
-            if(u1_t_unit == (U1)1U){
-#endif   /* BEV Rebase provisionally */
                 (*u4p_a_0p001kmmile) = u4_g_UnitconvtrKmtoMi(st_gp_odo_trip_km[u1_a_CH].u4_di_m);
             }else{
                 (*u4p_a_0p001kmmile) = st_gp_odo_trip_km[u1_a_CH].u4_di_m;
