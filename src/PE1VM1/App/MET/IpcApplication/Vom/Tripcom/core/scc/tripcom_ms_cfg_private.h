@@ -1,63 +1,81 @@
-/* 0.0.0 */
+/* 2.1.3 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/*  Memory Service for Trip Computer                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef TRIPCOM_MS_CFG_H
+#define TRIPCOM_MS_CFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define TRIPCOM_MS_CFG_H_MAJOR                  (2)
+#define TRIPCOM_MS_CFG_H_MINOR                  (1)
+#define TRIPCOM_MS_CFG_H_PATCH                  (3)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
-
-#if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
-#endif   /* BEV Rebase provisionally */
+#include "aip_common.h"
+#include "tripcom.h"
+#include "veh_opemd.h"
+#include "nvmc_mgr.h"
+#include "rim_ctl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
+#define TRIPCOM_MS_NUM_ID                       (181U)
 
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
+#define TRIPCOM_MS_NUM_DEV                      (3U)
+#define TRIPCOM_MS_DEV_BR_Z                     (0U)
+#define TRIPCOM_MS_DEV_BR_M                     (1U)
+#define TRIPCOM_MS_DEV_NVM                      (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define u1_g_TripcomMsIgnOn()                   (u1_g_VehopemdIgnOn())
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct {
+    U2                                          u2_memoryid;
+    U1                                          u1_devtype;
+    U1                                          u1_nvmifch;         /* u1_gp_TRIPCOM_MS_CH2ID */
+} ST_TRIPCOM_MS_MEM;
+
+typedef struct {
+    U1      (* const                            fp_u1_RDIF)(const U2 u2_a_ID, U4 * u4p_a_value);
+} ST_TRIPCOM_MS_RDIF;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+/* U1           u1_g_TripcomMsIgnOn(void);                                                                                           */
+U1              u1_g_TripcomMsEsichk(void);
+void            vd_g_TripcomMsSyncUpdtImm(const U1 u1_a_CH);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern  const   ST_TRIPCOM_MS_MEM               st_gp_TRIPCOM_MS_MEM_CFG[];
+extern  const   ST_TRIPCOM_MS_RDIF              st_gp_TRIPCOM_MS_RDIF[];
+extern  void    (* const                        fp_gp_TRIPCOM_MS_WRIF[])(const U2 u2_a_ID, const U4 u4_a_VALUE);
+extern  const   U1                              u1_gp_TRIPCOM_MS_CH2ID[];
+extern  const   U1                              u1_gp_TRIPCOM_MS_GRPH_CH2ID[];
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif      /* TRIPCOM_MS_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  tripcom_ms.c                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

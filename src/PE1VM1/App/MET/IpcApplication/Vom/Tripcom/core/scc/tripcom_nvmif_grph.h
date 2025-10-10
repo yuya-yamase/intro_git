@@ -1,63 +1,74 @@
-/* 0.0.0 */
+/* 1.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/*  Tripcom Non-Volatile Memory Interface for M_DMGRPH                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef TRIPCOM_NVMIF_GRPH_H
+#define TRIPCOM_NVMIF_GRPH_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define TRIPCOM_NVMIF_GRPH_H_MAJOR                  (1)
+#define TRIPCOM_NVMIF_GRPH_H_MINOR                  (0)
+#define TRIPCOM_NVMIF_GRPH_H_PATCH                  (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
-
-#if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
-#endif   /* BEV Rebase provisionally */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
+#define TRIPCOM_NVMIF_GRPH_UNK                      (0xffffffffU)
 
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
+#define TRIPCOM_NVMIF_GRPH_CH_NUM                   (4U)
+#define TRIPCOM_NVMIF_GRPH_CH_TAFE_FE               (0U)
+#define TRIPCOM_NVMIF_GRPH_CH_TAFE_DT               (1U)
+#define TRIPCOM_NVMIF_GRPH_CH_TAEE_EE               (2U)
+#define TRIPCOM_NVMIF_GRPH_CH_TAEE_DT               (3U)
+
+
+#define TRIPCOM_NVMIF_GRPH_DIAG_REQ_CMP             (0x00U)
+#define TRIPCOM_NVMIF_GRPH_DIAG_REQ_WRI             (0x01U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
+#define TRIPCOM_NVMIF_GRPH_GRP_SIZE                 (6U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct{
+    U4               u4_value[TRIPCOM_NVMIF_GRPH_GRP_SIZE]; /* back-up value        */
+    U4               u4_wrt_cnt;                            /* Nvm write counter    */
+    volatile U4      u4_crc32;
+}ST_TRIPCOM_GRPH_NVMDATA;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+U1      u1_g_TripcomNvmIfGrphRWRqst(const U1 u1_a_CH, const U4 * u4_ap_NEXT);
+                                                                  /* if st_ap_NEXT == vdp_PTR_NA, requst to read all records         */
+
+void    vd_g_TripcomNvmIfGrphInit(const U1 u1_a_SYNC);                          /* called by tripcom                                 */
+void    vd_g_TripcomNvmIfGrphDiagStart(const U1 u1_a_REQ);                      /* called by tripcom_ms                              */
+
+void    vd_g_TripcomNvmIfGrphCbkData(const U1 u1_a_CH, const ST_TRIPCOM_GRPH_NVMDATA * const st_ap_DATANVM);
+                                                                                /* called by tripcom_nvmif                           */
+void    vd_g_TripcomNvmIfGrphDiagFinish(const U1 u1_a_RSLT);                    /* called by tripcom_nvmif                           */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif      /* TRIPCOM_NVMIF_GRPH_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  tripcom_nvmif_grph.c                                                                                          */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

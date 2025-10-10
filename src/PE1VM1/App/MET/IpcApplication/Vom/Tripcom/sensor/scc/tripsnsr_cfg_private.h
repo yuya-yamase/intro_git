@@ -1,63 +1,125 @@
-/* 0.0.0 */
+/* 2.1.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/*  Control sensors for Tripcom                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef TRIPSNSR_CFG_H
+#define TRIPSNSR_CFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define TRIPSNSR_CFG_H_MAJOR                    (2)
+#define TRIPSNSR_CFG_H_MINOR                    (1)
+#define TRIPSNSR_CFG_H_PATCH                    (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
+#include "aip_common.h"
+#include "tripcom.h"
+#include "tripsnsr.h"
+
+#include "tripsnsr_elpsdtm.h"
+#include "tripsnsr_odocnt.h"
+#include "tripsnsr_avgee.h"
+#include "tripsnsr_instee.h"
 
 #if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
+#include "veh_opemd.h"
+#include "vehspd_kmph.h"
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
+#define TRIPSNSR_VEH_STOP_THSLD                 (175U)          /* 1.75 * VEHSPD_1_KMPH                                              */
 
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
+#define TRIPSNSR_NUM_SNSR                       (8U)
+
+#define TRIPSNSR_EVDTE_VALID                    (0x00U)
+#define TRIPSNSR_EVDTE_UNKNOWN                  (0x01U)
+#define TRIPSNSR_EVDTE_INVALID                  (0x02U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
+#define u1_g_TripsnsrIgnOn()                    (u1_g_VehopemdIgnOn())
+#define u1_g_TripsnsrAccOn()                    (u1_g_VehopemdAccOn())
+#define u1_g_TripsnsrPtsOn()                    (u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_OFF))
+                                                                    /* If any pts souce signal is invalid/rxto, return PTS-OFF/FALSE */
+#define u1_g_TripsnsrVspKmph(x)                 (u1_g_VehspdKmphInst((x), (U1)TRUE))
+#else   /* BEV Rebase provisionally */
+#define u1_g_TripsnsrIgnOn()                    ((U1)FALSE)
+#define u1_g_TripsnsrAccOn()                    ((U1)FALSE)
+#define u1_g_TripsnsrPtsOn()                    ((U1)FALSE)
+#define u1_g_TripsnsrVspKmph(x)                 ((U1)0U)
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct {
+    void    (* const                            fp_vd_TRIPSNSR_INIT)(void);
+    void    (* const                            fp_vd_TRIPSNSR_SMPLNG_TASK)(const U2 u2_a_VEHSYSSTS, const U1 u1_a_PTSSTS);
+    U2      (* const                            fp_u2_TRIPSNSR_DELTA_CHK)(U4 * u4_ap_delta);
+    U1      (* const                            fp_u1_TRIPSNSR_RESET)(void);
+} ST_TRIPSNSR_CNTTS;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+/* U1           u1_g_TripsnsrIgnOn(void);                                                                                            */
+/* U1           u1_g_TripsnsrAccOn(void);                                                                                            */
+/* U1           u1_g_TripsnsrPtsOn(void);                                                                                            */
+/* U1           u1_g_TripsnsrVspKmph(U2 * u2_ap_kmph);                                                                               */
+
+U1              u1_g_TripsnsrCfgEcoMode(void);
+U1              u1_g_TripsnsrCfgGetECOMODE3(U1 * u1p_a_ecomode);
+
+void            vd_g_TripsnsrCfgElpsdtmInit(void);
+U4              u4_g_TripsnsrCfgElpsdtmGetDlt(void);
+
+U1              u1_g_TripsnsrCfgGetBFC(U4 * u4p_a_fuel_inst);
+U1              u1_g_TripsnsrCfgRxCntBFC(U1 * u1p_a_rollcnt);
+
+U1              u1_g_TripsnsrCfgGetCNSMH2(U4 * u4p_a_hydr_inst);
+U1              u1_g_TripsnsrCfgRxCntCNSMH2(U1 * u1p_a_rollcnt);
+
+void            vd_g_TripsnsrCfgEvDteDist(U2 * u2p_a_dist);
+void            vd_g_TripsnsrCfgEvDteSubRate(U1 * u1p_a_subrate);
+void            vd_g_TripsnsrCfgEvDtePIEVE06(U1 * u1p_a_pieve06);
+U1              u1_g_TripsnsrCfgEvDteCNGPIEVD(U1 * u1p_a_cngpievd);
+
+U1              u1_g_TripsnsrCfgEvDteSts(void);
+U1              u1_g_TripsnsrCfgEvDteBatSts(void);
+
+U1              u1_g_TripsnsrCfgGetInsEpusd(S4 * s4p_a_insepusd);
+U1              u1_g_TripsnsrCfgGetInsEvdist(U4 * u4p_a_evdist);
+U1              u1_g_TripsnsrCfgGetInsUpdtflg(U1 * u1p_a_updtflg);
+
+U1              u1_g_TripsnsrCfgGetEpusd(S4 * s4p_a_epusd);
+U1              u1_g_TripsnsrCfgGetEpUpdflg(U1 * u1p_a_epupdflg);
+
+U1              u1_g_TripsnsrCfgGetPtsSts(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern  const   ST_TRIPSNSR_CNTTS               st_gp_TRIPSNSR_CNTTS_CFG[];
+extern  const   U4                              u4_g_TRIPSNSR_ELPSDTM_FRT_1US;
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif      /* TRIPSNSR_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  tripsnsr.c                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -1,63 +1,80 @@
-/* 0.0.0 */
+/* 2.0.4 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/*  Instant XXXX Economy application core                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef INSTECON_H
+#define INSTECON_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define INSTECON_H_MAJOR                        (2)
+#define INSTECON_H_MINOR                        (0)
+#define INSTECON_H_PATCH                        (4)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
-
-#if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
-#endif   /* BEV Rebase provisionally */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
+#define INSTECON_NUM_ENGYTYPE                   (3U)
+#define INSTECON_ENGYTYPE_FUEL                  (0U)
+#define INSTECON_ENGYTYPE_HYDR                  (1U)
+#define INSTECON_ENGYTYPE_ELPW                  (2U)
 
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+typedef struct {
+    U1                                          u1_calcstsbit;
+    U1                                          u1_ocinit;
+    U1                                          u1_status;
+} ST_INSTECON_VAR;
+
+typedef struct {
+    U2                                          u2_autoreset;           /* see tripcom.h                                             */
+    U1                                          u1_ms_economy_id;       /* see tripcom_ms.h                                          */
+    U1                                          u1_ms_used_id;          /* see tripcom_ms.h                                          */
+    U1                                          u1_ms_odocnt_id;        /* see tripcom_ms.h                                          */
+    U1                                          u1_ms_dspval_id;        /* see tripcom_ms.h                                          */
+
+    U1                                          u1_cantx_resconv;       /* Multiplier to convert resolution                          */
+    U2                                          u2_cantx_unknown;       /* Unit is not defined                                       */
+    U2                                          u2_cantx_init;          /* Init value for vehicle stopped                            */
+    U2                                          u2_cantx_max;           /* Range max property for cantx value                        */
+} ST_INSTECON_CNTT;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+void            vd_g_InstEconInit(ST_INSTECON_VAR * stp_a_var, U1 * u1p_a_prevsts);
+U1              u1_g_InstEconCalcTrnst(const ST_INSTECON_CNTT * stp_a_CNTT, ST_INSTECON_VAR * stp_a_var,
+                                       const U2 * u2_ap_STSFIELD, const U1 u1_a_SNSRSTS);
+void            vd_g_InstEconAccmlt(const ST_INSTECON_CNTT * stp_a_CNTT,
+                                    const U1 u1_a_ISINIT, const U4 u4_a_USD, const U4 u4_a_ODO);
+void            vd_g_InstEconUpdt(const ST_INSTECON_CNTT * stp_a_CNTT, const U1 u1_a_TYPE);
+U2              u2_g_InstEconCalcTx(const ST_INSTECON_CNTT * stp_a_CNTT, const U1 u1_a_STS, const U1 u1_a_UNIT, const U1 u1_a_TYPE);
+void            vd_g_InstEconSmooth(const ST_INSTECON_CNTT * stp_a_CNTT, const U1 u1_a_STATUS, const U1 u1_a_PREVSTS);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif      /* INSTECON_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  instecon.c                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
