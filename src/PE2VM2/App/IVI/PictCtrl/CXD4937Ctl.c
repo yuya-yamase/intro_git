@@ -811,6 +811,8 @@ static void vd_s_Pict_GvifSndrCycChk(void)
         case GVIFSNDR_CYCCHK_STEP7:                                         /* STEP7 */
             /* State Update */
             u1_s_gvifsnd_state = (U1)GVIFSENDER_SEQ_LINKCHK;
+            /* Error Count Clear */
+            u1_s_gvifsnd_linkchk_err_cnt = (U1)0U;
             /* Link Error Check */
             vd_s_Pict_GvifSndrGvifLinkChk();
             /* Process Reset */
@@ -1142,8 +1144,6 @@ static void vd_s_Pict_GvifSndrGvifLinkChk(void)
             u1_t_reg_read_result = st_sp_CXD4957_GVIFSNDRLINKCHK_RD_TBL[1].u1p_pdu[1];
             u1_t_reg_read_result = u1_t_reg_read_result & (U1)PICT_CXD_REG_MASK_BIT_0;          /* Get Link Check Result */
             if(u1_t_reg_read_result == (U1)PICT_CXD_REG_MASK_BIT_0){                            /* Link Check Error */
-                /* Error Count Clear */
-                u1_s_gvifsnd_linkchk_err_cnt = (U1)0U;
                 /* Next Process */
                 u1_s_gvifsnd_linkchk_sts = (U1)GVIFSENDER_LINKCHK_STEP2;
             }else{
@@ -1164,17 +1164,15 @@ static void vd_s_Pict_GvifSndrGvifLinkChk(void)
                 /* State Reset */
                 u1_s_gvifsnd_state = (U1)GVIFSENDER_SEQ_IDLE;
                 /* Process Reset */
-                u1_s_gvifsnd_linkchk_sts = (U1)GVIFSNDR_CYCCHK_STEP0;
+                u1_s_gvifsnd_linkchk_sts = (U1)GVIFSENDER_LINKCHK_STEP0;
             }
             break;
         case GVIFSENDER_LINKCHK_STEP3:                                                      /* STEP3 */
             if(u1_s_gvifsnd_linkchk_err_cnt >= (U1)PICT_GVIFSNDRGVIFLINK_CHK_CNT_MAX){
-                /* Error Count Clear */
-                u1_s_gvifsnd_linkchk_err_cnt = (U1)0U;
                 /* State Reset */
                 u1_s_gvifsnd_state = (U1)GVIFSENDER_SEQ_CYC;
                 /* Process Reset */
-                u1_s_gvifsnd_linkchk_sts = (U1)GVIFSNDR_CYCCHK_STEP0;
+                u1_s_gvifsnd_linkchk_sts = (U1)GVIFSENDER_LINKCHK_STEP0;
             }
             else {
                 /* Timer Clear */
@@ -1184,7 +1182,6 @@ static void vd_s_Pict_GvifSndrGvifLinkChk(void)
                 /* Next Process */
                 u1_s_gvifsnd_linkchk_sts = (U1)GVIFSENDER_LINKCHK_STEP4;
             }
-
             break;
         case GVIFSENDER_LINKCHK_STEP4:                                                      /* STEP4 */
             u1_t_gviflink_time_chk_flg = u1_s_Pict_GvifSndrTimChk(u2_s_gvifsnd_linkchk_timer, GVIFSENDER_LINKCHK_WAIT_TIME);
