@@ -1080,7 +1080,7 @@ void            vd_g_GyroInit(void)
 void            vd_g_GyroMainTask(void)
 {
     /* Bu-DET HI監視 */
-    vd_s_GyroBuDetHiCheck();
+    //vd_s_GyroBuDetHiCheck();      /* temporary */
 
     /* V33-Peri-ON状態チェック */
     vd_s_GyroV33PeriOnCheck();
