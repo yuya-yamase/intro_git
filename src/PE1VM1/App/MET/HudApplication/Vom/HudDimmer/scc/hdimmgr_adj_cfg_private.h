@@ -1,65 +1,78 @@
-/* 0.0.0 */
+/* 2.1.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
-/*                                                                                                                                   */
+/*  HudDimmer Adjudt Duty                                                                                                            */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef HDIMADJ_H
+#define HDIMADJ_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define HDIMADJ_CFG_H_MAJOR                  (2)
+#define HDIMADJ_CFG_H_MINOR                  (1)
+#define HDIMADJ_CFG_H_PATCH                  (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Include Files                                                                                                                    */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
-
-#if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
-#include "tripcom.h"
-#endif   /* BEV Rebase provisionally */
-
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Literal Definitions                                                                                                              */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
-
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Macro Definitions                                                                                                                */
+/*  Include File                                                                                                                     */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Variable Externs                                                                                                                 */
+/*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define HDIMADJ_ACTTYPE_ADJDUTY_BLK          (0x01)
+#define HDIMADJ_ACTTYPE_ADJDUTY_CAL          (0x02)
+#define HDIMADJ_ACTTYPE_ADJDUTY_DEF          (0x04)
+
+#define HDIMADJ_DUTY_0PER                    (0)                                /* Duty 0 percent                                    */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Macros                                                                                                                           */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Constant Variable Externs                                                                                                        */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+extern const U1     u1_g_HDIMADJ_DMMNGTBL_X_NUM;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+/* hdimmgr_adj.c */
+void        vd_g_HdimadjInit(void);
+void        vd_g_HdimadjDutyUpdt(U2 * u2_ap_tgtduty , U2 * u2_ap_adjduty);
+void        vd_g_HdimadjHookIllmnCalUpdt(void);
+U2          u2_g_HdimadjCalcDuty(const U4 u4_a_ILLMN, const U2 u2_ap_TBL[], const U4 u4_ap_TBL[], const U1 u1_a_X_IDX_NUM);
+
+/* hdimmgr_adj_cfg.c */
+void        vd_g_HdimadjCfgInit(void);
+U1          u1_g_HdimadjCfgActUpdt(U1 * u1_ap_illmnsts, U4 * u4_ap_situat , U4 * u4_ap_step , U4 * u4_ap_illmn);
+U1          u1_g_HdimadjCfgJdgRpdChg(const U4 u4_a_ILLMN, const U4 u4_a_PASTILLMN);
+U1          u1_g_HdimadjCfgInMvaveNum(const U1 u1_a_ISDK2BR);
+const U4 *  u4_gp_HdimadjCfgDmmngTbl_X(void);
+const U2 *  u2_gp_HdimadjCfgDmmngTbl_Y(const U4 u4_a_SITUAT, const U4 u4_a_STEP);
+U2          u2_g_HdimadjCfgDtctTgtDuty(const U2 u2_a_TGTDUTY);
+U1          u1_g_HdimadjCfgAdjMvaveNum(void);
+
+/* hdimmgr_adj_frill.c */
+void        vd_g_HdimadjFrillInit(void);
+U1          u1_g_HdimadjFrilldutyUpdt(U2 * u2_ap_tgtduty);
+U1          u1_g_HdimadjFrillGetOthfrillRawVal(U4 * u4_a_cdm2);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Constant Externs                                                                                                                 */
+/*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif /* HDIMADJ_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  see  hdimmgr_adj.c                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

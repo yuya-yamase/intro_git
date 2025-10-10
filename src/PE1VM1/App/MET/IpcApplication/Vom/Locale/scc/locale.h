@@ -1,44 +1,91 @@
-/* 0.0.0 */
+/* 2.0.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/*  Locale                                                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef LOCALE_H
+#define LOCALE_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define LOCALE_H_MAJOR                         (2)
+#define LOCALE_H_MINOR                         (0)
+#define LOCALE_H_PATCH                         (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
-
-#if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
-#include "tripcom.h"
-#endif   /* BEV Rebase provisionally */
+#include "locale_lang.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
+#define LOCALE_VAL_UNDEF                    (255U)
 
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
+/* Definitions of language:See config/locale_lang.h */
+
+
+#define UNIT_NUM_IDX                        (5U)
+#define UNIT_IDX_DIST                       (0U)
+#define UNIT_IDX_SPEED                      (1U)
+#define UNIT_IDX_FUECO                      (2U)
+#define UNIT_IDX_ELECO                      (3U)
+#define UNIT_IDX_AMBTMP                     (4U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Unit Distance */
+#define UNIT_NUM_VAL_DIST                   (2U)
+#define UNIT_VAL_DIST_KM                    (0U)
+#define UNIT_VAL_DIST_MILE                  (1U)
+
+/* Unit Speed */
+#define UNIT_NUM_VAL_SPEED                  (2U)
+#define UNIT_VAL_SPEED_KMPH                 (0U)
+#define UNIT_VAL_SPEED_MPH                  (1U)
+
+/* Unit Fuel Economy */
+#define UNIT_NUM_VAL_FUECO                  (7U)
+#define UNIT_VAL_FUECO_KMPL                 (0U)
+#define UNIT_VAL_FUECO_LP100KM              (1U)
+#define UNIT_VAL_FUECO_MPG_USA              (2U)
+#define UNIT_VAL_FUECO_MPG_UK               (3U)
+#define UNIT_VAL_FUECO_MPG_E                (4U)
+#define UNIT_VAL_FUECO_KMPKG                (5U)
+#define UNIT_VAL_FUECO_KGP100KM             (6U)
+
+/* Unit Electronic Economy */
+#define UNIT_NUM_VAL_ELECO                  (7U)   /* Electricity cost Number                      */
+#define UNIT_VAL_ELECO_WHPKM                (0U)
+#define UNIT_VAL_ELECO_KWHPKM               (1U)
+#define UNIT_VAL_ELECO_WHPMILE              (2U)
+#define UNIT_VAL_ELECO_KWHPMILE             (3U)
+#define UNIT_VAL_ELECO_KMPKWH               (4U)   /* Electricity cost    : km/kWh                 */
+#define UNIT_VAL_ELECO_KWHP100KM            (5U)   /* Electricity cost    : kWh/100km              */
+#define UNIT_VAL_ELECO_MILEPKWH             (6U)   /* Electricity cost    : miles/kWh              */
+
+/* Unit Ambient Temparature */
+#define UNIT_NUM_VAL_AMBTMP                 (2U)
+#define UNIT_VAL_AMBTMP_CEL                 (0U)
+#define UNIT_VAL_AMBTMP_FAH                 (1U)
+
+#define TIMEFMT_NUM_VAL                     (2U)
+#define TIMEFMT_VAL_24H                     (0U)
+#define TIMEFMT_VAL_12H                     (1U)
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/* Sub Digital Speed */
+#define UNIT_NUM_SUB_SPD                    (3U)
+#define UNIT_SUB_SPD_NON                    (0U)
+#define UNIT_SUB_SPD_KMPH                   (1U)
+#define UNIT_SUB_SPD_MPH                    (2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -48,18 +95,33 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+void    vd_g_LocaleBonInit(void);
+void    vd_g_LocaleRstWkupInit(void);
+void    vd_g_LocaleMainTask(void);
+
+U1      u1_g_Language(const U1 u1_a_MET);                   /* Current */
+U1      u1_g_LanguageDef(void);                             /* Default */
+void    vd_g_LanguagePut(const U1 u1_a_LANG);
+
+U1      u1_g_Unit(const U1 u1_a_IDX);                       /* Current */
+U1      u1_g_UnitDef(const U1 u1_a_IDX);                    /* Default */
+void    vd_g_UnitPut(const U1 u1_a_IDX , const U1 u1_a_VAL);
+
+U1      u1_g_TimeFormat12H24H(void);                        /* Current */
+U1      u1_g_TimeFormat12H24HDef(void);                     /* Default */
+void    vd_g_TimeFormat12H24HPut(const U1 u1_a_FRMT);
+
+U1      u1_g_UnitSubSpd(void);
+
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif      /* LOCALE_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  locale.c                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

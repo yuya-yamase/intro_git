@@ -27,6 +27,8 @@
     -I${APP_DIR}/MET/EcuLib/Common/scc
     -I${APP_DIR}/MET/EcuLib/Common/config
     -I${APP_DIR}/MET/EcuLib/Ren_G3m/scc
+    -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/config
+    -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/scc
     -I${APP_DIR}/MET/HudApplication/Vom/HudImgadj/config_met
     -I${APP_DIR}/MET/IpcApplication/Evc/Calibration/config
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config
@@ -35,12 +37,14 @@
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/scc
     -I${APP_DIR}/MET/IpcApplication/Hmi/config
     -I${APP_DIR}/MET/IpcApplication/Hmi/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Ambtmp/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Dimmer/scc
+    -I${APP_DIR}/MET/IpcApplication/Vom/Locale/config
+    -I${APP_DIR}/MET/IpcApplication/Vom/Locale/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Odo/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Odo/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/RcmmUI/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/config
     -I${APP_DIR}/MET/IpcApplication/Vom/Vptran/scc
@@ -48,6 +52,7 @@
     -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/scc
+    -I${APP_DIR}/MET/IpcApplication/Vsv/Thblnkr/scc
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -96,6 +101,17 @@ App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u2_dw.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_blp.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_memcpy_u4_dw.850
 App/MET/EcuLib/Ren_G3m/scc/g3mlib_mtrxsrch.850
+App/MET/HudApplication/Vom/HudDimmer/config/hdimillmn.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_adj_cfg.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_adj_frill.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_cfg.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimmgr_if.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimsituat.c
+App/MET/HudApplication/Vom/HudDimmer/config/hdimstep_cfg.c
+App/MET/HudApplication/Vom/HudDimmer/scc/hdimmgr_adj.c
+App/MET/HudApplication/Vom/HudDimmer/scc/hdimmgr.c
+App/MET/HudApplication/Vom/HudDimmer/scc/hdimowduty.c
+App/MET/HudApplication/Vom/HudDimmer/scc/hdimstep.c
 App/MET/HudApplication/Vom/HudImgadj/config_met/himgadj.c
 App/MET/IpcApplication/Evc/Calibration/config/calibration.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ABG1S01.c
@@ -179,10 +195,15 @@ App/MET/IpcApplication/Hmi/scc/hmiscreen.c
 App/MET/IpcApplication/Hmi/scc/hmitripcom.c
 App/MET/IpcApplication/Hmi/scc/hmitt.c
 App/MET/IpcApplication/Hmi/scc/hmiwchime.c
+App/MET/IpcApplication/Vom/Ambtmp/config/ambtmp_cfg.c
+App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp_can.c
+App/MET/IpcApplication/Vom/Ambtmp/scc/ambtmp.c
 App/MET/IpcApplication/Vom/Dimmer/config/dimmer_cfg.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_daynight.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dim_usadjbysw.c
 App/MET/IpcApplication/Vom/Dimmer/scc/dimmer.c
+App/MET/IpcApplication/Vom/Locale/config/locale_cfg.c
+App/MET/IpcApplication/Vom/Locale/scc/locale.c
 App/MET/IpcApplication/Vom/Odo/config/odo_km_cfg.c
 App/MET/IpcApplication/Vom/Odo/scc/odo_km.c
 App/MET/IpcApplication/Vom/Odo/scc/odo_nvmif_km.c
@@ -207,4 +228,6 @@ App/MET/IpcApplication/Vsv/Illumi/config/illumi_cfg.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_comtx.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_tftpct.c
 App/MET/IpcApplication/Vsv/Illumi/scc/illumi.c
+App/MET/IpcApplication/Vsv/Thblnkr/config/thblnkr_cfg.c
+App/MET/IpcApplication/Vsv/Thblnkr/scc/thblnkr.c
 

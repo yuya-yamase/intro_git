@@ -1,57 +1,56 @@
-/* 1.1.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*   Hmilocale                                                                                                                         */
+/*  Ambient Temprature Celsius/Fahrenheit detected by CAN                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMILOCALE_C_MAJOR                         (1)
-#define HMILOCALE_C_MINOR                         (1)
-#define HMILOCALE_C_PATCH                         (0)
+#define AMBTMP_CAN_C_MAJOR                         (2)
+#define AMBTMP_CAN_C_MINOR                         (2)
+#define AMBTMP_CAN_C_PATCH                         (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
-#include "locale.h"
+#include "ambtmp_cfg_private.h"
+#include "ambtmp_can.h"
 
-#include "hmilocale.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((HMILOCALE_C_MAJOR != HMILOCALE_H_MAJOR) || \
-     (HMILOCALE_C_MINOR != HMILOCALE_H_MINOR) || \
-     (HMILOCALE_C_PATCH != HMILOCALE_H_PATCH))
-#error "hmiodo.c and hmiodo.h : source and header files are inconsistent!"
+#if ((AMBTMP_CAN_C_MAJOR != AMBTMP_CFG_H_MAJOR) || \
+     (AMBTMP_CAN_C_MINOR != AMBTMP_CFG_H_MINOR) || \
+     (AMBTMP_CAN_C_PATCH != AMBTMP_CFG_H_PATCH))
+#error "ambtmp_can.c and ambtmp_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMILOCALE_FUELCO_KMPL       (0U)    /* km/L         */
-#define HMILOCALE_FUELCO_LP100KM    (1U)    /* L/100km      */
-#define HMILOCALE_FUELCO_MPGUS      (2U)    /* MPG US       */
-#define HMILOCALE_FUELCO_MPGUK      (3U)    /* MPG UK       */
-#define HMILOCALE_FUELCO_MPGUKIMP   (4U)    /* MPG Imperial */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define AMBTMP_CAN_SNSR_ERROR           (0x03U)
+#define AMBTMP_CAN_SNSR_TIMEOUT         (0x04U)
+
+#define AMBTMP_CAN_SNSR_MIN             (0x08U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static ST_HMILOCALE st_s_hmilocale_put;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1   u1_s_AmbtmpCANNorm(const U1 u1_a_TMP, const U1 u1_a_AC_AMB05, U2 * u2p_a_cel);
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,99 +58,87 @@ static ST_HMILOCALE st_s_hmilocale_put;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocaleInit(void)                                                                                                    */
+/*  U1   u1_g_AmbtmpCAN(U2 * u2p_a_cel)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocaleInit(void)
+U1   u1_g_AmbtmpCAN(U2 * u2p_a_cel)
 {
-    st_s_hmilocale_put.u1_language    = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_dist   = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_speed  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_fueco  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_eleco  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_ambtmp = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_timeformat  = (U1)U1_MAX;
+    U1  u1_t_igon;
+    U1  u1_t_msgsts;
+    U1  u1_t_acn_tmp;
+    U1  u1_t_ac_amb05;
+    U1  u1_t_ambsts;
+    
+#if 0   /* BEV Rebase provisionally */
+    u1_t_igon = u1_g_VehopemdIgnOn();
+#else   /* BEV Rebase provisionally */
+    u1_t_igon = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
+    if(u1_t_igon == (U1)TRUE){
+        u1_t_acn_tmp  = (U1)0U;
+        u1_t_ac_amb05 = (U1)0U;
+        u1_t_msgsts   = u1_g_AmbtmpCANCfg(&u1_t_acn_tmp , &u1_t_ac_amb05);
+        if((u1_t_msgsts & (U1)AMBTMP_STSBIT_INVALID) != (U1)0U){
+            u1_t_ambsts  = (U1)AMBTMP_STS_SNSRTO;
+            /* keep u2p_a_cel */
+        }
+        else if((u1_t_msgsts & (U1)AMBTMP_STSBIT_UNKNOWN) != (U1)0U){
+            u1_t_ambsts  = (U1)AMBTMP_STS_UNKNOWN;
+            /* keep u2p_a_cel */
+        }
+        else{
+            if(u1_t_acn_tmp == (U1)AMBTMP_CAN_SNSR_ERROR){
+                u1_t_ambsts   = (U1)AMBTMP_STS_SNSRERROR;
+                *u2p_a_cel    = (U2)U2_MAX;
+            }
+            else if(u1_t_acn_tmp == (U1)AMBTMP_CAN_SNSR_TIMEOUT){
+                u1_t_ambsts   = (U1)AMBTMP_STS_SNSRTO;
+                *u2p_a_cel    = (U2)U2_MAX;
+            }
+            else{
+                u1_t_ambsts = u1_s_AmbtmpCANNorm(u1_t_acn_tmp, u1_t_ac_amb05, u2p_a_cel);
+            }
+        }
+    }
+    else{
+        u1_t_ambsts   = (U1)AMBTMP_STS_UNKNOWN;
+        *u2p_a_cel    = (U2)U2_MAX;
+    }
+    return(u1_t_ambsts);
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocaleMainTask(void)                                                                                             */
+/*  static U1   u1_s_AmbtmpCANNorm(const U1 u1_a_TMP, const U1 u1_a_AC_AMB05, U2 * u2p_a_cel)                                        */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocaleMainTask(void)
+static U1   u1_s_AmbtmpCANNorm(const U1 u1_a_TMP, const U1 u1_a_AC_AMB05, U2 * u2p_a_cel)
 {
-    if (st_s_hmilocale_put.u1_language <= (U1)HMILOCALE_LANG){
-        vd_g_LanguagePut(st_s_hmilocale_put.u1_language);
-    }
+    U1  u1_t_ambsts;
+    U1  u1_t_tmp;
 
-    /* if (st_s_hmilocale_put.u1_unit_dist <= (U1)HMILOCALE_DIST){ */
-    /*    vd_g_UnitPut((U1)UNIT_IDX_DIST , st_s_hmilocale_put.u1_unit_dist); */
-    /* } */
-    /* if (st_s_hmilocale_put.u1_unit_speed <= (U1)HMILOCALE_SPEED){ */
-    /*    vd_g_UnitPut((U1)UNIT_IDX_SPEED ,st_s_hmilocale_put.u1_unit_speed ); */
-    /* } */
-
-    if (st_s_hmilocale_put.u1_unit_fueco <= (U1)HMILOCALE_FUELCO){
-        if(st_s_hmilocale_put.u1_unit_fueco == (U1)HMILOCALE_FUELCO_MPGUKIMP){
-            st_s_hmilocale_put.u1_unit_fueco = (U1)HMILOCALE_FUELCO_MPGUK;
-        }
-        vd_g_UnitPut((U1)UNIT_IDX_FUECO , st_s_hmilocale_put.u1_unit_fueco);
-
-        switch(st_s_hmilocale_put.u1_unit_fueco){
-            case (U1)HMILOCALE_FUELCO_KMPL:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KMPKWH);
-                break;
-            case (U1)HMILOCALE_FUELCO_LP100KM:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KWHP100KM);
-                break;
-            case (U1)HMILOCALE_FUELCO_MPGUS:
-            case (U1)HMILOCALE_FUELCO_MPGUK:
-            case (U1)HMILOCALE_FUELCO_MPGUKIMP:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_MILE);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_MPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_MILEPKWH);
-                break;
-            default:
-                /* Do nothing */
-                break;
+    if((u1_a_TMP       >= (U1)AMBTMP_CAN_SNSR_MIN) &&
+        (u1_a_AC_AMB05 <= (U1)TRUE               )){
+        u1_t_ambsts   = (U1)AMBTMP_STS_VALID;
+        u1_t_tmp      = u1_a_TMP - (U1)AMBTMP_CAN_SNSR_MIN;
+        *u2p_a_cel    = (U2)AMBTMP_CAN_DEG_RES * (U2)u1_t_tmp;
+        if(u1_a_AC_AMB05 == (U1)TRUE){
+            if(((U2)U2_MAX - (U2)AMBTMP_CAN_DEG_0P5) < *u2p_a_cel ){
+                *u2p_a_cel = (U2)U2_MAX;
+            }
+            else{
+                *u2p_a_cel += (U2)AMBTMP_CAN_DEG_0P5;
+            }
         }
     }
-
-/*   if (st_s_hmilocale_put.u1_unit_eleco <= (U1)HMILOCALE_ELECO){ */
-/*        vd_g_UnitPut((U1)UNIT_IDX_ELECO , st_s_hmilocale_put.u1_unit_eleco); */
-/*    } */
-    if (st_s_hmilocale_put.u1_unit_ambtmp <= (U1)HMILOCALE_AMBTMP){
-        vd_g_UnitPut((U1)UNIT_IDX_AMBTMP, st_s_hmilocale_put.u1_unit_ambtmp);
+    else{
+        u1_t_ambsts  = (U1)AMBTMP_STS_UNKNOWN;
+        *u2p_a_cel   = (U2)U2_MAX;
     }
-    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){
-        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat);
-    }
-}
-
-/*===================================================================================================================================*/
-/*  void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)                                                                  */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
-{
-    if(stp_a_HMILOCALE != vdp_PTR_NA){
-        st_s_hmilocale_put.u1_language    = stp_a_HMILOCALE->u1_language    ;
-        st_s_hmilocale_put.u1_unit_dist   = stp_a_HMILOCALE->u1_unit_dist   ;
-        st_s_hmilocale_put.u1_unit_speed  = stp_a_HMILOCALE->u1_unit_speed  ;
-        st_s_hmilocale_put.u1_unit_fueco  = stp_a_HMILOCALE->u1_unit_fueco  ;
-        st_s_hmilocale_put.u1_unit_eleco  = stp_a_HMILOCALE->u1_unit_eleco  ;
-        st_s_hmilocale_put.u1_unit_ambtmp = stp_a_HMILOCALE->u1_unit_ambtmp ;
-        st_s_hmilocale_put.u1_timeformat  = stp_a_HMILOCALE->u1_timeformat  ;
-    }
+    return(u1_t_ambsts);
 }
 
 /*===================================================================================================================================*/
@@ -162,9 +149,19 @@ void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    07/16/2019  TA       New.                                                                                               */
-/*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
+/*  1.0.0    10/08/2018  TA       New.                                                                                               */
+/*  1.1.0    03/10/2020  YN       ambtmp.c v1.0.0 -> v1.1.0.                                                                         */
+/*  1.1.1    05/14/2020  YN       ambtmp.c v1.1.0 -> v1.1.1.                                                                         */
+/*  1.2.1    06/15/2020  YN       ambtmp.c v1.1.1 -> v1.2.1.                                                                         */
+/*  1.2.2    07/21/2020  YN       ambtmp.c v1.2.1 -> v1.2.2.                                                                         */
+/*  1.3.2    07/27/2020  YN       ambtmp.c v1.2.2 -> v1.3.2.                                                                         */
+/*  2.0.0    04/14/2021  TA       ambtmp.c v1.3.2 -> v2.0.0.                                                                         */
+/*  2.0.1    10/18/2021  TA(M)    ambtmp.c v2.0.0 -> v2.0.1.                                                                         */
+/*  2.1.0    11/25/2021  TA(M)    ambtmp.c v2.0.1 -> v2.1.0.                                                                         */
+/*  2.2.1    06/28/2022  TA(M)    ambtmp.c v2.2.0 -> v2.2.1.                                                                         */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
+/*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

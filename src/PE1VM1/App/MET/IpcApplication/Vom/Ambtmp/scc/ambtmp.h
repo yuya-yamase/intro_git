@@ -1,40 +1,35 @@
-/* 0.0.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/*  Ambient Temprature Celsius/Fahrenheit                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef AMBTMP_H
+#define AMBTMP_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define AMBTMP_H_MAJOR                         (2)
+#define AMBTMP_H_MINOR                         (2)
+#define AMBTMP_H_PATCH                         (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
-
-#if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
-#include "tripcom.h"
-#endif   /* BEV Rebase provisionally */
+/* #include "xxxx.h" */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
+#define AMBTMP_STS_VALID            (0U)
+#define AMBTMP_STS_UNKNOWN          (1U)
+#define AMBTMP_STS_SNSRERROR        (2U)
+#define AMBTMP_STS_SNSRTO           (3U)
 
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
+#define AMBTMP_DEG_UNK              (0xffffU)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,24 +37,34 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+void    vd_g_AmbtmpBonInit(void);
+void    vd_g_AmbtmpRstWkInit(void);
+void    vd_g_AmbtmpMainTask(void);
+void    vd_g_AmbtmpOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT);
+U1      u1_g_AmbtmpCel(U2 * u2p_a_cel);     /* u2_ap_cel : res. = 0.01 celsius,    max 655.25 celsius,    offset 4000                */
+U1      u1_g_AmbtmpFah(U2 * u2p_a_fah);     /* u2_ap_fah : res. = 0.01 fahrenheit, max 655.25 fahrenheit, offset 4000                */
+U1      u1_g_AmbtmpIceWrnActCel(void);      /* Ice Warning Status: TRUE=Active  / FALSE=Inactive                                     */ 
+U1      u1_g_AmbtmpIcyraWrnActCel(void);    /* Road surface freezing display Status: TRUE=Active  / FALSE=Inactive                   */ 
+U1      u1_g_AmbtmpIceWrnActFah(void);      /* Ice Warning Status: TRUE=Active  / FALSE=Inactive                                     */ 
+U1      u1_g_AmbtmpIcyraWrnActFah(void);    /* Road surface freezing display Status: TRUE=Active  / FALSE=Inactive                   */ 
+U1      u1_g_AmbtmpIceWrnAct(void);
+U1      u1_g_AmbtmpIcyraWrnAct(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif      /* AMBTMP_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  ambtmp_cel.c                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

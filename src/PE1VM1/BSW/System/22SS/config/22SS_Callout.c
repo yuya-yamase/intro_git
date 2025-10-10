@@ -39,9 +39,7 @@
 #endif   /* BEV Rebase provisionally */
 #include "dimmer.h"
 #include "illumi.h"
-#if 0   /* BEV Rebase provisionally */
 #include "thblnkr.h"
-#endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #include "vptran_sel.h"
 #if 0   /* BEV Rebase provisionally */
@@ -55,7 +53,9 @@
 #if 0   /* BEV Rebase provisionally */
 #include "tripsnsr.h"
 #include "tripcom.h"
+#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
+#if 0   /* BEV Rebase provisionally */
 #include "mulmed_color.h"
 #include "mulmed_mulfr.h"
 #endif   /* BEV Rebase provisionally */
@@ -65,22 +65,21 @@
 #include "telltale.h"
 #include "wchime.h"
 #include "sbltsync.h"
-#include "locale.h"
 #endif   /* BEV Rebase provisionally */
+#include "locale.h"
 #include "vardef.h"
 #if 0   /* BEV Rebase provisionally */
 #include "hud_ca.h"
 #endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
 #if 0   /* BEV Rebase provisionally */
-#include "battpow.h"
 #include "drvind_pwr_pct.h"
 #include "drvind_eco.h"
 #include "drvind_hv_pct.h"
 #include "oilmil.h"
 #include "gateway_cxpi.h"
-#include "hdimmgr.h"
 #endif   /* BEV Rebase provisionally */
+#include "hdimmgr.h"
 #include "himgadj.h"
 #if 0   /* BEV Rebase provisionally */
 #include "mmlang.h"
@@ -128,7 +127,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_VardefBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxBonInit,
         &vd_g_DioIfInit,
@@ -140,8 +141,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
-        &vd_g_ThblnkrBonInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_ThblnkrBonInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
 #if 0   /* BEV Rebase provisionally */
@@ -156,13 +157,14 @@ void vd_g_22SSCallout_StaBonInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_AmbtmpBonInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
@@ -173,8 +175,8 @@ void vd_g_22SSCallout_StaBonInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
-        &vd_g_HdimmgrBonInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_HdimmgrBonInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangBonInit,
@@ -230,7 +232,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxRstInit,
         &vd_g_DioIfInit,
@@ -242,8 +246,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
-        &vd_g_ThblnkrRstWkInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_ThblnkrRstWkInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
 #if 0   /* BEV Rebase provisionally */
@@ -258,13 +262,14 @@ void vd_g_22SSCallout_StaRstInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_AmbtmpRstWkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
@@ -275,8 +280,8 @@ void vd_g_22SSCallout_StaRstInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
-        &vd_g_HdimmgrWkRstInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangWkupInit,
@@ -332,7 +337,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxWkupInit,
         &vd_g_DioIfInit,
@@ -344,8 +351,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
-        &vd_g_ThblnkrRstWkInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_ThblnkrRstWkInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
 #if 0   /* BEV Rebase provisionally */
@@ -360,13 +367,14 @@ void vd_g_22SSCallout_StaWkupInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_AmbtmpRstWkInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MulmedColorInit,
         &vd_g_MulmedMulfrInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_RcmmUIInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_BattpowInit,
         &vd_g_DrvIndPwrInit,
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
@@ -377,8 +385,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_GatewayCxpiInit,
         &vd_g_GatewaymmInit,
-        &vd_g_HdimmgrWkRstInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangWkupInit,

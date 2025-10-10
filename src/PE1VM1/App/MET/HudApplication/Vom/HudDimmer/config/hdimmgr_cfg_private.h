@@ -1,65 +1,96 @@
-/* 0.0.0 */
+/* 2.1.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
-/*                                                                                                                                   */
+/*  HudDimmer Manager Config Header                                                                                                  */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef HDIMMGRCFG_H
+#define HDIMMGRCFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define HDIMMGRCFG_H_MAJOR                   (2)
+#define HDIMMGRCFG_H_MINOR                   (1)
+#define HDIMMGRCFG_H_PATCH                   (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Include Files                                                                                                                    */
+/*  Include File                                                                                                                     */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
+#include "aip_common.h"
 
-#if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
-#include "tripcom.h"
-#endif   /* BEV Rebase provisionally */
+#include "hdimmgr.h"
+#include "hdimmgr_if.h"
 
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Literal Definitions                                                                                                              */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
+/* #include "hdimlmtduty_cfg_private.h" */
+/* #include "hdimmgr_dtctr_cfg_private.h" */
 
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Macro Definitions                                                                                                                */
-/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#include "hdimowduty.h"
+#include "hdimstep_cfg_private.h"
+#include "hdimsituat_cfg_private.h"
+#include "hdimillmn_cfg_private.h"
+#define HDIMADJ_FRILL_H
+#include "hdimmgr_adj_cfg_private.h"
+
+#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Variable Externs                                                                                                                 */
+/*  Defines                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define HDIMMGR_BASE_TASKTIM                (20)                /* Don't change!! : 20ms */
+
+#define HDIMMGR_INSTS_UNDET                 (0)                 /* Don't change!! : retrun value : u1_g_Hdim***Get***Val */
+#define HDIMMGR_INSTS_NML                   (1)                 /* Don't change!! : retrun value : u1_g_Hdim***Get***Val */
+#define HDIMMGR_INSTS_ERR                   (2)                 /* Don't change!! : retrun value : u1_g_Hdim***Get***Val */
+
+#define HDIMMGR_BASE_DUTYLSB                (65536)             /* Don't change!! */
+#define HDIMMGR_BASE_DUTYMAX                (65535)             /* Don't change!! */
+#define HDIMMGR_BASE_DTP_ROUND              (32768)             /* Don't change!! Round Value at Duty Exchange to Percent */
+
+#define HDIMMGR_IF_DUTYLSB                  (50000)
+#define HDIMMGR_IF_DUTYMAX                  (50000)
+
+#define HDIMADJ_FRILL_NOTSUP                (0U)
+#define HDIMADJ_FRILL_SUP                   (1U)
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Macros                                                                                                                           */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*  Constant Variable Externs                                                                                                        */
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+/* hdimmgr.c */
+U2 u2_g_HdimmgrDutyExchgBaseToIfLSB(const U2 u2_a_DUTY);
+
+/* hdimmgr_cfg.c */
+void vd_g_HdimmgrCfgBonInit(void);
+void vd_g_HdimmgrCfgWkRstInit(void);
+void vd_g_HdimmgrCfgIgon(void);
+void vd_g_HdimmgrCfgIgoff(void);
+void vd_g_HdimmgrCfgInptUpdtHiPri(void);
+void vd_g_HdimmgrCfgInptUpdtLoPri(void);
+void vd_g_HdimmgrCfgSetOtptDuty(const U2 u2_a_DUTY);
+U1   u1_g_HdimmgrCfgGetInSig(const U1 u1_a_ID , U4 *u4_ap_val);
+U1   u1_g_HdimmgrCfgIsSlpOK(const U1 u1_a_HDIMSTS);
+U1   u1_g_HdimmgrCfgIsBacklighOn(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*  Constant Externs                                                                                                                 */
+/*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif /* HDIMMGRCFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  see  hdimmgr_cfg.c                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

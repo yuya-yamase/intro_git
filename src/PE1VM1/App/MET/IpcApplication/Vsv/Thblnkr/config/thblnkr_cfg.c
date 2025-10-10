@@ -1,43 +1,39 @@
-/* 1.1.0 */
+/* 3.3.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*   Hmilocale                                                                                                                         */
+/*  Turn & Hazard Make/Manage Flash Cycle                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMILOCALE_C_MAJOR                         (1)
-#define HMILOCALE_C_MINOR                         (1)
-#define HMILOCALE_C_PATCH                         (0)
+#define THBLNKR_CFG_C_MAJOR                      (3)
+#define THBLNKR_CFG_C_MINOR                      (3)
+#define THBLNKR_CFG_C_PATCH                      (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
-#include "locale.h"
+#include "thblnkr_cfg_private.h"
+#if 0   /* BEV Rebase provisionally */
+#include "vehspd_kmph.h"
+#include "iohw_diflt.h"
+#endif   /* BEV Rebase provisionally */
 
-#include "hmilocale.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((HMILOCALE_C_MAJOR != HMILOCALE_H_MAJOR) || \
-     (HMILOCALE_C_MINOR != HMILOCALE_H_MINOR) || \
-     (HMILOCALE_C_PATCH != HMILOCALE_H_PATCH))
-#error "hmiodo.c and hmiodo.h : source and header files are inconsistent!"
+#if ((THBLNKR_CFG_C_MAJOR != THBLNKR_CFG_H_MAJOR) || \
+     (THBLNKR_CFG_C_MINOR != THBLNKR_CFG_H_MINOR) || \
+     (THBLNKR_CFG_C_PATCH != THBLNKR_CFG_H_PATCH))
+#error "thblnkr_cfg.c and thblnkr_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMILOCALE_FUELCO_KMPL       (0U)    /* km/L         */
-#define HMILOCALE_FUELCO_LP100KM    (1U)    /* L/100km      */
-#define HMILOCALE_FUELCO_MPGUS      (2U)    /* MPG US       */
-#define HMILOCALE_FUELCO_MPGUK      (3U)    /* MPG UK       */
-#define HMILOCALE_FUELCO_MPGUKIMP   (4U)    /* MPG Imperial */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,8 +43,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static ST_HMILOCALE st_s_hmilocale_put;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -59,99 +53,90 @@ static ST_HMILOCALE st_s_hmilocale_put;
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocaleInit(void)                                                                                                    */
+/*  U2    u2_g_ThblnkrVehSpdDsplyd(void)                                                                                             */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocaleInit(void)
+U2    u2_g_ThblnkrVehSpdDsplyd(void)
 {
-    st_s_hmilocale_put.u1_language    = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_dist   = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_speed  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_fueco  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_eleco  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_ambtmp = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_timeformat  = (U1)U1_MAX;
+    U2  u2_t_kmph;
+    U1  u1_t_sts;
+
+    u2_t_kmph = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
+    u1_t_sts  = u1_g_VehspdKmphBiased(&u2_t_kmph, (U1)FALSE);
+    if(u1_t_sts !=  (U1)VEHSPD_STSBIT_VALID){
+#else   /* BEV Rebase provisionally */
+    u1_t_sts  = (U1)1U;
+    if(u1_t_sts !=  (U1)0U){
+#endif   /* BEV Rebase provisionally */
+        u2_t_kmph = (U2)0U;
+    }
+
+    return(u2_t_kmph);
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocaleMainTask(void)                                                                                             */
+/*  U1             u1_g_ThblnkrCfgMTNL(void)                                                                                         */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocaleMainTask(void)
+U1             u1_g_ThblnkrCfgMTNL(void)
 {
-    if (st_s_hmilocale_put.u1_language <= (U1)HMILOCALE_LANG){
-        vd_g_LanguagePut(st_s_hmilocale_put.u1_language);
+#if 0   /* BEV Rebase provisionally */
+    U1                       u1_t_raw;
+    U1                       u1_t_mtnl;
+
+    u1_t_raw = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_TURN_L_IN);
+
+    if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_UNKNWN)
+    {
+        u1_t_mtnl = (U1)FALSE;
+    }
+    else if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_ACT) {
+        u1_t_mtnl = (U1)TRUE;
+    }
+    else {/* inact */
+        u1_t_mtnl = (U1)FALSE;
     }
 
-    /* if (st_s_hmilocale_put.u1_unit_dist <= (U1)HMILOCALE_DIST){ */
-    /*    vd_g_UnitPut((U1)UNIT_IDX_DIST , st_s_hmilocale_put.u1_unit_dist); */
-    /* } */
-    /* if (st_s_hmilocale_put.u1_unit_speed <= (U1)HMILOCALE_SPEED){ */
-    /*    vd_g_UnitPut((U1)UNIT_IDX_SPEED ,st_s_hmilocale_put.u1_unit_speed ); */
-    /* } */
-
-    if (st_s_hmilocale_put.u1_unit_fueco <= (U1)HMILOCALE_FUELCO){
-        if(st_s_hmilocale_put.u1_unit_fueco == (U1)HMILOCALE_FUELCO_MPGUKIMP){
-            st_s_hmilocale_put.u1_unit_fueco = (U1)HMILOCALE_FUELCO_MPGUK;
-        }
-        vd_g_UnitPut((U1)UNIT_IDX_FUECO , st_s_hmilocale_put.u1_unit_fueco);
-
-        switch(st_s_hmilocale_put.u1_unit_fueco){
-            case (U1)HMILOCALE_FUELCO_KMPL:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KMPKWH);
-                break;
-            case (U1)HMILOCALE_FUELCO_LP100KM:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KWHP100KM);
-                break;
-            case (U1)HMILOCALE_FUELCO_MPGUS:
-            case (U1)HMILOCALE_FUELCO_MPGUK:
-            case (U1)HMILOCALE_FUELCO_MPGUKIMP:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_MILE);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_MPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_MILEPKWH);
-                break;
-            default:
-                /* Do nothing */
-                break;
-        }
-    }
-
-/*   if (st_s_hmilocale_put.u1_unit_eleco <= (U1)HMILOCALE_ELECO){ */
-/*        vd_g_UnitPut((U1)UNIT_IDX_ELECO , st_s_hmilocale_put.u1_unit_eleco); */
-/*    } */
-    if (st_s_hmilocale_put.u1_unit_ambtmp <= (U1)HMILOCALE_AMBTMP){
-        vd_g_UnitPut((U1)UNIT_IDX_AMBTMP, st_s_hmilocale_put.u1_unit_ambtmp);
-    }
-    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){
-        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat);
-    }
+    return(u1_t_mtnl);
+#else   /* BEV Rebase provisionally */
+    return((U1)FALSE);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)                                                                  */
+/*  U1             u1_g_ThblnkrCfgMTNR(void)                                                                                 */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
+U1             u1_g_ThblnkrCfgMTNR(void)
 {
-    if(stp_a_HMILOCALE != vdp_PTR_NA){
-        st_s_hmilocale_put.u1_language    = stp_a_HMILOCALE->u1_language    ;
-        st_s_hmilocale_put.u1_unit_dist   = stp_a_HMILOCALE->u1_unit_dist   ;
-        st_s_hmilocale_put.u1_unit_speed  = stp_a_HMILOCALE->u1_unit_speed  ;
-        st_s_hmilocale_put.u1_unit_fueco  = stp_a_HMILOCALE->u1_unit_fueco  ;
-        st_s_hmilocale_put.u1_unit_eleco  = stp_a_HMILOCALE->u1_unit_eleco  ;
-        st_s_hmilocale_put.u1_unit_ambtmp = stp_a_HMILOCALE->u1_unit_ambtmp ;
-        st_s_hmilocale_put.u1_timeformat  = stp_a_HMILOCALE->u1_timeformat  ;
+#if 0   /* BEV Rebase provisionally */
+    U1                       u1_t_raw;
+    U1                       u1_t_mtnr;
+
+    u1_t_raw = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_TURN_R_IN);
+
+    if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_UNKNWN)
+    {
+        u1_t_mtnr = (U1)FALSE;
     }
+    else if (u1_t_raw == (U1)IOHW_DIFLT_SWITCH_ACT) {
+        u1_t_mtnr = (U1)TRUE;
+    }
+    else {/* inact */
+        u1_t_mtnr = (U1)FALSE;
+    }
+
+    return(u1_t_mtnr);
+#else   /* BEV Rebase provisionally */
+    return((U1)FALSE);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -162,9 +147,49 @@ void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    07/16/2019  TA       New.                                                                                               */
-/*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
+/*  1.0.0    02/07/2018  TA       New.                                                                                               */
+/*  1.3.0    10/08/2020  KK       thblnkr.c v1.2.0 -> v1.3.0.                                                                        */
+/*  1.3.1    03/15/2021  KK       thblnkr.c v1.3.0 -> v1.3.1.                                                                        */
+/*  2.0.0    09/06/2021  YI       thblnkr.c v1.3.1 -> v2.0.0.                                                                        */
+/*  2.0.1    10/18/2021  TA(M)    thblnkr.c v2.0.0 -> v2.0.1.                                                                        */
+/*  2.1.0    11/04/2021  TA(M)    thblnkr.c v2.0.1 -> v2.1.0.                                                                        */
+/*  2.3.0    04/18/2022  ZS       thblnkr.c v2.1.0 -> v2.3.0.                                                                        */
+/*  2.4.0    08/25/2022  TA(M)    thblnkr.c v2.3.0 -> v2.4.0.                                                                        */
+/*  2.5.0    09/24/2022  TA(M)    thblnkr.c v2.4.0 -> v2.5.0.                                                                        */
+/*  2.5.1    10/20/2022  YI       thblnkr.c v2.5.0 -> v2.5.1.                                                                        */
+/*  3.0.0    12/13/2023  KH       thblnkr.c v2.5.1 -> v3.0.0.                                                                        */
+/*  3.1.0    07/03/2024  AA       thblnkr.c v3.0.0 -> v3.1.0.                                                                        */
+/*  3.2.0    09/16/2024  YR       thblnkr.c v3.1.0 -> v3.2.0.                                                                        */
+/*  3.3.0    09/16/2024  KH       thblnkr.c v3.1.0 -> v3.3.0.                                                                        */
+/*                                                                                                                                   */
+/*  Revision     Date         Author   Change Description                                                                            */
+/*  ------------ -----------  -------  --------------------------------------------------------------------------------------------- */
+/*               03/06/2020   KK       Configured for 800B (The Output Ports and open_thresh were configured)                        */
+/*  893b-1       11/08/2020   SK       Configured for 893B (AD_I, open_thresh and mask_time were configred)                          */
+/*  200D-1       01/19/2022   XY       Configured for 200D                                                                           */
+/*  200D-2       08/10/2022   MK       Update Toyota Standard Application(lib_ipc_tycan_v210_r002)                                   */
+/*  200D-3       08/31/2022   MK       Fixed 24FGM22-14131                                                                           */
+/*  200D-4       09/02/2022   MK       Configured open_thresh for 200D                                                               */
+/*  200D-5       09/12/2022   MK       Update Toyota Standard Application(lib_ipc_tycan_v210_r004)                                   */
+/*  200D-6       09/23/2022   MK       Change value of F+B correction factor / default disconnection threshold.                      */
+/*  200D-7       10/31/2022   MK       Update Toyota Standard Application(lib_ipc_tycan_v210_r009)                                   */
+/*  200D-8       12/06/2022   YK       Add masking with starter signal(B_ST).                                                        */
+/*  330D-1       02/23/2023   MK       Fix 24FGM22-23181(F+B correction value error).                                                */
+/*  19PFv3-1     09/16/2024   YR       Removed the processing for sound pressure                                                     */
+/*  19PFv3-2     09/19/2024   YR       Removed "vardef.h" in the include files                                                       */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * DS   = Daisuke Suzuki,  Denso                                                                                                  */
+/*  * KK   = Kohei Kato,      Denso Techno                                                                                           */
+/*  * YI   = Yoshiki Iwata,   NTT Data MSE                                                                                           */
+/*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
+/*  * SK   = Shintaro Kanou,  Denso Techno                                                                                           */
+/*  * XY   = Xu Yang, DNKT                                                                                                           */
+/*  * ZS   = Zenjiro Shamoto, NTT Data MSE                                                                                           */
+/*  * MK   = Mitsuhiro Kato,  Denso Techno                                                                                           */
+/*  * YK   = Yuki Kawai,      Denso Techno                                                                                           */
+/*  * KH   = Kiko Huerte,     DTPH                                                                                                   */
+/*  * AA   = Anna Asuncion,   Denso Techno                                                                                           */
+/*  * YR   = Yhana Regalario, DTPH                                                                                                   */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

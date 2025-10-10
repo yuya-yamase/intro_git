@@ -1,43 +1,44 @@
-/* 1.1.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*   Hmilocale                                                                                                                         */
+/*  Ambient Temprature Celsius/Fahrenheit                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMILOCALE_C_MAJOR                         (1)
-#define HMILOCALE_C_MINOR                         (1)
-#define HMILOCALE_C_PATCH                         (0)
+#define AMBTMP_CFG_C_MAJOR                     (2)
+#define AMBTMP_CFG_C_MINOR                     (2)
+#define AMBTMP_CFG_C_PATCH                     (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "aip_common.h"
-#include "locale.h"
+#include "ambtmp_cfg_private.h"
 
-#include "hmilocale.h"
+#include "locale.h"
+#include "oxcan.h"
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if ((HMILOCALE_C_MAJOR != HMILOCALE_H_MAJOR) || \
-     (HMILOCALE_C_MINOR != HMILOCALE_H_MINOR) || \
-     (HMILOCALE_C_PATCH != HMILOCALE_H_PATCH))
-#error "hmiodo.c and hmiodo.h : source and header files are inconsistent!"
+#if ((AMBTMP_CFG_C_MAJOR != AMBTMP_H_MAJOR) || \
+     (AMBTMP_CFG_C_MINOR != AMBTMP_H_MINOR) || \
+     (AMBTMP_CFG_C_PATCH != AMBTMP_H_PATCH))
+#error "ambtmp_cfg.c and ambtmp_cel.h : source and header files are inconsistent!"
+#endif
+
+#if ((AMBTMP_CFG_C_MAJOR != AMBTMP_CFG_H_MAJOR) || \
+     (AMBTMP_CFG_C_MINOR != AMBTMP_CFG_H_MINOR) || \
+     (AMBTMP_CFG_C_PATCH != AMBTMP_CFG_H_PATCH))
+#error "ambtmp_cfg.c and ambtmp_cfg_private.h : source and header files are inconsistent!"
 #endif
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define HMILOCALE_FUELCO_KMPL       (0U)    /* km/L         */
-#define HMILOCALE_FUELCO_LP100KM    (1U)    /* L/100km      */
-#define HMILOCALE_FUELCO_MPGUS      (2U)    /* MPG US       */
-#define HMILOCALE_FUELCO_MPGUK      (3U)    /* MPG UK       */
-#define HMILOCALE_FUELCO_MPGUKIMP   (4U)    /* MPG Imperial */
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -47,113 +48,110 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-static ST_HMILOCALE st_s_hmilocale_put;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocaleInit(void)                                                                                                    */
+/* U1  u1_g_AmbtmpCfgIFIdx(void)                                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocaleInit(void)
+U1  u1_g_AmbtmpCfgIFIdx(void)
 {
-    st_s_hmilocale_put.u1_language    = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_dist   = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_speed  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_fueco  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_eleco  = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_unit_ambtmp = (U1)U1_MAX;
-    st_s_hmilocale_put.u1_timeformat  = (U1)U1_MAX;
+    return((U1)AMBTMP_IF_CAN);
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocaleMainTask(void)                                                                                             */
+/* U1  u1_g_AmbtmpCfgIFIdx(void)                                                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocaleMainTask(void)
+U1      u1_g_AmbtmpCfgUnit(void)
 {
-    if (st_s_hmilocale_put.u1_language <= (U1)HMILOCALE_LANG){
-        vd_g_LanguagePut(st_s_hmilocale_put.u1_language);
-    }
+    U1  u1_t_unit;
 
-    /* if (st_s_hmilocale_put.u1_unit_dist <= (U1)HMILOCALE_DIST){ */
-    /*    vd_g_UnitPut((U1)UNIT_IDX_DIST , st_s_hmilocale_put.u1_unit_dist); */
-    /* } */
-    /* if (st_s_hmilocale_put.u1_unit_speed <= (U1)HMILOCALE_SPEED){ */
-    /*    vd_g_UnitPut((U1)UNIT_IDX_SPEED ,st_s_hmilocale_put.u1_unit_speed ); */
-    /* } */
-
-    if (st_s_hmilocale_put.u1_unit_fueco <= (U1)HMILOCALE_FUELCO){
-        if(st_s_hmilocale_put.u1_unit_fueco == (U1)HMILOCALE_FUELCO_MPGUKIMP){
-            st_s_hmilocale_put.u1_unit_fueco = (U1)HMILOCALE_FUELCO_MPGUK;
-        }
-        vd_g_UnitPut((U1)UNIT_IDX_FUECO , st_s_hmilocale_put.u1_unit_fueco);
-
-        switch(st_s_hmilocale_put.u1_unit_fueco){
-            case (U1)HMILOCALE_FUELCO_KMPL:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KMPKWH);
-                break;
-            case (U1)HMILOCALE_FUELCO_LP100KM:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_KM);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_KMPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_KWHP100KM);
-                break;
-            case (U1)HMILOCALE_FUELCO_MPGUS:
-            case (U1)HMILOCALE_FUELCO_MPGUK:
-            case (U1)HMILOCALE_FUELCO_MPGUKIMP:
-                vd_g_UnitPut((U1)UNIT_IDX_DIST , (U1)UNIT_VAL_DIST_MILE);
-                vd_g_UnitPut((U1)UNIT_IDX_SPEED ,(U1)UNIT_VAL_SPEED_MPH);
-                vd_g_UnitPut((U1)UNIT_IDX_ELECO , (U1)UNIT_VAL_ELECO_MILEPKWH);
-                break;
-            default:
-                /* Do nothing */
-                break;
-        }
+    u1_t_unit = u1_g_Unit((U1)UNIT_IDX_AMBTMP);
+    if(u1_t_unit == (U1)UNIT_VAL_AMBTMP_CEL){
+        u1_t_unit = (U1)AMBTMP_UNIT_CEL;
     }
-
-/*   if (st_s_hmilocale_put.u1_unit_eleco <= (U1)HMILOCALE_ELECO){ */
-/*        vd_g_UnitPut((U1)UNIT_IDX_ELECO , st_s_hmilocale_put.u1_unit_eleco); */
-/*    } */
-    if (st_s_hmilocale_put.u1_unit_ambtmp <= (U1)HMILOCALE_AMBTMP){
-        vd_g_UnitPut((U1)UNIT_IDX_AMBTMP, st_s_hmilocale_put.u1_unit_ambtmp);
+    else{
+        u1_t_unit = (U1)AMBTMP_UNIT_FAH;
     }
-    if (st_s_hmilocale_put.u1_timeformat <= (U1)HMILOCALE_TIMEFORMAT){
-        vd_g_TimeFormat12H24HPut(st_s_hmilocale_put.u1_timeformat);
-    }
+    return(u1_t_unit);
 }
 
 /*===================================================================================================================================*/
-/*  void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)                                                                  */
+/* U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)                                                                   */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
+U1  u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05)
 {
-    if(stp_a_HMILOCALE != vdp_PTR_NA){
-        st_s_hmilocale_put.u1_language    = stp_a_HMILOCALE->u1_language    ;
-        st_s_hmilocale_put.u1_unit_dist   = stp_a_HMILOCALE->u1_unit_dist   ;
-        st_s_hmilocale_put.u1_unit_speed  = stp_a_HMILOCALE->u1_unit_speed  ;
-        st_s_hmilocale_put.u1_unit_fueco  = stp_a_HMILOCALE->u1_unit_fueco  ;
-        st_s_hmilocale_put.u1_unit_eleco  = stp_a_HMILOCALE->u1_unit_eleco  ;
-        st_s_hmilocale_put.u1_unit_ambtmp = stp_a_HMILOCALE->u1_unit_ambtmp ;
-        st_s_hmilocale_put.u1_timeformat  = stp_a_HMILOCALE->u1_timeformat  ;
-    }
-}
+#if ((AMBTMP_STSBIT_UNKNOWN != COM_NO_RX  ) || \
+     (AMBTMP_STSBIT_INVALID != COM_TIMEOUT))
+    U1           u1_t_pdusts;
+    U1           u1_t_stsbit;
 
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ACN_AMB, u1p_a_acn_amb);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_AC_AMB05, u1p_a_ac_amb05);
+    u1_t_pdusts = (U1)Com_GetIPDUStatus(MSG_ZN21S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
+#else   /* BEV Rebase provisionally */
+    u1_t_pdusts = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
+
+    if (u1_t_pdusts == ((U1)COM_TIMEOUT | (U1)COM_NO_RX)) {
+        u1_t_stsbit = (U1)AMBTMP_STSBIT_INVALID | (U1)AMBTMP_STSBIT_UNKNOWN;
+    }
+    else if (u1_t_pdusts == (U1)COM_TIMEOUT) {
+        u1_t_stsbit =(U1)AMBTMP_STSBIT_INVALID;
+    }
+    else if (u1_t_pdusts == (U1)COM_NO_RX) {
+        u1_t_stsbit = (U1)AMBTMP_STSBIT_UNKNOWN;
+    }
+    else {
+        u1_t_stsbit = (U1)AMBTMP_STSBIT_VALID;
+    }
+
+    return(u1_t_stsbit);
+#else
+#if 0   /* BEV Rebase provisionally */
+    (void)Com_ReceiveSignal(ComConf_ComSignal_ACN_AMB, u1p_a_acn_amb);
+    (void)Com_ReceiveSignal(ComConf_ComSignal_AC_AMB05, u1p_a_ac_amb05);
+    return((U1)Com_GetIPDUStatus(MSG_ZN21S13_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX));
+#else   /* BEV Rebase provisionally */
+    return((U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
+#endif
+}
+/*===================================================================================================================================*/
+/* void    vd_g_AmbtmpCfgMainStart(void)                                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_AmbtmpCfgMainStart(void)
+{
+}
+/*===================================================================================================================================*/
+/* void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 u2_a_FAH)                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 u2_a_FAH)
+{
+}
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
@@ -162,9 +160,25 @@ void    vd_g_HmiLocalePut(const ST_HMILOCALE * stp_a_HMILOCALE)
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  1.0.0    07/16/2019  TA       New.                                                                                               */
-/*  1.1.0    09/02/2020  TA       See hmiproxy.c                                                                                     */
+/*  1.0.0    12/15/2017  TN       New.                                                                                               */
+/*  1.1.0    03/10/2020  YN       ambtmp.c v1.0.0 -> v1.1.0.                                                                         */
+/*  1.1.1    05/14/2020  YN       ambtmp.c v1.1.0 -> v1.1.1.                                                                         */
+/*  1.2.1    06/15/2020  YN       ambtmp.c v1.1.1 -> v1.2.1.                                                                         */
+/*  1.2.2    07/21/2020  YN       ambtmp.c v1.2.1 -> v1.2.2.                                                                         */
+/*  1.3.2    07/27/2020  YN       ambtmp.c v1.2.2 -> v1.3.2.                                                                         */
+/*  2.0.0    04/14/2021  TA       ambtmp.c v1.3.2 -> v2.0.0.                                                                         */
+/*  2.0.1    10/18/2021  TA(M)    ambtmp.c v2.0.0 -> v2.0.1.                                                                         */
+/*  2.1.0    11/25/2021  TA(M)    ambtmp.c v2.0.1 -> v2.1.0.                                                                         */
+/*  2.2.0    03/09/2022  TA(M)    ambtmp.c v2.1.0 -> v2.2.0.                                                                         */
+/*  2.2.1    06/28/2022  TA(M)    ambtmp.c v2.2.0 -> v2.2.1.                                                                         */
 /*                                                                                                                                   */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*                                                                                                                                   */
+/*  * TN   = Takashi Nagai, Denso                                                                                                    */
+/*  * YN   = Yasuhiro Nakamura, Denso Techno                                                                                         */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
+/*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

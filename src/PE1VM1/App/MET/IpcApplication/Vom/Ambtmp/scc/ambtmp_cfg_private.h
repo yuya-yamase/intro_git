@@ -1,44 +1,55 @@
-/* 0.0.0 */
+/* 2.2.1 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  DENSO ICT1 Coding Style Standard Template                                                                                        */
+/*  Ambient Temprature Celsius/Fahrenheit                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef XSPI_CH0_CFG_H
-#define XSPI_CH0_CFG_H
+#ifndef AMBTMP_CFG_H
+#define AMBTMP_CFG_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CH0_CFG_H_MAJOR                         (0)
-#define XSPI_CH0_CFG_H_MINOR                         (0)
-#define XSPI_CH0_CFG_H_PATCH                         (0)
+#define AMBTMP_CFG_H_MAJOR                     (2)
+#define AMBTMP_CFG_H_MINOR                     (2)
+#define AMBTMP_CFG_H_PATCH                     (1)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#include "xspi_met.h"
+#include "aip_common.h"
 
+#include "rim_ctl.h"
+
+#include "veh_opemd.h"
 #if 0   /* BEV Rebase provisionally */
-#include "drvind_hv_pct.h"
-#include "tripcom.h"
+#include "vehspd_kmph.h"
 #endif   /* BEV Rebase provisionally */
+#include "ambtmp.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_TOTAL_FUEL_CONS                (0x02U) /* Fixed Value (Total Fuel Consumption) */ /* DRVINF1_UP */
-#define XSPI_INST_FUEL_CONS                 (0x01U) /* Fixed Value (Inst Fuel Consumption)  */ /* DRVINF1_DN */
-#define XSPI_AVERAGE_SPEED                  (0x06U) /* Fixed Value (Average Speed)          */ /* DRVINF2_UP */
-#define XSPI_DRIVE_TIME                     (0x09U) /* Fixed Value (Drive Time)             */ /* DRVINF2_DN */
+#define AMBTMP_IF_CAN               (0U)
 
-#define XSPI_HV_PCT_INIT                    (-511)  /* HV Sysind Initial Value              */
+#define AMBTMP_UNIT_CEL             (0U)
+#define AMBTMP_UNIT_FAH             (1U)
+
+#define AMBTMP_STSBIT_VALID         (0x00U)
+#define AMBTMP_STSBIT_UNKNOWN       (0x01U)
+#define AMBTMP_STSBIT_INVALID       (0x02U)
+
+#define AMBTMP_CEL2FAH_COEF         (18U)
+#define AMBTMP_CEL2FAH_DIV          (10U)
+
+#define AMBTMP_CAN_DEG_RES          (100U)
+#define AMBTMP_CAN_DEG_0P5          (50U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -48,18 +59,20 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-U1    u1_g_XSpiCfgGetHybsys(S2 * s2p_a_pct);
-U1    u1_g_XSpiCfgGetEvRatio(U1 * u1p_a_data);
-void    vd_g_XSPICfgGetDrvInf(U4 * u4p_a_drvinf);
+U1      u1_g_AmbtmpCfgIFIdx(void);
+U1      u1_g_AmbtmpCfgUnit(void);
+U1      u1_g_AmbtmpCANCfg(U1 * u1p_a_acn_amb , U1 * u1p_a_ac_amb05);
+void    vd_g_AmbtmpCfgMainStart(void);
+void    vd_g_AmbtmpCfgMainFinish(const U1 u1_a_STS, const U2 u2_a_CEL, const U2 u2_a_FAH);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* XSPI_CH0_CFG_H */
+#endif      /* AMBTMP_CFG_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  xspi_ch0_cfg.c                                                                                                */
+/*  Change History  :  ambtmp.c                                                                                                      */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
