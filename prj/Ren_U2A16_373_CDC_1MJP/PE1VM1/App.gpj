@@ -29,6 +29,7 @@
     -I${APP_DIR}/MET/EcuLib/Ren_G3m/scc
     -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/config
     -I${APP_DIR}/MET/HudApplication/Vom/HudDimmer/scc
+    -I${APP_DIR}/MET/HudApplication/Vom/HudImgadj/config_met
     -I${APP_DIR}/MET/IpcApplication/Evc/Calibration/config
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config/esopt_rx
@@ -111,6 +112,7 @@ App/MET/HudApplication/Vom/HudDimmer/scc/hdimmgr_adj.c
 App/MET/HudApplication/Vom/HudDimmer/scc/hdimmgr.c
 App/MET/HudApplication/Vom/HudDimmer/scc/hdimowduty.c
 App/MET/HudApplication/Vom/HudDimmer/scc/hdimstep.c
+App/MET/HudApplication/Vom/HudImgadj/config_met/himgadj.c
 App/MET/IpcApplication/Evc/Calibration/config/calibration.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ABG1S01.c
 App/MET/IpcApplication/Evc/Vardef/config/esopt_rx/vardef_esopt_ADU1S07.c

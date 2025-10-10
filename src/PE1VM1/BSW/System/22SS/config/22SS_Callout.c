@@ -80,8 +80,8 @@
 #include "gateway_cxpi.h"
 #endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
-#if 0   /* BEV Rebase provisionally */
 #include "himgadj.h"
+#if 0   /* BEV Rebase provisionally */
 #include "mmlang.h"
 #include "vmmunit.h"
 #include "fspomgr.h"
@@ -177,8 +177,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_GatewaymmInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrBonInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangBonInit,
         &vd_g_VardefMmUnitBonInit,
         &vd_g_FspomgrBonInit,
@@ -282,8 +282,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_GatewaymmInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrWkRstInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
         &vd_g_FspomgrWkupInit,
@@ -387,8 +387,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_GatewaymmInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrWkRstInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_HudImgAdjInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
         &vd_g_FspomgrWkupInit,
