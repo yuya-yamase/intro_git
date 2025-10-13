@@ -483,11 +483,7 @@ U1      u1_g_VardefDestCfg(U2 * u2p_a_c_code, U1 * u1p_a_dest_bdb, U1 * u1p_a_st
     U1  u1_t_c_code;
 
     u1_t_c_code = (U1)0U;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_rxcnt = u1_g_oXCANRxEvcnt((U2)OXCAN_PDU_RX_CAN_BDB1S08);
-#else   /* BEV Rebase provisionally */
-    u1_t_rxcnt = (U1)OXCAN_RXD_EVC_UNK;
-#endif   /* BEV Rebase provisionally */
+    u1_t_rxcnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S08_CH0);
 
 #if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE1, &u1_t_c_code);
