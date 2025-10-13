@@ -452,8 +452,7 @@ void            vd_g_XspiIviSub1PowerMainTask(void)
 
         u1_t_init_chk = u1_s_XspiIviSub1PowerDevInitCompChk();
 
-        if((u1_t_init_chk == (U1)TRUE) &&
-           (u1_s_xspi_ivi_power_state_trans_flg == (U1)TRUE)){  /* デバイス初期化済かつ指示あり */
+        if(u1_s_xspi_ivi_power_state_trans_flg == (U1)TRUE){  /* デバイス初期化済かつ指示あり */
             /* 状態移行確認 */
             u1_tp_data[0] = (U1)XSPI_IVI_POWER_STATE_TRANS_SEND;
             u1_tp_data[1] = st_s_xspi_ivi_state_trans.u1_count;
