@@ -968,9 +968,9 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     /* TMNT */
     u1_t_tmnt_reset_sts = u1_g_OdoCfgGetOmRstSts();
 
-    u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET                                   */
+    u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET_RESULT                        */
     u4_ap_pdu_tx[0]  |= ((U4)u1_t_odo_sts   << XSPI_STS_SHIFT);    /* ODO_STS                                      */
-    u4_ap_pdu_tx[1]   = u4_t_odo_dat;                                  /* ODO                                          */
+    u4_ap_pdu_tx[1]   = u4_t_odo_dat;                                  /* ODO_DSP                                  */
     u4_ap_pdu_tx[2]   = ((U4)u1_t_tripa_sts << XSPI_STS_SHIFT);    /* TRIPA_STS                                    */
     u4_ap_pdu_tx[3]   = u4_t_tripa_dat;                                /* TRIP_A                                       */
     u4_ap_pdu_tx[4]   = ((U4)u1_t_tripb_sts << XSPI_STS_SHIFT);    /* TRIPB_STS                                    */
