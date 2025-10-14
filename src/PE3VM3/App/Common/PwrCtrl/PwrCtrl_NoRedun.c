@@ -497,10 +497,6 @@ static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
                 /* 遷移条件の一致なし */
                 break;
         }
-
-        /* シス検暫定対応：電源ステートは固定でPowerON通常とする */
-        u1_t_mcu_return  = (U1)PWRCTRL_NOREDUN_STATE_APPON;
-        /* シス検暫定ここまで */
     }
     else
     {
