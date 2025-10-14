@@ -62,6 +62,12 @@ typedef struct {
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U1             u1_s_locale_TIMEFMT;
+static U1             u1_s_locale_UNIT_DIST;
+static U1             u1_s_locale_UNIT_SPEED;
+static U1             u1_s_locale_UNIT_ELECO;
+static U1             u1_s_locale_UNIT_AMBTMP;
+static U1             u1_s_locale_LANG;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -260,6 +266,7 @@ static const U1 u1_sp_LOCALE_LNGDB_DEFLANG[VDF_NUM_LNGDBTYPE] = {
 /*===================================================================================================================================*/
 void  vd_g_LocaleComTxInit(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_unit_fueco;
     U1  u1_t_unit_ch2;
 
@@ -268,9 +275,15 @@ void  vd_g_LocaleComTxInit(void)
     if(u1_t_unit_fueco < (U1)UNIT_NUM_VAL_FUECO){
         u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
     }
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
 #endif   /* BEV Rebase provisionally */
+    u1_s_locale_TIMEFMT      = (U1)TIMEFMT_VAL_UNDEF;
+    u1_s_locale_UNIT_DIST    = (U1)UNIT_VAL_DIST_UNDEF;
+    u1_s_locale_UNIT_SPEED   = (U1)UNIT_VAL_SPEED_UNDEF;
+    u1_s_locale_UNIT_ELECO   = (U1)UNIT_VAL_ELECO_UNDEF;
+    u1_s_locale_UNIT_AMBTMP  = (U1)UNIT_VAL_AMBTMP_UNDEF;
+    u1_s_locale_LANG         = (U1)LANG_VAL____UNDEF;
+
 }
 /*===================================================================================================================================*/
 /*  void  vd_g_LocaleComTxTask(void)                                                                                                 */
@@ -280,13 +293,12 @@ void  vd_g_LocaleComTxInit(void)
 /*===================================================================================================================================*/
 void  vd_g_LocaleComTxTask(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_unit_fueco;
     U1  u1_t_pre_unit_ch2;
     U1  u1_t_unit_ch2;
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_pre_unit_ch2);
-#endif   /* BEV Rebase provisionally */
 
     u1_t_unit_ch2   = (U1)LOCALE_UNIT_CH2_KM;
     u1_t_unit_fueco = u1_g_Unit((U1)UNIT_IDX_FUECO);
@@ -294,7 +306,6 @@ void  vd_g_LocaleComTxTask(void)
         u1_t_unit_ch2 = u1_sp_LOCALE_COMTX_UNIT_CH2[u1_t_unit_fueco];
     }
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
     if(u1_t_pre_unit_ch2 != u1_t_unit_ch2){
         (void)Com_TriggerIPDUSend(MSG_MET1S11_TXCH0);
@@ -475,7 +486,22 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
 #if 0   /* BEV Rebase provisionally */
     u1_t_unit  = u1_g_McstBf(u1_t_idx);
 #else   /* BEV Rebase provisionally */
-    u1_t_unit = (U1)U1_MAX;
+    switch(u1_a_UNITIDX){
+    case UNIT_IDX_DIST:
+        u1_t_unit  = u1_s_locale_UNIT_DIST;
+        break;
+    case UNIT_IDX_SPEED:
+         u1_t_unit  = u1_s_locale_UNIT_SPEED;
+        break;
+    case UNIT_IDX_ELECO:
+         u1_t_unit  = u1_s_locale_UNIT_ELECO;
+        break;
+    case UNIT_IDX_AMBTMP:
+         u1_t_unit  = u1_s_locale_UNIT_AMBTMP;
+        break;
+    default:
+        break;
+    }
 #endif   /* BEV Rebase provisionally */
     return(u1_t_unit);
 }
@@ -519,7 +545,7 @@ U1      u1_g_LocaleCfgTfm(void)
 #if 0   /* BEV Rebase provisionally */
     return(u1_g_McstBf((U1)MCST_BFI_TIMEFMT));
 #else   /* BEV Rebase provisionally */
-    return((U1)U1_MAX);
+    return(u1_s_locale_TIMEFMT);
 #endif   /* BEV Rebase provisionally */
 }
 

@@ -601,22 +601,12 @@ static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
 
-    U1    u1_t_unitslct;
-    U1    u1_t_convert;
     U1    u1_t_convert_eleco;
 
     u4_ap_pdu_tx[0]  = (U4)u1_g_Language((U1)TRUE);                                 /* LANG         */
 
     u4_ap_pdu_tx[1]  = ((U4)u1_g_Unit((U1)UNIT_IDX_DIST)     & (U4)0x03U);          /* DISTANCE     */
     u4_ap_pdu_tx[1]  |= (((U4)u1_g_Unit((U1)UNIT_IDX_SPEED)  & (U4)0x03U)  << 2 );  /* SPEED        */
-
-    u1_t_convert     = u1_g_Unit((U1)UNIT_IDX_FUECO);
-    u1_t_unitslct    = u1_g_VardefUnitSlctFuecoByPid() & (U1)VDF_UNIT_FUECO_BIT_MPG_UKIMP;
-
-    if((u1_t_convert == (U1)UNIT_VAL_FUECO_MPG_UK) && (u1_t_unitslct != (U1)0U)){
-    /* Unit Convert MPG Imperial */
-        u1_t_convert  = (U1)XSPI_UNIT_MPGIMP;
-    }
 
     u1_t_convert_eleco = u1_g_Unit((U1)UNIT_IDX_ELECO);
     
@@ -635,7 +625,6 @@ static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
             break;
     }
 
-    u4_ap_pdu_tx[1]  |= (((U4)u1_t_convert & (U4)0x07U)  << 4 );                    /* FUELECO      */
     u4_ap_pdu_tx[1]  |= (((U4)u1_t_convert_eleco             & (U4)0x0FU)  << 8 );  /* ELE          */
     u4_ap_pdu_tx[1]  |= (((U4)u1_g_Unit((U1)UNIT_IDX_AMBTMP) & (U4)0x03U)  << 12);  /* AMBTMP       */
     u4_ap_pdu_tx[1]  |= ((U4)u1_g_TimeFormat12H24H()                       << 14);  /* TMFMT_12H24H */
