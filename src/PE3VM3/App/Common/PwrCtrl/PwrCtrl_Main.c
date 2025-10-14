@@ -180,6 +180,9 @@ void vd_g_PwrCtrlMainBonReq( void )
     u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源：実行中 */
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
 
+    /* 監視処理初期化 */
+    vd_g_PwrCtrlObserveInit();
+
     /* VM間通信処理初期化 */
     vd_g_PwrCtrlComBonInit();
 
@@ -260,6 +263,9 @@ void vd_g_PwrCtrlMainWakeupReq( void )
     u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源：実行中 */
     u4_s_PwrCtrl_Main_Aoss      = (U4)PWRCTRL_MAIN_TIME_INIT;
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
+
+    /* 監視処理初期化 */
+    vd_g_PwrCtrlObserveInit();
 
     /* VM間通信処理初期化 */
     vd_g_PwrCtrlComWkupInit();
