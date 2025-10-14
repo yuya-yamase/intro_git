@@ -20,12 +20,10 @@
 #include "vehspd_can_sp1x_cfg_private.h"
 
 #include "oxcan.h"
-#if 0   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "odo_vslmt.h"
 #include "tripcom.h"
 #include "tripsnsr.h"
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -148,30 +146,20 @@ void    vd_g_VehspdCfgOdoInst(const U4 u4_a_ODO_INST, const U1 u1_a_STSBIT)
     U1                 u1_t_chk;
 
     if(u1_a_STSBIT == (U1)VEHSPD_STSBIT_VALID){
-#if 0   /* BEV Rebase provisionally */
         vd_g_OdoVslmtOdoInst(u4_a_ODO_INST);
         vd_g_OdoInst(u4_a_ODO_INST);
-#endif   /* BEV Rebase provisionally */
     }
-#if 0   /* BEV Rebase provisionally */
     u1_t_status = (U1)TRIPCOM_STSBIT_VALID;
-#endif   /* BEV Rebase provisionally */
 
     u1_t_chk = u1_a_STSBIT & ((U1)VEHSPD_STSBIT_UNKNOWN | (U1)VEHSPD_STSBIT_EMSTOP);
     if(u1_t_chk != (U1)0U){
-#if 0   /* BEV Rebase provisionally */
         u1_t_status  = (U1)TRIPCOM_STSBIT_UNKNOWN;
-#endif   /* BEV Rebase provisionally */
     }
     u1_t_chk = u1_a_STSBIT & (U1)VEHSPD_STSBIT_INVALID;
     if(u1_t_chk != (U1)0U){
-#if 0   /* BEV Rebase provisionally */
         u1_t_status |= (U1)TRIPCOM_STSBIT_INVALID;
-#endif   /* BEV Rebase provisionally */
     }
-#if 0   /* BEV Rebase provisionally */
     vd_g_TripsnsrGetOdoInst(u4_a_ODO_INST, u1_t_status);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_VehspdCanSp1xComRxInit(void)                                                                                        */
