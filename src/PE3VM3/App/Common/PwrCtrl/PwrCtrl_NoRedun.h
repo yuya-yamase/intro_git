@@ -58,26 +58,10 @@
 #define PWRCTRL_NOREDUN_BITSFT6         (6U)
 #define PWRCTRL_NOREDUN_BITSFT7         (7U)
 
-/* 車両電源ステート次回状態判定 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPON_UNCON      (0x40U) /* 見た目：オン ステート：状態未定 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPON_PARK       (0x20U) /* 見た目：オン ステート：駐車中 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPON_RIDE       (0x33U) /* 見た目：オン ステート：乗車中 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPON_PONEMG     (0x37U) /* 見た目：オン ステート：PowerON緊急停止 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPON_PON        (0x3FU) /* 見た目：オン ステート：PowerON通常 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPON_HVOL       (0x22U) /* 見た目：オン ステート：駐車中 高圧起動 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPON_HVOLHCOND  (0x23U) /* 見た目：オン ステート：駐車中 高圧・温調起動 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPOFF_UNCON     (0xC0U) /* 見た目：オフ ステート：状態未定 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPOFF_PARK      (0xA0U) /* 見た目：オフ ステート：駐車中 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPOFF_RIDE      (0xB3U) /* 見た目：オフ ステート：乗車中 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPOFF_PONEMG    (0xB7U) /* 見た目：オフ ステート：PowerON緊急停止 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPOFF_PON       (0xBFU) /* 見た目：オフ ステート：PowerON通常 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPOFF_HVOL      (0xA2U) /* 見た目：オフ ステート：駐車中 高圧起動 */
-#define PWRCTRL_NOREDUN_CHKSTS_APPOFF_HVOLHCOND (0xA3U) /* 見た目：オフ ステート：駐車中 高圧・温調起動 */
-
 /* 現在車両電源ステート管理用ステータス */
 #define PWRCTRL_NOREDUN_STATE_NUM       (4U)    /* 総数 */
-#define PWRCTRL_NOREDUN_STATE_OFF       (0U)    /* OFF */
-#define PWRCTRL_NOREDUN_STATE_PARK      (1U)    /* 駐車中起動 */
+#define PWRCTRL_NOREDUN_STATE_OFF       (0U)    /* 電源OFF・スタンバイ */
+#define PWRCTRL_NOREDUN_STATE_PARK      (1U)    /* 駐車中起動・縮退走行 */
 #define PWRCTRL_NOREDUN_STATE_APPOFF    (2U)    /* 見た目オフ起動 */
 #define PWRCTRL_NOREDUN_STATE_APPON     (3U)    /* 見た目オン起動 */
 

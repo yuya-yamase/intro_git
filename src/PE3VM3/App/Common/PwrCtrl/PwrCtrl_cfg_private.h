@@ -27,6 +27,7 @@
 
 #include "EthSwt_SWIC.h"
 #include "ivdsh.h"
+#include "VIS.h"
 #include "rim_ctl.h"
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */

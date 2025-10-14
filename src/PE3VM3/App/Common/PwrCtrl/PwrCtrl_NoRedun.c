@@ -93,6 +93,9 @@ static U2 u2_s_PwrCtrl_NoRedun_Hubwk_Time;
 static U2 u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time;
 static U2 u2_s_PwrCtrl_NoRedun_Huboff_Time;
 
+/* 車両電源特殊ステート(前回値) */
+static U1 u1_s_PwrCtrl_NoRedun_SpState_pre;
+
 /* SYS系デバイス終了状態 */
        U2     u2_g_PwrCtrl_OffSts;  /* exturn */
 static U2     u2_s_OffTime_XMTuner_Pmic;
@@ -218,7 +221,6 @@ void vd_g_PwrCtrlNoRedunPwrOffStart( void )
 {
     u1_g_PwrCtrl_NoRedun_Pwr_Sts    = (U1)PWRCTRL_NOREDUN_STS_OFF;
     u1_s_PwrCtrl_NoRedun_Step_Sts   = (U1)PWRCTRL_NOREDUN_STS_OFF;
-    u1_s_PwrCtrl_NoRedun_OnSequence = (U1)PWRCTRL_NOREDUN_ONSEQ_NON;
 
     return;
 }
@@ -265,32 +267,35 @@ void vd_g_PwrCtrlNoRedunInit( void )
     u1_s_PwrCtrl_NoRedun_OnSequence                = (U1)PWRCTRL_NOREDUN_ONSEQ_NON;
 
     /* 非冗長電源ON/OFFトリガの初期化 */
-    u1_s_PwrCtrl_NoRedun_MetBB_Chk                 = (U1)PWRCTRL_NOREDUN_PWR_NON;
-    u1_s_PwrCtrl_NoRedun_Disp_Chk                  = (U1)PWRCTRL_NOREDUN_PWR_NON;
-    u1_s_PwrCtrl_NoRedun_Hub_Chk                   = (U1)PWRCTRL_NOREDUN_PWR_NON;
+    u1_s_PwrCtrl_NoRedun_MetBB_Chk                 = (U1)PWRCTRL_NOREDUN_PWR_OFF;
+    u1_s_PwrCtrl_NoRedun_Disp_Chk                  = (U1)PWRCTRL_NOREDUN_PWR_OFF;
+    u1_s_PwrCtrl_NoRedun_Hub_Chk                   = (U1)PWRCTRL_NOREDUN_PWR_OFF;
 
     /* 現在起動/終了ステップの初期化 */
     u1_s_PwrCtrl_NoRedun_MetBB_OnStep              = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
     u1_s_PwrCtrl_NoRedun_Disp_OnStep               = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
     u1_s_PwrCtrl_NoRedun_Hub_OnStep                = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-    u1_s_PwrCtrl_NoRedun_MetBB_OffStep             = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-    u1_s_PwrCtrl_NoRedun_Disp_OffStep              = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-    u1_s_PwrCtrl_NoRedun_Hub_OffStep               = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+    u1_s_PwrCtrl_NoRedun_MetBB_OffStep             = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_NoRedun_Disp_OffStep              = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    u1_s_PwrCtrl_NoRedun_Hub_OffStep               = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
 
     /* 待機時間測定用RAMの初期化 */
     u2_s_PwrCtrl_NoRedun_BetWait_Time              = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     u2_s_PwrCtrl_NoRedun_MBon_Time                 = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
     u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time          = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
-    u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time      = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
-    u2_s_PwrCtrl_NoRedun_MBoff_Time                = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+    u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time      = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
+    u2_s_PwrCtrl_NoRedun_MBoff_Time                = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     u2_s_PwrCtrl_NoRedun_Dspon_Time                = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
     u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time         = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
-    u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time     = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
-    u2_s_PwrCtrl_NoRedun_Dspoff_Time               = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+    u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time     = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
+    u2_s_PwrCtrl_NoRedun_Dspoff_Time               = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     u2_s_PwrCtrl_NoRedun_Hubon_Time                = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
     u2_s_PwrCtrl_NoRedun_Hubwk_Time                = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
-    u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time            = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
-    u2_s_PwrCtrl_NoRedun_Huboff_Time               = (U2)PWRCTRL_NOREDUN_WAIT_TIME_INIT;
+    u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time            = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
+    u2_s_PwrCtrl_NoRedun_Huboff_Time               = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
+
+    /* 車両電源特殊ステート(前回値)の初期化 */
+    u1_s_PwrCtrl_NoRedun_SpState_pre               = (U1)VIS_SPECIALSTATE_NOTSET;
 
     /* SYS系デバイス終了状態 */
     u2_g_PwrCtrl_OffSts               = (U2)PWROFF_CONP_BIT;
@@ -355,9 +360,9 @@ void vd_g_PwrCtrlNoRedunMainFunction( void )
 
     /* 各シーケンスの処理関数をコールし、状態遷移によって決定したON/OFF処理を実行する */
     /* 未実施の場合は処理関数内部のelseに突入し、なにも実施しない */
-    vd_s_PwrCtrlNoRedunMetBB();
-    vd_s_PwrCtrlNoRedunDisp();
     vd_s_PwrCtrlNoRedunHub();
+    vd_s_PwrCtrlNoRedunDisp();
+    vd_s_PwrCtrlNoRedunMetBB();
 
     /* 非冗長電源間ウェイトタイムのカウント */
     /* カウント開始はシーケンスの処理関数内でRAMリセットをもって開始する */
@@ -397,105 +402,82 @@ void vd_g_PwrCtrlNoRedunMainFunction( void )
 *****************************************************************************/
 static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
 {
-    U1 u1_t_mcu_return;     /* 戻り値 */
-    U1 u1_t_mcu_appea;      /* CAN入力：見た目オンオフ(スタブ) */
-    U1 u1_t_mcu_VPSINFO1;   /* CAN入力：判定中 */
-    U1 u1_t_mcu_VPSINFO2;   /* CAN入力：駐車中 */
-    U1 u1_t_mcu_VPSINFO3;   /* CAN入力：乗車中 */
-    U1 u1_t_mcu_VPSINFO4;   /* CAN入力：PowerON通常 */
-    U1 u1_t_mcu_VPSINFO5;   /* CAN入力：PowerON緊急停止 */
-    U1 u1_t_mcu_VPSINFO6;   /* CAN入力：駐車中高圧起動 */
-    U1 u1_t_mcu_VPSINFO7;   /* CAN入力：駐車中高圧・温調起動 */
-    U1 u1_t_mcu_VPSINFO;    /* 電源状態取り纏め */
-    U1 u1_t_mcu_boot;       /* 開発時のみ使用する、BOOT入力取得(量産時削除予定) */
+    U1 u1_t_mcu_return;        /* 戻り値 */
+    U1 u1_t_mcu_BasicState;    /* 車両電源基本ステート */
+    U1 u1_t_mcu_SpecialState;  /* 車両電源特殊ステート */
+    U1 u1_t_mcu_Apofrq;        /* 見た目OFF要求 */
+    U1 u1_t_mcu_boot;          /* 開発時のみ使用する、BOOT入力取得(量産時削除予定) */
 
-    u1_t_mcu_return   = u1_s_PwrCtrl_NoRedun_Sts;  /* 初期値：前回保持状態 */
-    u1_t_mcu_appea    = (U1)FALSE;
-    u1_t_mcu_VPSINFO1 = (U1)FALSE;
-    u1_t_mcu_VPSINFO2 = (U1)FALSE;
-    u1_t_mcu_VPSINFO3 = (U1)FALSE;
-    u1_t_mcu_VPSINFO4 = (U1)FALSE;
-    u1_t_mcu_VPSINFO5 = (U1)FALSE;
-    u1_t_mcu_VPSINFO6 = (U1)FALSE;
-    u1_t_mcu_VPSINFO7 = (U1)FALSE;
-    u1_t_mcu_VPSINFO  = (U1)0U;
-    u1_t_mcu_boot     = (U1)STD_LOW;
+    u1_t_mcu_return              =  u1_s_PwrCtrl_NoRedun_Sts;   /* 初期値：前回保持状態 */
+    u1_t_mcu_BasicState          = (U1)VIS_BASICSTATE_PARKING;  /* 初期値：駐車中 */
+    u1_t_mcu_SpecialState        = (U1)VIS_SPECIALSTATE_NOTSET; /* 初期値：設定なし */
+    u1_t_mcu_Apofrq              = (U1)STD_OFF;  /* 初期値：OFF要求なし */
+    u1_t_mcu_boot                = (U1)STD_LOW;  /* 初期値：BOOT_Lo */
 
-    (void)Com_ReceiveSignal( ComConf_ComSignal_VPSINFO1, &u1_t_mcu_VPSINFO1 );
-    (void)Com_ReceiveSignal( ComConf_ComSignal_VPSINFO2, &u1_t_mcu_VPSINFO2 );
-    (void)Com_ReceiveSignal( ComConf_ComSignal_VPSINFO3, &u1_t_mcu_VPSINFO3 );
-    (void)Com_ReceiveSignal( ComConf_ComSignal_VPSINFO4, &u1_t_mcu_VPSINFO4 );
-    (void)Com_ReceiveSignal( ComConf_ComSignal_VPSINFO5, &u1_t_mcu_VPSINFO5 );
-    (void)Com_ReceiveSignal( ComConf_ComSignal_VPSINFO6, &u1_t_mcu_VPSINFO6 );
-    (void)Com_ReceiveSignal( ComConf_ComSignal_VPSINFO7, &u1_t_mcu_VPSINFO7 );
-    (void)Com_ReceiveSignal( ComConf_ComSignal_APOFRQ  , &u1_t_mcu_appea    );
+    (void)u1_g_VISPwrGetBasicState(&u1_t_mcu_BasicState);                    /* 車両電源基本ステート取得 */
+    (void)u1_g_VISPwrGetSpecialState(&u1_t_mcu_SpecialState);                /* 車両電源特殊ステート取得 */
+    u1_t_mcu_Apofrq = u1_g_VISPwrGetApofrq();                                /* 見た目OFF制御要求取得 */
 
+    /* 量産向け暫定 */
     /* BOOT入力値取得処理 */
-    u1_t_mcu_boot = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_BOOT]);
-
-    u1_t_mcu_VPSINFO =   (u1_t_mcu_appea    & (U1)TRUE) << (U1)PWRCTRL_NOREDUN_BITSFT7;  /* 8bit：見た目オンオフ */
-    u1_t_mcu_VPSINFO |=  (u1_t_mcu_VPSINFO1 & (U1)TRUE) << (U1)PWRCTRL_NOREDUN_BITSFT6;  /* 7bit：CAN入力：判定中 */
-    u1_t_mcu_VPSINFO |=  (u1_t_mcu_VPSINFO2 & (U1)TRUE) << (U1)PWRCTRL_NOREDUN_BITSFT5;  /* 6bit：CAN入力：駐車中 */
-    u1_t_mcu_VPSINFO |=  (u1_t_mcu_VPSINFO3 & (U1)TRUE) << (U1)PWRCTRL_NOREDUN_BITSFT4;  /* 5bit：CAN入力：乗車中 */
-    u1_t_mcu_VPSINFO |=  (u1_t_mcu_VPSINFO4 & (U1)TRUE) << (U1)PWRCTRL_NOREDUN_BITSFT3;  /* 4bit：CAN入力：PowerON通常 */
-    u1_t_mcu_VPSINFO |=  (u1_t_mcu_VPSINFO5 & (U1)TRUE) << (U1)PWRCTRL_NOREDUN_BITSFT2;  /* 3bit：CAN入力：PowerON緊急停止 */
-    u1_t_mcu_VPSINFO |=  (u1_t_mcu_VPSINFO6 & (U1)TRUE) << (U1)PWRCTRL_NOREDUN_BITSFT1;  /* 2bit：CAN入力：駐車中高圧起動 */
-    u1_t_mcu_VPSINFO |=  u1_t_mcu_VPSINFO7  & (U1)TRUE;                                  /* 1bit：CAN入力：駐車中高圧・温調起動 */
-
+    u1_t_mcu_boot = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_BOOT);
+    /* 量産向け暫定ここまで */
+    
     if ( u1_g_PwrCtrl_NoRedun_Pwr_Sts == (U1)PWRCTRL_NOREDUN_STS_OFF )       /* OFFトリガをリセットして次回要求に備える */
     {
-        u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_OFF;
+        u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_OFF;                     /* 電源OFF・スタンバイ */
     }
     else if ( u1_g_PwrCtrl_NoRedun_Pwr_Sts == (U1)PWRCTRL_NOREDUN_STS_ON )
     {
-        /* 次回状態判定 電源ステートはONOFF仕様 図5-3 参照 */
-        switch ( u1_t_mcu_VPSINFO )
+        if(u1_t_mcu_SpecialState == (U1)VIS_SPECIALSTATE_SERVICE_LLC)        /* 特殊ステート：WP注排水 */
         {
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_UNCON:           /* 見た目：オン ステート：状態未定 */
-                u1_t_mcu_return = u1_s_PwrCtrl_NoRedun_Sts;         /* 前回状態保持 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_PARK:            /* 見た目：オン ステート：駐車中 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_RIDE:            /* 見た目：オン ステート：乗車中 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_PONEMG:          /* 見た目：オン ステート：PowerON緊急停止 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_PON:             /* 見た目：オン ステート：PowerON通常 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_HVOL:            /* 見た目：オン ステート：駐車中 高圧起動 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPON_HVOLHCOND:       /* 見た目：オン ステート：駐車中 高圧・温調起動 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_UNCON:          /* 見た目：オフ ステート：状態未定 */
-                u1_t_mcu_return = (U1)u1_s_PwrCtrl_NoRedun_Sts;     /* 前回状態保持 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_PARK:           /* 見た目：オフ ステート：駐車中 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_RIDE:           /* 見た目：オフ ステート：乗車中 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPOFF; /* 見た目オフ起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_PONEMG:         /* 見た目：オフ ステート：PowerON緊急停止 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_PON:            /* 見た目：オフ ステート：PowerON通常 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;  /* 見た目オン起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_HVOL:           /* 見た目：オフ ステート：駐車中 高圧起動 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
-                break;
-            case  (U1)PWRCTRL_NOREDUN_CHKSTS_APPOFF_HVOLHCOND:      /* 見た目：オフ ステート：駐車中 高圧・温調起動 */
-                u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;   /* 駐車中起動 */
-                break;
-            default:
-                /* 遷移条件の一致なし */
-                break;
+            u1_t_mcu_SpecialState = u1_s_PwrCtrl_NoRedun_SpState_pre;        /* 特殊ステートを前回受信値に置き換え */
+        }
+        else{
+            u1_s_PwrCtrl_NoRedun_SpState_pre = u1_t_mcu_SpecialState;        /* 今回値で前回値更新 */
+        }
+
+        /* 車両電源特殊ステート判定 */
+        if(u1_t_mcu_SpecialState == (U1)VIS_SPECIALSTATE_EMERGENCY_STOP)     /* 特殊ステート：縮退走行 */
+        {
+            u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;                /* 駐車中起動・縮退走行 */
+        }
+        else if(u1_t_mcu_SpecialState == (U1)VIS_SPECIALSTATE_OTA)           /* 特殊ステート：OTA */
+        {
+            u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;               /* 見た目オン起動 */
+        }
+        else if(u1_t_mcu_SpecialState == (U1)VIS_SPECIALSTATE_POWEROFF_ALL)  /* 特殊ステート：電源ALL OFF */
+        {
+            u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_OFF;                 /* 電源OFF・スタンバイ */
+        }
+        else
+        {
+            /* 車両電源基本ステート判定 */
+            switch ( u1_t_mcu_BasicState )
+            {
+                case  (U1)VIS_BASICSTATE_PARKING:                                /* 基本ステート：駐車中 */
+                case  (U1)VIS_BASICSTATE_PARKING_HIGHVOL:                        /* 基本ステート：駐車中高圧起動 */
+                case  (U1)VIS_BASICSTATE_PARKING_HIGHVOLHEATCOND:                /* 基本ステート：駐車中高圧・温調起動 */
+                    u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_PARK;            /* 駐車中起動・縮退走行 */
+                    break;
+                case  (U1)VIS_BASICSTATE_POWERON_NORMAL:                         /* 基本ステート：PowerON通常 */
+                case  (U1)VIS_BASICSTATE_POWERON_EMERGENCY:                      /* 基本ステート：PowerON緊急停止 */
+                    u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;           /* 見た目オン起動 */
+                    break;
+                case  (U1)VIS_BASICSTATE_RIDING:                                 /* 基本ステート：乗車中 */
+                    if(u1_t_mcu_Apofrq == (U1)STD_ON)                            /* 見た目OFF制御要求：要求あり */
+                    {
+                        u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPOFF;      /* 見た目オフ起動 */
+                    }
+                    else                                                         /* 見た目OFF制御要求：要求なし */
+                    {
+                        u1_t_mcu_return = (U1)PWRCTRL_NOREDUN_STATE_APPON;       /* 見た目オン起動 */
+                    }
+                    break;
+                default:
+                    /* 処理なし(前回状態を適用) */
+                    break;
+            }
         }
     }
     else
@@ -503,12 +485,12 @@ static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
         /* 何もしない */
     }
 
-  /* 量産向け暫定 */
-  if((u1_g_PwrCtrl_NoRedun_Pwr_Sts != PWRCTRL_NOREDUN_STS_OFF) && /* OFF要求がない場合かつ */
-     (u1_t_mcu_boot == (U1)STD_HIGH)){                            /* BOOT=Hiを検知した場合、どの状態でも見た目オン起動へ上書き */
-    u1_t_mcu_return  = (U1)PWRCTRL_NOREDUN_STATE_APPON;           /* 電源ON 見た目オン起動 */
-  }
-  /* 量産向け暫定ここまで */
+    /* 量産向け暫定 */
+    if((u1_g_PwrCtrl_NoRedun_Pwr_Sts != PWRCTRL_NOREDUN_STS_OFF) && /* OFF要求がない場合かつ */
+       (u1_t_mcu_boot == (U1)STD_HIGH)){                            /* BOOT=Hiを検知した場合、どの状態でも見た目オン起動へ上書き */
+      u1_t_mcu_return  = (U1)PWRCTRL_NOREDUN_STATE_APPON;           /* 電源ON 見た目オン起動 */
+    }
+    /* 量産向け暫定ここまで */
 
     return( u1_t_mcu_return );
 }
@@ -522,10 +504,11 @@ static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlNoRedunMetBB( void )
 {
-    /* ON要求 かつ 実行中のONシーケンスがなしorMeter+BBの場合 */
-    if ( ( u1_s_PwrCtrl_NoRedun_MetBB_Chk    == (U1)PWRCTRL_NOREDUN_PWR_ON )
-      && ( ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_NON   )
-        || ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_METBB ) ) )
+    /* ON処理開始(ON要求 かつ ON実行中の他デバイスなし) */
+    /* または、ON処理継続(Meter+BB DisplayがON実行中) */
+    if ( ( ( u1_s_PwrCtrl_NoRedun_MetBB_Chk == (U1)PWRCTRL_NOREDUN_PWR_ON )
+        && ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_NON ) )
+      || ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_METBB ) )
     {
         /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
         u1_s_PwrCtrl_NoRedun_MetBB_OffStep        = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
@@ -607,7 +590,9 @@ static void vd_s_PwrCtrlNoRedunMetBB( void )
                 break;
         }
     }
-    else /* PWRCTRL_NOREDUN_PWR_NON：要求なし or u2_s_PwrCtrl_NoRedun_BetWait_Time≠FIN：非冗長電源間ウェイトタイム中 */
+    /* ON要求だが、他のデバイスがON実行中(ON要求 かつ Meter+BB Display以外がON実行中) */
+    /* 要求なし(NON かつ Meter+BB Display以外がON実行中) */
+    else
     {
         /* do nothing */
     }
@@ -628,7 +613,7 @@ static void vd_s_PwrCtrlNoRedunPwrOnMbPwr( void )
     /* MET+BB-PWR-ON */
     if ( u2_s_PwrCtrl_NoRedun_MBon_Time == (U2)PWRCTRL_NOREDUN_WAIT_MBPWR_TIME )
     {
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_MBPWR, MCU_DIO_HIGH);
+        (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_MBPWR], MCU_DIO_HIGH);
         u2_s_PwrCtrl_NoRedun_MBon_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     }
 
@@ -653,7 +638,7 @@ static void vd_s_PwrCtrlNoRedunWkGvifTxMetBB( void )
     /* GVIF-TX(MET+BB)-WAKE */
     if ( u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_GVIF_TX_MBWK_TIME )
     {
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_GVIF_TX_MBWK, MCU_DIO_HIGH);
+        (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_GVIF_TX_MBWK], MCU_DIO_HIGH);
         u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     }
 
@@ -678,7 +663,7 @@ static void vd_s_PwrCtrlNoRedunWkOffGvifTxMetBB( void )
     /* GVIF-TX(MET+BB)-WAKE */
     if ( u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_GVIF_TX_MBWK_OFF_TIME)
     {
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_GVIF_TX_MBWK, MCU_DIO_LOW);
+        (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_GVIF_TX_MBWK], MCU_DIO_LOW);
         u2_s_PwrCtrl_NoRedun_Gviftx_Mbwk_Off_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     }
 
@@ -703,7 +688,7 @@ static void vd_s_PwrCtrlNoRedunPwrOffMbPwr( void )
     /* MET+BB-PWR-OFF */
     if ( u2_s_PwrCtrl_NoRedun_MBoff_Time == (U2)PWRCTRL_NOREDUN_WAIT_MBPWR_OFF_TIME )
     { 
-        vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_MBPWR, MCU_DIO_LOW);
+        (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_MBPWR], MCU_DIO_LOW);
         u2_s_PwrCtrl_NoRedun_MBoff_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
     }
 
@@ -724,87 +709,91 @@ static void vd_s_PwrCtrlNoRedunPwrOffMbPwr( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlNoRedunDisp( void )
 {
-  /* ON要求あり かつ 実行中のONシーケンスがなしorCenterDispの場合 */
-  if(u1_s_PwrCtrl_NoRedun_Disp_Chk    == (U1)PWRCTRL_NOREDUN_PWR_ON &&
-     (u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_NON || u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_CNTDSP)){
-       /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
-       u1_s_PwrCtrl_NoRedun_Disp_OffStep          = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-       u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time = (U2)0U;
-       u2_s_PwrCtrl_NoRedun_Dspoff_Time           = (U2)0U;
+    /* ON処理開始(ON要求 かつ ON実行中の他デバイスなし) */
+    /* または、ON処理継続(Center DisplayがON実行中) */
+    if ( ( ( u1_s_PwrCtrl_NoRedun_Disp_Chk == (U1)PWRCTRL_NOREDUN_PWR_ON )
+        && ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_NON ) )
+      || ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_CNTDSP ) ){
+        /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
+        u1_s_PwrCtrl_NoRedun_Disp_OffStep          = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+        u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Dspoff_Time           = (U2)0U;
 
-       switch (u1_s_PwrCtrl_NoRedun_Disp_OnStep)
-       {
-       case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
-            /* 実行中のONシーケンスをCenterDsipに設定 */
-            u1_s_PwrCtrl_NoRedun_OnSequence = (U2)PWRCTRL_NOREDUN_ONSEQ_CNTDSP;
+        switch (u1_s_PwrCtrl_NoRedun_Disp_OnStep)
+        {
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
+                /* 実行中のONシーケンスをCenterDispに設定 */
+                u1_s_PwrCtrl_NoRedun_OnSequence = (U2)PWRCTRL_NOREDUN_ONSEQ_CNTDSP;
 
-            vd_s_PwrCtrlNoRedunPwrOnDsp();
+                vd_s_PwrCtrlNoRedunPwrOnDsp();
 
-            if(u2_s_PwrCtrl_NoRedun_Dspon_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
-               /* STEP1が完了していれば次のSTEPに進める */
-               u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U2)PWRCTRL_COMMON_PROCESS_STEP2;
-            }
-            break;
+                if(u2_s_PwrCtrl_NoRedun_Dspon_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+                   /* STEP1が完了していれば次のSTEPに進める */
+                   u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U2)PWRCTRL_COMMON_PROCESS_STEP2;
+                }
+                break;
 
-       case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
-            vd_s_PwrCtrlNoRedunWkGvifTxDisp();
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
+                vd_s_PwrCtrlNoRedunWkGvifTxDisp();
 
-            if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
-               /* STEP1,2が完了していれば正常起動を設定 */
-               u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U2)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-            }
-            /* 非冗長電源間ウェイトタイムをクリアしカウント開始する */
-            u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
-            break;
+                if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+                    /* STEP1,2が完了していれば正常起動を設定 */
+                    u1_s_PwrCtrl_NoRedun_Disp_OnStep = (U2)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                }
+                /* 非冗長電源間ウェイトタイムをクリアしカウント開始する */
+                u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
+                break;
 
-       case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
-            /* 正常起動時は何もしない */
-            break;
-    
-       default:
-            /* 異常系は未考慮 */
-            break;
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+                /* 正常起動時は何もしない */
+                break;
+
+            default:
+               /* 異常系は未考慮 */
+               break;
        }
-  }
-  
-  else if(u1_s_PwrCtrl_NoRedun_Disp_Chk == (U1)PWRCTRL_NOREDUN_PWR_OFF){
-         /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
-         u1_s_PwrCtrl_NoRedun_Disp_OnStep       = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-         u2_s_PwrCtrl_NoRedun_Dspon_Time        = (U2)0U;
-         u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time = (U2)0U;
+    }
+    /* OFF処理(OFF要求 かつ Center Display以外がON実行中) */
+    else if(u1_s_PwrCtrl_NoRedun_Disp_Chk == (U1)PWRCTRL_NOREDUN_PWR_OFF){
+        /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
+        u1_s_PwrCtrl_NoRedun_Disp_OnStep       = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+        u2_s_PwrCtrl_NoRedun_Dspon_Time        = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time = (U2)0U;
 
-         switch (u1_s_PwrCtrl_NoRedun_Disp_OffStep)
-         {
-         case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
-              vd_s_PwrCtrlNoRedunWkOffGvifTxDisp();
+        switch (u1_s_PwrCtrl_NoRedun_Disp_OffStep)
+        {
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
+                vd_s_PwrCtrlNoRedunWkOffGvifTxDisp();
 
-              if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
-                  /* STEP1が完了していれば次のSTEPに進める */
-                  u1_s_PwrCtrl_NoRedun_Disp_OffStep = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
-              }
-              break;
+                if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+                    /* STEP1が完了していれば次のSTEPに進める */
+                    u1_s_PwrCtrl_NoRedun_Disp_OffStep = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
+                }
+                break;
 
-         case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
-              vd_s_PwrCtrlNoRedunPwrOffDsp();
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
+                vd_s_PwrCtrlNoRedunPwrOffDsp();
 
-              if(u2_s_PwrCtrl_NoRedun_Dspoff_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
-                 /* STEP1,2が完了していれば正常終了を設定 */
-                 u1_s_PwrCtrl_NoRedun_Disp_OffStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-              }
-              break;
+                if(u2_s_PwrCtrl_NoRedun_Dspoff_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+                    /* STEP1,2が完了していれば正常終了を設定 */
+                    u1_s_PwrCtrl_NoRedun_Disp_OffStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                }
+                break;
 
-          case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
                /* 正常終了時は何もしない */
                break;
     
-          default:
+            default:
                /* 異常系は未考慮 */
                break;
-          }
-  }
-  else {    /* PWRCTRL_NOREDUN_PWR_NON：要求なし or u2_s_PwrCtrl_NoRedun_BetWait_Time≠FIN：非冗長電源間ウェイトタイム中 */
-    /* do nothing */
-  }
+        }
+    }
+    /* ON要求だが、他のデバイスがON実行中(ON要求 かつ Center Display以外がON実行中) */
+    /* 要求なし(NON かつ Center Display以外がON実行中) */
+    else {
+        /* do nothing */
+    }
   
   return;
 }
@@ -821,7 +810,7 @@ static void vd_s_PwrCtrlNoRedunPwrOnDsp( void )
 {
   /* DISP-PWR-ON */
   if(u2_s_PwrCtrl_NoRedun_Dspon_Time == (U2)PWRCTRL_NOREDUN_WAIT_DISP_TIME){ 
-    vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_DISP, MCU_DIO_HIGH);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_DISP], MCU_DIO_HIGH);
     u2_s_PwrCtrl_NoRedun_Dspon_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
@@ -844,7 +833,7 @@ static void vd_s_PwrCtrlNoRedunWkGvifTxDisp( void )
 {
   /* GVIF-TX(MET+BB)-WAKE */
   if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_GVIF_TX_DSPWK_TIME){ 
-    vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_GVIF_TX_DSPWK, MCU_DIO_HIGH);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_GVIF_TX_DSPWK], MCU_DIO_HIGH);
     u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
@@ -867,7 +856,7 @@ static void vd_s_PwrCtrlNoRedunWkOffGvifTxDisp( void )
 {
   /* GVIF-TX(MET+BB)-WAKE */
   if(u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_GVIF_TX_DSPWK_OFF_TIME){ 
-    vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_GVIF_TX_DSPWK, MCU_DIO_LOW);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_GVIF_TX_DSPWK], MCU_DIO_LOW);
     u2_s_PwrCtrl_NoRedun_Gviftx_Dspwk_Off_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
@@ -890,7 +879,7 @@ static void vd_s_PwrCtrlNoRedunPwrOffDsp( void )
 {
   /* DISP-PWR-Off */
   if(u2_s_PwrCtrl_NoRedun_Dspoff_Time == (U2)PWRCTRL_NOREDUN_WAIT_DISP_OFF_TIME){ 
-    vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_DISP, MCU_DIO_LOW);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_DISP], MCU_DIO_LOW);
     u2_s_PwrCtrl_NoRedun_Dspoff_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
@@ -910,85 +899,90 @@ static void vd_s_PwrCtrlNoRedunPwrOffDsp( void )
 *****************************************************************************/
 static void vd_s_PwrCtrlNoRedunHub( void )
 {
-  /* ON要求あり かつ 実行中のONシーケンスがなしorDSRC(HUB)の場合 */
-  if(u1_s_PwrCtrl_NoRedun_Hub_Chk == (U1)PWRCTRL_NOREDUN_PWR_ON &&
-     (u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_NON || u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_DSRC)){
     /* Off側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
-    u1_s_PwrCtrl_NoRedun_Hub_OffStep     = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-    u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time  = (U2)0U;
-    u2_s_PwrCtrl_NoRedun_Huboff_Time     = (U2)0U;
+    /* または、ON処理継続(DSRC(HUB)がON実行中) */
+    if ( ( ( u1_s_PwrCtrl_NoRedun_Hub_Chk == (U1)PWRCTRL_NOREDUN_PWR_ON )
+        && ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_NON ) )
+      || ( u1_s_PwrCtrl_NoRedun_OnSequence == (U1)PWRCTRL_NOREDUN_ONSEQ_DSRC ) ){
+        /* Off側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
+        u1_s_PwrCtrl_NoRedun_Hub_OffStep     = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+        u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time  = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Huboff_Time     = (U2)0U;
 
-    switch (u1_s_PwrCtrl_NoRedun_Hub_OnStep)
-    {
-    case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
-      /* 実行中のONシーケンスをDSRC(HUB)に設定 */
-      u1_s_PwrCtrl_NoRedun_OnSequence = (U1)PWRCTRL_NOREDUN_ONSEQ_DSRC;
+        switch (u1_s_PwrCtrl_NoRedun_Hub_OnStep)
+        {
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
+                /* 実行中のONシーケンスをDSRC(HUB)に設定 */
+                u1_s_PwrCtrl_NoRedun_OnSequence = (U1)PWRCTRL_NOREDUN_ONSEQ_DSRC;
 
-      vd_s_PwrCtrlNoRedunPwrOnHub();
+                vd_s_PwrCtrlNoRedunPwrOnHub();
 
-      if(u2_s_PwrCtrl_NoRedun_Hubon_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
-        /* STEP1が完了していれば次のSTEPに進める */
-        u1_s_PwrCtrl_NoRedun_Hub_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
-      }
-      break;
+                if(u2_s_PwrCtrl_NoRedun_Hubon_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+                    /* STEP1が完了していれば次のSTEPに進める */
+                    u1_s_PwrCtrl_NoRedun_Hub_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
+                }
+                break;
 
-    case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
-      vd_s_PwrCtrlNoRedunWkHub();
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
+                vd_s_PwrCtrlNoRedunWkHub();
 
-      if(u2_s_PwrCtrl_NoRedun_Hubwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
-        /* STEP1,2が完了していれば正常起動を設定 */
-        u1_s_PwrCtrl_NoRedun_Hub_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-      }
-      /* 非冗長電源間ウェイトタイムをクリアしカウント開始する */
-      u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
-      break;
+                if(u2_s_PwrCtrl_NoRedun_Hubwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+                    /* STEP1,2が完了していれば正常起動を設定 */
+                    u1_s_PwrCtrl_NoRedun_Hub_OnStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                }
+                /* 非冗長電源間ウェイトタイムをクリアしカウント開始する */
+                u2_s_PwrCtrl_NoRedun_BetWait_Time = (U2)0U;
+                break;
 
-    case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
-      /* 正常起動時は何もしない */
-      break;
-    
-    default:
-      /* 異常系は未考慮 */
-      break;
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+                /* 正常起動時は何もしない */
+                break;
+
+            default:
+                /* 異常系は未考慮 */
+                break;
+        }
     }
-  }
-  else if(u1_s_PwrCtrl_NoRedun_Hub_Chk == (U1)PWRCTRL_NOREDUN_PWR_OFF){
-    /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
-    u1_s_PwrCtrl_NoRedun_Hub_OnStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
-    u2_s_PwrCtrl_NoRedun_Hubon_Time    = (U2)0U;
-    u2_s_PwrCtrl_NoRedun_Hubwk_Time    = (U2)0U;
-    switch (u1_s_PwrCtrl_NoRedun_Hub_OffStep)
-    {
-    case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
-      vd_s_PwrCtrlNoRedunWkOffHub();
+    /* OFF処理(OFF要求 かつ DSRC(HUB)以外がON実行中) */
+    else if(u1_s_PwrCtrl_NoRedun_Hub_Chk == (U1)PWRCTRL_NOREDUN_PWR_OFF){
+        /* ON側のSTEP管理RAM,タイマをクリアしてON2週目も実行できるようにする */
+        u1_s_PwrCtrl_NoRedun_Hub_OnStep    = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+        u2_s_PwrCtrl_NoRedun_Hubon_Time    = (U2)0U;
+        u2_s_PwrCtrl_NoRedun_Hubwk_Time    = (U2)0U;
+        switch (u1_s_PwrCtrl_NoRedun_Hub_OffStep)
+        {
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP1:
+                vd_s_PwrCtrlNoRedunWkOffHub();
 
-      if(u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
-        /* STEP1が完了していれば次のSTEPに進める */
-        u1_s_PwrCtrl_NoRedun_Hub_OffStep = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
-      }
-      break;
+                if(u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+                    /* STEP1が完了していれば次のSTEPに進める */
+                    u1_s_PwrCtrl_NoRedun_Hub_OffStep = (U1)PWRCTRL_COMMON_PROCESS_STEP2;
+                }
+                break;
 
-    case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
-      vd_s_PwrCtrlNoRedunPwrOffHub();
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP2:
+                vd_s_PwrCtrlNoRedunPwrOffHub();
 
-      if(u2_s_PwrCtrl_NoRedun_Huboff_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
-        /* STEP1,2が完了していれば正常終了を設定 */
-        u1_s_PwrCtrl_NoRedun_Hub_OffStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
-      }
-      break;
+                if(u2_s_PwrCtrl_NoRedun_Huboff_Time == (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN){
+                    /* STEP1,2が完了していれば正常終了を設定 */
+                    u1_s_PwrCtrl_NoRedun_Hub_OffStep = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+                }
+                break;
 
-    case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
-      /* 正常終了時は何もしない */
-      break;
-    
-    default:
-      /* 異常系は未考慮 */
-      break;
+            case (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT:
+                /* 正常終了時は何もしない */
+                break;
+
+            default:
+                /* 異常系は未考慮 */
+                break;
+        }
     }
-  }
-  else {    /* PWRCTRL_NOREDUN_PWR_NON：要求なし or u2_s_PwrCtrl_NoRedun_BetWait_Time≠FIN：非冗長電源間ウェイトタイム中 */
-    /* do nothing */
-  }
+    /* ON要求だが、他のデバイスがON実行中(ON要求 かつ DSRC(HUB)以外がON実行中) */
+    /* 要求なし(NON かつ DSRC(HUB)以外がON実行中) */
+    else {
+        /* do nothing */
+    }
 
   return;
 }
@@ -1005,7 +999,7 @@ static void vd_s_PwrCtrlNoRedunPwrOnHub( void )
 {
   /* DSRC(HUB)-PWR-ON */
   if(u2_s_PwrCtrl_NoRedun_Hubon_Time == (U2)PWRCTRL_NOREDUN_WAIT_HUB_PWRON_TIME){ 
-    vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_HUB_PWRON, MCU_DIO_HIGH);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_HUB_PWRON], MCU_DIO_HIGH);
     u2_s_PwrCtrl_NoRedun_Hubon_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
@@ -1028,7 +1022,7 @@ static void vd_s_PwrCtrlNoRedunWkHub( void )
 {
   /* DSRC(HUB)-WAKE */
   if(u2_s_PwrCtrl_NoRedun_Hubwk_Time == (U2)PWRCTRL_NOREDUN_WAIT_HUB_WAKE_TIME){ 
-    vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_MCU_PORT_HUB_WK, MCU_DIO_HIGH);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_MCU_PORT_HUB_WK], MCU_DIO_HIGH);
     u2_s_PwrCtrl_NoRedun_Hubwk_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
@@ -1051,7 +1045,7 @@ static void vd_s_PwrCtrlNoRedunWkOffHub( void )
 {
   /* DSRC(HUB)-WAKE-OFF */
   if(u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time == (U2)PWRCTRL_NOREDUN_WAIT_HUB_WAKE_OFF_TIME){ 
-    vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_MCU_PORT_HUB_WK, MCU_DIO_LOW);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_MCU_PORT_HUB_WK], MCU_DIO_LOW);
     u2_s_PwrCtrl_NoRedun_Hubwk_Off_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
@@ -1074,7 +1068,7 @@ static void vd_s_PwrCtrlNoRedunPwrOffHub( void )
 {
   /* DSRC(HUB)-PWR-OFF */
   if(u2_s_PwrCtrl_NoRedun_Huboff_Time == (U2)PWRCTRL_NOREDUN_WAIT_HUB_PWROFF_TIME){ 
-    vd_g_McuDevPwronSetPort(PWRCTRL_CFG_PRIVATE_PORT_HUB_PWRON, MCU_DIO_LOW);
+    (void)Dio_WriteChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_HUB_PWRON], MCU_DIO_LOW);
     u2_s_PwrCtrl_NoRedun_Huboff_Time = (U2)PWRCTRL_NOREDUN_WAIT_TIME_FIN;
   }
     
