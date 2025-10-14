@@ -45,6 +45,7 @@
 #include "PwrCtrl_NoRedun.h"
 #include "PwrCtrl_Sip.h"
 #include "PwrCtrl_Sys.h"
+#include "PwrCtrl_Observe.h"
 #include "PwrCtrl_Com.h"
 
 /*--------------------------------------------------------------------------*/

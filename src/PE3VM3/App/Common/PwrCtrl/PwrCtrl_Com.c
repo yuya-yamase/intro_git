@@ -19,9 +19,14 @@
 /*--------------------------------------------------------------------------*/
 /* 受信用 */
 /* DID */
+#define PWRCTRL_COM_VMRXID_VM1_STBY        (IVDSH_DID_REA_CPREQ_002)   /* VM1スタンバイ条件成立有無 */
+#define PWRCTRL_COM_VMRXID_VM2_STBY        (IVDSH_DID_REA_CPREQ_003)   /* VM2スタンバイ条件成立有無 */
+#define PWRCTRL_COM_VMRXID_VM1_FSLP        (IVDSH_DID_REA_CPREQ_044)   /* VM1強制スリープ条件成立有無 */
 #define PWRCTRL_COM_VMRXID_VM2_SOCSTS      (IVDSH_DID_REA_CPREQ_047)   /* VM2動作ステータス通知 */
 
 /* データ長(word) */
+#define PWRCTRL_COM_STBY_LEN               (1U)         /* スタンバイ条件成立有無データ長 */
+#define PWRCTRL_COM_FSLP_LEN               (1U)         /* スタンバイ条件成立有無データ長 */
 #define PWRCTRL_COM_SOCSTS_LEN             (1U)         /* 動作ステータス通知データ長 */
 
 /* SoC動作状態 */
@@ -57,11 +62,17 @@
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
+static void vd_s_PwrCtrlComRxVm1Stby( void );
+static void vd_s_PwrCtrlComRxVm2Stby( void );
+static void vd_s_PwrCtrlComRxForceSleep( void );
 static void vd_s_PwrCtrlComRxSoCSts( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
 /*--------------------------------------------------------------------------*/
+static U1 u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo;   /* VM1スタンバイ条件成立有無 */
+static U1 u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo;   /* VM2スタンバイ条件成立有無 */
+static U1 u1_s_PwrCtrl_Com_Rx_FsleepInfo;    /* 強制スリープ条件成立有無 */
 static U1 u1_s_PwrCtrl_Com_Rx_SoCSts;        /* SoC動作状態 */
 static U1 u1_s_PwrCtrl_Com_Rx_SoCResetReq;   /* SoCリセット要求 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnCount;    /* SoC起動回数カウンタ */
@@ -87,6 +98,9 @@ static U4 u4_s_PwrCtrl_Com_Tx_SoCOnTime;     /* SoC起動回数カウンタ更新時の時間 
 *****************************************************************************/
 void vd_g_PwrCtrlComBonInit( void )
 {
+    u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
+    u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
+    u1_s_PwrCtrl_Com_Rx_FsleepInfo = (U1)PWRCTRL_COM_FSLP_OFF;      /* 強制スリープ条件成立有無 */
     u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONCOUNT_INIT;   /* SoC起動回数カウンタ */
     vd_g_Rim_WriteU2((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, (U2)(u4_s_PwrCtrl_Com_Tx_SoCOnCount & PWRCTRL_COM_LOW2BMASK));
 
@@ -110,6 +124,10 @@ void vd_g_PwrCtrlComWkupInit( void )
     U1 u1_t_soctime_ret;
     U1 u1_t_soccount_ret;
     
+    u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
+    u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
+    u1_s_PwrCtrl_Com_Rx_FsleepInfo = (U1)PWRCTRL_COM_FSLP_OFF;      /* 強制スリープ条件成立有無 */
+
     /* SoC起動回数カウンタ更新時の時間 */
     u4_t_soctime_buf = (U4)PWRCTRL_COM_SOCONTIME_INIT;
     u1_t_soctime_ret = u1_g_Rim_ReadU4withStatus((U2)RIMID_U4_PWCTR_SOC_ON_TIME, &u4_t_soctime_buf);
@@ -146,10 +164,55 @@ void vd_g_PwrCtrlComWkupInit( void )
 *****************************************************************************/
 void vd_g_PwrCtrlComRxTask( void )
 {
+    /* VM1スタンバイ条件成立有無受信 */
+    vd_s_PwrCtrlComRxVm1Stby();
+
+    /* VM2スタンバイ条件成立有無受信 */
+    vd_s_PwrCtrlComRxVm2Stby();
+
+    /* 強制スリープ条件成立有無受信 */
+    vd_s_PwrCtrlComRxForceSleep();
+    
     /* 動作ステータス通知受信 */
     vd_s_PwrCtrlComRxSoCSts();
 
     return;
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlComRxGetVm1Stby
+  Description   : VM1スタンバイ条件成立有無取得処理
+  param[in/out] : none
+  return        : [Out] VM1のスタンバイ条件成立有無
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlComRxGetVm1Stby( void )
+{
+    return(u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo);
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlComRxGetVm2Stby
+  Description   : VM2スタンバイ条件成立有無取得処理
+  param[in/out] : none
+  return        : [Out] VM2のスタンバイ条件成立有無
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlComRxGetVm2Stby( void )
+{
+    return(u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo);
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlComRxGetForceSleep
+  Description   : 強制スリープ条件成立有無取得処理
+  param[in/out] : none
+  return        : [Out] 強制スリープ条件成立有無
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlComRxGetForceSleep( void )
+{
+    return(u1_s_PwrCtrl_Com_Rx_FsleepInfo);
 }
 
 /*****************************************************************************
@@ -190,6 +253,108 @@ void vd_g_PwrCtrlComTxTask( void )
 
     /* SoC起動回数カウンタ更新時の時間 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_SOCONTIME, &u4_s_PwrCtrl_Com_Tx_SoCOnTime, (U2)PWRCTRL_COM_TIME_LEN);
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlComRxVm1Stby
+  Description   : VM1スタンバイ条件成立有無受信処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlComRxVm1Stby( void )
+{
+    U4 u4_t_buf;        /* VM間通信受信データ格納バッファ */
+    U1 u1_t_vm_data;    /* VM間通信受信データ */
+    U1 u1_t_vm_ret;     /* VM間通信戻り値 */
+
+    u4_t_buf = (U4)PWRCTRL_COM_RCVBUF_CLR;
+
+    /* VM間通信で取得 */
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)PWRCTRL_COM_VMRXID_VM1_STBY, &u4_t_buf, (U2)PWRCTRL_COM_STBY_LEN);
+
+    /* 受信OK */
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA)
+    {
+        u1_t_vm_data = (U1)(u4_t_buf & (U4)PWRCTRL_COM_1BYTEMASK);
+
+        /* 有効値受信時のみ更新 */
+        if((u1_t_vm_data == (U1)PWRCTRL_COM_STBY_OK)
+        || (u1_t_vm_data == (U1)PWRCTRL_COM_STBY_NG))
+        {
+            u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = u1_t_vm_data;
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlComRxVm2Stby
+  Description   : VM2スタンバイ条件成立有無受信処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlComRxVm2Stby( void )
+{
+    U4 u4_t_buf;        /* VM間通信受信データ格納バッファ */
+    U1 u1_t_vm_data;    /* VM間通信受信データ */
+    U1 u1_t_vm_ret;     /* VM間通信戻り値 */
+
+    u4_t_buf = (U4)PWRCTRL_COM_RCVBUF_CLR;
+
+    /* VM間通信で取得 */
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)PWRCTRL_COM_VMRXID_VM2_STBY, &u4_t_buf, (U2)PWRCTRL_COM_STBY_LEN);
+
+    /* 受信OK */
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA)
+    {
+        u1_t_vm_data = (U1)(u4_t_buf & (U4)PWRCTRL_COM_1BYTEMASK);
+
+        /* 有効値受信時のみ更新 */
+        if((u1_t_vm_data == (U1)PWRCTRL_COM_STBY_OK)
+        || (u1_t_vm_data == (U1)PWRCTRL_COM_STBY_NG))
+        {
+            u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = u1_t_vm_data;
+        }
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlComRxForceSleep
+  Description   : 強制スリープ条件成立有無受信処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+static void vd_s_PwrCtrlComRxForceSleep( void )
+{
+    U4 u4_t_buf;        /* VM間通信受信データ格納バッファ */
+    U1 u1_t_vm_data;    /* VM間通信受信データ */
+    U1 u1_t_vm_ret;     /* VM間通信戻り値 */
+
+    u4_t_buf = (U4)PWRCTRL_COM_RCVBUF_CLR;
+
+    /* VM間通信で取得 */
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)PWRCTRL_COM_VMRXID_VM1_FSLP, &u4_t_buf, (U2)PWRCTRL_COM_FSLP_LEN);
+
+    /* 受信OK */
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA)
+    {
+        u1_t_vm_data = (U1)(u4_t_buf & (U4)PWRCTRL_COM_1BYTEMASK);
+
+        /* 有効値受信時のみ更新 */
+        if((u1_t_vm_data == (U1)PWRCTRL_COM_FSLP_ON)
+        || (u1_t_vm_data == (U1)PWRCTRL_COM_FSLP_OFF))
+        {
+            u1_s_PwrCtrl_Com_Rx_FsleepInfo = u1_t_vm_data;
+        }
+    }
 
     return;
 }

@@ -23,6 +23,10 @@
 #define PWRCTRL_MAIN_BUDET_REQ             (0x04U) /* BU断終了シーケンス要求                 */
 #define PWRCTRL_MAIN_FORCEDOFF_REQ         (0x05U) /* SIP電源強制OFFシーケンス要求           */
 #define PWRCTRL_MAIN_NO_REQ                (0xFFU) /* 要求無し(処理完了)                     */
+
+#define PWRCTRL_MAIN_PROHIBITSLEEP_OFF     (0x00U)  /* スリープ許可 */
+#define PWRCTRL_MAIN_PROHIBITSLEEP_ON      (0x01U)  /* スリープ禁止 */
+
 /*-------------------------------------------------------------------------------------------*/
 /* Function Prototypes                                                                       */
 /*-------------------------------------------------------------------------------------------*/
@@ -34,6 +38,8 @@ void vd_g_PwrCtrlMainTask( void );
 
 U1 u1_g_PwrCtrlMainShtdwnOk( void );
 U1 u1_g_PwrCtrlWakeUpInfo( void );
+
+void vd_g_PwrCtrlMainProhibitSleep( const U1 u1_a_ProhibitSleep );
 
 #endif /* PWRCTRL_MAIN_H */
 

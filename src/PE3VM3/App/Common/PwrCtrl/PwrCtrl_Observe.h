@@ -1,47 +1,31 @@
-/* PwrCtrl_Com                                                              */
+/* PwrCtrl_Observe                                                          */
 /****************************************************************************/
 /* Protected                                                                */
 /* Copyright DENSO CORPORATION                                              */
 /****************************************************************************/
 
 /****************************************************************************/
-/* Object Name | PwrCtrl_Com/HEADER                                         */
+/* Object Name | PwrCtrl_Observe/HEADER                                     */
 /*--------------------------------------------------------------------------*/
 /* Notes       |                                                            */
 /****************************************************************************/
-#ifndef PWRCTRL_COM_H
-#define PWRCTRL_COM_H
+#ifndef PWRCTRL_OBSERVE_H
+#define PWRCTRL_OBSERVE_H
 
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
-/* VM間通信用定義 */
-/* スタンバイ条件成立有無用 */
-#define PWRCTRL_COM_STBY_NG                 (0U)  /* スタンバイ条件非成立 */
-#define PWRCTRL_COM_STBY_OK                 (1U)  /* スタンバイ条件成立 */
-
-/* 強制スリープ条件成立有無用 */
-#define PWRCTRL_COM_FSLP_OFF                (0U)  /* 強制スリープ条件非成立 */
-#define PWRCTRL_COM_FSLP_ON                 (1U)  /* 強制スリープ条件成立 */
+#define PWRCTRL_OBSERVE_POWER_OFF  (0x00U)  /* スタンバイ要求検知 */
+#define PWRCTRL_OBSERVE_POWER_ON   (0x01U)  /* 起動検知 */
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
-/* 共通 */
-void vd_g_PwrCtrlComBonInit( void );
-void vd_g_PwrCtrlComWkupInit( void );
+void vd_g_PwrCtrlObserveInit( void );
+void vd_g_PwrCtrlObserveOnOffTriggerDetect( void );
 
-/* 受信 */
-void vd_g_PwrCtrlComRxTask( void );
-U1 u1_g_PwrCtrlComRxGetVm1Stby( void );
-U1 u1_g_PwrCtrlComRxGetVm2Stby( void );
-U1 u1_g_PwrCtrlComRxGetForceSleep( void );
-U1 u1_g_PwrCtrlComGetSoCSts( void );
-U1 u1_g_PwrCtrlComGetSoCResetReq( void );
+U1 u1_g_PwrCtrlObserveOnOffTrigger( void );
+void vd_g_PwrCtrlObserveVm3StbyInfo( const U1 u1_a_ProhibitSleep );
 
-/* 送信 */
-void vd_g_PwrCtrlComTxTask( void );
-void vd_g_PwrCtrlComTxSetSoCOnStart( void );
-
-#endif /* PWRCTRL_COM_H */
+#endif /* PWRCTRL_OBSERVE_H */
 
 /**** End of File ***********************************************************/

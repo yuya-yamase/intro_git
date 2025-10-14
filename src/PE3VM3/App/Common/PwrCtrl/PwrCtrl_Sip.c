@@ -74,7 +74,7 @@
 #define PWRCTRL_SIP_OFF_T_MM_SUSPEND_REQ_N (     5U / PWRCTRL_CFG_TASK_TIME) /* tMM_SUSPEND_REQ_N:5ms                                                */
 #define PWRCTRL_SIP_OFF_T_STR_WAKE         (     5U / PWRCTRL_CFG_TASK_TIME) /* tSTR_WAKE:5ms                                                        */
 #define PWRCTRL_SIP_OFF_T_MM_OFF_REQ_LO    (     5U / PWRCTRL_CFG_TASK_TIME) /* tMM_OFF_REQ_LO:5ms                                                   */
-#define PWRCTRL_SIP_OFF_WAIT_MM_STBY       (     5U / PWRCTRL_CFG_TASK_TIME) /* MM_STBY_N =Loチェック待機時間:5ms                                    */
+#define PWRCTRL_SIP_OFF_WAIT_MM_STBY       (100000U / PWRCTRL_CFG_TASK_TIME) /* MM_STBY_N =Loチェック待機時間:100秒                                    */
 #define PWRCTRL_SIP_OFF_WAIT_PMA_PS_HOLD   (  3000U / PWRCTRL_CFG_TASK_TIME) /* PMA_PS_HOLD =Loチェック待機時間:3秒                                  */
 #define PWRCTRL_SIP_OFF_WAIT_SOC_RESOUT_N  (   100U / PWRCTRL_CFG_TASK_TIME) /* SOC_RESOUT_N    =Loチェック待機時間:100ms                            */
 #define PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N (   100U / PWRCTRL_CFG_TASK_TIME) /* SAIL_RESOUT_N   =Loチェック待機時間:100ms                            */
@@ -1406,7 +1406,7 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
         vd_s_PwrCtrlSipRsmVB33SIPFREQ();         /* STEP2-1 */
         
         /* STEP2-1が完了していれば次のSTEPに進める */
-        if((U1)u4_s_PwrCtrl_Sip_Rsm_VB33_SIP_FREQ_Tim == (U1)PWRCTRL_SIP_TIME_INVALID){
+        if(u4_s_PwrCtrl_Sip_Rsm_VB33_SIP_FREQ_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             u1_s_PwrCtrl_Sip_Rsm_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
         }
     }
@@ -1452,7 +1452,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
     }
 
 /* MM_STBY_N =Lo? */
-    if((U1)u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP2){
+    if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP2){
         vd_s_PwrCtrlSipOffValChkMMSTBY();         /* STEP2-1 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
@@ -1476,8 +1476,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
                 u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_SOCERR;
                 /* 【todo】異常内容の保存[ID0015] */
                 /* SoC異常検知の設定 */
-                /* 暫定対応 待ち時間を5msに変更したため本ルートに遷移しても異常を残さない */
-                /* vd_g_PwrCtrlSipSoCOnError(); */
+                vd_g_PwrCtrlSipSoCOnError();
             }
         }
     }
@@ -1553,7 +1552,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
             /* STEP4-1~4-3が100ms経過しても完了してなければSTEPを完了させる */
             if((u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SOC_RESOUT_N)  ||
               (u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N) ||
-              (u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N)){
+              (u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_POFF_COMP)){
                 
                 /* 【todo】異常内容の保存[ID0017/0018/0019] */
                 /* SoC異常検知の設定 */
@@ -1578,7 +1577,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
                 /* STEP4-1~4-3が100ms経過しても完了してなければSTEPを完了させる */
                 if((u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SOC_RESOUT_N)  ||
                   (u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N) ||
-                  (u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N)){
+                  (u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_POFF_COMP)){
                 
                     /* 【todo】異常内容の保存[ID0017/0018/0019] */
                     /* SoC異常検知の設定 */
@@ -1712,7 +1711,7 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
         }
         else
         {
-            /* STEP3-1が100ms経過しても完了してなければSTEPを完了させる */
+            /* STEP3-1が5s経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_Stby_AOSS_Wait_Tim > (U4)PWRCTRL_SIP_STBY_WAIT_AOSS){
                 /* 強制OFFシーケンス(PMIC異常)要求を設定 */
                 u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_PMICERR;
