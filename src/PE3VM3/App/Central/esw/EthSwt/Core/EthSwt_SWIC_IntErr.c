@@ -193,11 +193,15 @@ static Std_ReturnType ethswt_swic_interr_errDtct (uint32 * const errFactor)
 			switch (bit[i].prc) {
 			case 1:		/* ①FIRハードリセット */
 				result = E_NOT_OK;
+				*errFactor = D_ETHSWT_SWIC_ERR_INTN;
 				break;						/* breakを追加 */
 			case 2:		/* ②FIRソフトリセット */
+				result = E_OK;
 				ethswt_swic_interr_portMacResetRequest(errFactor);
 				break;						/* breakを追加 */
 			default:	/* 処理無し */
+				result = E_OK;
+				break;						/* breakを追加 */
 			}
 			break;
 		}
@@ -244,13 +248,14 @@ static void ethswt_swic_interr_portMacResetRequest(uint32 * const errFactor)
 		, {SWIC_REG_TBL(g_regListSeqRelayOn),	0}
 		};
 	static const struct swic_reg_tbl off[]
-	=	{ {&g_regListSeqRelayOff[14],	2u}	/* P8 */
-		, {&g_regListSeqRelayOff[0],	2u}	/* P1 */
-		, {&g_regListSeqRelayOff[2],	2u}
-		, {&g_regListSeqRelayOff[4],	2u}
-		, {&g_regListSeqRelayOff[6],	2u}
-		, {&g_regListSeqRelayOff[8],	2u}
-		, {&g_regListSeqRelayOff[10],	2u}
+	=	{ {&g_regListSeqRelayOff[0],	2u}	/* P1 */
+		, {&g_regListSeqRelayOff[2],	2u}	/* P2 */
+		, {&g_regListSeqRelayOff[4],	2u}	/* P3 */
+		, {&g_regListSeqRelayOff[6],	2u}	/* P4 */
+		, {&g_regListSeqRelayOff[8],	2u}	/* P5 */
+		, {&g_regListSeqRelayOff[10],	2u}	/* P6 */
+		, {&g_regListSeqRelayOff[12],	2u}	/* P7 */
+		, {&g_regListSeqRelayOff[14],	2u}	/* P8 */
 		};
 	uint32	i;
 	uint32	val;
