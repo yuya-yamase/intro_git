@@ -304,6 +304,26 @@ void vd_g_PwrCtrlNoRedunInit( void )
 }
 
 /*****************************************************************************
+  Function      : vd_g_PwrCtrlNoRedunRestartInit
+  Description   : 再起動時初期化関数
+  param[in/out] : none
+  return        : none
+  Note          : SYS電源初期化時に初期化する
+*****************************************************************************/
+void vd_g_PwrCtrlNoRedunRestartInit( void )
+{
+    /* SYS系デバイス終了状態 */
+    u2_g_PwrCtrl_OffSts               = (U2)PWROFF_CONP_BIT;
+    u2_s_OffTime_XMTuner_Pmic         = (U2)0U;
+#ifdef SYS_PWR_ANT_XM_SHDN
+    u2_s_OffTime_XMTuner_XmShdn       = (U2)0U;
+#endif
+    Mcu_OffStep_GNSS                  = (uint8)MCU_STEP_GNSS_OVERALL_1;
+    Mcu_OffTime_GNSS                  = (uint16)0U;
+    Mcu_OffCnt_GNSS                   = (uint8)0U;
+}
+
+/*****************************************************************************
   Function      : vd_g_PwrCtrlNoRedunMainFunction
   Description   : メインタスク
   param[in/out] : none

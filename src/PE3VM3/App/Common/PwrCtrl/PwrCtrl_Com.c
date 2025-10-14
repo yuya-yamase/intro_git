@@ -35,10 +35,14 @@
 
 /* 送信用 */
 /* DID */
+#define PWRCTRL_COM_VMTXID_VM2_PWRON       (IVDSH_DID_WRI_CPREQ_045)   /* SIP電源再起動通知 */
+#define PWRCTRL_COM_VMTXID_VM2_PWRERR      (IVDSH_DID_WRI_CPREQ_005)   /* SIP異常検知通知 */
 #define PWRCTRL_COM_VMTXID_VM2_SOCONCOUNT  (IVDSH_DID_WRI_CPREQ_048)   /* SoC起動回数カウンタ */
 #define PWRCTRL_COM_VMTXID_VM2_SOCONTIME   (IVDSH_DID_WRI_CPREQ_049)   /* Soc起動回数カウンタ更新時間 */
 
 /* データ長(word) */
+#define PWRCTRL_COM_PWRON_LEN              (1U)         /* SIP電源再起動通知データ長 */
+#define PWRCTRL_COM_PWRERR_LEN             (1U)         /* SIP異常検知通知データ長 */
 #define PWRCTRL_COM_COUNT_LEN              (1U)         /* データ長:1word */
 #define PWRCTRL_COM_TIME_LEN               (1U)         /* データ長:1word */
 
@@ -75,6 +79,8 @@ static U1 u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo;   /* VM2スタンバイ条件成立有無 */
 static U1 u1_s_PwrCtrl_Com_Rx_FsleepInfo;    /* 強制スリープ条件成立有無 */
 static U1 u1_s_PwrCtrl_Com_Rx_SoCSts;        /* SoC動作状態 */
 static U1 u1_s_PwrCtrl_Com_Rx_SoCResetReq;   /* SoCリセット要求 */
+static U4 u4_s_PwrCtrl_Com_Tx_PwrOn;         /* SIP電源再起動通知 */
+static U4 u4_s_PwrCtrl_Com_Tx_PwrErr;        /* SIP異常検知通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnCount;    /* SoC起動回数カウンタ */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnTime;     /* SoC起動回数カウンタ更新時の時間 */
 
@@ -101,6 +107,8 @@ void vd_g_PwrCtrlComBonInit( void )
     u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_FsleepInfo = (U1)PWRCTRL_COM_FSLP_OFF;      /* 強制スリープ条件成立有無 */
+    u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
+    u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
     u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONCOUNT_INIT;   /* SoC起動回数カウンタ */
     vd_g_Rim_WriteU2((U2)RIMID_U2_PWCTR_SOC_ON_COUNT, (U2)(u4_s_PwrCtrl_Com_Tx_SoCOnCount & PWRCTRL_COM_LOW2BMASK));
 
@@ -127,6 +135,8 @@ void vd_g_PwrCtrlComWkupInit( void )
     u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_FsleepInfo = (U1)PWRCTRL_COM_FSLP_OFF;      /* 強制スリープ条件成立有無 */
+    u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
+    u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
 
     /* SoC起動回数カウンタ更新時の時間 */
     u4_t_soctime_buf = (U4)PWRCTRL_COM_SOCONTIME_INIT;
@@ -248,11 +258,69 @@ U1 u1_g_PwrCtrlComGetSoCResetReq( void )
 *****************************************************************************/
 void vd_g_PwrCtrlComTxTask( void )
 {
+    /* SIP電源再起動通知 */
+    vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_PWRON, &u4_s_PwrCtrl_Com_Tx_PwrOn, (U2)PWRCTRL_COM_PWRON_LEN);
+
+    /* SIP異常検知通知 */
+    vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_PWRERR, &u4_s_PwrCtrl_Com_Tx_PwrErr, (U2)PWRCTRL_COM_PWRERR_LEN);
+
     /* SoC起動回数カウンタ */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_SOCONCOUNT, &u4_s_PwrCtrl_Com_Tx_SoCOnCount, (U2)PWRCTRL_COM_COUNT_LEN);
 
     /* SoC起動回数カウンタ更新時の時間 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_SOCONTIME, &u4_s_PwrCtrl_Com_Tx_SoCOnTime, (U2)PWRCTRL_COM_TIME_LEN);
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlComTxClr
+  Description   : VM間通信送信データクリア処理(前回値を送信しないデータのクリア)
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComTxClr( void )
+{
+    /* SIP電源再起動通知 */
+    u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;
+
+    /* SIP異常検知通知 */
+    u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlComTxSetPwrOn
+  Description   : SIP電源再起動通知設定処理
+  param[in/out] : [In] const U1 u1_a_data SIP電源再起動通知データ
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComTxSetPwrOn( const U1 u1_a_data )
+{
+    if(u4_s_PwrCtrl_Com_Tx_PwrOn == (U4)PWRCTRL_COM_PWRON_NOINFO)
+    {
+        u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)u1_a_data;
+    }
+
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlComTxSetPwrErr
+  Description   : SIP異常検知通知設定処理
+  param[in/out] : [In] const U1 u1_a_data SIP異常検知通知データ
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComTxSetPwrErr( const U1 u1_a_data )
+{
+    if(u4_s_PwrCtrl_Com_Tx_PwrErr == (U4)PWRCTRL_COM_PWRERR_NOERR)
+    {
+        u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)u1_a_data;
+    }
 
     return;
 }

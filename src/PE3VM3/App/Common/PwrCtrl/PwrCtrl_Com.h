@@ -23,6 +23,17 @@
 /* 強制スリープ条件成立有無用 */
 #define PWRCTRL_COM_FSLP_OFF                (0U)  /* 強制スリープ条件非成立 */
 #define PWRCTRL_COM_FSLP_ON                 (1U)  /* 強制スリープ条件成立 */
+/* SIP電源再起動通知用 */
+#define PWRCTRL_COM_PWRON_NOINFO            (0U)  /* SIP電源再起動なし */
+#define PWRCTRL_COM_PWRON_CANCEL_START      (1U)  /* スタンバイ処理中断開始(スタンバイ処理中の起動トリガ時) */
+#define PWRCTRL_COM_PWRON_CANCEL_TO_ON      (2U)  /* 電源再起動開始(スタンバイ処理中の起動トリガ時) */
+#define PWRCTRL_COM_PWRON_FRCOFF_TO_ON      (3U)  /* 電源再起動開始(SIP電源強制OFF) */
+
+/* SIP異常検知通知用 */
+#define PWRCTRL_COM_PWRERR_NOERR            (0U)  /* 異常検知なし */
+#define PWRCTRL_COM_PWRERR_FOFF_SOCERR      (1U)  /* 異常検知(SIP電源強制OFF:SOC異常系) */
+#define PWRCTRL_COM_PWRERR_FOFF_PMICERR     (2U)  /* 異常検知(SIP電源強制OFF:PMIC異常系/SOCPMICリセット) */
+#define PWRCTRL_COM_PWRERR_FOFF_DDERR       (3U)  /* 異常検知(SIP電源強制OFF:PMIC異常系/DDコンOFF) */
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
@@ -40,6 +51,9 @@ U1 u1_g_PwrCtrlComGetSoCResetReq( void );
 
 /* 送信 */
 void vd_g_PwrCtrlComTxTask( void );
+void vd_g_PwrCtrlComTxClr( void );
+void vd_g_PwrCtrlComTxSetPwrOn( const U1 u1_a_data );
+void vd_g_PwrCtrlComTxSetPwrErr( const U1 u1_a_data );
 void vd_g_PwrCtrlComTxSetSoCOnStart( void );
 
 #endif /* PWRCTRL_COM_H */

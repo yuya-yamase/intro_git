@@ -112,6 +112,7 @@
 /*  Function Prototypes                                                     */
 /*--------------------------------------------------------------------------*/
 void vd_g_PwrCtrlNoRedunInit( void );
+void vd_g_PwrCtrlNoRedunRestartInit( void );
 void vd_g_PwrCtrlNoRedunMainFunction( void );
 
 void vd_g_PwrCtrlNoRedunPwrOnStart( void );       /* îÒèÁí∑ìdåπONóvãÅ */

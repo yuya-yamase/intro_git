@@ -391,6 +391,36 @@ U1 u1_g_PwrCtrlSipFOffGetSts( void )
 }
 
 /*****************************************************************************
+  Function      : u1_g_PwrCtrlSipStbyStepGetSts
+  Description   : SIPスタンバイ/SIP電源OFFシーケンス現在STEP通知関数
+  param[in/out] : [in] u1_a_stby: スタンバイシーケンス/SIP電源OFFシーケンス判定
+  return        : 現在STEP数
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlSipStbyStepGetSts( const U1 u1_a_stby )
+{
+    U1 u1_t_ret;
+    
+    /* スタンバイシーケンスの現在STEP要求の場合 */
+    if(u1_a_stby == (U1)PWRCTRL_SIP_STBY_STEP_REQ){
+        /* 戻り値にスタンバイシーケンスのSTEP数を設定 */
+        u1_t_ret = u1_s_PwrCtrl_Sip_Stby_Step;
+    }
+    
+    else if(u1_a_stby == (U1)PWRCTRL_SIP_SIPOFF_STEP_REQ){
+        /* 戻り値にSIP電源OFFシーケンスのSTEP数を設定 */
+        u1_t_ret = u1_s_PwrCtrl_Sip_Off_Step;
+    }
+    
+    else{
+        /* 範囲外の場合は異常値としてCMPLTを設定 */
+        u1_t_ret = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    }
+    
+    return(u1_t_ret);
+}
+
+/*****************************************************************************
   Function      : vd_g_PwrCtrlSipEthReqJudge
   Description   : EtherSW制御要求処理
   param[in/out] : none
@@ -961,6 +991,34 @@ void vd_g_PwrCtrlSipForcedOffSTEP4Req( void )
     u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
     
     vd_s_PwrCtrlSipForcedOffInitReq();
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipStandbyCancelSTEP1Req
+  Description   : 5-6-1.スタンバイ処理中の起動トリガ時シーケンス STEP1開始要求
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipStandbyCancelSTEP1Req( void )
+{
+    /* 起動ステップの初期化 */
+    u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+
+    vd_s_PwrCtrlSipForcedOffInitReq();
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipSetDDConvOff
+  Description   : SIP入力DDコン電源OFF処理実施/未実施設定
+  param[in/out] : [in] u1_a_ddconv: SIP入力DDコン電源OFF処理実施有無
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipSetDDConvOff( const U1 u1_a_ddconv )
+{
+    /* SIP入力DDコン電源OFF処理未実施状態を設定 */
+    u1_s_PwrCtrl_Sip_DDConvFlag     = u1_a_ddconv;
 }
 
 /*****************************************************************************
@@ -1851,7 +1909,7 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
           (u4_s_PwrCtrl_Sip_ForcedOff_STR_WAKE_Tim           == (U4)PWRCTRL_SIP_TIME_INVALID) &&
           (u4_s_PwrCtrl_Sip_ForcedOff_MM_OFF_REQ_Tim         == (U4)PWRCTRL_SIP_TIME_INVALID)){
             /* DDコンに対するOFF区間確保時間の待機 */
-            if(u4_s_PwrCtrl_Sip_ForcedOff_DDConvOFFWait_Tim > (U4)PWRCTRL_SIP_FOFF_T_DDCONV_OFF_WAIT){
+            if(u4_s_PwrCtrl_Sip_ForcedOff_DDConvOFFWait_Tim >= (U4)PWRCTRL_SIP_FOFF_T_DDCONV_OFF_WAIT){
                /* 待機時間が満了したら次のSTEPに進める */
                u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                u1_s_PwrCtrl_Sip_DDConvFlag     = (U1)PWRCTRL_SIP_FOFF_DDCONV_ON;
