@@ -23,11 +23,13 @@
 #define PWRCTRL_COM_VMRXID_VM2_STBY        (IVDSH_DID_REA_CPREQ_003)   /* VM2スタンバイ条件成立有無 */
 #define PWRCTRL_COM_VMRXID_VM1_FSLP        (IVDSH_DID_REA_CPREQ_044)   /* VM1強制スリープ条件成立有無 */
 #define PWRCTRL_COM_VMRXID_VM2_SOCSTS      (IVDSH_DID_REA_CPREQ_047)   /* VM2動作ステータス通知 */
+#define PWRCTRL_COM_VMRXID_VM2_STR         (IVDSH_DID_REA_CPREQ_046)   /* STRモード状態通知 */
 
 /* データ長(word) */
 #define PWRCTRL_COM_STBY_LEN               (1U)         /* スタンバイ条件成立有無データ長 */
 #define PWRCTRL_COM_FSLP_LEN               (1U)         /* スタンバイ条件成立有無データ長 */
 #define PWRCTRL_COM_SOCSTS_LEN             (1U)         /* 動作ステータス通知データ長 */
+#define PWRCTRL_COM_STR_LEN                (1U)         /* STRモード状態通知データ長 */
 
 /* SoC動作状態 */
 #define PWRCTRL_COM_SOCSTS_COMP            (0x04U)      /* SoC動作状態:SoC起動完了 */
@@ -70,6 +72,7 @@ static void vd_s_PwrCtrlComRxVm1Stby( void );
 static void vd_s_PwrCtrlComRxVm2Stby( void );
 static void vd_s_PwrCtrlComRxForceSleep( void );
 static void vd_s_PwrCtrlComRxSoCSts( void );
+static void vd_s_PwrCtrlComRxSTR( void );
 
 /*--------------------------------------------------------------------------*/
 /* Data                                                                     */
@@ -79,6 +82,7 @@ static U1 u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo;   /* VM2スタンバイ条件成立有無 */
 static U1 u1_s_PwrCtrl_Com_Rx_FsleepInfo;    /* 強制スリープ条件成立有無 */
 static U1 u1_s_PwrCtrl_Com_Rx_SoCSts;        /* SoC動作状態 */
 static U1 u1_s_PwrCtrl_Com_Rx_SoCResetReq;   /* SoCリセット要求 */
+static U1 u1_s_PwrCtrl_Com_Rx_STRModeInfo;   /* STRモード状態 */
 static U4 u4_s_PwrCtrl_Com_Tx_PwrOn;         /* SIP電源再起動通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_PwrErr;        /* SIP異常検知通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnCount;    /* SoC起動回数カウンタ */
@@ -107,6 +111,7 @@ void vd_g_PwrCtrlComBonInit( void )
     u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_FsleepInfo = (U1)PWRCTRL_COM_FSLP_OFF;      /* 強制スリープ条件成立有無 */
+    u1_s_PwrCtrl_Com_Rx_STRModeInfo = (U1)PWRCTRL_COM_STR_OFF;      /* STRモード状態 */
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
     u4_s_PwrCtrl_Com_Tx_SoCOnCount = (U4)PWRCTRL_COM_SOCONCOUNT_INIT;   /* SoC起動回数カウンタ */
@@ -135,6 +140,7 @@ void vd_g_PwrCtrlComWkupInit( void )
     u1_s_PwrCtrl_Com_Rx_Vm1StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM1スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_Vm2StbyInfo = (U1)PWRCTRL_COM_STBY_OK;      /* VM2スタンバイ条件成立有無 */
     u1_s_PwrCtrl_Com_Rx_FsleepInfo = (U1)PWRCTRL_COM_FSLP_OFF;      /* 強制スリープ条件成立有無 */
+    u1_s_PwrCtrl_Com_Rx_STRModeInfo = (U1)PWRCTRL_COM_STR_OFF;      /* STRモード状態 */
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
 
@@ -185,6 +191,9 @@ void vd_g_PwrCtrlComRxTask( void )
     
     /* 動作ステータス通知受信 */
     vd_s_PwrCtrlComRxSoCSts();
+
+    /* STRモード状態受信 */
+    vd_s_PwrCtrlComRxSTR();
 
     return;
 }
@@ -247,6 +256,18 @@ U1 u1_g_PwrCtrlComGetSoCSts( void )
 U1 u1_g_PwrCtrlComGetSoCResetReq( void )
 {
     return(u1_s_PwrCtrl_Com_Rx_SoCResetReq);
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlComGetSTRMode
+  Description   : STRモード取得処理
+  param[in/out] : none
+  return        : STRモード
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlComGetSTRMode( void )
+{
+    return(u1_s_PwrCtrl_Com_Rx_STRModeInfo);
 }
 
 /*****************************************************************************
@@ -455,6 +476,39 @@ static void vd_s_PwrCtrlComRxSoCSts( void )
         /* WAKEUP-STAT1更新要求 */
         vd_g_PwrCtrlSipSoCOnComp();
     }
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_s_PwrCtrlComRxSTR
+  Description   : STRモード状態通知データ設定処理
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_s_PwrCtrlComRxSTR( void )
+{
+    U4 u4_t_buf;        /* VM間通信受信データ格納バッファ */
+    U1 u1_t_vm_data;    /* VM間通信受信データ */
+    U1 u1_t_vm_ret;     /* VM間通信戻り値 */
+    
+    u4_t_buf = (U4)PWRCTRL_COM_RCVBUF_CLR;
+    
+    /* VM間通信で取得 */
+    u1_t_vm_ret = u1_g_iVDshReabyDid((U2)PWRCTRL_COM_VMRXID_VM2_STR, &u4_t_buf, (U2)PWRCTRL_COM_STR_LEN);
+
+    /* 受信OK */
+    if(u1_t_vm_ret != (U1)IVDSH_NO_REA){
+        u1_t_vm_data = (U1)(u4_t_buf & (U4)PWRCTRL_COM_1BYTEMASK);
+
+        /* 有効値受信時のみ更新 */
+        if((u1_t_vm_data == (U1)PWRCTRL_COM_STR_ON)
+        || (u1_t_vm_data == (U1)PWRCTRL_COM_STR_OFF))
+        {
+            u1_s_PwrCtrl_Com_Rx_STRModeInfo = u1_t_vm_data;
+        }
+    }
+    
     return;
 }
 

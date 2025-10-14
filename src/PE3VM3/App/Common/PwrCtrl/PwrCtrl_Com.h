@@ -23,6 +23,11 @@
 /* 強制スリープ条件成立有無用 */
 #define PWRCTRL_COM_FSLP_OFF                (0U)  /* 強制スリープ条件非成立 */
 #define PWRCTRL_COM_FSLP_ON                 (1U)  /* 強制スリープ条件成立 */
+
+/* STRモード状態 */
+#define PWRCTRL_COM_STR_OFF                 (0U)  /* STRモードOFF */
+#define PWRCTRL_COM_STR_ON                  (1U)  /* STRモードON  */
+
 /* SIP電源再起動通知用 */
 #define PWRCTRL_COM_PWRON_NOINFO            (0U)  /* SIP電源再起動なし */
 #define PWRCTRL_COM_PWRON_CANCEL_START      (1U)  /* スタンバイ処理中断開始(スタンバイ処理中の起動トリガ時) */
@@ -48,6 +53,7 @@ U1 u1_g_PwrCtrlComRxGetVm2Stby( void );
 U1 u1_g_PwrCtrlComRxGetForceSleep( void );
 U1 u1_g_PwrCtrlComGetSoCSts( void );
 U1 u1_g_PwrCtrlComGetSoCResetReq( void );
+U1 u1_g_PwrCtrlComGetSTRMode( void );
 
 /* 送信 */
 void vd_g_PwrCtrlComTxTask( void );

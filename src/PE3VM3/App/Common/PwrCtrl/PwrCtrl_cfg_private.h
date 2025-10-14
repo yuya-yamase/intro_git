@@ -127,6 +127,8 @@
 #define     PWRCTRL_CFG_PRIVATE_BOOT_JUDGECOUNT                  (3U) /* BOOTの論理確定回数(3回) */
 #define     PWRCTRL_CFG_PRIVATE_BU_DET_JUDGECOUNT                (1U) /* BU_DETの論理確定回数(1回) */
 #define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_JUDGECOUNT          (3U) /* DBG_FAIL_OFFの論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR1_JUDGECOUNT             (3U) /* SAIL-ERR1の論理確定回数(3回) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR2_JUDGECOUNT             (3U) /* SAIL-ERR2の論理確定回数(3回) */
 #define     PWRCTRL_CFG_PRIVATE_AOSS_SLEEP_ENTRY_EXIT_WAITTIME   (0U) /* AOSS_SLEEP_ENTRY_EXITのウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_POFF_COMPLETE_N_WAITTIME         (0U) /* POFF_COMPLETE_Nのウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_PMA_PS_HOLD_WAITTIME             (0U) /* PMA_PS_HOLDのウェイト時間(0ms) */
@@ -136,6 +138,8 @@
 #define     PWRCTRL_CFG_PRIVATE_BOOT_WAITTIME                    (0U) /* BOOTのウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_BU_DET_WAITTIME                  (0U) /* BU_DETのウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_WAITTIME            (0U) /* DBG_FAIL_OFFのウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR1_WAITTIME               (0U) /* SAIL-ERR1のウェイト時間(0ms) */
+#define     PWRCTRL_CFG_PRIVATE_SAIL_ERR2_WAITTIME               (0U) /* SAIL-ERR2のウェイト時間(0ms) */
 #define     PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF                     (0U) /* 開発期間のみの実装：DBG_FAIL_OFF */
 
 typedef enum {
@@ -148,6 +152,8 @@ typedef enum {
  PWRCTRL_CFG_PRIVATE_KIND_BOOT,                 /* BOOT */
  PWRCTRL_CFG_PRIVATE_KIND_BU_DET,               /* BU_DET */
  PWRCTRL_CFG_PRIVATE_KIND_DBG_FAIL_OFF,         /* DBG_FAIL_OFF */
+ PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR1,            /* SAIL-ERR1 */
+ PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR2,            /* SAIL-ERR2 */
  PWRCTRL_CFG_PRIVATE_KIND_NUM                   /* 信号種別数 */
 } EN_PWRCTRL_CFG_PRIVATE_KIND;
 

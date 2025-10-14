@@ -35,6 +35,7 @@
 #define PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY (0x02U)  /* MM_STBY_N変化待ち */
 #define PWRCTRL_MAIN_SIP_STS_CHK_AOSS   (0x03U)  /* AOSS_SLEEP_ENTRY_EXIT変化待ち */
 #define PWRCTRL_MAIN_SIP_STS_CHK_WAKE   (0x04U)  /* 起動要因判定中 */
+#define PWRCTRL_MAIN_SIP_STS_CHK_SAILERR (0x05U) /* SAILERR判定中 */
 #define PWRCTRL_MAIN_SIP_STS_COMP       (0xFFU)  /* 完了 */
 
 /* SIP強制電源OFF状態 */
@@ -58,7 +59,8 @@
 
 #define PWRCTRL_MAIN_TIME_INIT          (0U)
 #define PWRCTRL_MAIN_TIME_MMSTBY        (100000U / PWRCTRL_CFG_TASK_TIME)
-#define PWRCTRL_MAIN_TIME_AOSS          (200U / PWRCTRL_CFG_TASK_TIME)
+#define PWRCTRL_MAIN_TIME_AOSS          (5000U / PWRCTRL_CFG_TASK_TIME)
+#define PWRCTRL_MAIN_TIME_SAILERR       (5000U / PWRCTRL_CFG_TASK_TIME)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -99,6 +101,7 @@ static U1  u1_s_PwrCtrl_Main_StbyJdgFlag;
 
 static U4  u4_s_PwrCtrl_Main_MmStby;
 static U4  u4_s_PwrCtrl_Main_Aoss;
+static U4  u4_s_PwrCtrl_Main_SailErr;
 
 #ifdef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
 U1 u1_g_PwrCtrl_Main_DbgFailOffFlag; /* DBG-FAIL-OFF状態 */
@@ -186,6 +189,8 @@ void vd_g_PwrCtrlMainBonReq( void )
     /* +B-ONシーケンス実施要求 */
     u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_BON_REQ;
     u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源：実行中 */
+    u4_s_PwrCtrl_Main_Aoss      = (U4)PWRCTRL_MAIN_TIME_INIT;
+    u4_s_PwrCtrl_Main_SailErr   = (U4)PWRCTRL_MAIN_TIME_INIT;
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
 
     /* 監視処理初期化 */
@@ -270,6 +275,7 @@ void vd_g_PwrCtrlMainWakeupReq( void )
     u1_s_PwrCtrl_Main_Sts       = (U1)PWRCTRL_MAIN_WAKEUP_REQ;
     u1_s_PwrCtrl_Main_SysPwrSts = (U1)PWRCTRL_MAIN_SYS_STS_INPRC;    /* SYS電源：実行中 */
     u4_s_PwrCtrl_Main_Aoss      = (U4)PWRCTRL_MAIN_TIME_INIT;
+    u4_s_PwrCtrl_Main_SailErr   = (U4)PWRCTRL_MAIN_TIME_INIT;
     u4_s_PwrCtrl_Main_MmStby    = (U4)PWRCTRL_MAIN_TIME_INIT;
 
     /* 監視処理初期化 */
@@ -542,6 +548,7 @@ void vd_g_PwrCtrlMainTask( void )
 static void vd_s_PwrCtrlMainOnOffJudge( void )
 {
     U1 u1_t_req;
+    U1 u1_t_str;
 
     if ( u1_s_PwrCtrl_Main_Sts == (U1)PWRCTRL_MAIN_NO_REQ )
     {
@@ -552,8 +559,17 @@ static void vd_s_PwrCtrlMainOnOffJudge( void )
             u1_t_req = u1_g_PwrCtrlObserveOnOffTrigger();
             if(u1_t_req == (U1)PWRCTRL_OBSERVE_POWER_OFF)
             {
-                /* SIP電源OFF&MCUスタンバイシーケンス要求 */
-                vd_s_PwrCtrlMainSipOffMcuStandbyReq();
+                u1_t_str = u1_g_PwrCtrlComGetSTRMode();
+                
+                if(u1_t_str == (U1)PWRCTRL_COM_STR_ON){
+                    /* スタンバイシーケンス要求 */
+                    vd_g_PwrCtrlMainStandbyReq();
+                }
+                
+                else{
+                    /* SIP電源OFF&MCUスタンバイシーケンス要求 */
+                    vd_s_PwrCtrlMainSipOffMcuStandbyReq();
+                }
             }
         }
         /* 起動検知 */
@@ -733,6 +749,9 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
     U1 u1_t_sipon_seq;                                                                                     /* SIPレジューム起動シーケンス状態問い合わせ結果 */
     U1 u1_t_read_lv;                                                                                       /* MCU端子状態取得結果 */
     U1 u1_t_foff_req;                                                                                      /* SIP電源強制OFFシーケンス要求確認結果 */
+    U1 u1_t_str;                                                                                           /* STRモード状態 */
+    U1 u1_t_sail_err1;                                                                                     /* SAIL-ERR[1]状態 */
+    U1 u1_t_sail_err2;                                                                                     /* SAIL-ERR[2]状態 */
 
     u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_INIT;
 /* /BU-DET =Hi? */
@@ -771,9 +790,15 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
                 vd_g_PwrCtrlSipRsmReq();                                                                  /* SIP電源ON要求(WakeUp) */
             }
             else{
-               /* 【todo】異常内容保存[ID0009]※STRがON時のみ記録 */
-               /* +B-ONシーケンスのSIP通常起動から開始 */
-               vd_s_PwrCtrlMainBonDDconvOnReq();
+                /* STRモード状態取得 */
+                u1_t_str = u1_g_PwrCtrlComGetSTRMode();
+                if(u1_t_str == (U1)PWRCTRL_COM_STR_ON){
+                    /* 【todo】異常内容保存[ID0009]※STRがON時のみ記録 */
+                    /* SoC異常検知を通知 */
+                    vd_g_PwrCtrlSipSoCOnError();
+                }
+                /* +B-ONシーケンスのSIP通常起動から開始 */
+                vd_s_PwrCtrlMainBonDDconvOnReq();
                
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
                 u1_s_pwrctrl_common_err_dbg_state = (U1)PWRCTRL_COMMON_ERR_WAKE_AOSS_HI; /* TP */
@@ -783,7 +808,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
     }
 
 /* SIP電源定期処理 */
-    if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC)
+    if((u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_INPRC) &&
+       (u1_s_PwrCtrl_Main_Sts == (U1)PWRCTRL_MAIN_WAKEUP_REQ))
     {
         vd_g_PwrCtrlSipMainFunc();                                                                        /* SIP電源 定期処理 */
         u1_t_sipon_seq = u1_g_PwrCtrlSipGetSts();                                                         /* SIP電源シーケンス状態問い合わせ */
@@ -804,8 +830,8 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
            (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW))
 #endif
         {
-            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY;                            /* SIP電源状態：AOSS_SLEEP_ENTRY_EXIT=Low判定中→MM_STBY_N=Hi判定中 */
-
+            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_CHK_SAILERR;                           /* SIP電源状態：AOSS_SLEEP_ENTRY_EXIT=Low判定中→SAIL-ERR端子判定 */
+            
             /* 【todo】5-9. PM_PSAIL_ERR_N監視処理開始 */
             /* 【todo】5-10. PMA_PS_HOLD監視処理開始 */
             /* 【todo】4.0版参照 5-12-1. PGOOD_ASIL_VB監視処理開始 4.0版参照 */
@@ -818,7 +844,7 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
             {
                 /* 強制OFFシーケンス(PMIC異常)要求 */
                 u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_PMICERR;
-                /* 【todo】異常内容の保存 */
+                /* 【todo】異常内容の保存[ID0010] */
                 /* SoC異常検知を通知 */
                 vd_g_PwrCtrlSipSoCOnError();
             }
@@ -833,9 +859,38 @@ static void vd_s_PwrCtrlMainWakeUpSeq( void )
 #endif
     }
     
-    /* 【todo】4.0版参照 SAIL-ERR[2:1] == 01かどうかのチェック 4.0版参照 */
-    /* 【todo】異常内容の保存[ID0011] */
-    
+/* SAIL-ERR[2:1] ='01'? */
+    if(u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_SAILERR){
+        u1_t_sail_err1 = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR1);   /* SAIL-ERR1端子の状態を取得 */
+        u1_t_sail_err2 = u1_g_PwrCtrl_PinMonitor_GetPinInfo(PWRCTRL_CFG_PRIVATE_KIND_SAIL_ERR2);   /* SAIL-ERR2端子の状態を取得 */
+        
+#ifndef PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF
+        if((u1_t_sail_err1 == (U1)MCU_DIO_HIGH) &&
+           (u1_t_sail_err2 == (U1)MCU_DIO_LOW))
+#else
+        if((u1_t_sail_err1 == (U1)MCU_DIO_HIGH) &&
+           (u1_t_sail_err2 == (U1)MCU_DIO_LOW) ||
+           (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW))
+#endif
+           {
+            /* 【todo】4.0版参照 5-8. SAIL-ERR監視開始 4.0版参照 */
+            u1_s_PwrCtrl_Main_SipPwrSts = (U1)PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY;                      /* SIP電源状態：SAIL-ERR端子判定中→MM_STBY_N=Hi判定中 */
+           }
+        
+        else{
+            /* SAIL-ERR[2:1] ='01'チェック開始してから5秒経過しても完了しない場合 */
+            if(u4_s_PwrCtrl_Main_SailErr >= (U4)PWRCTRL_MAIN_TIME_SAILERR){
+                /* 強制OFFシーケンス(SoC異常)要求 */
+                u1_t_foff_req = (U1)PWRCTRL_MAIN_FORCEDOFF_STS_SOCERR;
+                /* 【todo】異常内容の保存[ID0011] */
+                /* SoC異常検知を通知 */
+                vd_g_PwrCtrlSipSoCOnError();
+            }
+            else{
+                u4_s_PwrCtrl_Main_SailErr++;
+            }
+        }
+    }
 
 /* MM_STBY_N =Hi?(SOCメインドメインのQNX起動完了の確認) */
     if (u1_s_PwrCtrl_Main_SipPwrSts == (U1)PWRCTRL_MAIN_SIP_STS_CHK_MMSTBY)
