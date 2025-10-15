@@ -63,9 +63,7 @@ U1      u1_g_VdfEsoRx_SW_AC100V_TESTMODE(void)
 
     u1_t_rx     = (U1)0U;
     u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACINVSSW, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
 
     if(u1_t_rx != (U1)0U){
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
@@ -88,9 +86,7 @@ U1      u1_g_VdfEsoRx_SW_ACINV_1500W(void)
 
     u1_t_rx = (U1)0U;
     u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACINVSSW, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
 
     if (u1_t_rx == u1_s_VDF_ESO_SW_1500W_ACT) {
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
@@ -113,9 +109,7 @@ U1      u1_g_VdfEsoRx_SW_ACINV_2400W(void)
 
     u1_t_rx = (U1)0U;
     u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACINVSSW, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
 
     if (u1_t_rx == u1_s_VDF_ESO_SW_2400W_ACT) {
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;
@@ -138,9 +132,7 @@ U1      u1_g_VdfEsoRx_SW_ACINV_7200W(void)
 
     u1_t_rx = (U1)0U;
     u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_INA;
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_ACINVSSW, &u1_t_rx);
-#endif   /* BEV Rebase provisionally */
 
     if (u1_t_rx == u1_s_VDF_ESO_SW_7200W_ACT) {
         u1_t_ava_rx = (U1)VDF_ESO_AVA_RX_ACT;

@@ -69,11 +69,9 @@ U1      u1_g_VdfEsoRx_INDSPDALT(void)
     u1_t_code2_rx = (U1)0U;
     u1_t_code3_rx = (U1)0U;
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE1, &u1_t_code1_rx);
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE2, &u1_t_code2_rx);
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE3, &u1_t_code3_rx);
-#endif   /* BEV Rebase provisionally */
     if((u1_t_code1_rx == u1_s_VDF_ESO_RX_C_CODE1_INDIA) &&
        (u1_t_code2_rx == u1_s_VDF_ESO_RX_C_CODE2_INDIA) &&
        (u1_t_code3_rx == u1_s_VDF_ESO_RX_C_CODE3_INDIA)){

@@ -313,6 +313,7 @@ U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 /*  19PFv3-7   7/10/2024 YR       Added HCS for 19pfv3                                                                               */
 /*  19PFv3-8  11/ 7/2024 PG       Added vardef_sgauge for 19PFv3 R2.2                                                                */
 /*  19PFv3-9  11/18/2024 SH       Added NE_MET and HV_NE for 19pfv3                                                                  */
+/*  BEV-1     10/15/2025 SN       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */
 /*  * SF     = Seiya Fukutome, Denso Techno                                                                                          */
@@ -330,5 +331,6 @@ U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 /*  * YR     = Yhana Regalario, DTPH                                                                                                 */
 /*  * PG     = Patrick Garcia, DTPH                                                                                                  */
 /*  * SH     = Sae Hirose, Denso Techno                                                                                              */
+/*  * SN     = Shimon Nambu, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

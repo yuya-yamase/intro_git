@@ -2379,6 +2379,7 @@ U1      u1_g_VardefEsOptCfgEthRxEvcnt(const U2 u2_a_MSG_ID)
 /*  19PFv3-22 11/19/2024 KH       Change config for 19PFv3 R2.2(Delete SW_ALTOPT_BOF, SW_ALTOPT_VBOF)                                */
 /*  19PFv3-23 12/09/2024 SN       Change config for 19PFv3 R2.2(Add MM_MAP)                                                          */
 /*  19PFv3-24 12/10/2024 PG       Change config for 19PFv3 R3.0(Add SYS_ADASCS_SPDLIM_RSA)                                           */
+/*  BEV-1     10/15/2025 SN       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * YI     = Yoshiki Iwata, Denso                                                                                                  */
 /*  * TN     = Takashi Nagai, Denso                                                                                                  */

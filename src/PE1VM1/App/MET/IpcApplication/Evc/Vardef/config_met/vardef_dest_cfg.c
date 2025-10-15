@@ -773,6 +773,7 @@ static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const
 /*  19PFv3-9 12/03/2024  AA       Deleted Colombia control parameter              .                                                  */
 /*  19PFv3-10 1/16/2025  SN       Change DEFUNIT_FUECO United Kingdom parameter             .                                        */
 /*  19PFv3-11 4/10/2025  TR       Deletion of TMNT function presence judgement function             .                                */
+/*  BEV-1    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * SF   = Seiya Fukutome, DENSO TECHNO                                                                                            */
 /*  * AT   = Ayano Tomimoto, KSE                                                                                                     */
