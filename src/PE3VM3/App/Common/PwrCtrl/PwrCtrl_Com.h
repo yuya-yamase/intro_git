@@ -39,6 +39,11 @@
 #define PWRCTRL_COM_PWRERR_FOFF_SOCERR      (1U)  /* 異常検知(SIP電源強制OFF:SOC異常系) */
 #define PWRCTRL_COM_PWRERR_FOFF_PMICERR     (2U)  /* 異常検知(SIP電源強制OFF:PMIC異常系/SOCPMICリセット) */
 #define PWRCTRL_COM_PWRERR_FOFF_DDERR       (3U)  /* 異常検知(SIP電源強制OFF:PMIC異常系/DDコンOFF) */
+
+/* 起動ログ計測点検知データ定義 */
+#define PWRCTRL_COM_BOOTLOG_INITREQ         (0U)  /* 全データクリア要求 */
+#define PWRCTRL_COM_BOOTLOG_BONREQ          (1U)  /* Soc起動時要求 */
+#define PWRCTRL_COM_BOOTLOG_STRREQ          (2U)  /* STRWake時要求 */
 /*--------------------------------------------------------------------------*/
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
@@ -61,6 +66,8 @@ void vd_g_PwrCtrlComTxClr( void );
 void vd_g_PwrCtrlComTxSetPwrOn( const U1 u1_a_data );
 void vd_g_PwrCtrlComTxSetPwrErr( const U1 u1_a_data );
 void vd_g_PwrCtrlComTxSetSoCOnStart( void );
+void vd_g_PwrCtrlComTxSetBootLog( const U1 u1_a_req );
+void vd_g_PwrCtrlComTxClrBootLog( const U1 u1_a_req );
 
 #endif /* PWRCTRL_COM_H */
 
