@@ -46,6 +46,8 @@ void    vd_g_IllumiMainTask(void);
 
 U1      u1_g_IllumiShtdwnOk(void);
 U2      u2_g_IllumiLvlPct(const U1 u1_a_ILLUMI_CH);
+U1      u1_g_IllumiTftPct(void);
+U1      u1_g_IllumiTftAlpha(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
