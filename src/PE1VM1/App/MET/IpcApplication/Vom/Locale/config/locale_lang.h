@@ -74,7 +74,6 @@
 #define LANG_VAL_______HEBREW               (46U)   /* Israel              : Hebrew                 */
 #define LANG_VAL_______ISRAEL               (47U)   /* Israel              : Israel                 */
 #define LANG_VAL____SLOVENIAN               (48U)   /* Slovenian           : Slovenian              */
-#define LANG_VAL____UNDEF                   (0xFFU)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */

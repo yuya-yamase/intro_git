@@ -277,13 +277,12 @@ void  vd_g_LocaleComTxInit(void)
     }
     (void)Com_SendSignal(ComConf_ComSignal_UNIT_CH2 , &u1_t_unit_ch2);
 #endif   /* BEV Rebase provisionally */
-    u1_s_locale_TIMEFMT      = (U1)TIMEFMT_VAL_UNDEF;
-    u1_s_locale_UNIT_DIST    = (U1)UNIT_VAL_DIST_UNDEF;
-    u1_s_locale_UNIT_SPEED   = (U1)UNIT_VAL_SPEED_UNDEF;
-    u1_s_locale_UNIT_ELECO   = (U1)UNIT_VAL_ELECO_UNDEF;
-    u1_s_locale_UNIT_AMBTMP  = (U1)UNIT_VAL_AMBTMP_UNDEF;
-    u1_s_locale_LANG         = (U1)LANG_VAL____UNDEF;
-
+    u1_s_locale_TIMEFMT      = (U1)TIMEFMT_VAL_12H;
+    u1_s_locale_UNIT_DIST    = (U1)UNIT_VAL_DIST_KM;
+    u1_s_locale_UNIT_SPEED   = (U1)UNIT_VAL_SPEED_KMPH;
+    u1_s_locale_UNIT_ELECO   = (U1)UNIT_VAL_ELECO_KWHP100KM;
+    u1_s_locale_UNIT_AMBTMP  = (U1)UNIT_VAL_AMBTMP_CEL;
+    u1_s_locale_LANG         = (U1)LANG_VAL______BRI_ENG;
 }
 /*===================================================================================================================================*/
 /*  void  vd_g_LocaleComTxTask(void)                                                                                                 */
@@ -487,19 +486,20 @@ U1      u1_g_LocaleCfgUnit(const U1 u1_a_UNITIDX)
     u1_t_unit  = u1_g_McstBf(u1_t_idx);
 #else   /* BEV Rebase provisionally */
     switch(u1_a_UNITIDX){
-    case UNIT_IDX_DIST:
+    case  (U1)UNIT_IDX_DIST:
         u1_t_unit  = u1_s_locale_UNIT_DIST;
         break;
-    case UNIT_IDX_SPEED:
-         u1_t_unit  = u1_s_locale_UNIT_SPEED;
+    case (U1)UNIT_IDX_SPEED:
+        u1_t_unit  = u1_s_locale_UNIT_SPEED;
         break;
-    case UNIT_IDX_ELECO:
-         u1_t_unit  = u1_s_locale_UNIT_ELECO;
+    case (U1)UNIT_IDX_ELECO:
+        u1_t_unit  = u1_s_locale_UNIT_ELECO;
         break;
-    case UNIT_IDX_AMBTMP:
-         u1_t_unit  = u1_s_locale_UNIT_AMBTMP;
+    case (U1)UNIT_IDX_AMBTMP:
+        u1_t_unit  = u1_s_locale_UNIT_AMBTMP;
         break;
     default:
+        u1_t_unit  = (U1)U1_MAX;
         break;
     }
 #endif   /* BEV Rebase provisionally */
@@ -594,6 +594,7 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  296D235D 11/28/2022  TX       Add Lang Type18 and Type19                                                                         */
 /*  19PFv3-1 08/21/2023  SH       config merge                                                                                       */
 /*  19PFv3-2 04/24/2025  SF       Bug fixing for MET19PFV3-43718                                                                     */
+/*  BEV-1    10/15/2025  SN       Configured for BEVstep3_Rebase                                                                     */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * SF   = Seiya Fukutome, DensoTechno                                                                                             */
@@ -603,5 +604,6 @@ U1      u1_g_LocaleCfgUnitdef(const U1 u1_a_UNITIDX)
 /*  * TX   = Xinyuan Tong, DNST                                                                                                      */
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * SH   = Sae Hirose, Denso Techno                                                                                                */
+/*  * SN   = Shimon Nambu, DensoTechno                                                                                               */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

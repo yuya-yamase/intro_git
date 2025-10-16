@@ -41,13 +41,11 @@
 #define UNIT_NUM_VAL_DIST                   (2U)
 #define UNIT_VAL_DIST_KM                    (0U)
 #define UNIT_VAL_DIST_MILE                  (1U)
-#define UNIT_VAL_DIST_UNDEF                 (3U)
 
 /* Unit Speed */
 #define UNIT_NUM_VAL_SPEED                  (2U)
 #define UNIT_VAL_SPEED_KMPH                 (0U)
 #define UNIT_VAL_SPEED_MPH                  (1U)
-#define UNIT_VAL_SPEED_UNDEF                (3U)
 
 /* Unit Fuel Economy */
 #define UNIT_NUM_VAL_FUECO                  (7U)
@@ -68,18 +66,15 @@
 #define UNIT_VAL_ELECO_KMPKWH               (4U)   /* Electricity cost    : km/kWh                 */
 #define UNIT_VAL_ELECO_KWHP100KM            (5U)   /* Electricity cost    : kWh/100km              */
 #define UNIT_VAL_ELECO_MILEPKWH             (6U)   /* Electricity cost    : miles/kWh              */
-#define UNIT_VAL_ELECO_UNDEF                (8U)
 
 /* Unit Ambient Temparature */
 #define UNIT_NUM_VAL_AMBTMP                 (2U)
 #define UNIT_VAL_AMBTMP_CEL                 (0U)
 #define UNIT_VAL_AMBTMP_FAH                 (1U)
-#define UNIT_VAL_AMBTMP_UNDEF               (3U)
 
 #define TIMEFMT_NUM_VAL                     (2U)
 #define TIMEFMT_VAL_24H                     (0U)
 #define TIMEFMT_VAL_12H                     (1U)
-#define TIMEFMT_VAL_UNDEF                   (1U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /* Sub Digital Speed */
