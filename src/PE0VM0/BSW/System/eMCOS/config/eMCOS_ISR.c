@@ -24,6 +24,10 @@
 
 #include "scheduler.h"
 
+#if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
+#include "throughput.h"
+#endif
+
 #include <Ecu_Memmap_SdaDisableE_env.h>
 /*----------------------------------------------------------------------------
  *		Defines
@@ -46,6 +50,8 @@ ISR(eMCOS_ISR_INTRCAN7TRX);
  *--------------------------------------------------------------------------*/
 #define OS_START_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"
+
+#if (__AIP_THROUGHPUT__ != 1)
 /**---------------------------------------------------------------------------
  * [Format]		ISR(eMCOS_ISR_INTOSTM5TINT)
  * [Function]	
@@ -160,6 +166,139 @@ ISR(eMCOS_ISR_INTRCAN7TRX)
     Can_TxFinish_7();
 #endif
 }
+
+#else /* #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1)) */
+/**---------------------------------------------------------------------------
+ * [Format]		ISR(eMCOS_ISR_INTOSTM5TINT)
+ * [Function]	
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTOSTM5TINT)
+{
+    vd_g_ThroughputIntrptStart();
+    vd_g_SchdlrMainTick();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTOSTM5TINT);
+    return;
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTTAUD0I14)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTTAUD0I14)
+{
+    /*    INTTAUD0CH14;*/
+    vd_g_ThroughputIntrptStart();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTTAUD0I14);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN3REC)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN3REC)
+{
+    /*    INTRCAN3REC_ISR;*/
+    vd_g_ThroughputIntrptStart();
+#if (CAN_CFG_RX_PROCESSING_3 == CAN_INTERRUPT)
+    Can_RxFinish_3();
+#endif
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN3REC);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN3TRX)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN3TRX)
+{
+    /*    INTRCAN3TRX_ISR;*/
+    vd_g_ThroughputIntrptStart();
+#if (CAN_CFG_TX_PROCESSING_3 == CAN_INTERRUPT)
+    Can_TxFinish_3();
+#endif
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN3TRX);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN5REC)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN5REC)
+{
+    /*    INTRCAN5REC_ISR;*/
+    vd_g_ThroughputIntrptStart();
+#if (CAN_CFG_RX_PROCESSING_5 == CAN_INTERRUPT)
+    Can_RxFinish_5();
+#endif
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN5REC);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN5TRX)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN5TRX)
+{
+    /*    INTRCAN5TRX_ISR;*/
+    vd_g_ThroughputIntrptStart();
+#if (CAN_CFG_TX_PROCESSING_5 == CAN_INTERRUPT)
+    Can_TxFinish_5();
+#endif
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN5TRX);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN7REC)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN7REC)
+{
+    /*    INTRCAN7REC_ISR;*/
+    vd_g_ThroughputIntrptStart();
+#if (CAN_CFG_RX_PROCESSING_7 == CAN_INTERRUPT)
+    Can_RxFinish_7();
+#endif
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN7REC);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	ISR(eMCOS_ISR_INTRCAN7TRX)
+ * [Function]	
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTRCAN7TRX)
+{
+    /*    INTRCAN7TRX_ISR;*/
+    vd_g_ThroughputIntrptStart();
+#if (CAN_CFG_TX_PROCESSING_7 == CAN_INTERRUPT)
+    Can_TxFinish_7();
+#endif
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTRCAN7TRX);
+}
+#endif /* #if (__AIP_THROUGHPUT__ != 1) */
 
 #define OS_STOP_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"

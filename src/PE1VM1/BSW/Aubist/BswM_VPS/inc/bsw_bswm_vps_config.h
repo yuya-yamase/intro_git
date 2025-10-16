@@ -22,7 +22,6 @@
 
 #define BSW_BSWM_VPS_VPSMSG_E2EUSE               (BSW_BSWM_VPS_CFG_VPSMSG_E2EUSE)
 
-#define BSW_BSWM_VPS_VPSTOTALNUM                 (BSW_BSWM_VPS_CFG_VPS_NUM + BSW_BSWM_VPS_CFG_VPSSP_NUM)
 #define BSW_BSWM_VPS_TX_MESSAGE_NUM              (BSW_BSWM_VPS_CFG_VPS_TXPDUIDNUM + BSW_BSWM_VPS_CFG_RLYONCONFREQ_TXPDUIDNUM + BSW_BSWM_VPS_CFG_RLYONCONFRES_TXPDUIDNUM)
 #define BSW_BSWM_VPS_RX_MESSAGE_NUM              (BSW_BSWM_VPS_CFG_VPS_RXPDUIDNUM + BSW_BSWM_VPS_CFG_RLYONCONFREQ_RXPDUIDNUM + BSW_BSWM_VPS_CFG_RLYONCONFRES_RXPDUIDNUM)
 
@@ -148,7 +147,7 @@ extern BswConst Bsw_BswM_VPS_CoPncAwakeType bsw_bswm_vps_stCoPncAwake_Dummy[];
 /****************************************************************************/
 /* History                                                                  */
 /*  Version         :Date                                                   */
-/*  v3-0-0          :2024/11/11                                             */
+/*  v3-0-0          :2025/01/21                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

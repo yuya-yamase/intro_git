@@ -19,12 +19,9 @@
 #include "iohw_adc_cfg_private.h"
 
 #include "memfill_u4.h"
-
 #include "Adc.h"
-/* #include "int_handler_irq.h" */
-/* #include "adc_drv.h" */
-
-/* #include "gpt_drv_b16.h" */
+#include "Vcc.h"                      /* ehvm_vcc_transmit(...) */
+#include "ehvm_cfg_pe0_vm0.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -44,8 +41,23 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define IOHW_ADC_MAIN_TICK                       (5U)   /*  5ms */
-/* #define IOHW_ADC_CYCL_TICK                    (5U)       5ms */
+#define IOHW_ADC_MAIN_TICK                       (10U)   /* 10 milliseconds */
+/* #define IOHW_ADC_CYCL_TICK                    (5U)        5 milliseconds */
+
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+#ifdef ADC_CFG_H
+
+#define ADC_NUM_GR                               (ADC_CFG_GRP_SIZE)
+#define ADC_GR_UN_0                              (ADC_GR_0)
+#define ADC_GR_UN_1                              (ADC_GR_1)
+#define ADC_GR_UN_2                              (ADC_GR_2)
+
+#define ADC_NUM_CH                               (ADC_CFG_GRP00_CNV_CH_SIZE + ADC_CFG_GRP01_CNV_CH_SIZE + ADC_CFG_GRP02_CNV_CH_SIZE)
+#define ADC_UN_0_NUM_CH                          (ADC_CFG_GRP00_CNV_CH_SIZE)
+#define ADC_UN_1_NUM_CH                          (ADC_CFG_GRP01_CNV_CH_SIZE)
+#define ADC_UN_2_NUM_CH                          (ADC_CFG_GRP02_CNV_CH_SIZE)
+
+#endif /* #ifdef ADC_CFG_H */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -57,7 +69,7 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define IOHW_ADC_LV_NUM_WORD                     ((ADC_NUM_CH >> 1U) + (ADC_NUM_CH & 0x01U))
-static U4                u4_sp_iohw_adc_lv[IOHW_ADC_LV_NUM_WORD * IOHW_ADC_LV_NUM_BUF]               __attribute__((section(".bss_SHARE_IOHW_ADC_LV")));
+static U4                u4_sp_iohw_adc_lv[IOHW_ADC_LV_NUM_WORD * IOHW_ADC_LV_NUM_BUF];
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -68,7 +80,6 @@ static U4                u4_sp_iohw_adc_lv[IOHW_ADC_LV_NUM_WORD * IOHW_ADC_LV_NU
 #pragma ghs section rodata=".IOHW_ADC_RODATA_CONST"
 
 /* const U4                 u4_g_IOHW_ADC_IRQ_PLVL     = (U4)INT_HNDLR_IRQPL_OST_00; */
-const U4                 u4_g_IOHW_ADC_IRQ_PLVL     = (U4)8; /* @zantei 240903 */
 
 U4 * const               u4p_gp_IOHW_ADC_LV[IOHW_ADC_LV_NUM_BUF] = {
     &u4_sp_iohw_adc_lv[IOHW_ADC_LV_NUM_WORD * IOHW_ADC_LV_BUF_0],
@@ -178,16 +189,11 @@ void    vd_g_IoHwAdcCfgCvstStart(const U1 u1_a_CVST, const U1 u1_a_LV_IDX)
 
     vd_g_MemfillU4(u4p_gp_IOHW_ADC_LV[u1_a_LV_IDX], (U4)IOHW_ADC_LV_U4_UNKNWN, (U4)IOHW_ADC_LV_NUM_WORD);
 
-/*  vd_g_Adc_StartGr((U1)ADC_GR_UN_0,  (U1)FALSE); */
-    Adc_StartGroupConversion( ADC_GR_UN_0 );
-	
-#ifdef ADC_GR_UN_1
-    Adc_StartGroupConversion( ADC_GR_UN_1 );
-#endif
+    /* FUNC(void, ADC_CODE) Adc_StartGroupConversion(VAR(Adc_GroupType, ADC_VAR_INIT) Group); */
 
-#ifdef ADC_GR_UN_2
-	Adc_StartGroupConversion( ADC_GR_UN_2 );
-#endif
+    Adc_StartGroupConversion(ADC_GR_UN_0);
+    Adc_StartGroupConversion(ADC_GR_UN_1);
+    Adc_StartGroupConversion(ADC_GR_UN_2);
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_IoHwAdcCfgCvstFinish(const U1 u1_a_CVST, const U1 u1_a_LV_IDX)                                                      */
@@ -209,29 +215,40 @@ void    vd_g_IoHwAdcCfgCvstFinish(const U1 u1_a_CVST, const U1 u1_a_LV_IDX)
     /* IOHW_ADC_LV_NUM_BUF. Thus, no need to test u1_a_LV_IDX.                                         */
     /* ----------------------------------------------------------------------------------------------- */
 
+    /* FUNC(Adc_StatusType, ADC_CODE) Adc_GetGroupStatus(VAR(Adc_GroupType, ADC_VAR_INIT) Group); */
+    /* typedef enum {                                                                             */
+    /*     ADC_IDLE,                                                                              */
+    /*     ADC_BUSY,                                                                              */
+    /*     ADC_COMPLETED,                                                                         */
+    /*     ADC_STREAM_COMPLETED                                                                   */
+    /* } Adc_StatusType;                                                                          */
+    /* FUNC(Std_ReturnType, ADC_CODE) Adc_ReadGroup(VAR(Adc_GroupType, ADC_VAR_INIT) Group,       */
+    /*                        P2VAR(Adc_ValueGroupType, AUTOMATIC, ADC_VAR_INIT) DataBufferPtr);  */
+    /* typedef sint16   Adc_ValueGroupType;                                                       */
+
+    U4 *                        u4_tp_vcc_tx;
     Adc_ValueGroupType *        u2_tp_lv_arch;
+    Adc_StatusType              en_t_rslt;
 
-    u2_tp_lv_arch = (Adc_ValueGroupType *)u4p_gp_IOHW_ADC_LV[u1_a_LV_IDX];
+    u4_tp_vcc_tx  = u4p_gp_IOHW_ADC_LV[u1_a_LV_IDX];
+    u2_tp_lv_arch = (Adc_ValueGroupType *)u4_tp_vcc_tx;
+    en_t_rslt     = Adc_GetGroupStatus(ADC_GR_UN_0);
+    if(en_t_rslt == ADC_STREAM_COMPLETED){
+        (void)Adc_ReadGroup( ADC_GR_UN_0, &u2_tp_lv_arch[0] );
+    }
 
-/*  (void)u2_g_Adc_ReadGr((U1)ADC_GR_UN_0, &u2_tp_lv_arch[ADC_CH_STSW_0], (U1)ADC_UN_0_NUM_CH); */
-    if ( Adc_GetGroupStatus( ADC_GR_UN_0 ) == ADC_STREAM_COMPLETED )
-    {
-        Adc_ReadGroup( ADC_GR_UN_0, &u2_tp_lv_arch[0] );
+    en_t_rslt     = Adc_GetGroupStatus(ADC_GR_UN_1);
+    if(en_t_rslt == ADC_STREAM_COMPLETED){
+        (void)Adc_ReadGroup( ADC_GR_UN_1, &u2_tp_lv_arch[ADC_UN_0_NUM_CH] );
     }
-	
-#ifdef ADC_GR_UN_1
-    if ( Adc_GetGroupStatus( ADC_GR_UN_1 ) == ADC_STREAM_COMPLETED )
-    {
-        Adc_ReadGroup( ADC_GR_UN_1, &u2_tp_lv_arch[ADC_UN_0_NUM_CH] );
-    }
-#endif
 
-#ifdef ADC_GR_UN_2
-    if ( Adc_GetGroupStatus( ADC_GR_UN_2 ) == ADC_STREAM_COMPLETED )
-    {
-        Adc_ReadGroup( ADC_GR_UN_2, &u2_tp_lv_arch[ADC_UN_0_NUM_CH + ADC_UN_1_NUM_CH] );
+    en_t_rslt     = Adc_GetGroupStatus(ADC_GR_UN_2);
+    if(en_t_rslt == ADC_STREAM_COMPLETED){
+        (void)Adc_ReadGroup( ADC_GR_UN_2, &u2_tp_lv_arch[ADC_UN_0_NUM_CH + ADC_UN_1_NUM_CH] );
     }
-#endif
+
+    (void)ehvm_vcc_transmit(EHVM_TX_VCCID_VCC_IOHWAD_DATA_TX_VM0,
+                            u4_tp_vcc_tx, ((U4)IOHW_ADC_LV_NUM_WORD << 2U));
 }
 
 #pragma ghs section text=default

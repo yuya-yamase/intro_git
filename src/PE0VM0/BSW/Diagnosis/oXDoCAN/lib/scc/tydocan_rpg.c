@@ -65,6 +65,7 @@ static U1                    u1_s_oxdc_rpg_ctrl;
 /*===================================================================================================================================*/
 void    vd_g_oXDoCANRpgInit(void)
 {
+    u2_s_oxdc_rpg_vsok_tmcnt = (U2)U2_MAX;
     u2_s_oxdc_rpg_prep_tmcnt = (U2)U2_MAX;
     u1_s_oxdc_rpg_ctrl       = (U1)OXDC_RPG_CTRL_RDY_ACT;
 }

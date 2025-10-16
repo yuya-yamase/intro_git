@@ -28,6 +28,9 @@
 #define BSW_COM_u1RXIPDU_STOP_CLRTIME  ((BswU1)3U)
 #define BSW_COM_u1RXIPDU_CLRTIME       ((BswU1)4U)
 
+#define BSW_COM_u1RXMSKTIMSET_OFF      ((BswU1)0U)
+#define BSW_COM_u1RXMSKTIMSET_ON       ((BswU1)1U)
+
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
 /*--------------------------------------------------------------------------*/
@@ -36,7 +39,7 @@
 /* Function Prototypes                                                      */
 /*--------------------------------------------------------------------------*/
 void                bsw_com_rx_InitTimeOutSub( Bsw_Com_NetworkType u1Network );
-void                bsw_com_rx_InitComRxStat( NetworkHandleType Network, BswU4* ptIpduGrpStat );
+void                bsw_com_rx_InitComRxStat( NetworkHandleType Network, BswConstR BswU4* ptIpduGrpStat );
 void                bsw_com_rx_ShutdownComRxStat( void );
 BswU1               bsw_com_rx_GetPncIpduRxSt( NetworkHandleType Network, PduIdType u2PduId );
 BswU1               bsw_com_rx_GetPncIpduRxStNone( NetworkHandleType Network, PduIdType u2PduId );
@@ -48,7 +51,7 @@ void                bsw_com_rx_ShutdownPncRxSt( void );
 void                bsw_com_rx_ShutdownPncRxStNone( void );
 BswU1               bsw_com_rx_GetPncIpduRxDMSt( NetworkHandleType Network, PduIdType u2PduId );
 BswU1               bsw_com_rx_GetPncIpduRxDMStNone( NetworkHandleType Network, PduIdType u2PduId );
-void                bsw_com_rx_VPSRxIndicationNone( PduIdType PduId );
+boolean             bsw_com_rx_VPSRxIndicationNone( PduIdType PduId, BswConstR PduInfoType* PduInfoPtr );
 void                bsw_com_rx_UpdateRxStatus( BswU1 u1Ch );
 void                bsw_com_rx_UpdateRxStatusPnc( BswU1 u1Ch );
 
@@ -86,7 +89,7 @@ extern  Std_ReturnType  (* BswConst bsw_com_rom_ptAlvCntrFuncRx[])( PduIdType u2
 extern  void            (* BswConst bsw_com_rom_ptInitPncRxStatFunc)( void );
 extern  void            (* BswConst bsw_com_rom_ptDeInitPncRxStFunc)( void );
 extern  BswU1           (* BswConst bsw_com_rom_ptGetPncIpduRxDMStFunc)( NetworkHandleType Network, PduIdType u2PduId );
-extern  void            (* BswConst bsw_com_rom_ptVpsRxIndictionFunc)( PduIdType PduId );
+extern  boolean         (* BswConst bsw_com_rom_ptVpsRxIndictionFunc)( PduIdType PduId, BswConstR PduInfoType* PduInfoPtr );
 extern  void            (* BswConst bsw_com_rom_ptUpdateRxStsFunc[])( BswU1 u1Ch );
 
 #endif /* BSW_COM_RX_H */
@@ -97,7 +100,7 @@ extern  void            (* BswConst bsw_com_rom_ptUpdateRxStsFunc[])( BswU1 u1Ch
 /*  v1-0-0          :2017/02/22                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/11/18                                             */
-/*  v3-0-0          :2024/11/13                                             */
+/*  v3-0-0          :2025/02/10                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

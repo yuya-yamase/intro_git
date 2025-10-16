@@ -324,17 +324,19 @@ static const ST_CAN_LPR_RR     st_sp_CAN_LPR_RR_G2M_1[] = {
     {(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U, (U2)8U,  (U2)0U},     /* 158 : BDB1S27     = 0x40000629 */
 /*  {(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U, (U2)8U,  (U2)0U},  */ /*     : BDB1S28     = 0x4000062a */
 /*  {(U4)0x00000200U, (U4)0x40000629U, (U4)0x40000633U, (U2)8U,  (U2)0U},  */ /*     : IDT1S02     = 0x40000633 */
-    {(U4)0x00000200U, (U4)0x00000700U, (U4)0x0000070fU, (U2)8U,  (U2)0U},     /* 159 : UDS/CAN     = 0x00000700 */
-/*  {(U4)0x00000200U, (U4)0x00000700U, (U4)0x0000070fU, (U2)8U,  (U2)0U},  */ /*     : UDS/CAN     = 0x0000070f */
-    {(U4)0x00000200U, (U4)0x40000700U, (U4)0x4000070fU, (U2)32U, (U2)0U},     /* 160 : UDS/CAN-FD  = 0x40000700 */
-/*  {(U4)0x00000200U, (U4)0x40000700U, (U4)0x4000070fU, (U2)32U, (U2)0U},  */ /*     : UDS/CAN-FD  = 0x4000070f */
-    {(U4)0x00000200U, (U4)0x98000000U, (U4)0x980003ffU, (U2)0U,  (U2)0U},     /* 161 : QSEv/CAN    = 0x98000000 */
+    {(U4)0x00000200U, (U4)0x00000708U, (U4)0x0000070fU, (U2)8U,  (U2)0U},     /* 159 : UDS/CAN     = 0x00000708 */
+/*  {(U4)0x00000200U, (U4)0x00000708U, (U4)0x0000070fU, (U2)8U,  (U2)0U},  */ /*     : UDS/CAN     = 0x0000070f */
+    {(U4)0x00000200U, (U4)0x40000708U, (U4)0x4000070fU, (U2)32U, (U2)0U},     /* 160 : UDS/CAN-FD  = 0x40000708 */
+/*  {(U4)0x00000200U, (U4)0x40000708U, (U4)0x4000070fU, (U2)32U, (U2)0U},  */ /*     : UDS/CAN-FD  = 0x4000070f */
+    {(U4)0x00000200U, (U4)0x000007dfU, (U4)0x000007dfU, (U2)8U,  (U2)0U},     /* 161 : UDS/CAN     = 0x000007df */
+    {(U4)0x00000200U, (U4)0x400007dfU, (U4)0x400007dfU, (U2)32U, (U2)0U},     /* 162 : UDS/CAN-FD  = 0x400007df */
+    {(U4)0x00000200U, (U4)0x98000000U, (U4)0x980003ffU, (U2)0U,  (U2)0U},     /* 163 : QSEv/CAN    = 0x98000000 */
 /*  {(U4)0x00000200U, (U4)0x98000000U, (U4)0x980003ffU, (U2)0U,  (U2)0U},  */ /*     : QSEv/CAN    = 0x980003ff */
-    {(U4)0x00000200U, (U4)0xd8000000U, (U4)0xd80003ffU, (U2)0U,  (U2)0U},     /* 162 : QSEv/CAN-FD = 0xd8000000 */
+    {(U4)0x00000200U, (U4)0xd8000000U, (U4)0xd80003ffU, (U2)0U,  (U2)0U},     /* 164 : QSEv/CAN-FD = 0xd8000000 */
 /*  {(U4)0x00000200U, (U4)0xd8000000U, (U4)0xd80003ffU, (U2)0U,  (U2)0U},  */ /*     : QSEv/CAN-FD = 0xd80003ff */
-    {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)2U},     /* 163 : UDS/CAN     = 0x98da0000 */
+    {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)2U},     /* 165 : UDS/CAN     = 0x98da0000 */
 /*  {(U4)0x00000400U, (U4)0x98da0000U, (U4)0x98dbffffU, (U2)8U,  (U2)2U},  */ /*     : UDS/CAN     = 0x98dbffff */
-    {(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU, (U2)8U,  (U2)2U}      /* 164 : UDS/CAN-FD  = 0xd8da0000 */
+    {(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU, (U2)8U,  (U2)2U}      /* 166 : UDS/CAN-FD  = 0xd8da0000 */
 /*  {(U4)0x00000400U, (U4)0xd8da0000U, (U4)0xd8dbffffU, (U2)8U,  (U2)2U},  */ /*     : UDS/CAN-FD  = 0xd8dbffff */
 };
 
@@ -483,9 +485,10 @@ static const ST_CAN_LPR_RRMB   st_sp_CAN_LPR_RRMB_G2M_1[] = {
     {(U2)78U,         (U2)1U},    /* MBOX = 150 / 0x0000036e : Rx Mask = NOUSE      */
     {(U2)75U,         (U2)1U},    /* MBOX = 151 / 0x00000353 : Rx Mask = NOUSE      */
     {(U2)89U,         (U2)1U},    /* MBOX = 152 / 0x00000390 : Rx Mask = NOUSE      */
-    {(U2)163U,        (U2)2U},    /* MBOX = 153 / 0x18da0000 : Rx Mask = 0x8001FFFF */
-    {(U2)161U,        (U2)2U},    /* MBOX = 154 / 0x18000000 : Rx Mask = 0x800003FF */
-    {(U2)159U,        (U2)2U}     /* MBOX = 155 / 0x00000700 : Rx Mask = 0x0000000F */
+    {(U2)165U,        (U2)2U},    /* MBOX = 153 / 0x18da0000 : Rx Mask = 0x8001FFFF */
+    {(U2)163U,        (U2)2U},    /* MBOX = 154 / 0x18000000 : Rx Mask = 0x800003FF */
+    {(U2)159U,        (U2)2U},    /* MBOX = 155 / 0x00000708 : Rx Mask = 0x00000007 */
+    {(U2)161U,        (U2)2U}     /* MBOX = 156 / 0x000007df : Rx Mask = NOUSE      */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -509,9 +512,9 @@ static const ST_CAN_LPR_ING    st_s_CAN_LPR_ING_G2M_1 = {
     &st_sp_CAN_LPR_EGR_G2M_1[0U],                                          /* stp_EGR     */
     &u2_sp_CAN_LPR_EPDU_G2M_1[0U],                                         /* u2p_EPDU_ID */
     (U4)CAN_LPR_REGR_EN_PHY_RX_G2M1,                                       /* u4_ifrx_en  */
-    (U2)165U,                                                              /* u2_num_rr   */
+    (U2)167U,                                                              /* u2_num_rr   */
     (U2)11U,                                                               /* u2_mb_min   */
-    (U2)155U,                                                              /* u2_mb_max   */
+    (U2)156U,                                                              /* u2_mb_max   */
     (U2)2U                                                                 /* u2_num_egr  */
 };
 

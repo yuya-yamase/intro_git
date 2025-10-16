@@ -84,8 +84,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*#define vd_g_oXDoCANCfgReqNvmcToRun()            (vd_g_Nvmc_ClearShtdwnTimer())*//* @@@ */
-#define vd_g_oXDoCANCfgReqNvmcToRun()       /* @@@ */
+#define vd_g_oXDoCANCfgReqNvmcToRun()
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -134,15 +133,6 @@ void    vd_g_oXDoCANDtcRstInit(void);
 void    vd_g_oXDoCANDtcWkupInit(void);
 U4      u4_g_oXDoCANDtcMainTask(const ST_OXDC_REQ * st_ap_REQ, const U2 u2_a_TSLOT);
 
-/* TimeStamp */
-#if 0   /* @@@ */
-void    vd_g_oXDoCANTmstpBonInit(void);
-void    vd_g_oXDoCANTmstpRstInit(void);
-void    vd_g_oXDoCANTmstpWkupInit(void);
-void    vd_g_oXDoCANTmstpMainTask(const U2 u2_a_TSLOT, const U1 u1_a_EOM);
-void    vd_g_oXDoCANTmstpStaTmrwk(void);
-#endif
-
 /* SID 0x22 : ReadDataByIdentifier          */
 void    vd_g_oXDoCANRebyIdInit(void);
 void    vd_g_oXDoCANRebyIdMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
@@ -169,12 +159,10 @@ U1      u1_g_oXDoCANIocReqLenChk(const ST_OXDC_REQ * st_ap_REQ);
 #endif
 
 /* SID 0x31 : RoutineControl                 */
-#if 0   /* @@@ */
 void    vd_g_oXDoCANRoutInit(void);
 void    vd_g_oXDoCANRoutMainTask(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_ANS * st_ap_ans);
 #ifdef OXDC_FUNC_ROUT_STOP
 void    vd_g_oXDoCANRoutStop(const U1 u1_a_NEW);
-#endif
 #endif
 
 #if(OXDC_SID86_USE == OXDC_USE)

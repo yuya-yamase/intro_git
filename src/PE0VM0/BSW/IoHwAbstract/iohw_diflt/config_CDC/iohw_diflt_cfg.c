@@ -79,7 +79,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #pragma ghs section bss=".IOHW_DIFLT_BSS_VAR_NO_INIT"
 
-U4                          u4_gp_iohw_diflt_fltrd[IOHW_DIFLT_NUM_DIPORT]          __attribute__((section(".bss_SHARE_IOHW_DIFLT_FLTRD")));
+U4                          u4_gp_iohw_diflt_fltrd[IOHW_DIFLT_NUM_DIPORT];
 U2                          u2_gp_iohw_diflt_smpld[IOHW_DIFLT_NUM_DIPORT];
 
 ST_IOHW_DICTRL              st_gp_iohw_diflt_ctrl[IOHW_DIFLT_NUM_DISGNL];
@@ -92,6 +92,8 @@ ST_IOHW_DICTRL              st_gp_iohw_diflt_ctrl[IOHW_DIFLT_NUM_DISGNL];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#pragma ghs section rodata=".IOHW_DIFLT_RODATA_CONST"
+
 /* -------------------------------------------------------------------------------------------- */
 /* Attention :                                                                                  */
 /* If sampling conditions are determined after executing vd_g_IoHwDifltMainTask, the conditions */
@@ -102,8 +104,6 @@ ST_IOHW_DICTRL              st_gp_iohw_diflt_ctrl[IOHW_DIFLT_NUM_DISGNL];
 /* In Toyota-MET/HUD, vehicle operational mode, especially Ignition, are detemined after        */
 /* executing vd_g_IoHwDifltMainTask.                                                            */
 /* -------------------------------------------------------------------------------------------- */
-#pragma ghs section rodata=".IOHW_DIFLT_RODATA_CONST"
-
 const U2                    u2_g_IOHW_DIFLT_SMPLGCHK_AT_EVT = ((U2)IOHW_DIFLT_SMPLGCHK_ACC_ON |
                                                                (U2)IOHW_DIFLT_SMPLGCHK_STA_ON |
                                                                (U2)IOHW_DIFLT_SMPLGCHK_IGN_ON);
@@ -229,21 +229,7 @@ U2      u2_g_IoHwDifltCfgSmplgchk(void)
 /*===================================================================================================================================*/
 void    vd_g_IoHwDifltCfgRead(U2 * u2_ap_di_inst)
 {
-    static const U2                u2_s_IOHW_DIFLT_IG_LV_MAX = (U2)IOHW_ADC_LV_MAX;
-    static const U2                u2_s_IOHW_DIFLT_IG_LV_MIN = (U2)512U;
-
-    U2                             u2_t_lv;
-
     u2_ap_di_inst[IOHW_DIFLT_DIPORT_00] = (U2)0U;
-
-    u2_t_lv = u2_g_IoHwAdcLv((U1)ADC_CH_IG_MON);
-    if((u2_t_lv <= u2_s_IOHW_DIFLT_IG_LV_MAX) &&
-       (u2_t_lv >= u2_s_IOHW_DIFLT_IG_LV_MIN)){
-        u2_ap_di_inst[IOHW_DIFLT_DIPORT_00] |= (U2)0x0001U;
-    }
-
-    u2_ap_di_inst[IOHW_DIFLT_DIPORT_00] |= ((U2)Dio_ReadChannel(DIO_ID_PORT0_CH0)) << 4;
-
 }
 
 #pragma ghs section text=default

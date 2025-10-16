@@ -539,10 +539,10 @@
 #define BSW_COM_CFG_CH30_TX_DISTIMBYMSG    (BSW_NOUSE)
 #define BSW_COM_CFG_CH31_TX_DISTIMBYMSG    (BSW_NOUSE)
 
-#define BSW_COM_CFG_CH00_TXCLRSTOPTOUT     (BSW_NOUSE)
-#define BSW_COM_CFG_CH01_TXCLRSTOPTOUT     (BSW_NOUSE)
-#define BSW_COM_CFG_CH02_TXCLRSTOPTOUT     (BSW_NOUSE)
-#define BSW_COM_CFG_CH03_TXCLRSTOPTOUT     (BSW_NOUSE)
+#define BSW_COM_CFG_CH00_TXCLRSTOPTOUT     (BSW_USE)
+#define BSW_COM_CFG_CH01_TXCLRSTOPTOUT     (BSW_USE)
+#define BSW_COM_CFG_CH02_TXCLRSTOPTOUT     (BSW_USE)
+#define BSW_COM_CFG_CH03_TXCLRSTOPTOUT     (BSW_USE)
 #define BSW_COM_CFG_CH04_TXCLRSTOPTOUT     (BSW_NOUSE)
 #define BSW_COM_CFG_CH05_TXCLRSTOPTOUT     (BSW_NOUSE)
 #define BSW_COM_CFG_CH06_TXCLRSTOPTOUT     (BSW_NOUSE)
@@ -814,7 +814,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

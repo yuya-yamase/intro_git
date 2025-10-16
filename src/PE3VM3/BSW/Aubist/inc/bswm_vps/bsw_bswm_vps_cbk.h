@@ -21,6 +21,8 @@
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
 #define BswM_VPS_RxIndication             (bsw_bswm_vps_ctrl_RxIndication)
+#define BswM_VPS_TxConfirmation           (bsw_bswm_vps_ctrl_TxConf)
+#define BswM_VPS_TxReqConfirmation        (bsw_bswm_vps_ctrl_TxReqConf)
 #define BswM_VPS_MainFunctionCoBus        (bsw_bswm_vps_ctrl_MainFuncCoBus)
 #define BswM_VPS_NmRxIndication           (bsw_bswm_vps_ctrl_NmRxIndication)
 #define BswM_VPS_StartNetwork             (bsw_bswm_vps_ctrl_StartNetwork)
@@ -44,7 +46,7 @@
 /****************************************************************************/
 /* History                                                                  */
 /*  Version         :Date                                                   */
-/*  v3-0-0          :2024/10/23                                             */
+/*  v3-0-0          :2025/01/16                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

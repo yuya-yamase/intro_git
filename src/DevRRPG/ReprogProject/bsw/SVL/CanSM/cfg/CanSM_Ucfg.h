@@ -26,17 +26,17 @@
 
 #define CANSM_UCFG_CONTROLLERID_0   (5U)
 
-#define CANSM_UCFG_PDUID_NUM        (4U)                      /* ^^^ */
+#define CANSM_UCFG_PDUID_NUM        (4U)
 
 #define CANSM_UCFG_IPDUID_0         (0U)
 #define CANSM_UCFG_IPDUID_1         (1U)
-#define CANSM_UCFG_IPDUID_2         (2U)                      /* ^^^ */
-#define CANSM_UCFG_IPDUID_3         (3U)                      /* ^^^ */
+#define CANSM_UCFG_IPDUID_2         (2U)
+#define CANSM_UCFG_IPDUID_3         (3U)
 
-#define CANSM_UCFG_CANID_0          (0x18DA17E0UL)            /* ^^^ */
-#define CANSM_UCFG_CANID_1          (0x18DBEFE0UL)            /* ^^^ */
-#define CANSM_UCFG_CANID_2          (0x18DA17E0UL)            /* ^^^ */
-#define CANSM_UCFG_CANID_3          (0x18DBEFE0UL)            /* ^^^ */
+#define CANSM_UCFG_CANID_0          (0x18DA17E0UL)
+#define CANSM_UCFG_CANID_1          (0x18DBEFE0UL)
+#define CANSM_UCFG_CANID_2          (0x18DA17E0UL)
+#define CANSM_UCFG_CANID_3          (0x18DBEFE0UL)
 
 #define CANSM_UCFG_BAUDRATE_NUM     (1U)
 
@@ -80,5 +80,10 @@ extern CONST(CanSM_BaudrateSettingConfigType, CANSM_CONFIG_DATA) CanSM_Ucfg_Baud
 /*  v2.00       :2019/12/03 :Update                                rel.AUBASS */
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

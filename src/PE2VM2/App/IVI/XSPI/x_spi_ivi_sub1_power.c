@@ -20,7 +20,7 @@
 #include    "x_spi_ivi_sub1_power.h"
 #include    "Dio.h"
 #include    "Dio_Symbols.h"
-#include    "Iohw_adc.h"
+#include    "iohw_adc_sh.h"
 #include    "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

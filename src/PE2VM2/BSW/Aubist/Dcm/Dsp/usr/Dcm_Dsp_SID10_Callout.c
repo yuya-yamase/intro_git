@@ -17,7 +17,6 @@
 #if ( DCM_SUPPORT_SID10 == STD_ON )
 
 #include <Dcm.h>
-
 #include "oxdocan_aubif.h"
 
 /*--------------------------------------------------------------------------*/
@@ -103,8 +102,16 @@ FUNC( Std_ReturnType, DCM_CODE_CALLOUT ) Dcm_CheckSessionControl
 )
 {
     Std_ReturnType u1_RetVal;
+    uint8          u1_t_nrc;
 
-    u1_RetVal = (Std_ReturnType)E_OK;
+    u1_t_nrc = u1_g_oXDoCANAubIfSesCtrlOk(u1SubFunction);
+    if(u1_t_nrc == (U1)0U){
+        u1_RetVal      = (Std_ReturnType)E_OK;
+    }
+    else{
+        (*ptErrorCode) = u1_t_nrc;
+        u1_RetVal      = (Std_ReturnType)E_NOT_OK;
+    }
 
     return(u1_RetVal);
 }
@@ -125,7 +132,7 @@ FUNC( Std_ReturnType, DCM_CODE_CALLOUT ) Dcm_CheckSessionControl
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 

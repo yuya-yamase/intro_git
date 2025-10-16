@@ -2122,7 +2122,7 @@ CONST(AB_83_ConstV NvM_CommonInitBlockCallbackType, NVM_CONFIG_DATA) NvMCommonIn
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-1-0                                              */
 /****************************************************************************/
 

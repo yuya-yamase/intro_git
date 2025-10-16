@@ -207,7 +207,7 @@
 	{																										\
 		/* MSPInCTL1レジスタに設定する値 */																	\
 		( (U4)MSPI_CTL1_MSSEL 	* (U4)SPI_UCFG_MODEC_CH##id##_MASTERSLAVEMODE ) 						+	\
-		( (U4)MSPI_CTL1_CSIE	* (U4)MSPI_CTL1_CSIE_RECOGNIZE ) 										+	\
+		( (U4)MSPI_CTL1_CSIE	* (U4)SPI_UCFG_MODEC_CH##id##_CSINENABLE )								+	\
 		( (U4)MSPI_CTL1_SAMP 	* (U4)MSPI_CTL1_SAMP_STANDARD ) 										+	\
 		( (U4)MSPI_CTL1_CKR 	* (U4)SPI_UCFG_MODEC_CH##id##_SHIFTCLOCKIDLELEVEL ) 					+	\
 		( (U4)MSPI_CTL1_SOLS_0 	* (U4)MSPI_CTL1_SOLS_LOW_HOLD ),											\

@@ -38,6 +38,10 @@
 #include "../inc/bsw_bswm_can_ctrl.h"
 #include "../inc/bsw_bswm_can_connector.h"
 
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+#include <j1939tp/bsw_j1939tp.h>
+#endif
+
 /*--------------------------------------------------------------------------*/
 /* Macros                                                                   */
 /*--------------------------------------------------------------------------*/
@@ -89,6 +93,9 @@ bsw_bswm_can_st_Init( void )
 #if ( BSW_BSWM_CS_FUNC_CANTP == BSW_USE )
     bsw_bswm_can_CanTpInit();
 #endif
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+    J1939Tp_Init(NULL_PTR);
+#endif
 }
 
 /****************************************************************************/
@@ -119,6 +126,9 @@ bsw_bswm_can_st_PrepareDeInit( void )
 #if ( BSW_BSWM_CS_FUNC_CANTP == BSW_USE )
     bsw_bswm_can_CanTpShutdown();
 #endif
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+    J1939Tp_Shutdown();
+#endif
 }
 
 /****************************************************************************/
@@ -145,6 +155,9 @@ bsw_bswm_can_st_DeInit( void )
     CanSM_DeInit();
 #if ( BSW_BSWM_CS_FUNC_CANTP == BSW_USE )
     bsw_bswm_can_CanTpShutdown();
+#endif
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+    J1939Tp_Shutdown();
 #endif
 }
 
@@ -176,6 +189,9 @@ bsw_bswm_can_st_Wakeup( void )
 #if ( BSW_BSWM_CS_FUNC_CANTP == BSW_USE )
     bsw_bswm_can_CanTpInit();
 #endif
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+    J1939Tp_Init(NULL_PTR);
+#endif
 }
 
 /****************************************************************************/
@@ -201,6 +217,9 @@ bsw_bswm_can_st_Sleep( void )
     CanSM_DeInit();
 #if ( BSW_BSWM_CS_FUNC_CANTP == BSW_USE )
     bsw_bswm_can_CanTpShutdown();
+#endif
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+    J1939Tp_Shutdown();
 #endif
 }
 
@@ -232,6 +251,9 @@ bsw_bswm_can_st_Reset( void )
     CanSM_Init( NULL_PTR );
 #if ( BSW_BSWM_CS_FUNC_CANTP == BSW_USE )
     bsw_bswm_can_CanTpInit();
+#endif
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+    J1939Tp_Init(NULL_PTR);
 #endif
 
     bsw_bswm_can_ctrl_Reset();
@@ -388,6 +410,38 @@ bsw_bswm_can_st_MainFuncMidOut( void )
 #endif
 }
 
+/****************************************************************************/
+/* Function Name | bsw_bswm_can_st_MainPreComRx                             */
+/* Description   | Periodic processing - Pre Com Rx                         */
+/* Preconditions | Before Com_MainFunctionRx is called                      */
+/* Parameters    | NONE                                                     */
+/* Return Value  | NONE                                                     */
+/* Notes         | Supported API : BswM_Can_MainFunctionPreComRx            */
+/****************************************************************************/
+void
+bsw_bswm_can_st_MainPreComRx( void )
+{
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+    J1939Tp_MainFunctionRx();
+#endif
+}
+
+/****************************************************************************/
+/* Function Name | bsw_bswm_can_st_MainPostComTx                            */
+/* Description   | Periodic processing - Post Com Tx                        */
+/* Preconditions | After Com_MainFunctionTx is called                       */
+/* Parameters    | NONE                                                     */
+/* Return Value  | NONE                                                     */
+/* Notes         | Supported API : BswM_Can_MainFunctionPostComTx           */
+/****************************************************************************/
+void
+bsw_bswm_can_st_MainPostComTx( void )
+{
+#if ( BSW_BSWM_CS_FUNC_J1939TP == BSW_USE )
+    J1939Tp_MainFunctionTx();
+#endif
+}
+
 #if ( BSW_BSWM_CS_ECU_FAIL == BSW_NOUSE )
 /****************************************************************************/
 /* Function Name | bsw_bswm_can_st_DetectFail                               */
@@ -417,7 +471,7 @@ bsw_bswm_can_st_DetectFail( void )
 /*  v1-1-0          :2018/12/12                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2022/09/15                                             */
-/*  v3-0-0          :2024/08/30                                             */
+/*  v3-0-0          :2025/01/29                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/
