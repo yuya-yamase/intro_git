@@ -71,7 +71,7 @@
 #define VIS_CAN_DRDYSTS_UNDEFINED               ((U1)0x03U)         /* "Ready"インジケータ表示状態:未定義     */
 
 /* VINデータ */
-#define VIS_CAN_VIN_RX_NBYTE                    ((U1)17U)           /* CAN受信：ENG1S51バイト数 */
+#define VIS_CAN_VIN_RX_NBYTE                    ((U1)32U)           /* CAN受信：ENG1S51バイト数 */
 #define VIS_CAN_VIN0_NM                         ((U1)0U)            /* VIN情報(要素0)  */
 #define VIS_CAN_VIN1_NM                         ((U1)1U)            /* VIN情報(要素1)  */
 #define VIS_CAN_VIN2_NM                         ((U1)2U)            /* VIN情報(要素2)  */
