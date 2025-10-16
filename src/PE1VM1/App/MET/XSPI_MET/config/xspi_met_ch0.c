@@ -990,7 +990,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     U4              u4_t_data;
     U2              u2_t_data;
     U1              u1_t_data;
-    U1              u1_t_loop;
     U1              u1_t_acsts;
 
     u2_t_data        = (U2)0U;
