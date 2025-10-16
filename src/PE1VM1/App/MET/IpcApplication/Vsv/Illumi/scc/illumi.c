@@ -17,6 +17,7 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "illumi_cfg_private.h"
+#include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -212,6 +213,62 @@ U2      u2_g_IllumiLvlPct(const U1 u1_a_ILLUMI_CH)
     return(u2_t_pct);
 }
 /*===================================================================================================================================*/
+/*  U1      u1_g_IllumiTftPct(void)                                                                                                  */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_IllumiTftPct(void)
+{
+    U1                       u1_t_pct;
+    U1                       u1_t_daynight;
+    U2                       u2_t_lvl;
+
+    u1_t_pct      = (U1)ILLUMI_TFTPCT_OFF;
+    u1_t_daynight = u1_g_DimLvlDaynight();
+    if(u1_t_daynight < (U1)ILLUMI_DIM_LVL_DAYNIGHT){
+        u2_t_lvl = u2_g_DimLvlUsadjust(u1_t_daynight);
+        if(u2_t_lvl < (U2)CALIB_BL_STEP){
+            u2_t_lvl = ((U2)CALIB_BL_STEP - (U2)1U) - u2_t_lvl;
+            if(u1_t_daynight == (U1)ILLUMI_DIM_LVL_USADJ_DAY){
+                u1_t_pct = u1_CALIB_MCUID0342_BL_PCT_DAY[u2_t_lvl];
+            }
+            else{
+                u1_t_pct = u1_CALIB_MCUID0386_BL_PCT_NIGHT[u2_t_lvl];
+            }
+        }
+    }
+    return(u1_t_pct);
+}
+/*===================================================================================================================================*/
+/*  U1      u1_g_IllumiTftAlpha(void)                                                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U1      u1_g_IllumiTftAlpha(void)
+{
+    U1                       u1_t_pct;
+    U1                       u1_t_daynight;
+    U2                       u2_t_lvl;
+
+    u1_t_pct      = (U1)ILLUMI_TFTALPHA_OFF;
+    u1_t_daynight = u1_g_DimLvlDaynight();
+    if(u1_t_daynight < (U1)ILLUMI_DIM_LVL_DAYNIGHT){
+        u2_t_lvl = u2_g_DimLvlUsadjust(u1_t_daynight);
+        if(u2_t_lvl < (U2)CALIB_RGB_STEP){
+            u2_t_lvl = ((U2)CALIB_RGB_STEP - (U2)1U) - u2_t_lvl;
+            if(u1_t_daynight == (U1)ILLUMI_DIM_LVL_USADJ_DAY){
+                u1_t_pct = u1_CALIB_MCUID0364_RGB_ALPHA_DAY[u2_t_lvl];
+            }
+            else{
+                u1_t_pct = u1_CALIB_MCUID0408_RGB_ALPHA_NGT[u2_t_lvl];
+            }
+        }
+    }
+    return(u1_t_pct);
+}
+/*===================================================================================================================================*/
 /*                                                                                                                                   */
 /*  Change History                                                                                                                   */
 /*                                                                                                                                   */
@@ -231,7 +288,6 @@ U2      u2_g_IllumiLvlPct(const U1 u1_a_ILLUMI_CH)
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /* 19PFv3-1  04/16/2024  SaH      Add calibration guard                                                                              */
-/* 19PFv3-2  12/18/2024  KA       Change config for temperature derating                                                             */
 /*                                                                                                                                   */
 /*  * TN = Takashi Nagai, DENSO                                                                                                      */
 /*  * SM = Shota Maegawa, Denso Techno                                                                                               */
@@ -239,6 +295,5 @@ U2      u2_g_IllumiLvlPct(const U1 u1_a_ILLUMI_CH)
 /*  * TA(M)= Teruyuki Anjima, NTT Data MSE                                                                                           */
 /*  * TH = Taisuke Hirakawa, KSE                                                                                                     */
 /*  * SaH  = Sae Hirose, Denso Techno                                                                                                */
-/*  * KA = Kapuri Ando, NTT Data MSE                                                                                                 */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
