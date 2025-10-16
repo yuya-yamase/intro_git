@@ -61,6 +61,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static U2         u2_s_VardefCfgVomJdg(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -82,11 +83,7 @@ const U1                u1_g_VDF_PTS_RX_RXC_MAX  = (U1)OXCAN_RXD_EVC_MAX;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #ifdef VARDEF_HCS_H
-#if 0   /* BEV Rebase provisionally */
 const U2               u2_g_VDF_HCS_ASCEXT_RIM_U1  = (U2)RIMID_U1_VDF_HCS_ASCEXT;
-#else   /* BEV Rebase provisionally */
-const U2               u2_g_VDF_HCS_ASCEXT_RIM_U1  = U2_MAX;
-#endif   /* BEV Rebase provisionally */
 
 #if 0   /* BEV Rebase provisionally */
 const U1               u1_g_VDF_HCS_ASCEXT_RXC_INT = (U1)OXCAN_RX_RXEV_CNT_UNK;
@@ -189,10 +186,7 @@ U2      u2_g_VardefCfgEomchk(void)
 
     U2          u2_t_eom;
 
-    u2_t_eom  = (U2)VDF_EOM_PB_ON;
-#if 0   /* BEV Rebase provisionally */
-    u2_t_eom |= (U2)u4_g_VehopemdMdfield() & ((U2)VDF_EOM_ACC_ON | (U2)VDF_EOM_IGR_ON | (U2)VDF_EOM_PBA_ON | (U2)VDF_EOM_IGP_ON);
-#endif   /* BEV Rebase provisionally */
+    u2_t_eom = u2_s_VardefCfgVomJdg();
 #if 0   /* BEV Rebase provisionally */
     u2_t_eom |= ((U2)u1_g_ESInspectMdBfield() << 8U);
 #endif   /* BEV Rebase provisionally */
@@ -247,6 +241,44 @@ U1      u1_g_VardefHcsCfgAscextchk(U1* u1_ap_ascext_rx)
 #endif   /* BEV Rebase provisionally */
 }
 
+/*===================================================================================================================================*/
+/*  U1      u2_s_VardefCfgVomJdg(void)                                                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+U2      u2_s_VardefCfgVomJdg(void)
+{
+    U2          u2_t_ret;
+    U1          u1_t_acc_on;
+    U1          u1_t_igp_on;
+    U1          u1_t_pba_on;
+    U1          u1_t_igr_on;
+
+    u2_t_ret = (U2)VDF_EOM_PB_ON;
+
+    u1_t_acc_on = u1_g_VehopemdAccOn();
+    if (u1_t_acc_on == (U1)TRUE) {
+        u2_t_ret |= (U2)VDF_EOM_ACC_ON;
+    }
+
+    u1_t_igp_on = u1_g_VehopemdIgnpOn();
+    if (u1_t_igp_on == (U1)TRUE) {
+        u2_t_ret |= (U2)VDF_EOM_IGP_ON;
+    }
+
+    u1_t_pba_on = u1_g_VehopemdBaOn();
+    if (u1_t_pba_on == (U1)TRUE) {
+        u2_t_ret |= (U2)VDF_EOM_PBA_ON;
+    }
+
+    u1_t_igr_on = u1_g_VehopemdIgnOn();
+    if (u1_t_igr_on == (U1)TRUE) {
+        u2_t_ret |= (U2)VDF_EOM_IGR_ON;
+    }
+
+    return(u2_t_ret);
+}
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

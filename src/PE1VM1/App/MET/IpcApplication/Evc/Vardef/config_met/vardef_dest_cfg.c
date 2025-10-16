@@ -179,16 +179,13 @@ static inline U1    u1_s_VardefDestCfgCalibU1NumChk(const U1 u1_a_CALIBID, const
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
 const U2        u2_g_VDF_DST_C_CODE_RIM_U2      = (U2)RIMID_U2_VDF_C_CODE;
 const U2        u2_g_VDF_DST_DEST_BDB_RIM_U1    = (U2)RIMID_U1_VDF_DEST_BDB;
 const U2        u2_g_VDF_DST_STRG_WHL_RIM_U1    = (U2)RIMID_U1_VDF_STRG_WHL;
+#if 0   /* BEV Rebase provisionally */
 const U2        u2_g_VDF_DST_IDX_RIM_U1         = (U2)RIMID_U1_VDF_DST_IDX;
 const U2        u2_g_VDF_LANG_DST_IDX_RIM_U1    = (U2)RIMID_U1_VDF_LANG_DST_IDX;
 #else   /* BEV Rebase provisionally */
-const U2        u2_g_VDF_DST_C_CODE_RIM_U2      = U2_MAX;
-const U2        u2_g_VDF_DST_DEST_BDB_RIM_U1    = U2_MAX;
-const U2        u2_g_VDF_DST_STRG_WHL_RIM_U1    = U2_MAX;
 const U2        u2_g_VDF_DST_IDX_RIM_U1         = U2_MAX;
 const U2        u2_g_VDF_LANG_DST_IDX_RIM_U1    = U2_MAX;
 #endif   /* BEV Rebase provisionally */
@@ -485,28 +482,17 @@ U1      u1_g_VardefDestCfg(U2 * u2p_a_c_code, U1 * u1p_a_dest_bdb, U1 * u1p_a_st
     u1_t_c_code = (U1)0U;
     u1_t_rxcnt = u1_g_oXCANRxdEvcnt((U2)OXCAN_RXD_PDU_CAN_BDB1S08_CH0);
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE1, &u1_t_c_code);
-#endif   /* BEV Rebase provisionally */
     *u2p_a_c_code =  ((U2)u1_t_c_code & u2_s_VDF_DST_C_CODE_MSK) << u1_s_VDF_DST_C_CODE1_BIT;
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE2, &u1_t_c_code);
-#endif   /* BEV Rebase provisionally */
     *u2p_a_c_code |= (U2)(((U2)u1_t_c_code & u2_s_VDF_DST_C_CODE_MSK) << u1_s_VDF_DST_C_CODE2_BIT);
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_C_CODE3, &u1_t_c_code);
-#endif   /* BEV Rebase provisionally */
     *u2p_a_c_code |= ((U2)u1_t_c_code & u2_s_VDF_DST_C_CODE_MSK);
 
-#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_DEST_BDB, u1p_a_dest_bdb);
     (void)Com_ReceiveSignal(ComConf_ComSignal_STRG_WHL, u1p_a_strg_whl);
-#else   /* BEV Rebase provisionally */
-    (*u1p_a_dest_bdb) = (U1)0U;
-    (*u1p_a_strg_whl) = (U1)0U;
-#endif   /* BEV Rebase provisionally */
 
     return(u1_t_rxcnt);
 }

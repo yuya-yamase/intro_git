@@ -2167,13 +2167,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)0x08000000U,                           /* u4_unk */
         (U4)0xFFFFDEFFU,                           /* u4_rx  */
 
-#if 0   /* BEV Rebase provisionally */
         (U2)NVMCID_U4_VDF_ESO_W0,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W0                    /* u2_bid */
-#else   /* BEV Rebase provisionally */
-        U2_MAX,                                    /* u2_nid */
-        U2_MAX                                     /* u2_bid */
-#endif   /* BEV Rebase provisionally */
     },
     {
         (U4)VDF_ESO_INI_W1,                        /* u4_ini */
@@ -2181,13 +2176,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)0x30000100U,                           /* u4_unk */
         (U4)0xFC03C7ADU,                           /* u4_rx  */
 
-#if 0   /* BEV Rebase provisionally */
         (U2)NVMCID_U4_VDF_ESO_W1,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W1                    /* u2_bid */
-#else   /* BEV Rebase provisionally */
-        U2_MAX,                                    /* u2_nid */
-        U2_MAX                                     /* u2_bid */
-#endif   /* BEV Rebase provisionally */
     },
     {
         (U4)VDF_ESO_INI_W2,                        /* u4_ini */
@@ -2195,13 +2185,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)0x3CA3D068U,                           /* u4_unk */
         (U4)0x3CB3D569U,                           /* u4_rx  */
 
-#if 0   /* BEV Rebase provisionally */
         (U2)NVMCID_U4_VDF_ESO_W2,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W2                    /* u2_bid */
-#else   /* BEV Rebase provisionally */
-        U2_MAX,                                    /* u2_nid */
-        U2_MAX                                     /* u2_bid */
-#endif   /* BEV Rebase provisionally */
     },
     {
         (U4)VDF_ESO_INI_W3,                        /* u4_ini */
@@ -2209,13 +2194,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)0x098D0CBAU,                           /* u4_unk */
         (U4)0x1F8FACBAU,                           /* u4_rx  */
 
-#if 0   /* BEV Rebase provisionally */
         (U2)NVMCID_U4_VDF_ESO_W3,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W3                    /* u2_bid */
-#else   /* BEV Rebase provisionally */
-        U2_MAX,                                    /* u2_nid */
-        U2_MAX                                     /* u2_bid */
-#endif   /* BEV Rebase provisionally */
     },
     {
         (U4)VDF_ESO_INI_W4,                        /* u4_ini */
@@ -2223,13 +2203,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)0x407815F8U,                           /* u4_unk */
         (U4)0x507FB5FFU,                           /* u4_rx  */
 
-#if 0   /* BEV Rebase provisionally */
         (U2)NVMCID_U4_VDF_ESO_W4,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W4                    /* u2_bid */
-#else   /* BEV Rebase provisionally */
-        U2_MAX,                                    /* u2_nid */
-        U2_MAX                                     /* u2_bid */
-#endif   /* BEV Rebase provisionally */
     },
     {
         (U4)VDF_ESO_INI_W5,                        /* u4_ini */
@@ -2237,13 +2212,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)0xC000E000U,                           /* u4_unk */
         (U4)0xFFFFEF7FU,                           /* u4_rx  */
 
-#if 0   /* BEV Rebase provisionally */
         (U2)NVMCID_U4_VDF_ESO_W5,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W5                    /* u2_bid */
-#else   /* BEV Rebase provisionally */
-        U2_MAX,                                    /* u2_nid */
-        U2_MAX                                     /* u2_bid */
-#endif   /* BEV Rebase provisionally */
     },
     {
         (U4)VDF_ESO_INI_W6,                        /* u4_ini */
@@ -2251,13 +2221,8 @@ const ST_VDF_ESO_AVA   st_gp_VDF_ESO_AVA[VDF_ESO_NOW_AVA] = {
         (U4)0x40000FFFU,                           /* u4_unk */
         (U4)0x7D87FFFFU,                           /* u4_rx  */
 
-#if 0   /* BEV Rebase provisionally */
         (U2)NVMCID_U4_VDF_ESO_W6,                  /* u2_nid */
         (U2)RIMID_U4_VDF_ESO_W6                    /* u2_bid */
-#else   /* BEV Rebase provisionally */
-        U2_MAX,                                    /* u2_nid */
-        U2_MAX                                     /* u2_bid */
-#endif   /* BEV Rebase provisionally */
     }
 };
 const U1               u1_g_VDF_ESO_NOW_AVA = (U1)VDF_ESO_NOW_AVA;

@@ -76,9 +76,7 @@ void    vd_g_VardefHcsBonInit(void)
 {
     u1_s_vdf_hcs_rx_ascext_rim  = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
 
-#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_HCS_ASCEXT_RIM_U1, u1_s_vdf_hcs_rx_ascext_rim);
-#endif   /* BEV Rebase provisionally */
 
     u2_s_vdf_ascext_rcv_elpsd = (U2)U2_MAX;
     u1_s_vdf_ascext_rcv_sta   = u1_g_VDF_HCS_ASCEXT_RXC_INT;
@@ -96,11 +94,7 @@ void    vd_g_VardefHcsRstwkInit(void)
     U1          u1_t_rim_ascext_chk;
 
     u1_t_rim_ascext_rx   = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
-#if 0   /* BEV Rebase provisionally */
     u1_t_rim_ascext_chk  = u1_g_Rim_ReadU1withStatus(u2_g_VDF_HCS_ASCEXT_RIM_U1, &u1_t_rim_ascext_rx) & (U1)RIM_RESULT_KIND_MASK;
-#else   /* BEV Rebase provisionally */
-    u1_t_rim_ascext_chk  = (U1)RIM_RESULT_KIND_NG;
-#endif   /* BEV Rebase provisionally */
 
     if ((u1_t_rim_ascext_chk == (U1)RIM_RESULT_KIND_OK) &&
         (u1_t_rim_ascext_rx  <= (U1)VDF_HCS_RX_ASCEXT_07_UNK)) {
@@ -108,9 +102,7 @@ void    vd_g_VardefHcsRstwkInit(void)
     }
     else {
         u1_s_vdf_hcs_rx_ascext_rim = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
-#if 0   /* BEV Rebase provisionally */
         vd_g_Rim_WriteU1(u2_g_VDF_HCS_ASCEXT_RIM_U1, u1_s_vdf_hcs_rx_ascext_rim);
-#endif   /* BEV Rebase provisionally */
     }
 
     u2_s_vdf_ascext_rcv_elpsd = (U2)U2_MAX;
@@ -171,9 +163,7 @@ void    vd_g_VardefHcsMainTask(const U2 u2_a_EOM)
         if (u2_t_inc >= (U2)VDF_HCS_RXC_MAX) {
 
             u1_s_vdf_hcs_rx_ascext_rim = u1_t_rx;
-#if 0   /* BEV Rebase provisionally */
             vd_g_Rim_WriteU1(u2_g_VDF_HCS_ASCEXT_RIM_U1, u1_s_vdf_hcs_rx_ascext_rim);
-#endif   /* BEV Rebase provisionally */
         }
     }
     else if (u1_t_cnt != u1_s_vdf_ascext_rcv_sta) {
@@ -202,9 +192,7 @@ void    vd_g_VardefHcsMainTask(const U2 u2_a_EOM)
 void    vd_g_VardefHcsRxReset(void)
 {
     u1_s_vdf_hcs_rx_ascext_rim  = (U1)VDF_HCS_RX_ASCEXT_FF_NRX;
-#if 0   /* BEV Rebase provisionally */
     vd_g_Rim_WriteU1(u2_g_VDF_HCS_ASCEXT_RIM_U1, u1_s_vdf_hcs_rx_ascext_rim);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_VardefHcsRxAscext(void)                                                                                             */
