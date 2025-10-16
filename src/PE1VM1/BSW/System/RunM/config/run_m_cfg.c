@@ -33,10 +33,6 @@
 #ifdef DATE_CLK_H
 #include "date_clk.h"
 #endif
-#if 0   /* BEV BSW provisionally */
-#include "xpd_init.h"
-#else
-#endif
 #if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
 #endif   /* BEV Rebase provisionally */
@@ -48,10 +44,12 @@
 /* Application           */
 
 #include "alert.h"
-#include "illumi.h"
-#include "hmiproxy.h"
-#include "vardef.h"
 #endif   /* BEV Rebase provisionally */
+#include "illumi.h"
+#if 0   /* BEV Rebase provisionally */
+#include "hmiproxy.h"
+#endif   /* BEV Rebase provisionally */
+#include "vardef.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -120,7 +118,9 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
         &u1_g_Nvmc_IsShtdwnOk,
 #if 0   /* BEV Rebase provisionally */
         &u1_g_SoundCriMgrShtdwnOk,
+#endif   /* BEV Rebase provisionally */
         &u1_g_IllumiShtdwnOk,
+#if 0   /* BEV Rebase provisionally */
         &u1_g_HmiProxyShtdwnOK
 #endif   /* BEV Rebase provisionally */
     };
@@ -158,7 +158,6 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
     vd_g_AlertReqToBit( st_sp_REQBIT, u2_t_num_reqbit, &u4_t_req, (U1)1);
 #endif   /* BEV Rebase provisionally */
 
-#if 0   /* BEV Rebase provisionally */
     u1_t_dest       = u1_g_VardefTtTailHead();
     if(u1_t_dest == (U1)VDF_TTTAILHEAD_NO12){
         u4_t_req &= ((U4)U4_MAX ^ (U4)RUN_M_SLPNG_CHK_TTAIL_ON);
@@ -166,7 +165,6 @@ U1      u1_g_RunMCfghkShtdwnchk1st(void)
     else{
         u4_t_req &= ((U4)U4_MAX ^ (U4)RUN_M_SLPNG_CHK_THEAD_ON);
     }
-#endif   /* BEV Rebase provisionally */
 
     u1_t_1st  = u1_g_Fpcall_u1_And(&fp_sp_u1_RUN_M_SHTDWN_CHK[0], u2_NC_U1_AND(fp_sp_u1_RUN_M_SHTDWN_CHK));
 
@@ -208,7 +206,7 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 {
 #if 0   /* BEV BSW provisionally */
     U1                        u1_t_2nd;
-    u1_t_2nd  = u1_g_XpdiShtdwnOk(u1_a_1ST);
+    u1_t_2nd  = u1_a_1ST;
 
 #ifdef DATE_CLK_H
     /* ----------------------------------------------------------------------------------- */

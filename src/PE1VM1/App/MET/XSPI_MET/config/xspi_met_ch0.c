@@ -40,78 +40,76 @@
 #include "veh_opemd.h"
 #include "ivdsh.h"
 
-#if 0   /* BEV Rebase provisionally */
 /* VOM */
 #include "dimmer.h"
+#if 0   /* BEV Rebase provisionally */
 #include "drvind_pwr_pct.h"
 
 /* #include "alert.h" */
+#endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
+#if 0   /* BEV Rebase provisionally */
 #include "engspd_rpm.h"
 #include "engspd_det_rpm.h"
 #include "engspd_varrz.h"
-#include "gagdst_revind.h"
-#include "gagdst_revpeak.h"
 #include "ptsctmp_cel.h"
+#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
+#if 0   /* BEV Rebase provisionally */
 #include "gagdst_attempovhtind.h"
 #include "attmp_cel.h"
 /* #include "hydrvol.h" */
+#endif   /* BEV Rebase provisionally */
 #include "tripcom.h"
+#if 0   /* BEV Rebase provisionally */
 #include "mulmed_mulfr.h"
+#endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
 #include "odo_km.h"
 #include "odo_om_rst_if.h"
 #include "vptran_sel.h"
 #include "locale.h"
-#if 0   /* BEV BSW provisionally */
-#include "fuelvol_tau.h"
-#endif
-#include "vds_ci.h"
+#if 0   /* BEV Rebase provisionally */
 #include "oilmil.h"
-#include "ecojdg.h"
-#include "dte_ed.h"
+#endif   /* BEV Rebase provisionally */
 #include "avggrph.h"
-#include "batcare.h"
 
 #include "himgadj.h"
 #include "hdimmgr_if.h"
 
 /* VSV */
 #include "gagdst_nxmph.h"
+#if 0   /* BEV Rebase provisionally */
 #include "wchime.h"
+#endif   /* BEV Rebase provisionally */
 #include "illumi.h"
 
 /* HMI */
 #include "hmiodo.h"
 #include "hmimaint.h"
 #include "hmilocale.h"
-#include "hmirim.h"
 #include "hmiputxt.h"
 #include "hmitt.h"
 #include "hmiwchime.h"
 #include "hmitripcom.h"
-#include "hmimcst.h"
-#include "hmifuel.h"
 #include "hmiscreen.h"
 #include "hmihud.h"
-#include "hmilcom.h"
-#include "hmioilmaint.h"
-#include "hmitaste.h"
+#if 0   /* BEV Rebase provisionally */
 
 #include "dio_if.h"
 
+#endif   /* BEV Rebase provisionally */
 /* EVC */
 #include "vardef.h"
 #include "vardef_dest.h"
 #include "vardef_esopt.h"
-#include "mcst.h"
 #include "calibration.h"
 
 /* Legacy */
 #if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
 #endif
+#if 0   /* BEV Rebase provisionally */
 #include "g_monitor.h"
 #include "hmigmon.h"
 #include "fspo_cmn.h"
@@ -142,8 +140,10 @@
 #define XSPI_STS_SHIFT                      (30U)
 #if 0   /* BEV Rebase provisionally */
 #define XSPI_OVERHEAT_SHIFT                 (29U)
+#endif   /* BEV Rebase provisionally */
 #define XSPI_EV_KM_ACOFF_STS_SHIFT          (27U)
 #define XSPI_EV_KM_ACON_STS_SHIFT           (24U)
+#if 0   /* BEV Rebase provisionally */
 #define XSPI_PMCHGTH_SHIFT                  (16U)
 #define XSPI_PMPWRTH_STS_SHIFT              (28U)
 #endif   /* BEV Rebase provisionally */
@@ -208,10 +208,12 @@
 
 #define XSPI_RW_ADSW                        (0x01U)
 
+#endif   /* BEV Rebase provisionally */
 #define XSPI_SHIFT_3BYTE                    (24U)
 #define XSPI_SHIFT_2BYTE                    (16U)
 #define XSPI_SHIFT_1BYTE                    (8U)
 #define XSPI_SHIFT_NON                      (0U)
+#if 0   /* BEV Rebase provisionally */
 #define XSPI_UNIT_LOW                       (0x0000007FU)
 #define XSPI_UNIT_HI                        (0x00003F00U)
 
@@ -219,16 +221,14 @@
 
 #define XSPI_MAINTEDIST_OFFSET              (32768)
 
+#endif   /* BEV Rebase provisionally */
 #define XSPI_AMB_CEL_MAX                    (10000U)
 #define XSPI_AMB_FAH_MAX                    (18100U)
 #define XSPI_AMB_LSB_1                      (100U)
 
-#define XSPI_DTE_STS_VALID                  (0U)
-#define XSPI_DTE_STS_UNKNOWN                (1U)
-#define XSPI_DTE_STS_INVALID                (2U)
-
 /* @@@ Provisional @@@ */
 #define XSPI_HUD_DTA_NUM                    (7U)
+#if 0   /* BEV Rebase provisionally */
 
 #define XSPI_GMONI_GBALL_COEF               (10U)
 #define XSPI_GMONI_GBALL_OFST               ((S2)u1_CALIB_MCUID0219_G_GAUGE_MAX * (S2)XSPI_GMONI_GBALL_COEF)
@@ -238,20 +238,18 @@
 #define XSPI_GMONI_MAXHIST_BYTE             (0U)
 #define XSPI_GMONI_MAXHIST_POS              (1U)
 
-#define XSPI_ECOJDG_INVALID                 (155U)
-
 #define XSPI_NICKNAME_USERNUM               (3U)
 #define XSPI_NICKNAME_TXTNUM                (10U)
 
+#endif   /* BEV Rebase provisionally */
 #define XSPI_UNIT_MPGIMP                    (4U)
 #define XSPI_UNIT_VAL_ELECO_KMPKWH          (0U)   /* Electricity cost    : km/kWh                 */
 #define XSPI_UNIT_VAL_ELECO_KWHP100KM       (1U)   /* Electricity cost    : kWh/100km              */
 #define XSPI_UNIT_VAL_ELECO_MILEPKWH        (2U)   /* Electricity cost    : miles/kWh              */
+#if 0   /* BEV Rebase provisionally */
 
 #define XSPI_DESIGN_CLASSIC_SUP             (0x40U)
 #define XSPI_DESIGN_METALIC_SUP             (0x80U)
-
-#define XSPI_LMET_TST_CHG_INIT              (0x0FU)
 
 #define XSPI_PWR_1MHV                       (3U)
 
@@ -264,7 +262,9 @@
 #define XSPI_MCUID_MINMAXCHK_NUM            (5U)
 #define XSPI_EVSCHG_TMCHG_LINK_SIZE         (EVSCHG_TIMCHG_SCHDINFO_SIZE)
 
+#endif   /* BEV Rebase provisionally */
 #define XSPI_VDF_AREA_SIZE                  (9U)
+#if 0   /* BEV Rebase provisionally */
 
 #define XSPI_CLOCK_UNKNOWN                  (0x1EFBEU)
 #endif   /* BEV Rebase provisionally */
@@ -291,20 +291,6 @@ typedef struct{
 }ST_XSPI_DTC;
 
 typedef struct{
-    U2                          u2_xspiid;
-    U1                          u1_mask;
-    U1                          u1_bitpos;
-    U1                          u1_mcstid;
-}ST_XSPI_CSTMZ;
-
-typedef struct{
-    U2                          u2_xspiid;
-    U4                          u4_mask;
-    U1                          u1_bitpos;
-    U1                          u1_argid;
-}ST_XSPI_TFTCONT;
-
-typedef struct{
     const U2                    u2_xspiid;
     const U1                    u1_bitpos;
     const U1                    u1_size;
@@ -327,10 +313,7 @@ typedef struct{
 static U1           u1_sp_xspi_mulmed_msgid[XSPI_MULMED_NUM_MSG];
 #endif   /* BEV Rebase provisionally */
 
-static U1           u1_s_xspi_mmopngsts;
-static U1           u1_s_xspi_swlight;
 static U1           u1_s_xspi_vipos_disp;
-static U4           u4_s_xspi_drvinf;
 static U1           u1_s_xspi_dimsw;
 static U1           u1_s_gmoni_reset_pre;
 static U1           u1_s_xspi_gvifsts;
@@ -347,12 +330,9 @@ static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxHybsys(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxFuelvol(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxBatcare(       U4 * u4_ap_pdu_tx);
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx); */
-static inline void    vd_s_XSpiCfgTxBatpow(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx);
@@ -362,19 +342,14 @@ static inline void    vd_s_XSpiCfgTxTelltale(      U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxRcmmui(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMaint(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxTftcntt(       U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxRim(           U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxWrnmsg(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxCstmize(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMulmedText(    U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxFuelUpdate(    U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxGmoni(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxOilprss(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxOiltemp(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxCalib(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAttmp(         U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxMetcstm(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxNickname(      U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAvgGrph(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(   U4 * u4_ap_pdu_tx);
@@ -387,29 +362,21 @@ static inline void    vd_s_XSpiCfgTxEvschgSwquicha(U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgRxGmoni(      const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxMcst(       const U4 * u4_ap_PDU_RX);
-static inline void    vd_s_XSpiCfgRxFuelUpdate( const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxMaint(      const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxRcmmui(     const U4 * u4_ap_PDU_RX);
-static inline void    vd_s_XSpiCfgRxRim(        const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxRemoteWarn( const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX);
-static inline void    vd_s_XSpiCfgRxMulmed(     const U4 * u4_ap_PDU_RX);   /* UserName */
 static inline void    vd_s_XSpiRxMulmed(        const U4 * u4_ap_PDU_RX);   /* MSGID */
 static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX);
-static inline void    vd_s_XSpiCfgRxTftContents(const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX);
-static inline void    vd_s_XSpiCfgRxNickname(   const U4 * u4_ap_PDU_RX);
-static inline void    vd_s_XSpiCfgRxTastetxt(   const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxAvgGrph(    const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxMETDISP(    const U4 * u4_ap_PDU_RX);
 
 
 static inline void    vd_s_XSpiCfgEsopt(           U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgMcst(            U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgAisSubbus(       U4 * u4_ap_pdu_tx);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
@@ -468,7 +435,6 @@ static inline void    vd_s_XSpiCfgTxTripCnt(       U4 * u4_ap_pdu_tx) {} /* @@St
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
 
     U4  u4_t_loop;
     U1  u1_t_subdigspd;
@@ -480,20 +446,15 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     U1  u1_t_engrpm_unit;                                              /*  ENGRPM_UNIT                                          */
     U1  u1_t_fugag_scale;                                              /*  FUGAG_SCALE                                          */
     U1  u1_t_spd_red_scale;                                            /*  SPD_RED_SCALE                                        */
-    U1  u1_t_mmcnnct_comsys;                                           /*  MMCNNCT_COMSYS                                       */
     U1  u1_t_var_ecojdg_type;                                          /*  VAR_ECOJDG_TYPE                                      */
     U1  u1_t_langslct_type;                                            /*  LANGSLCT_TYPE                                        */
     U1  u1_t_smasta_na;                                                /*  SMASTA_NA                                            */
-    U1  u1_t_sport_gauge_num;                                          /*  SPORT_GAUGE_NUM                                      */
     U1  u1_t_var_4wdsys_disp;                                          /*  VAR_4WDSYS_DISP                                      */
     U1  u1_t_tempdest;                                                 /*  TEMPDEST                                             */
     U1  u1_t_cal_dsptyp;                                               /*  CALENDAR_DISP_TYPE                                   */
-    U4  u4_t_design_flg;
-    U1  u1_t_design_sup;                                               /*  SYS_CLASSIC and SYS_METALIC                          */
     U1  u1_t_hvsysind;
     U1  u1_t_sys_hcs;                                                  /*  SYS_HCS                                              */
-
-    u4_ap_pdu_tx[0] = (U4)u1_g_VardefDestinationByPid();               /*  DESTINATION                                          */
+    U1  u1_t_dist;
 
     /* Change for 970B/850B */
     u4_ap_pdu_tx[1] = ((U4)u1_g_VardefTtTrcoff() & (U4)0x01U);         /*  VAR_TT_TRCOFF                                        */
@@ -510,20 +471,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefTTVscExp() & (U4)0x01U) << 14; /*  VAR_TT_VSCEXP                                         */
 
-    u1_t_design_sup  = (U1)0U;
-    u4_t_design_flg  = u4_g_McstBfU4((U1)MCST_BFI_TAST_FLG);
-    if((u4_t_design_flg   & (U4)MCST_TAST_FLG_CLASSIC) != (U4)0U){
-        u1_t_design_sup |= (U1)XSPI_DESIGN_CLASSIC_SUP;
-    }
-    if((u4_t_design_flg   & (U4)MCST_TAST_FLG_METALLIC) != (U4)0U){
-        u1_t_design_sup |= (U1)XSPI_DESIGN_METALIC_SUP;
-    }
-    u4_ap_pdu_tx[1] |= (U4)u1_t_design_sup;                            /*  SYS_CLASSIC and SYS_METALIC                          */
-
     u4_ap_pdu_tx[1] |= ((U4)u1_g_VardefPtsRx() & (U4)0x1fU) << 16;     /*  VAR_PTSYS                                            */
-
-    u1_t_mmcnnct_comsys = u1_g_VardefMmMthd();
-    u4_ap_pdu_tx[2]  = ((U4)u1_t_mmcnnct_comsys & (U4)0x03U) << 9;     /*  MMCNNCT_COMSYS                                       */
 
     u1_t_subdigspd = u1_g_UnitSubSpd();
     u4_ap_pdu_tx[2] |= ((U4)u1_t_subdigspd & (U4)0x03U) << 11;         /*  SUBDIGSPD_DISP                                       */
@@ -553,7 +501,11 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u1_t_fugag_scale = u1_g_VardefFuGauge();
     u4_ap_pdu_tx[2] |= ((U4)u1_t_fugag_scale & (U4)0x01U) << 28;       /*  FUGAG_SCALE                                          */
 
-    u1_t_spd_red_scale = u1_g_VardefEuSpdScaleByPid();
+    u1_t_spd_red_scale = (U1)0U;
+    u1_t_dist = u1_g_Unit((U1)UNIT_IDX_DIST);
+    if(u1_t_dist == (U1)UNIT_VAL_DIST_KM){
+        u1_t_spd_red_scale = u1_g_VardefEuSpdScaleByPid();
+    }
     u4_ap_pdu_tx[2] |= ((U4)u1_t_spd_red_scale & (U4)0x01U) << 29;     /*  SPD_RED_SCALE                                        */
 
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)XSPI_VDF_AREA_SIZE; u4_t_loop++){
@@ -562,6 +514,7 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 
     vd_s_XSpiCfgEsopt(&u4_ap_pdu_tx[4]);
 
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[9] |= (U4)TRUE << 17;                                 /*  SYS_MOP                  */ /* BEV SV1 provisionally */
 
     u4_ap_pdu_tx[10] |= (U4)TRUE << 30;                                /*  SYS_DMASSP               */ /* BEV SV1 provisionally */
@@ -583,14 +536,12 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[12] |= (U4)TRUE << 6;                                 /*  SYS_DMTOEC               */ /* BEV SV1 provisionally */
     u4_ap_pdu_tx[12] |= (U4)TRUE << 7;                                 /*  SYS_DMM1EC               */ /* BEV SV1 provisionally */
 
+#endif   /* BEV Rebase provisionally */
     u1_t_var_ecojdg_type = u1_g_VardefEcoJudge();
     u4_ap_pdu_tx[13]  = ((U4)u1_t_var_ecojdg_type & (U4)0x01U) << 9;   /*  VAR_ECOJDG_TYPE                                      */
 
     u1_t_langslct_type = u1_g_VardefLngDBTypeByPid();
     u4_ap_pdu_tx[13] |= ((U4)u1_t_langslct_type & (U4)0x3FU) << 10;    /*  LANGSLCT_TYPE                                        */
-
-    u1_t_sport_gauge_num = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SGAUGE);
-    u4_ap_pdu_tx[13] |= ((U4)u1_t_sport_gauge_num & (U4)0x01U) << 21;  /*  SPORT_GAUGE_NUM                                      */
 
     u1_t_sys_hcs      = u1_g_VardefHcsAva();
     u4_ap_pdu_tx[13] |= ((U4)u1_t_sys_hcs & (U4)0x01U) << 22;          /*  SYS_HCS                                              */
@@ -611,7 +562,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
     /*  Variation:Dynamic Variartion No.2               */
     /*  Variation:Dynamic Variartion No.3               */
 
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -621,7 +571,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
 
     U4 u4_tp_xspi_esopt[VDF_ESO_NOW_AVA];
     U4 u4_t_loop;
@@ -642,7 +591,6 @@ static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[7] = u4_tp_xspi_esopt[7];
     u4_ap_pdu_tx[8] = u4_tp_xspi_esopt[8];
 
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -652,7 +600,6 @@ static inline void vd_s_XSpiCfgEsopt(U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
 
     U1    u1_t_unitslct;
     U1    u1_t_convert;
@@ -692,7 +639,6 @@ static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1]  |= (((U4)u1_t_convert_eleco             & (U4)0x0FU)  << 8 );  /* ELE          */
     u4_ap_pdu_tx[1]  |= (((U4)u1_g_Unit((U1)UNIT_IDX_AMBTMP) & (U4)0x03U)  << 12);  /* AMBTMP       */
     u4_ap_pdu_tx[1]  |= ((U4)u1_g_TimeFormat12H24H()                       << 14);  /* TMFMT_12H24H */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -726,7 +672,6 @@ static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
     U2  u2_t_kmph;
     U2  u2_t_mph;
@@ -748,7 +693,6 @@ static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
     u2_t_mph           = u2_g_GagdstNxmphDsplyd((U1)GAGDST_NXMPH__MPH);
     u4_ap_pdu_tx[3]   = (U4)u2_t_mph;                                          /* VEHICLE_SPD_DIGITAL_MI                       */
     /* u4_ap_pdu_tx[3]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT); */            /* VEHSPD_DIG_STS_MI                            */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -760,19 +704,13 @@ static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
 static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx) {
 #if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
-    U1  u1_t_revind;
-    U1  u1_t_revpeak;
     U2  u2_t_rpm;
-    U2  u2_t_revpeakval;
     U2  u2_t_instrpm;
     U2  u2_t_rzrpm;
     U2  u2_t_max;
 
     u2_t_rpm          =  (U2)0U;
-    u2_t_revpeakval   =  (U2)0U;
     u1_t_sts          =  u1_g_EngspdRpmFltrd(&u2_t_rpm);
-    u1_t_revind       =  u1_g_GagdstRevindSts();
-    u1_t_revpeak      =  u1_g_GagdstRevpeakRpm(&u2_t_revpeakval);
     u2_t_instrpm      =  (U2)0U;
     (void)u1_g_EngspdDetRpm(&u2_t_instrpm);
     u2_t_rzrpm        =  u2_g_EngspdVarrzGetRzrpm();
@@ -782,9 +720,6 @@ static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[1]   =  (U4)u2_t_rpm;                                          /* ENGINE_SPD                                   */
     u4_ap_pdu_tx[1]  |=  ((U4)u2_t_rzrpm << XSPI_SHIFT_2BYTE);              /* TACHO_VRZ_VAL                                */
     u4_ap_pdu_tx[1]  |=  ((U4)u1_t_sts << XSPI_STS_SHIFT);                  /* ENGSPD_STS                                   */
-    u4_ap_pdu_tx[2]   =  (U4)u2_t_revpeakval;                                   /* TACHO_REVPEAK_VAL                            */
-    u4_ap_pdu_tx[2]  |=  ((U4)u1_t_revind << 30);                               /* TACHO_REVIND                                 */
-    u4_ap_pdu_tx[2]  |=  ((U4)u1_t_revpeak & (U4)0x00000001U) << 29;            /* TACHO_REVPEAK                                */
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -849,36 +784,6 @@ static inline void    vd_s_XSpiCfgTxPwrmet(U4* u4_ap_pdu_tx) {
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxFuelvol(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxFuelvol(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U2  u2_t_pct;
-    U1  u1_t_sts;
-    U2  u2_t_lit;
-
-    u2_t_pct         = (U2)0U;
-#if 0   /* BEV BSW provisionally */
-    u1_t_sts         = u1_g_FuelvolTauPctMeZ(&u2_t_pct);
-#else
-    u1_t_sts         = (U1)0U;
-#endif
-    u4_ap_pdu_tx[0] = ((U4)u2_t_pct | ((U4)u1_t_sts << XSPI_STS_SHIFT));   /* FUELVOLPER_STS / FUELVOL_PER                      */
-
-    u2_t_lit         = (U2)0U;
-#if 0   /* BEV BSW provisionally */
-    u1_t_sts         = u1_g_FuelvolTauLitEst((U1)FALSE , &u2_t_lit);
-#else
-    u1_t_sts         = (U1)0U;
-#endif
-    u4_ap_pdu_tx[1] = ( (U4)u2_t_lit | ((U4)u1_t_sts << XSPI_STS_SHIFT) ); /* FUELVOLLIT_STS / FUELVOL_LIT                      */
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxPtsctmp(U4 * u4_ap_pdu_tx)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -903,7 +808,6 @@ static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_sts;
     U2  u2_t_tmp;
 
@@ -927,45 +831,8 @@ static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx) {
     u2_t_tmp /= (U2)XSPI_AMB_LSB_1;
 
     u4_ap_pdu_tx[1] |= ((U4)u2_t_tmp << XSPI_SHIFT_2BYTE);                     /* AMB_TEMP_FAH                                       */
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxBatcare(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxBatcare(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    u4_ap_pdu_tx[0]   = (U4)u2_g_BatcareGetBSOH();                            /* BSOH                                                */
-    u4_ap_pdu_tx[0]  |= ((U4)u1_g_BatcareGetBSOCE() << XSPI_SHIFT_2BYTE); /* BSOCE                                               */
-#endif   /* BEV Rebase provisionally */
 }
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx) {} */ /* @@Stub */
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxBatpow(U4 * u4_ap_pdu_tx)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxBatpow(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U1 u1_t_sts;
-    U1 u1_t_socdsp;
-    U1 u1_t_socindll;
-
-    u1_t_socdsp   = (U1)0U;
-    u1_t_socindll = (U1)0U;
-
-    u1_t_sts = u1_g_XSpiCfgGetBatpow(&u1_t_socdsp, &u1_t_socindll);
-
-    u4_ap_pdu_tx[0]   = (U4)u1_t_socdsp;
-    u4_ap_pdu_tx[0]  |= ((U4)u1_t_socindll << XSPI_SHIFT_1BYTE);
-    u4_ap_pdu_tx[0]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT);
-
-#endif   /* BEV Rebase provisionally */
-}
 
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxShift(U4 * u4_ap_pdu_tx)                                                                            */
@@ -974,7 +841,6 @@ static inline void    vd_s_XSpiCfgTxBatpow(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
 
     U1  u1_t_shift_pos;
     U1  u1_t_shift_blnk;
@@ -995,7 +861,6 @@ static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]   |= ((U4)u1_t_shift_blnk << 8);                            /* SHIFT_BLNK_STS */
 
     u4_ap_pdu_tx[1]   = (U4)u1_t_gsi;                                           /* GSI DOWN / UP */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1005,49 +870,22 @@ static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    static const U2    u2_sp_XSPI_UB_DIM[] = {
-        (U2)0x0000U, /* Up / Down = ina / ina */
-        (U2)0x0200U, /* Up / Down = ina / act */
-        (U2)0x0100U, /* Up / Down = act / ina */
-        (U2)0x0300U  /* Up / Down = act / act */
-    };
 
     U1  u1_t_daynight;
-    U1  u1_t_rheosw;
-    U2  u2_t_ub_act;
     U2  u2_t_rheo_lvl;
-    U1  u1_t_iohw_mask;
     U1  u1_t_illumi_mask;
 
     u1_t_daynight    = u1_g_DimLvlDaynight() & (U1)0x03U;
     u4_ap_pdu_tx[0]  = (U4)u1_t_daynight;                           /* DAYNIGHT                                                 */
     u2_t_rheo_lvl    = u2_g_DimLvlUsadjust(u1_t_daynight);          /* RHEOSTAT                                                 */
     u4_ap_pdu_tx[1]  = ((U4)u2_t_rheo_lvl & (U4)0x000000FFU);
-    u2_t_ub_act      = (U2)0U;
-    u1_t_rheosw      = u1_CALIB_MCUID0430_RHEOSW;
-    u1_t_illumi_mask = u1_g_IllumiTftAlpha();
+    u1_t_illumi_mask = (U1)u2_g_IllumiLvlPct((U1)ILLUMI_CH_ALPHA);
 
-    switch(u1_t_rheosw){
-        case (U1)CALIB_MCUID0430_1_INPUT:
-            u2_t_ub_act      = u2_DIO_IF_CH_TO_BN((U2)DIO_IF_CH_DIM_DW);
-            u2_t_ub_act      = (u2_g_DioIfGrAct((U1)DIO_IF_GR_UB_MI, (U1)TRUE) >> u2_t_ub_act) & (U2)0x0003U;
-            u4_ap_pdu_tx[1] |= (U4)u2_sp_XSPI_UB_DIM[u2_t_ub_act];
-            break;
-        case (U1)CALIB_MCUID0430_2_INPUT:
-            u1_t_iohw_mask   = u1_g_DioIfChAct((U2)DIO_IF_CH_DIM_UP, (U1)TRUE)        & (U1)0x01U;
-            u4_ap_pdu_tx[1] |= ((U4)u1_t_iohw_mask << 8U);
-            u1_t_iohw_mask   = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_RHEOSTAT_DOWN_SW) & (U1)0x01U;
-            u4_ap_pdu_tx[1] |= ((U4)u1_t_iohw_mask << 9U);
-            break;
-        default:
-            /* Do Nothing */
-            break;
-    }
     u4_ap_pdu_tx[1] |= ((U4)u1_t_illumi_mask << 10U);
+#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2]  = (U4)u2_g_IoHwAdcLv((U1)ADC_CH_TFT_TH);       /* TFT_BL_TH_AD */
-    u4_ap_pdu_tx[2] |= ((U4)u1_g_IllumiTftPct() << 16U);
 #endif   /* BEV Rebase provisionally */
+    u4_ap_pdu_tx[2] |= ((U4)u2_g_IllumiLvlPct((U1)ILLUMI_CH_DUTY) << 16U);
 }
 
 /*===================================================================================================================================*/
@@ -1079,21 +917,18 @@ static inline void    vd_s_XSpiCfgTxClock(         U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U4  u4_t_odo_dat;
     U1  u1_t_odo_sts;
     U4  u4_t_tripa_dat;
     U1  u1_t_tripa_sts;
     U4  u4_t_tripb_dat;
     U1  u1_t_tripb_sts;
-    U4  u4_t_odtrp_dsp;
     U4  u4_t_odo_km_dat;                                               /* ODO_KM                                       */
     U1  u1_t_tmnt_reset_sts;
 
 
     u4_t_odo_dat       = (U4)0U;
     u1_t_odo_sts = u1_g_OdoKmMileByUnit(&u4_t_odo_dat);
-    u4_t_odtrp_dsp     = u4_g_HmiRim((U1)HMIRIM_ODOTRIPCNTTS);
     u4_t_tripa_dat     = (U4)0U;
     u1_t_tripa_sts = u1_g_OdoTripKmMileByUnit((U1)ODO_TRIP_CH_A, &u4_t_tripa_dat);
     u4_t_tripb_dat     = (U4)0U;
@@ -1106,7 +941,6 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 
     u4_ap_pdu_tx[0]   = u1_t_tmnt_reset_sts;                           /* TMNT_RESET                                   */
     u4_ap_pdu_tx[0]  |= ((U4)u1_t_odo_sts   << XSPI_STS_SHIFT);    /* ODO_STS                                      */
-    u4_ap_pdu_tx[10]  = u4_t_odtrp_dsp & (U4)XSPI_MSK_03BIT;       /* ODOTRIP_CONTENTS (Address is Provisional)    */
     u4_ap_pdu_tx[1]   = u4_t_odo_dat;                                  /* ODO                                          */
     u4_ap_pdu_tx[2]   = ((U4)u1_t_tripa_sts << XSPI_STS_SHIFT);    /* TRIPA_STS                                    */
     u4_ap_pdu_tx[3]   = u4_t_tripa_dat;                                /* TRIP_A                                       */
@@ -1114,7 +948,6 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[5]   = u4_t_tripb_dat;                                /* TRIP_B                                       */
     u4_ap_pdu_tx[6]   = u4_t_odo_km_dat;                               /* ODO_KM                                       */
 
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1124,35 +957,12 @@ static inline void    vd_s_XSpiCfgTxOdo(           U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sts;
     U4              u4_t_data;
     U2              u2_t_data;
     U1              u1_t_data;
-    U1              u1_tp_ecojdg_scr[ECOJDG_NUM_SCR];
     U1              u1_t_loop;
     U1              u1_t_acsts;
-
-    u4_t_data        = (U4)0U;
-    u1_t_sts         = u1_g_InstFeKmpl(&u4_t_data);
-    u4_ap_pdu_tx[ 0] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* INST_FE_KMPL_STS                     */
-    u4_ap_pdu_tx[ 1] = u4_t_data;                                                   /* INST_FE_KMPL                         */
-
-    u2_t_data        = u2_g_DteEdMi();
-    if(u2_t_data == (U2)DTE_ED_UNDET_VLE){                                          /* Before the calculation is completed */
-        u1_t_sts     = (U1)XSPI_DTE_STS_UNKNOWN;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else if (u2_t_data == (U2)DTE_ED__FAIL_VLE){                                    /* The calculation is Failure           */
-        u1_t_sts     = (U1)XSPI_DTE_STS_INVALID;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else{                                                                           /* The calculation is completed         */
-        u1_t_sts     = (U1)XSPI_DTE_STS_VALID;
-        u4_t_data    = (U4)u2_t_data * (U4)1000U;                                   /* Since LSB is "0.001", it's multiplied by 1000  */
-    }
-    u4_ap_pdu_tx[2]  = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* DISTTOEMPTY_MILE_STS                 */
-    u4_ap_pdu_tx[3]  = u4_t_data;                                                   /* DISTTOEMPTY_MILE                     */
 
     u2_t_data        = (U2)0U;
     u1_t_sts         = u1_g_AvgVehspdKmph((U1)AVGVEHSPD_CNTT_TA , &u2_t_data);
@@ -1163,21 +973,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u1_t_sts         = u1_g_AvgVehspdKmph((U1)AVGVEHSPD_CNTT_DC , &u2_t_data);
     u4_ap_pdu_tx[ 6] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_SPD_KMPH_AFTSTRT_STS             */
     u4_ap_pdu_tx[ 7] = (U4)u2_t_data;                                               /* AVG_SPD_KMPH_AFTSTRT                 */
-
-    u4_t_data        = (U4)0U;
-    u1_t_sts         = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_TA , &u4_t_data);
-    u4_ap_pdu_tx[ 8] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_FE_KMPL_USRRST_STS               */
-    u4_ap_pdu_tx[ 9] = u4_t_data;                                                   /* AVG_FE_KMPL_USRRST                   */
-
-    u4_t_data        = (U4)0U;
-    u1_t_sts         = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_DC , &u4_t_data);
-    u4_ap_pdu_tx[10] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_FE_KMPL_AFTSTRT_STS              */
-    u4_ap_pdu_tx[11] = u4_t_data;                                                   /* AVG_FE_KMPL_AFTSTRT                  */
-
-    u4_t_data        = (U4)0U;
-    u1_t_sts         = u1_g_AvgFeKmpl((U1)AVGFE_CNTT_RF , &u4_t_data);
-    u4_ap_pdu_tx[12] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* AVG_FE_KMPL_AFTREFUEL_STS            */
-    u4_ap_pdu_tx[13] = u4_t_data;                                                   /* AVG_FE_KMPL_AFTREFUEL                */
 
     u4_t_data         = (U4)0U;
     u1_t_sts          = u1_g_TripcomEvDteKmIgOffAcOff(&u4_t_data);
@@ -1246,40 +1041,11 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[35] = u4_t_data;                                                   /* TRIPB_DRVTIME_HHHH_USRRST            */
                                                                                     /* TRIPB_DRVTIME_MM_USRRST              */
                                                                                     /* TRIPB_DRVTIME_SS_USRRST              */
-    for(u1_t_loop = (U1)0U;  u1_t_loop < (U1)ECOJDG_NUM_SCR; u1_t_loop++){
-       u1_tp_ecojdg_scr[u1_t_loop] = (U1)0U;
-    }
-    vd_g_EcoJdgScr(&u1_tp_ecojdg_scr[0], (U1)ECOJDG_NUM_SCR);
-    for(u1_t_loop = (U1)0U;  u1_t_loop < (U1)ECOJDG_NUM_SCR; u1_t_loop++){
-        if (u1_tp_ecojdg_scr[u1_t_loop] == (U1)ECOJDG_SCR_INVALID){
-            u1_tp_ecojdg_scr[u1_t_loop] =  (U1)XSPI_ECOJDG_INVALID;             /* Invalid Value Convert                */
-        }
-    }
-    u4_ap_pdu_tx[36]  = ((U4)u1_tp_ecojdg_scr[ECOJDG_SCR_RUN_TOTAL] << XSPI_SHIFT_3BYTE); /* OVERALL                              */
-    u4_ap_pdu_tx[36] |= ((U4)u1_tp_ecojdg_scr[ECOJDG_SCR_RUN_STR]   << XSPI_SHIFT_2BYTE); /* ECO_STARTING                         */
-    u4_ap_pdu_tx[36] |= ((U4)u1_tp_ecojdg_scr[ECOJDG_SCR_RUN_RUN]   << XSPI_SHIFT_1BYTE); /* STABLE_RUNNING                       */
-    u4_ap_pdu_tx[36] |=  (U4)u1_tp_ecojdg_scr[ECOJDG_SCR_RUN_DEC];                            /* ECO_DECELERATION                     */
 
     u1_t_data         = (U1)0U;
     u1_t_sts          = u1_g_EvDtePct(&u1_t_data);
     u4_ap_pdu_tx[37]  = (U4)u1_t_sts;                                               /* DISTTOEMPTY_PHV_ENG_STS             */
     u4_ap_pdu_tx[37] |= ((U4)u1_t_data << 2);                                       /* DISTTOEMPTY_PHV_ENG                 */
-
-    u2_t_data        = u2_g_DteEdKm();
-    if(u2_t_data == (U2)DTE_ED_UNDET_VLE){                                          /* Before the calculation is completed */
-        u1_t_sts     = (U1)XSPI_DTE_STS_UNKNOWN;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else if (u2_t_data == (U2)DTE_ED__FAIL_VLE){                                    /* The calculation is Failure           */
-        u1_t_sts     = (U1)XSPI_DTE_STS_INVALID;
-        u4_t_data    = (U4)U4_MAX;
-    }
-    else{                                                                           /* The calculation is completed         */
-        u1_t_sts     = (U1)XSPI_DTE_STS_VALID;
-        u4_t_data    = (U4)u2_t_data * (U4)1000U;                                   /* Since LSB is "0.001", it's multiplied by 1000  */
-    }
-    u4_ap_pdu_tx[38] = ((U4)u1_t_sts << XSPI_STS_SHIFT);                        /* DISTTOEMPTY_KM_STS                   */
-    u4_ap_pdu_tx[39] = u4_t_data;                                                   /* DISTTOEMPTY_KM                       */
 
     u4_t_data        = (U4)0U;
     u1_t_sts         = u1_g_InstEeKmpkwh(&u4_t_data);
@@ -1306,12 +1072,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[47]  = u4_t_data;                                                  /* DISTTOEMPTY_EV_KM                    */
     u4_ap_pdu_tx[37] |= ((U4)u1_t_acsts << 9);                                      /* DISTTOEMPTY_EV_AC_STS                */
 
-    u1_t_data        = (U1)0U;
-    u1_t_sts         = u1_g_XSpiCfgGetEvRatio(&u1_t_data);
-    u4_ap_pdu_tx[48] = ((U4)u1_t_sts << (XSPI_STS_SHIFT - 1U));                 /* EV_RATIO_STS                         */
-    u4_ap_pdu_tx[48] |= (U4)u1_t_data;                                              /* EV_RATIO                             */
-
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1321,9 +1081,7 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxTelltale(      U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     vd_g_HmiTt(&u4_ap_pdu_tx[0] , (U1)HMITT_NUM);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1333,9 +1091,7 @@ static inline void    vd_s_XSpiCfgTxTelltale(      U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxRcmmui(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[0] = (U4)u1_g_RcmmUISelect();
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1360,7 +1116,6 @@ static inline void    vd_s_XSpiCfgTxMaint(         U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1 u1_t_owdutyreq;
     U2 u2_t_owduty;
 
@@ -1374,66 +1129,11 @@ static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[2]  = (U4)u1_g_HudImgAdjGetMovReqID();                                     /* HUD_VIPOS_REQID      */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HdimmgrIfGet_L_HUDBR_S() & (U4)0x0000001FU) << 8;      /* HUD_L_HUDBR_S        */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_t_owdutyreq & (U4)0x00000001U) << 13;                    /* HUD_BLDUTY_OWREQ     */
-    u4_ap_pdu_tx[2] |= (U4)((U4)u1_s_xspi_vipos_disp & (U4)0x00000001U) << 14;          /* GV_VIPOS_DISP        */
+    u4_ap_pdu_tx[2] |= (U4)((U4)u1_s_xspi_vipos_disp & (U4)0x00000001U) << 14;              /* GV_VIPOS_DISP        */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvOwReq() & (U4)0x00000001U) << 15;        /* HUD_VIPOS_POS_OWREQ  */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjGetGvRtctlIniReq() & (U4)0x00000001U) << 16;  /* HUD_VIPOS_INIT_OWREQ */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsUpSwOn() & (U4)0x00000001U) << 17;          /* HUD_VIPOS_UPSW       */
     u4_ap_pdu_tx[2] |= (U4)((U4)u1_g_HudImgAdjIsDnSwOn() & (U4)0x01U) << 18;                /* HUD_VIPOS_DNSW       */
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxTftcntt(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxTftcntt(           U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    static const U4 u4_s_XSPI_NUM_PAYLOAD = (U4)3U;
-    static const ST_XSPI_TFTCONT st_sp_XSPI_TFTCONT[] = {
-         /* u2_xspiid, u4_mask,          u1_bitpos, u1_argid                        */
-           {(U2)0U,    (U4)0x00000003U,  (U1) 0U,   (U1)HMIRIM_AMB_COP_RETENTION    }
-    };
-
-    U4  u4_t_contsize;
-    U4  u4_t_loop;
-
-    u4_t_contsize = (U4)sizeof(st_sp_XSPI_TFTCONT) / (U4)sizeof(st_sp_XSPI_TFTCONT[0]);
-
-    for(u4_t_loop = (U4)0U; u4_t_loop < u4_s_XSPI_NUM_PAYLOAD; u4_t_loop++){
-        u4_ap_pdu_tx[u4_t_loop] = (U4)0U;
-    }
-
-    for(u4_t_loop = (U4)0U; u4_t_loop < u4_t_contsize; u4_t_loop++){
-        u4_ap_pdu_tx[st_sp_XSPI_TFTCONT[u4_t_loop].u2_xspiid] |= ((u4_g_HmiRim(st_sp_XSPI_TFTCONT[u4_t_loop].u1_argid)
-            & st_sp_XSPI_TFTCONT[u4_t_loop].u4_mask)
-            << st_sp_XSPI_TFTCONT[u4_t_loop].u1_bitpos);
-    }
-
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxRim(U4 * u4_ap_pdu_tx)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxRim(           U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U4              u4_t_loop;
-    U4              u4_tp_rim[4];
-
-    u4_tp_rim[0]        = u4_g_HmiRim((U1)HMIRIM_RESERVE_0);
-    u4_tp_rim[1]        = u4_g_HmiRim((U1)HMIRIM_RESERVE_1);
-    u4_tp_rim[2]        = u4_g_HmiRim((U1)HMIRIM_RESERVE_2);
-    u4_tp_rim[3]        = u4_g_HmiRim((U1)HMIRIM_RESERVE_3);
-
-    for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)4U ; u4_t_loop++){
-        u4_ap_pdu_tx[u4_t_loop] = u4_tp_rim[u4_t_loop];
-        /* BACKUP_RAM_0 / BACKUP_RAM_1 / BACKUP_RAM_2 / BACKUP_RAM_3 */
-    }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1443,9 +1143,7 @@ static inline void    vd_s_XSpiCfgTxRim(           U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxWrnmsg(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     vd_g_HmiPuTxt(&u4_ap_pdu_tx[0] , (U1)HMIPUTXT_NUM);
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxMulmed(U4 * u4_ap_pdu_tx)                                                                           */
@@ -1479,204 +1177,12 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxCstmize(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxCstmize(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    static const U4   u4_s_XSPI_MMCSTM_PAYLOAD  = (U4)13U;
-    U4  u4_t_loop;
-    U1  u1_t_esopt_ais_ether;
-    U1  u1_t_esopt_ais_subbus;
-    U1  u1_t_mmmthd;
-
-    for(u4_t_loop = (U1)0U; u4_t_loop < u4_s_XSPI_MMCSTM_PAYLOAD; u4_t_loop++){
-        u4_ap_pdu_tx[u4_t_loop] = (U4)0U;
-    }
-    u4_ap_pdu_tx[11]  = (U4)XSPI_LMET_TST_CHG_INIT << 28;      /* L_MET_TST_CHG Initial */
-
-    vd_g_XSPICfgGetDrvInf(&u4_s_xspi_drvinf);
-
-    u4_ap_pdu_tx[0]   = ((U4)u1_g_HmiLcomSwGet((U1)HMILCOM_L_CONT_C) << 2) & (U4)0x0CU;
-    u4_ap_pdu_tx[1]   = u4_s_xspi_drvinf;                      /*  DRVINF1_UPPER / DRVINF1_LOWER / DRVINF2_UPPER / DRVINF2_LOWER    */
-
-    u1_t_esopt_ais_subbus = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISMM);    /* MM-SUBBUS and Ais      */
-    u1_t_esopt_ais_ether  = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_AISETH);   /* Ethernet  and Ais      */
-    u1_t_mmmthd           = u1_g_VardefMmMthd();
-    
-    if(u1_t_esopt_ais_subbus == (U1)TRUE){
-        vd_s_XSpiCfgAisSubbus(&u4_ap_pdu_tx[2]);
-    }
-    if(u1_t_esopt_ais_ether == (U1)TRUE){
-        vd_s_XSpiCfgMcst(&u4_ap_pdu_tx[2]);
-    }
-    if(u1_t_mmmthd == (U1)VDF_MM_MTHD_ETHER){
-        u4_ap_pdu_tx[8]  |= (((U4)u1_g_McstFunc((U1)MCST_L_VS_FUNC)   & (U4)XSPI_MSK_01BIT) << 5 );    /* L_VS_FUNC    */
-        u4_ap_pdu_tx[9]  |= (((U4)u1_g_McstFunc((U1)MCST_L_STSW_FUNC) & (U4)XSPI_MSK_01BIT) << 7 );    /* L_STSW_FUNC  */
-        u4_ap_pdu_tx[10] |= (((U4)u1_g_McstFunc((U1)MCST_L_GRV_FUNC)  & (U4)XSPI_MSK_01BIT) << 17);    /* L_GRV_FUNC   */
-    }
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgAisSubbus(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgAisSubbus(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    static const ST_XSPI_CSTMZ st_sp_XSPI_STSWCSTMZ[] = {
-        /* u2_xspiid,   u1_mask,               u1_bitpos, u1_mcstid                    */
-           {(U2)5U,    (U1)XSPI_MSK_02BIT, (U1)28U,   (U1)MCST_BFI_TACHO          }  /* TACHO_CUSTOM_TYPE           */
-    };
-
-    U4  u4_t_cstmsize;
-    U4  u4_t_loop;
-
-    u4_t_cstmsize = (U4)sizeof(st_sp_XSPI_STSWCSTMZ) / (U4)sizeof(st_sp_XSPI_STSWCSTMZ[0]);
-    for (u4_t_loop = (U4)0U; u4_t_loop < u4_t_cstmsize; u4_t_loop++) {
-        u4_ap_pdu_tx[st_sp_XSPI_STSWCSTMZ[u4_t_loop].u2_xspiid] |= (((U4)u1_g_McstBf(st_sp_XSPI_STSWCSTMZ[u4_t_loop].u1_mcstid)
-            & (U4)st_sp_XSPI_STSWCSTMZ[u4_t_loop].u1_mask)
-            << st_sp_XSPI_STSWCSTMZ[u4_t_loop].u1_bitpos);
-    }
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgMcst(U4 * u4_ap_pdu_tx)                                                                               */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void vd_s_XSpiCfgMcst(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    static const ST_XSPI_CSTMZ st_sp_XSPI_CSTMZ[] = {
-        /* u2_xspiid,   u1_mask,               u1_bitpos, u1_mcstid                    */
-           {(U2)5U,    (U1)XSPI_MSK_02BIT, (U1)5U,    (U1)MCST_BFI_HUD_ST         }, /* HUD_MODE_STS                */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)7U,    (U1)MCST_BFI_HUD            }, /* L_HUD                       */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)8U,    (U1)MCST_BFI_ECO_IND        }, /* ECO_IND                     */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)10U,   (U1)MCST_BFI_REV_PK         }, /* RV_PK                       */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)12U,   (U1)MCST_BFI_REV_IND        }, /* REV_IND                     */
-           {(U2)5U,    (U1)XSPI_MSK_07BIT, (U1)17U,   (U1)MCST_BFI_REV_ST         }, /* REV_ST                      */
-           {(U2)5U,    (U1)XSPI_MSK_02BIT, (U1)28U,   (U1)MCST_BFI_TACHO          }, /* TACHO_CUSTOM_TYPE           */
-           {(U2)6U,    (U1)XSPI_MSK_01BIT, (U1)2U,    (U1)MCST_BFI_EV_IND         }, /* EV_IND                      */
-           {(U2)6U,    (U1)XSPI_MSK_01BIT, (U1)4U,    (U1)MCST_BFI_AR             }, /* L_AR_ST                     */
-           {(U2)6U,    (U1)XSPI_MSK_05BIT, (U1)8U,    (U1)MCST_BFI_HUDILL         }, /* HUDILL                      */
-           {(U2)6U,    (U1)XSPI_MSK_06BIT, (U1)18U,   (U1)MCST_BFI_REV_LIM        }  /* REV_LMT                     */
-    };
-
-    static const ST_XSPI_CSTMZ st_sp_XSPI_MCSTFUNC[] = {
-        /* u2_xspiid,   u1_mask,               u1_bitpos, u1_mcstid                    */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)9U,    (U1)MCST_L_RV_PK_F          }, /* L_RV_PK_F     */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)11U,   (U1)MCST_L_REV_FUNC         }, /* L_REV_FUNC    */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)15U,   (U1)MCST_L_MET_TYFN         }, /* L_MET_TYFN    */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)16U,   (U1)MCST_L_HUD_FUNC         }, /* L_HUD_FUNC    */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)27U,   (U1)MCST_L_TACHO_FUNC       }, /* L_TACHO_FUNC  */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)30U,   (U1)MCST_L_OMAINTE          }, /* L_OMAINTE     */
-           {(U2)5U,    (U1)XSPI_MSK_01BIT, (U1)31U,   (U1)MCST_L_MANTE            }, /* L_MANTE       */
-           {(U2)6U,    (U1)XSPI_MSK_01BIT, (U1)0U,    (U1)MCST_L_CONT_FUNC        }, /* L_CONT_FUNC   */
-           {(U2)6U,    (U1)XSPI_MSK_01BIT, (U1)1U,    (U1)MCST_L_EV_FUNC          }, /* L_EV_FUNC     */
-           {(U2)6U,    (U1)XSPI_MSK_01BIT, (U1)3U,    (U1)MCST_L_AR_FUNC          }, /* L_AR_FUNC     */
-           {(U2)6U,    (U1)XSPI_MSK_01BIT, (U1)5U,    (U1)MCST_L_VS_FUNC          }, /* L_VS_FUNC     */
-           {(U2)6U,    (U1)XSPI_MSK_01BIT, (U1)13U,   (U1)MCST_L_ECO_FUNC         }, /* L_ECO_FUNC    */
-           {(U2)9U,    (U1)XSPI_MSK_08BIT, (U1)0U,    (U1)MCST_L_STSWLHCSTM1      }, /* L_STSWLHCSTM1 */
-           {(U2)9U,    (U1)XSPI_MSK_08BIT, (U1)8U,    (U1)MCST_L_STSWLHCSTM2      }, /* L_STSWLHCSTM2 */
-           {(U2)10U,   (U1)XSPI_MSK_08BIT, (U1)0U,    (U1)MCST_L_STSWRHCSTM1      }, /* L_STSWRHCSTM1 */
-           {(U2)10U,   (U1)XSPI_MSK_08BIT, (U1)8U,    (U1)MCST_L_STSWRHCSTM2      }, /* L_STSWRHCSTM2 */
-           {(U2)10U,   (U1)XSPI_MSK_08BIT, (U1)16U,   (U1)MCST_L_STSWRHCSTM3      }, /* L_STSWRHCSTM3 */
-           {(U2)7U,    (U1)XSPI_MSK_04BIT, (U1)0U,    (U1)MCST_L_STSWLH           }, /* L_STSWLH      */
-           {(U2)7U,    (U1)XSPI_MSK_04BIT, (U1)8U,    (U1)MCST_L_STSWRH           }, /* L_STSWRH      */
-           {(U2)6U,    (U1)XSPI_MSK_01BIT, (U1)26U,   (U1)MCST_L_RHEOF            }, /* L_RHEOF       */
-           {(U2)7U,    (U1)XSPI_MSK_01BIT, (U1)7U,    (U1)MCST_L_STSW_FUNC        }, /* L_STSW_FUNC   */
-           {(U2)8U,    (U1)XSPI_MSK_01BIT, (U1)17U,   (U1)MCST_L_GRV_FUNC         }, /* L_GRV_FUNC    */
-           {(U2)9U,    (U1)XSPI_MSK_03BIT, (U1)21U,   (U1)MCST_L_MET_TSTFN        }  /* L_MET_TSTFN   */
-    };
-
-    U4 u4_t_cstmsize;
-    U4 u4_t_funcsize;
-    U4 u4_t_loop;
-
-    u4_t_cstmsize = (U4)sizeof(st_sp_XSPI_CSTMZ) / (U4)sizeof(st_sp_XSPI_CSTMZ[0]);
-    u4_t_funcsize = (U4)sizeof(st_sp_XSPI_MCSTFUNC) / (U4)sizeof(st_sp_XSPI_MCSTFUNC[0]);
-
-    for (u4_t_loop = (U4)0U; u4_t_loop < u4_t_cstmsize; u4_t_loop++) {
-        u4_ap_pdu_tx[st_sp_XSPI_CSTMZ[u4_t_loop].u2_xspiid] |= (((U4)u1_g_McstBf(st_sp_XSPI_CSTMZ[u4_t_loop].u1_mcstid)
-            & (U4)st_sp_XSPI_CSTMZ[u4_t_loop].u1_mask)
-            << st_sp_XSPI_CSTMZ[u4_t_loop].u1_bitpos);
-    }
-
-    for (u4_t_loop = (U4)0U; u4_t_loop < u4_t_funcsize; u4_t_loop++) {
-        u4_ap_pdu_tx[st_sp_XSPI_MCSTFUNC[u4_t_loop].u2_xspiid] |= (((U4)u1_g_McstFunc(st_sp_XSPI_MCSTFUNC[u4_t_loop].u1_mcstid)
-            & (U4)st_sp_XSPI_MCSTFUNC[u4_t_loop].u1_mask)
-            << st_sp_XSPI_MCSTFUNC[u4_t_loop].u1_bitpos);
-    }
-
-    u4_ap_pdu_tx[6]  |= (((U4)u1_g_McstCfgJdg_L_RHEOST() & (U4)XSPI_MSK_04BIT)  << 27);  /* L_RHEOST  */
-    u4_ap_pdu_tx[9]  |= (((U4)u1_g_McstCfgJdg_L_MET_TST() & (U4)XSPI_MSK_03BIT) << 18);  /* L_MET_TST */ 
-
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxMetcstm(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxMetcstm(    U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U4     u4_t_loop;
-    static const U4 u4_s_XSPI_NUM_PAYLOAD = (U4)6U;
-
-    for (u4_t_loop = (U4)0U; u4_t_loop < u4_s_XSPI_NUM_PAYLOAD; u4_t_loop++) {
-        u4_ap_pdu_tx[u4_t_loop] = (U4)0U;
-    }
-
-    u4_ap_pdu_tx[3]  = (((U4)u1_g_McstReset((U1)FALSE) & (U4)XSPI_MSK_02BIT) << 22);           /* Customize Reset                */
-    u4_ap_pdu_tx[5] |= ((u4_g_HmiRim((U1)HMIRIM_INTERRUPT_CSTM) & (U4)XSPI_MSK_08BIT) << 8);   /* Interrupt Customize            */
-
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxMetcstm(U4 * u4_ap_pdu_tx)                                                                          */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(    U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-
-    U4 u4_t_loop;
-    U4 u4_t_cstmbf[MCST_NUM_WORD_USER];
-
-    for (u4_t_loop = (U4)0U; u4_t_loop < (U4)MCST_NUM_WORD_USER; u4_t_loop++) {
-        u4_t_cstmbf[u4_t_loop] = (U4)0U;
-    }
-
-    vd_g_McstSetAllBf(&u4_t_cstmbf[0]);
-    u4_ap_pdu_tx[0] = u4_t_cstmbf[0];
-    u4_ap_pdu_tx[1] = u4_t_cstmbf[1];
-    u4_ap_pdu_tx[2] = u4_t_cstmbf[2];
-    u4_ap_pdu_tx[3] = u4_t_cstmbf[3];
-    u4_ap_pdu_tx[4] = u4_t_cstmbf[4];
-    u4_ap_pdu_tx[5] = u4_t_cstmbf[5];
-    u4_ap_pdu_tx[6] = u4_t_cstmbf[6];
-    u4_ap_pdu_tx[7] = u4_t_cstmbf[7];
-    u4_ap_pdu_tx[8] = u4_t_cstmbf[8];
-    u4_ap_pdu_tx[9] = u4_t_cstmbf[9];
-    u4_ap_pdu_tx[10] = u4_t_cstmbf[10];
-    u4_ap_pdu_tx[11] = u4_t_cstmbf[11];
-    u4_ap_pdu_tx[12] = u4_t_cstmbf[12];
-    u4_ap_pdu_tx[13] = u4_t_cstmbf[13];
-    u4_ap_pdu_tx[14] = u4_t_cstmbf[14];
-    u4_ap_pdu_tx[15] = u4_t_cstmbf[15];
-    u4_ap_pdu_tx[16] = u4_t_cstmbf[16];
-    u4_ap_pdu_tx[17] = u4_t_cstmbf[17];
-    u4_ap_pdu_tx[18] = u4_t_cstmbf[18];
-    /* not set u4_ap_pdu_tx[19] */
-#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxNickname(U4 * u4_ap_pdu_tx)                                                                         */
@@ -2372,17 +1878,6 @@ static inline void    vd_s_XSpiCfgRxGmoni(    const U4 * u4_ap_PDU_RX) {
     }
 #endif   /* BEV Rebase provisionally */
 }
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxFuelUpdate(U4 * u4_ap_pdu_tx)                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxFuelUpdate(   U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    u4_ap_pdu_tx[0] = (U4)u1_g_HmiFuelAct();                             /* FUEL_FORCEUPDT                   */
-#endif   /* BEV Rebase provisionally */
-}
 
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxAvgGrph(U4 * u4_ap_pdu_tx)                                                                          */
@@ -2392,7 +1887,6 @@ static inline void    vd_s_XSpiCfgTxFuelUpdate(   U4 * u4_ap_pdu_tx) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
 {
-#if 0   /* BEV Rebase provisionally */
     U4          u4_t_1mfedata[AVGGRPH_SIZE_1M];
     U4          u4_t_1meedata[AVGGRPH_SIZE_1M];
     U4          u4_t_tafedata[AVGGRPH_SIZE_TA];
@@ -2488,7 +1982,6 @@ static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
     u4_ap_pdu_tx[80] |= ((U4)u1_t_taeerslt & (U4)XSPI_MSK_02BIT) << 6U;
     u4_ap_pdu_tx[80] |= ((U4)u1_t_taferslt & (U4)XSPI_MSK_02BIT) << 8U;
     u4_ap_pdu_tx[80] |= ((U4)u1_t_taeerslt & (U4)XSPI_MSK_02BIT) << 10U;
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2498,7 +1991,6 @@ static inline void    vd_s_XSpiCfgTxAvgGrph(         U4 * u4_ap_pdu_tx)
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_display_sts;
 
     u1_t_display_sts = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0], (U1)0U, (U1)2U);            /* DISPLAY_STS         */
@@ -2516,7 +2008,6 @@ static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
     else{
         vd_g_HmiScreenPut((U1)HMISCREEN_CH_DISP_STS_WO_TURN,(U1)FALSE);
     }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2526,63 +2017,13 @@ static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
-
-    U1    u1_t_rxdata;
-
-    /* Customize */
-    vd_g_HmiCstmPut(&u4_ap_PDU_RX[0]);
-
-    /* Interrupt Customize */
-    u1_t_rxdata = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[5], (U1)0U, (U1)8U);
-    if(u1_t_rxdata != (U1)XSPI_UNKNOWN){
-        vd_g_HmiRimPut((U1)HMIRIM_INTERRUPT_CSTM, (U4)u1_t_rxdata);
-    }
 
     /* Maint */
     vd_g_HmiMaintMetCstmPut(&u4_ap_PDU_RX[6]);
 
-    /* Oilmaint */
-    vd_g_HmiOilmaintMetCstmPut(&u4_ap_PDU_RX[6]);
-
     /* CSTM_DIMSW */
     u1_s_xspi_dimsw = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0] , (U1)24U , (U1)2U);
 
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgRxNickname(U4 * u4_ap_PDU_RX)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgRxNickname(    const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
-
-    vd_g_HmiMcstNickname1Put(&u4_ap_PDU_RX[0]);
-    vd_g_HmiMcstNickname2Put(&u4_ap_PDU_RX[5]);
-    vd_g_HmiMcstNickname3Put(&u4_ap_PDU_RX[10]);
-
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgRxTastetxt(U4 * u4_ap_PDU_RX)                                                                         */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgRxTastetxt(    const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
-    vd_g_HmiTasteChgnumPut(&u4_ap_PDU_RX[0]);
-    vd_g_HmiTaste1Put(&u4_ap_PDU_RX[1]);
-    vd_g_HmiTaste2Put(&u4_ap_PDU_RX[16]);
-    vd_g_HmiTaste3Put(&u4_ap_PDU_RX[31]);
-    vd_g_HmiTaste4Put(&u4_ap_PDU_RX[46]);
-    vd_g_HmiTaste5Put(&u4_ap_PDU_RX[61]);
-    vd_g_HmiTaste6Put(&u4_ap_PDU_RX[76]);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2597,21 +2038,6 @@ U1  u1_g_XSpiDimSw(void) {
 
 static inline void    vd_s_XSpiCfgRxMcst(       const U4 * u4_ap_PDU_RX) {} /* @@Stub */
 
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgRxFuelUpdate(U4 * u4_ap_pdu_tx)                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgRxFuelUpdate( const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
-    U1 u1_t_rx;
-
-    u1_t_rx = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0] , (U1)0U , (U1)2U);
-    vd_g_HmiFuelPut(u1_t_rx);
-#endif   /* BEV Rebase provisionally */
-}
-
 static inline void    vd_s_XSpiCfgRxMaint(      const U4 * u4_ap_PDU_RX) {} /* @@Stub */
 
 /*===================================================================================================================================*/
@@ -2621,7 +2047,6 @@ static inline void    vd_s_XSpiCfgRxMaint(      const U4 * u4_ap_PDU_RX) {} /* @
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
     U1  u1_t_wchime[HMIWCHIME_NUM];
     
     u1_t_wchime[HMIWCHIME_TSR_A]       = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[0] , (U1)2U , (U1)2U);          /* TSR_BZ2        */
@@ -2629,7 +2054,6 @@ static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
     u1_t_wchime[HMIWCHIME_MASTER]      = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)0U , (U1)2U);          /* MASTER_BZ      */
     u1_t_wchime[HMIWCHIME_CRUISE_RJCT] = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)2U , (U1)2U);          /* CRUISE_RJCT_BZ */
     vd_g_HmiWchimePut(&u1_t_wchime[0] , (U1)HMIWCHIME_NUM);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2639,18 +2063,15 @@ static inline void    vd_s_XSpiCfgRxWchime(     const U4 * u4_ap_PDU_RX) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
     ST_HMILOCALE st_t_hmilocale;
 
     st_t_hmilocale.u1_language    = (U1)u4_ap_PDU_RX[0];
     st_t_hmilocale.u1_unit_dist   = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 0U , (U1)2U);
     st_t_hmilocale.u1_unit_speed  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 2U , (U1)2U);
-    st_t_hmilocale.u1_unit_fueco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 4U , (U1)3U);
     st_t_hmilocale.u1_unit_eleco  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1) 8U , (U1)4U);
     st_t_hmilocale.u1_unit_ambtmp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)12U , (U1)2U);
     st_t_hmilocale.u1_timeformat  = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[1] , (U1)14U , (U1)2U);
     vd_g_HmiLocalePut(&st_t_hmilocale);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2660,39 +2081,14 @@ static inline void    vd_s_XSpiCfgRxLocale(     const U4 * u4_ap_PDU_RX) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxRcmmui(     const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
     U1                 u1_t_cid;
     U1                 u1_t_usract;
 
     u1_t_cid    = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[0] , (U1)1U);
     u1_t_usract = u1_XSPI_MET_READ_BYTE(u4_ap_PDU_RX[0] , (U1)0U);
     vd_g_RcmmUIUserAct(u1_t_cid , u1_t_usract);
-#endif   /* BEV Rebase provisionally */
 }
 
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgRxRim(U4 * u4_ap_pdu_tx)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgRxRim(        const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
-    static const U1 u1_sp_XSPI_HMIRIM[4] = {
-        (U1)HMIRIM_RESERVE_0,
-        (U1)HMIRIM_RESERVE_1,
-        (U1)HMIRIM_RESERVE_2,
-        (U1)HMIRIM_RESERVE_3
-    };
-    U4  u4_t_loop;
-
-    for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)4U ; u4_t_loop++){
-        if(u4_ap_PDU_RX[2U + u4_t_loop] != (U4)XSPI_UNKNOWN){
-            vd_g_HmiRimPut(u1_sp_XSPI_HMIRIM[u4_t_loop]     , u4_ap_PDU_RX[2U + u4_t_loop]);    /*  BACKUP_RAM_0        */
-        }
-    }
-#endif   /* BEV Rebase provisionally */
-}
 static inline void    vd_s_XSpiCfgRxRemoteWarn( const U4 * u4_ap_PDU_RX) {} /* @@Stub */
 
 /*===================================================================================================================================*/
@@ -2702,15 +2098,9 @@ static inline void    vd_s_XSpiCfgRxRemoteWarn( const U4 * u4_ap_PDU_RX) {} /* @
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
     U4  u4_t_trip_a;
     U4  u4_t_trip_b;
-    U1  u1_t_odtrp_dsp;
 
-    u1_t_odtrp_dsp = u1_XSPI_MET_READ__BIT(u4_ap_PDU_RX[87] , (U1)0U , (U1)3U);  /* ODOTRIP_CONTENTS                     */
-    if(u1_t_odtrp_dsp != (U1)7U){
-        vd_g_HmiRimPut((U1)HMIRIM_ODOTRIPCNTTS , (U4)u1_t_odtrp_dsp);
-    }
 #if 0   /* BEV BSW provisionally */
     u4_t_trip_a    = u4_ap_PDU_RX[0];                                        /* TRIP_A                               */
     u4_t_trip_b    = u4_ap_PDU_RX[2];                                        /* TRIP_B                               */
@@ -2720,7 +2110,6 @@ static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX) {
 #endif
 
     vd_g_HmiOdoPut(u4_t_trip_a , u4_t_trip_b);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2730,14 +2119,10 @@ static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
     ST_HMITRIPCOM st_t_hmitripcom;
 
     st_t_hmitripcom.u2_avg_vehspd_kmph_ta  = (U2)u4_ap_PDU_RX[0];       /* AVG_SPD_KMPH_USRRST                  */
-    st_t_hmitripcom.u4_avg_fe_kmpl_ta      = u4_ap_PDU_RX[1];           /* AVG_FE_KMPL_USRRST                   */
     st_t_hmitripcom.u4_avg_ee_kmpl_ta      = u4_ap_PDU_RX[2];           /* AVG_EE_KMPL_USRRST                   */
-    st_t_hmitripcom.u4_ptsrun_dist_km_lc   = u4_ap_PDU_RX[3];           /* DIST_KM_USRRST                       */
-    st_t_hmitripcom.u4_ptsrun_time_hrs_lc  = u4_ap_PDU_RX[4];           /* DRVTIME_HHHH_USRRST                  */
     st_t_hmitripcom.u4_dist_km_tr_a        = u4_ap_PDU_RX[5];           /* TRIPA_DIST_KM_USRRST                 */
     st_t_hmitripcom.u4_dist_km_tr_b        = u4_ap_PDU_RX[6];           /* TRIPB_DIST_KM_USRRST                 */
     st_t_hmitripcom.u2_avg_vehspd_tr_a     = (U2)u4_ap_PDU_RX[7];       /* TRIPA_AVG_SPD_KMPH_USRRST            */
@@ -2753,21 +2138,6 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
     st_t_hmitripcom.u4_save_fs_ml_lc       = (U4)XSPI_UNKNOWN;      /* FUELSAVE_ML_USRRST is not Applicable */
 
     vd_g_HmiTripcomPut(&st_t_hmitripcom);
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgRxMulmed(U4 * u4_ap_pdu_tx)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgRxMulmed(     const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
-    vd_g_HmiMcstUser1Put(&u4_ap_PDU_RX[0]);
-    vd_g_HmiMcstUser2Put(&u4_ap_PDU_RX[16]);
-    vd_g_HmiMcstUser3Put(&u4_ap_PDU_RX[32]);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2796,7 +2166,6 @@ static inline void    vd_s_XSpiRxMulmed(  const U4 * u4_ap_PDU_RX)
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
 
     U4 u4_t_loop;
     U1 u1_t_gvifsts;
@@ -2816,10 +2185,14 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
 
         u1_t_rxdata = (U1)(u4_ap_PDU_RX[10] & (U4)0x03U);
         if(u1_t_rxdata == (U1)1U){
+#if 0   /* BEV Rebase provisionally */
             vd_g_HmiMcstPut((U1)HMIMCST_GV_SYS_HW_ERR, u1_t_rxdata);    /* GV SYS HW ERR */
+#endif   /* BEV Rebase provisionally */
         }
         else if(u1_t_rxdata == (U1)0U){
+#if 0   /* BEV Rebase provisionally */
             vd_g_HmiMcstPut((U1)HMIMCST_GV_SYS_HW_ERR, u1_t_rxdata);    /* GV SYS HW NML */
+#endif   /* BEV Rebase provisionally */
         }
         else {
             /* Do Nothing */
@@ -2828,10 +2201,14 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
         u1_t_rxdata = (U1)((u4_ap_PDU_RX[10] >> 2) & (U4)0x03U);
         u1_s_xspi_gvifsts = u1_t_rxdata;
         if(u1_t_rxdata == (U1)1U){
+#if 0   /* BEV Rebase provisionally */
             vd_g_HmiMcstPut((U1)HMIMCST_GVIF_LINKDOWN, u1_t_rxdata);    /* GVIF LINKDOWN */
+#endif   /* BEV Rebase provisionally */
         }
         else if(u1_t_rxdata == (U1)0U){
+#if 0   /* BEV Rebase provisionally */
             vd_g_HmiMcstPut((U1)HMIMCST_GVIF_LINKDOWN, u1_t_rxdata);    /* GVIF LINK NML */
+#endif   /* BEV Rebase provisionally */
         }
         else {
             /* Do Nothing */
@@ -2840,7 +2217,6 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
         u1_s_xspi_vipos_disp = (U1)0U;
         u1_s_xspi_gvifsts = (U1)XSPI_GVIF_UNDEF2;
     }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2852,58 +2228,6 @@ static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX) {
 U1    u1_g_XSpiGvifSts(void) {
     return(u1_s_xspi_gvifsts);
 }
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgRxTftContents(U4 * u4_ap_pdu_tx)                                                                      */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgRxTftContents(const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
-
-    static const ST_XSPI_TFTCONT st_sp_XSPI_TFTCONT[] = {
-         /* u2_xspiid, u4_mask,          u1_bitpos, u1_argid                       */
-           {(U2)4U,    (U4)0x00000003U,  (U1) 0U,   (U1)HMIRIM_AMB_COP_RETENTION    }
-    };
-
-    U4  u4_t_rxdata;
-    U4  u4_t_contsize;
-    U4  u4_t_loop;
-    U1  u1_t_swlight;
-
-    u4_t_contsize = (U4)sizeof(st_sp_XSPI_TFTCONT) / (U4)sizeof(st_sp_XSPI_TFTCONT[0]);
-
-    for(u4_t_loop = (U4)0U; u4_t_loop < u4_t_contsize; u4_t_loop++){
-        u4_t_rxdata = (u4_ap_PDU_RX[st_sp_XSPI_TFTCONT[u4_t_loop].u2_xspiid]
-            >> st_sp_XSPI_TFTCONT[u4_t_loop].u1_bitpos)
-            &  st_sp_XSPI_TFTCONT[u4_t_loop].u4_mask;
-        if(u4_t_rxdata != st_sp_XSPI_TFTCONT[u4_t_loop].u4_mask){
-            vd_g_HmiRimPut(st_sp_XSPI_TFTCONT[u4_t_loop].u1_argid, u4_t_rxdata);
-        }
-    }
-    vd_g_HmiTftcnttsPut(&u4_ap_PDU_RX[0]);
-    u1_s_xspi_mmopngsts = (U1)(u4_ap_PDU_RX[3] & (U4)0x00000003U);
-
-    u1_t_swlight = (U1)(u4_ap_PDU_RX[0] & (U4)0x00000003U);
-    if((u1_t_swlight != u1_s_xspi_swlight) && (u1_t_swlight < (U1)2U)){
-#if 0   /* BEV BSW provisionally */
-        CxpiCdd_TsWr0Cxmet1s01SW_LIGHT(u1_t_swlight);
-        vd_g_oXCANCxptxTrgrTx((U1)CXPICDD_FRM_0_CH0_CXMET1S01_INDEX);
-#endif
-    }
-    u1_s_xspi_swlight = u1_t_swlight;
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  U1      u1_g_XSpiMmopngSts(void)                                                                                                 */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         u1_s_xspi_mmopngsts                                                                                              */
-/*===================================================================================================================================*/
-U1  u1_g_XSpiMmopngSts(void) {
-    return(u1_s_xspi_mmopngsts);
-}
 
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgRxAvgGrph(U4 * u4_ap_pdu_tx)                                                                          */
@@ -2912,9 +2236,7 @@ U1  u1_g_XSpiMmopngSts(void) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgRxAvgGrph(const U4 * u4_ap_PDU_RX) {
-#if 0   /* BEV Rebase provisionally */
     vd_g_HmiTripcomGrphPut(&u4_ap_PDU_RX[0]);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2963,19 +2285,15 @@ void    vd_g_XSpiCfgInitCh0(void)
         u1_sp_xspi_mulmed_msgid[u4_t_lpcnt] = (U1)0U;
     }
 
-    u1_s_xspi_mmopngsts                       = (U1)0U;
-    u1_s_xspi_swlight                         = (U1)0U;
+#endif   /* BEV Rebase provisionally */
     u1_s_xspi_vipos_disp                      = (U1)0U;
-    u4_s_xspi_drvinf                          = ((U4)XSPI_TOTAL_FUEL_CONS << XSPI_SHIFT_3BYTE);
-    u4_s_xspi_drvinf                         |= ((U4)XSPI_INST_FUEL_CONS << XSPI_SHIFT_2BYTE);
-    u4_s_xspi_drvinf                         |= ((U4)XSPI_AVERAGE_SPEED << XSPI_SHIFT_1BYTE);
-    u4_s_xspi_drvinf                         |= ((U4)XSPI_DRIVE_TIME);
     u1_s_xspi_dimsw                           = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_s_gmoni_reset_pre                      = (U1)0U;
+#endif   /* BEV Rebase provisionally */
     u1_s_xspi_gvifsts                         = (U1)XSPI_GVIF_UNDEF2;
     u1_s_xspi_disp_gvifsts                    = (U1)XSPI_GVIF_METDSP_UNDEF;
 
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2989,12 +2307,10 @@ void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX)
     vd_s_XSpiCfgRxGmoni(      &u4_ap_PDU_RX[  8]);
     vd_s_XSpiCfgRxDispsts(    &u4_ap_PDU_RX[ 10]);
     vd_s_XSpiCfgRxMcst(       &u4_ap_PDU_RX[  2]);
-    vd_s_XSpiCfgRxFuelUpdate( &u4_ap_PDU_RX[  9]);
     vd_s_XSpiCfgRxMaint(      &u4_ap_PDU_RX[ 13]);
     vd_s_XSpiCfgRxWchime(     &u4_ap_PDU_RX[ 15]);
     vd_s_XSpiCfgRxLocale(     &u4_ap_PDU_RX[ 17]);
     vd_s_XSpiCfgRxRcmmui(     &u4_ap_PDU_RX[ 19]);
-    vd_s_XSpiCfgRxRim(        &u4_ap_PDU_RX[ 20]);
     vd_s_XSpiCfgRxRemoteWarn( &u4_ap_PDU_RX[ 21]);
     vd_s_XSpiCfgRxAvgGrph(    &u4_ap_PDU_RX[ 38]);
     vd_s_XSpiCfgRxOdo(        &u4_ap_PDU_RX[ 40]);
@@ -3002,12 +2318,8 @@ void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX)
     /* vd_s_XSpiCfgRxNvm(        &u4_ap_PDU_RX[ 57]); */ /* Delete for CV-R */
     vd_s_XSpiCfgRxHUD(        &u4_ap_PDU_RX[100]);
     vd_s_XSpiCfgRxMETDISP(    &u4_ap_PDU_RX[121]);
-    vd_s_XSpiCfgRxTftContents(&u4_ap_PDU_RX[128]);
     vd_s_XSpiRxMulmed(        &u4_ap_PDU_RX[144]);
-    vd_s_XSpiCfgRxMulmed(     &u4_ap_PDU_RX[150]);
     vd_s_XSpiCfgRxMetcstm(    &u4_ap_PDU_RX[212]);
-    vd_s_XSpiCfgRxNickname(   &u4_ap_PDU_RX[224]);
-    vd_s_XSpiCfgRxTastetxt(   &u4_ap_PDU_RX[244]);
     /* vd_s_XSpiCfgRxDnPrdctAns( &u4_ap_PDU_RX[344]); */ /* Delete for CV-R */
 
 
@@ -3038,12 +2350,9 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxVehSpd(        &u4_ap_pdu_tx[ 32]);      /* 032 - 035    : Vehicle Speed                                 */
     vd_s_XSpiCfgTxEngspd(        &u4_ap_pdu_tx[ 36]);      /* 036 - 038    : Engine Speed                                  */
     vd_s_XSpiCfgTxHybsys(        &u4_ap_pdu_tx[ 39]);      /* 039 - 040    : Hybrid System Ind.                            */
-    vd_s_XSpiCfgTxFuelvol(       &u4_ap_pdu_tx[ 41]);      /* 041 - 042    : Fuel Volume                                   */
     vd_s_XSpiCfgTxPtsctmp(       &u4_ap_pdu_tx[ 43]);      /* 043 - 043    : EngineTemp                                    */
     vd_s_XSpiCfgTxAmbtmp(        &u4_ap_pdu_tx[ 44]);      /* 044 - 045    : Ambient Temp                                  */
-    vd_s_XSpiCfgTxBatcare(       &u4_ap_pdu_tx[ 46]);      /* 046 - 046    : SOHDSP                                        */
     /* vd_g_XSpiCfgTxHydrovol(      &u4_ap_pdu_tx[0]); */  /*     -        : Hydro Volume                                  */
-    vd_s_XSpiCfgTxBatpow(        &u4_ap_pdu_tx[ 47]);      /* 047 - 048    : Battery Power                                 */
     vd_s_XSpiCfgTxShift(         &u4_ap_pdu_tx[ 49]);      /* 049 - 053    : Shift                                         */
     vd_s_XSpiCfgTxDimming(       &u4_ap_pdu_tx[ 54]);      /* 054 - 056    : Dimming                                       */
     vd_s_XSpiCfgTxClock(         &u4_ap_pdu_tx[ 57]);      /* 057 - 058    : Clock                                         */
@@ -3051,17 +2360,12 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxMaint(         &u4_ap_pdu_tx[ 66]);      /* 066 - 067    : Maintenance                                   */
     vd_s_XSpiCfgTxRcmmui(        &u4_ap_pdu_tx[ 68]);      /* 068 - 069    : Rcmmui                                        */
     vd_s_XSpiCfgTxPwrmet(        &u4_ap_pdu_tx[ 70]);      /* 070 - 071    : Pwrmet                                        */
-    vd_s_XSpiCfgTxTftcntt(       &u4_ap_pdu_tx[ 72]);      /* 072 - 080    : TftContents                                   */
-    vd_s_XSpiCfgTxFuelUpdate(    &u4_ap_pdu_tx[ 81]);      /* 081 - 081    : Fuel Force Update                             */
-    vd_s_XSpiCfgTxRim(           &u4_ap_pdu_tx[ 82]);      /* 082 - 085    : Rim                                           */
-    vd_s_XSpiCfgTxCstmize(       &u4_ap_pdu_tx[ 86]);      /* 086 - 109    : Customize                                     */
     vd_s_XSpiCfgTxHud(           &u4_ap_pdu_tx[110]);      /* 110 - 134    : Hud                                           */
     vd_s_XSpiCfgTxEvschgTimchg(  &u4_ap_pdu_tx[115]);      /* 115 - 134    : EVSCHG TIMCHG                                 */
     vd_s_XSpiCfgTxWrnmsg(        &u4_ap_pdu_tx[135]);      /* 135 - 184    : Wrnmsg                                        */
     vd_s_XSpiCfgTxTripcom(       &u4_ap_pdu_tx[185]);      /* 185 - 234    : Tripcom                                       */
     vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[235]);      /* 235 - 264    : Telltale                                      */
     vd_s_XSpiCfgTxMulmed(        &u4_ap_pdu_tx[265]);      /* 265 - 281    : MultimediaUserName                            */
-    vd_s_XSpiCfgTxMetcstm(       &u4_ap_pdu_tx[282]);      /* 282 - 292    : Meter Customize                               */
     vd_s_XSpiCfgTxMulmedText(    &u4_ap_pdu_tx[293]);      /* 293 - 360    : MultimediaText                                */
     vd_s_XSpiCfgTxNickname(      &u4_ap_pdu_tx[362]);      /* 362 - 378    : MultimediaNickName                            */
     vd_s_XSpiCfgTxEvschgSwquicha(&u4_ap_pdu_tx[379]);      /* 379 - 381    : EVSCHG SWQUICHA                               */
@@ -3146,6 +2450,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-7     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
+/*  BEV-10    10/10/2025 KO       Configured for BEVstep3_Dimmer_Rebase                                                              */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -3165,5 +2470,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * KO     = Kazuto Oishi,  Denso Techno                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
