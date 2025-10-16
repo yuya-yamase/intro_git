@@ -26,11 +26,8 @@
 #include "rim_ctl.h"
 #include "nvmc_mgr.h"
 
-#if 0   /* BEV BSW provisionally */
-#else
-#include "oxcan_channel_STUB.h"
-#endif
 #include "fpcall_vd_fvd.h"
+#if 0   /* BEV Rebase provisionally */
 /* Complex Device Driver */
 #include "nwcm.h"
 #include "drec_tx.h"
@@ -82,8 +79,11 @@
 #include "attmp_cel.h"
 #include "evschg.h"
 #include "batcare.h"
+#endif   /* BEV Rebase provisionally */
 #include "xspi_met.h"
+#if 0   /* BEV Rebase provisionally */
 #include "datesi_met.h"
+#endif   /* BEV Rebase provisionally */
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -111,6 +111,7 @@
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_StaBonInit(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
         &vd_g_EvschgBonInit,
         &vd_g_VardefBonInit,
@@ -161,6 +162,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_BatcareBonInit,
         &vd_g_DateSIMETInit
     };
+#endif   /* BEV Rebase provisionally */
 
     U1    u1_t_rslt;
 
@@ -179,8 +181,10 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+#if 0   /* BEV Rebase provisionally */
     vd_g_NWCMBonInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_BON_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_BON_INIT));
+#endif   /* BEV Rebase provisionally */
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
 
@@ -197,6 +201,7 @@ void vd_g_22SSCallout_StaBonInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_StaRstInit(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
         &vd_g_EvschgRstwkInit,
         &vd_g_VardefRstwkInit,
@@ -247,6 +252,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_BatcareRstwkInit,
         &vd_g_DateSIMETInit
     };
+#endif   /* BEV Rebase provisionally */
 
     U1    u1_t_rslt;
 
@@ -265,8 +271,10 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+#if 0   /* BEV Rebase provisionally */
     vd_g_NWCMWkupInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_RST_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_RST_INIT));
+#endif   /* BEV Rebase provisionally */
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
 
@@ -283,6 +291,7 @@ void vd_g_22SSCallout_StaRstInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_StaWkupInit(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
         &vd_g_EvschgRstwkInit,
         &vd_g_VardefRstwkInit,
@@ -333,6 +342,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_BatcareRstwkInit,
         &vd_g_DateSIMETInit
     };
+#endif   /* BEV Rebase provisionally */
 
     U1    u1_t_rslt;
 
@@ -351,8 +361,10 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
+#if 0   /* BEV Rebase provisionally */
     vd_g_NWCMWkupInit();
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_WKUP_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_WKUP_INIT));
+#endif   /* BEV Rebase provisionally */
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
 
@@ -369,5 +381,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
 /*===================================================================================================================================*/
 void vd_g_22SSCallout_PrepShtdwn(void)
 {
+#if 0   /* BEV Rebase provisionally */
     vd_g_SoundCriMgr_DeInit();
+#endif   /* BEV Rebase provisionally */
 }

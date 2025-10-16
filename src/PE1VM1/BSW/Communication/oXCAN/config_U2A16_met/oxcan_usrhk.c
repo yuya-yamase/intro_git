@@ -23,12 +23,14 @@
 #include "can_rscf4_cfg.h"      /* CAN_CFG_CONTROLLERNUM_MAX is defined in can_rscf4_cfg.h */
 
 
+#if 0   /* BEV Rebase provisionally */
 #include "illumi_comtx.h"
 #include "drec_tx.h"
 #include "mulmed_mulfr.h"
 #include "mulmed_color.h"
 #include "fspomgr.h"
 #include "mmappctrl.h"
+#endif   /* BEV Rebase provisionally */
 #include "xspi_met_can.h"
 
 #if (CAN_CFG_CONTROLLERNUM_MAX > 0U)
@@ -311,15 +313,19 @@ void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
 
     switch (u2_a_IPDU_TX) {
         case (U2)MSG_MET1S01_TXCH0:
+#if 0   /* BEV Rebase provisionally */
             vd_g_IllumiRheoTxAck();
+#endif   /* BEV Rebase provisionally */
             break;
         default:
             /* Do nothing */
             break;
     }
 
+#if 0   /* BEV Rebase provisionally */
     vd_g_DrectxTxAck(u2_a_IPDU_TX);
     vd_g_MulmedColorTxHk(u2_a_IPDU_TX);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)                                                                             */
@@ -369,7 +375,9 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
 
     switch (u2_a_IPDU_RX) {
         case (U2)MSG_ENG1G17_RXCH0:
+#if 0   /* BEV Rebase provisionally */
             vd_g_FsposnsrCanRxEng1g17();
+#endif   /* BEV Rebase provisionally */
             break;
 #if 0   /* BEV BSW provisionally */
         case (U2)MSG_ENG1S98_RXCH0:
@@ -378,7 +386,9 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
 #else
 #endif
         case (U2)MSG_VSC1G12_RXCH0:
+#if 0   /* BEV Rebase provisionally */
             vd_g_FsposnsrCanRxVsc1g12();
+#endif   /* BEV Rebase provisionally */
             break;
 #if 0   /* BEV BSW provisionally */
         case (U2)MSG_VSC1G30_RXCH0:
@@ -393,7 +403,9 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
     
     vd_s_oXCANUsrhkMmappRxMsg(u2_a_IPDU_RX);
     
+#if 0   /* BEV Rebase provisionally */
     vd_g_MulmedMulfrRxTxtHk(u2_a_IPDU_RX);
+#endif   /* BEV Rebase provisionally */
     vd_g_XSpiMETCANGWPushPDU(u2_a_IPDU_RX);
 }
 /*===================================================================================================================================*/
