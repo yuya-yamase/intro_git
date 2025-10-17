@@ -41,12 +41,14 @@
 #define PWRCTRL_COM_VMTXID_VM2_PWRERR      (IVDSH_DID_WRI_CPREQ_005)   /* SIP異常検知通知 */
 #define PWRCTRL_COM_VMTXID_VM2_SOCONCOUNT  (IVDSH_DID_WRI_CPREQ_048)   /* SoC起動回数カウンタ */
 #define PWRCTRL_COM_VMTXID_VM2_SOCONTIME   (IVDSH_DID_WRI_CPREQ_049)   /* Soc起動回数カウンタ更新時間 */
+#define PWRCTRL_COM_VMTXID_VM2_BOOTLOGINF  (IVDSH_DID_WRI_VM3TO2_BOOTLOG_INF) /* 起動ログ計測点検知データ */
 
 /* データ長(word) */
 #define PWRCTRL_COM_PWRON_LEN              (1U)         /* SIP電源再起動通知データ長 */
 #define PWRCTRL_COM_PWRERR_LEN             (1U)         /* SIP異常検知通知データ長 */
 #define PWRCTRL_COM_COUNT_LEN              (1U)         /* データ長:1word */
 #define PWRCTRL_COM_TIME_LEN               (1U)         /* データ長:1word */
+#define PWRCTRL_COM_BOOTLOG_LEN            (1U)         /* データ長:1word */
 
 /* SoC起動回数カウンタ */
 #define PWRCTRL_COM_SOCONCOUNT_MAX         (0xFFFFU)    /* 最大値 */
@@ -54,6 +56,13 @@
 
 /* SoC起動回数カウンタ更新時の時間 */
 #define PWRCTRL_COM_SOCONTIME_INIT         (0U)         /* 初期値 */
+
+/* 起動ログ計測点検知データ定義 */
+#define PWRCTRL_COM_BOOTLOG_NON           (0x00000000) /* 全計測点クリア */
+#define PWRCTRL_COM_BOOTLOG_BON_SET       (0x00000001) /* 計測点③SoC起動時 */
+#define PWRCTRL_COM_BOOTLOG_STR_SET       (0x00000100) /* 計測点③'STRWake時 */
+#define PWRCTRL_COM_BOOTLOG_BON_RESET     (0x0000FF00) /* 計測点③SoC起動クリア */
+#define PWRCTRL_COM_BOOTLOG_STR_RESET     (0x000000FF) /* 計測点③'STRWakeクリア */
 
 /* 共通 */
 #define PWRCTRL_COM_1BYTEMASK              (0x000000FF) /* 1Byte目マスク */
@@ -87,6 +96,7 @@ static U4 u4_s_PwrCtrl_Com_Tx_PwrOn;         /* SIP電源再起動通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_PwrErr;        /* SIP異常検知通知 */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnCount;    /* SoC起動回数カウンタ */
 static U4 u4_s_PwrCtrl_Com_Tx_SoCOnTime;     /* SoC起動回数カウンタ更新時の時間 */
+static U4 u4_s_PwrCtrl_Com_Tx_BootLog;       /* 起動ログ計測点通知 */
 
 /*--------------------------------------------------------------------------*/
 /* Constants                                                                */
@@ -119,6 +129,8 @@ void vd_g_PwrCtrlComBonInit( void )
 
     u4_s_PwrCtrl_Com_Tx_SoCOnTime = (U4)PWRCTRL_COM_SOCONTIME_INIT;     /* SoC起動回数カウンタ更新時の時間 */
     vd_g_Rim_WriteU4((U2)RIMID_U4_PWCTR_SOC_ON_TIME, u4_s_PwrCtrl_Com_Tx_SoCOnTime); 
+    
+    vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);       /* 起動ログ計測点をクリア */
 
     return;
 }
@@ -143,6 +155,7 @@ void vd_g_PwrCtrlComWkupInit( void )
     u1_s_PwrCtrl_Com_Rx_STRModeInfo = (U1)PWRCTRL_COM_STR_OFF;      /* STRモード状態 */
     u4_s_PwrCtrl_Com_Tx_PwrOn = (U4)PWRCTRL_COM_PWRON_NOINFO;       /* SIP電源再起動通知 */
     u4_s_PwrCtrl_Com_Tx_PwrErr = (U4)PWRCTRL_COM_PWRERR_NOERR;      /* SIP異常検知通知 */
+    vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_INITREQ);   /* 起動ログ計測点をクリア */
 
     /* SoC起動回数カウンタ更新時の時間 */
     u4_t_soctime_buf = (U4)PWRCTRL_COM_SOCONTIME_INIT;
@@ -290,6 +303,9 @@ void vd_g_PwrCtrlComTxTask( void )
 
     /* SoC起動回数カウンタ更新時の時間 */
     vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_SOCONTIME, &u4_s_PwrCtrl_Com_Tx_SoCOnTime, (U2)PWRCTRL_COM_TIME_LEN);
+
+    /* 起動ログ計測点検知データ */
+    vd_g_iVDshWribyDid((U2)PWRCTRL_COM_VMTXID_VM2_BOOTLOGINF, &u4_s_PwrCtrl_Com_Tx_BootLog, (U2)PWRCTRL_COM_BOOTLOG_LEN);
 
     return;
 }
@@ -507,6 +523,58 @@ void vd_s_PwrCtrlComRxSTR( void )
         {
             u1_s_PwrCtrl_Com_Rx_STRModeInfo = u1_t_vm_data;
         }
+    }
+    
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlComTxSetBootLog
+  Description   : 起動ログ計測点検知データ設定処理
+  param[in/out] : [In] const U1 u1_a_req 起動ログ計測点設定要求
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComTxSetBootLog( const U1 u1_a_req )
+{
+    if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_BONREQ){
+        /* Soc起動時の計測点を検知 */
+        u4_s_PwrCtrl_Com_Tx_BootLog |= (U4)PWRCTRL_COM_BOOTLOG_BON_SET;
+    }
+    else if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_STRREQ){
+        /* STRWake時の計測点を検知 */
+        u4_s_PwrCtrl_Com_Tx_BootLog |= (U4)PWRCTRL_COM_BOOTLOG_STR_SET;
+    }
+    else{
+        /* 未定義の要求が通知された場合は何もしない */
+    }
+    
+    return;
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlComTxClrBootLog
+  Description   : 起動ログ計測点検知データ設定処理
+  param[in/out] : [In] const U1 u1_a_req 起動ログ計測点クリア要求
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlComTxClrBootLog( const U1 u1_a_req )
+{
+    if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_INITREQ){
+        /* 全計測点に未検知を設定 */
+        u4_s_PwrCtrl_Com_Tx_BootLog = (U4)PWRCTRL_COM_BOOTLOG_NON;
+    }
+    else if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_BONREQ){
+        /* Soc起動を未検知にクリア */
+        u4_s_PwrCtrl_Com_Tx_BootLog &= (U4)PWRCTRL_COM_BOOTLOG_BON_RESET;
+    }
+    else if(u1_a_req == (U1)PWRCTRL_COM_BOOTLOG_STRREQ){
+        /* STRWakeを未検知にクリア */
+        u4_s_PwrCtrl_Com_Tx_BootLog &= (U4)PWRCTRL_COM_BOOTLOG_STR_RESET;
+    }
+    else{
+        /* 未定義の要求が通知された場合は何もしない */
     }
     
     return;

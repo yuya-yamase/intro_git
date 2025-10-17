@@ -778,6 +778,9 @@ void vd_g_PwrCtrlSipOnReq( void )
     u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim          = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_SOC_RESOUT_Wait_Tim           = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_Wait_Tim          = (U4)PWRCTRL_SIP_TIME_INIT;
+    
+    /* 計測点③Soc起動の検知状態をクリア */
+    vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
 
 }
 
@@ -833,6 +836,9 @@ void vd_g_PwrCtrlSipOnPwrOnReq( void )
     u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim          = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_SOC_RESOUT_Wait_Tim           = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_Wait_Tim          = (U4)PWRCTRL_SIP_TIME_INIT;
+    
+    /* 計測点③Soc起動の検知状態をクリア */
+    vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
 
 }
 
@@ -865,6 +871,10 @@ void vd_g_PwrCtrlSipRsmReq( void )
     u4_s_PwrCtrl_Sip_Rsm_VB33_SIP_FREQ_Tim    = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_Rsm_MM_SUSPEND_REQ_N_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_Rsm_STR_WAKE_Tim         = (U4)PWRCTRL_SIP_TIME_INIT;
+    
+    /* 計測点③'STRWakeの検知状態をクリア */
+    vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_STRREQ);
+
 }
 
 /*****************************************************************************
@@ -1364,6 +1374,8 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
             (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW)){
 #endif
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP7;
+            /* 計測点③SoC起動設定(SOC_RESOUT_N & SAIL_RESOUT_N=Hi) */
+            vd_g_PwrCtrlComTxSetBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
         }
 
         else
@@ -1482,6 +1494,8 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
             u1_s_PwrCtrl_Sip_Pwr_Sts  = (U1)PWRCTRL_SIP_STS_NON;
             /* SoC起動通知(STR_WAKE = Hi) */
             vd_g_PwrCtrlComTxSetSoCOnStart();
+            /* 計測点③'STRWake時設定(STR_WAKE = Hi) */
+            vd_g_PwrCtrlComTxSetBootLog((U1)PWRCTRL_COM_BOOTLOG_STRREQ);
         }
     }
     
