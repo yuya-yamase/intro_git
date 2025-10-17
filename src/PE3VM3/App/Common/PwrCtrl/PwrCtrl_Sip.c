@@ -74,7 +74,7 @@
 #define PWRCTRL_SIP_OFF_T_MM_SUSPEND_REQ_N (     5U / PWRCTRL_CFG_TASK_TIME) /* tMM_SUSPEND_REQ_N:5ms                                                */
 #define PWRCTRL_SIP_OFF_T_STR_WAKE         (     5U / PWRCTRL_CFG_TASK_TIME) /* tSTR_WAKE:5ms                                                        */
 #define PWRCTRL_SIP_OFF_T_MM_OFF_REQ_LO    (     5U / PWRCTRL_CFG_TASK_TIME) /* tMM_OFF_REQ_LO:5ms                                                   */
-#define PWRCTRL_SIP_OFF_WAIT_MM_STBY       (     5U / PWRCTRL_CFG_TASK_TIME) /* MM_STBY_N =Loチェック待機時間:5ms                                    */
+#define PWRCTRL_SIP_OFF_WAIT_MM_STBY       (100000U / PWRCTRL_CFG_TASK_TIME) /* MM_STBY_N =Loチェック待機時間:100秒                                    */
 #define PWRCTRL_SIP_OFF_WAIT_PMA_PS_HOLD   (  3000U / PWRCTRL_CFG_TASK_TIME) /* PMA_PS_HOLD =Loチェック待機時間:3秒                                  */
 #define PWRCTRL_SIP_OFF_WAIT_SOC_RESOUT_N  (   100U / PWRCTRL_CFG_TASK_TIME) /* SOC_RESOUT_N    =Loチェック待機時間:100ms                            */
 #define PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N (   100U / PWRCTRL_CFG_TASK_TIME) /* SAIL_RESOUT_N   =Loチェック待機時間:100ms                            */
@@ -388,6 +388,36 @@ U1 u1_g_PwrCtrlSipFOffInfo( void )
 U1 u1_g_PwrCtrlSipFOffGetSts( void )
 {
     return(u1_s_PwrCtrl_Sip_DDConvFlag);
+}
+
+/*****************************************************************************
+  Function      : u1_g_PwrCtrlSipStbyStepGetSts
+  Description   : SIPスタンバイ/SIP電源OFFシーケンス現在STEP通知関数
+  param[in/out] : [in] u1_a_stby: スタンバイシーケンス/SIP電源OFFシーケンス判定
+  return        : 現在STEP数
+  Note          : none
+*****************************************************************************/
+U1 u1_g_PwrCtrlSipStbyStepGetSts( const U1 u1_a_stby )
+{
+    U1 u1_t_ret;
+    
+    /* スタンバイシーケンスの現在STEP要求の場合 */
+    if(u1_a_stby == (U1)PWRCTRL_SIP_STBY_STEP_REQ){
+        /* 戻り値にスタンバイシーケンスのSTEP数を設定 */
+        u1_t_ret = u1_s_PwrCtrl_Sip_Stby_Step;
+    }
+    
+    else if(u1_a_stby == (U1)PWRCTRL_SIP_SIPOFF_STEP_REQ){
+        /* 戻り値にSIP電源OFFシーケンスのSTEP数を設定 */
+        u1_t_ret = u1_s_PwrCtrl_Sip_Off_Step;
+    }
+    
+    else{
+        /* 範囲外の場合は異常値としてCMPLTを設定 */
+        u1_t_ret = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
+    }
+    
+    return(u1_t_ret);
 }
 
 /*****************************************************************************
@@ -748,6 +778,9 @@ void vd_g_PwrCtrlSipOnReq( void )
     u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim          = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_SOC_RESOUT_Wait_Tim           = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_Wait_Tim          = (U4)PWRCTRL_SIP_TIME_INIT;
+    
+    /* 計測点③Soc起動の検知状態をクリア */
+    vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
 
 }
 
@@ -803,6 +836,9 @@ void vd_g_PwrCtrlSipOnPwrOnReq( void )
     u4_s_PwrCtrl_Sip_On_PMA_PS_HOLD_Wait_Tim          = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_SOC_RESOUT_Wait_Tim           = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_On_SAIL_RESOUT_Wait_Tim          = (U4)PWRCTRL_SIP_TIME_INIT;
+    
+    /* 計測点③Soc起動の検知状態をクリア */
+    vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
 
 }
 
@@ -835,6 +871,10 @@ void vd_g_PwrCtrlSipRsmReq( void )
     u4_s_PwrCtrl_Sip_Rsm_VB33_SIP_FREQ_Tim    = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_Rsm_MM_SUSPEND_REQ_N_Tim = (U4)PWRCTRL_SIP_TIME_INIT;
     u4_s_PwrCtrl_Sip_Rsm_STR_WAKE_Tim         = (U4)PWRCTRL_SIP_TIME_INIT;
+    
+    /* 計測点③'STRWakeの検知状態をクリア */
+    vd_g_PwrCtrlComTxClrBootLog((U1)PWRCTRL_COM_BOOTLOG_STRREQ);
+
 }
 
 /*****************************************************************************
@@ -961,6 +1001,34 @@ void vd_g_PwrCtrlSipForcedOffSTEP4Req( void )
     u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP4;
     
     vd_s_PwrCtrlSipForcedOffInitReq();
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipStandbyCancelSTEP1Req
+  Description   : 5-6-1.スタンバイ処理中の起動トリガ時シーケンス STEP1開始要求
+  param[in/out] : none
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipStandbyCancelSTEP1Req( void )
+{
+    /* 起動ステップの初期化 */
+    u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
+
+    vd_s_PwrCtrlSipForcedOffInitReq();
+}
+
+/*****************************************************************************
+  Function      : vd_g_PwrCtrlSipSetDDConvOff
+  Description   : SIP入力DDコン電源OFF処理実施/未実施設定
+  param[in/out] : [in] u1_a_ddconv: SIP入力DDコン電源OFF処理実施有無
+  return        : none
+  Note          : none
+*****************************************************************************/
+void vd_g_PwrCtrlSipSetDDConvOff( const U1 u1_a_ddconv )
+{
+    /* SIP入力DDコン電源OFF処理未実施状態を設定 */
+    u1_s_PwrCtrl_Sip_DDConvFlag     = u1_a_ddconv;
 }
 
 /*****************************************************************************
@@ -1306,6 +1374,8 @@ static void vd_s_PwrCtrlSipOnMainFunc( void )
             (u1_g_PwrCtrl_Main_DbgFailOffFlag == (U1)MCU_DIO_LOW)){
 #endif
             u1_s_PwrCtrl_Sip_On_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP7;
+            /* 計測点③SoC起動設定(SOC_RESOUT_N & SAIL_RESOUT_N=Hi) */
+            vd_g_PwrCtrlComTxSetBootLog((U1)PWRCTRL_COM_BOOTLOG_BONREQ);
         }
 
         else
@@ -1406,7 +1476,7 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
         vd_s_PwrCtrlSipRsmVB33SIPFREQ();         /* STEP2-1 */
         
         /* STEP2-1が完了していれば次のSTEPに進める */
-        if((U1)u4_s_PwrCtrl_Sip_Rsm_VB33_SIP_FREQ_Tim == (U1)PWRCTRL_SIP_TIME_INVALID){
+        if(u4_s_PwrCtrl_Sip_Rsm_VB33_SIP_FREQ_Tim == (U4)PWRCTRL_SIP_TIME_INVALID){
             u1_s_PwrCtrl_Sip_Rsm_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP3;
         }
     }
@@ -1424,6 +1494,8 @@ static void vd_s_PwrCtrlSipRsmMainFunc( void )
             u1_s_PwrCtrl_Sip_Pwr_Sts  = (U1)PWRCTRL_SIP_STS_NON;
             /* SoC起動通知(STR_WAKE = Hi) */
             vd_g_PwrCtrlComTxSetSoCOnStart();
+            /* 計測点③'STRWake時設定(STR_WAKE = Hi) */
+            vd_g_PwrCtrlComTxSetBootLog((U1)PWRCTRL_COM_BOOTLOG_STRREQ);
         }
     }
     
@@ -1452,7 +1524,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
     }
 
 /* MM_STBY_N =Lo? */
-    if((U1)u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP2){
+    if(u1_s_PwrCtrl_Sip_Off_Step == (U1)PWRCTRL_COMMON_PROCESS_STEP2){
         vd_s_PwrCtrlSipOffValChkMMSTBY();         /* STEP2-1 */
 
 #if (PWRCTRL_CFG_PRIVATE_ERR_CHK == PWRCTRL_CFG_PRIVATE_ERR_CHK_ENABLE)
@@ -1476,8 +1548,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
                 u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_SOCERR;
                 /* 【todo】異常内容の保存[ID0015] */
                 /* SoC異常検知の設定 */
-                /* 暫定対応 待ち時間を5msに変更したため本ルートに遷移しても異常を残さない */
-                /* vd_g_PwrCtrlSipSoCOnError(); */
+                vd_g_PwrCtrlSipSoCOnError();
             }
         }
     }
@@ -1553,7 +1624,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
             /* STEP4-1~4-3が100ms経過しても完了してなければSTEPを完了させる */
             if((u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SOC_RESOUT_N)  ||
               (u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N) ||
-              (u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N)){
+              (u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_POFF_COMP)){
                 
                 /* 【todo】異常内容の保存[ID0017/0018/0019] */
                 /* SoC異常検知の設定 */
@@ -1578,7 +1649,7 @@ static void vd_s_PwrCtrlSipOffMainFunc( void )
                 /* STEP4-1~4-3が100ms経過しても完了してなければSTEPを完了させる */
                 if((u4_s_PwrCtrl_Sip_Off_SOC_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SOC_RESOUT_N)  ||
                   (u4_s_PwrCtrl_Sip_Off_SAIL_RESOUT_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N) ||
-                  (u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_SAIL_RESOUT_N)){
+                  (u4_s_PwrCtrl_Sip_Off_POFF_COMPLETE_N_Wait_Tim > (U4)PWRCTRL_SIP_OFF_WAIT_POFF_COMP)){
                 
                     /* 【todo】異常内容の保存[ID0017/0018/0019] */
                     /* SoC異常検知の設定 */
@@ -1712,7 +1783,7 @@ static void vd_s_PwrCtrlSipStbyMainFunc( void )
         }
         else
         {
-            /* STEP3-1が100ms経過しても完了してなければSTEPを完了させる */
+            /* STEP3-1が5s経過しても完了してなければSTEPを完了させる */
             if(u4_s_PwrCtrl_Sip_Stby_AOSS_Wait_Tim > (U4)PWRCTRL_SIP_STBY_WAIT_AOSS){
                 /* 強制OFFシーケンス(PMIC異常)要求を設定 */
                 u1_s_PwrCtrl_Sip_FOff_Sts = (U1)PWRCTRL_SIP_FORCEDOFF_PMICERR;
@@ -1852,7 +1923,7 @@ static void vd_s_PwrCtrlSipForcedOffMainFunc( void )
           (u4_s_PwrCtrl_Sip_ForcedOff_STR_WAKE_Tim           == (U4)PWRCTRL_SIP_TIME_INVALID) &&
           (u4_s_PwrCtrl_Sip_ForcedOff_MM_OFF_REQ_Tim         == (U4)PWRCTRL_SIP_TIME_INVALID)){
             /* DDコンに対するOFF区間確保時間の待機 */
-            if(u4_s_PwrCtrl_Sip_ForcedOff_DDConvOFFWait_Tim > (U4)PWRCTRL_SIP_FOFF_T_DDCONV_OFF_WAIT){
+            if(u4_s_PwrCtrl_Sip_ForcedOff_DDConvOFFWait_Tim >= (U4)PWRCTRL_SIP_FOFF_T_DDCONV_OFF_WAIT){
                /* 待機時間が満了したら次のSTEPに進める */
                u1_s_PwrCtrl_Sip_ForcedOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP_CMPLT;
                u1_s_PwrCtrl_Sip_DDConvFlag     = (U1)PWRCTRL_SIP_FOFF_DDCONV_ON;
