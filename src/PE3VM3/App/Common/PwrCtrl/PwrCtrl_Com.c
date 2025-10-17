@@ -27,7 +27,7 @@
 
 /* データ長(word) */
 #define PWRCTRL_COM_STBY_LEN               (1U)         /* スタンバイ条件成立有無データ長 */
-#define PWRCTRL_COM_FSLP_LEN               (1U)         /* スタンバイ条件成立有無データ長 */
+#define PWRCTRL_COM_FSLP_LEN               (1U)         /* 強制スリープ条件成立有無データ長 */
 #define PWRCTRL_COM_SOCSTS_LEN             (1U)         /* 動作ステータス通知データ長 */
 #define PWRCTRL_COM_STR_LEN                (1U)         /* STRモード状態通知データ長 */
 
