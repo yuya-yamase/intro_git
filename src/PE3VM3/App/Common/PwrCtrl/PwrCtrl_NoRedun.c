@@ -231,7 +231,7 @@ void vd_g_PwrCtrlNoRedunPwrOffStart( void )
   param[in/out] : none
   return        : FALSE(0)：非冗長電源シーケンス実行中
                   TRUE(1) ：非冗長電源シーケンス完了
-  Note          : シス検までの暫定対応あり
+  Note          : none
 *****************************************************************************/
 U1 u1_g_PwrCtrlNoRedunGetSts( void )
 {
@@ -398,7 +398,7 @@ void vd_g_PwrCtrlNoRedunMainFunction( void )
   Description   : 次回状態遷移先の決定
   param[in/out] : none
   return        : 次回状態遷移先(PWRCTRL_NOREDUN_STATE_**)
-  Note          : シス検,量産までの暫定対応あり
+  Note          : 量産までの暫定対応あり
 *****************************************************************************/
 static U1 u1_s_PwrCtrlNoRedunNxtsts( void )
 {
