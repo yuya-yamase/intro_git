@@ -19,7 +19,6 @@
 #include       "DiagApp_SID10.h"
 #include       "x_spi_ivi_sub0_SID10.h"
 #include       "Dcm.h"
-#include       "PwrCtl.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -143,11 +142,11 @@ U1               u1_g_DiagAppSID10SesCtrlChk(const U1 u1_a_SES)
     U1   u1_t_power_sts;
 
     u1_t_ret = (U1)E_OK;
-    u1_t_power_sts = u1_g_Power_ModeState();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
 
     if(u1_s_session_chg_ok  == (U1)FALSE) {
         u1_t_ret = (U1)OXDC_SAL_PROC_NR_22;
-    } else if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
+    } else if(u1_t_power_sts == (U1)FALSE) {
         u1_t_ret = (U1)OXDC_SAL_PROC_NR_22;
     } else {
         /*Do Nothing*/

@@ -33,8 +33,13 @@
 #define MAX_CANDATA_QUEUE_SIZE                  (9984U)
 #define MAX_MISCSIZE_QUEUE_SIZE                 (256U)
 #define MAX_MISCDATA_QUEUE_SIZE                 (1604U)
+#define MAX_DIAGCANDATA_QUEUE_SIZE              (8200U)
+#define MAX_DIAGCAN_QUEUE_SIZE                  (7U)
+#define MAX_DIAGCANSIZE_QUEUE_SIZE              (MAX_DIAGCAN_QUEUE_SIZE * 2U)
 #define MAX_CANCOMMANDSIZE_QUEUE_SIZE           (128U)
 #define MAX_CANCOMMANDDATA_QUEUE_SIZE           (512U)
+
+#define XSPI_IVI_SFT_08                         ( 8U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -60,6 +65,11 @@ static  U1                                      u1_sp_xspi_ivi_queue_cancommand[
 static  U1                                      u1_sp_xspi_ivi_queue_cancommandsize[MAX_CANCOMMANDSIZE_QUEUE_SIZE];   /* CANコマンドサイズ向け */
 static  U1                                      u1_sp_xspi_ivi_queue_miscsize[MAX_MISCSIZE_QUEUE_SIZE];               /* MISCデータサイズ向け */
 static  U1                                      u1_sp_xspi_ivi_queue_miscdata[MAX_MISCDATA_QUEUE_SIZE];               /* MISCデータ向け */
+static  U1                                      u1_sp_xspi_ivi_queue_diagcandata[MAX_DIAGCANDATA_QUEUE_SIZE];         /* DiagCANデータ向け */
+static  U1                                      u1_sp_xspi_ivi_queue_diagcandatasize[MAX_DIAGCANSIZE_QUEUE_SIZE];     /* DiagCANデータサイズ向け */
+static  U1                                      u1_sp_xspi_ivi_queue_diagcansid[MAX_DIAGCAN_QUEUE_SIZE];              /* DiagCANSIDデータ向け */
+static  U1                                      u1_sp_xspi_ivi_queue_diagcanid[MAX_DIAGCAN_QUEUE_SIZE];               /* DiagCANIDデータ向け */
+static  U1                                      u1_sp_xspi_ivi_queue_diagcannum[MAX_DIAGCANSIZE_QUEUE_SIZE];          /* FlameNumデータ向け */
 
 ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_CMS;                               /* CMS向け */
 ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_CANDATA;                           /* CANメッセージ向け */
@@ -67,6 +77,11 @@ ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_CANCOMMAND;
 ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_CANCOMMANDSIZE;                     /* CANコマンドサイズ向け */
 ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_MISCDATA;                          /* MISC向け */
 ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_MISCDATASIZE;                      /* MISCデータサイズ向け */
+ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_DIAGCANDATA;                       /* DiagCAN向け */
+ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_DIAGCANDATASIZE;                   /* DiagCANデータサイズ向け */
+ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_DIAGCANSID;                        /* DiagCANSIDデータ向け */
+ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_DIAGCANID;                       /* DiagCANIDデータ向け */
+ST_XSPI_IVI_QUEUE_CONTROL                       st_sp_XSPI_IVI_QUEUE_DIAGCANNUM;                       /* DiagCANFlameNumデータ向け */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -97,6 +112,11 @@ void            vd_g_XspiIviQueueInit(void)
     vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_miscdata[0], (U1)0U, (U4)MAX_MISCDATA_QUEUE_SIZE);
     vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_cancommand[0], (U1)0U, (U4)MAX_CANCOMMANDDATA_QUEUE_SIZE);
     vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_cancommandsize[0], (U1)0U, (U4)MAX_CANCOMMANDSIZE_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcandata[0], (U1)0U, (U4)MAX_DIAGCANDATA_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcandatasize[0], (U1)0U, (U4)MAX_DIAGCANSIZE_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcansid[0], (U1)0U, (U4)MAX_DIAGCAN_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcanid[0], (U1)0U, (U4)MAX_DIAGCAN_QUEUE_SIZE);
+    vd_g_MemfillU1(&u1_sp_xspi_ivi_queue_diagcannum[0], (U1)0U, (U4)MAX_DIAGCANSIZE_QUEUE_SIZE);
 
     vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_CMS, u1_sp_xspi_ivi_queue_cmsdata, (U2)MAX_CMS_QUEUE_SIZE);
     vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_CANDATA, u1_sp_xspi_ivi_queue_candata, (U2)MAX_CANDATA_QUEUE_SIZE);
@@ -104,6 +124,11 @@ void            vd_g_XspiIviQueueInit(void)
     vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_MISCDATA, u1_sp_xspi_ivi_queue_miscdata, (U2)MAX_MISCDATA_QUEUE_SIZE);
     vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_CANCOMMAND, u1_sp_xspi_ivi_queue_cancommand, (U2)MAX_CANCOMMANDDATA_QUEUE_SIZE);
     vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_CANCOMMANDSIZE, u1_sp_xspi_ivi_queue_cancommandsize, (U2)MAX_CANCOMMANDSIZE_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATA, u1_sp_xspi_ivi_queue_diagcandata, (U2)MAX_DIAGCANDATA_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATASIZE, u1_sp_xspi_ivi_queue_diagcandatasize, (U2)MAX_DIAGCANSIZE_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANSID, u1_sp_xspi_ivi_queue_diagcansid, (U2)MAX_DIAGCAN_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANID, u1_sp_xspi_ivi_queue_diagcanid, (U2)MAX_DIAGCAN_QUEUE_SIZE);
+    vd_s_XspiIviQueueBufferInit(&st_sp_XSPI_IVI_QUEUE_DIAGCANNUM, u1_sp_xspi_ivi_queue_diagcannum, (U2)MAX_DIAGCANSIZE_QUEUE_SIZE);
 }
 
 /*===================================================================================================================================*/
@@ -194,6 +219,83 @@ U1              u1_g_XspiIviQueueWriMiscSize(U1 u1_a_value)
 void            vd_g_XspiIviQueueWriMiscdata(U1 * u1_ap_value, const U2 u2_a_NUM_VALUES)
 {
     (void)u1_s_XspiIviQueueEnqueue(&st_sp_XSPI_IVI_QUEUE_MISCDATA, u1_ap_value, u2_a_NUM_VALUES);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_XspiIviQueueWriDiagCANdata(U1 * u1_ap_value, const U2 u2_a_NUM_VALUES)                                       */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DiagCANデータ書込み処理                                                                                            */
+/*  Arguments:      u1_a_value      : 書込み対象のDiagCANデータ                                                                        */
+/*                  u2_a_NUM_VALUES : 書込みサイズ                                                                                    */
+/*  Return:         u1_t_return     : 成功(TRUE)/失敗(FALSE)                                                                          */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviQueueWriDiagCANdata(const U1 * u1_ap_VALUE, const U2 u2_a_NUM_VALUES)
+{
+    (void)u1_s_XspiIviQueueEnqueue(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATA, u1_ap_VALUE, u2_a_NUM_VALUES);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_XspiIviQueueWriDiagCANdataSize(U2  u2_a_value)                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DiagCANデータ書込み処理                                                                                            */
+/*  Arguments:      u1_a_value      : 書込み対象のDiagCANデータサイズ                                                                  */
+/*  Return:         u1_t_return     : 成功(TRUE)/失敗(FALSE)                                                                          */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviQueueWriDiagCANdataSize(U2  u2_a_value)
+{
+    static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_SIZE_NUM_VALUE   = (U2)2U;
+    U1  u1_t_value[2];
+
+    u1_t_value[0] = (U1)((u2_a_value & (U2)0xFF00U) >> XSPI_IVI_SFT_08);
+    u1_t_value[1] = (U1)(u2_a_value & (U2)0x00FFU);
+    (void)u1_s_XspiIviQueueEnqueue(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATASIZE, &u1_t_value[0], u2_s_XSPI_IVI_QUEUE_DIAGCAN_SIZE_NUM_VALUE);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_XspiIviQueueWriDiagCANdataSID(U1  u1_a_value)                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DiagCANデータ書込み処理                                                                                            */
+/*  Arguments:      u1_a_value      : 書込み対象のDiagCANSIDデータ                                                                     */
+/*  Return:         u1_t_return     : 成功(TRUE)/失敗(FALSE)                                                                          */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviQueueWriDiagCANdataSID(U1  u1_a_value)
+{
+    static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_SID_NUM_VALUE   = (U2)1U;
+
+    (void)u1_s_XspiIviQueueEnqueue(&st_sp_XSPI_IVI_QUEUE_DIAGCANSID, &u1_a_value, u2_s_XSPI_IVI_QUEUE_DIAGCAN_SID_NUM_VALUE);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_XspiIviQueueWriDiagCANdataID(U1  u1_a_value)                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DiagCANデータ書込み処理                                                                                            */
+/*  Arguments:      u1_a_value      : 書込み対象のDiagCANIDデータ                                                                     */
+/*  Return:         u1_t_return     : 成功(TRUE)/失敗(FALSE)                                                                          */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviQueueWriDiagCANdataID(U1  u1_a_value)
+{
+    static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_ID_NUM_VALUE   = (U2)1U;
+
+    (void)u1_s_XspiIviQueueEnqueue(&st_sp_XSPI_IVI_QUEUE_DIAGCANID, &u1_a_value, u2_s_XSPI_IVI_QUEUE_DIAGCAN_ID_NUM_VALUE);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_XspiIviQueueWriDiagCANdataNum(U1  u1_a_value)                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DiagCANデータ書込み処理                                                                                            */
+/*  Arguments:      u1_a_value      : 書込み対象のDiagCANFlameNumデータ                                                                */
+/*  Return:         u1_t_return     : 成功(TRUE)/失敗(FALSE)                                                                          */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviQueueWriDiagCANdataNum(U2  u2_a_value)
+{
+    static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_FLAMENUM_NUM_VALUE   = (U2)2U;
+    
+    U1  u1_t_value[2];
+
+    u1_t_value[0] = (U1)((u2_a_value & (U2)0xFF00U) >> XSPI_IVI_SFT_08);
+    u1_t_value[1] = (U1)(u2_a_value & (U2)0x00FFU);
+
+    (void)u1_s_XspiIviQueueEnqueue(&st_sp_XSPI_IVI_QUEUE_DIAGCANNUM, &u1_t_value[0], u2_s_XSPI_IVI_QUEUE_DIAGCAN_FLAMENUM_NUM_VALUE);
 }
 
 /*===================================================================================================================================*/
@@ -299,6 +401,92 @@ void            vd_g_XspiIviQueueGetMiscdata(U1 * u1_ap_buf, const U2 u2_a_NUM_V
 }
 
 /*===================================================================================================================================*/
+/* void            vd_g_XspiIviQueueGetDiagCANdata(U1 * u1_ap_buf, const U2 u2_a_NUM_VALUES)                                         */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DiagCANデータ読出し,格納処理                                                                                       */
+/*  Arguments:      u1_ap_buf       : DiagCANデータ読み出し用のバッファ                                                                 */
+/*                  u2_a_NUM_VALUES : 読み出しサイズ                                                                                   */
+/*  Return:         u1_t_return     : 成功(TRUE)/失敗(FALSE)                                                                          */
+/*===================================================================================================================================*/
+U1            u1_g_XspiIviQueueGetDiagCANdata(U1 * u1_ap_buf, const U2 u2_a_NUM_VALUES)
+{
+    U1  u1_t_rslt;
+
+    u1_t_rslt = u1_s_XspiIviQueueDequeue(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATA, u1_ap_buf, u2_a_NUM_VALUES);
+
+    return(u1_t_rslt);
+}
+
+/*===================================================================================================================================*/
+/* void            vd_g_XspiIviQueueGetDiagCANdataSize(U2 * u2_ap_buf)                                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DiagCANデータ読出し,格納処理                                                                                       */
+/*  Arguments:      u2_ap_buf       : DiagCANデータ読み出し用のバッファ                                                                 */
+/*                  u2_a_NUM_VALUES : 読み出しサイズ                                                                                   */
+/*  Return:         u1_t_return     : 成功(TRUE)/失敗(FALSE)                                                                          */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviQueueGetDiagCANdataSize(U2 * u2_ap_buf)
+{
+    static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_DATA_SIZE_VALUE   = (U2)2U;
+    U1  u1_t_value[2];
+    U1  u1_t_rslt;
+
+    u1_t_rslt = u1_s_XspiIviQueueDequeue(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATASIZE, &u1_t_value[0], u2_s_XSPI_IVI_QUEUE_DIAGCAN_DATA_SIZE_VALUE);
+
+    if(u1_t_rslt == (U1)TRUE) {
+        *u2_ap_buf = (U2)((u1_t_value[0] << XSPI_IVI_SFT_08) | u1_t_value[1]);
+    }
+}
+
+/*===================================================================================================================================*/
+/* void              vd_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf)                                                              */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    MISCデータサイズ読出し,格納処理                                                                                    */
+/*  Arguments:      u1_ap_buf   : MISCデータサイズ読み出し用のバッファ                                                                  */
+/*  Return:         u1_t_return : 成功(TRUE)/失敗(FALSE)                                                                              */
+/*===================================================================================================================================*/
+void              vd_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf)
+{
+    static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_SID_SIZE_VALUE   = (U2)1U;
+
+    (void)u1_s_XspiIviQueueDequeue(&st_sp_XSPI_IVI_QUEUE_DIAGCANSID, u1_ap_buf, u2_s_XSPI_IVI_QUEUE_DIAGCAN_SID_SIZE_VALUE);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_XspiIviQueueGetDiagCANDataID(U1 * u1_ap_buf)                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    MISCデータサイズ読出し,格納処理                                                                                    */
+/*  Arguments:      u1_ap_buf   : MISCデータサイズ読み出し用のバッファ                                                                  */
+/*  Return:         u1_t_return : 成功(TRUE)/失敗(FALSE)                                                                              */
+/*===================================================================================================================================*/
+void              vd_g_XspiIviQueueGetDiagCANDataID(U1 * u1_ap_buf)
+{
+    static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_ID_SIZE_VALUE   = (U2)1U;
+
+    (void)u1_s_XspiIviQueueDequeue(&st_sp_XSPI_IVI_QUEUE_DIAGCANID, u1_ap_buf, u2_s_XSPI_IVI_QUEUE_DIAGCAN_ID_SIZE_VALUE);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_XspiIviQueueGetDiagCANDataNum(U1 * u1_ap_buf)                                                                */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    MISCデータサイズ読出し,格納処理                                                                                    */
+/*  Arguments:      u1_ap_buf   : MISCデータサイズ読み出し用のバッファ                                                                  */
+/*  Return:         u1_t_return : 成功(TRUE)/失敗(FALSE)                                                                              */
+/*===================================================================================================================================*/
+void              vd_g_XspiIviQueueGetDiagCANDataNum(U2 * u2_ap_buf)
+{
+    static const U2 u2_s_XSPI_IVI_QUEUE_DIAGCAN_FLAMENUM_SIZE_VALUE   = (U2)2U;
+    U1  u1_t_value[2];
+    U1  u1_t_rslt;
+
+    u1_t_rslt = u1_s_XspiIviQueueDequeue(&st_sp_XSPI_IVI_QUEUE_DIAGCANNUM, &u1_t_value[0], u2_s_XSPI_IVI_QUEUE_DIAGCAN_FLAMENUM_SIZE_VALUE);
+
+    if(u1_t_rslt == (U1)TRUE) {
+        *u2_ap_buf = (U2)((u1_t_value[0] << XSPI_IVI_SFT_08) | u1_t_value[1]);
+    }
+}
+
+/*===================================================================================================================================*/
 /* U1            u1_g_XspiIviQueueGetMiscDataSizeRef(void)                                                                           */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Description:    MISCデータサイズ参照                                                                                              */
@@ -390,6 +578,46 @@ U1              u1_g_XspiIviQueueWriChkMISC(const U2 u2_a_NUM)
 
     /* CMSバッファに1つ以上空きがあり、かつCANデータバッファに書込みデータサイズより大きい空きがあるかチェック */
     if ((u2_t_miscsize_num > (U2)0U) && (u2_t_misc_num > u2_a_NUM)) {
+        u1_t_return = (U1)TRUE;
+    }
+    else {
+        /* あき容量不足で書き込み不可 */
+        /* do nothing */
+    }
+
+    return (u1_t_return);
+}
+
+/*===================================================================================================================================*/
+/* U1              u1_g_XspiIviQueueWriChkDiagCAN(const U2 u2_a_NUM)                                                                 */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    DiagCANデータバッファへの書き込み可否通知                                                                           */
+/*  Arguments:      U1 u1_a_NUM    : 書き込みデータサイズ                                                                              */
+/*  Return:         U1 u1_t_return : 可(TRUE)/否(FALSE)                                                                              */
+/*===================================================================================================================================*/
+U1              u1_g_XspiIviQueueWriChkDiagCAN(const U2 u2_a_NUM)
+{
+    U1          u1_t_return;
+    U2          u2_t_data_num;
+    U2          u2_t_size_num;
+    U2          u2_t_sid_num;
+    U2          u2_t_id_num;
+    U2          u2_t_flamenum_num;
+
+    u1_t_return = (U1)FALSE;
+
+    u2_t_data_num     = u2_s_XspiIviQueueFreeSpace(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATA);
+    u2_t_size_num     = u2_s_XspiIviQueueFreeSpace(&st_sp_XSPI_IVI_QUEUE_DIAGCANDATASIZE);
+    u2_t_sid_num      = u2_s_XspiIviQueueFreeSpace(&st_sp_XSPI_IVI_QUEUE_DIAGCANSID);
+    u2_t_id_num       = u2_s_XspiIviQueueFreeSpace(&st_sp_XSPI_IVI_QUEUE_DIAGCANID);
+    u2_t_flamenum_num = u2_s_XspiIviQueueFreeSpace(&st_sp_XSPI_IVI_QUEUE_DIAGCANNUM);
+
+    /* CMSバッファに1つ以上空きがあり、かつCANデータバッファに書込みデータサイズより大きい空きがあるかチェック */
+    if ((u2_t_size_num > (U2)0U) && 
+        (u2_t_sid_num  > (U2)0U) &&  
+        (u2_t_id_num   > (U2)0U) &&  
+        (u2_t_flamenum_num  > (U2)0U) && 
+        (u2_t_data_num > u2_a_NUM)) {
         u1_t_return = (U1)TRUE;
     }
     else {
