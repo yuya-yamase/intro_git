@@ -78,17 +78,11 @@ void vd_g_22SSCallout_StaBonInit(void)
     /*****************************************************/
     vd_g_Rim_BonInit();
 
-    /* 仮：Nvmc起動時処理                                         */
-    /* ※Bon/Wkup判定条件は仮                                     */
-    /*     BRAMが正常か否かで切り分ける(起動時に必ずどちらかを実施)  */
-    /* RIMでRAMチェックした結果も考慮して、Bon/Wkupを切り分けるべき。*/
-    /* (他の部品もその基準でBon/Wkupを切り分けているものがあるはず)  */
 /*    vd_g_Nvmc_BonInit(); */
 /*    do{  */
 /*        u1_t_rslt = u1_g_Nvmc_BonRead(); */
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
-    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
     vd_g_oXDoCANBonInit();
     vd_g_VehopemdRstInit();
@@ -132,19 +126,13 @@ void vd_g_22SSCallout_StaRstInit(void)
     /*****************************************************/
     /* Rim, Nvmc Init Function should be called at first */
     /*****************************************************/
-    vd_g_Rim_BonInit();
+    vd_g_Rim_WkupInit();
 
-    /* 仮：Nvmc起動時処理                                         */
-    /* ※Bon/Wkup判定条件は仮                                     */
-    /*     BRAMが正常か否かで切り分ける(起動時に必ずどちらかを実施)  */
-    /* RIMでRAMチェックした結果も考慮して、Bon/Wkupを切り分けるべき。*/
-    /* (他の部品もその基準でBon/Wkupを切り分けているものがあるはず)  */
-/*    vd_g_Nvmc_BonInit(); */
+/*    vd_g_Nvmc_WkupInit(); */
 /*    do{  */
-/*        u1_t_rslt = u1_g_Nvmc_BonRead(); */
+/*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
-    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANRstInit */
     vd_g_oXCANRstInit();
     vd_g_oXDoCANRstInit();
     vd_g_VehopemdRstInit();
@@ -191,17 +179,11 @@ void vd_g_22SSCallout_StaWkupInit(void)
     /*****************************************************/
     vd_g_Rim_WkupInit();
 
-    /* 仮：Nvmc起動時処理                                         */
-    /* ※Bon/Wkup判定条件は仮                                     */
-    /*     BRAMが正常か否かで切り分ける(起動時に必ずどちらかを実施)  */
-    /* RIMでRAMチェックした結果も考慮して、Bon/Wkupを切り分けるべき。*/
-    /* (他の部品もその基準でBon/Wkupを切り分けているものがあるはず)  */
 /*    vd_g_Nvmc_WkupInit(); */
 /*    do{  */
 /*        u1_t_rslt = u1_g_Nvmc_WkupRead(); */
 /*    }while(u1_t_rslt != (U1)FALSE); */
 
-    vd_g_oXDoCANPreInit();      /* vd_g_oXDoCANPreInit shall be called before vd_g_oXCANWkupInit */
     vd_g_oXCANWkupInit();
     vd_g_oXDoCANWkupInit();
     vd_g_VehopemdWkupInit();

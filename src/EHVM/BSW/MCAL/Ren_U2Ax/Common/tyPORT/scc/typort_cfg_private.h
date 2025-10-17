@@ -22,10 +22,8 @@
 #include "aip_common.h"
 #include "Mcal_SpalCmn.h"
 
-#include "Reg_Pic1.h"
 #include "Reg_STBC.h"
 #include "typort.h"
-#include "typort_cfg_pic.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */

@@ -23,7 +23,7 @@
 
 #if defined NVM_START_SEC_CODE
 #undef NVM_START_SEC_CODE
-#pragma ghs section text = "bsw_nvm_text"
+#pragma ghs section text = ".bsw_nvm_text"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_CODE
@@ -33,7 +33,7 @@
 
 #elif defined NvM_START_SEC_CODE
 #undef NvM_START_SEC_CODE
-#pragma ghs section text = "bsw_nvm_text"
+#pragma ghs section text = ".bsw_nvm_text"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_CODE
@@ -43,7 +43,7 @@
 
 #elif defined NVM_START_SEC_CODE_TRUST
 #undef NVM_START_SEC_CODE_TRUST
-#pragma ghs section text = "bsw_nvm_text"
+#pragma ghs section text = ".bsw_nvm_text"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_CODE_TRUST
@@ -53,7 +53,7 @@
 
 #elif defined NvM_START_SEC_CODE_TRUST
 #undef NvM_START_SEC_CODE_TRUST
-#pragma ghs section text = "bsw_nvm_text"
+#pragma ghs section text = ".bsw_nvm_text"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_CODE_TRUST
@@ -63,7 +63,7 @@
 
 #elif defined NVM_START_SEC_CONST_32
 #undef NVM_START_SEC_CONST_32
-#pragma ghs section rodata = "bsw_nvm_rodata"
+#pragma ghs section rodata = ".bsw_nvm_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_CONST_32
@@ -73,7 +73,7 @@
 
 #elif defined NvM_START_SEC_CONST_32
 #undef NvM_START_SEC_CONST_32
-#pragma ghs section rodata = "bsw_nvm_rodata"
+#pragma ghs section rodata = ".bsw_nvm_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_CONST_32
@@ -83,7 +83,7 @@
 
 #elif defined NVM_START_SEC_CONST_CONFIG_32
 #undef NVM_START_SEC_CONST_CONFIG_32
-#pragma ghs section rodata = "bsw_nvm_rodata"
+#pragma ghs section rodata = ".bsw_nvm_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_CONST_CONFIG_32
@@ -93,7 +93,7 @@
 
 #elif defined NvM_START_SEC_CONST_CONFIG_32
 #undef NvM_START_SEC_CONST_CONFIG_32
-#pragma ghs section rodata = "bsw_nvm_rodata"
+#pragma ghs section rodata = ".bsw_nvm_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_CONST_CONFIG_32
@@ -103,7 +103,7 @@
 
 #elif defined NVM_START_SEC_VAR_SAVED_ZONE_32
 #undef NVM_START_SEC_VAR_SAVED_ZONE_32
-#pragma ghs section bss = "bsw_nvm_bss_saved_zone"
+#pragma ghs section bss = ".bsw_nvm_bss_saved_zone"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_VAR_SAVED_ZONE_32
@@ -113,7 +113,7 @@
 
 #elif defined NvM_START_SEC_VAR_SAVED_ZONE_32
 #undef NvM_START_SEC_VAR_SAVED_ZONE_32
-#pragma ghs section bss = "bsw_nvm_bss_saved_zone"
+#pragma ghs section bss = ".bsw_nvm_bss_saved_zone"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_VAR_SAVED_ZONE_32
@@ -123,7 +123,7 @@
 
 #elif defined NVM_START_SEC_VAR_NO_INIT_32
 #undef NVM_START_SEC_VAR_NO_INIT_32
-#pragma ghs section bss = "bsw_nvm_bss"
+#pragma ghs section bss = ".bsw_nvm_bss"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_VAR_NO_INIT_32
@@ -133,7 +133,7 @@
 
 #elif defined NvM_START_SEC_VAR_NO_INIT_32
 #undef NvM_START_SEC_VAR_NO_INIT_32
-#pragma ghs section bss = "bsw_nvm_bss"
+#pragma ghs section bss = ".bsw_nvm_bss"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_VAR_NO_INIT_32
@@ -143,7 +143,7 @@
 
 #elif defined NVM_START_SEC_VAR_NO_INIT_SHARE
 #undef NVM_START_SEC_VAR_NO_INIT_SHARE
-#pragma ghs section bss = "bsw_nvm_bss"
+#pragma ghs section bss = ".bsw_nvm_bss"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_VAR_NO_INIT_SHARE
@@ -153,7 +153,7 @@
 
 #elif defined NvM_START_SEC_VAR_NO_INIT_SHARE
 #undef NvM_START_SEC_VAR_NO_INIT_SHARE
-#pragma ghs section bss = "bsw_nvm_bss"
+#pragma ghs section bss = ".bsw_nvm_bss"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_VAR_NO_INIT_SHARE
@@ -163,7 +163,7 @@
 
 #elif defined NVM_START_SEC_VAR_INIT_WAKEUP_32
 #undef NVM_START_SEC_VAR_INIT_WAKEUP_32
-#pragma ghs section bss = "bsw_nvm_bss"
+#pragma ghs section bss = ".bsw_nvm_bss"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_VAR_INIT_WAKEUP_32
@@ -173,7 +173,7 @@
 
 #elif defined NvM_START_SEC_VAR_INIT_WAKEUP_32
 #undef NvM_START_SEC_VAR_INIT_WAKEUP_32
-#pragma ghs section bss = "bsw_nvm_bss"
+#pragma ghs section bss = ".bsw_nvm_bss"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_VAR_INIT_WAKEUP_32
@@ -183,7 +183,7 @@
 
 #elif defined NVM_START_SEC_VAR_CLEARED_32
 #undef NVM_START_SEC_VAR_CLEARED_32
-#pragma ghs section bss = "bsw_nvm_bss"
+#pragma ghs section bss = ".bsw_nvm_bss"
 #undef MEMMAP_ERROR
 
 #elif defined NVM_STOP_SEC_VAR_CLEARED_32
@@ -193,7 +193,7 @@
 
 #elif defined NvM_START_SEC_VAR_CLEARED_32
 #undef NvM_START_SEC_VAR_CLEARED_32
-#pragma ghs section bss = "bsw_nvm_bss"
+#pragma ghs section bss = ".bsw_nvm_bss"
 #undef MEMMAP_ERROR
 
 #elif defined NvM_STOP_SEC_VAR_CLEARED_32
@@ -267,7 +267,7 @@
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

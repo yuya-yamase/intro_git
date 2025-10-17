@@ -73,5 +73,10 @@ GdnConst Gdn_Dcm_Dcp_ConnectionConfigType Gdn_Dcm_Dcp_ConnectionConfig[GDN_DCM_D
 #define GDN_DCM_STOP_SEC_CST
 #include <Gdn_Dcm_MemMap.h>
 
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /*-- End Of File -------------------------------------------------------*/
 

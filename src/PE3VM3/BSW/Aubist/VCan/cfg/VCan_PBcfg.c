@@ -83,7 +83,7 @@ BswConst Bsw_VCan_RxTblType bsw_vcan_stRxMessageTbl[ BSW_VCAN_VHRHNUM ] =
     ,{ 0x00000400UL, 0xBFFFFF00UL }   /* [1] */
     ,{ 0x40000500UL, 0xFFFFFF00UL }   /* [2] */
     ,{ 0x40000600UL, 0xFFFFFF00UL }   /* [3] */
-    ,{ 0x00000700UL, 0xBFFFFFF0UL }   /* [4] */
+    ,{ 0x00000700UL, 0xBFFFFF00UL }   /* [4] */
     ,{ 0x98DA0000UL, 0xBFFE0000UL }   /* [5] */
 };
 #endif /* ( BSW_VCAN_VHRHNUM != 0U ) */
@@ -356,7 +356,7 @@ BswConst BswU1 bsw_vcan_u1TxMBoxTbl_VControl15[ BSW_VCAN_TX_VMBOXNUM_15 ] =
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

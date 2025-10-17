@@ -7,8 +7,9 @@
 // ------------------------
 MEMORY {
 // Address Space:Code flash (User Area 2) (Bank C)
-    vector_core         : ORIGIN = 0x00400000, LENGTH = 0x000200                  //LENGTH:0.5KB
-    rom_memory          : ORIGIN = 0x00400200, LENGTH = 0x1FFE00                  //LENGTH:2047.5KB(2MB-0.5KB)
+    rom_memory_const    : ORIGIN = 0x00400000, LENGTH = 0x004000                  //LENGTH:16KB
+    vector_core         : ORIGIN = 0x00404000, LENGTH = 0x000200                  //LENGTH:0.5KB
+    rom_memory          : ORIGIN = 0x00404200, LENGTH = 0x1EBE00                  //LENGTH:1967.5KB(1968KB-0.5KB)
 
 // Address Space:Local RAM (CPU2)
 // ORIGIN = 0xFD800000, LENGTH = 64K
@@ -39,14 +40,10 @@ MEMORY {
 
 DEFAULTS {
 //1byte (0xFE430000 - 0xFE430100)
-    SHARE_IOHW_ADC_LV_RD_ADDR   = 0xFE430000
 //2byte (0xFE430100 - 0xFE430300)
 //4byte (0xFE430300 - 0xFE430700)
     SHARE_PORT_CONF_ADDR        = 0xFE430300
-    SHARE_VEH_OPEMD_MDBIT_ADDR  = 0xFE430304    
 //Struct
-    SHARE_IOHW_ADC_LV_ADDR      = 0xFE431000
-    SHARE_IOHW_DIFLT_FLTRD_ADDR = 0xFE431100
     SHARE_DMA_NOTICATION_ADDR   = 0xFE431200
     SHARE_SPI_MODEA_CHANNELDATA_ADDR   = 0xFE431300
     SHARE_SPI_MODEC_CHANNELDATA_ADDR   = 0xFE431400

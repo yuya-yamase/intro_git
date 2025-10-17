@@ -9,6 +9,10 @@ SECTIONS {
 
 // -- ROM -------------------
 // TopAddress
+// PE1VM1/MET Consts
+    .MET_PARAMETER_CONST    align(4)                        : > rom_memory_const  // PE1VM1/MET Consts Repro. Logical Block RH850-1
+    .FIXEDDATA_DUMMY_CONST  FIXEDDATA_DUMMY_CONST_ADDR     ABS    : > .           // Fixed data (not allowed to move)
+
 // Vector
     .vectortable_fe0                                        : > vector_core     // OS起動前ベクタ領域(FE用)トップ
 
@@ -23,11 +27,11 @@ SECTIONS {
     {
         *(".osCode*")
     } > .
-    bsw_fee_text            align(16)                       : > .
-    bsw_fls_text            align(16)                       : > .
-    bsw_memif_text          align(16)                       : > .
-    bsw_mscd_text           align(16)                       : > .
-    bsw_nvm_text            align(16)                       : > .
+    .bsw_fee_text           align(16)                       : > .
+    .bsw_fls_text           align(16)                       : > .
+    .bsw_memif_text         align(16)                       : > .
+    .bsw_mscd_text          align(16)                       : > .
+    .bsw_nvm_text           align(16)                       : > .
     .bsw_cs_text            align(16)                       : > .
     .bsw_can_text           align(16)                       : > .
     .bsw_e2e_text           align(16)                       : > .
@@ -38,11 +42,11 @@ SECTIONS {
     {
         *(".osConst*")
     } > .
-    bsw_fee_rodata          align(4)                        : > .
-    bsw_fls_rodata          align(4)                        : > .
-    bsw_memif_rodata        align(4)                        : > .
-    bsw_mscd_rodata         align(4)                        : > .
-    bsw_nvm_rodata          align(4)                        : > .
+    .bsw_fee_rodata         align(4)                        : > .
+    .bsw_fls_rodata         align(4)                        : > .
+    .bsw_memif_rodata       align(4)                        : > .
+    .bsw_mscd_rodata        align(4)                        : > .
+    .bsw_nvm_rodata         align(4)                        : > .
     .bsw_cs_const           align(4)                        : > .
     .bsw_can_const          align(4)                        : > .
     .bsw_const_bottom       align(4)                        : > .
@@ -104,6 +108,10 @@ SECTIONS {
     .iohw_rom_bottom        align(4)                        : > .
     _IOHW_ROM_SIZE = . - ADDR(.iohw_rom_top);
 
+// Communication
+    .IVDSH_TEXT_CODE        align(4)                        : > .
+    .IVDSH_RODATA_CONST     align(4)                        : > .
+
 // APP
     .app_n_nvarLR_ival      align(4)  ROM(.app_n_nvarLR_withval)  : > .
     .app_n_nvarCR0_ival     align(4)  ROM(.app_n_nvarCR0_withval)  : > .
@@ -122,7 +130,6 @@ SECTIONS {
 
 // SecInfo
     .secinfo                align(4)                        : > .               // セクションデータ領域
-
 
 // -- RAM -------------------
 // TopAddress
@@ -147,6 +154,7 @@ SECTIONS {
     _APP_N_NVARLR_WITHVAL_SIZE = . - ADDR(.app_n_nvarLR_withval);
     .ecu_n_nvarLR_top            align(4)                  : > .
     .app_n_nvarLR                align(4)                  : > .
+    .IVDSH_BSS_VAR_NO_INIT       align(4)                  : > .
     .ecu_n_nvarLR_bottom         align(4)                  : > .
     _ECU_N_NVAR_LR_SIZE = . - ADDR(.ecu_n_nvarLR_top);
 
@@ -187,12 +195,12 @@ SECTIONS {
     .bss_RIM1                    ALIGN(8)                             : > .
     .bss_RIM2                    ALIGN(8)                             : > .
     .bss_RIM3                    ALIGN(8)                             : > .
-    bsw_fee_bss             align(4)                        : > .
-    bsw_fls_bss             align(4)                        : > .
-    bsw_memif_bss           align(4)                        : > .
-    bsw_mscd_bss            align(4)                        : > .
-    bsw_nvm_bss             align(4)                        : > .
-    bsw_nvm_bss_saved_zone  align(4)                        : > .
+    .bsw_fee_bss            align(4)                        : > .
+    .bsw_fls_bss            align(4)                        : > .
+    .bsw_memif_bss          align(4)                        : > .
+    .bsw_mscd_bss           align(4)                        : > .
+    .bsw_nvm_bss            align(4)                        : > .
+    .bsw_nvm_bss_saved_zone align(4)                        : > .
     .MEM_SEC_END_RAM_LOC_APPL    ALIGN(8)                             : > .
     _LOC_RAM_SIZE = . - ADDR(.MEM_SEC_STA_RAM_LOC_APPL);
 
@@ -228,14 +236,10 @@ SECTIONS {
     .cluster2_share_ramtop                                   : > ram_memory_cluster2_share
 
 //1byte
-    .bss_SHARE_IOHW_ADC_LV_RD   SHARE_IOHW_ADC_LV_RD_ADDR   ABS    : > .
 //2byte
 //4byte
     .bss_SHARE_PORT_CONF        SHARE_PORT_CONF_ADDR        ABS    : > .
-    .bss_SHARE_VEH_OPEMD_MDBIT  SHARE_VEH_OPEMD_MDBIT_ADDR  ABS    : > .
 //struct
-    .bss_SHARE_IOHW_ADC_LV      SHARE_IOHW_ADC_LV_ADDR      ABS    : > .
-    .bss_SHARE_IOHW_DIFLT_FLTRD SHARE_IOHW_DIFLT_FLTRD_ADDR ABS    : > .
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .
@@ -369,6 +373,5 @@ SECTIONS {
    
 // EndAddress
     .retention_ramend                                       : > retention_ram_end // リテンションRAMボトム（ラベル）
-
 
 }

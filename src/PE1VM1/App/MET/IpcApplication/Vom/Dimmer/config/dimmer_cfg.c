@@ -39,7 +39,7 @@
 #include "iohw_diflt_sgnl_STUB.h"
 #endif
 #include "xspi_met_ch0.h"
-#include "iohw_adc.h"
+#include "iohw_adc_sh.h"
 #include "mcst.h"
 #include "hmiscreen.h"
 

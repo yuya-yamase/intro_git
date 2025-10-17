@@ -20,6 +20,10 @@
 
 #include "scheduler.h"
 
+#if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
+#include "throughput.h"
+#endif
+
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
 #include "xspi.h"
@@ -34,13 +38,14 @@
 ISR(eMCOS_ISR_INTOSTM2TINT);
 ISR(eMCOS_ISR_INTOSTM3TINT);
 ISR(eMCOS_ISR_INTP4);
-ISR(eMCOS_ISR_INTRLIN311UR1);
 
 /*----------------------------------------------------------------------------
  *		Codes
  *--------------------------------------------------------------------------*/
 #define OS_START_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"
+
+#if (__AIP_THROUGHPUT__ != 1)
 /**---------------------------------------------------------------------------
  * [Format]		ISR(eMCOS_ISR_INTOSTM2TINT)
  * [Function]	
@@ -78,16 +83,51 @@ ISR(eMCOS_ISR_INTP4)
 {
     /*    INTP4_ISR;*/
 }
+
+#else /* #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1)) */
 /**---------------------------------------------------------------------------
- * [Format]		ISR(eMCOS_ISR_INTRLIN311UR1)
+ * [Format]		ISR(eMCOS_ISR_INTOSTM2TINT)
  * [Function]	
  * [Arguments]	None
  * [Return]		None
  * [Notes]		
  *--------------------------------------------------------------------------*/
-ISR(eMCOS_ISR_INTRLIN311UR1)
+ISR(eMCOS_ISR_INTOSTM2TINT)
 {
-    /*    INTRLIN311_ISR;*/
+    vd_g_ThroughputIntrptStart();
+    vd_g_SchdlrMainTick();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTOSTM2TINT);
+    return;
 }
+
+/**---------------------------------------------------------------------------
+ * [Format]		ISR(eMCOS_ISR_INTOSTM3TINT)
+ * [Function]	
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTOSTM3TINT)
+{
+    /*    INTOSTM3_ISR;*/
+    vd_g_ThroughputIntrptStart();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTOSTM3TINT);
+}
+
+/**---------------------------------------------------------------------------
+ * [Format]		ISR(eMCOS_ISR_INTP4)
+ * [Function]	
+ * [Arguments]	None
+ * [Return]		None
+ * [Notes]		
+ *--------------------------------------------------------------------------*/
+ISR(eMCOS_ISR_INTP4)
+{
+    /*    INTP4_ISR;*/
+    vd_g_ThroughputIntrptStart();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_ISR_INTP4);
+}
+#endif /* #if (__AIP_THROUGHPUT__ != 1) */
+
 #define OS_STOP_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"

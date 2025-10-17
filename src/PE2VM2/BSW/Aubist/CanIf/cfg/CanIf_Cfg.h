@@ -3168,7 +3168,7 @@
 #define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_Remote (BSW_PDUR_LOCOMP_CANTP | 0x0001U)
 #define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_FD_Service (BSW_PDUR_LOCOMP_CANTP | 0x0002U)
 #define PDUID_Nsdu_TX_TxNPdu_Diag_Physical_FD_Remote (BSW_PDUR_LOCOMP_CANTP | 0x0003U)
-#define PDUID_CDC1N02_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0000U)
+#define PDUID_VIV1N99_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0000U)
 
 /* PDU ID for Rx L-PDU */
 #define PDUID_ABG1D50_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0066U)
@@ -3547,9 +3547,9 @@
 #define PDUID_Nsdu_RX_RxNPdu_Diag_Functional_FD_Service (BSW_PDUR_LOCOMP_CANTP | 0x0009U)
 #define PDUID_Nsdu_RX_RxNPdu_Diag_Physical_FD_Remote (BSW_PDUR_LOCOMP_CANTP | 0x000AU)
 #define PDUID_Nsdu_RX_RxNPdu_Diag_Functional_FD_Remote (BSW_PDUR_LOCOMP_CANTP | 0x000BU)
-#define PDUID_CDC1N00_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0001U)
-#define PDUID_CDC1N01_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0002U)
-#define PDUID_CDC1N03_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
+#define PDUID_CDC1N01_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0001U)
+#define PDUID_VME1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0002U)
+#define PDUID_VCE1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
 
 /* HOH Number for Tx L-PDU */
 #define HOH_AVN1S38_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0009U)
@@ -3658,7 +3658,7 @@
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_Remote (BSW_CANIF_HOH_VIRTUAL | 0x0032U)
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_FD_Service (BSW_CANIF_HOH_VIRTUAL | 0x0032U)
 #define HOH_Nsdu_TX_TxNPdu_Diag_Physical_FD_Remote (BSW_CANIF_HOH_VIRTUAL | 0x0032U)
-#define HOH_CDC1N02_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0033U)
+#define HOH_VIV1N99_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0033U)
 
 /* HOH Number for Rx L-PDU */
 #define HOH_ABG1D50_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
@@ -4037,9 +4037,9 @@
 #define HOH_Nsdu_RX_RxNPdu_Diag_Functional_FD_Service (BSW_CANIF_HOH_VIRTUAL | 0x0005U)
 #define HOH_Nsdu_RX_RxNPdu_Diag_Physical_FD_Remote (BSW_CANIF_HOH_VIRTUAL | 0x0004U)
 #define HOH_Nsdu_RX_RxNPdu_Diag_Functional_FD_Remote (BSW_CANIF_HOH_VIRTUAL | 0x0005U)
-#define HOH_CDC1N00_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
 #define HOH_CDC1N01_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
-#define HOH_CDC1N03_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
+#define HOH_VME1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
+#define HOH_VCE1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -4073,7 +4073,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

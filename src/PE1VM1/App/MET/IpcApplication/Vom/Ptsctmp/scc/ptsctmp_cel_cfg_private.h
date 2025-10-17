@@ -20,7 +20,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 #include "rngcmpr_u2.h"
-#include "iohw_adc.h"
+#include "iohw_adc_sh.h"
 
 #include "veh_opemd.h"
 #if 0   /* BEV BSW provisionally */

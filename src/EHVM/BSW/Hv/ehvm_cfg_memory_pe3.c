@@ -119,17 +119,17 @@ static EhvmConst ehvm_peg_spid_t s_Peg_SpidData_CH3[3] = {
 
 static EhvmConst ehvm_peg_prot_t s_Peg_ProtData_CH3[3] = {
     {
-        0x01600000U,  /* PEGBAD */
+        0xFD600000U,  /* PEGBAD */
         0x03FF8000U,  /* PEGADV */
         0x00000043U   /* PEGPROT */
     },
     {
-        0x01608000U,  /* PEGBAD */
+        0xFD608000U,  /* PEGBAD */
         0x03FF8000U,  /* PEGADV */
         0x00000043U   /* PEGPROT */
     },
     {
-        0x03FD0000U,  /* PEGBAD */
+        0xFFFD0000U,  /* PEGBAD */
         0x03FFC000U,  /* PEGADV */
         0x00000043U   /* PEGPROT */
     }
@@ -145,7 +145,7 @@ EhvmConst ehvm_peg_config_t ehvm_PegConfigData_pe3 = {
 /****************************************************************************************/
 /* Hv4mCommonInterruptControllerGuardConfig - Hv4mIntc2gCoreConfig                      */
 /****************************************************************************************/
-static EhvmConst ehvm_intc2g_n_channel_switch_t s_Intc2g_ChannelSwitchData_VM0_pe3[6] = {
+static EhvmConst ehvm_intc2g_n_channel_switch_t s_Intc2g_ChannelSwitchData_VM0_pe3[5] = {
     {
         INTC2GPROT_ADDRESS(109U)  /* Intc2gProtAddress */
     },
@@ -159,9 +159,6 @@ static EhvmConst ehvm_intc2g_n_channel_switch_t s_Intc2g_ChannelSwitchData_VM0_p
         INTC2GPROT_ADDRESS(202U)  /* Intc2gProtAddress */
     },
     {
-        INTC2GPROT_ADDRESS(462U)  /* Intc2gProtAddress */
-    },
-    {
         INTC2GPROT_ADDRESS(548U)  /* Intc2gProtAddress */
     }
 };
@@ -170,7 +167,7 @@ static EhvmConst ehvm_intc2g_prot_switch_t s_Intc2g_ProtSwitchData_pe3[VM_NUM_PE
     {
         INTC2GMPID_ADDRESS(PEID_3),             /* Intc2gMpidAddress */
         0x0000000EU,                            /* Intc2gSPID */
-        6U,                                    /* Intc2gNumOfChannelSwitch */
+        5U,                                    /* Intc2gNumOfChannelSwitch */
         &s_Intc2g_ChannelSwitchData_VM0_pe3[0]  /* Intc2gChannelSwitchPtr */
     }
 };
@@ -184,7 +181,7 @@ EhvmConst ehvm_intc2g_prot_switch_config_t ehvm_Intc2gSwitchConfigData_pe3 = {
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

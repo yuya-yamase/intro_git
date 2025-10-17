@@ -2,7 +2,7 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Renesas RH850/F1KM : Timer Array Unit D                                                                                          */
+/*  Renesas RH850/U2A : Timer Array Unit D                                                                                           */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 
@@ -137,6 +137,9 @@ void    vd_g_Gpt_D16DI(const U1 u1_a_D16_CH);
 
 U1      u1_g_Gpt_D16IRQst(const U1 u1_a_D16_CH, const U1 u1_a_W_CLR);            /* Return and u1_a_W_CLR : GPT_D16_IRQST_BIT_XXX   */
 U1      u1_g_Gpt_D16IRQenabled(const U1 u1_a_D16_CH);
+
+U1      u1_g_Gpt_D16PICRegChk(const U1 u1_a_D16_CH);                             /* Return : TRUE = No register fault detected, FALSE = Register fault detected */
+U1      u1_g_Gpt_D16PICRegRefresh(const U1 u1_a_D16_CH);                         /* Return : TRUE = Register refresh succeeded, FALSE = Register refresh failed */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

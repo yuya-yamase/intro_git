@@ -3085,7 +3085,7 @@
 #define PDUID_MET1S02_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0014U)
 #define PDUID_MET1S10_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0015U)
 #define PDUID_MET1S11_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0016U)
-#define PDUID_CDC1N01_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0000U)
+#define PDUID_VME1N99_Tx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0000U)
 
 /* PDU ID for Rx L-PDU */
 #define PDUID_ABG1D50_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0017U)
@@ -3340,9 +3340,9 @@
 #define PDUID_ZN21S05_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0110U)
 #define PDUID_ZN21S13_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0111U)
 #define PDUID_ZN21S72_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANIF | 0x0112U)
-#define PDUID_CDC1N00_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0001U)
-#define PDUID_CDC1N02_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0002U)
-#define PDUID_CDC1N03_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
+#define PDUID_CDC1N01_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0001U)
+#define PDUID_VIV1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0002U)
+#define PDUID_VCE1N99_Rx_CDC_VCAN_BUS           (BSW_PDUR_LOCOMP_CANNM | 0x0003U)
 
 /* HOH Number for Tx L-PDU */
 #define HOH_MET1S47_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0004U)
@@ -3368,7 +3368,7 @@
 #define HOH_MET1S02_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0016U)
 #define HOH_MET1S10_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0016U)
 #define HOH_MET1S11_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0016U)
-#define HOH_CDC1N01_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0017U)
+#define HOH_VME1N99_Tx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0017U)
 
 /* HOH Number for Rx L-PDU */
 #define HOH_ABG1D50_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
@@ -3558,7 +3558,7 @@
 #define HOH_MGC1F13_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
 #define HOH_PCN1S01_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
 #define HOH_PDC1G01_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
-#define HOH_PDC1G02_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0003U)
+#define HOH_PDC1G02_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0002U)
 #define HOH_PDS1S01_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
 #define HOH_PLG1G15_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
 #define HOH_PLG1G16_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
@@ -3623,9 +3623,9 @@
 #define HOH_ZN21S05_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
 #define HOH_ZN21S13_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
 #define HOH_ZN21S72_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0000U)
-#define HOH_CDC1N00_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
-#define HOH_CDC1N02_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
-#define HOH_CDC1N03_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
+#define HOH_CDC1N01_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
+#define HOH_VIV1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
+#define HOH_VCE1N99_Rx_CDC_VCAN_BUS             (BSW_CANIF_HOH_VIRTUAL | 0x0001U)
 
 /*--------------------------------------------------------------------------*/
 /* Types                                                                    */
@@ -3659,7 +3659,7 @@
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 
