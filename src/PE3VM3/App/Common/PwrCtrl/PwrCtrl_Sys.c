@@ -328,7 +328,7 @@ void vd_g_PwrCtrlSysInit( void )
 void vd_g_PwrCtrlSysPwrOnMainFunction( void )
 {
     /* SYS起動電源ON要求あり */
-    if ( u1_s_PwrCtrl_Sys_Pwr_Sts == PWRCTRL_SYS_ON )
+    if ( u1_s_PwrCtrl_Sys_Pwr_Sts == (U1)PWRCTRL_SYS_ON )
     {
         /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
         u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;

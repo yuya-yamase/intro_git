@@ -71,6 +71,7 @@ PwrCtrl_NoRedun.c
 PwrCtrl_PinMonitor.c
 PwrCtrl_Sip.c
 PwrCtrl_Sys.c
+PwrCtrl_Observe.c
 PwrCtrl_Com.c
 product_cfg.c
 EthSwt_SWIC.c
