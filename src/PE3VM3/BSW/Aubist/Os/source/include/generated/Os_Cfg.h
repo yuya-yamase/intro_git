@@ -140,9 +140,9 @@
 #define AR_OS_NUM_ALARMS                                    ((uint16)0x0000U)
 #define AR_OS_NUM_OSAPPLICATIONS                            ((uint16)0x0000U)
 #define AR_OS_NUM_APPMODES                                  ((uint16)0x0001U)
-#define AR_OS_NUM_ISRS                                      ((uint16)0x0004U)
+#define AR_OS_NUM_ISRS                                      ((uint16)0x0003U)
 #define AR_OS_NUM_C1ISRS                                    ((uint16)0x0000U)
-#define AR_OS_NUM_C2ISRS                                    ((uint16)0x0004U)
+#define AR_OS_NUM_C2ISRS                                    ((uint16)0x0003U)
 #define AR_OS_NUM_IOC_COMMUNICATIONS                        ((uint16)0x0000U)
 #define AR_OS_NUM_IOC_RECEIVERS                             ((uint16)0x0000U)
 #define AR_OS_NUM_IOC_SENDERS                               ((uint16)0x0000U)
@@ -182,7 +182,6 @@
 #define eMCOS_ISR_INTOSTM3TINT                              ((uint16)0x0000U)
 #define eMCOS_ISR_INTP4                                     ((uint16)0x0001U)
 #define eMCOS_ISR_INTOSTM2TINT                              ((uint16)0x0002U)
-#define eMCOS_ISR_INTRLIN311UR1                             ((uint16)0x0003U)
 
 
 
@@ -201,6 +200,6 @@
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/

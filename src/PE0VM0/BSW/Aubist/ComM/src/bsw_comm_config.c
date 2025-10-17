@@ -135,7 +135,9 @@
 
 /* Dummy table size */
 #define BSW_COMM_TBL_DUMMY_SIZE     (1U)
+#if ( BSW_COMM_CFG_PNC_AWAKEPW == BSW_USE )
 #define BSW_COMM_TBL_PNAWK_DMY_SIZE (BSW_COMM_SYSSTATTBLNUM)
+#endif /* ( BSW_COMM_CFG_PNC_AWAKEPW == BSW_USE ) */
 
 #define BSW_COMM_PNC_INVALID        (255U)
 #define BSW_COMM_PNC_BYTE_INVALID   (255U)
@@ -10988,7 +10990,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_0[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_0 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 0U ) */
 #if ( BSW_COMM_CFG_CHNUM > 1U )
-#if (BSW_COMM_CH_PNCNUM_1 == 0)
+#if (BSW_COMM_CH_PNCNUM_1 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_1[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -10996,7 +10998,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_1[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_1 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 1U ) */
 #if ( BSW_COMM_CFG_CHNUM > 2U )
-#if (BSW_COMM_CH_PNCNUM_2 == 0)
+#if (BSW_COMM_CH_PNCNUM_2 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_2[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11004,7 +11006,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_2[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_2 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 2U ) */
 #if ( BSW_COMM_CFG_CHNUM > 3U )
-#if (BSW_COMM_CH_PNCNUM_3 == 0)
+#if (BSW_COMM_CH_PNCNUM_3 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_3[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11012,7 +11014,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_3[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_3 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 3U ) */
 #if ( BSW_COMM_CFG_CHNUM > 4U )
-#if (BSW_COMM_CH_PNCNUM_4 == 0)
+#if (BSW_COMM_CH_PNCNUM_4 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_4[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11020,7 +11022,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_4[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_4 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 4U ) */
 #if ( BSW_COMM_CFG_CHNUM > 5U )
-#if (BSW_COMM_CH_PNCNUM_5 == 0)
+#if (BSW_COMM_CH_PNCNUM_5 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_5[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11028,7 +11030,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_5[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_5 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 5U ) */
 #if ( BSW_COMM_CFG_CHNUM > 6U )
-#if (BSW_COMM_CH_PNCNUM_6 == 0)
+#if (BSW_COMM_CH_PNCNUM_6 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_6[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11036,7 +11038,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_6[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_6 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 6U ) */
 #if ( BSW_COMM_CFG_CHNUM > 7U )
-#if (BSW_COMM_CH_PNCNUM_7 == 0)
+#if (BSW_COMM_CH_PNCNUM_7 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_7[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11044,7 +11046,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_7[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_7 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 7U ) */
 #if ( BSW_COMM_CFG_CHNUM > 8U )
-#if (BSW_COMM_CH_PNCNUM_8 == 0)
+#if (BSW_COMM_CH_PNCNUM_8 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_8[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11052,7 +11054,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_8[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_8 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 8U ) */
 #if ( BSW_COMM_CFG_CHNUM > 9U )
-#if (BSW_COMM_CH_PNCNUM_9 == 0)
+#if (BSW_COMM_CH_PNCNUM_9 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_9[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11060,7 +11062,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_9[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_9 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 9U ) */
 #if ( BSW_COMM_CFG_CHNUM > 10U )
-#if (BSW_COMM_CH_PNCNUM_10 == 0)
+#if (BSW_COMM_CH_PNCNUM_10 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_10[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11068,7 +11070,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_10[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_10 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 10U ) */
 #if ( BSW_COMM_CFG_CHNUM > 11U )
-#if (BSW_COMM_CH_PNCNUM_11 == 0)
+#if (BSW_COMM_CH_PNCNUM_11 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_11[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11076,7 +11078,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_11[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_11 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 11U ) */
 #if ( BSW_COMM_CFG_CHNUM > 12U )
-#if (BSW_COMM_CH_PNCNUM_12 == 0)
+#if (BSW_COMM_CH_PNCNUM_12 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_12[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11084,7 +11086,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_12[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_12 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 12U ) */
 #if ( BSW_COMM_CFG_CHNUM > 13U )
-#if (BSW_COMM_CH_PNCNUM_13 == 0)
+#if (BSW_COMM_CH_PNCNUM_13 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_13[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11092,7 +11094,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_13[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_13 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 13U ) */
 #if ( BSW_COMM_CFG_CHNUM > 14U )
-#if (BSW_COMM_CH_PNCNUM_14 == 0)
+#if (BSW_COMM_CH_PNCNUM_14 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_14[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11100,7 +11102,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_14[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_14 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 14U ) */
 #if ( BSW_COMM_CFG_CHNUM > 15U )
-#if (BSW_COMM_CH_PNCNUM_15 == 0)
+#if (BSW_COMM_CH_PNCNUM_15 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_15[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11108,7 +11110,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_15[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_15 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 15U ) */
 #if ( BSW_COMM_CFG_CHNUM > 16U )
-#if (BSW_COMM_CH_PNCNUM_16 == 0)
+#if (BSW_COMM_CH_PNCNUM_16 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_16[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11116,7 +11118,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_16[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_16 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 16U ) */
 #if ( BSW_COMM_CFG_CHNUM > 17U )
-#if (BSW_COMM_CH_PNCNUM_17 == 0)
+#if (BSW_COMM_CH_PNCNUM_17 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_17[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11124,7 +11126,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_17[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_17 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 17U ) */
 #if ( BSW_COMM_CFG_CHNUM > 18U )
-#if (BSW_COMM_CH_PNCNUM_18 == 0)
+#if (BSW_COMM_CH_PNCNUM_18 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_18[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11132,7 +11134,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_18[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_18 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 18U ) */
 #if ( BSW_COMM_CFG_CHNUM > 19U )
-#if (BSW_COMM_CH_PNCNUM_19 == 0)
+#if (BSW_COMM_CH_PNCNUM_19 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_19[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11140,7 +11142,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_19[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_19 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 19U ) */
 #if ( BSW_COMM_CFG_CHNUM > 20U )
-#if (BSW_COMM_CH_PNCNUM_20 == 0)
+#if (BSW_COMM_CH_PNCNUM_20 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_20[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11148,7 +11150,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_20[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_20 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 20U ) */
 #if ( BSW_COMM_CFG_CHNUM > 21U )
-#if (BSW_COMM_CH_PNCNUM_21 == 0)
+#if (BSW_COMM_CH_PNCNUM_21 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_21[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11156,7 +11158,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_21[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_21 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 21U ) */
 #if ( BSW_COMM_CFG_CHNUM > 22U )
-#if (BSW_COMM_CH_PNCNUM_22 == 0)
+#if (BSW_COMM_CH_PNCNUM_22 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_22[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11164,7 +11166,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_22[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_22 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 22U ) */
 #if ( BSW_COMM_CFG_CHNUM > 23U )
-#if (BSW_COMM_CH_PNCNUM_23 == 0)
+#if (BSW_COMM_CH_PNCNUM_23 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_23[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11172,7 +11174,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_23[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_23 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 23U ) */
 #if ( BSW_COMM_CFG_CHNUM > 24U )
-#if (BSW_COMM_CH_PNCNUM_24 == 0)
+#if (BSW_COMM_CH_PNCNUM_24 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_24[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11180,7 +11182,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_24[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_24 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 24U ) */
 #if ( BSW_COMM_CFG_CHNUM > 25U )
-#if (BSW_COMM_CH_PNCNUM_25 == 0)
+#if (BSW_COMM_CH_PNCNUM_25 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_25[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11188,7 +11190,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_25[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_25 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 25U ) */
 #if ( BSW_COMM_CFG_CHNUM > 26U )
-#if (BSW_COMM_CH_PNCNUM_26 == 0)
+#if (BSW_COMM_CH_PNCNUM_26 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_26[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11196,7 +11198,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_26[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_26 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 26U ) */
 #if ( BSW_COMM_CFG_CHNUM > 27U )
-#if (BSW_COMM_CH_PNCNUM_27 == 0)
+#if (BSW_COMM_CH_PNCNUM_27 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_27[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11204,7 +11206,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_27[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_27 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 27U ) */
 #if ( BSW_COMM_CFG_CHNUM > 28U )
-#if (BSW_COMM_CH_PNCNUM_28 == 0)
+#if (BSW_COMM_CH_PNCNUM_28 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_28[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11212,7 +11214,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_28[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_28 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 28U ) */
 #if ( BSW_COMM_CFG_CHNUM > 29U )
-#if (BSW_COMM_CH_PNCNUM_29 == 0)
+#if (BSW_COMM_CH_PNCNUM_29 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_29[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11220,7 +11222,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_29[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_29 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 29U ) */
 #if ( BSW_COMM_CFG_CHNUM > 30U )
-#if (BSW_COMM_CH_PNCNUM_30 == 0)
+#if (BSW_COMM_CH_PNCNUM_30 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_30[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11228,7 +11230,7 @@ BswConst BswU4 bsw_comm_ctrl_u4PncAwake_30[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
 #endif /* ( BSW_COMM_CH_PNCNUM_30 == 0U ) */
 #endif /* ( BSW_COMM_CFG_CHNUM > 30U ) */
 #if ( BSW_COMM_CFG_CHNUM > 31U )
-#if (BSW_COMM_CH_PNCNUM_31 == 0)
+#if (BSW_COMM_CH_PNCNUM_31 == 0U)
 BswConst BswU4 bsw_comm_ctrl_u4PncAwake_31[BSW_COMM_TBL_PNAWK_DMY_SIZE] = {
     (BswU4)BSW_COMM_PWSTAT_NONE
    ,(BswU4)BSW_COMM_PWSTAT_NONE
@@ -11380,7 +11382,7 @@ void (* BswConst  bsw_comm_ctrl_ptStartNetworkFn)( BswU1 NetworkId ) = BSW_COMM_
 /*  v1-1-0          :2018/12/13                                             */
 /*  v2-0-0          :2021/12/02                                             */
 /*  v2-1-0          :2023/02/03                                             */
-/*  v3-0-0          :2024/11/15                                             */
+/*  v3-0-0          :2024/12/05                                             */
 /****************************************************************************/
 
 /**** End of File ***********************************************************/

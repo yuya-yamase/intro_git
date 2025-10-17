@@ -23,6 +23,7 @@
 #define ECU_ARB_SLAVE_VM_NUM       ((ehvm_uint32_t)3U) /* スレーブVM数 */
 #define ECU_ARB_READY_SLEEP_PERIOD (10UL)              /* Ready Sleep周回数 */
 #define ECU_ARB_SLEEP_PERIOD       (20UL)              /* Sleep異常判定周回数 */
+#define ECU_ARB_VCC_RX_CNT         (5UL)               /* VCC_RECEIVEリトライ回数*/
 
 #define ECU_ARB_MASTER_VCCID ECU_VCCID0
 

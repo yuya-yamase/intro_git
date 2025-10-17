@@ -133,7 +133,7 @@ CONST(AB_83_ConstV uint16, FEE_CONFIG_DATA) FeeRecPosTblIdxSize = sizeof(FeeRecP
 
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-2                                              */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v2-0-0                                              */
 /****************************************************************************/
 

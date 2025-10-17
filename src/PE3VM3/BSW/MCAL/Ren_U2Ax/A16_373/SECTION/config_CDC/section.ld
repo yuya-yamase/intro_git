@@ -96,6 +96,10 @@ SECTIONS {
     .iohw_rom_bottom        align(4)                        : > .
     _IOHW_ROM_SIZE = . - ADDR(.iohw_rom_top);
 
+// Communication
+    .IVDSH_TEXT_CODE        align(4)                        : > .
+    .IVDSH_RODATA_CONST     align(4)                        : > .
+
 // APP
     .app_n_nvarLR_ival      align(4)  ROM(.app_n_nvarLR_withval)  : > .
     .app_n_nvarCR0_ival     align(4)  ROM(.app_n_nvarCR0_withval)  : > .
@@ -116,12 +120,11 @@ SECTIONS {
     .secinfo                align(4)                        : > .               // セクションデータ領域
 
 // Production Code (Address Fix)
-    _product_code_start_address = 0x007FFB00;
+    _product_code_start_address = 0x007BFB00;
     .app_product_const (_product_code_start_address) : {
         *(.app_product_const)
         .=ALIGN(4);
     } > .
-
 
 // -- RAM -------------------
 // TopAddress
@@ -146,6 +149,7 @@ SECTIONS {
     _APP_N_NVARLR_WITHVAL_SIZE = . - ADDR(.app_n_nvarLR_withval);
     .ecu_n_nvarLR_top            align(4)                  : > .
     .app_n_nvarLR                align(4)                  : > .
+    .IVDSH_BSS_VAR_NO_INIT       align(4)                  : > .
     .ecu_n_nvarLR_bottom         align(4)                  : > .
     _ECU_N_NVAR_LR_SIZE = . - ADDR(.ecu_n_nvarLR_top);
 
@@ -217,14 +221,10 @@ SECTIONS {
     .cluster2_share_ramtop                                   : > ram_memory_cluster2_share
 
 //1byte
-    .bss_SHARE_IOHW_ADC_LV_RD   SHARE_IOHW_ADC_LV_RD_ADDR   ABS    : > .
 //2byte
 //4byte
     .bss_SHARE_PORT_CONF        SHARE_PORT_CONF_ADDR        ABS    : > .
-    .bss_SHARE_VEH_OPEMD_MDBIT  SHARE_VEH_OPEMD_MDBIT_ADDR  ABS    : > .
 //struct
-    .bss_SHARE_IOHW_ADC_LV      SHARE_IOHW_ADC_LV_ADDR      ABS    : > .
-    .bss_SHARE_IOHW_DIFLT_FLTRD SHARE_IOHW_DIFLT_FLTRD_ADDR ABS    : > .
     .bss_SHARE_DMA_NOTICATION   SHARE_DMA_NOTICATION_ADDR   ABS    : > .
     .bss_SHARE_SPI_MODEA_CHANNELDATA SHARE_SPI_MODEA_CHANNELDATA_ADDR ABS    : > .
     .bss_SHARE_SPI_MODEC_CHANNELDATA SHARE_SPI_MODEC_CHANNELDATA_ADDR ABS    : > .

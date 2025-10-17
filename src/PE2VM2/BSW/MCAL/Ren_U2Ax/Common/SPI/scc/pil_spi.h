@@ -151,6 +151,10 @@
 #define		PIL_SPI_DELAY_300NS			(300.0)
 #define		PIL_SPI_DELAY_800NS			(800.0)
 
+/* MSPInCTL1.MSPInCSIE: This bit selects whether to recognize the CS input signal in Slave mode */
+#define		PIL_SPI_CS_IGNORE			(MSPI_CTL1_CSIE_IGNORE)
+#define		PIL_SPI_CS_RECOGNIZE		(MSPI_CTL1_CSIE_RECOGNIZE)
+
 /* MSPInCTL1.MSPInCKR: MSPIn Clock default level */
 #define		PIL_SPI_CKR_LOW				(MSPI_CTL1_CKR_LOW)		/* 0:The default level of MSPInSCK is low	*/
 #define		PIL_SPI_CKR_HIGH			(MSPI_CTL1_CKR_HIGH)	/* 1:The default level of MSPInSCK is high	*/

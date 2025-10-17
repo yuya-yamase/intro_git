@@ -7,9 +7,11 @@
 // ------------------------
 MEMORY {
 // Address Space:Code flash (User Area 3) (Bank D)
-    vector_core         : ORIGIN = 0x00600000, LENGTH = 0x000200                  //LENGTH:0.5KB
-    rom_memory          : ORIGIN = 0x00600200, LENGTH = 0x1FFA00                  //LENGTH:2046.5KB(2MB-0.5KB-1KB)
-// 0x007FFC00 - x007FFFFF: reserved for RRPG section.
+    vector_core         : ORIGIN = 0x005F0000, LENGTH = 0x000200                  //LENGTH:0.5KB
+    rom_memory          : ORIGIN = 0x005F0200, LENGTH = 0x1CFA00                  //LENGTH:1854.5KB(2112KB-0.5KB-256K(SEC)-1KB(RPRG))
+
+// 0x007BFC00 - 0x007BFFFF: reserved for RPRG section.
+// 0x007C0000 - 0x007FFFFF: reserved for SEC section.
 
 // Address Space:Local RAM (CPU3)
 // ORIGIN = 0xFD600000, LENGTH = 64K
@@ -40,14 +42,10 @@ MEMORY {
 
 DEFAULTS {
 //1byte (0xFE430000 - 0xFE430100)
-    SHARE_IOHW_ADC_LV_RD_ADDR   = 0xFE430000
 //2byte (0xFE430100 - 0xFE430300)
 //4byte (0xFE430300 - 0xFE430700)
     SHARE_PORT_CONF_ADDR        = 0xFE430300
-    SHARE_VEH_OPEMD_MDBIT_ADDR  = 0xFE430304    
 //Struct
-    SHARE_IOHW_ADC_LV_ADDR      = 0xFE431000
-    SHARE_IOHW_DIFLT_FLTRD_ADDR = 0xFE431100
     SHARE_DMA_NOTICATION_ADDR   = 0xFE431200
     SHARE_SPI_MODEA_CHANNELDATA_ADDR   = 0xFE431300
     SHARE_SPI_MODEC_CHANNELDATA_ADDR   = 0xFE431400

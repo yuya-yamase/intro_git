@@ -29,7 +29,7 @@
 #include "memfill_u1.h"
 #include "memcpy_u1.h"
 
-#include "iohw_adc.h"
+#include "iohw_adc_sh.h"
 #include "veh_opemd.h"
 #if 0   /* BEV BSW provisionally */
 #else

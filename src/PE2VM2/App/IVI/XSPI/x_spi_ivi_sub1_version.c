@@ -58,8 +58,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-volatile U4 * const    u4p_s_VERSION_MAJ = (volatile U4 *)0x007FFB00U;
-volatile U4 * const    u4p_s_VERSION_MIN = (volatile U4 *)0x007FFB00U;
+volatile U4 * const    u4p_s_VERSION_MAJ = (volatile U4 *)0x007BFB00U;
+volatile U4 * const    u4p_s_VERSION_MIN = (volatile U4 *)0x007BFB00U;
 
 static U1              u1_sp_xspi_ivi_version_gsensor_data[XSPI_IVI_VERSION_GSEN_DIG];
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

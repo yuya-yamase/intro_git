@@ -20,7 +20,7 @@ lib/can_lpfq.c
 ###lib/can_lpr_canif_rx.c
 ###lib/can_qsev_rx.c
 ###lib/vcan_tx_ack.c
-###lib/can_lpr_secoc_trx.c
+lib/can_lpr_secoc_trx.c
 lib/can_lpr_uds_trx.c
 lib/can_lpr_vir_tx.c
 scc/can_lpr.c

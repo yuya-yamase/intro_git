@@ -4923,7 +4923,7 @@ BswConst BswU4 bsw_com_u4PncStatTbl[BSW_COM_MSG_NUM][BSW_COM_PNC_REQNUM] =
      }
     ,{    /* [19] MSG_BAT1EDB_RXCH0 */
           ( BSW_COM_u4IPDUGRP_PNC_16 )
-         ,( BSW_COM_u4IPDUGRP_PNC_NONE )
+         ,( BSW_COM_u4IPDUGRP_PNC_40 )
      }
     ,{    /* [20] MSG_BAT1S08_RXCH0 */
           ( BSW_COM_u4IPDUGRP_PNC_16 )
@@ -5432,7 +5432,7 @@ BswConst Bsw_Com_TickTimeType bsw_com_u2EnablePeriodicTbl[BSW_COM_TX_MSG_NUM] = 
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v3-0-0                                              */
 /****************************************************************************/
 

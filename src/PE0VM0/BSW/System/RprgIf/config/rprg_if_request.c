@@ -10,12 +10,17 @@
 /*----------------------------------------------------------------------------
  *		ヘッダインクルード
  *--------------------------------------------------------------------------*/
+#include <stdint.h>
 #include <Std_Types.h>
 #include <SS.h>
+
+#include "int_drv.h"
+#include "gpt_drv_frt.h"
 
 #include <Ecu_Memmap_SdaDisableB_env.h>
 
 #include <Ecu_Int.h>
+#include <SS_Memory.h>
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -37,15 +42,22 @@
 #define RPRG_APL_RPGDATAADDR        (0xFE800004UL)  /* Launch Request Parameter Address */
 #define RPRG_APL_SIDDATAADDR        (0xFE800024UL)  /* SID Information Address */
 
+#define RIM_KEYWORD_SIZE            (12U)
+
 /*----------------------------------------------------------------------------
  *		変数宣言
  *--------------------------------------------------------------------------*/
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
+extern          uint32 __ghsbegin_retention_ramtop[];
+volatile static uint32 u4_s_time_clearburam;
+
 /*----------------------------------------------------------------------------
  *      プロトタイプ宣言
  *--------------------------------------------------------------------------*/
+#define RH850_G4MH_SYNCP_WORD  /* static inline void  vd_s_SYNCP_W(const volatile U4 * const u4_ap_RDBK) */
+#include "rh850_g4mh.h"
 
 /*----------------------------------------------------------------------------
  *		プログラム
@@ -63,6 +75,7 @@ void vd_g_RprgIfRequestReprog(void)     /* @@@ */
     uint32 *papl_rpgparamByte;
     uint32 *papl_sidparamByte;
     uint32 *papl_rpgflag;
+    uint32  u4_t_sta_clearburam;
     
     papl_rpgparamByte = (uint32 *)RPRG_APL_RPGDATAADDR;
     papl_sidparamByte = (uint32 *)RPRG_APL_SIDDATAADDR;
@@ -128,6 +141,14 @@ void vd_g_RprgIfRequestReprog(void)     /* @@@ */
     REG_u4RESKCPROT0 = VAL_u4RESKCPROT0_KCE_ENABLE;
     APL_REG_BSEQ0CTL = APL_BSEQ0CTL_BIST_SKIP_SET;
     REG_u4RESKCPROT0 = VAL_u4RESKCPROT0_KCE_DISABLE;
+
+    /* Disable interrupt */
+    (void)u4_g_IRQ_DI();
+
+    u4_t_sta_clearburam = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (uint32)0x7fffffffU;
+    /* Clear Retention RAM area from 0xFE808000(VM0 start) to 0xFE828000(VM3 end) */
+    (void)SS_Memory_set(__ghsbegin_retention_ramtop, 0UL, (uintptr_t)0x20000U);
+    u4_s_time_clearburam = (uint32)((u4_g_Gpt_FrtGetUsElapsed((void *)0) - u4_t_sta_clearburam) & (uint32)0x7fffffffU);
 
     Ecu_Int_performReset();
 

@@ -21,8 +21,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
 
-/* @zantei 240903 */
-/* #include "int_drv.h" */
+#include "int_drv.h"
 #include "iohw_adc.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -41,11 +40,8 @@
 #define __IOHW_ADC_CYCL_SEQ_ENA__                (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* @zantei 240903 */
-/* #define u4_g_IoHwAdcCfg_DI()                     (u4_g_PLM_DI(u4_g_IOHW_ADC_IRQ_PLVL))   */
-/* #define vd_g_IoHwAdcCfg_EI(u4)                   (vd_g_PLM_EI(u4))                       */
-#define u4_g_IoHwAdcCfg_DI()                     (0)
-#define vd_g_IoHwAdcCfg_EI(u4)                   (u4)
+#define u4_g_IoHwAdcCfg_DI()                     (u4_g_IRQ_DI())
+#define vd_g_IoHwAdcCfg_EI(u4)                   (vd_g_IRQ_EI(u4))
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
@@ -74,7 +70,7 @@ void    vd_g_IoHwAdcCfgCvstFinish(const U1 u1_a_CVST, const U1 u1_a_LV_IDX);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U4                    u4_g_IOHW_ADC_IRQ_PLVL;
+/* extern const U4                    u4_g_IOHW_ADC_IRQ_PLVL; */
 
 extern U4 * const                  u4p_gp_IOHW_ADC_LV[IOHW_ADC_LV_NUM_BUF];
 extern const U2                    u2_g_IOHW_ADC_LV_MAX;

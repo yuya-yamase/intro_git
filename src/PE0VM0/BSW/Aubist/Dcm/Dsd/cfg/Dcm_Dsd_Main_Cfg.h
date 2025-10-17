@@ -37,7 +37,7 @@
 #define DCM_D_SERVICETABLE_NUM              (6U)
 
 /* NUM of all services  */
-#define DCM_D_SERVICE_NUM                   (10U)
+#define DCM_D_SERVICE_NUM                   (11U)
 
 /* Supported OBD System */
 #define DCM_DSD_OBDSYS_ON_UDS               ((uint8)0x01U)
@@ -173,7 +173,7 @@ extern CONST( AB_83_ConstV boolean, DCM_CONFIG_DATA ) Dcm_Dsd_bNoSuppressNegResI
 /****************************************************************************/
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
-/*  Framework          :v2-0-3-z0003                                        */
+/*  Framework          :v2-1-0                                              */
 /*  BSW plug-in        :v5-5-1                                              */
 /****************************************************************************/
 

@@ -28,7 +28,7 @@
 #define ADC_EXIT_CRITICAL_SECTION(x)											/* ADC exclusive area end						*/
 
 /* API								*/
-#define ADC_CFG_DEINIT_API					(STD_OFF)							/* Adc_DeInit()									*/
+#define ADC_CFG_DEINIT_API					(STD_ON)							/* Adc_DeInit()									*/
 #define ADC_CFG_START_STOP_GRP_API			(STD_ON)							/* Adc_Start/StopGroupConversion()				*/
 #define ADC_CFG_HW_TRG_API					(STD_OFF)							/* Adc_Enable/DisableHardwareTrigger()			*/
 #define ADC_CFG_READ_GRP_API				(STD_ON)							/* Adc_ReadGroup()								*/

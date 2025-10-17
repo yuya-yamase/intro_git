@@ -49,8 +49,8 @@
 
 CONST(Startup_StandbyConfigInfoType, STARTUP_CONFIG_DATA) Startup_Ucfg_StandbyInfo[STARTUP_UCFG_STANDBY_SETTING_NUM] = {
      { STARTUP_REG_MSR_TAUJ_ISO, 0x00000002UL }
-    ,{ STARTUP_REG_MSR_MSPI, 0x000003BFUL }
     ,{ STARTUP_REG_MSR_RSCFD, 0x00000000UL }
+    ,{ STARTUP_REG_MSR_MSPI, 0x000003BFUL }
 };
 
 #define STARTUP_STOP_SEC_CST
@@ -79,5 +79,10 @@ CONST(Startup_StandbyConfigInfoType, STARTUP_CONFIG_DATA) Startup_Ucfg_StandbyIn
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
 /*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 
