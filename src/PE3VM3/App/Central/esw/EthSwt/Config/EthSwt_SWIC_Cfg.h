@@ -51,7 +51,6 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Link.c                                              */
 /* -------------------------------------------------------------------------- */
-#define D_ETHSWT_SWIC_LINK_FAST_GET_TMO             (70U)
 #define D_ETHSWT_SWIC_LINK_GET_CYCLE                (100U)
 
 /* -------------------------------------------------------------------------- */

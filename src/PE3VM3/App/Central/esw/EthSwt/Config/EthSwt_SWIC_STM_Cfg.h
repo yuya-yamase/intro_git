@@ -50,7 +50,6 @@ const EthSwt_registerAccessFunc G_ETHSWT_SWIC_BACK_FUNC_TABLE[][D_ETHSWT_SWIC_ST
 ,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , EthSwt_SWIC_Port_RelayOn              , NULL_PTR                  , NULL_PTR                  }   /* 中継開始設定 */
 ,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , NULL_PTR                              , NULL_PTR                  , EthSwt_SWIC_Port_RelayOff }   /* 中継停止設定 */
 ,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , NULL_PTR                              , EthSwt_SWIC_Link_Action   , NULL_PTR                  }   /* リンク状態取得 */
-,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , NULL_PTR                              , EthSwt_SWIC_Link_FastGet  , NULL_PTR                  }   /* 高速リンク状態取得 */
 ,   {   NULL_PTR                , NULL_PTR                      , NULL_PTR                      , NULL_PTR                              , EthSwt_SWIC_Port_Action   , NULL_PTR                  }   /* ポートモード制御 */
 ,   {   NULL_PTR                , NULL_PTR                      , EthSwt_SWIC_MIB_ReadDiscard  , NULL_PTR                              , EthSwt_SWIC_MIB_Action    , NULL_PTR                  }   /* MIB取得 */
 ,   {   NULL_PTR                , NULL_PTR                      , EthSwt_SWIC_Qci_ReadDiscard   , NULL_PTR                              , EthSwt_SWIC_Qci_Action    , NULL_PTR                  }   /* Qci取得 */
