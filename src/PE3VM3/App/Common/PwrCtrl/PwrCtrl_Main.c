@@ -179,7 +179,7 @@ void vd_g_PwrCtrlMainBonReq( void )
     /* 非冗長電源制御 初期化処理 */
     vd_g_PwrCtrlNoRedunInit();
 
-    u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_OFF; /* 暫定 */
+    u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_OFF;
     u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_NG;    /* スタンバイ判定不可 */
 
     vd_g_PwrCtrlSipBonInit();                                        /* SIP電源状態+B初期化要求 */
@@ -264,7 +264,7 @@ void vd_g_PwrCtrlMainWakeupReq( void )
     /* 非冗長電源制御 初期化処理 */
     vd_g_PwrCtrlNoRedunInit();
 
-    u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_OFF; /* 暫定 */
+    u1_s_PwrCtrl_Main_ShtdwnOkFlag = (U1)PWRCTRL_COMMON_SYS_PWR_OFF;
     u1_s_PwrCtrl_Main_StbyJdgFlag  = (U1)PWRCTRL_MAIN_STBYJDG_NG;    /* スタンバイ判定不可 */
 
     vd_g_PwrCtrlSipWkupInit();                                       /* SIP電源状態Wakeup初期化要求 */
