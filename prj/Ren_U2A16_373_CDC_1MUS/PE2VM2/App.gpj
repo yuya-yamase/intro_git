@@ -187,3 +187,4 @@ DiagApp_SID22.c
 DiagApp_SID28.c
 DiagApp_SID2E.c
 DiagApp_SID31.c
+BootLogCtl.c

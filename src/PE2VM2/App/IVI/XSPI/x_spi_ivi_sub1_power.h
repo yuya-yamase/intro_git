@@ -31,6 +31,15 @@
 #define    XSPI_IVI_POWER_GVIFSEND_INI          (2U)
 #define    XSPI_IVI_POWER_GYRO_INI              (3U)
 #define    XSPI_IVI_POWER_POWER_INI             (4U)
+
+#define    XSPI_IVI_POWER_01_BUFSIZ             (6U)    /* 電源状態通知 バッファサイズ */
+#define    XSPI_IVI_POWER_01_BYTE2              (0U)    /* 基本ステート */
+#define    XSPI_IVI_POWER_01_BYTE3              (1U)    /* 特殊ステート */
+#define    XSPI_IVI_POWER_01_BYTE4              (2U)    /* OTA特殊ステート */
+#define    XSPI_IVI_POWER_01_BYTE5              (3U)    /* 見た目状態 */
+#define    XSPI_IVI_POWER_01_BYTE6              (4U)    /* 車両電源(特殊)ステート遷移中フラグ */
+#define    XSPI_IVI_POWER_01_BYTE7              (5U)    /* 途絶状態 */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -42,11 +51,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 void            vd_g_XspiIviSub1PowerInit(void);
 void            vd_g_XspiIviSub1PowerMainTask(void);
+void            vd_g_XspiIviSub1PowerGetSts(U1* u1_ap_data);
 void            vd_g_XspiIviSub1PowerAna(const U1 * u1_ap_XSPI_ADD, const U2 u2_a_data_size);
 void            vd_g_XspiIviSub1_PowerState1stSend(void);
 void            vd_g_XspiIviSub1DevInitFinish(void);
 void            vd_g_XspiIviSub1PowerDevInitCmpApp(const U1 u1_a_ID);
 void            vd_g_XspiIviSub1PowerBmoniVolSend(void);
+void            vd_g_XspiIviSub1PowerBootLogResSend(const U1 * u1_ap_DATA);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

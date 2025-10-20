@@ -38,6 +38,8 @@
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U2## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 #define RIMID_U4_SAMPLE_BBB_4                    (0x8000U)
+#define RIMID_U4_BOOTLOG_SOCWAKE                 (0x8001U)
+#define RIMID_U4_DRC_TICKTIME                    (0x8002U)
 /* END : ##TOOL_OUT#RIM_ID_MOD_3B_U4## */
 /* START : ##TOOL_OUT#RIM_ID_MOD_3B_OTR## */
 #define RIMID_OTR_SAMPLE_BBB_OTH                 (0xC000U)

@@ -1,8 +1,8 @@
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-#ifndef SYSECDCR_H
-#define SYSECDCR_H
+#ifndef BOOTLOGCTL_H
+#define BOOTLOGCTL_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
@@ -12,25 +12,6 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define SYSECDRC_DREC_CAT_EIZOIC        (1U)
-#define SYSECDRC_DREC_CAT_GVIFRX        (2U)
-#define SYSECDRC_DREC_CAT_GVIFTX        (3U)
-#define SYSECDRC_DREC_CAT_CAMCTL        (4U)
-#define SYSECDRC_DREC_CAT_GYROACC       (5U)
-#define SYSECDRC_DREC_CAT_POWERIC       (6U)
-#define SYSECDRC_DREC_CAT_BOOTLOG       (7U)
-
-#define SYSECDRC_DREC_ID_1              (1U)
-#define SYSECDRC_DREC_ID_2              (2U)
-#define SYSECDRC_DREC_ID_3              (3U)
-#define SYSECDRC_DREC_ID_4              (4U)
-#define SYSECDRC_DREC_ID_5              (5U)
-#define SYSECDRC_DREC_ID_6              (6U)
-#define SYSECDRC_DREC_ID_7              (7U)
-#define SYSECDRC_DREC_ID_8              (8U)
-#define SYSECDRC_DREC_ID_9              (9U)
-#define SYSECDRC_DREC_ID_10             (10U)
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -43,19 +24,17 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_SysEcDrc_BonInit(void);
-void    vd_g_SysEcDrc_WkupInit(void);
-void    vd_g_SysEcDrc_MainTask(void);
-void    vd_g_SysEcDrc_Drec(const U1 u1_a_ARGTRCKIND, const U1 u1_a_DREC1, const U1 u1_a_DREC2, const U1 u1_a_DREC3);
-void    vd_g_SysEcDrc_SendDateSet(U4* u4p_a_size, U1* u1p_a_buff, const U4 u4_a_BUFF_MAX);
-U4      u4_g_SysEcDrc_GetSystime(void);
+void    vd_g_BootLogCtl_BonInit(void);
+void    vd_g_BootLogCtl_WkupInit(void);
+void    vd_g_BootLogCtl_MainTask(void);
+void    vd_g_BootLogCtl_RxReq(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 
-#endif      /* SYSECDCR_H */
+#endif      /* BOOTLOGCTL_H */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  SysEcDrc.c                                                                                                    */
+/*  Change History  :  BootLogCtl.c                                                                                                    */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
