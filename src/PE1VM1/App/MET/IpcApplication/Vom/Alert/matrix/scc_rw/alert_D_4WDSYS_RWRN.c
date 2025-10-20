@@ -145,6 +145,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_4WDSYS_RWRN_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_4wdsys_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_D_4WDSYS_LSB_B_4WD   = (U1)3U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
@@ -172,6 +173,9 @@ static U4      u4_s_AlertD_4wdsys_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_D_4WDSYS_LSB_B_4WD);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -182,6 +186,7 @@ static U4      u4_s_AlertD_4wdsys_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static void    vd_s_AlertD_4wdsys_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
 
     if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                         ) &&
@@ -192,6 +197,7 @@ static void    vd_s_AlertD_4wdsys_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_
         u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
     }
     (void)Com_SendSignal(ComConf_ComSignal_FWW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

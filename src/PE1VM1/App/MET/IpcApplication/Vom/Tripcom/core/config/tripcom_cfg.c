@@ -32,10 +32,8 @@
 #include "oxcan.h"
 #include "vardef.h"
 
-#if 0   /* BEV Rebase provisionally */
 #include "alert.h"
 #include "alert_mtrx.h"
-#endif   /* BEV Rebase provisionally */
 
 #include "calibration.h"
 

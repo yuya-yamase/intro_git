@@ -341,6 +341,7 @@ void    vd_g_AlertH_quichaInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_quichaChgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_QUICHA_CHG_LSB_PL10 = (U1)14U;
     static const U1 u1_s_ALERT_H_QUICHA_CHG_LSB_PID8 = (U1)6U;
     static const U1 u1_s_ALERT_H_QUICHA_CHG_LSB_PIDS = (U1)5U;
@@ -388,6 +389,9 @@ static U4      u4_s_AlertH_quichaChgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -398,6 +402,7 @@ static U4      u4_s_AlertH_quichaChgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_quichaLidSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_H_QUICHA_LID_TO_THRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_H_QUICHA_LID_LSB_PLG  = (U1)1U;
     static const U4 u4_s_ALERT_H_QUICHA_LID_BAT_WT   = (U4)0x00000004U;
@@ -425,6 +430,9 @@ static U4      u4_s_AlertH_quichaLidSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -435,6 +443,7 @@ static U4      u4_s_AlertH_quichaLidSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_quichaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_H_QUICHA_TT_TO_THRSH  = ((U2)5000U    / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_H_QUICHA_TT_LSB_PLG   = (U1)1U;
     static const U4 u4_s_ALERT_H_QUICHA_TT_DSPTM     = ((U4)1200000U / (U4)ALERT_CH_TICK);
@@ -479,6 +488,9 @@ static U4      u4_s_AlertH_quichaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -489,6 +501,7 @@ static U4      u4_s_AlertH_quichaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_quichaDchgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_H_QUICHA_DCHG_TRSH_PL = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_H_QUICHA_DCHG_LSB_PLG = (U1)3U;
     U4              u4_t_src_chk;
@@ -512,6 +525,9 @@ static U4      u4_s_AlertH_quichaDchgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

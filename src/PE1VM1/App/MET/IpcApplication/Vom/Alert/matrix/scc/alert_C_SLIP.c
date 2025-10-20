@@ -145,6 +145,7 @@ const ST_ALERT_MTRX st_gp_ALERT_C_SLIP_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_C_SLIP_TO_THRESH   = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_SLIP_LSB_VSC1S95 = (U1)3U;
     static const U1 u1_s_ALERT_C_SLIP_LSB_DDRTWV  = (U1)5U;
@@ -169,6 +170,9 @@ static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_C_SLIP_LSB_DDRTWV);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -179,6 +183,7 @@ static U4      u4_s_AlertC_slipSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*===================================================================================================================================*/
 static void    vd_s_AlertC_slipRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
     U1              u1_t_esopt_vsc;
 
@@ -193,6 +198,7 @@ static void    vd_s_AlertC_slipRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, con
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_VSCW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

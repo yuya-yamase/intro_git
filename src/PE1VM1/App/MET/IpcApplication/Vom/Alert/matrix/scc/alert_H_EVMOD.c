@@ -193,6 +193,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_EVMOD_MTRX[3] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_evmodTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_HEVMODETT_LSB_EHV1F04_MSGSTS = (U1)4U;
     static const U1 u1_s_ALERT_HEVMODETT_LSB_PTSYS_SIGSTS   = (U1)5U;
     U4              u4_t_src_chk;
@@ -213,6 +214,9 @@ static U4      u4_s_AlertH_evmodTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_HEVMODETT_LSB_EHV1F04_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -223,6 +227,7 @@ static U4      u4_s_AlertH_evmodTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_evmodPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_HEVMODEPD_LSB_EHV1F04_MSGSTS = (U1)4U;
     static const U1 u1_s_ALERT_HEVMODEPD_LSB_PTSYS_SIGSTS   = (U1)5U;
     U4              u4_t_src_chk;
@@ -243,6 +248,9 @@ static U4      u4_s_AlertH_evmodPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_HEVMODEPD_LSB_EHV1F04_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -253,6 +261,7 @@ static U4      u4_s_AlertH_evmodPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_evmodBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_HEVMODEBC_LSB_EHV1F04_MSGSTS = (U1)4U;
     static const U1 u1_s_ALERT_HEVMODEBC_LSB_PTSYS_SIGSTS   = (U1)5U;
     U4              u4_t_src_chk;
@@ -273,6 +282,9 @@ static U4      u4_s_AlertH_evmodBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_HEVMODEBC_LSB_EHV1F04_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

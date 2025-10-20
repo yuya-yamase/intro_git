@@ -112,6 +112,7 @@ const ST_ALERT_MTRX st_gp_ALERT_C_TPKBON_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_tpkbonSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_C_TPKBON_LSB_VSC1S95 = (U1)4U;
     static const U1 u1_s_ALERT_C_TPKBON_LSB_B_CPKB  = (U1)3U;
     static const U1 u1_s_ALERT_C_TPKBON_LSB_BDB1S01 = (U1)2U;
@@ -152,6 +153,9 @@ static U4      u4_s_AlertC_tpkbonSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

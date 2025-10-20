@@ -89,6 +89,7 @@ const ST_ALERT_MTRX st_gp_ALERT_B_SPAT_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_spatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_B_SPAT_LSB_MSGSTS = (U1)2U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
@@ -105,6 +106,9 @@ static U4      u4_s_AlertB_spatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_SPAT_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -115,6 +119,7 @@ static U4      u4_s_AlertB_spatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*===================================================================================================================================*/
 static void    vd_s_AlertB_spatRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_B_SPAT_TIM_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
     U1              u1_t_sgnl;
 
@@ -128,6 +133,7 @@ static void    vd_s_AlertB_spatRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, con
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_SPAW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

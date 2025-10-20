@@ -115,6 +115,7 @@ void    vd_g_AlertB_tpwsrInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_tpwsrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4  u4_s_ALERT_B_TPWSR_TM_EST     = ((U4)30000U / (U4)ALERT_MAIN_TICK);
     static const U4  u4_s_ALERT_B_TPWSR_TM_RST     = (U4)1U;
     static const U4  u4_s_ALERT_B_TPWSR_BIT_TM_EST = (U4)0x00000001U;
@@ -163,6 +164,9 @@ static U4      u4_s_AlertB_tpwsrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_srcchk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

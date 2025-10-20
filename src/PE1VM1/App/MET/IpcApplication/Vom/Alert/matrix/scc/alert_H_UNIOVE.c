@@ -179,6 +179,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_UNIOVE_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_unioveTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_ENG1G97) && defined(ComConf_ComSignal_B_EXKAME)
     static const U1 u1_s_ALERT_H_UNIOVE_TTBC_LSB_ENG = (U1)2U;
     U1              u1_t_msgsts_eng;
@@ -217,6 +218,9 @@ static U4      u4_s_AlertH_unioveTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID) */
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -227,6 +231,7 @@ static U4      u4_s_AlertH_unioveTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_uniovePdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID)
     static const U1 u1_s_ALERT_H_UNIOVE_PD_LSB_EHV   = (U1)2U;
     static const U1 u1_s_ALERT_H_UNIOVE_PD_LSB_PTSYS = (U1)3U;
@@ -254,6 +259,9 @@ static U4      u4_s_AlertH_uniovePdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_HVOTID) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -264,6 +272,7 @@ static U4      u4_s_AlertH_uniovePdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static void    vd_s_AlertH_unioveTtBcRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_UNIOVE_RWTX_CRT = ((U1)((U1)1U << ALERT_REQ_H_UNIOVE_TT_BC_MALFUNC)
                                                  |  (U1)((U1)1U << ALERT_REQ_H_UNIOVE_TT_BC_RW     )
                                                  |  (U1)((U1)1U << ALERT_REQ_H_UNIOVE_TT_BC_PRM_RW ));
@@ -281,6 +290,7 @@ static void    vd_s_AlertH_unioveTtBcRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_MIHW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

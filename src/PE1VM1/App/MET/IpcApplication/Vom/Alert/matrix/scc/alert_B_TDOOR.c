@@ -209,6 +209,7 @@ void    vd_g_AlertB_tdoorInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_tdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_B_TDOOR_BIT_SLP_OPN  = (U4)0x00000020U;
     static const U4 u4_s_ALERT_B_TDOOR_BIT_HDCY_OPN = (U4)0x00000010U;
     static const U4 u4_s_ALERT_B_TDOOR_BIT_DOOR_OPN = (U4)0x00000008U;
@@ -257,6 +258,9 @@ static U4      u4_s_AlertB_tdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -267,6 +271,7 @@ static U4      u4_s_AlertB_tdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static U1      u1_s_AlertB_tdoorSgnl(const U1 u1_a_FACT)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_B_TDOOR_TO_BDB1S01    = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U2 u2_s_ALERT_B_TDOOR_TO_BDB1F01    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_TDOOR_SGNL_LSB_PCTY = (U1)1U;
@@ -347,6 +352,9 @@ static U1      u1_s_AlertB_tdoorSgnl(const U1 u1_a_FACT)
     }
 
     return(u1_t_retval);
+#else   /* BEV Rebase provisionally */
+    return((U1)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -357,6 +365,7 @@ static U1      u1_s_AlertB_tdoorSgnl(const U1 u1_a_FACT)
 /*===================================================================================================================================*/
 static U1      u1_s_AlertB_tdoorPsdSgnl(const U1 u1_a_FACT)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (ALERT_CFG_B_TDOOR_LPSDWARN == TRUE)
     static const U2 u2_s_ALERT_B_TDOOR_TO_DRL1S03    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U1              u1_t_fact_drl1s03;
@@ -405,6 +414,9 @@ static U1      u1_s_AlertB_tdoorPsdSgnl(const U1 u1_a_FACT)
 #endif /* (ALERT_CFG_B_TDOOR_RPSDWARN == TRUE) */
 
     return(u1_t_retval);
+#else   /* BEV Rebase provisionally */
+    return((U1)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -415,6 +427,7 @@ static U1      u1_s_AlertB_tdoorPsdSgnl(const U1 u1_a_FACT)
 /*===================================================================================================================================*/
 static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (ALERT_CFG_B_TDOOR_SLP_POS == TRUE)
     static const U2 u2_s_ALERT_B_TDOOR_TO_SLP1S01 = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_TDOOR_SLP_MSK    = (U1)0x07U;
@@ -445,6 +458,9 @@ static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
 #endif /* (ALERT_CFG_B_TDOOR_SLP_POS == TRUE) */
 
     return(u1_t_retval);
+#else   /* BEV Rebase provisionally */
+    return((U1)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -455,6 +471,7 @@ static U1      u1_s_AlertB_tdoorSlpSgnl(const U1 u1_a_FACT)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_tdoorIgOffDsp(const U1 u1_a_VOM, const U2 u2_a_DOOR_STS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_TDOOR_IGOFF_DSPTM  = ((U4)ALERT_CFG_B_TDOOR_DISP_TIME / (U4)ALERT_MAIN_TICK);
     static const U4 u4_s_ALERT_TDOOR_DSPCNT_RST   = (U4)1U;
     static const U4 u4_s_ALERT_TDOOR_BIT_IGOFFCNT = (U4)0x00000001U;
@@ -479,6 +496,9 @@ static U4      u4_s_AlertB_tdoorIgOffDsp(const U1 u1_a_VOM, const U2 u2_a_DOOR_S
     u2_s_alert_b_tdoor_laststs = u2_a_DOOR_STS;
 
     return(u4_t_retval);
+#else   /* BEV Rebase provisionally */
+    return((U1)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -489,6 +509,7 @@ static U4      u4_s_AlertB_tdoorIgOffDsp(const U1 u1_a_VOM, const U2 u2_a_DOOR_S
 /*===================================================================================================================================*/
 static U1      u1_s_AlertB_tdoorRunSts(void)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_TDOOR_THRSH_RUN  = (U2)500U;
     static const U2 u2_s_ALERT_TDOOR_THRSH_STOP = (U2)400U;
     U2              u2_t_instspd;
@@ -515,6 +536,9 @@ static U1      u1_s_AlertB_tdoorRunSts(void)
     u1_s_alert_b_tdoor_runsts = u1_t_runsts;
 
     return(u1_s_alert_b_tdoor_runsts);
+#else   /* BEV Rebase provisionally */
+    return((U1)ALERT_B_TDOOR_STS_STOP);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

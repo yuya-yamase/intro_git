@@ -113,6 +113,7 @@ const ST_ALERT_MTRX st_gp_ALERT_O_CHAMAL_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertO_chamalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_O_CHAMAL_TO_THRESH    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_O_CHAMAL_LSB_MSGSTS   = (U1)3U;
     static const U1 u1_s_ALERT_O_CHAMAL_LSB_CHAW_BZR = (U1)2U;
@@ -135,6 +136,9 @@ static U4      u4_s_AlertO_chamalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_sgnl   << u1_s_ALERT_O_CHAMAL_LSB_CHAW_BZR);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -145,6 +149,7 @@ static U4      u4_s_AlertO_chamalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static void    vd_s_AlertO_chamalRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
 #ifdef ComConf_ComSignal_LW /* 130D_CAN */
     static const U4 u4_s_ALERT_O_CHAMAL_RWTX_CRT    = (U4)(((U4)1U << ALERT_REQ_O_CHAMAL_MALFUNC      )
                                                          | ((U4)1U << ALERT_REQ_O_CHAMAL_INSPECTION   )
@@ -168,6 +173,7 @@ static void    vd_s_AlertO_chamalRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 
     (void)Com_SendSignal(ComConf_ComSignal_LW, &u1_t_sgnl);
 #endif /* ComConf_ComSignal_LW */ /* 130D_CAN */
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

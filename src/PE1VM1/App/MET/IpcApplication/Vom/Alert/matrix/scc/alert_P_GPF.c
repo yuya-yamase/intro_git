@@ -218,6 +218,7 @@ const ST_ALERT_MTRX st_gp_ALERT_P_GPF_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_gpfWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(ComConf_ComSignal_B_GPFTT) || defined(ComConf_ComSignal_B_GPFMID)
 #ifdef ComConf_ComSignal_B_GPFMID
     static const U1 u1_s_ALERT_P_GPFWRN_LSB_B_GPFMID = (U1)3U;
@@ -255,6 +256,9 @@ static U4      u4_s_AlertP_gpfWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 #else
     return((U4)0U);
 #endif /* defined(ComConf_ComSignal_B_GPFTT) || defined(ComConf_ComSignal_B_GPFMID) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -265,6 +269,7 @@ static U4      u4_s_AlertP_gpfWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_gpfBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(ComConf_ComSignal_B_GPFBZR)
     static const U1 u1_s_ALERT_P_GPFBC_LSB_MSGSTS = (U1)1U;
     U4              u4_t_src_chk;
@@ -291,6 +296,9 @@ static U4      u4_s_AlertP_gpfBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 #else
     return((U4)0U);
 #endif /* ComConf_ComSignal_B_GPFBZR */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -301,6 +309,7 @@ static U4      u4_s_AlertP_gpfBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_gpfWrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_P_GPFWRN_CRT      = ((U4)((U4)1U << ALERT_REQ_P_GPF_WRN_FLASH1_RW   )
                                                  |  (U4)((U4)1U << ALERT_REQ_P_GPF_WRN_FLSH1_CAU_RW)
                                                  |  (U4)((U4)1U << ALERT_REQ_P_GPF_WRN_WARNING_RW  )
@@ -350,6 +359,7 @@ static void    vd_s_AlertP_gpfWrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 #ifdef ComConf_ComSignal_GPMW /* 460B_CAN */
     (void)Com_SendSignal(ComConf_ComSignal_GPMW, &u1_t_sgnl_gpmw);
 #endif /* ComConf_ComSignal_GPMW */
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

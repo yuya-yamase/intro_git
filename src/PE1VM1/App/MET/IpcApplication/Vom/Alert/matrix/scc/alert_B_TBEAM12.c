@@ -135,6 +135,7 @@ void    vd_g_AlertB_tbeam12Init(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_AFS1S01) && defined(ComConf_ComSignal_AZB_HIND)
     static const U2 u2_s_ALERT_B_TBEAM_THRSH_TO_AFS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_TBEAM_LSB_AFSSTS   = (U1)1U;
@@ -191,6 +192,9 @@ static U4      u4_s_AlertB_tbeam12Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

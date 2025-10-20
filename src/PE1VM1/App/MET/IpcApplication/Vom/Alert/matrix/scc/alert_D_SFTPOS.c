@@ -297,6 +297,7 @@ void    vd_g_AlertD_sftposInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_sftposBRjtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_D_SFTPOS_BC_LSB_ECT   = (U1)4U;
     static const U1 u1_s_ALERT_D_SFTPOS_BC_LSB_RJTB2 = (U1)1U;
     U4              u4_t_src_chk;
@@ -318,6 +319,9 @@ static U4      u4_s_AlertD_sftposBRjtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk |= ((U4)u1_t_sgnl << u1_s_ALERT_D_SFTPOS_BC_LSB_RJTB2);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -328,6 +332,7 @@ static U4      u4_s_AlertD_sftposBRjtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_sftposBRcvtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_D_SFTPOS_TO_THRESH    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U4 u4_s_ALERT_D_SFTPOS_TIM_ELPSD    = ((U4)300U  / (U4)ALERT_CH_TICK);
     static const U4 u4_s_ALERT_D_SFTPOS_BIT_CVT      = (U4)0x00000040U;
@@ -389,6 +394,9 @@ static U4      u4_s_AlertD_sftposBRcvtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)                         */
@@ -398,6 +406,7 @@ static U4      u4_s_AlertD_sftposBRcvtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_D_SFTPOS_TO_THRESH        = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U4 u4_s_ALERT_D_SFTPOS_BIT_SBW          = (U4)0x00000040U;
     static const U4 u4_s_ALERT_D_SFTPOS_BIT_INTERMITTENT = (U4)0x00000080U;
@@ -431,6 +440,9 @@ static U4      u4_s_AlertD_sftposBRsbwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

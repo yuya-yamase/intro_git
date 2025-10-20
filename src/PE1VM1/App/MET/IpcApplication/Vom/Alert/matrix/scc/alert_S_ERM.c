@@ -127,6 +127,7 @@ const ST_ALERT_MTRX st_gp_ALERT_S_ERM_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_ermTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_S_ERM_TT_LSB_MSGSTS = (U1)2U;
     static const U2 u2_s_ALERT_S_ERM_PD_THRSH_TO   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U1              u1_t_msgsts;
@@ -144,6 +145,9 @@ static U4      u4_s_AlertS_ermTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ERM_TT_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -154,6 +158,7 @@ static U4      u4_s_AlertS_ermTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_ermPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_S_ERM_PD_LSB_MSGSTS = (U1)5U;
     static const U2 u2_s_ALERT_S_ERM_PD_THRSH_TO   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U1              u1_t_msgsts;
@@ -171,6 +176,9 @@ static U4      u4_s_AlertS_ermPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_S_ERM_PD_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

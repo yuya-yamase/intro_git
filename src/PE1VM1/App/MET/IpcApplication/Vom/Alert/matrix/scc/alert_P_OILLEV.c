@@ -158,6 +158,7 @@ void    vd_g_AlertP_oillevInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_oillevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_P_OILLEV_LSB_MSGSTS = (U1)5U;
     static const U1 u1_s_ALERT_P_OILLEV_LSB_OILLV  = (U1)4U;
     static const U4 u4_s_ALERT_P_OILLEV_LAS        = (U4)0x00000001U;
@@ -189,6 +190,9 @@ static U4      u4_s_AlertP_oillevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -199,6 +203,7 @@ static U4      u4_s_AlertP_oillevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_oillevJdgOillv(const U1 u1_a_VOM, const U1 u1_a_CTRL_JDG, const U2 u2_a_LMT_RPM)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_P_OILLEV_DLY_TIME     = (U4)(40000U / ALERT_CH_TICK);  /* 40[s] */
     static const U2 u2_s_ALERT_P_OILLEV_TMP_THRESH   = (U2)8000U;                     /* 80[degree] */
     static const U4 u4_s_ALERT_P_OILLEV_OLLV_STS_HI  = (U4)0x00000000U;
@@ -269,6 +274,9 @@ static U4      u4_s_AlertP_oillevJdgOillv(const U1 u1_a_VOM, const U1 u1_a_CTRL_
     }
 
     return(u4_t_oillv);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -279,6 +287,7 @@ static U4      u4_s_AlertP_oillevJdgOillv(const U1 u1_a_VOM, const U1 u1_a_CTRL_
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_oillevRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
 #ifdef ComConf_ComSignal_OLW
     U1              u1_t_sgnl;
 
@@ -292,6 +301,7 @@ static void    vd_s_AlertP_oillevRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 
     (void)Com_SendSignal(ComConf_ComSignal_OLW, &u1_t_sgnl);
 #endif /* ComConf_ComSignal_OLW */
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

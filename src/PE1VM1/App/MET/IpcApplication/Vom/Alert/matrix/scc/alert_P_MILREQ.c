@@ -145,6 +145,7 @@ const ST_ALERT_MTRX st_gp_ALERT_P_MILREQ_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_milreqSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_P_MILREQ_TO_THRESH  = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_P_MILREQ_LSB_MSGSTS = (U1)4U;
     U1              u1_t_msgsts;
@@ -168,6 +169,9 @@ static U4      u4_s_AlertP_milreqSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_MILREQ_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -178,6 +182,7 @@ static U4      u4_s_AlertP_milreqSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_milreqRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
     U1              u1_t_esopt;
 
@@ -193,6 +198,7 @@ static void    vd_s_AlertP_milreqRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_ENGW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

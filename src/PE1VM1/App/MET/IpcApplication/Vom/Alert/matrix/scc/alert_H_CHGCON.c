@@ -90,6 +90,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_CHGCON_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_chgconSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S93) && defined(ComConf_ComSignal_PICAU)
     static const U1 u1_s_ALERT_H_CHGCON_LSB_MSGSTS = (U1)6U;
     U1              u1_t_msgsts;
@@ -110,6 +111,9 @@ static U4      u4_s_AlertH_chgconSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S93) && defined(ComConf_ComSignal_PICAU) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -165,6 +165,7 @@ void    vd_g_AlertB_bdoorInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_bdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_B_BDOOR_THSH_TO_BDB1S = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U2 u2_s_ALERT_B_BDOOR_THSH_TO_BDB1F = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
 #if (ALERT_CFG_B_BDOOR_LPSDWARN == TRUE)
@@ -227,6 +228,9 @@ static U4      u4_s_AlertB_bdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk       |= ((U4)u1_t_sgnl << u1_s_ALERT_B_BDOOR_LSB_SGNL);
     u4_t_src_chk       |= ((U4)u1_t_slp  << u1_s_ALERT_B_BDOOR_LSB_SLP );
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -238,6 +242,7 @@ static U4      u4_s_AlertB_bdoorSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static U1      u1_s_AlertB_bdoorGetSgnl(const U1 u1_a_BDB1S01STS, const U1 u1_a_BDB1F01STS, const U1 u1_a_DRL1S03STS, const U1 u1_a_DRR1S03STS)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
     U1              u1_t_retval;
 
@@ -299,6 +304,9 @@ static U1      u1_s_AlertB_bdoorGetSgnl(const U1 u1_a_BDB1S01STS, const U1 u1_a_
 #endif /* (ALERT_CFG_B_BDOOR_RPSDWARN == TRUE) */
 
     return(u1_t_retval);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -309,6 +317,7 @@ static U1      u1_s_AlertB_bdoorGetSgnl(const U1 u1_a_BDB1S01STS, const U1 u1_a_
 /*===================================================================================================================================*/
 static U1      u1_s_AlertB_bdoorGetSlp(const U1 u1_a_SLP1S01STS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (ALERT_CFG_B_BDOOR_SLP_POS == TRUE)
     U1              u1_t_sgnl;
     U1              u1_t_retval;
@@ -336,6 +345,9 @@ static U1      u1_s_AlertB_bdoorGetSlp(const U1 u1_a_SLP1S01STS)
 #else
     return((U1)ALERT_B_BDOOR_SLP_POS_INACT);
 #endif /* (ALERT_CFG_B_BDOOR_SLP_POS == TRUE) */
+#else   /* BEV Rebase provisionally */
+    return((U1)ALERT_B_BDOOR_SLP_POS_INACT);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

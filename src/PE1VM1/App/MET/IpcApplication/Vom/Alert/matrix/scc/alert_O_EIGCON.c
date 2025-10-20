@@ -192,6 +192,7 @@ void    vd_g_AlertO_eigconInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertO_eigconEngSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (defined(OXCAN_PDU_RX_CAN_PMN1G03) || defined(OXCAN_PDU_RX_CAN_PMN1F03)) && defined(ComConf_ComSignal_BZRQ_EIG) /* _235D_CAN_ */
     static const U2 u2_s_ALERT_O_EIGCON_ENG_TO_TRSH = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_O_EIGCON_ENG_LSB_MSG = (U1)4U;
@@ -220,6 +221,9 @@ static U4      u4_s_AlertO_eigconEngSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #else
     return((U4)0U);
 #endif /* (defined(OXCAN_PDU_RX_CAN_PMN1G03) || defined(OXCAN_PDU_RX_CAN_PMN1F03)) && defined(ComConf_ComSignal_BZRQ_EIG) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -230,6 +234,7 @@ static U4      u4_s_AlertO_eigconEngSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertO_eigconPowstsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (defined(OXCAN_PDU_RX_CAN_PMN1G03) || defined(OXCAN_PDU_RX_CAN_PMN1F03)) && defined(ComConf_ComSignal_MOD_EIG) /* _235D_CAN_ */
     static const U2 u2_s_ALERT_O_EIGCON_POW_TO_TRSH = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_O_EIGCON_POW_LSB_PDC = (U1)6U;
@@ -275,6 +280,9 @@ static U4      u4_s_AlertO_eigconPowstsSrcchk(const U1 u1_a_VOM, const U4 u4_a_I
 #else
     return((U4)0U);
 #endif /* (defined(OXCAN_PDU_RX_CAN_PMN1G03) || defined(OXCAN_PDU_RX_CAN_PMN1F03)) && defined(ComConf_ComSignal_MOD_EIG) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

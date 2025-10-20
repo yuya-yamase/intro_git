@@ -113,6 +113,7 @@ const ST_ALERT_MTRX st_gp_ALERT_P_OILLVG_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_oillvgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_P_OILLVG_LSB_MSGSTS = (U1)4U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
@@ -129,6 +130,9 @@ static U4      u4_s_AlertP_oillvgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_P_OILLVG_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -139,6 +143,7 @@ static U4      u4_s_AlertP_oillvgSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_oillvgRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_P_OILLVG_TIM_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
     U1              u1_t_sgnl_olsw;
     U1              u1_t_sgnl_olhw;
@@ -163,6 +168,7 @@ static void    vd_s_AlertP_oillvgRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 
     (void)Com_SendSignal(ComConf_ComSignal_OLSW, &u1_t_sgnl_olsw);
     (void)Com_SendSignal(ComConf_ComSignal_OLHW, &u1_t_sgnl_olhw);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

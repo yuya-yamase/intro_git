@@ -132,6 +132,7 @@ const ST_ALERT_MTRX st_gp_ALERT_P_CHEENG_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_cheengWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #ifdef ComConf_ComSignal_B_ENGMSG
     static const U1 u1_s_ALERT_P_CHEENG_WRN_LSB_ENG1 = (U1)4U;
     U1              u1_t_msgsts;
@@ -158,6 +159,9 @@ static U4      u4_s_AlertP_cheengWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #else
     return((U4)0U);
 #endif /* ComConf_ComSignal_B_ENGMSG */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -168,6 +172,7 @@ static U4      u4_s_AlertP_cheengWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_cheengBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #ifdef ComConf_ComSignal_B_ENGBZ
     static const U1 u1_s_ALERT_P_CHEENG_BC_LSB_MSTS = (U1)1U;
     U1              u1_t_msgsts;
@@ -195,6 +200,9 @@ static U4      u4_s_AlertP_cheengBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #else
     return((U4)0U);
 #endif /* ComConf_ComSignal_B_ENGBZ */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -205,6 +213,7 @@ static U4      u4_s_AlertP_cheengBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_cheengWrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_P_CHEENG_WRN_RW_CRT = (U2)((U2)1U << ALERT_REQ_P_CHEENG_WRN_MLFNC3_RW)
                                                    | (U2)((U2)1U << ALERT_REQ_P_CHEENG_WRN_MLFNC4_RW);           /* EG1W             */
     static const U1 u1_s_ALERT_P_CHEENG_WRN_RW_MSK = (U1)0x07U;
@@ -222,6 +231,7 @@ static void    vd_s_AlertP_cheengWrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_EG1W, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

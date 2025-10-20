@@ -105,6 +105,7 @@ void    vd_g_AlertB_pbdInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_pbdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_BKD1S01) /*840B_CAN CV-R*/
     static const U1 u1_s_ALERT_B_PBD_LSB_BKD1S01 = (U1)1U;
     static const U4 u4_s_ALERT_B_PBD_BIT_BTWT    = (U4)0x00000004U;
@@ -133,6 +134,9 @@ static U4      u4_s_AlertB_pbdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_BKD1S01) */ /*840B_CAN CV-R*/
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -114,6 +114,7 @@ void    vd_g_AlertM_bglfspdInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertM_bglfspdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_M_BGLFSPD_THRSH_LOWER = (U2)11950U;
     static const U2 u2_s_ALERT_M_BGLFSPD_THRSH_UPPER = (U2)12050U;
     static const U4 u4_s_ALERT_M_BGLFSPD_OF_ELPS_LMT = ((U4)6000U / (U4)ALERT_CH_TICK);
@@ -182,6 +183,9 @@ static U4      u4_s_AlertM_bglfspdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
     u1_s_alert_m_bglfspd_last_req = u1_a_LAS;
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

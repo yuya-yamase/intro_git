@@ -223,6 +223,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_THEVM_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_thevmTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_THEVM_TT_LSB_MSGSTS = (U1)4U;
     static const U4 u4_s_ALERT_H_THEVM_TT_BIT_IGN_ON = (U4)0x00000020U;
     U4              u4_t_src_chk;
@@ -244,6 +245,9 @@ static U4      u4_s_AlertH_thevmTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -254,6 +258,7 @@ static U4      u4_s_AlertH_thevmTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_thevmPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_THEVM_PD_LSB_MSGSTS = (U1)4U;
     static const U4 u4_s_ALERT_H_THEVM_PD_BIT_IGN_ON = (U4)0x00000020U;
     U4              u4_t_src_chk;
@@ -275,6 +280,9 @@ static U4      u4_s_AlertH_thevmPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -42,9 +42,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Project Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 #if (__PRJ_LIB_ALERT_D1L1_330D_HEV__ != 1)
 #error "alert_cfg.c : Target project is inactive!"
 #endif
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -66,7 +68,11 @@ static inline U1      u1_s_AlertCfgCalibU1NumChk(const U1 u1_a_CALIBID, const U1
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const U4                    u4_g_ALERT_IGN_OFF_TOUT    = (U4)150000U; /* 25 minutes */
+#if 0   /* BEV Rebase provisionally */
 const U1                    u1_g_ALERT_BUS_CH          = (U1)OXCAN_CH_0_CAN;
+#else   /* BEV Rebase provisionally */
+const U1                    u1_g_ALERT_BUS_CH          = (U1)0U;
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
@@ -130,6 +136,7 @@ U1    u1_g_AlertCfgPtsctmpCelFltrd(U2 * u2p_a_0p01cel)
     U1              u1_t_tmpret;
 
     u2_t_0p01cel = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_tmpret  = u1_g_PtsctmpCelFltrd(&u2_t_0p01cel);
 
     if(u2_t_0p01cel >= (U2)ALERT_PTSCTMP_CEL_OFFSET){
@@ -138,6 +145,10 @@ U1    u1_g_AlertCfgPtsctmpCelFltrd(U2 * u2p_a_0p01cel)
     else{
         *u2p_a_0p01cel = (U2)0U;
     }
+#else   /* BEV Rebase provisionally */
+    u1_t_tmpret = (U1)0U;
+    *u2p_a_0p01cel = (U2)0U;
+#endif   /* BEV Rebase provisionally */
 
     return(u1_t_tmpret);
 }
@@ -155,6 +166,7 @@ U1    u1_g_AlertCfgPtsctmpCelInst(U2 * u2p_a_0p01cel)
     U1              u1_t_tmpret;
 
     u2_t_0p01cel = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_tmpret  = u1_g_PtsctmpCelInst(&u2_t_0p01cel);
 
     if(u2_t_0p01cel >= (U2)ALERT_PTSCTMP_CEL_OFFSET){
@@ -163,6 +175,10 @@ U1    u1_g_AlertCfgPtsctmpCelInst(U2 * u2p_a_0p01cel)
     else{
         *u2p_a_0p01cel = (U2)0U;
     }
+#else   /* BEV Rebase provisionally */
+    u1_t_tmpret = (U1)0U;
+    *u2p_a_0p01cel = (U2)0U;
+#endif   /* BEV Rebase provisionally */
 
     return(u1_t_tmpret);
 }
@@ -175,6 +191,7 @@ U1    u1_g_AlertCfgPtsctmpCelInst(U2 * u2p_a_0p01cel)
 /*===================================================================================================================================*/
 U1    u1_g_AlertCfgS_cvrsAdds(U1 * u1p_a_rprt, U1 * u1p_a_sfty)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_AVNMS73) && (defined(ComConf_ComSignal_L_ADDSTRI1_REPORT) || defined(ComConf_ComSignal_L_ADDSTRI1_SAFETY_CON))
     static const U2 u2_s_ALERT_S_CVRS_TO_THRSH    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U1              u1_t_msgsts;
@@ -200,6 +217,9 @@ U1    u1_g_AlertCfgS_cvrsAdds(U1 * u1p_a_rprt, U1 * u1p_a_sfty)
 #else
     return((U1)COM_NO_RX);
 #endif /* defined(OXCAN_PDU_RX_CAN_AVNMS73) && (defined(ComConf_ComSignal_L_ADDSTRI1_REPORT) || defined(ComConf_ComSignal_L_ADDSTRI1_SAFETY_CON)) */
+#else   /* BEV Rebase provisionally */
+    return((U1)COM_NO_RX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -217,11 +237,13 @@ U1    u1_g_AlertCfgC_brk_0IsTmode(void)
 
     u1_t_tmode    = (U1)FALSE;
     u2_t_rim_mode = (U2)0U;
+#if 0   /* BEV Rebase provisionally */
     u1_t_rim_sts  = u1_g_Rim_ReadU2withStatus((U2)RIMID_U2_TYDC_WRBYID_AA00, &u2_t_rim_mode) & (U1)RIM_RESULT_KIND_MASK;
     if((u1_t_rim_sts                                  == (U1)RIM_RESULT_KIND_OK)&&
       ((u2_t_rim_mode & u2_s_ALERT_CFG_BIT_TEST_MODE) != (U2)0U               )){
         u1_t_tmode = (U1)TRUE;
     }
+#endif   /* BEV Rebase provisionally */
 
     return(u1_t_tmode);
 }
@@ -249,11 +271,15 @@ U2 u2_g_AlertCfgC_brk_0EngineRPMVal(void)
     u4_t_egrt_val = (U4)0U;
     u2_t_ret      = (U2)0U;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_stsbit   = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G02,
                                      (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
                                      u2_s_ALERT_C_BRK_TO_THRSH) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     (void)Com_ReceiveSignal(ComConf_ComSignal_NE1, &s2_t_ne);
+#else   /* BEV Rebase provisionally */
+    u1_t_stsbit   = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
 
     if(u1_t_stsbit == (U1)COM_NO_RX){
         u4_t_egrt_val = (U4)0U;

@@ -185,6 +185,7 @@ const ST_ALERT_MTRX st_gp_ALERT_C_ECB_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_ecbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_sp_ALERT_C_ECB_TT_JDG[ALERT_C_ECB_TT_JDG_NUM] = {
         (U1)ALERT_C_ECB_TT_JDG_UNKNOWN,
         (U1)ALERT_C_ECB_TT_JDG_TESTMODE,
@@ -349,6 +350,9 @@ static U4      u4_s_AlertC_ecbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
     u4_t_src_chk        = (((U4)u1_t_tt_jdg      << u1_s_ALERT_C_ECB_LSB_TT_JDG)   | ((U4)u1_t_mid_jdg      << u1_s_ALERT_C_ECB_LSB_MID_JDG) | (U4)u1_t_tt_rw_jdg);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -418,6 +422,7 @@ static void    vd_s_AlertC_ecb_b_ebw_jdg(const U1 u1_a_MSGSTS95,  U1 * u1_ap_b_e
     *u1_ap_b_ebw_jdg  = (U1)ALERT_C_ECB_B_EBW_UNKNOWN;
 #endif /* defined(ComConf_ComSignal_B_EBW) */
 
+#if 0   /* BEV Rebase provisionally */
 #if defined(ComConf_ComSignal_B_EBW2)
     u1_t_sgnl         = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_B_EBW2, &u1_t_sgnl);
@@ -426,6 +431,9 @@ static void    vd_s_AlertC_ecb_b_ebw_jdg(const U1 u1_a_MSGSTS95,  U1 * u1_ap_b_e
 #else
     *u1_ap_b_ebw2_jdg = (U1)ALERT_C_ECB_B_EBW_UNKNOWN;
 #endif /* defined(ComConf_ComSignal_B_EBW2) */
+#else   /* BEV Rebase provisionally */
+    *u1_ap_b_ebw2_jdg = (U1)ALERT_C_ECB_B_EBW_UNKNOWN;
+#endif   /* BEV Rebase provisionally */
 
     if((*u1_ap_b_ebw_jdg  & u1_s_ALERT_C_ECB_TT_RW_MASK) != (U1)0U){
         *u1_ap_b_ebw_rw_jdg  = u1_s_ALERT_C_ECB_B_EBW_RW_ON;
@@ -466,6 +474,7 @@ static void    vd_s_AlertC_ecb_ebw_mid_jdg(const U1 u1_a_MSGSTS95, U1 * u1_ap_eb
     U1              u1_t_mid2_sts;
 #endif /* ComConf_ComSignal_EBW_MID2 */
 
+#if 0   /* BEV Rebase provisionally */
 #if defined(ComConf_ComSignal_EBW_MID)
     u1_t_sgnl           = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_EBW_MID, &u1_t_sgnl);
@@ -483,6 +492,10 @@ static void    vd_s_AlertC_ecb_ebw_mid_jdg(const U1 u1_a_MSGSTS95, U1 * u1_ap_eb
 #else
     *u1_ap_ebw_mid2_jdg = (U1)ALERT_C_ECB_EBW_MID_UNKNOWN;
 #endif /* defined(ComConf_ComSignal_EBW_MID2) */
+#else   /* BEV Rebase provisionally */
+    *u1_ap_ebw_mid_jdg  = (U1)ALERT_C_ECB_EBW_MID_UNKNOWN;
+    *u1_ap_ebw_mid2_jdg = (U1)ALERT_C_ECB_EBW_MID_UNKNOWN;
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -514,6 +527,7 @@ static void    vd_s_AlertC_ecb_ddrtwv_jdg(const U1 u1_a_MSGSTS95, U1 * u1_ap_ddr
     U1              u1_t_ddrtwv2_sts;
 #endif /* defined(ComConf_ComSignal_DDRTWV2) */
 
+#if 0   /* BEV Rebase provisionally */
 #if defined(ComConf_ComSignal_DDRTWV)
     u1_t_sgnl          = (U1)0U;
     (void)Com_ReceiveSignal(ComConf_ComSignal_DDRTWV, &u1_t_sgnl);
@@ -531,6 +545,10 @@ static void    vd_s_AlertC_ecb_ddrtwv_jdg(const U1 u1_a_MSGSTS95, U1 * u1_ap_ddr
 #else
     *u1_ap_ddrtwv2_jdg = (U1)ALERT_C_ECB_DDRTWV_RW_OFF;
 #endif /* defined(ComConf_ComSignal_DDRTWV2) */
+#else   /* BEV Rebase provisionally */
+    *u1_ap_ddrtwv_jdg  = (U1)ALERT_C_ECB_DDRTWV_RW_OFF;
+    *u1_ap_ddrtwv2_jdg = (U1)ALERT_C_ECB_DDRTWV_RW_OFF;
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -541,6 +559,7 @@ static void    vd_s_AlertC_ecb_ddrtwv_jdg(const U1 u1_a_MSGSTS95, U1 * u1_ap_ddr
 /*===================================================================================================================================*/
 static void    vd_s_AlertC_ecbRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_C_ECB_RWTX_CRT = ((U4)((U4)1U << ALERT_REQ_C_ECB_LNG1_RW      )
                                                | (U4)((U4)1U << ALERT_REQ_C_ECB_LNG2_RW      )
                                                | (U4)((U4)1U << ALERT_REQ_C_ECB_UNABL_RW     )
@@ -575,6 +594,7 @@ static void    vd_s_AlertC_ecbRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, cons
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_ECBW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

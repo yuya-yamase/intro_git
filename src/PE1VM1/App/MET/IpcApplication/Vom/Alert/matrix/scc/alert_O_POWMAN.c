@@ -109,6 +109,7 @@ void    vd_g_AlertO_powmanInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertO_powmanSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_O_POWMAN_THR_TO      = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_O_POWMAN_LSB_PDC1G02 = (U1)1U;
     static const U4 u4_s_ALERT_O_POWMAN_BIT_BAT_WT  = (U4)0x00000008U;
@@ -130,6 +131,9 @@ static U4      u4_s_AlertO_powmanSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
         u4_t_src_chk |= u4_s_ALERT_O_POWMAN_BIT_BAT_WT;
     }
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

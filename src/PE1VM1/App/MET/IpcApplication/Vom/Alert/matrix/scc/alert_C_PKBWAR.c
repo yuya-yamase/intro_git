@@ -137,6 +137,7 @@ void    vd_g_AlertC_pkbwarInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_pkbwarBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_PKBWAR_BC_TO_THRS_VSC = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U2 u2_s_ALERT_PKBWAR_BC_TO_THRS_BDB = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_PKBWAR_BC_LSB_VSC1S95 = (U1)6U;
@@ -184,6 +185,9 @@ static U4      u4_s_AlertC_pkbwarBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -194,6 +198,7 @@ static U4      u4_s_AlertC_pkbwarBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_pkbwarPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_PKBWAR_PD_LSB_VSC1S95 = (U1)5U;
     static const U1 u1_s_ALERT_PKBWAR_PD_LSB_BDB1S01 = (U1)4U;
     static const U1 u1_s_ALERT_PKBWAR_PD_LSB_B_CPKB  = (U1)3U;
@@ -237,6 +242,9 @@ static U4      u4_s_AlertC_pkbwarPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

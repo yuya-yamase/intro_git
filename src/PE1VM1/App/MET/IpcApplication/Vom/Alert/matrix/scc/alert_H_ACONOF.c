@@ -123,6 +123,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_ACONOF_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_aconofSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_H_ACONOF_TRSH_EHV1S94 = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_H_ACONOF_LSB_EHV1S94  = (U1)3U;
     U4              u4_t_src_chk;
@@ -136,6 +137,9 @@ static U4      u4_s_AlertH_aconofSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_ACONOF_LSB_EHV1S94);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -161,7 +165,9 @@ static U4      u4_s_AlertH_aconofDsp(void)
     U4              u4_t_dispinfo;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_VSP_MSG, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 
     if(u1_s_ALERT_H_ACONOF_VSP_STOPPED == u1_t_sgnl){
         u4_t_dispinfo = (U4)u1_s_AlertH_aconofPtsysInfo();

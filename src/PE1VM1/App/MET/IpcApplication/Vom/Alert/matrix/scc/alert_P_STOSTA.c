@@ -234,6 +234,7 @@ const ST_ALERT_MTRX st_gp_ALERT_P_STOSTA_MTRX[5] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_stostaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_SSLMP)
     static const U1 u1_s_ALERT_P_STOSTA_TT_LSB_STS = (U1)4U;
     U1              u1_t_msgsts;
@@ -254,6 +255,9 @@ static U4      u4_s_AlertP_stostaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_SSLMP) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -264,6 +268,7 @@ static U4      u4_s_AlertP_stostaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_stostaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_ECOBZR)
     static const U2 u2_s_ALERT_P_STOSTA_BC_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_P_STOSTA_BC_LSB_STS = (U1)2U;
@@ -285,6 +290,9 @@ static U4      u4_s_AlertP_stostaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_ECOBZR) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -295,6 +303,7 @@ static U4      u4_s_AlertP_stostaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_stostaPdFalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_INFSSFAL)
     static const U1 u1_s_ALERT_P_STOSTA_FAL_LSB_STS = (U1)1U;
     U1              u1_t_msgsts;
@@ -315,6 +324,9 @@ static U4      u4_s_AlertP_stostaPdFalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_INFSSFAL) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -325,6 +337,7 @@ static U4      u4_s_AlertP_stostaPdFalSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_stostaPdCoaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_INFSSCOP) && defined(ComConf_ComSignal_INFSSADV)
     static const U2 u2_s_ALERT_P_STOSTA_COA_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_P_STOSTA_COA_LSB_COP = (U1)3U;
@@ -351,6 +364,9 @@ static U4      u4_s_AlertP_stostaPdCoaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_INFSSCOP) && defined(ComConf_ComSignal_INFSSADV) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -361,6 +377,7 @@ static U4      u4_s_AlertP_stostaPdCoaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_stostaPdInhSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_INFSSINH)
     static const U2 u2_s_ALERT_P_STOSTA_INH_TO_THRS = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_P_STOSTA_INH_LSB_STS = (U1)6U;
@@ -382,6 +399,9 @@ static U4      u4_s_AlertP_stostaPdInhSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_INFSSINH) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -392,6 +412,7 @@ static U4      u4_s_AlertP_stostaPdInhSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_stostaPdFalRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
 
     if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                             ) &&
@@ -403,6 +424,7 @@ static void    vd_s_AlertP_stostaPdFalRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_ISSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

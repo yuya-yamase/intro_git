@@ -221,6 +221,7 @@ void    vd_g_AlertB_eswuocInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_eswuocBcbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_BDB1S05) && defined(ComConf_ComSignal_EL_BZ)
     static const U1 u1_s_ALERT_B_ESWUOC_BCB_LSB_MSG  = (U1)2U;
     static const U4 u4_s_ALERT_B_ESWUOC_BCB_BIT_BTWT = (U4)0x00000008U;
@@ -247,6 +248,9 @@ static U4      u4_s_AlertB_eswuocBcbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05) && defined(ComConf_ComSignal_EL_BZ) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -257,6 +261,7 @@ static U4      u4_s_AlertB_eswuocBcbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_eswuocBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_BDB1S05) && defined(ComConf_ComSignal_EL_BZ)
     static const U1 u1_s_ALERT_B_ESWUOC_BC_LSB_MSG = (U1)2U;
     U4              u4_t_src_chk;
@@ -275,6 +280,9 @@ static U4      u4_s_AlertB_eswuocBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05) && defined(ComConf_ComSignal_EL_BZ) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -285,6 +293,7 @@ static U4      u4_s_AlertB_eswuocBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_eswuocPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_BDB1S05) && defined(ComConf_ComSignal_EL_MID)
     static const U1 u1_s_ALERT_B_ESWUOC_PD_LSB_MSG = (U1)3U;
     U4              u4_t_src_chk;
@@ -303,6 +312,9 @@ static U4      u4_s_AlertB_eswuocPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05) && defined(ComConf_ComSignal_EL_MID) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -313,6 +325,7 @@ static U4      u4_s_AlertB_eswuocPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_eswuocPdbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_BDB1S05) && defined(ComConf_ComSignal_EL_MID)
     static const U2 u2_s_ALERT_B_ESWUOC_PDB_TO_THRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_ESWUOC_PDB_LSB_MSG  = (U1)3U;
@@ -343,6 +356,9 @@ static U4      u4_s_AlertB_eswuocPdbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_BDB1S05) && defined(ComConf_ComSignal_EL_MID) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -353,6 +369,7 @@ static U4      u4_s_AlertB_eswuocPdbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static void    vd_s_AlertB_eswuocPdbRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
 
     if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                             ) &&
@@ -364,6 +381,7 @@ static void    vd_s_AlertB_eswuocPdbRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_ELSW, &u1_t_sgnl);
+#endif /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

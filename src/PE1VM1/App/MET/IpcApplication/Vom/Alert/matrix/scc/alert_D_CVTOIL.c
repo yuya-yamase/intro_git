@@ -113,6 +113,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_CVTOIL_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_cvtoilSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_D_CVTOIL_LSB_MSGSTS   = (U1)4U;
 #ifdef ComConf_ComSignal_B_OILWTT
     static const U1 u1_s_ALERT_D_CVTOIL_LSB_B_OILWTT = (U1)2U;
@@ -146,6 +147,9 @@ static U4      u4_s_AlertD_cvtoilSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_D_CVTOIL_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -156,6 +160,7 @@ static U4      u4_s_AlertD_cvtoilSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static void    vd_s_AlertD_cvtoilRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_D_CVTOIL_RW_CRT = (U2)((U2)1U << ALERT_REQ_D_CVTOIL_FLASH        )
                                                | (U2)((U2)1U << ALERT_REQ_D_CVTOIL_MALFUNC      )
                                                | (U2)((U2)1U << ALERT_REQ_D_CVTOIL_ON_MALFUNC   )
@@ -175,6 +180,7 @@ static void    vd_s_AlertD_cvtoilRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_ATSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

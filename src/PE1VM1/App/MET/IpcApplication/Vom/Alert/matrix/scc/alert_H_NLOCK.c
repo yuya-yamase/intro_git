@@ -96,6 +96,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_NLOCK_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_nlockSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_ENG1S60) && defined(ComConf_ComSignal_SFTWNG) /* _100D_CAN_ */
     static const U1 u1_s_ALERT_H_NLOCK_LSB_ENG1S60 = (U1)3U;
     U4              u4_t_src_chk;
@@ -115,6 +116,9 @@ static U4      u4_s_AlertH_nlockSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_ENG1S60) && defined(ComConf_ComSignal_SFTWNG) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -41,9 +41,11 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Project Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 #if (__PRJ_LIB_ALERT_D1L1_330D_HEV__ != 1)
 #error "alert_bcm.c : Target project is inactive!"
 #endif
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
@@ -130,15 +132,23 @@ void        vd_g_AlertBcmTask(const U1 u1_a_VOM)
             u2_t_bcm_act = (U2)ALERT_BCM_VDC;
         }
 
+#if 0   /* BEV Rebase provisionally */
         u1_t_ign_10v = u1_g_IoHwDifltSwitch((U2)IOHW_DISGNL_IGN_10P5V);
+#else   /* BEV Rebase provisionally */
+        u1_t_ign_10v = (U1)IOHW_DIFLT_SWITCH_INACT;
+#endif   /* BEV Rebase provisionally */
         if(u1_t_ign_10v == (U1)IOHW_DIFLT_SWITCH_ACT){
             u2_t_src_chk |= (U2)ALERT_BCM_SRC_IGN_10V;
         }
 
         u1_t_rdyind = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
         u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ENG1G90,
                                             (U2)OXCAN_RX_SYS_NRX_IGR,
                                             (U2)U2_MAX) & (U1)COM_NO_RX;
+#else   /* BEV Rebase provisionally */
+        u1_t_msgsts = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
         if(u1_t_msgsts != (U1)COM_NO_RX){
             (void)Com_ReceiveSignal(ComConf_ComSignal_RDYIND, &u1_t_rdyind);
         }
@@ -146,7 +156,11 @@ void        vd_g_AlertBcmTask(const U1 u1_a_VOM)
             u2_t_src_chk |= (U2)ALERT_BCM_SRC_RDY_ON;
         }
 
+#if 0   /* BEV Rebase provisionally */
         u1_t_pts = u1_g_VehopemdPtsOn((U1)VEH_OPEMD_PTS_INV_ON);
+#else   /* BEV Rebase provisionally */
+        u1_t_pts = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
         if(u1_t_pts != (U1)TRUE){
             u2_t_bcm_act |= (U2)ALERT_BCM_PTS;
         }

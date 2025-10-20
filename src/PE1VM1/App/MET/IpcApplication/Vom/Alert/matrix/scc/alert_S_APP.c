@@ -196,6 +196,7 @@ const ST_ALERT_MTRX st_gp_ALERT_S_APP_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_appBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_IPA1S05) && defined(ComConf_ComSignal_IPA_BZ2)
     static const U2 u2_s_ALERT_S_APP_BC_THRSH_TO   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_APP_BC_LSB_COMSTS = (U1)3U;
@@ -217,6 +218,9 @@ static U4      u4_s_AlertS_appBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_IPA1S05) && defined(ComConf_ComSignal_IPA_BZ2) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -227,6 +231,7 @@ static U4      u4_s_AlertS_appBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_appPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_IPA1S05) && defined(ComConf_ComSignal_APPME)
     static const U2 u2_s_ALERT_S_APP_PD_THRSH_TO   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_APP_PD_LSB_COMSTS = (U1)4U;
@@ -248,6 +253,9 @@ static U4      u4_s_AlertS_appPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_IPA1S05) && defined(ComConf_ComSignal_APPME) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -258,6 +266,7 @@ static U4      u4_s_AlertS_appPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static void    vd_s_AlertS_appPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_sp_ALERT_S_APP_RWTX_CRT[ALERT_S_APP_NUM_RWSGNL] = {
         ((U1)((U1)1U << ALERT_REQ_S_APP_PD_MALFUNC  ) | (U1)ALERT_S_APP_APP_EXT_BIT),
          (U1)((U1)1U << ALERT_REQ_S_APP_PD_REMMTEWAR)   /* No need APP_EXT */
@@ -286,6 +295,7 @@ static void    vd_s_AlertS_appPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_APPW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -173,6 +173,7 @@ const ST_ALERT_MTRX st_gp_ALERT_D_TMWRN_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertD_tmwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_D_TMWRN_LSB_MSGSTS  = (U1)3U;
     static const U1 u1_s_ALERT_TMSYS_WM_LSB_VALUE  = (U1)4U;
     static const U1 u1_s_ALERT_TMSYS_WM_LSB_MSGSTS = (U1)5U;
@@ -200,6 +201,9 @@ static U4      u4_s_AlertD_tmwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_TMSYS_WM_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -210,6 +214,7 @@ static U4      u4_s_AlertD_tmwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static void    vd_s_AlertD_tmwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_B_TMWRN_DST_CRT[ALERT_D_TMWRN_RWSGNL_NUM] = {
         ((U1)((U1)1U << ALERT_REQ_D_TMWRN_SYSLMT_TMW1) | (U1)((U1)1U << ALERT_REQ_D_TMWRN_SYSLMT_TMW2_1)), /* TMW1 */
         ((U1)((U1)1U << ALERT_REQ_D_TMWRN_UNKNOWN_TMW2)| (U1)((U1)1U << ALERT_REQ_D_TMWRN_SYSLMT_TMW2_1)
@@ -240,6 +245,7 @@ static void    vd_s_AlertD_tmwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
     (void)Com_SendSignal(ComConf_ComSignal_TMW1, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW1]);
     (void)Com_SendSignal(ComConf_ComSignal_TMW2, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW2]);
     (void)Com_SendSignal(ComConf_ComSignal_TMW3, &u1_tp_sgnl[ALERT_D_TMWRN_RWSGNL_TMW3]);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

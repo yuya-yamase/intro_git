@@ -101,6 +101,7 @@ void    vd_g_AlertH_batrefInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_batrefSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_H_BATREF_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_H_BATREF_LSB_MSGSTS = (U1)1U;
     static const U4 u4_s_ALERT_H_BATREF_BIT_BAT_WT = (U4)0x00000004U;
@@ -128,6 +129,9 @@ static U4      u4_s_AlertH_batrefSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

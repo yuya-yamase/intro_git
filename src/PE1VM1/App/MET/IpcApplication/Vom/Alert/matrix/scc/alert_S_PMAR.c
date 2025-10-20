@@ -142,6 +142,7 @@ const ST_ALERT_MTRX st_gp_ALERT_S_PMAR_MTRX[3] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pmarBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_WACS_BUZ_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_WACS_BUZ_LSB_MSGSTS = (U1)1U;
     U4              u4_t_src_chk;
@@ -159,6 +160,9 @@ static U4      u4_s_AlertS_pmarBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_WACS_BUZ_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -169,6 +173,7 @@ static U4      u4_s_AlertS_pmarBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pmarPdWacspSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_WACSPMID_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_WACSPMID_LSB_MSGSTS = (U1)1U;
     U4              u4_t_src_chk;
@@ -187,6 +192,9 @@ static U4      u4_s_AlertS_pmarPdWacspSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_WACSPMID_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -197,6 +205,7 @@ static U4      u4_s_AlertS_pmarPdWacspSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_pmarPdDispSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_PMARDISP_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_PMARDISP_LSB_MSGSTS = (U1)2U;
     U4              u4_t_src_chk;
@@ -215,6 +224,9 @@ static U4      u4_s_AlertS_pmarPdDispSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_PMARDISP_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

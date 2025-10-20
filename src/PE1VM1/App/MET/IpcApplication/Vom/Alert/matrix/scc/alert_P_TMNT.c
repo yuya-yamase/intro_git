@@ -240,6 +240,7 @@ void    vd_g_AlertP_tmntInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_tmntTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_P_TMNT_TT_TIM_PRMCHK = ((U4)3000U / (U4)ALERT_MAIN_TICK);
     static const U4 u4_s_ALERT_P_TMNT_TT_BIT_PRMCHK = (U4)0x00000020U;
     static const U4 u4_s_ALERT_P_TMNT_TT_MSK_LAS    = (U4)0x00000007U;
@@ -261,6 +262,9 @@ static U4      u4_s_AlertP_tmntTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -271,6 +275,7 @@ static U4      u4_s_AlertP_tmntTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_tmntPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_P_TMNT_PD_TIM_IGEDG   = ((U4)ALERT_MAIN_TICK / (U4)ALERT_MAIN_TICK);
     static const U4 u4_s_ALERT_P_TMNT_PD_BIT_IGEDG   = (U4)0x00000008U;
     static const U4 u4_s_ALERT_P_TMNT_PD_MSK_LAS     = (U4)0x00000003U;
@@ -304,6 +309,9 @@ static U4      u4_s_AlertP_tmntPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
         u1_s_alert_p_tmntpd_bstlast = (U1)0U;
     }
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -324,6 +332,7 @@ static U1      u1_s_AlertP_tmntMSTEDG(void)
     u1_t_ecorun = u1_g_AlertEsOptAvailable((U2)ALERT_OPT_ID_P_TMNT_ECORUN);
     u1_t_retval = (U1)0U;
 
+#if 0   /* BEV Rebase provisionally */
     if(u1_t_ecorun == (U1)TRUE){
         u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_ECO1S90,
                                        (U2)OXCAN_RX_SYS_NRX_IGR | (U2)OXCAN_RX_SYS_TOE_IGR,
@@ -340,6 +349,7 @@ static U1      u1_s_AlertP_tmntMSTEDG(void)
             (void)Com_ReceiveSignal(ComConf_ComSignal_B_ST, &u1_t_retval);
         }
     }
+#endif   /* BEV Rebase provisionally */
 
     return(u1_t_retval);
 }
@@ -434,6 +444,7 @@ static U1      u1_s_AlertP_tmntOILMNT(void)
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_tmntPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
     U1              u1_t_tmnt;
 
@@ -448,6 +459,7 @@ static void    vd_s_AlertP_tmntPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_OMRW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

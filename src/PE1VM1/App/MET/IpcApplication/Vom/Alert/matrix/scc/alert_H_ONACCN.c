@@ -88,6 +88,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_ONACCN_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_onaccnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S94)
     static const U2 u2_s_ALERT_H_ONACCN_TO_THRESH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) */ /* 840B_CAN */
@@ -113,6 +114,9 @@ static U4      u4_s_AlertH_onaccnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_ONACCN_LSB_STS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

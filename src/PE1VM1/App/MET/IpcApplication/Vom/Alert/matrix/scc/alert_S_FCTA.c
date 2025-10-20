@@ -96,6 +96,7 @@ const ST_ALERT_MTRX st_gp_ALERT_S_FCTA_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_fctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_DS11S40) && defined(ComConf_ComSignal_CTABUZF)
     static const U2  u2_s_ALERT_S_FCTA_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1  u1_s_ALERT_S_FCTA_LSB_MSGSTS = (U1)2U;
@@ -115,6 +116,9 @@ static U4      u4_s_AlertS_fctaSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 #else /* defined(OXCAN_PDU_RX_CAN_DS11S40) && defined(ComConf_ComSignal_CTABUZF) */
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_DS11S40) && defined(ComConf_ComSignal_CTABUZF) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

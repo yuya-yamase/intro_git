@@ -108,6 +108,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_PARLON_RWRN_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_parlon_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_sp_ALERT_H_PARLONRW_MLPT_JDG[ALERT_H_PARLON_HVMALPAT_NUM_TBL] = {
         (U1)ALERT_H_PARLON_HVMALPAT_RW_OFF,
         (U1)ALERT_H_PARLON_HVMALPAT_RW_ON,
@@ -182,6 +183,9 @@ static U4      u4_s_AlertH_parlon_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk       |= u4_t_hvind_jdg;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -192,6 +196,7 @@ static U4      u4_s_AlertH_parlon_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static void    vd_s_AlertH_parlon_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl_fcw1;
     U1              u1_t_sgnl_fcw2;
 
@@ -213,6 +218,7 @@ static void    vd_s_AlertH_parlon_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_
 
     (void)Com_SendSignal(ComConf_ComSignal_FCW1, &u1_t_sgnl_fcw1);
     (void)Com_SendSignal(ComConf_ComSignal_FCW2, &u1_t_sgnl_fcw2);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -132,7 +132,11 @@ void    vd_g_AlertB_waslevInit(void)
     u4_s_alert_b_waslev_dlycnt       = (U4)ALERT_B_WASLEV_DLY_CNT_INIT;
     u4_s_alert_waslev_wlvl_dlycnt    = (U4)ALERT_B_WASLEV_DLY_CNT_INIT;
     u1_s_alert_b_waslev_washlvsw_lst = (U1)ALERT_B_WASLEV_WASHLVSW_SGNL_HI;
+#if 0   /* BEV Rebase provisionally */
     u1_s_alert_b_waslev_wlvl_lst     = (U1)IOHW_DIFLT_SWITCH_UNKNWN;
+#else   /* BEV Rebase provisionally */
+    u1_s_alert_b_waslev_wlvl_lst     = (U1)2U;
+#endif   /* BEV Rebase provisionally */
     u1_s_alert_b_waslev_can_jdg_lst  = (U1)ALERT_B_WASLEV_JDG_OFF;
     u1_s_alert_b_waslev_hw_jdg_lst   = (U1)ALERT_B_WASLEV_JDG_OFF;
 }
@@ -145,6 +149,7 @@ void    vd_g_AlertB_waslevInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_waslevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_B_WASLEV_TIM_PRMRYCHK = ((U4)3000U / (U4)ALERT_MAIN_TICK);
     static const U4 u4_s_ALERT_B_WASLEV_BIT_PRMRYCHK = (U4)0x00000001U;
     static const U4 u4_s_ALERT_B_WASLEV_BIT_REQ_UNKN = (U4)0x00000006U;
@@ -173,6 +178,9 @@ static U4      u4_s_AlertB_waslevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -183,6 +191,7 @@ static U4      u4_s_AlertB_waslevSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static void    vd_s_AlertB_waslevRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
 #ifdef ComConf_ComSignal_WASH /* 460B_CAN */
     static const U1 u1_s_ALERT_B_WASLEV_RWTX_CRT = ((U1)((U1)1U << ALERT_REQ_B_WASLEV_TT_PD_ON)
                                                  |  (U1)((U1)1U << ALERT_REQ_B_WASLEV_PD_ON   ));
@@ -201,6 +210,7 @@ static void    vd_s_AlertB_waslevRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 
     (void)Com_SendSignal(ComConf_ComSignal_WASH, &u1_t_sgnl);
 #endif /* ComConf_ComSignal_WASH */
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -221,9 +231,13 @@ static U1      u1_s_AlertB_waslevCanJdg(const U1 u1_a_VOM)
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U){
         u1_t_sgnl   = (U1)ALERT_B_WASLEV_WASHLVSW_SGNL_HI;
 
+#if 0   /* BEV Rebase provisionally */
         u1_t_msgsts = u1_g_oXCANRxStat((U2)OXCAN_PDU_RX_CAN_PDC1G02,
                                             (U2)OXCAN_RX_SYS_NRX_IGR,
                                             (U2)U2_MAX) & (U1)COM_NO_RX;
+#else   /* BEV Rebase provisionally */
+        u1_t_msgsts = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
 
         if(u1_t_msgsts != (U1)COM_NO_RX){
             (void)Com_ReceiveSignal(ComConf_ComSignal_WASHLVSW, &u1_t_sgnl);
@@ -282,10 +296,12 @@ static U1      u1_s_AlertB_waslevHwJdg(const U1 u1_a_VOM)
     u1_t_wlvl                      = (U1)ALERT_B_WASLEV_JDG_OFF;
 
     if((u1_a_VOM & (U1)ALERT_VOM_IGN_ON) != (U1)0U){
+#if 0   /* BEV Rebase provisionally */
         u1_t_difltsw                  = u1_g_IoHwDifltSwitch((U2)ALERT_HW_ID_B_WASLEV_WLVL);
         if(u1_t_difltsw == (U1)IOHW_DIFLT_SWITCH_ACT){
             u1_t_wlvl                     = (U1)ALERT_B_WASLEV_JDG_ON;
         }
+#endif   /* BEV Rebase provisionally */
 
         if(u1_t_wlvl                          != u1_s_alert_b_waslev_wlvl_lst){
             u4_s_alert_waslev_wlvl_dlycnt = (U4)ALERT_B_WASLEV_DLY_CNT_RESET;

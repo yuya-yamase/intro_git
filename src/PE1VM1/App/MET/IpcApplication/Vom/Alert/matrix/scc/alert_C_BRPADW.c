@@ -90,6 +90,7 @@ const ST_ALERT_MTRX st_gp_ALERT_C_BRPADW_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_brpadwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_C_BRPADW_ZN11S17_STS = (U1)2U;
     static const U1 u1_s_ALERT_C_BRPADW_BPWRSW_VFLG = (U1)1U;
 
@@ -112,6 +113,9 @@ static U4      u4_s_AlertC_brpadwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -122,6 +126,7 @@ static U4      u4_s_AlertC_brpadwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static void    vd_s_AlertC_brpadwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
     U1              u1_t_brpadw_func_exist;
 
@@ -138,6 +143,7 @@ static void    vd_s_AlertC_brpadwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_BPAW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

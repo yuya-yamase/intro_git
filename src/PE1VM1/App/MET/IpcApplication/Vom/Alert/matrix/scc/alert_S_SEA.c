@@ -206,6 +206,7 @@ void    vd_g_AlertS_seaInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_S_SEA_BC_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_SEA_BC_LSB_MSGSTS = (U1)3U;
     static const U4 u4_s_ALERT_S_SEA_BC_BIT_BAT_WT = (U4)0x00000020U;
@@ -230,6 +231,9 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -240,6 +244,7 @@ static U4      u4_s_AlertS_seaBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_seaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_S_SEA_PD_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_S_SEA_PD_LSB_MSGSTS = (U1)1U;
     static const U4 u4_s_ALERT_S_SEA_PD_BIT_IGN_ON = (U4)0x00000008U;
@@ -269,6 +274,9 @@ static U4      u4_s_AlertS_seaPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

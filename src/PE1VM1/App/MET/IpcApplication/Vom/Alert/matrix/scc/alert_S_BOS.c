@@ -121,6 +121,7 @@ const ST_ALERT_MTRX st_gp_ALERT_S_BOS_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_bosSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_ENG1G92)
     static const U2 u2_s_ALERT_S_BOS_TO_TRSH_ENG1G92 = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
 #elif defined(OXCAN_PDU_RX_CAN_ENG1S92)
@@ -166,6 +167,9 @@ static U4      u4_s_AlertS_bosSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 #endif /* ComConf_ComSignal_BOSMINF */
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -176,6 +180,7 @@ static U4      u4_s_AlertS_bosSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
 /*===================================================================================================================================*/
 static void    vd_s_AlertS_bosRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_S_BOS_RW_CRT = ((U2)((U2)1U << ALERT_REQ_S_BOS_ON_MSG3  )
                                             |  (U2)((U2)1U << ALERT_REQ_S_BOS_FLSH     )
                                             |  (U2)((U2)1U << ALERT_REQ_S_BOS_FLSH_MSG2)
@@ -196,6 +201,7 @@ static void    vd_s_AlertS_bosRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, cons
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_BOSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -136,6 +136,7 @@ void    vd_g_AlertH_tevrnInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_tevrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_TEVRN_LSB_MSG_STS = (U1)2U;
     static const U1 u1_s_ALERT_H_TEVRN_LSB_RPMRNG  = (U1)4U;
     static const U1 u1_s_ALERT_H_TEVRN_LSB_RNG_STS = (U1)6U;
@@ -177,6 +178,9 @@ static U4      u4_s_AlertH_tevrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

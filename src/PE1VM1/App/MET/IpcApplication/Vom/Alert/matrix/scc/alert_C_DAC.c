@@ -126,6 +126,7 @@ const ST_ALERT_MTRX st_gp_ALERT_C_DAC_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_dacTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_DACIND)
     static const U2 u2_s_ALERT_C_DAC_TT_TO_THRESH  = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_DAC_TT_LSB_MSGSTS = (U1)2U;
@@ -146,6 +147,9 @@ static U4      u4_s_AlertC_dacTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_VSC1S95) && defined(ComConf_ComSignal_B_DACIND) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -156,6 +160,7 @@ static U4      u4_s_AlertC_dacTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_dacPdDspSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_VSC1S96) && defined(ComConf_ComSignal_DAC_DISP)
     static const U2 u2_s_ALERT_C_DAC_PDDSP_TO_TRSH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_DAC_PDDSP_LSB_MSG = (U1)2U;
@@ -176,6 +181,9 @@ static U4      u4_s_AlertC_dacPdDspSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_VSC1S96) && defined(ComConf_ComSignal_DAC_DISP) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

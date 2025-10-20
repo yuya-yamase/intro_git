@@ -161,6 +161,7 @@ void    vd_g_AlertB_persetInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_persetSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(ComConf_ComSignal_PS_MBR) && defined(OXCAN_PDU_RX_CAN_BDB1S28) /* _840B_CAN_ */
     static const U2 u2_s_ALERT_B_PERSET_TRSH_BDB1S28 = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_PERSET_LSB_BDB1S28  = (U1)3U;
@@ -188,6 +189,9 @@ static U4      u4_s_AlertB_persetSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 #else /* defined(ComConf_ComSignal_PS_MBR) && defined(OXCAN_PDU_RX_CAN_BDB1S28)  */
     return((U4)0U);
 #endif /* defined(ComConf_ComSignal_PS_MBR) && defined(OXCAN_PDU_RX_CAN_BDB1S28)  */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -109,6 +109,7 @@ void    vd_g_AlertB_mlgtInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_mlgtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_B_MLGT_LSB_BDB1S03 = (U1)1U;
     static const U4 u4_s_ALERT_B_MLGT_VOM_BAT_WT  = (U4)0x00000008U;
     static const U2 u2_s_ALERT_B_MLGT_THRSH_TO    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
@@ -130,6 +131,9 @@ static U4      u4_s_AlertB_mlgtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
         u4_t_src_chk |= u4_s_ALERT_B_MLGT_VOM_BAT_WT;
     }
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

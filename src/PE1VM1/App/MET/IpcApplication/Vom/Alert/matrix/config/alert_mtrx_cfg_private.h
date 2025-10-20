@@ -19,15 +19,22 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef.h"
 #include "vardef_esopt.h"
+
+#if 0   /* BEV Rebase provisionally */
 #include "iohw_diflt.h"
+#endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
+#if 0   /* BEV Rebase provisionally */
 #include "engspd_rpm.h"
+#endif   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "locale.h"
 #include "unitconvrt.h"
+#if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
 #include "ptsctmp_cel.h"
 #include "flid_open.h"
+#endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -278,13 +285,20 @@
 #define ALERT_SPD_STSBIT_UNKNOWN                 (VEHSPD_STSBIT_UNKNOWN)
 #define ALERT_SPD_STSBIT_INVALID                 (VEHSPD_STSBIT_INVALID)
 #define ALERT_SPD_FLUCT_DECR                     (VEHSPD_FLUCT_DECR)
+#if 0   /* BEV Rebase provisionally */
 #define ALERT_RPM_STSBIT_UNKNOWN                 (ENGSPD_STSBIT_UNKNOWN)
 #define ALERT_RPM_STSBIT_VALID                   (ENGSPD_STSBIT_VALID)
 #define ALERT_RPM_STSBIT_INVALID                 (ENGSPD_STSBIT_INVALID)
+#else   /* BEV Rebase provisionally */
+#define ALERT_RPM_STSBIT_UNKNOWN                 (0x01U)
+#define ALERT_RPM_STSBIT_VALID                   (0x00U)
+#define ALERT_RPM_STSBIT_INVALID                 (0x02U)
+#endif   /* BEV Rebase provisionally */
 #define ALERT_ODO_STSBIT_VALID                   (ODO_STSBIT_VALID)
 #define ALERT_UNIT_VAL_DIST_KM                   (UNIT_VAL_DIST_KM)
 #define ALERT_UNIT_VAL_DIST_MILE                 (UNIT_VAL_DIST_MILE)
 #define ALERT_UNIT_IDX_DIST                      (UNIT_IDX_DIST)
+#if 0   /* BEV Rebase provisionally */
 #define ALERT_PTS_INV_ON                         (VEH_OPEMD_PTS_INV_ON)
 #define ALERT_PTS_INV_LAS                        (VEH_OPEMD_PTS_INV_LAS)
 #define ALERT_PTSCTMP_STSBIT_VALID               (PTSCTMP_STSBIT_VALID)
@@ -293,6 +307,7 @@
 #define ALERT_PTSCTMP_STSBIT_WTSW_HI             (PTSCTMP_STSBIT_WTSW_HI)
 #define ALERT_PTSCTMP_STSBIT_WTSW_OP             (PTSCTMP_STSBIT_WTSW_OP)
 #define ALERT_PTSCTMP_CEL_OFFSET                 (PTSCTMP_CEL_OFFSET)
+#endif   /* BEV Rebase provisionally */
 #define ALERT_ESOPT_NUM_GR                       (VDF_ESO_NOW_AVA)
 #define ALERT_PTSYS_0F_UNK                       (VDF_PTS_RX_0F_UNK)
 #define ALERT_PTSYS_1F_NRX                       (VDF_PTS_RX_1F_NRX)
@@ -317,13 +332,25 @@
 #define u1_g_AlertSpdKmphBiased(u2_ap_kmph, u1_a_BC)                (u1_g_VehspdKmphBiased(u2_ap_kmph, u1_a_BC))
 #define u1_g_AlertSpdKmphInst(u2_ap_kmph, u1_a_OW_EN)               (u1_g_VehspdKmphInst(u2_ap_kmph, u1_a_OW_EN))
 #define u1_g_AlertSpdFluctStat()                                    (u1_g_VehspdFluctStat())
+#if 0   /* BEV Rebase provisionally */
 #define u1_g_AlertEngspdRpmInst(u2p_a_rpm)                          (u1_g_EngspdRpmInst(u2p_a_rpm))
+#else   /* BEV Rebase provisionally */
+#define u1_g_AlertEngspdRpmInst(u2p_a_rpm)                          ((U1)FALSE)
+#endif   /* BEV Rebase provisionally */
 #define u4_g_AlertUnitconvtrKmtoMi(x)                               (u4_g_UnitconvtrKmtoMi(x))
 #define u1_g_AlertUnit(u1_a_IDX)                                    (u1_g_Unit(u1_a_IDX))
+#if 0   /* BEV Rebase provisionally */
 #define u1_g_AlertPtsOn(u1_a_INV)                                   (u1_g_VehopemdPtsOn(u1_a_INV))
+#else   /* BEV Rebase provisionally */
+#define u1_g_AlertPtsOn(u1_a_INV)                                   ((U1)FALSE)
+#endif   /* BEV Rebase provisionally */
 #define u1_g_AlertPtsys()                                           (u1_g_VardefPtsRx())
 #define u1_g_AlertEsOptAvailable(u2_a_CH)                           (u1_g_VardefEsOptAvaByCh(u2_a_CH))
+#if 0   /* BEV Rebase provisionally */
 #define u1_g_AlertFLidopenMsgRqst()                                 (u1_g_FLidopenMsgRqst())
+#else   /* BEV Rebase provisionally */
+#define u1_g_AlertFLidopenMsgRqst()                                 ((U1)FALSE)
+#endif   /* BEV Rebase provisionally */
 #define u1_g_AlertOillvSw()                                         ((U1)FALSE)
 #define u1_g_AlertShiftSbwFunc()                                    (u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_SBW))
 #define u4_g_AlertRevBzrSoundType()                                 (u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_20C2))

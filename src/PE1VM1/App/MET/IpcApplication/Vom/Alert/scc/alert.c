@@ -17,8 +17,6 @@
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "eculib_cmn.h"
-#include "3gbsw.h"
-#include "ipc_mainline.h"
 
 #include "alert_cfg_private.h"
 #include "alert_mtrx_cfg_private.h"
@@ -46,6 +44,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Package Version Check                                                                                                            */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#if 0   /* BEV Rebase provisionally */
 #define ALERT_ECULIB_CMN_MAJOR                   (1)
 #define ALERT_ECULIB_CMN_MINOR                   (2)
 #define ALERT_ECULIB_CMN_PATCH                   (1)
@@ -57,30 +56,7 @@
      (ALERT_ECULIB_CMN_REV   != ECULIB_CMN_REV      ))
 #error "alert pkg and eculib_cmn pkg : package are incompatible!"
 #endif
-
-#define ALERT_BSW_MAJOR                          (1)
-#define ALERT_BSW_MINOR                          (2)
-#define ALERT_BSW_PATCH                          (1)
-#define ALERT_BSW_REV                            (2)
-
-#if ((ALERT_BSW_MAJOR != BSW_3RD_GEN_VER_MAJOR) || \
-     (ALERT_BSW_MINOR != BSW_3RD_GEN_VER_MINOR) || \
-     (ALERT_BSW_PATCH != BSW_3RD_GEN_VER_PATCH) || \
-     (ALERT_BSW_REV   != BSW_3RD_GEN_REV      ))
-#error "alert pkg and 3gbsw pkg : package are incompatible!"
-#endif
-
-#define ALERT_IPC_MAINLINE_MAJOR                    (2)
-#define ALERT_IPC_MAINLINE_MINOR                    (1)
-#define ALERT_IPC_MAINLINE_PATCH                    (2)
-#define ALERT_IPC_MAINLINE_REV                      (0)
-
-#if ((ALERT_IPC_MAINLINE_MAJOR != IPC_MAINLINE_VER_MAJOR) || \
-     (ALERT_IPC_MAINLINE_MINOR != IPC_MAINLINE_VER_MINOR) || \
-     (ALERT_IPC_MAINLINE_PATCH != IPC_MAINLINE_VER_PATCH) || \
-     (ALERT_IPC_MAINLINE_REV   != IPC_MAINLINE_REV      ))
-#error "alert pkg and ipc_mainline pkg : package are incompatible!"
-#endif
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  VOM Index Check                                                                                                                  */
@@ -195,6 +171,7 @@ void    vd_g_AlertOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     U4                       u4_t_evt;
     U1                       u1_t_vom_chk;
 
+#if 0   /* BEV Rebase provisionally */
     u4_t_mdbit   = u4_a_MDBIT & ((U4)VEH_OPEMD_MDBIT_ACC |
                                  (U4)VEH_OPEMD_MDBIT_IGN |
                                  (U4)VEH_OPEMD_MDBIT_STA);
@@ -215,6 +192,7 @@ void    vd_g_AlertOpemdEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVTBIT)
     }
 
     u1_s_alert_vom_chk = u1_t_vom_chk;
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_AlertMainTask(void)                                                                                                 */
@@ -403,9 +381,13 @@ static U1      u1_s_AlertVomchk(void)
         u2_s_alert_rmtx_tm_elpsd++;
     }
 
+#if 0   /* BEV Rebase provisionally */
     u4_t_mdbit   = u4_g_VehopemdMdfield() & ((U4)VEH_OPEMD_MDBIT_ACC |
                                              (U4)VEH_OPEMD_MDBIT_IGN |
                                              (U4)VEH_OPEMD_MDBIT_STA);
+#else   /* BEV Rebase provisionally */
+    u4_t_mdbit   = (U4)0U;
+#endif   /* BEV Rebase provisionally */
 
     u1_t_vom_chk = u1_sp_ALERT_VOM_CHK[u4_t_mdbit];
     u1_t_ign_on  = u1_t_vom_chk & (U1)ALERT_VOM_IGN_ON;
@@ -477,6 +459,7 @@ static U1      u1_s_AlertJudgeStartEngine(void)
     u1_t_ecomode3_jdg_result = (U1)FALSE;
     u1_t_eng_start           = (U1)FALSE;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_eng1g90_msgsts = Com_GetIPDUStatus(MSG_ENG1G90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     (void)Com_ReceiveSignal(ComConf_ComSignal_RDYIND, &u1_t_rdyind);
 
@@ -485,6 +468,11 @@ static U1      u1_s_AlertJudgeStartEngine(void)
 
     u1_t_eco1s90_msgsts = Com_GetIPDUStatus(MSG_ECO1S90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     (void)Com_ReceiveSignal(ComConf_ComSignal_ECOMODE3, &u1_t_ecomode3);
+#else   /* BEV Rebase provisionally */
+    u1_t_eng1g90_msgsts = (U1)COM_NO_RX;
+    u1_t_eng1g02_msgsts = (U1)COM_NO_RX;
+    u1_t_eco1s90_msgsts = (U1)COM_NO_RX;
+#endif   /* BEV Rebase provisionally */
 
     if((u1_t_eng1g90_msgsts == (U1)0U  ) &&
        (u1_t_rdyind         == (U1)TRUE)){
@@ -534,7 +522,11 @@ static U1      u1_s_AlertToutchk(void)
     U1                       u1_t_chk;
     U1                       u1_t_wk;
 
+#if 0   /* BEV Rebase provisionally */
     u1_t_wk = u1_g_oXCANRxEnabled(u1_g_ALERT_BUS_CH);
+#else   /* BEV Rebase provisionally */
+    u1_t_wk = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
     if(u1_t_wk == (U1)TRUE){
         u4_s_alert_bslp_tm_elpsd = (U4)U4_MAX;
     }

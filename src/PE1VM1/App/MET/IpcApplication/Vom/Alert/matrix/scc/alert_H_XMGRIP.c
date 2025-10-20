@@ -190,6 +190,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_XMGRIP_MTRX[3] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_xmgripTtIndSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_XMGRIP_TT_IND_LSB_MSGSTS = (U1)3U;
     static const U2 u2_s_ALERT_H_XMGRIP_TT_IND_TO_THRESH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U1              u1_t_msgsts;
@@ -206,6 +207,9 @@ static U4      u4_s_AlertH_xmgripTtIndSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_XMGRIP_TT_IND_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -216,6 +220,7 @@ static U4      u4_s_AlertH_xmgripTtIndSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_xmgripPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_XMGRIP_PD_LSB_MSGSTS = (U1)3U;
     static const U2 u2_s_ALERT_H_XMGRIP_PD_TO_THRESH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     U1              u1_t_msgsts;
@@ -232,6 +237,9 @@ static U4      u4_s_AlertH_xmgripPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_XMGRIP_PD_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -242,6 +250,7 @@ static U4      u4_s_AlertH_xmgripPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_xmgripBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_XMGRIP_BC_LSB_MSGSTS = (U1)3U;
     U1              u1_t_msgsts;
     U1              u1_t_sgnl;
@@ -258,6 +267,9 @@ static U4      u4_s_AlertH_xmgripBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_XMGRIP_BC_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

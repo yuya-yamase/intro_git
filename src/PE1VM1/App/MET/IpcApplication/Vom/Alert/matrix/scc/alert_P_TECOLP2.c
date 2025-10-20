@@ -180,6 +180,7 @@ const ST_ALERT_MTRX st_gp_ALERT_P_TECOLP2_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_tecolp2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_P_TECOLP2_TO_B_ECO_THRESH = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U2 u2_s_ALERT_P_TECOLP2_TO_IECO_THRESH  = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_P_ENG1G17_LSB_MSGSTS      = (U1)2U;
@@ -212,6 +213,9 @@ static U4      u4_s_AlertP_tecolp2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     u4_t_src_chk |= ((U4)u1_t_ehv1f04_sts   << u1_s_ALERT_P_EHV1F04_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

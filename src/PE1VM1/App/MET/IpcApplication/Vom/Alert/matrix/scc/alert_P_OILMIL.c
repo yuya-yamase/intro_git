@@ -176,6 +176,7 @@ const ST_ALERT_MTRX st_gp_ALERT_P_OILMIL_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_oilmilDispSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_P_OILMIL_DISP_TO_TRSH = ((U2)7500U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_P_OILMIL_DISP_LSB_COM = (U1)2U;
     U4              u4_t_src_chk;
@@ -192,6 +193,9 @@ static U4      u4_s_AlertP_oilmilDispSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -202,6 +206,7 @@ static U4      u4_s_AlertP_oilmilDispSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_oilmilRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_P_OILMIL_RW_TO_THRESH = ((U2)7500U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_P_OILMIL_RW_LSB_OMWI  = (U1)2U;
     static const U1 u1_s_ALERT_P_OILMIL_RW_LSB_HV_B  = (U1)4U;
@@ -253,6 +258,9 @@ static U4      u4_s_AlertP_oilmilRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk   |= ((U4)u1_t_sgnl << u1_s_ALERT_P_OILMIL_RW_LSB_HV_B);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -263,6 +271,7 @@ static U4      u4_s_AlertP_oilmilRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_oilmilRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_P_OILMIL_RW_OMDW_CRT = ((U2)((U2)1U << ALERT_REQ_P_OILMIL_RW_RW_OMDW)
                                                     |  (U2)((U2)1U << ALERT_REQ_P_OILMIL_RW_RW     ));
 
@@ -289,6 +298,7 @@ static void    vd_s_AlertP_oilmilRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 
     (void)Com_SendSignal(ComConf_ComSignal_OMDW, &u1_t_omdw);
     (void)Com_SendSignal(ComConf_ComSignal_OMPW, &u1_t_ompw);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

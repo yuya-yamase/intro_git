@@ -89,6 +89,7 @@ const ST_ALERT_MTRX st_gp_ALERT_B_AVAS_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_avasSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_B_AVAS_LSB_SPWNGTT = (U1)1U;
     static const U1 u1_s_ALERT_B_AVAS_LSB_MSGSTS  = (U1)2U;
     U4              u4_t_src_chk;
@@ -118,6 +119,9 @@ static U4      u4_s_AlertB_avasSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_AVAS_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -128,6 +132,7 @@ static U4      u4_s_AlertB_avasSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
 /*===================================================================================================================================*/
 static void    vd_s_AlertB_avasRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_B_AVAS_RWTX_CRT = ((U1)((U1)1U << ALERT_REQ_B_AVAS_MALFUNC_PD)
                                                |  (U1)((U1)1U << ALERT_REQ_B_AVAS_MALFUNC_TT)
                                                |  (U1)((U1)1U << ALERT_REQ_B_AVAS_MALFUNC   ));
@@ -145,6 +150,7 @@ static void    vd_s_AlertB_avasRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, con
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_VPNW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

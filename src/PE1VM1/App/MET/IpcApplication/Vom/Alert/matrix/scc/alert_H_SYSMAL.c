@@ -323,6 +323,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_SYSMAL_MTRX[4] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_SYSMALBC_LSB_EHV  = (U1)3U;
 #if defined(OXCAN_PDU_RX_CAN_EHV1S26)
     static const U2 u2_s_ALERT_H_SYSMALBC_THRSH_TO = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
@@ -347,6 +348,9 @@ static U4      u4_s_AlertH_sysmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -357,6 +361,7 @@ static U4      u4_s_AlertH_sysmalBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_SYSMALPD1_LSB_EHV  = (U1)8U;
     static const U1 u1_s_ALERT_H_SYSMALPD1_LSB_MLPT = (U1)5U;
     U4              u4_t_src_chk;
@@ -385,6 +390,9 @@ static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -395,6 +403,7 @@ static U4      u4_s_AlertH_sysmalPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_SYSMALPD2_LSB_EHV   = (U1)10U;
     static const U1 u1_s_ALERT_H_SYSMALPD2_LSB_HVIND = (U1)5U;
     U4              u4_t_src_chk;
@@ -423,6 +432,9 @@ static U4      u4_s_AlertH_sysmalPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -433,6 +445,7 @@ static U4      u4_s_AlertH_sysmalPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_sp_ALERT_H_SYSMALRW_PTSYS_JDG[ALERT_H_SYSMAL_PTSYS_NUM_TBL] = {
         (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
         (U1)ALERT_H_SYSMAL_PTSYS_OTHER,
@@ -545,6 +558,9 @@ static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk   = (u4_t_ptsys_jdg | u4_t_mlpt_jdg | u4_t_hvind_jdg);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -555,6 +571,7 @@ static U4      u4_s_AlertH_sysmalRwSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static void    vd_s_AlertH_sysmalRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_sp_ALERT_H_SYSMALRWTX_VOM_CRT[ALERT_H_SYSMAL_NUM_RWSGNL] = {
         (U1)ALERT_VOM_IGN_ON,                                       /* HVSW     */
         (U1)ALERT_VOM_RWT_EN,                                       /* HVSW2    */
@@ -595,6 +612,7 @@ static void    vd_s_AlertH_sysmalRwRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 #if defined(ComConf_ComSignal_EVSW2)
     (void)Com_SendSignal(ComConf_ComSignal_EVSW2, &u1_tp_sgnl[ALERT_H_SYSMAL_RWSGNL_EVSW2]);
 #endif /* defined(ComConf_ComSignal_EVSW2)  */
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

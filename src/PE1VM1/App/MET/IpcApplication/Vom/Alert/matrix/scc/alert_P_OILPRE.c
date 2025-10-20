@@ -288,6 +288,7 @@ void    vd_g_AlertP_oilpreInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_oilpreWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_P_OILPRE_WRN_BIT_OPSW = (U4)0x00000080U;
     static const U4 u4_s_ALERT_P_OILPRE_WRN_DLY_CMP  = (U4)0x00000008U;
     static const U4 u4_s_ALERT_P_OILPRE_WRN_DLY_TM   = ((U4)1000U / (U4)ALERT_MAIN_TICK);
@@ -374,6 +375,9 @@ static U4      u4_s_AlertP_oilpreWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
         u4_t_src_chk                     = (U4)0U;
     }
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -384,6 +388,7 @@ static U4      u4_s_AlertP_oilpreWrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_oilpreBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_P_OILPRE_BC_DLY_CMP   = (U4)0x00000002U;
     static const U4 u4_s_ALERT_P_OILPRE_BC_DLY_TM    = ((U4)1000U / (U4)ALERT_MAIN_TICK);
     static const U2 u2_s_ALERT_P_OILPRE_BC_THSH_PD01 = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
@@ -475,6 +480,9 @@ static U4      u4_s_AlertP_oilpreBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
         u4_t_src_chk                    = (U4)0U;
     }
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 
 }
 /*===================================================================================================================================*/
@@ -485,6 +493,7 @@ static U4      u4_s_AlertP_oilpreBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U1      u1_s_AlertP_oilpreRxJudgeSgnl(const U1 u1_a_RXID)
 {
+#if 0   /* BEV Rebase provisionally */
 #if (defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_MOPSINH)) || (defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_OPLMPMSK))
     static const U2 u2_sp_ALERT_P_OILPRE_COMRX[ALERT_P_OILPRE_RXSTAT_NUM] = {
         (U2)(OXCAN_RX_SYS_NRX_IGR),
@@ -546,6 +555,9 @@ static U1      u1_s_AlertP_oilpreRxJudgeSgnl(const U1 u1_a_RXID)
 #else
     return((U1)FALSE);
 #endif /* (defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_MOPSINH)) || (defined(OXCAN_PDU_RX_CAN_ECO1S90) && defined(ComConf_ComSignal_OPLMPMSK)) */ /* BSW VerUp */
+#else   /* BEV Rebase provisionally */
+    return((U1)FALSE);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -609,6 +621,7 @@ static U1      u1_s_AlertP_oilpreRpmrng(U4 * u4p_a_ne1_tm_elpsd)
 /*===================================================================================================================================*/
 static U1      u1_s_AlertP_oilpreOilpreSw(void)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_opsw_act;
 
 #if (defined(ALERT_HW_ID_P_OILPRE_OP_SW) && (ALERT_HW_ID_P_OILPRE_OP_SW != U2_MAX))
@@ -617,6 +630,9 @@ static U1      u1_s_AlertP_oilpreOilpreSw(void)
     u1_t_opsw_act = (U1)IOHW_DIFLT_SWITCH_INACT;
 #endif
     return(u1_t_opsw_act);
+#else   /* BEV Rebase provisionally */
+    return((U1)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -627,6 +643,7 @@ static U1      u1_s_AlertP_oilpreOilpreSw(void)
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_oilpreWrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_P_OILPRE_RWTX_CRT = ((U1)((U1)1U << ALERT_REQ_P_OILPRE_WRN_WRN_ON  )
                                                  |  (U1)((U1)1U << ALERT_REQ_P_OILPRE_WRN_WRN_FLSH)
                                                  |  (U1)((U1)1U << ALERT_REQ_P_OILPRE_WRN_WRN_OFF ));
@@ -644,6 +661,7 @@ static void    vd_s_AlertP_oilpreWrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_OPW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

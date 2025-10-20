@@ -163,6 +163,7 @@ const ST_ALERT_MTRX st_gp_ALERT_C_TPMS_MTRX[3] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_tpmsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_C_TPMS_TT_TO_THRSH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U4 u4_s_ALERT_C_TPMS_TT_BIT_DEST   = (U4)0x00000040U;
     static const U1 u1_s_ALERT_C_TPMS_TT_LSB_MSGSTS = (U1)4U;
@@ -186,6 +187,9 @@ static U4      u4_s_AlertC_tpmsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -196,6 +200,7 @@ static U4      u4_s_AlertC_tpmsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_C_TPMS_BC_LSB_MSGSTS = (U1)2U;
     U4              u4_t_src_chk;
     U1              u1_t_sgnl;
@@ -211,6 +216,9 @@ static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -221,6 +229,7 @@ static U4      u4_s_AlertC_tpmsBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_tpmsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_C_TPMS_PD_TO_THRSH    = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_TPMS_PD_LSB_TPM1S02 = (U1)7U;
     static const U1 u1_s_ALERT_C_TPMS_PD_LSB_TPMDISP = (U1)1U;
@@ -249,6 +258,9 @@ static U4      u4_s_AlertC_tpmsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk    |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -259,6 +271,7 @@ static U4      u4_s_AlertC_tpmsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static void    vd_s_AlertC_tpmsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_tirw;
     U1              u1_t_tilw;
     U1              u1_t_tipw;
@@ -287,6 +300,7 @@ static void    vd_s_AlertC_tpmsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     (void)Com_SendSignal(ComConf_ComSignal_TIRW, &u1_t_tirw);
     (void)Com_SendSignal(ComConf_ComSignal_TILW, &u1_t_tilw);
     (void)Com_SendSignal(ComConf_ComSignal_TIPW, &u1_t_tipw);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

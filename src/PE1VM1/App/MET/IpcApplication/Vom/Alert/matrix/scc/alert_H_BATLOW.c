@@ -84,6 +84,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_BATLOW_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_batlowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_BATLOW_LSB_MSGSTS = (U1)1U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
@@ -105,6 +106,9 @@ static U4      u4_s_AlertH_batlowSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_BATLOW_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

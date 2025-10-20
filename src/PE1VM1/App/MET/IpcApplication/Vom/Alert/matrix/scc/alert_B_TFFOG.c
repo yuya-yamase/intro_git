@@ -111,6 +111,7 @@ void    vd_g_AlertB_tffogInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_tffogSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_B_TFFOG_TO_THRESH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_TFFOG_LSB_SGNL    = (U1)1U;
     static const U1 u1_s_ALERT_B_TFFOG_LSB_MSGSTS  = (U1)2U;
@@ -154,6 +155,9 @@ static U4      u4_s_AlertB_tffogSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U1)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

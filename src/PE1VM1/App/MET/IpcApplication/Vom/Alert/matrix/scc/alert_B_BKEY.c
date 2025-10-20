@@ -157,6 +157,7 @@ void    vd_g_AlertB_bkeyInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_bkeySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_B_BKEY_TO_THRESH     = ((U2)3600U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_BKEY_LSB_MSGSTS    = (U1)2U;
     static const U1 u1_s_ALERT_B_BKEY_LSB_SKSW      = (U1)1U;
@@ -196,6 +197,9 @@ static U4      u4_s_AlertB_bkeySrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

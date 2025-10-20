@@ -163,6 +163,7 @@ void    vd_g_AlertC_brk_0Init(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_brk_0Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_C_BRK_TIM_DLY         = ((U4)7100U / (U4)ALERT_MAIN_TICK);
     static const U2 u2_s_ALERT_C_BRK_TO_ZN11S17      = ((U2)1000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_BRK_ZN11S17_LSB_STS = (U1)2U;
@@ -226,6 +227,9 @@ static U4      u4_s_AlertC_brk_0Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif  /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  static U1      u1_s_AlertC_brk_0RunSts(void)                                                                                     */

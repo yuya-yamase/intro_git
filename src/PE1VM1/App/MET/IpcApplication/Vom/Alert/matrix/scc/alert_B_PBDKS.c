@@ -134,6 +134,7 @@ void    vd_g_AlertB_pbdksInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_pbdksPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_B_PBDKS_TO_THRESH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_B_PBDKS_LSB_MSGSTS = (U1)2U;
     static const U4 u4_s_ALERT_B_PBDKS_BIT_BAT_WT = (U4)0x00000008U;
@@ -161,6 +162,9 @@ static U4      u4_s_AlertB_pbdksPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -171,6 +175,7 @@ static U4      u4_s_AlertB_pbdksPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_pbdksRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_B_PBDKS_LSB_MSGSTS = (U1)2U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
@@ -185,6 +190,9 @@ static U4      u4_s_AlertB_pbdksRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_B_PBDKS_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -195,6 +203,7 @@ static U4      u4_s_AlertB_pbdksRwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static void    vd_s_AlertB_pbdksRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_B_PBDKS_TIM_RW_ENBL = ((U4)15000U / (U4)ALERT_MAIN_TICK);
     U1              u1_t_sgnl;
 
@@ -208,6 +217,7 @@ static void    vd_s_AlertB_pbdksRwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_HPKW, &u1_t_sgnl);
+#endif /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

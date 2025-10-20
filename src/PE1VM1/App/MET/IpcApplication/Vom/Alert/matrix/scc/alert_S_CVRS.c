@@ -110,6 +110,7 @@ const ST_ALERT_MTRX st_gp_ALERT_S_CVRS_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_cvrsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_S_CVRS_LSB_RPRT    = (U1)1U;
     static const U1 u1_s_ALERT_S_CVRS_LSB_MSGSTS  = (U1)2U;
     static const U4 u4_s_ALERT_S_CVRS_BIT_IGN_ON  = (U4)0x00000010U;
@@ -131,6 +132,9 @@ static U4      u4_s_AlertS_cvrsSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, c
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

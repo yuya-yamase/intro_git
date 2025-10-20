@@ -315,6 +315,7 @@ void    vd_g_AlertC_hcsInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_hcsTtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_C_HCS_TTB_TO_THRSH  = ((U2)10000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_HCS_TTB_MSGSTS    = (U1)2U;
     static const U4 u4_s_ALERT_C_HCS_BIT_BAT_WT    = (U4)0x00000010U;
@@ -339,6 +340,9 @@ static U4      u4_s_AlertC_hcsTtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -349,6 +353,7 @@ static U4      u4_s_AlertC_hcsTtbSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_hcsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_C_HCS_TT_TO_THRSH   = ((U2)10000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_HCS_TT_LSB_MSGSTS = (U1)5U;
     static const U1 u1_s_ALERT_C_HCS_TT_LSB_ASCEXT = (U1)2U;
@@ -371,6 +376,9 @@ static U4      u4_s_AlertC_hcsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_C_HCS_TT_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -381,6 +389,7 @@ static U4      u4_s_AlertC_hcsTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_hcsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_C_HCS_PD_TO_THRSH   = ((U2)10000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_C_HCS_PD_LSB_MSGSTS = (U1)7U;
     static const U1 u1_s_ALERT_C_HCS_PD_LSB_ASCEXT = (U1)4U;
@@ -402,6 +411,9 @@ static U4      u4_s_AlertC_hcsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_C_HCS_PD_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 
@@ -413,6 +425,7 @@ static U4      u4_s_AlertC_hcsPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 /*===================================================================================================================================*/
 static void    vd_s_AlertC_hcsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
 
     if (((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                              )&&
@@ -427,6 +440,7 @@ static void    vd_s_AlertC_hcsPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, co
     }
 
     (void)Com_SendSignal(ComConf_ComSignal_SUSW, &u1_t_sgnl);
+#endif /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*                                                                                                                                   */

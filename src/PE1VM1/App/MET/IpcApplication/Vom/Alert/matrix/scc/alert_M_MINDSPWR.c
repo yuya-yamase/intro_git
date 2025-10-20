@@ -116,6 +116,7 @@ void    vd_g_AlertM_mindspwrInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertM_mindspwrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2  u2_s_ALERT_M_MINDSPWR_L1_LOTHRSH = (U2)7900U;
     static const U2  u2_s_ALERT_M_MINDSPWR_L1_UPTHRSH = (U2)8000U;
     static const U2  u2_s_ALERT_M_MINDSPWR_L2_LOTHRSH = (U2)11900U;
@@ -190,6 +191,9 @@ static U4      u4_s_AlertM_mindspwrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u1_s_alert_m_mindspwr_bzsts_last  = u1_t_bzsts;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

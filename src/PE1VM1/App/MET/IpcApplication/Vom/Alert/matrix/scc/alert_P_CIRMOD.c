@@ -157,6 +157,7 @@ const ST_ALERT_MTRX st_gp_ALERT_P_CIRMOD_MTRX[4] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_cirmodTtAlcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_P_CIRMOD_ALC_LSB_MSG = (U1)1U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
@@ -174,6 +175,9 @@ static U4      u4_s_AlertP_cirmodTtAlcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -184,6 +188,7 @@ static U4      u4_s_AlertP_cirmodTtAlcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_cirmodTtCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_P_CIRMOD_SLCT_MSG = (U1)3U;
     static const U1 u1_s_ALERT_P_CIRMOD_SLCT     = (U1)2U;
     static const U1 u1_s_ALERT_P_CIRMOD_BXCM_MSG = (U1)1U;
@@ -212,6 +217,9 @@ static U4      u4_s_AlertP_cirmodTtCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -222,6 +230,7 @@ static U4      u4_s_AlertP_cirmodTtCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_cirmodPdCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_P_CIRMOD_PDCM_LSB_MSG = (U1)2U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
@@ -237,6 +246,9 @@ static U4      u4_s_AlertP_cirmodPdCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -247,6 +259,7 @@ static U4      u4_s_AlertP_cirmodPdCmSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_cirmodPdFanSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_P_CIRMOD_FAN_LSB_MSG = (U1)1U;
     U4              u4_t_src_chk;
     U1              u1_t_msgsts;
@@ -262,6 +275,9 @@ static U4      u4_s_AlertP_cirmodPdFanSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk |= (U4)u1_t_sgnl;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -167,6 +167,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_PEXI_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_PEXI_TT_LSB_NDBW    = (U1)3U;
     static const U1 u1_s_ALERT_H_PEXI_TT_LSB_EHV1S90 = (U1)5U;
 #if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID)
@@ -203,6 +204,9 @@ static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID) */
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -213,6 +217,7 @@ static U4      u4_s_AlertH_pexiTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_pexiWarnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_H_PEXI_WARN_LSB_MSG   = (U1)1U;
 #if defined(OXCAN_PDU_RX_CAN_EHV1S90)
     static const U2 u2_s_ALERT_H_PEXI_WARN_TO_THRESH = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
@@ -237,6 +242,9 @@ static U4      u4_s_AlertH_pexiWarnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_H_PEXI_WARN_LSB_MSG);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -174,6 +174,7 @@ void    vd_g_AlertC_brkbzInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertC_brkbzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4  u4_sp_ALERT_C_BRKBZ_BZJDG_CRIT[ALERT_C_BRKBZ_BZJDG_REQ_TBL] = {
         (U4)0x00000020U,                                                       /* 00 UNAVAILABLE1                                    */
         (U4)0x00000030U,                                                       /* 01 TESTMODE1                                       */
@@ -315,6 +316,9 @@ static U4      u4_s_AlertC_brkbzSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk                    |= (u4_t_src_chk_b_buzze << u1_s_ALERT_C_BRKBZ_LSB_BZR_REQ);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif  /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

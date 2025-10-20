@@ -158,6 +158,7 @@ void    vd_g_AlertP_cootemInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_cootemTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_P_COOTEM_TTBC_HI_TRSH = (U2)12000U;       /* 120 degrees celsius (LSB:0.01) */
     static const U2 u2_s_ALERT_P_COOTEM_TTBC_MD_TRSH = (U2)11700U;       /* 117 degrees celsius (LSB:0.01) */
     static const U2 u2_s_ALERT_P_COOTEM_TTBC_LO_TRSH = (U2)11500U;       /* 115 degrees celsius (LSB:0.01) */
@@ -200,6 +201,9 @@ static U4      u4_s_AlertP_cootemTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u2_s_alert_p_cootem_ttbc_tempprv = u2_t_cel;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -210,6 +214,7 @@ static U4      u4_s_AlertP_cootemTtBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertP_cootemTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_P_COOTEM_TTPD_HI_TRSH = (U2)12000U;       /* 120 degrees celsius (LSB:0.01) */
     static const U2 u2_s_ALERT_P_COOTEM_TTPD_LO_TRSH = (U2)11500U;       /* 115 degrees celsius (LSB:0.01) */
     static const U4 u4_s_ALERT_P_COOTEM_TTPD_IGN_ON  = (U4)0x00000008U;
@@ -244,6 +249,9 @@ static U4      u4_s_AlertP_cootemTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u2_s_alert_p_cootem_ttpd_tempprv = u2_t_cel;
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -254,6 +262,7 @@ static U4      u4_s_AlertP_cootemTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static void    vd_s_AlertP_cootemTtPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
 #ifdef ComConf_ComSignal_WTPW /* 130D_CAN */
     U1              u1_t_sgnl;
     U1              u1_t_rwtx_enbl;
@@ -287,6 +296,7 @@ static void    vd_s_AlertP_cootemTtPdRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 
     (void)Com_SendSignal(ComConf_ComSignal_WTPW, &u1_t_sgnl);
 #endif /* ComConf_ComSignal_WTPW */ /* 130D_CAN */
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

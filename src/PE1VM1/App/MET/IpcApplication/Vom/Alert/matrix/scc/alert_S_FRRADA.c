@@ -273,6 +273,7 @@ const ST_ALERT_MTRX st_gp_ALERT_S_FRRADA_MTRX[3] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_frradaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_FSR    = (U1)1U;
     static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_RSL    = (U1)2U;
     static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_RSR    = (U1)3U;
@@ -304,6 +305,9 @@ static U4      u4_s_AlertS_frradaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_FRRADA_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -314,6 +318,7 @@ static U4      u4_s_AlertS_frradaTtSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_frradaBzCmpSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_CH_S_FRRADA_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_FSR    = (U1)1U;
     static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_RSL    = (U1)2U;
@@ -346,6 +351,9 @@ static U4      u4_s_AlertS_frradaBzCmpSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_FRRADA_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -356,6 +364,7 @@ static U4      u4_s_AlertS_frradaBzCmpSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_frradaBzErrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U2 u2_s_ALERT_CH_S_FRRADA_TO_THRESH  = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_FSR    = (U1)1U;
     static const U1 u1_s_ALERT_CH_S_FRRADA_LSB_RSL    = (U1)2U;
@@ -388,6 +397,9 @@ static U4      u4_s_AlertS_frradaBzErrSrcchk(const U1 u1_a_VOM, const U4 u4_a_IG
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_FRRADA_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

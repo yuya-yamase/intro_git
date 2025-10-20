@@ -157,6 +157,7 @@ void    vd_g_AlertB_fmseatInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_fmseatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_B_FMSEAT_LSB_ZN11S60 = (U1)4U;
     static const U4 u4_s_ALERT_B_FMSEAT_BIT_BAT_WT  = (U4)0x00000020U;
     U4              u4_t_src_chk;
@@ -179,6 +180,9 @@ static U4      u4_s_AlertB_fmseatSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM,
     }
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

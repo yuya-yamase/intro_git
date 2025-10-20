@@ -143,6 +143,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_SOCLOW_MTRX[2] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_soclowTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID)
     static const U1 u1_s_ALERT_SOCLOWID_TT_LSB_MSGST = (U1)3U;
     U4              u4_t_src_chk;
@@ -163,6 +164,9 @@ static U4      u4_s_AlertH_soclowTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -173,6 +177,7 @@ static U4      u4_s_AlertH_soclowTtPdSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_soclowBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID)
     static const U2 u2_s_ALERT_EHV1S94_TO_THRESH     = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
     static const U1 u1_s_ALERT_SOCLOWID_BC_LSB_MSGST = (U1)3U;
@@ -194,6 +199,9 @@ static U4      u4_s_AlertH_soclowBcSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_T
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S94) && defined(ComConf_ComSignal_SOCLOWID) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

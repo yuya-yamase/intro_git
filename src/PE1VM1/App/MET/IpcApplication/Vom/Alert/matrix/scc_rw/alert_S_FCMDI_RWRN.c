@@ -84,6 +84,7 @@ const ST_ALERT_MTRX st_gp_ALERT_S_FCMDI_RWRN_MTRX[1] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertS_fcmdi_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U1 u1_s_ALERT_CH_S_FCMDI_RW_LSB_STS = (U1)1U;
     U4              u4_t_src_chk;
     U1              u1_t_sgnl;
@@ -99,6 +100,9 @@ static U4      u4_s_AlertS_fcmdi_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
     u4_t_src_chk |= ((U4)u1_t_msgsts << u1_s_ALERT_CH_S_FCMDI_RW_LSB_STS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -109,6 +113,7 @@ static U4      u4_s_AlertS_fcmdi_rwrnSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN
 /*===================================================================================================================================*/
 static void    vd_s_AlertS_fcmdi_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_DST)
 {
+#if 0   /* BEV Rebase provisionally */
     U1              u1_t_sgnl;
 
     if(((u1_a_VOM & (U1)ALERT_VOM_RWT_EN) != (U1)0U                            ) &&
@@ -119,6 +124,7 @@ static void    vd_s_AlertS_fcmdi_rwrnRwTx(const U1 u1_a_VOM, const U4 u4_a_IGN_T
         u1_t_sgnl = (U1)ALERT_RW_SGNL_OFF;
     }
     (void)Com_SendSignal(ComConf_ComSignal_ADAW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

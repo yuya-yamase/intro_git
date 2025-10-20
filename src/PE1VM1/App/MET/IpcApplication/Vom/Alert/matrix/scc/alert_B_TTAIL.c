@@ -103,6 +103,7 @@ void    vd_g_AlertB_ttailInit(void)
 /*===================================================================================================================================*/
 static U4      u4_s_AlertB_ttailSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
     static const U4 u4_s_ALERT_B_TAIL_DLY_THRESH  = ((U4)300U  / (U4)ALERT_CH_TICK);
     static const U4 u4_s_ALERT_B_TAIL_BIT_DLYELPS = (U4)0x00000001U;
     static const U2 u2_s_ALERT_B_TAIL_TO_THRESH   = ((U2)5000U / (U2)OXCAN_MAIN_TICK);
@@ -145,6 +146,9 @@ static U4      u4_s_AlertB_ttailSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
     u4_t_src_chk  |= (((U4)u1_s_alert_b_ttail_msgsts & (U4)COM_NO_RX) << u1_s_ALERT_B_TAIL_LSB_MSGSTS);
 
     return(u4_t_src_chk);
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

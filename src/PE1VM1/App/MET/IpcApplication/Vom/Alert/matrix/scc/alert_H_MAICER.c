@@ -141,6 +141,7 @@ const ST_ALERT_MTRX st_gp_ALERT_H_MAICER_MTRX[4] = {
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_maicerPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_CHMH)
     static const U1 u1_s_ALERT_H_MAICER_PD1_LSB_MSG = (U1)1U;
     U4              u4_t_src_chk;
@@ -159,6 +160,9 @@ static U4      u4_s_AlertH_maicerPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_CHMH) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -169,6 +173,7 @@ static U4      u4_s_AlertH_maicerPd1Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_maicerPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_CMH2)
     static const U1 u1_s_ALERT_H_MAICER_PD2_LSB_MSG = (U1)1U;
     U4              u4_t_src_chk;
@@ -187,6 +192,9 @@ static U4      u4_s_AlertH_maicerPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_CMH2) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -197,6 +205,7 @@ static U4      u4_s_AlertH_maicerPd2Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_maicerPd3Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_CMH3)
     static const U1 u1_s_ALERT_H_MAICER_PD3_LSB_MSG = (U1)1U;
     U4              u4_t_src_chk;
@@ -215,6 +224,9 @@ static U4      u4_s_AlertH_maicerPd3Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_CMH3) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -225,6 +237,7 @@ static U4      u4_s_AlertH_maicerPd3Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 /*===================================================================================================================================*/
 static U4      u4_s_AlertH_maicerPd4Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, const U1 u1_a_LAS)
 {
+#if 0   /* BEV Rebase provisionally */
 #if defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_CMH4)
     static const U1 u1_s_ALERT_H_MAICER_PD4_LSB_MSG = (U1)1U;
     U4              u4_t_src_chk;
@@ -243,6 +256,9 @@ static U4      u4_s_AlertH_maicerPd4Srcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_
 #else
     return((U4)0U);
 #endif /* defined(OXCAN_PDU_RX_CAN_EHV1S90) && defined(ComConf_ComSignal_CMH4) */
+#else   /* BEV Rebase provisionally */
+    return((U4)0U);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
