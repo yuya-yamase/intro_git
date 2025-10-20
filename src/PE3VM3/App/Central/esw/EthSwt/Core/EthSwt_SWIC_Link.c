@@ -23,7 +23,7 @@ static struct {
 
 /* -------------------------------------------------------------------------- */
 static Std_ReturnType ethswt_swic_link_read(uint32 * const errFactor);
-static Std_ReturnType ethswt_swic_link_readPort(const uint8 SwitchPortIdx, uint32 * const errFactor);
+static Std_ReturnType ethswt_swic_link_readPerPort(const uint8 SwitchPortIdx, uint32 * const errFactor);
 /* -------------------------------------------------------------------------- */
 void EthSwt_SWIC_Link_Init (void)
 {
@@ -111,7 +111,7 @@ static Std_ReturnType ethswt_swic_link_read(uint32 * const errFactor)
     
     for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
         if (G_ETHSWT_SWIC_LINK_VAILD[idx] == STD_ON) {
-            result = ethswt_swic_link_readPort(idx, errFactor);
+            result = ethswt_swic_link_readPerPort(idx, errFactor);
             if (result == E_NOT_OK) {break;}
         }
     }
@@ -119,7 +119,7 @@ static Std_ReturnType ethswt_swic_link_read(uint32 * const errFactor)
     return result;
 }
 /* -------------------------------------------------------------------------- */
-static Std_ReturnType ethswt_swic_link_readPort(const uint8 SwitchPortIdx, uint32 * const errFactor)
+static Std_ReturnType ethswt_swic_link_readPerPort(const uint8 SwitchPortIdx, uint32 * const errFactor)
 {
     Std_ReturnType	        result;
     EthTrcv_LinkStateType   state;
