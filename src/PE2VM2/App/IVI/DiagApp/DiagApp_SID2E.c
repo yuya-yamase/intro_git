@@ -38,7 +38,6 @@
 #define DIAGAPP_SID2E_MIN_REQ_SIZE      (2U)
 
 #define DIAGAPP_SID2E_POSRES            (0U)
-#define DIAGAPP_SID2E_NRC_7F            (0x7FU)
 
 #define DIAGAPP_SID2E_DID_SIZE          (2U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -90,7 +89,13 @@ void           vd_g_DiagAppSID2ERequest(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
     U2 u2_t_dtlen;
 
     u1_t_nrc = (U1)0U;
-    if (st_ap_REQ->u2_tim_elpsd == 0) {
+    if (st_ap_REQ->u2_tim_elpsd == (U2)0U) {
+        /* Get Request ID */
+        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
+        if(u1_t_requestId != (U1)DIAGAPP_REQUESTID_PHYOFF) {
+            vd_g_DiagAppAnsTxNRC((U1)DIAGAPP_NRC_NONSUP);
+            return;
+        }
         st_s_diagapp_sid2E_ans.u1p_tx = st_ap_ans->u1p_tx;
         st_s_diagapp_sid2E_ans.u4_nbyte = st_ap_ans->u4_nbyte;
         /* Under Minimum Request Data */
@@ -103,12 +108,9 @@ void           vd_g_DiagAppSID2ERequest(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
         u2_t_did = (U2)((st_ap_REQ->u1p_RX[0] << DIAGAPP_SFT_08) | st_ap_REQ->u1p_RX[1]);
         u2_t_dtlen = (U2)(st_ap_REQ->u4_nbyte - (U4)DIAGAPP_SID2E_DID_SIZE);
 
-        /* Get Request ID */
-        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
-
         u1_t_result = u1_g_XspiIviSub0Request_Sid2E(u1_t_requestId, u2_t_did, u2_t_dtlen, &st_ap_REQ->u1p_RX[2], &u1_t_nrc);
 
-        if (u1_t_result == E_NOT_OK) {
+        if (u1_t_result == (U1)E_NOT_OK) {
             /* NRC */
             vd_g_DiagAppAnsTxNRC(u1_t_nrc);
         }

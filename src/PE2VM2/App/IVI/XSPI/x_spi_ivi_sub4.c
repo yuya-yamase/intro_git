@@ -1,4 +1,4 @@
-/* 0.9.0 */
+/* 1.10.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO TECHNO Corporation                                                                                               */
 /*===================================================================================================================================*/
@@ -9,8 +9,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_IVI_SUB4_C_MAJOR                   (0)
-#define XSPI_IVI_SUB4_C_MINOR                   (9)
+#define XSPI_IVI_SUB4_C_MAJOR                   (1)
+#define XSPI_IVI_SUB4_C_MINOR                   (10)
 #define XSPI_IVI_SUB4_C_PATCH                   (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -75,7 +75,7 @@
 #define XSPI_IVI_CANBUS_RSV_ACTIVE          (0x00U)
 #define XSPI_IVI_CANBUS_RSV_REGSTUCK        (0x01U)
 #define XSPI_IVI_CANBUS_RSV_BUSOFF          (0x02U)
-#define XSPI_IVI_CANBUS_RSV_NOCONNECT       (0x03U)
+#define XSPI_IVI_CANBUS_RSV_NOCONNECT       (0x04U)
 
 /*UTC*/
 #define XSPI_IVI_CLOCKUTC_SEND_TASK         (1000U / XSPI_IVI_TASK_TIME)
@@ -759,7 +759,7 @@ void            vd_g_XspiIviCANGWPushPDU(const U2 u2_a_MSG)
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36700000},       /*     90:MSG_BDC1S83_RXCH0    (192U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x1A000000},       /*     91:MSG_BDC1S87_RXCH0    (193U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x36C00000},       /*     92:MSG_BDC1S89_RXCH0    (194U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_32,    0x1E400000},       /*     93:MSG_BDC1S91_RXCH0    (195U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x1E400000},       /*     93:MSG_BDC1S91_RXCH0    (195U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35500000},       /*     94:MSG_BDC1S97_RXCH0    (196U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35800000},       /*     95:MSG_BDC1S98_RXCH0    (197U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_32,    0x35D00000},       /*     96:MSG_BDC1S99_RXCH0    (198U) */
@@ -809,15 +809,15 @@ void            vd_g_XspiIviCANGWPushPDU(const U2 u2_a_MSG)
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x53800000},       /*    140:MSG_BDC1SH6_RXCH0    (242U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_08,    0x2B300000},       /*    141:MSG_BDC1SH8_RXCH0    (243U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3CE00000},       /*    142:MSG_BDC1SI0_RXCH0    (244U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x3E800000},       /*    143:MSG_BDC1SI1_RXCH0    (245U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x3E900000},       /*    144:MSG_BDC1SI2_RXCH0    (246U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x3F400000},       /*    145:MSG_BDC1SI3_RXCH0    (247U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x31E00000},       /*    146:MSG_BDC1SI4_RXCH0    (248U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x31F00000},       /*    147:MSG_BDC1SI5_RXCH0    (249U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x32100000},       /*    148:MSG_BDC1SI6_RXCH0    (250U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x50800000},       /*    149:MSG_BDC1SI7_RXCH0    (251U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x50B00000},       /*    150:MSG_BDC1SI8_RXCH0    (252U) */
-        {   (U1)FALSE,  (U1)XSPI_IVI_CAN_DLC_64,    0x50C00000},       /*    151:MSG_BDC1SI9_RXCH0    (253U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3E800000},       /*    143:MSG_BDC1SI1_RXCH0    (245U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3E900000},       /*    144:MSG_BDC1SI2_RXCH0    (246U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x3F400000},       /*    145:MSG_BDC1SI3_RXCH0    (247U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x31E00000},       /*    146:MSG_BDC1SI4_RXCH0    (248U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x31F00000},       /*    147:MSG_BDC1SI5_RXCH0    (249U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x32100000},       /*    148:MSG_BDC1SI6_RXCH0    (250U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50800000},       /*    149:MSG_BDC1SI7_RXCH0    (251U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50B00000},       /*    150:MSG_BDC1SI8_RXCH0    (252U) */
+        {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50C00000},       /*    151:MSG_BDC1SI9_RXCH0    (253U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50E00000},       /*    152:MSG_BDC1SJ0_RXCH0    (254U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x48500000},       /*    153:MSG_BDC1SJ1_RXCH0    (255U) */
         {   (U1)TRUE,   (U1)XSPI_IVI_CAN_DLC_64,    0x50D00000},       /*    154:MSG_BDC1SJ2_RXCH0    (256U) */
@@ -1187,42 +1187,35 @@ void            vd_g_XspiIviCANBusGet2M(void)
     /* 2M-1 */
     u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_029, &u4_t_data, u2_s_NWORD);
     if(u1_t_sts != (U1)IVDSH_NO_REA){
-        switch (u4_t_data)
-        {
-        case XSPI_IVI_CANBUS_RSV_ACTIVE:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x03U;      /* 通常動作状態 */
-            break;
+        u1_sp_Xspi_Ivi_CanBusSts2M[0]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts2M[1]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts2M[2]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts2M[3]   = (U1)0x03U;    /* 初期化 : 通常動作状態 */
 
-        case XSPI_IVI_CANBUS_RSV_REGSTUCK:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x01U;      /* 通信不能状態要因 メッセージレジスタ固着 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
+        if(u4_t_data    != (U4)XSPI_IVI_CANBUS_RSV_ACTIVE){
+            u1_sp_Xspi_Ivi_CanBusSts2M[3]   = (U1)0x04U;        /* 通信不能状態 */
 
-        case XSPI_IVI_CANBUS_RSV_BUSOFF:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x01U;      /* 通信不能状態要因 バス OFF */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
-
-        case XSPI_IVI_CANBUS_RSV_NOCONNECT:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x01U;      /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
-        
-        default:
-            u1_sp_Xspi_Ivi_CanBusSts2M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts2M[3] = (U1)0x01U;      /* INIT：初期化状態（送受信不可状態） */
-            break;
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_REGSTUCK)    != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts2M[0]   = (U1)0x01U;    /* 通信不能状態要因 メッセージレジスタ固着 */
+            }
+            else{
+                 /* do nothing */
+            }
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_BUSOFF)      != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts2M[1]   = (U1)0x01U;    /* 通信不能状態要因 バス OFF */
+            }
+            else{
+                 /* do nothing */
+            }
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_NOCONNECT)   != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts2M[2]   = (U1)0x01U;    /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
+            }
+            else{
+                 /* do nothing */
+            }
+        }
+        else{
+            /* do nothing */
         }
     }
     else{
@@ -1252,42 +1245,35 @@ void            vd_g_XspiIviCANBusGet5M(void)
     /* 5M */
     u1_t_sts    = u1_g_iVDshReabyDid((U2)IVDSH_DID_REA_CPREQ_032, &u4_t_data, u2_s_NWORD);
     if(u1_t_sts != (U1)IVDSH_NO_REA){
-        switch (u4_t_data)
-        {
-        case (U4)XSPI_IVI_CANBUS_RSV_ACTIVE:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x03U;      /* 通常動作状態 */
-            break;
+        u1_sp_Xspi_Ivi_CanBusSts5M[0]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts5M[1]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts5M[2]   = (U1)0x00U;    /* 初期化 : 正常 */
+        u1_sp_Xspi_Ivi_CanBusSts5M[3]   = (U1)0x03U;    /* 初期化 : 通常動作状態 */
 
-        case (U4)XSPI_IVI_CANBUS_RSV_REGSTUCK:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x01U;      /* 通信不能状態要因 メッセージレジスタ固着 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
+        if(u4_t_data    != (U4)XSPI_IVI_CANBUS_RSV_ACTIVE){
+            u1_sp_Xspi_Ivi_CanBusSts5M[3]   = (U1)0x04U;        /* 通信不能状態 */
 
-        case (U4)XSPI_IVI_CANBUS_RSV_BUSOFF:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x01U;      /* 通信不能状態要因 バス OFF */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
-
-        case (U4)XSPI_IVI_CANBUS_RSV_NOCONNECT:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x01U;      /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x04U;      /* 通信不能状態 */
-            break;
-        
-        default:
-            u1_sp_Xspi_Ivi_CanBusSts5M[0] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[1] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[2] = (U1)0x00U;      /* 正常 */
-            u1_sp_Xspi_Ivi_CanBusSts5M[3] = (U1)0x01U;      /* INIT：初期化状態（送受信不可状態） */
-            break;
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_REGSTUCK)    != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts5M[0]   = (U1)0x01U;    /* 通信不能状態要因 メッセージレジスタ固着 */
+            }
+            else{
+                 /* do nothing */
+            }
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_BUSOFF)      != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts5M[1]   = (U1)0x01U;    /* 通信不能状態要因 バス OFF */
+            }
+            else{
+                 /* do nothing */
+            }
+            if((u4_t_data    & (U4)XSPI_IVI_CANBUS_RSV_NOCONNECT)   != (U4)0U){
+                u1_sp_Xspi_Ivi_CanBusSts5M[2]   = (U1)0x01U;    /* 通信不能状態要因 CANバス未接続（5sec間送信割未検出） */
+            }
+            else{
+                 /* do nothing */
+            }
+        }
+        else{
+            /* do nothing */
         }
     }
     else{
@@ -1534,18 +1520,18 @@ static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u
         u1_tp_utc_data[2] = (U1)0x44U;
         u1_tp_utc_data[3] = (U1)0x54U;
         /*データ長*/
-        u1_tp_utc_data[4] = 0U;        /*データタイプがU1に収まるためByte4は0固定*/
-        u1_tp_utc_data[5] = (U1)u1_t_utc_data_size - (U2)XSPI_IVI_HEADER;
+        u1_tp_utc_data[4] = (U1)((u2_a_SIZE >> XSPI_IVI_SFT_08) & (U2)0x00FFU);
+        u1_tp_utc_data[5] = (U1)(u2_a_SIZE & (U2)0x00FFU);
         /*データサイズ*/
         u1_tp_utc_data[6] = (U1)u1_a_ID;
         u1_tp_utc_data[7] = (U1)0U;
         u1_tp_utc_data[8] = (U1)u1_a_ID;
 
         /*tickTime*/
-        u1_tp_utc_data[9] = (U1)((u4_t_time >> XSPI_IVI_SFT_24) & 0x000000FFU);
-        u1_tp_utc_data[10] = (U1)((u4_t_time >> XSPI_IVI_SFT_16) & 0x000000FFU);
-        u1_tp_utc_data[11] = (U1)((u4_t_time >> XSPI_IVI_SFT_08) & 0x000000FFU);
-        u1_tp_utc_data[12] = (U1)(u4_t_time & 0x000000FFU);
+        u1_tp_utc_data[9] = (U1)((u4_t_time >> XSPI_IVI_SFT_24) & (U4)0x000000FFU);
+        u1_tp_utc_data[10] = (U1)((u4_t_time >> XSPI_IVI_SFT_16) & (U4)0x000000FFU);
+        u1_tp_utc_data[11] = (U1)((u4_t_time >> XSPI_IVI_SFT_08) & (U4)0x000000FFU);
+        u1_tp_utc_data[12] = (U1)(u4_t_time & (U4)0x000000FFU);
         /*UTC data*/
         vd_g_MemcpyU1(&u1_tp_utc_data[13], &u1_sp_Xspi_Ivi_ClockUtcdata[0], (U4)XSPI_IVI_CLOCKUTC_DATA_SIZE);
 
@@ -1568,18 +1554,19 @@ static void            vd_s_XspiIviClockUTCStuckBuff(const U1 u1_a_ID,const U2 u
 /*                                                                                                                                   */
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
-/*  0.0.0    11/11/2024  TN       New.                                                                                               */
-/*  0.0.1    01/30/2025  TN       Updated to follow BSW macro changes.                                                               */
-/*  0.1.0    05/12/2025  TN       Updated for communication specification v6.50.                                                     */
-/*  0.2.0    05/26/2025  TN       Added support for UTC clock information command.                                                   */
-/*  0.3.0    05/26/2025  TaN      Added processing to set CD_SIZE signal value.                                                      */
-/*  0.4.0    06/30/2025  TN       Updated for communication specification v7.30.                                                     */
-/*  0.5.0    07/07/2025  TaN      Added support for Partial Network Management (PartialNM).                                          */
-/*  0.6.0    07/07/2025  TN       Added CAN bus status processing.                                                                   */
-/*  0.7.0    07/14/2025  TaN      Added CAN transmission processing for FLYNOP signal notified via inter-VM communication.           */
-/*  0.7.1    07/21/2025  TN       Fixed CAN bus notification.                                                                        */
-/*  0.8.0    07/21/2025  TN       Added GW processing for signals excluded in Comm. Spec. V7.30.                                     */
-/*  0.9.0    08/19/2025  TN       Added gateway for QSEv.                                                                            */
+/*  1.0.0    11/11/2024  TN       New.                                                                                               */
+/*  1.0.1    01/30/2025  TN       Updated to follow BSW macro changes.                                                               */
+/*  1.1.0    05/12/2025  TN       Updated for communication specification v6.50.                                                     */
+/*  1.2.0    05/26/2025  TN       Added support for UTC clock information command.                                                   */
+/*  1.3.0    05/26/2025  TaN      Added processing to set CD_SIZE signal value.                                                      */
+/*  1.4.0    06/30/2025  TN       Updated for communication specification v7.30.                                                     */
+/*  1.5.0    07/07/2025  TaN      Added support for Partial Network Management (PartialNM).                                          */
+/*  1.6.0    07/07/2025  TN       Added CAN bus status processing.                                                                   */
+/*  1.7.0    07/14/2025  TaN      Added CAN transmission processing for FLYNOP signal notified via inter-VM communication.           */
+/*  1.7.1    07/21/2025  TN       Fixed CAN bus notification.                                                                        */
+/*  1.8.0    07/21/2025  TN       Added GW processing for signals excluded in Comm. Spec. V7.30.                                     */
+/*  1.9.0    08/19/2025  TN       Added gateway for QSEv.                                                                            */
+/*  1.10.0   10/06/2025  TN       Update Gateway Process: BEVstep3-Cockpit_CanVmRouting_v7.30.xlsx Revision 12104                    */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN   = Tetsu Naruse, Denso Techno                                                                                              */

@@ -149,6 +149,22 @@ static const ST_PWRCTRL_PINMONITOR_STS st_PwrCtrl_PinMonitor_Sts[PWRCTRL_CFG_PRI
         (U1)PWRCTRL_CFG_PRIVATE_DBG_FAIL_OFF_WAITTIME,                     /* ポーリング開始待ち時間 */
         u1_g_PwrCtrlWakeUpInfo,                                            /* MCU初期化処理、またはウェイクアップ処理完了状態判定 */
     },
+    /* SAIL-ERR1 */
+    {
+        (U2)DIO_ID_PORT6_CH2,                                              /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR1_JUDGECOUNT,                      /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR1_WAITTIME,                        /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSipLowPowerOnInfo,                                     /* LowPowerOn状態判定 */
+    },
+    /* SAIL-ERR2 */
+    {
+        (U2)DIO_ID_PORT6_CH4,                                              /* DIOチャネルID */
+        (U1)PWRCTRL_PINMONITOR_SAMPLING_TASK_5ms,                          /* サンプリング周期 */
+        (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR2_JUDGECOUNT,                      /* 同一論理判定確定回数 */
+        (U1)PWRCTRL_CFG_PRIVATE_SAIL_ERR2_WAITTIME,                        /* ポーリング開始待ち時間 */
+        u1_g_PwrCtrlSipLowPowerOnInfo,                                     /* LowPowerOn状態判定 */
+    },
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

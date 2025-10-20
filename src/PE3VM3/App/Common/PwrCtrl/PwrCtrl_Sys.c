@@ -328,7 +328,7 @@ void vd_g_PwrCtrlSysInit( void )
 void vd_g_PwrCtrlSysPwrOnMainFunction( void )
 {
     /* SYS起動電源ON要求あり */
-    if ( u1_s_PwrCtrl_Sys_Pwr_Sts == PWRCTRL_SYS_ON )
+    if ( u1_s_PwrCtrl_Sys_Pwr_Sts == (U1)PWRCTRL_SYS_ON )
     {
         /* OFF側のSTEP管理RAM,タイマをクリアしてOFF2週目も実行できるようにする */
         u1_s_PwrCtrl_Sys_PwrOff_Step = (U1)PWRCTRL_COMMON_PROCESS_STEP1;
@@ -1013,8 +1013,12 @@ static void     vd_s_McuDev_Pwron_PictIC(const U1 u1_a_PWR)
     dl_t_port   = Dio_ReadChannel(Mcu_Dio_PortId[PWRCTRL_CFG_PRIVATE_PORT_EIZO]);
 
     if((dl_t_port == (Dio_LevelType)STD_HIGH) && 
+#if 0   /* temporary */
        ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
         /* EIZO-ON=H かつ「見た目オフ起動」または「見た目オン起動」または「OTA」へでカウンタインクリメント */
+#else
+       (u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY)){
+#endif  /* temporary */
         if(u4_s_PwrCtrl_waittim_pictic < U4_MAX){
             u4_s_PwrCtrl_waittim_pictic++;
         }
@@ -1073,7 +1077,11 @@ static void     vd_s_McuDev_Pwron_GVIFTx_CDisp(const U1 u1_a_PWR)
     u1_t_timchk     = u1_t_Pwron_TimChk(u4_s_PwrCtrl_Polling_AUDIO, u4_s_WAITTIME_GVIFTX);
 
     if((u1_t_timchk ==  (U1)TRUE) &&
+#if 0   /* temporary */
        ((u1_a_PWR == (U1)POWER_MODE_STATE_APPON) || (u1_a_PWR == (U1)POWER_MODE_STATE_APPOFF))){
+#else
+       (u1_a_PWR != (U1)POWER_MODE_STATE_STANDBY)){
+#endif  /* temporary */
         vd_g_McuDevPwronSetPort(MCU_PORT_GVIF_CDISP_RST , MCU_DIO_HIGH);
         u2_g_PwrCtrl_OffSts &= ~(U2)PWROFF_GVIFTX_BIT;
     }

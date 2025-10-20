@@ -57,6 +57,17 @@ U1              u1_g_XspiIviQueueGetMiscDataSize(U1 * u1_ap_buf);
 void            vd_g_XspiIviQueueGetMiscdata(U1 * u1_ap_buf, const U2 u2_a_NUM_VALUES);
 U1              u1_g_XspiIviQueueGetMiscDataSizeRef(void);
 U1              u1_g_XspiIviQueueWriChkMISC(const U2 u2_a_NUM);
+void            vd_g_XspiIviQueueWriDiagCANdata(const U1 * u1_ap_VALUE, const U2 u2_a_NUM_VALUES);
+void            vd_g_XspiIviQueueWriDiagCANdataSize(U2  u2_a_value);
+void            vd_g_XspiIviQueueWriDiagCANdataSID(U1  u1_a_value);
+void            vd_g_XspiIviQueueWriDiagCANdataID(U1  u1_a_value);
+void            vd_g_XspiIviQueueWriDiagCANdataNum(U2  u2_a_value);
+U1              u1_g_XspiIviQueueGetDiagCANdata(U1 * u1_ap_buf, const U2 u2_a_NUM_VALUES);
+void            vd_g_XspiIviQueueGetDiagCANdataSize(U2 * u2_ap_buf);
+void            vd_g_XspiIviQueueGetDiagCANDataSID(U1 * u1_ap_buf);
+void            vd_g_XspiIviQueueGetDiagCANDataID(U1 * u1_ap_buf);
+void            vd_g_XspiIviQueueGetDiagCANDataNum(U2 * u2_ap_buf);
+U1              u1_g_XspiIviQueueWriChkDiagCAN(const U2 u2_a_NUM);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */

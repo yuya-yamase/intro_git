@@ -49,7 +49,11 @@
 #define XSPI_IVI_DIAG_RES_COMP          (0U)
 #define XSPI_IVI_DIAG_RES_WAIT          (1U)
 
-#define XSPI_IVI_DIAG_TOUT              (40000U / XSPI_IVI_TASK_TIME)
+#define XSPI_IVI_DIAG_RES_NODEL         (0U)
+#define XSPI_IVI_DIAG_RES_DELETE        (1U)
+#define XSPI_IVI_DIAG_RES_DELETE_RDY    (2U)
+
+#define XSPI_IVI_DIAG_TOUT              (30000U / XSPI_IVI_TASK_TIME)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -74,6 +78,8 @@ static  ST_XSPI_IVI_DIAGCAN_DATA    st_s_XspiIviSub0DiagCanData;                
 
 static  U1          u1_s_XspiIviSub0OsComBridgeChk;
 static  U1          u1_s_XspiIviSub0SendFlg;
+static  U1          u1_s_XspiIviSub0ResponseFlg;
+static  U1          u1_s_XspiIviSub0ResponseDeleteFlg;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
@@ -100,6 +106,8 @@ void            vd_g_XspiIviSub0Init(void)
     u2_s_XspiIviSub0DiagResSize = (U2)0U;
     u1_s_XspiIviSub0OsComBridgeChk = (U1)FALSE;
     u1_s_XspiIviSub0SendFlg = (U1)FALSE;
+    u1_s_XspiIviSub0ResponseFlg = (U1)XSPI_IVI_DIAG_RES_COMP;
+    u1_s_XspiIviSub0ResponseDeleteFlg = (U1)XSPI_IVI_DIAG_RES_NODEL;
 
     vd_g_MemfillU1(&u1_sp_XspiIviSub0DiagResponse_buf[0], (U1)0U, (U4)XSPI_IVI_DIAG_MAX_SIZE);
 
@@ -165,6 +173,11 @@ void                vd_g_XspiIviSub0Ana(const U1 * u1_ap_XSPI_ADD)
     } else {
         /*Do Nothing*/
     }
+
+    if((u1_s_XspiIviSub0ResponseFlg != (U1)XSPI_IVI_DIAG_RES_COMP) &&
+       (u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_DIAG_TOUT] > (U4)XSPI_IVI_DIAG_TOUT)) {
+        u1_s_XspiIviSub0ResponseFlg = (U1)XSPI_IVI_DIAG_RES_COMP;
+    }
 }
 
 /*===================================================================================================================================*/
@@ -181,28 +194,35 @@ static void            vd_s_XspiIviSub0DiagCANAna(const U1 * u1_ap_SUB0_ADD, con
 
     u1_t_SID = u1_ap_SUB0_ADD[0];
 
-    switch(u1_t_SID) {
-        case XSPI_IVI_SID10:
-            vd_g_DiagAppSID10Respons(&u1_ap_SUB0_ADD[0]);
-            break;
-        case XSPI_IVI_SID14:
-            vd_g_XspiIviSub0Response_SID14(&u1_ap_SUB0_ADD[0]);
-            break;
-        case XSPI_IVI_SID19:
-            vd_g_XspiIviSub0Response_SID19(&u1_ap_SUB0_ADD[0]);
-            break;
-        case XSPI_IVI_SID22:
-            vd_g_XspiIviSub0Response_SID22(&u1_ap_SUB0_ADD[0], u2_a_DTLEN);
-            break;
-        case XSPI_IVI_SID2E:
-            vd_g_XspiIviSub0Response_SID2E(&u1_ap_SUB0_ADD[0]);
-            break;
-        case XSPI_IVI_SID31:
-            vd_g_XspiIviSub0Response_SID31(&u1_ap_SUB0_ADD[0]);
-            break;
-        default :
-            break;
+    if(u1_t_SID == (U1)XSPI_IVI_SID10) {
+        vd_g_DiagAppSID10Respons(&u1_ap_SUB0_ADD[0]);
+    } else {
+        if(u1_s_XspiIviSub0ResponseDeleteFlg != (U1)XSPI_IVI_DIAG_RES_DELETE) {
+            switch(u1_t_SID) {
+                case XSPI_IVI_SID14:
+                    vd_g_XspiIviSub0Response_SID14(&u1_ap_SUB0_ADD[0]);
+                    break;
+                case XSPI_IVI_SID19:
+                    vd_g_XspiIviSub0Response_SID19(&u1_ap_SUB0_ADD[0]);
+                    break;
+                case XSPI_IVI_SID22:
+                    vd_g_XspiIviSub0Response_SID22(&u1_ap_SUB0_ADD[0], u2_a_DTLEN);
+                    break;
+                case XSPI_IVI_SID2E:
+                    vd_g_XspiIviSub0Response_SID2E(&u1_ap_SUB0_ADD[0]);
+                    break;
+                case XSPI_IVI_SID31:
+                    vd_g_XspiIviSub0Response_SID31(&u1_ap_SUB0_ADD[0]);
+                    break;
+                default :
+                    break;
+            }
+        } else {
+        }
+        u1_s_XspiIviSub0ResponseDeleteFlg = (U1)XSPI_IVI_DIAG_RES_NODEL;
+        u1_s_XspiIviSub0ResponseFlg = (U1)XSPI_IVI_DIAG_RES_COMP;
     }
+
 }
 
 /*===================================================================================================================================*/
@@ -216,23 +236,55 @@ void            vd_g_XspiIviSub0Send(U1 * u1_ap_xspi_add)
 {
     U2          u2_t_data_size;
     U1          u1_t_canid;
+    U1          u1_t_rslt;
 
     u2_t_data_size = (U2)0U;
+    u1_t_canid     = (U1)0U;
+    u1_t_rslt      = (U1)FALSE;
 
     vd_g_MemfillU1(&u1_ap_xspi_add[0], (U1)0U, (U4)XSPI_IVI_DIAG_SIZE);
 
-    if(u1_s_XspiIviSub0SendFlg == (U1)TRUE) {
-        vd_s_XspiIviSub0SendDiagCANData(&u2_t_data_size,&u1_t_canid, &u1_ap_xspi_add[8]);
-        u1_ap_xspi_add[0] = (U1)((st_s_XspiIviSub0DiagCanData.u2_frame_cnt & (U2)0xFF00U) >> XSPI_IVI_SFT_08);
-        u1_ap_xspi_add[1] = (U1)(st_s_XspiIviSub0DiagCanData.u2_frame_cnt & (U2)0x00FFU);
-        u1_ap_xspi_add[2] = (U1)((st_s_XspiIviSub0DiagCanData.u2_frame_num & (U2)0xFF00U) >> XSPI_IVI_SFT_08);
-        u1_ap_xspi_add[3] = (U1)(st_s_XspiIviSub0DiagCanData.u2_frame_num & (U2)0x00FFU);
-        u1_ap_xspi_add[4] = (U1)((u2_t_data_size & (U2)0xFF00U) >> XSPI_IVI_SFT_08);
-        u1_ap_xspi_add[5] = (U1)(u2_t_data_size & (U2)0x00FFU);
-        u1_ap_xspi_add[6] = (U1)XSPI_IVI_DIAG_TX_MCU_TO_SOC;
-        u1_ap_xspi_add[7] = u1_t_canid;
+    if(u1_s_XspiIviSub0SendFlg == (U1)FALSE){
+        /*リングバッファからデータ取り出し*/
+        vd_g_XspiIviQueueGetDiagCANdataSize(&st_s_XspiIviSub0DiagCanData.u2_data_len);
+        vd_g_XspiIviQueueGetDiagCANDataSID(&st_s_XspiIviSub0DiagCanData.u1_sid);
+        vd_g_XspiIviQueueGetDiagCANDataID(&st_s_XspiIviSub0DiagCanData.u1_canid);
+        vd_g_XspiIviQueueGetDiagCANDataNum(&st_s_XspiIviSub0DiagCanData.u2_frame_num);
+        if((st_s_XspiIviSub0DiagCanData.u2_data_len >  (U2)0U) &&
+           (st_s_XspiIviSub0DiagCanData.u2_data_len <= (U2)XSPI_IVI_DIAG_MAX_SIZE)) {
+            u1_t_rslt = u1_g_XspiIviQueueGetDiagCANdata(&st_s_XspiIviSub0DiagCanData.u1_data[0],st_s_XspiIviSub0DiagCanData.u2_data_len);
+            if(u1_t_rslt == (U1)TRUE) {
+                u1_s_XspiIviSub0SendFlg = (U1)TRUE;
+            }
+        }
+    }
 
-        u1_s_XspiIviSub0SendFlg = (U1)FALSE;
+    if(u1_s_XspiIviSub0SendFlg == (U1)TRUE) {
+        if(u1_s_XspiIviSub0ResponseFlg == (U1)XSPI_IVI_DIAG_RES_COMP) {
+            vd_s_XspiIviSub0SendDiagCANData(&u2_t_data_size,&u1_t_canid, &u1_ap_xspi_add[8]);
+            u1_ap_xspi_add[0] = (U1)((st_s_XspiIviSub0DiagCanData.u2_frame_cnt & (U2)0xFF00U) >> XSPI_IVI_SFT_08);
+            u1_ap_xspi_add[1] = (U1)(st_s_XspiIviSub0DiagCanData.u2_frame_cnt & (U2)0x00FFU);
+            u1_ap_xspi_add[2] = (U1)((st_s_XspiIviSub0DiagCanData.u2_frame_num & (U2)0xFF00U) >> XSPI_IVI_SFT_08);
+            u1_ap_xspi_add[3] = (U1)(st_s_XspiIviSub0DiagCanData.u2_frame_num & (U2)0x00FFU);
+            u1_ap_xspi_add[4] = (U1)((u2_t_data_size & (U2)0xFF00U) >> XSPI_IVI_SFT_08);
+            u1_ap_xspi_add[5] = (U1)(u2_t_data_size & (U2)0x00FFU);
+            u1_ap_xspi_add[6] = (U1)XSPI_IVI_DIAG_TX_MCU_TO_SOC;
+            u1_ap_xspi_add[7] = u1_t_canid;
+
+            if(st_s_XspiIviSub0DiagCanData.u2_frame_num == st_s_XspiIviSub0DiagCanData.u2_frame_cnt) {
+                u1_s_XspiIviSub0SendFlg = (U1)FALSE;
+                st_s_XspiIviSub0DiagCanData.u2_frame_cnt = (U2)0U;
+                if((st_s_XspiIviSub0DiagCanData.u1_sid == (U1)XSPI_IVI_SID10) ||
+                   (st_s_XspiIviSub0DiagCanData.u1_sid == (U1)XSPI_IVI_SID28)) {
+                    u1_s_XspiIviSub0ResponseFlg = (U1)XSPI_IVI_DIAG_RES_COMP;
+                } else {
+                    u1_s_XspiIviSub0ResponseFlg = (U1)XSPI_IVI_DIAG_RES_WAIT;
+                    u4_s_xspi_ivi_task_cnt[XSPI_TASK_CNT_DIAG_TOUT] = (U4)0U;
+                }
+            }
+        }
+    } else {
+        /*Do Nothing*/
     }
 }
 
@@ -280,14 +332,32 @@ static void         vd_s_XspiIviSub0SendDiagCANData(U2 * u2_ap_datalen, U1 *u1_a
 /*===================================================================================================================================*/
 void         vd_g_XspiIviSub0Request(const U2 u2_a_DATALEN, const U1 u1_a_CANID, const U1 * u1_ap_XSPI_ADD, const U1 u1_a_SID)
 {
-    vd_g_MemcpyU1(&st_s_XspiIviSub0DiagCanData.u1_data[0],&u1_ap_XSPI_ADD[0],(U4)u2_a_DATALEN);
-    st_s_XspiIviSub0DiagCanData.u1_canid = u1_a_CANID;
-    st_s_XspiIviSub0DiagCanData.u2_data_len = u2_a_DATALEN;
-    st_s_XspiIviSub0DiagCanData.u2_frame_cnt = (U2)0U;
-    st_s_XspiIviSub0DiagCanData.u2_frame_num = (u2_a_DATALEN + (U2)XSPI_IVI_DIAG_OSCOM_DATA_SIZE - (U2)1U) / (U2)XSPI_IVI_DIAG_OSCOM_DATA_SIZE;
-    st_s_XspiIviSub0DiagCanData.u1_sid = u1_a_SID;
+    U1  u1_t_jdg;
+    U2  u2_t_num;
 
-    u1_s_XspiIviSub0SendFlg = (U1)TRUE;
+    u1_t_jdg = u1_g_XspiIviQueueWriChkDiagCAN(u2_a_DATALEN);
+
+    if(u1_t_jdg == (U1)TRUE) {
+        u2_t_num = (u2_a_DATALEN + (U2)XSPI_IVI_DIAG_OSCOM_DATA_SIZE - (U2)1U) / (U2)XSPI_IVI_DIAG_OSCOM_DATA_SIZE;
+        vd_g_XspiIviQueueWriDiagCANdata(u1_ap_XSPI_ADD,u2_a_DATALEN);
+        vd_g_XspiIviQueueWriDiagCANdataSize(u2_a_DATALEN);
+        vd_g_XspiIviQueueWriDiagCANdataSID(u1_a_SID);
+        vd_g_XspiIviQueueWriDiagCANdataID(u1_a_CANID);
+        vd_g_XspiIviQueueWriDiagCANdataNum(u2_t_num);
+    }
+
+    if((u1_a_SID == (U1)XSPI_IVI_SID10) ||
+       (u1_a_SID == (U1)XSPI_IVI_SID28)){
+        /*Do Nothing*/
+    } else {
+        if(u1_s_XspiIviSub0ResponseDeleteFlg == (U1)XSPI_IVI_DIAG_RES_DELETE_RDY) {
+            u1_s_XspiIviSub0ResponseDeleteFlg = (U1)XSPI_IVI_DIAG_RES_DELETE;
+        } else if(u1_s_XspiIviSub0ResponseDeleteFlg == (U1)XSPI_IVI_DIAG_RES_NODEL){
+            u1_s_XspiIviSub0ResponseDeleteFlg = (U1)XSPI_IVI_DIAG_RES_DELETE_RDY;
+        } else {
+            /*Do Nothing*/
+        }
+    }
 }
 
 /*===================================================================================================================================*/
@@ -312,22 +382,6 @@ void            vd_g_XspiIviSub0OSComChk(void)
 U1            u1_g_XspiIviSub0OSComBridge(void)
 {
     return(u1_s_XspiIviSub0OsComBridgeChk);
-}
-
-/*===================================================================================================================================*/
-/*  U1            u1_g_XspiIviSub0PowerSts(void)                                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Description:    Power Status check                                                                                               */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1       u1_g_XspiIviSub0PowerSts(void)
-{
-    U1  u1_t_ret;
-
-    u1_t_ret = u1_g_Power_ModeState();
-
-    return(u1_t_ret);
 }
 
 /*===================================================================================================================================*/

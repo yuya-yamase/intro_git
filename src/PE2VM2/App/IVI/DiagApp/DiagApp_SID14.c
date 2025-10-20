@@ -41,8 +41,10 @@
 #define DIAGAPP_SID14_DTC_HIGH                  (0U)            /* DTC High Bufpos        */
 #define DIAGAPP_SID14_DTC_MIDDLE                (1U)            /* DTC Middle Bufpos      */
 #define DIAGAPP_SID14_DTC_LOW                   (2U)            /* DTC Low Bufpos         */
-#define DIAGAPP_SID14_MEMSEL_INIT_VALUE         ((uint8)0x00U)  /* MemorySelection Init   */
-#define DIAGAPP_SID14_ENABLE_DTC                (0xFFFFFF)      /* GroupOfDTC             */
+#define DIAGAPP_SID14_ENABLE_DTC                (0xFFFFFFU)     /* GroupOfDTC             */
+#define DIAGAPP_SID14_MEMSEL_OCCDTC             (0x11U)         /* Memory Selection OccurrenceDTC(0x11)    */
+#define DIAGAPP_SID14_MEMSEL_MNTDTC             (0x12U)         /* Memory Selection MaintenanceDTC(0x12)   */
+#define DIAGAPP_SID14_MEMSEL_SECDTC             (0x14U)         /* Memory Selection SecurityEventDTC(0x14) */
 
 #define DIAGAPP_SID14_REQ_OFF_MEMSEL            ((uint8)3U)     /* MemorySelection Bufpos */
 #define DIAGAPP_SID14_REQ_MEMSEL_LEN            ((uint8)1U)     /* MemorySelection Size   */
@@ -102,37 +104,52 @@ void           vd_g_DiagAppSID14Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
     u1_t_dataLength = (U1)st_ap_REQ->u4_nbyte;
     u1_t_NRC = (U1)0U;
 
-    if (st_ap_REQ->u2_tim_elpsd == 0) {
+    if (st_ap_REQ->u2_tim_elpsd == (U2)0U) {
         st_s_diagapp_sid14_ans.u1p_tx = st_ap_ans->u1p_tx;
         st_s_diagapp_sid14_ans.u4_nbyte = st_ap_ans->u4_nbyte;
+        /* RequestID */
+        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
+        if((u1_t_requestId == (U1)DIAGAPP_REQUESTID_PHYON) ||
+           (u1_t_requestId == (U1)DIAGAPP_REQUESTID_FUNCON)) {
+            vd_g_DiagAppAnsTxNRC((U1)DIAGAPP_NRC_NONSUP);
+            return;
+        }
         /* Data Length Check */
-        if ((u1_t_dataLength == DIAGAPP_SID14_REQ_DATA_LENGTH) ||
-            (u1_t_dataLength == DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN)) {
+        if ((u1_t_dataLength == (U1)DIAGAPP_SID14_REQ_DATA_LENGTH) ||
+            (u1_t_dataLength == (U1)DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN)) {
             /* DTC group */
             u4_t_groupOfDTC = (((U4)st_ap_REQ->u1p_RX[DIAGAPP_SID14_DTC_HIGH]) << DIAGAPP_SID14_SHIFT_DTC_HIGH) |
             (((U4)st_ap_REQ->u1p_RX[DIAGAPP_SID14_DTC_MIDDLE]) << DIAGAPP_SID14_SHIFT_DTC_MIDDLE) |
             ((U4)st_ap_REQ->u1p_RX[DIAGAPP_SID14_DTC_LOW]);
 
-            if (u4_t_groupOfDTC != DIAGAPP_SID14_ENABLE_DTC) {
+            /* Memory Selection*/
+            if (u1_t_dataLength == (U1)DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN) {
+                u1_t_memorySelection = st_ap_REQ->u1p_RX[DIAGAPP_SID14_REQ_OFF_MEMSEL];
+            }
+            else {
+                /* Not MemorySelection */
+                u1_t_memorySelection = 0;
+            }
+
+            if (u4_t_groupOfDTC != (U4)DIAGAPP_SID14_ENABLE_DTC) {
                 /* --- error --- */
+                /* Group Of DTC */
+                /* NRC:0x31 */
+                vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_31);
+            }
+            else if((u1_t_dataLength == (U1)DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN) &&
+                   ((u1_t_memorySelection != (U1)DIAGAPP_SID14_MEMSEL_OCCDTC) &&
+                    (u1_t_memorySelection != (U1)DIAGAPP_SID14_MEMSEL_MNTDTC) &&
+                    (u1_t_memorySelection != (U1)DIAGAPP_SID14_MEMSEL_SECDTC))) {
+                /* --- error --- */
+                /* Memory Selection */
                 /* NRC:0x31 */
                 vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_31);
             }
             else {
-                if (u1_t_dataLength == DIAGAPP_SID14_REQ_DATA_AND_MEMSEL_LEN) {
-                    /* MemorySelection */
-                    u1_t_memorySelection = st_ap_REQ->u1p_RX[DIAGAPP_SID14_REQ_OFF_MEMSEL];
-                }
-                else {
-                    /* Not MemorySelection */
-                    u1_t_memorySelection = 0;
-                }
-
-                /* RequestID */
-                u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
                 /* DTC Clear Request */
                 u1_t_result = u1_g_XspiIviSub0Request_Sid14(u1_t_requestId, u1_t_dataLength, u4_t_groupOfDTC, u1_t_memorySelection, &u1_t_NRC);
-                if (u1_t_result == E_NOT_OK) {
+                if (u1_t_result == (U1)E_NOT_OK) {
                     /* NRC */
                     vd_g_DiagAppAnsTxNRC(u1_t_NRC);
                 }

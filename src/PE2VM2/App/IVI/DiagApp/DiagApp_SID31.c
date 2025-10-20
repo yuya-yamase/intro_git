@@ -54,6 +54,11 @@
 
 #define DIAGAPP_SID31_SF_OFFSET         (0x03)
 #define DIAGAPP_SID31_SF_DATA_OFFSET    (0x01)
+
+/* On-Board Support RID */
+#define DIAGAPP_SID31_RID_D000          (0xD000U)
+/* Function Adrress Support RID */
+#define DIAGAPP_SID31_RID_DA00          (0xDA00U)
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -112,9 +117,17 @@ void           vd_g_DiagAppSID31Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
 
     u1_t_nrc = (U1)0U;
 
-    if (st_ap_REQ->u2_tim_elpsd == 0) {
+    if (st_ap_REQ->u2_tim_elpsd == (U2)0U) {
         st_s_diagapp_sid31_ans.u1p_tx = st_ap_ans->u1p_tx;
         st_s_diagapp_sid31_ans.u4_nbyte = st_ap_ans->u4_nbyte;
+
+        /* Get Request ID */
+        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
+
+        u2_t_rid = (U2)(((U2)st_ap_REQ->u1p_RX[DIAGAPP_SID31_RID_HIGH_POS] << DIAGAPP_SFT_08) 
+                 | (U2)st_ap_REQ->u1p_RX[DIAGAPP_SID31_RID_LOW_POS]);
+        u2_t_dtlen = (U2)(st_ap_REQ->u4_nbyte - (U4)DIAGAPP_SID31_SF_OFFSET);
+
         /* Under Minimum Request Data */
         if(st_ap_REQ->u4_nbyte < (U4)DIAGAPP_SID31_MIN_REQ_SIZE) {
             /* NRC:0x13 */
@@ -133,16 +146,29 @@ void           vd_g_DiagAppSID31Request(const ST_OXDC_REQ * st_ap_REQ, ST_OXDC_A
             return;
         }
 
-        u2_t_rid = (U2)(((U2)st_ap_REQ->u1p_RX[DIAGAPP_SID31_RID_HIGH_POS] << DIAGAPP_SFT_08) 
-                       | (U2)st_ap_REQ->u1p_RX[DIAGAPP_SID31_RID_LOW_POS]);
-        u2_t_dtlen = (U2)(st_ap_REQ->u4_nbyte - (U4)DIAGAPP_SID31_SF_OFFSET);
+        /* Function Address No Support */
+        switch(u1_t_requestId) {
+            case DIAGAPP_REQUESTID_FUNCOFF:
+                if(u2_t_rid != (U2)DIAGAPP_SID31_RID_DA00){
+                    vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_31);
+                    return;
+                }
+                break;
+            case DIAGAPP_REQUESTID_PHYON:
+            case DIAGAPP_REQUESTID_FUNCON:
+                if(u2_t_rid != (U2)DIAGAPP_SID31_RID_D000){
+                    vd_g_DiagAppAnsTxNRC((U1)OXDC_SAL_PROC_NR_31);
+                    return;
+                }
+                break;
+            default:
+                break;
+        }
 
-        /* Get Request ID */
-        u1_t_requestId = u1_g_DiagAppConvPduIdToRequestId(st_ap_REQ->u1_req_type);
-
-        u1_t_result = (*fp_sp_SID31FUNC[u1_subfunction - 1U])(u1_t_requestId, u2_t_rid, u2_t_dtlen, &st_ap_REQ->u1p_RX[DIAGAPP_SID31_RID_DATA_POS], &u1_t_nrc);
-
-        if (u1_t_result == E_NOT_OK) {
+        if(u1_subfunction <= (U1)DIAGAPP_SID31_SF_03){
+            u1_t_result = (*fp_sp_SID31FUNC[u1_subfunction - 1U])(u1_t_requestId, u2_t_rid, u2_t_dtlen, &st_ap_REQ->u1p_RX[DIAGAPP_SID31_RID_DATA_POS], &u1_t_nrc);
+        }
+        if (u1_t_result == (U1)E_NOT_OK) {
             /* NRC */
             vd_g_DiagAppAnsTxNRC(u1_t_nrc);
         }

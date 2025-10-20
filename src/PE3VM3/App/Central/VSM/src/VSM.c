@@ -9,8 +9,7 @@
 /*                                                                          */
 /****************************************************************************/
 #include "VSM.h"
-/* ★未実装のため蓋閉じ */
-/* #include "PwrCtrl_Observe.h" */
+#include "PwrCtrl_Main.h"
 
 /****************************************************************/
 /* VARIABLE                                                     */
@@ -83,12 +82,10 @@ void App_VSM_Main(void)
 
     /* CPUスリープNG通知 */
     if ( State_SleepNg0.u4data == (U4)0x00000000UL ) {
-        /* ★未実装のため蓋閉じ */
-        /* vd_g_PwrCtrlObserveProhibitSleep(PWRCTRL_OBSERVE_PROHIBITSLEEP_OFF); */
+        vd_g_PwrCtrlMainProhibitSleep(PWRCTRL_MAIN_PROHIBITSLEEP_OFF);
     }
     else {
-        /* ★未実装のため蓋閉じ */
-        /* vd_g_PwrCtrlObserveProhibitSleep(PWRCTRL_OBSERVE_PROHIBITSLEEP_ON); */
+        vd_g_PwrCtrlMainProhibitSleep(PWRCTRL_MAIN_PROHIBITSLEEP_ON);
     }
 
     return;

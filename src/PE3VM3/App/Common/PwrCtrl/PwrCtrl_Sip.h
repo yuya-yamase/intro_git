@@ -44,6 +44,9 @@
 #define PWRCTRL_SIP_FOFF_DDCONV_OFF       (0x00U) /* SIP入力DDコン電源OFF処理未実施 */
 #define PWRCTRL_SIP_FOFF_DDCONV_ON        (0x01U) /* SIP入力DDコン電源OFF処理実施   */
 
+#define PWRCTRL_SIP_STBY_STEP_REQ   (0U) /* スタンバイシーケンスSTEP通知要求 */
+#define PWRCTRL_SIP_SIPOFF_STEP_REQ (1U) /* SIP電源OFFシーケンスSTEP通知要求 */
+
 /* 初期化 */
 void vd_g_PwrCtrlSipBonInit( void );
 void vd_g_PwrCtrlSipWkupInit( void );
@@ -57,6 +60,8 @@ void vd_g_PwrCtrlSipStbyReq( void );
 void vd_g_PwrCtrlSipForcedOffSTEP1Req( void );
 void vd_g_PwrCtrlSipForcedOffSTEP2Req( void );
 void vd_g_PwrCtrlSipForcedOffSTEP4Req( void );
+void vd_g_PwrCtrlSipStandbyCancelSTEP1Req( void );
+void vd_g_PwrCtrlSipSetDDConvOff( const U1 u1_a_ddconv );
 
 /* 定期処理 */
 void vd_g_PwrCtrlSipMainFunc( void );
@@ -71,6 +76,8 @@ U1 u1_g_PwrCtrlSipFOffInfo( void );
 U1 u1_g_PwrCtrlSipFOffGetSts( void );
 /* EtherSW制御要求処理 */
 void vd_g_PwrCtrlSipEthReqJudge( void );
+/* SIPスタンバイ/SIP電源OFFシーケンス現在STEP通知関数 */
+U1 u1_g_PwrCtrlSipStbyStepGetSts( const U1 u1_a_stby );
 /* SoC起動完了通知関数 */
 void vd_g_PwrCtrlSipSoCOnComp( void );
 /* SoC異常検知通知関数 */
