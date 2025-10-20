@@ -48,14 +48,17 @@
 #define XSPI_IVI_TMUTE_MUTE                  (1U)
 #define XSPI_IVI_TMUTE_UNMUTE                (2U)
 
+#define XSPI_IVI_SYSTEM_NUM                  (1U)
+#define XSPI_IVI_SYSTEM_STRMODE              (0U)
+#define XSPI_IVI_SYSTEM_SNDSIZE              (2U + XSPI_IVI_SYSTEM_NUM * 2U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/*車速カウンタ */
 typedef struct{
     /*Pulse Width Data*/
-    U1                          u1_clock_freq;  /*クロック周波数*/
-    U4                          u4_sp_count;    /*車速カウンタ値*/
+    U1                          u1_clock_freq;
+    U4                          u4_sp_count;
 }ST_XSPI_IVI_SP_CNT_DATA;
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
@@ -77,6 +80,8 @@ void            vd_g_XspiIviSub1SpCntPut(const ST_XSPI_IVI_SP_CNT_DATA st_a_DATA
 void            vd_g_XspiIviSub1USBPowSupPut(const U2 u2_a_DATA);
 void            vd_g_XspiIviSub1TmuteSend(void);
 void            vd_g_XspiIviSub1TmuteDataPut(const U1 u1_a_DATA);
+void            vd_g_XspiIviSub1SystemDataPut(const U1 u1_a_ID,const U1 u1_a_DATA);
+void            vd_g_XspiIviSub1SystemData1stSend(void);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

@@ -23,6 +23,7 @@
 #include    "Dio.h"
 #include    "Dio_Symbols.h"
 #include    "ExtSigCtrl.h"
+#include    "STRCtl.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -54,6 +55,8 @@
 #define    XSPI_IVI_SYSTEM_VEHSPD_CNT      (0x30U)
 #define    XSPI_IVI_SYSTEM_EXTSIG_SEND     (0x40U)
 #define    XSPI_IVI_SYSTEM_TMUTE           (0x50U)
+#define    XSPI_IVI_SYSTEM_SETTING_REC     (0x90U)
+#define    XSPI_IVI_SYSTEM_SETTING_SEND    (0x91U)
 
 #define    XSPI_IVI_EXTSIG_ID_TEST         (0x01U)
 #define    XSPI_IVI_EXTSIG_ID_USB          (0x10U)
@@ -88,6 +91,9 @@
 #define    XSPI_IVI_PWR_OFF                (1U)
 #define    XSPI_IVI_PWR_ON                 (2U)
 
+/*SubType:90h/91h*/
+#define    XSPI_IVI_SYSTEM_ID_STRMODE      (0x01U)
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -111,6 +117,11 @@ static U1              u1_s_xspi_ivi_system_vehspd_cnt_send_flg;
 static U1              u1_s_xspi_ivi_system_usbpowsup_send_flg;
 static U1              u1_s_xspi_ivi_system_tmute_1stsend_flg;
 
+/*SubType:90h/91h*/
+static U1              u1_s_xspi_ivi_system_setdata[XSPI_IVI_SYSTEM_NUM];
+static U1              u1_s_xspi_ivi_system_setdatarec_flg;
+static U1              u1_s_xspi_ivi_system_set_1stsend_flg;
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Static Function Prototypes                                                                                                       */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -124,6 +135,8 @@ static U1              u1_s_xspi_ivi_system_tmute_1stsend_flg;
 static void            vd_s_XspiIviSub1SystemDataToQueue(const U2 u2_a_size,const U1* u1_ap_XSPI_ADD);
 static U1              u1_s_XspiIviSub1SystemDataEventJdg(const U1* u1_ap_DATA,const U1* u1_ap_DATA_PRE,const U1 u1_a_SIZE);
 static void            vd_s_XspiIviSub1USBPowSupSend(void);
+static void            vd_s_XspiIviSub1SystemSetDataRec(const U1 * u1_ap_XSPI_ADD);
+static void            vd_s_XspiIviSub1SystemDataSend(void);
 /*===================================================================================================================================*/
 /*  void            vd_g_XspiIviSub1SystemInit(void)                                                                                */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
@@ -154,6 +167,10 @@ void            vd_g_XspiIviSub1SystemInit(void)
     u1_s_xspi_ivi_system_tmute_1stsend_flg = (U1)FALSE;
 
     vd_g_XspiIviSub1ExtSgnlPut((U1)XSPI_IVI_EXTSIG_PWR, (U1)XSPI_IVI_PWR_OFF);
+
+    vd_g_MemfillU1(&u1_s_xspi_ivi_system_setdata[0], (U1)0U, (U4)XSPI_IVI_SYSTEM_NUM);
+    u1_s_xspi_ivi_system_setdatarec_flg = (U1)FALSE;
+    u1_s_xspi_ivi_system_set_1stsend_flg = (U1)FALSE;
 }
 
 /*===================================================================================================================================*/
@@ -280,10 +297,41 @@ void            vd_g_XspiIviSub1SystemAna(const U1 * u1_ap_XSPI_ADD, const U2 u2
         /*GPS動作要求の通知先IFをコール*/
         vd_g_Gnss_GpsReq(u1_ap_XSPI_ADD[1]);
         break;
+    case XSPI_IVI_SYSTEM_SETTING_REC:
+        vd_s_XspiIviSub1SystemSetDataRec(&u1_ap_XSPI_ADD[1]);
+        break;
     /*SystemのSip⇒MCUのその他コマンド解析処理いれる*/
     
     default:
         break;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1SystemSetDataRec(const U1 * u1_ap_XSPI_ADD)                                                      */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_ap_XSPI_ADD : Subtype(90h) Start Buffer                                                                       */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1SystemSetDataRec(const U1 * u1_ap_XSPI_ADD)
+{
+    U1  u1_t_system_num;
+    U4  u4_t_loop;
+    U1  u1_t_id;
+    U1  u1_t_data;
+    U4  u4_t_buf;
+
+    u1_t_system_num = u1_ap_XSPI_ADD[0];
+    for(u4_t_loop = (U4)0U; u4_t_loop < u1_t_system_num; u4_t_loop++) {
+        u4_t_buf = ((u4_t_loop * (U4)2U) + (U4)1U);
+        u1_t_id = u1_ap_XSPI_ADD[u4_t_buf];
+        u1_t_data = u1_ap_XSPI_ADD[u4_t_buf + 1U];
+        switch(u1_t_id){
+            case XSPI_IVI_SYSTEM_ID_STRMODE:
+                vd_g_Str_ModeReq(u1_t_data);
+            break;
+        }
     }
 }
 
@@ -436,6 +484,71 @@ void            vd_g_XspiIviSub1ExtSgnlPut(const U1 u1_a_ID,const U1 u1_a_DATA)
     if(u1_a_ID < (U1)XSPI_IVI_EXTSIG_NUM) {
         u1_sp_xspi_ivi_system_extsig_data[u1_a_ID] = u1_a_DATA;
     }
+}
+/*===================================================================================================================================*/
+/*  void            vd_s_XspiIviSub1SystemDataSend(void)                                                                             */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+static void            vd_s_XspiIviSub1SystemDataSend(void)
+{
+    U1     u1_tp_data[XSPI_IVI_SYSTEM_SNDSIZE];
+    U4     u4_t_loop;
+    U4     u4_t_hi;
+    U4     u4_t_lo;
+
+    u1_tp_data[0] = (U1)XSPI_IVI_SYSTEM_SETTING_SEND;
+    u1_tp_data[1] = (U1)XSPI_IVI_SYSTEM_NUM;
+    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_IVI_SYSTEM_NUM;u4_t_loop++){
+        u4_t_hi = ((u4_t_loop * (U4)2U) + (U4)2U);
+        u4_t_lo = ((u4_t_loop * (U4)2U) + (U4)3U);
+        u1_tp_data[u4_t_lo] = u1_s_xspi_ivi_system_setdata[u4_t_loop];
+        switch (u4_t_loop)
+        {
+            case XSPI_IVI_SYSTEM_STRMODE:
+                u1_tp_data[u4_t_hi] = (U1)XSPI_IVI_SYSTEM_ID_STRMODE;
+                break;
+            default:
+                break;
+        }
+    }
+    vd_s_XspiIviSub1SystemDataToQueue((U2)XSPI_IVI_SYSTEM_SNDSIZE,u1_tp_data);
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1SystemDataPut(const U1 u1_a_ID,const U1 u1_a_DATA)                                               */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      u1_a_ID   : システム設定ID                                                                                        */
+/*                  u1_a_DATA : システム設定値                                                                                        */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1SystemDataPut(const U1 u1_a_ID,const U1 u1_a_DATA)
+{
+    if(u1_a_ID < (U1)XSPI_IVI_SYSTEM_NUM) {
+        u1_s_xspi_ivi_system_setdata[u1_a_ID] = u1_a_DATA;
+        if(u1_s_xspi_ivi_system_set_1stsend_flg == (U1)TRUE) {
+            vd_s_XspiIviSub1SystemDataSend();
+        }
+        u1_s_xspi_ivi_system_setdatarec_flg = (U1)TRUE;
+    }
+}
+
+/*===================================================================================================================================*/
+/*  void            vd_g_XspiIviSub1SystemData1stSend(void)                                                                          */
+/* --------------------------------------------------------------------------------------------------------------------------------- */
+/*  Description:    SubFlame1(MISC) Data Analysis                                                                                    */
+/*  Arguments:      -                                                                                                                */
+/*  Return:         -                                                                                                                */
+/*===================================================================================================================================*/
+void            vd_g_XspiIviSub1SystemData1stSend(void)
+{
+    if(u1_s_xspi_ivi_system_setdatarec_flg == (U1)TRUE) {
+        vd_s_XspiIviSub1SystemDataSend();
+    }
+    u1_s_xspi_ivi_system_set_1stsend_flg = (U1)TRUE;
 }
 
 /*===================================================================================================================================*/
