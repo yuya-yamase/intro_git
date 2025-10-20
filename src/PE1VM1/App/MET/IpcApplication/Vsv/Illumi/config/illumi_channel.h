@@ -22,15 +22,13 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ILLUMI_NUM_CH                           (8U)
+#define ILLUMI_NUM_CH                           (6U)
 #define ILLUMI_CH_TT                            (0U)
 #define ILLUMI_CH_TR2                           (1U)
 #define ILLUMI_CH_IL2                           (2U)
 #define ILLUMI_CH_DIAL                          (3U)
 #define ILLUMI_CH_GAUGE                         (4U)
 #define ILLUMI_CH_COMTX                         (5U)
-#define ILLUMI_CH_DUTY                          (6U)
-#define ILLUMI_CH_ALPHA                         (7U)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
