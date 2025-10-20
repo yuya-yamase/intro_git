@@ -87,7 +87,7 @@ Std_ReturnType EthSwt_SWIC_Link_Action (uint32 * const errFactor)
     return result;
 }
 /* -------------------------------------------------------------------------- */
-Std_ReturnType EthSwt_SWIC_Link_GetLinkState(const uint8 SwitchPortIdx, EthTrcv_LinkStateType * const LinkStatePtr)
+Std_ReturnType EthSwt_SWIC_Link_Get(const uint8 SwitchPortIdx, EthTrcv_LinkStateType * const LinkStatePtr)
 {
     Std_ReturnType ret = E_NOT_OK;
     EthSwt_StateType status;
