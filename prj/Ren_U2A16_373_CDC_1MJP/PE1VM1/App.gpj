@@ -460,7 +460,6 @@ App/MET/IpcApplication/Vsv/Gauge/scc/gagdst_nxmph.c
 App/MET/IpcApplication/Vsv/Gauge/scc/gauge.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_cfg.c
 App/MET/IpcApplication/Vsv/Illumi/config/illumi_comtx.c
-App/MET/IpcApplication/Vsv/Illumi/config/illumi_tftpct.c
 App/MET/IpcApplication/Vsv/Illumi/scc/illumi.c
 App/MET/IpcApplication/Vsv/Thblnkr/config/thblnkr_cfg.c
 App/MET/IpcApplication/Vsv/Thblnkr/scc/thblnkr.c

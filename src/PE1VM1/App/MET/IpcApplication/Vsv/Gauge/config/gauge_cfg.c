@@ -18,9 +18,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "gauge_cfg_private.h"
 /* DIGITAL SPEED            */
-#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
-#endif   /* BEV Rebase provisionally */
 #include "gagdst_nxmph.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -133,12 +131,7 @@ void    vd_g_GaugeCfgMapUpdate(void)
 /*===================================================================================================================================*/
 static U1      u1_s_GagsrcKmph(U2 * u2p_a_src)
 {
-#if 0   /* BEV Rebase provisionally */
     return(u1_g_VehspdKmphBiased(u2p_a_src, (U1)FALSE));
-#else   /* BEV Rebase provisionally */
-    (*u2p_a_src) = (U2)0x00U;
-    return((U1)0U); /* VEHSPD_STSBIT_UNKNOWN */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

@@ -19,7 +19,6 @@
 #include "illumi_cfg_private.h"
 
 #include "illumi_comtx.h"
-#include "illumi_tftpct.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -66,9 +65,7 @@ U2 ( * const            fp_gp_u2_ILLUMI_LVL_UPDT[ILLUMI_NUM_CH])(const U2 * u2_a
     &u2_g_IllumiILTx,
     vdp_PTR_NA,
     vdp_PTR_NA,
-    &u2_g_IllumiComTx,
-    &u2_g_IllumiTftPctDuty,
-    &u2_g_IllumiTftPctAlpha
+    &u2_g_IllumiComTx
 };
 const U1                u1_g_ILLUMI_NUM_CH = (U1)ILLUMI_NUM_CH;
 
@@ -87,7 +84,6 @@ void    vd_g_IllumiCfgBonInit(void)
 {
     vd_g_IllumiComTxInit();
     vd_g_IllumiComTxBonInit();
-    vd_g_IllumiTftPctInit();
 }
 /*===================================================================================================================================*/
 /*  void            vd_g_IllumiCfgRstInit(void)                                                                                      */
@@ -99,7 +95,6 @@ void    vd_g_IllumiCfgRstInit(void)
 {
     vd_g_IllumiComTxInit();
     vd_g_IllumiComTxRstwkInit();
-    vd_g_IllumiTftPctInit();
 }
 /*===================================================================================================================================*/
 /*  void            vd_g_IllumiCfgWkupInit(void)                                                                                     */
@@ -111,7 +106,6 @@ void    vd_g_IllumiCfgWkupInit(void)
 {
     vd_g_IllumiComTxInit();
     vd_g_IllumiComTxRstwkInit();
-    vd_g_IllumiTftPctInit();
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_IllumiCfgMainStart(void)                                                                                            */
@@ -137,21 +131,20 @@ void    vd_g_IllumiCfgMainFinish(void)
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Version    Date        Author   Change Description                                                                               */
-/* ----------  ----------  -------  ------------------------------------------------------------------------------------------------ */
-/*  1.0.0      3/19/2018   TN       New.                                                                                             */
-/*  1.1.0      10/12/2018  TN       illumi v1.0.0 -> v1.1.0.                                                                         */
-/*  1.2.0      04/13/2020  SM       illumi v1.1.0 -> v1.2.0.                                                                         */
-/*  1.3.0      09/24/2020  SH       Add failsafe of Lcom Opening sts.                                                                */
-/*  2.0.1      11/16/2021  SA       illumi v1.3.0 -> v2.0.1.                                                                         */
-/*  2.1.0      02/07/2022  SA       illumi v2.0.1 -> v2.1.0.                                                                         */
-/*  2.2.0      02/15/2024  TH       illumi v2.1.0 -> v2.2.0.                                                                         */
+/*  Version  Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  1.0.0     3/19/2018  TN       New.                                                                                               */
+/*  1.1.0    10/12/2018  TN       illumi v1.0.0 -> v1.1.0.                                                                           */
+/*  1.2.0    04/13/2020  SM       illumi v1.1.0 -> v1.2.0.                                                                           */
+/*  1.3.0    09/24/2020  SH       Add failsafe of Lcom Opening sts.                                                                  */
+/*  2.0.1    11/16/2021  SA       illumi v1.3.0 -> v2.0.1.                                                                           */
+/*  2.1.0    02/07/2022  SA       illumi v2.0.1 -> v2.1.0.                                                                           */
+/*  2.2.0    02/15/2024  TH       illumi v2.1.0 -> v2.2.0.                                                                           */
 /*                                                                                                                                   */
-/*  Revision   Date        Author   Change Description                                                                               */
-/* ----------  ----------  -------  ------------------------------------------------------------------------------------------------ */
-/*  1.0.0      03/25/2020  SM       800B Vehicle Settings                                                                            */
-/*  19PFv3     01/11/2024  TH       for 19PFv3 (Delete Ext)                                                                          */
-/*  19PFv3-2   12/18/2024  KA       Change config for temperature derating                                                           */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  1.0.0    03/25/2020  SM       800B Vehicle Settings                                                                              */
+/*  19PFv3   01/11/2024  TH       for 19PFv3 (Delete Ext)                                                                            */
 /*                                                                                                                                   */
 /*                                                                                                                                   */
 /*  * TN = Takashi Nagai, DENSO                                                                                                      */
@@ -159,6 +152,5 @@ void    vd_g_IllumiCfgMainFinish(void)
 /*  * SH = Shota Higashide                                                                                                           */
 /*  * SA = Seiya Asaoka                                                                                                              */
 /*  * TH = Taisuke Hirakawa, KSE                                                                                                     */
-/*  * KA = Kapuri Ando, NTTD-MSE                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
