@@ -879,13 +879,13 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
     u4_ap_pdu_tx[0]  = (U4)u1_t_daynight;                           /* DAYNIGHT                                                 */
     u2_t_rheo_lvl    = u2_g_DimLvlUsadjust(u1_t_daynight);          /* RHEOSTAT                                                 */
     u4_ap_pdu_tx[1]  = ((U4)u2_t_rheo_lvl & (U4)0x000000FFU);
-    u1_t_illumi_mask = (U1)u2_g_IllumiLvlPct((U1)ILLUMI_CH_ALPHA);
+    u1_t_illumi_mask = u1_g_IllumiTftAlpha();
 
     u4_ap_pdu_tx[1] |= ((U4)u1_t_illumi_mask << 10U);
 #if 0   /* BEV Rebase provisionally */
     u4_ap_pdu_tx[2]  = (U4)u2_g_IoHwAdcLv((U1)ADC_CH_TFT_TH);       /* TFT_BL_TH_AD */
 #endif   /* BEV Rebase provisionally */
-    u4_ap_pdu_tx[2] |= ((U4)u2_g_IllumiLvlPct((U1)ILLUMI_CH_DUTY) << 16U);
+    u4_ap_pdu_tx[2]  = ((U4)u1_g_IllumiTftPct() << 16U);
 }
 
 /*===================================================================================================================================*/
@@ -961,7 +961,6 @@ static inline void    vd_s_XSpiCfgTxTripcom(       U4 * u4_ap_pdu_tx) {
     U4              u4_t_data;
     U2              u2_t_data;
     U1              u1_t_data;
-    U1              u1_t_loop;
     U1              u1_t_acsts;
 
     u2_t_data        = (U2)0U;
