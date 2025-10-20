@@ -87,10 +87,10 @@ U1          u1_g_XspiIviSub0Request_Sid2E(const U1 u1_a_REQID, const U2 u2_a_DID
     U1  u1_tp_data[XSPI_IVI_DIAG_MAX_SIZE];
 
     u1_t_ret = (U1)E_OK;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
+    if(u1_t_power_sts == (U1)FALSE) {
         *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {

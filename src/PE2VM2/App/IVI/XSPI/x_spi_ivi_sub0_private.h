@@ -23,7 +23,7 @@
 #include    "aip_common.h"
 #include    "x_spi_ivi_sub0.h"
 #include    "x_spi_ivi_private.h"
-#include    "PwrCtl.h"
+#include    "veh_opemd.h"
 #include    "DiagApp.h"
 #include    "DiagApp_SID10.h"
 #include    "tydocan_sal.h"

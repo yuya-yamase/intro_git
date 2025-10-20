@@ -121,14 +121,14 @@ U1          u1_g_XspiIviSub0Request_SID19sf02(const U1 u1_a_REQID, const U1 u1_a
 
     u1_t_ret = (U1)E_OK;
     u2_t_datalength = (U2)XSPI_IVI_DIAG_1901_SIZE;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+    if(u1_t_power_sts == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else {
         u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID19_OPC_1901 >> XSPI_IVI_SFT_08) & 0x00FFU);
@@ -157,14 +157,14 @@ U1          u1_g_XspiIviSub0Request_SID19sf03(const U1 u1_a_REQID, U1 * u1_ap_Ne
 
     u1_t_ret = (U1)E_OK;
     u2_t_datalength = (U2)XSPI_IVI_DIAG_1903_SIZE;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+    if(u1_t_power_sts == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else {
         u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID19_OPC_1903 >> XSPI_IVI_SFT_08) & 0x00FFU);
@@ -194,14 +194,14 @@ U1          u1_g_XspiIviSub0Request_SID19sf04(const U1 u1_a_REQID, const U4 u4_a
 
     u1_t_ret = (U1)E_OK;
     u2_t_datalength = (U2)XSPI_IVI_DIAG_1905_SIZE;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+    if(u1_t_power_sts == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else {
         u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID19_OPC_1905 >> XSPI_IVI_SFT_08) & 0x00FFU);
@@ -235,14 +235,14 @@ U1          u1_g_XspiIviSub0Request_SID19sf06(const U1 u1_a_REQID, const U4 u4_a
 
     u1_t_ret = (U1)E_OK;
     u2_t_datalength = (U2)XSPI_IVI_DIAG_1907_SIZE;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+    if(u1_t_power_sts == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else {
         u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID19_OPC_1907 >> XSPI_IVI_SFT_08) & 0x00FFU);
@@ -276,14 +276,14 @@ U1          u1_g_XspiIviSub0Request_SID19sf17(const U1 u1_a_REQID, const U1 u1_a
 
     u1_t_ret = (U1)E_OK;
     u2_t_datalength = (U2)XSPI_IVI_DIAG_190D_SIZE;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+    if(u1_t_power_sts == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else {
         u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID19_OPC_190D >> XSPI_IVI_SFT_08) & 0x00FFU);
@@ -315,14 +315,14 @@ U1          u1_g_XspiIviSub0Request_SID19sf18(const U1 u1_a_REQID, const U4 u4_a
 
     u1_t_ret = (U1)E_OK;
     u2_t_datalength = (U2)XSPI_IVI_DIAG_190F_SIZE;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+    if(u1_t_power_sts == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else {
         u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID19_OPC_190F >> XSPI_IVI_SFT_08) & 0x00FFU);
@@ -357,14 +357,14 @@ U1          u1_g_XspiIviSub0Request_SID19sf19(const U1 u1_a_REQID, const U4 u4_a
 
     u1_t_ret = (U1)E_OK;
     u2_t_datalength = (U2)XSPI_IVI_DIAG_1911_SIZE;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+    if(u1_t_power_sts == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else {
         u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID19_OPC_1911 >> XSPI_IVI_SFT_08) & 0x00FFU);
@@ -397,14 +397,14 @@ U1          u1_g_XspiIviSub0Request_SID19sf1A(const U1 u1_a_REQID, const U1 u1_a
 
     u1_t_ret = (U1)E_OK;
     u2_t_datalength = (U2)XSPI_IVI_DIAG_1913_SIZE;
-    u1_t_power_sts = u1_g_XspiIviSub0PowerSts();
+    u1_t_power_sts = u1_g_VehopemdIgnOn();
     u1_t_oscom_chk = u1_g_XspiIviSub0OSComBridge();
 
-    if(u1_t_power_sts != (U1)POWER_MODE_STATE_APPON) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+    if(u1_t_power_sts == (U1)FALSE) {
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else if(u1_t_oscom_chk == (U1)FALSE) {
-        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_22;
+        *u1_ap_NegativeResponseCode = (U1)OXDC_SAL_PROC_NR_31;
         u1_t_ret = (U1)E_NOT_OK;
     } else {
         u1_tp_data[0] = (U1)(((U2)XSPI_IVI_SID19_OPC_1913 >> XSPI_IVI_SFT_08) & 0x00FFU);

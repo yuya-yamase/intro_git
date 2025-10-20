@@ -40,7 +40,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #define XSPI_IVI_HEADER                     (8U)
 
-#define XSPI_TASK_CNT_NUM                   (13U)
+#define XSPI_TASK_CNT_NUM                   (14U)
 #define XSPI_TASK_CNT_CAMERA                ( 0U)
 #define XSPI_TASK_CNT_CAMERA_SYNC           ( 1U)
 #define XSPI_TASK_CNT_POWER_STS             ( 2U)
@@ -54,6 +54,7 @@
 #define XSPI_TASK_CNT_GYRO_INI              (10U)
 #define XSPI_TASK_CNT_POWER_BMONI           (11U)
 #define XSPI_TASK_CNT_CLOCK_UTC             (12U)
+#define XSPI_TASK_CNT_DIAG_TOUT             (13U)
 
 #define XSPI_IVI_TASK_TIME                  (1U)     
 

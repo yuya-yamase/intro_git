@@ -24,6 +24,7 @@
 #include    "oxdocan.h"
 #include    "memcpy_u1.h"
 #include    "memfill_u1.h"
+#include    "veh_opemd.h"
 
 #include    "DiagApp.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
