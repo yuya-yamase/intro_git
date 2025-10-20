@@ -17,6 +17,7 @@
 #include "VIS.h"
 #include "VIS_Pwr.h"
 #include "VIS_Pwrcfg.h"
+#include "LIB.h"
 #include "chipcom_config.h"
 #include "chipcom.h"
 #include "iohw_adc.h"
@@ -54,13 +55,14 @@ static U1   u1_s_vispwr_apofrq;                     /* 見た目OFF制御要求 */
 
 static void vd_s_VISPwrGetBatVolt(void);
 static U1 u1_s_VISPwrBatVoltADCnv(const U2 u2_a_digitalbatvolt);
-static void vd_s_VISPwrJudgeBasicState(void);
-static void vd_s_VISPwrJudgeSpecialState(void);
-static void vd_s_VISPwrJudgeTransFlg(void);
+static void vd_s_VISPwrRcvBDC1S81(void);
+static void vd_s_VISPwrJudgeBasicState(const U1 u1_t_ipdu_st, const U1 u1_t_recv);
+static void vd_s_VISPwrJudgeSpecialState(const U1 u1_t_ipdu_st, const U1 u1_t_vpsinfos);
+static void vd_s_VISPwrJudgeTransFlg(const U1 u1_t_ipdu_st, const U1 u1_t_transflg);
 static U1 u1_s_VISPwrJudgeEthActiveStartup(void);
 static U1 u1_s_VISPwrJudgeEthPassiveStartup(void);
 static void vd_s_VISPwrJudgeEthChComPwr(void);
-static void vd_s_VISPwrJudgeApofrq(void);
+static void vd_s_VISPwrJudgeApofrq(const U1 u1_t_ipdu_st, const U1 u1_t_apofrq);
 
 /************************************************************************************************/
 /* Function Name     : vd_g_VISPwrInit                                                          */
@@ -90,11 +92,8 @@ void vd_g_VISPwrInit(void)
 void vd_g_VISPwrCyc(void)
 {
     vd_s_VISPwrGetBatVolt();
-    vd_s_VISPwrJudgeBasicState();
-    vd_s_VISPwrJudgeSpecialState();
-    vd_s_VISPwrJudgeTransFlg();
+    vd_s_VISPwrRcvBDC1S81();
     vd_s_VISPwrJudgeEthChComPwr();
-    vd_s_VISPwrJudgeApofrq();
 
     return;
 }
@@ -182,53 +181,47 @@ static U1 u1_s_VISPwrBatVoltADCnv(const U2 u2_a_digitalbatvolt)
     /* アナログ値を出力 */
     return u1_t_analogbatvolt;
 }
-/************************************************************************************************/
-/* Function Name     : vd_s_VISPwrJudgeBasicState                                               */
-/************************************************************************************************/
-static void vd_s_VISPwrJudgeBasicState(void)
-{
-    U1 u1_t_recv = VIS_PWR_RCV_UNDEFINED_VALUE;
-    U1 u1_t_vpsinfo1 = VIS_PWR_INIT;
-    U1 u1_t_vpsinfo2 = VIS_PWR_INIT;
-    U1 u1_t_vpsinfo3 = VIS_PWR_INIT;
-    U1 u1_t_vpsinfo4 = VIS_PWR_INIT;
-    U1 u1_t_vpsinfo5 = VIS_PWR_INIT;
-    U1 u1_t_vpsinfo6 = VIS_PWR_INIT;
-    U1 u1_t_vpsinfo7 = VIS_PWR_INIT;
-    U1 u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_LENGTH_2];
-    U1 u1_t_ipdu_st;
 
+/************************************************************************************************/
+/* Function Name     : vd_s_VISPwrRcvBDC1S81                                                    */
+/************************************************************************************************/
+static void vd_s_VISPwrRcvBDC1S81(void)
+{
+    U1 u1_t_ipdu_st;
+    U1 u1_tp_rx[VIS_PWR_STATE_RX_NBYTE];
+
+    /* 格納先の初期化 */
+    LIB_memset(u1_tp_rx, VIS_PWR_INIT, sizeof(u1_tp_rx));
+    
+    /* 特殊ステート初期値設定 */
+    u1_tp_rx[VIS_PWR_STATE_RX_SPECIALSTATE] = VIS_PWR_SPECIALSTATE_INIT;
+
+    /* BDC1S81メッセージ状態取得 */
     u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if (VIS_PWR_COM_IPDUST_OK == u1_t_ipdu_st){
-        /* VPSINFO1~7を取得 */
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO1, &u1_t_vpsinfo1);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO2, &u1_t_vpsinfo2);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO3, &u1_t_vpsinfo3);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO4, &u1_t_vpsinfo4);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO5, &u1_t_vpsinfo5);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO6, &u1_t_vpsinfo6);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFO7, &u1_t_vpsinfo7);
-        
+        /* BDC1S81メッセージ読出し */
+        (void)Com_ReadIPDU((U2)MSG_BDC1S81_RXCH0, &u1_tp_rx[VIS_PWR_STATE_RX_MIN_POS]);
+    }
+
+    vd_s_VISPwrJudgeBasicState(u1_t_ipdu_st, u1_tp_rx[VIS_PWR_STATE_RX_BASICSTATE]);     /* 車両電源ステート(基本ステート)情報判定 */
+    vd_s_VISPwrJudgeSpecialState(u1_t_ipdu_st, u1_tp_rx[VIS_PWR_STATE_RX_SPECIALSTATE]); /* 車両電源ステート(特殊ステート)情報判定 */
+    vd_s_VISPwrJudgeTransFlg(u1_t_ipdu_st, u1_tp_rx[VIS_PWR_STATE_RX_TRANSFLG]);         /* 車両電源(特殊)ステート遷移中フラグ情報判定 */
+    vd_s_VISPwrJudgeApofrq(u1_t_ipdu_st, u1_tp_rx[VIS_PWR_STATE_RX_APQFRQ]);             /* 見た目OFF制御要求情報判定 */
+
+    return;
+}
+
+/************************************************************************************************/
+/* Function Name     : vd_s_VISPwrJudgeBasicState                                               */
+/************************************************************************************************/
+static void vd_s_VISPwrJudgeBasicState(const U1 u1_t_ipdu_st, const U1 u1_t_recv)
+{
+    U1 u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_LENGTH_2];
+
+    if (VIS_PWR_COM_IPDUST_OK == u1_t_ipdu_st){
         u1_s_vispwr_vpsinfo_responsestate = VIS_COMMUNICATION_OK;           /* CANメッセージ受信状態：正常受信 */
 
-        if ((VIS_PWR_RCVCHK_VAL >= u1_t_vpsinfo1)
-            && (VIS_PWR_RCVCHK_VAL >= u1_t_vpsinfo2)
-            && (VIS_PWR_RCVCHK_VAL >= u1_t_vpsinfo3)
-            && (VIS_PWR_RCVCHK_VAL >= u1_t_vpsinfo4)
-            && (VIS_PWR_RCVCHK_VAL >= u1_t_vpsinfo5)
-            && (VIS_PWR_RCVCHK_VAL >= u1_t_vpsinfo6)
-            && (VIS_PWR_RCVCHK_VAL >= u1_t_vpsinfo7))
-        {
-            /* 受信値を1byteデータに結合する */
-            u1_t_recv = u1_t_vpsinfo1;
-            u1_t_recv |= (U1)(u1_t_vpsinfo2 << VIS_PWR_BITSHIFT_1);
-            u1_t_recv |= (U1)(u1_t_vpsinfo3 << VIS_PWR_BITSHIFT_2);
-            u1_t_recv |= (U1)(u1_t_vpsinfo4 << VIS_PWR_BITSHIFT_3);
-            u1_t_recv |= (U1)(u1_t_vpsinfo5 << VIS_PWR_BITSHIFT_4);
-            u1_t_recv |= (U1)(u1_t_vpsinfo6 << VIS_PWR_BITSHIFT_5);
-            u1_t_recv |= (U1)(u1_t_vpsinfo7 << VIS_PWR_BITSHIFT_6);
-        }
         /* 車両電源ステート(基本ステート)を判定する */
         switch (u1_t_recv) {
         case VIS_PWR_RCV_CHECKING:
@@ -274,18 +267,15 @@ static void vd_s_VISPwrJudgeBasicState(void)
 
     return;
 }
+
 /************************************************************************************************/
 /* Function Name     : vd_s_VISPwrJudgeSpecialState                                             */
 /************************************************************************************************/
-static void vd_s_VISPwrJudgeSpecialState(void)
+static void vd_s_VISPwrJudgeSpecialState(const U1 u1_t_ipdu_st, const U1 u1_t_vpsinfos)
 {
-    U1 u1_t_vpsinfos = VIS_PWR_SPECIALSTATE_INIT;
     U1 u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_LENGTH_2];
-    U1 u1_t_ipdu_st;
 
-    u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     if (VIS_PWR_COM_IPDUST_OK == u1_t_ipdu_st){
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSINFOS, &u1_t_vpsinfos);
         u1_s_vispwr_vpsinfos_responsestate = VIS_COMMUNICATION_OK;              /* CANメッセージ受信状態：正常受信 */
         
         /* 車両電源ステート(特殊ステート)を判定する */
@@ -323,16 +313,11 @@ static void vd_s_VISPwrJudgeSpecialState(void)
 /************************************************************************************************/
 /* Function Name     : vd_s_VISPwrJudgeTransFlg                                                 */
 /************************************************************************************************/
-static void vd_s_VISPwrJudgeTransFlg(void)
+static void vd_s_VISPwrJudgeTransFlg(const U1 u1_t_ipdu_st, const U1 u1_t_transflg)
 {
-    U1 u1_t_transflg = (U1)STD_OFF;
     U1 u1_tp_transreq_data[VIS_PWR_TRANSREQ_DATA_LENGTH_2];
-    U1 u1_t_ipdu_st;
 
-    u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     if (VIS_PWR_COM_IPDUST_OK == u1_t_ipdu_st){
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VPSCNG, &u1_t_transflg);
-
         u1_s_vispwr_vpscng_responsestate = VIS_COMMUNICATION_OK;            /* CANメッセージ受信状態：正常受信 */
 
         if (VIS_PWR_RCVCHK_VAL >= u1_t_transflg) {
@@ -482,15 +467,9 @@ static void vd_s_VISPwrJudgeEthChComPwr(void)
 /************************************************************************************************/
 /* Function Name     : vd_s_VISPwrJudgeApofrq                                                   */
 /************************************************************************************************/
-static void vd_s_VISPwrJudgeApofrq(void)
+static void vd_s_VISPwrJudgeApofrq(const U1 u1_t_ipdu_st, const U1 u1_t_apofrq)
 {
-    U1 u1_t_apofrq = (U1)STD_OFF;
-    U1 u1_t_ipdu_st;
-
-    u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_BDC1S81_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     if (VIS_PWR_COM_IPDUST_OK == u1_t_ipdu_st){
-        (void)Com_ReceiveSignal(ComConf_ComSignal_APOFRQ, &u1_t_apofrq);
-
         if (VIS_PWR_RCVCHK_VAL >= u1_t_apofrq) {
             u1_s_vispwr_apofrq = u1_t_apofrq;
         }

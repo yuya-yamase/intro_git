@@ -106,8 +106,12 @@ static void vd_s_VISCanGetUtc(void)
     U1 u1_t_basicstate = VIS_BASICSTATE_CHECKING;   /* 車両電源ステート */
     U1 u1_t_ret;                                    /* 時刻範囲チェック結果 */
     U1 u1_t_msgsts;                                 /* 受信フレームの状態 */
+    U1 u1_tp_rx[VIS_CAN_UTC_RX_NBYTE];
     U1 u1_tp_utcdata[VIS_CAN_TRANSREQ_DATA_UTCNUM];
 
+    /* 格納先の初期化 */
+    LIB_memset(u1_tp_rx, VIS_CAN_INIT_0, sizeof(u1_tp_rx));
+    
     /* UTC時刻情報取得 */
     /* ★車両電源ステート(基本ステート)情報を取得 */
     u1_t_responsestate = u1_g_VISPwrGetBasicState(&u1_t_basicstate);
@@ -119,19 +123,14 @@ static void vd_s_VISCanGetUtc(void)
             u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_RSE1G20_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
             /* RSE1G20 正常受信の場合 */
             if(u1_t_msgsts == VIS_CAN_COM_IPDUST_OK){
-                /* 年取得 */
-                (void)Com_ReceiveSignal(ComConf_ComSignal_D_YEAR, &st_s_vis_can_utcdata.u1_year);
-                /* 月取得 */
-                (void)Com_ReceiveSignal(ComConf_ComSignal_D_MONT, &st_s_vis_can_utcdata.u1_month);
-                /* 日取得 */
-                (void)Com_ReceiveSignal(ComConf_ComSignal_D_DAY,  &st_s_vis_can_utcdata.u1_day);
-                /* 時取得 */
-                (void)Com_ReceiveSignal(ComConf_ComSignal_D_HOUR, &st_s_vis_can_utcdata.u1_hour);
-                /* 分取得 */
-                (void)Com_ReceiveSignal(ComConf_ComSignal_D_MIN,  &st_s_vis_can_utcdata.u1_minute);
-                /* 秒取得 */
-                (void)Com_ReceiveSignal(ComConf_ComSignal_D_SEC,  &st_s_vis_can_utcdata.u1_second);
-                
+                /* RSE1G20取得 */
+                (void)Com_ReadIPDU(MSG_RSE1G20_RXCH0, u1_tp_rx);
+                st_s_vis_can_utcdata.u1_year   = u1_tp_rx[VIS_CAN_UTC_RX_YEAR];
+                st_s_vis_can_utcdata.u1_month  = u1_tp_rx[VIS_CAN_UTC_RX_MONTH];
+                st_s_vis_can_utcdata.u1_day    = u1_tp_rx[VIS_CAN_UTC_RX_DAY];
+                st_s_vis_can_utcdata.u1_hour   = u1_tp_rx[VIS_CAN_UTC_RX_HOUR];
+                st_s_vis_can_utcdata.u1_minute = u1_tp_rx[VIS_CAN_UTC_RX_MIN];
+                st_s_vis_can_utcdata.u1_second = u1_tp_rx[VIS_CAN_UTC_RX_SEC];
                 /* 時刻範囲チェック */
                 u1_t_ret = u1_s_VISCanUtcCheckVal(&st_s_vis_can_utcdata);
                 /* UTC時刻情報が範囲外の場合 */
@@ -172,17 +171,24 @@ static void vd_s_VISCanGetOdo(void)
     U1 u1_t_msgsts;                             /* 受信フレームの状態 */
     U1 u1_t_odounit = VIS_CAN_ODO_UNIT_NON;     /* オドメータ単位情報 */
     U4 u4_t_odo = VIS_CAN_ODO_FAIL;             /* オドメータ情報 */
+    U1 u1_tp_rx[VIS_CAN_ODO_RX_NBYTE];
     U1 u1_tp_ododata[VIS_CAN_TRANSREQ_DATA_ODONUM];
+
+    /* 格納先の初期化 */
+    LIB_memset(u1_tp_rx, VIS_CAN_INIT_0, sizeof(u1_tp_rx));
 
     /* オド情報取得 */
     /* MET1S02メッセージの状態取得 */
     u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_MET1S02_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
     /* MET1S02 正常受信の場合 */
     if(u1_t_msgsts == VIS_CAN_COM_IPDUST_OK){
-        /* ODO_UNIT信号取得 */
-        (void)Com_ReceiveSignal(ComConf_ComSignal_ODO_UNIT, &u1_t_odounit);
-        /* ODO信号取得 (LSBは1km) */
-        (void)Com_ReceiveSignal(ComConf_ComSignal_ODO, &u4_t_odo);
+        /* MET1S02取得 */
+        (void)Com_ReadIPDU(MSG_MET1S02_RXCH0, u1_tp_rx);
+        u1_t_odounit = (u1_tp_rx[VIS_CAN_ODO_RX_UNIT] & VIS_CAN_ODO_UNITMASK) >> VIS_CAN_SHIFT_4BIT;
+        u4_t_odo = (((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS1] << VIS_CAN_SHIFT_3BYTE) |
+                    ((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS2] << VIS_CAN_SHIFT_2BYTE) |
+                    ((U4)u1_tp_rx[VIS_CAN_ODO_RX_POS3] << VIS_CAN_SHIFT_1BYTE) |
+                     (U4)u1_tp_rx[VIS_CAN_ODO_RX_POS4]);
         
         /* オド単位がkmの場合 */
         if(u1_t_odounit == VIS_CAN_ODO_UNIT_KM){
@@ -370,41 +376,26 @@ static void vd_s_VISCanGetRdySts(void)
 /* -------------------------------------------------------------------------- */
 static void vd_s_VISCanGetVin(void)
 {
-    U1 u1_tp_vindata[VIS_VIN_MAX_NM];
+    U1 u1_tp_rx[VIS_CAN_VIN_RX_NBYTE];
     U1 u1_tp_transreq_data[VIS_CAN_TRANSREQ_DATA_LENGTH_18];
     U1 u1_t_datacnt;
     U1 u1_t_ipdu_st;
 
-    for (u1_t_datacnt = VIS_CAN_VIN0_NM; u1_t_datacnt < VIS_VIN_MAX_NM; u1_t_datacnt++) {
-        u1_tp_vindata[u1_t_datacnt] = VIS_VIN_INIT_VAL;
-    }
+    /* 格納先の初期化 */
+    LIB_memset(u1_tp_rx, VIS_VIN_INIT_VAL, sizeof(u1_tp_rx));
 
+    /* ENG1S51メッセージ状態取得 */
     u1_t_ipdu_st = (U1)Com_GetIPDUStatus((U2)MSG_ENG1S51_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 
     if (VIS_CAN_COM_IPDUST_OK == u1_t_ipdu_st){
-        /* VINデータ取得 */
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_1, &u1_tp_vindata[VIS_CAN_VIN0_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_2, &u1_tp_vindata[VIS_CAN_VIN1_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_3, &u1_tp_vindata[VIS_CAN_VIN2_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_4, &u1_tp_vindata[VIS_CAN_VIN3_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_5, &u1_tp_vindata[VIS_CAN_VIN4_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_6, &u1_tp_vindata[VIS_CAN_VIN5_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_7, &u1_tp_vindata[VIS_CAN_VIN6_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_8, &u1_tp_vindata[VIS_CAN_VIN7_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_9, &u1_tp_vindata[VIS_CAN_VIN8_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_10, &u1_tp_vindata[VIS_CAN_VIN9_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_11, &u1_tp_vindata[VIS_CAN_VIN10_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_12, &u1_tp_vindata[VIS_CAN_VIN11_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_13, &u1_tp_vindata[VIS_CAN_VIN12_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_14, &u1_tp_vindata[VIS_CAN_VIN13_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_15, &u1_tp_vindata[VIS_CAN_VIN14_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_16, &u1_tp_vindata[VIS_CAN_VIN15_NM]);
-        (void)Com_ReceiveSignal(ComConf_ComSignal_VIN_17, &u1_tp_vindata[VIS_CAN_VIN16_NM]);
-        
+        /* ENG1S51メッセージ読み出し */
+        (void)Com_ReadIPDU((U2)MSG_ENG1S51_RXCH0, &u1_tp_rx[VIS_CAN_VIN0_NM]);
+
         u1_s_vis_vin_responsestate = VIS_COMMUNICATION_OK;              /* CANメッセージ受信状態：正常受信 */
         
+        /* VINデータ設定 */
         for (u1_t_datacnt = VIS_CAN_VIN0_NM; u1_t_datacnt < VIS_VIN_MAX_NM; u1_t_datacnt++) {
-            u1_sp_vis_can_vindata[u1_t_datacnt] = u1_tp_vindata[u1_t_datacnt];
+            u1_sp_vis_can_vindata[u1_t_datacnt] = u1_tp_rx[u1_t_datacnt];
         }
     }
     else if ((U1)COM_TIMEOUT == u1_t_ipdu_st){
