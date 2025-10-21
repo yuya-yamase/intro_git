@@ -79,8 +79,8 @@
 #include "rcmmui.h"
 #if 0   /* BEV Rebase provisionally */
 #include "telltale.h"
-#include "wchime.h"
 #endif   /* BEV Rebase provisionally */
+#include "wchime.h"
 #include "gauge.h"
 #if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
@@ -415,8 +415,8 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_TelltaleMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
 #endif   /* BEV Rebase provisionally */
     {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
-#if 0   /* BEV Rebase provisionally */
     {&vd_g_wChimeMainTask,              (U4)SCHDLR_TASKBIT__10MS_A  },
+#if 0   /* BEV Rebase provisionally */
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*  Platform Post Task                                               */

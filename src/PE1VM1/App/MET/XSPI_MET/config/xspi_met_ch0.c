@@ -79,9 +79,7 @@
 
 /* VSV */
 #include "gagdst_nxmph.h"
-#if 0   /* BEV Rebase provisionally */
 #include "wchime.h"
-#endif   /* BEV Rebase provisionally */
 #include "illumi.h"
 
 /* HMI */
@@ -216,8 +214,10 @@
 #if 0   /* BEV Rebase provisionally */
 #define XSPI_UNIT_LOW                       (0x0000007FU)
 #define XSPI_UNIT_HI                        (0x00003F00U)
+#endif   /* BEV Rebase provisionally */
 
 #define XSPI_USRNAME_SIZE                   (16U)
+#if 0   /* BEV Rebase provisionally */
 
 #define XSPI_MAINTEDIST_OFFSET              (32768)
 
@@ -1180,7 +1180,6 @@ static inline void    vd_s_XSpiCfgTxWrnmsg(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1              u1_t_bzlvl;
     U1              u1_t_bzlength;
     U1              u1_t_bzemg;
@@ -1196,12 +1195,13 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
         u4_tp_usrname[u4_t_loop]  = (U4)0U;
     }
 
+#if 0   /* BEV Rebase provisionally */
     (void)u1_g_McstReadUsrName(&u4_tp_usrname[0], (U1)XSPI_USRNAME_SIZE, (U1)0xFFU); /* Get current user name */
+#endif   /* BEV Rebase provisionally */
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_USRNAME_SIZE; u4_t_loop++) {
         u4_ap_pdu_tx[5U + u4_t_loop]  = u4_tp_usrname[u4_t_loop];
     }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/

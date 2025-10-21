@@ -20,7 +20,9 @@
 
 #include "oxcan.h"
 #include "hmiwchime.h"
+#if 0   /* BEV Rebase provisionally */
 #include "hmimcst.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -66,7 +68,11 @@ void    vd_g_wChimeGrdCfgInit(void)
 {
     u1_s_wchime_master_pre = (U1)HMIWCHIME_UNDEF;
     u1_s_wchime_cruise_pre = (U1)HMIWCHIME_UNDEF;
+#if 0   /* BEV Rebase provisionally */
     u1_s_wchime_mwvc_pre   = (U1)HMIMCST_MWVC_OPE_INIT;
+#else   /* BEV Rebase provisionally */
+    u1_s_wchime_mwvc_pre   = (U1)7U;
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_wChimeCfgMMInfoTx(void)                                                                                             */
@@ -83,9 +89,11 @@ void    vd_g_wChimeCfgMMInfoTx(void)
     /* Multimedia */
     vd_g_wChimeMetBuzzInfo(&u1_t_level, &u1_t_length, &u1_t_emergency);
 
+#if 0   /* BEV Rebase provisionally */
     (void)Com_SendSignal(ComConf_ComSignal_EMERGENCY_ON, &u1_t_emergency);
     (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LV, &u1_t_level);
     (void)Com_SendSignal(ComConf_ComSignal_BUZZER_LEN, &u1_t_length);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgRsaPermaReq(void)                                                                                          */
@@ -170,6 +178,7 @@ U1      u1_g_wChimeCfgMWVCReq(void)
     U1    u1_t_ope;
 
     u1_t_req = (U1)FALSE;
+#if 0   /* BEV Rebase provisionally */
     u1_t_ope = u1_g_HmiMcstGetMWVCOpe();
 
     if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
@@ -177,6 +186,7 @@ U1      u1_g_wChimeCfgMWVCReq(void)
             u1_t_req = (U1)TRUE;
     }
     u1_s_wchime_mwvc_pre = u1_t_ope;
+#endif   /* BEV Rebase provisionally */
 
     return(u1_t_req);
 }

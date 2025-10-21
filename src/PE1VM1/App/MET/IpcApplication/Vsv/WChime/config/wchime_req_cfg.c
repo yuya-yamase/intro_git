@@ -21,9 +21,11 @@
 #include "veh_opemd.h"
 
 #include "alert.h"
+#if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
 
 #include "mcst.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -590,7 +592,11 @@ void    vd_g_wChimeReqCfgInit(void)
 /*===================================================================================================================================*/
 U1      u1_g_wChimeCfgOpemdchk(void)
 {
+#if 0   /* BEV Rebase provisionally */
     return(u1_g_VehopemdIgnOn());
+#else   /* BEV Rebase provisionally */
+    return((U1)0U);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /*  U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL)                                                                              */
@@ -808,7 +814,11 @@ U1      u1_g_wChimeReqSwCtrl(const U1 u1_a_REQ_SEL)
     u1_t_sw_ctrl = u1_sp_WCHIME_REQ_SW_CTRL[u1_a_REQ_SEL];
 
     if(u1_a_REQ_SEL == (U1)WCHIME_REQ_IN_SBLT_LV2){
+#if 0   /* BEV Rebase provisionally */
         u1_t_judge = u1_g_SbltsyncLv2Cmp();
+#else   /* BEV Rebase provisionally */
+        u1_t_judge = (U1)FALSE;
+#endif   /* BEV Rebase provisionally */
 
         if(u1_t_judge == (U1)TRUE){
             (u1_t_sw_ctrl) |= (U1)WCHIME_REQ_SWC_WAV_CYCL;
@@ -899,10 +909,14 @@ U1      u1_g_wChimeCfgVolGet(const U1 u1_a_REQ_SEL)
     U1    u1_t_metcstmvol;
 
     if(u1_a_REQ_SEL < (U1)WCHIME_NUM_REQ){
+#if 0   /* BEV Rebase provisionally */
         u1_t_metcstmvol = u1_g_McstBf((U1)MCST_BFI_METWRNCSTM);
         if(u1_t_metcstmvol >= (U1)MCST_METWRNCSTM_VOL_NUM){
             u1_t_metcstmvol = (U1)MCST_METWRNCSTM_VOL_MID;
         }
+#else   /* BEV Rebase provisionally */
+        u1_t_metcstmvol = (U1)0U;
+#endif   /* BEV Rebase provisionally */
         u1_t_reqvol = u1_sp2_WCHIME_REQ_VOL_INFO[u1_a_REQ_SEL][u1_t_metcstmvol];
 
         switch(u1_t_reqvol){

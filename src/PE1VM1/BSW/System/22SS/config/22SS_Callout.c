@@ -63,7 +63,9 @@
 #include "gauge.h"
 #if 0   /* BEV Rebase provisionally */
 #include "telltale.h"
+#endif   /* BEV Rebase provisionally */
 #include "wchime.h"
+#if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
 #endif   /* BEV Rebase provisionally */
 #include "locale.h"
@@ -147,9 +149,7 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_ThblnkrBonInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdBonInit,
@@ -252,9 +252,7 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_ThblnkrRstWkInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
@@ -357,9 +355,7 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_ThblnkrRstWkInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
-#if 0   /* BEV Rebase provisionally */
         &vd_g_wChimeInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_EngspdRstwkInit,
