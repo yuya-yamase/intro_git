@@ -73,6 +73,7 @@ ${SS_DIR}/22SS/config/22SS_Callout.c
 xspi.c
 xspi_sub.c
 xspi_met.c
+xspi_met_calib.c
 xspi_met_can.c
 xspi_met_vptran.c
 xspi_met_ch0.c

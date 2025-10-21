@@ -1,4 +1,4 @@
-/* 1.0.0 */
+/* 0.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
@@ -12,7 +12,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_CALIB_H_MAJOR                    (1)
+#define XSPI_CALIB_H_MAJOR                    (0)
 #define XSPI_CALIB_H_MINOR                    (0)
 #define XSPI_CALIB_H_PATCH                    (0)
 
@@ -23,23 +23,23 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define XSPI_MSK_01BIT                      (0x00000001U)
-#define XSPI_MSK_02BIT                      (0x00000003U)
-#define XSPI_MSK_03BIT                      (0x00000007U)
-#define XSPI_MSK_04BIT                      (0x0000000FU)
-#define XSPI_MSK_05BIT                      (0x0000001FU)
-#define XSPI_MSK_06BIT                      (0x0000003FU)
-#define XSPI_MSK_07BIT                      (0x0000007FU)
-#define XSPI_MSK_08BIT                      (0x000000FFU)
-#define XSPI_MSK_09BIT                      (0x000001FFU)
-#define XSPI_MSK_10BIT                      (0x000003FFU)
-#define XSPI_MSK_11BIT                      (0x000007FFU)
-#define XSPI_MSK_12BIT                      (0x00000FFFU)
-#define XSPI_MSK_13BIT                      (0x00001FFFU)
-#define XSPI_MSK_14BIT                      (0x00003FFFU)
-#define XSPI_MSK_15BIT                      (0x00007FFFU)
-#define XSPI_MSK_16BIT                      (0x0000FFFFU)
-#define XSPI_MSK_17BIT                      (0x0001FFFFU)
+#define XSPI_MSK_01BIT                          (0x00000001U)
+#define XSPI_MSK_02BIT                          (0x00000003U)
+#define XSPI_MSK_03BIT                          (0x00000007U)
+#define XSPI_MSK_04BIT                          (0x0000000FU)
+#define XSPI_MSK_05BIT                          (0x0000001FU)
+#define XSPI_MSK_06BIT                          (0x0000003FU)
+#define XSPI_MSK_07BIT                          (0x0000007FU)
+#define XSPI_MSK_08BIT                          (0x000000FFU)
+#define XSPI_MSK_09BIT                          (0x000001FFU)
+#define XSPI_MSK_10BIT                          (0x000003FFU)
+#define XSPI_MSK_11BIT                          (0x000007FFU)
+#define XSPI_MSK_12BIT                          (0x00000FFFU)
+#define XSPI_MSK_13BIT                          (0x00001FFFU)
+#define XSPI_MSK_14BIT                          (0x00003FFFU)
+#define XSPI_MSK_15BIT                          (0x00007FFFU)
+#define XSPI_MSK_16BIT                          (0x0000FFFFU)
+#define XSPI_MSK_17BIT                          (0x0001FFFFU)
 
 #define XSPI_SHIFT_3BYTE                        (24U)
 #define XSPI_SHIFT_2BYTE                        (16U)

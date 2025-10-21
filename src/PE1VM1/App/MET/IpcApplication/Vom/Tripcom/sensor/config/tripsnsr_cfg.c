@@ -127,6 +127,7 @@ U1              u1_g_TripsnsrCfgGetPtsSts(void)
     U1          u1_t_calib;
 
     u1_t_msgsts = (U1)TRIPCOM_STSBIT_UNKNOWN;
+#if 0   /* BEV Rebase provisionally */
     u1_t_calib  = u1_CALIB_MCUID0237_CANMOVEFLAG;
 
     if (u1_t_calib == (U1)CALIB_MCUID0237_NE1) {
@@ -139,6 +140,7 @@ U1              u1_g_TripsnsrCfgGetPtsSts(void)
         u1_t_msgsts = (U1)Com_GetIPDUStatus(MSG_ENG1G90_RXCH0) & ((U1)COM_TIMEOUT | (U1)COM_NO_RX);
 #endif   /* BEV Rebase provisionally */
     }
+#endif   /* BEV Rebase provisionally */
 
     return (u1_t_msgsts);
 }
