@@ -33,7 +33,6 @@
 #include "drec_tx.h"
 #include "dio_if.h"
 #include "sound_cri_mgr.h"
-#include "gateway_mm.h"
 
 /* Application           */
 #endif   /* BEV Rebase provisionally */
@@ -75,7 +74,6 @@
 #include "drvind_eco.h"
 #include "drvind_hv_pct.h"
 #include "oilmil.h"
-#include "gateway_cxpi.h"
 #endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
 #include "himgadj.h"
@@ -168,10 +166,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyBonInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_GatewayCxpiInit,
-        &vd_g_GatewaymmInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrBonInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
@@ -271,10 +265,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyRstInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_GatewayCxpiInit,
-        &vd_g_GatewaymmInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
@@ -374,10 +364,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyWkupInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_GatewayCxpiInit,
-        &vd_g_GatewaymmInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_HdimmgrWkRstInit,
         &vd_g_HudImgAdjInit,
 #if 0   /* BEV Rebase provisionally */
