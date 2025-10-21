@@ -225,7 +225,7 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 /*  1.10.0   11/ 7/2016  TN       bsw_m.c v1.9.0 -> v1.10.0.                                                                         */
 /*  1.11.0    3/ 4/2019  TN       bsw_m.c v1.10.0 -> v1.11.0.                                                                        */
 /*  1.12.0    6/24/2025  RS       Change for BEV PreCV.                                                                              */
-/*  1.12.0   10/21/2025  TS       Change for BEV rebase.                                                                              */
+/*  1.12.0   10/21/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
