@@ -60,7 +60,6 @@
 #include "rcmmui.h"
 #include "gauge.h"
 #if 0   /* BEV Rebase provisionally */
-#include "telltale.h"
 #include "wchime.h"
 #include "sbltsync.h"
 #endif   /* BEV Rebase provisionally */
@@ -138,7 +137,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
-        &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrBonInit,
         &vd_g_VehspdInit,
@@ -241,7 +239,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
-        &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrRstWkInit,
         &vd_g_VehspdInit,
@@ -344,7 +341,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
-        &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrRstWkInit,
         &vd_g_VehspdInit,

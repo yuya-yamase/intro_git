@@ -76,7 +76,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
 #if 0   /* BEV Rebase provisionally */
-#include "telltale.h"
 #include "wchime.h"
 #endif   /* BEV Rebase provisionally */
 #include "gauge.h"
@@ -408,7 +407,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_GaugeMainTask,               (U4)SCHDLR_TASKBIT__20MS_A  },
 #if 0   /* BEV Rebase provisionally */
     {&vd_g_SbltsyncMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
-    {&vd_g_TelltaleMainTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
 #endif   /* BEV Rebase provisionally */
     {&vd_g_ThblnkrMainTask,             (U4)SCHDLR_TASKBIT__10MS_A  },
 #if 0   /* BEV Rebase provisionally */
@@ -550,11 +548,13 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*            8/29/2017  AM       QAC warining was fixed.                                                                            */
 /*  2.6.1     9/ 7/2021  TN       scheduler v2.6.0 -> v2.6.1.                                                                        */
 /*  2.7.0     9/15/2021  TN       scheduler v2.6.1 -> v2.7.0.                                                                        */
+/*  2.7.0    10/21/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
+/*  * TS      = Takuo Suganuma, PXT                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
