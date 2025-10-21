@@ -66,9 +66,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "locale.h"
 #include "vardef.h"
-#if 0   /* BEV Rebase provisionally */
-#include "hud_ca.h"
-#endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
 #if 0   /* BEV Rebase provisionally */
 #include "drvind_pwr_pct.h"
@@ -123,9 +120,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_EvschgBonInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_VardefBonInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_HudCaInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
@@ -226,9 +220,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_EvschgRstwkInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_VardefRstwkInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_HudCaInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
@@ -329,9 +320,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_EvschgRstwkInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_VardefRstwkInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_HudCaInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
