@@ -85,7 +85,6 @@
 #include "fspomgr.h"
 #include "mmappctrl.h"
 #include "attmp_cel.h"
-#include "evschg.h"
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met.h"
 #if 0   /* BEV Rebase provisionally */
@@ -119,9 +118,6 @@
 void vd_g_22SSCallout_StaBonInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EvschgBonInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_VardefBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
@@ -222,9 +218,6 @@ void vd_g_22SSCallout_StaBonInit(void)
 void vd_g_22SSCallout_StaRstInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EvschgRstwkInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
@@ -325,9 +318,6 @@ void vd_g_22SSCallout_StaRstInit(void)
 void vd_g_22SSCallout_StaWkupInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EvschgRstwkInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_VardefRstwkInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_HudCaInit,
