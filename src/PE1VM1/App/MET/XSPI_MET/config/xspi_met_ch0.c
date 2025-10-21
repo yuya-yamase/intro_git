@@ -2295,7 +2295,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-7     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
-/*  BEV-10    10/21/2025 TS       Change for BEV rebase.                                                                              */
+/*  BEV-10    10/21/2025 TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2315,6 +2315,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
-/*  * TS   = Takuo Suganuma, PXT                                                                                                       */
+/*  * TS   = Takuo Suganuma, PXT                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
