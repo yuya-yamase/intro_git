@@ -110,7 +110,6 @@
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
 #include "drec_tx.h"
-#include "nwcm.h"
 #include "dio_if.h"
 #include "sound_cri_mgr.h"
 #include "gateway_cxpi.h"
@@ -420,7 +419,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
     /*-------------------------------------------------------------------*/
     {&vd_g_DioIfMainOut,                (U4)SCHDLR_TASKBIT__10MS_A  },
-    {&vd_g_NWCMMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
     {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
@@ -550,11 +548,13 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*            8/29/2017  AM       QAC warining was fixed.                                                                            */
 /*  2.6.1     9/ 7/2021  TN       scheduler v2.6.0 -> v2.6.1.                                                                        */
 /*  2.7.0     9/15/2021  TN       scheduler v2.6.1 -> v2.7.0.                                                                        */
+/*  2.7.0    10/21/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
+/*  * TS      = Takuo Suganuma, PXT                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

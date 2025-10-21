@@ -29,7 +29,6 @@
 #include "fpcall_vd_fvd.h"
 #if 0   /* BEV Rebase provisionally */
 /* Complex Device Driver */
-#include "nwcm.h"
 #include "drec_tx.h"
 #include "dio_if.h"
 #include "sound_cri_mgr.h"
@@ -201,9 +200,6 @@ void vd_g_22SSCallout_StaBonInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
-#if 0   /* BEV Rebase provisionally */
-    vd_g_NWCMBonInit();
-#endif   /* BEV Rebase provisionally */
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_BON_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_BON_INIT));
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
@@ -304,9 +300,6 @@ void vd_g_22SSCallout_StaRstInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
-#if 0   /* BEV Rebase provisionally */
-    vd_g_NWCMWkupInit();
-#endif   /* BEV Rebase provisionally */
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_RST_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_RST_INIT));
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
@@ -407,9 +400,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
     vd_g_iVDshInit();
 
     /* vv User Hook start vv */
-#if 0   /* BEV Rebase provisionally */
-    vd_g_NWCMWkupInit();
-#endif   /* BEV Rebase provisionally */
     vd_g_Fpcall_vd_Fvd(&fp_sp_vd_ECU_M_CFG_WKUP_INIT[0], u2_NC_VD_FVD(fp_sp_vd_ECU_M_CFG_WKUP_INIT));
     vd_g_XSpiMETInit();
     /* ^^ User Hook end   ^^ */
