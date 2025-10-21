@@ -93,7 +93,6 @@
 #include "drvind_pwr_pct.h"
 #include "drvind_eco.h"
 #include "drvind_hv_pct.h"
-#include "oilmil.h"
 #endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
 #include "himgadj.h"
@@ -377,7 +376,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_DrvIndPwrMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_DrvIndEcoMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_DrvIndHvMainTask,            (U4)SCHDLR_TASKBIT__20MS_A  },
-    {&vd_g_OilmilMainTask,              (U4)SCHDLR_TASKBIT__50MS_E  },
     #endif   /* BEV Rebase provisionally */
     {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
@@ -550,11 +548,13 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*            8/29/2017  AM       QAC warining was fixed.                                                                            */
 /*  2.6.1     9/ 7/2021  TN       scheduler v2.6.0 -> v2.6.1.                                                                        */
 /*  2.7.0     9/15/2021  TN       scheduler v2.6.1 -> v2.7.0.                                                                        */
+/*  2.7.0    10/21/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
+/*  * TS      = Takuo Suganuma, PXT                                                                                                  */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

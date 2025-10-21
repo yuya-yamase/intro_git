@@ -69,9 +69,6 @@
 #include "odo_om_rst_if.h"
 #include "vptran_sel.h"
 #include "locale.h"
-#if 0   /* BEV Rebase provisionally */
-#include "oilmil.h"
-#endif   /* BEV Rebase provisionally */
 #include "avggrph.h"
 
 #include "himgadj.h"
@@ -218,8 +215,6 @@
 #define XSPI_UNIT_HI                        (0x00003F00U)
 
 #define XSPI_USRNAME_SIZE                   (16U)
-
-#define XSPI_MAINTEDIST_OFFSET              (32768)
 
 #endif   /* BEV Rebase provisionally */
 #define XSPI_AMB_CEL_MAX                    (10000U)
@@ -1129,12 +1124,6 @@ static inline void    vd_s_XSpiCfgTxRcmmui(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMaint(         U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    S4 s4_t_m_dist;
-
-    s4_t_m_dist     = (S4)s2_g_OilmilGetVal() + (S4)XSPI_MAINTEDIST_OFFSET;
-    u4_ap_pdu_tx[0]  = (U4)s4_t_m_dist;
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -2478,6 +2467,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-7     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
+/*  BEV-10    10/21/2025 TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2497,5 +2487,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * TS   = Takuo Suganuma, PXT                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
