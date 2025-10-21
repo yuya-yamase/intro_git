@@ -46,8 +46,6 @@
 #include "ptsctmp_cel.h"
 #include "alert.h"
 #include "sbltwrn.h"
-#include "engspd_rpm.h"
-#include "engspd_det_rpm.h"
 #endif   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "tripsnsr.h"
@@ -147,10 +145,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_wChimeInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_GaugeBonInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EngspdBonInit,
-        &vd_g_EngspdDetInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_OdoBonInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
@@ -250,10 +244,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_wChimeInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EngspdRstwkInit,
-        &vd_g_EngspdDetInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
@@ -353,10 +343,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_wChimeInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_GaugeRstwkInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EngspdRstwkInit,
-        &vd_g_EngspdDetInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
