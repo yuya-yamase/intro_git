@@ -23,7 +23,6 @@
 
 #include "vehspd_kmph.h"
 #if 0   /* BEV Rebase provisionally */
-#include "ptsctmp_cel.h"
 #include "alert.h"
 #endif   /* BEV Rebase provisionally */
 #include "gauge.h"
@@ -48,7 +47,7 @@
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #if 0   /* BEV Rebase provisionally */
-#define VEH_OPEMD_NUM_EVHK                      (6U)
+#define VEH_OPEMD_NUM_EVHK                      (5U)
 #else   /* BEV Rebase provisionally */
 #define VEH_OPEMD_NUM_EVHK                      (3U)
 #endif   /* BEV Rebase provisionally */
@@ -146,9 +145,11 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 /*  1.3.0    12/ 7/2020  ST       veh_opemd v1.2.1 -> v1.3.0.                                                                        */
 /*  2.0.0     2/ 3/2025  ST       Supported vehicle power state.                                                                     */
 /*  2.1.0     2/ 7/2025  TN       veh_opemd v2.0.0 -> v2.1.0.                                                                        */
+/*  2.1.0    10/21/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * HU   = Hayato Usui, Denso Create                                                                                               */
 /*  * ST   = Satoshi Tanaka, Denso Create                                                                                            */
+/*  * TS   = Takuo Suganuma, PXT                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -52,7 +52,6 @@
 #include "engspd_rpm.h"
 #include "engspd_det_rpm.h"
 #include "engspd_varrz.h"
-#include "ptsctmp_cel.h"
 #endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
 #if 0   /* BEV Rebase provisionally */
@@ -330,7 +329,6 @@ static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxHybsys(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx);
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx); */
 static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx);
@@ -780,24 +778,6 @@ static inline void    vd_s_XSpiCfgTxPwrmet(U4* u4_ap_pdu_tx) {
     u1_t_sts = u1_g_DrvIndPwrPctPwrth(&u2_t_pmpwrth);
     u4_ap_pdu_tx[1] |= (U4)u2_t_pmpwrth & (U4)XSPI_MSK_09BIT;               /* PWRMET_PMPWRTH                              */
     u4_ap_pdu_tx[1] |= ((U4)u1_t_sts << XSPI_PMPWRTH_STS_SHIFT);            /* PWRMET_PMPWRTH_STS                          */
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxPtsctmp(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U1  u1_t_sts;
-    U2  u2_t_ptsctmp;
-
-    u2_t_ptsctmp      = (U2)0U;
-    u1_t_sts          = u1_g_PtsctmpCelFltrd(&u2_t_ptsctmp);
-    u4_ap_pdu_tx[0]   = (U4)u2_t_ptsctmp;                                      /* ENGINE_TEMP_CEL                              */
-    u4_ap_pdu_tx[0]  |= ((U4)u1_t_sts << XSPI_SHIFT_2BYTE);                /* ENGTMP_STS                                   */
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -2378,7 +2358,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxVehSpd(        &u4_ap_pdu_tx[ 32]);      /* 032 - 035    : Vehicle Speed                                 */
     vd_s_XSpiCfgTxEngspd(        &u4_ap_pdu_tx[ 36]);      /* 036 - 038    : Engine Speed                                  */
     vd_s_XSpiCfgTxHybsys(        &u4_ap_pdu_tx[ 39]);      /* 039 - 040    : Hybrid System Ind.                            */
-    vd_s_XSpiCfgTxPtsctmp(       &u4_ap_pdu_tx[ 43]);      /* 043 - 043    : EngineTemp                                    */
     vd_s_XSpiCfgTxAmbtmp(        &u4_ap_pdu_tx[ 44]);      /* 044 - 045    : Ambient Temp                                  */
     /* vd_g_XSpiCfgTxHydrovol(      &u4_ap_pdu_tx[0]); */  /*     -        : Hydro Volume                                  */
     vd_s_XSpiCfgTxShift(         &u4_ap_pdu_tx[ 49]);      /* 049 - 053    : Shift                                         */
@@ -2478,6 +2457,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-7     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
+/*  BEV-10    10/21/2025 TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2497,5 +2477,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * TS   = Takuo Suganuma, PXT                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

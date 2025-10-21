@@ -43,7 +43,6 @@
 #include "vehspd_kmph.h"
 #include "vptran_sel.h"
 #if 0   /* BEV Rebase provisionally */
-#include "ptsctmp_cel.h"
 #include "alert.h"
 #include "sbltwrn.h"
 #include "engspd_rpm.h"
@@ -135,7 +134,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_DimInit,
         &vd_g_IllumiBonInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
@@ -238,7 +236,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_DimInit,
         &vd_g_IllumiRstInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
@@ -341,7 +338,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_DimInit,
         &vd_g_IllumiWkupInit,
 #if 0   /* BEV Rebase provisionally */
-        &vd_g_PtsctmpInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
