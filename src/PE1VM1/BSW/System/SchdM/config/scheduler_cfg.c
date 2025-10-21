@@ -547,7 +547,7 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*            8/29/2017  AM       QAC warining was fixed.                                                                            */
 /*  2.6.1     9/ 7/2021  TN       scheduler v2.6.0 -> v2.6.1.                                                                        */
 /*  2.7.0     9/15/2021  TN       scheduler v2.6.1 -> v2.7.0.                                                                        */
-/*  2.7.0    10/21/2025  TS       Change for BEV rebase.                                                                              */
+/*  2.7.0    10/21/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */

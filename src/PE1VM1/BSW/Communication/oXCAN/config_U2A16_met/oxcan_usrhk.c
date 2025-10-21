@@ -414,7 +414,7 @@ static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_IPDU_RX)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  2.0.0     2/27/2025  TN       oxcan_usrhk.c v.1.0.5 -> v2.0.0.                                                                   */
-/*  2.0.0     10/21/2025 TS       Change for BEV rebase.                                                                              */
+/*  2.0.0     10/21/2025 TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
