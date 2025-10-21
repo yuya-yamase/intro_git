@@ -22,7 +22,6 @@
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/scc
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config_met_common
     -I${APP_DIR}/MET/IpcApplication/Evc/Vardef/config
-    -I${APP_DIR}/MET/IpcApplication/Legacy/Fspo/fspo_framework/config
 
 config_tybev3/veh_opemd_evhk.c
 config_tybev3/veh_opemd_tybev3.c
