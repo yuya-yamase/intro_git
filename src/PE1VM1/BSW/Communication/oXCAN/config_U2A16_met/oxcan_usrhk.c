@@ -26,8 +26,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "illumi_comtx.h"
 #include "drec_tx.h"
-#include "mulmed_mulfr.h"
-#include "mulmed_color.h"
 #include "fspomgr.h"
 #include "mmappctrl.h"
 #endif   /* BEV Rebase provisionally */
@@ -324,7 +322,6 @@ void    vd_g_oXCANUsrhkTraAck(const U2 u2_a_IPDU_TX)
 
 #if 0   /* BEV Rebase provisionally */
     vd_g_DrectxTxAck(u2_a_IPDU_TX);
-    vd_g_MulmedColorTxHk(u2_a_IPDU_TX);
 #endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
@@ -403,9 +400,6 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
     
     vd_s_oXCANUsrhkMmappRxMsg(u2_a_IPDU_RX);
     
-#if 0   /* BEV Rebase provisionally */
-    vd_g_MulmedMulfrRxTxtHk(u2_a_IPDU_RX);
-#endif   /* BEV Rebase provisionally */
     vd_g_XSpiMETCANGWPushPDU(u2_a_IPDU_RX);
 }
 /*===================================================================================================================================*/
@@ -443,10 +437,12 @@ static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_IPDU_RX)
 /*  Version  Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*  2.0.0     2/27/2025  TN       oxcan_usrhk.c v.1.0.5 -> v2.0.0.                                                                   */
+/*  2.0.0     10/21/2025 TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
+/*  * TS   = Takuo Suganuma, PXT                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

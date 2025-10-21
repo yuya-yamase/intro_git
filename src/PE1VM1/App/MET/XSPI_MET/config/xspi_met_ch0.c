@@ -61,9 +61,6 @@
 /* #include "hydrvol.h" */
 #endif   /* BEV Rebase provisionally */
 #include "tripcom.h"
-#if 0   /* BEV Rebase provisionally */
-#include "mulmed_mulfr.h"
-#endif   /* BEV Rebase provisionally */
 #include "rcmmui.h"
 #include "odo_km.h"
 #include "odo_om_rst_if.h"
@@ -181,8 +178,6 @@
 #define XSPI_TRIPCOM_IDLSTP_SUP             (0U)
 
 #define XSPI_MAINT_SUP                      (1U)
-
-#define XSPI_MULMED_NUM_MSG                 (4U)
 
 #define XSPI_SPN_INVALID                    (0x3F3F3F3FU)
 
@@ -309,10 +304,6 @@ typedef struct{
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-static U1           u1_sp_xspi_mulmed_msgid[XSPI_MULMED_NUM_MSG];
-#endif   /* BEV Rebase provisionally */
-
 static U1           u1_s_xspi_vipos_disp;
 static U1           u1_s_xspi_dimsw;
 static U1           u1_s_gmoni_reset_pre;
@@ -344,7 +335,6 @@ static inline void    vd_s_XSpiCfgTxMaint(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxHud(           U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxWrnmsg(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxMulmedText(    U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxGmoni(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxOilprss(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxOiltemp(       U4 * u4_ap_pdu_tx);
@@ -369,7 +359,6 @@ static inline void    vd_s_XSpiCfgRxRcmmui(     const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxRemoteWarn( const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxOdo(        const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX);
-static inline void    vd_s_XSpiRxMulmed(        const U4 * u4_ap_PDU_RX);   /* MSGID */
 static inline void    vd_s_XSpiCfgRxHUD(        const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxMetcstm(    const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxAvgGrph(    const U4 * u4_ap_PDU_RX);
@@ -1665,51 +1654,6 @@ static inline void    vd_s_XSpiCfgTxCalib(         U4 * u4_ap_pdu_tx)
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxMulmedText(U4 * u4_ap_pdu_tx)                                                                       */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxMulmedText(    U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    static const U4    u4_s_XSPI_MULMED_TEXT_LPMAX = (U4)(MULMED_MULFR_MAX_TXTSIZE / 2U);
-    static const U4    u4_s_XSPI_MULMED_PCK_NWORD  = (U4)17U;
-
-    U4                 u4_t_loop_msg;
-    U4                 u4_t_loop_cntts;
-    U4                 u4_t_header_pos;
-    U4                 u4_t_header_opt;
-    U4                 u4_t_body_pos;
-    U1                 u1_t_modeid;
-    U2                 u2_tp_rxtext[MULMED_MULFR_MAX_TXTSIZE];
-    U1                 u1_tp_option[MULMED_MULFR_NUM_OPT];
-
-    for(u4_t_loop_msg = (U4)0U; u4_t_loop_msg < (U4)XSPI_MULMED_NUM_MSG ; u4_t_loop_msg++){
-        u1_t_modeid = (U1)0U;
-        for(u4_t_loop_cntts = (U4)0U ; u4_t_loop_cntts < (U4)MULMED_MULFR_MAX_TXTSIZE ; u4_t_loop_cntts++){
-            u2_tp_rxtext[u4_t_loop_cntts] = (U2)0U;
-        }
-        for(u4_t_loop_cntts = (U4)0U ; u4_t_loop_cntts < (U4)MULMED_MULFR_NUM_OPT ; u4_t_loop_cntts++){
-            u1_tp_option[u4_t_loop_cntts] = (U1)0U;
-        }
-        vd_g_MulmedTextMsg(u1_sp_xspi_mulmed_msgid[u4_t_loop_msg] , &u1_t_modeid , &u1_tp_option[0], &u2_tp_rxtext[0]);
-        u4_t_header_pos = (u4_t_loop_msg * u4_s_XSPI_MULMED_PCK_NWORD);
-        u4_t_header_opt = u4_t_header_pos + (U4)1U;
-        u4_t_body_pos   = u4_t_header_pos + (U4)2U;
-        u4_ap_pdu_tx[u4_t_header_pos] =  (((U4)u1_sp_xspi_mulmed_msgid[u4_t_loop_msg] << XSPI_SHIFT_3BYTE) |
-                                          ((U4)u1_t_modeid                                << XSPI_SHIFT_2BYTE));
-        u4_ap_pdu_tx[u4_t_header_opt] = (U4)0U;
-        for(u4_t_loop_cntts = (U4)0U ; u4_t_loop_cntts < (U4)MULMED_MULFR_NUM_OPT ; u4_t_loop_cntts++){
-            u4_ap_pdu_tx[u4_t_header_opt] |= ((U4)u1_tp_option[u4_t_loop_cntts] << (u4_t_loop_cntts * (U4)8U));
-        }
-        for(u4_t_loop_cntts = (U4)0U ; u4_t_loop_cntts < u4_s_XSPI_MULMED_TEXT_LPMAX ; u4_t_loop_cntts++){
-            u4_ap_pdu_tx[u4_t_body_pos + u4_t_loop_cntts]  =  (U4)u2_tp_rxtext[u4_t_loop_cntts * (U4)2U          ];
-            u4_ap_pdu_tx[u4_t_body_pos + u4_t_loop_cntts] |= ((U4)u2_tp_rxtext[(u4_t_loop_cntts * (U4)2U) + (U4)1U ] << XSPI_SHIFT_2BYTE);
-        }
-    }
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxEvschgTimchg(U4 * u4_ap_pdu_tx)                                                                     */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -2169,25 +2113,6 @@ static inline void    vd_s_XSpiCfgRxTripcom(    const U4 * u4_ap_PDU_RX) {
 }
 
 /*===================================================================================================================================*/
-/*  static void    vd_s_XSpiRxMulmed(U4 * u4_ap_pdu_tx)                                                                              */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiRxMulmed(  const U4 * u4_ap_PDU_RX)
-{
-#if 0   /* BEV Rebase provisionally */
-    const U4 *         u4_tp_MULMED_RX;
-    U4                 u4_t_loop;
-
-    u4_tp_MULMED_RX = &u4_ap_PDU_RX[0];
-    for(u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_MULMED_NUM_MSG; u4_t_loop++){
-        u1_sp_xspi_mulmed_msgid[u4_t_loop] = (U1)u4_tp_MULMED_RX[u4_t_loop];
-    }
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgRxHUD(U4 * u4_ap_pdu_tx)                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -2306,14 +2231,6 @@ U1    u1_g_XSpiGvifSts_METDISP(void) {
 /*===================================================================================================================================*/
 void    vd_g_XSpiCfgInitCh0(void)
 {
-#if 0   /* BEV Rebase provisionally */
-    U4                      u4_t_lpcnt;
-
-    for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)XSPI_MULMED_NUM_MSG; u4_t_lpcnt++){
-        u1_sp_xspi_mulmed_msgid[u4_t_lpcnt] = (U1)0U;
-    }
-
-#endif   /* BEV Rebase provisionally */
     u1_s_xspi_vipos_disp                      = (U1)0U;
     u1_s_xspi_dimsw                           = (U1)0U;
 #if 0   /* BEV Rebase provisionally */
@@ -2346,7 +2263,6 @@ void    vd_g_XSpiCfgPduRxCh0(const U4 * u4_ap_PDU_RX)
     /* vd_s_XSpiCfgRxNvm(        &u4_ap_PDU_RX[ 57]); */ /* Delete for CV-R */
     vd_s_XSpiCfgRxHUD(        &u4_ap_PDU_RX[100]);
     vd_s_XSpiCfgRxMETDISP(    &u4_ap_PDU_RX[121]);
-    vd_s_XSpiRxMulmed(        &u4_ap_PDU_RX[144]);
     vd_s_XSpiCfgRxMetcstm(    &u4_ap_PDU_RX[212]);
     /* vd_s_XSpiCfgRxDnPrdctAns( &u4_ap_PDU_RX[344]); */ /* Delete for CV-R */
 
@@ -2394,7 +2310,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxTripcom(       &u4_ap_pdu_tx[185]);      /* 185 - 234    : Tripcom                                       */
     vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[235]);      /* 235 - 264    : Telltale                                      */
     vd_s_XSpiCfgTxMulmed(        &u4_ap_pdu_tx[265]);      /* 265 - 281    : MultimediaUserName                            */
-    vd_s_XSpiCfgTxMulmedText(    &u4_ap_pdu_tx[293]);      /* 293 - 360    : MultimediaText                                */
     vd_s_XSpiCfgTxNickname(      &u4_ap_pdu_tx[362]);      /* 362 - 378    : MultimediaNickName                            */
     vd_s_XSpiCfgTxEvschgSwquicha(&u4_ap_pdu_tx[379]);      /* 379 - 381    : EVSCHG SWQUICHA                               */
     vd_s_XSpiCfgTxEvschgSchdList(&u4_ap_pdu_tx[382]);      /* 382 - 397    : EVSCHG set charging schedule List info        */
@@ -2478,6 +2393,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-7     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
+/*  BEV-10    10/21/2025 TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2497,5 +2413,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * TS   = Takuo Suganuma, PXT                                                                                                     */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
