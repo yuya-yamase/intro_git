@@ -117,6 +117,7 @@
 #include "gateway_mm.h"
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met.h"
+#include "xspi_met_calib.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -426,6 +427,7 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
 #endif   /* BEV Rebase provisionally */
     {&vd_g_XSpiMETPduTx,                (U4)SCHDLR_TASKBIT___5MS    },
+    {&vd_g_XSpiCalibMainTask,           (U4)SCHDLR_TASKBIT_100MS_A  },      /* This task is not needed to be called before vd_g_XSpiMETPduTx  */
 
     /*-------------------------------------------------------------------*/
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
