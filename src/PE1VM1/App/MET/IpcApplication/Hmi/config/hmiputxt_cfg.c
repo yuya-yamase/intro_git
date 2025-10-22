@@ -60,11 +60,7 @@
 
 #define HMIPUTXT_TASK_TIME                  (10U)
 #define HMIPUTXT_HID_CNT_MAX                (6000U / HMIPUTXT_TASK_TIME)
-#if 0   /* BEV Rebase provisionally */
 #define HMIPUTXT_REQ_INIT                   (ALERT_REQ_UNKNOWN)
-#else   /* BEV Rebase provisionally */
-#define HMIPUTXT_REQ_INIT                   (0xFFU)
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -368,6 +364,7 @@ void    vd_g_HmiPuTxtCfgDetail(U2 * u2_ap_detail)
 #else
     u2_ap_detail[0] = (U2)0U;
 #endif
+
 }
 
 /*===================================================================================================================================*/
@@ -589,7 +586,7 @@ static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
 
 #if 0   /* BEV Rebase provisionally */
     u1_t_igsts = u1_g_VehopemdIgnOn();
-#else
+#else   /* BEV Rebase provisionally */
     u1_t_igsts = (U1)FALSE;
 #endif   /* BEV Rebase provisionally */
     if(u1_t_igsts == (U1)TRUE) {
@@ -635,6 +632,7 @@ static void    vd_s_HmiPuTxtCfgEvmReq(U4 * u4_ap_req)
 #else
     /* Do Nothing */
 #endif
+
 }
 
 /*===================================================================================================================================*/
@@ -700,6 +698,7 @@ void    vd_g_HmiPuTxtCfgThevmHidmask(U4 * u4_ap_varmask)
 #else
     /* Do Nothing */
 #endif
+
 }
 
 /*===================================================================================================================================*/

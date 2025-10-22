@@ -225,6 +225,7 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
         /* Do Nothing */
     }
 
+
     u1_t_ecbepbtt = u1_s_HmiTtEcbEpbTt();
     u4_ap_req[HMITT_ECBEPB_DATPOS] |= u4_HMITT_HB7(u1_t_ecbepbtt);
 

@@ -497,7 +497,7 @@ static U4      u4_s_AlertB_tdoorIgOffDsp(const U1 u1_a_VOM, const U2 u2_a_DOOR_S
 
     return(u4_t_retval);
 #else   /* BEV Rebase provisionally */
-    return((U1)0U);
+    return((U4)0U);
 #endif   /* BEV Rebase provisionally */
 }
 
