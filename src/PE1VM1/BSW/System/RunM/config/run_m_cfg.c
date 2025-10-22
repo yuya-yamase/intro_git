@@ -232,6 +232,6 @@ U1      u1_g_RunMCfghkShtdwnchk2nd(const U1 u1_a_1ST, const U2 u2_a_TM_ELPSD)
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * RS   = Ryuki Sako, Denso Techno                                                                                                */
-/*  * TS   = Takuo Suganuma PXT                                                                                                      */
+/*  * TS   = Takuo Suganuma Denso Techno                                                                                             */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
