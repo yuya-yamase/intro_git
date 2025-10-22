@@ -81,7 +81,6 @@
 #define ILLUMI_TAIL_CN_ACT                      (0x02U)  /* TAIL_CN Active      */
 #define ILLUMI_TAIL_CN_INACT                    (0x03U)  /* TAIL_CN Inactive    */
 
-#define ILLUMI_DIM_LVL_NUM                      (22U)
 #define ILLUMI_ILL_OUT_TX_MAX                   (100U)  /* ILL_OUT MAX Value   */
 
 #define ILLUMI_COMTX_IL2STS_PARK                (0U)
@@ -873,7 +872,7 @@ static void    vd_s_IllumiPosTx(const U2 * u2_ap_DIM_LVL)
             u1_t_tx = (U1)u2_t_lvl;
         }
         else{
-            u1_t_tx = (U1)0U;
+            u1_t_tx = (U1)ILLUMI_DIM_LVL_NUM - (U1)1U;
         }
     }
     else{

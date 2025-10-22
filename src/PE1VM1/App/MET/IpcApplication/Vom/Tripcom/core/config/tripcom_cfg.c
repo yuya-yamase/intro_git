@@ -243,7 +243,9 @@ U2              u2_g_TripcomCfgGetVariation(void)
     static const U2 u2_s_TRIPCOM_VARBIT_EVRATIO = (U2)0x0800U;
     U1  u1_t_ptsys;
     U2  u2_t_var;
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_mcuid0026_val;
+#endif   /* BEV Rebase provisionally */
 
 #if 0   /* BEV Rebase provisionally */
     u1_t_mcuid0026_val = u1_CALIB_MCUID0026_1MOTHV;
