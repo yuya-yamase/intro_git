@@ -419,33 +419,48 @@ static boolean Ecu_Arb_stateSleep_VMm(void)
  *--------------------------------------------------------------------------*/
 static void Ecu_Arb_getVMxStatus(void)
 {
+    ehvm_uint32_t     u4TempReceiveBuf;
     ehvm_uint32_t     u4ReceiveBuf;
     ehvm_uint32_t     u4ReceiveDataBytes;
     ehvm_std_return_t u1Ret;
     uint8             u1VmNum;
+    uint8             u1LpCnt;
 
     for (u1VmNum = 0U; u1VmNum < ECU_ARB_SLAVE_VM_NUM; u1VmNum++)
     {
-        u4ReceiveBuf = (ehvm_uint32_t)0U;
-        u1Ret        = ehvm_vcc_receive((ehvm_uint32_t)(u1VmNum + 1U), &u4ReceiveBuf, ECU_VCC_SLEEP_STATUS_LEN, &u4ReceiveDataBytes);
-        if (u1Ret == E_EHVM_OK)
+        u4TempReceiveBuf = (ehvm_uint32_t)0U;
+        for (u1LpCnt = 0U; u1LpCnt < ECU_ARB_VCC_RX_CNT; u1LpCnt++)
         {
-            if (u4ReceiveBuf == ECU_SLEEP_INITIALIZED)
+            u4ReceiveBuf = (ehvm_uint32_t)0U;
+            u1Ret        = ehvm_vcc_receive((ehvm_uint32_t)(u1VmNum + 1U), &u4ReceiveBuf, ECU_VCC_SLEEP_STATUS_LEN, &u4ReceiveDataBytes);
+            if (u1Ret == E_EHVM_OK)
             {
-                Ecu_Arb_bVMxInitializedFlag[u1VmNum] = TRUE;
+                u4TempReceiveBuf = u4ReceiveBuf;
             }
-            else if (u4ReceiveBuf == ECU_SLEEP_NG)
-            {
-                Ecu_Arb_bVMxSleepOKFlag[u1VmNum] = FALSE;
-            }
-            else if (u4ReceiveBuf == ECU_SLEEP_OK)
-            {
-                Ecu_Arb_bVMxSleepOKFlag[u1VmNum] = TRUE;
-            }
-            else
+            else if (u1Ret == E_EHVM_RECEIVE_OVERWRITE_OCCURS)
             {
                 /* Nothing to do */
             }
+            else
+            {
+                break;
+            }
+        }
+        if (u4TempReceiveBuf == ECU_SLEEP_INITIALIZED)
+        {
+            Ecu_Arb_bVMxInitializedFlag[u1VmNum] = TRUE;
+        }
+        else if (u4TempReceiveBuf == ECU_SLEEP_NG)
+        {
+            Ecu_Arb_bVMxSleepOKFlag[u1VmNum] = FALSE;
+        }
+        else if (u4TempReceiveBuf == ECU_SLEEP_OK)
+        {
+            Ecu_Arb_bVMxSleepOKFlag[u1VmNum] = TRUE;
+        }
+        else
+        {
+            /* Nothing to do */
         }
     }
     return;

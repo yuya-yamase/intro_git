@@ -51,28 +51,28 @@
 #define GDN_CANTP_FullDuplexSupport    (GDN_OFF)   /* 全2重通信のサポート有無はOFF固定 */
 #define GDN_CANTP_CanFDSupport         (GDN_ON)    /* CanFD送受信のサポート有無 */
 
-#define GDN_CANTP_FixedPar             (1U)        /* FC受信時に、固定のBSとSTminを使用する */
-#define GDN_CANTP_FirstPar             (2U)        /* FC受信時に、最初のBSとSTminを使用する */
-#define GDN_CANTP_LatestPar            (3U)        /* FC受信時に、最新のBSとSTminを使用する */
+#define GDN_CANTP_FixedPar             (1)         /* FC受信時に、固定のBSとSTminを使用する */
+#define GDN_CANTP_FirstPar             (2)         /* FC受信時に、最初のBSとSTminを使用する */
+#define GDN_CANTP_LatestPar            (3)         /* FC受信時に、最新のBSとSTminを使用する */
 #define GDN_CANTP_ParameterPattern     (GDN_CANTP_FirstPar)
 #define GDN_CANTP_BSFixedValue         (0U)        /* Fixed選択時のみ有効 */
 #define GDN_CANTP_STminFixedValue      (0U)        /* Fixed選択時のみ有効 */
 
-#define GDN_CANTP_FailSafeMax          (1U)        /* μsオーダーのSTminを最大値とみなす */
-#define GDN_CANTP_FailSafeMin          (2U)        /* μsオーダーのSTminを最小値とみなす */
+#define GDN_CANTP_FailSafeMax          (1)         /* μsオーダーのSTminを最大値とみなす */
+#define GDN_CANTP_FailSafeMin          (2)         /* μsオーダーのSTminを最小値とみなす */
 #define GDN_CANTP_STminFailPattern     (GDN_CANTP_FailSafeMin)
 
     /* 受信PDUID定義（CANIFへ公開） */
 #define GDN_CANTP_RxPduId0000          ((Gdn_PduIdType)0x0000U)
 #define GDN_CANTP_RxPduId0001          ((Gdn_PduIdType)0x0001U)
-#define GDN_CANTP_RxPduId0002          ((Gdn_PduIdType)0x0002U)     /* ^^^ */
-#define GDN_CANTP_RxPduId0003          ((Gdn_PduIdType)0x0003U)     /* ^^^ */
-#define GDN_CANTP_MaxRxPduIdCnt        (4U)        /* 受信PduId数 */ /* ^^^ */
+#define GDN_CANTP_RxPduId0002          ((Gdn_PduIdType)0x0002U)
+#define GDN_CANTP_RxPduId0003          ((Gdn_PduIdType)0x0003U)
+#define GDN_CANTP_MaxRxPduIdCnt        (4U)        /* 受信PduId数 */
 
     /* 送信SDUID定義（PDURへ公開） */
 #define GDN_CANTP_TxSduId0000          ((Gdn_PduIdType)0x0000U)
-#define GDN_CANTP_TxSduId0001          ((Gdn_PduIdType)0x0001U)     /* ^^^ */
-#define GDN_CANTP_MaxTxSduIdCnt        (2U)        /* 送信SduId数 */ /* ^^^ */
+#define GDN_CANTP_TxSduId0001          ((Gdn_PduIdType)0x0001U)
+#define GDN_CANTP_MaxTxSduIdCnt        (2U)        /* 送信SduId数 */
 
     /* 受信N_AI数 */
 #define GDN_CANTP_MaxRxNAICnt          (GDN_CANTP_MaxRxPduIdCnt)
@@ -158,15 +158,15 @@
 
   #else                                         /* サブマイコン未使用又はサブマイコン使用(メインマイコン) */
 
-#define GDN_PDUR_MaxRxPduIdCnt_LoTp_0    (4U)        /* 下位トランスポート層の受信PduId数 *//* ^^^ */
-#define GDN_PDUR_MaxTxPduIdCnt_LoTp_0    (2U)        /* 下位トランスポート層の送信PduId数 *//* ^^^ */
+#define GDN_PDUR_MaxRxPduIdCnt_LoTp_0    (4U)        /* 下位トランスポート層の受信PduId数 */
+#define GDN_PDUR_MaxTxPduIdCnt_LoTp_0    (2U)        /* 下位トランスポート層の送信PduId数 */
 #define GDN_PDUR_ComponentName_LoTp_0    CanTp       /* 下位トランスポート層のコンポーネント名 */
 
         /* 受信PduId定義（下位Transport層へ公開） */
 #define GDN_PDUR_LoTpRxPduId_0_0         (GDN_DCM_DCP_RXPDUID_0)
 #define GDN_PDUR_LoTpRxPduId_0_1         (GDN_DCM_DCP_RXPDUID_1)
-#define GDN_PDUR_LoTpRxPduId_0_2         (GDN_DCM_DCP_RXPDUID_2)        /* ^^^ */
-#define GDN_PDUR_LoTpRxPduId_0_3         (GDN_DCM_DCP_RXPDUID_3)        /* ^^^ */
+#define GDN_PDUR_LoTpRxPduId_0_2         (GDN_DCM_DCP_RXPDUID_2)
+#define GDN_PDUR_LoTpRxPduId_0_3         (GDN_DCM_DCP_RXPDUID_3)
 
   #endif
 
@@ -254,8 +254,8 @@
         /* コンポーネント#0 */
         /********************/
 #define GDN_PDUR_UseZeroCost_UpTp_0       (GDN_ON)  /* 上位トランスポート層のゼロコストコードサポート有無 */
-#define GDN_PDUR_MaxRxPduIdCnt_UpTp_0     (4U)      /* 上位トランスポート層の受信PduId数 *//* ^^^ */
-#define GDN_PDUR_MaxTxPduIdCnt_UpTp_0     (2U)      /* 上位トランスポート層の送信PduId数 *//* ^^^ */
+#define GDN_PDUR_MaxRxPduIdCnt_UpTp_0     (4U)      /* 上位トランスポート層の受信PduId数 */
+#define GDN_PDUR_MaxTxPduIdCnt_UpTp_0     (2U)      /* 上位トランスポート層の送信PduId数 */
 #define GDN_PDUR_ComponentName_UpTp_0     Dcm       /* 上位トランスポート層のコンポーネント名 */
 #define GDN_PDUR_CancelReceive_UpTp_0     (GDN_OFF)  /* 上位トランスポート層の受信中止要求サポート有無 */
 #define GDN_PDUR_ChangeParameter_UpTp_0   (GDN_OFF) /* 上位トランスポート層のパラメータ変更要求サポート有無 */
@@ -264,8 +264,8 @@
         /* 送信PduId定義（上位Transport層へ公開） */
 #define GDN_PDUR_UpTpTxPduId_0_0          (GDN_CANTP_TxSduId0000)
 #define GDN_PDUR_UpTpTxPduId_0_1          (GDN_CANTP_TxSduId0000)
-#define GDN_PDUR_UpTpTxPduId_0_2          (GDN_CANTP_TxSduId0001)       /* ^^^ */
-#define GDN_PDUR_UpTpTxPduId_0_3          (GDN_CANTP_TxSduId0001)       /* ^^^ */
+#define GDN_PDUR_UpTpTxPduId_0_2          (GDN_CANTP_TxSduId0001)
+#define GDN_PDUR_UpTpTxPduId_0_3          (GDN_CANTP_TxSduId0001)
 
   #if ( GDN_PDUR_UseZeroCost_UpTp_0 == GDN_ON ) /* ゼロコスト使用時 */
 
@@ -427,57 +427,62 @@
 /*--------------------------------------*/
 /* コネクションコンフィグレーション     */
 /*--------------------------------------*/
-#define GDN_DCM_DCP_ALL_CONNECTION_NUM                 (4U)     /* DcmDcpConnection数 *//* ^^^ */
-#define GDN_DCM_DCP_ALL_RXPDUID_NUM                    (4U)     /* 全DcmRxPduId数     *//* ^^^ */
+#define GDN_DCM_DCP_ALL_CONNECTION_NUM                 (4U)     /* DcmDcpConnection数 */
+#define GDN_DCM_DCP_ALL_RXPDUID_NUM                    (4U)     /* 全DcmRxPduId数     */
 
 /* DcmRxPduId定義 */
 #define GDN_DCM_DCP_RXPDUID_0                          ((Gdn_PduIdType)0U)
 #define GDN_DCM_DCP_RXPDUID_1                          ((Gdn_PduIdType)1U)
-#define GDN_DCM_DCP_RXPDUID_2                          ((Gdn_PduIdType)2U)              /* ^^^ */
-#define GDN_DCM_DCP_RXPDUID_3                          ((Gdn_PduIdType)3U)              /* ^^^ */
+#define GDN_DCM_DCP_RXPDUID_2                          ((Gdn_PduIdType)2U)
+#define GDN_DCM_DCP_RXPDUID_3                          ((Gdn_PduIdType)3U)
 
 /* DcmTxConfPduId定義 */
 #define GDN_DCM_DCP_TXCONFPDUID_0                      (GDN_PDUR_UpTpTxPduId_0_0)
 #define GDN_DCM_DCP_TXCONFPDUID_1                      (GDN_PDUR_UpTpTxPduId_0_1)
-#define GDN_DCM_DCP_TXCONFPDUID_2                      (GDN_PDUR_UpTpTxPduId_0_2)       /* ^^^ */
-#define GDN_DCM_DCP_TXCONFPDUID_3                      (GDN_PDUR_UpTpTxPduId_0_3)       /* ^^^ */
+#define GDN_DCM_DCP_TXCONFPDUID_2                      (GDN_PDUR_UpTpTxPduId_0_2)
+#define GDN_DCM_DCP_TXCONFPDUID_3                      (GDN_PDUR_UpTpTxPduId_0_3)
 
 /* DcmTxPduIdRef定義 */
 #define GDN_DCM_DCP_TXPDUID_REF_0                      (GDN_PDUR_UpTpTxPduId_0_0)
 #define GDN_DCM_DCP_TXPDUID_REF_1                      (GDN_PDUR_UpTpTxPduId_0_1)
-#define GDN_DCM_DCP_TXPDUID_REF_2                      (GDN_PDUR_UpTpTxPduId_0_2)       /* ^^^ */
-#define GDN_DCM_DCP_TXPDUID_REF_3                      (GDN_PDUR_UpTpTxPduId_0_3)       /* ^^^ */
+#define GDN_DCM_DCP_TXPDUID_REF_2                      (GDN_PDUR_UpTpTxPduId_0_2)
+#define GDN_DCM_DCP_TXPDUID_REF_3                      (GDN_PDUR_UpTpTxPduId_0_3)
 
 /* DcmDcpConnectionId_## */
 #define GDN_DCM_DCP_CONNECTION_0_PRIORITY              (0U)
 #define GDN_DCM_DCP_CONNECTION_1_PRIORITY              (0U)
-#define GDN_DCM_DCP_CONNECTION_2_PRIORITY              (0U)                             /* ^^^ */
-#define GDN_DCM_DCP_CONNECTION_3_PRIORITY              (0U)                             /* ^^^ */
+#define GDN_DCM_DCP_CONNECTION_2_PRIORITY              (0U)
+#define GDN_DCM_DCP_CONNECTION_3_PRIORITY              (0U)
 #define GDN_DCM_DCP_CONNECTION_0_TXCONF_ID             (GDN_DCM_DCP_TXCONFPDUID_0)
 #define GDN_DCM_DCP_CONNECTION_1_TXCONF_ID             (GDN_DCM_DCP_TXCONFPDUID_1)
-#define GDN_DCM_DCP_CONNECTION_2_TXCONF_ID             (GDN_DCM_DCP_TXCONFPDUID_2)      /* ^^^ */
-#define GDN_DCM_DCP_CONNECTION_3_TXCONF_ID             (GDN_DCM_DCP_TXCONFPDUID_3)      /* ^^^ */
+#define GDN_DCM_DCP_CONNECTION_2_TXCONF_ID             (GDN_DCM_DCP_TXCONFPDUID_2)
+#define GDN_DCM_DCP_CONNECTION_3_TXCONF_ID             (GDN_DCM_DCP_TXCONFPDUID_3)
 #define GDN_DCM_DCP_CONNECTION_0_TXREF_ID              (GDN_DCM_DCP_TXPDUID_REF_0)
 #define GDN_DCM_DCP_CONNECTION_1_TXREF_ID              (GDN_DCM_DCP_TXPDUID_REF_1)
-#define GDN_DCM_DCP_CONNECTION_2_TXREF_ID              (GDN_DCM_DCP_TXPDUID_REF_2)      /* ^^^ */
-#define GDN_DCM_DCP_CONNECTION_3_TXREF_ID              (GDN_DCM_DCP_TXPDUID_REF_3)      /* ^^^ */
+#define GDN_DCM_DCP_CONNECTION_2_TXREF_ID              (GDN_DCM_DCP_TXPDUID_REF_2)
+#define GDN_DCM_DCP_CONNECTION_3_TXREF_ID              (GDN_DCM_DCP_TXPDUID_REF_3)
 
 /* DcmRxPduId_## */
 #define GDN_DCM_DCP_RXPDUID_0_ID                       (GDN_DCM_DCP_RXPDUID_0)
 #define GDN_DCM_DCP_RXPDUID_1_ID                       (GDN_DCM_DCP_RXPDUID_1)
-#define GDN_DCM_DCP_RXPDUID_2_ID                       (GDN_DCM_DCP_RXPDUID_2)          /* ^^^ */
-#define GDN_DCM_DCP_RXPDUID_3_ID                       (GDN_DCM_DCP_RXPDUID_3)          /* ^^^ */
+#define GDN_DCM_DCP_RXPDUID_2_ID                       (GDN_DCM_DCP_RXPDUID_2)
+#define GDN_DCM_DCP_RXPDUID_3_ID                       (GDN_DCM_DCP_RXPDUID_3)
 #define GDN_DCM_DCP_RXPDUID_0_RXTYPE                   (GDN_DCM_AddressKindPhysical)
 #define GDN_DCM_DCP_RXPDUID_1_RXTYPE                   (GDN_DCM_AddressKindFunctional)
-#define GDN_DCM_DCP_RXPDUID_2_RXTYPE                   (GDN_DCM_AddressKindPhysical)    /* ^^^ */
-#define GDN_DCM_DCP_RXPDUID_3_RXTYPE                   (GDN_DCM_AddressKindFunctional)  /* ^^^ */
+#define GDN_DCM_DCP_RXPDUID_2_RXTYPE                   (GDN_DCM_AddressKindPhysical)
+#define GDN_DCM_DCP_RXPDUID_3_RXTYPE                   (GDN_DCM_AddressKindFunctional)
 #define GDN_DCM_DCP_RXPDUID_0_CONNECTIONID             (0U)
 #define GDN_DCM_DCP_RXPDUID_1_CONNECTIONID             (1U)
-#define GDN_DCM_DCP_RXPDUID_2_CONNECTIONID             (2U)                             /* ^^^ */
-#define GDN_DCM_DCP_RXPDUID_3_CONNECTIONID             (3U)                             /* ^^^ */
+#define GDN_DCM_DCP_RXPDUID_2_CONNECTIONID             (2U)
+#define GDN_DCM_DCP_RXPDUID_3_CONNECTIONID             (3U)
 
 /****************************** DCP CONFIG END ********************************/
 
 #endif /* GDN_UCFG_H */
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

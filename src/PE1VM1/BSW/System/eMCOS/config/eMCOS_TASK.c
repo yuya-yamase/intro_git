@@ -24,6 +24,10 @@
 
 #include "oxcan.h"
 
+#if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1))
+#include "throughput.h"
+#endif
+
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
 #if (PROCESSING_LOAD_MEASURE_TIME > 0)
@@ -69,6 +73,7 @@ TASK(eMCOS_TASK_Idle)
     vd_g_SchdlrIdleTask();      /* Infinity loop here */
 }
 
+#if (__AIP_THROUGHPUT__ != 1)
 /**---------------------------------------------------------------------------
  * [Format] 	eMCOS_TASK_High
  * [Function]	TASK_High
@@ -114,6 +119,40 @@ TASK(eMCOS_TASK_Medium)
     vd_g_SchdlrMainTask();
     (void)TerminateTask();
 }
+
+#else /* #if ((defined(__AIP_THROUGHPUT__)) && (__AIP_THROUGHPUT__ == 1)) */
+/**---------------------------------------------------------------------------
+ * [Format] 	eMCOS_TASK_High
+ * [Function]	TASK_High
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]	None
+ *--------------------------------------------------------------------------*/
+TASK(eMCOS_TASK_High)
+{
+    vd_g_ThroughputIntrptStart();
+    BswM_CS_MainFunctionHigh();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_EMCOS_TASK_HIGH);
+
+    (void)TerminateTask();
+}
+
+/**---------------------------------------------------------------------------
+ * [Format] 	eMCOS_TASK_Medium
+ * [Function]	TASK_Medium
+ * [Arguments]	None
+ * [Return] 	None
+ * [Notes]	None
+ *--------------------------------------------------------------------------*/
+TASK(eMCOS_TASK_Medium)
+{
+    vd_g_ThroughputIntrptStart();
+    vd_g_SchdlrMainTask();
+    vd_g_ThroughputIntrptFinish((U2)THRPTM_TASK_EMCOS_TASK_MEDIUM);
+
+    (void)TerminateTask();
+}
+#endif /* #if (__AIP_THROUGHPUT__ != 1) */
 
 #define OS_STOP_SEC_CODE_GLOBAL
 #include "Os_MemMap.h"

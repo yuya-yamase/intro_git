@@ -20,8 +20,8 @@
 #include "tydocan_sal.h"
 #include "oxdocan_saif.h"
 
-#include "memcpy_u1.h"      /* @@@ */
-#include "oxdocan_aubif.h"  /* @@@ */
+#include "memcpy_u1.h"
+#include "oxdocan_aubif.h"
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -52,13 +52,13 @@
 /*  Arguments:      -                                                                                                                */
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
-/* stub for tydocan_tmstp.c *//* @@@ */
+/* stub for tydocan_tmstp.c */
 uint8   u1_g_oXDoCANAubIfTripcnt(uint8 * u1_ap_tripcnt){return((uint8)E_OK);}
 uint8   u1_g_oXDoCANAubIfOdo(uint8 * u1_ap_odo){return((uint8)E_OK);}
 uint8   u1_g_oXDoCANAubIfGmt(uint8 * u1_ap_gmt){return((uint8)E_OK);}
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-/* 開発リプロ用固定値送信 */
+/* Sample value for wired reprogramming */
 
 U1      u1_g_oXDoCANRebyId_F188(U1 * u1_ap_ans, const U2 u2_a_ELPSD)
 {

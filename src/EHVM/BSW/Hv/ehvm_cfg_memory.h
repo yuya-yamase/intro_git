@@ -30,6 +30,9 @@
 #pragma ghs section rodata=".rodata.ehvm.cfg"
 
 #define INTC2G_SWITCH_REGISTER          (INTC2G_SWITCH_ENABLE)
+#define MM_NUM_OF_ROMRAM_AREA           (3U)
+
+extern EhvmConst ehvm_mm_common_config_t ehvmMmCommonConfigData;
 
 #pragma ghs section rodata=default
 
@@ -38,6 +41,6 @@
 /****************************************************************************/
 /* AUBIST Configurator Version                                              */
 /*  Framework          :v2-1-0                                              */
-/*  BSW plug-in        :v2-0-0                                              */
+/*  BSW plug-in        :v2-2-0-z0001                                        */
 /****************************************************************************/
 

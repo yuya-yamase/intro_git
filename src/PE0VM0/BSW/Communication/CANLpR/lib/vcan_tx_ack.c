@@ -84,7 +84,6 @@ void    vd_g_vCANTxAckInit(void)
 {
     U4                            u4_t_lpcnt;
 
-    (void)ehvm_vcc_clear_channel(u4_g_VCAN_TXA_VCC_RSP_TX);
     for(u4_t_lpcnt = (U4)0U; u4_t_lpcnt < (U4)u1_g_VCAN_TXA_NUM_CCH; u4_t_lpcnt++){
         (void)ehvm_vcc_clear_channel(st_gp_VCAN_TXA_CCH[u4_t_lpcnt].u4_vcc_rx);
     }
@@ -108,7 +107,7 @@ void    vd_g_vCANTxAckPreHigh(void)
     U4                            u4_t_ack;
     U4                            u4_t_nbyte;
 
-    U1                            u1_t_eas_chk;
+    U1                            u1_t_vcc_ok;
 
     for(u4_t_cch = (U4)0U; u4_t_cch < (U4)u1_g_VCAN_TXA_NUM_CCH; u4_t_cch++){
 
@@ -127,9 +126,11 @@ void    vd_g_vCANTxAckPreHigh(void)
             /* #define E_EHVM_RECEIVE_OVERWRITE_OCCURS  ((ehvm_std_return_t)0x04U) */
             /* #define E_EHVM_HVC_ACC_DENY              ((ehvm_std_return_t)0x10U) */
             /* #define E_EHVM_MM_ACC_NG                 ((ehvm_std_return_t)0x20U) */
-            u1_t_eas_chk = ehvm_vcc_receive(u4_t_vcc_rx, &u4_t_ack, (U4)VCAN_TXA_NBYTE, &u4_t_nbyte);
-            if((u1_t_eas_chk != E_EHVM_OK                      ) &&
-               (u1_t_eas_chk != E_EHVM_RECEIVE_OVERWRITE_OCCURS)){ 
+            u1_t_vcc_ok = ehvm_vcc_receive(u4_t_vcc_rx, &u4_t_ack, (U4)VCAN_TXA_NBYTE, &u4_t_nbyte);
+            if(u1_t_vcc_ok == E_EHVM_RECEIVE_OVERWRITE_OCCURS){
+                /* do nothing */
+            }
+            else if(u1_t_vcc_ok != E_EHVM_OK){ 
                 break;
             }
             else if(u4_t_lphth != (U4)VCAN_TXA_LP_HTH_FIN){

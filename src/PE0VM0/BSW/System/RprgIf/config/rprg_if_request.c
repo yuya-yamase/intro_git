@@ -10,12 +10,17 @@
 /*----------------------------------------------------------------------------
  *		ヘッダインクルード
  *--------------------------------------------------------------------------*/
+#include <stdint.h>
 #include <Std_Types.h>
 #include <SS.h>
+
+#include "int_drv.h"
+#include "gpt_drv_frt.h"
 
 #include <Ecu_Memmap_SdaDisableB_env.h>
 
 #include <Ecu_Int.h>
+#include <SS_Memory.h>
 
 /*----------------------------------------------------------------------------
  *		置換シンボル定義
@@ -45,7 +50,8 @@
 
 #include <Ecu_Memmap_SdaDisableE_env.h>
 
-extern uint32 __ghsbegin_rodata_SHARE_ROM_RIM_KEYWORD_top;
+extern          uint32 __ghsbegin_retention_ramtop[];
+volatile static uint32 u4_s_time_clearburam;
 
 /*----------------------------------------------------------------------------
  *      プロトタイプ宣言
@@ -69,8 +75,7 @@ void vd_g_RprgIfRequestReprog(void)     /* @@@ */
     uint32 *papl_rpgparamByte;
     uint32 *papl_sidparamByte;
     uint32 *papl_rpgflag;
-    uint32 u4_t_lpcnt;
-    volatile uint32* u4_tp_word;
+    uint32  u4_t_sta_clearburam;
     
     papl_rpgparamByte = (uint32 *)RPRG_APL_RPGDATAADDR;
     papl_sidparamByte = (uint32 *)RPRG_APL_SIDDATAADDR;
@@ -137,12 +142,13 @@ void vd_g_RprgIfRequestReprog(void)     /* @@@ */
     APL_REG_BSEQ0CTL = APL_BSEQ0CTL_BIST_SKIP_SET;
     REG_u4RESKCPROT0 = VAL_u4RESKCPROT0_KCE_DISABLE;
 
-    u4_tp_word = (volatile uint32*)&__ghsbegin_rodata_SHARE_ROM_RIM_KEYWORD_top;
-    for (u4_t_lpcnt = (uint32)0U; u4_t_lpcnt < (uint32)RIM_KEYWORD_SIZE; u4_t_lpcnt++) {
-        *((volatile uint32 *)(u4_tp_word[u4_t_lpcnt])) = (uint32)0x00000000U;
-    }
+    /* Disable interrupt */
+    (void)u4_g_IRQ_DI();
 
-    vd_s_SYNCP_W(&u4_tp_word[(uint8)RIM_KEYWORD_SIZE - (uint8)1U]);
+    u4_t_sta_clearburam = u4_g_Gpt_FrtGetUsElapsed((void *)0) & (uint32)0x7fffffffU;
+    /* Clear Retention RAM area from 0xFE808000(VM0 start) to 0xFE828000(VM3 end) */
+    (void)SS_Memory_set(__ghsbegin_retention_ramtop, 0UL, (uintptr_t)0x20000U);
+    u4_s_time_clearburam = (uint32)((u4_g_Gpt_FrtGetUsElapsed((void *)0) - u4_t_sta_clearburam) & (uint32)0x7fffffffU);
 
     Ecu_Int_performReset();
 

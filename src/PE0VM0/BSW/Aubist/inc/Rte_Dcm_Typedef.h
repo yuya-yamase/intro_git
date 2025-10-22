@@ -38,7 +38,7 @@ typedef uint8        Dcm_DidRequestType;
 typedef uint8        Dcm_InputOutputControlParameterType;
 typedef uint8        Dcm_IOOperationResponseType;
 typedef uint8        Dcm_ActiveStateType;
-typedef uint8        Dcm_RequestDataArrayType[4112];
+typedef uint8        Dcm_RequestDataArrayType[4095];
 
 typedef uint8        Dcm_AuthenticationRoleType[1];
 

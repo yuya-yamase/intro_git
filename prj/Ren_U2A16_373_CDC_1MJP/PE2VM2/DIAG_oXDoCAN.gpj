@@ -6,7 +6,6 @@
 
     -I${CAN_DIR}/inc
     -I${CAN_DIR}/inc/Dcm
-    -I${CAN_DIR}/inc/Dem
 
     -I${CAN_DIR}/Dcm/Dsd/cfg
     -I${CAN_DIR}/Dcm/Dsd/inc
@@ -18,8 +17,6 @@
     -I${CAN_DIR}/Dcm/Dsl/usr
     -I${CAN_DIR}/Dcm/Main/cfg
     -I${CAN_DIR}/Dcm/Main/inc
-    -I${CAN_DIR}/Dem/cfg
-    -I${CAN_DIR}/Dem/usr
 
     -I${CAN_DIR}/CS/inc
     

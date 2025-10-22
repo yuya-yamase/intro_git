@@ -32,7 +32,7 @@
 #include <DiagSrv_MemMap.h>
 
 static CONST(DiagSrv_RewriteAreaInfoConfigType, DIAGSRV_CONFIG_DATA) DiagSrv_RewriteAreaInfoConfig[] = {
-     { 0x00U, { 0x00020000UL, 0x007DFE00UL } }
+     { 0x00U, { 0x0001C000UL, 0x007A3E00UL } }
 };
 
 CONST(DiagSrv_RewriteAreaConfigType, DIAGSRV_CONFIG_DATA) DiagSrv_RewriteAreaConfig = {
@@ -56,5 +56,10 @@ CONST(DiagSrv_SblAreaConfigType, DIAGSRV_CONFIG_DATA) DiagSrv_SblAreaConfig = {
 /*----------------------------------------------------------------------------*/
 /* Notes        |                                                             */
 /*----------------------------------------------------------------------------*/
+/****************************************************************************/
+/* AUBIST Configurator Version                                              */
+/*  Framework          :v2-1-0                                              */
+/*  BSW plug-in        :v2-0-0                                              */
+/****************************************************************************/
 /**** End of File *************************************************************/
 

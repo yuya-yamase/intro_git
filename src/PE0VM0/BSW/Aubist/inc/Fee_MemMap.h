@@ -23,7 +23,7 @@
 
 #if defined FEE_START_SEC_CODE
 #undef FEE_START_SEC_CODE
-#pragma ghs section text = "bsw_fee_text"
+#pragma ghs section text = ".bsw_fee_text"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_STOP_SEC_CODE
@@ -33,7 +33,7 @@
 
 #elif defined FEE_PROXY_START_SEC_CODE
 #undef FEE_PROXY_START_SEC_CODE
-#pragma ghs section text = "bsw_fee_text"
+#pragma ghs section text = ".bsw_fee_text"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_PROXY_STOP_SEC_CODE
@@ -43,7 +43,7 @@
 
 #elif defined FEE_PROXY_START_SEC_CODE_TRUST
 #undef FEE_PROXY_START_SEC_CODE_TRUST
-#pragma ghs section text = "bsw_fee_text"
+#pragma ghs section text = ".bsw_fee_text"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_PROXY_STOP_SEC_CODE_TRUST
@@ -53,7 +53,7 @@
 
 #elif defined FEE_START_SEC_CONST_32
 #undef FEE_START_SEC_CONST_32
-#pragma ghs section rodata = "bsw_fee_rodata"
+#pragma ghs section rodata = ".bsw_fee_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_STOP_SEC_CONST_32
@@ -63,7 +63,7 @@
 
 #elif defined FEE_START_SEC_CONST_CONFIG_32
 #undef FEE_START_SEC_CONST_CONFIG_32
-#pragma ghs section rodata = "bsw_fee_rodata"
+#pragma ghs section rodata = ".bsw_fee_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_STOP_SEC_CONST_CONFIG_32
@@ -73,7 +73,7 @@
 
 #elif defined FEE_PROXY_START_SEC_CONST_CONFIG
 #undef FEE_PROXY_START_SEC_CONST_CONFIG
-#pragma ghs section rodata = "bsw_fee_rodata"
+#pragma ghs section rodata = ".bsw_fee_rodata"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_PROXY_STOP_SEC_CONST_CONFIG
@@ -83,7 +83,7 @@
 
 #elif defined FEE_START_SEC_VAR_NO_INIT_32
 #undef FEE_START_SEC_VAR_NO_INIT_32
-#pragma ghs section bss = "bsw_fee_bss"
+#pragma ghs section bss = ".bsw_fee_bss"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_STOP_SEC_VAR_NO_INIT_32
@@ -93,7 +93,7 @@
 
 #elif defined FEE_START_SEC_VAR_INIT_WAKEUP_32
 #undef FEE_START_SEC_VAR_INIT_WAKEUP_32
-#pragma ghs section bss = "bsw_fee_bss"
+#pragma ghs section bss = ".bsw_fee_bss"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_STOP_SEC_VAR_INIT_WAKEUP_32
@@ -103,7 +103,7 @@
 
 #elif defined FEE_START_SEC_VAR_CLEARED_32
 #undef FEE_START_SEC_VAR_CLEARED_32
-#pragma ghs section bss = "bsw_fee_bss"
+#pragma ghs section bss = ".bsw_fee_bss"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_STOP_SEC_VAR_CLEARED_32
@@ -113,7 +113,7 @@
 
 #elif defined FEE_PROXY_START_SEC_VAR_NO_INIT_SHARE
 #undef FEE_PROXY_START_SEC_VAR_NO_INIT_SHARE
-#pragma ghs section bss = "bsw_fee_bss"
+#pragma ghs section bss = ".bsw_fee_bss"
 #undef MEMMAP_ERROR
 
 #elif defined FEE_PROXY_STOP_SEC_VAR_NO_INIT_SHARE
