@@ -216,8 +216,8 @@
 #define XSPI_UNIT_HI                        (0x00003F00U)
 #endif   /* BEV Rebase provisionally */
 
-#define XSPI_USRNAME_SIZE                   (16U)
 #if 0   /* BEV Rebase provisionally */
+#define XSPI_USRNAME_SIZE                   (16U)
 
 #define XSPI_MAINTEDIST_OFFSET              (32768)
 
@@ -1184,24 +1184,26 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
     U1              u1_t_bzlength;
     U1              u1_t_bzemg;
     U4              u4_t_loop;
+#if 0   /* BEV Rebase provisionally */
     U4              u4_tp_usrname[XSPI_USRNAME_SIZE];
+#endif   /* BEV Rebase provisionally */
 
     vd_g_wChimeMetBuzzInfo(&u1_t_bzlvl, &u1_t_bzlength, &u1_t_bzemg);
     u4_ap_pdu_tx[0]  = (U4)((U4)u1_t_bzlvl    & (U4)0x0000000FU)  << 1;
     u4_ap_pdu_tx[0] |= (U4)((U4)u1_t_bzlength & (U4)0x00000001U)  << 0;
     u4_ap_pdu_tx[0] |= (U4)((U4)u1_t_bzemg    & (U4)0x00000001U)  << 5;
 
+#if 0   /* BEV Rebase provisionally */
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_USRNAME_SIZE; u4_t_loop++) {
         u4_tp_usrname[u4_t_loop]  = (U4)0U;
     }
 
-#if 0   /* BEV Rebase provisionally */
     (void)u1_g_McstReadUsrName(&u4_tp_usrname[0], (U1)XSPI_USRNAME_SIZE, (U1)0xFFU); /* Get current user name */
-#endif   /* BEV Rebase provisionally */
 
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_USRNAME_SIZE; u4_t_loop++) {
         u4_ap_pdu_tx[5U + u4_t_loop]  = u4_tp_usrname[u4_t_loop];
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
