@@ -24,8 +24,8 @@
 #include "vehspd_kmph.h"
 #if 0   /* BEV Rebase provisionally */
 #include "ptsctmp_cel.h"
-#include "alert.h"
 #endif   /* BEV Rebase provisionally */
+#include "alert.h"
 #include "gauge.h"
 #if 0   /* BEV Rebase provisionally */
 
@@ -50,7 +50,7 @@
 #if 0   /* BEV Rebase provisionally */
 #define VEH_OPEMD_NUM_EVHK                      (6U)
 #else   /* BEV Rebase provisionally */
-#define VEH_OPEMD_NUM_EVHK                      (3U)
+#define VEH_OPEMD_NUM_EVHK                      (4U)
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -92,10 +92,9 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
         {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 
+#endif   /* BEV Rebase provisionally */
         {&vd_g_AlertOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
-
-#endif   /* BEV Rebase provisionally */
         {&vd_g_GaugeOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
 #if 0   /* BEV Rebase provisionally */

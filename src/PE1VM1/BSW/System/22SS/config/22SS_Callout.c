@@ -44,7 +44,9 @@
 #include "vptran_sel.h"
 #if 0   /* BEV Rebase provisionally */
 #include "ptsctmp_cel.h"
+#endif   /* BEV Rebase provisionally */
 #include "alert.h"
+#if 0   /* BEV Rebase provisionally */
 #include "sbltwrn.h"
 #include "engspd_rpm.h"
 #include "engspd_det_rpm.h"
@@ -136,7 +138,9 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_IllumiBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_AlertInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */
@@ -239,7 +243,9 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_IllumiRstInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_AlertInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */
@@ -342,7 +348,9 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_IllumiWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_PtsctmpInit,
+#endif   /* BEV Rebase provisionally */
         &vd_g_AlertInit,
+#if 0   /* BEV Rebase provisionally */
         &vd_g_SbltwrnInit,
         &vd_g_TelltaleInit,
 #endif   /* BEV Rebase provisionally */

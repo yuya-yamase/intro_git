@@ -19,9 +19,7 @@
 #include "hmitt_cfg_private.h"
 #include "hmitt_if_cfg.h"
 
-#if 0   /* BEV Rebase provisionally */ 
 #include "alert.h"
-#endif   /* BEV Rebase provisionally */
 #include "thblnkr.h"
 #include "ambtmp.h"
 #if 0   /* BEV Rebase provisionally */ 
@@ -167,26 +165,24 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
 
     U4  u4_t_loop;
     U4  u4_t_onoff;
-#if 0   /* BEV Rebase provisionally */ 
     U2  u2_t_num_reqbit;
+#if 0   /* BEV Rebase provisionally */ 
     U2  u2_t_belt_tt;
 #endif   /* BEV Rebase provisionally */
     U1  u1_t_icewrn;
 #if 0   /* BEV Rebase provisionally */
     U1  u1_t_rearbelt_tt;
+#endif   /* BEV Rebase provisionally */
     U1  u1_t_placon;
     U1  u1_t_ecbepbtt;
     U1  u1_t_pkbtt;
 
-#endif   /* BEV Rebase provisionally */
     for(u4_t_loop = (U4)0U ; u4_t_loop < (U4)HMITT_NUM ; u4_t_loop++){
         u4_ap_req[u4_t_loop] = (U4)0U;
     }
 
-#if 0   /* BEV Rebase provisionally */ 
     u2_t_num_reqbit = u2_g_HmittSizeReqbit();
     vd_g_AlertReqToBit( st_gp_HMITTREQBIT, u2_t_num_reqbit, u4_ap_req, (U1)HMITT_NUM);
-#endif   /* BEV Rebase provisionally */
 
     u1_t_icewrn = u1_g_AmbtmpIceWrnAct();
     if(u1_t_icewrn == (U1)TRUE){
@@ -220,6 +216,7 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     if (u1_t_rearbelt_tt == (U1)TRUE) {
         u4_ap_req[HMITT_REARBLT_DATPOS] |= u4_HMITT_HB4(HMITT_BLINK_CO_ON_____100P);
     }
+#endif   /* BEV Rebase provisionally */
 
     u1_t_placon  = u1_g_AlertReqByCh((U2)ALERT_CH_P_PLACON);
     if(u1_t_placon == (U1)ALERT_REQ_P_PLACON_FLASH){
@@ -239,7 +236,6 @@ void    vd_g_HmiTtCfgReq(U4 * u4_ap_req)
     vd_s_HmiTtTECOLP2(u4_ap_req);
     vd_s_HmiTtLbwTt(u4_ap_req);
     vd_s_HmiTtZmilrqTt(u4_ap_req);
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -274,7 +270,6 @@ static void    vd_s_HmiTtTurn(U4 * u4_ap_req)
 /*===================================================================================================================================*/
 static U1      u1_s_HmiTtEcbEpbTt(void)
 {
-#if 0   /* BEV Rebase provisionally */ 
     static const U1    u1_sp_HMITT_REQ_ECB_YEL[HMITT_REQ_NUM_ECB_YEL] = {
         (U1)HMITT_BLINK_CO_OFF____100P,                /* ALERT_REQ_C_ECB_FAILDISP                 ( 0U) */
         (U1)HMITT_BLINK_CO_OFF____100P,                /* ALERT_REQ_C_ECB_FDISP_RW                 ( 1U) */
@@ -324,9 +319,7 @@ static U1      u1_s_HmiTtEcbEpbTt(void)
         (U1)HMITT_BLINK_CO_ON_____100P                 /* ALERT_REQ_C_EPB_WRN_IG_EPBDEFRW7         (21U) */
     };
 
-#endif   /* BEV Rebase provisionally */
     U1  u1_t_req;
-#if 0   /* BEV Rebase provisionally */ 
     U1  u1_t_epbreq;
     U1  u1_t_ecbreq;
     U1  u1_t_epbexist;
@@ -358,9 +351,6 @@ static U1      u1_s_HmiTtEcbEpbTt(void)
         u1_t_req = (U1)HMITT_BLINK_CO_OFF____100P;
     }
 
-#else   /* BEV Rebase provisionally */
-    u1_t_req = (U1)HMITT_BLINK_CO_OFF____100P;
-#endif   /* BEV Rebase provisionally */
     return(u1_t_req);
 
 }
@@ -373,7 +363,6 @@ static U1      u1_s_HmiTtEcbEpbTt(void)
 /*===================================================================================================================================*/
 static U1      u1_s_HmiTtPkbTt(void)
 {
-#if 0   /* BEV Rebase provisionally */ 
     static const U1    u1_sp_HMITT_REQ_EPB_TT_PKB_RED[HMITT_REQ_NUM_EPB_TT_PKB_RED] = {
         (U1)HMITT_BLINK_CO_ON_____100P,          /* ALERT_REQ_C_EPB_TT_PKB_TT_ON             ( 0U) */
         (U1)HMITT_BLINK_CO_1P00HZ__50P,          /* ALERT_REQ_C_EPB_TT_PKB_FLASH_1HZ         ( 1U) */
@@ -385,14 +374,10 @@ static U1      u1_s_HmiTtPkbTt(void)
     };
 
     U1  u1_t_sts;
-#endif   /* BEV Rebase provisionally */
     U1  u1_t_req;
-#if 0   /* BEV Rebase provisionally */ 
     U1  u1_t_epb1f01;
 
-#endif   /* BEV Rebase provisionally */
     u1_t_req  = (U1)HMITT_BLINK_CO_OFF____100P;
-#if 0   /* BEV Rebase provisionally */ 
     u1_t_epb1f01 = u1_g_VardefEsOptAvaByCh((U2)VDF_ESO_CH_EPB);
     if(u1_t_epb1f01 == (U1)TRUE){
         u1_t_sts  = u1_g_AlertReqByCh((U2)ALERT_CH_C_EPB_TT_PKB);
@@ -406,7 +391,6 @@ static U1      u1_s_HmiTtPkbTt(void)
             u1_t_req = u1_sp_HMITT_REQ_TEPKB_RED[u1_t_sts];
         }
     }
-#endif   /* BEV Rebase provisionally */
     return(u1_t_req);
 }
 
@@ -441,7 +425,6 @@ static void    vd_s_HmiTtTECOLP2(U4* u4_ap_req)
 /*===================================================================================================================================*/
 static void    vd_s_HmiTtLbwTt(U4* u4_ap_req)
 {
-#if 0   /* BEV Rebase provisionally */ 
     U1  u1_t_ptsys;
     U1  u1_t_lbw_req;
 
@@ -463,7 +446,6 @@ static void    vd_s_HmiTtLbwTt(U4* u4_ap_req)
             u4_ap_req[HMITT_LBW_DATPOS] &= (~((U4)HMITT_VAR_MASK << HMITT_28BIT_SHIFT));
         }
     }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -498,7 +480,6 @@ static void    vd_s_HmiTtZmilrqTt(U4* u4_ap_req)
 /*===================================================================================================================================*/
 void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
 {
-#if 0   /* BEV Rebase provisionally */
     static const ST_HMITT_ESOPT st_sp_HMITT_ESOPT[] = {
     /* u1_idx     u1_strtpos   u2_esopt                       u2_chid                           u1_req                                       */
         {  (U1)0U,    (U1)16U,    (U2)VDF_ESO_CH_PEDPRO,        (U2)ALERT_CH_B_PEDPRO,             (U1)ALERT_REQ_B_PEDPRO_DIAGDTRMN             },
@@ -542,7 +523,6 @@ void    vd_g_HmiTtCfgVarmask(U4 * u4_ap_varmask)
             u4_ap_varmask[u1_t_bufpos] &= (~((U4)HMITT_VAR_MASK << st_sp_HMITT_ESOPT[u4_t_loop].u1_strtpos));
         }
     }
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
