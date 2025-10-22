@@ -214,9 +214,7 @@
 #if 0   /* BEV Rebase provisionally */
 #define XSPI_UNIT_LOW                       (0x0000007FU)
 #define XSPI_UNIT_HI                        (0x00003F00U)
-#endif   /* BEV Rebase provisionally */
 
-#if 0   /* BEV Rebase provisionally */
 #define XSPI_USRNAME_SIZE                   (16U)
 
 #define XSPI_MAINTEDIST_OFFSET              (32768)
@@ -1183,8 +1181,8 @@ static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
     U1              u1_t_bzlvl;
     U1              u1_t_bzlength;
     U1              u1_t_bzemg;
-    U4              u4_t_loop;
 #if 0   /* BEV Rebase provisionally */
+    U4              u4_t_loop;
     U4              u4_tp_usrname[XSPI_USRNAME_SIZE];
 #endif   /* BEV Rebase provisionally */
 
