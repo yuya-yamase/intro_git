@@ -61,6 +61,9 @@
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Illumi/scc
     -I${APP_DIR}/MET/IpcApplication/Vsv/Thblnkr/scc
+    -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config_D1L1
+    -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config
+    -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/scc
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -463,4 +466,8 @@ App/MET/IpcApplication/Vsv/Illumi/config/illumi_comtx.c
 App/MET/IpcApplication/Vsv/Illumi/scc/illumi.c
 App/MET/IpcApplication/Vsv/Thblnkr/config/thblnkr_cfg.c
 App/MET/IpcApplication/Vsv/Thblnkr/scc/thblnkr.c
+App/MET/IpcApplication/Vsv/WChime/config_D1L1/wchime_grd_cfg.c
+App/MET/IpcApplication/Vsv/WChime/config/wchime_arb_cfg.c
+App/MET/IpcApplication/Vsv/WChime/config/wchime_req_cfg.c
+App/MET/IpcApplication/Vsv/WChime/scc/wchime_arb.c
 

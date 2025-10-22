@@ -79,9 +79,7 @@
 
 /* VSV */
 #include "gagdst_nxmph.h"
-#if 0   /* BEV Rebase provisionally */
 #include "wchime.h"
-#endif   /* BEV Rebase provisionally */
 #include "illumi.h"
 
 /* HMI */
@@ -1180,18 +1178,20 @@ static inline void    vd_s_XSpiCfgTxWrnmsg(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMulmed(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
     U1              u1_t_bzlvl;
     U1              u1_t_bzlength;
     U1              u1_t_bzemg;
+#if 0   /* BEV Rebase provisionally */
     U4              u4_t_loop;
     U4              u4_tp_usrname[XSPI_USRNAME_SIZE];
+#endif   /* BEV Rebase provisionally */
 
     vd_g_wChimeMetBuzzInfo(&u1_t_bzlvl, &u1_t_bzlength, &u1_t_bzemg);
     u4_ap_pdu_tx[0]  = (U4)((U4)u1_t_bzlvl    & (U4)0x0000000FU)  << 1;
     u4_ap_pdu_tx[0] |= (U4)((U4)u1_t_bzlength & (U4)0x00000001U)  << 0;
     u4_ap_pdu_tx[0] |= (U4)((U4)u1_t_bzemg    & (U4)0x00000001U)  << 5;
 
+#if 0   /* BEV Rebase provisionally */
     for (u4_t_loop = (U4)0U; u4_t_loop < (U4)XSPI_USRNAME_SIZE; u4_t_loop++) {
         u4_tp_usrname[u4_t_loop]  = (U4)0U;
     }
