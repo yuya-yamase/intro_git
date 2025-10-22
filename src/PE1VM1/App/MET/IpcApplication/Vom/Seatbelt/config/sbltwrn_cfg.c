@@ -57,6 +57,7 @@
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 const   ST_SBLTWRN_MSGCFG                       st_gp_SBLTWRN_MSGCOND_CFG[SBLTWRN_NUM_MSG] = {
+#if 0   /* BEV Rebase provisionally */
     {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)MSG_BDB1S01_RXCH0  },      /* 01 SBLTWRN_MSG_BDB1S01 */ /* For R*OSW, POSW, ***Y, PKB_BDB      */
     {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ECT1G01_RXCH0  },      /* 02 SBLTWRN_MSG_ECT1G01 */ /* For B_P, B_R                        */
     {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ABG1S01_RXCH0  },      /* 03 SBLTWRN_MSG_ABG1S01 */ /* For *BKLAB                          */
@@ -64,6 +65,15 @@ const   ST_SBLTWRN_MSGCFG                       st_gp_SBLTWRN_MSGCOND_CFG[SBLTWR
     {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)MSG_PDC1G02_RXCH0  },      /* 05 SBLTWRN_MSG_PDC1G02 */ /* For R*BKLPDC, PBKL_PDC              */
     {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)MSG_ZN11S19_RXCH0  },      /* 06 SBLTWRN_MSG_ZN11S19 */ /* For R**OSW, CFOSW                   */
     {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)MSG_ZN11S26_RXCH0  }       /* 07 SBLTWRN_MSG_ZN11S26 */ /* For *R*BCKL, CFBCKL, DBKLSW, REVSW2 */
+#else   /* BEV Rebase provisionally */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)U2_MAX             },      /* 01 SBLTWRN_MSG_BDB1S01 */ /* For R*OSW, POSW, ***Y, PKB_BDB      */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)U2_MAX             },      /* 02 SBLTWRN_MSG_ECT1G01 */ /* For B_P, B_R                        */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)U2_MAX             },      /* 03 SBLTWRN_MSG_ABG1S01 */ /* For *BKLAB                          */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)U2_MAX             },      /* 04 SBLTWRN_MSG_VSC1G13 */ /* For SP1                             */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)U2_MAX             },      /* 05 SBLTWRN_MSG_PDC1G02 */ /* For R*BKLPDC, PBKL_PDC              */
+    {   (U1)SBLTWRN_MSGCOND_BATT,   (U2)U2_MAX             },      /* 06 SBLTWRN_MSG_ZN11S19 */ /* For R**OSW, CFOSW                   */
+    {   (U1)SBLTWRN_MSGCOND_IGON,   (U2)U2_MAX             }       /* 07 SBLTWRN_MSG_ZN11S26 */ /* For *R*BCKL, CFBCKL, DBKLSW, REVSW2 */
+    #endif   /* BEV Rebase provisionally */
 };
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

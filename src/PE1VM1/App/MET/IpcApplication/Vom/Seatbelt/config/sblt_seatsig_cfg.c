@@ -80,7 +80,9 @@ U1              u1_g_SbltDsCfgGetDBKLAB(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_DBKLAB, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -96,7 +98,9 @@ U1              u1_g_SbltDsCfgGetDBKLSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_DBKLSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -112,7 +116,9 @@ U1              u1_g_SbltPsCfgGetPBKLAB(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_PBKLAB, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -128,7 +134,9 @@ U1              u1_g_SbltPsCfgGetPBKLPDC(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_PBKL_PDC, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -144,7 +152,9 @@ U1              u1_g_SbltPsCfgGetPOSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_POSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -160,7 +170,9 @@ U1              u1_g_SbltFcCfgGetCFBCKL(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CFBCKL, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -176,7 +188,9 @@ U1              u1_g_SbltFcCfgGetCFOSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CFOSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -192,7 +206,9 @@ U1              u1_g_SbltRsCfgGetRRBKLPDC(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RRBKLPDC, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -208,7 +224,9 @@ U1              u1_g_SbltRsCfgGetRCBKLPDC(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RCBKLPDC, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -224,7 +242,9 @@ U1              u1_g_SbltRsCfgGetRLBKLPDC(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RLBKLPDC, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -240,7 +260,9 @@ U1              u1_g_SbltRsCfgGetRR2BCKL(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RR2BCKL, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -256,7 +278,9 @@ U1              u1_g_SbltRsCfgGetCR2BCKL(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CR2BCKL, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -272,7 +296,9 @@ U1              u1_g_SbltRsCfgGetLR2BCKL(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_LR2BCKL, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -288,7 +314,9 @@ U1              u1_g_SbltRsCfgGetRR3BCKL(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RR3BCKL, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -304,7 +332,9 @@ U1              u1_g_SbltRsCfgGetCR3BCKL(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_CR3BCKL, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -320,7 +350,9 @@ U1              u1_g_SbltRsCfgGetLR3BCKL(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_LR3BCKL, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -336,7 +368,9 @@ U1              u1_g_SbltRsCfgGetRROSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RROSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -352,7 +386,9 @@ U1              u1_g_SbltRsCfgGetRCOSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RCOSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -368,7 +404,9 @@ U1              u1_g_SbltRsCfgGetRLOSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RLOSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -384,7 +422,9 @@ U1              u1_g_SbltRsCfgGetRR2OSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RR2OSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -400,7 +440,9 @@ U1              u1_g_SbltRsCfgGetRC2OSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RC2OSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -416,7 +458,9 @@ U1              u1_g_SbltRsCfgGetRL2OSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RL2OSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -432,7 +476,9 @@ U1              u1_g_SbltRsCfgGetRR3OSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RR3OSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -448,7 +494,9 @@ U1              u1_g_SbltRsCfgGetRC3OSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RC3OSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -464,7 +512,9 @@ U1              u1_g_SbltRsCfgGetRL3OSW(void)
     U1          u1_t_sgnl;
 
     u1_t_sgnl = (U1)0U;
+#if 0   /* BEV Rebase provisionally */
     (void)Com_ReceiveSignal(ComConf_ComSignal_RL3OSW, &u1_t_sgnl);
+#endif   /* BEV Rebase provisionally */
     return (u1_t_sgnl);
 }
 
@@ -476,6 +526,7 @@ U1              u1_g_SbltRsCfgGetRL3OSW(void)
 /*===================================================================================================================================*/
 void            vd_g_SbltDsCfgTxDBKL_MET(const U1 u1_a_DBKL_MET, const U1 u1_a_EVENT_SEND)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_pre_dbkl_met;
     
     u1_t_pre_dbkl_met = (U1)0U;
@@ -484,6 +535,7 @@ void            vd_g_SbltDsCfgTxDBKL_MET(const U1 u1_a_DBKL_MET, const U1 u1_a_E
     if ((u1_a_EVENT_SEND == (U1)TRUE) && (u1_a_DBKL_MET != u1_t_pre_dbkl_met)) {
         (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -494,6 +546,7 @@ void            vd_g_SbltDsCfgTxDBKL_MET(const U1 u1_a_DBKL_MET, const U1 u1_a_E
 /*===================================================================================================================================*/
 void            vd_g_SbltPsCfgTxPBKL_MET(const U1 u1_a_PBKL_MET, const U1 u1_a_EVENT_SEND)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_pre_pbkl_met;
     
     u1_t_pre_pbkl_met = (U1)0U;
@@ -502,6 +555,7 @@ void            vd_g_SbltPsCfgTxPBKL_MET(const U1 u1_a_PBKL_MET, const U1 u1_a_E
     if ((u1_a_EVENT_SEND == (U1)TRUE) && (u1_a_PBKL_MET != u1_t_pre_pbkl_met)) {
         (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -513,6 +567,7 @@ void            vd_g_SbltPsCfgTxPBKL_MET(const U1 u1_a_PBKL_MET, const U1 u1_a_E
 /*===================================================================================================================================*/
 void            vd_g_SbltRsCfgTxRRBKLMET(const U1 u1_a_RRBKLMET, const U1 u1_a_EVENT_SEND)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_pre_rrbklmet;
     
     u1_t_pre_rrbklmet = (U1)0U;
@@ -521,6 +576,7 @@ void            vd_g_SbltRsCfgTxRRBKLMET(const U1 u1_a_RRBKLMET, const U1 u1_a_E
     if ((u1_a_EVENT_SEND == (U1)TRUE) && (u1_a_RRBKLMET != u1_t_pre_rrbklmet)) {
         (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -532,6 +588,7 @@ void            vd_g_SbltRsCfgTxRRBKLMET(const U1 u1_a_RRBKLMET, const U1 u1_a_E
 /*===================================================================================================================================*/
 void            vd_g_SbltRsCfgTxRCBKLMET(const U1 u1_a_RCBKLMET, const U1 u1_a_EVENT_SEND)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_pre_rcbklmet;
     
     u1_t_pre_rcbklmet = (U1)0U;
@@ -540,6 +597,7 @@ void            vd_g_SbltRsCfgTxRCBKLMET(const U1 u1_a_RCBKLMET, const U1 u1_a_E
     if ((u1_a_EVENT_SEND == (U1)TRUE) && (u1_a_RCBKLMET != u1_t_pre_rcbklmet)) {
         (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -551,6 +609,7 @@ void            vd_g_SbltRsCfgTxRCBKLMET(const U1 u1_a_RCBKLMET, const U1 u1_a_E
 /*===================================================================================================================================*/
 void            vd_g_SbltRsCfgTxRLBKLMET(const U1 u1_a_RLBKLMET, const U1 u1_a_EVENT_SEND)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_pre_rlbklmet;
     
     u1_t_pre_rlbklmet = (U1)0U;
@@ -559,6 +618,7 @@ void            vd_g_SbltRsCfgTxRLBKLMET(const U1 u1_a_RLBKLMET, const U1 u1_a_E
     if ((u1_a_EVENT_SEND == (U1)TRUE) && (u1_a_RLBKLMET != u1_t_pre_rlbklmet)) {
         (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -570,6 +630,7 @@ void            vd_g_SbltRsCfgTxRLBKLMET(const U1 u1_a_RLBKLMET, const U1 u1_a_E
 /*===================================================================================================================================*/
 void            vd_g_SbltRsCfgTxBKL3RMET(const U1 u1_a_BKL3RMET, const U1 u1_a_EVENT_SEND)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_pre_bkl3rmet;
     
     u1_t_pre_bkl3rmet = (U1)0U;
@@ -578,6 +639,7 @@ void            vd_g_SbltRsCfgTxBKL3RMET(const U1 u1_a_BKL3RMET, const U1 u1_a_E
     if ((u1_a_EVENT_SEND == (U1)TRUE) && (u1_a_BKL3RMET != u1_t_pre_bkl3rmet)) {
         (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -589,6 +651,7 @@ void            vd_g_SbltRsCfgTxBKL3RMET(const U1 u1_a_BKL3RMET, const U1 u1_a_E
 /*===================================================================================================================================*/
 void            vd_g_SbltRsCfgTxBKL3CMET(const U1 u1_a_BKL3CMET, const U1 u1_a_EVENT_SEND)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_pre_bkl3cmet;
     
     u1_t_pre_bkl3cmet = (U1)0U;
@@ -597,6 +660,7 @@ void            vd_g_SbltRsCfgTxBKL3CMET(const U1 u1_a_BKL3CMET, const U1 u1_a_E
     if ((u1_a_EVENT_SEND == (U1)TRUE) && (u1_a_BKL3CMET != u1_t_pre_bkl3cmet)) {
         (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -608,6 +672,7 @@ void            vd_g_SbltRsCfgTxBKL3CMET(const U1 u1_a_BKL3CMET, const U1 u1_a_E
 /*===================================================================================================================================*/
 void            vd_g_SbltRsCfgTxBKL3LMET(const U1 u1_a_BKL3LMET, const U1 u1_a_EVENT_SEND)
 {
+#if 0   /* BEV Rebase provisionally */
     U1  u1_t_pre_bkl3lmet;
     
     u1_t_pre_bkl3lmet = (U1)0U;
@@ -616,6 +681,7 @@ void            vd_g_SbltRsCfgTxBKL3LMET(const U1 u1_a_BKL3LMET, const U1 u1_a_E
     if ((u1_a_EVENT_SEND == (U1)TRUE) && (u1_a_BKL3LMET != u1_t_pre_bkl3lmet)) {
         (void)Com_TriggerIPDUSend(MSG_MET1S47_TXCH0);
     }
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
