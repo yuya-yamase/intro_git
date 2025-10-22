@@ -156,7 +156,7 @@ static U4      u4_s_AlertB_tffogSrcchk(const U1 u1_a_VOM, const U4 u4_a_IGN_TM, 
 
     return(u4_t_src_chk);
 #else   /* BEV Rebase provisionally */
-    return((U1)0U);
+    return((U4)0U);
 #endif   /* BEV Rebase provisionally */
 }
 

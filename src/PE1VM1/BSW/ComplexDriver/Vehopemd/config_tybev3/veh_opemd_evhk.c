@@ -50,7 +50,7 @@
 #if 0   /* BEV Rebase provisionally */
 #define VEH_OPEMD_NUM_EVHK                      (6U)
 #else   /* BEV Rebase provisionally */
-#define VEH_OPEMD_NUM_EVHK                      (3U)
+#define VEH_OPEMD_NUM_EVHK                      (4U)
 #endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/

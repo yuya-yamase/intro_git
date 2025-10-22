@@ -19,21 +19,15 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "vardef.h"
 #include "vardef_esopt.h"
-
 #if 0   /* BEV Rebase provisionally */
 #include "iohw_diflt.h"
 #endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
-#if 0   /* BEV Rebase provisionally */
-#include "engspd_rpm.h"
-#endif   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "locale.h"
 #include "unitconvrt.h"
 #if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
-#include "ptsctmp_cel.h"
-#include "flid_open.h"
 #endif   /* BEV Rebase provisionally */
 #include "calibration.h"
 
