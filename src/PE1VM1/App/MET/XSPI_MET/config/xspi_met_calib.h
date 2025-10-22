@@ -1,43 +1,52 @@
-/* 2.2.0 */
+/* 0.0.0 */
 /*===================================================================================================================================*/
 /*  Copyright DENSO Corporation                                                                                                      */
 /*===================================================================================================================================*/
-/*  Illumination                                                                                                                     */
-/*  Configuration                                                                                                                    */
+/*  Local Communication SPI / MCUCONST Data Set                                                                                      */
+/*                                                                                                                                   */
 /*===================================================================================================================================*/
 
-#ifndef ILLUMI_CFG_H
-#define ILLUMI_CFG_H
+#ifndef XSPI_CALIB_H
+#define XSPI_CALIB_H
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version                                                                                                                          */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ILLUMI_CFG_H_MAJOR                      (2)
-#define ILLUMI_CFG_H_MINOR                      (2)
-#define ILLUMI_CFG_H_PATCH                      (0)
+#define XSPI_CALIB_H_MAJOR                    (0)
+#define XSPI_CALIB_H_MINOR                    (0)
+#define XSPI_CALIB_H_PATCH                    (0)
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Include Files                                                                                                                    */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "aip_common.h"
-#include "dimmer.h"
-#include "illumi.h"
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#define ILLUMI_NUM_DIM_LVL                      (3U)
-#define ILLUMI_DIM_LVL_USADJ_DAY                (DIM_DAYNIGHT_LVL_DAY)    /* 0U */
-#define ILLUMI_DIM_LVL_USADJ_NIGHT              (DIM_DAYNIGHT_LVL_NIGHT)  /* 1U */
-#define ILLUMI_DIM_LVL_DAYNIGHT                 (2U)
+#define XSPI_MSK_01BIT                          (0x00000001U)
+#define XSPI_MSK_02BIT                          (0x00000003U)
+#define XSPI_MSK_03BIT                          (0x00000007U)
+#define XSPI_MSK_04BIT                          (0x0000000FU)
+#define XSPI_MSK_05BIT                          (0x0000001FU)
+#define XSPI_MSK_06BIT                          (0x0000003FU)
+#define XSPI_MSK_07BIT                          (0x0000007FU)
+#define XSPI_MSK_08BIT                          (0x000000FFU)
+#define XSPI_MSK_09BIT                          (0x000001FFU)
+#define XSPI_MSK_10BIT                          (0x000003FFU)
+#define XSPI_MSK_11BIT                          (0x000007FFU)
+#define XSPI_MSK_12BIT                          (0x00000FFFU)
+#define XSPI_MSK_13BIT                          (0x00001FFFU)
+#define XSPI_MSK_14BIT                          (0x00003FFFU)
+#define XSPI_MSK_15BIT                          (0x00007FFFU)
+#define XSPI_MSK_16BIT                          (0x0000FFFFU)
+#define XSPI_MSK_17BIT                          (0x0001FFFFU)
 
-#define ILLUMI_OW_TOC_MAX                       (0xfffeU)   /* Overwrite Timeout Counter Max. */
-#define ILLUMI_OW_INA                           (0xffffU)
-
-#define ILLUMI_TFTPCT_OFF                       (0U)
-#define ILLUMI_TFTALPHA_OFF                     (255U)
-
-#define ILLUMI_DIM_LVL_NUM                      (22U)
+#define XSPI_SHIFT_3BYTE                        (24U)
+#define XSPI_SHIFT_2BYTE                        (16U)
+#define XSPI_SHIFT_1BYTE                        (8U)
+#define XSPI_SHIFT_NON                          (0U)
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
+/*-----------------------------------------------------------------------------------------------------------------------------------*/
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -45,44 +54,23 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Type Definitions                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-typedef struct{
-    U2      u2_tocnt;
-    U2      u2_pct;
-}ST_ILLUMI_OW_CTRL;
-
-typedef struct{
-    U2                  u2_step;
-    volatile const U1 * u1p_day;
-    volatile const U1 * u1p_night;
-}ST_ILLUMI_TFTPCT;
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Variable Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern U2                   u2_gp_illumi_lvl_pct[];
-extern ST_ILLUMI_OW_CTRL    st_gp_illumi_ow_ctrl[];
-
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-void    vd_g_IllumiCfgBonInit(void);
-void    vd_g_IllumiCfgRstInit(void);
-void    vd_g_IllumiCfgWkupInit(void);
-void    vd_g_IllumiCfgMainStart(void);
-void    vd_g_IllumiCfgMainFinish(void);
-
+void    vd_g_XSpiCalibInit(void);
+void    vd_g_XSpiCalibMainTask(void);
+void    vd_g_XSpiCalibGetData(U4 * u4_ap_pdu_tx);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Externs                                                                                                                 */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-extern const U2             u2_g_ILLUMI_OW_TOUT;
-extern U2 ( * const         fp_gp_u2_ILLUMI_LVL_UPDT[])(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW);
-extern const U1             u1_g_ILLUMI_NUM_CH;
-extern const U4             u4_g_ILLUMI_SHTDWN_CHK_BY_CH;
 
-#endif /* ILLUMI_CFG_H */
+#endif      /* XSPI_CALIB_H */
 
 /*===================================================================================================================================*/
 /*                                                                                                                                   */
-/*  Change History  :  illumi.c                                                                                                      */
+/*  Change History  :  xspi_met_calib.c                                                                                              */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

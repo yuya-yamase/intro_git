@@ -632,10 +632,10 @@ U1      u1_g_VardefCfgUnitType(void)
 /*===================================================================================================================================*/
 U1      u1_g_VardefCfgBltDst(void)
 {
-    static const U1    u1_s_BLTDST_TBL[CALIB_MCUID0603_TO_MCUID0607_NUM] = {
-        (U1)VDF_SEATBLT_DEST_USA,          /* CALIB_MCUID0603_TO_MCUID0607_USA         (0) */
-        (U1)VDF_SEATBLT_DEST_EU,           /* CALIB_MCUID0603_TO_MCUID0607_AUS         (1) */
-        (U1)VDF_SEATBLT_DEST_CHN           /* CALIB_MCUID0603_TO_MCUID0607_CHN         (2) */
+    static const U1    u1_s_BLTDST_TBL[CALIB_MCUID0604_TO_MCUID0607_NUM] = {
+        (U1)VDF_SEATBLT_DEST_USA,          /* CALIB_MCUID0604_TO_MCUID0607_USA         (0) */
+        (U1)VDF_SEATBLT_DEST_EU,           /* CALIB_MCUID0604_TO_MCUID0607_AUS         (1) */
+        (U1)VDF_SEATBLT_DEST_CHN           /* CALIB_MCUID0604_TO_MCUID0607_CHN         (2) */
     };
 
     U1 u1_t_blt_const;
@@ -647,27 +647,31 @@ U1      u1_g_VardefCfgBltDst(void)
 
 	switch(u1_t_blt_const){
         case (U1)VDF_SEATBLT_MCUID0603:
-            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0603_SBELT_USA, (U1)CALIB_MCUID0603_TO_MCUID0607_NUM,
+#if 0   /* BEV Rebase provisionally */
+            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0603_SBELT_USA, (U1)CALIB_MCUID0604_TO_MCUID0607_NUM,
                                                              (U1)CALIB_MCUID0603_DEF);
+#else   /* BEV Rebase provisionally */
+            u1_t_blt_calib = (U1)0U;
+#endif   /* BEV Rebase provisionally */
             break;
         case (U1)VDF_SEATBLT_MCUID0604:
-            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0604_SBELT_MEXICO, (U1)CALIB_MCUID0603_TO_MCUID0607_NUM,
+            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0604_SBELT_MEXICO, (U1)CALIB_MCUID0604_TO_MCUID0607_NUM,
                                                              (U1)CALIB_MCUID0604_DEF);
             break;
         case (U1)VDF_SEATBLT_MCUID0605:
-            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0605_SBELT_EU, (U1)CALIB_MCUID0603_TO_MCUID0607_NUM,
+            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0605_SBELT_EU, (U1)CALIB_MCUID0604_TO_MCUID0607_NUM,
                                                              (U1)CALIB_MCUID0605_DEF);
             break;
         case (U1)VDF_SEATBLT_MCUID0606:
-            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0606_SBELT_KOREA, (U1)CALIB_MCUID0603_TO_MCUID0607_NUM,
+            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0606_SBELT_KOREA, (U1)CALIB_MCUID0604_TO_MCUID0607_NUM,
                                                              (U1)CALIB_MCUID0606_DEF);
             break;
         case (U1)VDF_SEATBLT_MCUID0607:
-            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0607_SBELT_CHINA, (U1)CALIB_MCUID0603_TO_MCUID0607_NUM,
+            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0607_SBELT_CHINA, (U1)CALIB_MCUID0604_TO_MCUID0607_NUM,
                                                              (U1)CALIB_MCUID0607_DEF);
             break;
         default:
-            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0605_SBELT_EU, (U1)CALIB_MCUID0603_TO_MCUID0607_NUM,
+            u1_t_blt_calib = u1_s_VardefDestCfgCalibU1NumChk(u1_CALIB_MCUID0605_SBELT_EU, (U1)CALIB_MCUID0604_TO_MCUID0607_NUM,
                                                              (U1)CALIB_MCUID0605_DEF);
             break;
     }

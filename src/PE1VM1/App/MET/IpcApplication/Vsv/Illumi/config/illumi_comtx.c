@@ -81,11 +81,6 @@
 #define ILLUMI_TAIL_CN_ACT                      (0x02U)  /* TAIL_CN Active      */
 #define ILLUMI_TAIL_CN_INACT                    (0x03U)  /* TAIL_CN Inactive    */
 
-#define ILLUMI_DIM_LVL_RHEOSTAT_NUM             (CALIB_MCUID0270_RHEO_STEP)
-#define ILLUMI_DIM_LVL_TR2_NUM                  (CALIB_MCUID0292_TR2_STEP)
-#define ILLUMI_DIM_LVL_IL2_NUM                  (CALIB_MCUID0314_IL2_STEP)
-#define ILLUMI_DIM_LVL_BKLT_NUM                 (CALIB_BL_STEP)
-#define ILLUMI_DIM_LVL_OFS                      (1U)    /* Lelel Offset Value  */
 #define ILLUMI_ILL_OUT_TX_MAX                   (100U)  /* ILL_OUT MAX Value   */
 
 #define ILLUMI_COMTX_IL2STS_PARK                (0U)
@@ -144,6 +139,131 @@ static        U2       u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_a
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static volatile const U1 * u1p_sp_ILLUMI_RHEO_PCT[ILLUMI_DIM_LVL_NUM] = {
+    &u1_CALIB_MCUID0291_RHEO_MIN,
+    &u1_CALIB_MCUID0290_RHEO_LV20,
+    &u1_CALIB_MCUID0289_RHEO_LV19,
+    &u1_CALIB_MCUID0288_RHEO_LV18,
+    &u1_CALIB_MCUID0287_RHEO_LV17,
+    &u1_CALIB_MCUID0286_RHEO_LV16,
+    &u1_CALIB_MCUID0285_RHEO_LV15,
+    &u1_CALIB_MCUID0284_RHEO_LV14,
+    &u1_CALIB_MCUID0283_RHEO_LV13,
+    &u1_CALIB_MCUID0282_RHEO_LV12,
+    &u1_CALIB_MCUID0281_RHEO_LV11,
+    &u1_CALIB_MCUID0280_RHEO_LV10,
+    &u1_CALIB_MCUID0279_RHEO_LV9,
+    &u1_CALIB_MCUID0278_RHEO_LV8,
+    &u1_CALIB_MCUID0277_RHEO_LV7,
+    &u1_CALIB_MCUID0276_RHEO_LV6,
+    &u1_CALIB_MCUID0275_RHEO_LV5,
+    &u1_CALIB_MCUID0274_RHEO_LV4,
+    &u1_CALIB_MCUID0273_RHEO_LV3,
+    &u1_CALIB_MCUID0272_RHEO_LV2,
+    &u1_CALIB_MCUID0271_RHEO_LV1,
+    &u1_CALIB_MCUID0270_RHEO_MAX
+};
+
+static volatile const U2 * u2p_sp_ILLUMI_TR2_PCT[ILLUMI_DIM_LVL_NUM] = {
+    &u2_CALIB_MCUID0313_TR2_DUTY_MIN,
+    &u2_CALIB_MCUID0312_TR2_DUTY_LV20,
+    &u2_CALIB_MCUID0311_TR2_DUTY_LV19,
+    &u2_CALIB_MCUID0310_TR2_DUTY_LV18,
+    &u2_CALIB_MCUID0309_TR2_DUTY_LV17,
+    &u2_CALIB_MCUID0308_TR2_DUTY_LV16,
+    &u2_CALIB_MCUID0307_TR2_DUTY_LV15,
+    &u2_CALIB_MCUID0306_TR2_DUTY_LV14,
+    &u2_CALIB_MCUID0305_TR2_DUTY_LV13,
+    &u2_CALIB_MCUID0304_TR2_DUTY_LV12,
+    &u2_CALIB_MCUID0303_TR2_DUTY_LV11,
+    &u2_CALIB_MCUID0302_TR2_DUTY_LV10,
+    &u2_CALIB_MCUID0301_TR2_DUTY_LV9,
+    &u2_CALIB_MCUID0300_TR2_DUTY_LV8,
+    &u2_CALIB_MCUID0299_TR2_DUTY_LV7,
+    &u2_CALIB_MCUID0298_TR2_DUTY_LV6,
+    &u2_CALIB_MCUID0297_TR2_DUTY_LV5,
+    &u2_CALIB_MCUID0296_TR2_DUTY_LV4,
+    &u2_CALIB_MCUID0295_TR2_DUTY_LV3,
+    &u2_CALIB_MCUID0294_TR2_DUTY_LV2,
+    &u2_CALIB_MCUID0293_TR2_DUTY_LV1,
+    &u2_CALIB_MCUID0292_TR2_DUTY_MAX
+};
+
+static volatile const U2 * u2p_sp_ILLUMI_IL2_PCT[ILLUMI_DIM_LVL_NUM] = {
+    &u2_CALIB_MCUID0335_IL2_DUTY_MIN,
+    &u2_CALIB_MCUID0334_IL2_DUTY_LV20,
+    &u2_CALIB_MCUID0333_IL2_DUTY_LV19,
+    &u2_CALIB_MCUID0332_IL2_DUTY_LV18,
+    &u2_CALIB_MCUID0331_IL2_DUTY_LV17,
+    &u2_CALIB_MCUID0330_IL2_DUTY_LV16,
+    &u2_CALIB_MCUID0329_IL2_DUTY_LV15,
+    &u2_CALIB_MCUID0328_IL2_DUTY_LV14,
+    &u2_CALIB_MCUID0327_IL2_DUTY_LV13,
+    &u2_CALIB_MCUID0326_IL2_DUTY_LV12,
+    &u2_CALIB_MCUID0325_IL2_DUTY_LV11,
+    &u2_CALIB_MCUID0324_IL2_DUTY_LV10,
+    &u2_CALIB_MCUID0323_IL2_DUTY_LV9,
+    &u2_CALIB_MCUID0322_IL2_DUTY_LV8,
+    &u2_CALIB_MCUID0321_IL2_DUTY_LV7,
+    &u2_CALIB_MCUID0320_IL2_DUTY_LV6,
+    &u2_CALIB_MCUID0319_IL2_DUTY_LV5,
+    &u2_CALIB_MCUID0318_IL2_DUTY_LV4,
+    &u2_CALIB_MCUID0317_IL2_DUTY_LV3,
+    &u2_CALIB_MCUID0316_IL2_DUTY_LV2,
+    &u2_CALIB_MCUID0315_IL2_DUTY_LV1,
+    &u2_CALIB_MCUID0314_IL2_DUTY_MAX
+};
+
+static volatile const U1 * u1p_sp_ILLUMI_BL_DAY[ILLUMI_DIM_LVL_NUM] = {
+    &u1_CALIB_MCUID0363_BL_DAY_MIN,
+    &u1_CALIB_MCUID0362_BL_DAY_LV20,
+    &u1_CALIB_MCUID0361_BL_DAY_LV19,
+    &u1_CALIB_MCUID0360_BL_DAY_LV18,
+    &u1_CALIB_MCUID0359_BL_DAY_LV17,
+    &u1_CALIB_MCUID0358_BL_DAY_LV16,
+    &u1_CALIB_MCUID0357_BL_DAY_LV15,
+    &u1_CALIB_MCUID0356_BL_DAY_LV14,
+    &u1_CALIB_MCUID0355_BL_DAY_LV13,
+    &u1_CALIB_MCUID0354_BL_DAY_LV12,
+    &u1_CALIB_MCUID0353_BL_DAY_LV11,
+    &u1_CALIB_MCUID0352_BL_DAY_LV10,
+    &u1_CALIB_MCUID0351_BL_DAY_LV9,
+    &u1_CALIB_MCUID0350_BL_DAY_LV8,
+    &u1_CALIB_MCUID0349_BL_DAY_LV7,
+    &u1_CALIB_MCUID0348_BL_DAY_LV6,
+    &u1_CALIB_MCUID0347_BL_DAY_LV5,
+    &u1_CALIB_MCUID0346_BL_DAY_LV4,
+    &u1_CALIB_MCUID0345_BL_DAY_LV3,
+    &u1_CALIB_MCUID0344_BL_DAY_LV2,
+    &u1_CALIB_MCUID0343_BL_DAY_LV1,
+    &u1_CALIB_MCUID0342_BL_DAY_MAX
+};
+
+static volatile const U1 * u1p_sp_ILLUMI_BL_NGT[ILLUMI_DIM_LVL_NUM] = {
+    &u1_CALIB_MCUID0407_BL_NGT_MIN,
+    &u1_CALIB_MCUID0406_BL_NGT_LV20,
+    &u1_CALIB_MCUID0405_BL_NGT_LV19,
+    &u1_CALIB_MCUID0404_BL_NGT_LV18,
+    &u1_CALIB_MCUID0403_BL_NGT_LV17,
+    &u1_CALIB_MCUID0402_BL_NGT_LV16,
+    &u1_CALIB_MCUID0401_BL_NGT_LV15,
+    &u1_CALIB_MCUID0400_BL_NGT_LV14,
+    &u1_CALIB_MCUID0399_BL_NGT_LV13,
+    &u1_CALIB_MCUID0398_BL_NGT_LV12,
+    &u1_CALIB_MCUID0397_BL_NGT_LV11,
+    &u1_CALIB_MCUID0396_BL_NGT_LV10,
+    &u1_CALIB_MCUID0395_BL_NGT_LV9,
+    &u1_CALIB_MCUID0394_BL_NGT_LV8,
+    &u1_CALIB_MCUID0393_BL_NGT_LV7,
+    &u1_CALIB_MCUID0392_BL_NGT_LV6,
+    &u1_CALIB_MCUID0391_BL_NGT_LV5,
+    &u1_CALIB_MCUID0390_BL_NGT_LV4,
+    &u1_CALIB_MCUID0389_BL_NGT_LV3,
+    &u1_CALIB_MCUID0388_BL_NGT_LV2,
+    &u1_CALIB_MCUID0387_BL_NGT_LV1,
+    &u1_CALIB_MCUID0386_BL_NGT_MAX
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -293,9 +413,8 @@ U2      u2_g_IllumiTRTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)
     U2                  u2_t_lvl;
 
     u2_t_lvl = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_USADJ_NIGHT];
-    if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_TR2_NUM){
-        u2_t_lvl = ((U2)ILLUMI_DIM_LVL_TR2_NUM - (U2)ILLUMI_DIM_LVL_OFS) - u2_t_lvl;
-        u2_t_pct = u2_CALIB_MCUID0292_TR2_PCT[u2_t_lvl];
+    if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_NUM){
+        u2_t_pct = *(u2p_sp_ILLUMI_TR2_PCT[u2_t_lvl]);
     }
     else{
         u2_t_pct = (U2)ILLUMI_DUTY_TX_MAX;
@@ -322,9 +441,8 @@ U2      u2_g_IllumiILTx(const U2 * u2_ap_DIM_LVL, const U2 u2_a_OW)
     U2                  u2_t_lvl;
 
     u2_t_lvl = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_USADJ_NIGHT];
-    if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_IL2_NUM){
-        u2_t_lvl = ((U2)ILLUMI_DIM_LVL_IL2_NUM - (U2)ILLUMI_DIM_LVL_OFS) - u2_t_lvl;
-        u2_t_pct = u2_CALIB_MCUID0314_IL2_PCT[u2_t_lvl];
+    if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_NUM){
+        u2_t_pct = *(u2p_sp_ILLUMI_IL2_PCT[u2_t_lvl]);
         u2_t_pct = u2_s_IllumiILFadeJdg(u2_t_lvl, u2_t_pct);
     }
     else{
@@ -621,10 +739,9 @@ static U2      u2_s_IllumiRheoTxCtrl(const U2 * u2_ap_DIM_LVL, U1 * u1_ap_RHEOPC
 #endif
 
     u2_t_lvl = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_USADJ_NIGHT];
-    if((u1_s_illumi_rheo_tx_ctrl < (U1)ILLUMI_RHEO_EVTX_NUM_STS   ) &&
-       (u2_t_lvl                 < (U2)ILLUMI_DIM_LVL_RHEOSTAT_NUM)){
-        u2_t_lvl = ((U2)ILLUMI_DIM_LVL_RHEOSTAT_NUM - (U2)ILLUMI_DIM_LVL_OFS) - u2_t_lvl;
-        u1_t_pct = u1_CALIB_MCUID0270_RHEO_PCT[u2_t_lvl];
+    if((u1_s_illumi_rheo_tx_ctrl < (U1)ILLUMI_RHEO_EVTX_NUM_STS) &&
+       (u2_t_lvl                 < (U2)ILLUMI_DIM_LVL_NUM      )){
+        u1_t_pct = *(u1p_sp_ILLUMI_RHEO_PCT[u2_t_lvl]);
 #ifdef ComConf_ComSignal_RHEO_IN
         u1_t_drtx    = u1_t_pct;
 #endif
@@ -751,11 +868,11 @@ static void    vd_s_IllumiPosTx(const U2 * u2_ap_DIM_LVL)
     u2_t_daynight = u2_ap_DIM_LVL[ILLUMI_DIM_LVL_DAYNIGHT];
     if(u2_t_daynight < (U2)DIM_DAYNIGHT_NUM_LVL){
         u2_t_lvl = u2_ap_DIM_LVL[u2_t_daynight];
-        if(u2_t_lvl       < (U2)ILLUMI_DIM_LVL_RHEOSTAT_NUM){
+        if(u2_t_lvl       < (U2)ILLUMI_DIM_LVL_NUM){
             u1_t_tx = (U1)u2_t_lvl;
         }
         else{
-            u1_t_tx = (U1)ILLUMI_DIM_LVL_RHEOSTAT_NUM - (U1)1U;
+            u1_t_tx = (U1)ILLUMI_DIM_LVL_NUM - (U1)1U;
         }
     }
     else{
@@ -789,12 +906,11 @@ static void    vd_s_IllumiTftbkTx(const U2 * u2_ap_DIM_LVL)
     if(u2_t_daynight < (U2)ILLUMI_DIM_LVL_DAYNIGHT){
         u2_t_lvl = u2_ap_DIM_LVL[u2_t_daynight];
         if(u2_t_lvl < (U2)ILLUMI_DIM_LVL_BKLT_NUM){
-            u2_t_lvl = ((U2)ILLUMI_DIM_LVL_BKLT_NUM - (U2)ILLUMI_DIM_LVL_OFS) - u2_t_lvl;
             if(u2_t_daynight == (U2)ILLUMI_DIM_LVL_USADJ_DAY){
-                u1_t_tx = u1_CALIB_MCUID0342_BL_PCT_DAY[u2_t_lvl];
+                u1_t_tx = *(u1p_sp_ILLUMI_BL_DAY[u2_t_lvl]);
             }
             else{
-                u1_t_tx = u1_CALIB_MCUID0386_BL_PCT_NIGHT[u2_t_lvl];
+                u1_t_tx = *(u1p_sp_ILLUMI_BL_NGT[u2_t_lvl]);
             }
         }
         else{

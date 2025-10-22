@@ -99,6 +99,52 @@ static void    vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT);
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Constant Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+static volatile const U2 * u2p_sp_VEHSPD_BIAS_USA_CAN[VEHSPD_CALIB_CORPT] = {
+    &u2_CALIB_MCUID0757_SP_USA_20KM,
+    &u2_CALIB_MCUID0758_SP_USA_40KM,
+    &u2_CALIB_MCUID0759_SP_USA_59KM,
+    &u2_CALIB_MCUID0760_SP_USA_80KM,
+    &u2_CALIB_MCUID0761_SP_USA_100KM,
+    &u2_CALIB_MCUID0762_SP_USA_120KM,
+    &u2_CALIB_MCUID0763_SP_USA_140KM,
+    &u2_CALIB_MCUID0764_SP_USA_160KM,
+    &u2_CALIB_MCUID0765_SP_USA_180KM,
+    &u2_CALIB_MCUID0766_SP_USA_200KM,
+    &u2_CALIB_MCUID0767_SP_USA_220KM,
+    &u2_CALIB_MCUID0768_SP_USA_240KM,
+    &u2_CALIB_MCUID0769_SP_USA_260KM,
+    &u2_CALIB_MCUID0770_SP_USA_280KM,
+    &u2_CALIB_MCUID0771_SP_USA_300KM,
+    &u2_CALIB_MCUID0772_SP_USA_320KM,
+    &u2_CALIB_MCUID0773_SP_USA_340KM,
+    &u2_CALIB_MCUID0774_SP_USA_360KM,
+    &u2_CALIB_MCUID0775_SP_USA_380KM,
+    &u2_CALIB_MCUID0776_SP_USA_400KM
+};
+
+static volatile const U2 * u2p_sp_VEHSPD_BIAS_UNR_AUS[VEHSPD_CALIB_CORPT] = {
+    &u2_CALIB_MCUID0777_SP_UNR_20KM,
+    &u2_CALIB_MCUID0778_SP_UNR_40KM,
+    &u2_CALIB_MCUID0779_SP_UNR_59KM,
+    &u2_CALIB_MCUID0780_SP_UNR_80KM,
+    &u2_CALIB_MCUID0781_SP_UNR_100KM,
+    &u2_CALIB_MCUID0782_SP_UNR_120KM,
+    &u2_CALIB_MCUID0783_SP_UNR_140KM,
+    &u2_CALIB_MCUID0784_SP_UNR_160KM,
+    &u2_CALIB_MCUID0785_SP_UNR_180KM,
+    &u2_CALIB_MCUID0786_SP_UNR_200KM,
+    &u2_CALIB_MCUID0787_SP_UNR_220KM,
+    &u2_CALIB_MCUID0788_SP_UNR_240KM,
+    &u2_CALIB_MCUID0789_SP_UNR_260KM,
+    &u2_CALIB_MCUID0790_SP_UNR_280KM,
+    &u2_CALIB_MCUID0791_SP_UNR_300KM,
+    &u2_CALIB_MCUID0792_SP_UNR_320KM,
+    &u2_CALIB_MCUID0793_SP_UNR_340KM,
+    &u2_CALIB_MCUID0794_SP_UNR_360KM,
+    &u2_CALIB_MCUID0795_SP_UNR_380KM,
+    &u2_CALIB_MCUID0796_SP_UNR_400KM
+};
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -532,12 +578,12 @@ static void   vd_s_VehspdGetBias(ST_VEHSPD_BIAS_FACT * st_ap_FACT)
     if(u1_t_bias_idx == (U1)VEHSPD_SPDTLRNC_USA_CAN){       /* Vehicle Speed ​​Tolerance in Usa/Canada */
         u1_t_toler_a   = u1_VEHSPD_CALIB_TOLER_A_USA_CAN;
         s1_t_toler_b   = s1_VEHSPD_CALIB_TOLER_B_USA_CAN;
-        u2_tp_BIAS_MAP = u2p_VEHSPD_CALIB_BIAS_USA_CAN; 
+        u2_tp_BIAS_MAP = *(u2p_sp_VEHSPD_BIAS_USA_CAN); 
     }
     else{                                                   /* Vehicle Speed ​​Tolerance in UNR/Australia/others or Default Settings */
         u1_t_toler_a   = u1_VEHSPD_CALIB_TOLER_A_UNR_AUS;
         s1_t_toler_b   = s1_VEHSPD_CALIB_TOLER_B_UNR_AUS;
-        u2_tp_BIAS_MAP = u2p_VEHSPD_CALIB_BIAS_UNR_AUS;
+        u2_tp_BIAS_MAP = *(u2p_sp_VEHSPD_BIAS_UNR_AUS);
     }
     
     st_ap_FACT->u1_toler_a = u1_t_toler_a;
