@@ -111,7 +111,9 @@
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
 /*---------------------------------------------------------------------------*/
+#endif   /* BEV Rebase provisionally */
 #include "drec_tx.h"
+#if 0   /* BEV Rebase provisionally */
 #include "nwcm.h"
 #include "dio_if.h"
 #include "sound_cri_mgr.h"
@@ -425,7 +427,9 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_g_DioIfMainOut,                (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_NWCMMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
+#endif   /* BEV Rebase provisionally */
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
+#if 0   /* BEV Rebase provisionally */
     {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
 #endif   /* BEV Rebase provisionally */
@@ -557,8 +561,10 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
+/*  * TS      = Takuo Suganuma, Denso Techno                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
