@@ -30,7 +30,6 @@
 #include "mulmed_color.h"
 #include "vardef.h"
 
-#include "gateway_mm.h"
 
 #endif   /* BEV Rebase provisionally */
 

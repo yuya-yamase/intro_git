@@ -112,8 +112,6 @@
 #include "drec_tx.h"
 #include "nwcm.h"
 #include "sound_cri_mgr.h"
-#include "gateway_cxpi.h"
-#include "gateway_mm.h"
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met.h"
 
@@ -413,8 +411,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*-------------------------------------------------------------------*/
     {&vd_g_NWCMMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
-    {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
-    {&vd_g_GatewaymmMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
 #endif   /* BEV Rebase provisionally */
     {&vd_g_XSpiMETPduTx,                (U4)SCHDLR_TASKBIT___5MS    },
 
