@@ -63,10 +63,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "alert.h"
 #include "sbltwrn.h"
-#if 0   /* BEV Rebase provisionally */
-#include "engspd_rpm.h"
-#include "engspd_det_rpm.h"
-#endif   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "tripsnsr.h"
 #include "tripcom.h"
@@ -337,8 +333,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
 #if 0   /* BEV Rebase provisionally */
-    {&vd_g_EngspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
-    {&vd_g_EngspdDetMainTask,           (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_PtsctmpMainTask,             (U4)SCHDLR_TASKBIT_100MS_A  },
 #endif   /* BEV Rebase provisionally */
     {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },

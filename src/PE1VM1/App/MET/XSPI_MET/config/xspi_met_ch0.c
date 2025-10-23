@@ -49,9 +49,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
 #if 0   /* BEV Rebase provisionally */
-#include "engspd_rpm.h"
-#include "engspd_det_rpm.h"
-#include "engspd_varrz.h"
 #include "ptsctmp_cel.h"
 #endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
@@ -304,7 +301,6 @@ static inline void    vd_s_XSpiCfgTxVariation(     U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxHybsys(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx);
@@ -650,34 +646,6 @@ static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx) {
     u2_t_mph           = u2_g_GagdstNxmphDsplyd((U1)GAGDST_NXMPH__MPH);
     u4_ap_pdu_tx[3]   = (U4)u2_t_mph;                                          /* VEHICLE_SPD_DIGITAL_MI                       */
     /* u4_ap_pdu_tx[3]  |= ((U4)u1_t_sts << XSPI_STS_SHIFT); */            /* VEHSPD_DIG_STS_MI                            */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxengspd(U4 * u4_ap_pdu_tx)                                                                           */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxEngspd(        U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U1  u1_t_sts;
-    U2  u2_t_rpm;
-    U2  u2_t_instrpm;
-    U2  u2_t_rzrpm;
-    U2  u2_t_max;
-
-    u2_t_rpm          =  (U2)0U;
-    u1_t_sts          =  u1_g_EngspdRpmFltrd(&u2_t_rpm);
-    u2_t_instrpm      =  (U2)0U;
-    (void)u1_g_EngspdDetRpm(&u2_t_instrpm);
-    u2_t_rzrpm        =  u2_g_EngspdVarrzGetRzrpm();
-    u2_t_max          =  u2_g_EngspdVarrzGetGagMax();
-    u4_ap_pdu_tx[0]   =  (U4)u2_t_instrpm;                                      /* ENGINE_SPD_DIG                               */
-    u4_ap_pdu_tx[0]  |=  ((U4)u2_t_max << XSPI_SHIFT_2BYTE);                /* ENGSPD_MAX                                   */
-    u4_ap_pdu_tx[1]   =  (U4)u2_t_rpm;                                          /* ENGINE_SPD                                   */
-    u4_ap_pdu_tx[1]  |=  ((U4)u2_t_rzrpm << XSPI_SHIFT_2BYTE);              /* TACHO_VRZ_VAL                                */
-    u4_ap_pdu_tx[1]  |=  ((U4)u1_t_sts << XSPI_STS_SHIFT);                  /* ENGSPD_STS                                   */
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -1952,7 +1920,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxLocale(        &u4_ap_pdu_tx[ 27]);      /* 027 - 028    : Locale                                        */
     vd_s_XSpiCfgTxStrsw(         &u4_ap_pdu_tx[ 29]);      /* 029 - 031    : Steering Switch                               */
     vd_s_XSpiCfgTxVehSpd(        &u4_ap_pdu_tx[ 32]);      /* 032 - 035    : Vehicle Speed                                 */
-    vd_s_XSpiCfgTxEngspd(        &u4_ap_pdu_tx[ 36]);      /* 036 - 038    : Engine Speed                                  */
     vd_s_XSpiCfgTxHybsys(        &u4_ap_pdu_tx[ 39]);      /* 039 - 040    : Hybrid System Ind.                            */
     vd_s_XSpiCfgTxPtsctmp(       &u4_ap_pdu_tx[ 43]);      /* 043 - 043    : EngineTemp                                    */
     vd_s_XSpiCfgTxAmbtmp(        &u4_ap_pdu_tx[ 44]);      /* 044 - 045    : Ambient Temp                                  */

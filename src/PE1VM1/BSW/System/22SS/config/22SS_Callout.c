@@ -45,10 +45,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "alert.h"
 #include "sbltwrn.h"
-#if 0   /* BEV Rebase provisionally */
-#include "engspd_rpm.h"
-#include "engspd_det_rpm.h"
-#endif   /* BEV Rebase provisionally */
 #include "odo_km.h"
 #include "tripsnsr.h"
 #include "tripcom.h"
@@ -133,10 +129,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
         &vd_g_GaugeBonInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EngspdBonInit,
-        &vd_g_EngspdDetInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_OdoBonInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomBonInit,
@@ -221,10 +213,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
         &vd_g_GaugeRstwkInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EngspdRstwkInit,
-        &vd_g_EngspdDetInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
@@ -309,10 +297,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_VptranInit,
         &vd_g_wChimeInit,
         &vd_g_GaugeRstwkInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_EngspdRstwkInit,
-        &vd_g_EngspdDetInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_OdoRstwkInit,
         &vd_g_TripsnsrInit,
         &vd_g_TripcomWkupInit,
