@@ -72,7 +72,7 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define D_ETHSWT_SWIC_MIB_TCAM3						(8U)
 #define D_ETHSWT_SWIC_MIB_NUM						(9U)
 
-#define ETHSWT_SWIC_MIB_NOTIFY(SwitchPortIdx, MIBArray)	EthSwt_Data_NotifyMIB(SwitchPortIdx, MIBArray)
+#define ETHSWT_SWIC_MIB_NOTIFY(SwitchPortIdx, MIBArray)				EthSwt_Data_NotifyMIB(SwitchPortIdx, MIBArray)
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Qci.c                                              */
