@@ -92,11 +92,7 @@
 #include "hmitripcom.h"
 #include "hmiscreen.h"
 #include "hmihud.h"
-#if 0   /* BEV Rebase provisionally */
 
-#include "dio_if.h"
-
-#endif   /* BEV Rebase provisionally */
 /* EVC */
 #include "vardef.h"
 #include "vardef_dest.h"
@@ -647,16 +643,6 @@ static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx) {
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx) {
 #if 0   /* BEV Rebase provisionally */
-    U1 u1_t_stsw_back;
-
-    u1_t_stsw_back   =  (U4)u1_g_DioIfChAct((U2)DIO_IF_CH_STE_BA, (U1)TRUE);                           /* STSW_BACK     */
-    u4_ap_pdu_tx[0]  =  (U4)u1_g_DioIfChAct((U2)DIO_IF_CH_STE_UP, (U1)TRUE);                          /* STSW_UP       */
-    u4_ap_pdu_tx[0] |= ((U4)u1_g_DioIfChAct((U2)DIO_IF_CH_STE_DW, (U1)TRUE)             << 1U);       /* STSW_DOWN     */
-    u4_ap_pdu_tx[0] |= ((U4)u1_g_DioIfChAct((U2)DIO_IF_CH_STE_LE, (U1)TRUE)             << 2U);       /* STSW_LEFT     */
-    u4_ap_pdu_tx[0] |= ((U4)u1_g_DioIfChAct((U2)DIO_IF_CH_STE_RI, (U1)TRUE)             << 3U);       /* STSW_RIGHT    */
-    u4_ap_pdu_tx[0] |= ((U4)u1_t_stsw_back                                              << 4U);       /* STSW_BACK     */
-    u4_ap_pdu_tx[0] |= ((U4)u1_g_DioIfChAct((U2)DIO_IF_CH_STE_EN, (U1)TRUE)             << 5U);       /* STSW_ENTER    */
-    u4_ap_pdu_tx[0] |= ((U4)u1_g_DioIfChAct((U2)DIO_IF_CH_OT_SEL, (U1)TRUE)             << 6U);       /* STSW_ODO      */
 
     vd_g_XSpiDsrUnlock((U4)XSPI_DSR_UNLOCK);
     vd_g_XSpiDsrTesmdOw(u1_t_stsw_back);
@@ -892,11 +878,6 @@ static inline void    vd_s_XSpiCfgTxDimming(       U4 * u4_ap_pdu_tx) {
     switch(u1_t_rheosw){
         case (U1)CALIB_MCUID0430_1_INPUT:
         case (U1)CALIB_MCUID0430_2_INPUT:
-            /* RHEO_SW_DOWN & RHEO_SW_UP is follow u2_s_DioIfRea_Ub_MI setting */
-#if 0   /* BEV Rebase provisionally */
-            u2_t_ub_act      = u2_DIO_IF_CH_TO_BN((U2)DIO_IF_CH_DIM_DW);
-            u2_t_ub_act      = (u2_g_DioIfGrAct((U1)DIO_IF_GR_UB_MI, (U1)TRUE) >> u2_t_ub_act) & (U2)0x0003U;
-#endif   /* BEV Rebase provisionally */
             u4_ap_pdu_tx[1] |= (U4)u2_sp_XSPI_UB_DIM[u2_t_ub_act];
             break;
         case (U1)CALIB_MCUID0430_THUMB_WHEEL:
@@ -2478,6 +2459,7 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  BEV-7     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-C_HCSBSW-CSTD-0-01-A-C0)                                */
 /*  BEV-8     05/30/2025 SN(K)    Change for BEV System_Consideration_2.(MET-S_ADBB-CSTD-0-01-A-C0)                                  */
 /*  BEV-9     06/17/2025 JS       Change for BEV System_Consideration_2.(MET-B_WDICBB-CSTD-0-01-A-C0)                                */
+/*  BEV-10    10/22/2025 TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TA   = Teruyuki Anjima, Denso                                                                                                  */
 /*  * KM   = Keisuke Mashita, Denso Techno                                                                                           */
@@ -2497,5 +2479,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
 /*  * MN   = Mikiya Negishi, KSE                                                                                                     */
 /*  * SN(K)= Shizuka Nakajima, KSE                                                                                                   */
 /*  * JS   = Jun Sugiyama, KSE                                                                                                       */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

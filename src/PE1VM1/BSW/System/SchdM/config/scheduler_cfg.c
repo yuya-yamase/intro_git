@@ -113,7 +113,6 @@
 /*---------------------------------------------------------------------------*/
 #include "drec_tx.h"
 #include "nwcm.h"
-#include "dio_if.h"
 #include "sound_cri_mgr.h"
 #include "gateway_cxpi.h"
 #include "gateway_mm.h"
@@ -327,7 +326,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*-------------------------------------------------------------------*/
     {&vd_g_SoundCriMgrMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
-    {&vd_g_DioIfMainIn,                 (U4)SCHDLR_TASKBIT__10MS_A  },
     /*-------------------------------------------------------------------*/
     /*                                                                   */
     /*                                                                   */
@@ -421,7 +419,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     /*                                                                   */
     /*  WARNING "DO NOT EXECUTE APPLICATION AT HERE"                     */
     /*-------------------------------------------------------------------*/
-    {&vd_g_DioIfMainOut,                (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_NWCMMainTask,                (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_DrectxMainTask,              (U4)SCHDLR_TASKBIT__50MS_A  },
     {&vd_g_GatewayCxpiMainTask,         (U4)SCHDLR_TASKBIT__10MS_A  },
@@ -555,8 +552,10 @@ static void    vd_s_SchdlrCfgWdgTimRestart(void)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN      = Takashi Nagai, Denso                                                                                                 */
 /*  * AM      = Akira Motomatsu, Denso Create                                                                                        */
+/*  * TS      = Takuo Suganuma, Denso Techno                                                                                         */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/

@@ -31,7 +31,6 @@
 /* Complex Device Driver */
 #include "nwcm.h"
 #include "drec_tx.h"
-#include "dio_if.h"
 #include "sound_cri_mgr.h"
 #include "gateway_mm.h"
 
@@ -134,7 +133,6 @@ void vd_g_22SSCallout_StaBonInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxBonInit,
-        &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
         &vd_g_IllumiBonInit,
@@ -237,7 +235,6 @@ void vd_g_22SSCallout_StaRstInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxRstInit,
-        &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
         &vd_g_IllumiRstInit,
@@ -340,7 +337,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
         &vd_g_DrectxWkupInit,
-        &vd_g_DioIfInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_DimInit,
         &vd_g_IllumiWkupInit,
