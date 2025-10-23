@@ -102,7 +102,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "mmlang.h"
 #include "vmmunit.h"
-#include "fspomgr.h"
 #include "attmp_cel.h"
 #include "mmvar.h"
 #include "mmappctrl.h"
@@ -382,8 +381,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
     {&vd_g_HdimmgrRoutine,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_HudImgAdjMainTask,           (U4)SCHDLR_TASKBIT__10MS_A  },
 #if 0   /* BEV Rebase provisionally */
-    {&vd_g_Fsposnsr10msTask,            (U4)SCHDLR_TASKBIT__10MS_A  },
-    {&vd_g_FspomgrRoutine,              (U4)SCHDLR_TASKBIT__50MS_E  },
     {&vd_g_AttmpMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MMVarTask,                   (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_MMAppCtrlTask,               (U4)SCHDLR_TASKBIT__50MS_E  },

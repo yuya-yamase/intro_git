@@ -28,7 +28,6 @@
 #include "drec_tx.h"
 #include "mulmed_mulfr.h"
 #include "mulmed_color.h"
-#include "fspomgr.h"
 #include "mmappctrl.h"
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met_can.h"
@@ -373,34 +372,6 @@ void    vd_g_oXCANUsrhkRecAck(const U2 u2_a_IPDU_RX)
 /*          break;                                          */
 /*  }                                                       */
 
-    switch (u2_a_IPDU_RX) {
-        case (U2)MSG_ENG1G17_RXCH0:
-#if 0   /* BEV Rebase provisionally */
-            vd_g_FsposnsrCanRxEng1g17();
-#endif   /* BEV Rebase provisionally */
-            break;
-#if 0   /* BEV BSW provisionally */
-        case (U2)MSG_ENG1S98_RXCH0:
-            vd_g_FsposnsrCanRxEng1s98();
-            break;
-#else
-#endif
-        case (U2)MSG_VSC1G12_RXCH0:
-#if 0   /* BEV Rebase provisionally */
-            vd_g_FsposnsrCanRxVsc1g12();
-#endif   /* BEV Rebase provisionally */
-            break;
-#if 0   /* BEV BSW provisionally */
-        case (U2)MSG_VSC1G30_RXCH0:
-            vd_g_FsposnsrCanRxVsc1g30();
-            break;
-#else
-#endif
-        default:
-            /* Do nothing */
-            break;
-    }
-    
     vd_s_oXCANUsrhkMmappRxMsg(u2_a_IPDU_RX);
     
 #if 0   /* BEV Rebase provisionally */
@@ -446,7 +417,9 @@ static void    vd_s_oXCANUsrhkMmappRxMsg(const U2 u2_a_IPDU_RX)
 /*                                                                                                                                   */
 /*  Revision Date        Author   Change Description                                                                                 */
 /* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, DENSO                                                                                                    */
+/*  * TS   = Takuo Suganuma, Denso Techno                                                                                            */
 /*                                                                                                                                   */
 /*===================================================================================================================================*/
