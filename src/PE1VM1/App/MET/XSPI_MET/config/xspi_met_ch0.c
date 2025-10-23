@@ -103,9 +103,6 @@
 #if 0   /* BEV BSW provisionally */
 #include "es_inspect.h"
 #endif
-#if 0   /* BEV Rebase provisionally */
-#include "evschg.h"
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -241,7 +238,6 @@
 
 #define XSPI_MCUID_NUM                      (137U)
 #define XSPI_MCUID_MINMAXCHK_NUM            (5U)
-#define XSPI_EVSCHG_TMCHG_LINK_SIZE         (EVSCHG_TIMCHG_SCHDINFO_SIZE)
 
 #endif   /* BEV Rebase provisionally */
 #define XSPI_VDF_AREA_SIZE                  (9U)
@@ -331,11 +327,6 @@ static inline void    vd_s_XSpiCfgTxNickname(      U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAvgGrph(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxMetcstmMcst(   U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxPwrmet(        U4 * u4_ap_pdu_tx);
-
-static inline void    vd_s_XSpiCfgTxEvschgTimchg(  U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxEvschgSchdList(U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxEvschgSwquicha(U4 * u4_ap_pdu_tx);
-
 static inline void    vd_s_XSpiCfgRxDispsts(    const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxMcst(       const U4 * u4_ap_PDU_RX);
 static inline void    vd_s_XSpiCfgRxMaint(      const U4 * u4_ap_PDU_RX);
@@ -1495,180 +1486,6 @@ static inline void    vd_s_XSpiCfgTxMulmedText(    U4 * u4_ap_pdu_tx) {
     }
 #endif   /* BEV Rebase provisionally */
 }
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxEvschgTimchg(U4 * u4_ap_pdu_tx)                                                                     */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxEvschgTimchg( U4 * u4_ap_pdu_tx)
-{
-#if 0   /* BEV Rebase provisionally */
-    ST_EVSCHG_TMCHG_SCHDINFO st_t_set;                                                                        /* Schedule data        */
-    U1                       u1_t_evschg_setid;                                                               /* Schedule id          */
-    U2                       u2_t_evschg_rxdata;                                                              /* Rx Signal Data       */
-
-    for(u1_t_evschg_setid = (U1)0U; u1_t_evschg_setid < (U1)XSPI_EVSCHG_TMCHG_LINK_SIZE; u1_t_evschg_setid++)
-    {
-        st_t_set = st_g_EvschgGetSchdInfo(u1_t_evschg_setid);
-        u4_ap_pdu_tx[u1_t_evschg_setid]   = ((U4)st_t_set.u2_start_tim   & (U4)XSPI_MSK_09BIT           );  /* Schedule:P_SETSTM */
-        u4_ap_pdu_tx[u1_t_evschg_setid]  |= (((U4)st_t_set.u2_finish_tim & (U4)XSPI_MSK_09BIT)   << 16U );  /* Schedule:P_SETFTM */
-    }
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_NCTYP);
-    u4_ap_pdu_tx[16]   =  ((U4)u2_t_evschg_rxdata      & (U4)XSPI_MSK_04BIT         );                  /* Next Schedule:P_NCTYP */
-    
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_NCWKD);
-    u4_ap_pdu_tx[16]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_03BIT)  <<  4U);                  /* Next Schedule:P_NCWKD */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_NCSTM);
-    u4_ap_pdu_tx[16]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_09BIT)  <<  7U);                  /* Next Schedule:P_NCSTM */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_NCFTM);
-    u4_ap_pdu_tx[16]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_09BIT)  << 16U);                  /* Next Schedule:P_NCFTM */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_ADDDSP);
-    u4_ap_pdu_tx[16]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_01BIT)  << 25U);                  /* Signal Data:P_ADDDSP  */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_PCNOWDSP);
-    u4_ap_pdu_tx[16]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_02BIT)  << 26U);                  /* Signal Data:PCNOWDSP  */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_PARK_S);
-    u4_ap_pdu_tx[17]   =  ((U4)u2_t_evschg_rxdata      & (U4)XSPI_MSK_06BIT         );                  /* Signal Data:PARK_S    */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_NCDSP);
-    u4_ap_pdu_tx[17]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_02BIT)  <<  6U);                  /* Signal Data:P_NCDSP   */
-    
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_TMPID);
-    u4_ap_pdu_tx[17]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_06BIT)  <<  8U);                  /* Signal Data:P_TMPID   */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_TMPTYP);
-    u4_ap_pdu_tx[17]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_04BIT)  << 16U);                  /* Signal Data:P_TMPTYP  */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_TMPSTM);
-    u4_ap_pdu_tx[17]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_09BIT)  << 20U);                  /* Signal Data:P_TMPSTM  */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_TMPFTM);
-    u4_ap_pdu_tx[18]   =  ((U4)u2_t_evschg_rxdata      & (U4)XSPI_MSK_09BIT         );                  /* Signal Data:P_TMPFTM  */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_TMPSWK);
-    u4_ap_pdu_tx[18]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_07BIT)  <<  9U);                  /* Signal Data:P_TMPSWK  */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_TMPNWK);
-    u4_ap_pdu_tx[18]  |=  (((U4)u2_t_evschg_rxdata     & (U4)XSPI_MSK_03BIT)  << 16U);                  /* Signal Data:P_TMPNWK  */
-#endif   /* BEV Rebase provisionally */
-
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxEvschgSchdList(U4 * u4_ap_pdu_tx)                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxEvschgSchdList( U4 * u4_ap_pdu_tx)
-{
-#if 0   /* BEV Rebase provisionally */
-    ST_EVSCHG_TMCHG_SCHDINFO st_t_set;                                                                          /* Schedule data     */
-    U1                       u1_t_evschg_setid;                                                                 /* Schedule id       */
-
-    for(u1_t_evschg_setid = (U1)0U; u1_t_evschg_setid < (U1)XSPI_EVSCHG_TMCHG_LINK_SIZE; u1_t_evschg_setid++)
-    {
-        st_t_set = st_g_EvschgGetSchdInfo(u1_t_evschg_setid);
-        u4_ap_pdu_tx[u1_t_evschg_setid]   = ((U4)st_t_set.u1_id         & (U4)XSPI_MSK_06BIT          );    /* Schedule:P_SETID  */
-        u4_ap_pdu_tx[u1_t_evschg_setid]  |= (((U4)st_t_set.u1_onoff     & (U4)XSPI_MSK_01BIT)   <<  6U);    /* Schedule:P_SETON  */
-        u4_ap_pdu_tx[u1_t_evschg_setid]  |= (((U4)st_t_set.u1_type      & (U4)XSPI_MSK_04BIT)   <<  8U);    /* Schedule:P_SETTYP */
-        u4_ap_pdu_tx[u1_t_evschg_setid]  |= (((U4)st_t_set.u1_wkd_bit   & (U4)XSPI_MSK_07BIT)   << 16U);    /* Schedule:P_SETWKD */
-        u4_ap_pdu_tx[u1_t_evschg_setid]  |= (((U4)st_t_set.u1_nxt_id    & (U4)XSPI_MSK_06BIT)   << 24U);    /* Schedule:P_SETNXT */
-    }
-#endif   /* BEV Rebase provisionally */
-}
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxEvschgSwquicha(U4 * u4_ap_pdu_tx)                                                                   */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxEvschgSwquicha( U4 * u4_ap_pdu_tx)
-{
-#if 0   /* BEV Rebase provisionally */
-    U2  u2_t_evschg_rxdata;                                                                        /* Rx Signal Data                 */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_CURAVA);
-    u4_ap_pdu_tx[0]  =  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_02BIT)        );            /* Signal Data:P_CURAVA           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_CUR200);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_03BIT)   <<  2U);           /* Signal Data:P_CUR200           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_CLCAVA);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_02BIT)   <<  6U);           /* Signal Data:P_CLCAVA           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_CBLOCKSU);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_03BIT)   <<  8U);           /* Signal Data:CBLOCKSU           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_LMTAVA);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_02BIT)   << 11U);           /* Signal Data:P_LMTAVA           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_LMTNOW);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_03BIT)   << 13U);           /* Signal Data:P_LMTNOW           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_LMTSEL);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_03BIT)   << 16U);           /* Signal Data:P_LMTSEL           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWAVA);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_02BIT)   << 19U);           /* Signal Data:P_DPWAVA           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPW);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_04BIT)   << 21U);           /* Signal Data:P_DPW              */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL0);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   << 25U);           /* Signal Data:P_DPWSL0           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL1);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   << 26U);           /* Signal Data:P_DPWSL1           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL2);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   << 27U);           /* Signal Data:P_DPWSL2           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL3);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   << 28U);           /* Signal Data:P_DPWSL3           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL4);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   << 29U);           /* Signal Data:P_DPWSL4           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL5);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   << 30U);           /* Signal Data:P_DPWSL5           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL6);
-    u4_ap_pdu_tx[0] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   << 31U);           /* Signal Data:P_DPWSL6           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL7);
-    u4_ap_pdu_tx[1]  =  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)         );           /* Signal Data:P_DPWSL7           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL8);
-    u4_ap_pdu_tx[1] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   <<  1U);           /* Signal Data:P_DPWSL8           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_DPWSL9);
-    u4_ap_pdu_tx[1] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   <<  2U);           /* Signal Data:P_DPWSL9           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_CURSL1);
-    u4_ap_pdu_tx[1] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   <<  3U);           /* Signal Data:P_CURSL1           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_CURSL2);
-    u4_ap_pdu_tx[1] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   <<  4U);           /* Signal Data:P_CURSL2           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_CURSL3);
-    u4_ap_pdu_tx[1] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   <<  5U);           /* Signal Data:P_CURSL3           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_CURSL4);
-    u4_ap_pdu_tx[1] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_01BIT)   <<  6U);           /* Signal Data:P_CURSL4           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_TMRAVA);
-    u4_ap_pdu_tx[1] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_02BIT)   <<  7U);           /* Signal Data:P_TMRAVA           */
-
-    u2_t_evschg_rxdata = u2_g_EvschgGetSignal((U1)EVSCHG_ID_P_SLMAVA);
-    u4_ap_pdu_tx[1] |=  (((U4)u2_t_evschg_rxdata    & (U4)XSPI_MSK_02BIT)   <<  9U);           /* Signal Data:P_SLMAVA           */
-
-#endif   /* BEV Rebase provisionally */
-}
 
 /*===================================================================================================================================*/
 /*  static void    vd_s_XSpiCfgTxAvgGrph(U4 * u4_ap_pdu_tx)                                                                          */
@@ -2148,15 +1965,12 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxRcmmui(        &u4_ap_pdu_tx[ 68]);      /* 068 - 069    : Rcmmui                                        */
     vd_s_XSpiCfgTxPwrmet(        &u4_ap_pdu_tx[ 70]);      /* 070 - 071    : Pwrmet                                        */
     vd_s_XSpiCfgTxHud(           &u4_ap_pdu_tx[110]);      /* 110 - 134    : Hud                                           */
-    vd_s_XSpiCfgTxEvschgTimchg(  &u4_ap_pdu_tx[115]);      /* 115 - 134    : EVSCHG TIMCHG                                 */
     vd_s_XSpiCfgTxWrnmsg(        &u4_ap_pdu_tx[135]);      /* 135 - 184    : Wrnmsg                                        */
     vd_s_XSpiCfgTxTripcom(       &u4_ap_pdu_tx[185]);      /* 185 - 234    : Tripcom                                       */
     vd_s_XSpiCfgTxTelltale(      &u4_ap_pdu_tx[235]);      /* 235 - 264    : Telltale                                      */
     vd_s_XSpiCfgTxMulmed(        &u4_ap_pdu_tx[265]);      /* 265 - 281    : MultimediaUserName                            */
     vd_s_XSpiCfgTxMulmedText(    &u4_ap_pdu_tx[293]);      /* 293 - 360    : MultimediaText                                */
     vd_s_XSpiCfgTxNickname(      &u4_ap_pdu_tx[362]);      /* 362 - 378    : MultimediaNickName                            */
-    vd_s_XSpiCfgTxEvschgSwquicha(&u4_ap_pdu_tx[379]);      /* 379 - 381    : EVSCHG SWQUICHA                               */
-    vd_s_XSpiCfgTxEvschgSchdList(&u4_ap_pdu_tx[382]);      /* 382 - 397    : EVSCHG set charging schedule List info        */
     vd_s_XSpiCfgTxAttmp  (       &u4_ap_pdu_tx[417]);      /* 417 - 418    : Attmp                                         */
     vd_s_XSpiCfgTxMetcstmMcst(   &u4_ap_pdu_tx[566]);      /* 566 - 584    : Meter Customize                               */
     vd_s_XSpiCfgTxCalib(         &u4_ap_pdu_tx[585]);      /* 585 - 625    : Calibration                                   */

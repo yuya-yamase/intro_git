@@ -105,7 +105,6 @@
 #include "attmp_cel.h"
 #include "mmvar.h"
 #include "mmappctrl.h"
-#include "evschg.h"
 #include "datesi_met.h"
 /*---------------------------------------------------------------------------*/
 /* Platform Header                                                           */
@@ -356,10 +355,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
 #endif   /* BEV Rebase provisionally */
     {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_OdoMainTask,                 (U4)SCHDLR_TASKBIT__50MS_C  },
-#if 0   /* BEV Rebase provisionally */
-    {&vd_g_EvschgMainTask,              (U4)SCHDLR_TASKBIT__50MS_E  },
-    {&vd_g_Evschg10msTask,              (U4)SCHDLR_TASKBIT__10MS_A  },
-#endif   /* BEV Rebase provisionally */
     {&vd_g_AlertMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
     {&vd_g_SbltwrnMainTask,             (U4)SCHDLR_TASKBIT__50MS_C  },
     {&vd_g_TripsnsrSmplngTask,          (U4)SCHDLR_TASKBIT__20MS_A  },
