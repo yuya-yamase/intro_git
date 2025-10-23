@@ -140,7 +140,10 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 /*  1.3.0    12/ 7/2020  ST       veh_opemd v1.2.1 -> v1.3.0.                                                                        */
 /*  2.0.0     2/ 3/2025  ST       Supported vehicle power state.                                                                     */
 /*  2.1.0     2/ 7/2025  TN       veh_opemd v2.0.0 -> v2.1.0.                                                                        */
-/*  2.1.0    10/21/2025  TS       Change for BEV rebase.                                                                             */
+/*                                                                                                                                   */
+/*  Revision Date        Author   Change Description                                                                                 */
+/* --------- ----------  -------  -------------------------------------------------------------------------------------------------- */
+/*  BEV-1    10/22/2025  TS       Change for BEV rebase.                                                                             */
 /*                                                                                                                                   */
 /*  * TN   = Takashi Nagai, Denso                                                                                                    */
 /*  * HU   = Hayato Usui, Denso Create                                                                                               */
