@@ -22,9 +22,6 @@
 #include "oxcan.h"
 
 #include "vehspd_kmph.h"
-#if 0   /* BEV Rebase provisionally */
-#include "ptsctmp_cel.h"
-#endif   /* BEV Rebase provisionally */
 #include "alert.h"
 #include "gauge.h"
 #include "vardef.h"

@@ -48,9 +48,6 @@
 /* #include "alert.h" */
 #endif   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
-#if 0   /* BEV Rebase provisionally */
-#include "ptsctmp_cel.h"
-#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
 #if 0   /* BEV Rebase provisionally */
 #include "gagdst_attempovhtind.h"
@@ -288,7 +285,6 @@ static inline void    vd_s_XSpiCfgTxLocale(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxStrsw(         U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxVehSpd(        U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxHybsys(        U4 * u4_ap_pdu_tx);
-static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx);
 static inline void    vd_s_XSpiCfgTxAmbtmp(        U4 * u4_ap_pdu_tx);
 /* static inline void    vd_s_XSpiCfgTxHydrovol(      U4 * u4_ap_pdu_tx); */
 static inline void    vd_s_XSpiCfgTxShift(         U4 * u4_ap_pdu_tx);
@@ -689,24 +685,6 @@ static inline void    vd_s_XSpiCfgTxPwrmet(U4* u4_ap_pdu_tx) {
     u1_t_sts = u1_g_DrvIndPwrPctPwrth(&u2_t_pmpwrth);
     u4_ap_pdu_tx[1] |= (U4)u2_t_pmpwrth & (U4)XSPI_MSK_09BIT;               /* PWRMET_PMPWRTH                              */
     u4_ap_pdu_tx[1] |= ((U4)u1_t_sts << XSPI_PMPWRTH_STS_SHIFT);            /* PWRMET_PMPWRTH_STS                          */
-#endif   /* BEV Rebase provisionally */
-}
-
-/*===================================================================================================================================*/
-/*  static void    vd_s_XSpiCfgTxPtsctmp(U4 * u4_ap_pdu_tx)                                                                          */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-static inline void    vd_s_XSpiCfgTxPtsctmp(       U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    U1  u1_t_sts;
-    U2  u2_t_ptsctmp;
-
-    u2_t_ptsctmp      = (U2)0U;
-    u1_t_sts          = u1_g_PtsctmpCelFltrd(&u2_t_ptsctmp);
-    u4_ap_pdu_tx[0]   = (U4)u2_t_ptsctmp;                                      /* ENGINE_TEMP_CEL                              */
-    u4_ap_pdu_tx[0]  |= ((U4)u1_t_sts << XSPI_SHIFT_2BYTE);                /* ENGTMP_STS                                   */
 #endif   /* BEV Rebase provisionally */
 }
 
@@ -1825,7 +1803,6 @@ void    vd_g_XSpiCfgPduTxCh0(U4 * u4_ap_pdu_tx)
     vd_s_XSpiCfgTxStrsw(         &u4_ap_pdu_tx[ 29]);      /* 029 - 031    : Steering Switch                               */
     vd_s_XSpiCfgTxVehSpd(        &u4_ap_pdu_tx[ 32]);      /* 032 - 035    : Vehicle Speed                                 */
     vd_s_XSpiCfgTxHybsys(        &u4_ap_pdu_tx[ 39]);      /* 039 - 040    : Hybrid System Ind.                            */
-    vd_s_XSpiCfgTxPtsctmp(       &u4_ap_pdu_tx[ 43]);      /* 043 - 043    : EngineTemp                                    */
     vd_s_XSpiCfgTxAmbtmp(        &u4_ap_pdu_tx[ 44]);      /* 044 - 045    : Ambient Temp                                  */
     /* vd_g_XSpiCfgTxHydrovol(      &u4_ap_pdu_tx[0]); */  /*     -        : Hydro Volume                                  */
     vd_s_XSpiCfgTxShift(         &u4_ap_pdu_tx[ 49]);      /* 049 - 053    : Shift                                         */

@@ -14,7 +14,6 @@
 
     -I${CAN_DIR}/CS/inc
     -I${APP_DIR}/MET/IpcApplication/Vom/Vehspd/scc
-    -I${APP_DIR}/MET/IpcApplication/Vom/Ptsctmp/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/scc
     -I${APP_DIR}/MET/IpcApplication/Vom/Alert/matrix/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/Gauge/scc

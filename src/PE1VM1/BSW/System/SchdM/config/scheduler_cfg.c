@@ -58,9 +58,6 @@
 #include "thblnkr.h"
 #include "vehspd_kmph.h"
 #include "vptran_sel.h"
-#if 0   /* BEV Rebase provisionally */
-#include "ptsctmp_cel.h"
-#endif   /* BEV Rebase provisionally */
 #include "alert.h"
 #include "sbltwrn.h"
 #include "odo_km.h"
@@ -326,9 +323,6 @@ const ST_SCHDLR_RGLR st_gp_SCHDLR_RGLR_TASK[] = {
 #endif   /* BEV Rebase provisionally */
     {&vd_g_DimMainTask,                 (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_VehspdMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
-#if 0   /* BEV Rebase provisionally */
-    {&vd_g_PtsctmpMainTask,             (U4)SCHDLR_TASKBIT_100MS_A  },
-#endif   /* BEV Rebase provisionally */
     {&vd_g_VptranMainTask,              (U4)SCHDLR_TASKBIT__20MS_A  },
     {&vd_g_OdoMainTask,                 (U4)SCHDLR_TASKBIT__50MS_C  },
     {&vd_g_AlertMainTask,               (U4)SCHDLR_TASKBIT__10MS_A  },
