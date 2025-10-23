@@ -51,7 +51,10 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Link.c                                              */
 /* -------------------------------------------------------------------------- */
+#include <EthSwt_Data.h>
 #define D_ETHSWT_SWIC_LINK_GET_CYCLE                (100U)
+
+#define ETHSWT_SWIC_LINK_NOTIFY(SwitchPortIdx, result, state)		EthSwt_Data_NotifyLink(SwitchPortIdx, result, state)
 
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_MIB.c                                               */
@@ -69,6 +72,8 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define D_ETHSWT_SWIC_MIB_TCAM3						(8U)
 #define D_ETHSWT_SWIC_MIB_NUM						(9U)
 
+#define ETHSWT_SWIC_MIB_NOTIFY(SwitchPortIdx, MIBArray)	EthSwt_Data_NotifyMIB(SwitchPortIdx, MIBArray)
+
 /* -------------------------------------------------------------------------- */
 /* Config for EthSwt_SWIC_Qci.c                                              */
 /* -------------------------------------------------------------------------- */
@@ -80,6 +85,8 @@ Std_ReturnType EthSwt_SWIC_AllowSetRegister(void);
 #define D_ETHSWT_SWIC_QCI_ID_DLC_TCP				(3U)
 #define D_ETHSWT_SWIC_QCI_ID_DLC_UDP				(4U)
 #define D_ETHSWT_SWIC_QCI_ID_NUM					(5U)
+
+#define ETHSWT_SWIC_QCI_NOTIFY(qciIdx, qciCount)					EthSwt_Data_NotifyQci(qciIdx, qciCount)
 
 /* -------------------------------------------------------------------------- */
 #endif /* ETHSWT_SWIC_CFG_H */

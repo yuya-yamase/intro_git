@@ -64,6 +64,12 @@ void EthSwt_SWIC_Link_Clear (void)
         S_ETHSWT_SWIC_LINK[idx].linkState = ETHTRCV_LINK_STATE_DOWN;
     }
     LIB_EI();
+
+    for (idx = 0u; idx < D_ETHSWT_SWIC_PORT_NUM; idx++) {
+        if (G_ETHSWT_SWIC_LINK_VAILD[idx] == STD_ON) {
+            ETHSWT_SWIC_LINK_NOTIFY(idx, E_NOT_OK, ETHTRCV_LINK_STATE_DOWN);
+        }
+    }
     
     return;
 }
@@ -133,6 +139,8 @@ static Std_ReturnType ethswt_swic_link_readPerPort(const uint8 SwitchPortIdx, ui
         S_ETHSWT_SWIC_LINK[SwitchPortIdx].getLinkResult = result;
         S_ETHSWT_SWIC_LINK[SwitchPortIdx].linkState = state;
         LIB_EI();
+
+        ETHSWT_SWIC_LINK_NOTIFY(SwitchPortIdx, result, state);
     }
 
 	return result;

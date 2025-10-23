@@ -13,19 +13,63 @@
 /* -------------------------------------------------------------------------- */
 #define D_ETHSWT_SWIC_ID                        ETHSWT_SWIC_IDX
 
-#define D_ETHSWT_SWIC_GET_LINK_TIME             (D_ETHSWT_DATA_GET_LINK_CYCLE / D_ETHSWT_DATA_CYCLE)
-#define D_ETHSWT_SWIC_GET_MIB_TIME              (D_ETHSWT_DATA_GET_MIB_CYCLE / D_ETHSWT_DATA_CYCLE)
-#define D_ETHSWT_SWIC_GET_SQI_TIME              (D_ETHSWT_DATA_GET_SQI_CYCLE / D_ETHSWT_DATA_CYCLE)
-#define D_ETHSWT_DATA_GET_QCI_TIME              (D_ETHSWT_DATA_GET_QCI_CYCLE / D_ETHSWT_DATA_CYCLE)
+#define D_ETHSWT_DATA_FAILED                        (0xFF)
+
+#define D_ETHSWT_DATA_UPDATE_ADC                    (1U << 0U)
+#define D_ETHSWT_DATA_UPDATE_DCM                    (1U << 1U)
+#define D_ETHSWT_DATA_UPDATE_SAIL                   (1U << 2U)
+#define D_ETHSWT_DATA_UPDATE_TOOL                   (1U << 3U)
+#define D_ETHSWT_DATA_UPDATE_LINUX                  (1U << 4U)
+#define D_ETHSWT_DATA_UPDATE_ANDROID                (1U << 5U)
+
+#define D_ETHSWT_DATA_UPDATE_QCI0                   (1U << 0U)
+#define D_ETHSWT_DATA_UPDATE_QCI1                   (1U << 1U)
+#define D_ETHSWT_DATA_UPDATE_QCI2                   (1U << 2U)
+#define D_ETHSWT_DATA_UPDATE_QCI3                   (1U << 3U)
+#define D_ETHSWT_DATA_UPDATE_QCI4                   (1U << 4U)
 /* -------------------------------------------------------------------------- */
-static const uint8 S_ETHSWT_DATA_IDX_TABLE[D_ETHSWT_DATA_USE_PORT_NUM] =
+typedef struct {
+    uint8 arrayID;
+    uint8 flagPosition;
+} S_ETHSWT_DATA_FOR_UPDATE;
+
+static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_LINK_ID_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
 {
-    D_ETHSWT_SWIC_ADC_PORT_ID
-,   D_ETHSWT_SWIC_DCM_PORT_ID
-,   D_ETHSWT_SWIC_SAIL_PORT_ID
-,   D_ETHSWT_SWIC_TOOL_PORT_ID
-,   D_ETHSWT_SWIC_LINUX_PORT_ID
-,   D_ETHSWT_SWIC_ANDROID_PORT_ID
+    {D_ETHSWT_DATA_LINK_ADC_ID      , D_ETHSWT_DATA_UPDATE_ADC      }           /* Port1: A-DC      */
+,   {D_ETHSWT_DATA_LINK_DCM_ID      , D_ETHSWT_DATA_UPDATE_DCM      }           /* Port2: DCM       */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port3: no use    */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port4: no use    */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port5: SAIL(リンク読み出し対象外)  */
+,   {D_ETHSWT_DATA_LINK_TOOL_ID     , D_ETHSWT_DATA_UPDATE_TOOL     }           /* Port6: DLC       */
+,   {D_ETHSWT_DATA_LINK_LINUX_ID    , D_ETHSWT_DATA_UPDATE_LINUX    }           /* Port7: Linux     */
+,   {D_ETHSWT_DATA_LINK_ANDROID_ID  , D_ETHSWT_DATA_UPDATE_ANDROID  }           /* Port8: Android   */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port9: no use    */
+};
+
+static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_MIB_ID_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
+{
+    {D_ETHSWT_DATA_MIB_ADC_ID       , D_ETHSWT_DATA_UPDATE_ADC      }           /* Port1: A-DC      */
+,   {D_ETHSWT_DATA_MIB_DCM_ID       , D_ETHSWT_DATA_UPDATE_DCM      }           /* Port2: DCM       */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port3: no use    */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port4: no use    */
+,   {D_ETHSWT_DATA_MIB_SAIL_ID      , D_ETHSWT_DATA_UPDATE_SAIL     }           /* Port5: SAIL      */
+,   {D_ETHSWT_DATA_MIB_TOOL_ID      , D_ETHSWT_DATA_UPDATE_TOOL     }           /* Port6: DLC       */
+,   {D_ETHSWt_DATA_MIB_LINUX_ID     , D_ETHSWT_DATA_UPDATE_LINUX    }           /* Port7: Linux     */
+,   {D_ETHSWT_DATA_MIB_ANDROID_ID   , D_ETHSWT_DATA_UPDATE_ANDROID  }           /* Port8: Android   */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port9: no use    */
+};
+
+static const S_ETHSWT_DATA_FOR_UPDATE S_ETHSWT_DATA_SQI_ID_TABLE[D_ETHSWT_SWIC_PORT_NUM] =
+{
+    {D_ETHSWT_DATA_SQI_ADC_ID       , D_ETHSWT_DATA_UPDATE_ADC      }           /* Port1: A-DC      */
+,   {D_ETHSWT_DATA_SQI_DCM_ID       , D_ETHSWT_DATA_UPDATE_DCM      }           /* Port2: DCM       */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port3: no use    */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port4: no use    */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port5: SAIL      */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port6: DLC       */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port7: Linux     */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port8: Android   */
+,   {D_ETHSWT_DATA_FAILED           , D_ETHSWT_DATA_FAILED          }           /* Port9: no use    */
 };
 
 /* -------------------------------------------------------------------------- */
@@ -37,23 +81,22 @@ static S_ETHSWT_DATA_MIB        G_ETHSWT_DATA_MIB;
 static S_ETHSWT_DATA_SQI        G_ETHSWT_DATA_SQI;
 static S_ETHSWT_DATA_QCI        G_ETHSWT_DATA_QCI;
 
-static uint32                   G_ETHSWT_DATA_LINK_COUNT;
-static uint32                   G_ETHSWT_DATA_MIB_COUNT;
-static uint32                   G_ETHSWT_DATA_SQI_COUNT;
-static uint32                   G_ETHSWT_DATA_QCI_COUNT;
-
 static uint32                   G_ETHSWT_DATA_LINK_ID;
 static uint32                   G_ETHSWT_DATA_MIB_ID;
 static uint32                   G_ETHSWT_DATA_SQI_ID;
 static uint32                   G_ETHSWT_DATA_QCI_ID;
+
+static uint8                    G_ETHSWT_DATA_LINK_UPDATE;
+static uint8                    G_ETHSWT_DATA_MIB_UPDATE;
+static uint8                    G_ETHSWT_DATA_SQI_UPDATE;
+static uint8                    G_ETHSWT_DATA_QCI_UPDATE;
+
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_setLinkData(void);
-static void ethswt_data_setMIBData(void);
-static uint32 ehtswt_data_getTargetMib(uint8 targetPort, uint8 targetMIB);
-static void ethswt_data_setSQIData(void);
-static void ethswt_data_setQciData(void);
-static uint32 ethswt_data_getTargetQci(uint8 targetQciId);
 static void ethswt_data_setEthSwtStateData(void);
+static void ethswt_data_checkLinkUpdate(void);
+static void ethswt_data_checkMIBUpdate(void);
+static void ethswt_data_checkSQIUpdate(void);
+static void ethswt_data_checkQciUpdate(void);
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_Init(void)
 {
@@ -63,160 +106,185 @@ void EthSwt_Data_Init(void)
     LIB_memset((uint8*)&G_ETHSWT_DATA_SQI, 0, sizeof(G_ETHSWT_DATA_SQI));
     LIB_memset((uint8*)&G_ETHSWT_DATA_QCI, 0, sizeof(G_ETHSWT_DATA_QCI));
 
-    G_ETHSWT_DATA_LINK_COUNT = 0;
-    G_ETHSWT_DATA_MIB_COUNT = 0;
-    G_ETHSWT_DATA_SQI_COUNT = 0;
-    G_ETHSWT_DATA_QCI_COUNT = 0;
-
     G_ETHSWT_DATA_LINK_ID = 0;
     G_ETHSWT_DATA_MIB_ID = 0;
     G_ETHSWT_DATA_SQI_ID = 0;
     G_ETHSWT_DATA_QCI_ID = 0;
+
+    LIB_memset((uint8*)&G_ETHSWT_DATA_LINK_UPDATE, 0, sizeof(G_ETHSWT_DATA_LINK_UPDATE));
+    LIB_memset((uint8*)&G_ETHSWT_DATA_MIB_UPDATE, 0, sizeof(G_ETHSWT_DATA_MIB_UPDATE));
+    LIB_memset((uint8*)&G_ETHSWT_DATA_SQI_UPDATE, 0, sizeof(G_ETHSWT_DATA_SQI_UPDATE));
+    LIB_memset((uint8*)&G_ETHSWT_DATA_QCI_UPDATE, 0, sizeof(G_ETHSWT_DATA_QCI_UPDATE));
+    
+    return;
+}
+/* -------------------------------------------------------------------------- */
+void EthSwt_Data_NotifyLink(const uint8 SwitchPortIdx, const Std_ReturnType getLinkResult, const EthTrcv_LinkStateType linkState)
+{
+    do {
+        if (SwitchPortIdx >= D_ETHSWT_SWIC_PORT_NUM)                                    {break;}
+        if (S_ETHSWT_DATA_LINK_ID_TABLE[SwitchPortIdx].arrayID == D_ETHSWT_DATA_FAILED) {break;}
+        
+        LIB_DI();
+        G_ETHSWT_DATA_LINK.link[S_ETHSWT_DATA_LINK_ID_TABLE[SwitchPortIdx].arrayID].linkGetResult = getLinkResult;
+        G_ETHSWT_DATA_LINK.link[S_ETHSWT_DATA_LINK_ID_TABLE[SwitchPortIdx].arrayID].linkStatus = linkState;
+        G_ETHSWT_DATA_LINK_UPDATE |= S_ETHSWT_DATA_LINK_ID_TABLE[SwitchPortIdx].flagPosition;
+        LIB_EI();
+    } while(0);
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+void EthSwt_Data_NotifyMIB(const uint8 SwitchPortIdx, const uint32 *const MIBArray)
+{
+    uint8   idx;
+
+    do {
+        if (SwitchPortIdx >= D_ETHSWT_SWIC_PORT_NUM)                                    {break;}
+        if (S_ETHSWT_DATA_MIB_ID_TABLE[SwitchPortIdx].arrayID == D_ETHSWT_DATA_FAILED)  {break;}
+
+        LIB_DI();
+        for(idx = 0; idx < D_ETHSWT_SWIC_MIB_NUM; idx++) {
+            G_ETHSWT_DATA_MIB.mib[S_ETHSWT_DATA_MIB_ID_TABLE[SwitchPortIdx].arrayID][idx] = MIBArray[idx];
+        }
+        G_ETHSWT_DATA_MIB_UPDATE |= S_ETHSWT_DATA_MIB_ID_TABLE[SwitchPortIdx].flagPosition;
+        LIB_EI();
+    } while(0);
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+void EthSwt_Data_NotifySQI(const uint8 SwtichPortIdx, const Std_ReturnType getSQIResult, const uint8 SQIValue)
+{
+    do {
+        if (SwtichPortIdx >= D_ETHSWT_SWIC_PORT_NUM)                                    {break;}
+        if (S_ETHSWT_DATA_SQI_ID_TABLE[SwtichPortIdx].arrayID == D_ETHSWT_DATA_FAILED)  {break;}
+
+        LIB_DI();
+        G_ETHSWT_DATA_SQI.sqi[S_ETHSWT_DATA_SQI_ID_TABLE[SwtichPortIdx].arrayID].sqiGetResult = getSQIResult;
+        G_ETHSWT_DATA_SQI.sqi[S_ETHSWT_DATA_SQI_ID_TABLE[SwtichPortIdx].arrayID].sqiValue = SQIValue;
+        G_ETHSWT_DATA_SQI_UPDATE |= S_ETHSWT_DATA_SQI_ID_TABLE[SwtichPortIdx].flagPosition;
+        LIB_EI();
+    } while(0);
+
+    return;
+}
+/* -------------------------------------------------------------------------- */
+void EthSwt_Data_NotifyQci(const uint8 QciIdx, const uint32 QciCount)
+{
+    do {
+        if (QciIdx >= D_ETHSWT_DATA_QCI_NUM)                                            {break;}
+
+        LIB_DI();
+        G_ETHSWT_DATA_QCI.qciCount[QciIdx] = QciCount;
+        G_ETHSWT_DATA_QCI_UPDATE |= (1u << QciIdx);
+        LIB_EI();
+    } while(0);
 
     return;
 }
 /* -------------------------------------------------------------------------- */
 void EthSwt_Data_LoProc(void)
 {
-    ethswt_data_setLinkData();
-    ethswt_data_setMIBData();
-    ethswt_data_setSQIData();
-    ethswt_data_setQciData();
     ethswt_data_setEthSwtStateData();
+    ethswt_data_checkLinkUpdate();
+    ethswt_data_checkMIBUpdate();
+    ethswt_data_checkSQIUpdate();
+    ethswt_data_checkQciUpdate();
     
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_setLinkData(void)
+static void ethswt_data_checkLinkUpdate(void)
 {
-    uint8                   idx;
-    EthTrcv_LinkStateType   status = ETHTRCV_LINK_STATE_DOWN;
-    Std_ReturnType          getResult;
+    uint8   isUpdated = STD_OFF;
 
-    G_ETHSWT_DATA_LINK_COUNT++;
-    if(G_ETHSWT_DATA_LINK_COUNT >= D_ETHSWT_SWIC_GET_LINK_TIME)
-    {
-        G_ETHSWT_DATA_LINK_COUNT = 0;
-
-        for(idx = 0; idx < D_ETHSWT_DATA_USE_PORT_NUM; idx++) {
-            getResult = EthSwt_SWIC_GetLinkState(D_ETHSWT_SWIC_ID, S_ETHSWT_DATA_IDX_TABLE[idx], &status);
-            G_ETHSWT_DATA_LINK.link[idx].linkStatus = status;
-            G_ETHSWT_DATA_LINK.link[idx].linkGetResult = getResult;
-        }
+    /* リンク状態取得対象は、A-DC, DCM, Tool, Linux, Android ポート */
+    if (G_ETHSWT_DATA_LINK_UPDATE == (D_ETHSWT_DATA_UPDATE_ADC | D_ETHSWT_DATA_UPDATE_DCM | D_ETHSWT_DATA_UPDATE_TOOL | D_ETHSWT_DATA_UPDATE_LINUX | D_ETHSWT_DATA_UPDATE_ANDROID) ) {
+        isUpdated = STD_ON;
         G_ETHSWT_DATA_LINK.id = G_ETHSWT_DATA_LINK_ID;
-
-        if(G_ETHSWT_DATA_LINK_ID >= 0xFFFFFFFF) {
-            G_ETHSWT_DATA_LINK_ID = 0;
+    }
+    
+    if (isUpdated == STD_ON) {
+        (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_LINKINFO, sizeof(G_ETHSWT_DATA_LINK), (uint8*)&G_ETHSWT_DATA_LINK);
+        if (G_ETHSWT_DATA_LINK_ID == 0xFFFF) {
+            G_ETHSWT_DATA_LINK_ID = 0u;
         } else {
             G_ETHSWT_DATA_LINK_ID++;
         }
+        G_ETHSWT_DATA_LINK_UPDATE = 0u;
     }
-
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_LINKINFO, sizeof(G_ETHSWT_DATA_LINK), (uint8*)&G_ETHSWT_DATA_LINK);
 
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_setMIBData(void)
+static void ethswt_data_checkMIBUpdate(void)
 {
-    uint8                   idx;
+    uint8   isUpdated = STD_OFF;
 
-    G_ETHSWT_DATA_MIB_COUNT++;
-    if(G_ETHSWT_DATA_MIB_COUNT >= D_ETHSWT_SWIC_GET_MIB_TIME)
-    {
-        G_ETHSWT_DATA_MIB_COUNT = 0;
-
-        for(idx = 0; idx < D_ETHSWT_DATA_USE_PORT_NUM; idx++) {
-            G_ETHSWT_DATA_MIB.mib[idx].InFCSErr = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INFCSERR);
-            G_ETHSWT_DATA_MIB.mib[idx].InDiscards = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INDISCARDS);
-            G_ETHSWT_DATA_MIB.mib[idx].InFiltered = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INFILTERED);
-            G_ETHSWT_DATA_MIB.mib[idx].InOversize = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INOVERSIZE);
-            G_ETHSWT_DATA_MIB.mib[idx].InUndersize = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_INUNDERSIZE);
-            G_ETHSWT_DATA_MIB.mib[idx].Tcam0 = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM0);
-            G_ETHSWT_DATA_MIB.mib[idx].Tcam1 = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM1);
-            G_ETHSWT_DATA_MIB.mib[idx].Tcam2 = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM2);
-            G_ETHSWT_DATA_MIB.mib[idx].Tcam3 = ehtswt_data_getTargetMib(S_ETHSWT_DATA_IDX_TABLE[idx], D_ETHSWT_SWIC_MIB_TCAM3);
-        }
-
+    /* MIB取得対象は、A-DC, DCM, SAIL, Tool, Linux, Android ポート */
+    if (G_ETHSWT_DATA_MIB_UPDATE == (D_ETHSWT_DATA_UPDATE_ADC | D_ETHSWT_DATA_UPDATE_DCM | D_ETHSWT_DATA_UPDATE_SAIL | D_ETHSWT_DATA_UPDATE_TOOL | D_ETHSWT_DATA_UPDATE_LINUX | D_ETHSWT_DATA_UPDATE_ANDROID) ) {
+        isUpdated = STD_ON;
         G_ETHSWT_DATA_MIB.id = G_ETHSWT_DATA_MIB_ID;
+    }
 
-        if (G_ETHSWT_DATA_MIB_ID >= 0xFFFFFFFF) {
-            G_ETHSWT_DATA_MIB_ID = 0;
+    if (isUpdated == STD_ON) {
+        (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_MIB, sizeof(G_ETHSWT_DATA_MIB), (uint8*)&G_ETHSWT_DATA_MIB);
+        if (G_ETHSWT_DATA_MIB_ID == 0xFFFF) {
+            G_ETHSWT_DATA_MIB_ID = 0u;
         } else {
             G_ETHSWT_DATA_MIB_ID++;
         }
+        G_ETHSWT_DATA_MIB_UPDATE = 0u;
     }
-
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_MIB, sizeof(G_ETHSWT_DATA_MIB), (uint8*)&G_ETHSWT_DATA_MIB);
 
     return;
 }
 /* -------------------------------------------------------------------------- */
-static uint32 ehtswt_data_getTargetMib(uint8 targetPort, uint8 targetMIB)
+static void ethswt_data_checkSQIUpdate(void)
 {
-    uint32                  mibCounter = 0;
+    uint8   isUpdated = STD_OFF;
 
-    (void)EthSwt_SWIC_GetMIB(D_ETHSWT_SWIC_ID, targetPort, targetMIB, &mibCounter);
-
-    return mibCounter;
-}
-/* -------------------------------------------------------------------------- */
-static void ethswt_data_setSQIData(void)
-{
-    G_ETHSWT_DATA_SQI_COUNT++;
-    if(G_ETHSWT_DATA_SQI_COUNT >= D_ETHSWT_SWIC_GET_SQI_TIME)
-    {
-        G_ETHSWT_DATA_SQI_COUNT = 0;
-
-        /* 後に対応 */
-
+    /* SQI値取得対象は、A-DC, DCM ポート */
+    if (G_ETHSWT_DATA_SQI_UPDATE == (D_ETHSWT_DATA_UPDATE_ADC | D_ETHSWT_DATA_UPDATE_DCM) ) {
+        isUpdated = STD_ON;
         G_ETHSWT_DATA_SQI.id = G_ETHSWT_DATA_SQI_ID;
+    }
 
-        if (G_ETHSWT_DATA_SQI_ID >= 0xFFFFFFFF) {
-            G_ETHSWT_DATA_SQI_ID = 0;
+    if (isUpdated == STD_ON) {
+        (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_SQI, sizeof(G_ETHSWT_DATA_SQI), (uint8*)&G_ETHSWT_DATA_SQI);
+        if (G_ETHSWT_DATA_SQI_ID == 0xFFFF) {
+            G_ETHSWT_DATA_SQI_ID = 0u;
         } else {
             G_ETHSWT_DATA_SQI_ID++;
         }
+        G_ETHSWT_DATA_SQI_UPDATE = 0u;
     }
 
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_SQI, sizeof(G_ETHSWT_DATA_SQI), (uint8*)&G_ETHSWT_DATA_SQI);
     return;
 }
 /* -------------------------------------------------------------------------- */
-static void ethswt_data_setQciData(void)
+static void ethswt_data_checkQciUpdate(void)
 {
-    G_ETHSWT_DATA_QCI_COUNT++;
-    if(G_ETHSWT_DATA_QCI_COUNT >= D_ETHSWT_DATA_GET_QCI_TIME)
-    {
-        G_ETHSWT_DATA_QCI_COUNT = 0;
-        
-        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DCM_TCP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DCM_TCP);
-        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DCM_UDP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DCM_UDP);
-        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DCM_ICMP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DCM_ICMP);
-        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DLC_TCP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DLC_TCP);
-        G_ETHSWT_DATA_QCI.qciCount[D_ETHSWT_DATA_QCI_DLC_UDP_ID] = ethswt_data_getTargetQci(D_ETHSWT_SWIC_QCI_ID_DLC_UDP);
-        
-        G_ETHSWT_DATA_QCI.id = G_ETHSWT_DATA_QCI_ID;
+    uint8   isUpdated = STD_OFF;
 
-        if (G_ETHSWT_DATA_QCI_ID >= 0xFFFFFFFF) {
-            G_ETHSWT_DATA_QCI_ID = 0;
+    /* Qci取得対象は、QciID = 0, 1, 2, 3, 4 */
+    if (G_ETHSWT_DATA_QCI_UPDATE == (D_ETHSWT_DATA_UPDATE_QCI0 | D_ETHSWT_DATA_UPDATE_QCI1 | D_ETHSWT_DATA_UPDATE_QCI2 | D_ETHSWT_DATA_UPDATE_QCI3 | D_ETHSWT_DATA_UPDATE_QCI4) ) {
+        isUpdated = STD_ON;
+        G_ETHSWT_DATA_QCI.id = G_ETHSWT_DATA_QCI_ID;
+    }
+
+    if (isUpdated == STD_ON) {
+        (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_DATAUSAGEEXCEED, sizeof(G_ETHSWT_DATA_QCI), (uint8*)&G_ETHSWT_DATA_QCI);
+        if (G_ETHSWT_DATA_QCI_ID == 0xFFFF) {
+            G_ETHSWT_DATA_QCI_ID = 0u;
         } else {
             G_ETHSWT_DATA_QCI_ID++;
         }
+        G_ETHSWT_DATA_QCI_UPDATE = 0u;
     }
 
-    (void)ChipCom_SetPeriodicTxData(CHIPCOM_PERIODICID_ETHERSWT_SWIC_DATAUSAGEEXCEED, sizeof(G_ETHSWT_DATA_QCI), (uint8*)&G_ETHSWT_DATA_QCI);
-
     return;
-}
-/* -------------------------------------------------------------------------- */
-static uint32 ethswt_data_getTargetQci(uint8 targetQciId)
-{
-    uint32                  qciData = 0;
-
-    (void)EthSwt_SWIC_GetQci(D_ETHSWT_SWIC_ID, targetQciId, &qciData);
-    
-    return qciData;
 }
 /* -------------------------------------------------------------------------- */
 static void ethswt_data_setEthSwtStateData(void)
@@ -227,3 +295,4 @@ static void ethswt_data_setEthSwtStateData(void)
 
     return;
 }
+/* -------------------------------------------------------------------------- */
