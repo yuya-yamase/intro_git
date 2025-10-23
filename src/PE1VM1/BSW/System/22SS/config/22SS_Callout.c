@@ -64,7 +64,6 @@
 #include "drvind_pwr_pct.h"
 #include "drvind_eco.h"
 #include "drvind_hv_pct.h"
-#include "oilmil.h"
 #endif   /* BEV Rebase provisionally */
 #include "hdimmgr.h"
 #include "himgadj.h"
@@ -134,7 +133,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
-        &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyBonInit,
         &vd_g_HdimmgrBonInit,
@@ -211,7 +209,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
-        &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyRstInit,
         &vd_g_HdimmgrWkRstInit,
@@ -288,7 +285,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_DrvIndEcoInit,
         &vd_g_DrvIndHvInit,
         &vd_g_SbltsyncInit,
-        &vd_g_OilmilInit,
 #endif   /* BEV Rebase provisionally */
         &vd_g_HmiProxyWkupInit,
         &vd_g_HdimmgrWkRstInit,

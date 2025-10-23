@@ -63,9 +63,6 @@
 #include "odo_om_rst_if.h"
 #include "vptran_sel.h"
 #include "locale.h"
-#if 0   /* BEV Rebase provisionally */
-#include "oilmil.h"
-#endif   /* BEV Rebase provisionally */
 #include "avggrph.h"
 
 #include "himgadj.h"
@@ -196,8 +193,6 @@
 #define XSPI_UNIT_HI                        (0x00003F00U)
 
 #define XSPI_USRNAME_SIZE                   (16U)
-
-#define XSPI_MAINTEDIST_OFFSET              (32768)
 
 #endif   /* BEV Rebase provisionally */
 #define XSPI_AMB_CEL_MAX                    (10000U)
@@ -1038,12 +1033,6 @@ static inline void    vd_s_XSpiCfgTxRcmmui(        U4 * u4_ap_pdu_tx) {
 /*  Return:         -                                                                                                                */
 /*===================================================================================================================================*/
 static inline void    vd_s_XSpiCfgTxMaint(         U4 * u4_ap_pdu_tx) {
-#if 0   /* BEV Rebase provisionally */
-    S4 s4_t_m_dist;
-
-    s4_t_m_dist     = (S4)s2_g_OilmilGetVal() + (S4)XSPI_MAINTEDIST_OFFSET;
-    u4_ap_pdu_tx[0]  = (U4)s4_t_m_dist;
-#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
