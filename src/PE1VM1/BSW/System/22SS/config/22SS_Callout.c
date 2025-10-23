@@ -68,9 +68,6 @@
 #endif   /* BEV Rebase provisionally */
 #include "locale.h"
 #include "vardef.h"
-#if 0   /* BEV Rebase provisionally */
-#include "hud_ca.h"
-#endif   /* BEV Rebase provisionally */
 #include "hmiproxy.h"
 #if 0   /* BEV Rebase provisionally */
 #include "drvind_pwr_pct.h"
@@ -119,9 +116,6 @@ void vd_g_22SSCallout_StaBonInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_BON_INIT[] = {
         &vd_g_VardefBonInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_HudCaInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
@@ -213,9 +207,6 @@ void vd_g_22SSCallout_StaRstInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_RST_INIT[] = {
         &vd_g_VardefRstwkInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_HudCaInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
@@ -307,9 +298,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
 {
     static const FP_VD_FVD             fp_sp_vd_ECU_M_CFG_WKUP_INIT[] = {
         &vd_g_VardefRstwkInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_HudCaInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_LocaleRstWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
