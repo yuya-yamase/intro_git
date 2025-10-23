@@ -30,8 +30,8 @@
 
 #if 0   /* BEV Rebase provisionally */
 #include "veh_opemd.h"
-#include "vehspd_kmph.h"
 #endif   /* BEV Rebase provisionally */
+#include "vehspd_kmph.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
