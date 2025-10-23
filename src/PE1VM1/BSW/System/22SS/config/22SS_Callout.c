@@ -47,9 +47,6 @@
 #include "ambtmp.h"
 #include "rcmmui.h"
 #include "gauge.h"
-#if 0   /* BEV Rebase provisionally */
-#include "telltale.h"
-#endif   /* BEV Rebase provisionally */
 #include "wchime.h"
 #if 0   /* BEV Rebase provisionally */
 #include "sbltsync.h"
@@ -109,9 +106,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_IllumiBonInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_TelltaleInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrBonInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
@@ -182,9 +176,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_IllumiRstInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_TelltaleInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrRstWkInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
@@ -255,9 +246,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_IllumiWkupInit,
         &vd_g_AlertInit,
         &vd_g_SbltwrnInit,
-#if 0   /* BEV Rebase provisionally */
-        &vd_g_TelltaleInit,
-#endif   /* BEV Rebase provisionally */
         &vd_g_ThblnkrRstWkInit,
         &vd_g_VehspdInit,
         &vd_g_VptranInit,
