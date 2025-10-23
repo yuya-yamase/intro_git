@@ -27,7 +27,6 @@
 /* Platform */
 /* #include "oxcan.h" */ /* @@@ Provisional for 310D PreCV @@@ */
 
-#include "mulmed_color.h"
 #include "vardef.h"
 
 
