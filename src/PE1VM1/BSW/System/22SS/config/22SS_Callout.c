@@ -80,7 +80,6 @@
 #if 0   /* BEV Rebase provisionally */
 #include "mmlang.h"
 #include "vmmunit.h"
-#include "mmappctrl.h"
 #include "attmp_cel.h"
 #endif   /* BEV Rebase provisionally */
 #include "xspi_met.h"
@@ -163,7 +162,6 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_MmLangBonInit,
         &vd_g_VardefMmUnitBonInit,
         &vd_g_AttmpInit,
-        &vd_g_MMAppCtrlInitial,
         &vd_g_DateSIMETInit
 #endif   /* BEV Rebase provisionally */
     };
@@ -254,7 +252,6 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
         &vd_g_AttmpInit,
-        &vd_g_MMAppCtrlInitial,
         &vd_g_DateSIMETInit
 #endif   /* BEV Rebase provisionally */
     };
@@ -345,7 +342,6 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_MmLangWkupInit,
         &vd_g_VardefMmUnitWkupInit,
         &vd_g_AttmpInit,
-        &vd_g_MMAppCtrlInitial,
         &vd_g_DateSIMETInit
 #endif   /* BEV Rebase provisionally */
     };
