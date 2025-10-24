@@ -420,11 +420,7 @@ static void vd_s_AmbtmpTrvlFlgChk(void)
     U2 u2_t_vehspd;                                                     /* Vehicle Speed(LSB0.01km/h)       */
 
     u2_t_vehspd = (U2)0U;
-#if 0   /* BEV Rebase provisionally */
     u1_t_spdsts = u1_g_VehspdKmphInst(&u2_t_vehspd, (U1)TRUE);
-#else   /* BEV Rebase provisionally */
-    u1_t_spdsts = (U1)AMBTMP_STS_UNKNOWN;
-#endif   /* BEV Rebase provisionally */
 
     if(u1_t_spdsts != (U1)AMBTMP_STS_VALID){
         u1_s_ambtmp_trvl_flg = (U1)FALSE;
