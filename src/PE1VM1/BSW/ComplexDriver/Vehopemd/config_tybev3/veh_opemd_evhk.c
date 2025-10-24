@@ -38,11 +38,7 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
-#if 0   /* BEV Rebase provisionally */
-#define VEH_OPEMD_NUM_EVHK                      (5U)
-#else   /* BEV Rebase provisionally */
 #define VEH_OPEMD_NUM_EVHK                      (4U)
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
@@ -78,12 +74,6 @@ void    vd_g_VehopemdCfgEvhk(const U4 u4_a_MDBIT, const U4 u4_a_EVBIT)
 #if (VEH_OPEMD_NUM_EVHK > 0U)
     static const ST_VEH_OPEMD_EVHK   st_sp_VEH_OPEMD_EVHK[VEH_OPEMD_NUM_EVHK] = {
         {&vd_g_VehspdOpemdEvhk,         (U4)VEH_OPEMD_EVBIT_IG_R_TO_ON    },
-
-#if 0   /* BEV Rebase provisionally */
-        {&vd_g_PtsctmpOpemdEvhk,        ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
-                                         (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
-
-#endif   /* BEV Rebase provisionally */
         {&vd_g_AlertOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
                                          (U4)VEH_OPEMD_EVBIT_IG_R_TO_OFF) },
         {&vd_g_GaugeOpemdEvhk,          ((U4)VEH_OPEMD_EVBIT_IG_R_TO_ON  |
