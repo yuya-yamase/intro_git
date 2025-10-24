@@ -18,9 +18,10 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 #include "sbltsync_cfg_private.h"
 #include "vardef.h"
-#include "vardef_ds2e.h"
 #include "wchime.h"
+#if 0   /* BEV Rebase provisionally */
 #include "CxpiCdd_App.h"
+#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -91,6 +92,7 @@ U2      u2_g_SbltsyncCfgChmMask(void)
 {
     static const U2 u2_s_BELT_CHM_DEF = (U2)0x0FFFU;
     static const U4 u4_sp_DS2E_BITPOS[SBLTWRN_NUM_ALLSEAT] = {
+#if 0   /* BEV Rebase provisionally */
         (U4)VDF_DS_2E_SBLT_DR,      /* SBLTWRN_DRV_SEAT */
         (U4)VDF_DS_2E_SBLT_CE,      /* SBLTWRN_FRC_SEAT */
         (U4)VDF_DS_2E_SBLT_PA,      /* SBLTWRN_PSG_SEAT */
@@ -103,6 +105,20 @@ U2      u2_g_SbltsyncCfgChmMask(void)
         (U4)VDF_DS_2E_SBLT_4L,      /* SBLTWRN_R4L_SEAT */
         (U4)VDF_DS_2E_SBLT_4C,      /* SBLTWRN_R4C_SEAT */
         (U4)VDF_DS_2E_SBLT_4R       /* SBLTWRN_R4R_SEAT */
+#else   /* BEV Rebase provisionally */
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX,
+        (U4)U4_MAX
+#endif   /* BEV Rebase provisionally */
     };
     U4  u4_t_ds2e_2041;
     U4  u4_t_seat;
@@ -115,7 +131,11 @@ U2      u2_g_SbltsyncCfgChmMask(void)
         /* No diag customization in China (for China SBR regulations). */
         u2_t_chmmsk = u2_s_BELT_CHM_DEF;
     } else {
+#if 0   /* BEV Rebase provisionally */
         u4_t_ds2e_2041 = u4_g_VardefDs2E_Las32((U2)VDF_DS_2E_2041);
+#else   /* BEV Rebase provisionally */
+        u4_t_ds2e_2041 = (U4)0U;
+#endif   /* BEV Rebase provisionally */
         u2_t_chmmsk = (U2)0U;
 
         for (u4_t_seat = (U4)0U; u4_t_seat < (U4)SBLTWRN_NUM_ALLSEAT; u4_t_seat++) {
@@ -136,7 +156,9 @@ U2      u2_g_SbltsyncCfgChmMask(void)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRRTT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RRTT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /* void            vd_g_SbltsyncCfgTxRCTT(const U1 u1_a_SIG)                                                                         */
@@ -146,7 +168,9 @@ void    vd_g_SbltsyncCfgTxRRTT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRCTT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RCTT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /* void            vd_g_SbltsyncCfgTxRLTT(const U1 u1_a_SIG)                                                                         */
@@ -156,7 +180,9 @@ void    vd_g_SbltsyncCfgTxRCTT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRLTT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RLTT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 /*===================================================================================================================================*/
 /* void            vd_g_SbltsyncCfgTxRR2TT(const U1 u1_a_SIG)                                                                        */
@@ -166,7 +192,9 @@ void    vd_g_SbltsyncCfgTxRLTT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRR2TT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RR2TT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -177,7 +205,9 @@ void    vd_g_SbltsyncCfgTxRR2TT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRC2TT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RC2TT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -188,7 +218,9 @@ void    vd_g_SbltsyncCfgTxRC2TT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRL2TT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RL2TT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -199,7 +231,9 @@ void    vd_g_SbltsyncCfgTxRL2TT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRR3TT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RR3TT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -210,7 +244,9 @@ void    vd_g_SbltsyncCfgTxRR3TT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRC3TT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RC3TT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -221,7 +257,9 @@ void    vd_g_SbltsyncCfgTxRC3TT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxRL3TT(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02RL3TT(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -232,7 +270,9 @@ void    vd_g_SbltsyncCfgTxRL3TT(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxREARINDI(const U1 u1_a_SIG)
 {
+#if 0   /* BEV Rebase provisionally */
     CxpiCdd_TsWr0Cxmet1s02REARINDI(u1_a_SIG);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
@@ -243,7 +283,9 @@ void    vd_g_SbltsyncCfgTxREARINDI(const U1 u1_a_SIG)
 /*===================================================================================================================================*/
 void    vd_g_SbltsyncCfgTxCXMET1S02(void)
 {
+#if 0   /* BEV Rebase provisionally */
     vd_g_oXCANCxptxTrgrTx((U1)CXPICDD_FRM_0_CH0_CXMET1S02_INDEX);
+#endif   /* BEV Rebase provisionally */
 }
 
 /*===================================================================================================================================*/
