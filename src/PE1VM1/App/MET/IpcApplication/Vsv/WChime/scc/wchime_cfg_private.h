@@ -100,6 +100,7 @@ extern  U1                          u1_g_wchime_alrt_csr_vol_old;
 extern  U1                          u1_g_wchime_alrt_csr_vol_now;
 
 extern  U1                          u1_g_wchime_silencetime_flag;
+extern  U1                          u1_g_wchime_metcstmvol;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Function Prototypes                                                                                                              */

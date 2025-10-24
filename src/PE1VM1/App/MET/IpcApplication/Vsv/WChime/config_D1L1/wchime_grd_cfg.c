@@ -20,9 +20,6 @@
 
 #include "oxcan.h"
 #include "hmiwchime.h"
-#if 0   /* BEV Rebase provisionally */
-#include "hmimcst.h"
-#endif   /* BEV Rebase provisionally */
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Version Check                                                                                                                    */
@@ -36,6 +33,8 @@
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Literal Definitions                                                                                                              */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
+#define WCHIME_MWVC_OPE_INIT                   (7U)                                 /* Initial value of MWVCUS.                      */
+
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 /*  Macro Definitions                                                                                                                */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -46,7 +45,6 @@
 /*  Variable Definitions                                                                                                             */
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
 static U1 u1_s_wchime_master_pre;
-static U1 u1_s_wchime_cruise_pre;
 static U1 u1_s_wchime_mwvc_pre;
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
@@ -67,12 +65,7 @@ static U1 u1_s_wchime_mwvc_pre;
 void    vd_g_wChimeGrdCfgInit(void)
 {
     u1_s_wchime_master_pre = (U1)HMIWCHIME_UNDEF;
-    u1_s_wchime_cruise_pre = (U1)HMIWCHIME_UNDEF;
-#if 0   /* BEV Rebase provisionally */
-    u1_s_wchime_mwvc_pre   = (U1)HMIMCST_MWVC_OPE_INIT;
-#else   /* BEV Rebase provisionally */
-    u1_s_wchime_mwvc_pre   = (U1)7U;
-#endif   /* BEV Rebase provisionally */
+    u1_s_wchime_mwvc_pre   = (U1)WCHIME_MWVC_OPE_INIT;
 }
 /*===================================================================================================================================*/
 /*  void    vd_g_wChimeCfgMMInfoTx(void)                                                                                             */
@@ -141,32 +134,6 @@ U1      u1_g_wChimeCfgMstrReq(void)
     return(u1_t_req);
 }
 /*===================================================================================================================================*/
-/*  U1      u1_g_wChimeCfgCruiseReq(void)                                                                                            */
-/* --------------------------------------------------------------------------------------------------------------------------------- */
-/*  Arguments:      -                                                                                                                */
-/*  Return:         -                                                                                                                */
-/*===================================================================================================================================*/
-U1      u1_g_wChimeCfgCruiseReq(void)
-{
-    U1    u1_t_req;
-    U1    u1_t_hmiwchime[HMIWCHIME_NUM];
-
-    u1_t_req = (U1)FALSE;
-
-    vd_g_HmiWchime(&u1_t_hmiwchime[0], (U1)HMIWCHIME_NUM);
-
-    if(u1_s_wchime_cruise_pre != u1_t_hmiwchime[HMIWCHIME_CRUISE_RJCT]){
-        if(((U1)HMIWCHIME_ON1 == u1_t_hmiwchime[HMIWCHIME_CRUISE_RJCT]) ||
-           ((U1)HMIWCHIME_ON2 == u1_t_hmiwchime[HMIWCHIME_CRUISE_RJCT])){
-            u1_t_req = (U1)TRUE;
-        }
-    }
-
-    u1_s_wchime_cruise_pre = u1_t_hmiwchime[HMIWCHIME_CRUISE_RJCT];
-
-    return(u1_t_req);
-}
-/*===================================================================================================================================*/
 /*  U1      u1_g_wChimeCfgMWVCReq(void)                                                                                              */
 /* --------------------------------------------------------------------------------------------------------------------------------- */
 /*  Arguments:      -                                                                                                                */
@@ -178,15 +145,15 @@ U1      u1_g_wChimeCfgMWVCReq(void)
     U1    u1_t_ope;
 
     u1_t_req = (U1)FALSE;
-#if 0   /* BEV Rebase provisionally */
-    u1_t_ope = u1_g_HmiMcstGetMWVCOpe();
+    u1_t_ope = u1_g_wchime_metcstmvol;
 
+#if 0   /* BEV Rebase provisionally */
     if((u1_s_wchime_mwvc_pre != u1_t_ope    )&&
        (u1_t_ope <= (U1)HMIMCST_MWVC_OPE_MAX)){
             u1_t_req = (U1)TRUE;
     }
-    u1_s_wchime_mwvc_pre = u1_t_ope;
 #endif   /* BEV Rebase provisionally */
+    u1_s_wchime_mwvc_pre = u1_t_ope;
 
     return(u1_t_req);
 }

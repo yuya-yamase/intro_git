@@ -41,7 +41,6 @@ void    vd_g_wChimeCfgMMInfoTx(void);
 U1      u1_g_wChimeCfgRsaPermaReq(void);
 U1      u1_g_wChimeCfgRsaAdasReq(void);
 U1      u1_g_wChimeCfgMstrReq(void);
-U1      u1_g_wChimeCfgCruiseReq(void);
 U1      u1_g_wChimeCfgMWVCReq(void);
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
