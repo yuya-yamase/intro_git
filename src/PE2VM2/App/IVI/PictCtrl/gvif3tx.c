@@ -409,12 +409,12 @@ static void    Mcu_Dev_Pwron_GvifTx_OverAll_Flow( void )
 
             if(mcu_rslt == (uint8)TRUE){
 #warning "BEVCDCFD-1960"
-#if 0
+#if 0 /* BEVCDCFD-1960 */
                 Mcu_OnStep_GVIF3TX_OVRALL = MCU_STEP_GVIF3TX_OVERALL_FIN;
                 vd_g_XspiIviSub1PowerDevInitCmpApp((U1)XSPI_IVI_POWER_GVIFSEND_INI);
-#else
+#else /* BEVCDCFD-1960 */
                 Mcu_OnStep_GVIF3TX_OVRALL = MCU_STEP_GVIF3TX_OVERALL_4;
-#endif
+#endif /* BEVCDCFD-1960 */
             }
         }
         break;
