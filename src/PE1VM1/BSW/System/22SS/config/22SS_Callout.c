@@ -27,9 +27,8 @@
 #include "nvmc_mgr.h"
 
 #include "fpcall_vd_fvd.h"
-#if 0   /* BEV Rebase provisionally */
-/* Complex Device Driver */
 #include "drec_tx.h"
+#if 0   /* BEV Rebase provisionally */
 #include "sound_cri_mgr.h"
 
 /* Application           */
@@ -100,8 +99,8 @@ void vd_g_22SSCallout_StaBonInit(void)
         &vd_g_LocaleBonInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
-        &vd_g_DrectxBonInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_DrectxBonInit,
         &vd_g_DimInit,
         &vd_g_IllumiBonInit,
         &vd_g_AlertInit,
@@ -170,8 +169,8 @@ void vd_g_22SSCallout_StaRstInit(void)
         &vd_g_LocaleRstWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
-        &vd_g_DrectxRstInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_DrectxRstInit,
         &vd_g_DimInit,
         &vd_g_IllumiRstInit,
         &vd_g_AlertInit,
@@ -240,8 +239,8 @@ void vd_g_22SSCallout_StaWkupInit(void)
         &vd_g_LocaleRstWkupInit,
 #if 0   /* BEV Rebase provisionally */
         &vd_g_SoundCriMgrInitialize,
-        &vd_g_DrectxWkupInit,
 #endif   /* BEV Rebase provisionally */
+        &vd_g_DrectxWkupInit,
         &vd_g_DimInit,
         &vd_g_IllumiWkupInit,
         &vd_g_AlertInit,

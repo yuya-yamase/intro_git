@@ -65,6 +65,7 @@
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config_D1L1
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/config
     -I${APP_DIR}/MET/IpcApplication/Vsv/WChime/scc
+    -I${APP_DIR}/MET/Platform/ComplexDriver/DrecTx/config
     
 
 ${SS_DIR}/eMCOS/config/eMCOS_TASK.c
@@ -477,4 +478,5 @@ App/MET/IpcApplication/Vsv/WChime/config_D1L1/wchime_grd_cfg.c
 App/MET/IpcApplication/Vsv/WChime/config/wchime_arb_cfg.c
 App/MET/IpcApplication/Vsv/WChime/config/wchime_req_cfg.c
 App/MET/IpcApplication/Vsv/WChime/scc/wchime_arb.c
+App/MET/Platform/ComplexDriver/DrecTx/config/drec_tx.c
 
