@@ -24,9 +24,7 @@
 #include "rim_ctl.h"
 
 #include "veh_opemd.h"
-#if 0   /* BEV Rebase provisionally */
 #include "vehspd_kmph.h"
-#endif   /* BEV Rebase provisionally */
 #include "ambtmp.h"
 
 /*-----------------------------------------------------------------------------------------------------------------------------------*/
